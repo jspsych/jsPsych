@@ -1,4 +1,8 @@
 // jspsych.js - a jQuery plugin for running psychology experiments
+// 
+//	Josh de Leeuw and Drew Hendrickson
+//	Percepts and Concepts Lab, Indiana University
+//
 (function( $ ) {
 	$.fn.jsPsych = function(options) {
 		// build main options list before element iteration
