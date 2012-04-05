@@ -9,7 +9,7 @@ function sd_create(params)
 		trials[i]["a_path"] = sd_stims[i][0];
 		trials[i]["b_path"] = sd_stims[i][1];
 		trials[i]["timing"] = params["timing"];
-		trials[i]["answer"] = params["answer"];
+		trials[i]["answer"] = params["answer"][i];
 		if(params["prompt"] != undefined){
 			trials[i]["prompt"] = params["prompt"];
 		}
@@ -48,20 +48,20 @@ function sd_trial($this, block, trial, part)
 			var resp_func = function(e) {
 				var flag = false;
 				var correct = false;
-				if(e.which=='80') // 'p' key -- different
+				if(e.which=='80') // 'p' key -- same
 				{
 					flag = true;
-					if(trial.answer == "different") { correct = true; }
-				} else if(e.which=='81') // 'q' key -- same
+					if(trial.answer == "same") { correct = true; }
+				} else if(e.which=='81') // 'q' key -- different
 				{
 					flag = true;
-					if(trial.answer == "same"){ correct = true; }
+					if(trial.answer == "different"){ correct = true; }
 				}
 				if(flag)
 				{
 					endTime = (new Date()).getTime();
 					rt = (endTime-startTime);
-					var trial_data = {"rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path, "key": e.which}
+					var trial_data = {"rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which}
 					block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 					$(document).unbind('keyup',resp_func);
 					$('.sd').remove();
