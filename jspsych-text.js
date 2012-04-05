@@ -6,6 +6,7 @@ function text_create(params)
 		trials[i] = {};
 		trials[i]["type"] = "text";
 		trials[i]["text"] = params.text[i];
+		trials[i]["cont_key"] = params.cont_key;
 		trials[i]["timing"] = params.timing;
 	}
 	return trials;
@@ -15,7 +16,7 @@ function text_trial($this, block, trial, part)
 {
 	$this.html(trial.text);
 	var key_listener = function(e) {
-		if(e.which=="80") // 'spacebar' 
+		if(e.which==trial.cont_key) 
 		{
 			flag = true;				
 			$(document).unbind('keyup',key_listener);

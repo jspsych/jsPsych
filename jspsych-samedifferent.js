@@ -9,6 +9,13 @@ function sd_create(params)
 		trials[i]["a_path"] = sd_stims[i][0];
 		trials[i]["b_path"] = sd_stims[i][1];
 		trials[i]["timing"] = params["timing"];
+		trials[i]["answer"] = params["answer"];
+		if(params["prompt"] != undefined){
+			trials[i]["prompt"] = params["prompt"];
+		}
+		if(params["data"]!=undefined){
+			trials[i]["data"] = params["data"][i];
+		}
 	}
 	return trials;
 }
@@ -25,27 +32,40 @@ function sd_trial($this, block, trial, part)
 			setTimeout(sd_trial, trial.timing[1], $this, block, trial, part + 1);
 			break;
 		case 3:
-			startTime = (new Date()).getTime();
 			$.fn.jsPsych.showImage($this, trial.b_path, 'sd');
+			if(trial.timing[3]!=undefined){
+				setTimeout(sd_trial, trial.timing[3], $this, block, trial, part + 1);
+			} else {
+				sd_trial($this, block, trial, part + 1);
+			}
+			break;
+		case 4:
+			if(trial.timing[3]!=undefined){
+				$('.sd').remove();
+				$this.html(trial.prompt);
+			}
+			startTime = (new Date()).getTime();
 			var resp_func = function(e) {
 				var flag = false;
 				var correct = false;
 				if(e.which=='80') // 'p' key -- different
 				{
 					flag = true;
-					if(trial.a_path!=trial.b_path) { correct = true; }
+					if(trial.answer == "different") { correct = true; }
 				} else if(e.which=='81') // 'q' key -- same
 				{
 					flag = true;
-					if(trial.a_path==trial.b_path){ correct = true; }
+					if(trial.answer == "same"){ correct = true; }
 				}
 				if(flag)
 				{
 					endTime = (new Date()).getTime();
 					rt = (endTime-startTime);
-					block.data[block.trial_idx] = {"rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path}
+					var trial_data = {"rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path, "key": e.which}
+					block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 					$(document).unbind('keyup',resp_func);
 					$('.sd').remove();
+					$this.html('');
 					setTimeout(function(b){b.next();}, trial.timing[2], block);
 				}
 			}

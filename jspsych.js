@@ -105,11 +105,7 @@
 	$.fn.jsPsych.defaults = {
 		// overall experiment parameters
 		experiment_structure: [],
-		plugins: [
-				{"type": "sim",  "createFunc": similarity_create, "trialFunc": similarity_trial},
-				{"type": "sd",   "createFunc": sd_create,         "trialFunc": sd_trial},
-				{"type": "text", "createFunc": text_create,       "trialFunc": text_trial},
-				{"type": "xab",  "createFunc": xab_create,        "trialFunc": xab_trial}]
+		plugins: []
 	};
 	//
 	// useful helper functions for multiple plugins //
