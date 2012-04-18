@@ -33,7 +33,7 @@ jspsych-xab.js
 	On each trial, 2 images must be specified, along with 3 timing parameters
 		The "a_path" image is always the X image
 		Both the "a_path" and "b_path" images are displayed in random arrangement
-	POSSIBLY A BUG ON P TRIALS: how are they ever parked as correct?
+	POSSIBLY A BUG ON P TRIALS: how are they ever marked as correct?
 	STILL HAS A TODO NOTE, is that current?
 
 jspsych.js
@@ -43,5 +43,5 @@ jspsych.js
 		finding the correct trial plugin type
 		building the set of trials
 		then calling the correct plugin
-	Data is output at the end of all blocks
+	Data is output at the end of all blocks (?)
 	Also includes helpful private functions for displaying images
