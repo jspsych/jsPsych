@@ -24,14 +24,17 @@ function sd_trial($this, block, trial, part)
 {
 	switch(part){
 		case 1:
+			p1_time = (new Date()).getTime();
 			$.fn.jsPsych.showImage($this, trial.a_path, 'sd');
 			setTimeout(sd_trial, trial.timing[0], $this, block, trial, part + 1);
 			break;
 		case 2:
+			p2_time = (new Date()).getTime();
 			$('.sd').remove();
 			setTimeout(sd_trial, trial.timing[1], $this, block, trial, part + 1);
 			break;
 		case 3:
+			p3_time = (new Date()).getTime();
 			$.fn.jsPsych.showImage($this, trial.b_path, 'sd');
 			if(trial.timing[3]!=undefined){
 				setTimeout(sd_trial, trial.timing[3], $this, block, trial, part + 1);
@@ -40,6 +43,7 @@ function sd_trial($this, block, trial, part)
 			}
 			break;
 		case 4:
+			p4_time = (new Date()).getTime();
 			if(trial.timing[3]!=undefined){
 				$('.sd').remove();
 				$this.html(trial.prompt);
@@ -61,7 +65,10 @@ function sd_trial($this, block, trial, part)
 				{
 					endTime = (new Date()).getTime();
 					rt = (endTime-startTime);
-					var trial_data = {"rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which}
+					stim1_time = (p2_time-p1_time);
+					isi_time = (p3_time-p2_time);
+					stim2_time = (p4_time-p3_time);
+					var trial_data = {"rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which, "stim1_time": stim1_time, "stim2_time":stim2_time, "isi_time":isi_time}
 					block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 					$(document).unbind('keyup',resp_func);
 					$('.sd').remove();

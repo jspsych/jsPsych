@@ -39,6 +39,7 @@ function xab_trial($this, block, trial, part)
 				if(e.which=='80') // 'p' key
 				{
 					flag = true;
+					if(!target_left) { correct = true; }
 				} else if(e.which=='81') // 'q' key
 				{
 					flag = true;
