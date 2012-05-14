@@ -25,19 +25,25 @@ function sd_trial($this, block, trial, part)
 	switch(part){
 		case 1:
 			p1_time = (new Date()).getTime();
-			$.fn.jsPsych.showImage($this, trial.a_path, 'sd');
-			setTimeout(sd_trial, trial.timing[0], $this, block, trial, part + 1);
+			$this.append($('<img>', {
+				"src": trial.a_path,
+				"class": 'sd'
+			}));
+			setTimeout(function(){sd_trial($this, block, trial, part + 1);}, trial.timing[0]);
 			break;
 		case 2:
 			p2_time = (new Date()).getTime();
 			$('.sd').remove();
-			setTimeout(sd_trial, trial.timing[1], $this, block, trial, part + 1);
+			setTimeout(function(){sd_trial($this, block, trial, part + 1);}, trial.timing[1]);
 			break;
 		case 3:
 			p3_time = (new Date()).getTime();
-			$.fn.jsPsych.showImage($this, trial.b_path, 'sd');
+			$this.append($('<img>', {
+				"src": trial.b_path,
+				"class": 'sd'
+			}));
 			if(trial.timing[3]!=undefined){
-				setTimeout(sd_trial, trial.timing[3], $this, block, trial, part + 1);
+				setTimeout(function(){sd_trial($this, block, trial, part + 1);}, trial.timing[3]);
 			} else {
 				sd_trial($this, block, trial, part + 1);
 			}
@@ -73,7 +79,7 @@ function sd_trial($this, block, trial, part)
 					$(document).unbind('keyup',resp_func);
 					$('.sd').remove();
 					$this.html('');
-					setTimeout(function(b){b.next();}, trial.timing[2], block);
+					setTimeout(function(){block.next();}, trial.timing[2]);
 				}
 			}
 			$(document).keyup(resp_func);

@@ -21,7 +21,7 @@ function text_trial($this, block, trial, part)
 			flag = true;				
 			$(document).unbind('keyup',key_listener);
 			$this.html('');
-			setTimeout(function(b){b.next();}, trial.timing[0], block);
+			setTimeout(function(){block.next();}, trial.timing[0]);
 		}
 	}
 	$(document).keyup(key_listener);
