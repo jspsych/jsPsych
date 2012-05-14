@@ -22,13 +22,16 @@ function xab_trial($this, block, trial, part)
 	switch(part){
 		case 1:
 			p1_time = (new Date()).getTime();
-			$.fn.jsPsych.showImage($this, trial.a_path, 'xab');
-			setTimeout(xab_trial, trial.timing[0], $this, block, trial, part + 1);
+			$this.append($('<img>', {
+				"src": trial.a_path,
+				"class": 'xab'
+			}));
+			setTimeout(function(){xab_trial($this, block, trial, part + 1)}, trial.timing[0]);
 			break;
 		case 2:
 			p2_time = (new Date()).getTime();
 			$('.xab').remove();
-			setTimeout(xab_trial, trial.timing[1], $this, block, trial, part + 1);
+			setTimeout(function(){xab_trial($this, block, trial, part + 1)}, trial.timing[1]);
 			break;
 		case 3:
 			p3_time = (new Date()).getTime();
@@ -38,7 +41,18 @@ function xab_trial($this, block, trial, part)
 			if(!target_left){
 				images = [trial.b_path, trial.a_path];
 			}
-			$.fn.jsPsych.showImages($this, images, 'xab');
+			
+			// show the images
+			$this.append($('<img>', {
+				"src": images[0],
+				"class": 'xab'
+			}));
+			$this.append($('<img>', {
+				"src": images[1],
+				"class": 'xab'
+			}));
+			
+			
 			var resp_func = function(e) {
 				var flag = false;
 				var correct = false;
@@ -61,7 +75,7 @@ function xab_trial($this, block, trial, part)
 					block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 					$(document).unbind('keyup',resp_func);
 					$('.xab').remove();
-					setTimeout(function(b){b.next();}, trial.timing[2], block);
+					setTimeout(function(){block.next();}, trial.timing[2]);
 				}
 			}
 			$(document).keyup(resp_func);

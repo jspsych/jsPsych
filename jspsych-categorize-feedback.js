@@ -33,13 +33,15 @@ function cf_create(params)
 
 function cf_trial($this, block, trial, part)
 {
-	//console.log(block.trial_idx);
 	switch(part){
 		case 1:
 			p1_time = (new Date()).getTime();
-			$.fn.jsPsych.showImage($this, trial.a_path, 'cf');
+			$this.append($('<img>', {
+				"src": trial.a_path,
+				"class": 'cf'
+			}));
 			if(trial.timing[2]!=undefined){
-				setTimeout(cf_trial, trial.timing[2], $this, block, trial, part + 1);
+				setTimeout(function(){cf_trial($this, block, trial, part + 1);}, trial.timing[2]);
 			} else {
 				//show prompt here
 				$this.append(trial.prompt);
@@ -50,7 +52,7 @@ function cf_trial($this, block, trial, part)
 			p2_time = (new Date()).getTime();
 			if(trial.timing[2]!=undefined){
 				$('.cf').remove();
-				$this.html(trial.prompt);
+				$this.append(trial.prompt);
 			}
 			startTime = (new Date()).getTime();
 			var resp_func = function(e) {
@@ -81,7 +83,6 @@ function cf_trial($this, block, trial, part)
 					var trial_data = {"rt": rt, "correct": correct, "a_path": trial.a_path, "key_press": e.which, "stim1_time": stim1_time}
 					block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 					$(document).unbind('keyup',resp_func);
-					$('.cf').remove();
 					$this.html('');
 					cf_trial($this, block, trial, part + 1);
 				}
@@ -91,7 +92,10 @@ function cf_trial($this, block, trial, part)
 		case 3:
 			if(trial.show_stim_feedback)
 			{
-				$.fn.jsPsych.showImage($this, trial.a_path, 'cf');
+				$this.append($('<img>', {
+					"src": trial.a_path,
+					"class": 'cf'
+				}));
 			}
 			// give feedback
 			var atext = "";
@@ -102,11 +106,11 @@ function cf_trial($this, block, trial, part)
 				atext = trial.incorrect_text.replace("&ANS&", trial.text_answer);
 			}
 			$this.append(atext);
-			setTimeout(cf_trial, trial.timing[0], $this, block, trial, part + 1);
+			setTimeout(function(){cf_trial($this, block, trial, part + 1);}, trial.timing[0]);
 			break;
 		case 4:
 			$this.html("");
-			setTimeout(function(b){b.next();}, trial.timing[1], block);
+			setTimeout(function(){block.next();}, trial.timing[1]);
 			break;
 	}
 }

@@ -22,14 +22,13 @@ function animation_create(params)
 
 function animation_trial($this, block, trial, part)
 {
-	animate_frame = -1;
-	reps = 0;
+	var animate_frame = -1;
+	var reps = 0;
 	switch(part)
 	{
 		case 1:
 			animate_interval = setInterval(function(){
 				showImage = true;
-				$('.animate').remove();
 				$this.html(""); // clear everything
 				animate_frame++;
 				if(animate_frame == trial.stims.length)
@@ -44,13 +43,16 @@ function animation_trial($this, block, trial, part)
 					}
 				}
 				if(showImage){
-					$.fn.jsPsych.showImage($this, trial.stims[animate_frame], 'animate');
+					$this.append($('<img>', {
+						"src": trial.stims[animate_frame],
+						"class": 'animate'
+					}));
 					if(trial.prompt != undefined) { $this.append(trial.prompt); }
 				}
 			}, trial.frame_time);
 			break;
 		case 2:
-			setTimeout(function(b){ b.next(); }, trial.timing[0], block);
+			setTimeout(function(){ block.next(); }, trial.timing[0]);
 			break;
 	}			
 }
