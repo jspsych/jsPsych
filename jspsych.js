@@ -107,25 +107,6 @@
 		experiment_structure: [],
 		plugins: []
 	};
-	//
-	// useful helper functions for multiple plugins //
-	//
-	$.fn.jsPsych.showImage = function($this, img_path, img_class)
-	{
-		var the_img = document.createElement('img');
-		the_img.setAttribute('src', img_path);
-		the_img.setAttribute('class',img_class);
-		$this.append(the_img);
-	}
-
-	$.fn.jsPsych.showImages = function($this, img_list, img_class)
-	{
-		for(img in img_list)
-		{
-			$.fn.jsPsych.showImage($this, img_list[img], img_class);
-		}
-	}
-	
 }) (jQuery);
 
 
