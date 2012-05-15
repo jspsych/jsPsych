@@ -25,7 +25,7 @@
 				{
 					if(opts["experiment_structure"][i]["type"] == opts["plugins"][j]["type"])
 					{
-						trials = opts["plugins"][j]["createFunc"].call(null, opts["experiment_structure"][i]);
+						trials = opts["plugins"][j]["src"]["create"].call(null, opts["experiment_structure"][i]);
 					}
 				}
 				
@@ -94,7 +94,7 @@
 			{
 				if(trial.type == opts["plugins"][j]["type"])
 				{
-					opts["plugins"][j]["trialFunc"].call(this, $this, block, trial, 1);
+					opts["plugins"][j]["src"]["trial"].call(this, $this, block, trial, 1);
 				}
 			}
 		}
