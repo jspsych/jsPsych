@@ -1,5 +1,5 @@
 (function( $ ) {
-	$.fn.jsPsych.text = (function(){
+	$.fn.jsPsych.similarity = (function(){
 	
 		var plugin = {};
 	
