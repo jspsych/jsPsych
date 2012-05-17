@@ -2,7 +2,7 @@
 // if optional length to display target is missing, then target is displayed until subject responds.
 
 (function( $ ) {
-	$.fn.jsPsych.categorize-unknown = (function(){
+	jsPsych.categorize-unknown = (function(){
 	
 		var plugin = {};
 	
@@ -12,7 +12,7 @@
 			for(var i = 0; i < trials.length; i++)
 			{
 				trials[i] = {};
-				trials[i]["type"] = "cu";
+				trials[i]["type"] = "categorize-unknown";
 				trials[i]["a_path"] = cu_stims[i];
 				trials[i]["timing"] = params["timing"];
 				trials[i]["choices"] = params["choices"];

@@ -1,5 +1,5 @@
 (function( $ ) {
-	$.fn.jsPsych.samedifferent = (function(){
+	jsPsych.samedifferent = (function(){
 
 		var plugin = {};
 		
@@ -9,7 +9,7 @@
 			for(var i = 0; i < trials.length; i++)
 			{
 				trials[i] = {};
-				trials[i]["type"] = "sd";
+				trials[i]["type"] = "samedifferent";
 				trials[i]["a_path"] = sd_stims[i][0];
 				trials[i]["b_path"] = sd_stims[i][1];
 				trials[i]["timing"] = params["timing"];

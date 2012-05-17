@@ -1,6 +1,6 @@
 
 (function( $ ) {
-	$.fn.jsPsych.text = (function(){
+	jsPsych.text = (function(){
 	
 		var plugin = {};
 	

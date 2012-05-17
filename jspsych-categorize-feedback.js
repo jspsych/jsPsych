@@ -6,7 +6,7 @@
 // way to provide corrective feedback
 
 (function( $ ) {
-	$.fn.jsPsych.categorize-feedback = (function(){
+	jsPsych.categorize-feedback = (function(){
 	
 		var plugin = {};
 	
@@ -16,7 +16,7 @@
 			for(var i = 0; i < trials.length; i++)
 			{
 				trials[i] = {};
-				trials[i]["type"] = "cf";
+				trials[i]["type"] = "categorize-feedback";
 				trials[i]["a_path"] = cf_stims[i];
 				trials[i]["timing"] = params["timing"];
 				trials[i]["key_answer"] = params["key_answer"][i];

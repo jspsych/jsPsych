@@ -1,5 +1,5 @@
 (function( $ ) {
-	$.fn.jsPsych.xab-touch = (function(){
+	jsPsych.xab-touch = (function(){
 	
 		var plugin = {};
 	
@@ -10,7 +10,7 @@
 			for(var i = 0; i < trials.length; i++)
 			{
 				trials[i] = {};
-				trials[i]["type"] = "xab_touch";
+				trials[i]["type"] = "xab-touch";
 				trials[i]["a_path"] = xab_stims[i][0];
 				trials[i]["b_path"] = xab_stims[i][1];
 				trials[i]["timing"] = params["timing"];

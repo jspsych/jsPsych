@@ -2,7 +2,7 @@
 // Josh de Leeuw
 
 (function( $ ) {
-	$.fn.jsPsych.animation = (function(){
+	jsPsych.animation = (function(){
 	
 		var plugin = {};
 	
@@ -12,7 +12,7 @@
 			for(var i = 0; i < trials.length; i++)
 			{
 				trials[i] = {};
-				trials[i]["type"] = "animate";
+				trials[i]["type"] = "animation";
 				trials[i]["stims"] = stims[i];
 				trials[i]["frame_time"] = params["frame_time"];
 				trials[i]["repetitions"] = params["repetitions"];

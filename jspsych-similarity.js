@@ -1,5 +1,5 @@
 (function( $ ) {
-	$.fn.jsPsych.similarity = (function(){
+	jsPsych.similarity = (function(){
 	
 		var plugin = {};
 	
@@ -9,7 +9,7 @@
 			for(var i = 0; i < trials.length; i++)
 			{
 				trials[i] = {};
-				trials[i]["type"] = "sim";
+				trials[i]["type"] = "similarity";
 				trials[i]["a_path"] = sim_stims[i][0];
 				trials[i]["b_path"] = sim_stims[i][1];
 				trials[i]["timing"] = params["timing"];

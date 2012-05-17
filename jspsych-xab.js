@@ -1,6 +1,6 @@
 
 (function( $ ) {
-	$.fn.jsPsych.xab = (function(){
+	jsPsych.xab = (function(){
 	
 		var plugin = {}
 
