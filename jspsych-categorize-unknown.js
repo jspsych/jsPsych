@@ -2,7 +2,7 @@
 // if optional length to display target is missing, then target is displayed until subject responds.
 
 (function( $ ) {
-	jsPsych.categorize-unknown = (function(){
+	jsPsych.categorize_unknown = (function(){
 	
 		var plugin = {};
 	
@@ -12,7 +12,7 @@
 			for(var i = 0; i < trials.length; i++)
 			{
 				trials[i] = {};
-				trials[i]["type"] = "categorize-unknown";
+				trials[i]["type"] = "categorize_unknown";
 				trials[i]["a_path"] = cu_stims[i];
 				trials[i]["timing"] = params["timing"];
 				trials[i]["choices"] = params["choices"];
@@ -36,11 +36,11 @@
 						"class": 'cu'
 					}));
 					if(trial.timing[1]!=undefined){
-						setTimeout(function(){cu_trial($this, block, trial, part + 1);}, trial.timing[1]);
+						setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[1]);
 					} else {
 						//show prompt here
 						$this.append(trial.prompt);
-						cu_trial($this, block, trial, part + 1);
+						plugin.trial($this, block, trial, part + 1);
 					}
 					break;
 				case 2:

@@ -32,12 +32,12 @@
 						"src": trial.a_path,
 						"class": 'xab'
 					}));
-					setTimeout(function(){xab_trial($this, block, trial, part + 1)}, trial.timing[0]);
+					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing[0]);
 					break;
 				case 2:
 					p2_time = (new Date()).getTime();
 					$('.xab').remove();
-					setTimeout(function(){xab_trial($this, block, trial, part + 1)}, trial.timing[1]);
+					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing[1]);
 					break;
 				case 3:
 					p3_time = (new Date()).getTime();

@@ -6,7 +6,7 @@
 // way to provide corrective feedback
 
 (function( $ ) {
-	jsPsych.categorize-feedback = (function(){
+	jsPsych.categorize_feedback = (function(){
 	
 		var plugin = {};
 	
@@ -16,7 +16,7 @@
 			for(var i = 0; i < trials.length; i++)
 			{
 				trials[i] = {};
-				trials[i]["type"] = "categorize-feedback";
+				trials[i]["type"] = "categorize_feedback";
 				trials[i]["a_path"] = cf_stims[i];
 				trials[i]["timing"] = params["timing"];
 				trials[i]["key_answer"] = params["key_answer"][i];
@@ -45,11 +45,11 @@
 						"class": 'cf'
 					}));
 					if(trial.timing[2]!=undefined){
-						setTimeout(function(){cf_trial($this, block, trial, part + 1);}, trial.timing[2]);
+						setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[2]);
 					} else {
 						//show prompt here
 						$this.append(trial.prompt);
-						cf_trial($this, block, trial, part + 1);
+						plugin.trial($this, block, trial, part + 1);
 					}
 					break;
 				case 2:
@@ -88,7 +88,7 @@
 							block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 							$(document).unbind('keyup',resp_func);
 							$this.html('');
-							cf_trial($this, block, trial, part + 1);
+							plugin.trial($this, block, trial, part + 1);
 						}
 					}
 					$(document).keyup(resp_func);
@@ -110,7 +110,7 @@
 						atext = trial.incorrect_text.replace("&ANS&", trial.text_answer);
 					}
 					$this.append(atext);
-					setTimeout(function(){cf_trial($this, block, trial, part + 1);}, trial.timing[0]);
+					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[0]);
 					break;
 				case 4:
 					$this.html("");
