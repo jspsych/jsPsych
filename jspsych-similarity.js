@@ -49,7 +49,7 @@
 					$this.append($('<button>', {'id':'next','class':'sim'}));
 					$("#next").html('Next');
 					$("#next").click(function(){
-						similarity_trial($this,block,trial,part+1);
+						plugin.trial($this,block,trial,part+1);
 					});
 					break;
 				case 2:

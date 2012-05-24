@@ -1,5 +1,5 @@
 (function( $ ) {
-	jsPsych.xab-touch = (function(){
+	jsPsych.xab_touch = (function(){
 	
 		var plugin = {};
 	
@@ -10,7 +10,7 @@
 			for(var i = 0; i < trials.length; i++)
 			{
 				trials[i] = {};
-				trials[i]["type"] = "xab-touch";
+				trials[i]["type"] = "xab_touch";
 				trials[i]["a_path"] = xab_stims[i][0];
 				trials[i]["b_path"] = xab_stims[i][1];
 				trials[i]["timing"] = params["timing"];
@@ -30,12 +30,12 @@
 						"src": trial.a_path,
 						"class": 'xab_touch'
 					}));
-					setTimeout(function(){xab_touch_trial($this, block, trial, part + 1);}, trial.timing[0]);
+					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[0]);
 					break;
 				case 2:
 					p2_time = (new Date()).getTime();
 					$('.xab_touch').remove();
-					setTimeout(function(){xab_touch_trial($this, block, trial, part + 1);}, trial.timing[1]);
+					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[1]);
 					break;
 				case 3:
 					p3_time = (new Date()).getTime();

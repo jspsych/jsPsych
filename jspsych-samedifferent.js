@@ -33,12 +33,12 @@
 						"src": trial.a_path,
 						"class": 'sd'
 					}));
-					setTimeout(function(){sd_trial($this, block, trial, part + 1);}, trial.timing[0]);
+					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[0]);
 					break;
 				case 2:
 					p2_time = (new Date()).getTime();
 					$('.sd').remove();
-					setTimeout(function(){sd_trial($this, block, trial, part + 1);}, trial.timing[1]);
+					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[1]);
 					break;
 				case 3:
 					p3_time = (new Date()).getTime();
@@ -47,9 +47,9 @@
 						"class": 'sd'
 					}));
 					if(trial.timing[3]!=undefined){
-						setTimeout(function(){sd_trial($this, block, trial, part + 1);}, trial.timing[3]);
+						setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[3]);
 					} else {
-						sd_trial($this, block, trial, part + 1);
+						plugin.trial($this, block, trial, part + 1);
 					}
 					break;
 				case 4:

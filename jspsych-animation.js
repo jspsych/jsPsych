@@ -41,7 +41,7 @@
 							reps++;
 							if(reps >= trial.repetitions)
 							{
-								animation_trial($this, block, trial, part + 1);
+								plugin.trial($this, block, trial, part + 1);
 								clearInterval(animate_interval);
 								showImage = false;
 							}
