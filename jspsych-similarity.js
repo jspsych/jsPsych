@@ -21,17 +21,25 @@
 		{
 			switch(part){
 				case 1:
-					images = [trial.a_path, trial.b_path];
-					if(Math.floor(Math.random()*2)==0){
-						images = [trial.b_path, trial.a_path];
-					}
 					// show the images
 					$this.append($('<img>', {
-						"src": images[0],
+						"src": trial.a_path,
 						"class": 'sim'
 					}));
+					
+					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing[0]);
+					break;
+					
+				case 2:
+				
+					$('.sim').remove();
+					
+					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing[0]);
+					break;
+				case 3:
+				
 					$this.append($('<img>', {
-						"src": images[1],
+						"src": trial.b_path,
 						"class": 'sim'
 					}));
 
@@ -44,6 +52,13 @@
 							max:100,
 							step:1,
 						});
+					
+					
+					// create labels for slider
+					$this.append($('<div>', {"id": 'slider_labels', "class": 'sim'}));
+					
+					$('#slider_labels').append($('<p class="slider_left sim">Not at all similar</p>'));
+					$('#slider_labels').append($('<p class="slider_right sim">Highly similar</p>'));
 						
 					//  create button
 					$this.append($('<button>', {'id':'next','class':'sim'}));
@@ -52,7 +67,7 @@
 						plugin.trial($this,block,trial,part+1);
 					});
 					break;
-				case 2:
+				case 4:
 					// get data
 					var score = $("#slider").slider("value");
 					block.data[block.trial_idx] = {"score": score, "a_path": trial.a_path, "b_path": trial.b_path}

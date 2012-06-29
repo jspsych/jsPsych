@@ -36,6 +36,11 @@
 			// set target
 			DOM_target = $this;
 			
+			run();
+			/*
+			 * load scripts dynamically??
+			 *
+			 *
 			// load plugin script files
 			var scripts_loaded = 0;
 			// load all of the plugins that are defined in the opts["plugins"]
@@ -48,7 +53,7 @@
 						run();
 					}
 				});
-			}
+			}*/
 		}
 		
 		//
@@ -60,17 +65,9 @@
 			exp_blocks = new Array(opts["experiment_structure"].length);
 			
 			// iterate through block list to create trials
-			for(var i = exp_blocks.length-1; i>=0; i--)
+			for(var i = 0; i < exp_blocks.length; i++)
 			{
-				var trials = "undefined";
-				
-				for(var j = 0; j < opts["plugins"].length; j++)
-				{
-					if(opts["experiment_structure"][i]["type"] == opts["plugins"][j]["type"])
-					{
-						trials = jsPsych[opts["plugins"][j]["type"]]["create"].call(null, opts["experiment_structure"][i]);
-					}
-				}
+				var trials = jsPsych[opts["experiment_structure"][i]["type"]]["create"].call(null, opts["experiment_structure"][i]);
 				
 				exp_blocks[i] = createBlock(trials);
 			}
@@ -130,13 +127,7 @@
 		
 		function do_trial(block, trial)
 		{
-			for(var j = 0; j < opts["plugins"].length; j++)
-			{
-				if(trial.type == opts["plugins"][j]["type"])
-				{
-					jsPsych[opts["plugins"][j]["type"]]["trial"].call(this, DOM_target, block, trial, 1);
-				}
-			}
+			jsPsych[trial.type]["trial"].call(this, DOM_target, block, trial, 1);
 		}
 		
 		return core;
