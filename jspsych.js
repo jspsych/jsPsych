@@ -56,6 +56,15 @@
 			}*/
 		}
 		
+		core.data = function(){
+			var all_data = [];
+			for(var i=0;i<exp_blocks.length;i++)
+			{
+				all_data[i] = exp_blocks[i].data;
+			}
+			return all_data;
+		}
+		
 		//
 		// private functions //
 		//
