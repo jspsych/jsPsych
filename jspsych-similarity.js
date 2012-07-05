@@ -13,6 +13,9 @@
 				trials[i]["a_path"] = sim_stims[i][0];
 				trials[i]["b_path"] = sim_stims[i][1];
 				trials[i]["timing"] = params["timing"];
+				if(params["data"]!=undefined){
+					trials[i]["data"] = params["data"][i];
+				}
 			}
 			return trials;
 		}

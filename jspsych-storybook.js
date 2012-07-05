@@ -36,6 +36,8 @@
 					
 					var touchfunction = function(e) {
 					
+						e.originalEvent.preventDefault();
+					
 						var rt = (new Date()).getTime() - p1_time;
 						var x = e.originalEvent.touches[0].pageX;
 						var y = e.originalEvent.touches[0].pageY;
