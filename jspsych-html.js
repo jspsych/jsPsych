@@ -10,6 +10,8 @@ Parameters:
     cont_btn:  id of a button (or any element on the page) that can be clicked to continue (optional)
                note that the button / element has to be included in the page that is loaded, already
     timing:   number of ms to wait after hiding the page and before proceeding (optional)
+    check_fn: called with $this as argument when subject attempts to proceed; only proceeds if this
+              returns true; (optional)
   cont_key:  this setting is used for all pages that don't define it themself (optional)
   cont_btn: this setting is used for all pages that don't define it themself (optional)
   timing:    this setting is used for all pages that don't define it themself (optional)
@@ -43,6 +45,7 @@ Example Usage:
 			    ,cont_key: params.pages[i].cont_key || params.cont_key
 			    ,cont_btn: params.pages[i].cont_btn || params.cont_btn
 			    ,timing: params.pages[i].timing || params.timing
+			    ,check_fn: params.pages[i].check_fn
 			    }
 			  );
 			}
@@ -53,6 +56,8 @@ Example Usage:
 		  $this.load(trial.url, function() {
 		    var t0 = Date.now();
 		    var finish = function() {
+  		    if (trial.check_fn && !trial.check_fn($this)) return;
+  		    if (trial.cont_key) $(document).unbind('keyup', key_listener);	        
 		      block.data[block.trial_idx] = 
  		      { user_duration: Date.now()-t0
 		       ,url: trial.url
@@ -74,10 +79,7 @@ Example Usage:
 		    if (trial.cont_btn) $('#'+trial.cont_btn).click(finish);
 		    if (trial.cont_key) {
   		    var key_listener = function(e) {
-	  	      if (e.which == trial.cont_key) {
-	  	        $(document).unbind('keyup', key_listener);
-	  	        finish();
-	  	      }
+	  	      if (e.which == trial.cont_key) finish();
 	  	    }
 	  	    $(document).keyup(key_listener);
 	  		}
