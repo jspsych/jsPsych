@@ -55,8 +55,9 @@
 						{
 							var click_loc_data = {"click_locations": click_locations};
 							var click_time_data = {"click_times": click_times};
+							var img = {"img": trial.a_path };
 							// save data
-							block.data[block.trial_idx] = $.extend({}, click_loc_data, click_time_data);
+							block.data[block.trial_idx] = $.extend({}, img, click_loc_data, click_time_data, trial.data);
 						
 							plugin.trial($this, block, trial, part + 1);
 						}

@@ -73,7 +73,7 @@
 				case 4:
 					// get data
 					var score = $("#slider").slider("value");
-					block.data[block.trial_idx] = {"score": score, "a_path": trial.a_path, "b_path": trial.b_path}
+					block.data[block.trial_idx] = $.extend({},{"score": score, "a_path": trial.a_path, "b_path": trial.b_path},trial.data);
 					// goto next trial in block
 					$('.sim').remove();
 					setTimeout(function(){block.next();}, trial.timing[0]);
