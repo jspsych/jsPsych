@@ -37,24 +37,10 @@
 			DOM_target = $this;
 			
 			run();
-			/*
-			 * load scripts dynamically??
-			 *
-			 *
-			// load plugin script files
-			var scripts_loaded = 0;
-			// load all of the plugins that are defined in the opts["plugins"]
-			for(var j = 0; j < opts["plugins"].length; j++)
-			{
-				$.getScript(opts["plugins"][j]["src"], function(){
-					scripts_loaded++; 
-					if(scripts_loaded==opts["plugins"].length) {
-						intialized = true;
-						run();
-					}
-				});
-			}*/
 		}
+		
+		// core.data returns all of the data objects for each block as an array
+		// 		where core.data[0] = data object from block 0, etc...
 		
 		core.data = function(){
 			var all_data = [];
@@ -63,6 +49,35 @@
 				all_data[i] = exp_blocks[i].data;
 			}
 			return all_data;
+		}
+		
+		// core.progress returns an object with the following properties
+		// 		total_blocks: the number of total blocks in the experiment
+		//		total_trials: the number of total trials in the experiment
+		//		current_trial_global: the current trial number in global terms
+		// 					i.e. if each block has 20 trials and the experiment is
+		//					currently in block 2 trial 10, this has a value of 30.
+		//		current_trial_local: the current trial number within the block.
+		//		current_block: the current block number.
+		
+		core.progress = function(){
+		
+			var total_trials = 0;
+			for(var i=0; i<exp_blocks.length; i++) { total_trials += exp_blocks[i].num_trials; }
+			
+			var current_trial_global = 0;
+			for(var i=0; i<curr_block; i++) { current_trial_global += exp_blocks[i].num_trials; }
+			current_trial_global += exp_blocks[curr_block].trial_idx;
+		
+			var obj = {
+				"total_blocks": exp_blocks.length,
+				"total_trials": total_trials,
+				"current_trial_global": current_trial_global,
+				"current_trial_local": exp_blocks[curr_block].trial_idx,
+				"current_block": curr_block
+			};
+			
+			return obj;		
 		}
 		
 		//
@@ -108,7 +123,7 @@
 				next: function() {
 					this.trial_idx = this.trial_idx+1;
 				
-					curr_trial = trial_list[this.trial_idx];
+					var curr_trial = trial_list[this.trial_idx];
 					
 					if ( typeof curr_trial == "undefined"){
 						return this.done();
@@ -117,7 +132,9 @@
 					do_trial(this, curr_trial);
 				},
 				
-				done: nextBlock
+				done: nextBlock,
+				
+				num_trials: trials_list.length
 			}
 			
 			return block;
