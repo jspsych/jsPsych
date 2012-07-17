@@ -25,10 +25,6 @@
 		var initialized = false;
 		// target DOM element
 		var DOM_target;
-		// trial start callback method
-		var on_trial_start;
-		// trial finish callback method
-		var on_trial_finish;
 		
 		//
 		// public methods
@@ -36,7 +32,7 @@
 		
 		core.init = function($this, options){
 			var defaults = {
-				'on_trial_start': function(){ return undefined; }
+				'on_trial_start': function(){ return undefined; },
 				'on_trial_finish': function() { return undefined; }
 			}
 			// import options
@@ -142,7 +138,7 @@
 				
 				done: nextBlock,
 				
-				num_trials: trials_list.length
+				num_trials: trial_list.length
 			}
 			
 			return block;
@@ -156,13 +152,13 @@
 		function do_trial(block, trial)
 		{
 			// call on_trial_start()
-			on_trial_start();
+			opts.on_trial_start();
 		
 			// execute trial method
 			jsPsych[trial.type]["trial"].call(this, DOM_target, block, trial, 1);
 			
 			// call on_trial_finish()
-			on_trial_finish();
+			opts.on_trial_finish();
 		}
 		
 		return core;
