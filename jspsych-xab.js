@@ -16,9 +16,9 @@
 				trials[i]["a_path"] = xab_stims[i][0];
 				trials[i]["b_path"] = xab_stims[i][1];
 				trials[i]["timing"] = params["timing"];
-				if(params["data"]!=undefined){
-					trials[i]["data"] = params["data"][i];
-				}
+				trials[i]["data"] = params["data"][i] || params["data"] || undefined;
+				trials[i]["left_key"] = params["left_key"] || 81; // defaults to 'q'
+				trials[i]["right_key"] = params["right_key"] || 80; // defaults to 'p'
 			}
 			return trials;
 		}
@@ -62,11 +62,11 @@
 					var resp_func = function(e) {
 						var flag = false;
 						var correct = false;
-						if(e.which=='80') // 'p' key
+						if(e.which== trial.left_key) // 'p' key
 						{
 							flag = true;
 							if(!target_left) { correct = true; }
-						} else if(e.which=='81') // 'q' key
+						} else if(e.which== trial.right_key) // 'q' key
 						{
 							flag = true;
 							if(target_left){ correct = true; }
