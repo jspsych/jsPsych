@@ -128,7 +128,7 @@
 				
 					// call on_trial_finish() 
 					//     if not very first trial
-					//		and 
+					//		and not the last call in this block (no trial due to advance in block)
 					if(typeof this.trials[this.trial_idx+1] != "undefined" && (curr_block !=0 || this.trial_idx > -1)) { opts.on_trial_finish() };
 					
 					this.trial_idx = this.trial_idx+1;
