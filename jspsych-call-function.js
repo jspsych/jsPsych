@@ -25,6 +25,7 @@
 				"func": params["func"],
 				"args": params["args"] || []
 			}
+			return trials;
 		}
 		
 		plugin.trial = function($this, block, trial, part)
