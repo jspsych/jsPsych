@@ -15,7 +15,7 @@
 				trials[i]["type"] = "animation";
 				trials[i]["stims"] = stims[i];
 				trials[i]["frame_time"] = params["frame_time"];
-				trials[i]["repetitions"] = params["repetitions"];
+				trials[i]["repetitions"] = params["repetitions"] || 1;
 				trials[i]["timing"] = params["timing"];
 				if(params["prompt"] != undefined){
 					trials[i]["prompt"] = params["prompt"][i];
