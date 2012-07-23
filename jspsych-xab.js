@@ -16,9 +16,14 @@
 				trials[i]["a_path"] = xab_stims[i][0];
 				trials[i]["b_path"] = xab_stims[i][1];
 				trials[i]["timing"] = params["timing"];
-				trials[i]["data"] = params["data"][i] || params["data"] || undefined;
 				trials[i]["left_key"] = params["left_key"] || 81; // defaults to 'q'
 				trials[i]["right_key"] = params["right_key"] || 80; // defaults to 'p'
+				if(params["prompt"]) {
+					trials[i]["prompt"] = params["prompt"];
+				}
+				if(params["data"]){
+					trials[i]["data"] = params["data"][i];
+				} 
 			}
 			return trials;
 		}
@@ -57,6 +62,11 @@
 						"src": images[1],
 						"class": 'xab'
 					}));
+					
+					if(trial.prompt)
+					{
+						$this.append(trial.prompt);
+					}
 					
 					
 					var resp_func = function(e) {
