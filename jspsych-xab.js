@@ -90,7 +90,7 @@
 							var trial_data = {"rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which, "key_press": e.which, "stim1_time": stim1_time, "isi_time":isi_time}
 							block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 							$(document).unbind('keyup',resp_func);
-							$('.xab').remove();
+							$this.html(''); // remove all
 							setTimeout(function(){block.next();}, trial.timing[2]);
 						}
 					}
