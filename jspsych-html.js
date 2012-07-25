@@ -15,7 +15,8 @@ Parameters:
   cont_key:  this setting is used for all pages that don't define it themself (optional)
   cont_btn: this setting is used for all pages that don't define it themself (optional)
   timing:    this setting is used for all pages that don't define it themself (optional)
-
+  force_refresh: set to true if you want to force the plugin to grab the newest version of the html document
+  
 Data:
   array of
     url:      the url of the page
@@ -46,6 +47,7 @@ Example Usage:
 			    ,cont_btn: params.pages[i].cont_btn || params.cont_btn
 			    ,timing: params.pages[i].timing || params.timing
 			    ,check_fn: params.pages[i].check_fn
+				,force_refresh: params.force_refresh || false
 			    }
 			  );
 			}
@@ -53,7 +55,11 @@ Example Usage:
 		}
 
 		plugin.trial = function($this, block, trial, part) {
-		  $this.load(trial.url, function() {
+		
+		var url = trial.url;
+		if(trial.force_refresh) { url = trial.url + "?time=" + (new Date().getTime()); }
+		
+		$this.load(trial.url, function() {
 		    var t0 = Date.now();
 		    var finish = function() {
   		    if (trial.check_fn && !trial.check_fn($this)) return;
