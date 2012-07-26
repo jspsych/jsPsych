@@ -1,7 +1,7 @@
 jsPsych
 =======
 
-jsPsych is a javascript library for running behavioral experiments in a web browser. It uses a modular structure so that new experiment types can be written as plugins to the core library. It was created by Josh de Leeuw and Drew Hendrickson at Indiana University.
+jsPsych is a javascript library for running behavioral experiments in a web browser. It uses a modular structure so that new experiment types can be written as plugins to the core library. It was created by Josh de Leeuw (with inspiration from Drew Hendrickson) at Indiana University.
 
 Documentation
 -------------
