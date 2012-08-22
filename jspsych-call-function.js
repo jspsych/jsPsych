@@ -30,7 +30,10 @@
 		
 		plugin.trial = function($this, block, trial, part)
 		{
-			block.data[block.trial_idx] = trial.func.apply({}, [trial.args]);
+			var return_val = trial.func.apply({}, [trial.args]);
+			if(return_val){
+				block.data[block.trial_idx] = return_val;
+			}
 			
 			block.next();
 		}
