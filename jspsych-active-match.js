@@ -37,6 +37,14 @@
 		{
 			switch(part){
 				case 1:
+					// reset response variables
+					responses = [];
+					last_response_time = 0;
+					start_time = 0;
+					direction_changes = 0;
+					last_response = -1;
+				
+					// starting new trial
 					start_time = (new Date()).getTime();
 					last_response_time = start_time;
 					
