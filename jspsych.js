@@ -1,7 +1,8 @@
 // jspsych.js
 // 
-//	Josh de Leeuw and Drew Hendrickson
+//	Josh de Leeuw 
 //	Percepts and Concepts Lab, Indiana University
+//
 //
 (function( $ ) {
 	jsPsych = (function() {
@@ -30,6 +31,13 @@
 		// public methods
 		//
 		
+		// core.init creates the experiment and starts running it
+		//		$this is an HTML element (usually a <div>) that will display jsPsych content
+		//		options is an object: {
+		//			"experiment_structure": an array of blocks specifying the experiment
+		//			"finish": function to execute when the experiment ends
+		//		}
+		//
 		core.init = function($this, options){
 			var defaults = {
 				'on_trial_start': function(){ return undefined; },
