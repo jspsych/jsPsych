@@ -98,7 +98,7 @@
 								final_locations.push({"src": $(this).attr('src'), "x": $(this).css('left'), "y": $(this).css('top')});
 							});
 							
-							block.data[block.trial_idx] = $.extend({}, {"init_location": init_locations, "moves": moves, "final_locations": final_locations}, trial.data);
+							block.data[block.trial_idx] = $.extend({}, {"init_locations": JSON.stringify(init_locations), "moves": JSON.stringify(moves), "final_locations": JSON.stringify(final_locations)}, trial.data);
 							
 							// advance to next part
 							plugin.trial($this, block, trial, part + 1);
