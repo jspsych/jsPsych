@@ -61,7 +61,7 @@
 					$this.append($('<div>', {"id": 'slider_labels', "class": 'sim'}));
 					
 					$('#slider_labels').append($('<p class="slider_left sim">Not at all similar</p>'));
-					$('#slider_labels').append($('<p class="slider_right sim">Highly similar</p>'));
+					$('#slider_labels').append($('<p class="slider_right sim">Identical</p>'));
 						
 					//  create button
 					$this.append($('<button>', {'id':'next','class':'sim'}));
