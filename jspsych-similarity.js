@@ -13,6 +13,8 @@
 				trials[i]["a_path"] = sim_stims[i][0];
 				trials[i]["b_path"] = sim_stims[i][1];
 				trials[i]["timing"] = params["timing"];
+				trials[i]["label_low"] = params["label_low"] || "Not at all similar";
+				trials[i]["label_high"] = params["label_high"] || "Identical";
 				if(params["data"]!=undefined){
 					trials[i]["data"] = params["data"][i];
 				}
@@ -60,8 +62,8 @@
 					// create labels for slider
 					$this.append($('<div>', {"id": 'slider_labels', "class": 'sim'}));
 					
-					$('#slider_labels').append($('<p class="slider_left sim">Not at all similar</p>'));
-					$('#slider_labels').append($('<p class="slider_right sim">Identical</p>'));
+					$('#slider_labels').append($('<p class="slider_left sim">'+trial.label_low+'</p>'));
+					$('#slider_labels').append($('<p class="slider_right sim">'+trial.label_high+'</p>'));
 						
 					//  create button
 					$this.append($('<button>', {'id':'next','class':'sim'}));
