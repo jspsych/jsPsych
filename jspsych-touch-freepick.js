@@ -4,15 +4,16 @@
 		var plugin = {};
 	
 		plugin.create = function(params) {
-			stims = params["stimuli"];
+			stims = params["stims"];
 			trials = new Array(stims.length);
 			for(var i = 0; i < trials.length; i++)
 			{
 				trials[i] = {};
 				trials[i]["type"] = "touch_freepick";
 				trials[i]["stims"] = stims[i];
-				trials[i]["answers"] = params["answers"][i];
+				trials[i]["answer_text"] = params["answer_text"][i] || "";
 				trials[i]["timing"] = params["timing"];
+				trials[i]["force_correct_pick"] = params["force_correct_pick"] || false;
 				if(params["data"]!=undefined){
 					trials[i]["data"] = params["data"][i];
 				}
@@ -26,60 +27,61 @@
 				case 1:
 					p1_time = (new Date()).getTime();
 					
+					var order = [];
+					for(var i=0;i<trial.stims.length;i++)
+					{
+						order.push(i);
+					}
+					
+					order = shuffle(order);
+					
 					// add images
-					for(var i=0;trial.stims.length;i++){
+					for(var i=0;i<trial.stims.length;i++){
 						$this.append($('<img>', {
-							"src": trial.stims[i],
+							"src": trial.stims[order[i]],
 							"class": 'freepick',
-							"id":'fp'+i
+							"id":'fp'+order[i]
 						}));
 					}
 					
-					var click_count = 0;
-					var click_locations = [];
-					var click_times = [];
-					
-					var touchfunction = function(e) {
-					
-						e.originalEvent.preventDefault();
-					
-						var rt = (new Date()).getTime() - p1_time;
-						var x = e.originalEvent.touches[0].pageX;
-						var y = e.originalEvent.touches[0].pageY;
-						
-						click_count = click_count + 1;
-						
-						console.log("click event "+x+" "+y+". click count "+click_count+". click num "+trial.click_num);
-						
-						//save location
-						click_locations.push([x,y]);
-						click_times.push(rt);
-						
-						//save response time
-						if(click_count == trial.click_num)
-						{
-							var click_loc_data = {"click_locations": click_locations};
-							var click_time_data = {"click_times": click_times};
-							var img = {"img": trial.a_path };
-							// save data
-							block.data[block.trial_idx] = $.extend({}, img, click_loc_data, click_time_data, trial.data);
-						
-							plugin.trial($this, block, trial, part + 1);
-						}
-					};
-					
-					$('.storybook').click(function(){ void(0); })
-					
-					//$('.storybook').mousedown(function(e){ touchfunction(e);});
-					$('.storybook').bind("touchstart", function(e){touchfunction(e);});
+					// need to pick the right one!
+					if(trial.force_correct_pick) {
+						$("#fp0").click(
+							function(){
+							// clear everything
+								$this.html('');
+								// add only target
+								$this.append($('<img>', {
+									"src": trial.stims[0],
+									"class": 'freepick',
+									"id":'fp_answer'
+								}));
+								$this.append($('<p class="answer">'+trial.answer_text+'</p>'));
+								setTimeout(function(){plugin.trial($this,block,trial,part+1)}, trial.timing[0]);
+							}
+						);
+					}
 					
 					break;
 				case 2:
-					$('.storybook').remove();
+					$this.html('');
 					
-					setTimeout(function(){block.next();}, trial.timing[0]);
+					setTimeout(function(){block.next();}, trial.timing[1]);
 					break;
 			}
+		}
+		
+		function shuffle(array) {
+			var tmp, current, top = array.length;
+
+			if(top) while(--top) {
+				current = Math.floor(Math.random() * (top + 1));
+				tmp = array[current];
+				array[current] = array[top];
+				array[top] = tmp;
+			}
+
+			return array;
 		}
 		
 		return plugin;

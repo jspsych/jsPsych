@@ -86,8 +86,20 @@
 				}
 			}
 			
-			// attach the response function to the html document.
-			$(document).keyup(key_listener);
+			var mouse_listener = function(e){
+				$this.unbind('click', mouse_listener); // remove the response function, so that it doesn't get triggered again.
+				$this.html(''); // clear the display
+				setTimeout(function(){block.next();}, trial.timing[0]); // call block.next() to advance the experiment after a delay.
+			}
+			
+			// check if key is 'mouse'
+			if(trial.cont_key == 'mouse')
+			{
+				$this.click(mouse_listener);
+			} else {
+				// attach the response function to the html document.
+				$(document).keyup(key_listener);
+			}
 		}
 		
 		return plugin;
