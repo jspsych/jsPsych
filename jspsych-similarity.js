@@ -1,3 +1,10 @@
+/* jspsych-similarity.js
+ * Josh de Leeuw
+ * 
+ * This plugin create a trial where two images are shown sequentially, and the subject rates their similarity using a slider controlled with the mouse.
+ *
+ */
+
 (function( $ ) {
 	jsPsych.similarity = (function(){
 	
@@ -12,7 +19,10 @@
 				trials[i]["type"] = "similarity";
 				trials[i]["a_path"] = sim_stims[i][0];
 				trials[i]["b_path"] = sim_stims[i][1];
-				trials[i]["timing"] = params["timing"];
+				trials[i]["timing_first_image"] = params["timing_first_image"] || 1000; // default 1000ms
+				trials[i]["timing_second_image"] = params["timing_second_image"] || -1; // -1 = inf time; positive numbers = msec to display second image.
+				trials[i]["timing_image_gap"] = params["timing_image_gap"] || 1000; // default 1000ms
+				trials[i]["timing_post_trial"] = params["timing_post_trial"] || 1000; // default 1000ms
 				trials[i]["label_low"] = params["label_low"] || "Not at all similar";
 				trials[i]["label_high"] = params["label_high"] || "Identical";
 				if(params["data"]!=undefined){
@@ -21,32 +31,45 @@
 			}
 			return trials;
 		}
+		
+		var sim_trial_complete = false;
 
 		plugin.trial = function($this, block, trial, part)
 		{
 			switch(part){
 				case 1:
+					sim_trial_complete = false;
 					// show the images
 					$this.append($('<img>', {
 						"src": trial.a_path,
 						"class": 'sim'
 					}));
 					
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing[0]);
+					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing_first_image);
 					break;
 					
 				case 2:
 				
 					$('.sim').remove();
 					
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing[0]);
+					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing_image_gap);
 					break;
 				case 3:
 				
 					$this.append($('<img>', {
 						"src": trial.b_path,
-						"class": 'sim'
+						"class": 'sim',
+						"id": 'jspsych_sim_second_image'
 					}));
+					
+					if(trial.timing_second_image > 0)
+					{
+						setTimeout(function(){
+							if(!sim_trial_complete) {
+								$("#jspsych_sim_second_image").css('visibility', 'hidden');
+							}
+						}, trial.timing_second_image);
+					}
 
 					// create slider
 					$this.append($('<div>', { "id": 'slider', "class": 'sim' }));
@@ -69,6 +92,7 @@
 					$this.append($('<button>', {'id':'next','class':'sim'}));
 					$("#next").html('Next');
 					$("#next").click(function(){
+						sim_trial_complete = true;
 						plugin.trial($this,block,trial,part+1);
 					});
 					break;
@@ -78,7 +102,7 @@
 					block.data[block.trial_idx] = $.extend({},{"sim_score": score, "a_path": trial.a_path, "b_path": trial.b_path},trial.data);
 					// goto next trial in block
 					$('.sim').remove();
-					setTimeout(function(){block.next();}, trial.timing[0]);
+					setTimeout(function(){block.next();}, trial.timing_post_trial);
 					break;
 			}
 		}
