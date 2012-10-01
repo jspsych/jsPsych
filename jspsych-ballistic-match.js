@@ -146,7 +146,7 @@
 					$this.html(''); 
 					var correct = false;
 					if(change > 0 && trial.start_idx < trial.target_idx) { correct = true; }
-					if(change < 0 && trial.start_idx > trial.target_idx) { correct = false; }
+					if(change < 0 && trial.start_idx > trial.target_idx) { correct = true; }
 					
 					var trial_data = {"start_idx":trial.start_idx, "target_idx": trial.target_idx, "correct": correct, "rt": (end_time-start_time)};
 					block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
