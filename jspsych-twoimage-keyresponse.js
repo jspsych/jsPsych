@@ -1,11 +1,10 @@
 // Josh de Leeuw
 // Nov. 2012
 
-// This plugin is for presenting a single image and collecting a key response.
-// It can be used for categorizing images (without feedback), collecting yes/no responses, etc...
+// This plugin is for presenting two images in sequence and collecting a key response.
 
 (function( $ ) {
-	jsPsych.singleimage_keyresponse = (function(){
+	jsPsych.twoimage_keyresponse = (function(){
 	
 		var plugin = {};
 	
@@ -15,11 +14,14 @@
 			for(var i = 0; i < trials.length; i++)
 			{
 				trials[i] = {};
-				trials[i]["type"] = "singleimage_keyresponse";
-				trials[i]["a_path"] = stims[i];
+				trials[i]["type"] = "twoimage_keyresponse";
+				trials[i]["a_path"] = stims[i][0];
+				trials[i]["b_path"] = stims[i][1];
 				trials[i]["choices"] = params["choices"];
 				// timing parameters
-				trials[i]["timing_stim"] = params["timing_stim"]; // if undefined, then show indefinitely
+				trials[i]["timing_first_stim"] = params["timing_first_stim"] || 1000; 
+				trials[i]["timing_gap"] = params["timing_gap"] || 500;
+				trials[i]["timing_second_stim"] = params["timing_second_stim"]; // if undefined, then show indefinitely
 				trials[i]["timing_post_trial"] = params["timing_post_trial"] || 1000;
 				// optional parameters
 				if(params["prompt"] != undefined){
@@ -32,17 +34,32 @@
 			return trials;
 		}
 
-		var sikr_trial_complete = false;
+		var tikr_trial_complete = false;
 		plugin.trial = function($this, block, trial, part)
 		{
 			switch(part){
 				case 1:
-					sikr_trial_complete = false;
+					tikr_trial_complete = false;
 					
-					startTime = (new Date()).getTime();
 					$this.append($('<img>', {
 						"src": trial.a_path,
-						"id": 'sikr_img'
+						"id": 'tikr_a_img'
+					}));
+				
+					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing_first_stim);
+					break;
+					
+				case 2: 
+					$('#tikr_a_img').remove();
+					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing_gap);
+					break;
+					
+				case 3
+					startTime = (new Date()).getTime();
+					
+					$this.append($('<img>', {
+						"src": trial.b_path,
+						"id": 'tikr_b_img'
 					}));
 					
 					//show prompt here
@@ -51,12 +68,12 @@
 					}
 			
 					// hide image if timing is set
-					if(trial.timing_stim != undefined){
+					if(trial.timing_second_stim != undefined){
 						setTimeout(function(){
-							if(!sikr_trial_complete){
-								$('#sikr_img').css('visibility','hidden');
+							if(!tikr_trial_complete){
+								$('#tikr_b_img').css('visibility','hidden');
 							}
-						}, trial.timing_stim);
+						}, trial.timing_second_stim);
 					}
 		
 					var resp_func = function(e) {
@@ -74,11 +91,11 @@
 							endTime = (new Date()).getTime();
 							rt = (endTime-startTime);
 						
-							var trial_data = {"rt": rt, "a_path": trial.a_path, "key_press": e.which}
+							var trial_data = {"rt": rt, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which}
 							block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 							$(document).unbind('keyup',resp_func);
 							$this.html('');
-							sikr_trial_complete = true;
+							tikr_trial_complete = true;
 							setTimeout(function(){block.next();}, trial.timing_post_trial);
 						}
 					}
