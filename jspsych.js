@@ -26,6 +26,8 @@
 		var initialized = false;
 		// target DOM element
 		var DOM_target;
+		// time that the experiment began
+		var exp_start_time;
 		
 		//
 		// public methods
@@ -39,6 +41,15 @@
 		//		}
 		//
 		core.init = function($this, options){
+		
+			// reset the key variables
+			// TODO: properly define this as a class with instance variables?
+			exp_blocks = [];
+			opts = {};
+			initialized = false;
+			curr_block = 0;
+			
+		
 			var defaults = {
 				'on_trial_start': function(){ return undefined; },
 				'on_trial_finish': function() { return undefined; }
@@ -92,6 +103,12 @@
 			return obj;		
 		}
 		
+		// core.startTime() returns the Date object which represents the time that the experiment started.
+				
+		core.startTime = function(){
+			return exp_start_time;
+		}
+		
 		//
 		// private functions //
 		//
@@ -107,6 +124,8 @@
 				
 				exp_blocks[i] = createBlock(trials);
 			}
+			// start!
+			exp_start_time = new Date();
 
 			// run the first block
 			exp_blocks[0].next();
