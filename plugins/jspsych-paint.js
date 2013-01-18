@@ -46,13 +46,13 @@
 			return trials;
 		}
 
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			switch(part){
 				case 1:
 					p1_time = (new Date()).getTime();
 					
-					$this.append($('<div>', {
+					display_element.append($('<div>', {
 						"id": 'paintbox',
 						"class": 'paint'}));
 					
@@ -124,16 +124,16 @@
 						paint = false;
 					});
 					
-					$this.append($('<button>',{
+					display_element.append($('<button>',{
 						'id':'done',
 						'class':'paint'}));
 					
 					$('#done').html('Done');
 					$('#done').click(function(){
-						plugin.trial($this,block,trial,part+1);
+						plugin.trial(display_element,block,trial,part+1);
 					});
 					
-					$this.append($('<button>',{
+					display_element.append($('<button>',{
 						'id':'reset',
 						'class':'paint'}));
 						
@@ -146,7 +146,7 @@
 					});
 					
 					if(trial.prompt){
-						$this.append(trial.prompt);						
+						display_element.append(trial.prompt);						
 					}
 					
 					break;
@@ -174,7 +174,7 @@
 				
 					block.data[block.trial_idx] = $.extend({},{"a_path": trial.a_path,"pixels": data_string},trial.data);
 				
-					$this.html('');
+					display_element.html('');
 					
 					setTimeout(function(){block.next();}, trial.timing[0]);
 					break;

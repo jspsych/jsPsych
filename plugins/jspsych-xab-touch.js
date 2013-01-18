@@ -21,21 +21,21 @@
 			return trials;
 		}
 
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			switch(part){
 				case 1:
 					p1_time = (new Date()).getTime();
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.a_path,
 						"class": 'xab_touch'
 					}));
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[0]);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing[0]);
 					break;
 				case 2:
 					p2_time = (new Date()).getTime();
 					$('.xab_touch').remove();
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[1]);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing[1]);
 					break;
 				case 3:
 					p3_time = (new Date()).getTime();
@@ -45,11 +45,11 @@
 					if(!target_left){
 						images = [trial.b_path, trial.a_path];
 					}
-					//$.fn.jsPsych.showImages($this, images, 'xab');
+					//$.fn.jsPsych.showImages(display_element, images, 'xab');
 					
 					var correct=false;
 					
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": images[0],
 						"class": 'xab_touch',
 						"id": "left_img"
@@ -67,7 +67,7 @@
 						setTimeout(function(){block.next();}, trial.timing[2]);
 					});
 					
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": images[1],
 						"class": 'xab_touch',
 						"id": "right_img"

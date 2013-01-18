@@ -41,7 +41,7 @@
 		
 		var xab_trial_complete = false;
 
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			switch(part){
 				case 1:
@@ -49,16 +49,16 @@
 					xab_trial_complete = false;
 					
 					p1_time = (new Date()).getTime();
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.a_path,
 						"class": 'xab'
 					}));
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing_x);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1)}, trial.timing_x);
 					break;
 				case 2:
 					p2_time = (new Date()).getTime();
 					$('.xab').remove();
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing_xab_gap);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1)}, trial.timing_xab_gap);
 					break;
 				case 3:
 					p3_time = (new Date()).getTime();
@@ -70,18 +70,18 @@
 					}
 					
 					// show the images
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": images[0],
 						"class": 'xab'
 					}));
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": images[1],
 						"class": 'xab'
 					}));
 					
 					if(trial.prompt)
 					{
-						$this.append(trial.prompt);
+						display_element.append(trial.prompt);
 					}
 					
 					if(trial.timing_ab > 0)
@@ -114,7 +114,7 @@
 							var trial_data = {"rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which, "stim1_time": stim1_time, "isi_time":isi_time}
 							block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 							$(document).unbind('keyup',resp_func);
-							$this.html(''); // remove all
+							display_element.html(''); // remove all
 							xab_trial_complete = true;
 							setTimeout(function(){block.next();}, trial.timing_post_trial);
 						}

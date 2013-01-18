@@ -34,29 +34,29 @@
 		
 		var sim_trial_complete = false;
 
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			switch(part){
 				case 1:
 					sim_trial_complete = false;
 					// show the images
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.a_path,
 						"class": 'sim'
 					}));
 					
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing_first_image);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1)}, trial.timing_first_image);
 					break;
 					
 				case 2:
 				
 					$('.sim').remove();
 					
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing_image_gap);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1)}, trial.timing_image_gap);
 					break;
 				case 3:
 				
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.b_path,
 						"class": 'sim',
 						"id": 'jspsych_sim_second_image'
@@ -72,7 +72,7 @@
 					}
 
 					// create slider
-					$this.append($('<div>', { "id": 'slider', "class": 'sim' }));
+					display_element.append($('<div>', { "id": 'slider', "class": 'sim' }));
 					$("#slider").slider(
 						{
 							value:50,
@@ -83,17 +83,17 @@
 					
 					
 					// create labels for slider
-					$this.append($('<div>', {"id": 'slider_labels', "class": 'sim'}));
+					display_element.append($('<div>', {"id": 'slider_labels', "class": 'sim'}));
 					
 					$('#slider_labels').append($('<p class="slider_left sim">'+trial.label_low+'</p>'));
 					$('#slider_labels').append($('<p class="slider_right sim">'+trial.label_high+'</p>'));
 						
 					//  create button
-					$this.append($('<button>', {'id':'next','class':'sim'}));
+					display_element.append($('<button>', {'id':'next','class':'sim'}));
 					$("#next").html('Next');
 					$("#next").click(function(){
 						sim_trial_complete = true;
-						plugin.trial($this,block,trial,part+1);
+						plugin.trial(display_element,block,trial,part+1);
 					});
 					break;
 				case 4:

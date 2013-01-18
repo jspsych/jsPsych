@@ -24,39 +24,39 @@
 			return trials;
 		}
 
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			switch(part){
 				case 1:
 					p1_time = (new Date()).getTime();
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.a_path,
 						"class": 'sd'
 					}));
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[0]);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing[0]);
 					break;
 				case 2:
 					p2_time = (new Date()).getTime();
 					$('.sd').remove();
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[1]);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing[1]);
 					break;
 				case 3:
 					p3_time = (new Date()).getTime();
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.b_path,
 						"class": 'sd'
 					}));
 					if(trial.timing[3]!=undefined){
-						setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[3]);
+						setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing[3]);
 					} else {
-						plugin.trial($this, block, trial, part + 1);
+						plugin.trial(display_element, block, trial, part + 1);
 					}
 					break;
 				case 4:
 					p4_time = (new Date()).getTime();
 					if(trial.timing[3]!=undefined){
 						$('.sd').remove();
-						$this.html(trial.prompt);
+						display_element.html(trial.prompt);
 					}
 					startTime = (new Date()).getTime();
 					var resp_func = function(e) {
@@ -82,7 +82,7 @@
 							block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 							$(document).unbind('keyup',resp_func);
 							$('.sd').remove();
-							$this.html('');
+							display_element.html('');
 							setTimeout(function(){block.next();}, trial.timing[2]);
 						}
 					}

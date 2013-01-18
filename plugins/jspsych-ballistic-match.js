@@ -32,7 +32,7 @@
 		var start_time;
 		var end_time; 
 		
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			switch(part){
 				case 1:
@@ -41,14 +41,14 @@
 					change = 0;
 						
 					// show manipulate image
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.stimuli[trial.start_idx],
 						"class": 'bm_img',
 						"id": 'bm_manipulate'
 					}));
 						
 					// show target image
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.stimuli[trial.target_idx],
 						"class": 'bm_img',
 						"id": 'bm_target'
@@ -56,7 +56,7 @@
 					
 					if(trial.prompt)
 					{
-						$this.append(trial.prompt);
+						display_element.append(trial.prompt);
 					}
 					
 					// categorize the image.
@@ -75,7 +75,7 @@
 						
 						if(valid_response){
 							end_time = (new Date()).getTime();
-							plugin.trial($this,block,trial,part+1);
+							plugin.trial(display_element,block,trial,part+1);
 							$(document).unbind('keyup', resp_func);
 						}
 					}
@@ -84,18 +84,18 @@
 					break;
 				case 2:
 					// clear everything
-					$this.html('');
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[1]);
+					display_element.html('');
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing[1]);
 					break;
 				case 3:
 					// draw trajectory
-					draw_trajectory($this,
+					draw_trajectory(display_element,
 									trial.stimuli[trial.target_idx], 
 									trial.stimuli[trial.start_idx], 
 									trial.target_idx/(trial.stimuli.length-1),
 									trial.start_idx/(trial.stimuli.length-1));
 					
-					$this.append($('<div>',{
+					display_element.append($('<div>',{
 						"id":"bm_feedback",
 						}));
 					
@@ -105,16 +105,16 @@
 						$("#bm_feedback").html('<p>You said decrease.</p>');
 					}
 					
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[1]*3);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing[1]*3);
 					break;
 				case 4:
 					var curr_loc = trial.start_idx
 					animate_interval = setInterval(function(){
 		
 						// clear everything
-						$this.html('');
+						display_element.html('');
 						// draw trajectory
-						draw_trajectory($this,
+						draw_trajectory(display_element,
 										trial.stimuli[trial.target_idx], 
 										trial.stimuli[curr_loc], 
 										trial.target_idx/(trial.stimuli.length-1),
@@ -130,7 +130,7 @@
 							if(change > 0 && trial.start_idx < trial.target_idx) { correct = true; }
 							if(change < 0 && trial.start_idx > trial.target_idx) { correct = true; }
 							
-							$this.append($('<div>',{
+							display_element.append($('<div>',{
 								"id":"bm_feedback",
 							}));
 							if(correct){
@@ -138,12 +138,12 @@
 							} else {
 								$("#bm_feedback").html('<p>Wrong.</p>');
 							}
-							setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[1]*3);
+							setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing[1]*3);
 						}
 					}, trial.animate_frame_time);				
 					break;
 				case 5:
-					$this.html(''); 
+					display_element.html(''); 
 					var correct = false;
 					if(change > 0 && trial.start_idx < trial.target_idx) { correct = true; }
 					if(change < 0 && trial.start_idx > trial.target_idx) { correct = true; }
@@ -156,9 +156,9 @@
 			}
 		}
 		
-		function draw_trajectory($this,target_img, moving_img, target_loc_percent, moving_loc_percent)
+		function draw_trajectory(display_element,target_img, moving_img, target_loc_percent, moving_loc_percent)
 		{
-			$this.append($('<div>', {
+			display_element.append($('<div>', {
 				"id": "message_holder"}));
 			$("#message_holder").append($('<p id="left">Less Chemical X</p>'));
 			$("#message_holder").append($('<p id="right">More Chemical X</p>'));
@@ -168,7 +168,7 @@
 				"id":"arrow"
 				}));
 			// display the images on the trajectory							
-			$this.append($('<div>',{
+			display_element.append($('<div>',{
 				"id": "bm_trajectory",
 				"css": {
 					"position":"relative"

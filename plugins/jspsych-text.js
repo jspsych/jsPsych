@@ -56,7 +56,7 @@
 			return trials;
 		}
 		
-		plugin.trial = function($this, block, trial, part) {
+		plugin.trial = function(display_element, block, trial, part) {
 			// the text for the trial is in trial.text, but we need to replace any variables that are in the text.
 			var replaced_text = trial.text;
 			
@@ -73,7 +73,7 @@
 				}
 			}
 			// set the HTML of the display target to replaced_text.
-			$this.html(replaced_text);
+			display_element.html(replaced_text);
 			
 			// define a function that will advance to the next trial when the user presses
 			// the continue key.
@@ -81,21 +81,21 @@
 				if(e.which==trial.cont_key) 
 				{			
 					$(document).unbind('keyup',key_listener); // remove the response function, so that it doesn't get triggered again.
-					$this.html(''); // clear the display
+					display_element.html(''); // clear the display
 					setTimeout(function(){block.next();}, trial.timing[0]); // call block.next() to advance the experiment after a delay.
 				}
 			}
 			
 			var mouse_listener = function(e){
-				$this.unbind('click', mouse_listener); // remove the response function, so that it doesn't get triggered again.
-				$this.html(''); // clear the display
+				display_element.unbind('click', mouse_listener); // remove the response function, so that it doesn't get triggered again.
+				display_element.html(''); // clear the display
 				setTimeout(function(){block.next();}, trial.timing[0]); // call block.next() to advance the experiment after a delay.
 			}
 			
 			// check if key is 'mouse'
 			if(trial.cont_key == 'mouse')
 			{
-				$this.click(mouse_listener);
+				display_element.click(mouse_listener);
 			} else {
 				// attach the response function to the html document.
 				$(document).keyup(key_listener);

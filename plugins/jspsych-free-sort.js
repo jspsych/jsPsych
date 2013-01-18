@@ -26,7 +26,7 @@
 			return trials;
 		}
 
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			switch(part){
 				case 1:
@@ -35,10 +35,10 @@
 					// check if there is a prompt and if it is shown above
 					if(trial.prompt && trial.prompt_location == "above")
 					{
-						$this.append(trial.prompt);
+						display_element.append(trial.prompt);
 					}
 					
-					$this.append($('<div>', {
+					display_element.append($('<div>', {
 						"id": "sort_arena",
 						"class": "sort",
 						"css": {
@@ -51,7 +51,7 @@
 					// check if prompt exists and if it is shown below
 					if(trial.prompt && trial.prompt_location == "below")
 					{
-						$this.append(trial.prompt);
+						display_element.append(trial.prompt);
 					}
 					
 					// store initial location data
@@ -86,7 +86,7 @@
 						}
 					});
 					
-					$this.append($('<button>', {
+					display_element.append($('<button>', {
 						"id": "done_btn",
 						"class": "sort",
 						"html": "Done",
@@ -101,7 +101,7 @@
 							block.data[block.trial_idx] = $.extend({}, {"init_locations": JSON.stringify(init_locations), "moves": JSON.stringify(moves), "final_locations": JSON.stringify(final_locations)}, trial.data);
 							
 							// advance to next part
-							plugin.trial($this, block, trial, part + 1);
+							plugin.trial(display_element, block, trial, part + 1);
 						}
 					}));
 					break;

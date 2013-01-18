@@ -33,7 +33,7 @@
 			return trials;
 		}
 
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			var animate_frame = -1;
 			var reps = 0;
@@ -50,7 +50,7 @@
 					
 					// show animation
 					animate_interval = setInterval(function(){
-						$this.html(""); // clear everything
+						display_element.html(""); // clear everything
 						animate_frame++;
 						if(animate_frame == trial.stims.length)
 						{
@@ -64,7 +64,7 @@
 						}
 						
 						if( showAnimation ) {
-							$this.append($('<img>', {
+							display_element.append($('<img>', {
 								"src": trial.stims[animate_frame],
 								"class": 'animate'
 							}));
@@ -72,13 +72,13 @@
 						
 						if(!responded && trial.allow_response_before_complete) {
 							// in here if the user can respond before the animation is done
-							if(trial.prompt != undefined) { $this.append(trial.prompt); }
+							if(trial.prompt != undefined) { display_element.append(trial.prompt); }
 						} else if(!responded) {
 							// in here if the user has to wait to respond until animation is done.
 							// if this is the case, don't show the prompt until the animation is over.
 							if( !showAnimation )
 							{
-								if(trial.prompt != undefined) { $this.append(trial.prompt); }
+								if(trial.prompt != undefined) { display_element.append(trial.prompt); }
 							}
 						} else {
 							// user has responded if we get here.
@@ -91,13 +91,13 @@
 							} else {
 								feedback_text = trial.incorrect_text.replace("&ANS&", trial.text_answer);
 							}
-							$this.append(feedback_text);
+							display_element.append(feedback_text);
 							
 							// set timeout to clear feedback
 							if(!timeoutSet)
 							{
 								timeoutSet = true;
-								setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[0]);
+								setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing[0]);
 							}
 						}
 							
@@ -149,7 +149,7 @@
 					
 				case 2:
 					clearInterval(animate_interval); // stop animation!
-					$this.html(''); // clear everything
+					display_element.html(''); // clear everything
 					setTimeout(function(){ block.next(); }, trial.timing[1]);
 					break;
 			}			

@@ -40,11 +40,11 @@
 			return trials;
 		}
 
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			switch(part){
 				case 1:
-					$this.append($('<div>', {
+					display_element.append($('<div>', {
 						"id": 'sdl_img_container',
 						"css": {
 							"position": 'relative'
@@ -60,7 +60,7 @@
 							"left": trial.a_x_offset
 						}
 					}));
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing_first_img);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing_first_img);
 					break;
 				case 2:
 					$('.sd1').remove();
@@ -68,7 +68,7 @@
 						"src": trial.mask_path,
 						"class": 'sdl'						
 					}));
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing_mask);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing_mask);
 					break;
 				case 3:
 					$('.sd1').remove();
@@ -83,7 +83,7 @@
 						}
 					}));
 					
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing_second_img);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing_second_img);
 					break;
 				case 4:
 					$('.sd1').remove();
@@ -129,7 +129,7 @@
 						var trial_data = {"rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which, 
 							"a_x_loc": trial.a_x_offset,"a_y_loc": trial.a_y_offset,"b_x_loc": trial.b_x_offset, "b_y_loc": trial.b_y_offset };
 						block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
-						$this.html('');
+						display_element.html('');
 						block.next();
 					}
 					

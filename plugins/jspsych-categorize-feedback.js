@@ -35,28 +35,28 @@
 			return trials;
 		}
 
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			switch(part){
 				case 1:
 					p1_time = (new Date()).getTime();
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.a_path,
 						"class": 'cf'
 					}));
 					if(trial.timing[2]!=undefined){
-						setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[2]);
+						setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing[2]);
 					} else {
 						//show prompt here
-						$this.append(trial.prompt);
-						plugin.trial($this, block, trial, part + 1);
+						display_element.append(trial.prompt);
+						plugin.trial(display_element, block, trial, part + 1);
 					}
 					break;
 				case 2:
 					p2_time = (new Date()).getTime();
 					if(trial.timing[2]!=undefined){
 						$('.cf').remove();
-						$this.append(trial.prompt);
+						display_element.append(trial.prompt);
 					}
 					startTime = (new Date()).getTime();
 					var resp_func = function(e) {
@@ -87,8 +87,8 @@
 							var trial_data = {"rt": rt, "correct": correct, "a_path": trial.a_path, "key_press": e.which, "stim1_time": stim1_time}
 							block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 							$(document).unbind('keyup',resp_func);
-							$this.html('');
-							plugin.trial($this, block, trial, part + 1);
+							display_element.html('');
+							plugin.trial(display_element, block, trial, part + 1);
 						}
 					}
 					$(document).keyup(resp_func);
@@ -96,7 +96,7 @@
 				case 3:
 					if(trial.show_stim_feedback)
 					{
-						$this.append($('<img>', {
+						display_element.append($('<img>', {
 							"src": trial.a_path,
 							"class": 'cf'
 						}));
@@ -109,11 +109,11 @@
 					} else {
 						atext = trial.incorrect_text.replace("&ANS&", trial.text_answer);
 					}
-					$this.append(atext);
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[0]);
+					display_element.append(atext);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing[0]);
 					break;
 				case 4:
-					$this.html("");
+					display_element.html("");
 					setTimeout(function(){block.next();}, trial.timing[1]);
 					break;
 			}

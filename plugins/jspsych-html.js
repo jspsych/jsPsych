@@ -10,7 +10,7 @@ Parameters:
     cont_btn:  id of a button (or any element on the page) that can be clicked to continue (optional)
                note that the button / element has to be included in the page that is loaded, already
     timing:   number of ms to wait after hiding the page and before proceeding (optional)
-    check_fn: called with $this as argument when subject attempts to proceed; only proceeds if this
+    check_fn: called with display_element as argument when subject attempts to proceed; only proceeds if this
               returns true; (optional)
   cont_key:  this setting is used for all pages that don't define it themself (optional)
   cont_btn: this setting is used for all pages that don't define it themself (optional)
@@ -54,15 +54,15 @@ Example Usage:
 			return trials;
 		}
 
-		plugin.trial = function($this, block, trial, part) {
+		plugin.trial = function(display_element, block, trial, part) {
 		
 		var url = trial.url;
 		if(trial.force_refresh) { url = trial.url + "?time=" + (new Date().getTime()); }
 		
-		$this.load(trial.url, function() {
+		display_element.load(trial.url, function() {
 		    var t0 = Date.now();
 		    var finish = function() {
-  		    if (trial.check_fn && !trial.check_fn($this)) return;
+  		    if (trial.check_fn && !trial.check_fn(display_element)) return;
   		    if (trial.cont_key) $(document).unbind('keyup', key_listener);	        
 		      block.data[block.trial_idx] = 
  		      { user_duration: Date.now()-t0
@@ -70,15 +70,15 @@ Example Usage:
 		      };
 		      if (trial.timing) {
 		        block.data[block.trial_idx].timing = trial.timing;
-		        // hide $this, since it could have a border and we want a blank screen during timing
-		        $this.hide(); 
+		        // hide display_element, since it could have a border and we want a blank screen during timing
+		        display_element.hide(); 
 		        setTimeout(function() {
-		          $this.empty();
-		          $this.show();
+		          display_element.empty();
+		          display_element.show();
 		          block.next();
 		        }, trial.timing);
 		      } else {
-		        $this.empty();
+		        display_element.empty();
 		        block.next();
 		      }
 		    }

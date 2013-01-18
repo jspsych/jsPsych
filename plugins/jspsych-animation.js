@@ -24,7 +24,7 @@
 			return trials;
 		}
 
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			var animate_frame = -1;
 			var reps = 0;
@@ -33,7 +33,7 @@
 				case 1:
 					animate_interval = setInterval(function(){
 						showImage = true;
-						$this.html(""); // clear everything
+						display_element.html(""); // clear everything
 						animate_frame++;
 						if(animate_frame == trial.stims.length)
 						{
@@ -41,17 +41,17 @@
 							reps++;
 							if(reps >= trial.repetitions)
 							{
-								plugin.trial($this, block, trial, part + 1);
+								plugin.trial(display_element, block, trial, part + 1);
 								clearInterval(animate_interval);
 								showImage = false;
 							}
 						}
 						if(showImage){
-							$this.append($('<img>', {
+							display_element.append($('<img>', {
 								"src": trial.stims[animate_frame],
 								"class": 'animate'
 							}));
-							if(trial.prompt != undefined) { $this.append(trial.prompt); }
+							if(trial.prompt != undefined) { display_element.append(trial.prompt); }
 						}
 					}, trial.frame_time);
 					break;

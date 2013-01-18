@@ -28,7 +28,7 @@
 			return trials;
 		}
 		
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			var return_val = trial.func.apply({}, [trial.args]);
 			if(return_val){

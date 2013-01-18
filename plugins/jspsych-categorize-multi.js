@@ -40,12 +40,12 @@
 		// to save correct_answers between iterations of trial method...
 		var correct_answers = [];
 		
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			switch(part){
 				case 1:
 					// show image
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.a_path,
 						"class": 'cm'
 					}));
@@ -59,7 +59,7 @@
 					}
 					
 					// show prompt
-					$this.append(trial.prompt);
+					display_element.append(trial.prompt);
 					
 					
 					// start recording for RT
@@ -70,7 +70,7 @@
 					for(var i = 0; i<trial.choices.length; i++)
 					{
 						// add a DIV
-						$this.append($('<div>', {
+						display_element.append($('<div>', {
 							"id": "cm_"+i
 						}));
 						// for each INDIVIDUAL choice
@@ -90,7 +90,7 @@
 					}
 					
 					// add a button to hit when done.
-					$this.append($('<button>', {
+					display_element.append($('<button>', {
 						"type": "button",
 						"value": "done",
 						"name": "Next",
@@ -128,28 +128,28 @@
 						block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 						
 						// clear everything
-						$this.html('');
+						display_element.html('');
 						
-						plugin.trial($this, block, trial, part + 1);
+						plugin.trial(display_element, block, trial, part + 1);
 						
 					});
 					break;
 				case 2:
 					// show image
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.a_path,
 						"class": 'cm'
 					}));
 					
 					// show prompt
-					$this.append(trial.prompt);
+					display_element.append(trial.prompt);
 					
 					// give feedback
 					var atext = "";
 					for(var i=0; i<correct_answers.length; i++)
 					{
 						// add a DIV
-						$this.append($('<div>', {
+						display_element.append($('<div>', {
 							"id": "cm_"+i
 						}));
 						
@@ -167,10 +167,10 @@
 						
 						$('#cm_'+i).append(text_to_add);
 					}
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing_length_of_feedback); // fix timing?
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing_length_of_feedback); // fix timing?
 					break;
 				case 3:
-					$this.html('');
+					display_element.html('');
 					setTimeout(function(){block.next()},1000);
 					break;
 			}

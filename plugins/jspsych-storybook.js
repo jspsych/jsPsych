@@ -20,12 +20,12 @@
 			return trials;
 		}
 
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			switch(part){
 				case 1:
 					p1_time = (new Date()).getTime();
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.a_path,
 						"class": 'storybook'
 					}));
@@ -59,7 +59,7 @@
 							// save data
 							block.data[block.trial_idx] = $.extend({}, img, click_loc_data, click_time_data, trial.data);
 						
-							plugin.trial($this, block, trial, part + 1);
+							plugin.trial(display_element, block, trial, part + 1);
 						}
 					};
 					

@@ -33,7 +33,7 @@
 		var direction_changes = 0;
 		var last_response = -1;
 
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			switch(part){
 				case 1:
@@ -51,27 +51,27 @@
 					current_idx = trial.start_idx;
 					
 					// show target image
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.stimuli[trial.target_idx],
 						"class": '',
 						"id": 'am_target'
 					}));
 					
 					// show manipulate image
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.stimuli[trial.start_idx],
 						"class": '',
 						"id": 'am_manipulate'
 					}));
 					
 					// append a div for showing messages
-					$this.append($('<div>', {
+					display_element.append($('<div>', {
 						"id": 'am_message_box'
 					}));
 					
 					if(trial.prompt)
 					{
-						$this.append(trial.prompt);
+						display_element.append(trial.prompt);
 					}
 					
 					// add function on keypress to control manipulate image
@@ -134,7 +134,7 @@
 								// unbind response function to prevent further change
 								$(document).unbind('keyup',resp_func);
 								// match!
-								plugin.trial($this, block, trial, part + 1);
+								plugin.trial(display_element, block, trial, part + 1);
 										
 							}
 						}
@@ -159,11 +159,11 @@
 					var trial_data = {"key_responses": key_responses_string, "rt_responses": rt_responses_string, "num_responses": responses.length, "direction_changes": direction_changes, "start_idx":trial.start_idx, "target_idx": trial.target_idx};
 					block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 					
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1);}, trial.timing[1]);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing[1]);
 					break;
 
 				case 3:	
-					$this.html('');
+					display_element.html('');
 					setTimeout(function(){block.next();}, trial.timing[0]);
 					break;
 			}

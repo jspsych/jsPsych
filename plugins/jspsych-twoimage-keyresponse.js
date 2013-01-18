@@ -35,36 +35,36 @@
 		}
 
 		var tikr_trial_complete = false;
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			switch(part){
 				case 1:
 					tikr_trial_complete = false;
 					
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.a_path,
 						"id": 'tikr_a_img'
 					}));
 				
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing_first_stim);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1)}, trial.timing_first_stim);
 					break;
 					
 				case 2: 
 					$('#tikr_a_img').remove();
-					setTimeout(function(){plugin.trial($this, block, trial, part + 1)}, trial.timing_gap);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1)}, trial.timing_gap);
 					break;
 					
 				case 3
 					startTime = (new Date()).getTime();
 					
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.b_path,
 						"id": 'tikr_b_img'
 					}));
 					
 					//show prompt here
 					if(trial.prompt != undefined){
-						$this.append(trial.prompt);
+						display_element.append(trial.prompt);
 					}
 			
 					// hide image if timing is set
@@ -94,7 +94,7 @@
 							var trial_data = {"rt": rt, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which}
 							block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 							$(document).unbind('keyup',resp_func);
-							$this.html('');
+							display_element.html('');
 							tikr_trial_complete = true;
 							setTimeout(function(){block.next();}, trial.timing_post_trial);
 						}

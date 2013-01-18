@@ -21,7 +21,7 @@
 			return trials;
 		}
 
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			switch(part){
 				case 1:
@@ -37,7 +37,7 @@
 					
 					// add images
 					for(var i=0;i<trial.stims.length;i++){
-						$this.append($('<img>', {
+						display_element.append($('<img>', {
 							"src": trial.stims[order[i]],
 							"class": 'freepick',
 							"id":'fp'+order[i]
@@ -49,22 +49,22 @@
 						$("#fp0").click(
 							function(){
 							// clear everything
-								$this.html('');
+								display_element.html('');
 								// add only target
-								$this.append($('<img>', {
+								display_element.append($('<img>', {
 									"src": trial.stims[0],
 									"class": 'freepick',
 									"id":'fp_answer'
 								}));
-								$this.append($('<p class="answer">'+trial.answer_text+'</p>'));
-								setTimeout(function(){plugin.trial($this,block,trial,part+1)}, trial.timing[0]);
+								display_element.append($('<p class="answer">'+trial.answer_text+'</p>'));
+								setTimeout(function(){plugin.trial(display_element,block,trial,part+1)}, trial.timing[0]);
 							}
 						);
 					}
 					
 					break;
 				case 2:
-					$this.html('');
+					display_element.html('');
 					
 					setTimeout(function(){block.next();}, trial.timing[1]);
 					break;

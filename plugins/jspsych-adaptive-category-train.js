@@ -45,7 +45,7 @@
 			return trials;
 		}
 		
-		plugin.trial = function($this, block, trial, part)
+		plugin.trial = function(display_element, block, trial, part)
 		{
 			// create a tally for each item
 			var all_items = [];
@@ -69,12 +69,12 @@
 			
 			// create the training controller
 			var controller = new TrainingControl(all_items, trial.consecutive_correct_min, trial.min_items_per_block, 
-												trial.min_percent_correct, $this, block, trial.show_progress, trial.timing_post_trial,
+												trial.min_percent_correct, display_element, block, trial.show_progress, trial.timing_post_trial,
 												trial.stop_training_criteria);
 			controller.next_round(); // when this finishes, block.next() is called.
 		}
 			
-		function TrainingControl(items, min_correct, min_per_block, min_percent_correct, $this, block, show_progress, timing_post_trial, stop_criteria){
+		function TrainingControl(items, min_correct, min_per_block, min_percent_correct, display_element, block, show_progress, timing_post_trial, stop_criteria){
 			
 			this.total_items = items.length;
 			this.remaining_items = items;
@@ -103,7 +103,7 @@
 						}
 						// present remaining items in random order
 						shuffle(this.remaining_items);
-						var iterator = new TrialIterator($this, this.remaining_items, this, block, this.curr_block);
+						var iterator = new TrialIterator(display_element, this.remaining_items, this, block, this.curr_block);
 						this.curr_block++;
 						var updated_trials = iterator.next(); // when this finishes, all trials are complete.
 						// updated_trials will have the updated consecutive correct responses
@@ -209,7 +209,7 @@
 					}
 				}
 				
-				$this.html(
+				display_element.html(
 					'<div id="adaptive_category_progress"><p>You correctly categorized '+percent_correct+'% of the items in that round.</p>'+completed+'<p>Press ENTER to continue.</p></div>'
 				);
 				
@@ -219,7 +219,7 @@
 					if(e.which=='13') 
 					{			
 						$(document).unbind('keyup',key_listener); // remove the response function, so that it doesn't get triggered again.
-						$this.html(''); // clear the display
+						display_element.html(''); // clear the display
 						setTimeout(function(){controller.next_round();}, this.timing_post_trial); // call block.next() to advance the experiment after a delay.
 					}
 				}
@@ -227,7 +227,7 @@
 			}
 		}
 		
-		function TrialIterator($this, trials, controller, block, block_idx){	
+		function TrialIterator(display_element, trials, controller, block, block_idx){	
 			this.trials = trials;
 			this.curr_trial = 0;
 			this.curr_block = block_idx;
@@ -247,12 +247,12 @@
 				// do the trial!
 				
 				// show the image
-				$this.append($('<img>', {
+				display_element.append($('<img>', {
 						"src": trial.a_path,
 						"class": 'cf'
 					}));
 					
-				$this.append(trial.prompt);
+				display_element.append(trial.prompt);
 				
 				startTime = (new Date()).getTime();
 				
@@ -299,7 +299,7 @@
 							block.data.push(trial_data);
 						}
 						$(document).unbind('keyup',resp_func);
-						$this.html('');
+						display_element.html('');
 						show_feedback(correct, e.data.iterator_object);
 					}
 				}
@@ -309,7 +309,7 @@
 				// provide feedback
 				function show_feedback(is_correct, iterator_object){
 					
-					$this.append($('<img>', {
+					display_element.append($('<img>', {
 						"src": trial.a_path,
 						"class": 'cf'
 					}));
@@ -322,12 +322,12 @@
 					} else {
 						atext = trial.incorrect_text.replace("&ANS&", trial.text_answer);
 					}
-					$this.append(atext);
+					display_element.append(atext);
 					setTimeout(function(){finish_trial(iterator_object);}, trial.timing_display_feedback);		
 				}
 				
 				function finish_trial(iterator_object){
-					$this.html('');
+					display_element.html('');
 					
 					setTimeout(function(){
 						iterator_object.curr_trial++;
