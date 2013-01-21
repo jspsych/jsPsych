@@ -47,7 +47,7 @@
 				trials[i]["type"] = "text"; // must match plugin name
 				trials[i]["text"] = params.text[i]; // text of all trials
 				trials[i]["cont_key"] = params.cont_key || '13'; // keycode to press to advance screen, default is ENTER.
-				trials[i]["timing"] = params.timing || [0]; // how long to delay between screens, default is no delay.
+				trials[i]["timing_post_trial"] = params.timing_post_trial || 0; // how long to delay between screens, default is no delay.
 				if(params.variables != undefined)
 				{
 					trials[i]["variables"] = params.variables[i]; // optional variables, defined as functions.
@@ -82,14 +82,14 @@
 				{			
 					$(document).unbind('keyup',key_listener); // remove the response function, so that it doesn't get triggered again.
 					display_element.html(''); // clear the display
-					setTimeout(function(){block.next();}, trial.timing[0]); // call block.next() to advance the experiment after a delay.
+					setTimeout(function(){block.next();}, trial.timing_post_trial); // call block.next() to advance the experiment after a delay.
 				}
 			}
 			
 			var mouse_listener = function(e){
 				display_element.unbind('click', mouse_listener); // remove the response function, so that it doesn't get triggered again.
 				display_element.html(''); // clear the display
-				setTimeout(function(){block.next();}, trial.timing[0]); // call block.next() to advance the experiment after a delay.
+				setTimeout(function(){block.next();}, trial.timing_post_trial); // call block.next() to advance the experiment after a delay.
 			}
 			
 			// check if key is 'mouse'

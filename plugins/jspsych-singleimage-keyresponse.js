@@ -19,6 +19,8 @@
 				trials[i]["a_path"] = stims[i];
 				trials[i]["choices"] = params["choices"];
 				// option to show image for fixed time interval, ignoring key responses
+				// 		true = image will keep displaying after response
+				// 		false = trial will immediately advance when response is recorded
 				trials[i]["continue_afer_response"] = params["continue_after_response"] || true;
 				// timing parameters
 				trials[i]["timing_stim"] = params["timing_stim"] || -1; // if -1, then show indefinitely
@@ -61,16 +63,7 @@
 						sikr_trial_complete = true;
 						plugin.trial(display_element, block, trial, part+1);
 					}
-			
-					// hide image if timing is set
-					if(trial.timing_stim > 0){
-						setTimeout(function(){
-							if(!sikr_trial_complete){
-								$('#sikr_img').css('visibility','hidden');
-							}
-						}, trial.timing_stim);
-					}
-		
+					
 					var resp_func = function(e) {
 						var flag = false;
 						// check if the key is any of the options, or if it is an accidental keystroke
@@ -99,6 +92,15 @@
 					}
 					
 					$(document).keyup(resp_func);
+			
+					// hide image if timing is set
+					if(trial.timing_stim > 0){
+						setTimeout(function(){
+							if(!sikr_trial_complete){
+								$('#sikr_img').css('visibility','hidden');
+							}
+						}, trial.timing_stim);
+					}
 					
 					// end trial if time limit is set
 					if(trial.timing_response > 0)
