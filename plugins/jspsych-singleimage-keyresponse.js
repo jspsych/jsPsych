@@ -21,7 +21,7 @@
 				// option to show image for fixed time interval, ignoring key responses
 				// 		true = image will keep displaying after response
 				// 		false = trial will immediately advance when response is recorded
-				trials[i]["continue_afer_response"] = params["continue_after_response"] || true;
+				trials[i]["continue_after_response"] = params["continue_after_response"] || true;
 				// timing parameters
 				trials[i]["timing_stim"] = params["timing_stim"] || -1; // if -1, then show indefinitely
 				trials[i]["timing_response"] = params["timing_response"] || -1; // if -1, then wait for response forever
