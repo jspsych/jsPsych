@@ -92,14 +92,18 @@
 					display_element.append($('<button>', {'id':'next','class':'sim'}));
 					$("#next").html('Next');
 					$("#next").click(function(){
+						endTime = (new Date()).getTime();
+						response_time = endTime-startTime;
 						sim_trial_complete = true;
 						plugin.trial(display_element,block,trial,part+1);
 					});
+					
+					startTime = (new Date()).getTime();
 					break;
 				case 4:
 					// get data
 					var score = $("#slider").slider("value");
-					block.data[block.trial_idx] = $.extend({},{"sim_score": score, "a_path": trial.a_path, "b_path": trial.b_path},trial.data);
+					block.data[block.trial_idx] = $.extend({},{"sim_score": score, "rt": response_time, "a_path": trial.a_path, "b_path": trial.b_path, "trial_type": "similarity"},trial.data);
 					// goto next trial in block
 					$('.sim').remove();
 					setTimeout(function(){block.next();}, trial.timing_post_trial);

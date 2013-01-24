@@ -111,7 +111,7 @@
 							rt = (endTime-startTime);
 							stim1_time = (p2_time-p1_time);
 							isi_time = (p3_time-p2_time);
-							var trial_data = {"rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which, "stim1_time": stim1_time, "isi_time":isi_time}
+							var trial_data = {"trial_type": "xab", "rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which, "stim1_time": stim1_time, "isi_time":isi_time}
 							block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 							$(document).unbind('keyup',resp_func);
 							display_element.html(''); // remove all

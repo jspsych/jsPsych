@@ -32,6 +32,8 @@
 				}
 				if(params["data"]!=undefined){
 					trials[i]["data"] = params["data"][i];
+				} else {
+					trials[i]["data"] = undefined;
 				}
 			}
 			return trials;
