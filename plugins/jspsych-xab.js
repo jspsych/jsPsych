@@ -19,8 +19,16 @@
 			{
 				trials[i] = {};
 				trials[i]["type"] = "xab";
-				trials[i]["a_path"] = xab_stims[i][0];
-				trials[i]["b_path"] = xab_stims[i][1];
+				trials[i]["x_path"] = xab_stims[i][0];
+				// if there is only a pair of stimuli, then the first is the target and is shown twice.
+				// if there is a triplet, then the first is X, the second is the target, and the third is foil (useful for non-exact-match XAB).
+				if(xab_stims[i].length == 2){
+					trials[i]["a_path"] = xab_stims[i][0];
+					trials[i]["b_path"] = xab_stims[i][1];
+				} else {
+					trials[i]["a_path"] = xab_stims[i][1];
+					trials[i]["b_path"] = xab_stims[i][2];
+				}
 				trials[i]["left_key"] = params["left_key"] || 81; // defaults to 'q'
 				trials[i]["right_key"] = params["right_key"] || 80; // defaults to 'p'
 				// timing parameters
@@ -50,7 +58,7 @@
 					
 					p1_time = (new Date()).getTime();
 					display_element.append($('<img>', {
-						"src": trial.a_path,
+						"src": trial.x_path,
 						"class": 'xab'
 					}));
 					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1)}, trial.timing_x);
@@ -109,9 +117,9 @@
 						{
 							endTime = (new Date()).getTime();
 							rt = (endTime-startTime);
-							stim1_time = (p2_time-p1_time);
-							isi_time = (p3_time-p2_time);
-							var trial_data = {"trial_type": "xab", "rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which, "stim1_time": stim1_time, "isi_time":isi_time}
+							//stim1_time = (p2_time-p1_time);
+							//isi_time = (p3_time-p2_time);
+							var trial_data = {"trial_type": "xab", "rt": rt, "correct": correct, "x_path": trial.x_path, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which}
 							block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 							$(document).unbind('keyup',resp_func);
 							display_element.html(''); // remove all

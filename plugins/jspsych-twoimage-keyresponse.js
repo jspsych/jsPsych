@@ -54,7 +54,7 @@
 					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1)}, trial.timing_gap);
 					break;
 					
-				case 3
+				case 3:
 					startTime = (new Date()).getTime();
 					
 					display_element.append($('<img>', {
@@ -91,7 +91,7 @@
 							endTime = (new Date()).getTime();
 							rt = (endTime-startTime);
 						
-							var trial_data = {"rt": rt, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which}
+							var trial_data = {"trial_type":"twoimage_keyresponse", "rt": rt, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which}
 							block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 							$(document).unbind('keyup',resp_func);
 							display_element.html('');

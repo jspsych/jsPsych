@@ -12,8 +12,15 @@
 				trials[i]["type"] = "samedifferent";
 				trials[i]["a_path"] = sd_stims[i][0];
 				trials[i]["b_path"] = sd_stims[i][1];
-				trials[i]["timing"] = params["timing"];
 				trials[i]["answer"] = params["answer"][i];
+				trials[i]["same_key"] = params["same_key"] || 81; // default is 'q'
+				trials[i]["different_key"] = params["different_key"] || 80; // default is 'p'
+				// timing parameters
+				trials[i]["timing_first_stim"] = params["timing_first_stim"] || 1000;
+				trials[i]["timing_second_stim"] = params["timing_second_stim"] || 1000; // if -1, then second stim is shown until response.
+				trials[i]["timing_gap"] = params["timing_gap"] || 500;
+				trials[i]["timing_post_trial"] = params["timing_post_trial"] || 1000;
+				// optional parameters				
 				if(params["prompt"] != undefined){
 					trials[i]["prompt"] = params["prompt"];
 				}
@@ -23,50 +30,58 @@
 			}
 			return trials;
 		}
+		
+		var sd_trial_complete = false;
 
 		plugin.trial = function(display_element, block, trial, part)
 		{
 			switch(part){
 				case 1:
-					p1_time = (new Date()).getTime();
+					sd_trial_complete = false;
+					// show image
 					display_element.append($('<img>', {
 						"src": trial.a_path,
 						"class": 'sd'
 					}));
-					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing[0]);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing_first_stim);
 					break;
 				case 2:
-					p2_time = (new Date()).getTime();
 					$('.sd').remove();
-					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing[1]);
+					setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing_gap);
 					break;
 				case 3:
-					p3_time = (new Date()).getTime();
+	
 					display_element.append($('<img>', {
 						"src": trial.b_path,
-						"class": 'sd'
+						"class": 'sd',
+						"id":'jspsych_sd_second_image'
 					}));
+					
+					if(trial.timing_second_stim > 0){
+						setTimeout(function(){
+							if(!sd_trial_complete) {
+								$("#jspsych_sd_second_image").css('visibility', 'hidden');
+							}
+						}, trial.timing_second_stim);
+					}
+					
+					startTime = (new Date()).getTime();
+					
+					
 					if(trial.timing[3]!=undefined){
 						setTimeout(function(){plugin.trial(display_element, block, trial, part + 1);}, trial.timing[3]);
 					} else {
 						plugin.trial(display_element, block, trial, part + 1);
 					}
-					break;
-				case 4:
-					p4_time = (new Date()).getTime();
-					if(trial.timing[3]!=undefined){
-						$('.sd').remove();
-						display_element.html(trial.prompt);
-					}
-					startTime = (new Date()).getTime();
+					
 					var resp_func = function(e) {
 						var flag = false;
 						var correct = false;
-						if(e.which=='80') // 'p' key -- same
+						if(e.which== trial.same_key) // 'p' key -- same
 						{
 							flag = true;
 							if(trial.answer == "same") { correct = true; }
-						} else if(e.which=='81') // 'q' key -- different
+						} else if(e.which== trial.different_key) // 'q' key -- different
 						{
 							flag = true;
 							if(trial.answer == "different"){ correct = true; }
@@ -75,15 +90,13 @@
 						{
 							endTime = (new Date()).getTime();
 							rt = (endTime-startTime);
-							stim1_time = (p2_time-p1_time);
-							isi_time = (p3_time-p2_time);
-							stim2_time = (p4_time-p3_time);
-							var trial_data = {"rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which, "stim1_time": stim1_time, "stim2_time":stim2_time, "isi_time":isi_time}
+							
+							var trial_data = {"trial_type": "samedifferent", "rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which}
 							block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 							$(document).unbind('keyup',resp_func);
 							$('.sd').remove();
 							display_element.html('');
-							setTimeout(function(){block.next();}, trial.timing[2]);
+							setTimeout(function(){block.next();}, trial.timing_post_trial);
 						}
 					}
 					$(document).keyup(resp_func);
