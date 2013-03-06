@@ -52,6 +52,12 @@
 				{
 					trials[i]["variables"] = params.variables[i]; // optional variables, defined as functions.
 				}
+				if(params.data != undefined)
+				{
+					trials[i]["data"] = params.data[i];
+				} else {
+					trials[i]["data"] = {};
+				}
 			}
 			return trials;
 		}
@@ -75,11 +81,14 @@
 			// set the HTML of the display target to replaced_text.
 			display_element.html(replaced_text);
 			
+			startTime = (new Date()).getTime();
+			
 			// define a function that will advance to the next trial when the user presses
 			// the continue key.
 			var key_listener = function(e) {
 				if(e.which==trial.cont_key) 
-				{			
+				{	
+					save_data();
 					$(document).unbind('keyup',key_listener); // remove the response function, so that it doesn't get triggered again.
 					display_element.html(''); // clear the display
 					setTimeout(function(){block.next();}, trial.timing_post_trial); // call block.next() to advance the experiment after a delay.
@@ -87,6 +96,7 @@
 			}
 			
 			var mouse_listener = function(e){
+				save_data();
 				display_element.unbind('click', mouse_listener); // remove the response function, so that it doesn't get triggered again.
 				display_element.html(''); // clear the display
 				setTimeout(function(){block.next();}, trial.timing_post_trial); // call block.next() to advance the experiment after a delay.
@@ -99,6 +109,12 @@
 			} else {
 				// attach the response function to the html document.
 				$(document).keyup(key_listener);
+			}
+			
+			var save_data = function()
+			{
+				var rt = (new Date()).getTime() - startTime;
+				block.data[block.trial_idx] = $.extend({},{"trial_type":"text", "trial_idx": block.trial_idx, "rt": rt},trial.data);
 			}
 		}
 		

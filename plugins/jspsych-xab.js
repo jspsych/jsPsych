@@ -119,7 +119,7 @@
 							rt = (endTime-startTime);
 							//stim1_time = (p2_time-p1_time);
 							//isi_time = (p3_time-p2_time);
-							var trial_data = {"trial_type": "xab", "rt": rt, "correct": correct, "x_path": trial.x_path, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which}
+							var trial_data = {"trial_type": "xab", "trial_index": block.trial_idx, "rt": rt, "correct": correct, "x_path": trial.x_path, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which}
 							block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 							$(document).unbind('keyup',resp_func);
 							display_element.html(''); // remove all

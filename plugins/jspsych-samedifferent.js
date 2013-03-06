@@ -77,11 +77,11 @@
 					var resp_func = function(e) {
 						var flag = false;
 						var correct = false;
-						if(e.which== trial.same_key) // 'p' key -- same
+						if(e.which== trial.same_key) 
 						{
 							flag = true;
 							if(trial.answer == "same") { correct = true; }
-						} else if(e.which== trial.different_key) // 'q' key -- different
+						} else if(e.which== trial.different_key) 
 						{
 							flag = true;
 							if(trial.answer == "different"){ correct = true; }
@@ -91,7 +91,7 @@
 							endTime = (new Date()).getTime();
 							rt = (endTime-startTime);
 							
-							var trial_data = {"trial_type": "samedifferent", "rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which}
+							var trial_data = {"trial_type": "samedifferent", "trial_index": block.trial_idx, "rt": rt, "correct": correct, "a_path": trial.a_path, "b_path": trial.b_path, "key_press": e.which}
 							block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 							$(document).unbind('keyup',resp_func);
 							$('.sd').remove();

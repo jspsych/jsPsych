@@ -1,5 +1,13 @@
-// jsPsych plugin for showing animations
-// Josh de Leeuw
+/* jsPsych plugin for showing animations
+ * Josh de Leeuw
+ * updated March 2013
+ * 
+ * shows a sequence of images at a fixed frame rate.
+ * no data is collected from the subject, but it does record the path of the first image
+ * in each sequence, and allows for optional data tagging as well.
+ *
+ */
+
 
 (function( $ ) {
 	jsPsych.animation = (function(){
@@ -16,10 +24,14 @@
 				trials[i]["stims"] = stims[i];
 				trials[i]["frame_time"] = params["frame_time"];
 				trials[i]["repetitions"] = params["repetitions"] || 1;
-				trials[i]["timing"] = params["timing"];
+				trials[i]["timing_post_trial"] = params["timing_post_trial"];
 				if(params["prompt"] != undefined){
 					trials[i]["prompt"] = params["prompt"][i];
 				}
+				if(params["data"] != undefined) {
+					trials[i]["data"] = params["data"][i];
+				} else {
+					trials[i]["data"] = {};
 			}
 			return trials;
 		}
@@ -56,7 +68,8 @@
 					}, trial.frame_time);
 					break;
 				case 2:
-					setTimeout(function(){ block.next(); }, trial.timing[0]);
+					block.data[block.trial_idx] = $.extend({}, {"type": "animation", "trial_index": block.trial_idx, "a_path": trial.stims[0]}, trial.data);
+					setTimeout(function(){ block.next(); }, trial.timing_post_trial);
 					break;
 			}			
 		}
