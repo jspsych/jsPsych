@@ -121,7 +121,9 @@
 				
 				// save data
 				block.data[block.trial_idx] = $.extend({},{"trial_type": "likert", "trial_index": block.trial_idx, "rt": response_time}, question_data, trial.data);
-					
+				
+				display_element.html('');
+				
 				// next trial
 				block.next();
 			});
