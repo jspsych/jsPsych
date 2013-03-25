@@ -32,6 +32,7 @@
 					trials[i]["data"] = params["data"][i];
 				} else {
 					trials[i]["data"] = {};
+				}
 			}
 			return trials;
 		}
@@ -68,7 +69,7 @@
 					}, trial.frame_time);
 					break;
 				case 2:
-					block.data[block.trial_idx] = $.extend({}, {"type": "animation", "trial_index": block.trial_idx, "a_path": trial.stims[0]}, trial.data);
+					block.data[block.trial_idx] = $.extend({}, {"trial_type": "animation", "trial_index": block.trial_idx, "a_path": trial.stims[0]}, trial.data);
 					setTimeout(function(){ block.next(); }, trial.timing_post_trial);
 					break;
 			}			
