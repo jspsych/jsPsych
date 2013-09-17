@@ -11,7 +11,7 @@
 		var plugin = {};
 	
 		plugin.create = function(params) {
-			trials = [];
+			var trials = [];
 			for(var i = 0; i < params["stimuli"].length; i++)
 			{
 				trials.push({});
@@ -33,10 +33,10 @@
 				} else {
 					trials[i]["force_correct_button_press"] = false;
 				}
-				if(params["prompt"] != undefined){
+				if(params["prompt"] !== undefined){
 					trials[i]["prompt"] = params["prompt"];
 				}
-				if(params["data"]!=undefined){
+				if(params["data"] !== undefined){
 					trials[i]["data"] = params["data"][i];
 				}
 			}
