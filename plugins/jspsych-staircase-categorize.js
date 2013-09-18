@@ -43,7 +43,7 @@
 
         plugin.trial = function(display_element, block, trial, part) {
             
-            var interleaver = StaircaseInterleaver(display_element, trial, block);
+            var interleaver = new StaircaseInterleaver(display_element, trial, block);
             interleaver.start();
         };
         
@@ -54,7 +54,7 @@
             {
                 var s_trial = $.extend(true, {}, trial);
                 s_trial.items = s_trial.items[i];
-                var staircase = StaircaseController(display_element, s_trial, this, block);
+                var staircase = new StaircaseController(display_element, s_trial, this, block);
                 this.staircases.push(staircase);
             }
             
