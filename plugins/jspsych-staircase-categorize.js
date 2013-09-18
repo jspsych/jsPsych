@@ -50,7 +50,7 @@
         function StaircaseInterleaver(display_element, trial, block) {
             this.staircases = [];
             
-            for(var i=0; i<trial.items.length(); i++)
+            for(var i=0; i<trial.items.length; i++)
             {
                 var s_trial = $.extend(true, {}, trial);
                 s_trial.items = s_trial.items[i];
@@ -64,17 +64,17 @@
             
             this.next_trial = function() {
                 var eligible_staircases = [];
-                for (var i = 0; i < this.staircases.length(); i++) {
+                for (var i = 0; i < this.staircases.length; i++) {
                     if (this.staircases[i].is_complete === false) {
                         eligible_staircases.push(this.staircases[i]);
                     }
                 }
 
-                if (eligible_staircases.length() === 0) {
+                if (eligible_staircases.length === 0) {
                     this.finish();
                 }
                 else {
-                    var which_staircase = Math.floor(Math.random() * eligible_staircases.length());
+                    var which_staircase = Math.floor(Math.random() * eligible_staircases.length);
 
                     eligible_staircases[which_staircase].next_trial();
                 }
@@ -162,7 +162,7 @@
                 }
                 
                 // check if we are done
-                if (this.turns.length() >= trial.n_turns ){
+                if (this.turns.length >= trial.n_turns ){
                     this.is_complete = true;
                 }
 
@@ -217,7 +217,7 @@
                     if (flag) {
                         var endTime = (new Date()).getTime();
                         var rt = (endTime - startTime);
-                        var t_idx = block.data.length();
+                        var t_idx = block.data.length;
 
                         var trial_data = {
                             "trial_type": "staircase-categorize",
