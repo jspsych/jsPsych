@@ -225,9 +225,9 @@
                             "trial_index": t_idx,
                             "rt": rt,
                             "correct": correct,
-                            "a_path": trial.a_path,
-                            "staircase_index": this.current_item,
-                            "staircase_direction": this.current_direction,
+                            "a_path": this_trial.a_path,
+                            "staircase_index": e.data.iterator_object.curent_item,
+                            "staircase_direction": e.data.iterator_object.current_direction,
                             "key_press": e.which
                         };
                         block.data.push($.extend({},trial_data,trial.data));
