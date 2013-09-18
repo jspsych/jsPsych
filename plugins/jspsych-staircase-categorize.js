@@ -226,7 +226,7 @@
                             "rt": rt,
                             "correct": correct,
                             "a_path": this_trial.a_path,
-                            "staircase_index": e.data.iterator_object.curent_item,
+                            "staircase_index": e.data.iterator_object.current_item,
                             "staircase_direction": e.data.iterator_object.current_direction,
                             "key_press": e.which
                         };
