@@ -54,6 +54,7 @@
             {
                 var s_trial = $.extend(true, {}, trial);
                 s_trial.items = s_trial.items[i];
+                s_trial.choices = s_trial.choices[i];
                 var staircase = new StaircaseController(display_element, s_trial, this, block);
                 this.staircases.push(staircase);
             }
