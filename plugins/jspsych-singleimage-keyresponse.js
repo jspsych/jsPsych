@@ -116,7 +116,7 @@
 					
 					break;
 				case 2:
-					var trial_data = {"trial_type": "singleimage_keyresponse", "rt": rt, "a_path": trial.a_path, "key_press": key_press}
+					var trial_data = {"trial_type": "singleimage_keyresponse", "trial_index":block.trial_idx, "rt": rt, "a_path": trial.a_path, "key_press": key_press}
 					block.data[block.trial_idx] = $.extend({},trial_data,trial.data);
 					$(document).unbind('keyup',resp_func);
 					display_element.html('');
