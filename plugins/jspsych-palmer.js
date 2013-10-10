@@ -10,7 +10,7 @@
  *
  * Josh de Leeuw (October 2013)
  *
- *  NOTE: This plugin requires the Raphaeljs library for manipulating vector graphics (SVG). Download at http://www.raphaeljs.com
+ * NOTE: This plugin requires the Raphaeljs library for manipulating vector graphics (SVG). Download at http://www.raphaeljs.com
  *
  */
 
