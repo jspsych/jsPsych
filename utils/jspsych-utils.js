@@ -196,9 +196,9 @@
             var possible_new_lines = build_possible_lines_list();
 
             // make sure there are lines to add
-            while (possible_new_lines.length === 0) {
+            /*while (possible_new_lines.length === 0) {
                 possible_new_lines = build_possible_lines_list();
-            }
+            }*/
 
             // now pick a random line to add
             var random_new_line = possible_new_lines[Math.floor(Math.random() * possible_new_lines.length)];
