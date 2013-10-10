@@ -52,10 +52,11 @@
 
             var size = trial.grid_spacing * (trial.square_size + 1);
 
-            display_element.append("<div id='raphaelCanvas'>").css({
+            display_element.append($("<div id='raphaelCanvas'>", 
+            css: {
                 width: size + "px",
                 height: size + "px"
-            });
+            }));
 
             var paper = Raphael("raphaelCanvas", size, size);
 
