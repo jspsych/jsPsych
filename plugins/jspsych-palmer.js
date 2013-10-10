@@ -88,7 +88,7 @@
                             }
                             else {
                                 end_circle = this.data("node");
-                                toggle_line(getLineIndex(start_circle, end_circle));
+                                draw_connection(start_circle, end_circle);
                             }
                         });
                     }
