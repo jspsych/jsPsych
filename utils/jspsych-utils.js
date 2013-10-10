@@ -183,7 +183,7 @@
                 // build a list of all possible lines that contain this circle
                 var possible_new_lines = [];
                 $.each(lines, function(i, v) {
-                    if ($.inArray(which_circle, lines) > -1) {
+                    if ($.inArray(which_circle, v) > -1) {
                         if (configuration[i] === 0) { // this excludes lines that already exist
                             possible_new_lines.push(i);
                         }
