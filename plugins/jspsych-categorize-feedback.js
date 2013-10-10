@@ -31,7 +31,7 @@
                 trials[i].is_html = (typeof params.is_html === undefined) ? false : params.is_html;
                 trials[i].force_correct_button_press = (typeof params.force_correct_button_press === undefined) ? false : params.force_correct_button_press;
                 trials[i].prompt = (typeof params.prompt === undefined) ? undefined : params.prompt;
-                trials[i].data = (typeof params.data === undefined) ? {} : params.data[i];
+                trials[i].data = (typeof params.data === undefined) ? undefined : params.data[i];
             }
             return trials;
         }
