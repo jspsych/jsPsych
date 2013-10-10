@@ -211,7 +211,7 @@
             // for now, the only option will be to display for a fixed amount of time.
             // future ideas: allow for key response, to enable things like n-back, same/different, etc..
             if (!trial.editable) {
-                showConfiguration(trial.configuration);
+                showConfiguration(trial.configurations);
                 setTimeout(function() {
                     save_data();
                 }, trial.timing_item);
