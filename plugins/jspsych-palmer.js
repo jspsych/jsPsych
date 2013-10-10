@@ -235,7 +235,7 @@
 
                 // check if configuration is correct
                 // this is meaningless for trials where the user can't edit
-                var correct = arrayEqual(trial.configuration, lineIsVisible);
+                var correct = arrayEqual(trial.configurations, lineIsVisible);
 
                 block.data[block.trial_idx] = $.extend({}, {
                     "trial_type": "palmer",
