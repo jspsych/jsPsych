@@ -4,9 +4,9 @@
  * display an image and then give corrective feedback based on the subject's response
  *
  * updated March 2013
- */ 
- 
- (function($) {
+ */
+
+(function($) {
     jsPsych.categorize_feedback = (function() {
 
         var plugin = {};
@@ -27,10 +27,10 @@
                 trials[i].timing_feedback_duration = params.timing_feedback_duration || 2000;
                 trials[i].timing_post_trial = params.timing_post_trial || 1000;
                 // optional params
-                trials[i].show_stim_with_feedback =  (typeof params.show_stim_with_feedback === 'undefined') ? true : params.show_stim_with_feedback;
+                trials[i].show_stim_with_feedback = (typeof params.show_stim_with_feedback === 'undefined') ? true : params.show_stim_with_feedback;
                 trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
                 trials[i].force_correct_button_press = (typeof params.force_correct_button_press === 'undefined') ? false : params.force_correct_button_press;
-                trials[i].prompt = (typeof params.prompt === 'undefined') ? 'undefined' : params.prompt;
+                trials[i].prompt = (typeof params.prompt === 'undefined') ? '' : params.prompt;
                 trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
             }
             return trials;
@@ -44,14 +44,15 @@
                 // set finish flag
                 cf_trial_complete = false;
 
-                if(!trial.is_html){
+                if (!trial.is_html) {
                     // add image to display
                     display_element.append($('<img>', {
                         "src": trial.a_path,
                         "class": 'cf',
                         "id": 'jspsych_cf_image'
                     }));
-                } else {
+                }
+                else {
                     display_element.append($('<div>', {
                         id: 'jspsych_cf_image',
                         "class": 'cf',
@@ -110,7 +111,7 @@
                             "a_path": trial.a_path,
                             "key_press": e.which
                         };
-                        
+
                         block.data[block.trial_idx] = $.extend({}, trial_data, trial.data);
 
                         // clear function
@@ -127,10 +128,21 @@
             case 2:
                 // show image during feedback if flag is set
                 if (trial.show_stim_with_feedback) {
-                    display_element.append($('<img>', {
-                        "src": trial.a_path,
-                        "class": 'cf'
-                    }));
+                    if (!trial.is_html) {
+                        // add image to display
+                        display_element.append($('<img>', {
+                            "src": trial.a_path,
+                            "class": 'cf',
+                            "id": 'jspsych_cf_image'
+                        }));
+                    }
+                    else {
+                        display_element.append($('<div>', {
+                            id: 'jspsych_cf_image',
+                            "class": 'cf',
+                            html: trial.a_path
+                        }));
+                    }
                 }
 
                 // substitute answer in feedback string.
