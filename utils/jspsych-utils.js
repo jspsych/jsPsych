@@ -197,7 +197,7 @@
 
             // make sure there are lines to add
             while (possible_new_lines.length === 0) {
-                build_possible_lines_list();
+                possible_new_lines = build_possible_lines_list();
             }
 
             // now pick a random line to add
