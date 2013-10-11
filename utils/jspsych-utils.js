@@ -178,17 +178,19 @@
                 var choice = possible_lines_to_connect_from[Math.floor(Math.random() * possible_lines_to_connect_from.length)];
 
                 // randomly select which end of the line to connect to
-                var which_circle = lines[choice][Math.floor(Math.random() * 2)];
+                var circles = lines[choice];
 
-                // build a list of all possible lines that contain this circle
+                // build a list of all possible lines that contain the circles
                 var possible_new_lines = [];
-                $.each(lines, function(i, v) {
-                    if ($.inArray(which_circle, v) > -1) {
-                        if (configuration[i] === 0) { // this excludes lines that already exist
-                            possible_new_lines.push(i);
+                for(var i=0;i<circles.length;i++){
+                    $.each(lines, function(index, v) {
+                        if ($.inArray(circles[i], v) > -1) {
+                            if (configuration[index] === 0) { // this excludes lines that already exist
+                                possible_new_lines.push(index);
+                            }
                         }
-                    }
-                });
+                    });
+                }
 
                 return possible_new_lines;
             }
