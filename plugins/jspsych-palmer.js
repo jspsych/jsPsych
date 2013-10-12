@@ -30,19 +30,16 @@
                     square_size: params.square_size || 3,
                     circle_radius: params.circle_radius || 20,
                     timing_item: params.timing_item || 1000,
-                    timing_post_trial: params.timing_post_trial || 1000
+                    timing_post_trial: params.timing_post_trial || 1000,
+                    prompt: (params.prompt !== 'undefined') ? params.prompt : "",
+                    data: (params.data !== 'undefined') ? params.data[i] : {}
                 };
-                
-                if(params.data !== undefined)
-                {
-                    $.extend({},trial,{data:params.data[i]});
-                }
-                
+
                 trials.push(trial);
             }
             return trials;
         };
-        
+
         plugin.trial = function(display_element, block, trial, part) {
 
             // variables to keep track of user interaction
@@ -217,6 +214,10 @@
                 setTimeout(function() {
                     save_data();
                 }, trial.timing_item);
+            }
+            
+            if(trial.prompt!==""){
+                display_element.append(trial.prompt);
             }
 
             function arrayEqual(arr1, arr2) {
