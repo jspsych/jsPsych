@@ -26,11 +26,13 @@
                     type: "palmer",
                     configurations: params.configurations[i],
                     editable: params.editable,
+                    show_feedback: (typeof params.show_feedback === 'undefined') ? false : params.show_feedback,
                     grid_spacing: params.grid_spacing || 75,
                     square_size: params.square_size || 3,
                     circle_radius: params.circle_radius || 20,
                     timing_item: params.timing_item || 1000,
                     timing_post_trial: params.timing_post_trial || 1000,
+                    timing_feedback: params.timing_feedback || 1000,
                     prompt: (typeof params.prompt === 'undefined') ? "" : params.prompt,
                     data: (typeof params.data === 'undefined') ? {} : params.data[i]
                 };
@@ -191,6 +193,11 @@
                     }
                 }
             }
+            
+            // highlight a line
+            function highlightLine(line) {
+                lineElements[line].attr("stroke", "#f00");
+            }
 
             // start recording the time
             var startTime = (new Date()).getTime();
@@ -217,16 +224,20 @@
             }
             
             if(trial.prompt!==""){
-                display_element.append(trial.prompt);
+                var prompt = $.parseHTML(trial.prompt);
+                prompt.addClass('palmer_prompt');
+                display_element.append(prompt);
             }
 
-            function arrayEqual(arr1, arr2) {
-                for (var i = 0; i < arr1.length; i++) {
-                    if (arr1[i] != arr2[i]) {
-                        return false;
+            function arrayDifferences(arr1, arr2) {
+                var n_diff = 0;
+                for(var i=0;i<arr1.length; i++)
+                {
+                    if(arr1[i]!=arr2[i]){
+                        n_diff++;
                     }
                 }
-                return true;
+                return n_diff;
             }
 
             // save data
@@ -238,22 +249,55 @@
 
                 // check if configuration is correct
                 // this is meaningless for trials where the user can't edit
-                var correct = arrayEqual(trial.configurations, lineIsVisible);
+                var n_diff = arrayDifferences(trial.configurations, lineIsVisible);
+                var correct = (n_diff === 0);
 
                 block.data[block.trial_idx] = $.extend({}, {
                     "trial_type": "palmer",
                     "trial_index": block.trial_idx,
                     "configuration": lineIsVisible,
                     "rt": response_time,
-                    "correct": correct
+                    "correct": correct,
+                    "num_wrong": n_diff,
                 }, trial.data);
 
+               if(trial.editable && trial.show_feedback){
+                   // hide the button
+                   $('#submitButton').hide();
+                   $('.palmer_prompt').hide();
+                   
+                   showConfiguration(trial.configuration);
+                   var feedback = "";
+                   if(correct)
+                   {
+                       feedback = "Correct!";
+                   } else {
+                       if(n_diff > 1){
+                           feedback = "You missed "+n_diff+" lines. The correct symbol is shown above.";
+                       } else {
+                           feedback = "You missed 1 line. The correct symbol is shown above.";
+                       }
+                   }
+                   display_element.append($.parseHTML("<p id='palmer_feedback'></p>"));
+                   
+                   setTimeout(function() {
+                       next_trial();
+                   }, trial.timing_feedback);
+                   
+               } else {
+                   next_trial();
+               }
+            }
+            
+            function next_trial() {
+                
                 display_element.html('');
 
                 // next trial
                 setTimeout(function() {
                     block.next();
                 }, trial.timing_post_trial);
+                
             }
 
 
