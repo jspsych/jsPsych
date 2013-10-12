@@ -193,7 +193,7 @@
                     }
                 }
             }
-            
+
             // highlight a line
             function highlightLine(line) {
                 lineElements[line].attr("stroke", "#f00");
@@ -218,22 +218,20 @@
             // future ideas: allow for key response, to enable things like n-back, same/different, etc..
             if (!trial.editable) {
                 showConfiguration(trial.configurations);
+                if (trial.prompt !== "") {
+                    var prompt = $.parseHTML(trial.prompt);
+                    prompt.addClass('palmer_prompt');
+                    display_element.append(prompt);
+                }
                 setTimeout(function() {
                     save_data();
                 }, trial.timing_item);
             }
-            
-            if(trial.prompt!==""){
-                var prompt = $.parseHTML(trial.prompt);
-                prompt.addClass('palmer_prompt');
-                display_element.append(prompt);
-            }
 
             function arrayDifferences(arr1, arr2) {
                 var n_diff = 0;
-                for(var i=0;i<arr1.length; i++)
-                {
-                    if(arr1[i]!=arr2[i]){
+                for (var i = 0; i < arr1.length; i++) {
+                    if (arr1[i] != arr2[i]) {
                         n_diff++;
                     }
                 }
@@ -261,43 +259,45 @@
                     "num_wrong": n_diff,
                 }, trial.data);
 
-               if(trial.editable && trial.show_feedback){
-                   // hide the button
-                   $('#submitButton').hide();
-                   $('.palmer_prompt').hide();
-                   
-                   showConfiguration(trial.configurations);
-                   var feedback = "";
-                   if(correct)
-                   {
-                       feedback = "Correct!";
-                   } else {
-                       if(n_diff > 1){
-                           feedback = "You missed "+n_diff+" lines. The correct symbol is shown above.";
-                       } else {
-                           feedback = "You missed 1 line. The correct symbol is shown above.";
-                       }
-                   }
-                   display_element.append($.parseHTML("<p id='palmer_feedback'>"+feedback+"</p>"));
-                   
-                   setTimeout(function() {
-                       next_trial();
-                   }, trial.timing_feedback);
-                   
-               } else {
-                   next_trial();
-               }
+                if (trial.editable && trial.show_feedback) {
+                    // hide the button
+                    $('#submitButton').hide();
+                    $('.palmer_prompt').hide();
+
+                    showConfiguration(trial.configurations);
+                    var feedback = "";
+                    if (correct) {
+                        feedback = "Correct!";
+                    }
+                    else {
+                        if (n_diff > 1) {
+                            feedback = "You missed " + n_diff + " lines. The correct symbol is shown above.";
+                        }
+                        else {
+                            feedback = "You missed 1 line. The correct symbol is shown above.";
+                        }
+                    }
+                    display_element.append($.parseHTML("<p id='palmer_feedback'>" + feedback + "</p>"));
+
+                    setTimeout(function() {
+                        next_trial();
+                    }, trial.timing_feedback);
+
+                }
+                else {
+                    next_trial();
+                }
             }
-            
+
             function next_trial() {
-                
+
                 display_element.html('');
 
                 // next trial
                 setTimeout(function() {
                     block.next();
                 }, trial.timing_post_trial);
-                
+
             }
 
 
