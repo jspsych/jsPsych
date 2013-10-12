@@ -266,7 +266,7 @@
                    $('#submitButton').hide();
                    $('.palmer_prompt').hide();
                    
-                   showConfiguration(trial.configuration);
+                   showConfiguration(trial.configurations);
                    var feedback = "";
                    if(correct)
                    {
