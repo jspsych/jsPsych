@@ -225,8 +225,8 @@
             }
             
             if (trial.prompt !== "") {
-                var prompt = $.parseHTML(trial.prompt).addClass('palmer_prompt');
-                display_element.append(prompt);
+                display_element.append($('<div id="palmer_prompt">'));
+                $("#palmer_prompt").append(prompt);
             }
 
             function arrayDifferences(arr1, arr2) {
