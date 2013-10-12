@@ -278,7 +278,7 @@
                            feedback = "You missed 1 line. The correct symbol is shown above.";
                        }
                    }
-                   display_element.append($.parseHTML("<p id='palmer_feedback'></p>"));
+                   display_element.append($.parseHTML("<p id='palmer_feedback'>"+feedback+"</p>"));
                    
                    setTimeout(function() {
                        next_trial();
