@@ -218,14 +218,16 @@
             // future ideas: allow for key response, to enable things like n-back, same/different, etc..
             if (!trial.editable) {
                 showConfiguration(trial.configurations);
-                if (trial.prompt !== "") {
-                    var prompt = $.parseHTML(trial.prompt);
-                    prompt.addClass('palmer_prompt');
-                    display_element.append(prompt);
-                }
+                
                 setTimeout(function() {
                     save_data();
                 }, trial.timing_item);
+            }
+            
+            if (trial.prompt !== "") {
+                var prompt = $.parseHTML(trial.prompt);
+                prompt.addClass('palmer_prompt');
+                display_element.append(prompt);
             }
 
             function arrayDifferences(arr1, arr2) {
