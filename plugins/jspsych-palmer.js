@@ -31,8 +31,8 @@
                     circle_radius: params.circle_radius || 20,
                     timing_item: params.timing_item || 1000,
                     timing_post_trial: params.timing_post_trial || 1000,
-                    prompt: (params.prompt !== 'undefined') ? params.prompt : "",
-                    data: (params.data !== 'undefined') ? params.data[i] : {}
+                    prompt: (typeof params.prompt === 'undefined') ? "" : params.prompt,
+                    data: (typeof params.data === 'undefined') ? {} : params.data[i]
                 };
 
                 trials.push(trial);
