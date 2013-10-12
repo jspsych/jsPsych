@@ -188,7 +188,7 @@
             // is a 1 in the array.
             function showConfiguration(configuration) {
                 for (var i = 0; i < configuration.length; i++) {
-                    if (configuration[i] == 1) {
+                    if (configuration[i] != lineIsVisible[i]) {
                         toggle_line(i);
                     }
                 }
