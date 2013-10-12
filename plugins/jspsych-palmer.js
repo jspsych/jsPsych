@@ -226,7 +226,7 @@
             
             if (trial.prompt !== "") {
                 display_element.append($('<div id="palmer_prompt">'));
-                $("#palmer_prompt").append(prompt);
+                $("#palmer_prompt").html(prompt);
             }
 
             function arrayDifferences(arr1, arr2) {
