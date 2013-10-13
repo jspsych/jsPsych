@@ -263,7 +263,7 @@
                 if (trial.editable && trial.show_feedback) {
                     // hide the button
                     $('#submitButton').hide();
-                    $('.palmer_prompt').hide();
+                    $('#palmer_prompt').hide();
 
                     showConfiguration(trial.configurations);
                     var feedback = "";
