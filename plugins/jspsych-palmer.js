@@ -255,6 +255,7 @@
                     "trial_type": "palmer",
                     "trial_index": block.trial_idx,
                     "configuration": lineIsVisible,
+                    "target_configuration": trial.configurations,
                     "rt": response_time,
                     "correct": correct,
                     "num_wrong": n_diff,
