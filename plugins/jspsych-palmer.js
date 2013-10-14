@@ -254,8 +254,8 @@
                 block.data[block.trial_idx] = $.extend({}, {
                     "trial_type": "palmer",
                     "trial_index": block.trial_idx,
-                    "configuration": lineIsVisible,
-                    "target_configuration": trial.configurations,
+                    "configuration": JSON.stringify(lineIsVisible),
+                    "target_configuration": JSON.stringify(trial.configurations),
                     "rt": response_time,
                     "correct": correct,
                     "num_wrong": n_diff,
