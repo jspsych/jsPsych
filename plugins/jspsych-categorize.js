@@ -1,13 +1,30 @@
 /* jspsych plugin for categorization trials with feedback
  * Josh de Leeuw
+ * updated October 2013
  * 
- * display an image and then give corrective feedback based on the subject's response
+ * display an image or HTML object and then give corrective feedback based on the subject's response
  *
- * updated March 2013
+ * parameters:
+ *      stimuli: array of stimuli. array elements can be paths to images or strings of HTML.
+ *      key_answer: array of key codes representing the correct answer for each stimulus.
+ *      text_answer: array of strings representing the label associated with each stimulus. optional.
+ *      choices: array of key codes representing valid choices that can be made. other key responses will be ignored.
+ *      correct_text: HTML string to show when correct answer is given.
+ *      incorrect_text: HTML string to show when incorrect answer is given.
+ *              NOTE: for both of the above, the special string %ANS% can be used. The text_answer associated with 
+ *              the trial will be substituted for %ANS%. 
+ *      timing_stim: how long to show the stimulus for. -1 will show until response is given.
+ *      timing_feedback_duration: how long to show the feedback for.
+ *      timing_post_trial: how long to show a blank screen before the next trial.
+ *      show_stim_with_feedback: if true, the stimulus will remain on the screen while feedback is given.
+ *      is_html: must set to true if the stimulus is HTML code.
+ *      force_correct_button_press: if true, then the user must press the correct key after feedback is given.
+ *      prompt: HTML string to show when the subject is viewing the stimulus and making a categorization decision.
+ *      data: the optional data object
  */
 
 (function($) {
-    jsPsych.categorize_feedback = (function() {
+    jsPsych.categorize = (function() {
 
         var plugin = {};
 
@@ -15,15 +32,15 @@
             var trials = [];
             for (var i = 0; i < params.stimuli.length; i++) {
                 trials.push({});
-                trials[i].type = "categorize_feedback";
+                trials[i].type = "categorize";
                 trials[i].a_path = params.stimuli[i];
                 trials[i].key_answer = params.key_answer[i];
-                trials[i].text_answer = params.text_answer[i];
+                trials[i].text_answer = (typeof params.text_answer === 'undefined') ? "" : params.text_answer[i];
                 trials[i].choices = params.choices;
                 trials[i].correct_text = params.correct_text;
                 trials[i].incorrect_text = params.incorrect_text;
                 // timing params
-                trials[i].timing_image = params.timing_image || -1; // default is to show image until response
+                trials[i].timing_stim = params.timing_stim || -1; // default is to show image until response
                 trials[i].timing_feedback_duration = params.timing_feedback_duration || 2000;
                 trials[i].timing_post_trial = params.timing_post_trial || 1000;
                 // optional params
@@ -36,37 +53,37 @@
             return trials;
         };
 
-        var cf_trial_complete = false;
+        var cat_trial_complete = false;
 
         plugin.trial = function(display_element, block, trial, part) {
             switch (part) {
             case 1:
                 // set finish flag
-                cf_trial_complete = false;
+                cat_trial_complete = false;
 
                 if (!trial.is_html) {
                     // add image to display
                     display_element.append($('<img>', {
                         "src": trial.a_path,
-                        "class": 'cf',
-                        "id": 'jspsych_cf_image'
+                        "class": 'cat',
+                        "id": 'jspsych_cat_image'
                     }));
                 }
                 else {
                     display_element.append($('<div>', {
-                        id: 'jspsych_cf_image',
-                        "class": 'cf',
+                        id: 'jspsych_cat_image',
+                        "class": 'cat',
                         html: trial.a_path
                     }));
                 }
 
                 // hide image after time if the timing parameter is set
-                if (trial.timing_image > 0) {
+                if (trial.timing_stim > 0) {
                     setTimeout(function() {
-                        if (!cf_trial_complete) {
-                            $('#jspsych_cf_image').css('visibility', 'hidden');
+                        if (!cat_trial_complete) {
+                            $('#jspsych_cat_image').css('visibility', 'hidden');
                         }
-                    }, trial.timing_image);
+                    }, trial.timing_stim);
                 }
 
                 // if prompt is set, show prompt
@@ -96,7 +113,7 @@
                         }
                     }
                     if (flag) {
-                        cf_trial_complete = true;
+                        cat_trial_complete = true;
 
                         // measure response time
                         var endTime = (new Date()).getTime();
@@ -132,14 +149,14 @@
                         // add image to display
                         display_element.append($('<img>', {
                             "src": trial.a_path,
-                            "class": 'cf',
-                            "id": 'jspsych_cf_image'
+                            "class": 'cat',
+                            "id": 'jspsych_cat_image'
                         }));
                     }
                     else {
                         display_element.append($('<div>', {
-                            id: 'jspsych_cf_image',
-                            "class": 'cf',
+                            id: 'jspsych_cat_image',
+                            "class": 'cat',
                             html: trial.a_path
                         }));
                     }
@@ -148,10 +165,10 @@
                 // substitute answer in feedback string.
                 var atext = "";
                 if (block.data[block.trial_idx].correct) {
-                    atext = trial.correct_text.replace("&ANS&", trial.text_answer);
+                    atext = trial.correct_text.replace("%ANS%", trial.text_answer);
                 }
                 else {
-                    atext = trial.incorrect_text.replace("&ANS&", trial.text_answer);
+                    atext = trial.incorrect_text.replace("%ANS%", trial.text_answer);
                 }
 
                 // show the feedback
