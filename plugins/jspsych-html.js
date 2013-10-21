@@ -32,66 +32,68 @@ Example Usage:
 		 finish: function(data) { }
 	});
 */
-(function( $ ) {
-	jsPsych.html = (function(){
+(function($) {
+    jsPsych.html = (function() {
 
-		var plugin = {};
-        
-		plugin.create = function(params) {
-		  var trials = [];
-			for(var i=0; i<params.pages.length; i++) {
-			  trials.push(
-			    {type: "html"
-			    ,url: params.pages[i].url
-			    ,cont_key: params.pages[i].cont_key || params.cont_key
-			    ,cont_btn: params.pages[i].cont_btn || params.cont_btn
-			    ,timing: params.pages[i].timing || params.timing
-			    ,check_fn: params.pages[i].check_fn
-				,force_refresh: params.force_refresh || false
-			    }
-			  );
-			}
-			return trials;
-		}
+        var plugin = {};
 
-		plugin.trial = function(display_element, block, trial, part) {
-		
-		var url = trial.url;
-		if(trial.force_refresh) { url = trial.url + "?time=" + (new Date().getTime()); }
-		
-		display_element.load(trial.url, function() {
-		    var t0 = Date.now();
-		    var finish = function() {
-  		    if (trial.check_fn && !trial.check_fn(display_element)) return;
-  		    if (trial.cont_key) $(document).unbind('keyup', key_listener);	        
-		      block.data[block.trial_idx] = 
- 		      { user_duration: Date.now()-t0
-		       ,url: trial.url
-		      };
-		      if (trial.timing) {
-		        block.data[block.trial_idx].timing = trial.timing;
-		        // hide display_element, since it could have a border and we want a blank screen during timing
-		        display_element.hide(); 
-		        setTimeout(function() {
-		          display_element.empty();
-		          display_element.show();
-		          block.next();
-		        }, trial.timing);
-		      } else {
-		        display_element.empty();
-		        block.next();
-		      }
-		    }
-		    if (trial.cont_btn) $('#'+trial.cont_btn).click(finish);
-		    if (trial.cont_key) {
-  		    var key_listener = function(e) {
-	  	      if (e.which == trial.cont_key) finish();
-	  	    }
-	  	    $(document).keyup(key_listener);
-	  		}
-	    });
-		}
-    
-		return plugin;
-	})();
-}) (jQuery);
+        plugin.create = function(params) {
+            var trials = [];
+            for (var i = 0; i < params.pages.length; i++) {
+                trials.push({
+                    type: "html",
+                    url: params.pages[i].url,
+                    cont_key: params.pages[i].cont_key || params.cont_key,
+                    cont_btn: params.pages[i].cont_btn || params.cont_btn,
+                    timing: params.pages[i].timing || params.timing,
+                    check_fn: params.pages[i].check_fn,
+                    force_refresh: params.force_refresh || false
+                });
+            }
+            return trials;
+        };
+
+        plugin.trial = function(display_element, block, trial, part) {
+
+            var url = trial.url;
+            if (trial.force_refresh) {
+                url = trial.url + "?time=" + (new Date().getTime());
+            }
+
+            display_element.load(trial.url, function() {
+                var t0 = Date.now();
+                var finish = function() {
+                    if (trial.check_fn && !trial.check_fn(display_element)) return;
+                    if (trial.cont_key) $(document).unbind('keyup', key_listener);
+                    block.data[block.trial_idx] = {
+                        user_duration: Date.now() - t0,
+                        url: trial.url
+                    };
+                    if (trial.timing) {
+                        block.data[block.trial_idx].timing = trial.timing;
+                        // hide display_element, since it could have a border and we want a blank screen during timing
+                        display_element.hide();
+                        setTimeout(function() {
+                            display_element.empty();
+                            display_element.show();
+                            block.next();
+                        }, trial.timing);
+                    }
+                    else {
+                        display_element.empty();
+                        block.next();
+                    }
+                };
+                if (trial.cont_btn) $('#' + trial.cont_btn).click(finish);
+                if (trial.cont_key) {
+                    var key_listener = function(e) {
+                        if (e.which == trial.cont_key) finish();
+                    };
+                    $(document).keyup(key_listener);
+                }
+            });
+        };
+
+        return plugin;
+    })();
+})(jQuery);
