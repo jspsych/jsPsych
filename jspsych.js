@@ -34,13 +34,13 @@
 		//
 		
 		// core.init creates the experiment and starts running it
-		//		$this is an HTML element (usually a <div>) that will display jsPsych content
+		//		display_element is an HTML element (usually a <div>) that will display jsPsych content
 		//		options is an object: {
 		//			"experiment_structure": an array of blocks specifying the experiment
 		//			"finish": function to execute when the experiment ends
 		//		}
 		//
-		core.init = function($this, options){
+		core.init = function(display_element, options){
 		
 			// reset the key variables
 			// TODO: properly define this as a class with instance variables?
@@ -52,18 +52,19 @@
 		
 			var defaults = {
 				'on_trial_start': function(){ return undefined; },
-				'on_trial_finish': function() { return undefined; }
-			}
+				'on_trial_finish': function() { return undefined; },
+				'on_data_update' : function(data) { return undefined; }
+			};
 			// import options
 			opts = $.extend({}, defaults, options);
 			// set target
-			DOM_target = $this;
+			DOM_target = display_element;
 			
 			run();
-		}
+		};
 		
 		// core.data returns all of the data objects for each block as an array
-		// 		where core.data[0] = data object from block 0, etc...
+		//      where core.data[0] = data object from block 0, etc...
 		
 		core.data = function(){
 			var all_data = [];
@@ -72,7 +73,7 @@
 				all_data[i] = exp_blocks[i].data;
 			}
 			return all_data;
-		}
+		};
 		
 		// core.progress returns an object with the following properties
 		// 		total_blocks: the number of total blocks in the experiment
@@ -124,10 +125,11 @@
 				
 				exp_blocks[i] = createBlock(trials);
 			}
-			// start!
+			
+			// record the start time
 			exp_start_time = new Date();
 
-			// run the first block
+			// begin! - run the first block
 			exp_blocks[0].next();
 		}
 		
@@ -170,6 +172,11 @@
 					opts.on_trial_start();
 							
 					do_trial(this, curr_trial);
+				},
+				
+				writeData: function(data_object) {
+				    this.data[this.trial_idx] = data_object;
+				    opts.on_data_update(data_object);
 				},
 				
 				done: nextBlock,
