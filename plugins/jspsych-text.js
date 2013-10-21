@@ -10,7 +10,8 @@
  * Parameters:
  * 		type: "text"
  *		text: an array of strings. Each element in the array will be displayed on a separate screen.
- *		cont_key: the keycode of the key the user should press to advance to the next screen. Default is '13' which is ENTER.
+ *		cont_key: the keycode of the key the user should press to advance to the next screen. Default is '13' which is ENTER. May specify mouse click
+ *                  by listing the key as 'mouse'
  *		timing: an array with a single element representing the time in milliseconds to delay on a blank screen after the continue key is pressed. Default is no delay.
  *		variables: see variables section below.
  *
@@ -33,91 +34,87 @@
  *				When the above parameters are loaded into the text plugin, the first screen would show 
  * 				"hello, hello." and the second screen would show "I don't know why you say goodbye, I say hello."
  *
- */
-(function( $ ) {
-	jsPsych.text = (function(){
-	
-		var plugin = {};
-	
-		plugin.create = function(params) {
-			var trials = new Array(params.text.length);
-			for(var i = 0; i < trials.length; i++)
-			{
-				trials[i] = {};
-				trials[i]["type"] = "text"; // must match plugin name
-				trials[i]["text"] = params.text[i]; // text of all trials
-				trials[i]["cont_key"] = params.cont_key || '13'; // keycode to press to advance screen, default is ENTER.
-				trials[i]["timing_post_trial"] = params.timing_post_trial || 0; // how long to delay between screens, default is no delay.
-				if(params.variables != undefined)
-				{
-					trials[i]["variables"] = params.variables[i]; // optional variables, defined as functions.
-				}
-				if(params.data != undefined)
-				{
-					trials[i]["data"] = params.data[i];
-				} else {
-					trials[i]["data"] = {};
-				}
-			}
-			return trials;
-		}
-		
-		plugin.trial = function(display_element, block, trial, part) {
-			// the text for the trial is in trial.text, but we need to replace any variables that are in the text.
-			var replaced_text = trial.text;
-			
-			// check to see if there are any variables defined.
-			if(trial.variables != undefined)
-			{
-				for(var i = 0; i < trial.variables.length; i++)
-				{
-					// loop through the array of variables and call each variable function
-					// 	to get the actual text that should be substituted in.
-					var variable_text = trial.variables[i](); 
-					// replace the "%v" with the return value of the function.
-					replaced_text = replaced_text.replace("%v", variable_text);
-				}
-			}
-			// set the HTML of the display target to replaced_text.
-			display_element.html(replaced_text);
-			
-			startTime = (new Date()).getTime();
-			
-			// define a function that will advance to the next trial when the user presses
-			// the continue key.
-			var key_listener = function(e) {
-				if(e.which==trial.cont_key) 
-				{	
-					save_data();
-					$(document).unbind('keyup',key_listener); // remove the response function, so that it doesn't get triggered again.
-					display_element.html(''); // clear the display
-					setTimeout(function(){block.next();}, trial.timing_post_trial); // call block.next() to advance the experiment after a delay.
-				}
-			}
-			
-			var mouse_listener = function(e){
-				save_data();
-				display_element.unbind('click', mouse_listener); // remove the response function, so that it doesn't get triggered again.
-				display_element.html(''); // clear the display
-				setTimeout(function(){block.next();}, trial.timing_post_trial); // call block.next() to advance the experiment after a delay.
-			}
-			
-			// check if key is 'mouse'
-			if(trial.cont_key == 'mouse')
-			{
-				display_element.click(mouse_listener);
-			} else {
-				// attach the response function to the html document.
-				$(document).keyup(key_listener);
-			}
-			
-			var save_data = function()
-			{
-				var rt = (new Date()).getTime() - startTime;
-				block.data[block.trial_idx] = $.extend({},{"trial_type":"text", "trial_index": block.trial_idx, "rt": rt},trial.data);
-			}
-		}
-		
-		return plugin;
-	})();
-}) (jQuery);
+ */ 
+ 
+ (function($) {
+    jsPsych.text = (function() {
+
+        var plugin = {};
+
+        plugin.create = function(params) {
+            var trials = new Array(params.text.length);
+            for (var i = 0; i < trials.length; i++) {
+                trials[i] = {};
+                trials[i].type = "text"; // must match plugin name
+                trials[i].text = params.text[i]; // text of all trials
+                trials[i].cont_key = params.cont_key || '13'; // keycode to press to advance screen, default is ENTER.
+                trials[i].timing_post_trial = params.timing_post_trial || 0; // how long to delay between screens, default is no delay.
+                trials[i].variables = (typeof params.variables === 'undefined') ? undefined : params.variables[i];
+                trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
+            }
+            return trials;
+        };
+
+        plugin.trial = function(display_element, block, trial, part) {
+            // the text for the trial is in trial.text, but we need to replace any variables that are in the text.
+            var replaced_text = trial.text;
+
+            // check to see if there are any variables defined.
+            if (typeof trial.variables != 'undefined') {
+                for (var i = 0; i < trial.variables.length; i++) {
+                    // loop through the array of variables and call each variable function
+                    // to get the actual text that should be substituted in.
+                    var variable_text = trial.variables[i]();
+                    // replace the "%v" with the return value of the function.
+                    replaced_text = replaced_text.replace("%v", variable_text);
+                }
+            }
+            // set the HTML of the display target to replaced_text.
+            display_element.html(replaced_text);
+
+            var startTime = (new Date()).getTime();
+
+            // define a function that will advance to the next trial when the user presses
+            // the continue key.
+            var key_listener = function(e) {
+                if (e.which == trial.cont_key) {
+                    save_data();
+                    $(document).unbind('keyup', key_listener); // remove the response function, so that it doesn't get triggered again.
+                    display_element.html(''); // clear the display
+                    setTimeout(function() {
+                        block.next();
+                    }, trial.timing_post_trial); // call block.next() to advance the experiment after a delay.
+                }
+            };
+
+            var mouse_listener = function(e) {
+                save_data();
+                display_element.unbind('click', mouse_listener); // remove the response function, so that it doesn't get triggered again.
+                display_element.html(''); // clear the display
+                setTimeout(function() {
+                    block.next();
+                }, trial.timing_post_trial); // call block.next() to advance the experiment after a delay.
+            };
+
+            // check if key is 'mouse'
+            if (trial.cont_key == 'mouse') {
+                display_element.click(mouse_listener);
+            }
+            else {
+                // attach the response function to the html document.
+                $(document).keyup(key_listener);
+            }
+
+            var save_data = function() {
+                var rt = (new Date()).getTime() - startTime;
+                block.data[block.trial_idx] = $.extend({}, {
+                    "trial_type": "text",
+                    "trial_index": block.trial_idx,
+                    "rt": rt
+                }, trial.data);
+            };
+        };
+
+        return plugin;
+    })();
+})(jQuery);
