@@ -49,12 +49,12 @@
 			initialized = false;
 			curr_block = 0;
 			
-		
 			var defaults = {
 				'on_trial_start': function(){ return undefined; },
 				'on_trial_finish': function() { return undefined; },
 				'on_data_update' : function(data) { return undefined; }
 			};
+			
 			// import options
 			opts = $.extend({}, defaults, options);
 			// set target
