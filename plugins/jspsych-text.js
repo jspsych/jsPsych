@@ -107,11 +107,11 @@
 
             var save_data = function() {
                 var rt = (new Date()).getTime() - startTime;
-                block.data[block.trial_idx] = $.extend({}, {
+                block.writeData($.extend({}, {
                     "trial_type": "text",
                     "trial_index": block.trial_idx,
                     "rt": rt
-                }, trial.data);
+                }, trial.data));
             };
         };
 

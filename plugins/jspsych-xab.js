@@ -187,7 +187,7 @@
                             "b_path": trial.b_path,
                             "key_press": e.which
                         };
-                        block.data[block.trial_idx] = $.extend({}, trial_data, trial.data);
+                        block.writeData($.extend({}, trial_data, trial.data));
                         $(document).unbind('keyup', resp_func); // remove response function from keys
                         display_element.html(''); // remove all
                         xab_trial_complete = true;

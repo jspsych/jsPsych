@@ -251,7 +251,7 @@
                 var n_diff = arrayDifferences(trial.configurations, lineIsVisible);
                 var correct = (n_diff === 0);
 
-                block.data[block.trial_idx] = $.extend({}, {
+                block.writeData($.extend({}, {
                     "trial_type": "palmer",
                     "trial_index": block.trial_idx,
                     "configuration": JSON.stringify(lineIsVisible),
@@ -259,7 +259,7 @@
                     "rt": response_time,
                     "correct": correct,
                     "num_wrong": n_diff,
-                }, trial.data);
+                }, trial.data));
 
                 if (trial.editable && trial.show_feedback) {
                     // hide the button

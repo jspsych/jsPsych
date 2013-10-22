@@ -61,14 +61,14 @@ Example Usage:
             }
 
             display_element.load(trial.url, function() {
-                var t0 = Date.now();
+                var t0 = (new Date()).getTime();
                 var finish = function() {
                     if (trial.check_fn && !trial.check_fn(display_element)) return;
                     if (trial.cont_key) $(document).unbind('keyup', key_listener);
-                    block.data[block.trial_idx] = {
-                        user_duration: Date.now() - t0,
+                    block.writeData({
+                        rt: (new Date()).getTime() - t0,
                         url: trial.url
-                    };
+                    });
                     if (trial.timing) {
                         block.data[block.trial_idx].timing = trial.timing;
                         // hide display_element, since it could have a border and we want a blank screen during timing

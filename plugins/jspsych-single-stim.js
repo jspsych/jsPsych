@@ -90,7 +90,7 @@
                     "key_press": key_press
                 };
 
-                block.data[block.trial_idx] = $.extend({}, trial_data, trial.data);
+                block.writeData($.extend({}, trial_data, trial.data));
                 $(document).unbind('keyup', resp_func);
                 display_element.html('');
                 setTimeout(function() {

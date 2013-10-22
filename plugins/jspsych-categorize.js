@@ -129,7 +129,7 @@
                             "key_press": e.which
                         };
 
-                        block.data[block.trial_idx] = $.extend({}, trial_data, trial.data);
+                        block.writeData($.extend({}, trial_data, trial.data));
 
                         // clear function
                         $(document).unbind('keyup', resp_func);
