@@ -102,13 +102,13 @@
 			};
 			
 			return obj;		
-		}
+		};
 		
 		// core.startTime() returns the Date object which represents the time that the experiment started.
 				
 		core.startTime = function(){
 			return exp_start_time;
-		}
+		};
 		
 		//
 		// private functions //
@@ -116,7 +116,7 @@
 		function run()
 		{
 			// take the experiment structure and dynamically create a set of blocks
-			exp_blocks = new Array(opts["experiment_structure"].length);
+			exp_blocks = new Array(opts.experiment_structure.length);
 			
 			// iterate through block list to create trials
 			for(var i = 0; i < exp_blocks.length; i++)
@@ -179,10 +179,11 @@
 				    opts.on_data_update(data_object);
 				},
 				
+				
 				done: nextBlock,
 				
 				num_trials: trial_list.length
-			}
+			};
 			
 			return block;
 		}
