@@ -1,8 +1,7 @@
 /** July 2012. Josh de Leeuw
 
 	This plugin gives the user the ability to execute an arbitrary function
-	during an experiment. It can be used to save data in the middle of an
-	experiment, for example.
+	during an experiment.
 	
 	Params:
 		"type" is "call_function"
