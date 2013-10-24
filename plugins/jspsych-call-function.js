@@ -1,4 +1,6 @@
-/** July 2012. Josh de Leeuw
+/** 
+ * Josh de Leeuw
+ * Updated October 2013
 
 	This plugin gives the user the ability to execute an arbitrary function
 	during an experiment.
@@ -12,32 +14,36 @@
 		The return value of the function will be stored in the data.
 **/
 
-(function( $ ) {
-	jsPsych.call_function = (function(){
-	
-		var plugin = {};
-		
-		plugin.create = function(params) {
-			var trials = new Array(1);
-			trials[0] = {
-				"type": "call_function",
-				"func": params["func"],
-				"args": params["args"] || []
-			}
-			return trials;
-		}
-		
-		plugin.trial = function(display_element, block, trial, part)
-		{
-			var return_val = trial.func.apply({}, [trial.args]);
-			if(return_val){
-				block.data[block.trial_idx] = return_val;
-			}
-			
-			block.next();
-		}
-	
-	
-		return plugin;
-	})();
+(function($) {
+    jsPsych['call-function'] = (function() {
+
+        var plugin = {};
+
+        plugin.create = function(params) {
+            var trials = new Array(1);
+            trials[0] = {
+                "type": "call-function",
+                "func": params.func,
+                "args": params.args || [],
+                "data": (typeof params.data === 'undefined') ? {} : params.data
+            };
+            return trials;
+        };
+
+        plugin.trial = function(display_element, block, trial, part) {
+            var return_val = trial.func.apply({}, [trial.args]);
+            if (return_val) {
+                block.writeData({
+                    trial_type: "call-function",
+                    trial_index: block.trial_idx,
+                    value: return_val,
+                    data: trial.data
+                });
+            }
+
+            block.next();
+        };
+
+        return plugin;
+    })();
 })(jQuery);

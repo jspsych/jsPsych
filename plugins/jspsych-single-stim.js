@@ -83,7 +83,7 @@
                 trial_complete = true;
 
                 var trial_data = {
-                    "trial_type": "singleimage_keyresponse",
+                    "trial_type": "single-stim",
                     "trial_index": block.trial_idx,
                     "rt": rt,
                     "a_path": trial.a_path,

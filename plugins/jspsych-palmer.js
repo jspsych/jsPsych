@@ -1,4 +1,6 @@
-/* jspsych-palmer
+/** jspsych-palmer
+ * Josh de Leeuw (October 2013)
+ * 
  * a jspsych plugin for presenting and querying about stimuli modeled after
  *
  * Palmer, S. (1977). Hierarchical Structure in Perceptual Representation. Cognitive Psychology, 9, 441.
@@ -8,9 +10,21 @@
  * Goldstone, R. L., Rogosky, B. J., Pevtzow, R., & Blair, M. (2005). Perceptual and semantic reorganization during category learning. 
  * In H. Cohen & C. Lefebvre (Eds.) Handbook of Categorization in Cognitive Science. (pp. 651-678). Amsterdam: Elsevier.
  *
- * Josh de Leeuw (October 2013)
- *
  * NOTE: This plugin requires the Raphaeljs library for manipulating vector graphics (SVG). Download at http://www.raphaeljs.com
+ * 
+ * parameters:
+ *      configurations: array of arrays. inner most array should be an array of 1s and 0s, where 1s represent the
+ *                      presence of a line segment, and 0s represent the absence.
+ *      editable:       set to true if you want the subject to be able to change the configuration by interacting
+ *                      with the stimulus. (click two circles to toggle the line between them).
+ *      show_feedback:  set to true to show corrective feedback when trial is editable.
+ *      grid_spacing:   distance in pixels between the circles.
+ *      square_Size:    how many circles per row/column.
+ *      timing_item:    how long to show the stimulus for. (only matters when editable is false)
+ *      timing_post_trial:  how long to show blank screen after trial.
+ *      timing_feedback:    how long to show corrective feedback for.
+ *      prompt:         optional html string to show during stimulus presentation
+ *      data:           optional data object
  *
  */
 

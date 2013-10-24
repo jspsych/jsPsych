@@ -20,8 +20,7 @@ Parameters:
 Data:
   array of
     url:      the url of the page
-    timing:   the timing parameter that was given, if any
-    user_duration: duration the user looked at the page in ms
+    rt: duration the user looked at the page in ms
   
 
 Example Usage:
@@ -45,7 +44,7 @@ Example Usage:
                     url: params.pages[i].url,
                     cont_key: params.pages[i].cont_key || params.cont_key,
                     cont_btn: params.pages[i].cont_btn || params.cont_btn,
-                    timing: params.pages[i].timing || params.timing,
+                    timing_post_trial: params.pages[i].timing || params.timing,
                     check_fn: params.pages[i].check_fn,
                     force_refresh: params.force_refresh || false
                 });
@@ -70,7 +69,6 @@ Example Usage:
                         url: trial.url
                     });
                     if (trial.timing) {
-                        block.data[block.trial_idx].timing = trial.timing;
                         // hide display_element, since it could have a border and we want a blank screen during timing
                         display_element.hide();
                         setTimeout(function() {

@@ -1,4 +1,5 @@
-/* jspsych plugin for categorization trials with feedback
+/** 
+ * jspsych plugin for categorization trials with feedback
  * Josh de Leeuw
  * updated October 2013
  * 
@@ -21,7 +22,7 @@
  *      force_correct_button_press: if true, then the user must press the correct key after feedback is given.
  *      prompt: HTML string to show when the subject is viewing the stimulus and making a categorization decision.
  *      data: the optional data object
- */
+**/
 
 (function($) {
     jsPsych.categorize = (function() {
@@ -87,7 +88,7 @@
                 }
 
                 // if prompt is set, show prompt
-                if (trial.prompt) {
+                if (trial.prompt !== "") {
                     display_element.append(trial.prompt);
                 }
 

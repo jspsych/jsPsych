@@ -1,4 +1,5 @@
-/* jsPsych plugin for showing animations
+/**
+ * jsPsych plugin for showing animations
  * Josh de Leeuw
  * updated October 2013
  * 
