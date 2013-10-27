@@ -200,7 +200,7 @@
         }
 
         function finishExperiment() {
-            opts["finish"].apply((new Object()), [core.data()]);
+            opts["on_finish"].apply((new Object()), [core.data()]);
         }
 
         function do_trial(block, trial) {
