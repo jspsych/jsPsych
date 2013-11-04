@@ -43,14 +43,20 @@
         core.init = function(options) {
 
             // reset the key variables
-            // TODO: properly define this as a class with instance variables?
             exp_blocks = [];
             opts = {};
             initialized = false;
             curr_block = 0;
+            
+            // check if there is a body element on the page
+            var default_display_element = $('body');
+            if(default_display_element.length === 0) {
+                $(document.documentElement).append($('<body>'));
+                default_display_element = $('body');
+            }
 
             var defaults = {
-                'display_element': document.firstChild,
+                'display_element': default_display_element,
                 'on_finish': function(data) {
                     return undefined;
                 },
