@@ -47,10 +47,10 @@
             opts = {};
             initialized = false;
             curr_block = 0;
-            
+
             // check if there is a body element on the page
             var default_display_element = $('body');
-            if(default_display_element.length === 0) {
+            if (default_display_element.length === 0) {
                 $(document.documentElement).append($('<body>'));
                 default_display_element = $('body');
             }
@@ -88,6 +88,16 @@
                 all_data[i] = exp_blocks[i].data;
             }
             return all_data;
+        };
+        
+        // core.dataAsCSV returns a CSV string that contains all of the data
+        //      append_data is an option map object that will append values
+        //      to every row. for example, if append_data = {"subject": 4},
+        //      then a column called subject will be added to the data and
+        //      it will always have the value 4.
+        core.dataAsCSV = function(append_data) {
+            var dataObj = core.data();
+            return JSON2CSV(flattenData(dataObj, append_data));
         };
 
         // core.progress returns an object with the following properties
@@ -212,6 +222,71 @@
         function do_trial(block, trial) {
             // execute trial method
             jsPsych[trial.type]["trial"].call(this, DOM_target, block, trial, 1);
+        }
+
+        //
+        // A few helper functions to handle data format conversion
+        //
+        function flattenData(data_object, append_data) {
+
+            append_data = (typeof append_data === undefined) ? {} : append_data;
+
+            var trials = [];
+
+            // loop through data_object
+            for (var i = 0; i < data_object.length; i++) {
+                for (var j = 0; j < data_object[i].length; j++) {
+                    var data = $.extend({}, data_object[i][j], append_data);
+                    trials.push(data);
+                }
+            }
+
+            return trials;
+        }
+
+        // this function based on code suggested by StackOverflow users:
+        // http://stackoverflow.com/users/64741/zachary
+        // http://stackoverflow.com/users/317/joseph-sturtevant
+        function JSON2CSV(objArray) {
+            var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+
+            var line = '';
+            var result = '';
+            var columns = [];
+
+            var i = 0;
+            for (var j = 0; j < array.length; j++) {
+                for (var key in array[j]) {
+                    var keyString = key + "";
+                    keyString = '"' + keyString.replace(/"/g, '""') + '",';
+                    if (columns.indexOf(key) == -1) {
+                        columns[i] = key;
+                        line += keyString;
+                        i++;
+                    }
+                }
+            }
+
+
+            line = line.slice(0, - 1);
+            result += line + '\r\n';
+            
+            for (var i = 0; i < array.length; i++) {
+                var line = '';
+                
+                for (var j = 0; j < columns.length; j++) {
+                    var value = array[i][columns[j]] ? array[i][columns[j]] : '';
+                    var valueString = value + "";
+                    line += '"' + valueString.replace(/"/g, '""') + '",';
+                }
+
+
+                line = line.slice(0, - 1);
+                result += line + '\r\n';
+            }
+
+            return result;
+
         }
 
         return core;
