@@ -275,7 +275,7 @@
                 var line = '';
                 
                 for (var j = 0; j < columns.length; j++) {
-                    var value = array[i][columns[j]] ? array[i][columns[j]] : '';
+                    var value = (typeof array[i][columns[j]] === 'undefined') ? '' : array[i][columns[j]];
                     var valueString = value + "";
                     line += '"' + valueString.replace(/"/g, '""') + '",';
                 }
