@@ -32,7 +32,7 @@
                 trials[i].stims = params.stimuli[i];
                 trials[i].frame_time = params.frame_time || 250;
                 trials[i].repetitions = params.repetitions || 1;
-                trials[i].timing_post_trial = params.timing_post_trial;
+                trials[i].timing_post_trial = params.timing_post_trial || 1000;
                 trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
                 trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
             }
@@ -72,7 +72,7 @@
                 block.writeData($.extend({}, {
                     "trial_type": "animation",
                     "trial_index": block.trial_idx,
-                    "a_path": trial.stims[0]
+                    "stimulus": trial.stims[0]
                 }, trial.data));
                 setTimeout(function() {
                     block.next();
