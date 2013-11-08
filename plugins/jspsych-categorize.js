@@ -38,8 +38,8 @@
                 trials[i].key_answer = params.key_answer[i];
                 trials[i].text_answer = (typeof params.text_answer === 'undefined') ? "" : params.text_answer[i];
                 trials[i].choices = params.choices;
-                trials[i].correct_text = params.correct_text;
-                trials[i].incorrect_text = params.incorrect_text;
+                trials[i].correct_text = (typeof params.correct_text === 'undefined') ? "<p class='feedback'>Correct</p>" : params.correct_text;
+                trials[i].incorrect_text = (typeof params.incorrect_text === 'undefined') ? "<p class='feedback'>Incorrect</p>" : params.incorrect_text;
                 // timing params
                 trials[i].timing_stim = params.timing_stim || -1; // default is to show image until response
                 trials[i].timing_feedback_duration = params.timing_feedback_duration || 2000;
@@ -122,11 +122,11 @@
 
                         // save data
                         var trial_data = {
-                            "trial_type": "categorize_feedback",
+                            "trial_type": "categorize",
                             "trial_index": block.trial_idx,
                             "rt": rt,
                             "correct": correct,
-                            "a_path": trial.a_path,
+                            "stimulus": trial.a_path,
                             "key_press": e.which
                         };
 
