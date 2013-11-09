@@ -42,7 +42,7 @@
                 trials[i].timing_response = params.timing_response || -1; // if -1, then wait for response forever
                 trials[i].timing_post_trial = params.timing_post_trial || 1000;
                 // optional parameters
-                trials[i].is_html = (typeof params.is_html === 'undefined') ? false : true;
+                trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
                 trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
                 trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
             }
