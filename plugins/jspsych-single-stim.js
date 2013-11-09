@@ -86,7 +86,7 @@
                     "trial_type": "single-stim",
                     "trial_index": block.trial_idx,
                     "rt": rt,
-                    "a_path": trial.a_path,
+                    "stimulus": trial.a_path,
                     "key_press": key_press
                 };
 
