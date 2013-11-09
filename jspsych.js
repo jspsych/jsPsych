@@ -306,7 +306,7 @@
                 download: filename,
                 html: 'download file'
             }));
-            $('#jspsych-download-as-text-link').click();
+            $('#jspsych-download-as-text-link')[0].click();
         }
 
         return core;
