@@ -182,9 +182,9 @@
                             "trial_index": block.trial_idx,
                             "rt": rt,
                             "correct": correct,
-                            "x_path": trial.x_path,
-                            "a_path": trial.a_path,
-                            "b_path": trial.b_path,
+                            "stimulus_x": trial.x_path,
+                            "stimulus_a": trial.a_path,
+                            "stimulus_b": trial.b_path,
                             "key_press": e.which
                         };
                         block.writeData($.extend({}, trial_data, trial.data));
