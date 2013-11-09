@@ -146,8 +146,8 @@
                     block.writeData($.extend({}, {
                         "sim_score": score,
                         "rt": response_time,
-                        "a_path": trial.a_path,
-                        "b_path": trial.b_path,
+                        "stimulus": trial.a_path,
+                        "stimulus_2": trial.b_path,
                         "trial_type": "similarity",
                         "trial_index": block.trial_idx
                     }, trial.data));
