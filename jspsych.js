@@ -99,6 +99,11 @@
             var dataObj = core.data();
             return JSON2CSV(flattenData(dataObj, append_data));
         };
+        
+        core.saveCSVdata = function(filename, append_data) {
+            var data_string = core.dataAsCSV(append_data);
+            saveTextToFile(data_string, filename);
+        };
 
         // core.progress returns an object with the following properties
         // 		total_blocks: the number of total blocks in the experiment
@@ -286,7 +291,21 @@
             }
 
             return result;
-
+        }
+        
+        function saveTextToFile(textstr, filename) {
+            var blobToSave = new Blob([textstr], {type:'text/plain'});
+            var blobURL = (window.webkitURL !== null) ? 
+                window.webkitURL.createObjectURL(blobToSave) :
+                window.URL.createObjectURL(blobToSave);
+            $(document).append($('<a>',
+            {
+                id: 'jspsych-download-as-text-link',
+                href: blobURL,
+                css: {display: 'none'},
+                download: filename
+            }));
+            $('#jspsych-download-as-text-link').click();
         }
 
         return core;
