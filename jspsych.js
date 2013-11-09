@@ -303,7 +303,8 @@
                 id: 'jspsych-download-as-text-link',
                 href: blobURL,
                 css: {display: 'none'},
-                download: filename
+                download: filename,
+                html: 'download file'
             }));
             $('#jspsych-download-as-text-link').click();
         }
