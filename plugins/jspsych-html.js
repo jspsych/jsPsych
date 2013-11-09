@@ -24,11 +24,10 @@ Data:
   
 
 Example Usage:
-  jsPsych.init($('#target'), 
+  jsPsych.init( 
     {experiment_structure: [
 		   {type: "html", pages:[{url: "intro.html", cont_btn: "start"}]}
-		 ],
-		 finish: function(data) { }
+		 ]
 	});
 */
 (function($) {
@@ -44,7 +43,7 @@ Example Usage:
                     url: params.pages[i].url,
                     cont_key: params.pages[i].cont_key || params.cont_key,
                     cont_btn: params.pages[i].cont_btn || params.cont_btn,
-                    timing_post_trial: params.pages[i].timing || params.timing,
+                    timing_post_trial: params.pages[i].timing_post_trial || params.timing_post_trial,
                     check_fn: params.pages[i].check_fn,
                     force_refresh: params.force_refresh || false
                 });

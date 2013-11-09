@@ -31,9 +31,9 @@
                 trials[i] = {
                     "type": "free-sort",
                     "images": params.stimuli[i], // array of images to display
-                    "stim_height": params.stim_height,
-                    "stim_width": params.stim_width,
-                    "timing": params.timing_post_trial || 1000,
+                    "stim_height": params.stim_height || 100,
+                    "stim_width": params.stim_width || 100,
+                    "timing_post_trial": params.timing_post_trial || 1000,
                     "prompt": (typeof params.prompt === 'undefined') ? '' : params.prompt,
                     "prompt_location": params.prompt_location || "above",
                     "sort_area_width": params.sort_area_width || 800,
