@@ -39,7 +39,7 @@
                 var trial = {
                     type: "palmer",
                     configurations: params.configurations[i],
-                    editable: params.editable,
+                    editable: (typeof params.editable === 'undefined') ? false : params.editable,
                     show_feedback: (typeof params.show_feedback === 'undefined') ? false : params.show_feedback,
                     grid_spacing: params.grid_spacing || 75,
                     square_size: params.square_size || 3,
