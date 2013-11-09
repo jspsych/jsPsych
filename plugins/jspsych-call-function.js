@@ -32,13 +32,12 @@
 
         plugin.trial = function(display_element, block, trial, part) {
             var return_val = trial.func.apply({}, [trial.args]);
-            if (return_val) {
-                block.writeData({
+            if (typeof return_val !== 'undefined') {
+                block.writeData($.extend({},{
                     trial_type: "call-function",
                     trial_index: block.trial_idx,
-                    value: return_val,
-                    data: trial.data
-                });
+                    value: return_val
+                },trial.data));
             }
 
             block.next();
