@@ -298,7 +298,7 @@
             var blobURL = (window.webkitURL !== null) ? 
                 window.webkitURL.createObjectURL(blobToSave) :
                 window.URL.createObjectURL(blobToSave);
-            $(document).append($('<a>',
+            DOM_target.append($('<a>',
             {
                 id: 'jspsych-download-as-text-link',
                 href: blobURL,
