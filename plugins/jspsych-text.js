@@ -12,8 +12,9 @@
  *		text: an array of strings. Each element in the array will be displayed on a separate screen.
  *		cont_key: the keycode of the key the user should press to advance to the next screen. Default is '13' which is ENTER. May specify mouse click
  *                  by listing the key as 'mouse'
- *		timing: an array with a single element representing the time in milliseconds to delay on a blank screen after the continue key is pressed. Default is no delay.
+ *		timing_post_trial: an array with a single element representing the time in milliseconds to delay on a blank screen after the continue key is pressed. Default is no delay.
  *		variables: see variables section below.
+ *      data: optional data object
  *
  * Optional Variables: If you want to display dynamic information that is updated at the moment the text is rendered on the screen,
  * such calculating an accuracy score to tell a subject how many trials they got right, you can use the optional variables parameter.
