@@ -89,7 +89,7 @@
             }
             return all_data;
         };
-        
+
         // core.dataAsCSV returns a CSV string that contains all of the data
         //      append_data is an option map object that will append values
         //      to every row. for example, if append_data = {"subject": 4},
@@ -99,7 +99,7 @@
             var dataObj = core.data();
             return JSON2CSV(flattenData(dataObj, append_data));
         };
-        
+
         core.saveCSVdata = function(filename, append_data) {
             var data_string = core.dataAsCSV(append_data);
             saveTextToFile(data_string, filename);
@@ -275,10 +275,10 @@
 
             line = line.slice(0, - 1);
             result += line + '\r\n';
-            
+
             for (var i = 0; i < array.length; i++) {
                 var line = '';
-                
+
                 for (var j = 0; j < columns.length; j++) {
                     var value = (typeof array[i][columns[j]] === 'undefined') ? '' : array[i][columns[j]];
                     var valueString = value + "";
@@ -292,17 +292,24 @@
 
             return result;
         }
-        
+
         function saveTextToFile(textstr, filename) {
-            var blobToSave = new Blob([textstr], {type:'text/plain'});
-            var blobURL = (window.webkitURL !== null) ? 
-                window.webkitURL.createObjectURL(blobToSave) :
-                window.URL.createObjectURL(blobToSave);
-            DOM_target.append($('<a>',
-            {
+            var blobToSave = new Blob([textstr], {
+                type: 'text/plain'
+            });
+            var blobURL = "";
+            if (window.webkitURL !== null) {
+                blobURL = window.webkitURL.createObjectURL(blobToSave);
+            }
+            else {
+                blobURL = window.URL.createObjectURL(blobToSave);
+            }
+            DOM_target.append($('<a>', {
                 id: 'jspsych-download-as-text-link',
                 href: blobURL,
-                css: {display: 'none'},
+                css: {
+                    display: 'none'
+                },
                 download: filename,
                 html: 'download file'
             }));
