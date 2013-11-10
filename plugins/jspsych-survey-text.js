@@ -21,7 +21,7 @@
             var trials = [];
             for (var i = 0; i < params.questions.length; i++) {
                 trials.push({
-                    type: "survey_text",
+                    type: "survey-text",
                     questions: params.questions[i],
                     data: (typeof params.data === 'undefined') ? {} : params.data[i]
                 });
@@ -69,7 +69,7 @@
 
                 // save data
                 block.writeData($.extend({}, {
-                    "trial_type": "survey_text",
+                    "trial_type": "survey-text",
                     "trial_index": block.trial_idx,
                     "rt": response_time
                 }, question_data, trial.data));
