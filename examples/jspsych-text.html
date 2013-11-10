@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+    <head>
+        <title>jspsych-text plugin example</title>
+        <!-- jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
+        <!-- jsPsych -->
+        <script src="scripts/jspsych.js"></script>
+        <script src="scripts/plugins/jspsych-text.js"></script>
+        <!-- style -->
+        <style>
+            #jspsych_target { margin: 50px auto 50px auto; font-size:18px; text-align: center;}
+            #instructions { text-align: left; }
+        </style>
+    </head>
+    <body>
+        <div id="jspsych_target">
+        </div>
+    </body>
+    <script type="text/javascript">
+        // declare variable to hold instructions
+        var instructions_part_1 = '<div id="instructions"><p>The first part of the instructions. Any HTML code can be used here.</p><p>Press ENTER to continue.</p></div>';
+        var instructions_part_2 = '<div id="instructions"><p>Variables can also be put in the text, like this: %v</p><p>Press ENTER to continue.</p></div>';
+        
+        var variable_function = function(){ return "This is a variable."; };
+        
+        var text_block = [{type:'text', text: [instructions_part_1,instructions_part_2], variables:[[],[variable_function]]}];
+        
+        jsPsych.init({
+            display_element: $('#jspsych_target'),
+            experiment_structure: [text_block]
+        });
+    </script>
+</html>
