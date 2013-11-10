@@ -29,7 +29,7 @@
                     questions: params.questions[i],
                     labels: params.labels[i],
                     intervals: params.intervals[i],
-                    show_ticks: params.show_ticks || true,
+                    show_ticks: (typeof params.show_ticks === 'undefined') ? true : params.show_ticks,
                     data: (typeof params.data === 'undefined') ? {} : params.data[i]
                 });
             }
