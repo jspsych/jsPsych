@@ -298,7 +298,7 @@
                 type: 'text/plain'
             });
             var blobURL = "";
-            if (window.webkitURL !== null) {
+            if (typeof window.webkitURL !== 'undefined') {
                 blobURL = window.webkitURL.createObjectURL(blobToSave);
             }
             else {
