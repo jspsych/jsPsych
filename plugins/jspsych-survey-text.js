@@ -13,7 +13,7 @@
  */
 
 (function($) {
-    jsPsych.survey_text = (function() {
+    jsPsych['survey-text'] = (function() {
 
         var plugin = {};
 
