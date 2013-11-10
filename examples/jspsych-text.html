@@ -24,7 +24,7 @@
         
         var variable_function = function(){ return "This is a variable."; };
         
-        var text_block = [{type:'text', text: [instructions_part_1,instructions_part_2], variables:[[],[variable_function]]}];
+        var text_block = {type:'text', text: [instructions_part_1,instructions_part_2], variables:[[],[variable_function]]};
         
         jsPsych.init({
             display_element: $('#jspsych_target'),
