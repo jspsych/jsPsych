@@ -145,7 +145,7 @@
 
                 // save data
                 block.writeData($.extend({}, {
-                    "trial_type": "likert",
+                    "trial_type": "survey-likert",
                     "trial_index": block.trial_idx,
                     "rt": response_time
                 }, question_data, trial.data));
