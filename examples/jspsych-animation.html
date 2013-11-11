@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+    <head>
+        <title>jspsych-text plugin example</title>
+        <!-- jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
+        <!-- jsPsych -->
+        <script src="scripts/jspsych.js"></script>
+        <script src="scripts/plugins/jspsych-animation.js"></script>
+        <!-- style -->
+        <style>
+            #jspsych_target { margin: 50px auto 50px auto; width: 600px; font-size:18px; text-align: center;}
+            #instructions { text-align: left; }
+            pre { text-align: left; }
+        </style>
+    </head>
+    <body>
+        <div id="jspsych_target">
+        </div>
+    </body>
+    <script type="text/javascript">
+        // declare variable to hold instructions
+        var animation_sequence = ["img/face_1.jpg","img/face_2.jpg","img/face_3.jpg","img/face_4.jpg","img/face_3.jpg","img/face_2.jpg"];
+        
+        var animation_block = {type:'animation', stimuli: [animation_sequence], repetitions:3};
+        
+        jsPsych.init({
+            display_element: $('#jspsych_target'),
+            experiment_structure: [animation_block],
+            on_finish:function(data){
+                $('#jspsych_target').append($("<pre>",{
+                    html: JSON.stringify(data,undefined,2)
+                }));
+            }
+        });
+    </script>
+</html>
