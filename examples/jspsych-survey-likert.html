@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+    
+    <head>
+        <title>jspsych-categorize plugin example</title>
+        <!-- jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <!-- this plugin requires the jQuery UI library and stylesheet -->
+        <!-- these can be loaded from google's servers with the following links -->
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/black-tie/jquery-ui.min.css" rel="stylesheet" type="text/css"></link>
+        <!-- jsPsych -->
+        <script src="scripts/jspsych.js"></script>
+        <script src="scripts/plugins/jspsych-survey-likert.js"></script>
+        <!-- style -->
+        <style>
+            #jspsych_target {
+                margin: 50px auto 50px auto;
+                width: 600px;
+                font-size:18px;
+                text-align: center;
+            }
+            #instructions {
+                text-align: left;
+            }
+            pre {
+                text-align: left;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div id="jspsych_target"></div>
+    </body>
+    <script type="text/javascript">
+    
+        var page_1_questions = ["I like vegetables.", "I hate eggs."];
+        var page_2_questions = ["I like fruit."];
+        
+        var scale_1 = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
+        var scale_2 = ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neural", "Somewhat Agree", "Agree", "Strongly Agree"];
+        
+        var likert_block = {
+            type: 'survey-likert',
+            questions: [page_1_questions, page_2_questions],
+            labels: [[scale_1, scale_2], [scale_1]],
+            intervals: [[5,7], [9]] // note the the intervals and labels don't necessarily need to match.
+        }
+        
+        // launch jspsych experiment
+        jsPsych.init({
+            display_element: $('#jspsych_target'),
+            experiment_structure: [likert_block],
+            on_finish: function(data) {
+                $('#jspsych_target').append($("<pre>", {
+                    text: JSON.stringify(data, undefined, 2)
+                }));
+            }
+        });
+    </script>
+
+</html>
