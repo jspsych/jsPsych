@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+    <head>
+        <title>jspsych-text plugin example</title>
+        <!-- jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
+        <!-- jsPsych -->
+        <script src="scripts/jspsych.js"></script>
+        <script src="scripts/plugins/jspsych-animation.js"></script>
+        <!-- style -->
+        <style>
+            #jspsych_target { margin: 50px auto 50px auto; width: 600px; font-size:18px; text-align: center;}
+            #stimulus { width: 150px; height: 150px; background-color: #777; font-size:124px; font-family: 'Impact'; }
+            pre { text-align: left; }
+        </style>
+    </head>
+    <body>
+        <div id="jspsych_target">
+        </div>
+    </body>
+    <script type="text/javascript">
+        // number of trials
+        var n_trials = 15;
+        
+        // this is an example of using HTML objects as stimuli.
+        // you could also use images.
+        var numbers = ["1","2","3","4","5"];
+        var letters = ["I","Z","B","A","S"];
+        
+        var stimuli = [];
+        var answers = [];
+        var text_answers = [];
+        
+        // randomly choose stimuli
+        for(var i=0; i<n_trials; i++) {
+            if(Math.floor(Math.random()*2)===0){
+                // pick a number
+                stimuli.push("<div id='stimulus'><p>"+numbers[Math.floor(Math.random*numbers.length)]+"</p></div>");
+                answers.push(81);
+                text_answers.push("number");
+            } else {
+                // pick a letter
+                stimuli.push("<div id='stimulus'><p>"+letters[Math.floor(Math.random*numbers.length)]+"</p></div>");
+                answers.push(80);
+                text_answers.push("letter");
+            }
+        }
+        
+        // create animation block for jspsych
+        var categorization_block = {type:'categorize', stimuli: stimuli, key_answers: answers, text_answers: text_answers, choices: [80,81]};
+        
+        // launch jspsych experiment
+        jsPsych.init({
+            display_element: $('#jspsych_target'),
+            experiment_structure: [categorization_block],
+            on_finish:function(data){
+                $('#jspsych_target').append($("<pre>",{
+                    html: JSON.stringify(data,undefined,2)
+                }));
+            }
+        });
+    </script>
+</html>
