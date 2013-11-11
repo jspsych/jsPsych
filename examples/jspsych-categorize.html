@@ -23,7 +23,7 @@
             #stimulus {
                 width: 150px;
                 height: 150px;
-                background-color: #777;
+                background-color: #ddd;
                 font-size:124px;
                 font-family:'Impact';
             }
@@ -62,7 +62,7 @@
             }
             else {
                 // pick a letter
-                stimuli.push("<div id='stimulus'><p>" + letters[Math.floor(Math.random * numbers.length)] + "</p></div>");
+                stimuli.push("<div id='stimulus'><p>" + letters[Math.floor(Math.random * letters.length)] + "</p></div>");
                 answers.push(80);
                 text_answers.push("letter");
             }
