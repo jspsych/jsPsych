@@ -56,13 +56,13 @@
         for (var i = 0; i < n_trials; i++) {
             if (Math.floor(Math.random() * 2) === 0) {
                 // pick a number
-                stimuli.push("<div id='stimulus'><p>" + numbers[Math.floor(Math.random * numbers.length)] + "</p></div>");
+                stimuli.push("<div id='stimulus'><p>" + numbers[Math.floor(Math.random() * numbers.length)] + "</p></div>");
                 answers.push(81);
                 text_answers.push("number");
             }
             else {
                 // pick a letter
-                stimuli.push("<div id='stimulus'><p>" + letters[Math.floor(Math.random * letters.length)] + "</p></div>");
+                stimuli.push("<div id='stimulus'><p>" + letters[Math.floor(Math.random() * letters.length)] + "</p></div>");
                 answers.push(80);
                 text_answers.push("letter");
             }
@@ -75,6 +75,8 @@
             key_answer: answers,
             text_answer: text_answers,
             choices: [80, 81],
+            correct_text: "<p class='prompt'>Correct, this is a %ANS%.</p>",
+            incorrect_text: "<p class='prompt'>Incorrect, this is a %ANS.</p>",
             is_html: true,
             prompt: "<p class='prompt'>Press P for letter. Press Q for number.</p>"
         };
