@@ -23,10 +23,14 @@
         var instructions_part_1 = '<div id="instructions"><p>The first part of the instructions. Any HTML code can be used here.</p><p>Press ENTER to continue.</p></div>';
         var instructions_part_2 = '<div id="instructions"><p>Variables can also be put in the text, like this: %v</p><p>Press ENTER to continue.</p></div>';
         
+        // this is a simple function, but any function can be used to put a variable into
+        // the text block as long as it returns a string.
         var variable_function = function(){ return "This is a variable."; };
         
+        // create the text block
         var text_block = {type:'text', text: [instructions_part_1,instructions_part_2], variables:[[],[variable_function]]};
         
+        // launch jspsych
         jsPsych.init({
             display_element: $('#jspsych_target'),
             experiment_structure: [text_block],

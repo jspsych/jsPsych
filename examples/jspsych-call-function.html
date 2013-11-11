@@ -6,7 +6,7 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
         <!-- jsPsych -->
         <script src="scripts/jspsych.js"></script>
-        <script src="scripts/plugins/jspsych-animation.js"></script>
+        <script src="scripts/plugins/jspsych-call-function.js"></script>
         <!-- style -->
         <style>
             #jspsych_target { margin: 50px auto 50px auto; width: 600px; font-size:18px; text-align: center;}
@@ -19,16 +19,18 @@
         </div>
     </body>
     <script type="text/javascript">
-        // declare variable to hold animation sequence
-        var animation_sequence = ["img/face_1.jpg","img/face_2.jpg","img/face_3.jpg","img/face_4.jpg","img/face_3.jpg","img/face_2.jpg"];
+        // this is a simple function that changes the background color of the page
+        var demo_function = function(color) { 
+            $('body').css({"background-color": color});
+            return color;
+        };
         
-        // create animation block for jspsych
-        var animation_block = {type:'animation', stimuli: [animation_sequence], repetitions:3};
+        // declare the block.
+        var function_block = {type:'call-function', func: demo_function, args:["#ff0000"]};
         
-        // launch jspsych experiment
         jsPsych.init({
             display_element: $('#jspsych_target'),
-            experiment_structure: [animation_block],
+            experiment_structure: [function_block],
             on_finish:function(data){
                 $('#jspsych_target').append($("<pre>",{
                     html: JSON.stringify(data,undefined,2)
