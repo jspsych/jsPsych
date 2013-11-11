@@ -30,9 +30,9 @@
             display_element: $('#jspsych_target'),
             experiment_structure: [text_block],
             on_finish:function(data){
-                $('#jspsych_target').append("<pre>",{
-                    html:(JSON.stringify(data,undefined,2))
-                });
+                $('#jspsych_target').append($("<pre>",{
+                    html: JSON.stringify(data,undefined,2)
+                }));
             }
         });
     </script>
