@@ -94,7 +94,7 @@
             experiment_structure: [instructions_block, categorization_block],
             on_finish: function(data) {
                 $('#jspsych_target').append($("<pre>", {
-                    html: JSON.stringify(data, undefined, 2)
+                    text: JSON.stringify(data, undefined, 2)
                 }));
             }
         });
