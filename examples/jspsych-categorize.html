@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title>jspsych-text plugin example</title>
+        <title>jspsych-categorize plugin example</title>
         <!-- jQuery -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
         <!-- jsPsych -->
@@ -49,7 +49,7 @@
         }
         
         // create categorization block for jspsych
-        var categorization_block = {type:'categorize', stimuli: stimuli, key_answers: answers, text_answers: text_answers, choices: [80,81]};
+        var categorization_block = {type:'categorize', stimuli: stimuli, key_answer: answers, text_answer: text_answers, choices: [80,81]};
         
         // create a block of instructions
         var instructions_block = {type:'text', text:["<div id='instructions'><p>Press P if you see a letter. Press Q if you see a number.</p><p>Press ENTER to begin.</p></div>"]};
