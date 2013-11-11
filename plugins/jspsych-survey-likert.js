@@ -1,5 +1,5 @@
 /**
- * jspsych-likert
+ * jspsych-survey-likert
  * a jspsych plugin for measuring items on a likert scale
  *
  * Josh de Leeuw (March 2013)
@@ -17,7 +17,7 @@
  */
 
 (function($) {
-    jsPsych.likert = (function() {
+    jsPsych['survey-likert'] = (function() {
 
         var plugin = {};
 
@@ -25,7 +25,7 @@
             var trials = [];
             for (var i = 0; i < params.questions.length; i++) {
                 trials.push({
-                    type: "likert",
+                    type: "survey-likert",
                     questions: params.questions[i],
                     labels: params.labels[i],
                     intervals: params.intervals[i],
