@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+    
+    <head>
+        <title>jspsych-palmer plugin example</title>
+        <!-- jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <!-- this plugin requires the raphael.js library -->
+        <script src="scripts/raphael-min.js"></script>
+        <!-- jsPsych -->
+        <script src="scripts/jspsych.js"></script>
+        <script src="scripts/plugins/jspsych-text.js"></script>
+        <script src="scripts/plugins/jspsych-palmer.js"></script>
+        <!-- style -->
+        <style>
+            #jspsych_target {
+                margin: 50px auto 50px auto;
+                width: 600px;
+                font-size:18px;
+                text-align: center;
+            }
+            #instructions {
+                text-align: left;
+            }
+            #stimulus {
+                width: 150px;
+                height: 150px;
+                background-color: #ddd;
+                font-size:124px;
+                font-family:'Impact';
+                margin: auto;
+            }
+            .prompt {
+                font-size:14px;
+            }
+            pre {
+                text-align: left;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div id="jspsych_target"></div>
+    </body>
+    <script type="text/javascript">
+        
+        var instructions = '<div id="instructions"><p>Memorize the following picture. Press ENTER when you are ready.</p></div>';
+        
+        var instructions_block = {type:'text', text:[instructions]};
+        
+        var stim_block = {
+            type: 'palmer',
+            configurations: [[0,1,0,0,1,1,0,0,1,1,0,0,1,0,0,0,1,0,0,1]],
+            editable: false,
+            timing_item: 2500
+        };
+        
+        var test_block = {
+            type: 'palmer',
+            configurations: [[0,1,0,0,1,1,0,0,1,1,0,0,1,0,0,0,1,0,0,1]],
+            editable: true,
+            show_feedback: true
+        };
+        
+
+        // launch jspsych experiment
+        jsPsych.init({
+            display_element: $('#jspsych_target'),
+            experiment_structure: [instructions_block, stim_block, test_block],
+            on_finish: function(data) {
+                $('#jspsych_target').append($("<pre>", {
+                    text: JSON.stringify(data, undefined, 2)
+                }));
+            }
+        });
+    </script>
+
+</html>
