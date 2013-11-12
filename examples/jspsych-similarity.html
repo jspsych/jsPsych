@@ -5,10 +5,13 @@
         <title>jspsych-similarity plugin example</title>
         <!-- jQuery -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <!-- this plugin requires the jQuery UI library and stylesheet -->
-        <!-- these can be loaded from google's servers with the following links -->
+        <!-- this plugin requires the jQuery UI library and stylesheet
+        -->
+        <!-- these can be loaded from google's servers with the following links
+        -->
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/black-tie/jquery-ui.min.css" rel="stylesheet" type="text/css"></link>
+        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/black-tie/jquery-ui.min.css"
+        rel="stylesheet" type="text/css"></link>
         <!-- jsPsych -->
         <script src="scripts/jspsych.js"></script>
         <script src="scripts/plugins/jspsych-similarity.js"></script>
@@ -26,7 +29,7 @@
             pre {
                 text-align: left;
             }
-            img { 
+            img {
                 width: 150px;
                 margin:20px;
             }
@@ -39,24 +42,24 @@
     <script type="text/javascript">
         // how many trials?
         var n_trials = 6;
-    
+
         // declare an array to hold the stimuli
         var stimuli = [];
         for (var i = 1; i <= 12; i++) {
             stimuli.push("img/cell_img_" + i + ".jpg");
         }
-        
+
         var pairs = [];
-        
-        for(var i = 0; i < n_trials; i++){
+
+        for (var i = 0; i < n_trials; i++) {
             // randomly choose the two stimuli we will show to subject
-            var first_stim = stimuli[Math.floor(Math.random()*stimuli.length)];
-            var second_stim = stimuli[Math.floor(Math.random()*stimuli.length)];
-            
+            var first_stim = stimuli[Math.floor(Math.random() * stimuli.length)];
+            var second_stim = stimuli[Math.floor(Math.random() * stimuli.length)];
+
             // add the pair
             pairs.push([first_stim, second_stim]);
         }
-    
+
         // create free-sort block for jspsych
         var similarity_block = {
             type: 'similarity',
@@ -64,16 +67,22 @@
             prompt: "<p>Drag the slider to indicate how similar the two images are.</p>"
         };
 
+        // preload images
+        // call start() when loading is complete
+        jsPsych.preloadImages(stimuli, start);
+
         // launch jspsych experiment
-        jsPsych.init({
-            display_element: $('#jspsych_target'),
-            experiment_structure: [similarity_block],
-            on_finish: function(data) {
-                $('#jspsych_target').append($("<pre>", {
-                    html: JSON.stringify(data, undefined, 2)
-                }));
-            }
-        });
+        function start() {
+            jsPsych.init({
+                display_element: $('#jspsych_target'),
+                experiment_structure: [similarity_block],
+                on_finish: function(data) {
+                    $('#jspsych_target').append($("<pre>", {
+                        html: JSON.stringify(data, undefined, 2)
+                    }));
+                }
+            });
+        }
     </script>
 
 </html>
