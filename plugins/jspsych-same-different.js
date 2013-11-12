@@ -20,7 +20,7 @@
  * 
  * 
  */ 
-
+(function($) {
     jsPsych['same-different'] = (function() {
 
         var plugin = {};
