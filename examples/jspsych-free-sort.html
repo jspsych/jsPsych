@@ -1,9 +1,10 @@
 <!doctype html>
 <html>
+    
     <head>
         <title>jspsych-free-sort plugin example</title>
         <!-- jQuery -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <!-- requires jQuery UI library as well -->
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
         <!-- jsPsych -->
@@ -11,37 +12,55 @@
         <script src="scripts/plugins/jspsych-free-sort.js"></script>
         <!-- style -->
         <style>
-            #jspsych_target { margin: 50px auto 50px auto; width: 800px; font-size:18px; text-align: center;}
-            #instructions { text-align: left; }
-            pre { text-align: left; }
-            img { width: 100px; border: 1px solid #ccc;}
-            #sort_arena { border: 1px solid black; }
+            #jspsych_target {
+                margin: 50px auto 50px auto;
+                width: 800px;
+                font-size:18px;
+                text-align: center;
+            }
+            #instructions {
+                text-align: left;
+            }
+            pre {
+                text-align: left;
+            }
+            img {
+                width: 100px;
+                border: 1px solid #ccc;
+            }
+            #sort_arena {
+                border: 1px solid black;
+            }
         </style>
     </head>
+    
     <body>
-        <div id="jspsych_target">
-        </div>
+        <div id="jspsych_target"></div>
     </body>
     <script type="text/javascript">
         // declare an array to hold the stimuli
         var sorting_stimuli = [];
-        for( var i = 1; i <= 12; i++ )
-        {
-            sorting_stimuli.push("img/sort_img_"+i+".jpg");
+        for (var i = 1; i <= 12; i++) {
+            sorting_stimuli.push("img/sort_img_" + i + ".jpg");
         }
-        
+
         // create free-sort block for jspsych
-        var sort_block = {type:'free-sort', stimuli: [sorting_stimuli]};
-        
+        var sort_block = {
+            type: 'free-sort',
+            stimuli: [sorting_stimuli],
+            prompt: "<p>Click and drag the images below to sort them so that similar items are close together.</p>"
+        };
+
         // launch jspsych experiment
         jsPsych.init({
             display_element: $('#jspsych_target'),
             experiment_structure: [sort_block],
-            on_finish:function(data){
-                $('#jspsych_target').append($("<pre>",{
-                    html: JSON.stringify(data,undefined,2)
+            on_finish: function(data) {
+                $('#jspsych_target').append($("<pre>", {
+                    html: JSON.stringify(data, undefined, 2)
                 }));
             }
         });
     </script>
+
 </html>
