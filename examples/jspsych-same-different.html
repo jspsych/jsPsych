@@ -7,7 +7,7 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <!-- jsPsych -->
         <script src="scripts/jspsych.js"></script>
-        <script src="scripts/plugins/jspsych-free-sort.js"></script>
+        <script src="scripts/plugins/jspsych-same-different.js"></script>
         <!-- style -->
         <style>
             #jspsych_target {
@@ -75,7 +75,7 @@
     
         // create free-sort block for jspsych
         var same_diff_block = {
-            type: 'free-sort',
+            type: 'same-different',
             stimuli: pairs,
             answers: answers,
             prompt: "<p>Press Q if the images were the same. Press P if they were different.</p>"
