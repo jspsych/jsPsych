@@ -122,7 +122,7 @@
                     "id": 'slider_labels',
                     "class": 'sim',
                     css: {
-                        height: 3em
+                        height: '3em'
                     }
                 }));
 
@@ -130,14 +130,14 @@
                     'class': 'slider_left sim',
                     html: trial.label_low,
                     css: {
-                        float: left;
+                        float: 'left'
                     }
                 }));
                 $('#slider_labels').append($('<p>',{
                     'class': 'slider_right sim',
                     html: trial.label_high,
                     css: {
-                        float: right;
+                        float: 'right'
                     }
                 }));
                 
