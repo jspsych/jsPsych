@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+    
+    <head>
+        <title>jspsych-survey-text plugin example</title>
+        <!-- jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <!-- jsPsych -->
+        <script src="scripts/jspsych.js"></script>
+        <script src="scripts/plugins/jspsych-survey-text.js"></script>
+        <!-- style -->
+        <style>
+            #jspsych_target {
+                margin: 50px auto 50px auto;
+                width: 600px;
+                font-size:18px;
+                text-align: center;
+            }
+            pre {
+                text-align: left;
+            }
+            button {
+                width: 80px;
+                height: 28px;
+                font-size:20px;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div id="jspsych_target"></div>
+    </body>
+    <script type="text/javascript">
+    
+        // defining groups of questions that will go together.
+        var page_1_questions = ["How old are you?", "Where were you born?"];
+        var page_2_questions = ["What is your favorite food?"];
+        
+        var survey_block = {
+            type: 'survey-text',
+            questions: [page_1_questions, page_2_questions],
+        };
+        
+        // launch jspsych experiment
+        jsPsych.init({
+            display_element: $('#jspsych_target'),
+            experiment_structure: [survey_block],
+            on_finish: function(data) {
+                $('#jspsych_target').append($("<pre>", {
+                    text: JSON.stringify(data, undefined, 2)
+                }));
+            }
+        });
+    </script>
+
+</html>
