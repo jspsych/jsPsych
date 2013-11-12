@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+    
+    <head>
+        <title>My experiment</title>
+        <!-- Load jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <!-- Load the jspsych library and plugins -->
+        <script src="scripts/jspsych.js"></script>
+        <script src="scripts/plugins/jspsych-text.js"></script>
+    </head>
+    
+    <body>
+        <div id="jspsych_target"></div>
+    </body>
+    <script type="text/javascript">
+        // Experiment Instructions
+        var welcome_message = '<div id="instructions"><p>Welcome to the experiment. Press enter to begin.</p></div>';
+
+        var instructions = '<div id="instructions"><p>You will see a series of images that look similar to this:</p>\
+            <p><img src="img/incongruent_right.gif"></p><p>Press the arrow key that corresponds to the direction that\
+            the middle arrow is pointing. For example, in this case you would press the right arrow key.</p>\
+            <p>Press enter to start.</p>';
+
+
+        // Define experiment blocks
+        var instruction_block = {
+            type: "text",
+            text: [welcome_message, instructions]
+        };
+
+
+        jsPsych.init({
+            display_element: $(‘#jspsych_target’),
+            experiment_structure: [instruction_block]
+        });
+    </script>
+
+</html>
