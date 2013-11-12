@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+    
+    <head>
+        <title>jspsych-same-different plugin example</title>
+        <!-- jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <!-- jsPsych -->
+        <script src="scripts/jspsych.js"></script>
+        <script src="scripts/plugins/jspsych-free-sort.js"></script>
+        <!-- style -->
+        <style>
+            #jspsych_target {
+                margin: 50px auto 50px auto;
+                width: 800px;
+                font-size:18px;
+                text-align: center;
+            }
+            #instructions {
+                text-align: left;
+            }
+            pre {
+                text-align: left;
+            }
+            img { 
+                width: 300px;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div id="jspsych_target"></div>
+    </body>
+    <script type="text/javascript">
+        // how many trials?
+        var n_trials = 6;
+    
+        // declare an array to hold the stimuli
+        var stimuli = [];
+        for (var i = 1; i <= 12; i++) {
+            stimuli.push("img/cell_img_" + i + ".jpg");
+        }
+        
+        var pairs = [];
+        var answers = [];
+        
+        for(var i = 0; i < n_trials; i++){
+            // randomly choose the first stim we will show to subject
+            var first_stim = stimuli[Math.floor(Math.random()*stimuli.length)];
+            // randomly choose whether this trial will be "same" or "different"
+            if(Math.floor(Math.random()*2)===0){
+                // same trial
+                
+                // add the matching pair to the pairs list
+                pairs.push([first_stim, first_stim]); 
+               
+                // add the answer to the answers list
+                answers.push("same");
+            } else {
+                // different trial
+                
+                // need a second stim that is not the same as the first
+                var second_stim = stimuli[Math.floor(Math.random()*stimuli.length)];
+                while(second_stim==first_stim){
+                    second_stim = stimuli[Math.floor(Math.random()*stimuli.length)];
+                }
+                
+                // add the pair
+                pairs.push([first_stim, second_stim]);
+                
+                // add the answer
+                answers.push("different");
+            }
+        }
+    
+        // create free-sort block for jspsych
+        var same_diff_block = {
+            type: 'free-sort',
+            stimuli: pairs,
+            answers: answers,
+            prompt: "<p>Press Q if the images were the same. Press P if they were different.</p>"
+        };
+
+        // launch jspsych experiment
+        jsPsych.init({
+            display_element: $('#jspsych_target'),
+            experiment_structure: [same_diff_block],
+            on_finish: function(data) {
+                $('#jspsych_target').append($("<pre>", {
+                    html: JSON.stringify(data, undefined, 2)
+                }));
+            }
+        });
+    </script>
+
+</html>
