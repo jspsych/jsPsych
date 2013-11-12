@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title>jspsych-call-function plugin example</title>
+        <title>jspsych-html plugin example</title>
         <!-- jQuery -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
         <!-- jsPsych -->
@@ -18,18 +18,31 @@
         </div>
     </body>
     <script type="text/javascript">
-        // this is a simple function that changes the background color of the page
-        var demo_function = function(color) { 
-            $('body').css({"background-color": color});
-            return color;
-        };
+        
+        // the html function loads external html content into the page. 
+        // the external content is a file called "external_page.html"
+        // in the same directory as this file.
         
         // declare the block.
-        var function_block = {type:'call-function', func: demo_function, args:["#ff0000"]};
+        var html_block = {type:'html', pages: [{url: "external_page.html", cont_btn: "start", check_fn: check_consent}};
+        
+        // sample function that might be used to check if a subject has given
+        // consent to participate.
+        var check_consent = function(elem) {
+            if ($('#consent_checkbox').is(':checked')) {
+                return true;
+            }
+            else {
+                alert("If you wish to participate, you must check the box next to the statement 'I agree to participate in this study.'");
+                return false;
+            }
+            return false;
+        };
+        
         
         jsPsych.init({
             display_element: $('#jspsych_target'),
-            experiment_structure: [function_block],
+            experiment_structure: [html_block],
             on_finish:function(data){
                 $('#jspsych_target').append($("<pre>",{
                     html: JSON.stringify(data,undefined,2)
