@@ -18,4 +18,5 @@ Contact
 -------
 
 jsPsych was created by Josh de Leeuw at Indiana University
+
 email Josh at jodeleeu@indiana.edu
