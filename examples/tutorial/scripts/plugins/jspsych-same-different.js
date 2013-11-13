@@ -20,7 +20,7 @@
  * 
  * 
  */ 
-
+(function($) {
     jsPsych['same-different'] = (function() {
 
         var plugin = {};
@@ -80,14 +80,14 @@
             case 3:
                 if (!trial.is_html) {
                     display_element.append($('<img>', {
-                        src: trial.a_path,
+                        src: trial.b_path,
                         "class": 'sd',
                         id: 'jspsych_sd_second_image'
                     }));
                 }
                 else {
                     display_element.append($('<div>', {
-                        html: trial.a_path,
+                        html: trial.b_path,
                         "class": 'sd',
                         id: 'jspsych_sd_second_image'
                     }));
@@ -99,6 +99,11 @@
                             $("#jspsych_sd_second_image").css('visibility', 'hidden');
                         }
                     }, trial.timing_second_stim);
+                }
+                
+                //show prompt here
+                if (trial.prompt !== "") {
+                    display_element.append(trial.prompt);
                 }
 
                 var startTime = (new Date()).getTime();

@@ -120,12 +120,27 @@
                 // create labels for slider
                 display_element.append($('<div>', {
                     "id": 'slider_labels',
-                    "class": 'sim'
+                    "class": 'sim',
+                    css: {
+                        height: '3em'
+                    }
                 }));
 
-                $('#slider_labels').append($('<p class="slider_left sim">' + trial.label_low + '</p>'));
-                $('#slider_labels').append($('<p class="slider_right sim">' + trial.label_high + '</p>'));
-
+                $('#slider_labels').append($('<p>',{
+                    'class': 'slider_left sim',
+                    html: trial.label_low,
+                    css: {
+                        float: 'left'
+                    }
+                }));
+                $('#slider_labels').append($('<p>',{
+                    'class': 'slider_right sim',
+                    html: trial.label_high,
+                    css: {
+                        float: 'right'
+                    }
+                }));
+                
                 //  create button
                 display_element.append($('<button>', {
                     'id': 'next',
