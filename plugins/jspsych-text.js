@@ -61,7 +61,7 @@
             var replaced_text = trial.text;
 
             // check to see if there are any variables defined.
-            if (typeof trial.variables != 'undefined') {
+            if (typeof trial.variables !== 'undefined') {
                 for (var i = 0; i < trial.variables.length; i++) {
                     // loop through the array of variables and call each variable function
                     // to get the actual text that should be substituted in.
@@ -74,17 +74,31 @@
             display_element.html(replaced_text);
 
             var startTime = (new Date()).getTime();
+            
+            // it's possible that if the user is holding down the cont_key when
+            // they arrive on the page that they will advance as soon as the
+            // key is released. this prevents that from happening by requiring a
+            // full cycle on the page with a down and up event.
+            var cont_key_down = false;
 
             // define a function that will advance to the next trial when the user presses
             // the continue key.
             var key_listener = function(e) {
-                if (e.which == trial.cont_key) {
+                if (e.which == trial.cont_key && cont_key_down) {
                     save_data();
                     $(document).unbind('keyup', key_listener); // remove the response function, so that it doesn't get triggered again.
+                    $(document).unbind('keydown', key_down_listener);
                     display_element.html(''); // clear the display
                     setTimeout(function() {
                         block.next();
                     }, trial.timing_post_trial); // call block.next() to advance the experiment after a delay.
+                }
+            };
+            
+            var key_down_listener = function(e){
+                if(e.which == trial.cont_key)
+                {
+                    cont_key_down = true;
                 }
             };
 
@@ -103,6 +117,7 @@
             }
             else {
                 // attach the response function to the html document.
+                $(document).keydown(key_down_listener);
                 $(document).keyup(key_listener);
             }
 
