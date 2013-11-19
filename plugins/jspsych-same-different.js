@@ -132,8 +132,8 @@
                             "trial_index": block.trial_idx,
                             "rt": rt,
                             "correct": correct,
-                            "a_path": trial.a_path,
-                            "b_path": trial.b_path,
+                            "stimulus": trial.a_path,
+                            "stimulus_2": trial.b_path,
                             "key_press": e.which
                         };
                         block.data[block.trial_idx] = $.extend({}, trial_data, trial.data);
