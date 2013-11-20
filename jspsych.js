@@ -28,6 +28,8 @@
         var DOM_target;
         // time that the experiment began
         var exp_start_time;
+        // turk info
+        var turk_info;
 
         //
         // public methods
@@ -169,6 +171,47 @@
               
               img.src = images[i];
           }
+        };
+        
+        // core.turkInfo gets information relevant to mechanical turk experiments. returns an object
+        // containing the workerID, assignmentID, and hitID, and whether or not the HIT is in
+        // preview mode, meaning that they haven't accepted the HIT yet.
+        core.turkInfo = function(force_refresh)
+        {
+            // default value is false
+            force_refresh = (typeof force_refresh === 'undefined') ? false : force_refresh;
+            // if we already have the turk_info and force_refresh is false
+            // then just return the cached version.
+            if(typeof turk_info !== 'undefined' && !force_refresh) {
+                return turk_info;
+            } else {
+                
+                var turk = {};
+
+                var param = function(url, name ) {
+                  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+                  var regexS = "[\\?&]"+name+"=([^&#]*)";
+                  var regex = new RegExp( regexS );
+                  var results = regex.exec( url );
+                  return ( results == null ) ? "" : results[1];
+                };
+
+                var src = param(window.location.href, "assignmentId") ? window.location.href : document.referrer;
+            
+                var keys = ["assignmentId","hitId","workerId"];
+                keys.map(
+                    function(key) {
+                        turk[key] = unescape(param(src, key));
+                    }
+                );
+            
+                turk.previewMode = (turk.assignmentId == "ASSIGNMENT_ID_NOT_AVAILABLE");
+
+                turk_info = turk;
+                
+                return turk;
+            }
+            
         };
 
         //
