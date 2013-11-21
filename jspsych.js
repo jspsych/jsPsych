@@ -206,6 +206,8 @@
                 );
             
                 turk.previewMode = (turk.assignmentId == "ASSIGNMENT_ID_NOT_AVAILABLE");
+                
+                turk.outsideTurk = (!turk.previewMode && turk.hitId === "" && turk.assignmentId == "" && turk.workerId == "")
 
                 turk_info = turk;
                 
