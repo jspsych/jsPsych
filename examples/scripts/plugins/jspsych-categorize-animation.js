@@ -37,7 +37,7 @@
                 trials[i].stims = params.stimuli[i];
                 trials[i].reps = params.reps || 1;
                 trials[i].key_answer = params.key_answer[i];
-                trials[i].text_answer = params.text_answer[i] || "";
+                trials[i].text_answer = (typeof params.text_answer === 'undefined') ? "" : params.text_answer[i];
                 trials[i].choices = params.choices;
                 trials[i].correct_text = params.correct_text || "Correct.";
                 trials[i].incorrect_text = params.incorrect_text || "Wrong.";
