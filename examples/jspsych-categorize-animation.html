@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+    <head>
+        <title>jspsych-categorize-animation plugin example</title>
+        <!-- jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <!-- jsPsych -->
+        <script src="scripts/jspsych.js"></script>
+        <script src="scripts/plugins/jspsych-text.js"></script>
+        <script src="scripts/plugins/jspsych-categorize-animation.js"></script>
+        <!-- style -->
+        <style>
+            #jspsych_target {
+                margin: 50px auto 50px auto;
+                width: 600px;
+                font-size: 18px;
+                text-align: center;
+            }
+            #instructions {
+                text-align: left;
+            }
+            .prompt {
+                font-size:14px;
+            }
+            pre {
+                text-align: left;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div id="jspsych_target"></div>
+    </body>
+    <script type="text/javascript">
+        var animation_sequences = [
+            ["img/face_1.jpg", "img/face_2.jpg", "img/face_3.jpg", "img/face_4.jpg"],
+            ["img/face_4.jpg", "img/face_3.jpg", "img/face_2.jpg", "img/face_1.jpg"],
+            ["img/face_1.jpg", "img/face_2.jpg", "img/face_3.jpg", "img/face_4.jpg"],
+            ["img/face_4.jpg", "img/face_3.jpg", "img/face_2.jpg", "img/face_1.jpg"]
+        ];
+    
+        var answers = [81,80,81,80];
+
+        // create categorization block for jspsych
+        var categorization_block = {
+            type: 'categorize-animation',
+            stimuli: animation_sequences,
+            key_answer: answers,
+            choices: [80, 81],
+            prompt: "<p class='prompt'>Press P if the face rotates from the front to the side. Press Q if the face rotates from the side to the front.</p>"
+        };
+
+        // create a block of instructions
+        var instructions_block = {
+            type: 'text',
+            text: ["<div id='instructions'><p>Press P if the face rotates from the front to the side. Press Q if the face rotates from the side to the front.</p><p>Press ENTER to begin.</p></div>"]
+        };
+
+        // launch jspsych experiment
+        jsPsych.init({
+            display_element: $('#jspsych_target'),
+            experiment_structure: [instructions_block, categorization_block],
+            on_finish: function(data) {
+                $('#jspsych_target').append($("<pre>", {
+                    text: JSON.stringify(data, undefined, 2)
+                }));
+            }
+        });
+    </script>
+
+</html>
