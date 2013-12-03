@@ -55,17 +55,23 @@
             type: 'text',
             text: ["<div id='instructions'><p>Press P if the face rotates from the front to the side. Press Q if the face rotates from the side to the front.</p><p>Press ENTER to begin.</p></div>"]
         };
+        
+        // preload images for animation sequence
+        // call start() when loading is complete
+        jsPsych.preloadImages(animation_sequences[0], start);
 
         // launch jspsych experiment
-        jsPsych.init({
-            display_element: $('#jspsych_target'),
-            experiment_structure: [instructions_block, categorization_block],
-            on_finish: function(data) {
-                $('#jspsych_target').append($("<pre>", {
-                    text: JSON.stringify(data, undefined, 2)
-                }));
-            }
-        });
+        function start(){
+            jsPsych.init({
+                display_element: $('#jspsych_target'),
+                experiment_structure: [instructions_block, categorization_block],
+                on_finish: function(data) {
+                    $('#jspsych_target').append($("<pre>", {
+                        text: JSON.stringify(data, undefined, 2)
+                    }));
+                }
+            });
+        }
     </script>
 
 </html>
