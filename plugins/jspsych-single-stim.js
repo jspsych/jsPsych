@@ -56,7 +56,8 @@
             var trial_complete = false;
 
             var startTime = (new Date()).getTime();
-            
+            var endTime = -1;
+
             var key_press = -1;
 
             if (!trial.is_html) {
@@ -78,8 +79,10 @@
             }
 
             var cont_function = function() {
-                var endTime = (new Date()).getTime();
-                var rt = (endTime - startTime);
+                var rt = -1;
+                if (endTime != -1) {
+                    rt = (endTime - startTime);
+                }
                 trial_complete = true;
 
                 var trial_data = {
@@ -108,6 +111,9 @@
                 }
                 if (flag) {
                     key_press = e.which;
+
+                    // record rt
+                    endTime = (new Date()).getTime();
 
                     // after a valid response, the stimulus will have the CSS class 'responded'
                     // which can be used to provide visual feedback that a response was recorded
