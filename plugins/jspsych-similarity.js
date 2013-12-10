@@ -156,6 +156,7 @@
                 "class": 'sliderlabels',
                 "css": {
                     "width": "100%",
+                    "height": "3em",
                     "margin": "10px 0px 0px 0px",
                     "padding": "0px",
                     "display": "block",
