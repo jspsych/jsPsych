@@ -87,10 +87,9 @@
                     plugin.trial(display_element, block, trial, part + 1);
                 }, trial.timing_image_gap);
                 break;
+            
             case 3:
                 
-                 $('#jspsych_sim_stim').css('visibility', 'visible');
-
                 if (!trial.is_html) {
                     $('#jspsych_sim_stim').attr('src', trial.b_path);
                 }
@@ -98,6 +97,8 @@
                     $('#jspsych_sim_stim').html(trial.b_path);
                 }
 
+                $('#jspsych_sim_stim').css('visibility', 'visible');
+                 
                 if (trial.show_response == "SECOND_STIMULUS") {
                     show_response_slider(display_element, trial, block);
                 }
