@@ -6,8 +6,10 @@
  *
  * parameters:
  *      stimuli:            array of arrays. inner arrays are two stimuli. stimuli can be image paths or html strings. each inner array is one trial.
- *      label_low:          label to display at the left end of the similarity slider scale.
- *      label_high:         label to display at the right end of the similiarity slider scale.
+ *      labels:             array of strings to label the slider with. labels will be evenly spaced along the slider.
+ *      intervals:          how many different response options are on the slider
+ *      show_ticks:         if true, then the slider will have small tick marks displayed to show where the response options are.
+ *      show_response:      determines when to show the response options: "FIRST_STIMULUS","SECOND_STIMULUS",or "POST_STIMULUS"
  *      timing_first_stim:  how long to show the first stimulus.
  *      timing_second_stim: how long to show the second stimulus. can be -1 to show until a response is given.
  *      timing_image_gap:   how long to show a blank screen between the two stimuli.
