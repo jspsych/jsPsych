@@ -52,6 +52,7 @@
             var startTime = (new Date()).getTime();
             var animation_sequence = [];
             var responses = [];
+            var current_stim = "";
 
             var animate_interval = setInterval(function() {
                 var showImage = true;
@@ -77,10 +78,12 @@
                     "src": trial.stims[animate_frame],
                     "id": 'jspsych-animation-image'
                 }));
+                
+                current_stim = trial.stims[animate_frame];
 
                 // record when image was shown
                 animation_sequence.push({
-                    "stimulus": trial.stims[animate_frame],
+                    "stimulus": current_stim,
                     "time": (new Date()).getTime() - startTime
                 });
 
@@ -91,6 +94,7 @@
                 if (trial.frame_isi > 0) {
                     setTimeout(function() {
                         $('#jspsych-animation-image').css('visibility', 'hidden');
+                        current_stim = 'blank';
                         // record when blank image was shown
                         animation_sequence.push({
                             "stimulus": 'blank',
@@ -116,7 +120,8 @@
 
                     responses.push({
                         "key_press": key_press,
-                        "rt": endTime - startTime
+                        "rt": endTime - startTime,
+                        "stimulus": current_stim
                     });
 
                     // after a valid response, the stimulus will have the CSS class 'responded'
