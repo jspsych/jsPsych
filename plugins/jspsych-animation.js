@@ -15,6 +15,8 @@
  *      timing_post_trial: how long to show a blank screen after the trial in ms.
  *      prompt: optional HTML string to display while the animation is playing
  *      data: optional data object
+ * 
+ * testing branch setup
  */
 
 
