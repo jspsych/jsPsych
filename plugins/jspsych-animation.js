@@ -1,22 +1,24 @@
 /**
  * jsPsych plugin for showing animations
  * Josh de Leeuw
- * updated October 2013
+ * updated January 2014
  * 
  * shows a sequence of images at a fixed frame rate.
- * no data is collected from the subject, but it does record the path of the first image
- * in each sequence, and allows for optional data tagging as well.
+ * subject can respond with keys if desired.
+ * entire animation sequence is recorded as JSON encoded string.
+ * responses are tagged with rt and image that was onscreen.
  *
  * parameters:
  *      stimuli: array of arrays. inner arrays should consist of all the frames of the animation sequence. each inner array
  *                  corresponds to a single trial
  *      frame_time: how long to display each frame in ms.
+ *      frame_isi: length of gap between successive frames.
  *      repetitions: how many times to show the animation sequence.
+ *      choices: array of valid key responses during animation.
  *      timing_post_trial: how long to show a blank screen after the trial in ms.
  *      prompt: optional HTML string to display while the animation is playing
  *      data: optional data object
  * 
- * testing branch setup
  */
 
 
@@ -33,7 +35,9 @@
                 trials[i].type = "animation";
                 trials[i].stims = params.stimuli[i];
                 trials[i].frame_time = params.frame_time || 250;
+                trials[i].frame_isi = params.frame_isi || 0;
                 trials[i].repetitions = params.repetitions || 1;
+                trials[i].choices = params.choices || [];
                 trials[i].timing_post_trial = params.timing_post_trial || 1000;
                 trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
                 trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
@@ -42,44 +46,100 @@
         };
 
         plugin.trial = function(display_element, block, trial, part) {
+            var interval_time = trial.frame_time + trial.frame_isi;
             var animate_frame = -1;
             var reps = 0;
-            switch (part) {
-            case 1:
-                var animate_interval = setInterval(function() {
-                    var showImage = true;
-                    display_element.html(""); // clear everything
-                    animate_frame++;
-                    if (animate_frame == trial.stims.length) {
-                        animate_frame = 0;
-                        reps++;
-                        if (reps >= trial.repetitions) {
-                            plugin.trial(display_element, block, trial, part + 1);
-                            clearInterval(animate_interval);
-                            showImage = false;
-                        }
+            var startTime = (new Date()).getTime();
+            var animation_sequence = [];
+            var responses = [];
+
+            var animate_interval = setInterval(function() {
+                var showImage = true;
+                display_element.html(""); // clear everything
+                animate_frame++;
+                if (animate_frame == trial.stims.length) {
+                    animate_frame = 0;
+                    reps++;
+                    if (reps >= trial.repetitions) {
+                        endTrial();
+                        clearInterval(animate_interval);
+                        showImage = false;
                     }
-                    if (showImage) {
-                        display_element.append($('<img>', {
-                            "src": trial.stims[animate_frame],
-                            "class": 'animate'
-                        }));
-                        if (trial.prompt !== "") {
-                            display_element.append(trial.prompt);
-                        }
+                }
+                if (showImage) {
+                    show_next_frame();
+                }
+            }, interval_time);
+
+            function show_next_frame() {
+                // show image
+                display_element.append($('<img>', {
+                    "src": trial.stims[animate_frame],
+                    "id": 'jspsych-animation-image'
+                }));
+
+                // record when image was shown
+                animation_sequence.push({
+                    "stimulus": trial.stims[animate_frame],
+                    "time": (new Date()).getTime() - startTime
+                });
+
+                if (trial.prompt !== "") {
+                    display_element.append(trial.prompt);
+                }
+
+                if (trial.frame_isi > 0) {
+                    setTimeout(function() {
+                        $('#jspsych-animation-image').css('visibility', 'hidden');
+                        // record when blank image was shown
+                        animation_sequence.push({
+                            "stimulus": 'blank',
+                            "time": (new Date()).getTime() - startTime
+                        });
+                    }, trial.frame_time);
+                }
+            }
+
+            var resp_func = function(e) {
+                var flag = false;
+                // check if the key is any of the options, or if it is an accidental keystroke
+                for (var i = 0; i < trial.choices.length; i++) {
+                    if (e.which == trial.choices[i]) {
+                        flag = true;
                     }
-                }, trial.frame_time);
-                break;
-            case 2:
+                }
+                if (flag) {
+                    var key_press = e.which;
+
+                    // record rt
+                    var endTime = (new Date()).getTime();
+
+                    responses.push({
+                        "key_press": key_press,
+                        "rt": endTime - startTime
+                    });
+
+                    // after a valid response, the stimulus will have the CSS class 'responded'
+                    // which can be used to provide visual feedback that a response was recorded
+                    $("#jspsych-animation-image").addClass('responded');
+                }
+            };
+            
+            $(document).keyup(resp_func);
+
+            function endTrial() {
+                 $(document).unbind('keyup', resp_func);
+                
                 block.writeData($.extend({}, {
                     "trial_type": "animation",
                     "trial_index": block.trial_idx,
-                    "stimulus": trial.stims[0]
+                    "animation_sequence": animation_sequence,
+                    "responses": responses
                 }, trial.data));
+
                 setTimeout(function() {
                     block.next();
                 }, trial.timing_post_trial);
-                break;
             }
         };
 
