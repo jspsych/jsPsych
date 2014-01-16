@@ -130,10 +130,10 @@
                 }
             };
             
-            $(document).keyup(resp_func);
+            $(document).keydown(resp_func);
 
             function endTrial() {
-                 $(document).unbind('keyup', resp_func);
+                 $(document).unbind('keydown', resp_func);
                 
                 block.writeData($.extend({}, {
                     "trial_type": "animation",
