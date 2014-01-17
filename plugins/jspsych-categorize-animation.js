@@ -80,7 +80,7 @@
                 if (showAnimation) {
                     display_element.append($('<img>', {
                         "src": trial.stims[animate_frame],
-                        "class": 'animate'
+                        "class": 'jspsych-categorize-animate-stimulus'
                     }));
                 }
 
