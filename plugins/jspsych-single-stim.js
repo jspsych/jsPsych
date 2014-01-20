@@ -63,13 +63,13 @@
             if (!trial.is_html) {
                 display_element.append($('<img>', {
                     src: trial.a_path,
-                    id: 'ss'
+                    id: 'jspsych-single-stim-stimulus'
                 }));
             }
             else {
                 display_element.append($('<div>', {
                     html: trial.a_path,
-                    id: 'ss'
+                    id: 'jspsych-single-stim-stimulus'
                 }));
             }
 
@@ -117,7 +117,7 @@
 
                     // after a valid response, the stimulus will have the CSS class 'responded'
                     // which can be used to provide visual feedback that a response was recorded
-                    $("#ss").addClass('responded');
+                    $("#jspsych-single-stim-stimulus").addClass('responded');
 
                     if (trial.continue_after_response) {
                         // response triggers the next trial in this case.
@@ -134,7 +134,7 @@
             if (trial.timing_stim > 0) {
                 setTimeout(function() {
                     if (!trial_complete) {
-                        $('#ss').css('visibility', 'hidden');
+                        $('#jspsych-single-stim-stimulus').css('visibility', 'hidden');
                     }
                 }, trial.timing_stim);
             }
