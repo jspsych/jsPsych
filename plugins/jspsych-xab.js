@@ -80,12 +80,12 @@
                 if (!trial.is_html) {
                     display_element.append($('<img>', {
                         src: trial.x_path,
-                        "class": 'xab'
+                        "class": 'jspsych-xab-stimulus'
                     }));
                 }
                 else {
                     display_element.append($('<div>', {
-                        "class": 'xab',
+                        "class": 'jspsych-xab-stimulus',
                         html: trial.x_path
                     }));
                 }
@@ -99,7 +99,7 @@
                 // the second part of the trial is the gap between X and AB.
             case 2:
                 // remove the x stimulus
-                $('.xab').remove();
+                $('.jspsych-xab-stimulus').remove();
 
                 // start timer
                 setTimeout(function() {
@@ -121,20 +121,20 @@
                 if (!trial.is_html) {
                     display_element.append($('<img>', {
                         "src": images[0],
-                        "class": 'xab'
+                        "class": 'jspsych-xab-stimulus'
                     }));
                     display_element.append($('<img>', {
                         "src": images[1],
-                        "class": 'xab'
+                        "class": 'jspsych-xab-stimulus'
                     }));
                 }
                 else {
                     display_element.append($('<div>', {
-                        "class": 'xab',
+                        "class": 'jspsych-xab-stimulus',
                         html: images[0]
                     }));
                     display_element.append($('<div>', {
-                        "class": 'xab',
+                        "class": 'jspsych-xab-stimulus',
                         html: images[1]
                     }));
                 }
@@ -150,7 +150,7 @@
                 if (trial.timing_ab > 0) {
                     setTimeout(function() {
                         if (!xab_trial_complete) {
-                            $('.xab').css('visibility', 'hidden');
+                            $('.jspsych-xab-stimulus').css('visibility', 'hidden');
                         }
                     }, trial.timing_ab);
                 }
