@@ -42,19 +42,19 @@
             for (var i = 0; i < trial.questions.length; i++) {
                 // create div
                 display_element.append($('<div>', {
-                    "id": 'likert' + i,
-                    "class": 'likertquestion'
+                    "id": 'survey-likert-' + i,
+                    "class": 'survey-likert-question'
                 }));
 
                 // add question text
-                $("#likert" + i).append('<p class="likerttext likert">' + trial.questions[i] + '</p>');
+                $("#survey-likert-" + i).append('<p class="survey-likert-text survey-likert">' + trial.questions[i] + '</p>');
 
                 // create slider
-                $("#likert" + i).append($('<div>', {
-                    "id": 'slider' + i,
-                    "class": 'slider likert'
+                $("#survey-likert-" + i).append($('<div>', {
+                    "id": 'survey-likert-slider-' + i,
+                    "class": 'survey-likert-slider survey-likert'
                 }));
-                $("#slider" + i).slider({
+                $("#survey-likert-slider-" + i).slider({
                     value: Math.ceil(trial.intervals[i] / 2),
                     min: 1,
                     max: trial.intervals[i],
@@ -63,18 +63,18 @@
 
                 // show tick marks
                 if (trial.show_ticks) {
-                    $("#likert" + i).append($('<div>', {
-                        "id": 'sliderticks' + i,
-                        "class": 'sliderticks likert',
+                    $("#survey-likert-" + i).append($('<div>', {
+                        "id": 'survey-likert-sliderticks' + i,
+                        "class": 'survey-likert-sliderticks survey-likert',
                         "css": {
                             "position": 'relative'
                         }
                     }));
                     for (var j = 1; j < trial.intervals[i] - 1; j++) {
-                        $('#slider' + i).append('<div class="slidertickmark"></div>');
+                        $('#survey-likert-slider-' + i).append('<div class="survey-likert-slidertickmark"></div>');
                     }
 
-                    $('#slider' + i + ' .slidertickmark').each(function(index) {
+                    $('#survey-likert-slider-' + i + ' .survey-likert-slidertickmark').each(function(index) {
                         var left = (index + 1) * (100 / (trial.intervals[i] - 1));
                         $(this).css({
                             'position': 'absolute',
@@ -87,9 +87,9 @@
                 }
 
                 // create labels for slider
-                $("#likert" + i).append($('<ul>', {
-                    "id": "sliderlabels" + i,
-                    "class": 'sliderlabels likert',
+                $("#survey-likert-" + i).append($('<ul>', {
+                    "id": "survey-likert-sliderlabels" + i,
+                    "class": 'survey-likert-sliderlabels survey-likert',
                     "css": {
                         "width": "100%",
                         "margin": "10px 0px 0px 0px",
@@ -100,16 +100,16 @@
                 }));
 
                 for (var j = 0; j < trial.labels[i].length; j++) {
-                    $("#sliderlabels" + i).append('<li>' + trial.labels[i][j] + '</li>');
+                    $("#survey-likert-sliderlabels-" + i).append('<li>' + trial.labels[i][j] + '</li>');
                 }
 
                 // position labels to match slider intervals
-                var slider_width = $("#slider" + i).width();
+                var slider_width = $("#survey-likert-slider-" + i).width();
                 var num_items = trial.labels[i].length;
                 var item_width = slider_width / num_items;
                 var spacing_interval = slider_width / (num_items - 1);
 
-                $("#sliderlabels" + i + " li").each(function(index) {
+                $("#survey-likert-sliderlabels-" + i + " li").each(function(index) {
                     $(this).css({
                         'display': 'inline-block',
                         'width': item_width + 'px',
@@ -124,18 +124,18 @@
 
             // add submit button
             display_element.append($('<button>', {
-                'id': 'next',
-                'class': 'likert'
+                'id': 'survey-likert-next',
+                'class': 'survey-likert'
             }));
-            $("#next").html('Submit Answers');
-            $("#next").click(function() {
+            $("#survey-likert-next").html('Submit Answers');
+            $("#survey-likert-next").click(function() {
                 // measure response time
                 var endTime = (new Date()).getTime();
                 var response_time = endTime - startTime;
 
                 // create object to hold responses
                 var question_data = {};
-                $("div.slider").each(function(index) {
+                $("div.survey-likert-slider").each(function(index) {
                     var id = "Q" + index;
                     var val = $(this).slider("value");
                     var obje = {};
