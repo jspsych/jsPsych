@@ -38,7 +38,7 @@
                 trials[i].frame_isi = params.frame_isi || 0;
                 trials[i].repetitions = params.repetitions || 1;
                 trials[i].choices = params.choices || [];
-                trials[i].timing_post_trial = params.timing_post_trial || 1000;
+                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
                 trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
                 trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
             }
@@ -142,9 +142,13 @@
                     "responses": JSON.stringify(responses)
                 }, trial.data));
 
-                setTimeout(function() {
+                if(trial.timing_post_trial > 0){
+                    setTimeout(function() {
+                        block.next();
+                    }, trial.timing_post_trial);
+                } else {
                     block.next();
-                }, trial.timing_post_trial);
+                }
             }
         };
 
