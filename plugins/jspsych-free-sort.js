@@ -54,8 +54,8 @@
             }
 
             display_element.append($('<div>', {
-                "id": "sort_arena",
-                "class": "sort",
+                "id": "jspsych-free-sort-arena",
+                "class": "jspsych-free-sort-arena",
                 "css": {
                     "position": "relative",
                     "width": trial.sort_area_width,
@@ -76,7 +76,7 @@
 
                 $("#sort_arena").append($('<img>', {
                     "src": trial.images[i],
-                    "class": "draggable_stim sort",
+                    "class": "jspsych-free-sort-draggable",
                     "css": {
                         "position": "absolute",
                         "top": coords.y,
@@ -93,10 +93,10 @@
 
             var moves = [];
 
-            $('.draggable_stim').draggable({
-                containment: "#sort_arena",
+            $('.jspsych-free-sort-draggable').draggable({
+                containment: "#jspsych-free-sort-arena",
                 scroll: false,
-                stack: ".draggable_stim",
+                stack: ".jspsych-free-sort-draggable",
                 stop: function(event, ui) {
                     moves.push({
                         "src": event.target.src.split("/").slice(-1)[0],
@@ -108,7 +108,7 @@
 
             display_element.append($('<button>', {
                 "id": "done_btn",
-                "class": "sort",
+                "class": "jspsych-free-sort",
                 "html": "Done",
                 "click": function() {
                     var end_time = (new Date()).getTime();
@@ -116,7 +116,7 @@
                     // gather data
                     // get final position of all objects
                     var final_locations = [];
-                    $('.draggable_stim').each(function() {
+                    $('.jspsych-free-sort-draggable').each(function() {
                         final_locations.push({
                             "src": $(this).attr('src'),
                             "x": $(this).css('left'),
@@ -132,7 +132,7 @@
                     }, trial.data));
 
                     // advance to next part
-                    $('.sort').remove();
+                    display_element.html("");
                     setTimeout(function() {
                         block.next();
                     }, trial.timing_post_trial);
