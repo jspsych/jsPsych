@@ -39,7 +39,7 @@
                 trials[i].timing_first_stim = params.timing_first_stim || 1000;
                 trials[i].timing_second_stim = params.timing_second_stim || 1000; // if -1, then second stim is shown until response.
                 trials[i].timing_gap = params.timing_gap || 500;
-                trials[i].timing_post_trial = params.timing_post_trial || 1000;
+                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
                 // optional parameters
                 trials[i].is_html = (typeof params.is_html === 'undefined') ? false : true;
                 trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
@@ -140,9 +140,13 @@
                         $(document).unbind('keyup', resp_func);
 
                         display_element.html('');
-                        setTimeout(function() {
+                        if(trial.timing_post_trial > 0) {
+                            setTimeout(function() {
+                                block.next();
+                            }, trial.timing_post_trial);
+                        } else {
                             block.next();
-                        }, trial.timing_post_trial);
+                        }
                     }
                 };
                 $(document).keyup(resp_func);
