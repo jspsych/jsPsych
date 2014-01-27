@@ -55,7 +55,7 @@
                 trials[i].timing_x = params.timing_x || 1000; // defaults to 1000msec.
                 trials[i].timing_xab_gap = params.timing_xab_gap || 1000; // defaults to 1000msec.
                 trials[i].timing_ab = params.timing_ab || -1; // defaults to -1, meaning infinite time on AB. If a positive number is used, then AB will only be displayed for that length.
-                trials[i].timing_post_trial = params.timing_post_trial || 1000; // defaults to 1000msec.
+                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial; // defaults to 1000msec.
                 // optional parameters
                 trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
                 trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
@@ -192,9 +192,13 @@
                         display_element.html(''); // remove all
                         xab_trial_complete = true;
                         // move on to the next trial after timing_post_trial milliseconds
-                        setTimeout(function() {
+                        if(trial.timing_post_trial > 0) {
+                            setTimeout(function() {
+                                block.next();
+                            }, trial.timing_post_trial);
+                        } else {
                             block.next();
-                        }, trial.timing_post_trial);
+                        }
                     }
                 };
                 $(document).keyup(resp_func);

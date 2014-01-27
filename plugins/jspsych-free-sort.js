@@ -33,7 +33,7 @@
                     "images": params.stimuli[i], // array of images to display
                     "stim_height": params.stim_height || 100,
                     "stim_width": params.stim_width || 100,
-                    "timing_post_trial": params.timing_post_trial || 1000,
+                    "timing_post_trial": (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial,
                     "prompt": (typeof params.prompt === 'undefined') ? '' : params.prompt,
                     "prompt_location": params.prompt_location || "above",
                     "sort_area_width": params.sort_area_width || 800,
@@ -133,9 +133,14 @@
 
                     // advance to next part
                     display_element.html("");
-                    setTimeout(function() {
+                    if (trial.timing_post_trial > 0) {
+                        setTimeout(function() {
+                            block.next();
+                        }, trial.timing_post_trial);
+                    }
+                    else {
                         block.next();
-                    }, trial.timing_post_trial);
+                    }
                 }
             }));
 

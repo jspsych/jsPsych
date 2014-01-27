@@ -43,7 +43,7 @@
                 trials[i].timing_first_stim = params.timing_first_stim || 1000; // default 1000ms
                 trials[i].timing_second_stim = params.timing_second_stim || -1; // -1 = inf time; positive numbers = msec to display second image.
                 trials[i].timing_image_gap = params.timing_image_gap || 1000; // default 1000ms
-                trials[i].timing_post_trial = params.timing_post_trial || 1000; // default 1000ms
+                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial; // default 1000ms
 
                 trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
                 trials[i].prompt = (typeof params.prompt === 'undefined') ? '' : params.prompt;
@@ -89,9 +89,9 @@
                     plugin.trial(display_element, block, trial, part + 1);
                 }, trial.timing_image_gap);
                 break;
-            
+
             case 3:
-                
+
                 if (!trial.is_html) {
                     $('#jspsych_sim_stim').attr('src', trial.b_path);
                 }
@@ -100,7 +100,7 @@
                 }
 
                 $('#jspsych_sim_stim').css('visibility', 'visible');
-                 
+
                 if (trial.show_response == "SECOND_STIMULUS") {
                     show_response_slider(display_element, trial, block);
                 }
@@ -218,9 +218,14 @@
                 }, trial.data));
                 // goto next trial in block
                 display_element.html('');
-                setTimeout(function() {
+                if (trial.timing_post_trial > 0) {
+                    setTimeout(function() {
+                        block.next();
+                    }, trial.timing_post_trial);
+                }
+                else {
                     block.next();
-                }, trial.timing_post_trial);
+                }
             });
         }
 

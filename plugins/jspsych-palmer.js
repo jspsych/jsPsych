@@ -45,7 +45,7 @@
                     square_size: params.square_size || 3,
                     circle_radius: params.circle_radius || 20,
                     timing_item: params.timing_item || 1000,
-                    timing_post_trial: params.timing_post_trial || 1000,
+                    timing_post_trial: (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial,
                     timing_feedback: params.timing_feedback || 1000,
                     prompt: (typeof params.prompt === 'undefined') ? "" : params.prompt,
                     data: (typeof params.data === 'undefined') ? {} : params.data[i]
@@ -232,12 +232,12 @@
             // future ideas: allow for key response, to enable things like n-back, same/different, etc..
             if (!trial.editable) {
                 showConfiguration(trial.configurations);
-                
+
                 setTimeout(function() {
                     save_data();
                 }, trial.timing_item);
             }
-            
+
             if (trial.prompt !== "") {
                 display_element.append($('<div id="jspsych-palmer-prompt">'));
                 $("#jspsych-palmer-prompt").html(trial.prompt);
@@ -310,9 +310,14 @@
                 display_element.html('');
 
                 // next trial
-                setTimeout(function() {
+                if (trial.timing_post_trial > 0) {
+                    setTimeout(function() {
+                        block.next();
+                    }, trial.timing_post_trial);
+                }
+                else {
                     block.next();
-                }, trial.timing_post_trial);
+                }
 
             }
 

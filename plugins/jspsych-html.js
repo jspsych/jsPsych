@@ -43,7 +43,7 @@ Example Usage:
                     url: params.pages[i].url,
                     cont_key: params.pages[i].cont_key || params.cont_key,
                     cont_btn: params.pages[i].cont_btn || params.cont_btn,
-                    timing_post_trial: params.pages[i].timing_post_trial || params.timing_post_trial || 1000,
+                    timing_post_trial: params.pages[i].timing_post_trial || (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial,
                     check_fn: params.pages[i].check_fn,
                     force_refresh: (typeof params.force_refresh === 'undefined') ? false : params.force_refresh
                 });
@@ -69,7 +69,7 @@ Example Usage:
                         rt: (new Date()).getTime() - t0,
                         url: trial.url
                     });
-                    if (trial.timing) {
+                    if (trial.timing_post_trial > 0) {
                         // hide display_element, since it could have a border and we want a blank screen during timing
                         display_element.hide();
                         setTimeout(function() {
