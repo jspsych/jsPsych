@@ -62,7 +62,7 @@ Example Usage:
                 var t0 = (new Date()).getTime();
                 var finish = function() {
                     if (trial.check_fn && !trial.check_fn(display_element)) return;
-                    if (trial.cont_key) $(document).unbind('keyup', key_listener);
+                    if (trial.cont_key) $(document).unbind('keydown', key_listener);
                     block.writeData({
                         trial_type: "html",
                         trial_index: block.trial_idx,
@@ -88,7 +88,7 @@ Example Usage:
                     var key_listener = function(e) {
                         if (e.which == trial.cont_key) finish();
                     };
-                    $(document).keyup(key_listener);
+                    $(document).keydown(key_listener);
                 }
             });
         };

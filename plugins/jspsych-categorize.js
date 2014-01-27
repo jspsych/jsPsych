@@ -133,14 +133,14 @@
                         block.writeData($.extend({}, trial_data, trial.data));
 
                         // clear function
-                        $(document).unbind('keyup', resp_func);
+                        $(document).unbind('keydown', resp_func);
                         display_element.html('');
                         plugin.trial(display_element, block, trial, part + 1);
                     }
                 };
 
                 // add event listener
-                $(document).keyup(resp_func);
+                $(document).keydown(resp_func);
                 break;
 
             case 2:

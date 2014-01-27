@@ -164,10 +164,10 @@
                         "key_press": e.which
                     };
                     block.writeData($.extend({}, trial_data, trial.data));
-                    $(document).unbind('keyup', resp_func);
+                    $(document).unbind('keydown', resp_func);
                 }
             };
-            $(document).keyup(resp_func);
+            $(document).keydown(resp_func);
 
             function endTrial() {
                 clearInterval(animate_interval); // stop animation!
