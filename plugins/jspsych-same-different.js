@@ -137,7 +137,7 @@
                             "key_press": e.which
                         };
                         block.data[block.trial_idx] = $.extend({}, trial_data, trial.data);
-                        $(document).unbind('keyup', resp_func);
+                        $(document).unbind('keydown', resp_func);
 
                         display_element.html('');
                         if(trial.timing_post_trial > 0) {
@@ -149,7 +149,7 @@
                         }
                     }
                 };
-                $(document).keyup(resp_func);
+                $(document).keydown(resp_func);
                 break;
             }
         };

@@ -188,7 +188,7 @@
                             "key_press": e.which
                         };
                         block.writeData($.extend({}, trial_data, trial.data));
-                        $(document).unbind('keyup', resp_func); // remove response function from keys
+                        $(document).unbind('keydown', resp_func); // remove response function from keys
                         display_element.html(''); // remove all
                         xab_trial_complete = true;
                         // move on to the next trial after timing_post_trial milliseconds
@@ -201,7 +201,7 @@
                         }
                     }
                 };
-                $(document).keyup(resp_func);
+                $(document).keydown(resp_func);
                 break;
             }
         };

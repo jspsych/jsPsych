@@ -94,7 +94,7 @@
                 };
 
                 block.writeData($.extend({}, trial_data, trial.data));
-                $(document).unbind('keyup', resp_func);
+                $(document).unbind('keydown', resp_func);
                 display_element.html('');
                 if (trial.timing_post_trial > 0) {
                     setTimeout(function() {
@@ -133,7 +133,7 @@
                 }
             };
 
-            $(document).keyup(resp_func);
+            $(document).keydown(resp_func);
 
             // hide image if timing is set
             if (trial.timing_stim > 0) {
