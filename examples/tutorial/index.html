@@ -17,21 +17,25 @@
         <div id="jspsych_target"></div>
     </body>
     
-    <script type="text/javascript">
+    <script>
         // Experiment parameters
         var n_trials = 20;
         var stimuli = ["img/congruent_left.gif", "img/congruent_right.gif", "img/incongruent_left.gif", "img/incongruent_right.gif"];
         var stimuli_types = ["congruent", "congruent", "incongruent", "incongruent"];
 
         // Experiment Instructions
-        var welcome_message = '<div id="instructions"><p>Welcome to the experiment. Press enter to begin.</p></div>';
+        var welcome_message = "<div id='instructions'><p>Welcome to the " +
+            "experiment. Press enter to begin.</p></div>";
         
-        var instructions = '<div id="instructions"><p>You will see a series of images that look similar to this:</p>\
-            <p><img src="img/incongruent_right.gif"></p><p>Press the arrow key that corresponds to the direction that\
-            the middle arrow is pointing. For example, in this case you would press the right arrow key.</p>\
-            <p>Press enter to start.</p>';
+        var instructions = "<div id='instructions'><p>You will see a " +
+ 		    "series of images that look similar to this:</p><p>" +
+            "<img src='img/incongruent_right.gif'></p><p>Press the arrow " +
+            "key that corresponds to the direction that the middle arrow " +
+            "is pointing. For example, in this case you would press the " +
+            "right arrow key.</p><p>Press enter to start.</p>";
 
-        var debrief = '<div id="instructions"><p>Thank you for participating! Press enter to see the data.</p></div>';
+        var debrief = "<div id='instructions'><p>Thank you for " +
+            "participating!  Press enter to see the data.</p></div>";
 
         // Generating Random Order for Stimuli
         var stimuli_random_order = [];

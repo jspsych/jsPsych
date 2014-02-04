@@ -13,14 +13,17 @@
     <body>
         <div id="jspsych_target"></div>
     </body>
-    <script type="text/javascript">
+    <script>
         // Experiment Instructions
-        var welcome_message = '<div id="instructions"><p>Welcome to the experiment. Press enter to begin.</p></div>';
-
-        var instructions = '<div id="instructions"><p>You will see a series of images that look similar to this:</p>\
-            <p><img src="img/incongruent_right.gif"></p><p>Press the arrow key that corresponds to the direction that\
-            the middle arrow is pointing. For example, in this case you would press the right arrow key.</p>\
-            <p>Press enter to start.</p>';
+        var welcome_message = "<div id='instructions'><p>Welcome to the " +
+            "experiment. Press enter to begin.</p></div>";
+        
+        var instructions = "<div id='instructions'><p>You will see a " +
+ 		    "series of images that look similar to this:</p><p>" +
+            "<img src='img/incongruent_right.gif'></p><p>Press the arrow " +
+            "key that corresponds to the direction that the middle arrow " +
+            "is pointing. For example, in this case you would press the " +
+            "right arrow key.</p><p>Press enter to start.</p>";
 
 
         // Define experiment blocks
