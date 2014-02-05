@@ -42,19 +42,19 @@
             for (var i = 0; i < trial.questions.length; i++) {
                 // create div
                 display_element.append($('<div>', {
-                    "id": 'survey-likert-' + i,
-                    "class": 'survey-likert-question'
+                    "id": 'jspsych-survey-likert-' + i,
+                    "class": 'jspsych-survey-likert-question'
                 }));
 
                 // add question text
-                $("#survey-likert-" + i).append('<p class="survey-likert-text survey-likert">' + trial.questions[i] + '</p>');
+                $("#jspsych-survey-likert-" + i).append('<p class="jspsych-survey-likert-text survey-likert">' + trial.questions[i] + '</p>');
 
                 // create slider
-                $("#survey-likert-" + i).append($('<div>', {
-                    "id": 'survey-likert-slider-' + i,
-                    "class": 'survey-likert-slider survey-likert'
+                $("#jspsych-survey-likert-" + i).append($('<div>', {
+                    "id": 'jspsych-survey-likert-slider-' + i,
+                    "class": 'jspsych-survey-likert-slider jspsych-survey-likert'
                 }));
-                $("#survey-likert-slider-" + i).slider({
+                $("#jspsych-survey-likert-slider-" + i).slider({
                     value: Math.ceil(trial.intervals[i] / 2),
                     min: 1,
                     max: trial.intervals[i],
@@ -63,18 +63,18 @@
 
                 // show tick marks
                 if (trial.show_ticks) {
-                    $("#survey-likert-" + i).append($('<div>', {
-                        "id": 'survey-likert-sliderticks' + i,
-                        "class": 'survey-likert-sliderticks survey-likert',
+                    $("#jspsych-survey-likert-" + i).append($('<div>', {
+                        "id": 'jspsych-survey-likert-sliderticks' + i,
+                        "class": 'jspsych-survey-likert-sliderticks jspsych-survey-likert',
                         "css": {
                             "position": 'relative'
                         }
                     }));
                     for (var j = 1; j < trial.intervals[i] - 1; j++) {
-                        $('#survey-likert-slider-' + i).append('<div class="survey-likert-slidertickmark"></div>');
+                        $('#jspsych-survey-likert-slider-' + i).append('<div class="jspsych-survey-likert-slidertickmark"></div>');
                     }
 
-                    $('#survey-likert-slider-' + i + ' .survey-likert-slidertickmark').each(function(index) {
+                    $('#jspsych-survey-likert-slider-' + i + ' .jspsych-survey-likert-slidertickmark').each(function(index) {
                         var left = (index + 1) * (100 / (trial.intervals[i] - 1));
                         $(this).css({
                             'position': 'absolute',
@@ -87,9 +87,9 @@
                 }
 
                 // create labels for slider
-                $("#survey-likert-" + i).append($('<ul>', {
-                    "id": "survey-likert-sliderlabels" + i,
-                    "class": 'survey-likert-sliderlabels survey-likert',
+                $("#jspsych-survey-likert-" + i).append($('<ul>', {
+                    "id": "jspsych-survey-likert-sliderlabels-" + i,
+                    "class": 'jspsych-survey-likert-sliderlabels survey-likert',
                     "css": {
                         "width": "100%",
                         "margin": "10px 0px 0px 0px",
@@ -100,16 +100,16 @@
                 }));
 
                 for (var j = 0; j < trial.labels[i].length; j++) {
-                    $("#survey-likert-sliderlabels-" + i).append('<li>' + trial.labels[i][j] + '</li>');
+                    $("#jspsych-survey-likert-sliderlabels-" + i).append('<li>' + trial.labels[i][j] + '</li>');
                 }
 
                 // position labels to match slider intervals
-                var slider_width = $("#survey-likert-slider-" + i).width();
+                var slider_width = $("#jspsych-survey-likert-slider-" + i).width();
                 var num_items = trial.labels[i].length;
                 var item_width = slider_width / num_items;
                 var spacing_interval = slider_width / (num_items - 1);
 
-                $("#survey-likert-sliderlabels-" + i + " li").each(function(index) {
+                $("#jspsych-survey-likert-sliderlabels-" + i + " li").each(function(index) {
                     $(this).css({
                         'display': 'inline-block',
                         'width': item_width + 'px',
@@ -124,18 +124,18 @@
 
             // add submit button
             display_element.append($('<button>', {
-                'id': 'survey-likert-next',
-                'class': 'survey-likert'
+                'id': 'jspsych-survey-likert-next',
+                'class': 'jspsych-survey-likert'
             }));
-            $("#survey-likert-next").html('Submit Answers');
-            $("#survey-likert-next").click(function() {
+            $("#jspsych-survey-likert-next").html('Submit Answers');
+            $("#jspsych-survey-likert-next").click(function() {
                 // measure response time
                 var endTime = (new Date()).getTime();
                 var response_time = endTime - startTime;
 
                 // create object to hold responses
                 var question_data = {};
-                $("div.survey-likert-slider").each(function(index) {
+                $("div.jspsych-survey-likert-slider").each(function(index) {
                     var id = "Q" + index;
                     var val = $(this).slider("value");
                     var obje = {};
@@ -157,7 +157,7 @@
             });
 
             var startTime = (new Date()).getTime();
-        }
+        };
 
         return plugin;
     })();
