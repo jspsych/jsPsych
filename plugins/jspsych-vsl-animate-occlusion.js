@@ -90,10 +90,17 @@
                     });
                 }
             }
+            
+            display_element.append($("<div id='jspsych-vsl-animate-occlusion-raphaelCanvas'>", {
+                css: {
+                    width: trial.canvas_size[0] + "px",
+                    height: trial.canvas_size[1] + "px"
+                }
+            }));
 
-            var paper = Raphael(display_element, trial.canvas_size[0], trial.canvas_size[1]);
+            var paper = Raphael("jspsych-vsl-animate-occlusion-raphaelCanvas", trial.canvas_size[0], trial.canvas_size[1]);
 
-            var c = paper.image(trial.stimuli[which_image], trial.canvas_size[0] / 2 - trial.image_size[0] / 2, trial.canvas_size[1] / 2 - trial.image_size[1] / 2, trial.image_size[0], trial.image_size[1]);
+            var c = paper.image(trial.stims[which_image], trial.canvas_size[0] / 2 - trial.image_size[0] / 2, trial.canvas_size[1] / 2 - trial.image_size[1] / 2, trial.image_size[0], trial.image_size[1]);
 
             if (trial.occlude_center) {
                 paper.rect((trial.canvas_size[0] / 2) - (trial.image_size[0] / 2), 0, trial.image_size[0], trial.canvas_size[1]).attr({
@@ -111,6 +118,9 @@
             }
 
             function endTrial() {
+                
+                display_element.html('');
+                
                 block.writeData($.extend({}, {
                     "trial_type": "vsl-animate-occlusion",
                     "trial_index": block.trial_idx,
