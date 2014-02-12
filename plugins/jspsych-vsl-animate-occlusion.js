@@ -11,7 +11,15 @@
  * REQUIRES rapaheljs (www.raphaeljs.com)
  * 
  * parameters:
- *      
+ *      stimuli: array of paths to images. will be shown in the order declared in array
+ *      timing_cycle: how long for an image to complete an animation cycle
+ *      canvas_size: array [width, height] - how big to draw the area
+ *      image_size: array [width, height] - how big to draw the stimuli
+ *      initial_direction: "left" or "right" - which way to move the first image
+ *      occlude_center: if true, draw a rectangle in the center to occlude the swaps between images
+ *      timing_pre_movement: how long to wait before the first image starts moving
+ *      timing_post_trial: how long to show blank screen after trial
+ *      data: the optional data object
  * 
  */
 
