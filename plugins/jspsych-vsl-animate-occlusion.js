@@ -88,14 +88,17 @@
                     var i = trial.stims[which_image];
                     which_image++;
 
+                    eve.once("raphael.attr.src."+c.id, function(){
+                        c.animate(d[0].params, d[0].ms, function() {
+                            c.animate(d[1].params, d[1].ms, function() {
+                                next_step();
+                            });
+                        });
+                    });
                     c.attr({
                         src: i
                     });
-                    c.animate(d[0].params, d[0].ms, function() {
-                        c.animate(d[1].params, d[1].ms, function() {
-                            next_step();
-                        });
-                    });
+                    
                 }
             }
             
