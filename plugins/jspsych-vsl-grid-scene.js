@@ -15,13 +15,12 @@
  *          the top-left to bottom-right diagonal would be declared like this:
  * 
  *              var s = [
- *                  [ "img_path", , ],
- *                  [ , "img_path", ],
- *                  [ , , "img_path"]
+ *                  [ "img_path", 0, 0 ],
+ *                  [ 0, "img_path", 0 ],
+ *                  [ 0, 0, "img_path" ]
  *              ]
  * 
- *          for blank spaces in the grid, you can either leave the element blank, as above, or
- *          you can put a 0 in the corresponding location. 
+ *          for blank spaces in the grid, you need to put a 0 in the corresponding location. 
  *      image_size: array [width, height] - how big to draw the stimuli
  *      timing_duration: how long to show the scene
  *      timing_post_trial: how long to show blank screen after trial
@@ -84,7 +83,7 @@
             function fill_table(pattern) {
                 for (var row = 0; row < nrows; row++) {
                     for (var col = 0; col < ncols; col++) {
-                        if (typeof pattern[row][col] !== 'undefined' && pattern[row][col] !== 0) {
+                        if (pattern[row][col] !== 0) {
                             $('#jspsych-vsl-grid-scene-table-' + row + '-' + col).append($('<img>', {
                                 src: pattern[row][col],
                                 css: {
