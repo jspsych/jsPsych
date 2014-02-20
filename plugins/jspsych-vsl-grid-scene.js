@@ -60,7 +60,7 @@
                     'border-collapse': 'collapse'
                 }
             }));
-
+            
             for (var row = 0; row < nrows; row++) {
                 $("#jspsych-vsl-grid-scene-table").append($('<tr>', {
                     id: 'jspsych-vsl-grid-scene-table-row-' + row,
@@ -72,9 +72,15 @@
                     $("#jspsych-vsl-grid-scene-table-row-" + row).append($('<td>', {
                         id: 'jspsych-vsl-grid-scene-table-' + row + '-' + col,
                         css: {
+                            padding: trial.image_size[1] / 10 + "px " + trial.image_size[0] / 10 + "px",
+                            border: '1px solid #555'
+                        }
+                    }));
+                    $('#jspsych-vsl-grid-scene-table-' + row + '-' + col).append($('<div>', {
+                        id: 'jspsych-vsl-grid-scene-table-cell-' + row + '-' + col,
+                        css: {
                             width: trial.image_size[0] + "px",
-                            border: '1px solid #555',
-                            padding: trial.image_size[1] / 10 + "px " + trial.image_size[0] / 10 + "px"
+                            height: trial.image_size[1] + "px"
                         }
                     }));
                 }
@@ -84,7 +90,7 @@
                 for (var row = 0; row < nrows; row++) {
                     for (var col = 0; col < ncols; col++) {
                         if (pattern[row][col] !== 0) {
-                            $('#jspsych-vsl-grid-scene-table-' + row + '-' + col).append($('<img>', {
+                            $('#jspsych-vsl-grid-scene-table-cell-' + row + '-' + col).append($('<img>', {
                                 src: pattern[row][col],
                                 css: {
                                     width: trial.image_size[0] + "px",
