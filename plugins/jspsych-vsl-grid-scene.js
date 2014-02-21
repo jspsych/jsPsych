@@ -57,7 +57,9 @@
             display_element.append($('<table>', {
                 id: 'jspsych-vsl-grid-scene-table',
                 css: {
-                    'border-collapse': 'collapse'
+                    'border-collapse': 'collapse',
+                    'margin-left': 'auto',
+                    'margin-right': 'auto'
                 }
             }));
             
