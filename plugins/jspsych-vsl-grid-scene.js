@@ -50,63 +50,11 @@
 
         plugin.trial = function(display_element, block, trial, part) {
 
-            var nrows = trial.stimuli.length;
-            var ncols = trial.stimuli[0].length;
+            display_element.html(plugin.generate_stimulus(trial.stimuli, trial.image_size));
 
-            // create table
-            display_element.append($('<table>', {
-                id: 'jspsych-vsl-grid-scene-table',
-                css: {
-                    'border-collapse': 'collapse',
-                    'margin-left': 'auto',
-                    'margin-right': 'auto'
-                }
-            }));
-            
-            for (var row = 0; row < nrows; row++) {
-                $("#jspsych-vsl-grid-scene-table").append($('<tr>', {
-                    id: 'jspsych-vsl-grid-scene-table-row-' + row,
-                    css: {
-                        height: trial.image_size[1] + "px"
-                    }
-                }));
-                for (var col = 0; col < ncols; col++) {
-                    $("#jspsych-vsl-grid-scene-table-row-" + row).append($('<td>', {
-                        id: 'jspsych-vsl-grid-scene-table-' + row + '-' + col,
-                        css: {
-                            padding: trial.image_size[1] / 10 + "px " + trial.image_size[0] / 10 + "px",
-                            border: '1px solid #555'
-                        }
-                    }));
-                    $('#jspsych-vsl-grid-scene-table-' + row + '-' + col).append($('<div>', {
-                        id: 'jspsych-vsl-grid-scene-table-cell-' + row + '-' + col,
-                        css: {
-                            width: trial.image_size[0] + "px",
-                            height: trial.image_size[1] + "px"
-                        }
-                    }));
-                }
-            }
-
-            function fill_table(pattern) {
-                for (var row = 0; row < nrows; row++) {
-                    for (var col = 0; col < ncols; col++) {
-                        if (pattern[row][col] !== 0) {
-                            $('#jspsych-vsl-grid-scene-table-cell-' + row + '-' + col).append($('<img>', {
-                                src: pattern[row][col],
-                                css: {
-                                    width: trial.image_size[0] + "px",
-                                    height: trial.image_size[1] + "px",
-                                }
-                            }));
-                        }
-                    }
-                }
-            }
-
-            fill_table(trial.stimuli);
-            
-            setTimeout(function(){ endTrial(); }, trial.timing_duration);
+            setTimeout(function() {
+                endTrial();
+            }, trial.timing_duration);
 
             function endTrial() {
 
@@ -127,6 +75,75 @@
                     block.next();
                 }
             }
+        };
+
+        plugin.generate_stimulus = function(pattern, image_size) {
+            var nrows = pattern.length;
+            var ncols = pattern[0].length;
+
+            // create blank element to hold code that we generate
+            $('body').append($('<div>', {
+                id: 'jspsych-vsl-grid-scene-dummy',
+                css: {
+                    display: 'none'
+                }
+            }));
+
+            // create table
+            $('#jspsych-vsl-grid-scene-dummy').append($('<table>', {
+                id: 'jspsych-vsl-grid-scene-table',
+                css: {
+                    'border-collapse': 'collapse',
+                    'margin-left': 'auto',
+                    'margin-right': 'auto'
+                }
+            }));
+
+            for (var row = 0; row < nrows; row++) {
+                $("#jspsych-vsl-grid-scene-table").append($('<tr>', {
+                    id: 'jspsych-vsl-grid-scene-table-row-' + row,
+                    css: {
+                        height: image_size[1] + "px"
+                    }
+                }));
+                for (var col = 0; col < ncols; col++) {
+                    $("#jspsych-vsl-grid-scene-table-row-" + row).append($('<td>', {
+                        id: 'jspsych-vsl-grid-scene-table-' + row + '-' + col,
+                        css: {
+                            padding: image_size[1] / 10 + "px " + image_size[0] / 10 + "px",
+                            border: '1px solid #555'
+                        }
+                    }));
+                    $('#jspsych-vsl-grid-scene-table-' + row + '-' + col).append($('<div>', {
+                        id: 'jspsych-vsl-grid-scene-table-cell-' + row + '-' + col,
+                        css: {
+                            width: image_size[0] + "px",
+                            height: image_size[1] + "px"
+                        }
+                    }));
+                }
+            }
+
+
+            for (var row = 0; row < nrows; row++) {
+                for (var col = 0; col < ncols; col++) {
+                    if (pattern[row][col] !== 0) {
+                        $('#jspsych-vsl-grid-scene-table-cell-' + row + '-' + col).append($('<img>', {
+                            src: pattern[row][col],
+                            css: {
+                                width: image_size[0] + "px",
+                                height: image_size[1] + "px",
+                            }
+                        }));
+                    }
+                }
+            }
+            
+            var html_out =  $('#jspsych-vsl-grid-scene-dummy').html();
+            $('#jspsych-vsl-grid-scene-dummy').remove();
+             
+            return html_out;
+
         };
 
         return plugin;
