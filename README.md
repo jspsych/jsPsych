@@ -1,8 +1,7 @@
 jsPsych
 =======
 
-jsPsych is a javascript library for creating and running behavioral experiments in a web browser.
-It consists of a set of plugins that can be easily combined to assemble different behvarioral experiments.
+jsPsych is a JavaScript library for creating and running behavioral experiments in a web browser. jsPsych simplifies the process of coding browser-based experiments by providing a set of flexibile plugins that define different kinds of tasks a subject could complete during an experiment. By assembling different plugins together and customizing the parameters of each, it is possible to create many different types of experiments.
 
 
 Documentation
@@ -17,6 +16,6 @@ trying some of the demos is a good place to start.
 Contact
 -------
 
-jsPsych was created by Josh de Leeuw at Indiana University
+jsPsych was created by Josh de Leeuw (@jodeleeu) at Indiana University.
 
-email Josh at jodeleeu@indiana.edu
+email: jodeleeu@indiana.edu
