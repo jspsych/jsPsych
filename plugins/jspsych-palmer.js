@@ -323,6 +323,108 @@
 
 
         };
+        
+        // method for drawing palmer stimuli.
+        // returns the string description of svg element containing the stimulus
+        // requires raphaeljs library -> www.raphaeljs.com
+        
+        plugin.generate_stimulus = function(square_size, grid_spacing, circle_radius, configuration) {
+
+            // create a div to hold the generated svg object
+            var stim_div = $('body').append('<div id="jspsych-palmer-temp-stim"></div>');
+
+            var size = grid_spacing * (square_size + 1);
+
+            // create the svg raphael object
+            var paper = Raphael("jspsych-palmer-temp-stim", size, size);
+
+            // create the circles at the vertices.
+            var circles = [];
+            var node_idx = 0;
+            for (var i = 1; i <= square_size; i++) {
+                for (var j = 1; j <= square_size; j++) {
+                    var circle = paper.circle(grid_spacing * j, grid_spacing * i, circle_radius);
+                    circle.attr("fill", "#000").attr("stroke-width", "0").attr("stroke", "#000").data("node", node_idx);
+                    node_idx++;
+                    circles.push(circle);
+                }
+            }
+
+            // create all possible lines that connect circles
+            var horizontal_lines = [];
+            var vertical_lines = [];
+            var backslash_lines = [];
+            var forwardslash_lines = [];
+
+            for (var i = 0; i < square_size; i++) {
+                for (var j = 0; j < square_size; j++) {
+                    var current_item = (i * square_size) + j;
+                    // add horizontal connections
+                    if (j < (square_size - 1)) {
+                        horizontal_lines.push([current_item, current_item + 1]);
+                    }
+                    // add vertical connections
+                    if (i < (square_size - 1)) {
+                        vertical_lines.push([current_item, current_item + square_size]);
+                    }
+                    // add diagonal backslash connections
+                    if (i < (square_size - 1) && j < (square_size - 1)) {
+                        backslash_lines.push([current_item, current_item + square_size + 1]);
+                    }
+                    // add diagonal forwardslash connections
+                    if (i < (square_size - 1) && j > 0) {
+                        forwardslash_lines.push([current_item, current_item + square_size - 1]);
+                    }
+                }
+            }
+
+            var lines = horizontal_lines.concat(vertical_lines).concat(backslash_lines).concat(forwardslash_lines);
+
+            // actually draw the lines
+            var lineIsVisible = [];
+            var lineElements = [];
+
+            for (var i = 0; i < lines.length; i++) {
+                var line = paper.path("M" + circles[lines[i][0]].attr("cx") + " " + circles[lines[i][0]].attr("cy") + "L" + circles[lines[i][1]].attr("cx") + " " + circles[lines[i][1]].attr("cy")).attr("stroke-width", "8").attr("stroke", "#000");
+                line.hide();
+                lineElements.push(line);
+                lineIsVisible.push(0);
+            }
+
+            // define some helper functions to toggle lines on and off
+
+            // this function turns a line on/off based on the index (the_line)
+            function toggle_line(the_line) {
+                if (the_line > -1) {
+                    if (lineIsVisible[the_line] === 0) {
+                        lineElements[the_line].show();
+                        lineElements[the_line].toBack();
+                        lineIsVisible[the_line] = 1;
+                    }
+                    else {
+                        lineElements[the_line].hide();
+                        lineElements[the_line].toBack();
+                        lineIsVisible[the_line] = 0;
+                    }
+                }
+            }
+
+            // displays the line wherever there
+            // is a 1 in the array.
+            // showConfiguration(configuration) 
+            for (var i = 0; i < configuration.length; i++) {
+                if (configuration[i] == 1) {
+                    toggle_line(i);
+                }
+            }
+
+
+            var svg = $("#jspsych-palmer-temp-stim").html();
+
+            $('#jspsych-palmer-temp-stim').remove();
+
+            return svg;
+        };
 
         return plugin;
     })();
