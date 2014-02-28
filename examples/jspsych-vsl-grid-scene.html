@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+
+    <head>
+        <title>jspsych-vsl-grid-scene plugin example</title>
+        <!-- jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <!-- jsPsych -->
+        <script src="scripts/jspsych.js"></script>
+        <script src="scripts/plugins/jspsych-vsl-grid-scene.js"></script>
+        <!-- style -->
+        <style>
+            #jspsych_target {
+                margin: 50px auto 50px auto;
+                width: 600px;
+                font-size:18px;
+                text-align: center;
+            }
+            pre {
+                text-align: left;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="jspsych_target"></div>
+    </body>
+    <script type="text/javascript">
+        var images = ["img/1.gif","img/2.gif","img/3.gif","img/4.gif","img/5.gif",
+                      "img/6.gif","img/7.gif","img/8.gif","img/9.gif","img/10.gif"];
+
+        var scenes = [
+            [
+                ["img/1.gif", "img/2.gif", 0],
+                [ 0, "img/3.gif", 0],
+                ["img/5.gif", "img/4.gif", 0]
+            ],
+            [
+                [ 0, 0, "img/6.gif"],
+                [ "img/10.gif", "img/7.gif", 0],
+                [ 0,"img/8.gif", "img/9.gif" ]
+            ]
+        ];
+
+        // create vsl block for jspsych
+        var vsl_block = {
+            type: 'vsl-grid-scene',
+            stimuli: scenes
+        };
+
+        // preload images
+        // call start() when loading is complete
+        jsPsych.preloadImages(images, start);
+
+        // function to launch jspsych experiment
+        // putting this in a function so that it only gets called once all the
+        // images are loaded using preloadImages
+        function start() {
+            jsPsych.init({
+                display_element: $('#jspsych_target'),
+                experiment_structure: [vsl_block],
+                on_finish: function(data) {
+                    $('#jspsych_target').append($("<pre>", {
+                        html: JSON.stringify(data, undefined, 2)
+                    }));
+                }
+            });
+        }
+    </script>
+
+</html>
