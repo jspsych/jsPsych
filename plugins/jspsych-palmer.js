@@ -419,97 +419,12 @@
             }
 
 
-            var svg = $("#stim_palmer").html();
+            var svg = $("#jspsych-palmer-temp-stim").html();
 
-            $('#stim_palmer').remove();
+            $('#jspsych-palmer-temp-stim').remove();
 
             return svg;
         };
-        /*
-         * Maybe add this back in later?
-         *
-        public_object.palmer_add_random_connected_element = function(square_size, configuration) {
-            // make sure that configuration is not ALL 1's
-            if ($.inArray(0, configuration) == -1) {
-                return configuration;
-            }
-
-            // create all possible lines that connect circles
-            var horizontal_lines = [];
-            var vertical_lines = [];
-            var backslash_lines = [];
-            var forwardslash_lines = [];
-
-            for (var i = 0; i < square_size; i++) {
-                for (var j = 0; j < square_size; j++) {
-                    var current_item = (i * square_size) + j;
-                    // add horizontal connections
-                    if (j < (square_size - 1)) {
-                        horizontal_lines.push([current_item, current_item + 1]);
-                    }
-                    // add vertical connections
-                    if (i < (square_size - 1)) {
-                        vertical_lines.push([current_item, current_item + square_size]);
-                    }
-                    // add diagonal backslash connections
-                    if (i < (square_size - 1) && j < (square_size - 1)) {
-                        backslash_lines.push([current_item, current_item + square_size + 1]);
-                    }
-                    // add diagonal forwardslash connections
-                    if (i < (square_size - 1) && j > 0) {
-                        forwardslash_lines.push([current_item, current_item + square_size - 1]);
-                    }
-                }
-            }
-
-            var lines = horizontal_lines.concat(vertical_lines).concat(backslash_lines).concat(forwardslash_lines);
-
-            function build_possible_lines_list() {
-                // get a list of all the lines that exist in the passed configuration
-                var possible_lines_to_connect_from = [];
-                $.each(configuration, function(i, v) {
-                    if (v == 1) {
-                        possible_lines_to_connect_from.push(i);
-                    }
-                });
-
-                // randomly select one of the lines
-                var choice = possible_lines_to_connect_from[Math.floor(Math.random() * possible_lines_to_connect_from.length)];
-
-                // randomly select which end of the line to connect to
-                var circles = lines[choice];
-
-                // build a list of all possible lines that contain the circles
-                var possible_new_lines = [];
-                for(var i=0;i<circles.length;i++){
-                    $.each(lines, function(index, v) {
-                        if ($.inArray(circles[i], v) > -1) {
-                            if (configuration[index] === 0) { // this excludes lines that already exist
-                                possible_new_lines.push(index);
-                            }
-                        }
-                    });
-                }
-
-                return possible_new_lines;
-            }
-
-            var possible_new_lines = build_possible_lines_list();
-
-            // make sure there are lines to add
-            //while (possible_new_lines.length === 0) {
-            //    possible_new_lines = build_possible_lines_list();
-            //}
-
-            // now pick a random line to add
-            var random_new_line = possible_new_lines[Math.floor(Math.random() * possible_new_lines.length)];
-
-            var output = configuration.slice(0);
-            output[random_new_line] = 1;
-            
-            return output;
-        };
-        */
 
         return plugin;
     })();
