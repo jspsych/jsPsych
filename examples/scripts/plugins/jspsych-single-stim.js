@@ -36,11 +36,11 @@
                 // option to show image for fixed time interval, ignoring key responses
                 //      true = image will keep displaying after response
                 //      false = trial will immediately advance when response is recorded
-                trials[i].continue_after_response = params.continue_after_response || true;
+                trials[i].continue_after_response = (typeof params.continue_after_response === 'undefined') ? true : params.continue_after_response;
                 // timing parameters
                 trials[i].timing_stim = params.timing_stim || -1; // if -1, then show indefinitely
                 trials[i].timing_response = params.timing_response || -1; // if -1, then wait for response forever
-                trials[i].timing_post_trial = params.timing_post_trial || 1000;
+                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
                 // optional parameters
                 trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
                 trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
@@ -56,19 +56,20 @@
             var trial_complete = false;
 
             var startTime = (new Date()).getTime();
-            
+            var endTime = -1;
+
             var key_press = -1;
 
             if (!trial.is_html) {
                 display_element.append($('<img>', {
                     src: trial.a_path,
-                    id: 'ss'
+                    id: 'jspsych-single-stim-stimulus'
                 }));
             }
             else {
                 display_element.append($('<div>', {
                     html: trial.a_path,
-                    id: 'ss'
+                    id: 'jspsych-single-stim-stimulus'
                 }));
             }
 
@@ -78,8 +79,10 @@
             }
 
             var cont_function = function() {
-                var endTime = (new Date()).getTime();
-                var rt = (endTime - startTime);
+                var rt = -1;
+                if (endTime != -1) {
+                    rt = (endTime - startTime);
+                }
                 trial_complete = true;
 
                 var trial_data = {
@@ -91,11 +94,16 @@
                 };
 
                 block.writeData($.extend({}, trial_data, trial.data));
-                $(document).unbind('keyup', resp_func);
+                $(document).unbind('keydown', resp_func);
                 display_element.html('');
-                setTimeout(function() {
+                if (trial.timing_post_trial > 0) {
+                    setTimeout(function() {
+                        block.next();
+                    }, trial.timing_post_trial);
+                }
+                else {
                     block.next();
-                }, trial.timing_post_trial);
+                }
             };
 
             var resp_func = function(e) {
@@ -109,9 +117,12 @@
                 if (flag) {
                     key_press = e.which;
 
+                    // record rt
+                    endTime = (new Date()).getTime();
+
                     // after a valid response, the stimulus will have the CSS class 'responded'
                     // which can be used to provide visual feedback that a response was recorded
-                    $("#ss").addClass('responded');
+                    $("#jspsych-single-stim-stimulus").addClass('responded');
 
                     if (trial.continue_after_response) {
                         // response triggers the next trial in this case.
@@ -122,13 +133,13 @@
                 }
             };
 
-            $(document).keyup(resp_func);
+            $(document).keydown(resp_func);
 
             // hide image if timing is set
             if (trial.timing_stim > 0) {
                 setTimeout(function() {
                     if (!trial_complete) {
-                        $('#ss').css('visibility', 'hidden');
+                        $('#jspsych-single-stim-stimulus').css('visibility', 'hidden');
                     }
                 }, trial.timing_stim);
             }

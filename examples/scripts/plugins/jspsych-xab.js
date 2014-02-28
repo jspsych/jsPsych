@@ -55,7 +55,7 @@
                 trials[i].timing_x = params.timing_x || 1000; // defaults to 1000msec.
                 trials[i].timing_xab_gap = params.timing_xab_gap || 1000; // defaults to 1000msec.
                 trials[i].timing_ab = params.timing_ab || -1; // defaults to -1, meaning infinite time on AB. If a positive number is used, then AB will only be displayed for that length.
-                trials[i].timing_post_trial = params.timing_post_trial || 1000; // defaults to 1000msec.
+                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial; // defaults to 1000msec.
                 // optional parameters
                 trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
                 trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
@@ -80,12 +80,12 @@
                 if (!trial.is_html) {
                     display_element.append($('<img>', {
                         src: trial.x_path,
-                        "class": 'xab'
+                        "class": 'jspsych-xab-stimulus'
                     }));
                 }
                 else {
                     display_element.append($('<div>', {
-                        "class": 'xab',
+                        "class": 'jspsych-xab-stimulus',
                         html: trial.x_path
                     }));
                 }
@@ -99,7 +99,7 @@
                 // the second part of the trial is the gap between X and AB.
             case 2:
                 // remove the x stimulus
-                $('.xab').remove();
+                $('.jspsych-xab-stimulus').remove();
 
                 // start timer
                 setTimeout(function() {
@@ -121,20 +121,20 @@
                 if (!trial.is_html) {
                     display_element.append($('<img>', {
                         "src": images[0],
-                        "class": 'xab'
+                        "class": 'jspsych-xab-stimulus'
                     }));
                     display_element.append($('<img>', {
                         "src": images[1],
-                        "class": 'xab'
+                        "class": 'jspsych-xab-stimulus'
                     }));
                 }
                 else {
                     display_element.append($('<div>', {
-                        "class": 'xab',
+                        "class": 'jspsych-xab-stimulus',
                         html: images[0]
                     }));
                     display_element.append($('<div>', {
-                        "class": 'xab',
+                        "class": 'jspsych-xab-stimulus',
                         html: images[1]
                     }));
                 }
@@ -150,7 +150,7 @@
                 if (trial.timing_ab > 0) {
                     setTimeout(function() {
                         if (!xab_trial_complete) {
-                            $('.xab').css('visibility', 'hidden');
+                            $('.jspsych-xab-stimulus').css('visibility', 'hidden');
                         }
                     }, trial.timing_ab);
                 }
@@ -188,16 +188,20 @@
                             "key_press": e.which
                         };
                         block.writeData($.extend({}, trial_data, trial.data));
-                        $(document).unbind('keyup', resp_func); // remove response function from keys
+                        $(document).unbind('keydown', resp_func); // remove response function from keys
                         display_element.html(''); // remove all
                         xab_trial_complete = true;
                         // move on to the next trial after timing_post_trial milliseconds
-                        setTimeout(function() {
+                        if(trial.timing_post_trial > 0) {
+                            setTimeout(function() {
+                                block.next();
+                            }, trial.timing_post_trial);
+                        } else {
                             block.next();
-                        }, trial.timing_post_trial);
+                        }
                     }
                 };
-                $(document).keyup(resp_func);
+                $(document).keydown(resp_func);
                 break;
             }
         };

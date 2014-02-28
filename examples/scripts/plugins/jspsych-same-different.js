@@ -39,7 +39,7 @@
                 trials[i].timing_first_stim = params.timing_first_stim || 1000;
                 trials[i].timing_second_stim = params.timing_second_stim || 1000; // if -1, then second stim is shown until response.
                 trials[i].timing_gap = params.timing_gap || 500;
-                trials[i].timing_post_trial = params.timing_post_trial || 1000;
+                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
                 // optional parameters
                 trials[i].is_html = (typeof params.is_html === 'undefined') ? false : true;
                 trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
@@ -58,13 +58,13 @@
                 if (!trial.is_html) {
                     display_element.append($('<img>', {
                         src: trial.a_path,
-                        "class": 'sd'
+                        "class": 'jspsych-same-different-stimulus'
                     }));
                 }
                 else {
                     display_element.append($('<div>', {
                         html: trial.a_path,
-                        "class": 'sd'
+                        "class": 'jspsych-same-different-stimulus'
                     }));
                 }
                 setTimeout(function() {
@@ -72,7 +72,7 @@
                 }, trial.timing_first_stim);
                 break;
             case 2:
-                $('.sd').remove();
+                $('.jspsych-same-different-stimulus').remove();
                 setTimeout(function() {
                     plugin.trial(display_element, block, trial, part + 1);
                 }, trial.timing_gap);
@@ -81,22 +81,22 @@
                 if (!trial.is_html) {
                     display_element.append($('<img>', {
                         src: trial.b_path,
-                        "class": 'sd',
-                        id: 'jspsych_sd_second_image'
+                        "class": 'jspsych-same-different-stimulus',
+                        id: 'jspsych-same-different-second-stimulus'
                     }));
                 }
                 else {
                     display_element.append($('<div>', {
                         html: trial.b_path,
-                        "class": 'sd',
-                        id: 'jspsych_sd_second_image'
+                        "class": 'jspsych-same-different-stimulus',
+                        id: 'jspsych-same-different-second-stimulus'
                     }));
                 }
 
                 if (trial.timing_second_stim > 0) {
                     setTimeout(function() {
                         if (!sd_trial_complete) {
-                            $("#jspsych_sd_second_image").css('visibility', 'hidden');
+                            $("#jspsych-same-different-second-stimulus").css('visibility', 'hidden');
                         }
                     }, trial.timing_second_stim);
                 }
@@ -132,20 +132,24 @@
                             "trial_index": block.trial_idx,
                             "rt": rt,
                             "correct": correct,
-                            "a_path": trial.a_path,
-                            "b_path": trial.b_path,
+                            "stimulus": trial.a_path,
+                            "stimulus_2": trial.b_path,
                             "key_press": e.which
                         };
                         block.data[block.trial_idx] = $.extend({}, trial_data, trial.data);
-                        $(document).unbind('keyup', resp_func);
+                        $(document).unbind('keydown', resp_func);
 
                         display_element.html('');
-                        setTimeout(function() {
+                        if(trial.timing_post_trial > 0) {
+                            setTimeout(function() {
+                                block.next();
+                            }, trial.timing_post_trial);
+                        } else {
                             block.next();
-                        }, trial.timing_post_trial);
+                        }
                     }
                 };
-                $(document).keyup(resp_func);
+                $(document).keydown(resp_func);
                 break;
             }
         };

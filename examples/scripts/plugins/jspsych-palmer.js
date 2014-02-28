@@ -45,7 +45,7 @@
                     square_size: params.square_size || 3,
                     circle_radius: params.circle_radius || 20,
                     timing_item: params.timing_item || 1000,
-                    timing_post_trial: params.timing_post_trial || 1000,
+                    timing_post_trial: (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial,
                     timing_feedback: params.timing_feedback || 1000,
                     prompt: (typeof params.prompt === 'undefined') ? "" : params.prompt,
                     data: (typeof params.data === 'undefined') ? {} : params.data[i]
@@ -65,14 +65,14 @@
 
             var size = trial.grid_spacing * (trial.square_size + 1);
 
-            display_element.append($("<div id='raphaelCanvas'>", {
+            display_element.append($("<div id='jspsych-palmer-raphaelCanvas'>", {
                 css: {
                     width: size + "px",
                     height: size + "px"
                 }
             }));
 
-            var paper = Raphael("raphaelCanvas", size, size);
+            var paper = Raphael("jspsych-palmer-raphaelCanvas", size, size);
 
             // create the circles at the vertices.
             var circles = [];
@@ -221,8 +221,8 @@
             // something, e.g. for a reconstruction probe.
             // need a way for the user to submit when they are done in that case...
             if (trial.editable) {
-                display_element.append($('<button id="submitButton" type="button">Submit Answer</button>'));
-                $('#submitButton').click(function() {
+                display_element.append($('<button id="jspsych-palmer-submitButton" type="button">Submit Answer</button>'));
+                $('#jspsych-palmer-submitButton').click(function() {
                     save_data();
                 });
             }
@@ -232,15 +232,15 @@
             // future ideas: allow for key response, to enable things like n-back, same/different, etc..
             if (!trial.editable) {
                 showConfiguration(trial.configurations);
-                
+
                 setTimeout(function() {
                     save_data();
                 }, trial.timing_item);
             }
-            
+
             if (trial.prompt !== "") {
-                display_element.append($('<div id="palmer_prompt">'));
-                $("#palmer_prompt").html(trial.prompt);
+                display_element.append($('<div id="jspsych-palmer-prompt">'));
+                $("#jspsych-palmer-prompt").html(trial.prompt);
             }
 
             function arrayDifferences(arr1, arr2) {
@@ -277,8 +277,8 @@
 
                 if (trial.editable && trial.show_feedback) {
                     // hide the button
-                    $('#submitButton').hide();
-                    $('#palmer_prompt').hide();
+                    $('#jspsych-palmer-submitButton').hide();
+                    $('#jspsych-palmer-prompt').hide();
 
                     showConfiguration(trial.configurations);
                     var feedback = "";
@@ -293,7 +293,7 @@
                             feedback = "You missed 1 line. The correct symbol is shown above.";
                         }
                     }
-                    display_element.append($.parseHTML("<p id='palmer_feedback'>" + feedback + "</p>"));
+                    display_element.append($.parseHTML("<p id='jspsych-palmer-feedback'>" + feedback + "</p>"));
 
                     setTimeout(function() {
                         next_trial();
@@ -310,9 +310,14 @@
                 display_element.html('');
 
                 // next trial
-                setTimeout(function() {
+                if (trial.timing_post_trial > 0) {
+                    setTimeout(function() {
+                        block.next();
+                    }, trial.timing_post_trial);
+                }
+                else {
                     block.next();
-                }, trial.timing_post_trial);
+                }
 
             }
 

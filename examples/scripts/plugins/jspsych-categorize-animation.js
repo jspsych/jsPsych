@@ -44,7 +44,7 @@
                 trials[i].allow_response_before_complete = params.allow_response_before_complete || false;
                 trials[i].frame_time = params.frame_time || 500;
                 trials[i].timing_feedback_duration = params.timing_feedback_duration || 2000;
-                trials[i].timing_post_trial = params.timing_post_trial || 1000;
+                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
                 trials[i].prompt = (typeof params.prompt === 'undefined') ? '' : params.prompt;
                 trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
             }
@@ -80,7 +80,7 @@
                 if (showAnimation) {
                     display_element.append($('<img>', {
                         "src": trial.stims[animate_frame],
-                        "class": 'animate'
+                        "class": 'jspsych-categorize-animate-stimulus'
                     }));
                 }
 
@@ -164,17 +164,21 @@
                         "key_press": e.which
                     };
                     block.writeData($.extend({}, trial_data, trial.data));
-                    $(document).unbind('keyup', resp_func);
+                    $(document).unbind('keydown', resp_func);
                 }
             };
-            $(document).keyup(resp_func);
+            $(document).keydown(resp_func);
 
             function endTrial() {
                 clearInterval(animate_interval); // stop animation!
                 display_element.html(''); // clear everything
-                setTimeout(function() {
+                if(trial.timing_post_trial > 0){
+                    setTimeout(function() {
+                        block.next();
+                    }, trial.timing_post_trial);
+                } else {
                     block.next();
-                }, trial.timing_post_trial);
+                }
             }
         };
 
