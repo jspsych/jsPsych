@@ -83,12 +83,19 @@
 
         // core.data returns all of the data objects for each block as an array
         //      where core.data[0] = data object from block 0, etc...
+        // if flatten is true, then the hierarchical structure of the data
+        // is removed and each array entry will be a single trial.
 
-        core.data = function() {
+        core.data = function(flatten) {
             var all_data = [];
             for (var i = 0; i < exp_blocks.length; i++) {
                 all_data[i] = exp_blocks[i].data;
             }
+            
+            if(flatten===true){
+                all_data = flattenData(all_data);
+            }
+            
             return all_data;
         };
 
