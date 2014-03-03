@@ -74,7 +74,7 @@
             for (var i = 0; i < trial.images.length; i++) {
                 var coords = random_coordinate(trial.sort_area_width - trial.stim_width, trial.sort_area_height - trial.stim_height);
 
-                $("#sort_arena").append($('<img>', {
+                $("#jspsych-free-sort-arena").append($('<img>', {
                     "src": trial.images[i],
                     "class": "jspsych-free-sort-draggable",
                     "css": {
@@ -107,7 +107,7 @@
             });
 
             display_element.append($('<button>', {
-                "id": "done_btn",
+                "id": "jspsych-free-sort-done-btn",
                 "class": "jspsych-free-sort",
                 "html": "Done",
                 "click": function() {
