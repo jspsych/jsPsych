@@ -222,6 +222,23 @@
             }
             
         };
+        
+        core.normalizeTrialVariables = function(trial){
+            
+            var keys = getKeys(trial);
+            
+            tmp = {};
+            for(var i=0; i<keys.length; i++){
+                if(typeof trial[keys[i]] == "function"){
+                    tmp[keys[i]] = trial[keys[i]].call();
+                } else {
+                    tmp[keys[i]] = trial[keys[i]];
+                }
+            }
+            
+            return tmp;
+            
+        }
 
         //
         // private functions //
@@ -389,6 +406,16 @@
                 html: 'download file'
             }));
             $('#jspsych-download-as-text-link')[0].click();
+        }
+        
+        function getKeys(obj) {
+            var r = [];
+            for (var k in obj) {
+                if (!obj.hasOwnProperty(k)) 
+                    continue;
+                r.push(k);
+            }
+            return r;
         }
 
         return core;
