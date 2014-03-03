@@ -67,7 +67,7 @@
                 // show the images
                 if (!trial.is_html) {
                     display_element.append($('<img>', {
-                        "src": normed_trial.a_path,
+                        "src": trial.a_path,
                         "id": 'jspsych_sim_stim'
                     }));
                 }
