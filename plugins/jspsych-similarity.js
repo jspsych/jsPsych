@@ -55,13 +55,19 @@
         var sim_trial_complete = false;
 
         plugin.trial = function(display_element, block, trial, part) {
+            
+            // if any trial variables are functions
+            // this evaluates the function and replaces
+            // it with the output of the function
+            trial = jsPsych.normalizeTrialVariables(trial);
+            
             switch (part) {
             case 1:
                 sim_trial_complete = false;
                 // show the images
                 if (!trial.is_html) {
                     display_element.append($('<img>', {
-                        "src": trial.a_path,
+                        "src": normed_trial.a_path,
                         "id": 'jspsych_sim_stim'
                     }));
                 }
