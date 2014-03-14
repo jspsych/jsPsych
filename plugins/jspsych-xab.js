@@ -68,6 +68,12 @@
         var xab_trial_complete = false;
 
         plugin.trial = function(display_element, block, trial, part) {
+            
+            // if any trial variables are functions
+            // this evaluates the function and replaces
+            // it with the output of the function
+            trial = jsPsych.normalizeTrialVariables(trial);
+            
             switch (part) {
 
                 // the first part of the trial is to show the X stimulus.    
