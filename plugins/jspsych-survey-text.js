@@ -36,7 +36,7 @@
                 // create div
                 display_element.append($('<div>', {
                     "id": 'jspsych-survey-text-' + i,
-                    "class": '#jspsych-survey-text-question'
+                    "class": 'jspsych-survey-text-question'
                 }));
 
                 // add question text
