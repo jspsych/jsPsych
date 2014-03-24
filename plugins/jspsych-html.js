@@ -52,6 +52,11 @@ Example Usage:
         };
 
         plugin.trial = function(display_element, block, trial, part) {
+            
+            // if any trial variables are functions
+            // this evaluates the function and replaces
+            // it with the output of the function
+            trial = jsPsych.normalizeTrialVariables(trial);
 
             var url = trial.url;
             if (trial.force_refresh) {

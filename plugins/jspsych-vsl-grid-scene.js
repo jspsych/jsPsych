@@ -49,6 +49,11 @@
         };
 
         plugin.trial = function(display_element, block, trial, part) {
+            
+            // if any trial variables are functions
+            // this evaluates the function and replaces
+            // it with the output of the function
+            trial = jsPsych.normalizeTrialVariables(trial);
 
             display_element.html(plugin.generate_stimulus(trial.stimuli, trial.image_size));
 
