@@ -14,13 +14,16 @@ The wiki contains a [list of all of the available plugins](https://github.com/jo
 and working demos for each one are on the associated wiki page. If you want to get a sense of what jsPsych can do, 
 trying some of the demos is a good place to start.
 
+Contributing
+------------
+
+Contributions to the code are welcome. Please use the [Issue tracker system](https://github.com/jodeleeuw/jsPsych/issues) to report bugs or discuss suggestions for new features and improvements. If you would like to contribute code, [submit a Pull request](https://help.github.com/articles/using-pull-requests).
+
 
 Contact
 -------
 
 jsPsych was created by Josh de Leeuw ([@jodeleeu](https://github.com/jodeleeuw)) at Indiana University.
-
-email: jodeleeu@indiana.edu
 
 Citation
 --------
