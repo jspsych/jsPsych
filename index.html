@@ -28,38 +28,54 @@
         
       </header>
       <section>
-        <h3>What is jsPsych?</h3>
         <p>
-          jsPsych is a JavaScript based library for creating and running behavioral experiments in a web browser.
-          It defines a formal structure for assembling experiments using a variety of plugins, making it easy to
-          create a new experiment with only a handful of lines of JavaScript. Experienced programmers will be able
-          to add new plugins to define new building blocks forexperiments. With the increasing power of web
-          technology and the flexibility of jsPsych, virtually any kind of behavioral experiment is possible.
+        jsPsych is a JavaScript library for creating and running behavioral experiments in a web browser. 
+        jsPsych simplifies the process of coding browser-based experiments by providing a set of flexibile 
+        plugins that define different kinds of tasks a subject could complete during an experiment. By 
+        assembling different plugins together and customizing the parameters of each, it is possible to 
+        create many different types of experiments.
         </p>
-        <h3>How does it work?</h3>
+
         <p>
-          The basic formula for using jsPsych is to define the structure of the experiment using a few lines of 
-          JavaScript and then tell jsPsych to run the experiment. The description of the experiment is generated
-          by assembling different plugins together. Each plugin defines a different kind of behavioral task that
-          a subject can complete, like responding to a stimulus by pressing a key, reading instructions, or answering
-          a survey question.
+        If creating your experiment is not possible with the current set of jsPsych plugins, consider 
+        <a href="https://github.com/jodeleeuw/jsPsych/wiki/Create-a-Plugin">writing a new plugin</a>. The core jsPsych 
+        library provides a framework for constructing experiments by managing the presentation of trials and 
+        recording data. It may be faster to develop a jsPsych compatible plugin than writing an experiment 
+        from scratch. You will also be able to take advantage of all of the other jsPsych plugins for basic 
+        tasks like displaying instructions.
         </p>
-        <h3>What plugins are available?</h3>
-        <p>
-          The project wiki contains <a href="https://github.com/jodeleeuw/jsPsych/wiki/List-of-Plugins">a list of 
-          included plugins</a>. Documentation for each plugin is available from that list.
-        </p>
-        <h3>What if the plugin I need isn't available?</h3>
-        <p>
-          You can create your own plugin. The formal structure of a plugin is very flexible, making it possible
-          to create a plugin that describes almost any kind of task you can imagine. If you create a plugin that
-          would be useful for other people, consider adding it to jsPsych!
-        </p>
-        <h3>Support or Contact</h3>
-        <p>
-          jsPsych was created by Josh de Leeuw (<a href="https://github.com/jodeleeuw" class="user-mention">@jodeleeuw</a>) at Indiana University.
-          You can email jodeleeu@indiana.edu with any questions about how to use jsPsych.
-        </p>
+
+        <h3>Start using jsPsych</h3>
+
+        <p>There are three ways to start exploring jsPsych.</p>
+        <ol>
+          <li>Follow the <a href="https://github.com/jodeleeuw/jsPsych/wiki/Quickstart">quickstart guide</a> 
+          to get a working jsPsych-ready repository to edit in under 2 minutes.</li>
+          <li>Work through the <a href="https://github.com/jodeleeuw/jsPsych/wiki/Getting-started">in-depth 
+          tutorial</a> to gain an understanding of how jsPsych works.</li>
+          <li>Try out the <a href="https://github.com/jodeleeuw/jsPsych/wiki/List-of-Plugins">live demos of 
+          each jsPsych plugin</a>.</li>
+        </ol>
+        
+        <h3>Documentation</h3>
+
+        <p>Documentation is available in the <a href="https://github.com/jodeleeuw/jsPsych/wiki">GitHub wiki</a>.</p>
+
+        <h3>Contributing</h3>
+
+        <p>Contributions to the code are welcome. Please use the <a href="https://github.com/jodeleeuw/jsPsych/issues">
+        issue tracker system</a> to report bugs or discuss suggestions for new features and improvements. If you 
+        would like to contribute code, <a href="https://help.github.com/articles/using-pull-requests">submit a 
+        Pull request</a>.</p>
+
+
+        <h3>Citation</h3>
+
+        <p>If you use this library in academic work, please cite the 
+        <a href="http://link.springer.com/article/10.3758%2Fs13428-014-0458-y">paper that describes jsPsych</a></p>
+
+        <p>de Leeuw, J.R. (2014). jsPsych: A JavaScript library for creating behavioral experiments in a 
+        Web browser. <em>Behavior Research Methods</em>. Advance online publication. doi:10.3758/s13428-014-0458-y</p>
         
       </section>
       <footer>
