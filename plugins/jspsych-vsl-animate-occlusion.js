@@ -39,7 +39,7 @@
             trials[0].image_size = params.image_size || [100, 100];
             trials[0].initial_direction = params.initial_direction || "left";
             trials[0].occlude_center = (typeof params.occlude_center === 'undefined') ? true : params.occlude_center;
-            trials[0].choices = params.choices || [32]; // spacebar
+            trials[0].choices = params.choices || []; // spacebar
             // timing
             trials[0].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
             trials[0].timing_pre_movement = (typeof params.timing_pre_movement === 'undefined') ? 500 : params.timing_pre_movement;
