@@ -56,7 +56,7 @@ Example Usage:
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            // trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.normalizeTrialVariables(trial, ["check_fn"]);
 
             var url = trial.url;
             if (trial.force_refresh) {
