@@ -227,17 +227,31 @@
             
         };
         
-        core.normalizeTrialVariables = function(trial){
+        core.normalizeTrialVariables = function(trial, protect){
+            
+            protect = (typeof protect === 'undefined') ? [] : protect;
             
             var keys = getKeys(trial);
             
-            tmp = {};
+            var tmp = {};
             for(var i=0; i<keys.length; i++){
-                if(typeof trial[keys[i]] == "function"){
-                    tmp[keys[i]] = trial[keys[i]].call();
-                } else {
-                    tmp[keys[i]] = trial[keys[i]];
+                
+                var process = true;
+                for(var j = 0; j < protect.length; j++){
+                    if(protect[j] == keys[i]){
+                        process = false;
+                        break;
+                    }
                 }
+                
+                if(process){
+                    if(typeof trial[keys[i]] == "function"){
+                        tmp[keys[i]] = trial[keys[i]].call();
+                    } else {
+                        tmp[keys[i]] = trial[keys[i]];
+                    }
+                }
+                
             }
             
             return tmp;
