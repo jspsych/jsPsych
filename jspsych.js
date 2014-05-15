@@ -244,12 +244,10 @@
                     }
                 }
                 
-                if(process){
-                    if(typeof trial[keys[i]] == "function"){
-                        tmp[keys[i]] = trial[keys[i]].call();
-                    } else {
-                        tmp[keys[i]] = trial[keys[i]];
-                    }
+                if(typeof trial[keys[i]] == "function" && process){
+                    tmp[keys[i]] = trial[keys[i]].call();
+                } else {
+                    tmp[keys[i]] = trial[keys[i]];
                 }
                 
             }
