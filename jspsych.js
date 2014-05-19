@@ -264,7 +264,7 @@
         
         // if possible_array is not an array, then return a one-element array
         // containing possible_array
-        core.enforceArray = function(possible_array) {
+        core.enforceArray = function(params, possible_arrays) {
             
             // function to check if something is an array, fallback
             // to string method if browser doesn't support Array.isArray
@@ -272,11 +272,11 @@
                 return toString.call(a) == '[object Array]';
             }
             
-            if(ckArray(possible_array)){
-                return(possible_array);
-            } else {
-                return([possible_array]);
+            for(var i=0; i<possible_arrays.length; i++){
+                params[possible_arrays[i]] = ckArray(params[possible_arrays[i]]) ? params[possible_arrays[i]] : [params[possible_arrays[i]]];
             }
+            
+            return params;
         } 
 
         //
