@@ -161,11 +161,15 @@
         //                  argument is the number of images currently loaded.
 
         core.preloadImages = function(images, callback_complete, callback_load){
-          var n_loaded = 0;
-          var loadfn = (typeof callback_load === 'undefined') ? function(){} : callback_load;
-          var finishfn = (typeof callback_complete === 'undefined') ? function(){} : callback_complete;
+            
+            // flatten the images array
+            images = flatten(images);
+            
+            var n_loaded = 0;
+            var loadfn = (typeof callback_load === 'undefined') ? function(){} : callback_load;
+            var finishfn = (typeof callback_complete === 'undefined') ? function(){} : callback_complete;
           
-          for(var i=0;i<images.length;i++){
+            for(var i=0;i<images.length;i++){
               var img = new Image();
               
               img.onload = function(){
@@ -177,7 +181,7 @@
               };
               
               img.src = images[i];
-          }
+            }
         };
         
         // core.turkInfo gets information relevant to mechanical turk experiments. returns an object
@@ -223,22 +227,35 @@
             
         };
         
+
         //
         // These are public functions, intended to be used for developing plugins.
         // They aren't considered part of the normal API for the core library.
         //
-        
-        core.normalizeTrialVariables = function(trial){
+
+        core.normalizeTrialVariables = function(trial, protect){
+            
+            protect = (typeof protect === 'undefined') ? [] : protect;
             
             var keys = getKeys(trial);
             
-            tmp = {};
+            var tmp = {};
             for(var i=0; i<keys.length; i++){
-                if(typeof trial[keys[i]] == "function"){
+                
+                var process = true;
+                for(var j = 0; j < protect.length; j++){
+                    if(protect[j] == keys[i]){
+                        process = false;
+                        break;
+                    }
+                }
+                
+                if(typeof trial[keys[i]] == "function" && process){
                     tmp[keys[i]] = trial[keys[i]].call();
                 } else {
                     tmp[keys[i]] = trial[keys[i]];
                 }
+                
             }
             
             return tmp;
@@ -438,6 +455,19 @@
                 r.push(k);
             }
             return r;
+        }
+        
+        // private function to flatten nested arrays
+        function flatten(arr, out) {
+            out = (typeof out === 'undefined') ? [] : out;
+            for (var i = 0; i < arr.length; i++) {
+                if (Array.isArray(arr[i])) {
+                    flatten(arr[i], out);
+                } else {
+                    out.push(arr[i]);
+                }
+            }
+            return out;
         }
 
         return core;
