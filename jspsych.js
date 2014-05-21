@@ -227,6 +227,12 @@
             
         };
         
+
+        //
+        // These are public functions, intended to be used for developing plugins.
+        // They aren't considered part of the normal API for the core library.
+        //
+
         core.normalizeTrialVariables = function(trial, protect){
             
             protect = (typeof protect === 'undefined') ? [] : protect;
@@ -255,6 +261,23 @@
             return tmp;
             
         }
+        
+        // if possible_array is not an array, then return a one-element array
+        // containing possible_array
+        core.enforceArray = function(params, possible_arrays) {
+            
+            // function to check if something is an array, fallback
+            // to string method if browser doesn't support Array.isArray
+            var ckArray = Array.isArray || function(a) {
+                return toString.call(a) == '[object Array]';
+            }
+            
+            for(var i=0; i<possible_arrays.length; i++){
+                params[possible_arrays[i]] = ckArray(params[possible_arrays[i]]) ? params[possible_arrays[i]] : [params[possible_arrays[i]]];
+            }
+            
+            return params;
+        } 
 
         //
         // private functions //
