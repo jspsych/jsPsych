@@ -21,11 +21,16 @@
     <script type="text/javascript">
         // declare variable to hold instructions
         var instructions_part_1 = '<div id="instructions"><p>The first part of the instructions. Any HTML code can be used here.</p><p>Press ENTER to continue.</p></div>';
-        var instructions_part_2 = '<div id="instructions"><p>Variables can also be put in the text, like this: %v</p><p>Press ENTER to continue.</p></div>';
-        
-        // this is a simple function, but any function can be used to put a variable into
-        // the text block as long as it returns a string.
-        var variable_function = function(){ return "This is a variable."; };
+		
+		// you can also use a function that returns a string as the text parameter.
+		// the advantage of this is that the function is evaluated when the text is
+		// displayed, so you can show information that depends on things that 
+		// have happened in the experiment already.
+        var instructions_part_2 = function() {
+			var d = new Date();
+			var n = d.toTimeString();
+			return '<div id="instructions"><p>Variables can also be put in the text.</p><p>The current time is '+n+'</p><p>Press ENTER to continue.</p></div>';
+        }
         
         // create the text block
         var text_block = {type:'text', text: [instructions_part_1,instructions_part_2], variables:[[],[variable_function]]};
