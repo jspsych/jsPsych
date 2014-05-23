@@ -83,12 +83,19 @@
 
         // core.data returns all of the data objects for each block as an array
         //      where core.data[0] = data object from block 0, etc...
+        // if flatten is true, then the hierarchical structure of the data
+        // is removed and each array entry will be a single trial.
 
-        core.data = function() {
+        core.data = function(flatten) {
             var all_data = [];
             for (var i = 0; i < exp_blocks.length; i++) {
                 all_data[i] = exp_blocks[i].data;
             }
+            
+            if(flatten===true){
+                all_data = flattenData(all_data);
+            }
+            
             return all_data;
         };
 
@@ -154,11 +161,15 @@
         //                  argument is the number of images currently loaded.
 
         core.preloadImages = function(images, callback_complete, callback_load){
-          var n_loaded = 0;
-          var loadfn = (typeof callback_load === 'undefined') ? function(){} : callback_load;
-          var finishfn = (typeof callback_complete === 'undefined') ? function(){} : callback_complete;
+            
+            // flatten the images array
+            images = flatten(images);
+            
+            var n_loaded = 0;
+            var loadfn = (typeof callback_load === 'undefined') ? function(){} : callback_load;
+            var finishfn = (typeof callback_complete === 'undefined') ? function(){} : callback_complete;
           
-          for(var i=0;i<images.length;i++){
+            for(var i=0;i<images.length;i++){
               var img = new Image();
               
               img.onload = function(){
@@ -170,7 +181,7 @@
               };
               
               img.src = images[i];
-          }
+            }
         };
         
         // core.turkInfo gets information relevant to mechanical turk experiments. returns an object
@@ -215,6 +226,58 @@
             }
             
         };
+        
+
+        //
+        // These are public functions, intended to be used for developing plugins.
+        // They aren't considered part of the normal API for the core library.
+        //
+
+        core.normalizeTrialVariables = function(trial, protect){
+            
+            protect = (typeof protect === 'undefined') ? [] : protect;
+            
+            var keys = getKeys(trial);
+            
+            var tmp = {};
+            for(var i=0; i<keys.length; i++){
+                
+                var process = true;
+                for(var j = 0; j < protect.length; j++){
+                    if(protect[j] == keys[i]){
+                        process = false;
+                        break;
+                    }
+                }
+                
+                if(typeof trial[keys[i]] == "function" && process){
+                    tmp[keys[i]] = trial[keys[i]].call();
+                } else {
+                    tmp[keys[i]] = trial[keys[i]];
+                }
+                
+            }
+            
+            return tmp;
+            
+        }
+        
+        // if possible_array is not an array, then return a one-element array
+        // containing possible_array
+        core.enforceArray = function(params, possible_arrays) {
+            
+            // function to check if something is an array, fallback
+            // to string method if browser doesn't support Array.isArray
+            var ckArray = Array.isArray || function(a) {
+                return toString.call(a) == '[object Array]';
+            }
+            
+            for(var i=0; i<possible_arrays.length; i++){
+                params[possible_arrays[i]] = ckArray(params[possible_arrays[i]]) ? params[possible_arrays[i]] : [params[possible_arrays[i]]];
+            }
+            
+            return params;
+        } 
 
         //
         // private functions //
@@ -382,6 +445,29 @@
                 html: 'download file'
             }));
             $('#jspsych-download-as-text-link')[0].click();
+        }
+        
+        function getKeys(obj) {
+            var r = [];
+            for (var k in obj) {
+                if (!obj.hasOwnProperty(k)) 
+                    continue;
+                r.push(k);
+            }
+            return r;
+        }
+        
+        // private function to flatten nested arrays
+        function flatten(arr, out) {
+            out = (typeof out === 'undefined') ? [] : out;
+            for (var i = 0; i < arr.length; i++) {
+                if (Array.isArray(arr[i])) {
+                    flatten(arr[i], out);
+                } else {
+                    out.push(arr[i]);
+                }
+            }
+            return out;
         }
 
         return core;

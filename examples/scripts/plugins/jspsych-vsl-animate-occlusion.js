@@ -39,6 +39,8 @@
             trials[0].image_size = params.image_size || [100, 100];
             trials[0].initial_direction = params.initial_direction || "left";
             trials[0].occlude_center = (typeof params.occlude_center === 'undefined') ? true : params.occlude_center;
+            trials[0].choices = params.choices || []; // spacebar
+            // timing
             trials[0].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
             trials[0].timing_pre_movement = (typeof params.timing_pre_movement === 'undefined') ? 500 : params.timing_pre_movement;
             //trials[0].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
@@ -48,6 +50,15 @@
         };
 
         plugin.trial = function(display_element, block, trial, part) {
+            
+            // if any trial variables are functions
+            // this evaluates the function and replaces
+            // it with the output of the function
+            //trial = jsPsych.normalizeTrialVariables(trial);
+            
+            // variable to keep track of timing info and responses
+            var start_time = 0;
+            var responses = [];
 
             var directions = [
                 [{
@@ -99,6 +110,8 @@
                         src: i
                     });
                     
+                    // start timer for this trial
+                    start_time = (new Date()).getTime();
                 }
             }
             
@@ -118,6 +131,20 @@
                     fill: "#000"
                 });
             }
+            
+            // add key listener
+            var resp_func = function(e){
+                for(var i=0; i<trial.choices.length; i++){
+                    if(e.which == trial.choices[i]){
+                        responses.push({
+                            key: e.which,
+                            stimulus: which_image - 1,
+                            rt: (new Date()).getTime() - start_time
+                        });
+                    }
+                }
+            };
+            $(document).keydown(resp_func);
 
             if (trial.timing_pre_movement > 0) {
                 setTimeout(function() {
@@ -132,10 +159,13 @@
                 
                 display_element.html('');
                 
+                $(document).unbind('keydown', resp_func);
+                
                 block.writeData($.extend({}, {
                     "trial_type": "vsl-animate-occlusion",
                     "trial_index": block.trial_idx,
-                    "stimuli": JSON.stringify(trial.stims)
+                    "stimuli": JSON.stringify(trial.stims),
+                    "responses": JSON.stringify(responses)
                 }, trial.data));
 
                 if (trial.timing_post_trial > 0) {
