@@ -75,8 +75,12 @@
 
             // import options
             opts = $.extend({}, defaults, options);
+            
             // set target
             DOM_target = opts.display_element;
+            
+            // add CSS class to DOM_target
+            DOM_target.addClass('jspsych-display-element');
 
             run();
         };
