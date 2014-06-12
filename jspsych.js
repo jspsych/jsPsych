@@ -156,6 +156,12 @@
         core.startTime = function() {
             return exp_start_time;
         };
+        
+        // core.totalTime() returns the length of time in ms since the experiment began
+        
+        core.totalTime = function() {
+            return (new Date()).getTime() - exp_start_time.getTime();
+        }
 
         // core.preloadImage will load images into the browser cache so that they appear quickly when
         // used during a trial. 
