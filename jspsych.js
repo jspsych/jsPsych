@@ -219,7 +219,7 @@
 
                 var src = param(window.location.href, "assignmentId") ? window.location.href : document.referrer;
             
-                var keys = ["assignmentId","hitId","workerId"];
+                var keys = ["assignmentId","hitId","workerId", "turkSubmitTo"];
                 keys.map(
                     function(key) {
                         turk[key] = unescape(param(src, key));
@@ -236,6 +236,34 @@
             }
             
         };
+        
+        // core.submitToTurk will submit a MechanicalTurk ExternalHIT type
+        
+        core.submitToTurk = function(data){
+            
+            var turkInfo = core.turkInfo;
+            
+            var assignmentId = turkInfo.assignmentId;
+            
+		    var turkSubmitTo = turkInfo.turkSubmitTo;
+
+		    if (!assignmentId || !turkSubmitTo) return;
+
+		    var dataString = [];
+
+		    for(var key in data) {
+			
+    			if (data.hasOwnProperty(key)) {
+    				dataString.push(key+"="+escape(data[key]));
+    			}
+    		}
+		
+		    dataString.push("assignmentId="+assignmentId);
+
+		    var url = turkSubmitTo + "/mturk/externalSubmit?" + dataString.join("&");
+		       
+		    window.location.href = url;
+        }
         
 
         //
