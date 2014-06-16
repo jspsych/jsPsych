@@ -240,29 +240,27 @@
         // core.submitToTurk will submit a MechanicalTurk ExternalHIT type
         
         core.submitToTurk = function(data){
-            
-            var turkInfo = core.turkInfo;
-            
-            var assignmentId = turkInfo.assignmentId;
-            
-		    var turkSubmitTo = turkInfo.turkSubmitTo;
+        	
+        	var turkInfo = core.turkInfo();
+        	var assignmentId = turkInfo.assignmentId;
+           	var turkSubmitTo = turkInfo.turkSubmitTo;
 
-		    if (!assignmentId || !turkSubmitTo) return;
+		if (!assignmentId || !turkSubmitTo) return;
 
-		    var dataString = [];
+		var dataString = [];
 
-		    for(var key in data) {
+		for(var key in data) {
 			
     			if (data.hasOwnProperty(key)) {
     				dataString.push(key+"="+escape(data[key]));
     			}
     		}
 		
-		    dataString.push("assignmentId="+assignmentId);
+		dataString.push("assignmentId="+assignmentId);
 
-		    var url = turkSubmitTo + "/mturk/externalSubmit?" + dataString.join("&");
+		var url = turkSubmitTo + "/mturk/externalSubmit?" + dataString.join("&");
 		       
-		    window.location.href = url;
+		window.location.href = url;
         }
         
 
