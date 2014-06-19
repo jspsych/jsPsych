@@ -143,7 +143,7 @@
                             "stimulus_2": trial.b_path,
                             "key_press": e.which
                         };
-                        block.data[block.trial_idx] = $.extend({}, trial_data, trial.data);
+                        block.writeData($.extend({}, trial_data, trial.data));
                         $(document).unbind('keydown', resp_func);
 
                         display_element.html('');
