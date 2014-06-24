@@ -60,11 +60,6 @@
 
             var trial_complete = false;
 
-            var startTime = (new Date()).getTime();
-            var endTime = -1;
-
-            var key_press = -1;
-
             if (!trial.is_html) {
                 display_element.append($('<img>', {
                     src: trial.a_path,
@@ -83,23 +78,20 @@
                 display_element.append(trial.prompt);
             }
 
-            var cont_function = function() {
-                var rt = -1;
-                if (endTime != -1) {
-                    rt = (endTime - startTime);
-                }
+            var end_trial = function(info) {
+                
                 trial_complete = true;
 
                 var trial_data = {
                     "trial_type": "single-stim",
                     "trial_index": block.trial_idx,
-                    "rt": rt,
+                    "rt": info.rt,
                     "stimulus": trial.a_path,
-                    "key_press": key_press
+                    "key_press": info.key
                 };
 
                 block.writeData($.extend({}, trial_data, trial.data));
-                $(document).unbind('keydown', resp_func);
+                
                 display_element.html('');
                 if (trial.timing_post_trial > 0) {
                     setTimeout(function() {
@@ -111,20 +103,8 @@
                 }
             };
 
-            var resp_func = function(e) {
-                var flag = false;
-                // check if the key is any of the options, or if it is an accidental keystroke
-                for (var i = 0; i < trial.choices.length; i++) {
-                    if (e.which == trial.choices[i]) {
-                        flag = true;
-                    }
-                }
-                if (flag) {
-                    key_press = e.which;
-
-                    // record rt
-                    endTime = (new Date()).getTime();
-
+            var after_response = function(info) {
+                
                     // after a valid response, the stimulus will have the CSS class 'responded'
                     // which can be used to provide visual feedback that a response was recorded
                     $("#jspsych-single-stim-stimulus").addClass('responded');
@@ -133,13 +113,13 @@
                         // response triggers the next trial in this case.
                         // if hide_image_after_response is true, then next
                         // trial should be triggered by timeout function below.
-                        cont_function();
+                        end_trial(info);
                     }
                 }
             };
 
-            $(document).keydown(resp_func);
-
+            jsPsych.getKeyboardResponse(after_response, trial.choices);
+            
             // hide image if timing is set
             if (trial.timing_stim > 0) {
                 setTimeout(function() {
@@ -153,7 +133,7 @@
             if (trial.timing_response > 0) {
                 setTimeout(function() {
                     if (!trial_complete) {
-                        cont_function();
+                        end_trial({rt: -1, key: -1});
                     }
                 }, trial.timing_response);
             }
