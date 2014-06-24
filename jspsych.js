@@ -324,7 +324,14 @@
 
             // iterate through block list to create trials
             for (var i = 0; i < exp_blocks.length; i++) {
-                var trials = jsPsych[opts["experiment_structure"][i]["type"]]["create"].call(null, opts["experiment_structure"][i]);
+            	
+            	// check to make sure plugin is loaded
+            	var plugin_name = experiment_structure[i].type;
+            	if(typeof jsPsych[plugin_name] == 'undefined'){
+            		throw new Error("Failed attempt to create trials using plugin type "+plugin_name+". Is the plugin loaded?");
+            	}
+            	
+                var trials = jsPsych[plugin_name]["create"].call(null, opts["experiment_structure"][i]);
 
                 exp_blocks[i] = createBlock(trials);
             }
