@@ -314,6 +314,43 @@
             
             return params;
         } 
+        
+        core.getKeyboardResponse = function(callback_function, valid_responses, rt_method){
+        	
+        	rt_method = (typeof rt_method === 'undefined') ? 'date' : rt_method;
+        	if(rt_method != 'date' || rt_method != 'performance') {
+        		console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
+        		rt_method = 'date';
+        	}
+        	
+        	var start_time;
+        	if(rt_method == 'date') { start_time = (new Date()).getTime(); }
+        	if(rt_method == 'performance') { start_time = performance.now(); }
+        	
+        	var listener_function = function(e){
+        		
+        		var key_time;
+        		if(rt_method == 'date') { key_time = (new Date()).getTime(); }
+        		if(rt_method == 'performance') { key_time = performance.now(); }
+        		
+        		var valid_response = false;
+        		if(typeof valid_responses === 'undefined' || valid_responses.length === 0){
+        			valid_response = true;
+        		}
+        		for(var i = 0; i<valid_responses.length; i++){
+        			if(e.which == valid_responses[i]){
+        				valid_response = true;
+        			}
+        		}
+        		
+        		if(valid_response){
+        			$(document).unbind('keydown', listener_function);
+        			callback_function({key: e.which, rt: key_time - start_time});
+        		}
+        	}
+        	
+        	$(document).keydown(listener_function);
+        }
 
         //
         // private functions //
