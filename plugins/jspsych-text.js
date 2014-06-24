@@ -70,17 +70,17 @@
                 display_element.click(mouse_listener);
                 var start_time = (new Date()).getTime();
             } else {
-                core.getKeyboardResponse(after_key_response, trial.cont_key);
+                jsPsych.getKeyboardResponse(after_response, trial.cont_key);
             }
 
-            function save_data(rt, key) {
+            function save_data(key, rt) {
                 block.writeData($.extend({}, {
                     "trial_type": "text",
                     "trial_index": block.trial_idx,
                     "rt": rt,
-                    "key_press", key
+                    "key_press": key
                 }, trial.data));
-            };
+            }
         };
 
         return plugin;
