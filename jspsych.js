@@ -75,10 +75,10 @@
 
             // import options
             opts = $.extend({}, defaults, options);
-            
+
             // set target
             DOM_target = opts.display_element;
-            
+
             // add CSS class to DOM_target
             DOM_target.addClass('jspsych-display-element');
 
@@ -95,11 +95,11 @@
             for (var i = 0; i < exp_blocks.length; i++) {
                 all_data[i] = exp_blocks[i].data;
             }
-            
-            if(flatten===true){
+
+            if (flatten === true) {
                 all_data = flattenData(all_data);
             }
-            
+
             return all_data;
         };
 
@@ -156,12 +156,12 @@
         core.startTime = function() {
             return exp_start_time;
         };
-        
+
         // core.totalTime() returns the length of time in ms since the experiment began
-        
+
         core.totalTime = function() {
             return (new Date()).getTime() - exp_start_time.getTime();
-        }
+        };
 
         // core.preloadImage will load images into the browser cache so that they appear quickly when
         // used during a trial. 
@@ -170,187 +170,199 @@
         //  callback_load: a function with a single argument that calls whenever an image is loaded
         //                  argument is the number of images currently loaded.
 
-        core.preloadImages = function(images, callback_complete, callback_load){
-            
+        core.preloadImages = function(images, callback_complete, callback_load) {
+
             // flatten the images array
             images = flatten(images);
-            
+
             var n_loaded = 0;
-            var loadfn = (typeof callback_load === 'undefined') ? function(){} : callback_load;
-            var finishfn = (typeof callback_complete === 'undefined') ? function(){} : callback_complete;
-          
-            for(var i=0;i<images.length;i++){
-              var img = new Image();
-              
-              img.onload = function(){
-                n_loaded++;
-                loadfn(n_loaded);
-                if(n_loaded == images.length){
-                    finishfn();
-                }
-              };
-              
-              img.src = images[i];
+            var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
+            var finishfn = (typeof callback_complete === 'undefined') ? function() {} : callback_complete;
+
+            for (var i = 0; i < images.length; i++) {
+                var img = new Image();
+
+                img.onload = function() {
+                    n_loaded++;
+                    loadfn(n_loaded);
+                    if (n_loaded == images.length) {
+                        finishfn();
+                    }
+                };
+
+                img.src = images[i];
             }
         };
-        
+
         // core.turkInfo gets information relevant to mechanical turk experiments. returns an object
         // containing the workerID, assignmentID, and hitID, and whether or not the HIT is in
         // preview mode, meaning that they haven't accepted the HIT yet.
-        core.turkInfo = function(force_refresh)
-        {
+        core.turkInfo = function(force_refresh) {
             // default value is false
             force_refresh = (typeof force_refresh === 'undefined') ? false : force_refresh;
             // if we already have the turk_info and force_refresh is false
             // then just return the cached version.
-            if(typeof turk_info !== 'undefined' && !force_refresh) {
+            if (typeof turk_info !== 'undefined' && !force_refresh) {
                 return turk_info;
-            } else {
-                
+            }
+            else {
+
                 var turk = {};
 
-                var param = function(url, name ) {
-                  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-                  var regexS = "[\\?&]"+name+"=([^&#]*)";
-                  var regex = new RegExp( regexS );
-                  var results = regex.exec( url );
-                  return ( results == null ) ? "" : results[1];
+                var param = function(url, name) {
+                    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+                    var regexS = "[\\?&]" + name + "=([^&#]*)";
+                    var regex = new RegExp(regexS);
+                    var results = regex.exec(url);
+                    return (results == null) ? "" : results[1];
                 };
 
                 var src = param(window.location.href, "assignmentId") ? window.location.href : document.referrer;
-            
-                var keys = ["assignmentId","hitId","workerId", "turkSubmitTo"];
+
+                var keys = ["assignmentId", "hitId", "workerId", "turkSubmitTo"];
                 keys.map(
-                    function(key) {
-                        turk[key] = unescape(param(src, key));
-                    }
-                );
-            
+
+                function(key) {
+                    turk[key] = unescape(param(src, key));
+                });
+
                 turk.previewMode = (turk.assignmentId == "ASSIGNMENT_ID_NOT_AVAILABLE");
-                
+
                 turk.outsideTurk = (!turk.previewMode && turk.hitId === "" && turk.assignmentId == "" && turk.workerId == "")
 
                 turk_info = turk;
-                
+
                 return turk;
             }
-            
+
         };
-        
+
         // core.submitToTurk will submit a MechanicalTurk ExternalHIT type
-        
-        core.submitToTurk = function(data){
-        	
-        	var turkInfo = core.turkInfo();
-        	var assignmentId = turkInfo.assignmentId;
-           	var turkSubmitTo = turkInfo.turkSubmitTo;
 
-		if (!assignmentId || !turkSubmitTo) return;
+        core.submitToTurk = function(data) {
 
-		var dataString = [];
+            var turkInfo = core.turkInfo();
+            var assignmentId = turkInfo.assignmentId;
+            var turkSubmitTo = turkInfo.turkSubmitTo;
 
-		for(var key in data) {
-			
-    			if (data.hasOwnProperty(key)) {
-    				dataString.push(key+"="+escape(data[key]));
-    			}
-    		}
-		
-		dataString.push("assignmentId="+assignmentId);
+            if (!assignmentId || !turkSubmitTo) return;
 
-		var url = turkSubmitTo + "/mturk/externalSubmit?" + dataString.join("&");
-		       
-		window.location.href = url;
+            var dataString = [];
+
+            for (var key in data) {
+
+                if (data.hasOwnProperty(key)) {
+                    dataString.push(key + "=" + escape(data[key]));
+                }
+            }
+
+            dataString.push("assignmentId=" + assignmentId);
+
+            var url = turkSubmitTo + "/mturk/externalSubmit?" + dataString.join("&");
+
+            window.location.href = url;
         }
-        
+
 
         //
         // These are public functions, intended to be used for developing plugins.
         // They aren't considered part of the normal API for the core library.
         //
 
-        core.normalizeTrialVariables = function(trial, protect){
-            
+        core.normalizeTrialVariables = function(trial, protect) {
+
             protect = (typeof protect === 'undefined') ? [] : protect;
-            
+
             var keys = getKeys(trial);
-            
+
             var tmp = {};
-            for(var i=0; i<keys.length; i++){
-                
+            for (var i = 0; i < keys.length; i++) {
+
                 var process = true;
-                for(var j = 0; j < protect.length; j++){
-                    if(protect[j] == keys[i]){
+                for (var j = 0; j < protect.length; j++) {
+                    if (protect[j] == keys[i]) {
                         process = false;
                         break;
                     }
                 }
-                
-                if(typeof trial[keys[i]] == "function" && process){
+
+                if (typeof trial[keys[i]] == "function" && process) {
                     tmp[keys[i]] = trial[keys[i]].call();
-                } else {
+                }
+                else {
                     tmp[keys[i]] = trial[keys[i]];
                 }
-                
+
             }
-            
+
             return tmp;
-            
-        }
-        
+
+        };
+
         // if possible_array is not an array, then return a one-element array
         // containing possible_array
         core.enforceArray = function(params, possible_arrays) {
-            
+
             // function to check if something is an array, fallback
             // to string method if browser doesn't support Array.isArray
             var ckArray = Array.isArray || function(a) {
-                return toString.call(a) == '[object Array]';
-            }
-            
-            for(var i=0; i<possible_arrays.length; i++){
+                    return toString.call(a) == '[object Array]';
+                };
+
+            for (var i = 0; i < possible_arrays.length; i++) {
                 params[possible_arrays[i]] = ckArray(params[possible_arrays[i]]) ? params[possible_arrays[i]] : [params[possible_arrays[i]]];
             }
-            
+
             return params;
-        } 
-        
-        core.getKeyboardResponse = function(callback_function, valid_responses, rt_method){
-        	
-        	rt_method = (typeof rt_method === 'undefined') ? 'date' : rt_method;
-        	if(rt_method != 'date' && rt_method != 'performance') {
-        		console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
-        		rt_method = 'date';
-        	}
-        	
-        	var start_time;
-        	if(rt_method == 'date') { start_time = (new Date()).getTime(); }
-        	if(rt_method == 'performance') { start_time = performance.now(); }
-        	
-        	var listener_function = function(e){
-        		
-        		var key_time;
-        		if(rt_method == 'date') { key_time = (new Date()).getTime(); }
-        		if(rt_method == 'performance') { key_time = performance.now(); }
-        		
-        		var valid_response = false;
-        		if(typeof valid_responses === 'undefined' || valid_responses.length === 0){
-        			valid_response = true;
-        		}
-        		for(var i = 0; i<valid_responses.length; i++){
-        			if(e.which == valid_responses[i]){
-        				valid_response = true;
-        			}
-        		}
-        		
-        		if(valid_response){
-        			$(document).unbind('keydown', listener_function);
-        			callback_function({key: e.which, rt: key_time - start_time});
-        		}
-        	}
-        	
-        	$(document).keydown(listener_function);
-        }
+        };
+
+        core.getKeyboardResponse = function(callback_function, valid_responses, rt_method) {
+
+            rt_method = (typeof rt_method === 'undefined') ? 'date' : rt_method;
+            if (rt_method != 'date' && rt_method != 'performance') {
+                console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
+                rt_method = 'date';
+            }
+
+            var start_time;
+            if (rt_method == 'date') {
+                start_time = (new Date()).getTime();
+            }
+            if (rt_method == 'performance') {
+                start_time = performance.now();
+            }
+
+            var listener_function = function(e) {
+
+                var key_time;
+                if (rt_method == 'date') {
+                    key_time = (new Date()).getTime();
+                }
+                if (rt_method == 'performance') {
+                    key_time = performance.now();
+                }
+
+                var valid_response = false;
+                if (typeof valid_responses === 'undefined' || valid_responses.length === 0) {
+                    valid_response = true;
+                }
+                for (var i = 0; i < valid_responses.length; i++) {
+                    if (e.which == valid_responses[i]) {
+                        valid_response = true;
+                    }
+                }
+
+                if (valid_response) {
+                    $(document).unbind('keydown', listener_function);
+                    callback_function({
+                        key: e.which,
+                        rt: key_time - start_time
+                    });
+                }
+            };
+
+            $(document).keydown(listener_function);
+        };
 
         //
         // private functions //
@@ -361,13 +373,13 @@
 
             // iterate through block list to create trials
             for (var i = 0; i < exp_blocks.length; i++) {
-            	
-            	// check to make sure plugin is loaded
-            	var plugin_name = experiment_structure[i].type;
-            	if(typeof jsPsych[plugin_name] == 'undefined'){
-            		throw new Error("Failed attempt to create trials using plugin type "+plugin_name+". Is the plugin loaded?");
-            	}
-            	
+
+                // check to make sure plugin is loaded
+                var plugin_name = opts.experiment_structure[i].type;
+                if (typeof jsPsych[plugin_name] == 'undefined') {
+                    throw new Error("Failed attempt to create trials using plugin type " + plugin_name + ". Is the plugin loaded?");
+                }
+
                 var trials = jsPsych[plugin_name]["create"].call(null, opts["experiment_structure"][i]);
 
                 exp_blocks[i] = createBlock(trials);
@@ -478,7 +490,7 @@
                 for (var key in array[j]) {
                     var keyString = key + "";
                     keyString = '"' + keyString.replace(/"/g, '""') + '",';
-                    if ($.inArray(key,columns) == -1) {
+                    if ($.inArray(key, columns) == -1) {
                         columns[i] = key;
                         line += keyString;
                         i++;
@@ -526,24 +538,24 @@
             }));
             $('#jspsych-download-as-text-link')[0].click();
         }
-        
+
         function getKeys(obj) {
             var r = [];
             for (var k in obj) {
-                if (!obj.hasOwnProperty(k)) 
-                    continue;
+                if (!obj.hasOwnProperty(k)) continue;
                 r.push(k);
             }
             return r;
         }
-        
+
         // private function to flatten nested arrays
         function flatten(arr, out) {
             out = (typeof out === 'undefined') ? [] : out;
             for (var i = 0; i < arr.length; i++) {
                 if (Array.isArray(arr[i])) {
                     flatten(arr[i], out);
-                } else {
+                }
+                else {
                     out.push(arr[i]);
                 }
             }
