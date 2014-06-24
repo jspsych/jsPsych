@@ -318,7 +318,7 @@
         core.getKeyboardResponse = function(callback_function, valid_responses, rt_method){
         	
         	rt_method = (typeof rt_method === 'undefined') ? 'date' : rt_method;
-        	if(rt_method != 'date' || rt_method != 'performance') {
+        	if(rt_method != 'date' && rt_method != 'performance') {
         		console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
         		rt_method = 'date';
         	}
