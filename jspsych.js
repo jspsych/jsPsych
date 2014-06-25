@@ -75,10 +75,10 @@
 
             // import options
             opts = $.extend({}, defaults, options);
-            
+
             // set target
             DOM_target = opts.display_element;
-            
+
             // add CSS class to DOM_target
             DOM_target.addClass('jspsych-display-element');
 
@@ -95,11 +95,11 @@
             for (var i = 0; i < exp_blocks.length; i++) {
                 all_data[i] = exp_blocks[i].data;
             }
-            
-            if(flatten===true){
+
+            if (flatten === true) {
                 all_data = flattenData(all_data);
             }
-            
+
             return all_data;
         };
 
@@ -156,12 +156,12 @@
         core.startTime = function() {
             return exp_start_time;
         };
-        
+
         // core.totalTime() returns the length of time in ms since the experiment began
-        
+
         core.totalTime = function() {
             return (new Date()).getTime() - exp_start_time.getTime();
-        }
+        };
 
         // core.preloadImage will load images into the browser cache so that they appear quickly when
         // used during a trial. 
@@ -170,150 +170,207 @@
         //  callback_load: a function with a single argument that calls whenever an image is loaded
         //                  argument is the number of images currently loaded.
 
-        core.preloadImages = function(images, callback_complete, callback_load){
-            
+        core.preloadImages = function(images, callback_complete, callback_load) {
+
             // flatten the images array
             images = flatten(images);
-            
+
             var n_loaded = 0;
-            var loadfn = (typeof callback_load === 'undefined') ? function(){} : callback_load;
-            var finishfn = (typeof callback_complete === 'undefined') ? function(){} : callback_complete;
-          
-            for(var i=0;i<images.length;i++){
-              var img = new Image();
-              
-              img.onload = function(){
-                n_loaded++;
-                loadfn(n_loaded);
-                if(n_loaded == images.length){
-                    finishfn();
-                }
-              };
-              
-              img.src = images[i];
+            var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
+            var finishfn = (typeof callback_complete === 'undefined') ? function() {} : callback_complete;
+
+            for (var i = 0; i < images.length; i++) {
+                var img = new Image();
+
+                img.onload = function() {
+                    n_loaded++;
+                    loadfn(n_loaded);
+                    if (n_loaded == images.length) {
+                        finishfn();
+                    }
+                };
+
+                img.src = images[i];
             }
         };
-        
+
         // core.turkInfo gets information relevant to mechanical turk experiments. returns an object
         // containing the workerID, assignmentID, and hitID, and whether or not the HIT is in
         // preview mode, meaning that they haven't accepted the HIT yet.
-        core.turkInfo = function(force_refresh)
-        {
+        core.turkInfo = function(force_refresh) {
             // default value is false
             force_refresh = (typeof force_refresh === 'undefined') ? false : force_refresh;
             // if we already have the turk_info and force_refresh is false
             // then just return the cached version.
-            if(typeof turk_info !== 'undefined' && !force_refresh) {
+            if (typeof turk_info !== 'undefined' && !force_refresh) {
                 return turk_info;
-            } else {
-                
+            }
+            else {
+
                 var turk = {};
 
-                var param = function(url, name ) {
-                  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-                  var regexS = "[\\?&]"+name+"=([^&#]*)";
-                  var regex = new RegExp( regexS );
-                  var results = regex.exec( url );
-                  return ( results == null ) ? "" : results[1];
+                var param = function(url, name) {
+                    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+                    var regexS = "[\\?&]" + name + "=([^&#]*)";
+                    var regex = new RegExp(regexS);
+                    var results = regex.exec(url);
+                    return (results == null) ? "" : results[1];
                 };
 
                 var src = param(window.location.href, "assignmentId") ? window.location.href : document.referrer;
-            
-                var keys = ["assignmentId","hitId","workerId", "turkSubmitTo"];
+
+                var keys = ["assignmentId", "hitId", "workerId", "turkSubmitTo"];
                 keys.map(
-                    function(key) {
-                        turk[key] = unescape(param(src, key));
-                    }
-                );
-            
+
+                function(key) {
+                    turk[key] = unescape(param(src, key));
+                });
+
                 turk.previewMode = (turk.assignmentId == "ASSIGNMENT_ID_NOT_AVAILABLE");
-                
+
                 turk.outsideTurk = (!turk.previewMode && turk.hitId === "" && turk.assignmentId == "" && turk.workerId == "")
 
                 turk_info = turk;
-                
+
                 return turk;
             }
-            
+
         };
-        
+
         // core.submitToTurk will submit a MechanicalTurk ExternalHIT type
-        
-        core.submitToTurk = function(data){
-        	
-        	var turkInfo = core.turkInfo();
-        	var assignmentId = turkInfo.assignmentId;
-           	var turkSubmitTo = turkInfo.turkSubmitTo;
 
-		if (!assignmentId || !turkSubmitTo) return;
+        core.submitToTurk = function(data) {
 
-		var dataString = [];
+            var turkInfo = core.turkInfo();
+            var assignmentId = turkInfo.assignmentId;
+            var turkSubmitTo = turkInfo.turkSubmitTo;
 
-		for(var key in data) {
-			
-    			if (data.hasOwnProperty(key)) {
-    				dataString.push(key+"="+escape(data[key]));
-    			}
-    		}
-		
-		dataString.push("assignmentId="+assignmentId);
+            if (!assignmentId || !turkSubmitTo) return;
 
-		var url = turkSubmitTo + "/mturk/externalSubmit?" + dataString.join("&");
-		       
-		window.location.href = url;
+            var dataString = [];
+
+            for (var key in data) {
+
+                if (data.hasOwnProperty(key)) {
+                    dataString.push(key + "=" + escape(data[key]));
+                }
+            }
+
+            dataString.push("assignmentId=" + assignmentId);
+
+            var url = turkSubmitTo + "/mturk/externalSubmit?" + dataString.join("&");
+
+            window.location.href = url;
         }
-        
+
 
         //
         // These are public functions, intended to be used for developing plugins.
         // They aren't considered part of the normal API for the core library.
         //
 
-        core.normalizeTrialVariables = function(trial, protect){
-            
+        core.normalizeTrialVariables = function(trial, protect) {
+
             protect = (typeof protect === 'undefined') ? [] : protect;
-            
+
             var keys = getKeys(trial);
-            
+
             var tmp = {};
-            for(var i=0; i<keys.length; i++){
-                
+            for (var i = 0; i < keys.length; i++) {
+
                 var process = true;
-                for(var j = 0; j < protect.length; j++){
-                    if(protect[j] == keys[i]){
+                for (var j = 0; j < protect.length; j++) {
+                    if (protect[j] == keys[i]) {
                         process = false;
                         break;
                     }
                 }
-                
-                if(typeof trial[keys[i]] == "function" && process){
+
+                if (typeof trial[keys[i]] == "function" && process) {
                     tmp[keys[i]] = trial[keys[i]].call();
-                } else {
+                }
+                else {
                     tmp[keys[i]] = trial[keys[i]];
                 }
-                
+
             }
-            
+
             return tmp;
-            
-        }
-        
+
+        };
+
         // if possible_array is not an array, then return a one-element array
         // containing possible_array
         core.enforceArray = function(params, possible_arrays) {
-            
+
             // function to check if something is an array, fallback
             // to string method if browser doesn't support Array.isArray
             var ckArray = Array.isArray || function(a) {
-                return toString.call(a) == '[object Array]';
-            }
-            
-            for(var i=0; i<possible_arrays.length; i++){
+                    return toString.call(a) == '[object Array]';
+                };
+
+            for (var i = 0; i < possible_arrays.length; i++) {
                 params[possible_arrays[i]] = ckArray(params[possible_arrays[i]]) ? params[possible_arrays[i]] : [params[possible_arrays[i]]];
             }
-            
+
             return params;
-        } 
+        };
+
+        core.getKeyboardResponse = function(callback_function, valid_responses, rt_method) {
+
+            rt_method = (typeof rt_method === 'undefined') ? 'date' : rt_method;
+            if (rt_method != 'date' && rt_method != 'performance') {
+                console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
+                rt_method = 'date';
+            }
+
+            var start_time;
+            if (rt_method == 'date') {
+                start_time = (new Date()).getTime();
+            }
+            if (rt_method == 'performance') {
+                start_time = performance.now();
+            }
+
+            var listener_function = function(e) {
+
+                var key_time;
+                if (rt_method == 'date') {
+                    key_time = (new Date()).getTime();
+                }
+                if (rt_method == 'performance') {
+                    key_time = performance.now();
+                }
+
+                var valid_response = false;
+                if (typeof valid_responses === 'undefined' || valid_responses.length === 0) {
+                    valid_response = true;
+                }
+                for (var i = 0; i < valid_responses.length; i++) {
+                    if (typeof valid_responses[i] == 'string') {
+                        if(typeof keylookup[valid_responses[i]] !== 'undefined'){
+                            if(e.which == keylookup[valid_responses[i]]) {
+                                valid_response = true;
+                            }
+                        } else {
+                            throw new Error('Invalid key string specified for getKeyboardResponse');
+                        }
+                    } else if (e.which == valid_responses[i]) {
+                        valid_response = true;
+                    }
+                }
+
+                if (valid_response) {
+                    $(document).unbind('keydown', listener_function);
+                    callback_function({
+                        key: e.which,
+                        rt: key_time - start_time
+                    });
+                }
+            };
+
+            $(document).keydown(listener_function);
+        };
 
         //
         // private functions //
@@ -324,13 +381,13 @@
 
             // iterate through block list to create trials
             for (var i = 0; i < exp_blocks.length; i++) {
-            	
-            	// check to make sure plugin is loaded
-            	var plugin_name = experiment_structure[i].type;
-            	if(typeof jsPsych[plugin_name] == 'undefined'){
-            		throw new Error("Failed attempt to create trials using plugin type "+plugin_name+". Is the plugin loaded?");
-            	}
-            	
+
+                // check to make sure plugin is loaded
+                var plugin_name = opts.experiment_structure[i].type;
+                if (typeof jsPsych[plugin_name] == 'undefined') {
+                    throw new Error("Failed attempt to create trials using plugin type " + plugin_name + ". Is the plugin loaded?");
+                }
+
                 var trials = jsPsych[plugin_name]["create"].call(null, opts["experiment_structure"][i]);
 
                 exp_blocks[i] = createBlock(trials);
@@ -441,7 +498,7 @@
                 for (var key in array[j]) {
                     var keyString = key + "";
                     keyString = '"' + keyString.replace(/"/g, '""') + '",';
-                    if ($.inArray(key,columns) == -1) {
+                    if ($.inArray(key, columns) == -1) {
                         columns[i] = key;
                         line += keyString;
                         i++;
@@ -489,29 +546,152 @@
             }));
             $('#jspsych-download-as-text-link')[0].click();
         }
-        
+
         function getKeys(obj) {
             var r = [];
             for (var k in obj) {
-                if (!obj.hasOwnProperty(k)) 
-                    continue;
+                if (!obj.hasOwnProperty(k)) continue;
                 r.push(k);
             }
             return r;
         }
-        
+
         // private function to flatten nested arrays
         function flatten(arr, out) {
             out = (typeof out === 'undefined') ? [] : out;
             for (var i = 0; i < arr.length; i++) {
                 if (Array.isArray(arr[i])) {
                     flatten(arr[i], out);
-                } else {
+                }
+                else {
                     out.push(arr[i]);
                 }
             }
             return out;
         }
+        
+        // keycode lookup associative array
+        var keylookup = {
+            'backspace': 8,
+            'tab': 9,
+            'enter': 13,
+            'shift': 16,
+            'ctrl': 17,
+            'alt': 18,
+            'pause': 19,
+            'capslock': 20,
+            'esc': 27,
+            'space':32,
+            'spacebar':32,
+            ' ':32,
+            'pageup': 33,
+            'pagedown': 34,
+            'end': 35,
+            'home': 36,
+            'leftarrow': 37,
+            'uparrow': 38,
+            'rightarrow': 39,
+            'downarrow': 40,
+            'insert': 45,
+            'delete': 46,
+            '0': 48,
+            '1': 49,
+            '2': 50,
+            '3': 51,
+            '4': 52,
+            '5': 53,
+            '6': 54,
+            '7': 55,
+            '8': 56,
+            '9': 57,
+            'a': 65,
+            'b': 66,
+            'c': 67,
+            'd': 68,
+            'e': 69,
+            'f': 70,
+            'g': 71,
+            'h': 72,
+            'i': 73,
+            'j': 74,
+            'k': 75,
+            'l': 76,
+            'm': 77,
+            'n': 78,
+            'o': 79,
+            'p': 80,
+            'q': 81,
+            'r': 82,
+            's': 83,
+            't': 84,
+            'u': 85,
+            'v': 86,
+            'w': 87,
+            'x': 88,
+            'y': 89,
+            'z': 90,
+            'A': 65,
+            'B': 66,
+            'C': 67,
+            'D': 68,
+            'E': 69,
+            'F': 70,
+            'G': 71,
+            'H': 72,
+            'I': 73,
+            'J': 74,
+            'K': 75,
+            'L': 76,
+            'M': 77,
+            'N': 78,
+            'O': 79,
+            'P': 80,
+            'Q': 81,
+            'R': 82,
+            'S': 83,
+            'T': 84,
+            'U': 85,
+            'V': 86,
+            'W': 87,
+            'X': 88,
+            'Y': 89,
+            'Z': 90,
+            '0numpad': 96,
+            '1numpad': 97,
+            '2numpad': 98,
+            '3numpad': 99,
+            '4numpad': 100,
+            '5numpad': 101,
+            '6numpad': 102,
+            '7numpad': 103,
+            '8numpad': 104,
+            '9numpad': 105,
+            'multiply': 106,
+            'plus': 107,
+            'minus': 109,
+            'decimal': 110,
+            'divide': 111,
+            'F1': 112,
+            'F2': 113,
+            'F3': 114,
+            'F4': 115,
+            'F5': 116,
+            'F6': 117,
+            'F7': 118,
+            'F8': 119,
+            'F9': 120,
+            'F10': 121,
+            'F11': 122,
+            'F12': 123,
+            '=': 187,
+            ',': 188,
+            '.': 190,
+            '/': 191,
+            '`': 192,
+            '[': 219,
+            '\\': 220,
+            ']': 221
+        };
 
         return core;
     })();
