@@ -695,4 +695,91 @@
 
         return core;
     })();
+    
+    jsPsych.randomization = (function() {
+        
+        module = {};
+        
+        module.simpleSample = function(array, repetitions, unpack) {
+           
+            var arr_isArray = Array.isArray(array);
+            var rep_isArray = Array.isArray(repetitions);
+            
+            // if array is not an array, then we just repeat the item
+            if(!arr_isArray){
+                if(!rep_isArray) {
+                    array = [array];
+                    repetitions = [repetitions];
+                } else {
+                    repetitions = [repetitions[0]];
+                    console.log('Unclear parameters given to randomizeSimpleSample. Multiple set sizes specified, but only one item exists to sample. Proceeding using the first set size.');
+                }
+            } else {
+                if(!rep_isArray) {
+                    var reps = [];
+                    for(var i = 0; i < array.length; i++){
+                        reps.push(repetitions);            
+                    }
+                    repetitions = reps;
+                } else {
+                    if(array.length != repetitions.length) {
+                        // throw warning if repetitions is too short,
+                        // throw warning if too long, and then use the first N
+                    }
+                }
+            }
+            
+            // should be clear at this point to assume that array and repetitions are arrays with == length
+            var allsamples = [];
+            for(var i = 0; i < array.length; i++){
+                for(var j = 0; j < repetitions[i]; j++){
+                    allsamples.push(array[i]);
+                }
+            }
+            
+            var out = shuffle(allsamples);
+            
+            if(unpack) { out = unpackArray(out);  }
+            
+            return shuffle(out);   
+        }
+        
+        function unpackArray(array) {
+            
+            var out = {};
+        
+            for(var i = 0; i < array.length; i++){
+                var keys = Object.keys(array[i]);
+                for(var k = 0; k < keys.length; k++){
+                    if(typeof out[keys[k]] === 'undefined') {
+                        out[keys[k]] = [];
+                    }
+                    out[keys[k]].push(array[i][keys[k]]);
+                }
+            }
+            
+            return out;
+        }
+        
+        function shuffle(array) {
+          var m = array.length, t, i;
+        
+          // While there remain elements to shuffle…
+          while (m) {
+        
+            // Pick a remaining element…
+            i = Math.floor(Math.random() * m--);
+        
+            // And swap it with the current element.
+            t = array[m];
+            array[m] = array[i];
+            array[i] = t;
+          }
+        
+          return array;
+        }
+        
+        return module;
+        
+    })();
 })(jQuery);
