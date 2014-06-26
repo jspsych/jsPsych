@@ -365,9 +365,8 @@
                 }
 
                 if (valid_response) {
-                    $(document).unbind('keydown', listener_function);
-                    // remove the keyboard listener from the list of listeners
-                    keyboard_listeners.splice($.inArray(listener_id, keyboard_listeners), 1)
+                    // remove keyboard listener
+                    core.cancelKeyboardResponse(listener_id);
                     
                     callback_function({
                         key: e.which,
@@ -393,13 +392,16 @@
             $(document).unbind(listener.type, listener.fn);
             
             // remove the listener from the list of listeners
-            keyboard_listeners.splice($.inArray(listener, keyboard_listeners), 1)
+            if($.inArray(listener, keyboard_listeners) > -1) {
+                keyboard_listeners.splice($.inArray(listener, keyboard_listeners), 1)
+            }
         }
         
         core.cancelAllKeyboardResponses = function() {
             for(var i = 0; i< keyboard_listeners.length; i++){
                 $(document).unbind(keyboard_listeners[i].type, keyboard_listeners[i].fn);
             }
+            keyboard_listeners = [];
         }
 
         //
