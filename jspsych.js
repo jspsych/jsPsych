@@ -30,6 +30,8 @@
         var exp_start_time;
         // turk info
         var turk_info;
+        // keyboard listeners
+        var keyboard_listeners = [];
 
         //
         // public methods
@@ -332,6 +334,8 @@
                 start_time = performance.now();
             }
 
+            var listener_id;
+            
             var listener_function = function(e) {
 
                 var key_time;
@@ -362,6 +366,9 @@
 
                 if (valid_response) {
                     $(document).unbind('keydown', listener_function);
+                    // remove the keyboard listener from the list of listeners
+                    keyboard_listeners.splice($.inArray(listener_id, keyboard_listeners), 1)
+                    
                     callback_function({
                         key: e.which,
                         rt: key_time - start_time
@@ -370,7 +377,30 @@
             };
 
             $(document).keydown(listener_function);
+            
+            // create listener id object
+            listener_id = {type: 'keydown', fn: listener_function};
+            
+            // add this keyboard listener to the list of listeners
+            keyboard_listeners.push(listener_id)
+            
+            return listener_id;
+            
         };
+        
+        core.cancelKeyboardResponse = function(listener) {
+            // remove the listener from the doc
+            $(document).unbind(listener.type, listener.fn);
+            
+            // remove the listener from the list of listeners
+            keyboard_listeners.splice($.inArray(listener, keyboard_listeners), 1)
+        }
+        
+        core.cancelAllKeyboardResponses = function() {
+            for(var i = 0; i< keyboard_listeners.length; i++){
+                $(document).unbind(keyboard_listeners[i].type, keyboard_listeners[i].fn);
+            }
+        }
 
         //
         // private functions //
