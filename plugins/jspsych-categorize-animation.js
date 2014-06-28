@@ -130,50 +130,39 @@
 
             }, trial.frame_time);
 
-            // attach response function
-
-            var resp_func = function(e) {
-
+            
+            var keyboard_listener;
+            
+            var after_response = function(info){
+                // ignore the response if animation is playing and subject
+                // not allowed to respond before it is complete
                 if (!trial.allow_response_before_complete && showAnimation) {
                     return false;
                 }
-
-                var flag = false; // valid keystroke?
-                var correct = false; // correct answer?
-
-                if (e.which == trial.key_answer) // correct category
-                {
-                    flag = true;
+                
+                var correct = false;
+                if(trial.key_answer == info.key) {
                     correct = true;
                 }
-                else {
-                    // check if the key is any of the options, or if it is an accidental keystroke
-                    for (var i = 0; i < trial.choices.length; i++) {
-                        if (e.which == trial.choices[i]) {
-                            flag = true;
-                            correct = false;
-                        }
-                    }
-                }
-                if (flag) // if keystroke is one of the choices
-                {
-                    responded = true;
-                    var endTime = (new Date()).getTime();
-                    var rt = (endTime - startTime);
+                
+                responded = true;
 
-                    var trial_data = {
-                        "trial_type": trial.type,
-                        "trial_index": block.trial_idx,
-                        "stimulus": trial.stims[0],
-                        "rt": rt,
-                        "correct": correct,
-                        "key_press": e.which
-                    };
-                    block.writeData($.extend({}, trial_data, trial.data));
-                    $(document).unbind('keydown', resp_func);
-                }
-            };
-            $(document).keydown(resp_func);
+                var trial_data = {
+                    "trial_type": trial.type,
+                    "trial_index": block.trial_idx,
+                    "stimulus": trial.stims[0],
+                    "rt": info.rt,
+                    "correct": correct,
+                    "key_press": info.key
+                };
+                
+                block.writeData($.extend({}, trial_data, trial.data));
+                
+                jsPsych.pluginAPI.cancelKeyboardResponse(keyboard_listener);
+                
+            }
+            
+            jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices, 'date', true);
 
             function endTrial() {
                 clearInterval(animate_interval); // stop animation!
