@@ -30,8 +30,6 @@
         var exp_start_time;
         // turk info
         var turk_info;
-        // keyboard listeners
-        var keyboard_listeners = [];
 
         //
         // public methods
@@ -317,92 +315,6 @@
 
             return params;
         };
-
-        core.getKeyboardResponse = function(callback_function, valid_responses, rt_method) {
-
-            rt_method = (typeof rt_method === 'undefined') ? 'date' : rt_method;
-            if (rt_method != 'date' && rt_method != 'performance') {
-                console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
-                rt_method = 'date';
-            }
-
-            var start_time;
-            if (rt_method == 'date') {
-                start_time = (new Date()).getTime();
-            }
-            if (rt_method == 'performance') {
-                start_time = performance.now();
-            }
-
-            var listener_id;
-            
-            var listener_function = function(e) {
-
-                var key_time;
-                if (rt_method == 'date') {
-                    key_time = (new Date()).getTime();
-                }
-                if (rt_method == 'performance') {
-                    key_time = performance.now();
-                }
-
-                var valid_response = false;
-                if (typeof valid_responses === 'undefined' || valid_responses.length === 0) {
-                    valid_response = true;
-                }
-                for (var i = 0; i < valid_responses.length; i++) {
-                    if (typeof valid_responses[i] == 'string') {
-                        if(typeof keylookup[valid_responses[i]] !== 'undefined'){
-                            if(e.which == keylookup[valid_responses[i]]) {
-                                valid_response = true;
-                            }
-                        } else {
-                            throw new Error('Invalid key string specified for getKeyboardResponse');
-                        }
-                    } else if (e.which == valid_responses[i]) {
-                        valid_response = true;
-                    }
-                }
-
-                if (valid_response) {
-                    // remove keyboard listener
-                    core.cancelKeyboardResponse(listener_id);
-                    
-                    callback_function({
-                        key: e.which,
-                        rt: key_time - start_time
-                    });
-                }
-            };
-
-            $(document).keydown(listener_function);
-            
-            // create listener id object
-            listener_id = {type: 'keydown', fn: listener_function};
-            
-            // add this keyboard listener to the list of listeners
-            keyboard_listeners.push(listener_id)
-            
-            return listener_id;
-            
-        };
-        
-        core.cancelKeyboardResponse = function(listener) {
-            // remove the listener from the doc
-            $(document).unbind(listener.type, listener.fn);
-            
-            // remove the listener from the list of listeners
-            if($.inArray(listener, keyboard_listeners) > -1) {
-                keyboard_listeners.splice($.inArray(listener, keyboard_listeners), 1)
-            }
-        }
-        
-        core.cancelAllKeyboardResponses = function() {
-            for(var i = 0; i< keyboard_listeners.length; i++){
-                $(document).unbind(keyboard_listeners[i].type, keyboard_listeners[i].fn);
-            }
-            keyboard_listeners = [];
-        }
 
         //
         // private functions //
@@ -845,4 +757,101 @@
         return module;
         
     })();
+    
+    jsPsych.pluginAPI = (function() {
+        
+        // keyboard listeners
+        var keyboard_listeners = [];
+        
+        var module = {};
+        
+        module.getKeyboardResponse = function(callback_function, valid_responses, rt_method) {
+
+            rt_method = (typeof rt_method === 'undefined') ? 'date' : rt_method;
+            if (rt_method != 'date' && rt_method != 'performance') {
+                console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
+                rt_method = 'date';
+            }
+
+            var start_time;
+            if (rt_method == 'date') {
+                start_time = (new Date()).getTime();
+            }
+            if (rt_method == 'performance') {
+                start_time = performance.now();
+            }
+
+            var listener_id;
+            
+            var listener_function = function(e) {
+
+                var key_time;
+                if (rt_method == 'date') {
+                    key_time = (new Date()).getTime();
+                }
+                if (rt_method == 'performance') {
+                    key_time = performance.now();
+                }
+
+                var valid_response = false;
+                if (typeof valid_responses === 'undefined' || valid_responses.length === 0) {
+                    valid_response = true;
+                }
+                for (var i = 0; i < valid_responses.length; i++) {
+                    if (typeof valid_responses[i] == 'string') {
+                        if(typeof keylookup[valid_responses[i]] !== 'undefined'){
+                            if(e.which == keylookup[valid_responses[i]]) {
+                                valid_response = true;
+                            }
+                        } else {
+                            throw new Error('Invalid key string specified for getKeyboardResponse');
+                        }
+                    } else if (e.which == valid_responses[i]) {
+                        valid_response = true;
+                    }
+                }
+
+                if (valid_response) {
+                    // remove keyboard listener
+                    core.cancelKeyboardResponse(listener_id);
+                    
+                    callback_function({
+                        key: e.which,
+                        rt: key_time - start_time
+                    });
+                }
+            };
+
+            $(document).keydown(listener_function);
+            
+            // create listener id object
+            listener_id = {type: 'keydown', fn: listener_function};
+            
+            // add this keyboard listener to the list of listeners
+            keyboard_listeners.push(listener_id)
+            
+            return listener_id;
+            
+        };
+        
+        module.cancelKeyboardResponse = function(listener) {
+            // remove the listener from the doc
+            $(document).unbind(listener.type, listener.fn);
+            
+            // remove the listener from the list of listeners
+            if($.inArray(listener, keyboard_listeners) > -1) {
+                keyboard_listeners.splice($.inArray(listener, keyboard_listeners), 1)
+            }
+        }
+        
+        module.cancelAllKeyboardResponses = function() {
+            for(var i = 0; i< keyboard_listeners.length; i++){
+                $(document).unbind(keyboard_listeners[i].type, keyboard_listeners[i].fn);
+            }
+            keyboard_listeners = [];
+        }
+        
+        return module;
+    })();
+    
 })(jQuery);
