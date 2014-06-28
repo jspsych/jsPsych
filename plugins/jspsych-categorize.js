@@ -102,51 +102,32 @@
                 var startTime = (new Date()).getTime();
 
                 // create response function
-                var resp_func = function(e) {
-                    var flag = false;
+                var after_response = function(info) {
+                    
                     var correct = false;
-                    if (e.which == trial.key_answer) // correct category
-                    {
-                        flag = true;
-                        correct = true;
-                    }
-                    else {
-                        // check if the key is any of the options, or if it is an accidental keystroke
-                        for (var i = 0; i < trial.choices.length; i++) {
-                            if (e.which == trial.choices[i]) {
-                                flag = true;
-                                correct = false;
-                            }
-                        }
-                    }
-                    if (flag) {
-                        cat_trial_complete = true;
+                    if(trial.key_answer == info.key) { correct = true; }
+                    
+                    cat_trial_complete = true;
+                    
+                    // save data
+                    var trial_data = {
+                        "trial_type": "categorize",
+                        "trial_index": block.trial_idx,
+                        "rt": info.rt,
+                        "correct": correct,
+                        "stimulus": trial.a_path,
+                        "key_press": info.key
+                    };
 
-                        // measure response time
-                        var endTime = (new Date()).getTime();
-                        var rt = (endTime - startTime);
+                    block.writeData($.extend({}, trial_data, trial.data));
 
-                        // save data
-                        var trial_data = {
-                            "trial_type": "categorize",
-                            "trial_index": block.trial_idx,
-                            "rt": rt,
-                            "correct": correct,
-                            "stimulus": trial.a_path,
-                            "key_press": e.which
-                        };
-
-                        block.writeData($.extend({}, trial_data, trial.data));
-
-                        // clear function
-                        $(document).unbind('keydown', resp_func);
-                        display_element.html('');
-                        plugin.trial(display_element, block, trial, part + 1);
-                    }
-                };
-
-                // add event listener
-                $(document).keydown(resp_func);
+                    display_element.html('');
+                    
+                    plugin.trial(display_element, block, trial, part + 1);
+                }
+                
+                jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices, 'date', false);
+                
                 break;
 
             case 2:
@@ -183,14 +164,13 @@
 
                 // check if force correct button press is set
                 if (trial.force_correct_button_press && block.data[block.trial_idx].correct === false) {
-                    var resp_func_corr_key = function(e) {
-                        if (e.which == trial.key_answer) // correct category
-                        {
-                            $(document).unbind('keyup', resp_func_corr_key);
-                            plugin.trial(display_element, block, trial, part + 1);
-                        }
-                    };
-                    $(document).keyup(resp_func_corr_key);
+                    
+                    var after_forced_response = function(info) {
+                        plugin.trial(display_element, block, trial, part + 1);
+                    }
+                    
+                    jsPsych.pluginAPI.getKeyboardResponse(after_forced_response, trial.key_answer, 'date', false);
+                    
                 }
                 else {
                     setTimeout(function() {
