@@ -644,7 +644,7 @@
         
         var module = {};
         
-        module.getKeyboardResponse = function(callback_function, valid_responses, rt_method) {
+        module.getKeyboardResponse = function(callback_function, valid_responses, rt_method, persist) {
 
             rt_method = (typeof rt_method === 'undefined') ? 'date' : rt_method;
             if (rt_method != 'date' && rt_method != 'performance') {
@@ -691,8 +691,10 @@
                 }
 
                 if (valid_response) {
-                    // remove keyboard listener
-                    core.cancelKeyboardResponse(listener_id);
+                    if(!persist){
+                        // remove keyboard listener
+                        core.cancelKeyboardResponse(listener_id);
+                    }
                     
                     callback_function({
                         key: e.which,
