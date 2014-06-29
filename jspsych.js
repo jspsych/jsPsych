@@ -878,7 +878,9 @@
                 };
 
             for (var i = 0; i < possible_arrays.length; i++) {
-                params[possible_arrays[i]] = ckArray(params[possible_arrays[i]]) ? params[possible_arrays[i]] : [params[possible_arrays[i]]];
+                if(typeof params[possible_arrays[i]] !== 'undefined'){
+                    params[possible_arrays[i]] = ckArray(params[possible_arrays[i]]) ? params[possible_arrays[i]] : [params[possible_arrays[i]]];
+                }
             }
 
             return params;
