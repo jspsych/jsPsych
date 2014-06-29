@@ -113,50 +113,42 @@
                     display_element.append(trial.prompt);
                 }
 
-                var startTime = (new Date()).getTime();
-
-                var resp_func = function(e) {
-                    var flag = false;
+                var after_response = function(info){
+                    
                     var correct = false;
-                    if (e.which == trial.same_key) {
-                        flag = true;
-                        if (trial.answer == "same") {
-                            correct = true;
-                        }
+                    
+                    if(info.key == trial.same_key && trial.answer == 'same'){
+                        correct = true;
                     }
-                    else if (e.which == trial.different_key) {
-                        flag = true;
-                        if (trial.answer == "different") {
-                            correct = true;
-                        }
+                    
+                    if(info.key == trial.different_key && trial.answer == 'different'){
+                        correct = true;
                     }
-                    if (flag) {
-                        var endTime = (new Date()).getTime();
-                        var rt = (endTime - startTime);
-
-                        var trial_data = {
-                            "trial_type": "same-different",
-                            "trial_index": block.trial_idx,
-                            "rt": rt,
-                            "correct": correct,
-                            "stimulus": trial.a_path,
-                            "stimulus_2": trial.b_path,
-                            "key_press": e.which
-                        };
-                        block.writeData($.extend({}, trial_data, trial.data));
-                        $(document).unbind('keydown', resp_func);
-
-                        display_element.html('');
-                        if(trial.timing_post_trial > 0) {
-                            setTimeout(function() {
-                                block.next();
-                            }, trial.timing_post_trial);
-                        } else {
+                    
+                    var trial_data = {
+                        "trial_type": "same-different",
+                        "trial_index": block.trial_idx,
+                        "rt": info.rt,
+                        "correct": correct,
+                        "stimulus": trial.a_path,
+                        "stimulus_2": trial.b_path,
+                        "key_press": info.key
+                    };
+                    block.writeData($.extend({}, trial_data, trial.data));
+                    
+                    display_element.html('');
+                    
+                    if(trial.timing_post_trial > 0) {
+                        setTimeout(function() {
                             block.next();
-                        }
+                        }, trial.timing_post_trial);
+                    } else {
+                        block.next();
                     }
-                };
-                $(document).keydown(resp_func);
+                }
+                
+                jsPsych.pluginAPI.getKeyboardResponse(after_response, [trial.same_key, trial.different_key], 'date', false);
+                
                 break;
             }
         };
