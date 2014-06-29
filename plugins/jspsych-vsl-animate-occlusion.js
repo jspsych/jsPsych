@@ -133,18 +133,15 @@
             }
             
             // add key listener
-            var resp_func = function(e){
-                for(var i=0; i<trial.choices.length; i++){
-                    if(e.which == trial.choices[i]){
-                        responses.push({
-                            key: e.which,
-                            stimulus: which_image - 1,
-                            rt: (new Date()).getTime() - start_time
-                        });
-                    }
-                }
-            };
-            $(document).keydown(resp_func);
+            var after_response = function(info){
+                responses.push({
+                    key: info.key,
+                    stimulus: which_image - 1,
+                    rt: info.rt
+                });
+            }
+            
+            key_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices, 'date', true);
 
             if (trial.timing_pre_movement > 0) {
                 setTimeout(function() {
@@ -159,7 +156,7 @@
                 
                 display_element.html('');
                 
-                $(document).unbind('keydown', resp_func);
+                jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
                 
                 block.writeData($.extend({}, {
                     "trial_type": "vsl-animate-occlusion",
