@@ -1,26 +1,9 @@
 /**
- * jsPsych plugin for showing animations
+ * jsPsych plugin for showing animations and recording keyboard responses
  * Josh de Leeuw
- * updated January 2014
  * 
- * shows a sequence of images at a fixed frame rate.
- * subject can respond with keys if desired.
- * entire animation sequence is recorded as JSON encoded string.
- * responses are tagged with rt and image that was onscreen.
- *
- * parameters:
- *      stimuli: array of arrays. inner arrays should consist of all the frames of the animation sequence. each inner array
- *                  corresponds to a single trial
- *      frame_time: how long to display each frame in ms.
- *      frame_isi: length of gap between successive frames.
- *      repetitions: how many times to show the animation sequence.
- *      choices: array of valid key responses during animation.
- *      timing_post_trial: how long to show a blank screen after the trial in ms.
- *      prompt: optional HTML string to display while the animation is playing
- *      data: optional data object
- * 
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-animation
  */
-
 
 (function($) {
     jsPsych.animation = (function() {
@@ -28,6 +11,8 @@
         var plugin = {};
 
         plugin.create = function(params) {
+            
+            params = jsPsych.pluginAPI.enforceArray(params, ['choices', 'data']);
 
             var trials = new Array(params.stimuli.length);
             for (var i = 0; i < trials.length; i++) {
@@ -50,7 +35,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
             
             var interval_time = trial.frame_time + trial.frame_isi;
             var animate_frame = -1;
