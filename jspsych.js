@@ -28,9 +28,7 @@
         var DOM_target;
         // time that the experiment began
         var exp_start_time;
-        // turk info
-        var turk_info;
-
+       
         //
         // public methods
         //
@@ -176,128 +174,6 @@
 
                 img.src = images[i];
             }
-        };
-
-        // core.turkInfo gets information relevant to mechanical turk experiments. returns an object
-        // containing the workerID, assignmentID, and hitID, and whether or not the HIT is in
-        // preview mode, meaning that they haven't accepted the HIT yet.
-        core.turkInfo = function(force_refresh) {
-            // default value is false
-            force_refresh = (typeof force_refresh === 'undefined') ? false : force_refresh;
-            // if we already have the turk_info and force_refresh is false
-            // then just return the cached version.
-            if (typeof turk_info !== 'undefined' && !force_refresh) {
-                return turk_info;
-            }
-            else {
-
-                var turk = {};
-
-                var param = function(url, name) {
-                    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-                    var regexS = "[\\?&]" + name + "=([^&#]*)";
-                    var regex = new RegExp(regexS);
-                    var results = regex.exec(url);
-                    return (results == null) ? "" : results[1];
-                };
-
-                var src = param(window.location.href, "assignmentId") ? window.location.href : document.referrer;
-
-                var keys = ["assignmentId", "hitId", "workerId", "turkSubmitTo"];
-                keys.map(
-
-                function(key) {
-                    turk[key] = unescape(param(src, key));
-                });
-
-                turk.previewMode = (turk.assignmentId == "ASSIGNMENT_ID_NOT_AVAILABLE");
-
-                turk.outsideTurk = (!turk.previewMode && turk.hitId === "" && turk.assignmentId == "" && turk.workerId == "")
-
-                turk_info = turk;
-
-                return turk;
-            }
-
-        };
-
-        // core.submitToTurk will submit a MechanicalTurk ExternalHIT type
-
-        core.submitToTurk = function(data) {
-
-            var turkInfo = core.turkInfo();
-            var assignmentId = turkInfo.assignmentId;
-            var turkSubmitTo = turkInfo.turkSubmitTo;
-
-            if (!assignmentId || !turkSubmitTo) return;
-
-            var dataString = [];
-
-            for (var key in data) {
-
-                if (data.hasOwnProperty(key)) {
-                    dataString.push(key + "=" + escape(data[key]));
-                }
-            }
-
-            dataString.push("assignmentId=" + assignmentId);
-
-            var url = turkSubmitTo + "/mturk/externalSubmit?" + dataString.join("&");
-
-            window.location.href = url;
-        }
-
-
-        //
-        // These are public functions, intended to be used for developing plugins.
-        // They aren't considered part of the normal API for the core library.
-        //
-
-        core.normalizeTrialVariables = function(trial, protect) {
-
-            protect = (typeof protect === 'undefined') ? [] : protect;
-
-            var keys = getKeys(trial);
-
-            var tmp = {};
-            for (var i = 0; i < keys.length; i++) {
-
-                var process = true;
-                for (var j = 0; j < protect.length; j++) {
-                    if (protect[j] == keys[i]) {
-                        process = false;
-                        break;
-                    }
-                }
-
-                if (typeof trial[keys[i]] == "function" && process) {
-                    tmp[keys[i]] = trial[keys[i]].call();
-                }
-                else {
-                    tmp[keys[i]] = trial[keys[i]];
-                }
-
-            }
-
-            return tmp;
-
-        };
-
-        // if possible_array is not an array, then return a one-element array
-        // containing possible_array
-        core.enforceArray = function(params, possible_arrays) {
-
-            // function to check if something is an array, fallback
-            // to string method if browser doesn't support Array.isArray
-            var ckArray = Array.isArray || function(a) {
-                    return toString.call(a) == '[object Array]';
-                };
-
-            for (var i = 0; i < possible_arrays.length; i++) {
-                params[possible_arrays[i]] = ckArray(params[possible_arrays[i]]) ? params[possible_arrays[i]] : [params[possible_arrays[i]]];
-            }
-
-            return params;
         };
 
         //
@@ -535,6 +411,85 @@
             }
 
             return result;
+        }
+        
+        return module;
+        
+    })();
+    
+    jsPsych.turk = (function() {
+        
+         // turk info
+        var turk_info;
+        
+        var module = {};
+        
+        // core.turkInfo gets information relevant to mechanical turk experiments. returns an object
+        // containing the workerID, assignmentID, and hitID, and whether or not the HIT is in
+        // preview mode, meaning that they haven't accepted the HIT yet.
+        module.turkInfo = function(force_refresh) {
+            // default value is false
+            force_refresh = (typeof force_refresh === 'undefined') ? false : force_refresh;
+            // if we already have the turk_info and force_refresh is false
+            // then just return the cached version.
+            if (typeof turk_info !== 'undefined' && !force_refresh) {
+                return turk_info;
+            } else {
+
+                var turk = {};
+
+                var param = function(url, name) {
+                    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+                    var regexS = "[\\?&]" + name + "=([^&#]*)";
+                    var regex = new RegExp(regexS);
+                    var results = regex.exec(url);
+                    return (results == null) ? "" : results[1];
+                };
+
+                var src = param(window.location.href, "assignmentId") ? window.location.href : document.referrer;
+
+                var keys = ["assignmentId", "hitId", "workerId", "turkSubmitTo"];
+                keys.map(
+
+                function(key) {
+                    turk[key] = unescape(param(src, key));
+                });
+
+                turk.previewMode = (turk.assignmentId == "ASSIGNMENT_ID_NOT_AVAILABLE");
+
+                turk.outsideTurk = (!turk.previewMode && turk.hitId === "" && turk.assignmentId == "" && turk.workerId == "")
+
+                turk_info = turk;
+
+                return turk;
+            }
+
+        };
+
+        // core.submitToTurk will submit a MechanicalTurk ExternalHIT type
+
+        module.submitToTurk = function(data) {
+
+            var turkInfo = core.turkInfo();
+            var assignmentId = turkInfo.assignmentId;
+            var turkSubmitTo = turkInfo.turkSubmitTo;
+
+            if (!assignmentId || !turkSubmitTo) return;
+
+            var dataString = [];
+
+            for (var key in data) {
+
+                if (data.hasOwnProperty(key)) {
+                    dataString.push(key + "=" + escape(data[key]));
+                }
+            }
+
+            dataString.push("assignmentId=" + assignmentId);
+
+            var url = turkSubmitTo + "/mturk/externalSubmit?" + dataString.join("&");
+
+            window.location.href = url;
         }
         
         return module;
@@ -875,6 +830,58 @@
             '[': 219,
             '\\': 220,
             ']': 221
+        };
+        
+        //
+        // These are public functions, intended to be used for developing plugins.
+        // They aren't considered part of the normal API for the core library.
+        //
+
+        module.normalizeTrialVariables = function(trial, protect) {
+
+            protect = (typeof protect === 'undefined') ? [] : protect;
+
+            var keys = getKeys(trial);
+
+            var tmp = {};
+            for (var i = 0; i < keys.length; i++) {
+
+                var process = true;
+                for (var j = 0; j < protect.length; j++) {
+                    if (protect[j] == keys[i]) {
+                        process = false;
+                        break;
+                    }
+                }
+
+                if (typeof trial[keys[i]] == "function" && process) {
+                    tmp[keys[i]] = trial[keys[i]].call();
+                }
+                else {
+                    tmp[keys[i]] = trial[keys[i]];
+                }
+
+            }
+
+            return tmp;
+
+        };
+
+        // if possible_array is not an array, then return a one-element array
+        // containing possible_array
+        module.enforceArray = function(params, possible_arrays) {
+
+            // function to check if something is an array, fallback
+            // to string method if browser doesn't support Array.isArray
+            var ckArray = Array.isArray || function(a) {
+                    return toString.call(a) == '[object Array]';
+                };
+
+            for (var i = 0; i < possible_arrays.length; i++) {
+                params[possible_arrays[i]] = ckArray(params[possible_arrays[i]]) ? params[possible_arrays[i]] : [params[possible_arrays[i]]];
+            }
+
+            return params;
         };
         
         return module;
