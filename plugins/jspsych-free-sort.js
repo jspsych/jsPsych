@@ -1,22 +1,9 @@
 /**
+ * jspsych-free-sort
+ * plugin for drag-and-drop sorting of a collection of images
  * Josh de Leeuw
- * Updated October 2013
  * 
- * This plugin displays a set of images on the screen and allows the user to drag them around.
- * The location of each object and the moves that the subject performs are recorded.
- * 
- * parameters:
- *      stimuli: array of arrays. inner most arrays are collections of image paths that will be displayed in a trial. outer
- *                  arrays are trials.
- *      stim_height: the height of the images to sort in pixels.
- *      stim_width: the width of the images to sort in pixels.
- *      timing_post_trial: how long to show a blank screen after the trial in ms.
- *      prompt: optional html string to display while sorting happens.
- *      prompt_location: either 'above' or 'below'; changes location of prompt
- *      sort_area_width: width of the area used to sort the images
- *      sort_area_height: height of the area used to sort the images
- *      data: optional data object
- * 
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-free-sort
  */
 
 (function($) {
@@ -25,6 +12,8 @@
         var plugin = {};
 
         plugin.create = function(params) {
+
+            params = jsPsych.pluginAPI.enforceArray(params, ['data']);
 
             var trials = new Array(params.stimuli.length);
             for (var i = 0; i < trials.length; i++) {
@@ -49,7 +38,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
             var start_time = (new Date()).getTime();
 
