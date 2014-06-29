@@ -149,9 +149,6 @@
                     display_element.append(trial.prompt);
                 }
 
-                // start measuring response time
-                var startTime = (new Date()).getTime();
-
                 // if timing_ab is > 0, then we hide the stimuli after timing_ab milliseconds
                 if (trial.timing_ab > 0) {
                     setTimeout(function() {
@@ -162,52 +159,54 @@
                 }
 
                 // create the function that triggers when a key is pressed.
-                var resp_func = function(e) {
-                    var flag = false; // true when a valid key is chosen
+                var after_response = function(info) {
+                    
                     var correct = false; // true when the correct response is chosen
-                    if (e.which == trial.left_key) // 'q' key by default
+                    
+                    if (info.key == trial.left_key) // 'q' key by default
                     {
-                        flag = true;
                         if (target_left) {
                             correct = true;
                         }
                     }
-                    else if (e.which == trial.right_key) // 'p' key by default
+                    else if (info.key == trial.right_key) // 'p' key by default
                     {
-                        flag = true;
                         if (!target_left) {
                             correct = true;
                         }
                     }
-                    if (flag) {
-                        var endTime = (new Date()).getTime();
-                        var rt = (endTime - startTime);
-                        // create object to store data from trial
-                        var trial_data = {
-                            "trial_type": "xab",
-                            "trial_index": block.trial_idx,
-                            "rt": rt,
-                            "correct": correct,
-                            "stimulus_x": trial.x_path,
-                            "stimulus_a": trial.a_path,
-                            "stimulus_b": trial.b_path,
-                            "key_press": e.which
-                        };
-                        block.writeData($.extend({}, trial_data, trial.data));
-                        $(document).unbind('keydown', resp_func); // remove response function from keys
-                        display_element.html(''); // remove all
-                        xab_trial_complete = true;
-                        // move on to the next trial after timing_post_trial milliseconds
-                        if(trial.timing_post_trial > 0) {
-                            setTimeout(function() {
-                                block.next();
-                            }, trial.timing_post_trial);
-                        } else {
+                    
+                       
+                    // create object to store data from trial
+                    var trial_data = {
+                        "trial_type": "xab",
+                        "trial_index": block.trial_idx,
+                        "rt": info.rt,
+                        "correct": correct,
+                        "stimulus_x": trial.x_path,
+                        "stimulus_a": trial.a_path,
+                        "stimulus_b": trial.b_path,
+                        "key_press": info.key
+                    };
+                    block.writeData($.extend({}, trial_data, trial.data));
+                    
+                    display_element.html(''); // remove all
+                    
+                    xab_trial_complete = true;
+                    
+                    // move on to the next trial after timing_post_trial milliseconds
+                    if(trial.timing_post_trial > 0) {
+                        setTimeout(function() {
                             block.next();
-                        }
+                        }, trial.timing_post_trial);
+                    } else {
+                        block.next();
                     }
+                
                 };
-                $(document).keydown(resp_func);
+                
+                jsPsych.getKeyboardResponse(after_response, [trial.left_key, trial.right_key], 'date', false);
+                
                 break;
             }
         };
