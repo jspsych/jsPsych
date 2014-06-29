@@ -1,27 +1,8 @@
 /** 
  * jspsych plugin for categorization trials with feedback
  * Josh de Leeuw
- * updated October 2013
  * 
- * display an image or HTML object and then give corrective feedback based on the subject's response
- *
- * parameters:
- *      stimuli: array of stimuli. array elements can be paths to images or strings of HTML.
- *      key_answer: array of key codes representing the correct answer for each stimulus.
- *      text_answer: array of strings representing the label associated with each stimulus. optional.
- *      choices: array of key codes representing valid choices that can be made. other key responses will be ignored.
- *      correct_text: HTML string to show when correct answer is given.
- *      incorrect_text: HTML string to show when incorrect answer is given.
- *              NOTE: for both of the above, the special string %ANS% can be used. The text_answer associated with 
- *              the trial will be substituted for %ANS%. 
- *      timing_stim: how long to show the stimulus for. -1 will show until response is given.
- *      timing_feedback_duration: how long to show the feedback for.
- *      timing_post_trial: how long to show a blank screen before the next trial.
- *      show_stim_with_feedback: if true, the stimulus will remain on the screen while feedback is given.
- *      is_html: must set to true if the stimulus is HTML code.
- *      force_correct_button_press: if true, then the user must press the correct key after feedback is given.
- *      prompt: HTML string to show when the subject is viewing the stimulus and making a categorization decision.
- *      data: the optional data object
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-categorize
 **/
 
 (function($) {
@@ -30,6 +11,9 @@
         var plugin = {};
 
         plugin.create = function(params) {
+            
+            params = jsPsych.pluginAPI.enforceArray(params, ['choices', 'stimuli', 'key_answer', 'text_answer', 'data']);
+            
             var trials = [];
             for (var i = 0; i < params.stimuli.length; i++) {
                 trials.push({});
@@ -61,7 +45,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
             
             switch (part) {
             case 1:
