@@ -90,33 +90,17 @@
         // if flatten is true, then the hierarchical structure of the data
         // is removed and each array entry will be a single trial.
 
-        core.data = function(flatten) {
+        core.data = function() {
             var all_data = [];
+            
             for (var i = 0; i < exp_blocks.length; i++) {
                 all_data[i] = exp_blocks[i].data;
-            }
-
-            if (flatten === true) {
-                all_data = flattenData(all_data);
             }
 
             return all_data;
         };
 
-        // core.dataAsCSV returns a CSV string that contains all of the data
-        //      append_data is an option map object that will append values
-        //      to every row. for example, if append_data = {"subject": 4},
-        //      then a column called subject will be added to the data and
-        //      it will always have the value 4.
-        core.dataAsCSV = function(append_data) {
-            var dataObj = core.data();
-            return JSON2CSV(flattenData(dataObj, append_data));
-        };
-
-        core.saveCSVdata = function(filename, append_data) {
-            var data_string = core.dataAsCSV(append_data);
-            saveTextToFile(data_string, filename);
-        };
+        
 
         // core.progress returns an object with the following properties
         // 		total_blocks: the number of total blocks in the experiment
@@ -408,6 +392,91 @@
             jsPsych[trial.type]["trial"].call(this, DOM_target, block, trial, 1);
         }
 
+        
+
+        function getKeys(obj) {
+            var r = [];
+            for (var k in obj) {
+                if (!obj.hasOwnProperty(k)) continue;
+                r.push(k);
+            }
+            return r;
+        }
+
+        
+        
+        
+
+        return core;
+    })();
+    
+    jsPsych.dataAPI = (function() {
+        
+        var module = {};
+        
+        // core.dataAsCSV returns a CSV string that contains all of the data
+        //      append_data is an option map object that will append values
+        //      to every row. for example, if append_data = {"subject": 4},
+        //      then a column called subject will be added to the data and
+        //      it will always have the value 4.
+        module.dataAsCSV = function(append_data) {
+            var dataObj = jsPsych.data();
+            return JSON2CSV(flattenData(dataObj, append_data));
+        };
+
+        module.localSave = function(filename, format, append_data) {
+            
+            var data_string;
+            
+            if(format == 'JSON' || format == 'json') {
+                data_string = JSON.stringify(flatten_data(jsPsych.data(), append_data);
+            } else if(format == 'CSV' || format == 'csv') {
+                data_string = module.dataAsCSV(append_data);
+            } else {
+                throw new Error('invalid format specified for jsPsych.dataAPI.localSave');
+            }
+            
+            saveTextToFile(data_string, filename);
+        };
+        
+        // private function to save text file on local drive
+        function saveTextToFile(textstr, filename) {
+            var blobToSave = new Blob([textstr], {
+                type: 'text/plain'
+            });
+            var blobURL = "";
+            if (typeof window.webkitURL !== 'undefined') {
+                blobURL = window.webkitURL.createObjectURL(blobToSave);
+            }
+            else {
+                blobURL = window.URL.createObjectURL(blobToSave);
+            }
+            DOM_target.append($('<a>', {
+                id: 'jspsych-download-as-text-link',
+                href: blobURL,
+                css: {
+                    display: 'none'
+                },
+                download: filename,
+                html: 'download file'
+            }));
+            $('#jspsych-download-as-text-link')[0].click();
+        }
+        
+        // private function to flatten nested arrays
+        function flatten(arr, out) {
+            out = (typeof out === 'undefined') ? [] : out;
+            for (var i = 0; i < arr.length; i++) {
+                if (Array.isArray(arr[i])) {
+                    flatten(arr[i], out);
+                }
+                else {
+                    out.push(arr[i]);
+                }
+            }
+            return out;
+        }
+        
         //
         // A few helper functions to handle data format conversion
         //
@@ -427,7 +496,7 @@
 
             return trials;
         }
-
+        
         // this function based on code suggested by StackOverflow users:
         // http://stackoverflow.com/users/64741/zachary
         // http://stackoverflow.com/users/317/joseph-sturtevant
@@ -467,61 +536,14 @@
 
             return result;
         }
-
-        function saveTextToFile(textstr, filename) {
-            var blobToSave = new Blob([textstr], {
-                type: 'text/plain'
-            });
-            var blobURL = "";
-            if (typeof window.webkitURL !== 'undefined') {
-                blobURL = window.webkitURL.createObjectURL(blobToSave);
-            }
-            else {
-                blobURL = window.URL.createObjectURL(blobToSave);
-            }
-            DOM_target.append($('<a>', {
-                id: 'jspsych-download-as-text-link',
-                href: blobURL,
-                css: {
-                    display: 'none'
-                },
-                download: filename,
-                html: 'download file'
-            }));
-            $('#jspsych-download-as-text-link')[0].click();
-        }
-
-        function getKeys(obj) {
-            var r = [];
-            for (var k in obj) {
-                if (!obj.hasOwnProperty(k)) continue;
-                r.push(k);
-            }
-            return r;
-        }
-
-        // private function to flatten nested arrays
-        function flatten(arr, out) {
-            out = (typeof out === 'undefined') ? [] : out;
-            for (var i = 0; i < arr.length; i++) {
-                if (Array.isArray(arr[i])) {
-                    flatten(arr[i], out);
-                }
-                else {
-                    out.push(arr[i]);
-                }
-            }
-            return out;
-        }
         
+        return module;
         
-
-        return core;
     })();
     
     jsPsych.randomization = (function() {
         
-        module = {};
+        var module = {};
         
         module.repeat = function(array, repetitions, unpack) {
            
