@@ -2,13 +2,9 @@
  * jspsych-survey-text
  * a jspsych plugin for free response survey questions
  *
- * Josh de Leeuw (March 2013)
- * Updated October 2013
+ * Josh de Leeuw
  * 
- * parameters:
- *      questions: array of arrays. inner arrays are arrays of strings, where each string represents a prompt
- *                  for the user to respond to.
- *      data: optional data object
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-survey-text
  *
  */
 
@@ -18,6 +14,9 @@
         var plugin = {};
 
         plugin.create = function(params) {
+            
+            params = jsPsych.pluginAPI.enforceArray(params, ['data']);
+            
             var trials = [];
             for (var i = 0; i < params.questions.length; i++) {
                 trials.push({
@@ -34,7 +33,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
             // add likert scale questions
             for (var i = 0; i < trial.questions.length; i++) {
