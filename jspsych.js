@@ -655,7 +655,7 @@
                 if (valid_response) {
                     if(!persist){
                         // remove keyboard listener
-                        core.cancelKeyboardResponse(listener_id);
+                        module.cancelKeyboardResponse(listener_id);
                     }
                     
                     var after_up = function(up) {
