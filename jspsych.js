@@ -653,22 +653,26 @@
                 }
 
                 if (valid_response) {
-                    if(!persist){
-                        // remove keyboard listener
-                        module.cancelKeyboardResponse(listener_id);
-                    }
                     
                     var after_up = function(up) {
                         
                         if(up.which == e.which) {
                             $(document).off('keyup', after_up);
                         
-                            callback_function({
-                                key: e.which,
-                                rt: key_time - start_time
-                            });
+                            if($.inArray(listener_id, keyboard_listeners) > -1) {
+                                
+                                if(!persist){
+                                    // remove keyboard listener
+                                    module.cancelKeyboardResponse(listener_id);
+                                }
+                                
+                                callback_function({
+                                    key: e.which,
+                                    rt: key_time - start_time
+                                });
+                            }
                         }
-                    }
+                    };
                     
                     $(document).keyup(after_up);
                 }
@@ -680,7 +684,7 @@
             listener_id = {type: 'keydown', fn: listener_function};
             
             // add this keyboard listener to the list of listeners
-            keyboard_listeners.push(listener_id)
+            keyboard_listeners.push(listener_id);
             
             return listener_id;
             
@@ -692,16 +696,16 @@
             
             // remove the listener from the list of listeners
             if($.inArray(listener, keyboard_listeners) > -1) {
-                keyboard_listeners.splice($.inArray(listener, keyboard_listeners), 1)
+                keyboard_listeners.splice($.inArray(listener, keyboard_listeners), 1);
             }
-        }
+        };
         
         module.cancelAllKeyboardResponses = function() {
             for(var i = 0; i< keyboard_listeners.length; i++){
                 $(document).off(keyboard_listeners[i].type, keyboard_listeners[i].fn);
             }
             keyboard_listeners = [];
-        }
+        };
         
         // keycode lookup associative array
         var keylookup = {
@@ -888,7 +892,7 @@
             }
             return r;
         }
-
+        
         return module;
     })();
     
