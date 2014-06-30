@@ -1,23 +1,10 @@
 /**
  * jspsych-same-different
- * Josh de Leeuw (Updated Oct 2013)
+ * Josh de Leeuw
  * 
  * plugin for showing two stimuli sequentially and getting a same / different judgment
  * 
- * parameters:
- *      stimuli:            array of arrays. inner most array should have two elements, corresponding to the two items that will be shown.
- *                          items can be image paths or HTML strings. each inner array is a trial.
- *      answer:             array of strings. acceptable values are "same" and "different". represents the correct answer for each trial.
- *      same_key:           which key to press to indicate a 'same' response.
- *      different_key:      which key to press to indicate a 'different' response.
- *      timing_first_stim:  how long to show the first stimulus
- *      timing_second_stim: how long to show the second stim. can be -1, which means to show until a response is given.
- *      timing_gap:         how long to show a blank screen in between the two stimuli.
- *      timing_post_trial:  how long to show a blank screen after the trial ends.
- *      is_html:            must set to true if the stimulus is HTML code.
- *      prompt:             HTML string to show when the subject is viewing the stimulus and making a categorization decision.
- *      data:               the optional data object
- * 
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-categorize-animation
  * 
  */ 
 (function($) {
@@ -26,6 +13,9 @@
         var plugin = {};
 
         plugin.create = function(params) {
+            
+            params = jsPsych.pluginAPI.enforceArray(params, ['data','answer'])
+            
             var trials = new Array(params.stimuli.length);
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {};
@@ -55,7 +45,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
             
             
             switch (part) {
