@@ -676,7 +676,7 @@
                     var after_up = function(up) {
                         
                         if(up.which == e.which) {
-                            $(document).unbind('keyup', after_up);
+                            $(document).off('keyup', after_up);
                         
                             callback_function({
                                 key: e.which,
@@ -703,7 +703,7 @@
         
         module.cancelKeyboardResponse = function(listener) {
             // remove the listener from the doc
-            $(document).unbind(listener.type, listener.fn);
+            $(document).off(listener.type, listener.fn);
             
             // remove the listener from the list of listeners
             if($.inArray(listener, keyboard_listeners) > -1) {
@@ -713,7 +713,7 @@
         
         module.cancelAllKeyboardResponses = function() {
             for(var i = 0; i< keyboard_listeners.length; i++){
-                $(document).unbind(keyboard_listeners[i].type, keyboard_listeners[i].fn);
+                $(document).off(keyboard_listeners[i].type, keyboard_listeners[i].fn);
             }
             keyboard_listeners = [];
         }
