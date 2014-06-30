@@ -95,18 +95,18 @@
 
             var after_response = function(info) {
                 
-                    // after a valid response, the stimulus will have the CSS class 'responded'
-                    // which can be used to provide visual feedback that a response was recorded
-                    $("#jspsych-single-stim-stimulus").addClass('responded');
+                // after a valid response, the stimulus will have the CSS class 'responded'
+                // which can be used to provide visual feedback that a response was recorded
+                $("#jspsych-single-stim-stimulus").addClass('responded');
 
-                    if (trial.continue_after_response) {
-                        // response triggers the next trial in this case.
-                        // if hide_image_after_response is true, then next
-                        // trial should be triggered by timeout function below.
-                        end_trial(info);
-                    }
+                if (trial.continue_after_response) {
+                    // response triggers the next trial in this case.
+                    // if hide_image_after_response is true, then next
+                    // trial should be triggered by timeout function below.
+                    end_trial(info);
                 }
             };
+        
 
             jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices);
             
