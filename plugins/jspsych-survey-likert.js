@@ -2,17 +2,9 @@
  * jspsych-survey-likert
  * a jspsych plugin for measuring items on a likert scale
  *
- * Josh de Leeuw (March 2013)
- * Updated October 2013
+ * Josh de Leeuw 
  * 
- * parameters:
- *      questions: array of arrays. inner arrays are arrays of strings, where each string represents a prompt
- *                  for the user to respond to.
- *      labels: array of arrays of arrays. inner most arrays are label markers for the slider, e.g. ["Strongly Disagree", "Neutral", "Strongly Agree"]. 
- *              need one inner array for every question that is part of the trial. middle arrays group questions together.
- *      intervals: array of arrays. inner arrays are how many different responses the user can select from, e.g. 5, one for each question.
- *      show_ticks: graphically show tick marks on the slider bar to indicate the response levels.
- *      data: optional data object
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-survey-likert
  *
  */
 
@@ -22,6 +14,9 @@
         var plugin = {};
 
         plugin.create = function(params) {
+            
+            params = jsPsych.pluginAPI.enforceArray(params, ['data']);
+            
             var trials = [];
             for (var i = 0; i < params.questions.length; i++) {
                 trials.push({
@@ -41,7 +36,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
             // add likert scale questions
             for (var i = 0; i < trial.questions.length; i++) {
