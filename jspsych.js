@@ -673,10 +673,19 @@
                         core.cancelKeyboardResponse(listener_id);
                     }
                     
-                    callback_function({
-                        key: e.which,
-                        rt: key_time - start_time
-                    });
+                    var after_up = function(up) {
+                        
+                        if(up.which == e.which) {
+                            $(document).unbind('keyup', after_up);
+                        
+                            callback_function({
+                                key: e.which,
+                                rt: key_time - start_time
+                            });
+                        }
+                    }
+                    
+                    $(document).keyup(after_up);
                 }
             };
 
