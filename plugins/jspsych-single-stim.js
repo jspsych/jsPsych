@@ -1,25 +1,12 @@
-// Josh de Leeuw
-// Updated October 2013
-//
-// This plugin is for presenting a single image and collecting a key response.
-// It can be used for categorizing images (without feedback), collecting yes/no responses, etc...
-//
-//  parameters
-//      stimuli: array of stimuli to present. elements of the array can be either paths to images
-//                  or HTML strings
-//      choices: array of key codes that represent valid responses. other key codes will be ignored
-//      continue_after_response: when true, the trial will end as soon as the user gives a response.
-//                  if false, then the trial will continue until timing_response is reached
-//      timing_stim: how long to show the stimulus for. -1 will show indefinitely.
-//      timing_response: how long to wait for a response. this timer starts at the same time as the
-//                  timer for the stimulus presentation. if the timer is reached without a response
-//                  given, then the user's response will be recorded as a "-1" for the trial, and the
-//                  trial will end.
-//      timing_post_trial: how long to show a blank screen after the trial ends.
-//      is_html: must set to true when using HTML strings as the stimuli.
-//      prompt: optional HTML string to display with the stimulus.
-//      data: the optional data object
-
+/**
+ * jspsych-single-stim
+ * Josh de Leeuw
+ * 
+ * plugin for displaying a stimulus and getting a keyboard response
+ * 
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-single-stim
+ *
+ **/
 
 (function($) {
     jsPsych["single-stim"] = (function() {
@@ -27,6 +14,9 @@
         var plugin = {};
 
         plugin.create = function(params) {
+            
+            params = jsPsych.pluginAPI.enforceArray(params, ['stimuli', 'choices', 'data']);
+            
             var trials = new Array(params.stimuli.length);
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {};
@@ -56,7 +46,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
             var trial_complete = false;
 
@@ -118,7 +108,7 @@
                 }
             };
 
-            jsPsych.getKeyboardResponse(after_response, trial.choices);
+            jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices);
             
             // hide image if timing is set
             if (trial.timing_stim > 0) {
