@@ -268,21 +268,6 @@
             jsPsych[trial.type]["trial"].call(this, DOM_target, block, trial, 1);
         }
 
-        
-
-        function getKeys(obj) {
-            var r = [];
-            for (var k in obj) {
-                if (!obj.hasOwnProperty(k)) continue;
-                r.push(k);
-            }
-            return r;
-        }
-
-        
-        
-        
-
         return core;
     })();
     
@@ -895,6 +880,15 @@
             return params;
         };
         
+        function getKeys(obj) {
+            var r = [];
+            for (var k in obj) {
+                if (!obj.hasOwnProperty(k)) continue;
+                r.push(k);
+            }
+            return r;
+        }
+
         return module;
     })();
     
