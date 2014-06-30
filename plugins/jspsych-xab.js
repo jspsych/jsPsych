@@ -1,27 +1,10 @@
 /*  jspsych-xab.js
  *	Josh de Leeuw
- *  updated Oct 2013
  *
  *  This plugin runs a single XAB trial, where X is an image presented in isolation, and A and B are choices, with A or B being equal to X. 
  *	The subject's goal is to identify whether A or B is identical to X.
  *
- *  parameters:
- *      stimuli: array of arrays. each interior array represents the stimuli for a single trial.
- *                  each interior array can be two or three elements. if two elements, then the plugin
- *                  will show the first one as the target (X). if three elements, then the first is X
- *                  the second is A and the third is B. the second is considered the target and the third
- *                  is the foil. this is useful if X and A are not identical, but A is still the correct
- *                  choice (e.g. a categorization experiment where the goal is to pick the item that is 
- *                  in the same category). stimuli can be paths to images, or html strings.
- *      left_key: key code for response associated with image on the left side of the screen.
- *      right_key: key code for right side
- *      timing_x: how long to display X for in ms
- *      timing_xab_gap: how long to show a blank screen in between X and AB in ms.
- *      timing_ab: how long to show the screen with AB in ms. -1 will display until a response is given.
- *      timing_post_trial: how long to show a blank screen after the trial is complete.
- *      is_html: must set to TRUE if the stimuli are HTML strings instead of images.
- *      prompt: an HTML string to display under the AB stimuli, e.g. to remind the subject which keys to use
- *      data: the optional data object
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-xab
  *
  */
 
@@ -31,6 +14,8 @@
         var plugin = {};
 
         plugin.create = function(params) {
+            
+            params = jsPsych.pluginAPI.enforceArray(params, ['data']);
 
             // the number of trials is determined by how many entries the params.stimuli array has
             var trials = new Array(params.stimuli.length);
@@ -72,7 +57,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
             
             switch (part) {
 
@@ -205,7 +190,7 @@
                 
                 };
                 
-                jsPsych.getKeyboardResponse(after_response, [trial.left_key, trial.right_key], 'date', false);
+                jsPsych.pluginAPI.getKeyboardResponse(after_response, [trial.left_key, trial.right_key], 'date', false);
                 
                 break;
             }
