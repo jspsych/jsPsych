@@ -3,6 +3,8 @@
  *
  * This plugin displays text (including HTML formatted strings) during the experiment.
  * Use it to show instructions, provide performance feedback, etc...
+ *
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-text
  * 
  *
  */
@@ -14,7 +16,7 @@
 
         plugin.create = function(params) {
             
-            params = jsPsych.enforceArray(params, ['text','data']);
+            params = jsPsych.pluginAPI.enforceArray(params, ['text','data']);
             
             var trials = new Array(params.text.length);
             for (var i = 0; i < trials.length; i++) {
@@ -33,7 +35,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
             
             // set the HTML of the display target to replaced_text.
             display_element.html(trial.text);
@@ -70,7 +72,7 @@
                 display_element.click(mouse_listener);
                 var start_time = (new Date()).getTime();
             } else {
-                jsPsych.getKeyboardResponse(after_response, trial.cont_key);
+                jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.cont_key);
             }
 
             function save_data(key, rt) {
