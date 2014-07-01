@@ -300,6 +300,21 @@
             saveTextToFile(data_string, filename);
         };
         
+        module.getTrialsOfType = function(trial_type){
+            var data = jsPsych.data();
+            
+            data = flatten(data);
+            
+            var trials = [];
+            for(var i = 0; i < data.length; i++){
+                if(data[i].trial_type == trial_type){
+                    trials.push(data[i]);
+                }
+            }
+            
+            return trials;
+        };
+        
         // private function to save text file on local drive
         function saveTextToFile(textstr, filename) {
             var blobToSave = new Blob([textstr], {
