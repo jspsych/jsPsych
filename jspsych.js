@@ -1,9 +1,10 @@
-// jspsych.js
-// 
-//	Josh de Leeuw 
-//	Percepts and Concepts Lab, Indiana University
-//
-//
+/**
+ * jspsych.js
+ * Josh de Leeuw
+ * 
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki
+ *
+ **/ 
 (function($) {
     jsPsych = (function() {
 
