@@ -8,8 +8,9 @@
  * based on code written for psychtoolbox by Ben Motz
  * 
  * todo: 
- * check for performance.now support
- * generalize set sizes
+ * 
+ * generalize set sizes, display size
+ * allow for use of display_element
  * 
  **/
 
@@ -62,8 +63,6 @@
             var stimw = trial.target_size[1];
             var hstimh = stimh / 2;
             var hstimw = stimw / 2;
-
-            // [left, top, right, bottom]
 
             var fix_loc = [Math.floor(paper_size / 2 - trial.fixation_size[0]), Math.floor(paper_size / 2 - trial.fixation_size[1])];
 
@@ -120,49 +119,44 @@
                 }
 
                 var trial_over = false;
-
-                var resp_function = function(e) {
-                    if (e.which == trial.target_present_key || e.which == trial.target_absent_key) {
-                        rt = performance.now() - start_time;
-
-                        trial_over = true;
-
-                        key_press = e.which;
-
-                        correct = 0;
-                        if (e.which == trial.target_present_key && trial.target_present || 
-                            e.which == trial.target_absent_key && !trial.target_present) {
-                            correct = 1;
-                        }
-
-                        $(document).unbind('keydown', resp_function);
-
-                        clear_display();
-
-                        end_trial();
+                
+                var after_response = function(info){
+                    
+                    trial_over = true;
+                    
+                    var correct = 0;
+                    
+                    if (info.key == trial.target_present_key && trial.target_present || 
+                        info.key == trial.target_absent_key && !trial.target_present) {
+                        correct = 1;
                     }
-                };
-
-                $(document).keydown(resp_function);
-
-                var start_time = performance.now();
+                    
+                    clear_display();
+                    
+                    end_trial(info.rt, correct, info.key);
+                        
+                }
+                
+                var valid_keys = [trial.target_present_key, trial.target_absent_key];
+                
+                key_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, valid_keys, 'date',false);
 
                 if (trial.timing_max_search > 0) {
                     setTimeout(function() {
 
                         if (!trial_over) {
-                            rt = performance.now() - start_time;
-
+                            
+                            jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
+                            
                             trial_over = true;
-
-                            correct = 0;
-                            key_press = -1;
-
-                            $(document).unbind('keydown', resp_function);
+                            
+                            var rt = -1;
+                            var correct = 0;
+                            var key_press = -1;
 
                             clear_display();
 
-                            end_trial();
+                            end_trial(rt, correct, key_press);
                         }
                     }, trial.timing_max_search);
                 }
@@ -175,7 +169,7 @@
             }
 
 
-            function end_trial() {
+            function end_trial(rt, correct, key_press) {
 
                 // data saving
                 var trial_data = {
