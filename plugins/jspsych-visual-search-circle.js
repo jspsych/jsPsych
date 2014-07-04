@@ -9,7 +9,6 @@
  * 
  * todo: 
  * 
- * generalize set sizes, display size
  * allow for use of display_element
  * 
  **/
