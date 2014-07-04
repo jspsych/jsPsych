@@ -33,11 +33,12 @@
                 trials[i].fixation_image = params.fixation_image;
                 trials[i].target_size = params.target_size || [50, 50];
                 trials[i].fixation_size = params.fixation_size || [16, 16];
-                trials[i].circle_diameter = params.circle_diamaeter || 250;
+                trials[i].circle_diameter = params.circle_diameter || 250;
                 trials[i].target_present_key = params.target_present_key || 74;
                 trials[i].target_absent_key = params.target_absent_key || 70;
                 trials[i].timing_max_search = (typeof params.timing_max_search === 'undefined') ? -1 : params.timing_max_search;
                 trials[i].timing_fixation = (typeof params.timing_fixation === 'undefined') ? 1000 : params.timing_fixation;
+                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
                 trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
             }
 
@@ -46,7 +47,7 @@
 
         plugin.trial = function(display_element, block, trial, part) {
 
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
             // screen information
             var screenw = $(window).width();
@@ -76,7 +77,7 @@
                 display_locs.push([
                     Math.floor(paper_size / 2 + (cosd(random_offset + (i * (360/possible_display_locs))) * radi) - hstimw),
                     Math.floor(paper_size / 2 - (sind(random_offset + (i * (360/possible_display_locs))) * radi) - hstimh)
-                ])
+                ]);
             }
                 
             // get target to draw on
@@ -154,15 +155,13 @@
                 }
 
                 function clear_display() {
-                    for (var i = 0; i < search_array_images.length; i++) {
-                        search_array_images[i].remove();
-                    }
+                    paper.remove();
                 }
             }
 
 
             function end_trial(rt, correct, key_press) {
-
+                
                 // data saving
                 var trial_data = {
                     trial_type: trial.type,
@@ -179,8 +178,14 @@
                 // data object (trial.data), and then stores them.
                 block.writeData($.extend({}, trial_data, trial.data));
 
-                // this method must be called at the end of the trial
-                block.next();
+                // go to next trial
+                if(trial.timing_post_trial > 0){
+                    setTimeout(function() {
+                        block.next();
+                    }, trial.timing_post_trial);
+                } else {
+                    block.next();
+                }
             }
         };
 
