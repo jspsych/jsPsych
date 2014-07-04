@@ -70,16 +70,15 @@
 
             // possible stimulus locations on the circle
             var display_locs = [];
-            var possible_display_locs = 12;
+            var possible_display_locs = trial.set_size;
+            var random_offset = Math.floor(Math.random()*360);
             for(var i = 0; i < possible_display_locs; i++){
                 display_locs.push([
-                    Math.floor(paper_size / 2 + (cosd(i * (360/possible_display_locs)) * radi) - hstimw),
-                    Math.floor(paper_size / 2 - (sind(i * (360/possible_display_locs)) * radi) - hstimh)
+                    Math.floor(paper_size / 2 + (cosd(random_offset + (i * (360/possible_display_locs))) * radi) - hstimw),
+                    Math.floor(paper_size / 2 - (sind(random_offset + (i * (360/possible_display_locs))) * radi) - hstimh)
                 ])
             }
                 
-            var stim_locs = stimLocs(trial.set_size, trial.target_present);
-
             // get target to draw on
             var paper = Raphael(centerx - diam / 2, centery - diam / 2, paper_size, paper_size);
 
@@ -101,14 +100,14 @@
 
                 var search_array_images = [];
 
-                for (var i = 0; i < stim_locs.length; i++) {
-                    if (stim_locs[i] !== 0) {
-                        var which_image = (stim_locs[i] == 1) ? trial.target : trial.foil;
+                for (var i = 0; i < display_locs.length; i++) {
+                    
+                    var which_image = (i == 0 && trial.target_present) ? trial.target : trial.foil;
 
-                        var img = paper.image(which_image, display_locs[i][0], display_locs[i][1], trial.target_size[0], trial.target_size[1]);
+                    var img = paper.image(which_image, display_locs[i][0], display_locs[i][1], trial.target_size[0], trial.target_size[1]);
 
-                        search_array_images.push(img);
-                    }
+                    search_array_images.push(img);
+                    
                 }
 
                 var trial_over = false;
@@ -171,7 +170,7 @@
                     correct: correct,
                     rt: rt,
                     key_press: key_press,
-                    locations: JSON.stringify(stim_locs),
+                    locations: JSON.stringify(display_locs),
                     target_present: trial.target_present,
                     set_size: trial.set_size
                 };
@@ -186,29 +185,7 @@
         };
 
         // helper function for determining stimulus locations
-        function stimLocs(set_size, target_present) {
 
-            var locs = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // fixed length of 12 (for now)
-            var start_loc = Math.floor(Math.random() * 12);
-
-            if (target_present) {
-                locs[start_loc] = 1; // show target
-            }
-            else {
-                locs[start_loc] = -1; // show foil
-            }
-
-            var c_loc = (start_loc + 12 / set_size) % 12;
-            for (var i = 1; i < set_size; i++) {
-                locs[c_loc] = -1; // show foil
-                c_loc = (c_loc + 12 / set_size) % 12;
-            }
-
-            return locs;
-        }
-
-
-        // cos, sin functions
         function cosd(num) {
             return Math.cos(num / 180 * Math.PI);
         }
