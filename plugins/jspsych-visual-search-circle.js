@@ -33,6 +33,7 @@
                 trials[i].fixation_image = params.fixation_image;
                 trials[i].target_size = params.target_size || [50, 50];
                 trials[i].fixation_size = params.fixation_size || [16, 16];
+                trials[i].circle_diameter = params.circle_diamaeter || 250;
                 trials[i].target_present_key = params.target_present_key || 74;
                 trials[i].target_absent_key = params.target_absent_key || 70;
                 trials[i].timing_max_search = (typeof params.timing_max_search === 'undefined') ? -1 : params.timing_max_search;
@@ -53,34 +54,30 @@
             var centerx = screenw / 2;
             var centery = screenh / 2;
 
-            // params
-            var diam = 250; // pixels
+            // circle params
+            var diam = trial.circle_diameter; // pixels
             var radi = diam / 2;
             var paper_size = diam + trial.target_size[0];
 
-            // Determine locations based on width/height of stimuli
+            // stimuli width, height
             var stimh = trial.target_size[0];
             var stimw = trial.target_size[1];
             var hstimh = stimh / 2;
             var hstimw = stimw / 2;
-
+            
+            // fixation location
             var fix_loc = [Math.floor(paper_size / 2 - trial.fixation_size[0]), Math.floor(paper_size / 2 - trial.fixation_size[1])];
 
-            var display_locs = [
-                [Math.floor(paper_size / 2 + (cosd(60) * radi) - hstimw), Math.floor(paper_size / 2 - (sind(60) * radi) - hstimh)],
-                [Math.floor(paper_size / 2 + (cosd(30) * radi) - hstimw), Math.floor(paper_size / 2 - (sind(30) * radi) - hstimh)],
-                [Math.floor(paper_size / 2 + (cosd(0) * radi) - hstimw), Math.floor(paper_size / 2 - (sind(0) * radi) - hstimh)],
-                [Math.floor(paper_size / 2 + (cosd(330) * radi) - hstimw), Math.floor(paper_size / 2 - (sind(330) * radi) - hstimh)],
-                [Math.floor(paper_size / 2 + (cosd(300) * radi) - hstimw), Math.floor(paper_size / 2 - (sind(300) * radi) - hstimh)],
-                [Math.floor(paper_size / 2 + (cosd(270) * radi) - hstimw), Math.floor(paper_size / 2 - (sind(270) * radi) - hstimh)],
-                [Math.floor(paper_size / 2 + (cosd(240) * radi) - hstimw), Math.floor(paper_size / 2 - (sind(240) * radi) - hstimh)],
-                [Math.floor(paper_size / 2 + (cosd(210) * radi) - hstimw), Math.floor(paper_size / 2 - (sind(210) * radi) - hstimh)],
-                [Math.floor(paper_size / 2 + (cosd(180) * radi) - hstimw), Math.floor(paper_size / 2 - (sind(180) * radi) - hstimh)],
-                [Math.floor(paper_size / 2 + (cosd(150) * radi) - hstimw), Math.floor(paper_size / 2 - (sind(150) * radi) - hstimh)],
-                [Math.floor(paper_size / 2 + (cosd(120) * radi) - hstimw), Math.floor(paper_size / 2 - (sind(120) * radi) - hstimh)],
-                [Math.floor(paper_size / 2 + (cosd(90) * radi) - hstimw), Math.floor(paper_size / 2 - (sind(90) * radi) - hstimh)]
-            ];
-
+            // possible stimulus locations on the circle
+            var display_locs = [];
+            var possible_display_locs = 12;
+            for(var i = 0; i < possible_display_locs; i++){
+                display_locs.push([
+                    Math.floor(paper_size / 2 + (cosd(i * (360/possible_display_locs)) * radi) - hstimw),
+                    Math.floor(paper_size / 2 - (sind(i * (360/possible_display_locs)) * radi) - hstimh)
+                ])
+            }
+                
             var stim_locs = stimLocs(trial.set_size, trial.target_present);
 
             // get target to draw on
@@ -94,15 +91,11 @@
 
                 // wait 
                 setTimeout(function() {
+                    // after wait is over
                     fixation.remove();
                     show_search_array();
                 }, trial.timing_fixation);
             }
-
-            // scope these variables higher
-            var correct;
-            var rt;
-            var key_press;
 
             function show_search_array() {
 
