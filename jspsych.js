@@ -340,20 +340,6 @@
             $('#jspsych-download-as-text-link')[0].click();
         }
         
-        // private function to flatten nested arrays
-        function flatten(arr, out) {
-            out = (typeof out === 'undefined') ? [] : out;
-            for (var i = 0; i < arr.length; i++) {
-                if (Array.isArray(arr[i])) {
-                    flatten(arr[i], out);
-                }
-                else {
-                    out.push(arr[i]);
-                }
-            }
-            return out;
-        }
-        
         //
         // A few helper functions to handle data format conversion
         //
@@ -912,4 +898,20 @@
         return module;
     })();
     
+    // methods used in multiple modules
+    
+    // private function to flatten nested arrays
+    function flatten(arr, out) {
+        out = (typeof out === 'undefined') ? [] : out;
+        for (var i = 0; i < arr.length; i++) {
+            if (Array.isArray(arr[i])) {
+                flatten(arr[i], out);
+            }
+            else {
+                out.push(arr[i]);
+            }
+        }
+        return out;
+    }
+
 })(jQuery);
