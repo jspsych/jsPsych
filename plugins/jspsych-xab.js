@@ -112,20 +112,20 @@
                 if (!trial.is_html) {
                     display_element.append($('<img>', {
                         "src": images[0],
-                        "class": 'jspsych-xab-stimulus'
+                        "class": 'jspsych-xab-stimulus left'
                     }));
                     display_element.append($('<img>', {
                         "src": images[1],
-                        "class": 'jspsych-xab-stimulus'
+                        "class": 'jspsych-xab-stimulus right'
                     }));
                 }
                 else {
                     display_element.append($('<div>', {
-                        "class": 'jspsych-xab-stimulus',
+                        "class": 'jspsych-xab-stimulus left',
                         html: images[0]
                     }));
                     display_element.append($('<div>', {
-                        "class": 'jspsych-xab-stimulus',
+                        "class": 'jspsych-xab-stimulus right',
                         html: images[1]
                     }));
                 }
