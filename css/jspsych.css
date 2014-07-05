@@ -162,11 +162,35 @@ button:hover {
 
 /*
  *
+ * PLUGIN: jspsych-same-different
+ *
+ */
+ 
+.jspsych-same-different-stimulus {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+ *
  * PLUGIN: jspsych-single-stim
  *
  */
  
 #jspsych-single-stim-stimulus {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+ *
+ * PLUGIN: jspsych-xab
+ *
+ */
+ 
+.jspsych-xab-stimulus {
     display: block;
     margin-left: auto;
     margin-right: auto;
