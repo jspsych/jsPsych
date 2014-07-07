@@ -66,7 +66,7 @@
             var hstimw = stimw / 2;
             
             // fixation location
-            var fix_loc = [Math.floor(paper_size / 2 - trial.fixation_size[0]), Math.floor(paper_size / 2 - trial.fixation_size[1])];
+            var fix_loc = [Math.floor(paper_size / 2 - trial.fixation_size[0] / 2), Math.floor(paper_size / 2 - trial.fixation_size[1] / 2)];
 
             // possible stimulus locations on the circle
             var display_locs = [];
@@ -80,7 +80,7 @@
             }
                 
             // get target to draw on
-            var paper = Raphael(centerx - diam / 2, centery - diam / 2, paper_size, paper_size);
+            var paper = Raphael(centerx - paper_size / 2, centery - paper_size / 2, paper_size, paper_size);
 
             show_fixation();
 
@@ -91,7 +91,6 @@
                 // wait 
                 setTimeout(function() {
                     // after wait is over
-                    fixation.remove();
                     show_search_array();
                 }, trial.timing_fixation);
             }
