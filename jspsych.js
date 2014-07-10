@@ -176,6 +176,10 @@
                 img.src = images[i];
             }
         };
+        
+        core.getDisplayElement = function() {
+            return DOM_target;
+        }
 
         //
         // private functions //
@@ -331,7 +335,9 @@
                 data_string = module.dataAsCSV(append_data);
             } 
             
-            DOM_target.append($('<pre>', {
+            var display_element = jsPsych.getDisplayElement();
+            
+            display_element.append($('<pre>', {
                 html: data_string
             }));
         }
@@ -348,7 +354,10 @@
             else {
                 blobURL = window.URL.createObjectURL(blobToSave);
             }
-            DOM_target.append($('<a>', {
+            
+            var display_element = jsPsych.getDisplayElement();
+            
+            display_element.append($('<a>', {
                 id: 'jspsych-download-as-text-link',
                 href: blobURL,
                 css: {
