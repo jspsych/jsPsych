@@ -316,6 +316,26 @@
             return trials;
         };
         
+        module.displayData = function(format) {
+            format = (typeof format === 'undefined') ? "json" : format.toLowerCase();
+            if(format != "json" && format != "csv") {
+                console.log('Invalid format declared for displayData function. Using json as default.');
+                format = "json";
+            }
+            
+            var data_string;
+            
+            if(format == 'json') {
+                data_string = JSON.stringify(flatten_data(jsPsych.data()));
+            } else {
+                data_string = module.dataAsCSV(append_data);
+            } 
+            
+            DOM_target.append($('<pre>', {
+                html: data_string
+            }));
+        }
+        
         // private function to save text file on local drive
         function saveTextToFile(textstr, filename) {
             var blobToSave = new Blob([textstr], {
