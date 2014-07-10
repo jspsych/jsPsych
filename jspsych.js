@@ -291,7 +291,7 @@
             var data_string;
             
             if(format == 'JSON' || format == 'json') {
-                data_string = JSON.stringify(flatten_data(jsPsych.data(), append_data));
+                data_string = JSON.stringify(flattenData(jsPsych.data(), append_data));
             } else if(format == 'CSV' || format == 'csv') {
                 data_string = module.dataAsCSV(append_data);
             } else {
@@ -326,7 +326,7 @@
             var data_string;
             
             if(format == 'json') {
-                data_string = JSON.stringify(flatten_data(jsPsych.data()));
+                data_string = JSON.stringify(flattenData(jsPsych.data()));
             } else {
                 data_string = module.dataAsCSV(append_data);
             } 
