@@ -330,7 +330,7 @@
             var data_string;
             
             if(format == 'json') {
-                data_string = JSON.stringify(flattenData(jsPsych.data()));
+                data_string = JSON.stringify(flattenData(jsPsych.data()), undefined, 1);
             } else {
                 data_string = module.dataAsCSV(append_data);
             } 
