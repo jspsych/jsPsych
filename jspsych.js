@@ -176,6 +176,10 @@
                 img.src = images[i];
             }
         };
+        
+        core.getDisplayElement = function() {
+            return DOM_target;
+        }
 
         //
         // private functions //
@@ -291,7 +295,7 @@
             var data_string;
             
             if(format == 'JSON' || format == 'json') {
-                data_string = JSON.stringify(flatten_data(jsPsych.data(), append_data));
+                data_string = JSON.stringify(flattenData(jsPsych.data(), append_data));
             } else if(format == 'CSV' || format == 'csv') {
                 data_string = module.dataAsCSV(append_data);
             } else {
@@ -316,6 +320,28 @@
             return trials;
         };
         
+        module.displayData = function(format) {
+            format = (typeof format === 'undefined') ? "json" : format.toLowerCase();
+            if(format != "json" && format != "csv") {
+                console.log('Invalid format declared for displayData function. Using json as default.');
+                format = "json";
+            }
+            
+            var data_string;
+            
+            if(format == 'json') {
+                data_string = JSON.stringify(flattenData(jsPsych.data()), undefined, 1);
+            } else {
+                data_string = module.dataAsCSV();
+            } 
+            
+            var display_element = jsPsych.getDisplayElement();
+            
+            display_element.append($('<pre>', {
+                html: data_string
+            }));
+        }
+        
         // private function to save text file on local drive
         function saveTextToFile(textstr, filename) {
             var blobToSave = new Blob([textstr], {
@@ -328,7 +354,10 @@
             else {
                 blobURL = window.URL.createObjectURL(blobToSave);
             }
-            DOM_target.append($('<a>', {
+            
+            var display_element = jsPsych.getDisplayElement();
+            
+            display_element.append($('<a>', {
                 id: 'jspsych-download-as-text-link',
                 href: blobURL,
                 css: {
