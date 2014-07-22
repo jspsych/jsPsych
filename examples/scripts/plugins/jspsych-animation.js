@@ -1,26 +1,9 @@
 /**
- * jsPsych plugin for showing animations
+ * jsPsych plugin for showing animations and recording keyboard responses
  * Josh de Leeuw
- * updated January 2014
  * 
- * shows a sequence of images at a fixed frame rate.
- * subject can respond with keys if desired.
- * entire animation sequence is recorded as JSON encoded string.
- * responses are tagged with rt and image that was onscreen.
- *
- * parameters:
- *      stimuli: array of arrays. inner arrays should consist of all the frames of the animation sequence. each inner array
- *                  corresponds to a single trial
- *      frame_time: how long to display each frame in ms.
- *      frame_isi: length of gap between successive frames.
- *      repetitions: how many times to show the animation sequence.
- *      choices: array of valid key responses during animation.
- *      timing_post_trial: how long to show a blank screen after the trial in ms.
- *      prompt: optional HTML string to display while the animation is playing
- *      data: optional data object
- * 
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-animation
  */
-
 
 (function($) {
     jsPsych.animation = (function() {
@@ -28,6 +11,8 @@
         var plugin = {};
 
         plugin.create = function(params) {
+            
+            params = jsPsych.pluginAPI.enforceArray(params, ['choices', 'data']);
 
             var trials = new Array(params.stimuli.length);
             for (var i = 0; i < trials.length; i++) {
@@ -50,7 +35,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
             
             var interval_time = trial.frame_time + trial.frame_isi;
             var animate_frame = -1;
@@ -109,37 +94,28 @@
                     }, trial.frame_time);
                 }
             }
-
-            var resp_func = function(e) {
-                var flag = false;
-                // check if the key is any of the options, or if it is an accidental keystroke
-                for (var i = 0; i < trial.choices.length; i++) {
-                    if (e.which == trial.choices[i]) {
-                        flag = true;
-                    }
-                }
-                if (flag) {
-                    var key_press = e.which;
-
-                    // record rt
-                    var endTime = (new Date()).getTime();
-
-                    responses.push({
-                        "key_press": key_press,
-                        "rt": endTime - startTime,
-                        "stimulus": current_stim
-                    });
-
-                    // after a valid response, the stimulus will have the CSS class 'responded'
-                    // which can be used to provide visual feedback that a response was recorded
-                    $("#jspsych-animation-image").addClass('responded');
-                }
-            };
             
-            $(document).keydown(resp_func);
+            var after_response = function(info) {
+                
+                responses.push({
+                    key_press: info.key,
+                    rt: info.rt,
+                    stimulus: current_stim
+                });
+                
+                // after a valid response, the stimulus will have the CSS class 'responded'
+                // which can be used to provide visual feedback that a response was recorded
+                $("#jspsych-animation-image").addClass('responded');
+            }
+
+            // hold the jspsych response listener object in memory
+            // so that we can turn off the response collection when
+            // the trial ends
+            var response_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices, 'date', true);
 
             function endTrial() {
-                 $(document).unbind('keydown', resp_func);
+                
+                jsPsych.pluginAPI.cancelKeyboardResponse(response_listener);
                 
                 block.writeData($.extend({}, {
                     "trial_type": "animation",

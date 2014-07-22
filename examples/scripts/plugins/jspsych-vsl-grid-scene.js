@@ -6,25 +6,8 @@
  * 12(6), 499-504.
  * 
  * Josh de Leeuw
- * February 2014
  * 
- * 
- * parameters:
- *      stimuli: array of arrays describing scenes. each interior array should have dimensions
- *          equal to the size of the desired grid. for example, a 3 x 3 grid  with stimuli along
- *          the top-left to bottom-right diagonal would be declared like this:
- * 
- *              var s = [
- *                  [ "img_path", 0, 0 ],
- *                  [ 0, "img_path", 0 ],
- *                  [ 0, 0, "img_path" ]
- *              ]
- * 
- *          for blank spaces in the grid, you need to put a 0 in the corresponding location. 
- *      image_size: array [width, height] - how big to draw the stimuli
- *      timing_duration: how long to show the scene
- *      timing_post_trial: how long to show blank screen after trial
- *      data: the optional data object
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-vsl-grid-scene
  * 
  */
 
@@ -34,6 +17,8 @@
         var plugin = {};
 
         plugin.create = function(params) {
+            
+            params = jsPsych.pluginAPI.enforceArray(params, ['data'])
             var trials = new Array(params.stimuli.length);
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {};
@@ -53,7 +38,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
             display_element.html(plugin.generate_stimulus(trial.stimuli, trial.image_size));
 

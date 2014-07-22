@@ -6,20 +6,8 @@
  * Psychology: Learning, Memory, and Cognition, 28(3), 458.
  * 
  * Josh de Leeuw
- * February 2014
  * 
- * REQUIRES rapaheljs (www.raphaeljs.com)
- * 
- * parameters:
- *      stimuli: array of paths to images. will be shown in the order declared in array
- *      timing_cycle: how long for an image to complete an animation cycle
- *      canvas_size: array [width, height] - how big to draw the area
- *      image_size: array [width, height] - how big to draw the stimuli
- *      initial_direction: "left" or "right" - which way to move the first image
- *      occlude_center: if true, draw a rectangle in the center to occlude the swaps between images
- *      timing_pre_movement: how long to wait before the first image starts moving
- *      timing_post_trial: how long to show blank screen after trial
- *      data: the optional data object
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-vsl-animate-occlusion
  * 
  */
 
@@ -29,6 +17,7 @@
         var plugin = {};
 
         plugin.create = function(params) {
+            
             var trials = new Array(1);
 
             trials[0] = {};
@@ -54,7 +43,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            //trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
             
             // variable to keep track of timing info and responses
             var start_time = 0;
@@ -133,18 +122,15 @@
             }
             
             // add key listener
-            var resp_func = function(e){
-                for(var i=0; i<trial.choices.length; i++){
-                    if(e.which == trial.choices[i]){
-                        responses.push({
-                            key: e.which,
-                            stimulus: which_image - 1,
-                            rt: (new Date()).getTime() - start_time
-                        });
-                    }
-                }
-            };
-            $(document).keydown(resp_func);
+            var after_response = function(info){
+                responses.push({
+                    key: info.key,
+                    stimulus: which_image - 1,
+                    rt: info.rt
+                });
+            }
+            
+            key_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices, 'date', true);
 
             if (trial.timing_pre_movement > 0) {
                 setTimeout(function() {
@@ -159,7 +145,7 @@
                 
                 display_element.html('');
                 
-                $(document).unbind('keydown', resp_func);
+                jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
                 
                 block.writeData($.extend({}, {
                     "trial_type": "vsl-animate-occlusion",
