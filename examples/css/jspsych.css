@@ -1,0 +1,211 @@
+/* 
+ * CSS for jsPsych experiments.
+ *
+ * This stylesheet provides minimal styling to make jsPsych 
+ * experiments look polished without any additional styles.
+ *
+ */
+
+/*
+ *
+ * fonts and type
+ *
+ */
+ 
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+
+html {
+ font-family: 'Open Sans', 'Arial', sans-serif;
+ font-size: 18px;
+ line-height: 1.6em;
+}
+
+p {
+    clear:both;
+}
+
+.very-small {
+    font-size: 50%;
+}
+
+.small {
+    font-size: 75%;
+}
+
+.large {
+    font-size: 125%;
+}
+
+.very-large {
+    font-size: 150%;
+}
+
+/*
+ *
+ * Classes for changing location of things
+ *
+ */
+ 
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.center-content {
+    text-align: center;
+}
+
+/*
+ *
+ * Form elements like input fields and buttons
+ *
+ */
+
+input[type="text"] {
+    font-family: 'Open Sans', 'Arial', sans-sefif;
+    font-size: 14px;
+}
+
+button {
+    padding: 0.5em;
+    background-color: #eaeaea;
+    border: 1px solid #eaeaea;
+    color: #333;
+    font-family: 'Open Sans', 'Arial', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+button:hover {
+    border:1px solid #ccc;
+}
+
+/*
+ *
+ * Container holding jsPsych content
+ *
+ */
+
+
+.jspsych-display-element {
+    width: 800px;
+    margin: 50px auto 50px auto;
+}
+
+/*
+ *
+ * PLUGIN: jspsych-animation
+ *
+ */
+
+#jspsych-animation-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+ *
+ * PLUGIN: jspsych-categorize-animation
+ *
+ */
+
+#jspsych-categorize-animation-stimulus {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+ *
+ * PLUGIN: jspsych-categorize
+ *
+ */
+
+#jspsych-categorize-stimulus {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.feedback {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+ *
+ * PLUGIN: jspsych-free-sort
+ *
+ */
+
+#jspsych-free-sort-arena {
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid #444;
+}
+
+/*
+ *
+ * PLUGIN: jspsych-palmer
+ *
+ */
+
+#jspsych-palmer-raphaelCanvas {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+ *
+ * PLUGIN: jspsych-same-different
+ *
+ */
+ 
+.jspsych-same-different-stimulus {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+ *
+ * PLUGIN: jspsych-single-stim
+ *
+ */
+ 
+#jspsych-single-stim-stimulus {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+ *
+ * PLUGIN: jspsych-xab
+ *
+ */
+ 
+.jspsych-xab-stimulus {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+ *
+ * PLUGIN: jspsych-survey-text
+ *
+ */
+ 
+ .jspsych-survey-text {
+     margin: 0.25em 0em;
+ }
+ 
+ .jspsych-survey-text-question {
+     margin: 2em 0em;
+ }

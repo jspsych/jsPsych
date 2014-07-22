@@ -1,25 +1,12 @@
-// Josh de Leeuw
-// Updated October 2013
-//
-// This plugin is for presenting a single image and collecting a key response.
-// It can be used for categorizing images (without feedback), collecting yes/no responses, etc...
-//
-//  parameters
-//      stimuli: array of stimuli to present. elements of the array can be either paths to images
-//                  or HTML strings
-//      choices: array of key codes that represent valid responses. other key codes will be ignored
-//      continue_after_response: when true, the trial will end as soon as the user gives a response.
-//                  if false, then the trial will continue until timing_response is reached
-//      timing_stim: how long to show the stimulus for. -1 will show indefinitely.
-//      timing_response: how long to wait for a response. this timer starts at the same time as the
-//                  timer for the stimulus presentation. if the timer is reached without a response
-//                  given, then the user's response will be recorded as a "-1" for the trial, and the
-//                  trial will end.
-//      timing_post_trial: how long to show a blank screen after the trial ends.
-//      is_html: must set to true when using HTML strings as the stimuli.
-//      prompt: optional HTML string to display with the stimulus.
-//      data: the optional data object
-
+/**
+ * jspsych-single-stim
+ * Josh de Leeuw
+ * 
+ * plugin for displaying a stimulus and getting a keyboard response
+ * 
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-single-stim
+ *
+ **/
 
 (function($) {
     jsPsych["single-stim"] = (function() {
@@ -27,6 +14,9 @@
         var plugin = {};
 
         plugin.create = function(params) {
+            
+            params = jsPsych.pluginAPI.enforceArray(params, ['stimuli', 'choices', 'data']);
+            
             var trials = new Array(params.stimuli.length);
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {};
@@ -56,14 +46,9 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
             var trial_complete = false;
-
-            var startTime = (new Date()).getTime();
-            var endTime = -1;
-
-            var key_press = -1;
 
             if (!trial.is_html) {
                 display_element.append($('<img>', {
@@ -83,23 +68,20 @@
                 display_element.append(trial.prompt);
             }
 
-            var cont_function = function() {
-                var rt = -1;
-                if (endTime != -1) {
-                    rt = (endTime - startTime);
-                }
+            var end_trial = function(info) {
+                
                 trial_complete = true;
 
                 var trial_data = {
                     "trial_type": "single-stim",
                     "trial_index": block.trial_idx,
-                    "rt": rt,
+                    "rt": info.rt,
                     "stimulus": trial.a_path,
-                    "key_press": key_press
+                    "key_press": info.key
                 };
 
                 block.writeData($.extend({}, trial_data, trial.data));
-                $(document).unbind('keydown', resp_func);
+                
                 display_element.html('');
                 if (trial.timing_post_trial > 0) {
                     setTimeout(function() {
@@ -111,35 +93,23 @@
                 }
             };
 
-            var resp_func = function(e) {
-                var flag = false;
-                // check if the key is any of the options, or if it is an accidental keystroke
-                for (var i = 0; i < trial.choices.length; i++) {
-                    if (e.which == trial.choices[i]) {
-                        flag = true;
-                    }
-                }
-                if (flag) {
-                    key_press = e.which;
+            var after_response = function(info) {
+                
+                // after a valid response, the stimulus will have the CSS class 'responded'
+                // which can be used to provide visual feedback that a response was recorded
+                $("#jspsych-single-stim-stimulus").addClass('responded');
 
-                    // record rt
-                    endTime = (new Date()).getTime();
-
-                    // after a valid response, the stimulus will have the CSS class 'responded'
-                    // which can be used to provide visual feedback that a response was recorded
-                    $("#jspsych-single-stim-stimulus").addClass('responded');
-
-                    if (trial.continue_after_response) {
-                        // response triggers the next trial in this case.
-                        // if hide_image_after_response is true, then next
-                        // trial should be triggered by timeout function below.
-                        cont_function();
-                    }
+                if (trial.continue_after_response) {
+                    // response triggers the next trial in this case.
+                    // if hide_image_after_response is true, then next
+                    // trial should be triggered by timeout function below.
+                    end_trial(info);
                 }
             };
+        
 
-            $(document).keydown(resp_func);
-
+            jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices);
+            
             // hide image if timing is set
             if (trial.timing_stim > 0) {
                 setTimeout(function() {
@@ -153,7 +123,7 @@
             if (trial.timing_response > 0) {
                 setTimeout(function() {
                     if (!trial_complete) {
-                        cont_function();
+                        end_trial({rt: -1, key: -1});
                     }
                 }, trial.timing_response);
             }

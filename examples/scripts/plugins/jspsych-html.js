@@ -3,32 +3,7 @@ The html-plugin will load and display an arbitrary number of html pages. To proc
 user might either press a button on the page or a specific key. Afterwards, the page get hidden and
 the plugin will wait of a specified time before it proceeds.
 
-Parameters:
-  pages: array of
-    url:       url of the html-page to display (mandatory)
-    cont_key:  keycode of the key to continue (optional)
-    cont_btn:  id of a button (or any element on the page) that can be clicked to continue (optional)
-               note that the button / element has to be included in the page that is loaded, already
-    timing:   number of ms to wait after hiding the page and before proceeding (optional)
-    check_fn: called with display_element as argument when subject attempts to proceed; only proceeds if this
-              returns true; (optional)
-  cont_key:  this setting is used for all pages that don't define it themself (optional)
-  cont_btn: this setting is used for all pages that don't define it themself (optional)
-  timing:    this setting is used for all pages that don't define it themself (optional)
-  force_refresh: set to true if you want to force the plugin to grab the newest version of the html document
-  
-Data:
-  array of
-    url:      the url of the page
-    rt: duration the user looked at the page in ms
-  
-
-Example Usage:
-  jsPsych.init( 
-    {experiment_structure: [
-		   {type: "html", pages:[{url: "intro.html", cont_btn: "start"}]}
-		 ]
-	});
+documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
 */
 (function($) {
     jsPsych.html = (function() {
@@ -36,7 +11,12 @@ Example Usage:
         var plugin = {};
 
         plugin.create = function(params) {
+            
+            params = jsPsych.pluginAPI.enforceArray(params, ['pages']);
+            
             var trials = [];
+            
+            
             for (var i = 0; i < params.pages.length; i++) {
                 trials.push({
                     type: "html",
@@ -56,7 +36,7 @@ Example Usage:
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial, ["check_fn"]);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial, ["check_fn"]);
 
             var url = trial.url;
             if (trial.force_refresh) {

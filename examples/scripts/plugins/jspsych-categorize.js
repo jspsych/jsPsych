@@ -1,27 +1,8 @@
 /** 
  * jspsych plugin for categorization trials with feedback
  * Josh de Leeuw
- * updated October 2013
  * 
- * display an image or HTML object and then give corrective feedback based on the subject's response
- *
- * parameters:
- *      stimuli: array of stimuli. array elements can be paths to images or strings of HTML.
- *      key_answer: array of key codes representing the correct answer for each stimulus.
- *      text_answer: array of strings representing the label associated with each stimulus. optional.
- *      choices: array of key codes representing valid choices that can be made. other key responses will be ignored.
- *      correct_text: HTML string to show when correct answer is given.
- *      incorrect_text: HTML string to show when incorrect answer is given.
- *              NOTE: for both of the above, the special string %ANS% can be used. The text_answer associated with 
- *              the trial will be substituted for %ANS%. 
- *      timing_stim: how long to show the stimulus for. -1 will show until response is given.
- *      timing_feedback_duration: how long to show the feedback for.
- *      timing_post_trial: how long to show a blank screen before the next trial.
- *      show_stim_with_feedback: if true, the stimulus will remain on the screen while feedback is given.
- *      is_html: must set to true if the stimulus is HTML code.
- *      force_correct_button_press: if true, then the user must press the correct key after feedback is given.
- *      prompt: HTML string to show when the subject is viewing the stimulus and making a categorization decision.
- *      data: the optional data object
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-categorize
 **/
 
 (function($) {
@@ -30,6 +11,9 @@
         var plugin = {};
 
         plugin.create = function(params) {
+            
+            params = jsPsych.pluginAPI.enforceArray(params, ['choices', 'stimuli', 'key_answer', 'text_answer', 'data']);
+            
             var trials = [];
             for (var i = 0; i < params.stimuli.length; i++) {
                 trials.push({});
@@ -61,7 +45,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
             
             switch (part) {
             case 1:
@@ -78,9 +62,9 @@
                 }
                 else {
                     display_element.append($('<div>', {
-                        id: 'jspsych-categorize-stimulus',
-                        "class": 'cat',
-                        html: trial.a_path
+                        "id": 'jspsych-categorize-stimulus',
+                        "class": 'jspsych-categorize-stimulus',
+                        "html": trial.a_path
                     }));
                 }
 
@@ -102,51 +86,32 @@
                 var startTime = (new Date()).getTime();
 
                 // create response function
-                var resp_func = function(e) {
-                    var flag = false;
+                var after_response = function(info) {
+                    
                     var correct = false;
-                    if (e.which == trial.key_answer) // correct category
-                    {
-                        flag = true;
-                        correct = true;
-                    }
-                    else {
-                        // check if the key is any of the options, or if it is an accidental keystroke
-                        for (var i = 0; i < trial.choices.length; i++) {
-                            if (e.which == trial.choices[i]) {
-                                flag = true;
-                                correct = false;
-                            }
-                        }
-                    }
-                    if (flag) {
-                        cat_trial_complete = true;
+                    if(trial.key_answer == info.key) { correct = true; }
+                    
+                    cat_trial_complete = true;
+                    
+                    // save data
+                    var trial_data = {
+                        "trial_type": "categorize",
+                        "trial_index": block.trial_idx,
+                        "rt": info.rt,
+                        "correct": correct,
+                        "stimulus": trial.a_path,
+                        "key_press": info.key
+                    };
 
-                        // measure response time
-                        var endTime = (new Date()).getTime();
-                        var rt = (endTime - startTime);
+                    block.writeData($.extend({}, trial_data, trial.data));
 
-                        // save data
-                        var trial_data = {
-                            "trial_type": "categorize",
-                            "trial_index": block.trial_idx,
-                            "rt": rt,
-                            "correct": correct,
-                            "stimulus": trial.a_path,
-                            "key_press": e.which
-                        };
-
-                        block.writeData($.extend({}, trial_data, trial.data));
-
-                        // clear function
-                        $(document).unbind('keydown', resp_func);
-                        display_element.html('');
-                        plugin.trial(display_element, block, trial, part + 1);
-                    }
-                };
-
-                // add event listener
-                $(document).keydown(resp_func);
+                    display_element.html('');
+                    
+                    plugin.trial(display_element, block, trial, part + 1);
+                }
+                
+                jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices, 'date', false);
+                
                 break;
 
             case 2:
@@ -163,8 +128,8 @@
                     else {
                         display_element.append($('<div>', {
                             "id": 'jspsych-categorize-stimulus',
-                            "class": 'cat',
-                            "html": trial.a_path
+                            "class": 'jspsych-categorize-stimulus',
+                            "html: trial.a_path
                         }));
                     }
                 }
@@ -183,14 +148,13 @@
 
                 // check if force correct button press is set
                 if (trial.force_correct_button_press && block.data[block.trial_idx].correct === false) {
-                    var resp_func_corr_key = function(e) {
-                        if (e.which == trial.key_answer) // correct category
-                        {
-                            $(document).unbind('keyup', resp_func_corr_key);
-                            plugin.trial(display_element, block, trial, part + 1);
-                        }
-                    };
-                    $(document).keyup(resp_func_corr_key);
+                    
+                    var after_forced_response = function(info) {
+                        plugin.trial(display_element, block, trial, part + 1);
+                    }
+                    
+                    jsPsych.pluginAPI.getKeyboardResponse(after_forced_response, trial.key_answer, 'date', false);
+                    
                 }
                 else {
                     setTimeout(function() {

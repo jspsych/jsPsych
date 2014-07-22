@@ -1,17 +1,10 @@
 /** 
+ * jspsych-call-function
+ * plugin for calling an arbitrary function during a jspsych experiment
  * Josh de Leeuw
- * Updated October 2013
-
-	This plugin gives the user the ability to execute an arbitrary function
-	during an experiment.
-	
-	Params:
-		"type" is "call_function"
-		"func" is the function that will be called
-		"args" is an array of arguments to pass to the function. (optional)
-	
-	Data:
-		The return value of the function will be stored in the data.
+ * 
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-call-function
+ * 
 **/
 
 (function($) {

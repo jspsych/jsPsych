@@ -1,27 +1,8 @@
 /** 
  * jspsych plugin for categorization trials with feedback and animated stimuli
  * Josh de Leeuw
- * updated December 2013
  * 
- * display a sequence of images at a fixed frame rate then give corrective feedback based on the subject's response
- *
- * parameters:
- *      stimuli: array of arrays. inner array elements are paths to images. each inner array is a set of frames
- *                  that will be displayed as an animation sequence.
- *      key_answer: array of key codes representing the correct answer for each stimulus.
- *      text_answer: array of strings representing the label associated with each stimulus. optional.
- *      choices: array of key codes representing valid choices that can be made. other key responses will be ignored.
- *      correct_text: HTML string to show when correct answer is given.
- *      incorrect_text: HTML string to show when incorrect answer is given.
- *              NOTE: for both of the above, the special string %ANS% can be used. The text_answer associated with 
- *              the trial will be substituted for %ANS%. 
- *      reps: how many cycles through the animation sequence to show. -1 will show until response is given.
- *      allow_response_before_complete: if true, the subject can give a response before the animation sequence finishes.
- *      timing_feedback_duration: how long to show the feedback for.
- *      timing_post_trial: how long to show a blank screen before the next trial.
- *      frame_time: how many ms to show each individual image in the animation sequence.
- *      prompt: HTML string to show when the subject is viewing the stimulus and making a categorization decision.
- *      data: the optional data object
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-categorize-animation
  **/
 
 (function($) {
@@ -30,6 +11,9 @@
         var plugin = {};
 
         plugin.create = function(params) {
+            
+            params = jsPsych.pluginAPI.enforceArray(params, ['key_answer','text_answer','choices','data']);
+            
             var trials = new Array(params.stimuli.length);
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {};
@@ -56,7 +40,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
             
             var animate_frame = -1;
             var reps = 0;
@@ -86,7 +70,7 @@
                 if (showAnimation) {
                     display_element.append($('<img>', {
                         "src": trial.stims[animate_frame],
-                        "class": 'jspsych-categorize-animate-stimulus'
+                        "class": 'jspsych-categorize-animation-stimulus'
                     }));
                 }
 
@@ -130,50 +114,39 @@
 
             }, trial.frame_time);
 
-            // attach response function
-
-            var resp_func = function(e) {
-
+            
+            var keyboard_listener;
+            
+            var after_response = function(info){
+                // ignore the response if animation is playing and subject
+                // not allowed to respond before it is complete
                 if (!trial.allow_response_before_complete && showAnimation) {
                     return false;
                 }
-
-                var flag = false; // valid keystroke?
-                var correct = false; // correct answer?
-
-                if (e.which == trial.key_answer) // correct category
-                {
-                    flag = true;
+                
+                var correct = false;
+                if(trial.key_answer == info.key) {
                     correct = true;
                 }
-                else {
-                    // check if the key is any of the options, or if it is an accidental keystroke
-                    for (var i = 0; i < trial.choices.length; i++) {
-                        if (e.which == trial.choices[i]) {
-                            flag = true;
-                            correct = false;
-                        }
-                    }
-                }
-                if (flag) // if keystroke is one of the choices
-                {
-                    responded = true;
-                    var endTime = (new Date()).getTime();
-                    var rt = (endTime - startTime);
+                
+                responded = true;
 
-                    var trial_data = {
-                        "trial_type": trial.type,
-                        "trial_index": block.trial_idx,
-                        "stimulus": trial.stims[0],
-                        "rt": rt,
-                        "correct": correct,
-                        "key_press": e.which
-                    };
-                    block.writeData($.extend({}, trial_data, trial.data));
-                    $(document).unbind('keydown', resp_func);
-                }
-            };
-            $(document).keydown(resp_func);
+                var trial_data = {
+                    "trial_type": trial.type,
+                    "trial_index": block.trial_idx,
+                    "stimulus": trial.stims[0],
+                    "rt": info.rt,
+                    "correct": correct,
+                    "key_press": info.key
+                };
+                
+                block.writeData($.extend({}, trial_data, trial.data));
+                
+                jsPsych.pluginAPI.cancelKeyboardResponse(keyboard_listener);
+                
+            }
+            
+            jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices, 'date', true);
 
             function endTrial() {
                 clearInterval(animate_interval); // stop animation!

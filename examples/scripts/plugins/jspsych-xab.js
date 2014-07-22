@@ -1,27 +1,10 @@
 /*  jspsych-xab.js
  *	Josh de Leeuw
- *  updated Oct 2013
  *
  *  This plugin runs a single XAB trial, where X is an image presented in isolation, and A and B are choices, with A or B being equal to X. 
  *	The subject's goal is to identify whether A or B is identical to X.
  *
- *  parameters:
- *      stimuli: array of arrays. each interior array represents the stimuli for a single trial.
- *                  each interior array can be two or three elements. if two elements, then the plugin
- *                  will show the first one as the target (X). if three elements, then the first is X
- *                  the second is A and the third is B. the second is considered the target and the third
- *                  is the foil. this is useful if X and A are not identical, but A is still the correct
- *                  choice (e.g. a categorization experiment where the goal is to pick the item that is 
- *                  in the same category). stimuli can be paths to images, or html strings.
- *      left_key: key code for response associated with image on the left side of the screen.
- *      right_key: key code for right side
- *      timing_x: how long to display X for in ms
- *      timing_xab_gap: how long to show a blank screen in between X and AB in ms.
- *      timing_ab: how long to show the screen with AB in ms. -1 will display until a response is given.
- *      timing_post_trial: how long to show a blank screen after the trial is complete.
- *      is_html: must set to TRUE if the stimuli are HTML strings instead of images.
- *      prompt: an HTML string to display under the AB stimuli, e.g. to remind the subject which keys to use
- *      data: the optional data object
+ * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-xab
  *
  */
 
@@ -31,6 +14,8 @@
         var plugin = {};
 
         plugin.create = function(params) {
+            
+            params = jsPsych.pluginAPI.enforceArray(params, ['data']);
 
             // the number of trials is determined by how many entries the params.stimuli array has
             var trials = new Array(params.stimuli.length);
@@ -72,7 +57,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
             
             switch (part) {
 
@@ -127,20 +112,20 @@
                 if (!trial.is_html) {
                     display_element.append($('<img>', {
                         "src": images[0],
-                        "class": 'jspsych-xab-stimulus'
+                        "class": 'jspsych-xab-stimulus left'
                     }));
                     display_element.append($('<img>', {
                         "src": images[1],
-                        "class": 'jspsych-xab-stimulus'
+                        "class": 'jspsych-xab-stimulus right'
                     }));
                 }
                 else {
                     display_element.append($('<div>', {
-                        "class": 'jspsych-xab-stimulus',
+                        "class": 'jspsych-xab-stimulus left',
                         html: images[0]
                     }));
                     display_element.append($('<div>', {
-                        "class": 'jspsych-xab-stimulus',
+                        "class": 'jspsych-xab-stimulus right',
                         html: images[1]
                     }));
                 }
@@ -148,9 +133,6 @@
                 if (trial.prompt !== "") {
                     display_element.append(trial.prompt);
                 }
-
-                // start measuring response time
-                var startTime = (new Date()).getTime();
 
                 // if timing_ab is > 0, then we hide the stimuli after timing_ab milliseconds
                 if (trial.timing_ab > 0) {
@@ -162,52 +144,54 @@
                 }
 
                 // create the function that triggers when a key is pressed.
-                var resp_func = function(e) {
-                    var flag = false; // true when a valid key is chosen
+                var after_response = function(info) {
+                    
                     var correct = false; // true when the correct response is chosen
-                    if (e.which == trial.left_key) // 'q' key by default
+                    
+                    if (info.key == trial.left_key) // 'q' key by default
                     {
-                        flag = true;
                         if (target_left) {
                             correct = true;
                         }
                     }
-                    else if (e.which == trial.right_key) // 'p' key by default
+                    else if (info.key == trial.right_key) // 'p' key by default
                     {
-                        flag = true;
                         if (!target_left) {
                             correct = true;
                         }
                     }
-                    if (flag) {
-                        var endTime = (new Date()).getTime();
-                        var rt = (endTime - startTime);
-                        // create object to store data from trial
-                        var trial_data = {
-                            "trial_type": "xab",
-                            "trial_index": block.trial_idx,
-                            "rt": rt,
-                            "correct": correct,
-                            "stimulus_x": trial.x_path,
-                            "stimulus_a": trial.a_path,
-                            "stimulus_b": trial.b_path,
-                            "key_press": e.which
-                        };
-                        block.writeData($.extend({}, trial_data, trial.data));
-                        $(document).unbind('keydown', resp_func); // remove response function from keys
-                        display_element.html(''); // remove all
-                        xab_trial_complete = true;
-                        // move on to the next trial after timing_post_trial milliseconds
-                        if(trial.timing_post_trial > 0) {
-                            setTimeout(function() {
-                                block.next();
-                            }, trial.timing_post_trial);
-                        } else {
+                    
+                       
+                    // create object to store data from trial
+                    var trial_data = {
+                        "trial_type": "xab",
+                        "trial_index": block.trial_idx,
+                        "rt": info.rt,
+                        "correct": correct,
+                        "stimulus_x": trial.x_path,
+                        "stimulus_a": trial.a_path,
+                        "stimulus_b": trial.b_path,
+                        "key_press": info.key
+                    };
+                    block.writeData($.extend({}, trial_data, trial.data));
+                    
+                    display_element.html(''); // remove all
+                    
+                    xab_trial_complete = true;
+                    
+                    // move on to the next trial after timing_post_trial milliseconds
+                    if(trial.timing_post_trial > 0) {
+                        setTimeout(function() {
                             block.next();
-                        }
+                        }, trial.timing_post_trial);
+                    } else {
+                        block.next();
                     }
+                
                 };
-                $(document).keydown(resp_func);
+                
+                jsPsych.pluginAPI.getKeyboardResponse(after_response, [trial.left_key, trial.right_key], 'date', false);
+                
                 break;
             }
         };
