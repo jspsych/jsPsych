@@ -28,9 +28,7 @@
             display_element: $('#jspsych_target'),
             experiment_structure: [function_block],
             on_finish:function(data){
-                $('#jspsych_target').append($("<pre>",{
-                    html: JSON.stringify(data,undefined,2)
-                }));
+                jsPsych.dataAPI.displayData();
             }
         });
     </script>
