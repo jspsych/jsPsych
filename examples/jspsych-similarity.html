@@ -16,7 +16,7 @@
         <script src="scripts/jspsych.js"></script>
         <script src="scripts/plugins/jspsych-similarity.js"></script>
         <!-- style -->
-        <link href="css/jspsych.css" rel="stylsheet" type="text/css"></link>
+        <link href="css/jspsych.css" rel="stylesheet" type="text/css"></link>
     </head>
     
     <body>
@@ -60,9 +60,7 @@
                 display_element: $('#jspsych_target'),
                 experiment_structure: [similarity_block],
                 on_finish: function(data) {
-                    $('#jspsych_target').append($("<pre>", {
-                        html: JSON.stringify(data, undefined, 2)
-                    }));
+                    jsPsych.dataAPI.displayData();
                 }
             });
         }
