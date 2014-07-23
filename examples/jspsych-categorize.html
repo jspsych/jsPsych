@@ -18,8 +18,14 @@
                 background-color: #ddd;
                 font-size:124px;
                 font-family:'Impact';
+				line-height: 1em;
+				text-align: center;
                 margin: auto;
             }
+			
+			#stimulus p {
+				margin: 0px;
+			}
         </style>
     </head>
     
@@ -62,10 +68,10 @@
             key_answer: answers,
             text_answer: text_answers,
             choices: [80, 81],
-            correct_text: "<p class='prompt'>Correct, this is a %ANS%.</p>",
-            incorrect_text: "<p class='prompt'>Incorrect, this is a %ANS%.</p>",
+            correct_text: "<p class='center-content'>Correct, this is a %ANS%.</p>",
+            incorrect_text: "<p class='center-content'>Incorrect, this is a %ANS%.</p>",
             is_html: true,
-            prompt: "<p class='prompt'>Press P for letter. Press Q for number.</p>"
+            prompt: "<p class='center-content'>Press P for letter. Press Q for number.</p>"
         };
 
         // create a block of instructions
