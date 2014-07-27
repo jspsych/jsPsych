@@ -64,7 +64,7 @@
                     display_element.append($('<div>', {
                         "id": 'jspsych-categorize-stimulus',
                         "class": 'jspsych-categorize-stimulus',
-                        "html: trial.a_path
+                        "html": trial.a_path
                     }));
                 }
 
@@ -129,7 +129,7 @@
                         display_element.append($('<div>', {
                             "id": 'jspsych-categorize-stimulus',
                             "class": 'jspsych-categorize-stimulus',
-                            "html: trial.a_path
+                            "html": trial.a_path
                         }));
                     }
                 }
