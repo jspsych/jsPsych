@@ -82,9 +82,6 @@
                     display_element.append(trial.prompt);
                 }
 
-                // start measuring RT
-                var startTime = (new Date()).getTime();
-
                 // create response function
                 var after_response = function(info) {
                     
