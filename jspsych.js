@@ -486,7 +486,7 @@
 
         module.submitToTurk = function(data) {
 
-            var turkInfo = core.turkInfo();
+            var turkInfo = jsPsych.turk.turkInfo();
             var assignmentId = turkInfo.assignmentId;
             var turkSubmitTo = turkInfo.turkSubmitTo;
 
