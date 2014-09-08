@@ -251,8 +251,19 @@
                 },
 
                 writeData: function(data_object) {
-                    this.data[this.trial_idx] = data_object;
-                    opts.on_data_update(data_object);
+                    
+                    var progress = jsPsych.progress();
+                    
+                    var default_data = {
+                        'trial_type': this.trials[this.trial_idx].type,
+                        'trial_index': this.trial_idx,
+                        'trial_index_global': progress.current_trial_global
+                    };
+                    
+                    var ext_data_object = $.extend({}, data_object, default_data);
+                    
+                    this.data[this.trial_idx] = ext_data_object;
+                    opts.on_data_update(ext_data_object);
                 },
 
 
