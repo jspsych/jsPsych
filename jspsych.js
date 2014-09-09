@@ -257,7 +257,8 @@
                     var default_data = {
                         'trial_type': this.trials[this.trial_idx].type,
                         'trial_index': this.trial_idx,
-                        'trial_index_global': progress.current_trial_global
+                        'trial_index_global': progress.current_trial_global,
+                        'time_elapsed': jsPsych.totalTime()
                     };
                     
                     var ext_data_object = $.extend({}, data_object, default_data);
