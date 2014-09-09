@@ -258,7 +258,8 @@
                         'trial_type': this.trials[this.trial_idx].type,
                         'trial_index': this.trial_idx,
                         'trial_index_global': progress.current_trial_global,
-                        'time_elapsed': jsPsych.totalTime()
+                        'time_elapsed': jsPsych.totalTime(),
+                        'block_index': curr_block
                     };
                     
                     var ext_data_object = $.extend({}, data_object, default_data);
