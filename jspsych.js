@@ -8,13 +8,10 @@
 (function($) {
     jsPsych = (function() {
 
-        //
-        // public object
-        //
         var core = {};
 
         //
-        // private class variables
+        // private variables
         //
 
         // options
@@ -34,13 +31,6 @@
         // public methods
         //
 
-        // core.init creates the experiment and starts running it
-        //		display_element is an HTML element (usually a <div>) that will display jsPsych content
-        //		options is an object: {
-        //			"experiment_structure": an array of blocks specifying the experiment
-        //			"finish": function to execute when the experiment ends
-        //		}
-        //
         core.init = function(options) {
 
             // reset the key variables
@@ -69,7 +59,8 @@
                 },
                 'on_data_update': function(data) {
                     return undefined;
-                }
+                },
+				'show_progress_bar': false
             };
 
             // import options
@@ -84,11 +75,6 @@
             run();
         };
 
-        // core.data returns all of the data objects for each block as an array
-        //      where core.data[0] = data object from block 0, etc...
-        // if flatten is true, then the hierarchical structure of the data
-        // is removed and each array entry will be a single trial.
-
         core.data = function() {
             var all_data = [];
             
@@ -99,17 +85,6 @@
             return all_data;
         };
 
-        
-
-        // core.progress returns an object with the following properties
-        // 		total_blocks: the number of total blocks in the experiment
-        //		total_trials: the number of total trials in the experiment
-        //		current_trial_global: the current trial number in global terms
-        // 					i.e. if each block has 20 trials and the experiment is
-        //					currently in block 2 trial 10, this has a value of 30.
-        //		current_trial_local: the current trial number within the block.
-        //		current_block: the current block number.
-
         core.progress = function() {
 
             var total_trials = 0;
@@ -118,40 +93,33 @@
             }
 
             var current_trial_global = 0;
+			var current_trial_local = -1;
             for (var i = 0; i < curr_block; i++) {
                 current_trial_global += exp_blocks[i].num_trials;
             }
-            current_trial_global += exp_blocks[curr_block].trial_idx;
+			if(current_trial_global < total_trials) {
+            	current_trial_global += exp_blocks[curr_block].trial_idx;
+				current_trial_local = exp_blocks[curr_block].trial_idx;
+			}
 
             var obj = {
                 "total_blocks": exp_blocks.length,
                 "total_trials": total_trials,
                 "current_trial_global": current_trial_global,
-                "current_trial_local": exp_blocks[curr_block].trial_idx,
+                "current_trial_local": current_trial_local,
                 "current_block": curr_block
             };
 
             return obj;
         };
 
-        // core.startTime() returns the Date object which represents the time that the experiment started.
-
         core.startTime = function() {
             return exp_start_time;
         };
 
-        // core.totalTime() returns the length of time in ms since the experiment began
-
         core.totalTime = function() {
             return (new Date()).getTime() - exp_start_time.getTime();
         };
-
-        // core.preloadImage will load images into the browser cache so that they appear quickly when
-        // used during a trial. 
-        //  images: array of paths to images
-        //  callback_complete: a function with no arguments that calls when loading is complete
-        //  callback_load: a function with a single argument that calls whenever an image is loaded
-        //                  argument is the number of images currently loaded.
 
         core.preloadImages = function(images, callback_complete, callback_load) {
 
@@ -185,10 +153,11 @@
         // private functions //
         //
         function run() {
-            // take the experiment structure and dynamically create a set of blocks
+			
+            // take the experiment structure and create a set of blocks
             exp_blocks = new Array(opts.experiment_structure.length);
 
-            // iterate through block list to create trials
+            // iterate through list to create trials
             for (var i = 0; i < exp_blocks.length; i++) {
 
                 // check to make sure plugin is loaded
@@ -201,6 +170,11 @@
 
                 exp_blocks[i] = createBlock(trials);
             }
+			
+			// show progress bar if requested
+			if(opts.show_progress_bar === true) {
+				drawProgressBar();
+			}
 
             // record the start time
             exp_start_time = new Date();
@@ -232,8 +206,14 @@
                     // call on_trial_finish() 
                     //     if not very first trial
                     //		and not the last call in this block (no trial due to advance in block)
-                    if (typeof this.trials[this.trial_idx + 1] != "undefined" && (curr_block != 0 || this.trial_idx > -1)) {
-                        opts.on_trial_finish();
+                    //if (typeof this.trials[this.trial_idx + 1] != "undefined" && (curr_block != 0 || this.trial_idx > -1)) {
+					if(this.trial_idx > -1){
+					    opts.on_trial_finish();
+						
+						// update progress bar if shown
+						if(opts.show_progress_bar === true) {
+							updateProgressBar();
+						}
                     };
 
                     this.trial_idx = this.trial_idx + 1;
@@ -285,6 +265,18 @@
             // execute trial method
             jsPsych[trial.type]["trial"].call(this, DOM_target, block, trial, 1);
         }
+		
+		function drawProgressBar(){
+			$('body').prepend($('<div id="jspsych-progressbar-container"><span>Completion Progress</span><div id="jspsych-progressbar-outer"><div id="jspsych-progressbar-inner"></div></div></div>'));
+		}
+		
+		function updateProgressBar(){
+			var progress = jsPsych.progress();
+			
+			var percentComplete = 100 * ( (progress.current_trial_global+1) / progress.total_trials);
+			
+			$('#jspsych-progressbar-inner').css('width', percentComplete+"%");
+		}
 
         return core;
     })();
