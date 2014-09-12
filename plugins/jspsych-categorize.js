@@ -92,8 +92,6 @@
                     
                     // save data
                     var trial_data = {
-                        "trial_type": "categorize",
-                        "trial_index": block.trial_idx,
                         "rt": info.rt,
                         "correct": correct,
                         "stimulus": trial.a_path,

@@ -132,8 +132,6 @@
                 responded = true;
 
                 var trial_data = {
-                    "trial_type": trial.type,
-                    "trial_index": block.trial_idx,
                     "stimulus": trial.stims[0],
                     "rt": info.rt,
                     "correct": correct,

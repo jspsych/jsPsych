@@ -118,8 +118,6 @@
                 jsPsych.pluginAPI.cancelKeyboardResponse(response_listener);
                 
                 block.writeData($.extend({}, {
-                    "trial_type": "animation",
-                    "trial_index": block.trial_idx,
                     "animation_sequence": JSON.stringify(animation_sequence),
                     "responses": JSON.stringify(responses)
                 }, trial.data));

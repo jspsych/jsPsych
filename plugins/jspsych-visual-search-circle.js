@@ -162,8 +162,6 @@
                 
                 // data saving
                 var trial_data = {
-                    trial_type: trial.type,
-                    trial_index: block.trial_idx,
                     correct: correct,
                     rt: rt,
                     key_press: key_press,

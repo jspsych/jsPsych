@@ -77,8 +77,6 @@
 
             function save_data(key, rt) {
                 block.writeData($.extend({}, {
-                    "trial_type": "text",
-                    "trial_index": block.trial_idx,
                     "rt": rt,
                     "key_press": key
                 }, trial.data));

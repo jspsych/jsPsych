@@ -51,8 +51,6 @@
                 display_element.html('');
 
                 block.writeData($.extend({}, {
-                    "trial_type": "vsl-grid-scene",
-                    "trial_index": block.trial_idx,
                     "stimuli": JSON.stringify(trial.stimuli)
                 }, trial.data));
 

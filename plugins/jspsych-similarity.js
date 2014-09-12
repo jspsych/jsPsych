@@ -207,9 +207,7 @@
                     "sim_score": score,
                     "rt": response_time,
                     "stimulus": trial.a_path,
-                    "stimulus_2": trial.b_path,
-                    "trial_type": "similarity",
-                    "trial_index": block.trial_idx
+                    "stimulus_2": trial.b_path
                 }, trial.data));
                 // goto next trial in block
                 display_element.html('');

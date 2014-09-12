@@ -27,8 +27,6 @@
             var return_val = trial.func.apply({}, [trial.args]);
             if (typeof return_val !== 'undefined') {
                 block.writeData($.extend({},{
-                    trial_type: "call-function",
-                    trial_index: block.trial_idx,
                     value: return_val
                 },trial.data));
             }

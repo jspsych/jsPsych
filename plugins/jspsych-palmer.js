@@ -261,8 +261,6 @@
                 var correct = (n_diff === 0);
 
                 block.writeData($.extend({}, {
-                    "trial_type": "palmer",
-                    "trial_index": block.trial_idx,
                     "configuration": JSON.stringify(lineIsVisible),
                     "target_configuration": JSON.stringify(trial.configurations),
                     "rt": response_time,

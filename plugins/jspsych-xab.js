@@ -164,8 +164,6 @@
                        
                     // create object to store data from trial
                     var trial_data = {
-                        "trial_type": "xab",
-                        "trial_index": block.trial_idx,
                         "rt": info.rt,
                         "correct": correct,
                         "stimulus_x": trial.x_path,

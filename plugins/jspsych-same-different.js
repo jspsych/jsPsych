@@ -116,8 +116,6 @@
                     }
                     
                     var trial_data = {
-                        "trial_type": "same-different",
-                        "trial_index": block.trial_idx,
                         "rt": info.rt,
                         "correct": correct,
                         "stimulus": trial.a_path,

@@ -73,8 +73,6 @@
 
                 // save data
                 block.writeData($.extend({}, {
-                    "trial_type": "survey-text",
-                    "trial_index": block.trial_idx,
                     "rt": response_time
                 }, question_data, trial.data));
 
