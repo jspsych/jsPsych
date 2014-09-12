@@ -203,11 +203,15 @@
 
                 next: function() {
 
-                    // call on_trial_finish() 
-                    //     if not very first trial
-                    //		and not the last call in this block (no trial due to advance in block)
-                    //if (typeof this.trials[this.trial_idx + 1] != "undefined" && (curr_block != 0 || this.trial_idx > -1)) {
+                    // trial_idx is -1 when block is created, so to start the first trial, trial_idx will be -1.
 					if(this.trial_idx > -1){
+						
+						// handle callback at plugin level
+						if(typeof this.trials[this.trial_idx].on_finish === 'function') {
+							this.trials[this.trial_idx].on_finish(this.data[this.trial_idx]);
+						}
+						
+						// handle callback at whole-experiment level
 					    opts.on_trial_finish();
 						
 						// update progress bar if shown
