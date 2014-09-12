@@ -23,7 +23,7 @@
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial, part) {
+        plugin.trial = function(display_element, block, trial) {
             var return_val = trial.func.apply({}, [trial.args]);
             if (typeof return_val !== 'undefined') {
                 block.writeData($.extend({},{

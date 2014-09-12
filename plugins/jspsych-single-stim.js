@@ -41,7 +41,7 @@
 
 
 
-		plugin.trial = function(display_element, block, trial, part) {
+		plugin.trial = function(display_element, block, trial) {
 
 			// if any trial variables are functions
 			// this evaluates the function and replaces
