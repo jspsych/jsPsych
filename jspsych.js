@@ -167,6 +167,9 @@
                 }
 
                 var trials = jsPsych[plugin_name]["create"].call(null, opts["experiment_structure"][i]);
+				
+				// add options that are generic to all plugins
+				trials = addGenericTrialOptions(trials, opts.experiment_structure[i]);
 
                 exp_blocks[i] = createBlock(trials);
             }
@@ -182,6 +185,38 @@
             // begin! - run the first block
             exp_blocks[0].next();
         }
+		
+		function addGenericTrialOptions(trials_arr, opts){
+			
+			// option: generic data object
+			if(typeof opts.data !== 'undefined'){
+				if(Array.isArray(opts.data)){
+					// check if data object array is the same length as the number of trials
+					if(opts.data.length != trials_arr.length) {
+						throw new Error('Invalid specification of data parameter in plugin type: '+trials_arr[i].type+'. Length of data parameter array does not match the number of trials in the block.');
+					} else {
+						for(var i=0; i<trials_arr.length; i++){
+							trials_arr[i].data = opts.data[i];
+						}
+					}
+				} else {
+					// use the same data object for each trial
+					for(var i=0; i<trials_arr.length; i++){
+						trials_arr[i].data = opts.data;
+					}
+				}
+			}
+			
+			// option: block level callback on_finish
+			if(typeof opts.on_finish === 'function'){
+				for(var i=0; i<trials_arr.length; i++){
+					trials_arr[i].on_finish = opts.on_finish;
+				}
+			}
+			
+			return trials_arr;
+			
+		}
 
         function nextBlock() {
             curr_block += 1;
