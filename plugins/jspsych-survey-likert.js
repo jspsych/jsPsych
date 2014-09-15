@@ -94,8 +94,9 @@
                         "width": "100%",
                         "margin": "10px 0px 0px 0px",
                         "padding": "0px",
-                        "display": "block",
-                        "position": "relative"
+                        "display": "inline-block",
+                        "position": "relative",
+                        "height": "2em"
                     }
                 }));
 
