@@ -188,34 +188,36 @@
 		
 		function addGenericTrialOptions(trials_arr, opts){
 			
-			// option: generic data object
-			if(typeof opts.data !== 'undefined'){
-				if(Array.isArray(opts.data)){
+			// modify this list to add new generic parameters
+			var genericParameters = ['data', 'timing_post_trial', 'on_finish'];
+			
+			for(var i = 0; i < genericParameters.length; i++){
+				trials_arr = addParamToTrialsArr(trials_arr, opts[genericParameters[i]], genericParameters[i]);
+			}
+			
+			return trials_arr;
+			
+		}
+		
+		function addParamToTrialsArr(trials_arr, param, param_name) {
+			if(typeof param !== 'undefined'){
+				if(Array.isArray(param)){
 					// check if data object array is the same length as the number of trials
-					if(opts.data.length != trials_arr.length) {
-						throw new Error('Invalid specification of data parameter in plugin type: '+trials_arr[i].type+'. Length of data parameter array does not match the number of trials in the block.');
+					if(param.length != trials_arr.length) {
+						throw new Error('Invalid specification of parameter '+param_name+' in plugin type '+trials_arr[i].type+'. Length of parameter array does not match the number of trials in the block.');
 					} else {
 						for(var i=0; i<trials_arr.length; i++){
-							trials_arr[i].data = opts.data[i];
+							trials_arr[i][param_name] = param[i];
 						}
 					}
 				} else {
 					// use the same data object for each trial
 					for(var i=0; i<trials_arr.length; i++){
-						trials_arr[i].data = opts.data;
+						trials_arr[i][param_name] = param;
 					}
 				}
 			}
-			
-			// option: block level callback on_finish
-			if(typeof opts.on_finish === 'function'){
-				for(var i=0; i<trials_arr.length; i++){
-					trials_arr[i].on_finish = opts.on_finish;
-				}
-			}
-			
 			return trials_arr;
-			
 		}
 
         function nextBlock() {
