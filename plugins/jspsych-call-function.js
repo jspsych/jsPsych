@@ -15,10 +15,8 @@
         plugin.create = function(params) {
             var trials = new Array(1);
             trials[0] = {
-                "type": "call-function",
                 "func": params.func,
-                "args": params.args || [],
-                "data": (typeof params.data === 'undefined') ? {} : params.data
+                "args": params.args || []
             };
             return trials;
         };

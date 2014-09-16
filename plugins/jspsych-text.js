@@ -16,16 +16,13 @@
 
         plugin.create = function(params) {
             
-            params = jsPsych.pluginAPI.enforceArray(params, ['text','data', 'cont_key']);
+            params = jsPsych.pluginAPI.enforceArray(params, ['text', 'cont_key']);
             
             var trials = new Array(params.text.length);
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {};
-                trials[i].type = "text"; // must match plugin name
                 trials[i].text = params.text[i]; // text of all trials
                 trials[i].cont_key = params.cont_key || []; // keycode to press to advance screen, default is all keys.
-                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 0 : params.timing_post_trial;
-                trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
             }
             return trials;
         };

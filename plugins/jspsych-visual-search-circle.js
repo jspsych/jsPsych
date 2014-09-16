@@ -24,7 +24,6 @@
 
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {};
-                trials[i].type = "visual-search-circle";
                 trials[i].target_present = params.target_present[i];
                 trials[i].set_size = params.set_size[i];
                 trials[i].target = params.target;
@@ -37,8 +36,6 @@
                 trials[i].target_absent_key = params.target_absent_key || 70;
                 trials[i].timing_max_search = (typeof params.timing_max_search === 'undefined') ? -1 : params.timing_max_search;
                 trials[i].timing_fixation = (typeof params.timing_fixation === 'undefined') ? 1000 : params.timing_fixation;
-                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
-                trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
             }
 
             return trials;

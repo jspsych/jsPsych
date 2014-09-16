@@ -20,7 +20,6 @@
 			var trials = new Array(params.stimuli.length);
 			for (var i = 0; i < trials.length; i++) {
 				trials[i] = {};
-				trials[i].type = "single-stim";
 				trials[i].a_path = params.stimuli[i];
 				trials[i].choices = params.choices;
 				// option to show image for fixed time interval, ignoring key responses
@@ -30,11 +29,9 @@
 				// timing parameters
 				trials[i].timing_stim = params.timing_stim || -1; // if -1, then show indefinitely
 				trials[i].timing_response = params.timing_response || -1; // if -1, then wait for response forever
-				trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
 				// optional parameters
 				trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
 				trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
-				trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
 			}
 			return trials;
 		};

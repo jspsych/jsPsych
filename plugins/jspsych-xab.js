@@ -22,7 +22,6 @@
 
 					for (var i = 0; i < trials.length; i++) {
 						trials[i] = {};
-						trials[i].type = "xab";
 						trials[i].x_path = params.stimuli[i][0];
 						// if there is only a pair of stimuli, then the first is the target and is shown twice.
 						// if there is a triplet, then the first is X, the second is the target, and the third is foil (useful for non-exact-match XAB).
@@ -39,11 +38,9 @@
 						trials[i].timing_x = params.timing_x || 1000; // defaults to 1000msec.
 						trials[i].timing_xab_gap = params.timing_xab_gap || 1000; // defaults to 1000msec.
 						trials[i].timing_ab = params.timing_ab || -1; // defaults to -1, meaning infinite time on AB. If a positive number is used, then AB will only be displayed for that length.
-						trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial; // defaults to 1000msec.
 						// optional parameters
 						trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
 						trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
-						trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
 
 					}
 					return trials;

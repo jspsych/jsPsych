@@ -27,7 +27,6 @@
             var trials = [];
             for (var i = 0; i < params.configurations.length; i++) {
                 var trial = {
-                    type: "palmer",
                     configurations: params.configurations[i],
                     editable: (typeof params.editable === 'undefined') ? false : params.editable,
                     show_feedback: (typeof params.show_feedback === 'undefined') ? false : params.show_feedback,
@@ -35,10 +34,8 @@
                     square_size: params.square_size || 3,
                     circle_radius: params.circle_radius || 20,
                     timing_item: params.timing_item || 1000,
-                    timing_post_trial: (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial,
                     timing_feedback: params.timing_feedback || 1000,
-                    prompt: (typeof params.prompt === 'undefined') ? "" : params.prompt,
-                    data: (typeof params.data === 'undefined') ? {} : params.data[i]
+                    prompt: (typeof params.prompt === 'undefined') ? "" : params.prompt
                 };
 
                 trials.push(trial);

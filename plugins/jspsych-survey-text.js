@@ -20,9 +20,7 @@
             var trials = [];
             for (var i = 0; i < params.questions.length; i++) {
                 trials.push({
-                    type: "survey-text",
-                    questions: params.questions[i],
-                    data: (typeof params.data === 'undefined') ? {} : params.data[i]
+                    questions: params.questions[i]
                 });
             }
             return trials;
@@ -79,7 +77,11 @@
                 display_element.html('');
 
                 // next trial
-                block.next();
+				if(trial.timing_post_trial > 0){
+                	setTimeout(function(){ block.next(); }, trial.timing_post_trial);
+				} else {
+					block.next();
+				}
             });
 
             var startTime = (new Date()).getTime();

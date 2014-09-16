@@ -17,7 +17,6 @@
 			var trials = [];
 			for (var i = 0; i < params.stimuli.length; i++) {
 				trials.push({});
-				trials[i].type = "categorize";
 				trials[i].a_path = params.stimuli[i];
 				trials[i].key_answer = params.key_answer[i];
 				trials[i].text_answer = (typeof params.text_answer === 'undefined') ? "" : params.text_answer[i];
@@ -27,13 +26,11 @@
 				// timing params
 				trials[i].timing_stim = params.timing_stim || -1; // default is to show image until response
 				trials[i].timing_feedback_duration = params.timing_feedback_duration || 2000;
-				trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
 				// optional params
 				trials[i].show_stim_with_feedback = (typeof params.show_stim_with_feedback === 'undefined') ? true : params.show_stim_with_feedback;
 				trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
 				trials[i].force_correct_button_press = (typeof params.force_correct_button_press === 'undefined') ? false : params.force_correct_button_press;
 				trials[i].prompt = (typeof params.prompt === 'undefined') ? '' : params.prompt;
-				trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
 			}
 			return trials;
 		};

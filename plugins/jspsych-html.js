@@ -19,11 +19,9 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
             
             for (var i = 0; i < params.pages.length; i++) {
                 trials.push({
-                    type: "html",
                     url: params.pages[i].url,
                     cont_key: params.pages[i].cont_key || params.cont_key,
                     cont_btn: params.pages[i].cont_btn || params.cont_btn,
-                    timing_post_trial: params.pages[i].timing_post_trial || (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial,
                     check_fn: params.pages[i].check_fn,
                     force_refresh: (typeof params.force_refresh === 'undefined') ? false : params.force_refresh
                 });

@@ -189,17 +189,25 @@
 		function addGenericTrialOptions(trials_arr, opts){
 			
 			// modify this list to add new generic parameters
-			var genericParameters = ['data', 'timing_post_trial', 'on_finish'];
+			var genericParameters = ['type', 'data', 'timing_post_trial', 'on_finish'];
+			
+			// default values for generics above
+			var defaultValues = [ , , 1000, ];
 			
 			for(var i = 0; i < genericParameters.length; i++){
-				trials_arr = addParamToTrialsArr(trials_arr, opts[genericParameters[i]], genericParameters[i]);
+				trials_arr = addParamToTrialsArr(trials_arr, opts[genericParameters[i]], genericParameters[i], defaultValues[i]);
 			}
 			
 			return trials_arr;
 			
 		}
 		
-		function addParamToTrialsArr(trials_arr, param, param_name) {
+		function addParamToTrialsArr(trials_arr, param, param_name, default_value) {
+			
+			if(typeof default_value !== 'undefined') {
+				param = (typeof param === 'undefined') ? default_value : param;
+			}
+			
 			if(typeof param !== 'undefined'){
 				if(Array.isArray(param)){
 					// check if data object array is the same length as the number of trials

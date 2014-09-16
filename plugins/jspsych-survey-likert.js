@@ -20,12 +20,10 @@
             var trials = [];
             for (var i = 0; i < params.questions.length; i++) {
                 trials.push({
-                    type: "survey-likert",
                     questions: params.questions[i],
                     labels: params.labels[i],
                     intervals: params.intervals[i],
-                    show_ticks: (typeof params.show_ticks === 'undefined') ? true : params.show_ticks,
-                    data: (typeof params.data === 'undefined') ? {} : params.data[i]
+                    show_ticks: (typeof params.show_ticks === 'undefined') ? true : params.show_ticks
                 });
             }
             return trials;
@@ -152,7 +150,11 @@
                 display_element.html('');
 
                 // next trial
-                block.next();
+				if(trial.timing_post_trial > 0){
+					setTimeout(function(){ block.next(); }, trial.timing_post_trial);
+				} else {
+                	block.next();
+				}
             });
 
             var startTime = (new Date()).getTime();

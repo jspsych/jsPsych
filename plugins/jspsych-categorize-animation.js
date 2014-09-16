@@ -17,7 +17,6 @@
             var trials = new Array(params.stimuli.length);
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {};
-                trials[i].type = "categorize-animation";
                 trials[i].stims = params.stimuli[i];
                 trials[i].reps = params.reps || 1;
                 trials[i].key_answer = params.key_answer[i];
@@ -28,9 +27,7 @@
                 trials[i].allow_response_before_complete = params.allow_response_before_complete || false;
                 trials[i].frame_time = params.frame_time || 500;
                 trials[i].timing_feedback_duration = params.timing_feedback_duration || 2000;
-                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
                 trials[i].prompt = (typeof params.prompt === 'undefined') ? '' : params.prompt;
-                trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
             }
             return trials;
         };
