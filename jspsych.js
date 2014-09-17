@@ -172,6 +172,22 @@
 			opts.on_data_update(ext_data_object);
 		}
 		
+		// chunk creation
+		function createExperimentChunk(){
+			
+			var chunk = {};
+			
+			chunk.blocks = [];
+			
+			chunk.type = "linear"; // linear, while
+			
+			chunk.length = function(){
+				// return the number of trials in the chunk
+			}
+			
+			
+		}
+		
 
 		//
 		// private functions //
@@ -329,8 +345,6 @@
 
 			return block;
 		}
-
-		function createChunk() {}
 
 		function finishExperiment() {
 			opts["on_finish"].apply((new Object()), [core.data()]);
