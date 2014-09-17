@@ -305,6 +305,8 @@
 
             return block;
         }
+        
+        function createChunk() { }
 
         function finishExperiment() {
             opts["on_finish"].apply((new Object()), [core.data()]);
