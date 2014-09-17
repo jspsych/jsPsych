@@ -17,11 +17,10 @@
 		// options
 		var opts = {};
 		// exp structure
-		var exp_blocks = [];
+		var exp_chunks = [];
 		// flow control
-		var curr_block = 0;
-		// everything loaded?
-		var initialized = false;
+		var curr_chunk = 0;
+		var global_trial_index = 0;
 		// target DOM element
 		var DOM_target;
 		// time that the experiment began
@@ -33,11 +32,10 @@
 
 		core.init = function(options) {
 
-			// reset the key variables
-			exp_blocks = [];
+			// reset variables
+			exp_chunks = [];
 			opts = {};
-			initialized = false;
-			curr_block = 0;
+			curr_chunk = 0;
 
 			// check if there is a body element on the page
 			var default_display_element = $('body');
@@ -76,38 +74,24 @@
 		};
 
 		core.data = function() {
-			var all_data = [];
-
-			for (var i = 0; i < exp_blocks.length; i++) {
-				all_data[i] = exp_blocks[i].data;
-			}
-
-			return all_data;
+			
+			return datastore.data;
+			
 		};
 
 		core.progress = function() {
 
 			var total_trials = 0;
-			for (var i = 0; i < exp_blocks.length; i++) {
-				total_trials += exp_blocks[i].num_trials;
-			}
-
-			var current_trial_global = 0;
-			var current_trial_local = -1;
-			for (var i = 0; i < curr_block; i++) {
-				current_trial_global += exp_blocks[i].num_trials;
-			}
-			if (current_trial_global < total_trials) {
-				current_trial_global += exp_blocks[curr_block].trial_idx;
-				current_trial_local = exp_blocks[curr_block].trial_idx;
+			for (var i = 0; i < exp_chunks.length; i++) {
+				total_trials += exp_chunks[i].length;
 			}
 
 			var obj = {
 				"total_blocks": exp_blocks.length,
 				"total_trials": total_trials,
-				"current_trial_global": current_trial_global,
-				"current_trial_local": current_trial_local,
-				"current_block": curr_block
+				"current_trial_global": global_trial_index,
+				"current_trial_local": exp_chunks[curr_chunk].currentTrialInChunk,
+				"current_block": curr_chunk + "-" + exp_chunks[curr_chunk].currentBlock
 			};
 
 			return obj;
@@ -149,27 +133,8 @@
 			return DOM_target;
 		}
 		
-		// data storage object
-		var datastore = {};
-		
-		datastore.data = [];
-		
-		datastore.writeData = function(data_object, trial_type, trial_index) {
-			
-			var progress = core.progress();
-
-			var default_data = {
-				'trial_type': trial_type,
-				'trial_index': trial_index,
-				'trial_index_global': progress.current_trial_global,
-				'time_elapsed': core.totalTime(),
-				'block_index': curr_block
-			};
-
-			var ext_data_object = $.extend({}, data_object, default_data);
-
-			this.data[this.trial_idx] = ext_data_object;
-			opts.on_data_update(ext_data_object);
+		core.finishTrial = function(){
+			// logic to advance to next trial?
 		}
 		
 		// chunk creation
@@ -250,6 +215,21 @@
 			// begin! - run the first block
 			exp_blocks[0].next();
 		}
+		
+		function nextTrial() {
+			
+			if(exp_chunks[curr_chunk].isComplete()){
+				curr_chunk += 1;
+			}
+			
+			if(curr_chunk == exp_chunks.length) {
+				finishExperiment();
+			} else {
+				var trial = exp_chunks[curr_chunk].next();
+				doTrial(trial);
+			}
+			
+		}
 
 		function addGenericTrialOptions(trials_arr, opts) {
 
@@ -293,15 +273,6 @@
 			return trials_arr;
 		}
 
-		function nextBlock() {
-			curr_block += 1;
-			if (curr_block == exp_blocks.length) {
-				finishExperiment();
-			} else {
-				exp_blocks[curr_block].next();
-			}
-		}
-
 		function createBlock(trial_list) {
 			var block = {
 				trial_idx: -1,
@@ -342,26 +313,7 @@
 
 					do_trial(this, curr_trial);
 				},
-
-				writeData: function(data_object) {
-
-					var progress = jsPsych.progress();
-
-					var default_data = {
-						'trial_type': this.trials[this.trial_idx].type,
-						'trial_index': this.trial_idx,
-						'trial_index_global': progress.current_trial_global,
-						'time_elapsed': jsPsych.totalTime(),
-						'block_index': curr_block
-					};
-
-					var ext_data_object = $.extend({}, data_object, default_data);
-
-					this.data[this.trial_idx] = ext_data_object;
-					opts.on_data_update(ext_data_object);
-				},
-
-
+				
 				done: nextBlock,
 
 				num_trials: trial_list.length
@@ -374,7 +326,7 @@
 			opts["on_finish"].apply((new Object()), [core.data()]);
 		}
 
-		function do_trial(block, trial) {
+		function doTrial(block, trial) {
 			// execute trial method
 			jsPsych[trial.type]["trial"].call(this, DOM_target, block, trial);
 		}
@@ -397,6 +349,28 @@
 	jsPsych.dataAPI = (function() {
 
 		var module = {};
+		
+		// data storage object
+		module.data = [];
+		
+		module.write = function(data_object, trial_type, trial_index) {
+			
+			var progress = core.progress();
+
+			var default_data = {
+				'trial_type': trial_type,
+				'trial_index': trial_index,
+				'trial_index_global': progress.current_trial_global,
+				'time_elapsed': core.totalTime(),
+				'block_index': curr_block
+			};
+
+			var ext_data_object = $.extend({}, data_object, default_data);
+
+			module.data.push(ext_data_object);
+			
+			opts.on_data_update(ext_data_object); //TODO: FIX callback?
+		}
 
 		// core.dataAsCSV returns a CSV string that contains all of the data
 		//      append_data is an option map object that will append values
