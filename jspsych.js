@@ -151,6 +151,20 @@
 			if (opts.show_progress_bar === true) {
 				updateProgressBar();
 			}
+			
+			// advance chunk
+			exp_chunks[curr_chunk].advance();
+			
+			// check if chunk is complete
+			if(exp_chunks[curr_chunk].isComplete()){
+				
+				// do stuff ?
+				
+			} else {
+				
+				doTrial(exp_chunks[curr_chunk].next()); // fix this call?
+				
+			}
 		}
 		
 		function parseExpStructure(experiment_structure) {
@@ -207,15 +221,37 @@
 			
 			chunk.next = function() {
 				// return the next trial in the block to be run
+				
+				if(chunk.isComplete()){
+					throw new Error('Tried to get completed trial from chunk that is finished.');
+				} else {
+					return this.blocks[this.currentBlock].next();
+				}
+				
 			}
 			
 			chunk.advance = function(){
 				// increment the current trial in the chunk
+				
+				this.blocks[this.currentBlock].advance();
+				
+				if(this.blocks[this.currentBlock].isComplete()){
+					this.currentBlock++;
+					this.currentTrialInBlock = 0;
+				} else {
+					this.currentTrialInBlock++;
+				}
+				
+				this.currentTrialInChunk++;
+				
 			}
 			
 			chunk.isComplete = function() {
 				// return true if the chunk is done running trials
 				// return false otherwise
+				
+				if (this.currentBlock >= this.blocks.length) { return true; }
+				else { return false; }
 			}
 			
 			chunk.generatedData = function() {
@@ -247,6 +283,40 @@
 			
 			return chunk;
 			
+		}
+		
+		function createBlock(trial_list) {
+			
+			var block = {
+			
+				trial_idx: 0,
+
+				trials: trial_list,
+
+				next: function() {
+
+					var curr_trial = this.trials[this.trial_idx];
+					
+					return curr_trial;
+
+				},
+				
+				isComplete: function() {
+					if(trial_idx >= trial_list.length){
+						return true;
+					} else {
+						return false;
+					}
+				},
+				
+				advance: function() {
+					trial_idx++;
+				}
+				
+				num_trials: trial_list.length
+			};
+
+			return block;
 		}
 		
 		function startExperiment() {
@@ -320,37 +390,7 @@
 			return trials_arr;
 		}
 
-		function createBlock(trial_list) {
-			
-			var block = {
-			
-				trial_idx: 0,
-
-				trials: trial_list,
-
-				next: function() {
-
-					var curr_trial = this.trials[this.trial_idx];
-					
-					trial_idx++;
-					
-					return curr_trial;
-
-				},
-				
-				isComplete: function() {
-					if(trial_idx >= trial_list.length){
-						return true;
-					} else {
-						return false;
-					}
-				},
-				
-				num_trials: trial_list.length
-			};
-
-			return block;
-		}
+		
 
 		function finishExperiment() {
 			opts["on_finish"].apply((new Object()), [core.data()]);
