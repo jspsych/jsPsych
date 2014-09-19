@@ -56,12 +56,12 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
                         setTimeout(function() {
                             display_element.empty();
                             display_element.show();
-                            block.next();
+                            jsPsych.finishTrial();
                         }, trial.timing);
                     }
                     else {
                         display_element.empty();
-                        block.next();
+                       	jsPsych.finishTrial();
                     }
                 };
                 if (trial.cont_btn) $('#' + trial.cont_btn).click(finish);

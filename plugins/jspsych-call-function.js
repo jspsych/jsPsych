@@ -29,7 +29,7 @@
                 },trial.data));
             }
 
-            block.next();
+            jsPsych.finishTrial();
         };
 
         return plugin;

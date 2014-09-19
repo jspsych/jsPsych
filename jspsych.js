@@ -172,7 +172,7 @@
 				
 			} 
 				
-			doTrial(exp_chunks[curr_chunk].next()); // TODO: fix this call?
+			doTrial(exp_chunks[curr_chunk].next());
 		}
 		
 		core.currentTrial = function(){

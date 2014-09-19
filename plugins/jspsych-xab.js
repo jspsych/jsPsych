@@ -171,10 +171,10 @@
 							// move on to the next trial after timing_post_trial milliseconds
 							if (trial.timing_post_trial > 0) {
 								setTimeout(function() {
-									block.next();
+									jsPsych.finishTrial();
 								}, trial.timing_post_trial);
 							} else {
-								block.next();
+								jsPsych.finishTrial();
 							}
 
 						};

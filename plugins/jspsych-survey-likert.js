@@ -151,9 +151,9 @@
 
                 // next trial
 				if(trial.timing_post_trial > 0){
-					setTimeout(function(){ block.next(); }, trial.timing_post_trial);
+					setTimeout(function(){ jsPsych.finishTrial(); }, trial.timing_post_trial);
 				} else {
-                	block.next();
+                	jsPsych.finishTrial();
 				}
             });
 
