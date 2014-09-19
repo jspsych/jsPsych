@@ -169,7 +169,7 @@
 
                 // this line merges together the trial_data object and the generic
                 // data object (trial.data), and then stores them.
-                block.writeData($.extend({}, trial_data, trial.data));
+                jsPsych.data.write($.extend({}, trial_data, trial.data));
 
                 // go to next trial
                 if(trial.timing_post_trial > 0){

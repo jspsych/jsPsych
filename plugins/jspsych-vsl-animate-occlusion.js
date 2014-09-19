@@ -144,7 +144,7 @@
                 
                 jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
                 
-                block.writeData($.extend({}, {
+                jsPsych.data.write($.extend({}, {
                     "stimuli": JSON.stringify(trial.stims),
                     "responses": JSON.stringify(responses)
                 }, trial.data));

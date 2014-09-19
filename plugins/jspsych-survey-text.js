@@ -70,7 +70,7 @@
                 });
 
                 // save data
-                block.writeData($.extend({}, {
+                jsPsych.data.write($.extend({}, {
                     "rt": response_time
                 }, question_data, trial.data));
 

@@ -257,7 +257,7 @@
                 var n_diff = arrayDifferences(trial.configurations, lineIsVisible);
                 var correct = (n_diff === 0);
 
-                block.writeData($.extend({}, {
+                jsPsych.data.write($.extend({}, {
                     "configuration": JSON.stringify(lineIsVisible),
                     "target_configuration": JSON.stringify(trial.configurations),
                     "rt": response_time,

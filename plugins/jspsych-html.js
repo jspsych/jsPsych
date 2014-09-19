@@ -46,7 +46,7 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
                 var finish = function() {
                     if (trial.check_fn && !trial.check_fn(display_element)) return;
                     if (trial.cont_key) $(document).unbind('keydown', key_listener);
-                    block.writeData({
+                    jsPsych.data.write({
                         rt: (new Date()).getTime() - t0,
                         url: trial.url
                     });

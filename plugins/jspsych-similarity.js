@@ -195,7 +195,7 @@
 							var response_time = endTime - startTime;
 							sim_trial_complete = true;
 							var score = $("#slider").slider("value");
-							block.writeData($.extend({}, {
+							jsPsych.data.write($.extend({}, {
 								"sim_score": score,
 								"rt": response_time,
 								"stimulus": trial.a_path,

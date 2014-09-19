@@ -95,7 +95,7 @@
 					"key_press": info.key
 				};
 
-				block.writeData($.extend({}, trial_data, trial.data));
+				jsPsych.data.write($.extend({}, trial_data, trial.data));
 
 				display_element.html('');
 

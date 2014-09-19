@@ -162,7 +162,7 @@
 								"stimulus_b": trial.b_path,
 								"key_press": info.key
 							};
-							block.writeData($.extend({}, trial_data, trial.data));
+							jsPsych.data.write($.extend({}, trial_data, trial.data));
 
 							display_element.html(''); // remove all
 
