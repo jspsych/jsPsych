@@ -86,15 +86,17 @@
 		core.progress = function() {
 
 			var total_trials = 0;
+			var total_blocks = 0;
 			for (var i = 0; i < exp_chunks.length; i++) {
 				total_trials += exp_chunks[i].length;
+				total_blocks += exp_chunks[i].blocks.length;
 			}
 
 			var obj = {
-				"total_blocks": exp_blocks.length,
+				"total_blocks": total_blocks,
 				"total_trials": total_trials,
 				"current_trial_global": global_trial_index,
-				"current_trial_local": exp_chunks[curr_chunk].currentTrialInChunk,
+				"current_trial_local": exp_chunks[curr_chunk].currentTrialInBlock,
 				"current_block": curr_chunk + "-" + exp_chunks[curr_chunk].currentBlock
 			};
 
@@ -153,6 +155,8 @@
 				updateProgressBar();
 			}
 			
+			global_trial_index++;
+			
 			// advance chunk
 			exp_chunks[curr_chunk].advance();
 			
@@ -171,15 +175,25 @@
 			doTrial(exp_chunks[curr_chunk].next()); // TODO: fix this call?
 		}
 		
+		core.currentTrial = function(){
+			return current_trial;
+		}
+		
+		core.initSettings = function(){
+			return opts;
+		}
+		
 		function parseExpStructure(experiment_structure) {
 			
 			var chunks = [];
 			
 			for(var i=0; i<experiment_structure.length; i++){
 				
-				if(typeof experiment_structure[i].chunk_type !== 'undefined') {
+				var ct = experiment_structure[i].chunk_type;
+			
+				if(typeof ct !== 'undefined') {
 					
-					if($.inArray(experiment_structure[i].chunk_type, ['linear', 'while']){
+					if($.inArray(ct, ["linear", "while"]) > -1){
 						chunks.push(createExperimentChunk(experiment_structure[i]));
 					} else {
 						throw new Error('Invalid experiment structure definition. Element '+i+' of the experiment_structure array has an invalid chunk_type property');
@@ -312,7 +326,7 @@
 				},
 				
 				isComplete: function() {
-					if(trial_idx >= trial_list.length){
+					if(this.trial_idx >= this.trials.length){
 						return true;
 					} else {
 						return false;
@@ -320,8 +334,8 @@
 				},
 				
 				advance: function() {
-					trial_idx++;
-				}
+					this.trial_idx++;
+				},
 				
 				num_trials: trial_list.length
 			};
@@ -403,16 +417,18 @@
 		
 
 		function finishExperiment() {
-			opts["on_finish"].apply((new Object()), [core.data()]);
+			opts.on_finish(jsPsych.data.allData);
 		}
 
-		function doTrial(block, trial) {
+		function doTrial(trial) {
+			
+			current_trial = trial;
 			
 			// call experiment wide callback
 			opts.on_trial_start();
 			
 			// execute trial method
-			jsPsych[trial.type]["trial"].call(this, DOM_target, block, trial);
+			jsPsych[trial.type].trial(DOM_target, trial);
 		}
 
 		function drawProgressBar() {
@@ -430,30 +446,32 @@
 		return core;
 	})();
 
-	jsPsych.dataAPI = (function() {
+	jsPsych.data = (function() {
 
 		var module = {};
 		
 		// data storage object
-		module.data = [];
+		module.allData = [];
 		
-		module.write = function(data_object, trial_type, trial_index) {
+		module.write = function(data_object) {
 			
-			var progress = core.progress();
+			var progress = jsPsych.progress();
+			var trial = jsPsych.currentTrial();
 
 			var default_data = {
-				'trial_type': trial_type,
-				'trial_index': trial_index,
+				'trial_type': trial.type,
+				'trial_index': progress.current_trial_local,
 				'trial_index_global': progress.current_trial_global,
-				'time_elapsed': core.totalTime(),
-				'block_index': curr_block
+				'time_elapsed': jsPsych.totalTime(),
+				'block_index': progress.current_block
 			};
 
 			var ext_data_object = $.extend({}, data_object, default_data);
 
-			module.data.push(ext_data_object);
+			module.allData.push(ext_data_object);
 			
-			opts.on_data_update(ext_data_object); //TODO: FIX callback?
+			var initSettings = jsPsych.initSettings();
+			initSettings.on_data_update(ext_data_object); //TODO: FIX callback?
 		}
 
 		// core.dataAsCSV returns a CSV string that contains all of the data
