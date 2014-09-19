@@ -40,7 +40,7 @@
 
 				var sim_trial_complete = false;
 
-				plugin.trial = function(display_element, block, trial) {
+				plugin.trial = function(display_element, trial) {
 
 					// if any trial variables are functions
 					// this evaluates the function and replaces
@@ -63,7 +63,7 @@
 					}
 
 					if (trial.show_response == "FIRST_STIMULUS") {
-						show_response_slider(display_element, trial, block);
+						show_response_slider(display_element, trial);
 					}
 
 					setTimeout(function() {
@@ -91,7 +91,7 @@
 						$('#jspsych_sim_stim').css('visibility', 'visible');
 
 						if (trial.show_response == "SECOND_STIMULUS") {
-							show_response_slider(display_element, trial, block);
+							show_response_slider(display_element, trial);
 						}
 
 						if (trial.timing_second_stim > 0) {
@@ -99,7 +99,7 @@
 								if (!sim_trial_complete) {
 									$("#jspsych_sim_stim").css('visibility', 'hidden');
 									if (trial.show_response == "POST_STIMULUS") {
-										show_response_slider(display_element, trial, block);
+										show_response_slider(display_element, trial);
 									}
 								}
 							}, trial.timing_second_stim);
@@ -107,7 +107,7 @@
 					}
 
 
-					function show_response_slider(display_element, trial, block) {
+					function show_response_slider(display_element, trial) {
 
 						var startTime = (new Date()).getTime();
 

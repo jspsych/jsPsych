@@ -41,7 +41,7 @@
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial) {
+        plugin.trial = function(display_element, trial) {
 
             trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
