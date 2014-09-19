@@ -21,6 +21,7 @@
 		// flow control
 		var curr_chunk = 0;
 		var global_trial_index = 0;
+		var current_trial = {};
 		// target DOM element
 		var DOM_target;
 		// time that the experiment began
@@ -140,8 +141,8 @@
 			// logic to advance to next trial?
 			
 			// handle callback at plugin level
-			if (typeof this.trials[this.trial_idx].on_finish === 'function') {
-				this.trials[this.trial_idx].on_finish(this.data[this.trial_idx]);
+			if (typeof current_trial.on_finish === 'function') {
+				current_trial.on_finish(); // TODO: pass in data
 			}
 
 			// handle callback at whole-experiment level
@@ -159,12 +160,15 @@
 			if(exp_chunks[curr_chunk].isComplete()){
 				
 				// do stuff ?
+				curr_chunk++;
+				if(curr_chunk >= exp_chunks.length){
+					finishExperiment();
+					return;
+				}
 				
-			} else {
+			} 
 				
-				doTrial(exp_chunks[curr_chunk].next()); // fix this call?
-				
-			}
+			doTrial(exp_chunks[curr_chunk].next()); // TODO: fix this call?
 		}
 		
 		function parseExpStructure(experiment_structure) {
@@ -216,7 +220,13 @@
 			chunk.currentTrialInChunk = 0;
 			
 			chunk.length = function(){
-				// return the number of trials in the chunk
+				
+				var n = 0;
+				for(var i=0; i<blocks.length; i++){
+					n+=blocks[i].num_trials;
+				}
+				return n;
+				
 			}
 			
 			chunk.next = function() {
