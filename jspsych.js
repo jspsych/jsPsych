@@ -217,8 +217,11 @@
 			chunk.type = chunk_definition.chunk_type; // root, linear, while
 			
 			chunk.currentTimelineLocation = 0;
+			// this is the current trial since the last time the chunk was reset
 			chunk.currentTrialInTimeline = 0;
+			// this is the current trial since the chunk started (incl. resets)
 			chunk.currentTrialInChunk = 0;
+			
 			chunk.iteration = 0;
 			
 			chunk.length = function(){
@@ -237,21 +240,7 @@
 					return this.timeline[this.currentTimelineLocation].activeChunkID();
 				}
 			}
-			
-			/*chunk.getLocation = function() {
-				
-				var loc = chunk_id;
-				
-				if(typeof this.timeline[this.currentTimelineLocation].chunk_id !== 'undefined'){
-					loc = loc + "." + this.timeline[this.currentTimelineLocation].getLocation();
-				} else {
-					loc = loc + "." + this.timeline[this.currentTimelineLocation].trial_idx; // if the timeline is currently on a block
-				}
-				
-				return loc;
-				
-			}*/
-			
+						
 			chunk.chunkID = function() {
 				
 				if(typeof this.parentChunk === 'undefined') {
@@ -517,10 +506,10 @@
 
 			var default_data = {
 				'trial_type': trial.type,
-				'trial_index': progress.current_trial_local,
+				//'trial_index': progress.current_trial_local,
 				'trial_index_global': progress.current_trial_global,
 				'time_elapsed': jsPsych.totalTime(),
-				'block_index': progress.current_block,
+				//'block_index': progress.current_block,
 				'internal_chunk_id': jsPsych.currentChunkID()
 			};
 
