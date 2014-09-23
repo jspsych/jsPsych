@@ -31,7 +31,7 @@
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial) {
+        plugin.trial = function(display_element, trial) {
             
             // if any trial variables are functions
             // this evaluates the function and replaces
@@ -48,17 +48,17 @@
 
                 display_element.html('');
 
-                block.writeData($.extend({}, {
+                jsPsych.data.write($.extend({}, {
                     "stimuli": JSON.stringify(trial.stimuli)
                 }, trial.data));
 
                 if (trial.timing_post_trial > 0) {
                     setTimeout(function() {
-                        block.next();
+                        jsPsych.finishTrial();
                     }, trial.timing_post_trial);
                 }
                 else {
-                    block.next();
+                    jsPsych.finishTrial();
                 }
             }
         };

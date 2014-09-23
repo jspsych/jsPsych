@@ -38,7 +38,7 @@
 
 
 
-		plugin.trial = function(display_element, block, trial) {
+		plugin.trial = function(display_element, trial) {
 
 			// if any trial variables are functions
 			// this evaluates the function and replaces
@@ -85,7 +85,7 @@
 					"key_press": info.key
 				};
 
-				block.writeData($.extend({}, trial_data, trial.data));
+				jsPsych.data.write($.extend({}, trial_data, trial.data));
 
 				// clear the display
 				display_element.html('');
@@ -93,10 +93,10 @@
 				// move on to the next trial
 				if (trial.timing_post_trial > 0) {
 					setTimeout(function() {
-						block.next();
+						jsPsych.finishTrial();
 					}, trial.timing_post_trial);
 				} else {
-					block.next();
+					jsPsych.finishTrial();
 				}
 			};
 

@@ -29,7 +29,7 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial) {
+        plugin.trial = function(display_element, trial) {
             
             // if any trial variables are functions
             // this evaluates the function and replaces
@@ -46,7 +46,7 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
                 var finish = function() {
                     if (trial.check_fn && !trial.check_fn(display_element)) return;
                     if (trial.cont_key) $(document).unbind('keydown', key_listener);
-                    block.writeData({
+                    jsPsych.data.write({
                         rt: (new Date()).getTime() - t0,
                         url: trial.url
                     });
@@ -56,12 +56,12 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
                         setTimeout(function() {
                             display_element.empty();
                             display_element.show();
-                            block.next();
+                            jsPsych.finishTrial();
                         }, trial.timing);
                     }
                     else {
                         display_element.empty();
-                        block.next();
+                       	jsPsych.finishTrial();
                     }
                 };
                 if (trial.cont_btn) $('#' + trial.cont_btn).click(finish);

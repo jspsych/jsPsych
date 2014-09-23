@@ -35,7 +35,7 @@
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial) {
+        plugin.trial = function(display_element, trial) {
             
             // if any trial variables are functions
             // this evaluates the function and replaces
@@ -144,18 +144,18 @@
                 
                 jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
                 
-                block.writeData($.extend({}, {
+                jsPsych.data.write($.extend({}, {
                     "stimuli": JSON.stringify(trial.stims),
                     "responses": JSON.stringify(responses)
                 }, trial.data));
 
                 if (trial.timing_post_trial > 0) {
                     setTimeout(function() {
-                        block.next();
+                        jsPsych.finishTrial();
                     }, trial.timing_post_trial);
                 }
                 else {
-                    block.next();
+                    jsPsych.finishTrial();
                 }
             }
         };

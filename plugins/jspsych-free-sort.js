@@ -31,7 +31,7 @@
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial) {
+        plugin.trial = function(display_element, trial) {
             
             // if any trial variables are functions
             // this evaluates the function and replaces
@@ -116,7 +116,7 @@
                         });
                     });
 
-                    block.writeData($.extend({}, {
+                    jsPsych.data.write($.extend({}, {
                         "init_locations": JSON.stringify(init_locations),
                         "moves": JSON.stringify(moves),
                         "final_locations": JSON.stringify(final_locations),
@@ -127,11 +127,11 @@
                     display_element.html("");
                     if (trial.timing_post_trial > 0) {
                         setTimeout(function() {
-                            block.next();
+                            jsPsych.finishTrial();
                         }, trial.timing_post_trial);
                     }
                     else {
-                        block.next();
+                        jsPsych.finishTrial();
                     }
                 }
             }));

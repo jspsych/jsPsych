@@ -26,7 +26,7 @@
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial) {
+        plugin.trial = function(display_element, trial) {
             
             // if any trial variables are functions
             // this evaluates the function and replaces
@@ -70,7 +70,7 @@
                 });
 
                 // save data
-                block.writeData($.extend({}, {
+                jsPsych.data.write($.extend({}, {
                     "rt": response_time
                 }, question_data, trial.data));
 
@@ -78,9 +78,9 @@
 
                 // next trial
 				if(trial.timing_post_trial > 0){
-                	setTimeout(function(){ block.next(); }, trial.timing_post_trial);
+                	setTimeout(function(){ jsPsych.finishTrial(); }, trial.timing_post_trial);
 				} else {
-					block.next();
+					jsPsych.finishTrial();
 				}
             });
 

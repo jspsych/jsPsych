@@ -48,7 +48,7 @@
 
 				var xab_trial_complete = false;
 
-				plugin.trial = function(display_element, block, trial) {
+				plugin.trial = function(display_element, trial) {
 
 					// if any trial variables are functions
 					// this evaluates the function and replaces
@@ -162,7 +162,7 @@
 								"stimulus_b": trial.b_path,
 								"key_press": info.key
 							};
-							block.writeData($.extend({}, trial_data, trial.data));
+							jsPsych.data.write($.extend({}, trial_data, trial.data));
 
 							display_element.html(''); // remove all
 
@@ -171,10 +171,10 @@
 							// move on to the next trial after timing_post_trial milliseconds
 							if (trial.timing_post_trial > 0) {
 								setTimeout(function() {
-									block.next();
+									jsPsych.finishTrial();
 								}, trial.timing_post_trial);
 							} else {
-								block.next();
+								jsPsych.finishTrial();
 							}
 
 						};

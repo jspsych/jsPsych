@@ -43,7 +43,7 @@
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial) {
+        plugin.trial = function(display_element, trial) {
 
             // if any trial variables are functions
             // this evaluates the function and replaces
@@ -257,7 +257,7 @@
                 var n_diff = arrayDifferences(trial.configurations, lineIsVisible);
                 var correct = (n_diff === 0);
 
-                block.writeData($.extend({}, {
+                jsPsych.data.write($.extend({}, {
                     "configuration": JSON.stringify(lineIsVisible),
                     "target_configuration": JSON.stringify(trial.configurations),
                     "rt": response_time,
@@ -302,11 +302,11 @@
                 // next trial
                 if (trial.timing_post_trial > 0) {
                     setTimeout(function() {
-                        block.next();
+                        jsPsych.finishTrial();
                     }, trial.timing_post_trial);
                 }
                 else {
-                    block.next();
+                    jsPsych.finishTrial();
                 }
 
             }

@@ -27,7 +27,7 @@
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial) {
+        plugin.trial = function(display_element, trial) {
             
             // if any trial variables are functions
             // this evaluates the function and replaces
@@ -45,12 +45,12 @@
                 
                 if (trial.timing_post_trial > 0) {
                     setTimeout(function() {
-                        block.next();
+                        jsPsych.finishTrial();
                     }, trial.timing_post_trial);
                 }
                 else {
-                    block.next();
-                } // call block.next() to advance the experiment after a delay.
+                    jsPsych.finishTrial();
+                } 
                 
             };
 
@@ -73,7 +73,7 @@
             }
 
             function save_data(key, rt) {
-                block.writeData($.extend({}, {
+                jsPsych.data.write($.extend({}, {
                     "rt": rt,
                     "key_press": key
                 }, trial.data));

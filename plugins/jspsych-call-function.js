@@ -21,15 +21,15 @@
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial) {
+        plugin.trial = function(display_element, trial) {
             var return_val = trial.func.apply({}, [trial.args]);
             if (typeof return_val !== 'undefined') {
-                block.writeData($.extend({},{
+                jsPsych.data.write($.extend({},{
                     value: return_val
                 },trial.data));
             }
 
-            block.next();
+            jsPsych.finishTrial();
         };
 
         return plugin;

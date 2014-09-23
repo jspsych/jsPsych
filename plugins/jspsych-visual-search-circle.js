@@ -41,7 +41,7 @@
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial) {
+        plugin.trial = function(display_element, trial) {
 
             trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
@@ -169,15 +169,15 @@
 
                 // this line merges together the trial_data object and the generic
                 // data object (trial.data), and then stores them.
-                block.writeData($.extend({}, trial_data, trial.data));
+                jsPsych.data.write($.extend({}, trial_data, trial.data));
 
                 // go to next trial
                 if(trial.timing_post_trial > 0){
                     setTimeout(function() {
-                        block.next();
+                        jsPsych.finishTrial();
                     }, trial.timing_post_trial);
                 } else {
-                    block.next();
+                    jsPsych.finishTrial();
                 }
             }
         };
