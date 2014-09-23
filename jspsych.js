@@ -293,7 +293,8 @@
 				
 				// linear chunks just go through the blocks in order and are
 				// done when each trial has been completed once
-				if(this.type == 'linear'){
+				// the root chunk is a special case of the linear chunk
+				if(this.type == 'linear' || this.type == 'root'){
 					if (this.currentTimelineLocation >= this.timeline.length) { return true; }
 					else { return false; }
 				} 
@@ -578,7 +579,7 @@
 
 			var trials = [];
 			for (var i = 0; i < data.length; i++) {
-				if (data[i].internal_chunk_id === chunk_id) { // TODO: change this to starts with
+				if (data[i].internal_chunk_id.slice(0, chunk_id.length) === chunk_id) { // TODO: change this to starts with
 					trials.push(data[i]);
 				}
 			}
