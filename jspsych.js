@@ -81,7 +81,9 @@
 
 			var obj = {
 				"total_trials": root_chunk.length(),
-				"current_trial_global": global_trial_index
+				"current_trial_global": global_trial_index,
+				"total_chunks": root_chunk.timeline.length,
+				"current_chunk": root_chunk.currentTimelineLocation
 				//"current_trial_local": exp_chunks[curr_chunk].currentTrialInChunk,
 				//"current_timeline_location": curr_chunk + "-" + exp_chunks[curr_chunk].currentBlock
 			};
@@ -136,15 +138,15 @@
 			// handle callback at whole-experiment level
 			opts.on_trial_finish();
 
-			// update progress bar if shown
-			if (opts.show_progress_bar === true) {
-				updateProgressBar();
-			}
-			
 			global_trial_index++;
 			
 			// advance chunk
 			root_chunk.advance();
+			
+			// update progress bar if shown
+			if (opts.show_progress_bar === true) {
+				updateProgressBar();
+			}
 			
 			// check if experiment is over
 			if(root_chunk.isComplete()){
@@ -232,7 +234,7 @@
 				}
 				return n;
 			}
-			
+				
 			chunk.activeChunkID = function(){
 				if(this.timeline[this.currentTimelineLocation].type === 'block'){
 					return this.chunkID();
@@ -480,7 +482,7 @@
 		function updateProgressBar() {
 			var progress = jsPsych.progress();
 
-			var percentComplete = 100 * ((progress.current_trial_global + 1) / progress.total_trials);
+			var percentComplete = 100 * ((progress.current_chunk) / progress.total_chunks);
 
 			$('#jspsych-progressbar-inner').css('width', percentComplete + "%");
 		}
