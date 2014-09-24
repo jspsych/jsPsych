@@ -523,7 +523,6 @@
 				'trial_index': progress.current_trial_local,
 				'trial_index_global': progress.current_trial_global,
 				'time_elapsed': jsPsych.totalTime(),
-				//'block_index': progress.current_block,
 				'internal_chunk_id': jsPsych.currentChunkID()
 			};
 
