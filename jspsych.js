@@ -364,8 +364,14 @@
 
 						// add options that are generic to all plugins
 						trials = addGenericTrialOptions(trials, chunk_timeline[i]);
-
-						timeline.push(createBlock(trials));
+						
+						// setting default values for repetitions and randomize_order
+						var randomize_order = (typeof chunk_timeline[i].randomize_order === 'undefined') ? false : chunk_timeline[i].randomize_order;
+						var repetitions = (typeof chunk_timeline[i].repetitions === 'undefined') ? 1 : chunk_timeline[i].repetitions;
+						
+						for(var j = 0; j < repetitions; j++) {
+							timeline.push(createBlock(trials, chunk_timeline[i].randomize_order));
+						}
 					}
 				}
 				
@@ -376,7 +382,7 @@
 			
 		}
 		
-		function createBlock(trial_list) {
+		function createBlock(trial_list, randomize_order) {
 			
 			var block = {
 			
@@ -385,8 +391,17 @@
 				trials: trial_list,
 				
 				type: 'block',
+				
+				randomize_order: randomize_order,
 
 				next: function() {
+					
+					// stuff that happens when the block is running from the start
+					if(this.trial_idx === 0){
+						if(this.randomize_order){
+							this.trials = jsPsych.randomization.repeat(this.trials, 1, false);
+						}
+					}
 
 					var curr_trial = this.trials[this.trial_idx];
 					
