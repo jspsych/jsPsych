@@ -46,8 +46,6 @@
 			return trials;
 		};
 
-		var xab_trial_complete = false;
-
 		plugin.trial = function(display_element, trial) {
 
 			// if any trial variables are functions
@@ -55,7 +53,9 @@
 			// it with the output of the function
 			trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
-			xab_trial_complete = false;
+			// this array holds handlers from setTimeout calls
+			// that need to be cleared if the trial ends early
+			var setTimeoutHandlers = [];
 
 			// how we display the content depends on whether the content is 
 			// HTML code or an image path.
@@ -124,15 +124,18 @@
 
 				// if timing_ab is > 0, then we hide the stimuli after timing_ab milliseconds
 				if (trial.timing_ab > 0) {
-					setTimeout(function() {
-						if (!xab_trial_complete) {
-							$('.jspsych-xab-stimulus').css('visibility', 'hidden');
-						}
-					}, trial.timing_ab);
+					setTimeoutHandlers.push(setTimeout(function() {
+						$('.jspsych-xab-stimulus').css('visibility', 'hidden');
+					}, trial.timing_ab));
 				}
 
 				// create the function that triggers when a key is pressed.
 				var after_response = function(info) {
+
+					// kill any remaining setTimeout handlers
+					for (var i = 0; i < setTimeoutHandlers.length; i++) {
+						clearTimeout(setTimeoutHandlers[i]);
+					}
 
 					var correct = false; // true when the correct response is chosen
 
@@ -179,7 +182,7 @@
 
 			}
 		};
-		
+
 		return plugin;
 	})();
 })(jQuery);
