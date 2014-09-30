@@ -47,8 +47,10 @@
 					// it with the output of the function
 					trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
+					// this array holds handlers from setTimeout calls
+					// that need to be cleared if the trial ends early
+					var setTimeoutHandlers = [];
 
-					sim_trial_complete = false;
 					// show the images
 					if (!trial.is_html) {
 						display_element.append($('<img>', {
@@ -66,18 +68,18 @@
 						show_response_slider(display_element, trial);
 					}
 
-					setTimeout(function() {
+					setTimeoutHandlers.push(setTimeout(function() {
 						showBlankScreen();
-					}, trial.timing_first_stim);
+					}, trial.timing_first_stim));
 
 
 					function showBlankScreen() {
 
 						$('#jspsych_sim_stim').css('visibility', 'hidden');
 
-						setTimeout(function() {
+						setTimeoutHandlers.push(setTimeout(function() {
 							showSecondStim();
-						}, trial.timing_image_gap);
+						}, trial.timing_image_gap));
 					}
 
 					function showSecondStim() {
@@ -95,14 +97,12 @@
 						}
 
 						if (trial.timing_second_stim > 0) {
-							setTimeout(function() {
-								if (!sim_trial_complete) {
-									$("#jspsych_sim_stim").css('visibility', 'hidden');
-									if (trial.show_response == "POST_STIMULUS") {
-										show_response_slider(display_element, trial);
-									}
+							setTimeoutHandlers.push(setTimeout(function() {
+								$("#jspsych_sim_stim").css('visibility', 'hidden');
+								if (trial.show_response == "POST_STIMULUS") {
+									show_response_slider(display_element, trial);
 								}
-							}, trial.timing_second_stim);
+							}, trial.timing_second_stim));
 						}
 					}
 
@@ -193,7 +193,12 @@
 						$("#next").click(function() {
 							var endTime = (new Date()).getTime();
 							var response_time = endTime - startTime;
-							sim_trial_complete = true;
+
+							// kill any remaining setTimeout handlers
+							for (var i = 0; i < setTimeoutHandlers.length; i++) {
+								clearTimeout(setTimeoutHandlers[i]);
+							}
+
 							var score = $("#slider").slider("value");
 							jsPsych.data.write($.extend({}, {
 								"sim_score": score,

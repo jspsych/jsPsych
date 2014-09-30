@@ -35,8 +35,6 @@
 			return trials;
 		};
 
-		var cat_trial_complete = false;
-
 		plugin.trial = function(display_element, trial) {
 
 			// if any trial variables are functions
@@ -44,9 +42,9 @@
 			// it with the output of the function
 			trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
-
-			// set finish flag
-			cat_trial_complete = false;
+			// this array holds handlers from setTimeout calls
+			// that need to be cleared if the trial ends early
+			var setTimeoutHandlers = [];
 
 			if (!trial.is_html) {
 				// add image to display
@@ -65,11 +63,9 @@
 
 			// hide image after time if the timing parameter is set
 			if (trial.timing_stim > 0) {
-				setTimeout(function() {
-					if (!cat_trial_complete) {
-						$('#jspsych-categorize-stimulus').css('visibility', 'hidden');
-					}
-				}, trial.timing_stim);
+				setTimeoutHandlers.push(setTimeout(function() {
+					$('#jspsych-categorize-stimulus').css('visibility', 'hidden');
+				}, trial.timing_stim));
 			}
 
 			// if prompt is set, show prompt
@@ -80,12 +76,15 @@
 			// create response function
 			var after_response = function(info) {
 
+				// kill any remaining setTimeout handlers
+				for (var i = 0; i < setTimeoutHandlers.length; i++) {
+					clearTimeout(setTimeoutHandlers[i]);
+				}
+
 				var correct = false;
 				if (trial.key_answer == info.key) {
 					correct = true;
 				}
-
-				cat_trial_complete = true;
 
 				// save data
 				var trial_data = {

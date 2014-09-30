@@ -35,8 +35,6 @@
 			return trials;
 		};
 
-		var sd_trial_complete = false;
-
 		plugin.trial = function(display_element, trial) {
 
 			// if any trial variables are functions
@@ -44,9 +42,9 @@
 			// it with the output of the function
 			trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
-
-
-			sd_trial_complete = false;
+			// this array holds handlers from setTimeout calls
+			// that need to be cleared if the trial ends early
+			var setTimeoutHandlers = [];
 
 			// show image
 			if (!trial.is_html) {
@@ -62,17 +60,17 @@
 			}
 
 			// remove image after duration
-			setTimeout(function() {
+			setTimeoutHandlers.push(setTimeout(function() {
 				showBlankScreen();
-			}, trial.timing_first_stim);
+			}, trial.timing_first_stim));
 
 
 			function showBlankScreen() {
 				$('.jspsych-same-different-stimulus').remove();
 
-				setTimeout(function() {
+				setTimeoutHandlers.push(setTimeout(function() {
 					showSecondStim();
-				}, trial.timing_gap);
+				}, trial.timing_gap));
 			}
 
 			function showSecondStim() {
@@ -91,11 +89,9 @@
 				}
 
 				if (trial.timing_second_stim > 0) {
-					setTimeout(function() {
-						if (!sd_trial_complete) {
-							$("#jspsych-same-different-second-stimulus").css('visibility', 'hidden');
-						}
-					}, trial.timing_second_stim);
+					setTimeoutHandlers.push(setTimeout(function() {
+						$("#jspsych-same-different-second-stimulus").css('visibility', 'hidden');
+					}, trial.timing_second_stim));
 				}
 
 				//show prompt here
@@ -104,6 +100,11 @@
 				}
 
 				var after_response = function(info) {
+
+					// kill any remaining setTimeout handlers
+					for (var i = 0; i < setTimeoutHandlers.length; i++) {
+						clearTimeout(setTimeoutHandlers[i]);
+					}
 
 					var correct = false;
 
