@@ -514,7 +514,7 @@
 		
 		module.getData = function() {
 			return $.extend(true, [], allData); // deep clone
-		}
+		};
 		
 		module.write = function(data_object) {
 			
@@ -535,7 +535,7 @@
 			
 			var initSettings = jsPsych.initSettings();
 			initSettings.on_data_update(ext_data_object); //TODO: FIX callback?
-		}
+		};
 
 		module.dataAsCSV = function(append_data) {
 			var dataObj = module.getData();
@@ -585,7 +585,11 @@
 			}
 
 			return trials;
-		}
+		};
+		
+		module.getLastTrialData = function() {
+			return allData[allData.length-1];
+		};
 
 		module.displayData = function(format) {
 			format = (typeof format === 'undefined') ? "json" : format.toLowerCase();
@@ -607,7 +611,7 @@
 			display_element.append($('<pre>', {
 				html: data_string
 			}));
-		}
+		};
 
 		// private function to save text file on local drive
 
@@ -752,7 +756,6 @@
 		};
 
 		// core.submitToTurk will submit a MechanicalTurk ExternalHIT type
-
 		module.submitToTurk = function(data) {
 
 			var turkInfo = jsPsych.turk.turkInfo();
@@ -775,7 +778,7 @@
 			var url = turkSubmitTo + "/mturk/externalSubmit?" + dataString.join("&");
 
 			window.location.href = url;
-		}
+		};
 
 		return module;
 
