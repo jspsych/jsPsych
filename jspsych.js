@@ -124,7 +124,7 @@
 
 		core.getDisplayElement = function() {
 			return DOM_target;
-		}
+		};
 		
 		core.finishTrial = function(){
 			// logic to advance to next trial?
