@@ -579,7 +579,7 @@
 
 			var trials = [];
 			for (var i = 0; i < data.length; i++) {
-				if (data[i].internal_chunk_id.slice(0, chunk_id.length) === chunk_id) { // TODO: change this to starts with
+				if (data[i].internal_chunk_id.slice(0, chunk_id.length) === chunk_id) {
 					trials.push(data[i]);
 				}
 			}
@@ -588,8 +588,22 @@
 		};
 		
 		module.getLastTrialData = function() {
+			if(allData.length == 0){
+				return {};
+			}
 			return allData[allData.length-1];
 		};
+		
+		module.getLastChunkData = function() {
+			var lasttrial = module.getLastTrialData();
+			var chunk_id = lasttrial.internal_chunk_id;
+			if(typeof chunk_id === 'undefined') { 
+				return [];
+			} else {
+				var lastchunkdata = module.getTrialsFromChunk(chunk_id);
+				return lastchunkdata;
+			}
+		}
 
 		module.displayData = function(format) {
 			format = (typeof format === 'undefined') ? "json" : format.toLowerCase();
