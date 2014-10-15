@@ -1,0 +1,1 @@
+$('table').addClass('table-striped');
