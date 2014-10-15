@@ -20,7 +20,7 @@
                 trials[i].stims = params.stimuli[i];
                 trials[i].frame_time = params.frame_time || 250;
                 trials[i].frame_isi = params.frame_isi || 0;
-                trials[i].repetitions = params.repetitions || 1;
+                trials[i].sequence_reps = params.sequence_reps || 1;
                 trials[i].choices = params.choices || [];
                 trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
             }
@@ -49,7 +49,7 @@
                 if (animate_frame == trial.stims.length) {
                     animate_frame = 0;
                     reps++;
-                    if (reps >= trial.repetitions) {
+                    if (reps >= trial.sequence_reps) {
                         endTrial();
                         clearInterval(animate_interval);
                         showImage = false;
