@@ -172,7 +172,7 @@
 			
 			return createExperimentChunk({
 				chunk_type: 'root',
-				blocks: experiment_structure
+				timeline: experiment_structure
 			});
 			
 		}
@@ -181,7 +181,7 @@
 			
 			var chunk = {};
 			
-			chunk.timeline = parseChunkDefinition(chunk_definition.blocks);
+			chunk.timeline = parseChunkDefinition(chunk_definition.timeline);
 			chunk.parentChunk = parent_chunk;
 			chunk.relID = relative_id;
 			
@@ -252,7 +252,7 @@
 				// return true if the chunk is done running trials
 				// return false otherwise
 				
-				// linear chunks just go through the blocks in order and are
+				// linear chunks just go through the timeline in order and are
 				// done when each trial has been completed once
 				// the root chunk is a special case of the linear chunk
 				if(this.type == 'linear' || this.type == 'root'){
