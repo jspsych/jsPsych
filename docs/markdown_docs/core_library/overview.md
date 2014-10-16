@@ -39,13 +39,12 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.randomization.factorial](jspsych-randomization.md#jspsychrandomizationfactorial)
 * [jsPsych.randomization.repeat](jspsych-randomization.md#jspsychrandomizationrepeat)
 
-### PluginAPI module
+### [PluginAPI module](jspsych-pluginAPI.md)
 
-* jsPsych.pluginAPI.getKeyboardResponse
-* jsPsych.pluginAPI.cancelKeyboardResponse
-* jsPsych.pluginAPI.cancelAllKeyboardResponses
-* jsPsych.pluginAPI.normalizeTrialVariables
-* jsPsych.pluginAPI.enforceArray
-
+* [jsPsych.pluginAPI.cancelAllKeyboardResponses](jspsych-pluginAPI.md#jspsychpluginapicancelallkeyboardresponses)
+* [jsPsych.pluginAPI.cancelKeyboardResponse](jspsych-pluginAPI.md#jspsychpluginapicancelkeyboardresponse)
+* [jsPsych.pluginAPI.enforceArray](jspsych-pluginAPI.md#jspsychpluginapienforcearray)
+* [jsPsych.pluginAPI.getKeyboardResponse](jspsych-pluginAPI.md#jspsychpluginapigetkeyboardresponse)
+* [jsPsych.pluginAPI.normalizeTrialVariables](jspsych-pluginAPI.md#jspsychpluginapinormalizetrialvariables)
 
 
