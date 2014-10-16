@@ -45,6 +45,7 @@ pages:
 - ['features/functions-as-parameters.md', 'Features', 'Using Functions as Plugin Parameters']
 - ['features/data.md', 'Features', 'Event-related Callback Functions']
 - ['features/image-preloading.md', 'Features', 'Image Preloading']
+- ['support.md', 'Support']
 - ['about/about.md', 'About', 'About jsPsych']
 - ['about/license.md', 'About', 'License']
 - ['about/about.md', 'About', 'Contributing to jsPsych']
