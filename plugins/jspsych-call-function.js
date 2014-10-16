@@ -15,19 +15,18 @@
         plugin.create = function(params) {
             var trials = new Array(1);
             trials[0] = {
-                "func": params.func,
-                "args": params.args || []
+                "func": params.func
             };
             return trials;
         };
 
         plugin.trial = function(display_element, trial) {
-            var return_val = trial.func.apply({}, [trial.args]);
-            if (typeof return_val !== 'undefined') {
-                jsPsych.data.write($.extend({},{
-                    value: return_val
-                },trial.data));
-            }
+            var return_val = trial.func();
+            
+            jsPsych.data.write($.extend({},{
+                value: return_val
+            },trial.data));
+            
 
             jsPsych.finishTrial();
         };
