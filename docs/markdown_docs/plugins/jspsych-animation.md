@@ -39,7 +39,7 @@ var animation_sequence = ["img/face_1.jpg", "img/face_2.jpg", "img/face_3.jpg", 
 var animation_block = {
     type: 'animation',
     stimuli: [animation_sequence],
-    repetitions: 3
+    sequence_reps: 3
 };
 ```
 
@@ -54,6 +54,6 @@ var animation_sequence_2 = ["img/face_3.jpg", "img/face_2.jpg", "img/face_4.jpg"
 var animation_block = {
     type: 'animation',
     stimuli: [animation_sequence_1, animation_sequence_2],
-    repetitions: 3
+    sequence_reps: 3
 };
 ```

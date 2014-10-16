@@ -18,7 +18,7 @@
 			for (var i = 0; i < trials.length; i++) {
 				trials[i] = {};
 				trials[i].stims = params.stimuli[i];
-				trials[i].reps = params.reps || 1;
+				trials[i].sequence_reps = params.sequence_reps || 1;
 				trials[i].key_answer = params.key_answer[i];
 				trials[i].text_answer = (typeof params.text_answer === 'undefined') ? "" : params.text_answer[i];
 				trials[i].choices = params.choices;
@@ -58,7 +58,7 @@
 					animate_frame = 0;
 					reps++;
 					// check if reps complete //
-					if (trial.reps != -1 && reps >= trial.reps) {
+					if (trial.sequence_reps != -1 && reps >= trial.sequence_reps) {
 						// done with animation
 						showAnimation = false;
 					}
