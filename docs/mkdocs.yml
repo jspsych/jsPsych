@@ -16,7 +16,7 @@ pages:
 - ['core_library/jspsych-core.md', 'Core Library API', 'jsPsych core']
 - ['core_library/jspsych-data.md', 'Core Library API', 'jsPsych.data']
 - ['core_library/jspsych-randomization.md', 'Core Library API', 'jsPsych.randomization']
-- ['core_library/jspsych-mturk.md', 'Core Library API', 'jsPsych.mturk']
+- ['core_library/jspsych-turk.md', 'Core Library API', 'jsPsych.turk']
 - ['core_library/jspsych-pluginAPI.md', 'Core Library API', 'jsPsych.pluginAPI']
 - ['plugins/overview.md', 'Plugins', 'Overview']
 - ['plugins/creating-a-plugin.md', 'Plugins', 'Creating a New Plugin']

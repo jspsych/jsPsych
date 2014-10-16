@@ -29,15 +29,15 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * jsPsych.data.getLastChunkData
 * jsPsych.data.displayData
 
-### Turk module
+### [Turk module](jspsych-turk.md)
 
-* jsPsych.turk.turkInfo
-* jsPsych.turk.submitToTurk
+* [jsPsych.turk.submitToTurk](jspsych-turk.md#jspsychturksubmittoturk)
+* [jsPsych.turk.turkInfo](jspsych-turk.md#jspsychturkturkinfo)
 
-### Randomization module
+### [Randomization module](jspsych-randomization.md)
 
-* jsPsych.randomization.repeat
-* jsPsych.randomization.factorial
+* [jsPsych.randomization.factorial](jspsych-randomization.md#jspsychrandomizationfactorial)
+* [jsPsych.randomization.repeat](jspsych-randomization.md#jspsychrandomizationrepeat)
 
 ### PluginAPI module
 
