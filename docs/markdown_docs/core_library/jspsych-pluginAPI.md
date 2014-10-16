@@ -63,27 +63,36 @@ jsPsych.pluginAPI.cancelKeyboardResponse(listener_id);
 ## jsPsych.pluginAPI.enforceArray
 
 ```
-jsPsych.pluginAPI.enforceArray
+jsPsych.pluginAPI.enforceArray(params, possible_arrays)
 ```
 
 ### Parameters
 
 Parameter | Type | Description
 ----------|------|------------
-
+params | object | An object of `key: value` pairs.
+possible_arrays | array | Array of strings where each string is a key from `params` indicating which `keys` should have arrays as the `value`. 
 
 ### Return value
 
-
+Returns a copy of `params` where all of the `keys` in `possible_arrays` are guaranteed to be arrays. 
 
 ### Description 
 
-
+This function checks if specified parameters are arrays. If they are not arrays, then it converts them to arrays. Practically, this is used for cases where a plugin calls for an array, but a single value is also a reasonable option. An example would be specifying a stimulus for the `single-stim` plugin. Technically, the plugin requires the stimuli to be specified in an array. Each element of the array is then given its own trial. However, a single element array to present one trial is possible. This function means that users can declare the single element array as either an array or just the value that would be the element in the array.
 
 ### Examples
 
 ```javascript
 
+// a snippet from the text plugin
+plugin.create = function(params) {
+
+  params = jsPsych.pluginAPI.enforceArray(params, ['text','data']);
+
+  // other stuff here ... 
+
+};
 
 ```
 
