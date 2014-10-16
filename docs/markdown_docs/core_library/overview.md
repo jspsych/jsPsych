@@ -17,17 +17,17 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * jsPsych.initSettings
 * jsPsych.currentChunkID
 
-### Data module
+### [Data module](jspsych-data.md)
 
-* jsPsych.data.getData
-* jsPsych.data.write
-* jsPsych.data.dataAsCSV
-* jsPsych.data.localSave
-* jsPsych.data.getTrialsOfType
-* jsPsych.data.getTrialsFromChunk
-* jsPsych.data.getLastTrialData
-* jsPsych.data.getLastChunkData
-* jsPsych.data.displayData
+* [jsPsych.data.dataAsCSV](jspsych-data.md#jspsychdatadataascsv)
+* [jsPsych.data.displayData](jspsych-data.md#jspsychdatadisplaydata)
+* [jsPsych.data.getData](jspsych-data.md#jspsychdatagetdata)
+* [jsPsych.data.getLastChunkData](jspsych-data.md#jspsychdatagetlastchunkdata)
+* [jsPsych.data.getLastTrialData](jspsych-data.md#jspsychdatagetlasttrialdata)
+* [jsPsych.data.getTrialsOfType](jspsych-data.md#jspsychdatagettrialsoftype)
+* [jsPsych.data.getTrialsFromChunk](jspsych-data.md#jspsychdatagettrialsfromchunk)
+* [jsPsych.data.localSave](jspsych-data.md#jspsychdatalocalsave)
+* [jsPsych.data.write](jspsych-data.md#jspsychdatawrite)
 
 ### [Turk module](jspsych-turk.md)
 
