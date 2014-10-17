@@ -34,4 +34,8 @@ var block = {
 
 In the above example, there are two trials in the block. Both trials will occur (in a random order), and then the block will repeat 4 more times. The randomized order only applies to each individual repetition, so each set of two trials will contain one happy face and one sad face.
 
+## Generating random orders of parameter values
+
+The [jsPsych.randomization](../core-library/jspsych-randomization.md) module in the core library contains functions that assist with generating random orders of trial parameters.
+
 
