@@ -1,5 +1,6 @@
 # The jsPsych core library
 
+---
 ## jsPsych.currentChunkID
 
 ```
@@ -8,20 +9,44 @@ jsPsych.currentChunkID()
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
+None.
 
 ### Return value
 
+Returns the chunk ID of the chunk that is currently active.
+
 ### Description 
+
+Gets the chunk ID of the active chunk. The chunk ID is a string that follows a specific format:
+
+* `"0-0"` is the chunk ID of the first top-level chunk
+* `"1-0"` is the chunk ID of the second top-level chunk
+* `"2-0"` is the chunk ID of the third top-level chunk, and so on...
+
+If a chunk iterates multiple times (in a while chunk, for example), then the iterations are indicated in the second number:
+
+* `"0-0"` is the chunk ID of the first top-level chunk during the first iteration
+* `"0-1"` is the chunk ID of the first top-level chunk during the second iteration
+* `"0-2"` is the chunk ID of the first top-level chunk during the third iteration, and so on...
+
+If chunks are nested in other chunks, then the hierarchical structure is shown with `"."`:
+
+* `"0-0.1-0"` is the chunk ID of the second chunk on the timeline of the first top-level chunk.
+* `"0-0.2-0"` is the chunk ID of the third chunk on the timeline of the first top-level chunk, and so on...
+
+The rules about iterations apply throughout the hierarchical ID:
+
+* `"0-2.1-3"` is the chunk ID of the second chunk, executing for the fourth time, on the timeline of the first top-level chunk, executing for the third time.
 
 
 ### Example
 
 ```javascript
+var chunkid = jsPsych.currentChunkID();
 
+console.log('The current chunk ID is '+chunkid);
 ```
-
+---
 ## jsPsych.currentTrial
 
 ```
@@ -30,19 +55,25 @@ jsPsych.currentTrial()
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
+None.
 
 ### Return value
 
+Returns the object describing the current trial. The object will contain all of the parameters associated with the current trial.
+
 ### Description 
 
+Get a description of the current trial
 
 ### Example
 
 ```javascript
 
+var trial = jsPsych.currentTrial();
+
+console.log('The current trial is using the '+trial.type+' plugin');
 ```
+---
 ## jsPsych.finishTrial
 
 ```
@@ -51,19 +82,31 @@ jsPsych.finishTrial()
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
+None.
 
 ### Return value
 
+Returns nothing.
+
 ### Description 
 
+This method tells jsPsych that the current trial is over. It is used in all of the plugins to end the current trial. When the trial ends a few things happen:
+
+* The on_finish callback function is executed for the trial
+* The on_trial_finish callback function is executed
+* The progress bar is updated if it is being displayed
+* The experiment ends if the trial is the last one (and the on_finish callback function is executed).
+* The next trial, if one exists, is started.
 
 ### Example
 
 ```javascript
 
+// this code would be in a plugin
+jsPsych.finishTrial();
+
 ```
+---
 ## jsPsych.getDisplayElement
 
 ```
@@ -72,19 +115,25 @@ jsPsych.getDisplayElement
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
+None.
 
 ### Return value
 
+Returns the jQuery-object that contains the DOM element used for displaying the experiment.
+
 ### Description 
 
+Get the DOM element that displays the experiment.
 
 ### Example
 
 ```javascript
+var el = jsPsych.getDisplayElement();
 
+// hide the jsPsych display
+el.hide();
 ```
+---
 ## jsPsych.init
 
 ```
@@ -95,17 +144,35 @@ jsPsych.init(settings)
 
 Parameter | Type | Description
 ----------|------|------------
+settings | object | The settings object for initializing jsPsych. See table below.
+
+The settings object can contain several parameters. The only *required* parameter is `experiment_structure`.
+
+Parameter | Type | Description
+--------- | ---- | -----------
+experiment_structure | array | An array containing the chunks and/or blocks that describe the experiment to run. See [Creating an Experiment: Chunks, Blocks, & Trials](../features/chunks-blocks-trials).
+display_element | jQuery object | A jQuery-selected DOM element, e.g. `$('#target')` selects the element with the `id='target'` attribute. If left blank, then jsPsych will use the `<body>` element to display content (creating it if necessary).
+on_finish | function | Function to execute when the experiment ends.
+on_trial_start | function | Function to execute when a new trial begins.
+on_trial_finish | function | Function to execute when a trial ends.
+on_data_update | function | Function to execute every time data is stored using the `jsPsych.data.write` method. All plugins use this method to save data, so this function runs every time a plugin stores new data.
+show_progress_bar | boolean | If true, then [a progress bar](../features/progress-bar.md) is shown at the top of the page.
+
 
 ### Return value
 
+Returns nothing.
+
 ### Description 
 
+This method configures and starts the experiment. 
 
 ### Example
 
 ```javascript
 
 ```
+---
 ## jsPsych.initSettings
 
 ```
@@ -114,19 +181,25 @@ jsPsych.initSettings()
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
+None
 
 ### Return value
 
+Returns the settings object used to initialize the experiment.
+
 ### Description 
 
+Gets the object containing the settings for the current experiment. 
 
 ### Example
 
 ```javascript
+var settings = jsPsych.initSettings();
 
+// check the experiment structure
+console.log(JSON.stringify(settings.experiment_structure));
 ```
+---
 ## jsPsych.preloadImages
 
 ```
@@ -191,7 +264,7 @@ function startExperiment(){
     });
 }
 ```
-
+---
 ## jsPsych.progress
 
 ```
@@ -230,6 +303,7 @@ var percent_complete = progress.current_chunk / progress.total_chunks * 100;
 alert('You have completed approximately '+percent_complete+'% of the experiment');
 
 ```
+---
 ## jsPsych.startTime
 
 ```
@@ -253,6 +327,7 @@ Get the time that the experiment began.
 ```javascript
 var start_time = jsPsych.startTime();
 ```
+---
 ## jsPsych.totalTime
 
 ```
