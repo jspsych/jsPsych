@@ -36,6 +36,6 @@ In the above example, there are two trials in the block. Both trials will occur 
 
 ## Generating random orders of parameter values
 
-The [jsPsych.randomization](../core-library/jspsych-randomization.md) module in the core library contains functions that assist with generating random orders of trial parameters.
+The [jsPsych.randomization](../core_library/jspsych-randomization.md) module in the core library contains functions that assist with generating random orders of trial parameters.
 
 
