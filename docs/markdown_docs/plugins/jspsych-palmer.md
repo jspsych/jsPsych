@@ -8,7 +8,9 @@ The stimuli look like this (there are several options to configure the appearanc
 
 Subjects can edit the stimuli by clicking on two adjacent circles to add or remove a line segment between them. The plugin also contains a function for generating non-editable versions of the stimuli that can be used in other plugins that accept HTML-formatted stimuli, like the single-stim and categorize plugins.
 
-**Dependency alert**: This plugin requires the Raphael-js library, available at [http://www.raphaeljs.com](http://www.raphaeljs.com). You must include the library in the `<head>` section of your experiment page.
+## Dependency
+
+This plugin requires the Raphael-js library, available at [http://www.raphaeljs.com](http://www.raphaeljs.com). You must include the library in the `<head>` section of your experiment page.
 
 ## Parameters
 
