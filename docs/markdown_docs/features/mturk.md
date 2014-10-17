@@ -52,7 +52,25 @@ Recording the workerId at the start of the experiment is also a good way to trac
 
 ## Submitting results to Mechanical Turk
 
+If you are running a HIT on Mechanical Turk using the ExternalQuestion template, then you'll need to provide a way for subjects to indicate that they have completed the HIT. (If you are using another template, then the template will provide this code for you). jsPSych makes this a relatively easy task. A common strategy for external HITs is to display an HTML page on the Mechanical Turk website that links to your HIT. Subjects click the link, which opens the actual experiment content in a new browser window or tab, allowing the experiment to take up the whole browser window instead of just the iframe that displays content on Mechanical Turk. 
 
+On this page, you might include a submit button for workers to indicate that they have finished the experiment. The page would look something like this:
+
+```html
+<p>Enter the code you were given:</p>
+<input type="text" id="code"></input>
+<button onclick="sendData();">Submit HIT</button>
+
+<script>
+function sendData() {
+  jsPsych.turk.submitToTurk({
+    code: document.getElementById('code').value
+  });
+}
+</script>
+```
+
+When workers click the button, the contents of the `code` text field will be sent to Mechanical Turk, and you'll be able to view the subjects and the codes that they entered in the Mechanical Turk GUI. You can then approve or reject work using the Mechanical Turk website.
 
 ## Limitations
 
