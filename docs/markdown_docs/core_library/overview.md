@@ -4,18 +4,18 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 
 ## Core library API
 
-### Core
+### [Core](jspsych-core.md)
 
-* jsPsych.init
-* jsPsych.progress
-* jsPsych.startTime
-* jsPsych.totalTime
-* jsPsych.preloadImages
-* jsPsych.getDisplayElement
-* jsPsych.finishTrial
-* jsPsych.currentTrial
-* jsPsych.initSettings
-* jsPsych.currentChunkID
+* [jsPsych.currentChunkID](jspsych-core.md#jspsychcurrentchunkID)
+* [jsPsych.currentTrial](jspsych-core.md#jspsychcurrenttrial)
+* [jsPsych.finishTrial](jspsych-core.md#jspsychfinishtrial)
+* [jsPsych.getDisplayElement](jspsych-core.md#jspsychgetdisplayelement)
+* [jsPsych.init](jspsych-core.md#jspsychinit)
+* [jsPsych.initSettings](jspsych-core.md#jspsychinitSettings)
+* [jsPsych.preloadImages](jspsych-core.md#jspsychpreloadimages)
+* [jsPsych.progress](jspsych-core.md#jspsychprogress)
+* [jsPsych.startTime](jspsych-core.md#jspsychstarttime)
+* [jsPsych.totalTime](jspsych-core.md#jspsychtotaltime)
 
 ### [Data module](jspsych-data.md)
 

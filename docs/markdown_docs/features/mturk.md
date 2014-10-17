@@ -2,9 +2,9 @@
 
 A common use of jsPsych is to build an online experiment and find subjects using [Mechanical Turk](http://www.mturk.com/). Once an experiment is available through a web server and data is being [saved on the server](), connecting the experiment with Mechanical Turk takes only a few additional steps. jsPsych has some built-in functionality to assist with this process. 
 
-## The jsPsych.mturk module
+## The jsPsych.turk module
 
-The `jsPsych.mturk` module contains functions that are relevant for experiments running on Mechanical Turk.
+The [jsPsych.turk](../core_library/jspsych-turk.md) module contains functions that are relevant for experiments running on Mechanical Turk.
 
 ## Creating an advertisement page
 
