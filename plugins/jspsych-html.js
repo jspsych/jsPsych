@@ -57,7 +57,7 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
                             display_element.empty();
                             display_element.show();
                             jsPsych.finishTrial();
-                        }, trial.timing);
+                        }, trial.timing_post_trial);
                     }
                     else {
                         display_element.empty();
