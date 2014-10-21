@@ -6,6 +6,7 @@ extra_css:
 - css/extra.css
 extra_javascript:
 - js/extra.js
+- js/analytics.js
 include_next_prev: false
 docs_dir: markdown_docs
 pages:
