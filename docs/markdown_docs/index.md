@@ -10,7 +10,6 @@ This page gives a broad overview of how jsPsych works. More detail is available 
 
 ## Conceptual Overview
 
-Explaining the nested timeline approach
 
 ## Loading jsPsych
 

@@ -10,7 +10,7 @@ include_next_prev: false
 docs_dir: markdown_docs
 pages:
 - ['index.md', 'Introduction']
-- ['tutorials/flanker-task.md', 'Tutorials', 'Demo Experiment: Choice Response Time Task']
+- ['tutorials/go-nogo-task.md', 'Tutorials', 'Demo Experiment: Go / No-Go Task']
 - ['tutorials/flanker-task.md', 'Tutorials', 'Demo Experiment: Flanker Task']
 - ['core_library/overview.md', 'Core Library API', 'Overview']
 - ['core_library/jspsych-core.md', 'Core Library API', 'jsPsych core']
@@ -30,7 +30,7 @@ pages:
 - ['plugins/jspsych-same-different.md', 'Plugins', 'jspsych-same-different']
 - ['plugins/jspsych-similarity.md', 'Plugins', 'jspsych-similarity']
 - ['plugins/jspsych-single-stim.md', 'Plugins', 'jspsych-single-stim']
-- ['plugins/jspsych-suvey-likert.md', 'Plugins', 'jspsych-suvey-likert']
+- ['plugins/jspsych-survey-likert.md', 'Plugins', 'jspsych-survey-likert']
 - ['plugins/jspsych-survey-text.md', 'Plugins', 'jspsych-survey-text']
 - ['plugins/jspsych-text.md', 'Plugins', 'jspsych-text']
 - ['plugins/jspsych-visual-search-circle.md', 'Plugins', 'jspsych-visual-search-circle']
