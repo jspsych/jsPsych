@@ -23,7 +23,7 @@
             var trials = new Array(params.stimuli.length);
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {};
-                trials[i].stimuli = params.stimuli[i];
+                trials[i].stimulus = params.stimuli[i];
                 trials[i].image_size = params.image_size || [100, 100];
                 trials[i].timing_duration = (typeof params.timing_duration === 'undefined') ? 2000 : params.timing_duration;
                 //trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
