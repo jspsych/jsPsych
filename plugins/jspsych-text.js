@@ -16,21 +16,18 @@
 
         plugin.create = function(params) {
             
-            params = jsPsych.pluginAPI.enforceArray(params, ['text','data']);
+            params = jsPsych.pluginAPI.enforceArray(params, ['text', 'cont_key']);
             
             var trials = new Array(params.text.length);
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {};
-                trials[i].type = "text"; // must match plugin name
                 trials[i].text = params.text[i]; // text of all trials
                 trials[i].cont_key = params.cont_key || []; // keycode to press to advance screen, default is all keys.
-                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 0 : params.timing_post_trial;
-                trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
             }
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial, part) {
+        plugin.trial = function(display_element, trial) {
             
             // if any trial variables are functions
             // this evaluates the function and replaces
@@ -48,12 +45,12 @@
                 
                 if (trial.timing_post_trial > 0) {
                     setTimeout(function() {
-                        block.next();
+                        jsPsych.finishTrial();
                     }, trial.timing_post_trial);
                 }
                 else {
-                    block.next();
-                } // call block.next() to advance the experiment after a delay.
+                    jsPsych.finishTrial();
+                } 
                 
             };
 
@@ -76,9 +73,7 @@
             }
 
             function save_data(key, rt) {
-                block.writeData($.extend({}, {
-                    "trial_type": "text",
-                    "trial_index": block.trial_idx,
+                jsPsych.data.write($.extend({}, {
                     "rt": rt,
                     "key_press": key
                 }, trial.data));

@@ -15,25 +15,20 @@
         plugin.create = function(params) {
             var trials = new Array(1);
             trials[0] = {
-                "type": "call-function",
-                "func": params.func,
-                "args": params.args || [],
-                "data": (typeof params.data === 'undefined') ? {} : params.data
+                "func": params.func
             };
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial, part) {
-            var return_val = trial.func.apply({}, [trial.args]);
-            if (typeof return_val !== 'undefined') {
-                block.writeData($.extend({},{
-                    trial_type: "call-function",
-                    trial_index: block.trial_idx,
-                    value: return_val
-                },trial.data));
-            }
+        plugin.trial = function(display_element, trial) {
+            var return_val = trial.func();
+            
+            jsPsych.data.write($.extend({},{
+                value: return_val
+            },trial.data));
+            
 
-            block.next();
+            jsPsych.finishTrial();
         };
 
         return plugin;

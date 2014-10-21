@@ -24,7 +24,6 @@
 
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {};
-                trials[i].type = "visual-search-circle";
                 trials[i].target_present = params.target_present[i];
                 trials[i].set_size = params.set_size[i];
                 trials[i].target = params.target;
@@ -37,14 +36,12 @@
                 trials[i].target_absent_key = params.target_absent_key || 70;
                 trials[i].timing_max_search = (typeof params.timing_max_search === 'undefined') ? -1 : params.timing_max_search;
                 trials[i].timing_fixation = (typeof params.timing_fixation === 'undefined') ? 1000 : params.timing_fixation;
-                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
-                trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
             }
 
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial, part) {
+        plugin.trial = function(display_element, trial) {
 
             trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
@@ -162,8 +159,6 @@
                 
                 // data saving
                 var trial_data = {
-                    trial_type: trial.type,
-                    trial_index: block.trial_idx,
                     correct: correct,
                     rt: rt,
                     key_press: key_press,
@@ -174,15 +169,15 @@
 
                 // this line merges together the trial_data object and the generic
                 // data object (trial.data), and then stores them.
-                block.writeData($.extend({}, trial_data, trial.data));
+                jsPsych.data.write($.extend({}, trial_data, trial.data));
 
                 // go to next trial
                 if(trial.timing_post_trial > 0){
                     setTimeout(function() {
-                        block.next();
+                        jsPsych.finishTrial();
                     }, trial.timing_post_trial);
                 } else {
-                    block.next();
+                    jsPsych.finishTrial();
                 }
             }
         };

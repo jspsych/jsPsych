@@ -18,22 +18,20 @@
 
         plugin.create = function(params) {
             
-            params = jsPsych.pluginAPI.enforceArray(params, ['data'])
+            //params = jsPsych.pluginAPI.enforceArray(params, ['data'])
+			
             var trials = new Array(params.stimuli.length);
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {};
-                trials[i].type = "vsl-grid-scene";
                 trials[i].stimuli = params.stimuli[i];
                 trials[i].image_size = params.image_size || [100, 100];
-                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
                 trials[i].timing_duration = (typeof params.timing_duration === 'undefined') ? 2000 : params.timing_duration;
                 //trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
-                trials[i].data = (typeof params.data === 'undefined') ? {} : params.data;
             }
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial, part) {
+        plugin.trial = function(display_element, trial) {
             
             // if any trial variables are functions
             // this evaluates the function and replaces
@@ -50,19 +48,17 @@
 
                 display_element.html('');
 
-                block.writeData($.extend({}, {
-                    "trial_type": "vsl-grid-scene",
-                    "trial_index": block.trial_idx,
-                    "stimuli": JSON.stringify(trial.stimuli)
+                jsPsych.data.write($.extend({}, {
+                    "stimulus": JSON.stringify(trial.stimuli)
                 }, trial.data));
 
                 if (trial.timing_post_trial > 0) {
                     setTimeout(function() {
-                        block.next();
+                        jsPsych.finishTrial();
                     }, trial.timing_post_trial);
                 }
                 else {
-                    block.next();
+                    jsPsych.finishTrial();
                 }
             }
         };

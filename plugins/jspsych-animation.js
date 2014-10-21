@@ -17,20 +17,17 @@
             var trials = new Array(params.stimuli.length);
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {};
-                trials[i].type = "animation";
                 trials[i].stims = params.stimuli[i];
                 trials[i].frame_time = params.frame_time || 250;
                 trials[i].frame_isi = params.frame_isi || 0;
-                trials[i].repetitions = params.repetitions || 1;
+                trials[i].sequence_reps = params.sequence_reps || 1;
                 trials[i].choices = params.choices || [];
-                trials[i].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
                 trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
-                trials[i].data = (typeof params.data === 'undefined') ? {} : params.data[i];
             }
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial, part) {
+        plugin.trial = function(display_element, trial) {
             
             // if any trial variables are functions
             // this evaluates the function and replaces
@@ -52,7 +49,7 @@
                 if (animate_frame == trial.stims.length) {
                     animate_frame = 0;
                     reps++;
-                    if (reps >= trial.repetitions) {
+                    if (reps >= trial.sequence_reps) {
                         endTrial();
                         clearInterval(animate_interval);
                         showImage = false;
@@ -117,19 +114,17 @@
                 
                 jsPsych.pluginAPI.cancelKeyboardResponse(response_listener);
                 
-                block.writeData($.extend({}, {
-                    "trial_type": "animation",
-                    "trial_index": block.trial_idx,
+                jsPsych.data.write($.extend({}, {
                     "animation_sequence": JSON.stringify(animation_sequence),
                     "responses": JSON.stringify(responses)
                 }, trial.data));
 
                 if(trial.timing_post_trial > 0){
                     setTimeout(function() {
-                        block.next();
+                        jsPsych.finishTrial();
                     }, trial.timing_post_trial);
                 } else {
-                    block.next();
+                    jsPsych.finishTrial();
                 }
             }
         };

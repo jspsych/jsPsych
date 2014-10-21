@@ -19,11 +19,9 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
             
             for (var i = 0; i < params.pages.length; i++) {
                 trials.push({
-                    type: "html",
                     url: params.pages[i].url,
                     cont_key: params.pages[i].cont_key || params.cont_key,
                     cont_btn: params.pages[i].cont_btn || params.cont_btn,
-                    timing_post_trial: params.pages[i].timing_post_trial || (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial,
                     check_fn: params.pages[i].check_fn,
                     force_refresh: (typeof params.force_refresh === 'undefined') ? false : params.force_refresh
                 });
@@ -31,7 +29,7 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial, part) {
+        plugin.trial = function(display_element, trial) {
             
             // if any trial variables are functions
             // this evaluates the function and replaces
@@ -48,9 +46,7 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
                 var finish = function() {
                     if (trial.check_fn && !trial.check_fn(display_element)) return;
                     if (trial.cont_key) $(document).unbind('keydown', key_listener);
-                    block.writeData({
-                        trial_type: "html",
-                        trial_index: block.trial_idx,
+                    jsPsych.data.write({
                         rt: (new Date()).getTime() - t0,
                         url: trial.url
                     });
@@ -60,12 +56,12 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
                         setTimeout(function() {
                             display_element.empty();
                             display_element.show();
-                            block.next();
+                            jsPsych.finishTrial();
                         }, trial.timing);
                     }
                     else {
                         display_element.empty();
-                        block.next();
+                       	jsPsych.finishTrial();
                     }
                 };
                 if (trial.cont_btn) $('#' + trial.cont_btn).click(finish);

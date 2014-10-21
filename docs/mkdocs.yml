@@ -1,0 +1,51 @@
+site_name: jsPsych
+theme: flatly
+repo_url: 'https://github.com/jodeleeuw/jsPsych'
+repo_name: 'GitHub'
+extra_css: 
+- css/extra.css
+extra_javascript:
+- js/extra.js
+include_next_prev: false
+docs_dir: markdown_docs
+pages:
+- ['index.md', 'Introduction']
+- ['tutorials/go-nogo-task.md', 'Tutorials', 'Demo Experiment: Go / No-Go Task']
+- ['tutorials/flanker-task.md', 'Tutorials', 'Demo Experiment: Flanker Task']
+- ['core_library/overview.md', 'Core Library API', 'Overview']
+- ['core_library/jspsych-core.md', 'Core Library API', 'jsPsych core']
+- ['core_library/jspsych-data.md', 'Core Library API', 'jsPsych.data']
+- ['core_library/jspsych-randomization.md', 'Core Library API', 'jsPsych.randomization']
+- ['core_library/jspsych-turk.md', 'Core Library API', 'jsPsych.turk']
+- ['core_library/jspsych-pluginAPI.md', 'Core Library API', 'jsPsych.pluginAPI']
+- ['plugins/overview.md', 'Plugins', 'Overview']
+- ['plugins/creating-a-plugin.md', 'Plugins', 'Creating a New Plugin']
+- ['plugins/jspsych-animation.md', 'Plugins', 'jspsych-animation']
+- ['plugins/jspsych-call-function.md', 'Plugins', 'jspsych-call-function']
+- ['plugins/jspsych-categorize.md', 'Plugins', 'jspsych-categorize']
+- ['plugins/jspsych-categorize-animation.md', 'Plugins', 'jspsych-categorize-animation']
+- ['plugins/jspsych-free-sort.md', 'Plugins', 'jspsych-free-sort']
+- ['plugins/jspsych-html.md', 'Plugins', 'jspsych-html']
+- ['plugins/jspsych-palmer.md', 'Plugins', 'jspsych-palmer']
+- ['plugins/jspsych-same-different.md', 'Plugins', 'jspsych-same-different']
+- ['plugins/jspsych-similarity.md', 'Plugins', 'jspsych-similarity']
+- ['plugins/jspsych-single-stim.md', 'Plugins', 'jspsych-single-stim']
+- ['plugins/jspsych-survey-likert.md', 'Plugins', 'jspsych-survey-likert']
+- ['plugins/jspsych-survey-text.md', 'Plugins', 'jspsych-survey-text']
+- ['plugins/jspsych-text.md', 'Plugins', 'jspsych-text']
+- ['plugins/jspsych-visual-search-circle.md', 'Plugins', 'jspsych-visual-search-circle']
+- ['plugins/jspsych-vsl-animate-occlusion.md', 'Plugins', 'jspsych-vsl-animate-occlusion']
+- ['plugins/jspsych-vsl-grid-scene.md', 'Plugins', 'jspsych-vsl-grid-scene']
+- ['plugins/jspsych-xab.md', 'Plugins', 'jspsych-xab']
+- ['features/chunks-blocks-trials.md', 'Features', 'Creating an Experiment: Chunks, Blocks, & Trials']
+- ['features/progress-bar.md', 'Features', 'Automatic Progress Bar']
+- ['features/mturk.md', 'Features', 'Integrating with Mechanical Turk']
+- ['features/data.md', 'Features', 'Data Storage']
+- ['features/randomization-repetition.md', 'Features', 'Randomization & Repetition']
+- ['features/functions-as-parameters.md', 'Features', 'Using Functions as Plugin Parameters']
+- ['features/callbacks.md', 'Features', 'Event-related Callback Functions']
+- ['features/image-preloading.md', 'Features', 'Image Preloading']
+- ['support.md', 'Support']
+- ['about/about.md', 'About', 'About jsPsych']
+- ['about/license.md', 'About', 'License']
+- ['about/contributing.md', 'About', 'Contributing to jsPsych']

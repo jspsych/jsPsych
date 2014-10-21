@@ -13,12 +13,11 @@
 
         plugin.create = function(params) {
 
-            params = jsPsych.pluginAPI.enforceArray(params, ['data']);
+            //params = jsPsych.pluginAPI.enforceArray(params, ['data']);
 
             var trials = new Array(params.stimuli.length);
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {
-                    "type": "free-sort",
                     "images": params.stimuli[i], // array of images to display
                     "stim_height": params.stim_height || 100,
                     "stim_width": params.stim_width || 100,
@@ -26,14 +25,13 @@
                     "prompt": (typeof params.prompt === 'undefined') ? '' : params.prompt,
                     "prompt_location": params.prompt_location || "above",
                     "sort_area_width": params.sort_area_width || 800,
-                    "sort_area_height": params.sort_area_height || 800,
-                    "data": (typeof params.data === 'undefined') ? {} : params.data[i]
+                    "sort_area_height": params.sort_area_height || 800
                 };
             }
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial, part) {
+        plugin.trial = function(display_element, trial) {
             
             // if any trial variables are functions
             // this evaluates the function and replaces
@@ -118,7 +116,7 @@
                         });
                     });
 
-                    block.writeData($.extend({}, {
+                    jsPsych.data.write($.extend({}, {
                         "init_locations": JSON.stringify(init_locations),
                         "moves": JSON.stringify(moves),
                         "final_locations": JSON.stringify(final_locations),
@@ -129,11 +127,11 @@
                     display_element.html("");
                     if (trial.timing_post_trial > 0) {
                         setTimeout(function() {
-                            block.next();
+                            jsPsych.finishTrial();
                         }, trial.timing_post_trial);
                     }
                     else {
-                        block.next();
+                        jsPsych.finishTrial();
                     }
                 }
             }));

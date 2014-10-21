@@ -20,18 +20,16 @@
             var trials = [];
             for (var i = 0; i < params.questions.length; i++) {
                 trials.push({
-                    type: "survey-likert",
                     questions: params.questions[i],
                     labels: params.labels[i],
                     intervals: params.intervals[i],
-                    show_ticks: (typeof params.show_ticks === 'undefined') ? true : params.show_ticks,
-                    data: (typeof params.data === 'undefined') ? {} : params.data[i]
+                    show_ticks: (typeof params.show_ticks === 'undefined') ? true : params.show_ticks
                 });
             }
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial, part) {
+        plugin.trial = function(display_element, trial) {
             
             // if any trial variables are functions
             // this evaluates the function and replaces
@@ -94,8 +92,9 @@
                         "width": "100%",
                         "margin": "10px 0px 0px 0px",
                         "padding": "0px",
-                        "display": "block",
-                        "position": "relative"
+                        "display": "inline-block",
+                        "position": "relative",
+                        "height": "2em"
                     }
                 }));
 
@@ -144,16 +143,18 @@
                 });
 
                 // save data
-                block.writeData($.extend({}, {
-                    "trial_type": "survey-likert",
-                    "trial_index": block.trial_idx,
+                jsPsych.data.write($.extend({}, {
                     "rt": response_time
                 }, question_data, trial.data));
 
                 display_element.html('');
 
                 // next trial
-                block.next();
+				if(trial.timing_post_trial > 0){
+					setTimeout(function(){ jsPsych.finishTrial(); }, trial.timing_post_trial);
+				} else {
+                	jsPsych.finishTrial();
+				}
             });
 
             var startTime = (new Date()).getTime();

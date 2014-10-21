@@ -20,15 +20,13 @@
             var trials = [];
             for (var i = 0; i < params.questions.length; i++) {
                 trials.push({
-                    type: "survey-text",
-                    questions: params.questions[i],
-                    data: (typeof params.data === 'undefined') ? {} : params.data[i]
+                    questions: params.questions[i]
                 });
             }
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial, part) {
+        plugin.trial = function(display_element, trial) {
             
             // if any trial variables are functions
             // this evaluates the function and replaces
@@ -72,16 +70,18 @@
                 });
 
                 // save data
-                block.writeData($.extend({}, {
-                    "trial_type": "survey-text",
-                    "trial_index": block.trial_idx,
+                jsPsych.data.write($.extend({}, {
                     "rt": response_time
                 }, question_data, trial.data));
 
                 display_element.html('');
 
                 // next trial
-                block.next();
+				if(trial.timing_post_trial > 0){
+                	setTimeout(function(){ jsPsych.finishTrial(); }, trial.timing_post_trial);
+				} else {
+					jsPsych.finishTrial();
+				}
             });
 
             var startTime = (new Date()).getTime();

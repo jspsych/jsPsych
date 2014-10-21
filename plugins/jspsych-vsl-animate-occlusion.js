@@ -29,16 +29,13 @@
             trials[0].initial_direction = params.initial_direction || "left";
             trials[0].occlude_center = (typeof params.occlude_center === 'undefined') ? true : params.occlude_center;
             trials[0].choices = params.choices || []; // spacebar
-            // timing
-            trials[0].timing_post_trial = (typeof params.timing_post_trial === 'undefined') ? 1000 : params.timing_post_trial;
             trials[0].timing_pre_movement = (typeof params.timing_pre_movement === 'undefined') ? 500 : params.timing_pre_movement;
             //trials[0].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
-            trials[0].data = (typeof params.data === 'undefined') ? {} : params.data;
 
             return trials;
         };
 
-        plugin.trial = function(display_element, block, trial, part) {
+        plugin.trial = function(display_element, trial) {
             
             // if any trial variables are functions
             // this evaluates the function and replaces
@@ -147,20 +144,18 @@
                 
                 jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
                 
-                block.writeData($.extend({}, {
-                    "trial_type": "vsl-animate-occlusion",
-                    "trial_index": block.trial_idx,
+                jsPsych.data.write($.extend({}, {
                     "stimuli": JSON.stringify(trial.stims),
                     "responses": JSON.stringify(responses)
                 }, trial.data));
 
                 if (trial.timing_post_trial > 0) {
                     setTimeout(function() {
-                        block.next();
+                        jsPsych.finishTrial();
                     }, trial.timing_post_trial);
                 }
                 else {
-                    block.next();
+                    jsPsych.finishTrial();
                 }
             }
         };

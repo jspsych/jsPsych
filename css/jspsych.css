@@ -20,6 +20,11 @@ html {
  line-height: 1.6em;
 }
 
+body {
+	margin: 0;
+	padding: 0;
+}
+
 p {
     clear:both;
 }
@@ -93,6 +98,40 @@ button:hover {
 .jspsych-display-element {
     width: 800px;
     margin: 50px auto 50px auto;
+}
+
+/*
+ *
+ * jsPsych progress bar
+ *
+ */
+
+#jspsych-progressbar-container {
+	color: #777;
+	border-bottom: 2px solid #dedede;
+	background-color: #f3f3f3;
+	margin-bottom: 1em;
+	text-align: center;
+	padding: 10px 0px;
+}
+
+#jspsych-progressbar-container s {
+	
+}
+
+#jspsych-progressbar-outer {
+	background-color: #dedede;
+	border-radius: 5px;
+	padding: 1px;
+	width: 800px;
+	margin: auto;
+}
+
+#jspsych-progressbar-inner {
+	background-color: #aaa; /* #3EB3D7; */
+	width: 0%;
+	height: 1em;
+	border-radius: 5px;
 }
 
 /*
