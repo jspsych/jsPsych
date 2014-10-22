@@ -33,14 +33,14 @@ To use jsPsych, you'll need to load a few JavaScript files in an HTML document. 
 
 ## Creating an experiment
 
-To use jsPsych, you'll need to create a description of your experiment in JavaScript. This description is an array; each element of the array is a **block** or a **chunk**. Chunks and blocks are special objects in jsPsych. They define sets of trials that should be grouped together (learn more about [chunks and blocks]()).
+To use jsPsych, you'll need to create a description of your experiment in JavaScript. This description is an array; each element of the array is a **block** or a **chunk**. Chunks and blocks are special objects in jsPsych. They define sets of trials that should be grouped together (learn more about [chunks and blocks](features/chunks-blocks-trials.md)).
 
 ```javascript
 // defining an empty array to contain the experiment description
 var experiment = [];
 ```
 
-Blocks are created by defining a JavaScript object with a `type` property that corresponds to a particular [plugin](). The other properties of the block object will depend on which plugin is used. Each plugin has different options.
+Blocks are created by defining a JavaScript object with a `type` property that corresponds to a particular [plugin](plugins/overview.md). The other properties of the block object will depend on which plugin is used. Each plugin has different options.
 
 The code below will create a block that contains two trials. The first trial will display the image file `img/happy_face.jpg` and the second trial will display the image file `img/sad_face.jpg`.
 
@@ -66,6 +66,4 @@ jsPsych.init({
 	experiment_structure: experiment
 })
 ```
-
-For a more in-depth tutorial about creating an experiment, take a look at the [tutorials]().
 
