@@ -8,8 +8,11 @@ To build an experiment with jsPsych, you'll specify the structure of the experim
 
 This page gives a broad overview of how jsPsych works. More detail is available on most of the topics on this page by using the navigation above, or by following the links within the documentation.
 
-## Conceptual Overview
+## Download jsPsych
 
+<a href="https://github.com/jodeleeuw/jsPsych/archive/v4.0.zip" class="btn btn-primary" role="button">Download jsPsych v4.0 (zip)</a>
+
+jsPsych is hosted at [GitHub](http://github.com/jodeleeuw/jsPsych). You can find all other jsPsych releases there.
 
 ## Loading jsPsych
 
