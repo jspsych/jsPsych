@@ -10,6 +10,7 @@ include_next_prev: false
 docs_dir: markdown_docs
 pages:
 - ['index.md', 'Introduction']
+- ['tutorials/hello-world.md', 'Tutorials', 'The Basics: Hello World']
 - ['tutorials/go-nogo-task.md', 'Tutorials', 'Demo Experiment: Go / No-Go Task']
 - ['tutorials/flanker-task.md', 'Tutorials', 'Demo Experiment: Flanker Task']
 - ['core_library/overview.md', 'Core Library API', 'Overview']
