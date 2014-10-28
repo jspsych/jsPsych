@@ -1,13 +1,13 @@
 /**
- * jspsych-muli-stim-multi-response
- * Josh de Leeuw
- *
- * plugin for displaying a set of stimuli and collecting a set of responses
- * via the keyboard
- *
- * documentation: docs.jspsych.org
- *
- **/
+* jspsych-muli-stim-multi-response
+* Josh de Leeuw
+*
+* plugin for displaying a set of stimuli and collecting a set of responses
+* via the keyboard
+*
+* documentation: docs.jspsych.org
+*
+**/
 
 (function($) {
 	jsPsych["multi-stim-multi-response"] = (function() {
@@ -91,9 +91,9 @@
 
 				// gather the data to store for the trial
 				var trial_data = {
-					"rt": JSON.stringify(responseTimes);
-					"stimulus": JSON.stringify(trial.stimuli);
-					"key_press": JSON.stringify(responseKeys);
+					"rt": JSON.stringify(responseTimes),
+					"stimulus": JSON.stringify(trial.stimuli),
+					"key_press": JSON.stringify(responseKeys)
 				};
 
 				jsPsych.data.write($.extend({}, trial_data, trial.data));
@@ -180,7 +180,7 @@
 							$('#jspsych-multi-stim-multi-response-stimulus').css('visibility','hidden');
 						}
 
-					}, trial.timing_stim[i]);
+					}, trial.timing_stim[whichStimulus]);
 
 					setTimeoutHandlers.push(t1);
 				}
@@ -191,7 +191,7 @@
 			showNextStimulus();
 
 			// start the response listener
-			var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse(after_response, allchoices);
+			var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse(after_response, allchoices, "date", true);
 
 			// end trial if time limit is set
 			if (trial.timing_response > 0) {
