@@ -119,8 +119,7 @@
 					var trial_data = {
 						"rt": info.rt,
 						"correct": correct,
-						"stimulus": trial.a_path,
-						"stimulus_2": trial.b_path,
+						"stimulus": JSON.stringify([trial.a_path, trial.b_path]),
 						"key_press": info.key
 					};
 					jsPsych.data.write($.extend({}, trial_data, trial.data));

@@ -1,4 +1,4 @@
-/** 
+/**
  * jspsych-similarity.js
  * Josh de Leeuw
  *
@@ -203,8 +203,7 @@
 							jsPsych.data.write($.extend({}, {
 								"sim_score": score,
 								"rt": response_time,
-								"stimulus": trial.a_path,
-								"stimulus_2": trial.b_path
+								"stimulus": JSON.stringify([trial.a_path, trial.b_path])
 							}, trial.data));
 							// goto next trial in block
 							display_element.html('');

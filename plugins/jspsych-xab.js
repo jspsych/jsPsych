@@ -57,7 +57,7 @@
 			// that need to be cleared if the trial ends early
 			var setTimeoutHandlers = [];
 
-			// how we display the content depends on whether the content is 
+			// how we display the content depends on whether the content is
 			// HTML code or an image path.
 			if (!trial.is_html) {
 				display_element.append($('<img>', {
@@ -156,9 +156,7 @@
 					var trial_data = {
 						"rt": info.rt,
 						"correct": correct,
-						"stimulus_x": trial.x_path,
-						"stimulus_a": trial.a_path,
-						"stimulus_b": trial.b_path,
+						"stimulus": JSON.stringify([trial.x_path,trial.a_path,trial.b_path]),
 						"key_press": info.key
 					};
 					jsPsych.data.write($.extend({}, trial_data, trial.data));
