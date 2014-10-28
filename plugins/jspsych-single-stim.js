@@ -21,7 +21,7 @@
 			for (var i = 0; i < trials.length; i++) {
 				trials[i] = {};
 				trials[i].a_path = params.stimuli[i];
-				trials[i].choices = params.choices;
+				trials[i].choices = params.choices || [];
 				// option to show image for fixed time interval, ignoring key responses
 				//      true = image will keep displaying after response
 				//      false = trial will immediately advance when response is recorded
