@@ -70,7 +70,7 @@
 
 			// add CSS class to DOM_target
 			DOM_target.addClass('jspsych-display-element');
-			
+
 			// create experiment structure
 			root_chunk = parseExpStructure(opts.experiment_structure);
 
@@ -125,10 +125,10 @@
 		core.getDisplayElement = function() {
 			return DOM_target;
 		};
-		
+
 		core.finishTrial = function(){
 			// logic to advance to next trial?
-			
+
 			// handle callback at plugin level
 			if (typeof current_trial.on_finish === 'function') {
 				current_trial.on_finish(); // TODO: pass in data
@@ -138,63 +138,63 @@
 			opts.on_trial_finish();
 
 			global_trial_index++;
-			
+
 			// advance chunk
 			root_chunk.advance();
-			
+
 			// update progress bar if shown
 			if (opts.show_progress_bar === true) {
 				updateProgressBar();
 			}
-			
+
 			// check if experiment is over
 			if(root_chunk.isComplete()){
 				finishExperiment();
-				return;			
-			} 
-				
+				return;
+			}
+
 			doTrial(root_chunk.next());
 		};
-		
+
 		core.currentTrial = function(){
 			return current_trial;
 		};
-		
+
 		core.initSettings = function(){
 			return opts;
 		};
-		
+
 		core.currentChunkID = function(){
 			return root_chunk.activeChunkID();
 		};
-		
+
 		function parseExpStructure(experiment_structure) {
-			
+
 			return createExperimentChunk({
 				chunk_type: 'root',
 				timeline: experiment_structure
 			});
-			
+
 		}
-		
+
 		function createExperimentChunk(chunk_definition, parent_chunk, relative_id){
-			
+
 			var chunk = {};
-			
+
 			chunk.timeline = parseChunkDefinition(chunk_definition.timeline);
 			chunk.parentChunk = parent_chunk;
 			chunk.relID = relative_id;
-			
+
 			chunk.type = chunk_definition.chunk_type; // root, linear, while, if
-			
+
 			chunk.currentTimelineLocation = 0;
 			// this is the current trial since the last time the chunk was reset
 			chunk.currentTrialInTimeline = 0;
 			// this is the current trial since the chunk started (incl. resets)
 			chunk.currentTrialInChunk = 0;
-			
+
 			chunk.iteration = 0;
-			
+
 			chunk.length = function(){
 				// this will recursively get the number of trials on this chunk's timeline
 				var n = 0;
@@ -203,7 +203,7 @@
 				}
 				return n;
 			};
-				
+
 			chunk.activeChunkID = function(){
 				if(this.timeline[this.currentTimelineLocation].type === 'block'){
 					return this.chunkID();
@@ -211,77 +211,77 @@
 					return this.timeline[this.currentTimelineLocation].activeChunkID();
 				}
 			};
-						
+
 			chunk.chunkID = function() {
-				
+
 				if(typeof this.parentChunk === 'undefined') {
 					return 0 + "-" + this.iteration;
 				} else {
 					return this.parentChunk.chunkID() + "." + this.relID + "-" + this.iteration;
 				}
-				
+
 			};
-			
+
 			chunk.next = function() {
 				// return the next trial in the block to be run
-				
+
 				if(this.isComplete()){
 					throw new Error('Tried to get completed trial from chunk that is finished.');
 				} else {
 					return this.timeline[this.currentTimelineLocation].next();
 				}
-				
+
 			};
-			
+
 			chunk.advance = function(){
 				// increment the current trial in the chunk
-				
+
 				this.timeline[this.currentTimelineLocation].advance();
-				
+
 				while(this.currentTimelineLocation < this.timeline.length &&
 					this.timeline[this.currentTimelineLocation].isComplete()){
 					this.currentTimelineLocation++;
-				} 
-				
+				}
+
 				this.currentTrialInTimeline++;
 				this.currentTrialInChunk++;
-				
+
 			};
-			
+
 			chunk.isComplete = function() {
 				// return true if the chunk is done running trials
 				// return false otherwise
-				
+
 				// linear chunks just go through the timeline in order and are
 				// done when each trial has been completed once
 				// the root chunk is a special case of the linear chunk
 				if(this.type == 'linear' || this.type == 'root'){
 					if (this.currentTimelineLocation >= this.timeline.length) { return true; }
 					else { return false; }
-				} 
-				
+				}
+
 				// while chunks play the block again as long as the continue_function
 				// returns true
 				else if(this.type == 'while'){
-					if (this.currentTimelineLocation >= this.timeline.length) { 
-						
+					if (this.currentTimelineLocation >= this.timeline.length) {
+
 						if(chunk_definition.continue_function(this.generatedData())){
 							this.reset();
 							return false;
 						} else {
 							return true;
 						}
-						
-					} else { 
-						return false; 
+
+					} else {
+						return false;
 					}
 				}
-				
+
 				else if(this.type == 'if'){
 					if(this.currentTimelineLocation >= this.timeline.length){
 						return true;
 					}
-					
+
 					if(this.currentTimelineLocation == 0){
 						if(chunk_definition.conditional_function()){
 							return false;
@@ -292,28 +292,28 @@
 						return false;
 					}
 				}
-				
+
 			};
-			
+
 			chunk.currentTrialLocalIndex = function() {
-				
+
 				if(this.currentTimelineLocation >= this.timeline.length) {
 					return -1;
 				}
-				
+
 				if(this.timeline[this.currentTimelineLocation].type == 'block'){
 					return this.timeline[this.currentTimelineLocation].trial_idx;
 				} else {
 					return this.timeline[this.currentTimelineLocation].currentTrialLocalIndex();
 				}
 			};
-			
+
 			chunk.generatedData = function() {
 				// return an array containing all of the data generated by this chunk for this iteration
 				var d = jsPsych.data.getTrialsFromChunk(this.chunkID());
 				return d;
 			};
-			
+
 			chunk.reset = function() {
 				this.currentTimelineLocation = 0;
 				this.currentTrialInTimeline = 0;
@@ -322,26 +322,26 @@
 					this.timeline[i].reset();
 				}
 			};
-			
+
 			function parseChunkDefinition(chunk_timeline){
-				
+
 				var timeline = [];
-				
+
 				for (var i = 0; i < chunk_timeline.length; i++) {
-					
-					
+
+
 					var ct = chunk_timeline[i].chunk_type;
-		
+
 					if(typeof ct !== 'undefined') {
-					
+
 						if($.inArray(ct, ["linear", "while", "if"]) > -1){
 							timeline.push(createExperimentChunk(chunk_timeline[i], chunk, i));
 						} else {
 							throw new Error('Invalid experiment structure definition. Element of the experiment_structure array has an invalid chunk_type property');
 						}
-						
+
 					} else {
-						// create a terminal block ... 
+						// create a terminal block ...
 						// check to make sure plugin is loaded
 						var plugin_name = chunk_timeline[i].type;
 						if (typeof jsPsych[plugin_name] === 'undefined') {
@@ -352,38 +352,38 @@
 
 						// add options that are generic to all plugins
 						trials = addGenericTrialOptions(trials, chunk_timeline[i]);
-						
+
 						// setting default values for repetitions and randomize_order
 						var randomize_order = (typeof chunk_timeline[i].randomize_order === 'undefined') ? false : chunk_timeline[i].randomize_order;
 						var repetitions = (typeof chunk_timeline[i].repetitions === 'undefined') ? 1 : chunk_timeline[i].repetitions;
-						
+
 						for(var j = 0; j < repetitions; j++) {
 							timeline.push(createBlock(trials, randomize_order));
 						}
 					}
 				}
-				
+
 				return timeline;
 			}
-			
+
 			return chunk;
-			
+
 		}
-		
+
 		function createBlock(trial_list, randomize_order) {
-			
+
 			var block = {
-			
+
 				trial_idx: 0,
 
 				trials: trial_list,
-				
+
 				type: 'block',
-				
+
 				randomize_order: randomize_order,
 
 				next: function() {
-					
+
 					// stuff that happens when the block is running from the start
 					if(this.trial_idx === 0){
 						if(this.randomize_order){
@@ -392,11 +392,11 @@
 					}
 
 					var curr_trial = this.trials[this.trial_idx];
-					
+
 					return curr_trial;
 
 				},
-				
+
 				isComplete: function() {
 					if(this.trial_idx >= this.trials.length){
 						return true;
@@ -404,21 +404,21 @@
 						return false;
 					}
 				},
-				
+
 				advance: function() {
 					this.trial_idx++;
 				},
-				
+
 				reset: function() {
 					this.trial_idx = 0;
 				},
-				
+
 				length: trial_list.length
 			};
 
 			return block;
 		}
-		
+
 		function startExperiment() {
 
 			// show progress bar if requested
@@ -480,12 +480,12 @@
 		}
 
 		function doTrial(trial) {
-			
+
 			current_trial = trial;
-			
+
 			// call experiment wide callback
 			opts.on_trial_start();
-			
+
 			// execute trial method
 			jsPsych[trial.type].trial(DOM_target, trial);
 		}
@@ -508,16 +508,16 @@
 	jsPsych.data = (function() {
 
 		var module = {};
-		
+
 		// data storage object
 		var allData = [];
-		
+
 		module.getData = function() {
 			return $.extend(true, [], allData); // deep clone
 		};
-		
+
 		module.write = function(data_object) {
-			
+
 			var progress = jsPsych.progress();
 			var trial = jsPsych.currentTrial();
 
@@ -532,7 +532,7 @@
 			var ext_data_object = $.extend({}, data_object, default_data);
 
 			allData.push(ext_data_object);
-			
+
 			var initSettings = jsPsych.initSettings();
 			initSettings.on_data_update(ext_data_object); //TODO: FIX callback?
 		};
@@ -571,7 +571,7 @@
 
 			return trials;
 		};
-		
+
 		module.getTrialsFromChunk = function(chunk_id) {
 			var data = module.getData();
 
@@ -586,18 +586,18 @@
 
 			return trials;
 		};
-		
+
 		module.getLastTrialData = function() {
 			if(allData.length == 0){
 				return {};
 			}
 			return allData[allData.length-1];
 		};
-		
+
 		module.getLastChunkData = function() {
 			var lasttrial = module.getLastTrialData();
 			var chunk_id = lasttrial.internal_chunk_id;
-			if(typeof chunk_id === 'undefined') { 
+			if(typeof chunk_id === 'undefined') {
 				return [];
 			} else {
 				var lastchunkdata = module.getTrialsFromChunk(chunk_id);
@@ -615,7 +615,7 @@
 			var data_string;
 
 			if (format == 'json') {
-				data_string = JSON.stringify(flattenData(module.getData()), undefined, 1);
+				data_string = JSON.stringify(module.getData(), undefined, 1);
 			} else {
 				data_string = module.dataAsCSV();
 			}
@@ -755,7 +755,7 @@
 			turk_info = turk;
 
 			return turk;
-			
+
 		};
 
 		// core.submitToTurk will submit a MechanicalTurk ExternalHIT type
