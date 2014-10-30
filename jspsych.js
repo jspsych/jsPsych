@@ -539,7 +539,10 @@
 
 		module.dataAsCSV = function(append_data) {
 			var dataObj = module.getData();
-			return JSON2CSV(flattenData(dataObj, append_data));
+			for(var i=0; i < dataObj.length; i++){
+				dataObj[i] = $.extend({}, dataObj[i], append_data);
+			}
+			return JSON2CSV(dataObj);
 		};
 
 		module.localSave = function(filename, format, append_data) {
