@@ -20,6 +20,7 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
             for (var i = 0; i < params.pages.length; i++) {
                 trials.push({
                     url: params.pages[i].url,
+                    type: "html", // This wasn't present originally
                     cont_key: params.pages[i].cont_key || params.cont_key,
                     cont_btn: params.pages[i].cont_btn || params.cont_btn,
                     check_fn: params.pages[i].check_fn,
@@ -28,9 +29,11 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
             }
             return trials;
         };
-
-        plugin.trial = function(display_element, trial) {
-            
+        
+        // This function header causes failure, block and trial get mixed up.
+        // plugin.trial = function(display_element, trial) {
+        plugin.trial = function(display_element, block, trial, part) {
+        	
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
@@ -46,10 +49,22 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
                 var finish = function() {
                     if (trial.check_fn && !trial.check_fn(display_element)) return;
                     if (trial.cont_key) $(document).unbind('keydown', key_listener);
-                    jsPsych.data.write({
-                        rt: (new Date()).getTime() - t0,
-                        url: trial.url
-                    });
+                    
+                    // This block causes an error.
+                    //jsPsych.data.write({
+                    //    rt: (new Date()).getTime() - t0,
+                    //    url: trial.url
+                    //});
+                    
+                    // This block seems to work.
+                    block.writeData($.extend({}, {
+                    	"trial_type": "html",
+                        "trial_index": block.trial_idx,
+                    	"rt": (new Date()).getTime() - t0,
+                    	url: trial.url
+                    }, trial.data));
+                    
+                    
                     if (trial.timing_post_trial > 0) {
                         // hide display_element, since it could have a border and we want a blank screen during timing
                         display_element.hide();
@@ -61,7 +76,8 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
                     }
                     else {
                         display_element.empty();
-                       	jsPsych.finishTrial();
+                       	//jsPsych.finishTrial();
+                        block.next();
                     }
                 };
                 if (trial.cont_btn) $('#' + trial.cont_btn).click(finish);
