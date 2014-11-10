@@ -27,7 +27,11 @@
 				//      false = trial will immediately advance when response is recorded
 				trials[i].continue_after_response = (typeof params.continue_after_response === 'undefined') ? true : params.continue_after_response;
 				// timing parameters
-				trials[i].timing_stim = params.timing_stim || -1; // if -1, then show indefinitely
+				var default_timing_array = [];
+				for(var i = 0; i < params.stimuli[i].length; i++){
+					default_timing_array.push(1000);
+				}
+				trials[i].timing_stim = params.timing_stim || default_timing_array; 
 				trials[i].timing_response = params.timing_response || -1; // if -1, then wait for response forever
 				// optional parameters
 				trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
