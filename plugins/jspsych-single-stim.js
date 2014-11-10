@@ -21,7 +21,7 @@
 			for (var i = 0; i < trials.length; i++) {
 				trials[i] = {};
 				trials[i].a_path = params.stimuli[i];
-				trials[i].choices = params.choices;
+				trials[i].choices = params.choices || [];
 				// option to show image for fixed time interval, ignoring key responses
 				//      true = image will keep displaying after response
 				//      false = trial will immediately advance when response is recorded
@@ -66,9 +66,12 @@
 			if (trial.prompt !== "") {
 				display_element.append(trial.prompt);
 			}
+			
+			// store response
+			var response = {rt: -1, key: -1};
 
 			// function to end trial when it is time
-			var end_trial = function(info) {
+			var end_trial = function() {
 
 				// kill any remaining setTimeout handlers
 				for (var i = 0; i < setTimeoutHandlers.length; i++) {
@@ -80,9 +83,9 @@
 
 				// gather the data to store for the trial
 				var trial_data = {
-					"rt": info.rt,
+					"rt": response.rt,
 					"stimulus": trial.a_path,
-					"key_press": info.key
+					"key_press": response.key
 				};
 
 				jsPsych.data.write($.extend({}, trial_data, trial.data));
@@ -99,20 +102,22 @@
 					jsPsych.finishTrial();
 				}
 			};
-
+			
 			// function to handle responses by the subject
 			var after_response = function(info) {
 
 				// after a valid response, the stimulus will have the CSS class 'responded'
 				// which can be used to provide visual feedback that a response was recorded
 				$("#jspsych-single-stim-stimulus").addClass('responded');
+				
+				// only record the first response
+				if(response.key == -1){
+					response = info;
+				}
 
 				if (trial.continue_after_response) {
-					// response triggers the next trial in this case.
-					// if hide_image_after_response is true, then next
-					// trial should be triggered by timeout function below.
-					end_trial(info);
-				}
+					end_trial();
+				} 
 			};
 
 			// start the response listener
@@ -129,10 +134,7 @@
 			// end trial if time limit is set
 			if (trial.timing_response > 0) {
 				var t2 = setTimeout(function() {
-					end_trial({
-						rt: -1,
-						key: -1
-					});
+					end_trial();
 				}, trial.timing_response);
 				setTimeoutHandlers.push(t2);
 			}

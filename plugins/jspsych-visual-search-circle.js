@@ -1,16 +1,15 @@
 /**
+ *
  * jspsych-visual-search-circle
  * Josh de Leeuw
- * 
+ *
  * display a set of objects, with or without a target, equidistant from fixation
  * subject responds to whether or not the target is present
- * 
+ *
  * based on code written for psychtoolbox by Ben Motz
- * 
- * todo: 
- * 
- * allow for use of display_element
- * 
+ *
+ * requires Snap.svg library (snapsvg.io)
+ *
  **/
 
 (function($) {
@@ -46,8 +45,8 @@
             trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
             // screen information
-            var screenw = $(window).width();
-            var screenh = $(window).height();
+            var screenw = display_element.width();
+            var screenh = display_element.height();
             var centerx = screenw / 2;
             var centery = screenh / 2;
 
@@ -61,7 +60,7 @@
             var stimw = trial.target_size[1];
             var hstimh = stimh / 2;
             var hstimw = stimw / 2;
-            
+
             // fixation location
             var fix_loc = [Math.floor(paper_size / 2 - trial.fixation_size[0] / 2), Math.floor(paper_size / 2 - trial.fixation_size[1] / 2)];
 
@@ -75,9 +74,10 @@
                     Math.floor(paper_size / 2 - (sind(random_offset + (i * (360/possible_display_locs))) * radi) - hstimh)
                 ]);
             }
-                
+
             // get target to draw on
-            var paper = Raphael(centerx - paper_size / 2, centery - paper_size / 2, paper_size, paper_size);
+            display_element.appent($('<svg id="jspsych-visual-search-circle-svg" width='+paper_size+' height='+paper_size+'></svg>'))
+            var paper = Snap('#jspsych-visual-search-circle-svg');
 
             show_fixation();
 
@@ -85,7 +85,7 @@
                 // show fixation
                 var fixation = paper.image(trial.fixation_image, fix_loc[0], fix_loc[1], trial.fixation_size[0], trial.fixation_size[1]);
 
-                // wait 
+                // wait
                 setTimeout(function() {
                     // after wait is over
                     show_search_array();
@@ -97,47 +97,47 @@
                 var search_array_images = [];
 
                 for (var i = 0; i < display_locs.length; i++) {
-                    
+
                     var which_image = (i == 0 && trial.target_present) ? trial.target : trial.foil;
 
                     var img = paper.image(which_image, display_locs[i][0], display_locs[i][1], trial.target_size[0], trial.target_size[1]);
 
                     search_array_images.push(img);
-                    
+
                 }
 
                 var trial_over = false;
-                
+
                 var after_response = function(info){
-                    
+
                     trial_over = true;
-                    
+
                     var correct = 0;
-                    
-                    if (info.key == trial.target_present_key && trial.target_present || 
+
+                    if (info.key == trial.target_present_key && trial.target_present ||
                         info.key == trial.target_absent_key && !trial.target_present) {
                         correct = 1;
                     }
-                    
+
                     clear_display();
-                    
+
                     end_trial(info.rt, correct, info.key);
-                        
+
                 }
-                
+
                 var valid_keys = [trial.target_present_key, trial.target_absent_key];
-                
+
                 key_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, valid_keys, 'date',false);
 
                 if (trial.timing_max_search > 0) {
                     setTimeout(function() {
 
                         if (!trial_over) {
-                            
+
                             jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
-                            
+
                             trial_over = true;
-                            
+
                             var rt = -1;
                             var correct = 0;
                             var key_press = -1;
@@ -150,13 +150,13 @@
                 }
 
                 function clear_display() {
-                    paper.remove();
+                    paper.clear();
                 }
             }
 
 
             function end_trial(rt, correct, key_press) {
-                
+
                 // data saving
                 var trial_data = {
                     correct: correct,

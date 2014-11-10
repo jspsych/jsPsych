@@ -2,8 +2,8 @@
  * jspsych-survey-likert
  * a jspsych plugin for measuring items on a likert scale
  *
- * Josh de Leeuw 
- * 
+ * Josh de Leeuw
+ *
  * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-survey-likert
  *
  */
@@ -14,9 +14,9 @@
         var plugin = {};
 
         plugin.create = function(params) {
-            
+
             params = jsPsych.pluginAPI.enforceArray(params, ['data']);
-            
+
             var trials = [];
             for (var i = 0; i < params.questions.length; i++) {
                 trials.push({
@@ -30,7 +30,7 @@
         };
 
         plugin.trial = function(display_element, trial) {
-            
+
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
@@ -144,17 +144,18 @@
 
                 // save data
                 jsPsych.data.write($.extend({}, {
-                    "rt": response_time
-                }, question_data, trial.data));
+                    "rt": response_time,
+                    "responses": JSON.stringify(question_data)
+                }, trial.data));
 
                 display_element.html('');
 
                 // next trial
-				if(trial.timing_post_trial > 0){
-					setTimeout(function(){ jsPsych.finishTrial(); }, trial.timing_post_trial);
-				} else {
+        				if(trial.timing_post_trial > 0){
+        					setTimeout(function(){ jsPsych.finishTrial(); }, trial.timing_post_trial);
+        				} else {
                 	jsPsych.finishTrial();
-				}
+        				}
             });
 
             var startTime = (new Date()).getTime();
