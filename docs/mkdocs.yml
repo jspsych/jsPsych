@@ -2,7 +2,7 @@ site_name: jsPsych
 theme: flatly
 repo_url: 'https://github.com/jodeleeuw/jsPsych'
 repo_name: 'GitHub'
-extra_css: 
+extra_css:
 - css/extra.css
 extra_javascript:
 - js/extra.js
@@ -11,6 +11,7 @@ include_next_prev: false
 docs_dir: markdown_docs
 pages:
 - ['index.md', 'Introduction']
+- ['tutorials/hello-world.md', 'Tutorials', 'The Basics: Hello World']
 - ['tutorials/go-nogo-task.md', 'Tutorials', 'Demo Experiment: Go / No-Go Task']
 - ['tutorials/flanker-task.md', 'Tutorials', 'Demo Experiment: Flanker Task']
 - ['core_library/overview.md', 'Core Library API', 'Overview']
@@ -27,6 +28,7 @@ pages:
 - ['plugins/jspsych-categorize-animation.md', 'Plugins', 'jspsych-categorize-animation']
 - ['plugins/jspsych-free-sort.md', 'Plugins', 'jspsych-free-sort']
 - ['plugins/jspsych-html.md', 'Plugins', 'jspsych-html']
+- ['plugins/jspsych-multi-stim-multi-response.md', 'Plugins', 'jspsych-multi-stim-multi-response']
 - ['plugins/jspsych-palmer.md', 'Plugins', 'jspsych-palmer']
 - ['plugins/jspsych-same-different.md', 'Plugins', 'jspsych-same-different']
 - ['plugins/jspsych-similarity.md', 'Plugins', 'jspsych-similarity']
