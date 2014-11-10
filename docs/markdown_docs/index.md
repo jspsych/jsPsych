@@ -1,8 +1,8 @@
-# jsPsych 
+# jsPsych
 
-jsPsych is a JavaScript library for creating and running behavioral experiments in a web browser. The library provides a flexible framework for building a wide range of laboratory-like experiments that can be run online. 
+jsPsych is a JavaScript library for creating and running behavioral experiments in a web browser. The library provides a flexible framework for building a wide range of laboratory-like experiments that can be run online.
 
-jsPsych prvoides the *structure* for an experiment. It handles things like determining which trial to run next, storing data, and randomizing factors/order of presentation. It also provides a set of *plugins*, which are ready-made templates for simple experimental tasks like displaying instructions or displaying a stimulus and collecting a keyboard response. A full experiment created with jsPsych will be a collection of different plugins that define the different tasks that a subject will complete. 
+jsPsych prvoides the *structure* for an experiment. It handles things like determining which trial to run next, storing data, and randomizing factors/order of presentation. It also provides a set of *plugins*, which are ready-made templates for simple experimental tasks like displaying instructions or displaying a stimulus and collecting a keyboard response. A full experiment created with jsPsych will be a collection of different plugins that define the different tasks that a subject will complete.
 
 To build an experiment with jsPsych, you'll specify the structure of the experiment using JavaScript code. You'll also need to provide the *content* that defines your experiment, such as the actual text that subjects see when they are shown instructions and the images that they will view. You can also specify a wide-range of parameters to control things like stimulus duration, which keyboard keys subjects are allowed to press, and so on.
 
@@ -10,7 +10,7 @@ This page gives a broad overview of how jsPsych works. More detail is available 
 
 ## Download jsPsych
 
-<a href="https://github.com/jodeleeuw/jsPsych/archive/v4.0.zip" class="btn btn-primary" role="button">Download jsPsych v4.0 (zip)</a>
+<a href="https://github.com/jodeleeuw/jsPsych/archive/v4.0.1.zip" class="btn btn-primary" role="button">Download jsPsych v4.0.1 (zip)</a>
 
 jsPsych is hosted at [GitHub](http://github.com/jodeleeuw/jsPsych). You can find all other jsPsych releases there.
 
@@ -58,7 +58,7 @@ To add the block to the experiment description, we need to change the `experimen
 // add the block to the experiment description
 experiment.push(block);
 ```
- 
+
 Once you have the experiment description defined, you can tell jsPsych to run the experiment by calling `jsPsych.init()` and passing your description as the value for the `experiment_structure` parameter:
 
 ```javascript
@@ -66,4 +66,3 @@ jsPsych.init({
 	experiment_structure: experiment
 })
 ```
-

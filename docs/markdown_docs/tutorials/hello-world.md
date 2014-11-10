@@ -10,9 +10,9 @@ Start by downloading the jsPsych library. The most recent version can always be 
 
 ## Step 2: Create a folder to store your experiment files
 
-Create a folder on your computer to put the experiment files in. Once you've created the folder, open the downloaded archive from step 1, and move the extracted folder (called `jsPsych-4.0` if using v4.0 of jsPsych) into the experiment folder. Here's what it looks like on a mac:
+Create a folder on your computer to put the experiment files in. Once you've created the folder, open the downloaded archive from step 1, and move the extracted folder (called `jsPsych-4.0.1` if using v4.0.1 of jsPsych) into the experiment folder. Here's what it looks like on a mac:
 
-![folder setup](/img/folder-setup.png) 
+![folder setup](/img/folder-setup.png)
 
 ## Step 3: Create a new HTML file
 
@@ -46,7 +46,7 @@ Add the above code to the experiment.html file and save it. If you then open the
 ## Step 5: Import the jsPsych library
 
 To use jsPsych, add a `<script>` tag to import the library. You'll need to import the jQuery library as well, which jsPsych depends on. Make sure to import jQuery before jsPsych. jQuery can be imported directly from a hosted version on Google's servers.
-	
+
 ```html
 <!doctype html>
 <html>
@@ -61,7 +61,7 @@ To use jsPsych, add a `<script>` tag to import the library. You'll need to impor
 ```
 
 You may also want to import the jsPsych stylesheet, which applies a basic set of visual styles to the experiment to make it visually pleasing. This requires adding a `link` tag to the `<head>` section of the document.
-	
+
 ```html
 <!doctype html>
 <html>
@@ -79,7 +79,7 @@ You may also want to import the jsPsych stylesheet, which applies a basic set of
 ## Step 6: Use the jspsych-text plugin to print a message
 
 For the demo, we want to show some text on the screen. This is exactly what the [jspsych-text plugin]() is designed to do. To use the plugin, we need to load it with a `<script>` tag.
-	
+
 ```html
 <!doctype html>
 <html>
@@ -93,9 +93,9 @@ For the demo, we want to show some text on the screen. This is exactly what the 
 	<body>
 	</body>
 </html>
-```	
+```
 
-Once the plugin is loaded, we can create an experiment using the plugin. To declare a trial that uses the text plugin, we create a JavaScript object with the property `type` equal to `'text'`. Then we can specify the [other parameters of the plugin]() in the same object. 
+Once the plugin is loaded, we can create an experiment using the plugin. To declare a trial that uses the text plugin, we create a JavaScript object with the property `type` equal to `'text'`. Then we can specify the [other parameters of the plugin]() in the same object.
 
 To add JavaScript code directly to the webpage we need to add a set of `<script>` tags after the `<body>` tags.
 
@@ -112,15 +112,15 @@ To add JavaScript code directly to the webpage we need to add a set of `<script>
 	<body>
 	</body>
 	<script>
-	
+
 	var hello_trial = {
 		type: 'text',
 		text: 'Hello world!'
 	}
-	
+
 	</script>
 </html>
-```	
+```
 
 Now that we have the trial defined, we just need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.init` function and specifying the `experiment_structure` parameter.
 
@@ -137,18 +137,18 @@ Now that we have the trial defined, we just need to tell jsPsych to run an exper
 	<body>
 	</body>
 	<script>
-	
+
 	var hello_trial = {
 		type: 'text',
 		text: 'Hello world!'
 	}
-	
+
 	jsPsych.init({
 		experiment_structure: [ hello_trial ]
 	})
-	
+
 	</script>
 </html>
-```	
+```
 
 Once you've saved the file, open it in a browser. You should see "Hello world!" printed on the screen, and if you press a key on the keyboard, the text should disappear (ending the trial).
