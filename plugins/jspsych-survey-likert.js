@@ -20,6 +20,7 @@
             var trials = [];
             for (var i = 0; i < params.questions.length; i++) {
                 trials.push({
+                    preamble: params.preamble[i] || "",
                     questions: params.questions[i],
                     labels: params.labels[i],
                     intervals: params.intervals[i],
@@ -35,6 +36,14 @@
             // this evaluates the function and replaces
             // it with the output of the function
             trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+
+            // show preamble text
+            display_element.append($('<div>', {
+              "id": 'jspsych-survey-likert-preamble',
+              "class": 'jspsych-survey-likert-preamble'
+            }));
+
+            $('#jspsych-survey-likert-preamble').html(trial.preamble);
 
             // add likert scale questions
             for (var i = 0; i < trial.questions.length; i++) {
