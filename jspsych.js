@@ -59,7 +59,8 @@
 				'on_data_update': function(data) {
 					return undefined;
 				},
-				'show_progress_bar': false
+				'show_progress_bar': false,
+				'max_load_time': 30000
 			};
 
 			// override default options if user specifies an option
@@ -74,7 +75,8 @@
 			// create experiment structure
 			root_chunk = parseExpStructure(opts.experiment_structure);
 
-			startExperiment();
+			// wait for everything to load
+			allLoaded(startExperiment, opts.max_load_time);
 		};
 
 		core.progress = function() {
@@ -167,6 +169,23 @@
 		core.currentChunkID = function(){
 			return root_chunk.activeChunkID();
 		};
+
+		function allLoaded(callback, max_wait){
+
+			var refresh_rate = 1000;
+			var max_wait = max_wait || 30000;
+			var start = (new Date()).getTime();
+
+			var interval = setInterval(function(){
+				if(jsPsych.pluginAPI.audioLoaded()){
+					clearInterval(interval);
+					callback();
+				} else if((new Date()).getTime() - max_wait > start){
+					console.error('Experiment failed to load all resouces in time alloted');
+				}
+			}, refresh_rate);
+
+		}
 
 		function parseExpStructure(experiment_structure) {
 
@@ -918,10 +937,10 @@
 
 		var module = {};
 
-		module.getKeyboardResponse = function(callback_function, valid_responses, rt_method, persist) {
+		module.getKeyboardResponse = function(callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time) {
 
 			rt_method = (typeof rt_method === 'undefined') ? 'date' : rt_method;
-			if (rt_method != 'date' && rt_method != 'performance') {
+			if (rt_method != 'date' && rt_method != 'performance' && rt_method != 'audio') {
 				console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
 				rt_method = 'date';
 			}
@@ -929,9 +948,10 @@
 			var start_time;
 			if (rt_method == 'date') {
 				start_time = (new Date()).getTime();
-			}
-			if (rt_method == 'performance') {
+			} else if (rt_method == 'performance') {
 				start_time = performance.now();
+			} else if (rt_method == 'audio') {
+				start_time = audio_context_start_time;
 			}
 
 			var listener_id;
@@ -941,9 +961,10 @@
 				var key_time;
 				if (rt_method == 'date') {
 					key_time = (new Date()).getTime();
-				}
-				if (rt_method == 'performance') {
+				} else if (rt_method == 'performance') {
 					key_time = performance.now();
+				} else if (rt_method == 'audio') {
+					key_time = audio_context.currentTime
 				}
 
 				var valid_response = false;
@@ -1205,6 +1226,51 @@
 				r.push(k);
 			}
 			return r;
+		}
+
+		// audio
+		var context = new AudioContext();
+		var audio_buffers = [];
+
+		module.loadAudioFile = function(path) {
+
+			var bufferID = audio_buffers.length;
+			audio_buffers[bufferID] = 'tmp';
+
+			var request = new XMLHttpRequest();
+			request.open('GET',path,true);
+			request.responseType = 'arraybuffer';
+			request.onload = function(){
+				context.decodeAudioData(request.response, function(buffer){
+					audio_buffers[bufferID] = buffer;
+				}, function(){
+					console.error('Error loading audio file: '+path);
+				});
+			}
+			request.send();
+
+			return bufferID;
+
+		}
+
+		module.getAudioBuffer = function(audioID) {
+
+			if(audio_buffers[audioID] == 'tmp'){
+				console.error('Audio file failed to load in the time alloted.')
+				return;
+			}
+
+			return audio_buffers[audioID];
+
+		}
+
+		module.audioLoaded = function() {
+			for(var i = 0; i < audio_buffers.length; i++){
+				if(audio_buffers[i] == 'tmp') {
+					return false;
+				}
+			}
+			return true;
 		}
 
 		return module;
