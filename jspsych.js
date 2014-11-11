@@ -918,10 +918,10 @@
 
 		var module = {};
 
-		module.getKeyboardResponse = function(callback_function, valid_responses, rt_method, persist) {
+		module.getKeyboardResponse = function(callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time) {
 
 			rt_method = (typeof rt_method === 'undefined') ? 'date' : rt_method;
-			if (rt_method != 'date' && rt_method != 'performance') {
+			if (rt_method != 'date' && rt_method != 'performance' && rt_method != 'audio') {
 				console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
 				rt_method = 'date';
 			}
@@ -929,9 +929,10 @@
 			var start_time;
 			if (rt_method == 'date') {
 				start_time = (new Date()).getTime();
-			}
-			if (rt_method == 'performance') {
+			} else if (rt_method == 'performance') {
 				start_time = performance.now();
+			} else if (rt_method == 'audio') {
+				start_time = audio_context_start_time;
 			}
 
 			var listener_id;
@@ -941,9 +942,10 @@
 				var key_time;
 				if (rt_method == 'date') {
 					key_time = (new Date()).getTime();
-				}
-				if (rt_method == 'performance') {
+				} else if (rt_method == 'performance') {
 					key_time = performance.now();
+				} else if (rt_method == 'audio') {
+					key_time = audio_context.currentTime
 				}
 
 				var valid_response = false;
@@ -1208,6 +1210,7 @@
 		}
 
 		// audio
+		var context = new AudioContext();
 		var audio_buffers = [];
 
 		module.loadAudioFile = function(path) {
