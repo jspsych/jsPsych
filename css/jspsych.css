@@ -1,7 +1,7 @@
-/* 
+/*
  * CSS for jsPsych experiments.
  *
- * This stylesheet provides minimal styling to make jsPsych 
+ * This stylesheet provides minimal styling to make jsPsych
  * experiments look polished without any additional styles.
  *
  */
@@ -11,7 +11,7 @@
  * fonts and type
  *
  */
- 
+
 @import url(//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
 
 html {
@@ -50,7 +50,7 @@ p {
  * Classes for changing location of things
  *
  */
- 
+
 .left {
     float: left;
 }
@@ -116,7 +116,7 @@ button:hover {
 }
 
 #jspsych-progressbar-container s {
-	
+
 }
 
 #jspsych-progressbar-outer {
@@ -204,7 +204,7 @@ button:hover {
  * PLUGIN: jspsych-same-different
  *
  */
- 
+
 .jspsych-same-different-stimulus {
     display: block;
     margin-left: auto;
@@ -216,7 +216,7 @@ button:hover {
  * PLUGIN: jspsych-single-stim
  *
  */
- 
+
 #jspsych-single-stim-stimulus {
     display: block;
     margin-left: auto;
@@ -228,7 +228,7 @@ button:hover {
  * PLUGIN: jspsych-xab
  *
  */
- 
+
 .jspsych-xab-stimulus {
     display: block;
     margin-left: auto;
@@ -240,11 +240,36 @@ button:hover {
  * PLUGIN: jspsych-survey-text
  *
  */
- 
+
  .jspsych-survey-text {
      margin: 0.25em 0em;
  }
- 
+
  .jspsych-survey-text-question {
      margin: 2em 0em;
  }
+
+ /*
+  *
+  * PLUGIN: jspsych-survey-likert
+  *
+  */
+
+.jspsych-survey-likert-sliderlabels {
+  font-size: 75%;
+  line-height: 1.15em;
+}
+
+.jspsych-survey-likert-question {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.jspsych-survey-likert-text {
+  text-align: center;
+}
+
+#jspsych-survey-likert-next {
+  display: block;
+  margin: auto;
+}
