@@ -1207,6 +1207,50 @@
 			return r;
 		}
 
+		// audio
+		var audio_buffers = [];
+
+		module.loadAudioFile = function(path) {
+
+			var bufferID = audio_buffers.length;
+			audio_buffers[bufferID] = 'tmp';
+
+			var request = new XMLHttpRequest();
+			request.open('GET',path,true);
+			request.responseType = 'arraybuffer';
+			request.onload = function(){
+				context.decodeAudioData(request.response, function(buffer){
+					audio_buffers[bufferID] = buffer;
+				}, function(){
+					console.error('Error loading audio file: '+path);
+				});
+			}
+			request.send();
+
+			return bufferID;
+
+		}
+
+		module.getAudioBuffer = function(audioID) {
+
+			if(audio_buffers[audioID] == 'tmp'){
+				console.error('Audio file failed to load in the time alloted.')
+				return;
+			}
+
+			return audio_buffers[audioID];
+
+		}
+
+		module.audioLoaded = function() {
+			for(var i = 0; i < audio_buffers.length; i++){
+				if(audio_buffers[i] == 'tmp') {
+					return false;
+				}
+			}
+			return true;
+		}
+
 		return module;
 	})();
 
