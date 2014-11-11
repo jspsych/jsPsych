@@ -24,23 +24,8 @@
 			for (var i = 0; i < trials.length; i++) {
 
 				trials[i] = {};
-
-				// load sound files
-				var request = new XMLHttpRequest();
-				request.open('GET',params.stimuli[i],true);
-				request.responseType = 'arraybuffer';
-				request.onload = function(){
-					context.decodeAudioData(request.response, function(buffer){
-						sndBuffer = buffer;
-						loaded();
-					}, function(){
-						// on error
-						console.error('Unable to load sound file. Check path and make sure that the script is running on the same server as the hosted sound file.');
-					});
-				}
-				request.send();
-
-				trials[i].audio_stim = params.stimuli[i];
+				trials[i].audio_stim = jsPsych.pluginAPI.loadAudioFile(params.stimuli[i]);
+				trials[i].audio_path = params.stimuli[i];
 				trials[i].choices = params.choices || [];
 				// option to show image for fixed time interval, ignoring key responses
 				//      true = image will keep displaying after response
@@ -50,7 +35,9 @@
 				// trials[i].timing_stim = params.timing_stim || -1; // if -1, then show indefinitely
 				trials[i].timing_response = params.timing_response || -1; // if -1, then wait for response forever
 				trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
+
 			}
+
 			return trials;
 		};
 
@@ -67,7 +54,7 @@
 
 			// play stimulus
 			var source = context.createBufferSource();
-			source.buffer = trial.audio_stim;
+			source.buffer = jsPsych.pluginAPI.getAudioBuffer(trial.audio_stim);
 			source.connect(context.destination);
 			startTime = context.currentTime + 0.1;
 			source.start(startTime);
@@ -88,13 +75,16 @@
 					clearTimeout(setTimeoutHandlers[i]);
 				}
 
+				// stop the audio file if it is playing
+				source.stop();
+
 				// kill keyboard listeners
 				jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
 
 				// gather the data to store for the trial
 				var trial_data = {
 					"rt": response.rt,
-					"stimulus": trial.a_path,
+					"stimulus": trial.audio_path,
 					"key_press": response.key
 				};
 
