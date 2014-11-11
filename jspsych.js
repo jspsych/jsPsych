@@ -59,7 +59,8 @@
 				'on_data_update': function(data) {
 					return undefined;
 				},
-				'show_progress_bar': false
+				'show_progress_bar': false,
+				'max_load_time': 30000
 			};
 
 			// override default options if user specifies an option
@@ -74,7 +75,8 @@
 			// create experiment structure
 			root_chunk = parseExpStructure(opts.experiment_structure);
 
-			startExperiment();
+			// wait for everything to load
+			allLoaded(startExperiment, opts.max_load_time);
 		};
 
 		core.progress = function() {
@@ -167,6 +169,23 @@
 		core.currentChunkID = function(){
 			return root_chunk.activeChunkID();
 		};
+
+		function allLoaded(callback, max_wait){
+
+			var refresh_rate = 1000;
+			var max_wait = max_wait || 30000;
+			var start = (new Date()).getTime();
+
+			var interval = setInterval(function(){
+				if(jsPsych.pluginAPI.audioLoaded()){
+					clearInterval(interval);
+					callback();
+				} else if((new Date()).getTime() - max_wait > start){
+					console.error('Experiment failed to load all resouces in time alloted');
+				}
+			}, refresh_rate);
+
+		}
 
 		function parseExpStructure(experiment_structure) {
 
