@@ -10,7 +10,7 @@ Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 stimuli | array | *undefined* | Each element of this array is an array of stimuli. Each innermost array will be presented as a single trial, with each stimulus being presented as part of a single trial. The stimuli can be paths to images or HTML content.
 is_html | boolean | false | If the elements of the `stimuli` array are strings containing HTML content, then this parameter must be set to true.
-choices | array | *undefined* | Each element of this array is an array. The inner arrays contain the keys that the subject is allowed to press in order to respond to the stimulus. Keys can be specified as their [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) or as characters (e.g. `'a'`, `'q'`). Each inner array represents a response group that the subject should respond to. If you want the subject to generate a single response, then specify only one inner array that contains all the acceptable responses. If you want the subject to generate two responses, then you should have two inner arrays, one with the acceptable keys for the first response, and one with the acceptable keys for the second response. The response keys may not overlap between response groups.
+choices | array | *undefined* | Each element of this array is an array. The inner arrays contain the keys that the subject is allowed to press in order to respond to the stimulus. Keys can be specified as their [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes); specifying as a character won't work for this plugin. Each inner array represents a response group that the subject should respond to. If you want the subject to generate a single response, then specify only one inner array that contains all the acceptable responses. If you want the subject to generate two responses, then you should have two inner arrays, one with the acceptable keys for the first response, and one with the acceptable keys for the second response. The response keys may not overlap between response groups.
 prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g. which key to press).
 timing_stim | array | [1000, 1000, ... , 1000] | Each element of the array is the length of time to display the corresponding stimulus for in milliseconds. The length of this array should match the length of the innermost stimuli arrays. Setting the last value of the array to -1 will cause the last stimulus to display until the subject has generated a response for each response group.
 timing_response | numeric | -1 | How long to wait for the subject to make all responses before ending the trial in milliseconds. If the subject fails to make a response in a response group before this timer is reached, the the subject's response for that response group will be recorded as -1 for the trial and the trial will end. If the value of this parameter is -1, then the trial will wait for a response indefinitely.
@@ -34,7 +34,7 @@ rt | JSON string | JSON-encoded array indicating the response time in millisecon
 var block = {
 	type: 'multi-stim-multi-response',
 	stimuli: [['img/happy_face.png', 'img/sad_face.png']],
-	choices: ['y','n'],
+	choices: [[89,78]], // Y or N
 	timing_stim: [1000,-1],
 	prompt: 'Did the face get happier?'
 }
@@ -46,7 +46,7 @@ var block = {
 var block = {
 	type: 'single-stim',
 	stimuli: [['img/happy_face.png']],
-	choices: [['y','n'],['1','2','3','4','5']],
+	choices: [[89, 78],[49,50,51,52,53]], // Y or N , 1 - 5
 	timing_stim: [-1],
 	prompt: 'Rate the happiness of the person on a scale of 1-5, and press Y or N to indicate if you have seen the face before'
 }
