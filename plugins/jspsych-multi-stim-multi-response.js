@@ -28,7 +28,7 @@
 				trials[i].continue_after_response = (typeof params.continue_after_response === 'undefined') ? true : params.continue_after_response;
 				// timing parameters
 				var default_timing_array = [];
-				for(var i = 0; i < params.stimuli[i].length; i++){
+				for(var j = 0; j < params.stimuli[i].length; j++){
 					default_timing_array.push(1000);
 				}
 				trials[i].timing_stim = params.timing_stim || default_timing_array; 
