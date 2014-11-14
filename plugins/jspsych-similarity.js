@@ -4,7 +4,7 @@
  *
  * This plugin create a trial where two images are shown sequentially, and the subject rates their similarity using a slider controlled with the mouse.
  *
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-similarity
+ * documentation: docs.jspsych.org
  *
  */
 

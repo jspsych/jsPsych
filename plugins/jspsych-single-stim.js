@@ -4,7 +4,7 @@
  *
  * plugin for displaying a stimulus and getting a keyboard response
  *
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-single-stim
+ * documentation: docs.jspsych.org
  *
  **/
 
@@ -66,7 +66,7 @@
 			if (trial.prompt !== "") {
 				display_element.append(trial.prompt);
 			}
-			
+
 			// store response
 			var response = {rt: -1, key: -1};
 
@@ -102,14 +102,14 @@
 					jsPsych.finishTrial();
 				}
 			};
-			
+
 			// function to handle responses by the subject
 			var after_response = function(info) {
 
 				// after a valid response, the stimulus will have the CSS class 'responded'
 				// which can be used to provide visual feedback that a response was recorded
 				$("#jspsych-single-stim-stimulus").addClass('responded');
-				
+
 				// only record the first response
 				if(response.key == -1){
 					response = info;
@@ -117,7 +117,7 @@
 
 				if (trial.continue_after_response) {
 					end_trial();
-				} 
+				}
 			};
 
 			// start the response listener

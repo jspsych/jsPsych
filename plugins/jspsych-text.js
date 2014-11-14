@@ -4,8 +4,8 @@
  * This plugin displays text (including HTML formatted strings) during the experiment.
  * Use it to show instructions, provide performance feedback, etc...
  *
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-text
- * 
+ * documentation: docs.jspsych.org
+ *
  *
  */
 
@@ -15,9 +15,9 @@
         var plugin = {};
 
         plugin.create = function(params) {
-            
+
             params = jsPsych.pluginAPI.enforceArray(params, ['text', 'cont_key']);
-            
+
             var trials = new Array(params.text.length);
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {};
@@ -28,21 +28,21 @@
         };
 
         plugin.trial = function(display_element, trial) {
-            
+
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
             trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
-            
+
             // set the HTML of the display target to replaced_text.
             display_element.html(trial.text);
 
             var after_response = function(info) {
-                    
+
                 display_element.html(''); // clear the display
-                
+
                 save_data(info.key, info.rt);
-                
+
                 if (trial.timing_post_trial > 0) {
                     setTimeout(function() {
                         jsPsych.finishTrial();
@@ -50,18 +50,18 @@
                 }
                 else {
                     jsPsych.finishTrial();
-                } 
-                
+                }
+
             };
 
             var mouse_listener = function(e) {
-                
+
                 var rt = (new Date()).getTime() - start_time;
-                
-                display_element.unbind('click', mouse_listener); 
-                
+
+                display_element.unbind('click', mouse_listener);
+
                 after_response({key: 'mouse', rt: rt});
-                
+
             };
 
             // check if key is 'mouse'

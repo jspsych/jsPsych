@@ -1,14 +1,14 @@
 /**
  * jsPsych plugin for showing animations that mimic the experiment described in
- * 
- * Fiser, J., & Aslin, R. N. (2002). Statistical learning of higher-order 
- * temporal structure from visual shape sequences. Journal of Experimental 
+ *
+ * Fiser, J., & Aslin, R. N. (2002). Statistical learning of higher-order
+ * temporal structure from visual shape sequences. Journal of Experimental
  * Psychology: Learning, Memory, and Cognition, 28(3), 458.
- * 
+ *
  * Josh de Leeuw
- * 
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-vsl-animate-occlusion
- * 
+ *
+ * documentation: docs.jspsych.org
+ *
  */
 
 (function($) {
@@ -17,7 +17,7 @@
         var plugin = {};
 
         plugin.create = function(params) {
-            
+
             var trials = new Array(1);
 
             trials[0] = {};
@@ -36,12 +36,12 @@
         };
 
         plugin.trial = function(display_element, trial) {
-            
+
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
             trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
-            
+
             // variable to keep track of timing info and responses
             var start_time = 0;
             var responses = [];
@@ -95,12 +95,12 @@
                     c.attr({
                         src: i
                     });
-                    
+
                     // start timer for this trial
                     start_time = (new Date()).getTime();
                 }
             }
-            
+
             display_element.append($("<div id='jspsych-vsl-animate-occlusion-raphaelCanvas'>", {
                 css: {
                     width: trial.canvas_size[0] + "px",
@@ -117,7 +117,7 @@
                     fill: "#000"
                 });
             }
-            
+
             // add key listener
             var after_response = function(info){
                 responses.push({
@@ -126,7 +126,7 @@
                     rt: info.rt
                 });
             }
-            
+
             key_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices, 'date', true);
 
             if (trial.timing_pre_movement > 0) {
@@ -139,11 +139,11 @@
             }
 
             function endTrial() {
-                
+
                 display_element.html('');
-                
+
                 jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
-                
+
                 jsPsych.data.write($.extend({}, {
                     "stimuli": JSON.stringify(trial.stims),
                     "responses": JSON.stringify(responses)

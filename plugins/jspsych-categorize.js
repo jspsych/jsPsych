@@ -1,8 +1,8 @@
-/** 
+/**
  * jspsych plugin for categorization trials with feedback
  * Josh de Leeuw
  *
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-categorize
+ * documentation: docs.jspsych.org
  **/
 
 (function($) {

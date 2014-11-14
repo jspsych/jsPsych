@@ -1,4 +1,4 @@
-/** 
+/**
  * jspsych-palmer
  * Josh de Leeuw (October 2013)
  *
@@ -11,7 +11,7 @@
  * Goldstone, R. L., Rogosky, B. J., Pevtzow, R., & Blair, M. (2005). Perceptual and semantic reorganization during category learning.
  * In H. Cohen & C. Lefebvre (Eds.) Handbook of Categorization in Cognitive Science. (pp. 651-678). Amsterdam: Elsevier.
  *
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-palmer
+ * documentation: docs.jspsych.org
  *
  */
 
@@ -380,7 +380,7 @@
 
 			// displays the line wherever there
 			// is a 1 in the array.
-			// showConfiguration(configuration) 
+			// showConfiguration(configuration)
 			for (var i = 0; i < configuration.length; i++) {
 				if (configuration[i] == 1) {
 					toggle_line(i);

@@ -2,8 +2,8 @@
  * jspsych-free-sort
  * plugin for drag-and-drop sorting of a collection of images
  * Josh de Leeuw
- * 
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-free-sort
+ *
+ * documentation: docs.jspsych.org
  */
 
 (function($) {
@@ -32,7 +32,7 @@
         };
 
         plugin.trial = function(display_element, trial) {
-            
+
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function

@@ -4,7 +4,7 @@
  *
  * plugin for showing two stimuli sequentially and getting a same / different judgment
  *
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-same-different
+ * documentation: docs.jspsych.org
  *
  */
 (function($) {

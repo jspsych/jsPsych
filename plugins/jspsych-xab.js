@@ -4,7 +4,7 @@
  *  This plugin runs a single XAB trial, where X is an image presented in isolation, and A and B are choices, with A or B being equal to X.
  *	The subject's goal is to identify whether A or B is identical to X.
  *
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-xab
+ * documentation: docs.jspsych.org
  *
  */
 

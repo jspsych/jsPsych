@@ -10,6 +10,8 @@
  *
  * requires Snap.svg library (snapsvg.io)
  *
+ * documentation: docs.jspsych.org
+ *
  **/
 
 (function($) {

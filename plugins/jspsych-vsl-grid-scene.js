@@ -1,14 +1,14 @@
 /**
  * jsPsych plugin for showing scenes that mimic the experiments described in
- * 
- * Fiser, J., & Aslin, R. N. (2001). Unsupervised statistical learning of 
- * higher-order spatial structures from visual scenes. Psychological science, 
+ *
+ * Fiser, J., & Aslin, R. N. (2001). Unsupervised statistical learning of
+ * higher-order spatial structures from visual scenes. Psychological science,
  * 12(6), 499-504.
- * 
+ *
  * Josh de Leeuw
- * 
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-vsl-grid-scene
- * 
+ *
+ * documentation: docs.jspsych.org
+ *
  */
 
 (function($) {
@@ -17,9 +17,9 @@
         var plugin = {};
 
         plugin.create = function(params) {
-            
+
             //params = jsPsych.pluginAPI.enforceArray(params, ['data'])
-			
+
             var trials = new Array(params.stimuli.length);
             for (var i = 0; i < trials.length; i++) {
                 trials[i] = {};
@@ -32,7 +32,7 @@
         };
 
         plugin.trial = function(display_element, trial) {
-            
+
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
@@ -124,10 +124,10 @@
                     }
                 }
             }
-            
+
             var html_out =  $('#jspsych-vsl-grid-scene-dummy').html();
             $('#jspsych-vsl-grid-scene-dummy').remove();
-             
+
             return html_out;
 
         };
