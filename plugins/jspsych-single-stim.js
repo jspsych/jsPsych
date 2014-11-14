@@ -79,7 +79,9 @@
 				}
 
 				// kill keyboard listeners
-				jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+				if(typeof keyboardListener !== 'undefined'){
+					jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+				}
 
 				// gather the data to store for the trial
 				var trial_data = {
@@ -121,7 +123,9 @@
 			};
 
 			// start the response listener
-			var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices);
+			if(trial.choices != "none") {
+				var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices);
+			}
 
 			// hide image if timing is set
 			if (trial.timing_stim > 0) {
