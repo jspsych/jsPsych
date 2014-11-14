@@ -1237,7 +1237,7 @@
 		}
 
 		// audio
-		var context = new AudioContext();
+		var context = (typeof window.AudioContext !== 'undefined') ? new AudioContext() : null;
 		var audio_buffers = [];
 
 		module.loadAudioFile = function(path) {
