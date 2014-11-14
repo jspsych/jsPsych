@@ -1043,6 +1043,14 @@
 			keyboard_listeners = [];
 		};
 
+		module.convertKeyCharacterToKeyCode = function(character){
+			var code;
+			if(typeof keylookup[character] !== 'undefined'){
+				code = keylookup[character];
+			}
+			return code;
+		}
+
 		// keycode lookup associative array
 		var keylookup = {
 			'backspace': 8,
