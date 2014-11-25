@@ -1,13 +1,13 @@
 /**
- * jspsych-reconstruction
- * a jspsych plugin for a reconstruction task where the subject recreates
- * a stimulus from memory
- *
- * Josh de Leeuw
- *
- * documentation: docs.jspsych.org
- *
- */
+* jspsych-reconstruction
+* a jspsych plugin for a reconstruction task where the subject recreates
+* a stimulus from memory
+*
+* Josh de Leeuw
+*
+* documentation: docs.jspsych.org
+*
+*/
 
 (function($) {
   jsPsych['reconstruction'] = (function() {
@@ -23,7 +23,7 @@
       var trials = [];
       for (var i = 0; i < n_trials; i++) {
         trials.push({
-          starting_value: (typeof params.starting_value == 'undefined') ? [0.5] : params.starting_value[i],
+          starting_value: (typeof params.starting_value == 'undefined') ? 0.5 : params.starting_value[i],
           stim_function: params.stim_function,
           step_size: params.step_size || 0.05,
           key_increase: params.key_increase || 'h',
@@ -45,11 +45,17 @@
 
       // set-up key listeners
       var after_response = function(info){
+
+        console.log('fire');
+
+        var key_i = (typeof trial.key_increase == 'string') ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.key_increase) : trial.key_increase;
+        var key_d = (typeof trial.key_decrease == 'string') ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.key_decrease) : trial.key_decrease;
+
         // get new param value
-        if(info.key == key_increase) {
-          param = param + step_size;
-        } else if(info.key == key_decrease) {
-          param = param - step_size;
+        if(info.key == key_i) {
+          param = param + trial.step_size;
+        } else if(info.key == key_d) {
+          param = param - trial.step_size;
         }
         param = Math.max(Math.min(1,param),0);
 
@@ -64,6 +70,9 @@
       draw(param);
 
       function draw(param){
+
+        console.log(param);
+
         display_element.html('');
 
         display_element.append($('<div id="jspsych-reconstruction-stim-container"></div>'));
@@ -76,8 +85,7 @@
           'class': 'jspsych-survey-text'
         }));
         $("#jspsych-survey-text-next").html('Submit Answers');
-        $("#jspsych-survey-text-next").click(
-
+        $("#jspsych-survey-text-next").click(endTrial);
       }
 
       function endTrial(){
