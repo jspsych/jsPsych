@@ -20,7 +20,7 @@
       var trials = [];
       for (var i = 0; i < params.questions.length; i++) {
         trials.push({
-          preamble: params.preamble[i] || "",
+          preamble: (typeof params.preamble === 'undefined') ? "" : params.preamble[i],
           questions: params.questions[i],
           labels: params.labels[i],
           intervals: params.intervals[i],
