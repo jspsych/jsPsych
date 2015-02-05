@@ -644,9 +644,9 @@
 
 			var display_element = jsPsych.getDisplayElement();
 
-			display_element.append($('<pre>', {
-				html: data_string
-			}));
+			display_element.append($('<pre id="jspsych-data-display"></pre>'));
+
+			$('#jspsych-data-display').text(data_string);
 		};
 
 		// private function to save text file on local drive
