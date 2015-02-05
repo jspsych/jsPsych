@@ -198,6 +198,50 @@ output: shuffledArray = {
 }
 */
 ```
+---
+## jsPsych.randomization.sample
+
+```
+jsPsych.randomization.sample(array, sampleSize, withReplacement)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+array | array | The array of values to sample from
+sampleSize | numeric | The number of samples to draw
+withReplacement | boolean | If `true`, then sampling will be with replacement. Otherwise, sampling is without replacement.
+
+### Return value
+
+An array containing the sample.
+
+### Description
+
+This method returns a sample drawn at random from a set of values. Sampling can be with replacement (items can be chosen more than once) or without replacement (items may only be chosen once).
+
+### Examples
+
+#### Sample without replacement
+
+```javascript
+
+var myArray = [1,2,3,4,5];
+var sample = jsPsych.randomization.sample(myArray, 2, false);
+
+// output: sample = [3,2];
+```
+
+#### Sample with replacement
+
+```javascript
+
+var myArray = [1,2,3,4,5];
+var sample = jsPsych.randomization.sample(myArray, 8, true);
+
+// output: sample = [3,2,1,5,3,3,4,2];
+```
 
 ---
 ## jsPsych.randomization.shuffle

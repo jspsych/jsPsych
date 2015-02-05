@@ -863,6 +863,26 @@
 			return shuffle(arr);
 		}
 
+		module.sample = function(arr, size, withReplacement) {
+			if(withReplacement == false) {
+				if(size > arr.length){
+					console.error("jsPsych.randomization.sample cannot take a sample "+
+					"larger than the size of the set of items to sample from when "+
+					"sampling without replacement.");
+				}
+			}
+			var samp = [];
+			var shuff_arr = shuffle(arr);
+			for(var i=0; i<size; i++){
+				if(!withReplacement){
+					samp.push(shuff_arr.pop());
+				} else {
+					samp.push(shuff_arr[Math.floor(Math.random()*shuff_arr.length)]);
+				}
+			}
+			return samp;
+		}
+
 		module.factorial = function(factors, repetitions, unpack) {
 
 			var factorNames = Object.keys(factors);
