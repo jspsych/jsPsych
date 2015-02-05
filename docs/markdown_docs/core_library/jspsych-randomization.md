@@ -22,7 +22,7 @@ unpack | boolean | If `true` then the output will be an object with a property f
 
 The return value depends on the `unpack` parameter. See description of the parameter above, and examples below.
 
-### Description 
+### Description
 
 This method takes a list of factors and their levels, and creates a full factorial design by creating each unique combination of the factors. The returned set of combinations is in a random order.
 
@@ -37,7 +37,7 @@ var factors = {
 
 var full_design = jsPsych.randomization.factorial(factors, 1);
 
-/* 
+/*
 output:
 full_design = [
 	{stimulus: 'a.jpg', ms_delay: 200},
@@ -57,7 +57,7 @@ var factors = {
 
 var full_design = jsPsych.randomization.factorial(factors, 2);
 
-/* 
+/*
 output:
 full_design = [
 	{stimulus: 'b.jpg', ms_delay: 200},
@@ -81,7 +81,7 @@ var factors = {
 
 var full_design = jsPsych.randomization.factorial(factors, 1, true);
 
-/* 
+/*
 output:
 full_design = {
 	stimulus: ['a.jpg','b.jpg','b.jpg','a.jpg'],
@@ -109,7 +109,7 @@ unpack | boolean | If each element of `array` is an object with an equivalent se
 
 The return value depends on the `unpack` parameter. See description of the parameter above, and examples below.
 
-### Description 
+### Description
 
 This method takes an array of values and generates a new random order of the array, with the option of repeating each element of the array a specified number of times.
 
@@ -199,7 +199,35 @@ output: shuffledArray = {
 */
 ```
 
+---
+## jsPsych.randomization.shuffle
 
+```
+jsPsych.randomization.shuffle(array)
+```
 
+### Parameters
 
+Parameter | Type | Description
+----------|------|------------
+array | array | The array of values to shuffle
 
+### Return value
+
+Returns an array with the same elements as the input array in a random order.
+
+### Description
+
+A simple method for shuffling the order of an array.
+
+### Examples
+
+#### Shuffle an array
+
+```javascript
+
+var myArray = [1,2,3,4,5];
+var shuffledArray = jsPsych.randomization.shuffle(myArray);
+
+// output: shuffledArray = [3,2,4,1,5]
+```
