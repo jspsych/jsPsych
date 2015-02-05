@@ -8,7 +8,7 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-pages | array | *undefined* | Array of objects representing the individual pages to be shown. See table below for details about the parameters of the objects. 
+pages | array | *undefined* | Array of objects representing the individual pages to be shown. See table below for details about the parameters of the objects.
 cont_key | numeric | null | This setting is used for all pages that don't override the default value. See table below.
 cont_btn | string | null | This setting is used for all pages that don't override the default value. See table below.
 force_refresh | boolean | false | If `true`, then the plugin will avoid using the cached version of the HTML page to load if one exists.
@@ -20,8 +20,8 @@ Parameter | Type | Default Value | Description
 url | string | *undefined* | The URL of the page to display.
 cont_key | numeric | null | The key code a key to advance to the next trial. If left as null, then the subject will not be able to advance trials using the keyboard.
 cont_btn | string | null | The ID of a clickable element on the page. When the element is clicked, the trial will advance.
-check_fn | function | function(){} | This function is called with the jsPsych `display_element` as the only argument when the subject attempts to advance the trial. The trial will only advance if the function return `true`. This can be used to verify that the subject has adequetly filled out a form before continuing, for example.
- 
+check_fn | function | `function(){ return true; }` | This function is called with the jsPsych `display_element` as the only argument when the subject attempts to advance the trial. The trial will only advance if the function return `true`. This can be used to verify that the subject has adequetly filled out a form before continuing, for example.
+
 
 ## Data Generated
 
@@ -70,11 +70,7 @@ var check_consent = function(elem) {
 
 // declare the block.
 var html_block = {
-	type:'html', 
+	type:'html',
 	pages: [{url: "external_page.html", cont_btn: "start", check_fn: check_consent}]
 };
 ```
-
-
-
-

@@ -22,7 +22,7 @@ documentation: docs.jspsych.org
                     url: params.pages[i].url,
                     cont_key: params.pages[i].cont_key || params.cont_key,
                     cont_btn: params.pages[i].cont_btn || params.cont_btn,
-                    check_fn: params.pages[i].check_fn,
+                    check_fn: params.pages[i].check_fn || function(){ return true; },
                     force_refresh: (typeof params.force_refresh === 'undefined') ? false : params.force_refresh
                 });
             }
