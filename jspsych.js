@@ -932,6 +932,17 @@
 
 	jsPsych.pluginAPI = (function() {
 
+		/* for future centralized key handling... */
+		/*$(document).on('keydown', keyHandler);
+
+		function keyHandler(e){
+
+			// record time
+
+			// dispatch events
+
+		}*/
+
 		// keyboard listeners
 		var keyboard_listeners = [];
 
@@ -1174,11 +1185,6 @@
 			']': 221
 		};
 
-		//
-		// These are public functions, intended to be used for developing plugins.
-		// They aren't considered part of the normal API for the core library.
-		//
-
 		module.normalizeTrialVariables = function(trial, protect) {
 
 			protect = (typeof protect === 'undefined') ? [] : protect;
@@ -1208,8 +1214,6 @@
 
 		};
 
-		// if possible_array is not an array, then return a one-element array
-		// containing possible_array
 		module.enforceArray = function(params, possible_arrays) {
 
 			// function to check if something is an array, fallback
