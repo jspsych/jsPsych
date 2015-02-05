@@ -859,6 +859,10 @@
 			return shuffle(out);
 		}
 
+		module.shuffle = function(arr) {
+			return shuffle(arr);
+		}
+
 		module.factorial = function(factors, repetitions, unpack) {
 
 			var factorNames = Object.keys(factors);
