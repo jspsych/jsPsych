@@ -46,6 +46,7 @@
 
       var responded = false;
       var timeoutSet = false;
+      var correct;
 
 
       var startTime = (new Date()).getTime();
@@ -89,7 +90,7 @@
 
           // show feedback
           var feedback_text = "";
-          if (block.data[block.trial_idx].correct) {
+          if (correct) {
             feedback_text = trial.correct_text.replace("%ANS%", trial.text_answer);
           } else {
             feedback_text = trial.incorrect_text.replace("%ANS%", trial.text_answer);
@@ -118,7 +119,7 @@
           return false;
         }
 
-        var correct = false;
+        correct = false;
         if (trial.key_answer == info.key) {
           correct = true;
         }
