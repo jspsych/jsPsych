@@ -129,7 +129,25 @@
 
                 key_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, valid_keys, 'date',false);
 
-                if (trial.timing_max_search > 0) {
+                if (trial.timing_max_search > -1) {
+                
+                	if(trial.timing_max_search == 0){
+                		if (!trial_over) {
+
+                            jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
+
+                            trial_over = true;
+
+                            var rt = -1;
+                            var correct = 0;
+                            var key_press = -1;
+
+                            clear_display();
+
+                            end_trial(rt, correct, key_press);
+                        }
+                	}
+                
                     setTimeout(function() {
 
                         if (!trial_over) {
