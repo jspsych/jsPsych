@@ -72,7 +72,9 @@
                     "css": {
                         "position": "absolute",
                         "top": coords.y,
-                        "left": coords.x
+                        "left": coords.x,
+                        "width": trial.stim_width,
+                        "height": trial.stim_height
                     }
                 }));
 
