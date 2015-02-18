@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-categorize-animation.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <style>
+      img { width: 300px; }
+    </style>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  var trials = {
+    type: 'categorize-animation',
+    stimuli: [['img/happy_face_1.jpg','img/sad_face_3.jpg'],['img/happy_face_2.jpg','img/happy_face_3.jpg']],
+    key_answer: [68,83],
+    choices: [68,83],
+    text_answer: ['different','the same'],
+    correct_text: "<p class='center-content'>Correct. The faces had %ANS% expressions.</p>",
+    incorrect_text: "<p class='center-content'>Incorrect. The faces had %ANS% expressions.</p>",
+    prompt: "<p class='center-content'>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expressions.</p>",
+  };
+
+  function start(){
+    jsPsych.init({
+      display_element: $('#jspsych-target'),
+      experiment_structure: [trials]
+    });
+  }
+
+  jsPsych.preloadImages(['img/happy_face_1.jpg','img/happy_face_2.jpg','img/happy_face_3.jpg','img/sad_face_3.jpg'], start);
+
+  </script>
+</html>
