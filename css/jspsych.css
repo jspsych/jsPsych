@@ -188,6 +188,16 @@ button:hover {
     border: 2px solid #444;
 }
 
+.jspsych-free-sort-draggable {
+  cursor: move;
+}
+
+#jspsych-free-sort-done-btn {
+  display: block;
+  margin: auto;
+  margin-top: 25px;
+}
+
 /*
  *
  * PLUGIN: jspsych-palmer
