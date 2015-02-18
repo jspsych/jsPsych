@@ -145,7 +145,7 @@
 
 			for (var i = 0; i < lines.length; i++) {
 				var line = paper.path("M" + circles[lines[i][0]].attr("cx") + " " + circles[lines[i][0]].attr("cy") + "L" + circles[lines[i][1]].attr("cx") + " " + circles[lines[i][1]].attr("cy")).attr("stroke-width", "8").attr("stroke", "#000");
-				line.hide();
+				line.attr({ visibility: 'hidden' });
 				lineElements.push(line);
 				lineIsVisible.push(0);
 			}
@@ -170,12 +170,12 @@
 			function toggle_line(the_line) {
 				if (the_line > -1) {
 					if (lineIsVisible[the_line] === 0) {
-						lineElements[the_line].show();
-						lineElements[the_line].toBack();
+						lineElements[the_line].attr({ visibility: 'visible' });
+						lineElements[the_line].prependTo(paper);
 						lineIsVisible[the_line] = 1;
 					} else {
-						lineElements[the_line].hide();
-						lineElements[the_line].toBack();
+						lineElements[the_line].attr({ visibility: 'hidden' });
+						lineElements[the_line].prependTo(paper);
 						lineIsVisible[the_line] = 0;
 					}
 				}
@@ -295,7 +295,9 @@
 			var size = grid_spacing * (square_size + 1);
 
 			// create a div to hold the generated svg object
-			var stim_div = $('body').append('<svg id="jspsych-palmer-temp-stim" width="'+size+'" height="'+size+'"></div>');
+			var stim_div = $('body').append($('<div id="jspsych-palmer-container">'));
+
+			$('#jspsych-palmer-container').append('<svg id="jspsych-palmer-temp-stim" width="'+size+'" height="'+size+'"></svg>');
 
 			// create the snap object
 			var paper = Snap("#jspsych-palmer-temp-stim");
@@ -348,7 +350,9 @@
 
 			for (var i = 0; i < lines.length; i++) {
 				var line = paper.path("M" + circles[lines[i][0]].attr("cx") + " " + circles[lines[i][0]].attr("cy") + "L" + circles[lines[i][1]].attr("cx") + " " + circles[lines[i][1]].attr("cy")).attr("stroke-width", "8").attr("stroke", "#000");
-				line.hide();
+				line.attr({
+					visibility: 'hidden'
+				});
 				lineElements.push(line);
 				lineIsVisible.push(0);
 			}
@@ -360,12 +364,12 @@
 			function toggle_line(the_line) {
 				if (the_line > -1) {
 					if (lineIsVisible[the_line] === 0) {
-						lineElements[the_line].show();
-						lineElements[the_line].toBack();
+						lineElements[the_line].attr({ visibility: 'visible' });
+						lineElements[the_line].prependTo(paper);
 						lineIsVisible[the_line] = 1;
 					} else {
-						lineElements[the_line].hide();
-						lineElements[the_line].toBack();
+						lineElements[the_line].attr({ visibility: 'hidden' });
+						lineElements[the_line].prependTo(paper);
 						lineIsVisible[the_line] = 0;
 					}
 				}
@@ -381,9 +385,9 @@
 			}
 
 
-			var svg = $("#jspsych-palmer-temp-stim").html();
+			var svg = $("#jspsych-palmer-container").html();
 
-			$('#jspsych-palmer-temp-stim').remove();
+			$('#jspsych-palmer-container').remove();
 
 			return svg;
 		};
