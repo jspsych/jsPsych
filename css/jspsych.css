@@ -213,6 +213,18 @@ button:hover {
 
 /*
  *
+ * PLUGIN: jspsych-visual-search-circle
+ *
+ */
+
+#jspsych-visual-search-circle-svg {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+ *
  * PLUGIN: jspsych-single-stim
  *
  */
