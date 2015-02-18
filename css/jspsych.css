@@ -200,6 +200,17 @@ button:hover {
 
 /*
  *
+ * PLUGIN: jspsych-multi-stim-multi-response
+ *
+ */
+
+#jspsych-multi-stim-multi-response-stimulus {
+  display: block;
+  margin: auto;
+}
+
+/*
+ *
  * PLUGIN: jspsych-palmer
  *
  */
