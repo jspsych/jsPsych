@@ -54,14 +54,9 @@
 
 			var size = trial.grid_spacing * (trial.square_size + 1);
 
-			display_element.append($("<div id='jspsych-palmer-raphaelCanvas'>", {
-				css: {
-					width: size + "px",
-					height: size + "px"
-				}
-			}));
+			display_element.append($("<svg id='jspsych-palmer-snapCanvas' width='"+size+"' height='"+size+"'></svg>"));
 
-			var paper = Raphael("jspsych-palmer-raphaelCanvas", size, size);
+			var paper = Snap("#jspsych-palmer-snapCanvas");
 
 			// create the circles at the vertices.
 			var circles = [];
@@ -70,7 +65,6 @@
 				for (var j = 1; j <= trial.square_size; j++) {
 					var circle = paper.circle(trial.grid_spacing * j, trial.grid_spacing * i, trial.circle_radius);
 					circle.attr("fill", "#000").attr("stroke-width", "0").attr("stroke", "#000").data("node", node_idx);
-
 
 					circle.hover(
 
@@ -295,17 +289,16 @@
 
 		// method for drawing palmer stimuli.
 		// returns the string description of svg element containing the stimulus
-		// requires raphaeljs library -> www.raphaeljs.com
 
 		plugin.generate_stimulus = function(square_size, grid_spacing, circle_radius, configuration) {
 
-			// create a div to hold the generated svg object
-			var stim_div = $('body').append('<div id="jspsych-palmer-temp-stim"></div>');
-
 			var size = grid_spacing * (square_size + 1);
 
-			// create the svg raphael object
-			var paper = Raphael("jspsych-palmer-temp-stim", size, size);
+			// create a div to hold the generated svg object
+			var stim_div = $('body').append('<svg id="jspsych-palmer-temp-stim" width="'+size+'" height="'+size+'"></div>');
+
+			// create the snap object
+			var paper = Snap("#jspsych-palmer-temp-stim");
 
 			// create the circles at the vertices.
 			var circles = [];
