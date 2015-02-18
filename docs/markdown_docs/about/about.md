@@ -4,7 +4,7 @@ jsPsych was created by [Josh de Leeuw](http://pages.iu.edu/~jodeleeu) at Indiana
 
 ### Citation
 
-de Leeuw, J. R. (2014). jsPsych: A JavaScript library for creating behavioral experiments in a web browser. _Behavior Research Methods_, _47_(1), 1-12. doi:10.3758/s13428-014-0458-y.
+de Leeuw, J. R. (2015). jsPsych: A JavaScript library for creating behavioral experiments in a web browser. _Behavior Research Methods_, _47_(1), 1-12. doi:10.3758/s13428-014-0458-y.
 
 ---
 
