@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-call-function.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  var trials = {
+    type: 'call-function',
+    func: function(){ alert('plugin is working.')}
+  };
+
+
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    experiment_structure: [trials]
+  });
+
+
+  </script>
+</html>
