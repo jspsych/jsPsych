@@ -139,7 +139,7 @@
 
       }
 
-      jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices, 'date', true);
+      keyboard_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices, 'date', true);
 
       function endTrial() {
         clearInterval(animate_interval); // stop animation!
