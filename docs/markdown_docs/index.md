@@ -10,7 +10,7 @@ This page gives a broad overview of how jsPsych works. More detail is available 
 
 ## Download jsPsych
 
-<a href="https://github.com/jodeleeuw/jsPsych/archive/v4.0.1.zip" class="btn btn-primary" role="button">Download jsPsych v4.0.1 (zip)</a>
+<a href="https://github.com/jodeleeuw/jsPsych/archive/v4.1.zip" class="btn btn-primary" role="button">Download jsPsych v4.1 (zip)</a>
 
 jsPsych is hosted at [GitHub](http://github.com/jodeleeuw/jsPsych). You can find all other jsPsych releases there.
 

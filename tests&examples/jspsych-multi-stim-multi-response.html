@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-multi-stim-multi-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <style>
+      img { width: 300px; }
+    </style>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  var block_1 = {
+    type: 'multi-stim-multi-response',
+    stimuli: [['img/happy_face_1.jpg', 'img/sad_face_1.jpg']],
+    choices: [[89,78]], // Y or N
+    timing_stim: [1000,-1],
+    prompt: '<p class="center-content">Did the face get happier? Y or N.</p>'
+  }
+
+  var block_2 = {
+    type: 'multi-stim-multi-response',
+    stimuli: [['img/happy_face_1.jpg']],
+    choices: [[89, 78],[49,50,51,52,53]], // Y or N , 1 - 5
+    timing_stim: [-1],
+    prompt: '<p class="center-content">Rate the happiness of the person on a scale of 1-5, and press Y or N to indicate if you have seen the face before.</p>'
+  }
+
+  function start(){
+    jsPsych.init({
+      display_element: $('#jspsych-target'),
+      experiment_structure: [block_1, block_2]
+    });
+  }
+
+  jsPsych.preloadImages(['img/happy_face_1.jpg','img/sad_face_1.jpg'], start);
+
+  </script>
+</html>

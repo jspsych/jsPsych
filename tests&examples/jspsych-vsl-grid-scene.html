@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/snap.svg-min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-vsl-grid-scene.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  var images = ["img/1.gif","img/2.gif","img/3.gif","img/4.gif","img/5.gif","img/6.gif","img/7.gif","img/8.gif","img/9.gif","img/10.gif"];
+
+  var scenes = [
+    [
+      ["img/1.gif", "img/2.gif", 0],
+      [ 0, "img/3.gif", 0],
+      ["img/5.gif", "img/4.gif", 0]
+    ],
+    [
+      [ 0, 0, "img/6.gif"],
+      [ "img/10.gif", "img/7.gif", 0],
+      [ 0,"img/8.gif", "img/9.gif" ]
+    ]
+  ];
+
+  var block = {
+    type: 'vsl-grid-scene',
+    stimuli: scenes
+  };
+
+  function start(){
+    jsPsych.init({
+      display_element: $('#jspsych-target'),
+      experiment_structure: [block]
+    });
+  }
+
+  jsPsych.preloadImages(images, start);
+
+  </script>
+</html>

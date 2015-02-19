@@ -3,7 +3,7 @@ The html-plugin will load and display an arbitrary number of html pages. To proc
 user might either press a button on the page or a specific key. Afterwards, the page get hidden and
 the plugin will wait of a specified time before it proceeds.
 
-documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
+documentation: docs.jspsych.org
 */
 (function($) {
     jsPsych.html = (function() {
@@ -11,18 +11,18 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
         var plugin = {};
 
         plugin.create = function(params) {
-            
+
             params = jsPsych.pluginAPI.enforceArray(params, ['pages']);
-            
+
             var trials = [];
-            
-            
+
+
             for (var i = 0; i < params.pages.length; i++) {
                 trials.push({
                     url: params.pages[i].url,
                     cont_key: params.pages[i].cont_key || params.cont_key,
                     cont_btn: params.pages[i].cont_btn || params.cont_btn,
-                    check_fn: params.pages[i].check_fn,
+                    check_fn: params.pages[i].check_fn || function(){ return true; },
                     force_refresh: (typeof params.force_refresh === 'undefined') ? false : params.force_refresh
                 });
             }
@@ -30,7 +30,7 @@ documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-html
         };
 
         plugin.trial = function(display_element, trial) {
-            
+
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function

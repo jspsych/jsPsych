@@ -10,7 +10,7 @@ Subjects can edit the stimuli by clicking on two adjacent circles to add or remo
 
 ## Dependency
 
-This plugin requires the Raphael-js library, available at [http://www.raphaeljs.com](http://www.raphaeljs.com). You must include the library in the `<head>` section of your experiment page.
+This plugin requires the Snap.svg library, available at [http://www.snapsvg.io](http://www.snapsvg.io). You must include the library in the `<head>` section of your experiment page.
 
 ## Parameters
 
@@ -21,10 +21,10 @@ Parameter | Type | Default Value | Description
 configurations | array | *undefined* | Array of stimulus configurations. Each configuration is an array of 1s and 0s. A 1 represents the presence of a line segment, and a 0 represents the absence of a line segment. The number of elements in a configuration array should be the number of possible line segments in the stimulus. For the default size of 3x3, this is 20 (6 horizontal + 6 vertical + 8 diagonal). The order of the lines in the array are horizontal, vertical, and then diagonal. The easiest way to see this is just to try different configurations. This represents the target configuration, as the stimulus will be blank initially.
 show_feedback | boolean | false | Show corrective feedback after the subject submits a response.
 grid_spacing | numeric | 75 | Distance in pixels between the rows and columns.
-circle_radius | numeric | 20 | Radius in pixels of the circles. 
+circle_radius | numeric | 20 | Radius in pixels of the circles.
 square_size | numeric | 3 | Number of rows and columns in the stimulus.
 timing_feedback | numeric | 1000 | How long to show the feedback for in milliseconds.
-prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to 
+prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to
 
 ## Data Generated
 
@@ -50,7 +50,7 @@ var configuration = [0,1,0,0,1,1,0,0,1,1,0,0,1,0,0,0,1,0,0,1]; // see definition
 
 var stimulus = jsPsych.palmer.generate_stimulus(square_size, grid_spacing, circle_size, configuration);
 
-// stimulus now contains an HTML string that will generate the corresponding stimulus. 
+// stimulus now contains an HTML string that will generate the corresponding stimulus.
 ```
 
 ## Examples

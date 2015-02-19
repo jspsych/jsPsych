@@ -1,7 +1,7 @@
-/* 
+/*
  * CSS for jsPsych experiments.
  *
- * This stylesheet provides minimal styling to make jsPsych 
+ * This stylesheet provides minimal styling to make jsPsych
  * experiments look polished without any additional styles.
  *
  */
@@ -11,8 +11,8 @@
  * fonts and type
  *
  */
- 
-@import url(//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
 
 html {
  font-family: 'Open Sans', 'Arial', sans-serif;
@@ -50,7 +50,7 @@ p {
  * Classes for changing location of things
  *
  */
- 
+
 .left {
     float: left;
 }
@@ -116,7 +116,7 @@ button:hover {
 }
 
 #jspsych-progressbar-container s {
-	
+
 }
 
 #jspsych-progressbar-outer {
@@ -188,13 +188,34 @@ button:hover {
     border: 2px solid #444;
 }
 
+.jspsych-free-sort-draggable {
+  cursor: move;
+}
+
+#jspsych-free-sort-done-btn {
+  display: block;
+  margin: auto;
+  margin-top: 25px;
+}
+
+/*
+ *
+ * PLUGIN: jspsych-multi-stim-multi-response
+ *
+ */
+
+#jspsych-multi-stim-multi-response-stimulus {
+  display: block;
+  margin: auto;
+}
+
 /*
  *
  * PLUGIN: jspsych-palmer
  *
  */
 
-#jspsych-palmer-raphaelCanvas {
+#jspsych-palmer-snapCanvas {
     margin-left: auto;
     margin-right: auto;
 }
@@ -204,20 +225,8 @@ button:hover {
  * PLUGIN: jspsych-same-different
  *
  */
- 
-.jspsych-same-different-stimulus {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
 
-/*
- *
- * PLUGIN: jspsych-visual-search-circle
- *
- */
- 
-#jspsych-visual-search-circle-svg {
+.jspsych-same-different-stimulus {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -228,20 +237,8 @@ button:hover {
  * PLUGIN: jspsych-single-stim
  *
  */
- 
-#jspsych-single-stim-stimulus {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
 
-/*
- *
- * PLUGIN: jspsych-xab
- *
- */
- 
-.jspsych-xab-stimulus {
+#jspsych-single-stim-stimulus {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -252,11 +249,71 @@ button:hover {
  * PLUGIN: jspsych-survey-text
  *
  */
- 
+
  .jspsych-survey-text {
      margin: 0.25em 0em;
  }
- 
+
  .jspsych-survey-text-question {
      margin: 2em 0em;
+ }
+
+ /*
+  *
+  * PLUGIN: jspsych-survey-likert
+  *
+  */
+
+.jspsych-survey-likert-sliderlabels {
+  font-size: 75%;
+  line-height: 1.15em;
+}
+
+.jspsych-survey-likert-question {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.jspsych-survey-likert-text {
+  text-align: center;
+}
+
+#jspsych-survey-likert-next {
+  display: block;
+  margin: auto;
+}
+
+/*
+*
+* PLUGIN: jspsych-visual-search-circle
+*
+*/
+
+#jspsych-visual-search-circle-svg {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*
+ *
+ * PLUGIN: jspsych-vsl-animate-occlusion
+ *
+ */
+
+#jspsych-vsl-animate-occlusion-canvas {
+  display: block;
+  margin: auto;
+}
+
+/*
+ *
+ * PLUGIN: jspsych-xab
+ *
+ */
+
+ .jspsych-xab-stimulus {
+   display: block;
+   margin-left: auto;
+   margin-right: auto;
  }

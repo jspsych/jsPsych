@@ -44,7 +44,7 @@ var block = {
 
 ```javascript
 var block = {
-	type: 'single-stim',
+	type: 'multi-stim-multi-response',
 	stimuli: [['img/happy_face.png']],
 	choices: [[89, 78],[49,50,51,52,53]], // Y or N , 1 - 5
 	timing_stim: [-1],

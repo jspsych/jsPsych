@@ -1,4 +1,4 @@
-/** 
+/**
  * jspsych-palmer
  * Josh de Leeuw (October 2013)
  *
@@ -11,7 +11,7 @@
  * Goldstone, R. L., Rogosky, B. J., Pevtzow, R., & Blair, M. (2005). Perceptual and semantic reorganization during category learning.
  * In H. Cohen & C. Lefebvre (Eds.) Handbook of Categorization in Cognitive Science. (pp. 651-678). Amsterdam: Elsevier.
  *
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-palmer
+ * documentation: docs.jspsych.org
  *
  */
 
@@ -54,14 +54,9 @@
 
 			var size = trial.grid_spacing * (trial.square_size + 1);
 
-			display_element.append($("<div id='jspsych-palmer-raphaelCanvas'>", {
-				css: {
-					width: size + "px",
-					height: size + "px"
-				}
-			}));
+			display_element.append($("<svg id='jspsych-palmer-snapCanvas' width='"+size+"' height='"+size+"'></svg>"));
 
-			var paper = Raphael("jspsych-palmer-raphaelCanvas", size, size);
+			var paper = Snap("#jspsych-palmer-snapCanvas");
 
 			// create the circles at the vertices.
 			var circles = [];
@@ -70,7 +65,6 @@
 				for (var j = 1; j <= trial.square_size; j++) {
 					var circle = paper.circle(trial.grid_spacing * j, trial.grid_spacing * i, trial.circle_radius);
 					circle.attr("fill", "#000").attr("stroke-width", "0").attr("stroke", "#000").data("node", node_idx);
-
 
 					circle.hover(
 
@@ -151,7 +145,7 @@
 
 			for (var i = 0; i < lines.length; i++) {
 				var line = paper.path("M" + circles[lines[i][0]].attr("cx") + " " + circles[lines[i][0]].attr("cy") + "L" + circles[lines[i][1]].attr("cx") + " " + circles[lines[i][1]].attr("cy")).attr("stroke-width", "8").attr("stroke", "#000");
-				line.hide();
+				line.attr({ visibility: 'hidden' });
 				lineElements.push(line);
 				lineIsVisible.push(0);
 			}
@@ -176,12 +170,12 @@
 			function toggle_line(the_line) {
 				if (the_line > -1) {
 					if (lineIsVisible[the_line] === 0) {
-						lineElements[the_line].show();
-						lineElements[the_line].toBack();
+						lineElements[the_line].attr({ visibility: 'visible' });
+						lineElements[the_line].prependTo(paper);
 						lineIsVisible[the_line] = 1;
 					} else {
-						lineElements[the_line].hide();
-						lineElements[the_line].toBack();
+						lineElements[the_line].attr({ visibility: 'hidden' });
+						lineElements[the_line].prependTo(paper);
 						lineIsVisible[the_line] = 0;
 					}
 				}
@@ -295,17 +289,18 @@
 
 		// method for drawing palmer stimuli.
 		// returns the string description of svg element containing the stimulus
-		// requires raphaeljs library -> www.raphaeljs.com
 
 		plugin.generate_stimulus = function(square_size, grid_spacing, circle_radius, configuration) {
 
-			// create a div to hold the generated svg object
-			var stim_div = $('body').append('<div id="jspsych-palmer-temp-stim"></div>');
-
 			var size = grid_spacing * (square_size + 1);
 
-			// create the svg raphael object
-			var paper = Raphael("jspsych-palmer-temp-stim", size, size);
+			// create a div to hold the generated svg object
+			var stim_div = $('body').append($('<div id="jspsych-palmer-container">'));
+
+			$('#jspsych-palmer-container').append('<svg id="jspsych-palmer-temp-stim" width="'+size+'" height="'+size+'"></svg>');
+
+			// create the snap object
+			var paper = Snap("#jspsych-palmer-temp-stim");
 
 			// create the circles at the vertices.
 			var circles = [];
@@ -355,7 +350,9 @@
 
 			for (var i = 0; i < lines.length; i++) {
 				var line = paper.path("M" + circles[lines[i][0]].attr("cx") + " " + circles[lines[i][0]].attr("cy") + "L" + circles[lines[i][1]].attr("cx") + " " + circles[lines[i][1]].attr("cy")).attr("stroke-width", "8").attr("stroke", "#000");
-				line.hide();
+				line.attr({
+					visibility: 'hidden'
+				});
 				lineElements.push(line);
 				lineIsVisible.push(0);
 			}
@@ -367,12 +364,12 @@
 			function toggle_line(the_line) {
 				if (the_line > -1) {
 					if (lineIsVisible[the_line] === 0) {
-						lineElements[the_line].show();
-						lineElements[the_line].toBack();
+						lineElements[the_line].attr({ visibility: 'visible' });
+						lineElements[the_line].prependTo(paper);
 						lineIsVisible[the_line] = 1;
 					} else {
-						lineElements[the_line].hide();
-						lineElements[the_line].toBack();
+						lineElements[the_line].attr({ visibility: 'hidden' });
+						lineElements[the_line].prependTo(paper);
 						lineIsVisible[the_line] = 0;
 					}
 				}
@@ -380,7 +377,7 @@
 
 			// displays the line wherever there
 			// is a 1 in the array.
-			// showConfiguration(configuration) 
+			// showConfiguration(configuration)
 			for (var i = 0; i < configuration.length; i++) {
 				if (configuration[i] == 1) {
 					toggle_line(i);
@@ -388,9 +385,9 @@
 			}
 
 
-			var svg = $("#jspsych-palmer-temp-stim").html();
+			var svg = $("#jspsych-palmer-container").html();
 
-			$('#jspsych-palmer-temp-stim').remove();
+			$('#jspsych-palmer-container').remove();
 
 			return svg;
 		};

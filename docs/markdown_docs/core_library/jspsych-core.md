@@ -15,7 +15,7 @@ None.
 
 Returns the chunk ID of the chunk that is currently active.
 
-### Description 
+### Description
 
 Gets the chunk ID of the active chunk. The chunk ID is a string that follows a specific format:
 
@@ -61,7 +61,7 @@ None.
 
 Returns the object describing the current trial. The object will contain all of the parameters associated with the current trial.
 
-### Description 
+### Description
 
 Get a description of the current trial
 
@@ -88,7 +88,7 @@ None.
 
 Returns nothing.
 
-### Description 
+### Description
 
 This method tells jsPsych that the current trial is over. It is used in all of the plugins to end the current trial. When the trial ends a few things happen:
 
@@ -121,7 +121,7 @@ None.
 
 Returns the jQuery-object that contains the DOM element used for displaying the experiment.
 
-### Description 
+### Description
 
 Get the DOM element that displays the experiment.
 
@@ -157,15 +157,16 @@ on_trial_start | function | Function to execute when a new trial begins.
 on_trial_finish | function | Function to execute when a trial ends.
 on_data_update | function | Function to execute every time data is stored using the `jsPsych.data.write` method. All plugins use this method to save data, so this function runs every time a plugin stores new data.
 show_progress_bar | boolean | If true, then [a progress bar](../features/progress-bar.md) is shown at the top of the page.
-
+max_load_time | numeric | The maximum number of milliseconds to wait for audio content to preload. If the wait time is exceeded, then an error message is logged and the experiment stops. The default value is 30 seconds.
+skip_load_check | boolean | If true, then the experiment will not wait for audio content to load before starting. The default value is false.
 
 ### Return value
 
 Returns nothing.
 
-### Description 
+### Description
 
-This method configures and starts the experiment. 
+This method configures and starts the experiment.
 
 ### Example
 
@@ -187,9 +188,9 @@ None
 
 Returns the settings object used to initialize the experiment.
 
-### Description 
+### Description
 
-Gets the object containing the settings for the current experiment. 
+Gets the object containing the settings for the current experiment.
 
 ### Example
 
@@ -218,7 +219,7 @@ callback_load | function | A function to execute after each image has been loade
 
 Returns nothing.
 
-### Description 
+### Description
 
 Use this function to preload image files. See [Image Preloading](../features/image-preloading.md) in the documentation.
 
@@ -252,7 +253,7 @@ jsPsych.preloadImages(images, function(){ startExperiment(); }, function(nLoaded
 
 function updateLoadedCount(nLoaded){
 	var percentcomplete = nLoaded / images.length * 100;
-	
+
 	// could put something fancier here, like a progress bar
 	// or updating text in the DOM.
 	console.log('Loaded '+percentcomplete+'% of images');
@@ -288,7 +289,7 @@ total_chunks | numeric | Returns the total number of top-level chunks. (Chunks e
 current_chunk | numeric | Returns the index of the current top-level chunk.
 
 
-### Description 
+### Description
 
 This method returns information about the length of the experiment and the subject's current location in the experiment timeline.
 
@@ -318,7 +319,7 @@ None.
 
 Returns a `Date` object indicating when the experiment began.
 
-### Description 
+### Description
 
 Get the time that the experiment began.
 
@@ -342,7 +343,7 @@ None.
 
 Returns a numeric value indicating the number of milliseconds since `jsPsych.init` was called.
 
-### Description 
+### Description
 
 Gets the total time the subject has been in the experiment.
 
@@ -353,7 +354,3 @@ Gets the total time the subject has been in the experiment.
 var time = jsPsych.totalTime();
 
 ```
-
-
-
-

@@ -10,188 +10,209 @@
  *
  * requires Snap.svg library (snapsvg.io)
  *
+ * documentation: docs.jspsych.org
+ *
  **/
 
 (function($) {
-    jsPsych["visual-search-circle"] = (function() {
+  jsPsych["visual-search-circle"] = (function() {
 
-        var plugin = {};
+    var plugin = {};
 
-        plugin.create = function(params) {
+    plugin.create = function(params) {
 
-            var trials = new Array(params.target_present.length);
+      var trials = new Array(params.target_present.length);
 
-            for (var i = 0; i < trials.length; i++) {
-                trials[i] = {};
-                trials[i].target_present = params.target_present[i];
-                trials[i].set_size = params.set_size[i];
-                trials[i].target = params.target;
-                trials[i].foil = params.foil;
-                trials[i].fixation_image = params.fixation_image;
-                trials[i].target_size = params.target_size || [50, 50];
-                trials[i].fixation_size = params.fixation_size || [16, 16];
-                trials[i].circle_diameter = params.circle_diameter || 250;
-                trials[i].target_present_key = params.target_present_key || 74;
-                trials[i].target_absent_key = params.target_absent_key || 70;
-                trials[i].timing_max_search = (typeof params.timing_max_search === 'undefined') ? -1 : params.timing_max_search;
-                trials[i].timing_fixation = (typeof params.timing_fixation === 'undefined') ? 1000 : params.timing_fixation;
-            }
+      for (var i = 0; i < trials.length; i++) {
+        trials[i] = {};
+        trials[i].target_present = params.target_present[i];
+        trials[i].set_size = params.set_size[i];
+        trials[i].target = params.target;
+        trials[i].foil = params.foil;
+        trials[i].fixation_image = params.fixation_image;
+        trials[i].target_size = params.target_size || [50, 50];
+        trials[i].fixation_size = params.fixation_size || [16, 16];
+        trials[i].circle_diameter = params.circle_diameter || 250;
+        trials[i].target_present_key = params.target_present_key || 74;
+        trials[i].target_absent_key = params.target_absent_key || 70;
+        trials[i].timing_max_search = (typeof params.timing_max_search === 'undefined') ? -1 : params.timing_max_search;
+        trials[i].timing_fixation = (typeof params.timing_fixation === 'undefined') ? 1000 : params.timing_fixation;
+      }
 
-            return trials;
-        };
+      return trials;
+    };
 
-        plugin.trial = function(display_element, trial) {
+    plugin.trial = function(display_element, trial) {
 
-            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+      trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
 
-            // screen information
-            var screenw = display_element.width();
-            var screenh = display_element.height();
-            var centerx = screenw / 2;
-            var centery = screenh / 2;
+      // screen information
+      var screenw = display_element.width();
+      var screenh = display_element.height();
+      var centerx = screenw / 2;
+      var centery = screenh / 2;
 
-            // circle params
-            var diam = trial.circle_diameter; // pixels
-            var radi = diam / 2;
-            var paper_size = diam + trial.target_size[0];
+      // circle params
+      var diam = trial.circle_diameter; // pixels
+      var radi = diam / 2;
+      var paper_size = diam + trial.target_size[0];
 
-            // stimuli width, height
-            var stimh = trial.target_size[0];
-            var stimw = trial.target_size[1];
-            var hstimh = stimh / 2;
-            var hstimw = stimw / 2;
+      // stimuli width, height
+      var stimh = trial.target_size[0];
+      var stimw = trial.target_size[1];
+      var hstimh = stimh / 2;
+      var hstimw = stimw / 2;
 
-            // fixation location
-            var fix_loc = [Math.floor(paper_size / 2 - trial.fixation_size[0] / 2), Math.floor(paper_size / 2 - trial.fixation_size[1] / 2)];
+      // fixation location
+      var fix_loc = [Math.floor(paper_size / 2 - trial.fixation_size[0] / 2), Math.floor(paper_size / 2 - trial.fixation_size[1] / 2)];
 
-            // possible stimulus locations on the circle
-            var display_locs = [];
-            var possible_display_locs = trial.set_size;
-            var random_offset = Math.floor(Math.random()*360);
-            for(var i = 0; i < possible_display_locs; i++){
-                display_locs.push([
-                    Math.floor(paper_size / 2 + (cosd(random_offset + (i * (360/possible_display_locs))) * radi) - hstimw),
-                    Math.floor(paper_size / 2 - (sind(random_offset + (i * (360/possible_display_locs))) * radi) - hstimh)
-                ]);
-            }
+      // possible stimulus locations on the circle
+      var display_locs = [];
+      var possible_display_locs = trial.set_size;
+      var random_offset = Math.floor(Math.random() * 360);
+      for (var i = 0; i < possible_display_locs; i++) {
+        display_locs.push([
+          Math.floor(paper_size / 2 + (cosd(random_offset + (i * (360 / possible_display_locs))) * radi) - hstimw),
+          Math.floor(paper_size / 2 - (sind(random_offset + (i * (360 / possible_display_locs))) * radi) - hstimh)
+        ]);
+      }
 
-            // get target to draw on
-            display_element.append($('<svg id="jspsych-visual-search-circle-svg" width='+paper_size+' height='+paper_size+'></svg>'))
-            var paper = Snap('#jspsych-visual-search-circle-svg');
+      // get target to draw on
+      display_element.append($('<svg id="jspsych-visual-search-circle-svg" width=' + paper_size + ' height=' + paper_size + '></svg>'));
+      var paper = Snap('#jspsych-visual-search-circle-svg');
 
-            show_fixation();
+      show_fixation();
 
-            function show_fixation() {
-                // show fixation
-                var fixation = paper.image(trial.fixation_image, fix_loc[0], fix_loc[1], trial.fixation_size[0], trial.fixation_size[1]);
+      function show_fixation() {
+        // show fixation
+        var fixation = paper.image(trial.fixation_image, fix_loc[0], fix_loc[1], trial.fixation_size[0], trial.fixation_size[1]);
 
-                // wait
-                setTimeout(function() {
-                    // after wait is over
-                    show_search_array();
-                }, trial.timing_fixation);
-            }
+        // wait
+        setTimeout(function() {
+          // after wait is over
+          show_search_array();
+        }, trial.timing_fixation);
+      }
 
-            function show_search_array() {
+      function show_search_array() {
 
-                var search_array_images = [];
+        var search_array_images = [];
 
-                for (var i = 0; i < display_locs.length; i++) {
+        for (var i = 0; i < display_locs.length; i++) {
 
-                    var which_image = (i == 0 && trial.target_present) ? trial.target : trial.foil;
+          var which_image = (i == 0 && trial.target_present) ? trial.target : trial.foil;
 
-                    var img = paper.image(which_image, display_locs[i][0], display_locs[i][1], trial.target_size[0], trial.target_size[1]);
+          var img = paper.image(which_image, display_locs[i][0], display_locs[i][1], trial.target_size[0], trial.target_size[1]);
 
-                    search_array_images.push(img);
+          search_array_images.push(img);
 
-                }
-
-                var trial_over = false;
-
-                var after_response = function(info){
-
-                    trial_over = true;
-
-                    var correct = 0;
-
-                    if (info.key == trial.target_present_key && trial.target_present ||
-                        info.key == trial.target_absent_key && !trial.target_present) {
-                        correct = 1;
-                    }
-
-                    clear_display();
-
-                    end_trial(info.rt, correct, info.key);
-
-                }
-
-                var valid_keys = [trial.target_present_key, trial.target_absent_key];
-
-                key_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, valid_keys, 'date',false);
-
-                if (trial.timing_max_search > 0) {
-                    setTimeout(function() {
-
-                        if (!trial_over) {
-
-                            jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
-
-                            trial_over = true;
-
-                            var rt = -1;
-                            var correct = 0;
-                            var key_press = -1;
-
-                            clear_display();
-
-                            end_trial(rt, correct, key_press);
-                        }
-                    }, trial.timing_max_search);
-                }
-
-                function clear_display() {
-                    paper.clear();
-                }
-            }
-
-
-            function end_trial(rt, correct, key_press) {
-
-                // data saving
-                var trial_data = {
-                    correct: correct,
-                    rt: rt,
-                    key_press: key_press,
-                    locations: JSON.stringify(display_locs),
-                    target_present: trial.target_present,
-                    set_size: trial.set_size
-                };
-
-                // this line merges together the trial_data object and the generic
-                // data object (trial.data), and then stores them.
-                jsPsych.data.write($.extend({}, trial_data, trial.data));
-
-                // go to next trial
-                if(trial.timing_post_trial > 0){
-                    setTimeout(function() {
-                        jsPsych.finishTrial();
-                    }, trial.timing_post_trial);
-                } else {
-                    jsPsych.finishTrial();
-                }
-            }
-        };
-
-        // helper function for determining stimulus locations
-
-        function cosd(num) {
-            return Math.cos(num / 180 * Math.PI);
         }
 
-        function sind(num) {
-            return Math.sin(num / 180 * Math.PI);
+        var trial_over = false;
+
+        var after_response = function(info) {
+
+          trial_over = true;
+
+          var correct = 0;
+
+          if (info.key == trial.target_present_key && trial.target_present ||
+            info.key == trial.target_absent_key && !trial.target_present) {
+            correct = 1;
+          }
+
+          clear_display();
+
+          end_trial(info.rt, correct, info.key);
+
         }
 
-        return plugin;
-    })();
+        var valid_keys = [trial.target_present_key, trial.target_absent_key];
+
+        key_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, valid_keys, 'date', false);
+
+        if (trial.timing_max_search > -1) {
+
+          if (trial.timing_max_search == 0) {
+            if (!trial_over) {
+
+              jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
+
+              trial_over = true;
+
+              var rt = -1;
+              var correct = 0;
+              var key_press = -1;
+
+              clear_display();
+
+              end_trial(rt, correct, key_press);
+            }
+          } else {
+
+            setTimeout(function() {
+
+              if (!trial_over) {
+
+                jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
+
+                trial_over = true;
+
+                var rt = -1;
+                var correct = 0;
+                var key_press = -1;
+
+                clear_display();
+
+                end_trial(rt, correct, key_press);
+              }
+            }, trial.timing_max_search);
+          }
+        }
+
+        function clear_display() {
+          paper.clear();
+        }
+      }
+
+
+      function end_trial(rt, correct, key_press) {
+
+        // data saving
+        var trial_data = {
+          correct: correct,
+          rt: rt,
+          key_press: key_press,
+          locations: JSON.stringify(display_locs),
+          target_present: trial.target_present,
+          set_size: trial.set_size
+        };
+
+        // this line merges together the trial_data object and the generic
+        // data object (trial.data), and then stores them.
+        jsPsych.data.write($.extend({}, trial_data, trial.data));
+
+        // go to next trial
+        if (trial.timing_post_trial > 0) {
+          setTimeout(function() {
+            jsPsych.finishTrial();
+          }, trial.timing_post_trial);
+        } else {
+          jsPsych.finishTrial();
+        }
+      }
+    };
+
+    // helper function for determining stimulus locations
+
+    function cosd(num) {
+      return Math.cos(num / 180 * Math.PI);
+    }
+
+    function sind(num) {
+      return Math.sin(num / 180 * Math.PI);
+    }
+
+    return plugin;
+  })();
 })(jQuery);

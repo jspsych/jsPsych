@@ -28,10 +28,10 @@
 				trials[i].continue_after_response = (typeof params.continue_after_response === 'undefined') ? true : params.continue_after_response;
 				// timing parameters
 				var default_timing_array = [];
-				for(var i = 0; i < params.stimuli[i].length; i++){
+				for(var j = 0; j < params.stimuli[i].length; j++){
 					default_timing_array.push(1000);
 				}
-				trials[i].timing_stim = params.timing_stim || default_timing_array; 
+				trials[i].timing_stim = params.timing_stim || default_timing_array;
 				trials[i].timing_response = params.timing_response || -1; // if -1, then wait for response forever
 				// optional parameters
 				trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
@@ -120,10 +120,16 @@
 
 				var whichResponse;
 				for(var i = 0; i<trial.choices.length; i++){
-					// TODO: this method will only work if keys are specified
-					// as key codes. Generalize to characters.
-					if(trial.choices[i].indexOf(info.key) > -1){
-						whichResponse = i;
+
+					for(var j = 0; j < trial.choices[i].length; j++){
+						keycode = (typeof trial.choices[i][j] == 'string') ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.choices[i][j]) : trial.choices[i][j];
+						if(info.key == keycode){
+							whichResponse = i;
+							break;
+						}
+					}
+
+					if(typeof whichResponse !== 'undefined') {
 						break;
 					}
 				}

@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-single-audio.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  /*
+  this demo will only work if run online or with special permissions enable offline
+  for chrome, launch the browser from the command-line:
+  chrome --allow-file-access-from-files
+  */
+
+  var block_1 = {
+    type: 'single-audio',
+    stimuli: ['sound/sound.mp3']
+  }
+
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    experiment_structure: [block_1]
+  });
+
+  </script>
+</html>

@@ -4,7 +4,7 @@
  *
  * plugin for showing two stimuli sequentially and getting a same / different judgment
  *
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-same-different
+ * documentation: docs.jspsych.org
  *
  */
 (function($) {
@@ -19,8 +19,7 @@
 			var trials = new Array(params.stimuli.length);
 			for (var i = 0; i < trials.length; i++) {
 				trials[i] = {};
-				trials[i].a_path = params.stimuli[i][0];
-				trials[i].b_path = params.stimuli[i][1];
+				trials[i].stimuli = params.stimuli[i];
 				trials[i].answer = params.answer[i];
 				trials[i].same_key = params.same_key || 81; // default is 'q'
 				trials[i].different_key = params.different_key || 80; // default is 'p'
@@ -41,7 +40,11 @@
 			// this evaluates the function and replaces
 			// it with the output of the function
 			trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
-
+			
+			// unpack the stimuli array (for backwards code compatibility. this could be cleaned up in the future)
+			trial.a_path = trial.stimuli[0];
+			trial.b_path = trial.stimuli[1];
+			
 			// this array holds handlers from setTimeout calls
 			// that need to be cleared if the trial ends early
 			var setTimeoutHandlers = [];

@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-html.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  /*
+  this demo will only work if run online or with special permissions enable offline
+  for chrome, launch the browser from the command-line:
+  chrome --allow-file-access-from-files
+  */
+
+  var check_consent = function(elem) {
+    if ($('#consent_checkbox').is(':checked')) {
+      return true;
+    }
+    else {
+      alert("If you wish to participate, you must check the box next to the statement 'I agree to participate in this study.'");
+      return false;
+    }
+    return false;
+  };
+
+  var consent_block = {
+    "type": "html",
+    "force_refresh": true,
+    "pages": [{
+      "url": "external_html/simple_consent.html",
+      "cont_btn": "start",
+      "check_fn": check_consent
+    }]
+  }
+
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    experiment_structure: [consent_block]
+  });
+
+  </script>
+</html>

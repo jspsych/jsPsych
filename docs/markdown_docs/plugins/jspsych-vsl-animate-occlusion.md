@@ -6,7 +6,7 @@ Fiser, J., & Aslin, R. N. (2002). Statistical learning of higher-order temporal 
 
 ## Dependency
 
-This plugin requires the Raphael-js library, available at [http://www.raphaeljs.com](http://www.raphaeljs.com). You must include the library in the `<head>` section of your experiment page.
+This plugin requires the Snap.svg library, available at [http://www.snapsvg.io](http://www.snapsvg.io). You must include the library in the `<head>` section of your experiment page.
 
 ## Parameters
 

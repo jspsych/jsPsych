@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-similarity.js"></script>
+    <link rel="stylesheet" href="css/jquery-ui.css"></link>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <style>
+      img { width: 300px; }
+    </style>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  var block_1 = {
+    type: 'similarity',
+    stimuli: [['img/happy_face_1.jpg', 'img/sad_face_1.jpg']],
+    prompt: '<p class="center-content">How similar are these pictures?</p>'
+  }
+
+  function start(){
+    jsPsych.init({
+      display_element: $('#jspsych-target'),
+      experiment_structure: [block_1]
+    });
+  }
+
+  jsPsych.preloadImages(['img/happy_face_1.jpg','img/sad_face_1.jpg'], start);
+
+  </script>
+</html>

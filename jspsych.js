@@ -2,7 +2,7 @@
  * jspsych.js
  * Josh de Leeuw
  *
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki
+ * documentation: docs.jspsych.org
  *
  **/
 (function($) {
@@ -59,7 +59,9 @@
 				'on_data_update': function(data) {
 					return undefined;
 				},
-				'show_progress_bar': false
+				'show_progress_bar': false,
+				'max_load_time': 30000,
+				'skip_load_check': false
 			};
 
 			// override default options if user specifies an option
@@ -74,7 +76,12 @@
 			// create experiment structure
 			root_chunk = parseExpStructure(opts.experiment_structure);
 
-			startExperiment();
+			// wait for everything to load
+			if(opts.skip_load_check){
+				startExperiment();
+			} else {
+				allLoaded(startExperiment, opts.max_load_time);
+			}
 		};
 
 		core.progress = function() {
@@ -167,6 +174,23 @@
 		core.currentChunkID = function(){
 			return root_chunk.activeChunkID();
 		};
+
+		function allLoaded(callback, max_wait){
+
+			var refresh_rate = 1000;
+			var max_wait = max_wait || 30000;
+			var start = (new Date()).getTime();
+
+			var interval = setInterval(function(){
+				if(jsPsych.pluginAPI.audioLoaded()){
+					clearInterval(interval);
+					callback();
+				} else if((new Date()).getTime() - max_wait > start){
+					console.error('Experiment failed to load all resouces in time alloted');
+				}
+			}, refresh_rate);
+
+		}
 
 		function parseExpStructure(experiment_structure) {
 
@@ -625,9 +649,9 @@
 
 			var display_element = jsPsych.getDisplayElement();
 
-			display_element.append($('<pre>', {
-				html: data_string
-			}));
+			display_element.append($('<pre id="jspsych-data-display"></pre>'));
+
+			$('#jspsych-data-display').text(data_string);
 		};
 
 		// private function to save text file on local drive
@@ -840,6 +864,30 @@
 			return shuffle(out);
 		}
 
+		module.shuffle = function(arr) {
+			return shuffle(arr);
+		}
+
+		module.sample = function(arr, size, withReplacement) {
+			if(withReplacement == false) {
+				if(size > arr.length){
+					console.error("jsPsych.randomization.sample cannot take a sample "+
+					"larger than the size of the set of items to sample from when "+
+					"sampling without replacement.");
+				}
+			}
+			var samp = [];
+			var shuff_arr = shuffle(arr);
+			for(var i=0; i<size; i++){
+				if(!withReplacement){
+					samp.push(shuff_arr.pop());
+				} else {
+					samp.push(shuff_arr[Math.floor(Math.random()*shuff_arr.length)]);
+				}
+			}
+			return samp;
+		}
+
 		module.factorial = function(factors, repetitions, unpack) {
 
 			var factorNames = Object.keys(factors);
@@ -913,15 +961,26 @@
 
 	jsPsych.pluginAPI = (function() {
 
+		/* for future centralized key handling... */
+		/*$(document).on('keydown', keyHandler);
+
+		function keyHandler(e){
+
+			// record time
+
+			// dispatch events
+
+		}*/
+
 		// keyboard listeners
 		var keyboard_listeners = [];
 
 		var module = {};
 
-		module.getKeyboardResponse = function(callback_function, valid_responses, rt_method, persist) {
+		module.getKeyboardResponse = function(callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time) {
 
 			rt_method = (typeof rt_method === 'undefined') ? 'date' : rt_method;
-			if (rt_method != 'date' && rt_method != 'performance') {
+			if (rt_method != 'date' && rt_method != 'performance' && rt_method != 'audio') {
 				console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
 				rt_method = 'date';
 			}
@@ -929,9 +988,10 @@
 			var start_time;
 			if (rt_method == 'date') {
 				start_time = (new Date()).getTime();
-			}
-			if (rt_method == 'performance') {
+			} else if (rt_method == 'performance') {
 				start_time = performance.now();
+			} else if (rt_method == 'audio') {
+				start_time = audio_context_start_time;
 			}
 
 			var listener_id;
@@ -941,9 +1001,10 @@
 				var key_time;
 				if (rt_method == 'date') {
 					key_time = (new Date()).getTime();
-				}
-				if (rt_method == 'performance') {
+				} else if (rt_method == 'performance') {
 					key_time = performance.now();
+				} else if (rt_method == 'audio') {
+					key_time = audio_context.currentTime
 				}
 
 				var valid_response = false;
@@ -1021,6 +1082,14 @@
 			}
 			keyboard_listeners = [];
 		};
+
+		module.convertKeyCharacterToKeyCode = function(character){
+			var code;
+			if(typeof keylookup[character] !== 'undefined'){
+				code = keylookup[character];
+			}
+			return code;
+		}
 
 		// keycode lookup associative array
 		var keylookup = {
@@ -1145,11 +1214,6 @@
 			']': 221
 		};
 
-		//
-		// These are public functions, intended to be used for developing plugins.
-		// They aren't considered part of the normal API for the core library.
-		//
-
 		module.normalizeTrialVariables = function(trial, protect) {
 
 			protect = (typeof protect === 'undefined') ? [] : protect;
@@ -1179,8 +1243,6 @@
 
 		};
 
-		// if possible_array is not an array, then return a one-element array
-		// containing possible_array
 		module.enforceArray = function(params, possible_arrays) {
 
 			// function to check if something is an array, fallback
@@ -1205,6 +1267,51 @@
 				r.push(k);
 			}
 			return r;
+		}
+
+		// audio
+		var context = (typeof window.AudioContext !== 'undefined') ? new AudioContext() : null;
+		var audio_buffers = [];
+
+		module.loadAudioFile = function(path) {
+
+			var bufferID = audio_buffers.length;
+			audio_buffers[bufferID] = 'tmp';
+
+			var request = new XMLHttpRequest();
+			request.open('GET',path,true);
+			request.responseType = 'arraybuffer';
+			request.onload = function(){
+				context.decodeAudioData(request.response, function(buffer){
+					audio_buffers[bufferID] = buffer;
+				}, function(){
+					console.error('Error loading audio file: '+path);
+				});
+			}
+			request.send();
+
+			return bufferID;
+
+		}
+
+		module.getAudioBuffer = function(audioID) {
+
+			if(audio_buffers[audioID] == 'tmp'){
+				console.error('Audio file failed to load in the time alloted.')
+				return;
+			}
+
+			return audio_buffers[audioID];
+
+		}
+
+		module.audioLoaded = function() {
+			for(var i = 0; i < audio_buffers.length; i++){
+				if(audio_buffers[i] == 'tmp') {
+					return false;
+				}
+			}
+			return true;
 		}
 
 		return module;
