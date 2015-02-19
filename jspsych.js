@@ -2,7 +2,7 @@
  * jspsych.js
  * Josh de Leeuw
  *
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki
+ * documentation: docs.jspsych.org
  *
  **/
 (function($) {
