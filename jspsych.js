@@ -60,7 +60,8 @@
 					return undefined;
 				},
 				'show_progress_bar': false,
-				'max_load_time': 30000
+				'max_load_time': 30000,
+				'skip_load_check': false
 			};
 
 			// override default options if user specifies an option
@@ -76,7 +77,11 @@
 			root_chunk = parseExpStructure(opts.experiment_structure);
 
 			// wait for everything to load
-			allLoaded(startExperiment, opts.max_load_time);
+			if(opts.skip_load_check){
+				startExperiment();
+			} else {
+				allLoaded(startExperiment, opts.max_load_time);
+			}
 		};
 
 		core.progress = function() {
