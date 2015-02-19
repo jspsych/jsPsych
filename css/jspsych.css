@@ -234,35 +234,11 @@ button:hover {
 
 /*
  *
- * PLUGIN: jspsych-visual-search-circle
- *
- */
-
-#jspsych-visual-search-circle-svg {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/*
- *
  * PLUGIN: jspsych-single-stim
  *
  */
 
 #jspsych-single-stim-stimulus {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/*
- *
- * PLUGIN: jspsych-xab
- *
- */
-
-.jspsych-xab-stimulus {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -306,3 +282,38 @@ button:hover {
   display: block;
   margin: auto;
 }
+
+/*
+*
+* PLUGIN: jspsych-visual-search-circle
+*
+*/
+
+#jspsych-visual-search-circle-svg {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*
+ *
+ * PLUGIN: jspsych-vsl-animate-occlusion
+ *
+ */
+
+#jspsych-vsl-animate-occlusion-canvas {
+  display: block;
+  margin: auto;
+}
+
+/*
+ *
+ * PLUGIN: jspsych-xab
+ *
+ */
+
+ .jspsych-xab-stimulus {
+   display: block;
+   margin-left: auto;
+   margin-right: auto;
+ }
