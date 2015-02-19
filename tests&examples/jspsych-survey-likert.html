@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-survey-likert.js"></script>
+    <link rel="stylesheet" href="css/jquery-ui.css"></link>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  // defining groups of questions that will go together.
+  var page_1_questions = ["I like vegetables.", "I hate eggs."];
+  var page_2_questions = ["I like fruit."];
+
+  // definiting two different response scales that can be used.
+  var scale_1 = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
+  var scale_2 = ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neural", "Somewhat Agree", "Agree", "Strongly Agree"];
+
+  var likert_block = {
+      type: 'survey-likert',
+      questions: [page_1_questions, page_2_questions],
+      labels: [[scale_1, scale_2], [scale_1]], // need one scale for every question on a page
+      intervals: [[5,7], [9]] // note the the intervals and labels don't necessarily need to match.
+  };
+
+
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    experiment_structure: [likert_block]
+  });
+
+
+  </script>
+</html>

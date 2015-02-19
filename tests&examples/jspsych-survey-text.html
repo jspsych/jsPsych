@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-survey-text.js"></script>
+    <link rel="stylesheet" href="css/jquery-ui.css"></link>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  // defining groups of questions that will go together.
+  var page_1_questions = ["How old are you?", "Where were you born?"];
+  var page_2_questions = ["What is your favorite food?"];
+
+  var survey_block = {
+      type: 'survey-text',
+      questions: [page_1_questions, page_2_questions],
+  };
+
+
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    experiment_structure: [survey_block]
+  });
+
+
+  </script>
+</html>
