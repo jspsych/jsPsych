@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-text.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  var block = {
+    type: 'text',
+    text: 'Welcome to the experiment. Press any key to begin.'
+  }
+
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    experiment_structure: [block]
+  });
+
+  </script>
+</html>
