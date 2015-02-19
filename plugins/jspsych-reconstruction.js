@@ -46,7 +46,7 @@
       // set-up key listeners
       var after_response = function(info){
 
-        console.log('fire');
+        //console.log('fire');
 
         var key_i = (typeof trial.key_increase == 'string') ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.key_increase) : trial.key_increase;
         var key_d = (typeof trial.key_decrease == 'string') ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.key_decrease) : trial.key_decrease;
@@ -71,7 +71,7 @@
 
       function draw(param){
 
-        console.log(param);
+        //console.log(param);
 
         display_element.html('');
 
