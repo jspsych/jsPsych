@@ -1275,7 +1275,10 @@
 
 		module.loadAudioFile = function(path) {
 
-			var bufferID = audio_buffers.length;
+			var bufferID = path;
+			if(typeof audio_buffers.bufferID !== 'undefined') {
+				return bufferID;
+			}
 			audio_buffers[bufferID] = 'tmp';
 
 			var request = new XMLHttpRequest();
