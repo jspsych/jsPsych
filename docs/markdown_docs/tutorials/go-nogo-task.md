@@ -18,7 +18,7 @@ Start by downloading jsPsych and setting up a folder to contain your experiment 
 <html>
   <head>
     <title>My experiment</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="jsPsych-4.0/jspsych.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
     <link href="jsPsych-4.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
@@ -67,7 +67,7 @@ jsPsych.init({
 <html>
   <head>
     <title>My experiment</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="jsPsych-4.0/jspsych.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
     <link href="jsPsych-4.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
@@ -129,7 +129,7 @@ experiment.push(instructions_block);
 <html>
   <head>
     <title>My experiment</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="jsPsych-4.0/jspsych.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
     <link href="jsPsych-4.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
@@ -214,7 +214,7 @@ experiment.push(test_block);
 <html>
   <head>
     <title>My experiment</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="jsPsych-4.0/jspsych.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-single-stim.js"></script>
@@ -309,7 +309,7 @@ If you are wondering where to figure out what the various parameter options for 
 <html>
   <head>
     <title>My experiment</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="jsPsych-4.0/jspsych.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-single-stim.js"></script>
@@ -401,7 +401,7 @@ Now our experiment is 20 trials long, and the trials are shown in a random order
 <html>
   <head>
     <title>My experiment</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="jsPsych-4.0/jspsych.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-single-stim.js"></script>
@@ -482,7 +482,7 @@ jsPsych.init({
 <html>
   <head>
     <title>My experiment</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="jsPsych-4.0/jspsych.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-single-stim.js"></script>
@@ -592,7 +592,7 @@ var test_block = {
 <html>
   <head>
     <title>My experiment</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="jsPsych-4.0/jspsych.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-single-stim.js"></script>
@@ -702,7 +702,7 @@ If you run the experiment, you'll notice that the interval between trials change
 <html>
   <head>
     <title>My experiment</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="jsPsych-4.0/jspsych.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-single-stim.js"></script>
@@ -828,7 +828,7 @@ experiment.push(debrief_block);
 <html>
   <head>
     <title>My experiment</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="jsPsych-4.0/jspsych.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
     <script src="jsPsych-4.0/plugins/jspsych-single-stim.js"></script>
