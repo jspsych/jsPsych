@@ -7,8 +7,8 @@ The survey-likert plugin displays a set of questions with Likert scale responses
 This plugin requires the jQuery UI javascript library and accompanying CSS theme. To use this library, you must include both. Google hosts versions of both, which you can use in your project by including the following two lines in the `<head>` section of the HTML document:
 
 ```html
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-<link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/black-tie/jquery-ui.min.css" rel="stylesheet" type="text/css"></link>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/black-tie/jquery-ui.min.css" rel="stylesheet" type="text/css"></link>
 ```
 
 This example uses the 'black-tie' theme, but any theme should work.
@@ -31,7 +31,7 @@ In addition to the [default data collected by all plugins](), this plugin collec
 Name | Type | Value
 -----|------|------
 Q0, Q1, ... , Q*n* | numeric | The response to each question will be recorded in its own variable, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. The responses are recorded as integers, representing the position of the slider on the scale.
-rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response. 
+rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response.
 
 ## Examples
 

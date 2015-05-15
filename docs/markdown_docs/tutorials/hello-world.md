@@ -52,7 +52,7 @@ To use jsPsych, add a `<script>` tag to import the library. You'll need to impor
 <html>
 	<head>
 		<title>My experiment</title>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="jsPsych-4.0/jspsych.js"></script>
 	</head>
 	<body>
@@ -67,7 +67,7 @@ You may also want to import the jsPsych stylesheet, which applies a basic set of
 <html>
 	<head>
 		<title>My experiment</title>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="jsPsych-4.0/jspsych.js"></script>
 		<link href="jsPsych-4.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 	</head>
@@ -85,7 +85,7 @@ For the demo, we want to show some text on the screen. This is exactly what the 
 <html>
 	<head>
 		<title>My experiment</title>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="jsPsych-4.0/jspsych.js"></script>
 		<script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
 		<link href="jsPsych-4.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
@@ -104,7 +104,7 @@ To add JavaScript code directly to the webpage we need to add a set of `<script>
 <html>
 	<head>
 		<title>My experiment</title>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="jsPsych-4.0/jspsych.js"></script>
 		<script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
 		<link href="jsPsych-4.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
@@ -129,7 +129,7 @@ Now that we have the trial defined, we just need to tell jsPsych to run an exper
 <html>
 	<head>
 		<title>My experiment</title>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="jsPsych-4.0/jspsych.js"></script>
 		<script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
 		<link href="jsPsych-4.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
