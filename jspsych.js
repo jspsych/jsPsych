@@ -536,6 +536,9 @@
 		// data storage object
 		var allData = [];
 
+		// data properties for all trials
+		var dataProperties = {};
+
 		module.getData = function() {
 			return $.extend(true, [], allData); // deep clone
 		};
@@ -553,30 +556,41 @@
 				'internal_chunk_id': jsPsych.currentChunkID()
 			};
 
-			var ext_data_object = $.extend({}, data_object, default_data);
+			var ext_data_object = $.extend({}, data_object, default_data, dataProperties);
 
 			allData.push(ext_data_object);
 
 			var initSettings = jsPsych.initSettings();
-			initSettings.on_data_update(ext_data_object); //TODO: FIX callback?
+			initSettings.on_data_update(ext_data_object);
 		};
 
-		module.dataAsCSV = function(append_data) {
-			var dataObj = module.getData();
-			for(var i=0; i < dataObj.length; i++){
-				dataObj[i] = $.extend({}, dataObj[i], append_data);
+		module.addProperties = function(properties){
+
+			// first, add the properties to all data that's already stored
+			for(var i=0; i<allData.length; i++){
+				for(var key in properties){
+					allData[i][key] = properties[key];
+				}
 			}
+
+			// now add to list so that it gets appended to all future data
+			dataProperties = $.extend({}, dataProperties, properties);
+
+		}
+
+		module.dataAsCSV = function() {
+			var dataObj = module.getData();
 			return JSON2CSV(dataObj);
 		};
 
-		module.localSave = function(filename, format, append_data) {
+		module.localSave = function(filename, format) {
 
 			var data_string;
 
 			if (format == 'JSON' || format == 'json') {
-				data_string = JSON.stringify(flattenData(module.getData(), append_data));
+				data_string = JSON.stringify(module.getData());
 			} else if (format == 'CSV' || format == 'csv') {
-				data_string = module.dataAsCSV(append_data);
+				data_string = module.dataAsCSV();
 			} else {
 				throw new Error('invalid format specified for jsPsych.data.localSave');
 			}
@@ -684,23 +698,6 @@
 		//
 		// A few helper functions to handle data format conversion
 		//
-
-		function flattenData(data_object, append_data) {
-
-			append_data = (typeof append_data === undefined) ? {} : append_data;
-
-			var trials = [];
-
-			// loop through data_object
-			for (var i = 0; i < data_object.length; i++) {
-				for (var j = 0; j < data_object[i].length; j++) {
-					var data = $.extend({}, data_object[i][j], append_data);
-					trials.push(data);
-				}
-			}
-
-			return trials;
-		}
 
 		// this function based on code suggested by StackOverflow users:
 		// http://stackoverflow.com/users/64741/zachary
