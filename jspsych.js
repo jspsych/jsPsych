@@ -138,7 +138,8 @@
 
 			// handle callback at plugin level
 			if (typeof current_trial.on_finish === 'function') {
-				current_trial.on_finish(); // TODO: pass in data
+				var trial_data = jsPsych.data.getDataByTrialIndex(global_trial_index);
+				current_trial.on_finish(trial_data);
 			}
 
 			// handle callback at whole-experiment level
@@ -637,6 +638,15 @@
 			}
 			return allData[allData.length-1];
 		};
+
+		module.getDataByTrialIndex = function(trial_index) {
+			for(var i = 0; i<allData.length; i++){
+				if(allData[i].trial_index_global == trial_index){
+					return allData[i];
+				}
+			}
+			return undefined;
+		}
 
 		module.getLastChunkData = function() {
 			var lasttrial = module.getLastTrialData();
