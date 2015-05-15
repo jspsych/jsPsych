@@ -195,6 +195,10 @@
 
 		function parseExpStructure(experiment_structure) {
 
+			if(!Array.isArray(experiment_structure)){
+				throw new Error("Invalid experiment structure. Experiment structure must be an array");
+			}
+
 			return createExperimentChunk({
 				chunk_type: 'root',
 				timeline: experiment_structure
