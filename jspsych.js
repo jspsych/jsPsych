@@ -1216,7 +1216,12 @@
 
 		module.normalizeTrialVariables = function(trial, protect) {
 
+			// keys that are always protected
+			var always_protected = ['on_finish'];
+
 			protect = (typeof protect === 'undefined') ? [] : protect;
+
+			protect = protect.concat(always_protected);
 
 			var keys = getKeys(trial);
 
