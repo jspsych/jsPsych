@@ -116,6 +116,36 @@ var alldata = jsPsych.data.getData();
 ```
 
 ---
+## jsPsych.data.getDataByTrialIndex
+
+```
+jsPsych.data.getDataByTrialIndex(trial_index)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+trial_index | numeric | The global trial index of the trial
+
+### Return value
+
+Returns an array containing all of the data for a particular trial. Trials are automatically indexed by a global
+
+### Description
+
+Gets all the data generated from a specific trial.
+
+### Examples
+
+#### Basic example
+
+```javascript
+var first_trial_data = jsPsych.data.getDataByTrialIndex(0);
+var second_trial_data = jsPsych.data.getDataByTrialIndex(1);
+```
+
+---
 ## jsPsych.data.getLastChunkData
 
 ```
