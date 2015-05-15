@@ -368,6 +368,9 @@
 						// create a terminal block ...
 						// check to make sure plugin is loaded
 						var plugin_name = chunk_timeline[i].type;
+						if (plugin_name === 'undefined'){
+							throw new Error("Invalid experiment structure definition. One or more trials is missing a 'type' parameter.");
+						}
 						if (typeof jsPsych[plugin_name] === 'undefined') {
 							throw new Error("Failed attempt to create trials using plugin type " + plugin_name + ". Is the plugin loaded?");
 						}
