@@ -504,8 +504,8 @@
 						throw new Error('Invalid specification of parameter ' + param_name + ' in plugin type ' + trials_arr[i].type + '. Length of parameter array does not match the number of trials in the block.');
 					} else {
 						for (var i = 0; i < trials_arr.length; i++) {
-							if(extend && typeof trials[i][param_name] !== 'undefined'){
-								trials[i][param_name] = $.extend({}, trials[i][param_name], param[i])
+							if(extend && typeof trials_arr[i][param_name] !== 'undefined'){
+								trials_arr[i][param_name] = $.extend({}, trials_arr[i][param_name], param[i])
 							} else {
 								trials_arr[i][param_name] = param[i];
 							}
@@ -514,8 +514,8 @@
 				} else {
 					// use the same data object for each trial
 					for (var i = 0; i < trials_arr.length; i++) {
-						if(extend && typeof trials[i][param_name] !== 'undefined'){
-							trials[i][param_name] = $.extend({}, trials[i][param_name], param)
+						if(extend && typeof trials_arr[i][param_name] !== 'undefined'){
+							trials_arr[i][param_name] = $.extend({}, trials_arr[i][param_name], param)
 						} else {
 							trials_arr[i][param_name] = param;
 						}
