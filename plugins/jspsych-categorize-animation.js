@@ -12,7 +12,7 @@
 
     plugin.create = function(params) {
 
-      params = jsPsych.pluginAPI.enforceArray(params, ['key_answer', 'text_answer', 'choices', 'data']);
+      params = jsPsych.pluginAPI.enforceArray(params, ['key_answer', 'text_answer', 'choices']);
 
       var trials = new Array(params.stimuli.length);
       for (var i = 0; i < trials.length; i++) {
