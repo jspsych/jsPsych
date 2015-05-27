@@ -13,15 +13,11 @@ preamble | string | empty string | HTML formatted string to display at the top o
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
-<<<<<<< HEAD
 responses | JSON string | A string in JSON format containing the responses for each question. The encoded object will have a separate variable for the response to each question, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. Each response is a string containing whatever the subject typed into the associated text box.
-=======
-Q0, Q1, ... , Q_n_ | string | Each question in the trial gets its own response in the data object. The first question will be `Q0`, the second `Q1`, and so on. Each response is a string containing whatever the subject typed into the associated text box.
->>>>>>> origin/dev
 rt | numeric | The response time in milliseconds for the subject to make a response.
 
 ## Examples
