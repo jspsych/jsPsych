@@ -30,8 +30,8 @@ In addition to the [default data collected by all plugins](), this plugin collec
 
 Name | Type | Value
 -----|------|------
-Q0, Q1, ... , Q*n* | numeric | The response to each question will be recorded in its own variable, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. The responses are recorded as integers, representing the position of the slider on the scale.
-rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response. 
+responses | JSON string | A string in JSON format containing the responses for each question. The encoded object will have a separate variable for the response to each question, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. The responses are recorded as integers, representing the position of the slider on the scale.
+rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response.
 
 ## Examples
 
