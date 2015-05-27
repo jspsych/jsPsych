@@ -22,10 +22,7 @@
 				trials[i] = {};
 				trials[i].a_path = params.stimuli[i];
 				trials[i].choices = params.choices || [];
-				// option to show image for fixed time interval, ignoring key responses
-				//      true = image will keep displaying after response
-				//      false = trial will immediately advance when response is recorded
-				trials[i].continue_after_response = (typeof params.continue_after_response === 'undefined') ? true : params.continue_after_response;
+				trials[i].response_ends_trial = (typeof params.response_ends_trial === 'undefined') ? true : params.response_ends_trial;
 				// timing parameters
 				trials[i].timing_stim = params.timing_stim || -1; // if -1, then show indefinitely
 				trials[i].timing_response = params.timing_response || -1; // if -1, then wait for response forever
@@ -117,7 +114,7 @@
 					response = info;
 				}
 
-				if (trial.continue_after_response) {
+				if (trial.response_ends_trial) {
 					end_trial();
 				}
 			};

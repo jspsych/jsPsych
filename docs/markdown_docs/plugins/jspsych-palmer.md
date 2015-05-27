@@ -75,7 +75,7 @@ var stim_block = {
 	stimuli: [stimulus],
 	is_html: true,
 	timing_response: 2000,
-	continue_after_response: false
+	response_ends_trial: false
 }
 
 var test_block = {

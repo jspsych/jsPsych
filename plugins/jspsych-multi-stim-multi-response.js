@@ -25,7 +25,7 @@
 				// option to show image for fixed time interval, ignoring key responses
 				//      true = image will keep displaying after response
 				//      false = trial will immediately advance when response is recorded
-				trials[i].continue_after_response = (typeof params.continue_after_response === 'undefined') ? true : params.continue_after_response;
+				trials[i].response_ends_trial = (typeof params.response_ends_trial === 'undefined') ? true : params.response_ends_trial;
 				// timing parameters
 				var default_timing_array = [];
 				for(var j = 0; j < params.stimuli[i].length; j++){
@@ -140,7 +140,7 @@
 					responseKeys[whichResponse] = info.key;
 				}
 
-				if (trial.continue_after_response) {
+				if (trial.response_ends_trial) {
 
 					if(checkAllResponsesAreValid()){
 						end_trial();
