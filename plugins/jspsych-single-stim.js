@@ -15,7 +15,7 @@
 
 		plugin.create = function(params) {
 
-			params = jsPsych.pluginAPI.enforceArray(params, ['stimuli', 'choices', 'data']);
+			params = jsPsych.pluginAPI.enforceArray(params, ['stimuli', 'choices']);
 
 			var trials = new Array(params.stimuli.length);
 			for (var i = 0; i < trials.length; i++) {
@@ -123,7 +123,7 @@
 			};
 
 			// start the response listener
-			if(trial.choices != "none") {
+			if(JSON.stringify(trial.choices) != JSON.stringify(["none"])) {
 				var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices);
 			}
 

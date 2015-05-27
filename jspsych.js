@@ -382,6 +382,16 @@
 
 						var trials = jsPsych[plugin_name].create(chunk_timeline[i]);
 
+						// add chunk level data to all trials
+						if(typeof chunk_definition.data !== 'undefined'){
+							for(t in trials){
+								trials[t].data = chunk_definition.data;
+							}
+						}
+
+						// add block/trial level data to all trials
+						trials = addParamToTrialsArr(trials, chunk_timeline[i].data, 'data', undefined, true);
+
 						// add options that are generic to all plugins
 						trials = addGenericTrialOptions(trials, chunk_timeline[i]);
 
@@ -468,20 +478,20 @@
 		function addGenericTrialOptions(trials_arr, opts) {
 
 			// modify this list to add new generic parameters
-			var genericParameters = ['type', 'data', 'timing_post_trial', 'on_finish'];
+			var genericParameters = ['type', 'timing_post_trial', 'on_finish'];
 
 			// default values for generics above
-			var defaultValues = [, , 1000, ];
+			var defaultValues = [, 1000, ];
 
 			for (var i = 0; i < genericParameters.length; i++) {
-				trials_arr = addParamToTrialsArr(trials_arr, opts[genericParameters[i]], genericParameters[i], defaultValues[i]);
+				trials_arr = addParamToTrialsArr(trials_arr, opts[genericParameters[i]], genericParameters[i], defaultValues[i], false);
 			}
 
 			return trials_arr;
 
 		}
 
-		function addParamToTrialsArr(trials_arr, param, param_name, default_value) {
+		function addParamToTrialsArr(trials_arr, param, param_name, default_value, extend) {
 
 			if (typeof default_value !== 'undefined') {
 				param = (typeof param === 'undefined') ? default_value : param;
@@ -489,18 +499,26 @@
 
 			if (typeof param !== 'undefined') {
 				if (Array.isArray(param)) {
-					// check if data object array is the same length as the number of trials
+					// check if parameter setting is the same length as the number of trials
 					if (param.length != trials_arr.length) {
 						throw new Error('Invalid specification of parameter ' + param_name + ' in plugin type ' + trials_arr[i].type + '. Length of parameter array does not match the number of trials in the block.');
 					} else {
 						for (var i = 0; i < trials_arr.length; i++) {
-							trials_arr[i][param_name] = param[i];
+							if(extend && typeof trials_arr[i][param_name] !== 'undefined'){
+								trials_arr[i][param_name] = $.extend({}, trials_arr[i][param_name], param[i])
+							} else {
+								trials_arr[i][param_name] = param[i];
+							}
 						}
 					}
 				} else {
 					// use the same data object for each trial
 					for (var i = 0; i < trials_arr.length; i++) {
-						trials_arr[i][param_name] = param;
+						if(extend && typeof trials_arr[i][param_name] !== 'undefined'){
+							trials_arr[i][param_name] = $.extend({}, trials_arr[i][param_name], param)
+						} else {
+							trials_arr[i][param_name] = param;
+						}
 					}
 				}
 			}

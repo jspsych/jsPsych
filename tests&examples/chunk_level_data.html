@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-single-stim.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <style>
+      img { width: 300px; }
+    </style>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  var block_1 = {
+    type: 'single-stim',
+    stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
+    choices: [89,78], // Y or N
+    prompt: '<p class="center-content">Have you seen this face before? Y or N.</p>',
+    data: [{ block_data: "trial 1" }, {block_data: "trial_2"}]
+  }
+
+  var chunk = {
+    chunk_type: 'linear',
+    timeline: [block_1],
+    data: { chunk_data: true }
+  }
+
+  function start(){
+    jsPsych.init({
+      display_element: $('#jspsych-target'),
+      experiment_structure: [chunk],
+      on_finish: function(){
+        jsPsych.data.displayData();
+      }
+    });
+  }
+
+  jsPsych.preloadImages(['img/happy_face_1.jpg','img/sad_face_1.jpg'], start);
+
+  </script>
+</html>

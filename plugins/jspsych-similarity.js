@@ -15,7 +15,7 @@
 
     plugin.create = function(params) {
 
-      jsPsych.pluginAPI.enforceArray(params, ['data']);
+      //jsPsych.pluginAPI.enforceArray(params, ['data']);
 
       var trials = new Array(params.stimuli.length);
       for (var i = 0; i < trials.length; i++) {

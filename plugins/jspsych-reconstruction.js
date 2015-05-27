@@ -16,7 +16,7 @@
 
     plugin.create = function(params) {
 
-      params = jsPsych.pluginAPI.enforceArray(params, ['data']);
+      //params = jsPsych.pluginAPI.enforceArray(params, ['data']);
 
       var n_trials = (typeof params.starting_value == 'undefined') ? 1 : params.starting_value.length
 
