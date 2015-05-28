@@ -114,10 +114,10 @@
 
         jsPsych.pluginAPI.cancelKeyboardResponse(response_listener);
 
-        jsPsych.data.write($.extend({}, {
+        jsPsych.data.write({
           "animation_sequence": JSON.stringify(animation_sequence),
           "responses": JSON.stringify(responses)
-        }, trial.data));
+        });
 
         jsPsych.finishTrial();
       }

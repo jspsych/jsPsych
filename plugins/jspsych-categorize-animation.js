@@ -133,7 +133,7 @@
           "key_press": info.key
         };
 
-        jsPsych.data.write($.extend({}, trial_data, trial.data));
+        jsPsych.data.write(trial_data);
 
         jsPsych.pluginAPI.cancelKeyboardResponse(keyboard_listener);
 

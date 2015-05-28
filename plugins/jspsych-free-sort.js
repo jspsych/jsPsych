@@ -118,12 +118,12 @@
                         });
                     });
 
-                    jsPsych.data.write($.extend({}, {
+                    jsPsych.data.write({
                         "init_locations": JSON.stringify(init_locations),
                         "moves": JSON.stringify(moves),
                         "final_locations": JSON.stringify(final_locations),
                         "rt": rt
-                    }, trial.data));
+                    });
 
                     // advance to next part
                     display_element.html("");

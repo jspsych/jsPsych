@@ -234,13 +234,13 @@
 				var n_diff = arrayDifferences(trial.configurations, lineIsVisible);
 				var correct = (n_diff === 0);
 
-				jsPsych.data.write($.extend({}, {
+				jsPsych.data.write({
 					"configuration": JSON.stringify(lineIsVisible),
 					"target_configuration": JSON.stringify(trial.configurations),
 					"rt": response_time,
 					"correct": correct,
 					"num_wrong": n_diff,
-				}, trial.data));
+				});
 
 				if (trial.show_feedback) {
 					// hide the button

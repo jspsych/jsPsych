@@ -159,7 +159,7 @@
 						"stimulus": JSON.stringify([trial.x_path,trial.a_path,trial.b_path]),
 						"key_press": info.key
 					};
-					jsPsych.data.write($.extend({}, trial_data, trial.data));
+					jsPsych.data.write(trial_data);
 
 					display_element.html(''); // remove all
 

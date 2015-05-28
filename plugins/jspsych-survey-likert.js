@@ -152,10 +152,10 @@
         });
 
         // save data
-        jsPsych.data.write($.extend({}, {
+        jsPsych.data.write({
           "rt": response_time,
           "responses": JSON.stringify(question_data)
-        }, trial.data));
+        });
 
         display_element.html('');
 

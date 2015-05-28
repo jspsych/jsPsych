@@ -190,7 +190,7 @@
 
         // this line merges together the trial_data object and the generic
         // data object (trial.data), and then stores them.
-        jsPsych.data.write($.extend({}, trial_data, trial.data));
+        jsPsych.data.write(trial_data);
 
         // go to next trial
         jsPsych.finishTrial();

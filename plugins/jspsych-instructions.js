@@ -125,10 +125,10 @@
 
               display_element.html('');
 
-              jsPsych.data.write($.extend({},{
+              jsPsych.data.write({
                 "view_history": JSON.stringify(view_history),
                 "rt": (new Date()).getTime() - start_time
-              }, trial.data));
+              });
 
               jsPsych.finishTrial();
             }

@@ -100,7 +100,7 @@
 					"key_press": JSON.stringify(responseKeys)
 				};
 
-				jsPsych.data.write($.extend({}, trial_data, trial.data));
+				jsPsych.data.write(trial_data);
 
 				// clear the display
 				display_element.html('');

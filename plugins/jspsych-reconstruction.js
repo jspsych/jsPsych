@@ -94,11 +94,11 @@
         var response_time = endTime - startTime;
 
         // save data
-        jsPsych.data.write($.extend({}, {
+        jsPsych.data.write({
           "rt": response_time,
           "final_value": param,
           "start_value": trial.starting_value
-        }, trial.data));
+        });
 
         display_element.html('');
 

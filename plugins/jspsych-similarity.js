@@ -200,11 +200,11 @@
           }
 
           var score = $("#slider").slider("value");
-          jsPsych.data.write($.extend({}, {
+          jsPsych.data.write({
             "sim_score": score,
             "rt": response_time,
             "stimulus": JSON.stringify([trial.a_path, trial.b_path])
-          }, trial.data));
+          });
           // goto next trial in block
           display_element.html('');
           jsPsych.finishTrial();

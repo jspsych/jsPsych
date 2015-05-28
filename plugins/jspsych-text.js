@@ -66,10 +66,10 @@
             }
 
             function save_data(key, rt) {
-                jsPsych.data.write($.extend({}, {
+                jsPsych.data.write({
                     "rt": rt,
                     "key_press": key
-                }, trial.data));
+                });
             }
         };
 

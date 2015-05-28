@@ -48,9 +48,9 @@
 
                 display_element.html('');
 
-                jsPsych.data.write($.extend({}, {
+                jsPsych.data.write({
                     "stimulus": JSON.stringify(trial.stimuli)
-                }, trial.data));
+                });
 
                 jsPsych.finishTrial();
             }

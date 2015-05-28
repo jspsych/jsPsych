@@ -590,7 +590,7 @@
 				'internal_chunk_id': jsPsych.currentChunkID()
 			};
 
-			var ext_data_object = $.extend({}, data_object, default_data, dataProperties);
+			var ext_data_object = $.extend({}, data_object, trial.data, default_data, dataProperties);
 
 			allData.push(ext_data_object);
 
