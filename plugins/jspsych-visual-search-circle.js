@@ -44,7 +44,7 @@
 
     plugin.trial = function(display_element, trial) {
 
-      trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+      trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
       // screen information
       var screenw = display_element.width();

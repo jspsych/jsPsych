@@ -1254,7 +1254,7 @@
 			']': 221
 		};
 
-		module.normalizeTrialVariables = function(trial, protect) {
+		module.evaluateFunctionParameters = function(trial, protect) {
 
 			// keys that are always protected
 			var always_protected = ['on_finish'];

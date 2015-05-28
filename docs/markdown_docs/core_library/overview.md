@@ -45,6 +45,6 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.pluginAPI.cancelKeyboardResponse](jspsych-pluginAPI.md#jspsychpluginapicancelkeyboardresponse)
 * [jsPsych.pluginAPI.enforceArray](jspsych-pluginAPI.md#jspsychpluginapienforcearray)
 * [jsPsych.pluginAPI.getKeyboardResponse](jspsych-pluginAPI.md#jspsychpluginapigetkeyboardresponse)
-* [jsPsych.pluginAPI.normalizeTrialVariables](jspsych-pluginAPI.md#jspsychpluginapinormalizetrialvariables)
+* [jsPsych.pluginAPI.evaluateFunctionParameters](jspsych-pluginAPI.md#jspsychpluginapievaluateFunctionParameters)
 
 

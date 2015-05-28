@@ -45,7 +45,7 @@
       // if any trial variables are functions
       // this evaluates the function and replaces
       // it with the output of the function
-      trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+      trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
       // this array holds handlers from setTimeout calls
       // that need to be cleared if the trial ends early

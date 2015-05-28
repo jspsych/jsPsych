@@ -38,7 +38,7 @@
       // if any trial variables are functions
       // this evaluates the function and replaces
       // it with the output of the function
-      trial = jsPsych.pluginAPI.normalizeTrialVariables(trial, ['stim_function']);
+      trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial, ['stim_function']);
 
       // current param level
       var param = trial.starting_value;

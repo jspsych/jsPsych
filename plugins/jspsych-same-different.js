@@ -39,7 +39,7 @@
 			// if any trial variables are functions
 			// this evaluates the function and replaces
 			// it with the output of the function
-			trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+			trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
 			// unpack the stimuli array (for backwards code compatibility. this could be cleaned up in the future)
 			trial.a_path = trial.stimuli[0];

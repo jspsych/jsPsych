@@ -37,7 +37,7 @@
       // if any trial variables are functions
       // this evaluates the function and replaces
       // it with the output of the function
-      trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+      trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
       var animate_frame = -1;
       var reps = 0;
