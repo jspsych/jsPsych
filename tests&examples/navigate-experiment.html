@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-single-stim.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <style>
+      img { width: 300px; }
+    </style>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  var images = ["img/1.gif","img/2.gif","img/3.gif"];
+  var images2 = ["img/4.gif","img/5.gif","img/6.gif"];
+
+  var block_1 = {
+    type: 'single-stim',
+    stimuli: images,
+    choices: [89,78], // Y or N
+    prompt: '<p class="center-content">Press Y to Continue. Press N to exit the chunk.</p>',
+    on_finish: function(data){
+      if(data.key_press == 78){
+        jsPsych.endCurrentChunk();
+      }
+    }
+  }
+
+  var first_chunk = {
+    chunk_type: 'while',
+    timeline: [block_1],
+    continue_function: function() { return true; }
+  }
+
+  var block_2 = {
+    type: 'single-stim',
+    stimuli: images2,
+    choices: [89], // Y or N
+    prompt: '<p class="center-content">Press Y to Continue</p>'
+  }
+
+
+  function start(){
+    jsPsych.init({
+      display_element: $('#jspsych-target'),
+      experiment_structure: [first_chunk, block_2],
+      on_finish: function(){
+        jsPsych.data.displayData();
+      }
+    });
+  }
+
+  jsPsych.preloadImages([images, images2], start);
+
+  </script>
+</html>

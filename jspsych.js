@@ -172,6 +172,15 @@
 			}
 		};
 
+		core.endExperiment = function(){
+			root_chunk.end();
+			finishExperiment();
+		}
+
+		core.endCurrentChunk = function(){
+			root_chunk.endCurrentChunk();
+		}
+
 		core.currentTrial = function(){
 			return current_trial;
 		};
@@ -229,6 +238,8 @@
 			chunk.currentTrialInTimeline = 0;
 			// this is the current trial since the chunk started (incl. resets)
 			chunk.currentTrialInChunk = 0;
+			// flag that indicates the chunk is done; overrides loops and ifs
+			chunk.done = false;
 
 			chunk.iteration = 0;
 
@@ -248,6 +259,14 @@
 					return this.timeline[this.currentTimelineLocation].activeChunkID();
 				}
 			};
+
+			chunk.endCurrentChunk = function(){
+				if(this.timeline[this.currentTimelineLocation].type === 'block'){
+					this.end();
+				} else {
+					this.timeline[this.currentTimelineLocation].endCurrentChunk();
+				}
+			}
 
 			chunk.chunkID = function() {
 
@@ -270,6 +289,11 @@
 
 			};
 
+			chunk.end = function(){
+				// end the chunk no matter what
+				chunk.done = true;
+			}
+
 			chunk.advance = function(){
 				// increment the current trial in the chunk
 
@@ -288,6 +312,9 @@
 			chunk.isComplete = function() {
 				// return true if the chunk is done running trials
 				// return false otherwise
+
+				// if done flag is set, then we're done no matter what
+				if(this.done) { return true; }
 
 				// linear chunks just go through the timeline in order and are
 				// done when each trial has been completed once
@@ -354,6 +381,7 @@
 			chunk.reset = function() {
 				this.currentTimelineLocation = 0;
 				this.currentTrialInTimeline = 0;
+				this.done = false;
 				this.iteration++;
 				for(var i = 0; i < this.timeline.length; i++){
 					this.timeline[i].reset();
