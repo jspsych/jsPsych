@@ -16,7 +16,7 @@
 
     plugin.create = function(params) {
 
-      params = jsPsych.pluginAPI.enforceArray(params, ['data']);
+      //params = jsPsych.pluginAPI.enforceArray(params, ['data']);
 
       var n_trials = (typeof params.starting_value == 'undefined') ? 1 : params.starting_value.length
 
@@ -38,7 +38,7 @@
       // if any trial variables are functions
       // this evaluates the function and replaces
       // it with the output of the function
-      trial = jsPsych.pluginAPI.normalizeTrialVariables(trial, ['stim_function']);
+      trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial, ['stim_function']);
 
       // current param level
       var param = trial.starting_value;
@@ -94,22 +94,16 @@
         var response_time = endTime - startTime;
 
         // save data
-        jsPsych.data.write($.extend({}, {
+        jsPsych.data.write({
           "rt": response_time,
           "final_value": param,
           "start_value": trial.starting_value
-        }, trial.data));
+        });
 
         display_element.html('');
 
         // next trial
-        if (trial.timing_post_trial > 0) {
-          setTimeout(function() {
-            jsPsych.finishTrial();
-          }, trial.timing_post_trial);
-        } else {
-          jsPsych.finishTrial();
-        }
+        jsPsych.finishTrial();
       }
 
       var startTime = (new Date()).getTime();

@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-instructions.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  var block = {
+    type: 'instructions',
+    pages: [
+      'Welcome to the experiment. Click next to begin.',
+      'This is the second page of instructions.',
+      'This is the final page.'
+    ],
+    show_clickable_nav: true
+  }
+
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    experiment_structure: [block],
+    on_finish: function(){ jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>

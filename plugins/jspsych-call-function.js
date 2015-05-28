@@ -23,9 +23,9 @@
     plugin.trial = function(display_element, trial) {
       var return_val = trial.func();
 
-      jsPsych.data.write($.extend({}, {
+      jsPsych.data.write({
         value: return_val
-      }, trial.data));
+      });
 
 
       jsPsych.finishTrial();

@@ -138,30 +138,48 @@
 
 			// handle callback at plugin level
 			if (typeof current_trial.on_finish === 'function') {
-				current_trial.on_finish(); // TODO: pass in data
+				var trial_data = jsPsych.data.getDataByTrialIndex(global_trial_index);
+				current_trial.on_finish(trial_data);
 			}
 
 			// handle callback at whole-experiment level
 			opts.on_trial_finish();
 
-			global_trial_index++;
-
-			// advance chunk
-			root_chunk.advance();
-
-			// update progress bar if shown
-			if (opts.show_progress_bar === true) {
-				updateProgressBar();
+			if(current_trial.timing_post_trial > 0){
+				setTimeout(next_trial, current_trial.timing_post_trial);
+			} else {
+				next_trial();
 			}
 
-			// check if experiment is over
-			if(root_chunk.isComplete()){
-				finishExperiment();
-				return;
-			}
+			function next_trial(){
+				global_trial_index++;
 
-			doTrial(root_chunk.next());
+				// advance chunk
+				root_chunk.advance();
+
+				// update progress bar if shown
+				if (opts.show_progress_bar === true) {
+					updateProgressBar();
+				}
+
+				// check if experiment is over
+				if(root_chunk.isComplete()){
+					finishExperiment();
+					return;
+				}
+
+				doTrial(root_chunk.next());
+			}
 		};
+
+		core.endExperiment = function(){
+			root_chunk.end();
+			finishExperiment();
+		}
+
+		core.endCurrentChunk = function(){
+			root_chunk.endCurrentChunk();
+		}
 
 		core.currentTrial = function(){
 			return current_trial;
@@ -194,6 +212,10 @@
 
 		function parseExpStructure(experiment_structure) {
 
+			if(!Array.isArray(experiment_structure)){
+				throw new Error("Invalid experiment structure. Experiment structure must be an array");
+			}
+
 			return createExperimentChunk({
 				chunk_type: 'root',
 				timeline: experiment_structure
@@ -216,6 +238,8 @@
 			chunk.currentTrialInTimeline = 0;
 			// this is the current trial since the chunk started (incl. resets)
 			chunk.currentTrialInChunk = 0;
+			// flag that indicates the chunk is done; overrides loops and ifs
+			chunk.done = false;
 
 			chunk.iteration = 0;
 
@@ -235,6 +259,14 @@
 					return this.timeline[this.currentTimelineLocation].activeChunkID();
 				}
 			};
+
+			chunk.endCurrentChunk = function(){
+				if(this.timeline[this.currentTimelineLocation].type === 'block'){
+					this.end();
+				} else {
+					this.timeline[this.currentTimelineLocation].endCurrentChunk();
+				}
+			}
 
 			chunk.chunkID = function() {
 
@@ -257,6 +289,11 @@
 
 			};
 
+			chunk.end = function(){
+				// end the chunk no matter what
+				chunk.done = true;
+			}
+
 			chunk.advance = function(){
 				// increment the current trial in the chunk
 
@@ -275,6 +312,9 @@
 			chunk.isComplete = function() {
 				// return true if the chunk is done running trials
 				// return false otherwise
+
+				// if done flag is set, then we're done no matter what
+				if(this.done) { return true; }
 
 				// linear chunks just go through the timeline in order and are
 				// done when each trial has been completed once
@@ -341,6 +381,7 @@
 			chunk.reset = function() {
 				this.currentTimelineLocation = 0;
 				this.currentTrialInTimeline = 0;
+				this.done = false;
 				this.iteration++;
 				for(var i = 0; i < this.timeline.length; i++){
 					this.timeline[i].reset();
@@ -368,11 +409,24 @@
 						// create a terminal block ...
 						// check to make sure plugin is loaded
 						var plugin_name = chunk_timeline[i].type;
+						if (typeof chunk_timeline[i].type === 'undefined'){
+							throw new Error("Invalid experiment structure definition. One or more trials is missing a 'type' parameter.");
+						}
 						if (typeof jsPsych[plugin_name] === 'undefined') {
 							throw new Error("Failed attempt to create trials using plugin type " + plugin_name + ". Is the plugin loaded?");
 						}
 
 						var trials = jsPsych[plugin_name].create(chunk_timeline[i]);
+
+						// add chunk level data to all trials
+						if(typeof chunk_definition.data !== 'undefined'){
+							for(t in trials){
+								trials[t].data = chunk_definition.data;
+							}
+						}
+
+						// add block/trial level data to all trials
+						trials = addParamToTrialsArr(trials, chunk_timeline[i].data, 'data', undefined, true);
 
 						// add options that are generic to all plugins
 						trials = addGenericTrialOptions(trials, chunk_timeline[i]);
@@ -460,20 +514,20 @@
 		function addGenericTrialOptions(trials_arr, opts) {
 
 			// modify this list to add new generic parameters
-			var genericParameters = ['type', 'data', 'timing_post_trial', 'on_finish'];
+			var genericParameters = ['type', 'timing_post_trial', 'on_finish'];
 
 			// default values for generics above
-			var defaultValues = [, , 1000, ];
+			var defaultValues = [, 1000, ];
 
 			for (var i = 0; i < genericParameters.length; i++) {
-				trials_arr = addParamToTrialsArr(trials_arr, opts[genericParameters[i]], genericParameters[i], defaultValues[i]);
+				trials_arr = addParamToTrialsArr(trials_arr, opts[genericParameters[i]], genericParameters[i], defaultValues[i], false);
 			}
 
 			return trials_arr;
 
 		}
 
-		function addParamToTrialsArr(trials_arr, param, param_name, default_value) {
+		function addParamToTrialsArr(trials_arr, param, param_name, default_value, extend) {
 
 			if (typeof default_value !== 'undefined') {
 				param = (typeof param === 'undefined') ? default_value : param;
@@ -481,18 +535,26 @@
 
 			if (typeof param !== 'undefined') {
 				if (Array.isArray(param)) {
-					// check if data object array is the same length as the number of trials
+					// check if parameter setting is the same length as the number of trials
 					if (param.length != trials_arr.length) {
 						throw new Error('Invalid specification of parameter ' + param_name + ' in plugin type ' + trials_arr[i].type + '. Length of parameter array does not match the number of trials in the block.');
 					} else {
 						for (var i = 0; i < trials_arr.length; i++) {
-							trials_arr[i][param_name] = param[i];
+							if(extend && typeof trials_arr[i][param_name] !== 'undefined'){
+								trials_arr[i][param_name] = $.extend({}, trials_arr[i][param_name], param[i])
+							} else {
+								trials_arr[i][param_name] = param[i];
+							}
 						}
 					}
 				} else {
 					// use the same data object for each trial
 					for (var i = 0; i < trials_arr.length; i++) {
-						trials_arr[i][param_name] = param;
+						if(extend && typeof trials_arr[i][param_name] !== 'undefined'){
+							trials_arr[i][param_name] = $.extend({}, trials_arr[i][param_name], param)
+						} else {
+							trials_arr[i][param_name] = param;
+						}
 					}
 				}
 			}
@@ -536,6 +598,9 @@
 		// data storage object
 		var allData = [];
 
+		// data properties for all trials
+		var dataProperties = {};
+
 		module.getData = function() {
 			return $.extend(true, [], allData); // deep clone
 		};
@@ -553,30 +618,41 @@
 				'internal_chunk_id': jsPsych.currentChunkID()
 			};
 
-			var ext_data_object = $.extend({}, data_object, default_data);
+			var ext_data_object = $.extend({}, data_object, trial.data, default_data, dataProperties);
 
 			allData.push(ext_data_object);
 
 			var initSettings = jsPsych.initSettings();
-			initSettings.on_data_update(ext_data_object); //TODO: FIX callback?
+			initSettings.on_data_update(ext_data_object);
 		};
 
-		module.dataAsCSV = function(append_data) {
-			var dataObj = module.getData();
-			for(var i=0; i < dataObj.length; i++){
-				dataObj[i] = $.extend({}, dataObj[i], append_data);
+		module.addProperties = function(properties){
+
+			// first, add the properties to all data that's already stored
+			for(var i=0; i<allData.length; i++){
+				for(var key in properties){
+					allData[i][key] = properties[key];
+				}
 			}
+
+			// now add to list so that it gets appended to all future data
+			dataProperties = $.extend({}, dataProperties, properties);
+
+		}
+
+		module.dataAsCSV = function() {
+			var dataObj = module.getData();
 			return JSON2CSV(dataObj);
 		};
 
-		module.localSave = function(filename, format, append_data) {
+		module.localSave = function(filename, format) {
 
 			var data_string;
 
 			if (format == 'JSON' || format == 'json') {
-				data_string = JSON.stringify(flattenData(module.getData(), append_data));
+				data_string = JSON.stringify(module.getData());
 			} else if (format == 'CSV' || format == 'csv') {
-				data_string = module.dataAsCSV(append_data);
+				data_string = module.dataAsCSV();
 			} else {
 				throw new Error('invalid format specified for jsPsych.data.localSave');
 			}
@@ -620,6 +696,15 @@
 			}
 			return allData[allData.length-1];
 		};
+
+		module.getDataByTrialIndex = function(trial_index) {
+			for(var i = 0; i<allData.length; i++){
+				if(allData[i].trial_index_global == trial_index){
+					return allData[i];
+				}
+			}
+			return undefined;
+		}
 
 		module.getLastChunkData = function() {
 			var lasttrial = module.getLastTrialData();
@@ -684,23 +769,6 @@
 		//
 		// A few helper functions to handle data format conversion
 		//
-
-		function flattenData(data_object, append_data) {
-
-			append_data = (typeof append_data === undefined) ? {} : append_data;
-
-			var trials = [];
-
-			// loop through data_object
-			for (var i = 0; i < data_object.length; i++) {
-				for (var j = 0; j < data_object[i].length; j++) {
-					var data = $.extend({}, data_object[i][j], append_data);
-					trials.push(data);
-				}
-			}
-
-			return trials;
-		}
 
 		// this function based on code suggested by StackOverflow users:
 		// http://stackoverflow.com/users/64741/zachary
@@ -1214,9 +1282,14 @@
 			']': 221
 		};
 
-		module.normalizeTrialVariables = function(trial, protect) {
+		module.evaluateFunctionParameters = function(trial, protect) {
+
+			// keys that are always protected
+			var always_protected = ['on_finish'];
 
 			protect = (typeof protect === 'undefined') ? [] : protect;
+
+			protect = protect.concat(always_protected);
 
 			var keys = getKeys(trial);
 
@@ -1275,7 +1348,10 @@
 
 		module.loadAudioFile = function(path) {
 
-			var bufferID = audio_buffers.length;
+			var bufferID = path;
+			if(typeof audio_buffers.bufferID !== 'undefined') {
+				return bufferID;
+			}
 			audio_buffers[bufferID] = 'tmp';
 
 			var request = new XMLHttpRequest();

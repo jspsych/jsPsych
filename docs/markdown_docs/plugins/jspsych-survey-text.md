@@ -9,15 +9,16 @@ This table lists the parameters associated with this plugin. Parameters with a d
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 questions | array | *undefined* | Each array is an array of strings. The strings are the prompts for the subject to respond to. Each string gets its own response field. Each set of strings (inner arrays) will be presented on the same page (trial). The length of the outer array sets the number of trials in the block.
+preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions.
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
-Q0, Q1, ... , Q_n_ | string | Each question in the trial gets its own response in the data object. The first question will be `Q0`, the second `Q1`, and so on. Each response is a string containing whatever the subject typed into the associated text box.
-rt | numeric | The response time in milliseconds for the subject to make a response. 
+responses | JSON string | A string in JSON format containing the responses for each question. The encoded object will have a separate variable for the response to each question, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. Each response is a string containing whatever the subject typed into the associated text box.
+rt | numeric | The response time in milliseconds for the subject to make a response.
 
 ## Examples
 

@@ -31,6 +31,32 @@ var single_stim_block = {
 }
 ```
 
+## Parameters available plugins
+
+Each plugin specifies its own set of parameters. Check the documentation for a plugin to see what parameters are available and what they do.
+
+In addition, there is a set of parameters that can be specified for any plugin.
+
+Parameter | Type | Default Value | Description
+----------|------|---------------|------------
+timing_post_trial | numeric | 1000 | Sets the time, in milliseconds, between the current trial and the next trial.
+on_finish | function | *undefined* | A callback function to execute when the trial finishes. See [this page](../features/callbacks.md) for more details.
+data | object | *undefined* | An object containing additional data to store for the trial. See [this page](../features/data.md) for more details.
+
+## Data collected by plugins
+
+Each plugin defines what data is collected on the trial. The documentation for each plugin specifies what data is collected by that plugin.
+
+In addition to the data collected by a plugin, there is a default set of data that is collected on every trial. The collected data are:
+
+Name | Type | Value
+-----|------|------
+trial_type | string | The name of the plugin used to run the trial.
+trial_index | numeric | The index of the current trial in the **block**.
+trial_index_global | numeric | The index of the current trial across the whole experiment.
+time_elapsed | numeric | The number of milliseconds since the start of the experiment when the trial ended.
+internal_chunk_id | string | A string identifier for the current chunk.
+
 ## List of available plugins
 
 This table is a description of all plugins that are currently bundled with jsPsych. Click on the name of a plugin to view its documentation page.
@@ -42,9 +68,11 @@ This table is a description of all plugins that are currently bundled with jsPsy
  [jspsych&#8209;categorize](plugins/jspsych-categorize) | The subject responds to a stimulus using the keyboard and can be given feedback about the correctness of their response.
  [jspsych&#8209;categorize&#8209;animation](plugins/jspsych-categorize-animation) | A mash-up of the animation and categorize plugin. The subject responds to an animation and can be given feedback about their response.
  [jspsych&#8209;free&#8209;sort](plugins/jspsych-free-sort) | Displays a set of images on the screen in random locations. Subjects can click and drag the images to move them around the screen. Records all the moves made by the subject, so the sequence of moves can be recovered from the data.
+ [jspsych&#8209;instructions](plugins/jspsych-instructions) | For displaying instructions to the subject.
  [jspsych&#8209;html](plugins/jspsych-html) | Displays an external HTML page (such as a consent form) and lets the subject respond by clicking a button or pressing a key. Plugin can validate their response, which is useful for making sure that a subject has granted consent before starting the experiment.
  [jspsych&#8209;multi&#8209;stim&#8209;multi&#8209;response](plugins/jspsych-multi-stim-multi-response) | A more generalized version of the single-stim plugin. Can display multiple stimuli in a single trial, and collect multiple responses in a single trial.
- [jspsych&#8209;palmer](plugins/jspsych-palmer) | Shows grid-like stimuli inspired by Stephen Palmer's work. The stimuli are editable: subjects can add and subtract parts interactively. Also contains a method for generating the HTML code to render the stimuli, allowing them to be used in other plugins.  
+ [jspsych&#8209;palmer](plugins/jspsych-palmer) | Shows grid-like stimuli inspired by Stephen Palmer's work. The stimuli are editable: subjects can add and subtract parts interactively. Also contains a method for generating the HTML code to render the stimuli, allowing them to be used in other plugins.
+ [jspsych&#8209;reconstruction](plugins/jspsych-reconstruction) | The subject interacts with a stimulus by modifying a parameter of the stimulus and observing the change in the stimulus in real-time.  
  [jspsych&#8209;same&#8209;different](plugins/jspsych-same-different) | A same-different judgment task. A stimulus is shown, followed by a brief gap, and then another stimulus is shown. The subject indicates whether the stimuli are the same or different.
  [jspsych&#8209;similarity](plugins/jspsych-similarity) | Two stimuli are shown sequentially, and the subject indicates how similar they are by dragging a slider object.
  [jspsych&#8209;single&#8209;stim](plugins/jspsych-single-stim) | A basic plugin for displaying a stimulus and getting a keyboard response.

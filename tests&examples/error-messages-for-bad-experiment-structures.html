@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <style>
+      img { width: 300px; }
+    </style>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  // no type parameter below.
+  var block_1 = {
+    stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
+    choices: [89,78], // Y or N
+    prompt: '<p class="center-content">Have you seen this face before? Y or N.</p>'
+  }
+
+  // should get error message in console about no type parameter.
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    experiment_structure: [block_1]
+  });
+
+  </script>
+</html>

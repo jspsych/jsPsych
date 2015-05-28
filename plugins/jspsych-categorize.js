@@ -12,7 +12,7 @@
 
 		plugin.create = function(params) {
 
-			params = jsPsych.pluginAPI.enforceArray(params, ['choices', 'stimuli', 'key_answer', 'text_answer', 'data']);
+			params = jsPsych.pluginAPI.enforceArray(params, ['choices', 'stimuli', 'key_answer', 'text_answer']);
 
 			var trials = [];
 			for (var i = 0; i < params.stimuli.length; i++) {
@@ -40,7 +40,7 @@
 			// if any trial variables are functions
 			// this evaluates the function and replaces
 			// it with the output of the function
-			trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+			trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
 			// this array holds handlers from setTimeout calls
 			// that need to be cleared if the trial ends early
@@ -94,7 +94,7 @@
 					"key_press": info.key
 				};
 
-				jsPsych.data.write($.extend({}, trial_data, trial.data));
+				jsPsych.data.write(trial_data);
 
 				display_element.html('');
 
@@ -154,13 +154,7 @@
 
 			function endTrial() {
 				display_element.html("");
-				if (trial.timing_post_trial > 0) {
-					setTimeout(function() {
-						jsPsych.finishTrial();
-					}, trial.timing_post_trial);
-				} else {
-					jsPsych.finishTrial();
-				}
+				jsPsych.finishTrial();
 			}
 
 		};

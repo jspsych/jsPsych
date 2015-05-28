@@ -8,6 +8,8 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 
 * [jsPsych.currentChunkID](jspsych-core.md#jspsychcurrentchunkID)
 * [jsPsych.currentTrial](jspsych-core.md#jspsychcurrenttrial)
+* [jsPsych.endCurrentChunk](jspsych-core.md#jspsychendcurrentchunk)
+* [jsPsych.endExperiment](jspsych-core.md#jspsychendexperiment)
 * [jsPsych.finishTrial](jspsych-core.md#jspsychfinishtrial)
 * [jsPsych.getDisplayElement](jspsych-core.md#jspsychgetdisplayelement)
 * [jsPsych.init](jspsych-core.md#jspsychinit)
@@ -19,6 +21,7 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 
 ### [Data module](jspsych-data.md)
 
+* [jsPsych.data.addProperties](jspsych-data.md#jspsychdataaddproperties)
 * [jsPsych.data.dataAsCSV](jspsych-data.md#jspsychdatadataascsv)
 * [jsPsych.data.displayData](jspsych-data.md#jspsychdatadisplaydata)
 * [jsPsych.data.getData](jspsych-data.md#jspsychdatagetdata)
@@ -38,6 +41,8 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 
 * [jsPsych.randomization.factorial](jspsych-randomization.md#jspsychrandomizationfactorial)
 * [jsPsych.randomization.repeat](jspsych-randomization.md#jspsychrandomizationrepeat)
+* [jsPsych.randomization.sample](jspsych-randomization.md#jspsychrandomizationsample)
+* [jsPsych.randomization.shuffle](jspsych-randomization.md#jspsychrandomizationshuffle)
 
 ### [PluginAPI module](jspsych-pluginAPI.md)
 
@@ -45,6 +50,4 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.pluginAPI.cancelKeyboardResponse](jspsych-pluginAPI.md#jspsychpluginapicancelkeyboardresponse)
 * [jsPsych.pluginAPI.enforceArray](jspsych-pluginAPI.md#jspsychpluginapienforcearray)
 * [jsPsych.pluginAPI.getKeyboardResponse](jspsych-pluginAPI.md#jspsychpluginapigetkeyboardresponse)
-* [jsPsych.pluginAPI.normalizeTrialVariables](jspsych-pluginAPI.md#jspsychpluginapinormalizetrialvariables)
-
-
+* [jsPsych.pluginAPI.evaluateFunctionParameters](jspsych-pluginAPI.md#jspsychpluginapievaluatefunctionparameters)

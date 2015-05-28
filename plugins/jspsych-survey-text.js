@@ -15,7 +15,7 @@
 
     plugin.create = function(params) {
 
-      params = jsPsych.pluginAPI.enforceArray(params, ['data']);
+      //params = jsPsych.pluginAPI.enforceArray(params, ['data']);
 
       var trials = [];
       for (var i = 0; i < params.questions.length; i++) {
@@ -32,7 +32,7 @@
       // if any trial variables are functions
       // this evaluates the function and replaces
       // it with the output of the function
-      trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+      trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
       // show preamble text
       display_element.append($('<div>', {
@@ -79,21 +79,15 @@
         });
 
         // save data
-        jsPsych.data.write($.extend({}, {
+        jsPsych.data.write({
           "rt": response_time,
           "responses": JSON.stringify(question_data)
-        }, trial.data));
+        });
 
         display_element.html('');
 
         // next trial
-        if (trial.timing_post_trial > 0) {
-          setTimeout(function() {
-            jsPsych.finishTrial();
-          }, trial.timing_post_trial);
-        } else {
-          jsPsych.finishTrial();
-        }
+        jsPsych.finishTrial();
       });
 
       var startTime = (new Date()).getTime();

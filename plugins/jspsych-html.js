@@ -34,7 +34,7 @@ documentation: docs.jspsych.org
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial, ["check_fn"]);
+            trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial, ["check_fn"]);
 
             var url = trial.url;
             if (trial.force_refresh) {
@@ -50,19 +50,8 @@ documentation: docs.jspsych.org
                         rt: (new Date()).getTime() - t0,
                         url: trial.url
                     });
-                    if (trial.timing_post_trial > 0) {
-                        // hide display_element, since it could have a border and we want a blank screen during timing
-                        display_element.hide();
-                        setTimeout(function() {
-                            display_element.empty();
-                            display_element.show();
-                            jsPsych.finishTrial();
-                        }, trial.timing_post_trial);
-                    }
-                    else {
-                        display_element.empty();
-                       	jsPsych.finishTrial();
-                    }
+                    display_element.empty();
+                    jsPsych.finishTrial();
                 };
                 if (trial.cont_btn) $('#' + trial.cont_btn).click(finish);
                 if (trial.cont_key) {

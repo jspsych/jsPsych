@@ -44,7 +44,7 @@
 
     plugin.trial = function(display_element, trial) {
 
-      trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+      trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
       // screen information
       var screenw = display_element.width();
@@ -190,16 +190,10 @@
 
         // this line merges together the trial_data object and the generic
         // data object (trial.data), and then stores them.
-        jsPsych.data.write($.extend({}, trial_data, trial.data));
+        jsPsych.data.write(trial_data);
 
         // go to next trial
-        if (trial.timing_post_trial > 0) {
-          setTimeout(function() {
-            jsPsych.finishTrial();
-          }, trial.timing_post_trial);
-        } else {
-          jsPsych.finishTrial();
-        }
+        jsPsych.finishTrial();
       }
     };
 

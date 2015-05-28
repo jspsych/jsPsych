@@ -15,17 +15,14 @@
 
 		plugin.create = function(params) {
 
-			params = jsPsych.pluginAPI.enforceArray(params, ['stimuli', 'choices', 'data']);
+			params = jsPsych.pluginAPI.enforceArray(params, ['stimuli', 'choices']);
 
 			var trials = new Array(params.stimuli.length);
 			for (var i = 0; i < trials.length; i++) {
 				trials[i] = {};
 				trials[i].a_path = params.stimuli[i];
 				trials[i].choices = params.choices || [];
-				// option to show image for fixed time interval, ignoring key responses
-				//      true = image will keep displaying after response
-				//      false = trial will immediately advance when response is recorded
-				trials[i].continue_after_response = (typeof params.continue_after_response === 'undefined') ? true : params.continue_after_response;
+				trials[i].response_ends_trial = (typeof params.response_ends_trial === 'undefined') ? true : params.response_ends_trial;
 				// timing parameters
 				trials[i].timing_stim = params.timing_stim || -1; // if -1, then show indefinitely
 				trials[i].timing_response = params.timing_response || -1; // if -1, then wait for response forever
@@ -43,7 +40,7 @@
 			// if any trial variables are functions
 			// this evaluates the function and replaces
 			// it with the output of the function
-			trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+			trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
 			// this array holds handlers from setTimeout calls
 			// that need to be cleared if the trial ends early
@@ -90,19 +87,13 @@
 					"key_press": response.key
 				};
 
-				jsPsych.data.write($.extend({}, trial_data, trial.data));
+				jsPsych.data.write(trial_data);
 
 				// clear the display
 				display_element.html('');
 
 				// move on to the next trial
-				if (trial.timing_post_trial > 0) {
-					setTimeout(function() {
-						jsPsych.finishTrial();
-					}, trial.timing_post_trial);
-				} else {
-					jsPsych.finishTrial();
-				}
+				jsPsych.finishTrial();
 			};
 
 			// function to handle responses by the subject
@@ -117,13 +108,13 @@
 					response = info;
 				}
 
-				if (trial.continue_after_response) {
+				if (trial.response_ends_trial) {
 					end_trial();
 				}
 			};
 
 			// start the response listener
-			if(trial.choices != "none") {
+			if(JSON.stringify(trial.choices) != JSON.stringify(["none"])) {
 				var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices);
 			}
 

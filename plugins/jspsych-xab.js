@@ -51,7 +51,7 @@
 			// if any trial variables are functions
 			// this evaluates the function and replaces
 			// it with the output of the function
-			trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+			trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
 			// this array holds handlers from setTimeout calls
 			// that need to be cleared if the trial ends early
@@ -159,20 +159,14 @@
 						"stimulus": JSON.stringify([trial.x_path,trial.a_path,trial.b_path]),
 						"key_press": info.key
 					};
-					jsPsych.data.write($.extend({}, trial_data, trial.data));
+					jsPsych.data.write(trial_data);
 
 					display_element.html(''); // remove all
 
 					xab_trial_complete = true;
 
 					// move on to the next trial after timing_post_trial milliseconds
-					if (trial.timing_post_trial > 0) {
-						setTimeout(function() {
-							jsPsych.finishTrial();
-						}, trial.timing_post_trial);
-					} else {
-						jsPsych.finishTrial();
-					}
+					jsPsych.finishTrial();
 
 				};
 

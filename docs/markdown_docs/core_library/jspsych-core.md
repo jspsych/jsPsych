@@ -74,6 +74,88 @@ var trial = jsPsych.currentTrial();
 console.log('The current trial is using the '+trial.type+' plugin');
 ```
 ---
+## jsPsych.endCurrentChunk
+
+```
+jsPsych.endCurrentChunk()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+None.
+
+### Description
+
+Ends the current chunk, skipping all remaining trials in the chunk.
+
+### Example
+
+#### Loop indefinitely until a particular key is pressed
+
+```javascript
+
+var block_1 = {
+  type: 'single-stim',
+  stimuli: images,
+  choices: [89,78], // Y or N
+  prompt: '<p class="center-content">Press Y to Continue. Press N to exit the chunk.</p>',
+  on_finish: function(data){
+    if(data.key_press == 78){
+      jsPsych.endCurrentChunk();
+    }
+  }
+}
+
+var first_chunk = {
+  chunk_type: 'while',
+  timeline: [block_1],
+  continue_function: function() { return true; }
+}
+
+```
+
+---
+## jsPsych.endExperiment
+
+```
+jsPsych.endExperiment()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+None.
+
+### Description
+
+Ends the experiment, skipping all remaining trials.
+
+### Example
+
+#### End the experiment if a particular response is given
+
+```javascript
+var block_1 = {
+  type: 'single-stim',
+  stimuli: images,
+  choices: [89,78], // Y or N
+  prompt: '<p class="center-content">Press Y to Continue. Press N to end the experiment</p>',
+  on_finish: function(data){
+    if(data.key_press == 78){
+      jsPsych.endExperiment();
+    }
+  }
+}
+```
+
+---
 ## jsPsych.finishTrial
 
 ```

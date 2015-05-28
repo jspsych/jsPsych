@@ -15,7 +15,7 @@ func | function | *undefined* | The function to call.
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------

@@ -23,14 +23,15 @@ questions | array | *undefined* | Each array element is an array of strings. The
 labels | array |  *undefined* | Each array element is an array of arrays. The innermost arrays contain a set of labels to display for an individual question. The middle level of arrays groups together the sets of labels that appear in a single trial. This level should correspond to the `questions` array.
 intervals | array | *undefined* | Each array element is an array of integers. The integers define how many different levels of a response there are (i.e. how many choices exist for each question). The length of the inner arrays should correspond the the length of the inner arrays for the `questions` array. The number of intervals does not have to match the number of labels.
 show_ticks | boolean | true | If true, then tick marks will be displayed on the sliders to indicate where the acceptable responses lie on the slider.
+preamble | array | empty string | Array of HTML formatted strings to display at the top of each page above all the questions. Each element of the array corresponds to a trial/page of questions.
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
-Q0, Q1, ... , Q*n* | numeric | The response to each question will be recorded in its own variable, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. The responses are recorded as integers, representing the position of the slider on the scale.
+responses | JSON string | A string in JSON format containing the responses for each question. The encoded object will have a separate variable for the response to each question, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. The responses are recorded as integers, representing the position of the slider on the scale.
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response.
 
 ## Examples

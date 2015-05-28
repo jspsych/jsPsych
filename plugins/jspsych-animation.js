@@ -12,7 +12,7 @@
 
     plugin.create = function(params) {
 
-      params = jsPsych.pluginAPI.enforceArray(params, ['choices', 'data']);
+      params = jsPsych.pluginAPI.enforceArray(params, ['choices']);
 
       var trials = new Array(params.stimuli.length);
       for (var i = 0; i < trials.length; i++) {
@@ -32,7 +32,7 @@
       // if any trial variables are functions
       // this evaluates the function and replaces
       // it with the output of the function
-      trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+      trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
       var interval_time = trial.frame_time + trial.frame_isi;
       var animate_frame = -1;
@@ -114,18 +114,12 @@
 
         jsPsych.pluginAPI.cancelKeyboardResponse(response_listener);
 
-        jsPsych.data.write($.extend({}, {
+        jsPsych.data.write({
           "animation_sequence": JSON.stringify(animation_sequence),
           "responses": JSON.stringify(responses)
-        }, trial.data));
+        });
 
-        if (trial.timing_post_trial > 0) {
-          setTimeout(function() {
-            jsPsych.finishTrial();
-          }, trial.timing_post_trial);
-        } else {
-          jsPsych.finishTrial();
-        }
+        jsPsych.finishTrial();
       }
     };
 

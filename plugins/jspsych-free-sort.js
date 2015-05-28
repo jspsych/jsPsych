@@ -36,7 +36,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
             var start_time = (new Date()).getTime();
 
@@ -118,23 +118,16 @@
                         });
                     });
 
-                    jsPsych.data.write($.extend({}, {
+                    jsPsych.data.write({
                         "init_locations": JSON.stringify(init_locations),
                         "moves": JSON.stringify(moves),
                         "final_locations": JSON.stringify(final_locations),
                         "rt": rt
-                    }, trial.data));
+                    });
 
                     // advance to next part
                     display_element.html("");
-                    if (trial.timing_post_trial > 0) {
-                        setTimeout(function() {
-                            jsPsych.finishTrial();
-                        }, trial.timing_post_trial);
-                    }
-                    else {
-                        jsPsych.finishTrial();
-                    }
+                    jsPsych.finishTrial();
                 }
             }));
 

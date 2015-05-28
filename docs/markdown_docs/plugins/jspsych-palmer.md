@@ -28,7 +28,7 @@ prompt | string | "" | This string can contain HTML markup. Any content here wil
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
@@ -75,7 +75,7 @@ var stim_block = {
 	stimuli: [stimulus],
 	is_html: true,
 	timing_response: 2000,
-	continue_after_response: false
+	response_ends_trial: false
 }
 
 var test_block = {

@@ -45,7 +45,7 @@
 			// if any trial variables are functions
 			// this evaluates the function and replaces
 			// it with the output of the function
-			trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+			trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
 			// variables to keep track of user interaction
 			var start_circle = -1;
@@ -234,13 +234,13 @@
 				var n_diff = arrayDifferences(trial.configurations, lineIsVisible);
 				var correct = (n_diff === 0);
 
-				jsPsych.data.write($.extend({}, {
+				jsPsych.data.write({
 					"configuration": JSON.stringify(lineIsVisible),
 					"target_configuration": JSON.stringify(trial.configurations),
 					"rt": response_time,
 					"correct": correct,
 					"num_wrong": n_diff,
-				}, trial.data));
+				});
 
 				if (trial.show_feedback) {
 					// hide the button
@@ -274,13 +274,7 @@
 				display_element.html('');
 
 				// next trial
-				if (trial.timing_post_trial > 0) {
-					setTimeout(function() {
-						jsPsych.finishTrial();
-					}, trial.timing_post_trial);
-				} else {
-					jsPsych.finishTrial();
-				}
+				jsPsych.finishTrial();
 
 			}
 

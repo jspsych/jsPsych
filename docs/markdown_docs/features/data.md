@@ -4,6 +4,81 @@ There are two very different kinds of data storage: data stored in *memory* and 
 
 jsPsych has many features for interacting with data stored in *memory*, but relatively few for *permanent* data storage. This is a deliberate choice, mainly because there are dozens of ways that data could be stored permanently and this strategy avoids locking in one particular solution. However, saving data permanently is obviously a crucial component of any experiment, and this page contains a few suggestions on how to accomplish permanent data storage.
 
+## Storing data in jsPsych's data structure
+
+jsPsych has a centralized array of data that is filled in as the experiment runs. Each trial adds an entry to this array, and you can access the content of the array with various functions, including `jsPsych.data.getData()`, which returns the entire contents of jsPsych's data array.
+
+In many cases, data collection will essentially be automatic and hidden. Plugins save data without any specific intervention, so it is not uncommon to have the only interaction with the data be at the end of the experiment when it is time to save it in a more permanent manner (see sections below about how to do this). However, there are some situations in which you may want to interact with the data; in particular, you may want to store additional data that the plugins are not recording, like a subject identifier or condition assignment. You may also want to add data on a trial by trial basis; for example, in a Stroop paradigm you would want to label which trials are congruent and which are incongruent. These scenarios are explored below.
+
+### Adding data to all trials
+
+Often it is useful to add a piece of data to *all* of the trials in the experiment. For example, appending the subject ID to each trial. This can be done easily with the `jsPsych.addProperties` function. Here is an example:
+
+```
+// generate a random subject ID
+var subject_id = Math.floor(Math.random()*100000);
+
+// pick a random condition for the subject at the start of the experiment
+var condition_assignment = jsPsych.randomization.sample(['conditionA', 'conditionB', 'conditionC'],1);
+
+// record the condition assignment in the jsPsych data
+// this adds a property called 'subject' and a property called 'condition' to every trial
+jsPsych.addProperties({
+  subject: subject_id,
+  condition: condition_assignment
+});
+```
+
+### Adding data to a particular trial or block
+
+Data can be added to a particular trial by setting the `data` parameter for the trial. The `data` parameter is an object of key-value pairs, and each pair is added to the data for that trial.
+
+```
+var trial = {
+  type: 'single-stim',
+  stimuli: ['imgA.jpg'],
+  data: { image_type: 'A' }
+}
+```
+
+If you have multiple trials defined in the same block, then the data is added to each trial:
+
+```
+var block = {
+  type: 'single-stim',
+  stimuli: ['imgA1.jpg', 'imgA2.jpg', 'imgA3.jpg'],
+  data: { image_type: 'A' }
+}
+```
+
+However, if you specify an array for the data parameter that has the same length as the number of trials in the block, then the data is recorded individually for each trial:
+
+```
+var block = {
+  type: 'single-stim',
+  stimuli: ['imgA1.jpg', 'imgB1.jpg', 'imgC1.jpg'],
+  data: [{ image_type: 'A' }, { image_type: 'B' }, { image_type: 'C' }]
+}
+```
+
+### Adding data to a chunk of trials
+
+Data can be added at the chunk level as well. This can be useful to indicate different portions of the experiment, such as a training and test.
+
+```
+var training_chunk = {
+  chunk_type: 'linear',
+  timeline: [training_trials],
+  data: {phase: 'training'}
+}
+
+var test_chunk = {
+  chunk_type: 'linear',
+  timeline: [test_trials],
+  data: {phase: 'test'}
+}
+```
+
 ## Storing data permanently as a file
 
 This is one of the simplest methods for saving jsPsych data on the server that is running the experiment. It involves a short PHP script and a few lines of JavaScript code. This method will save each participant's data as a CSV file on the server. **This method will only work if you are running on a web server with PHP installed, or a local server with PHP (e.g. [XAMPP](https://www.apachefriends.org/index.html)).**

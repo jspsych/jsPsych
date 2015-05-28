@@ -14,7 +14,7 @@
 
 		plugin.create = function(params) {
 
-			params = jsPsych.pluginAPI.enforceArray(params, ['data', 'answer'])
+			params = jsPsych.pluginAPI.enforceArray(params, ['answer'])
 
 			var trials = new Array(params.stimuli.length);
 			for (var i = 0; i < trials.length; i++) {
@@ -39,12 +39,12 @@
 			// if any trial variables are functions
 			// this evaluates the function and replaces
 			// it with the output of the function
-			trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
-			
+			trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
+
 			// unpack the stimuli array (for backwards code compatibility. this could be cleaned up in the future)
 			trial.a_path = trial.stimuli[0];
 			trial.b_path = trial.stimuli[1];
-			
+
 			// this array holds handlers from setTimeout calls
 			// that need to be cleared if the trial ends early
 			var setTimeoutHandlers = [];
@@ -125,17 +125,11 @@
 						"stimulus": JSON.stringify([trial.a_path, trial.b_path]),
 						"key_press": info.key
 					};
-					jsPsych.data.write($.extend({}, trial_data, trial.data));
+					jsPsych.data.write(trial_data);
 
 					display_element.html('');
 
-					if (trial.timing_post_trial > 0) {
-						setTimeout(function() {
-							jsPsych.finishTrial();
-						}, trial.timing_post_trial);
-					} else {
-						jsPsych.finishTrial();
-					}
+					jsPsych.finishTrial();
 				}
 
 				jsPsych.pluginAPI.getKeyboardResponse(after_response, [trial.same_key, trial.different_key], 'date', false);

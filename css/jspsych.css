@@ -75,10 +75,11 @@ input[type="text"] {
 }
 
 button {
-    padding: 0.5em;
+    padding: 0.8em;
     background-color: #eaeaea;
     border: 1px solid #eaeaea;
-    color: #333;
+    color: #555;
+    font-weight: bold;
     font-family: 'Open Sans', 'Arial', sans-serif;
     font-size: 14px;
     cursor: pointer;
@@ -198,6 +199,20 @@ button:hover {
   margin-top: 25px;
 }
 
+/*
+ *
+ * PLUGIN: jspsych-instructions
+ *
+ */
+
+ .jspsych-instructions-nav {
+   text-align: center;
+   margin-top: 2em;
+ }
+
+ .jspsych-instructions-nav button {
+   margin: 20px;
+ }
 /*
  *
  * PLUGIN: jspsych-multi-stim-multi-response

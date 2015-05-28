@@ -15,7 +15,7 @@
 
     plugin.create = function(params) {
 
-      jsPsych.pluginAPI.enforceArray(params, ['data']);
+      //jsPsych.pluginAPI.enforceArray(params, ['data']);
 
       var trials = new Array(params.stimuli.length);
       for (var i = 0; i < trials.length; i++) {
@@ -45,7 +45,7 @@
       // if any trial variables are functions
       // this evaluates the function and replaces
       // it with the output of the function
-      trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+      trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
       // this array holds handlers from setTimeout calls
       // that need to be cleared if the trial ends early
@@ -200,20 +200,14 @@
           }
 
           var score = $("#slider").slider("value");
-          jsPsych.data.write($.extend({}, {
+          jsPsych.data.write({
             "sim_score": score,
             "rt": response_time,
             "stimulus": JSON.stringify([trial.a_path, trial.b_path])
-          }, trial.data));
+          });
           // goto next trial in block
           display_element.html('');
-          if (trial.timing_post_trial > 0) {
-            setTimeout(function() {
-              jsPsych.finishTrial();
-            }, trial.timing_post_trial);
-          } else {
-            jsPsych.finishTrial();
-          }
+          jsPsych.finishTrial();
         });
       }
     };

@@ -12,8 +12,7 @@ docs_dir: markdown_docs
 pages:
 - ['index.md', 'Introduction']
 - ['tutorials/hello-world.md', 'Tutorials', 'The Basics: Hello World']
-- ['tutorials/go-nogo-task.md', 'Tutorials', 'Demo Experiment: Go / No-Go Task']
-- ['tutorials/flanker-task.md', 'Tutorials', 'Demo Experiment: Flanker Task']
+- ['tutorials/go-nogo-task.md', 'Tutorials', 'Demo Experiment: Simple Reaction Time Task']
 - ['core_library/overview.md', 'Core Library API', 'Overview']
 - ['core_library/jspsych-core.md', 'Core Library API', 'jsPsych core']
 - ['core_library/jspsych-data.md', 'Core Library API', 'jsPsych.data']
@@ -28,6 +27,7 @@ pages:
 - ['plugins/jspsych-categorize-animation.md', 'Plugins', 'jspsych-categorize-animation']
 - ['plugins/jspsych-free-sort.md', 'Plugins', 'jspsych-free-sort']
 - ['plugins/jspsych-html.md', 'Plugins', 'jspsych-html']
+- ['plugins/jspsych-instructions.md', 'Plugins', 'jspsych-instructions']
 - ['plugins/jspsych-multi-stim-multi-response.md', 'Plugins', 'jspsych-multi-stim-multi-response']
 - ['plugins/jspsych-palmer.md', 'Plugins', 'jspsych-palmer']
 - ['plugins/jspsych-reconstruction.md', 'Plugins', 'jspsych-reconstruction']

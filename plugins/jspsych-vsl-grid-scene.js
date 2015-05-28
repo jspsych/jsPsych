@@ -36,7 +36,7 @@
             // if any trial variables are functions
             // this evaluates the function and replaces
             // it with the output of the function
-            trial = jsPsych.pluginAPI.normalizeTrialVariables(trial);
+            trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
             display_element.html(plugin.generate_stimulus(trial.stimuli, trial.image_size));
 
@@ -48,18 +48,11 @@
 
                 display_element.html('');
 
-                jsPsych.data.write($.extend({}, {
+                jsPsych.data.write({
                     "stimulus": JSON.stringify(trial.stimuli)
-                }, trial.data));
+                });
 
-                if (trial.timing_post_trial > 0) {
-                    setTimeout(function() {
-                        jsPsych.finishTrial();
-                    }, trial.timing_post_trial);
-                }
-                else {
-                    jsPsych.finishTrial();
-                }
+                jsPsych.finishTrial();
             }
         };
 

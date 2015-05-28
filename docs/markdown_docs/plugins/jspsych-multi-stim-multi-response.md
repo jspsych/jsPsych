@@ -14,11 +14,11 @@ choices | array | *undefined* | Each element of this array is an array. The inne
 prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g. which key to press).
 timing_stim | array | [1000, 1000, ... , 1000] | Each element of the array is the length of time to display the corresponding stimulus for in milliseconds. The length of this array should match the length of the innermost stimuli arrays. Setting the last value of the array to -1 will cause the last stimulus to display until the subject has generated a response for each response group.
 timing_response | numeric | -1 | How long to wait for the subject to make all responses before ending the trial in milliseconds. If the subject fails to make a response in a response group before this timer is reached, the the subject's response for that response group will be recorded as -1 for the trial and the trial will end. If the value of this parameter is -1, then the trial will wait for a response indefinitely.
-continue_after_response | boolean | true | If true, then the trial will end whenever the subject makes a response for each response group (assuming they make their response before the cutoff specified by the `timing_response` parameter). If false, then the trial will continue until the value for `timing_response` is reached. You can use this parameter to force the subject to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
+response_ends_trial | boolean | true | If true, then the trial will end whenever the subject makes a response for each response group (assuming they make their response before the cutoff specified by the `timing_response` parameter). If false, then the trial will continue until the value for `timing_response` is reached. You can use this parameter to force the subject to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
