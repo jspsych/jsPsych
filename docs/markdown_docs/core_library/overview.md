@@ -21,6 +21,7 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 
 ### [Data module](jspsych-data.md)
 
+* [jsPsych.data.addProperties](jspsych-data.md#jspsychdataaddproperties)
 * [jsPsych.data.dataAsCSV](jspsych-data.md#jspsychdatadataascsv)
 * [jsPsych.data.displayData](jspsych-data.md#jspsychdatadisplaydata)
 * [jsPsych.data.getData](jspsych-data.md#jspsychdatagetdata)

@@ -31,6 +31,18 @@ var single_stim_block = {
 }
 ```
 
+## Parameters available plugins
+
+Each plugin specifies its own set of parameters. Check the documentation for a plugin to see what parameters are available and what they do.
+
+In addition, there is a set of parameters that can be specified for any plugin.
+
+Parameter | Type | Default Value | Description
+----------|------|---------------|------------
+timing_post_trial | numeric | 1000 | Sets the time, in milliseconds, between the current trial and the next trial.
+on_finish | function | *undefined* | A callback function to execute when the trial finishes. See [this page](../features/callbacks.md) for more details.
+data | object | *undefined* | An object containing additional data to store for the trial. See [this page](../features/data.md) for more details.
+
 ## Data collected by plugins
 
 Each plugin defines what data is collected on the trial. The documentation for each plugin specifies what data is collected by that plugin.
