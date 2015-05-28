@@ -129,13 +129,7 @@
 
 					display_element.html('');
 
-					if (trial.timing_post_trial > 0) {
-						setTimeout(function() {
-							jsPsych.finishTrial();
-						}, trial.timing_post_trial);
-					} else {
-						jsPsych.finishTrial();
-					}
+					jsPsych.finishTrial();
 				}
 
 				jsPsych.pluginAPI.getKeyboardResponse(after_response, [trial.same_key, trial.different_key], 'date', false);

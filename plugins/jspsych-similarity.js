@@ -207,13 +207,7 @@
           }, trial.data));
           // goto next trial in block
           display_element.html('');
-          if (trial.timing_post_trial > 0) {
-            setTimeout(function() {
-              jsPsych.finishTrial();
-            }, trial.timing_post_trial);
-          } else {
-            jsPsych.finishTrial();
-          }
+          jsPsych.finishTrial();
         });
       }
     };

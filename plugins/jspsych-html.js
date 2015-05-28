@@ -50,19 +50,8 @@ documentation: docs.jspsych.org
                         rt: (new Date()).getTime() - t0,
                         url: trial.url
                     });
-                    if (trial.timing_post_trial > 0) {
-                        // hide display_element, since it could have a border and we want a blank screen during timing
-                        display_element.hide();
-                        setTimeout(function() {
-                            display_element.empty();
-                            display_element.show();
-                            jsPsych.finishTrial();
-                        }, trial.timing_post_trial);
-                    }
-                    else {
-                        display_element.empty();
-                       	jsPsych.finishTrial();
-                    }
+                    display_element.empty();
+                    jsPsych.finishTrial();
                 };
                 if (trial.cont_btn) $('#' + trial.cont_btn).click(finish);
                 if (trial.cont_key) {

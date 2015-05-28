@@ -145,23 +145,31 @@
 			// handle callback at whole-experiment level
 			opts.on_trial_finish();
 
-			global_trial_index++;
-
-			// advance chunk
-			root_chunk.advance();
-
-			// update progress bar if shown
-			if (opts.show_progress_bar === true) {
-				updateProgressBar();
+			if(current_trial.timing_post_trial > 0){
+				setTimeout(next_trial, current_trial.timing_post_trial);
+			} else {
+				next_trial();
 			}
 
-			// check if experiment is over
-			if(root_chunk.isComplete()){
-				finishExperiment();
-				return;
-			}
+			function next_trial(){
+				global_trial_index++;
 
-			doTrial(root_chunk.next());
+				// advance chunk
+				root_chunk.advance();
+
+				// update progress bar if shown
+				if (opts.show_progress_bar === true) {
+					updateProgressBar();
+				}
+
+				// check if experiment is over
+				if(root_chunk.isComplete()){
+					finishExperiment();
+					return;
+				}
+
+				doTrial(root_chunk.next());
+			}
 		};
 
 		core.currentTrial = function(){

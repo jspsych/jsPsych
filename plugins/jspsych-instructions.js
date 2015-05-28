@@ -130,14 +130,7 @@
                 "rt": (new Date()).getTime() - start_time
               }, trial.data));
 
-              if (trial.timing_post_trial > 0) {
-                  setTimeout(function() {
-                      jsPsych.finishTrial();
-                  }, trial.timing_post_trial);
-              }
-              else {
-                  jsPsych.finishTrial();
-              }
+              jsPsych.finishTrial();
             }
 
             var after_response = function(info) {

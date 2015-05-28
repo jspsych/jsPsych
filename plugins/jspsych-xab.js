@@ -166,13 +166,7 @@
 					xab_trial_complete = true;
 
 					// move on to the next trial after timing_post_trial milliseconds
-					if (trial.timing_post_trial > 0) {
-						setTimeout(function() {
-							jsPsych.finishTrial();
-						}, trial.timing_post_trial);
-					} else {
-						jsPsych.finishTrial();
-					}
+					jsPsych.finishTrial();
 
 				};
 

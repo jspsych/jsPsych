@@ -274,13 +274,7 @@
 				display_element.html('');
 
 				// next trial
-				if (trial.timing_post_trial > 0) {
-					setTimeout(function() {
-						jsPsych.finishTrial();
-					}, trial.timing_post_trial);
-				} else {
-					jsPsych.finishTrial();
-				}
+				jsPsych.finishTrial();
 
 			}
 
