@@ -4,13 +4,13 @@ In the long tradition of `hello world` examples, this tutorial creates an experi
 
 ## Step 1: Download the jsPsych library
 
-Start by downloading the jsPsych library. The most recent version can always be found on the [GitHub releases page](https://github.com/jodeleeuw/jsPsych/releases). Download either the ZIP or TAR archive of the latest release.
+Start by downloading the jsPsych library. The most recent version can always be found on the [GitHub releases page](https://github.com/jodeleeuw/jsPsych/releases).
 
 ![releasespage](/img/githubreleases.jpg)
 
 ## Step 2: Create a folder to store your experiment files
 
-Create a folder on your computer to put the experiment files in. Once you've created the folder, open the downloaded archive from step 1, and move the extracted folder (called `jsPsych-4.0.1` if using v4.0.1 of jsPsych) into the experiment folder. Here's what it looks like on a mac:
+Create a folder on your computer to put the experiment files in. Once you've created the folder, open the downloaded archive from step 1, and move the extracted folder (called `jspsych-4.2` if using v4.2 of jsPsych) into the experiment folder. Here's what it looks like on a mac:
 
 ![folder setup](/img/folder-setup.png)
 
@@ -53,7 +53,7 @@ To use jsPsych, add a `<script>` tag to import the library. You'll need to impor
 	<head>
 		<title>My experiment</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		<script src="jsPsych-4.0/jspsych.js"></script>
+		<script src="jspsych-4.2/jspsych.js"></script>
 	</head>
 	<body>
 	</body>
@@ -68,8 +68,8 @@ You may also want to import the jsPsych stylesheet, which applies a basic set of
 	<head>
 		<title>My experiment</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		<script src="jsPsych-4.0/jspsych.js"></script>
-		<link href="jsPsych-4.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+		<script src="jspsych-4.2/jspsych.js"></script>
+		<link href="jspsych-4.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 	</head>
 	<body>
 	</body>
@@ -86,9 +86,9 @@ For the demo, we want to show some text on the screen. This is exactly what the 
 	<head>
 		<title>My experiment</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		<script src="jsPsych-4.0/jspsych.js"></script>
-		<script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
-		<link href="jsPsych-4.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+		<script src="jspsych-4.2/jspsych.js"></script>
+		<script src="jspsych-4.2/plugins/jspsych-text.js"></script>
+		<link href="jspsych-4.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 	</head>
 	<body>
 	</body>
@@ -105,9 +105,9 @@ To add JavaScript code directly to the webpage we need to add a set of `<script>
 	<head>
 		<title>My experiment</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		<script src="jsPsych-4.0/jspsych.js"></script>
-		<script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
-		<link href="jsPsych-4.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+		<script src="jspsych-4.2/jspsych.js"></script>
+		<script src="jspsych-4.2/plugins/jspsych-text.js"></script>
+		<link href="jspsych-4.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 	</head>
 	<body>
 	</body>
@@ -130,9 +130,9 @@ Now that we have the trial defined, we just need to tell jsPsych to run an exper
 	<head>
 		<title>My experiment</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		<script src="jsPsych-4.0/jspsych.js"></script>
-		<script src="jsPsych-4.0/plugins/jspsych-text.js"></script>
-		<link href="jsPsych-4.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+		<script src="jspsych-4.2/jspsych.js"></script>
+		<script src="jspsych-4.2/plugins/jspsych-text.js"></script>
+		<link href="jspsych-4.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 	</head>
 	<body>
 	</body>
