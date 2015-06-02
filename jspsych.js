@@ -145,8 +145,11 @@
 			// handle callback at whole-experiment level
 			opts.on_trial_finish();
 
-			if(current_trial.timing_post_trial > 0){
-				setTimeout(next_trial, current_trial.timing_post_trial);
+			// if timing_post_trial is a function, evaluate it
+			var time_gap = (typeof current_trial.timing_post_trial == 'function') ? current_trial.timing_post_trial() : current_trial.timing_post_trial;
+
+			if(time_gap > 0){
+				setTimeout(next_trial, time_gap);
 			} else {
 				next_trial();
 			}
@@ -610,6 +613,8 @@
 			var progress = jsPsych.progress();
 			var trial = jsPsych.currentTrial();
 
+			var trial_opt_data = typeof trial.data == 'function' ? trial.data() : trial.data;
+
 			var default_data = {
 				'trial_type': trial.type,
 				'trial_index': progress.current_trial_local,
@@ -618,7 +623,7 @@
 				'internal_chunk_id': jsPsych.currentChunkID()
 			};
 
-			var ext_data_object = $.extend({}, data_object, trial.data, default_data, dataProperties);
+			var ext_data_object = $.extend({}, data_object, trial_opt_data, default_data, dataProperties);
 
 			allData.push(ext_data_object);
 
