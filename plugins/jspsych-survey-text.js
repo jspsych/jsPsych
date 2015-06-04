@@ -19,9 +19,19 @@
 
       var trials = [];
       for (var i = 0; i < params.questions.length; i++) {
+        var rows = [], cols = [];
+        if(typeof params.rows == 'undefined' || typeof params.columns == 'undefined'){
+          for(var j = 0; j < params.questions[i].length; j++){
+            cols.push(40);
+            rows.push(1);
+          }
+        }
+
         trials.push({
           preamble: typeof params.preamble == 'undefined' ? "" : params.preamble[i],
-          questions: params.questions[i]
+          questions: params.questions[i],
+          rows: typeof params.rows == 'undefined' ? rows : params.rows[i],
+          columns: typeof params.columns == 'undefined' ? cols : params.columns[i]
         });
       }
       return trials;
@@ -54,7 +64,7 @@
         $("#jspsych-survey-text-" + i).append('<p class="jspsych-survey-text">' + trial.questions[i] + '</p>');
 
         // add text box
-        $("#jspsych-survey-text-" + i).append('<input type="text" name="#jspsych-survey-text-response-' + i + '"></input>');
+        $("#jspsych-survey-text-" + i).append('<textarea name="#jspsych-survey-text-response-' + i + '" cols="'+trial.columns[i]+'" rows="'+trial.rows[i]+'"></textarea>');
       }
 
       // add submit button
