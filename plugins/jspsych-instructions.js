@@ -135,19 +135,20 @@
 
             var after_response = function(info) {
 
-                // check if key is forwards or backwards and update page
-                if(info.key === trial.key_forward || info.key === jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.key_forward)){
-                  next();
-                }
+                // have to reinitialize this instead of letting it persist to prevent accidental skips of pages by holding down keys too long
+                keyboard_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, [trial.key_forward, trial.key_backward]);
 
+                // check if key is forwards or backwards and update page
                 if(info.key === trial.key_backward || info.key === jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.key_backward)){
                   if(current_page !== 0 && trial.allow_backward) {
                     back();
                   }
                 }
 
-                // have to reinitialize this instead of letting it persist to prevent accidental skips of pages by holding down keys too long
-                keyboard_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, [trial.key_forward, trial.key_backward]);
+                if(info.key === trial.key_forward || info.key === jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.key_forward)){
+                  next();
+                }
+
             };
 
             show_current_page();
