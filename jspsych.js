@@ -177,7 +177,6 @@
 
 		core.endExperiment = function(){
 			root_chunk.end();
-			finishExperiment();
 		}
 
 		core.endCurrentChunk = function(){
