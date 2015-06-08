@@ -284,12 +284,16 @@
 			chunk.next = function() {
 				// return the next trial in the block to be run
 
-				if(this.isComplete()){
-					throw new Error('Tried to get completed trial from chunk that is finished.');
-				} else {
-					return this.timeline[this.currentTimelineLocation].next();
+				// if chunks might need their conditional_function evaluated
+				if(this.type == 'if' && this.currentTimelineLocation == 0){
+					if(!chunk_definition.conditional_function()){
+						this.end();
+						this.parentChunk.advance();
+						return this.parentChunk.next();
+					}
 				}
 
+				return this.timeline[this.currentTimelineLocation].next();
 			};
 
 			chunk.end = function(){
@@ -322,7 +326,7 @@
 				// linear chunks just go through the timeline in order and are
 				// done when each trial has been completed once
 				// the root chunk is a special case of the linear chunk
-				if(this.type == 'linear' || this.type == 'root'){
+				if(this.type == 'linear' || this.type == 'root' || this.type == 'if'){
 					if (this.currentTimelineLocation >= this.timeline.length) { return true; }
 					else { return false; }
 				}
@@ -344,7 +348,7 @@
 					}
 				}
 
-				else if(this.type == 'if'){
+				/*else if(this.type == 'if'){
 					if(this.currentTimelineLocation >= this.timeline.length){
 						return true;
 					}
@@ -358,7 +362,7 @@
 					} else {
 						return false;
 					}
-				}
+				}*/
 
 			};
 
