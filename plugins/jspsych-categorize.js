@@ -101,7 +101,13 @@
 				doFeedback(correct);
 			}
 
-			jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices, 'date', false);
+			jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: 'date',
+        persist: false,
+				allow_held_key: false
+      });
 
 
 
@@ -142,7 +148,13 @@
 						endTrial();
 					}
 
-					jsPsych.pluginAPI.getKeyboardResponse(after_forced_response, trial.key_answer, 'date', false);
+					jsPsych.pluginAPI.getKeyboardResponse({
+		        callback_function: after_forced_response,
+		        valid_responses: trial.key_answer,
+		        rt_method: 'date',
+		        persist: false,
+	          allow_held_key: false
+		      });
 
 				} else {
 					setTimeout(function() {

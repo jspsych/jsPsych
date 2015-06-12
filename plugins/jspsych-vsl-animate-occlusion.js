@@ -125,7 +125,13 @@
         });
       }
 
-      key_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices, 'date', true);
+      key_listener = jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: 'date',
+        persist: true,
+        allow_held_key: false
+      });
 
       if (trial.timing_pre_movement > 0) {
         setTimeout(function() {

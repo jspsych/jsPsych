@@ -111,8 +111,15 @@
 			};
 
 			// start the response listener
-			var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices, 'audio', false, context, startTime);
-
+			var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+				callback_function: after_response,
+				valid_responses: trial.choices,
+				rt_method: 'audio',
+				persist: false,
+				allow_held_key: false,
+				audio_context: context,
+				audio_context_start_time: startTime
+			});
 			// end trial if time limit is set
 			if (trial.timing_response > 0) {
 				var t2 = setTimeout(function() {

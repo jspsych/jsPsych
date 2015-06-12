@@ -132,7 +132,13 @@
 					jsPsych.finishTrial();
 				}
 
-				jsPsych.pluginAPI.getKeyboardResponse(after_response, [trial.same_key, trial.different_key], 'date', false);
+				jsPsych.pluginAPI.getKeyboardResponse({
+					callback_function: after_response,
+					valid_responses: [trial.same_key, trial.different_key],
+					rt_method: 'date',
+					persist: false,
+					allow_held_key: false
+				});
 
 			}
 

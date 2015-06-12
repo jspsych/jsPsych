@@ -62,7 +62,13 @@
                 display_element.click(mouse_listener);
                 var start_time = (new Date()).getTime();
             } else {
-                jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.cont_key);
+              jsPsych.pluginAPI.getKeyboardResponse({
+                callback_function: after_response,
+                valid_responses: trial.cont_key,
+                rt_method: 'date',
+                persist: false,
+                allow_held_key: false
+              });
             }
 
             function save_data(key, rt) {

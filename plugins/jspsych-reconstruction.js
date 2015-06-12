@@ -64,8 +64,13 @@
       }
 
       // listen for responses
-      var key_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, [trial.key_increase, trial.key_decrease], 'date', true);
-
+      var key_listener = jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: after_response,
+        valid_responses: [trial.key_increase, trial.key_decrease],
+        rt_method: 'date',
+        persist: true,
+        allow_held_key: true
+      });
       // draw first iteration
       draw(param);
 
