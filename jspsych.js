@@ -1051,23 +1051,26 @@
 		// keyboard listeners
 		var keyboard_listeners = [];
 
+		var held_keys = [];
+
 		var module = {};
 
-		module.getKeyboardResponse = function(callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time) {
+		module.getKeyboardResponse = function(parameters){
+			//parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key?
 
-			rt_method = (typeof rt_method === 'undefined') ? 'date' : rt_method;
-			if (rt_method != 'date' && rt_method != 'performance' && rt_method != 'audio') {
+			parameters.rt_method = (typeof parameters.rt_method === 'undefined') ? 'date' : parameters.rt_method;
+			if (parameters.rt_method != 'date' && parameters.rt_method != 'performance' && parameters.rt_method != 'audio') {
 				console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
-				rt_method = 'date';
+				parameters.rt_method = 'date';
 			}
 
 			var start_time;
-			if (rt_method == 'date') {
+			if (parameters.rt_method == 'date') {
 				start_time = (new Date()).getTime();
-			} else if (rt_method == 'performance') {
+			} else if (parameters.rt_method == 'performance') {
 				start_time = performance.now();
-			} else if (rt_method == 'audio') {
-				start_time = audio_context_start_time;
+			} else if (parameters.rt_method == 'audio') {
+				start_time = parameters.audio_context_start_time;
 			}
 
 			var listener_id;
@@ -1075,51 +1078,66 @@
 			var listener_function = function(e) {
 
 				var key_time;
-				if (rt_method == 'date') {
+				if (parameters.rt_method == 'date') {
 					key_time = (new Date()).getTime();
-				} else if (rt_method == 'performance') {
+				} else if (parameters.rt_method == 'performance') {
 					key_time = performance.now();
-				} else if (rt_method == 'audio') {
-					key_time = audio_context.currentTime
+				} else if (parameters.rt_method == 'audio') {
+					key_time = parameters.audio_context.currentTime
 				}
 
 				var valid_response = false;
-				if (typeof valid_responses === 'undefined' || valid_responses.length === 0) {
+				if (typeof parameters.valid_responses === 'undefined' || parameters.valid_responses.length === 0) {
 					valid_response = true;
 				}
-				for (var i = 0; i < valid_responses.length; i++) {
-					if (typeof valid_responses[i] == 'string') {
-						if (typeof keylookup[valid_responses[i]] !== 'undefined') {
-							if (e.which == keylookup[valid_responses[i]]) {
+				for (var i = 0; i < parameters.valid_responses.length; i++) {
+					if (typeof parameters.valid_responses[i] == 'string') {
+						if (typeof keylookup[parameters.valid_responses[i]] !== 'undefined') {
+							if (e.which == keylookup[parameters.valid_responses[i]]) {
 								valid_response = true;
 							}
 						} else {
 							throw new Error('Invalid key string specified for getKeyboardResponse');
 						}
-					} else if (e.which == valid_responses[i]) {
+					} else if (e.which == parameters.valid_responses[i]) {
 						valid_response = true;
+					}
+				}
+				// check if key was already held down
+
+				if ( ((typeof parameters.allow_held_key == 'undefined') || !parameters.allow_held_key) && valid_response ) {
+					for(i in held_keys){
+						if(held_keys[i]==e.which){
+							valid_response = false;
+							break;
+						}
 					}
 				}
 
 				if (valid_response) {
+
+					held_keys.push(e.which);
+
+					parameters.callback_function({
+						key: e.which,
+						rt: key_time - start_time
+					});
+
+					if ($.inArray(listener_id, keyboard_listeners) > -1) {
+
+						if (!parameters.persist) {
+							// remove keyboard listener
+							module.cancelKeyboardResponse(listener_id);
+						}
+					}
 
 					var after_up = function(up) {
 
 						if (up.which == e.which) {
 							$(document).off('keyup', after_up);
 
-							if ($.inArray(listener_id, keyboard_listeners) > -1) {
-
-								if (!persist) {
-									// remove keyboard listener
-									module.cancelKeyboardResponse(listener_id);
-								}
-
-								callback_function({
-									key: e.which,
-									rt: key_time - start_time
-								});
-							}
+							// mark key as released
+							held_keys.splice($.inArray(e.which, held_keys), 1);
 						}
 					};
 
