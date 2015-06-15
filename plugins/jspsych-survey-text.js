@@ -82,7 +82,7 @@
         var question_data = {};
         $("div.jspsych-survey-text-question").each(function(index) {
           var id = "Q" + index;
-          var val = $(this).children('input').val();
+          var val = $(this).children('textarea').val();
           var obje = {};
           obje[id] = val;
           $.extend(question_data, obje);
