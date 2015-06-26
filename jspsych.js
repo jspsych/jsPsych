@@ -645,7 +645,13 @@
 
 			// now add to list so that it gets appended to all future data
 			dataProperties = $.extend({}, dataProperties, properties);
+		};
 
+		module.addDataToLastTrial = function(data){
+			if(allData.length == 0){
+				throw new Error("Cannot add data to last trial - no data recorded so far");
+			}
+			allData[allData.length-1] = $.extend({},allData[allData.length-1],data);
 		}
 
 		module.dataAsCSV = function() {
