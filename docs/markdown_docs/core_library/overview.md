@@ -44,6 +44,7 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.randomization.repeat](jspsych-randomization.md#jspsychrandomizationrepeat)
 * [jsPsych.randomization.sample](jspsych-randomization.md#jspsychrandomizationsample)
 * [jsPsych.randomization.shuffle](jspsych-randomization.md#jspsychrandomizationshuffle)
+* [jsPsych.randomization.shuffleNoRepeats](jspsych-randomization.md#jspsychrandomizationshufflenorepeats)
 
 ### [PluginAPI module](jspsych-pluginAPI.md)
 

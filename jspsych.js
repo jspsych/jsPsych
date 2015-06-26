@@ -912,7 +912,7 @@
 					repetitions = [repetitions];
 				} else {
 					repetitions = [repetitions[0]];
-					console.log('Unclear parameters given to randomizeSimpleSample. Multiple set sizes specified, but only one item exists to sample. Proceeding using the first set size.');
+					console.log('Unclear parameters given to randomization.repeat. Multiple set sizes specified, but only one item exists to sample. Proceeding using the first set size.');
 				}
 			} else {
 				if (!rep_isArray) {
@@ -923,8 +923,18 @@
 					repetitions = reps;
 				} else {
 					if (array.length != repetitions.length) {
-						// throw warning if repetitions is too short,
-						// throw warning if too long, and then use the first N
+						console.warning('Unclear parameters given to randomization.repeat. Items and repetitions are unequal lengths. Behavior may not be as expected.');
+						// throw warning if repetitions is too short, use first rep ONLY.
+						if(repetitions.length < array.length){
+							var reps = [];
+							for (var i = 0; i < array.length; i++) {
+								reps.push(repetitions);
+							}
+							repetitions = reps;
+						} else {
+							// throw warning if too long, and then use the first N
+							repetitions = repetions.slice(0, array.length);
+						}
 					}
 				}
 			}
@@ -948,6 +958,36 @@
 
 		module.shuffle = function(arr) {
 			return shuffle(arr);
+		}
+
+		module.shuffleNoRepeats = function(arr, equalityTest){
+				// define a default equalityTest
+				if(typeof equalityTest == 'undefined'){
+					equalityTest = function(a,b){
+						if(a === b) { return true; }
+						else { return false; }
+					}
+				}
+
+				var random_shuffle = shuffle(arr);
+				for(var i=0; i<random_shuffle.length-2; i++){
+					if(equalityTest(random_shuffle[i], random_shuffle[i+1])){
+						// neighbors are equal, pick a new random neighbor to swap (not the first or last element, to avoid edge cases)
+						var random_pick = Math.floor(Math.random()*(random_shuffle.length-2))+1;
+						// test to make sure the new neighbor isn't equal to the old one
+						while(
+							equalityTest(random_shuffle[i+1], random_shuffle[random_pick]) ||
+							(equalityTest(random_shuffle[i+1], random_shuffle[random_pick+1]) || equalityTest(random_shuffle[i+1], random_shuffle[random_pick-1]))
+						){
+							random_pick = Math.floor(Math.random()*(random_shuffle.length-2))+1;
+						}
+						var new_neighbor = random_shuffle[random_pick];
+						random_shuffle[random_pick] = random_shuffle[i+1];
+						random_shuffle[i+1] = new_neighbor;
+					}
+				}
+
+				return random_shuffle;
 		}
 
 		module.sample = function(arr, size, withReplacement) {
