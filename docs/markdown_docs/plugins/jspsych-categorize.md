@@ -18,8 +18,12 @@ incorrect_text | string | "Wrong." | String to show when the wrong answer is giv
 prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g. which key to press).
 force_correct_button_press | boolean | false | If set to true, then the subject must press the correct response key after feedback is given in order to advance to the next trial.
 show_stim_with_feedback | boolean | true | If set to true, then the stimulus will be shown during feedback. If false, then only the text feedback will display during feedback.
+show_feedback_on_timeout | boolean | false | If true, then category feedback will be displayed for an incorrect response after a timeout (timing_response is exceeded). If false, then a timeout message will be shown.
+timeout_message | string | "Please respond faster." | The message to show on a timeout non-response.
 timing_stim | numeric | -1 | How long to show the stimulus for (milliseconds). If -1, then the stimulus is shown until a response is given.
 timing_feedback_duration | numeric | 2000 | How long to show the feedback for (milliseconds).
+timing_response | numeric | -1 | The maximum time allowed for a response. If -1, then the experiment will wait indefinitely for a response.
+
 
 ## Data Generated
 
