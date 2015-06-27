@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <style>
+      img { width: 300px; }
+    </style>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  var repeated_list = jsPsych.randomization.repeat([1,2,3,4,5],3);
+  console.log(JSON.stringify(repeated_list));
+
+  var no_neighbor_repeats = jsPsych.randomization.shuffleNoRepeats(repeated_list);
+  console.log(JSON.stringify(no_neighbor_repeats));
+
+  </script>
+</html>

@@ -645,7 +645,13 @@
 
 			// now add to list so that it gets appended to all future data
 			dataProperties = $.extend({}, dataProperties, properties);
+		};
 
+		module.addDataToLastTrial = function(data){
+			if(allData.length == 0){
+				throw new Error("Cannot add data to last trial - no data recorded so far");
+			}
+			allData[allData.length-1] = $.extend({},allData[allData.length-1],data);
 		}
 
 		module.dataAsCSV = function() {
@@ -906,7 +912,7 @@
 					repetitions = [repetitions];
 				} else {
 					repetitions = [repetitions[0]];
-					console.log('Unclear parameters given to randomizeSimpleSample. Multiple set sizes specified, but only one item exists to sample. Proceeding using the first set size.');
+					console.log('Unclear parameters given to randomization.repeat. Multiple set sizes specified, but only one item exists to sample. Proceeding using the first set size.');
 				}
 			} else {
 				if (!rep_isArray) {
@@ -917,8 +923,18 @@
 					repetitions = reps;
 				} else {
 					if (array.length != repetitions.length) {
-						// throw warning if repetitions is too short,
-						// throw warning if too long, and then use the first N
+						console.warning('Unclear parameters given to randomization.repeat. Items and repetitions are unequal lengths. Behavior may not be as expected.');
+						// throw warning if repetitions is too short, use first rep ONLY.
+						if(repetitions.length < array.length){
+							var reps = [];
+							for (var i = 0; i < array.length; i++) {
+								reps.push(repetitions);
+							}
+							repetitions = reps;
+						} else {
+							// throw warning if too long, and then use the first N
+							repetitions = repetions.slice(0, array.length);
+						}
 					}
 				}
 			}
@@ -942,6 +958,36 @@
 
 		module.shuffle = function(arr) {
 			return shuffle(arr);
+		}
+
+		module.shuffleNoRepeats = function(arr, equalityTest){
+				// define a default equalityTest
+				if(typeof equalityTest == 'undefined'){
+					equalityTest = function(a,b){
+						if(a === b) { return true; }
+						else { return false; }
+					}
+				}
+
+				var random_shuffle = shuffle(arr);
+				for(var i=0; i<random_shuffle.length-2; i++){
+					if(equalityTest(random_shuffle[i], random_shuffle[i+1])){
+						// neighbors are equal, pick a new random neighbor to swap (not the first or last element, to avoid edge cases)
+						var random_pick = Math.floor(Math.random()*(random_shuffle.length-2))+1;
+						// test to make sure the new neighbor isn't equal to the old one
+						while(
+							equalityTest(random_shuffle[i+1], random_shuffle[random_pick]) ||
+							(equalityTest(random_shuffle[i+1], random_shuffle[random_pick+1]) || equalityTest(random_shuffle[i+1], random_shuffle[random_pick-1]))
+						){
+							random_pick = Math.floor(Math.random()*(random_shuffle.length-2))+1;
+						}
+						var new_neighbor = random_shuffle[random_pick];
+						random_shuffle[random_pick] = random_shuffle[i+1];
+						random_shuffle[i+1] = new_neighbor;
+					}
+				}
+
+				return random_shuffle;
 		}
 
 		module.sample = function(arr, size, withReplacement) {
@@ -1051,23 +1097,26 @@
 		// keyboard listeners
 		var keyboard_listeners = [];
 
+		var held_keys = [];
+
 		var module = {};
 
-		module.getKeyboardResponse = function(callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time) {
+		module.getKeyboardResponse = function(parameters){
+			//parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key?
 
-			rt_method = (typeof rt_method === 'undefined') ? 'date' : rt_method;
-			if (rt_method != 'date' && rt_method != 'performance' && rt_method != 'audio') {
+			parameters.rt_method = (typeof parameters.rt_method === 'undefined') ? 'date' : parameters.rt_method;
+			if (parameters.rt_method != 'date' && parameters.rt_method != 'performance' && parameters.rt_method != 'audio') {
 				console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
-				rt_method = 'date';
+				parameters.rt_method = 'date';
 			}
 
 			var start_time;
-			if (rt_method == 'date') {
+			if (parameters.rt_method == 'date') {
 				start_time = (new Date()).getTime();
-			} else if (rt_method == 'performance') {
+			} else if (parameters.rt_method == 'performance') {
 				start_time = performance.now();
-			} else if (rt_method == 'audio') {
-				start_time = audio_context_start_time;
+			} else if (parameters.rt_method == 'audio') {
+				start_time = parameters.audio_context_start_time;
 			}
 
 			var listener_id;
@@ -1075,51 +1124,66 @@
 			var listener_function = function(e) {
 
 				var key_time;
-				if (rt_method == 'date') {
+				if (parameters.rt_method == 'date') {
 					key_time = (new Date()).getTime();
-				} else if (rt_method == 'performance') {
+				} else if (parameters.rt_method == 'performance') {
 					key_time = performance.now();
-				} else if (rt_method == 'audio') {
-					key_time = audio_context.currentTime
+				} else if (parameters.rt_method == 'audio') {
+					key_time = parameters.audio_context.currentTime
 				}
 
 				var valid_response = false;
-				if (typeof valid_responses === 'undefined' || valid_responses.length === 0) {
+				if (typeof parameters.valid_responses === 'undefined' || parameters.valid_responses.length === 0) {
 					valid_response = true;
 				}
-				for (var i = 0; i < valid_responses.length; i++) {
-					if (typeof valid_responses[i] == 'string') {
-						if (typeof keylookup[valid_responses[i]] !== 'undefined') {
-							if (e.which == keylookup[valid_responses[i]]) {
+				for (var i = 0; i < parameters.valid_responses.length; i++) {
+					if (typeof parameters.valid_responses[i] == 'string') {
+						if (typeof keylookup[parameters.valid_responses[i]] !== 'undefined') {
+							if (e.which == keylookup[parameters.valid_responses[i]]) {
 								valid_response = true;
 							}
 						} else {
 							throw new Error('Invalid key string specified for getKeyboardResponse');
 						}
-					} else if (e.which == valid_responses[i]) {
+					} else if (e.which == parameters.valid_responses[i]) {
 						valid_response = true;
+					}
+				}
+				// check if key was already held down
+
+				if ( ((typeof parameters.allow_held_key == 'undefined') || !parameters.allow_held_key) && valid_response ) {
+					for(i in held_keys){
+						if(held_keys[i]==e.which){
+							valid_response = false;
+							break;
+						}
 					}
 				}
 
 				if (valid_response) {
+
+					held_keys.push(e.which);
+
+					parameters.callback_function({
+						key: e.which,
+						rt: key_time - start_time
+					});
+
+					if ($.inArray(listener_id, keyboard_listeners) > -1) {
+
+						if (!parameters.persist) {
+							// remove keyboard listener
+							module.cancelKeyboardResponse(listener_id);
+						}
+					}
 
 					var after_up = function(up) {
 
 						if (up.which == e.which) {
 							$(document).off('keyup', after_up);
 
-							if ($.inArray(listener_id, keyboard_listeners) > -1) {
-
-								if (!persist) {
-									// remove keyboard listener
-									module.cancelKeyboardResponse(listener_id);
-								}
-
-								callback_function({
-									key: e.which,
-									rt: key_time - start_time
-								});
-							}
+							// mark key as released
+							held_keys.splice($.inArray(e.which, held_keys), 1);
 						}
 					};
 

@@ -129,7 +129,13 @@
 
         var valid_keys = [trial.target_present_key, trial.target_absent_key];
 
-        key_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, valid_keys, 'date', false);
+        key_listener = jsPsych.pluginAPI.getKeyboardResponse({
+					callback_function: after_response,
+					valid_responses: valid_keys,
+					rt_method: 'date',
+					persist: false,
+					allow_held_key: false
+				});
 
         if (trial.timing_max_search > -1) {
 
@@ -171,7 +177,7 @@
         }
 
         function clear_display() {
-          paper.clear();
+          display_element.html('');
         }
       }
 

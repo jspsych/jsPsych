@@ -275,3 +275,56 @@ var shuffledArray = jsPsych.randomization.shuffle(myArray);
 
 // output: shuffledArray = [3,2,4,1,5]
 ```
+
+---
+## jsPsych.randomization.shuffleNoRepeats
+
+```
+jsPsych.randomization.shuffleNoRepeats(array, equalityTest)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+array | array | The array of values to shuffle
+equalityTest | function | A function to use to evaluate the equality of neighbors in the array. The function should accept two parameters, which are the two elements to be tested. It should return `true` if they are equal and `false` if not. The default function, if none is specified, is to use the `===` operator. This will work for primitive values, but fail for Objects and Arrays. An example function is given below in the examples.
+
+### Return value
+
+Returns an array with the same elements as the input array in a random order, with no repeating neighbors.
+
+### Description
+
+Shuffle an array, ensuring that neighboring elements in the array are different.
+
+*Warning: if you provide an array that has very few valid permutations with no neighboring elements, then this method will fail and cause the browser to hang.*
+
+### Examples
+
+#### Basic example
+
+```javascript
+
+var myArray = [1,2,3,4,5,1,2,3,4,5,1,2,3,4,5];
+var shuffledArray = jsPsych.randomization.shuffleNoRepeats(myArray);
+
+// output: shuffledArray = [2, 3, 5, 1, 2, 4, 1, 5, 4, 1, 3, 5, 4, 3, 2]
+```
+
+#### Custom equalityTest
+
+```javascript
+var myObjects = [
+  {color:"blue"},
+	{color:"red"},
+	{color:"yellow"},
+	{color:"orange"}
+];
+
+var repeatedSet = jsPsych.randomization.repeat(myObjects,3);
+var shuffled = jsPsych.randomization.shuffleNoRepeats(repeatedSet, function(a,b) { return a.color === b.color });
+
+// console.log(JSON.stringify(shuffled))
+// "[{"color":"red"},{"color":"yellow"},{"color":"blue"},{"color":"yellow"},{"color":"orange"},{"color":"red"},{"color":"yellow"},{"color":"orange"},{"color":"blue"},{"color":"orange"},{"color":"red"},{"color":"blue"}]"
+```

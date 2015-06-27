@@ -108,7 +108,13 @@
       // hold the jspsych response listener object in memory
       // so that we can turn off the response collection when
       // the trial ends
-      var response_listener = jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices, 'date', true);
+      var response_listener = jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: 'date',
+        persist: true,
+        allow_held_key: false
+      });
 
       function endTrial() {
 

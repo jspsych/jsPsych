@@ -115,7 +115,13 @@
 
 			// start the response listener
 			if(JSON.stringify(trial.choices) != JSON.stringify(["none"])) {
-				var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices);
+				var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+					callback_function: after_response,
+					valid_responses: trial.choices,
+					rt_method: 'date',
+					persist: false,
+					allow_held_key: false
+				});
 			}
 
 			// hide image if timing is set

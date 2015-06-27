@@ -23,14 +23,16 @@
 				trials[i].choices = params.choices;
 				trials[i].correct_text = (typeof params.correct_text === 'undefined') ? "<p class='feedback'>Correct</p>" : params.correct_text;
 				trials[i].incorrect_text = (typeof params.incorrect_text === 'undefined') ? "<p class='feedback'>Incorrect</p>" : params.incorrect_text;
-				// timing params
-				trials[i].timing_stim = params.timing_stim || -1; // default is to show image until response
-				trials[i].timing_feedback_duration = params.timing_feedback_duration || 2000;
-				// optional params
 				trials[i].show_stim_with_feedback = (typeof params.show_stim_with_feedback === 'undefined') ? true : params.show_stim_with_feedback;
 				trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
 				trials[i].force_correct_button_press = (typeof params.force_correct_button_press === 'undefined') ? false : params.force_correct_button_press;
 				trials[i].prompt = (typeof params.prompt === 'undefined') ? '' : params.prompt;
+				trials[i].show_feedback_on_timeout = (typeof params.show_feedback_on_timeout === 'undefined') ? false : params.show_feedback_on_timeout;
+				trials[i].timeout_message = params.timeout_message || "<p>Please respond faster.</p>";
+				// timing params
+				trials[i].timing_stim = params.timing_stim || -1; // default is to show image until response
+				trials[i].timing_response = params.timing_response || -1; // default is no max response time
+				trials[i].timing_feedback_duration = params.timing_feedback_duration || 2000;
 			}
 			return trials;
 		};
@@ -81,6 +83,9 @@
 					clearTimeout(setTimeoutHandlers[i]);
 				}
 
+				// clear keyboard listener
+				jsPsych.pluginAPI.cancelAllKeyboardResponses();
+
 				var correct = false;
 				if (trial.key_answer == info.key) {
 					correct = true;
@@ -98,51 +103,72 @@
 
 				display_element.html('');
 
-				doFeedback(correct);
+				var timeout = info.rt == -1;
+				doFeedback(correct, timeout);
 			}
 
-			jsPsych.pluginAPI.getKeyboardResponse(after_response, trial.choices, 'date', false);
+			jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: 'date',
+        persist: false,
+				allow_held_key: false
+      });
 
+			if(trial.timing_response > 0) {
+				setTimeoutHandlers.push(setTimeout(function(){
+					after_response({key: -1, rt: -1});
+				}, trial.timing_response));
+			}
 
+			function doFeedback(correct, timeout) {
 
-			function doFeedback(correct) {
-				// show image during feedback if flag is set
-				if (trial.show_stim_with_feedback) {
-					if (!trial.is_html) {
-						// add image to display
-						display_element.append($('<img>', {
-							"src": trial.a_path,
-							"class": 'jspsych-categorize-stimulus',
-							"id": 'jspsych-categorize-stimulus'
-						}));
-					} else {
-						display_element.append($('<div>', {
-							"id": 'jspsych-categorize-stimulus',
-							"class": 'jspsych-categorize-stimulus',
-							"html": trial.a_path
-						}));
-					}
-				}
-
-				// substitute answer in feedback string.
-				var atext = "";
-				if (correct) {
-					atext = trial.correct_text.replace("%ANS%", trial.text_answer);
+				if(timeout && !trial.show_feedback_on_timeout){
+					display_element.append(trial.timeout_message);
 				} else {
-					atext = trial.incorrect_text.replace("%ANS%", trial.text_answer);
+					// show image during feedback if flag is set
+					if (trial.show_stim_with_feedback) {
+						if (!trial.is_html) {
+							// add image to display
+							display_element.append($('<img>', {
+								"src": trial.a_path,
+								"class": 'jspsych-categorize-stimulus',
+								"id": 'jspsych-categorize-stimulus'
+							}));
+						} else {
+							display_element.append($('<div>', {
+								"id": 'jspsych-categorize-stimulus',
+								"class": 'jspsych-categorize-stimulus',
+								"html": trial.a_path
+							}));
+						}
+					}
+
+					// substitute answer in feedback string.
+					var atext = "";
+					if (correct) {
+						atext = trial.correct_text.replace("%ANS%", trial.text_answer);
+					} else {
+						atext = trial.incorrect_text.replace("%ANS%", trial.text_answer);
+					}
+
+					// show the feedback
+					display_element.append(atext);
 				}
-
-				// show the feedback
-				display_element.append(atext);
-
 				// check if force correct button press is set
-				if (trial.force_correct_button_press && correct === false) {
+				if (trial.force_correct_button_press && correct === false && ((timeout && trial.show_feedback_on_timeout) || !timeout)) {
 
 					var after_forced_response = function(info) {
 						endTrial();
 					}
 
-					jsPsych.pluginAPI.getKeyboardResponse(after_forced_response, trial.key_answer, 'date', false);
+					jsPsych.pluginAPI.getKeyboardResponse({
+		        callback_function: after_forced_response,
+		        valid_responses: [trial.key_answer],
+		        rt_method: 'date',
+		        persist: false,
+	          allow_held_key: false
+		      });
 
 				} else {
 					setTimeout(function() {

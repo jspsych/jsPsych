@@ -21,6 +21,7 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 
 ### [Data module](jspsych-data.md)
 
+* [jsPsych.data.addDataToLastTrial](jspsych-data.md#jspsychdataadddatatolasttrial)
 * [jsPsych.data.addProperties](jspsych-data.md#jspsychdataaddproperties)
 * [jsPsych.data.dataAsCSV](jspsych-data.md#jspsychdatadataascsv)
 * [jsPsych.data.displayData](jspsych-data.md#jspsychdatadisplaydata)
@@ -43,6 +44,7 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.randomization.repeat](jspsych-randomization.md#jspsychrandomizationrepeat)
 * [jsPsych.randomization.sample](jspsych-randomization.md#jspsychrandomizationsample)
 * [jsPsych.randomization.shuffle](jspsych-randomization.md#jspsychrandomizationshuffle)
+* [jsPsych.randomization.shuffleNoRepeats](jspsych-randomization.md#jspsychrandomizationshufflenorepeats)
 
 ### [PluginAPI module](jspsych-pluginAPI.md)
 
