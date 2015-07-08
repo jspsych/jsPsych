@@ -9,6 +9,7 @@ extra_javascript:
 - js/analytics.js
 include_next_prev: false
 docs_dir: markdown_docs
+site_favicon: favicon.ico
 pages:
 - ['index.md', 'Introduction']
 - ['tutorials/hello-world.md', 'Tutorials', 'The Basics: Hello World']
