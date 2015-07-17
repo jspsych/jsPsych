@@ -22,7 +22,7 @@
 				trials[i] = {};
 				trials[i].a_path = params.stimuli[i];
 				trials[i].choices = params.choices;
-				trials[i].button_html = params.button_html || '<button>%choice%</button>';
+				trials[i].button_html = params.button_html || '<button class="jspsych-btn">%choice%</button>';
 				trials[i].response_ends_trial = (typeof params.response_ends_trial === 'undefined') ? true : params.response_ends_trial;
 				// timing parameters
 				trials[i].timing_stim = params.timing_stim || -1; // if -1, then show indefinitely
@@ -33,8 +33,6 @@
 			}
 			return trials;
 		};
-
-
 
 		plugin.trial = function(display_element, trial) {
 
@@ -51,12 +49,14 @@
 			if (!trial.is_html) {
 				display_element.append($('<img>', {
 					src: trial.a_path,
-					id: 'jspsych-button-response-stimulus'
+					id: 'jspsych-button-response-stimulus',
+					class: 'block-center'
 				}));
 			} else {
 				display_element.append($('<div>', {
 					html: trial.a_path,
-					id: 'jspsych-button-response-stimulus'
+					id: 'jspsych-button-response-stimulus',
+					class: 'block-center'
 				}));
 			}
 
@@ -73,12 +73,19 @@
 					buttons.push(trial.button_html);
 				}
 			}
+			display_element.append('<div id="jspsych-button-response-btngroup" class="center-content block-center"></div>')
 			for(var i=0; i<trial.choices.length; i++){
-				var str = trial.button_html[i].replace('%choice%', trial.choice[i]);
-				display_element.append($(str, {
-					id: 'jspsych-button-response-button-'+i,
-					class: 'jspsych-button-response-button'
-				}));
+				var str = buttons[i].replace('%choice%', trial.choices[i]);
+				$('#jspsych-button-response-btngroup').append(
+					$(str).
+					attr('id','jspsych-button-response-button-'+i).
+					data('choice',i).
+					addClass('jspsych-button-response-button').
+					on('click', function(e){
+						var choice = $('#'+this.id).data('choice');
+						after_response(choice);
+					})
+				);
 			}
 
 			//show prompt if there is one
@@ -89,24 +96,43 @@
 			// store response
 			var response = {rt: -1, button: -1};
 
+			// start time
+			var start_time = 0;
+
+			// function to handle responses by the subject
+			function after_response(choice) {
+
+				// measure rt
+				var end_time = Date.now();
+				var rt = end_time - start_time;
+				response.button = choice;
+				response.rt = rt;
+
+				// after a valid response, the stimulus will have the CSS class 'responded'
+				// which can be used to provide visual feedback that a response was recorded
+				$("#jspsych-button-response-stimulus").addClass('responded');
+
+				// disable all the buttons after a response
+				$('.jspsych-button-response-button').off('click').attr('disabled','disabled');
+
+				if (trial.response_ends_trial) {
+					end_trial();
+				}
+			};
+
 			// function to end trial when it is time
-			var end_trial = function() {
+			function end_trial() {
 
 				// kill any remaining setTimeout handlers
 				for (var i = 0; i < setTimeoutHandlers.length; i++) {
 					clearTimeout(setTimeoutHandlers[i]);
 				}
 
-				// kill keyboard listeners
-				if(typeof keyboardListener !== 'undefined'){
-					jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
-				}
-
 				// gather the data to store for the trial
 				var trial_data = {
 					"rt": response.rt,
 					"stimulus": trial.a_path,
-					"key_press": response.key
+					"button_pressed": response.button
 				};
 
 				jsPsych.data.write(trial_data);
@@ -118,22 +144,8 @@
 				jsPsych.finishTrial();
 			};
 
-			// function to handle responses by the subject
-			var after_response = function(info) {
-
-				// after a valid response, the stimulus will have the CSS class 'responded'
-				// which can be used to provide visual feedback that a response was recorded
-				$("#jspsych-button-response-stimulus").addClass('responded');
-
-				// only record the first response
-				if(response.button == -1){
-					response = info;
-				}
-
-				if (trial.response_ends_trial) {
-					end_trial();
-				}
-			};
+			// start timing
+			start_time = Date.now();
 
 			// hide image if timing is set
 			if (trial.timing_stim > 0) {
