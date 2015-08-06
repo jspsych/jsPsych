@@ -24,7 +24,7 @@
 				trials[i].same_key = params.same_key || 81; // default is 'q'
 				trials[i].different_key = params.different_key || 80; // default is 'p'
 				// timing parameters
-				trials[i].timing_first_stim = params.timing_first_stim || 1000;
+				trials[i].timing_first_stim = params.timing_first_stim || 1000; // if -1, the first stim is shown until any key is pressed
 				trials[i].timing_second_stim = params.timing_second_stim || 1000; // if -1, then second stim is shown until response.
 				trials[i].timing_gap = params.timing_gap || 500;
 				// optional parameters
@@ -62,11 +62,19 @@
 				}));
 			}
 
-			// remove image after duration
-			setTimeoutHandlers.push(setTimeout(function() {
-				showBlankScreen();
-			}, trial.timing_first_stim));
-
+			var first_stim_info;
+			if (trial.timing_first_stim > 0) {
+				setTimeoutHandlers.push(setTimeout(function() {
+					showBlankScreen();
+				}, trial.timing_first_stim));
+			}
+			else {
+				function afterKeyboardResponse(info) {
+					first_stim_info = info;
+					showBlankScreen();
+				}
+				jsPsych.pluginAPI.getKeyboardResponse(afterKeyboardResponse, [], 'date', false);
+			}
 
 			function showBlankScreen() {
 				$('.jspsych-same-different-stimulus').remove();
@@ -125,6 +133,10 @@
 						"stimulus": JSON.stringify([trial.a_path, trial.b_path]),
 						"key_press": info.key
 					};
+					if (first_stim_info) {
+						trial_data["rt_stim1"] = first_stim_info.rt;
+						trial_data["key_press_stim1"] = first_stim_info.key;
+					}
 					jsPsych.data.write(trial_data);
 
 					display_element.html('');

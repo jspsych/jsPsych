@@ -13,7 +13,7 @@ is_html | boolean | false | If the elements of the `stimuli` array are strings c
 answer | array | *undefined* | Array of strings, where each string is either `'same'` or `'different'`. This array should be the same length as `stimuli` and the answers should correspond to the pairs in the `stimuli` array.
 same_key | numeric or string | 'Q' | The key that subjects should press to indicate that the two stimuli are the same.
 different_key | numeric or string | 'P' | The key that subjects should press to indicate that the two stimuli are different.
-timing_first_stim | numeric | 1000 | How long to show the first stimulus for in milliseconds.
+timing_first_stim | numeric | 1000 | How long to show the first stimulus for in milliseconds. If the value of this parameter is `-1` then the stimulus will be shown until the subject presses any key.
 timing_gap | numeric | 500 | How long to show a blank screen in between the two stimuli.
 timing_second_stim | numeric | 1000 | How long to show the second stimulus for in milliseconds. If the value of this parameter is `-1` then the stimulus will be shown until the subject responds.
 prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g. which key to press).
@@ -30,6 +30,13 @@ stimulus_2 | string | Either the path to the image file or the string containing
 key_press | numeric | Indicates which key the subject pressed. The value is the [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) corresponding to the subject's response.
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the second stimulus first appears on the screen until the subject's response. 
 correct | boolean | `true` if the subject's response matched the `answer` for this trial.
+
+Additionally, if `timing_first_stim` is `-1`, then the following data is also collected:
+
+Name | Type | Value
+-----|------|------
+rt_stim1 | numeric | The response time in milliseconds for the subject to continue after the first stimulus. The time is measured from when the first stimulus appears on the screen until the subject's response.
+key_press_stim1 | numeric | Indicates which key the subject pressed to continue. The value is the [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) corresponding to the subject's response.
 
 ## Examples
 
