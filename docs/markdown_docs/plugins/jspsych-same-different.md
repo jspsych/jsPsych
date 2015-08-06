@@ -29,6 +29,7 @@ stimulus | string | An array of length 2 containing either the path to the image
 key_press | numeric | Indicates which key the subject pressed. The value is the [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) corresponding to the subject's response.
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the second stimulus first appears on the screen until the subject's response. 
 correct | boolean | `true` if the subject's response matched the `answer` for this trial.
+answer | string | The correct answer to the trial, either `'same'` or `'different'`.
 
 Additionally, if `timing_first_stim` is `-1`, then the following data is also collected:
 
