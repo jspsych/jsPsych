@@ -129,6 +129,7 @@
 
 					var trial_data = {
 						"rt": info.rt,
+						"answer": trial.answer,
 						"correct": correct,
 						"stimulus": JSON.stringify([trial.a_path, trial.b_path]),
 						"key_press": info.key
