@@ -22,9 +22,7 @@
         trials.push({
           preamble: (typeof params.preamble === 'undefined') ? "" : params.preamble[i],
           questions: params.questions[i],
-          labels: params.labels[i],
-          intervals: params.intervals[i],
-          show_ticks: (typeof params.show_ticks === 'undefined') ? true : params.show_ticks
+          options: params.options[i],
         });
       }
       return trials;
@@ -32,120 +30,85 @@
 
     plugin.trial = function(display_element, trial) {
 
+      var plugin_id_name = "jspsych-survey-multi-choice",
+          plugin_id_selector = '#' + plugin_id_name,
+          _join = function(/*args*/) {
+            var arr = Array.prototype.slice.call(arguments, _join.length);
+            return arr.join(separator='-');
+          }
+
       // if any trial variables are functions
       // this evaluates the function and replaces
       // it with the output of the function
       trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
       // show preamble text
+      var preamble_id_name = _join(plugin_id_name, 'preamble');
       display_element.append($('<div>', {
-        "id": 'jspsych-survey-multi-choice-preamble',
-        "class": 'jspsych-survey-multi-choice-preamble'
+        "id": preamble_id_name,
+        "class":preamble_id_name
       }));
+      $('#' + preamble_id_name).html(trial.preamble);
 
-      $('#jspsych-survey-multi-choice-preamble').html(trial.preamble);
-
-      // add multiple-choice scale questions
+      // add multiple-choice questions
       for (var i = 0; i < trial.questions.length; i++) {
         // create div
         display_element.append($('<div>', {
-          "id": 'jspsych-survey-multi-choice-' + i,
-          "class": 'jspsych-survey-multi-choice-question'
+          "id": _join(plugin_id_name, i),
+          "class": _join(plugin_id_name, 'question')
+        }));
+
+        // create question container
+        var question_selector = _join(plugin_id_selector, i);
+
+        $(question_selector).append($('<div>', {
+          "id": _join(plugin_id_name, 'radio', i),
+          "class": plugin_id_name + '-radio ' + plugin_id_name
         }));
 
         // add question text
-        $("#jspsych-survey-multi-choice-" + i).append('<p class="jspsych-survey-multi-choice-text survey-multiple-choice">' + trial.questions[i] + '</p>');
+        $(question_selector).append(
+          '<p class="' + plugin_id_name + '-text survey-multi-choice">' + trial.questions[i] + '</p>'
+        );
 
-        // create slider
-        $("#jspsych-survey-multi-choice-" + i).append($('<div>', {
-          "id": 'jspsych-survey-multi-choice-slider-' + i,
-          "class": 'jspsych-survey-multi-choice-slider jspsych-survey-multi-choice'
-        }));
-        $("#jspsych-survey-multi-choice-slider-" + i).slider({
-          value: Math.ceil(trial.intervals[i] / 2),
-          min: 1,
-          max: trial.intervals[i],
-          step: 1
-        });
+        // create option radio buttons
+        for (var j = 0; j < trial.options[i].length; j++) {
+          var option_id_name = _join(plugin_id_name, "option", i, j),
+              option_id_selector = '#' + option_id_name;
 
-        // show tick marks
-        if (trial.show_ticks) {
-          $("#jspsych-survey-multi-choice-" + i).append($('<div>', {
-            "id": 'jspsych-survey-multi-choice-sliderticks' + i,
-            "class": 'jspsych-survey-multi-choice-sliderticks jspsych-survey-multi-choice',
-            "css": {
-              "position": 'relative'
-            }
+          // add radio button container
+          $(question_selector).append($('<div>', {
+            "id": option_id_name,
+            "class": _join(plugin_id_name, 'option')
           }));
-          for (var j = 1; j < trial.intervals[i] - 1; j++) {
-            $('#jspsych-survey-multi-choice-slider-' + i).append('<div class="jspsych-survey-multi-choice-slidertickmark"></div>');
-          }
+          // console.log($(option_id_selector));
 
-          $('#jspsych-survey-multi-choice-slider-' + i + ' .jspsych-survey-multi-choice-slidertickmark').each(function(index) {
-            var left = (index + 1) * (100 / (trial.intervals[i] - 1));
-            $(this).css({
-              'position': 'absolute',
-              'left': left + '%',
-              'width': '1px',
-              'height': '100%',
-              'background-color': '#222222'
-            });
-          });
+          // add label and question text
+          var option_label = '<label class="' + plugin_id_name + '-text">' + trial.options[i][j] + '</label>';
+          $(option_id_selector).append(option_label);
+
+          // create radio button
+          var input_id_name = _join(plugin_id_name, 'response', i, j);
+          $(option_id_selector + " label").prepend('<input type="radio" name="#' + input_id_name + '" value="' + j + '">');
         }
-
-        // create labels for slider
-        $("#jspsych-survey-multi-choice-" + i).append($('<ul>', {
-          "id": "jspsych-survey-multi-choice-sliderlabels-" + i,
-          "class": 'jspsych-survey-multi-choice-sliderlabels survey-multiple-choice',
-          "css": {
-            "width": "100%",
-            "margin": "10px 0px 0px 0px",
-            "padding": "0px",
-            "display": "inline-block",
-            "position": "relative",
-            "height": "2em"
-          }
-        }));
-
-        for (var j = 0; j < trial.labels[i].length; j++) {
-          $("#jspsych-survey-multi-choice-sliderlabels-" + i).append('<li>' + trial.labels[i][j] + '</li>');
-        }
-
-        // position labels to match slider intervals
-        var slider_width = $("#jspsych-survey-multi-choice-slider-" + i).width();
-        var num_items = trial.labels[i].length;
-        var item_width = slider_width / num_items;
-        var spacing_interval = slider_width / (num_items - 1);
-
-        $("#jspsych-survey-multi-choice-sliderlabels-" + i + " li").each(function(index) {
-          $(this).css({
-            'display': 'inline-block',
-            'width': item_width + 'px',
-            'margin': '0px',
-            'padding': '0px',
-            'text-align': 'center',
-            'position': 'absolute',
-            'left': (spacing_interval * index) - (item_width / 2)
-          });
-        });
       }
 
       // add submit button
       display_element.append($('<button>', {
-        'id': 'jspsych-survey-multi-choice-next',
-        'class': 'jspsych-survey-multi-choice'
+        'id': plugin_id_name + '-next',
+        'class': plugin_id_name
       }));
-      $("#jspsych-survey-multi-choice-next").html('Submit Answers');
-      $("#jspsych-survey-multi-choice-next").click(function() {
+      $(plugin_id_selector + "-next").html('Submit options');
+      $(plugin_id_selector + "-next").click(function() {
         // measure response time
         var endTime = (new Date()).getTime();
         var response_time = endTime - startTime;
 
         // create object to hold responses
         var question_data = {};
-        $("div.jspsych-survey-multi-choice-slider").each(function(index) {
+        $("div." + plugin_id_name + "-radio").each(function(index) {
           var id = "Q" + index;
-          var val = $(this).slider("value");
+          var val = $(this).find("label input:radio").val();
           var obje = {};
           obje[id] = val;
           $.extend(question_data, obje);
