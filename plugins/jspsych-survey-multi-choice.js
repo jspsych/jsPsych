@@ -23,6 +23,7 @@
           preamble: (typeof params.preamble === 'undefined') ? "" : params.preamble[i],
           questions: params.questions[i],
           options: params.options[i],
+          horizontal: (typeof params.horizontal === 'undefined') ? false : params.horizontal
         });
       }
       return trials;
@@ -52,19 +53,18 @@
 
       // add multiple-choice questions
       for (var i = 0; i < trial.questions.length; i++) {
-        // create div
+        // create question container
+        var question_classes = [_join(plugin_id_name, 'question')];
+        if (trial.horizontal) {
+          question_classes.push(_join(plugin_id_name, 'horizontal'));
+        }
+
         display_element.append($('<div>', {
           "id": _join(plugin_id_name, i),
-          "class": _join(plugin_id_name, 'question')
+          "class": question_classes.join(' ')
         }));
 
-        // create question container
         var question_selector = _join(plugin_id_selector, i);
-
-        $(question_selector).append($('<div>', {
-          "id": _join(plugin_id_name, 'radio', i),
-          "class": plugin_id_name + '-radio ' + plugin_id_name
-        }));
 
         // add question text
         $(question_selector).append(
