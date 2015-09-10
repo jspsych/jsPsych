@@ -89,7 +89,7 @@
 
           // create radio button
           var input_id_name = _join(plugin_id_name, 'response', i);
-          $(option_id_selector + " label").prepend('<input type="radio" name="' + input_id_name + '" value="' + j + '">');
+          $(option_id_selector + " label").prepend('<input type="radio" name="' + input_id_name + '" value="' + trial.options[i][j] + '">');
         }
       }
 
