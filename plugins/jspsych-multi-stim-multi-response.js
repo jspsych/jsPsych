@@ -114,11 +114,6 @@
 
         var whichResponse;
         for (var i = 0; i < trial.choices.length; i++) {
-        	
-          // allow overlap between response groups
-          if (validResponses[i]) {
-            continue;
-          }
 
           for (var j = 0; j < trial.choices[i].length; j++) {
             keycode = (typeof trial.choices[i][j] == 'string') ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.choices[i][j]) : trial.choices[i][j];
