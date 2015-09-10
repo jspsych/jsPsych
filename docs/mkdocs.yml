@@ -37,6 +37,7 @@ pages:
 - ['plugins/jspsych-single-audio.md', 'Plugins', 'jspsych-single-audio']
 - ['plugins/jspsych-single-stim.md', 'Plugins', 'jspsych-single-stim']
 - ['plugins/jspsych-survey-likert.md', 'Plugins', 'jspsych-survey-likert']
+- ['plugins/jspsych-survey-multi-choice.md', 'Plugins', 'jspsych-survey-multi-choice']
 - ['plugins/jspsych-survey-text.md', 'Plugins', 'jspsych-survey-text']
 - ['plugins/jspsych-text.md', 'Plugins', 'jspsych-text']
 - ['plugins/jspsych-visual-search-circle.md', 'Plugins', 'jspsych-visual-search-circle']
