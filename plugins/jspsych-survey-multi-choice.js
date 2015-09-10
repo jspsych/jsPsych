@@ -88,8 +88,8 @@
           $(option_id_selector).append(option_label);
 
           // create radio button
-          var input_id_name = _join(plugin_id_name, 'response', i, j);
-          $(option_id_selector + " label").prepend('<input type="radio" name="#' + input_id_name + '" value="' + j + '">');
+          var input_id_name = _join(plugin_id_name, 'response', i);
+          $(option_id_selector + " label").prepend('<input type="radio" name="' + input_id_name + '" value="' + j + '">');
         }
       }
 
@@ -106,9 +106,9 @@
 
         // create object to hold responses
         var question_data = {};
-        $("div." + plugin_id_name + "-radio").each(function(index) {
+        $("div." + plugin_id_name + "-question").each(function(index) {
           var id = "Q" + index;
-          var val = $(this).find("label input:radio").val();
+          var val = $(this).find("input:radio:checked").val();
           var obje = {};
           obje[id] = val;
           $.extend(question_data, obje);
