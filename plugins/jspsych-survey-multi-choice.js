@@ -98,7 +98,7 @@
         'id': plugin_id_name + '-next',
         'class': plugin_id_name
       }));
-      $(plugin_id_selector + "-next").html('Submit options');
+      $(plugin_id_selector + "-next").html('Submit Answers');
       $(plugin_id_selector + "-next").click(function() {
         // measure response time
         var endTime = (new Date()).getTime();
