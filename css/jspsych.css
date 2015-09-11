@@ -320,6 +320,7 @@ button:hover {
   display: inline-block;
   margin-left: 1em;
   margin-right: 1em;
+  vertical-align: top;
 }
 
 label.jspsych-survey-multi-choice-text input[type="radio"] {
