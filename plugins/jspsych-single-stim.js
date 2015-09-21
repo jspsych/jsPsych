@@ -2,7 +2,7 @@
  * jspsych-single-stim
  * Josh de Leeuw
  *
- * plugin for displaying a stimulus and getting a keyboard response
+ * plugin for displaying a stimulus and getting a keyboard/mouse response
  *
  * documentation: docs.jspsych.org
  *
@@ -29,6 +29,7 @@
 				// optional parameters
 				trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
 				trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
+				trials[i].mouse_response = (typeof params.mouse_response === 'undefined') ? false : params.mouse_response;
 			}
 			return trials;
 		};
@@ -36,7 +37,7 @@
 
 
 		plugin.trial = function(display_element, trial) {
-
+			
 			// if any trial variables are functions
 			// this evaluates the function and replaces
 			// it with the output of the function
@@ -79,6 +80,9 @@
 				if(typeof keyboardListener !== 'undefined'){
 					jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
 				}
+				
+				// kill mouse listener
+				display_element.unbind('click', mouse_listener);
 
 				// gather the data to store for the trial
 				var trial_data = {
@@ -91,7 +95,7 @@
 
 				// clear the display
 				display_element.html('');
-
+				
 				// move on to the next trial
 				jsPsych.finishTrial();
 			};
@@ -112,8 +116,20 @@
 					end_trial();
 				}
 			};
+			
+			var mouse_listener = function(e) {
 
+                var rt = (new Date()).getTime() - start_time;
+
+                display_element.unbind('click', mouse_listener);
+                after_response({key: 'mouse', rt: rt});
+            };
+			
 			// start the response listener
+			if (trial.mouse_response == true) {
+                display_element.click(mouse_listener);
+				var start_time = (new Date()).getTime();
+			}
 			if(JSON.stringify(trial.choices) != JSON.stringify(["none"])) {
 				var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
 					callback_function: after_response,
@@ -139,7 +155,6 @@
 				}, trial.timing_response);
 				setTimeoutHandlers.push(t2);
 			}
-
 		};
 
 		return plugin;
