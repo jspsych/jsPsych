@@ -1,15 +1,15 @@
 /**
- * jspsych-single-stim
+ * jspsych-button-response
  * Josh de Leeuw
  *
- * plugin for displaying a stimulus and getting a keyboard/mouse response
+ * plugin for displaying a stimulus and getting a keyboard response
  *
  * documentation: docs.jspsych.org
  *
  **/
 
 (function($) {
-	jsPsych["single-stim"] = (function() {
+	jsPsych["button-response"] = (function() {
 
 		var plugin = {};
 
@@ -21,7 +21,8 @@
 			for (var i = 0; i < trials.length; i++) {
 				trials[i] = {};
 				trials[i].a_path = params.stimuli[i];
-				trials[i].choices = params.choices || [];
+				trials[i].choices = params.choices;
+				trials[i].button_html = params.button_html || '<button class="jspsych-btn">%choice%</button>';
 				trials[i].response_ends_trial = (typeof params.response_ends_trial === 'undefined') ? true : params.response_ends_trial;
 				// timing parameters
 				trials[i].timing_stim = params.timing_stim || -1; // if -1, then show indefinitely
@@ -29,15 +30,12 @@
 				// optional parameters
 				trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
 				trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
-				trials[i].mouse_response = (typeof params.mouse_response === 'undefined') ? false : params.mouse_response;
 			}
 			return trials;
 		};
 
-
-
 		plugin.trial = function(display_element, trial) {
-			
+
 			// if any trial variables are functions
 			// this evaluates the function and replaces
 			// it with the output of the function
@@ -51,13 +49,43 @@
 			if (!trial.is_html) {
 				display_element.append($('<img>', {
 					src: trial.a_path,
-					id: 'jspsych-single-stim-stimulus'
+					id: 'jspsych-button-response-stimulus',
+					class: 'block-center'
 				}));
 			} else {
 				display_element.append($('<div>', {
 					html: trial.a_path,
-					id: 'jspsych-single-stim-stimulus'
+					id: 'jspsych-button-response-stimulus',
+					class: 'block-center'
 				}));
+			}
+
+			//display buttons
+			var buttons = [];
+			if(Array.isArray(trial.button_html)){
+				if(trial.button_html.length == trial.choices.length){
+					buttons = trial.button_html;
+				} else {
+					console.error('Error in button-response plugin. The length of the button_html array does not equal the length of the choices array');
+				}
+			} else {
+				for(var i=0;i < trial.choices.length; i++){
+					buttons.push(trial.button_html);
+				}
+			}
+			display_element.append('<div id="jspsych-button-response-btngroup" class="center-content block-center"></div>')
+			for(var i=0; i<trial.choices.length; i++){
+				var str = buttons[i].replace('%choice%', trial.choices[i]);
+				$('#jspsych-button-response-btngroup').append(
+					$(str).
+					attr('id','jspsych-button-response-button-'+i).
+					data('choice',i).
+					addClass('jspsych-button-response-button').
+					on('click', function(e){
+						var choice = $('#'+this.id).data('choice');
+						after_response(choice);
+					})
+				);
 			}
 
 			//show prompt if there is one
@@ -66,84 +94,63 @@
 			}
 
 			// store response
-			var response = {rt: -1, key: -1};
+			var response = {rt: -1, button: -1};
+
+			// start time
+			var start_time = 0;
+
+			// function to handle responses by the subject
+			function after_response(choice) {
+
+				// measure rt
+				var end_time = Date.now();
+				var rt = end_time - start_time;
+				response.button = choice;
+				response.rt = rt;
+
+				// after a valid response, the stimulus will have the CSS class 'responded'
+				// which can be used to provide visual feedback that a response was recorded
+				$("#jspsych-button-response-stimulus").addClass('responded');
+
+				// disable all the buttons after a response
+				$('.jspsych-button-response-button').off('click').attr('disabled','disabled');
+
+				if (trial.response_ends_trial) {
+					end_trial();
+				}
+			};
 
 			// function to end trial when it is time
-			var end_trial = function() {
+			function end_trial() {
 
 				// kill any remaining setTimeout handlers
 				for (var i = 0; i < setTimeoutHandlers.length; i++) {
 					clearTimeout(setTimeoutHandlers[i]);
 				}
 
-				// kill keyboard listeners
-				if(typeof keyboardListener !== 'undefined'){
-					jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
-				}
-				
-				// kill mouse listener
-				display_element.unbind('click', mouse_listener);
-
 				// gather the data to store for the trial
 				var trial_data = {
 					"rt": response.rt,
 					"stimulus": trial.a_path,
-					"key_press": response.key
+					"button_pressed": response.button
 				};
 
 				jsPsych.data.write(trial_data);
 
 				// clear the display
 				display_element.html('');
-				
+
 				// move on to the next trial
 				jsPsych.finishTrial();
 			};
 
-			// function to handle responses by the subject
-			var after_response = function(info) {
-
-				// after a valid response, the stimulus will have the CSS class 'responded'
-				// which can be used to provide visual feedback that a response was recorded
-				$("#jspsych-single-stim-stimulus").addClass('responded');
-
-				// only record the first response
-				if(response.key == -1){
-					response = info;
-				}
-
-				if (trial.response_ends_trial) {
-					end_trial();
-				}
-			};
-			
-			var mouse_listener = function(e) {
-
-                var rt = (new Date()).getTime() - start_time;
-
-                display_element.unbind('click', mouse_listener);
-                after_response({key: 'mouse', rt: rt});
-            };
-			
-			// start the response listener
-			if (trial.mouse_response == true) {
-                display_element.click(mouse_listener);
-				var start_time = (new Date()).getTime();
-			}
-			if(JSON.stringify(trial.choices) != JSON.stringify(["none"])) {
-				var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-					callback_function: after_response,
-					valid_responses: trial.choices,
-					rt_method: 'date',
-					persist: false,
-					allow_held_key: false
-				});
-			}
+			// start timing
+			start_time = Date.now();
 
 			// hide image if timing is set
 			if (trial.timing_stim > 0) {
 				var t1 = setTimeout(function() {
-					$('#jspsych-single-stim-stimulus').css('visibility', 'hidden');
+					$('#jspsych-button-response-stimulus').css('visibility', 'hidden');
 				}, trial.timing_stim);
 				setTimeoutHandlers.push(t1);
 			}
@@ -155,6 +162,7 @@
 				}, trial.timing_response);
 				setTimeoutHandlers.push(t2);
 			}
+
 		};
 
 		return plugin;
