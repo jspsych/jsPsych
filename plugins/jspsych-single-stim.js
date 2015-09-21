@@ -25,7 +25,7 @@
 				trials[i].response_ends_trial = (typeof params.response_ends_trial === 'undefined') ? true : params.response_ends_trial;
 				// timing parameters
 				trials[i].timing_stim = params.timing_stim || -1; // if -1, then show indefinitely
-				trials[i].timing_response = params.timing_response || -1; // if -1, then wait for response forever
+				trials[i].timing_response = (typeof params.timing_response === 'undefined') ? -1 : params.timing_response; // if -1, then wait for response forever
 				// optional parameters
 				trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
 				trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
@@ -133,7 +133,7 @@
 			}
 
 			// end trial if time limit is set
-			if (trial.timing_response > 0) {
+			if (trial.timing_response > -1) {
 				var t2 = setTimeout(function() {
 					end_trial();
 				}, trial.timing_response);
