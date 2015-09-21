@@ -31,7 +31,7 @@
 				trials[i].timeout_message = params.timeout_message || "<p>Please respond faster.</p>";
 				// timing params
 				trials[i].timing_stim = params.timing_stim || -1; // default is to show image until response
-				trials[i].timing_response = params.timing_response || -1; // default is no max response time
+				trials[i].timing_response = (typeof params.timing_response === 'undefined') ? -1 : params.timing_response; // if -1, then wait for response forever
 				trials[i].timing_feedback_duration = params.timing_feedback_duration || 2000;
 			}
 			return trials;
@@ -115,7 +115,7 @@
 				allow_held_key: false
       });
 
-			if(trial.timing_response > 0) {
+			if(trial.timing_response > -1) {
 				setTimeoutHandlers.push(setTimeout(function(){
 					after_response({key: -1, rt: -1});
 				}, trial.timing_response));
