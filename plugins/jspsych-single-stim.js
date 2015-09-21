@@ -128,16 +128,15 @@
 			if (trial.timing_stim > 0) {
 				var t1 = setTimeout(function() {
 					$('#jspsych-single-stim-stimulus').css('visibility', 'hidden');
+					// end trial if time limit is set
+					if (trial.timing_response > 0) {
+						var t2 = setTimeout(function() {
+							end_trial();
+						}, trial.timing_response);
+						setTimeoutHandlers.push(t2);
+					}
 				}, trial.timing_stim);
 				setTimeoutHandlers.push(t1);
-			}
-
-			// end trial if time limit is set
-			if (trial.timing_response > 0) {
-				var t2 = setTimeout(function() {
-					end_trial();
-				}, trial.timing_response);
-				setTimeoutHandlers.push(t2);
 			}
 
 		};
