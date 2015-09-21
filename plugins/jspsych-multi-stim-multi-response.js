@@ -182,6 +182,13 @@
               showNextStimulus();
             } else {
               $('#jspsych-multi-stim-multi-response-stimulus').css('visibility', 'hidden');
+	      // end trial if time limit is set
+	      if (trial.timing_response > 0) {
+	        var t2 = setTimeout(function() {
+	          end_trial();
+	        }, trial.timing_response);
+	        setTimeoutHandlers.push(t2);
+	      }
             }
 
           }, trial.timing_stim[whichStimulus]);
@@ -202,14 +209,6 @@
         persist: true,
 				allow_held_key: false
       });
-
-      // end trial if time limit is set
-      if (trial.timing_response > 0) {
-        var t2 = setTimeout(function() {
-          end_trial();
-        }, trial.timing_response);
-        setTimeoutHandlers.push(t2);
-      }
 
     };
 

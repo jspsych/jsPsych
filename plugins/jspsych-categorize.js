@@ -67,6 +67,12 @@
 			if (trial.timing_stim > 0) {
 				setTimeoutHandlers.push(setTimeout(function() {
 					$('#jspsych-categorize-stimulus').css('visibility', 'hidden');
+					// end trial if time limit is set
+					if(trial.timing_response > 0) {
+						setTimeoutHandlers.push(setTimeout(function(){
+							after_response({key: -1, rt: -1});
+						}, trial.timing_response));
+					}
 				}, trial.timing_stim));
 			}
 
@@ -114,12 +120,6 @@
         persist: false,
 				allow_held_key: false
       });
-
-			if(trial.timing_response > 0) {
-				setTimeoutHandlers.push(setTimeout(function(){
-					after_response({key: -1, rt: -1});
-				}, trial.timing_response));
-			}
 
 			function doFeedback(correct, timeout) {
 
