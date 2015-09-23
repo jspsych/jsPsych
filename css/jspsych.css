@@ -309,6 +309,10 @@ button:hover {
   margin-bottom: 2em;
  }
 
+.jspsych-survey-multi-choice-text span.required {
+  color: darkred;
+}
+
 .jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {
   text-align: center;
 }
