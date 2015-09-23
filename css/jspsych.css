@@ -74,7 +74,8 @@ input[type="text"] {
     font-size: 14px;
 }
 
-button {
+button,
+input[type="submit"] {
     padding: 0.8em;
     background-color: #eaeaea;
     border: 1px solid #eaeaea;
