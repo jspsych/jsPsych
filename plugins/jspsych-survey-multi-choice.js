@@ -23,6 +23,7 @@
           preamble: (typeof params.preamble === 'undefined') ? "" : params.preamble[i],
           questions: params.questions[i],
           options: params.options[i],
+          required: (typeof params.required === 'undefined') ? null : params.required[i],
           horizontal: (typeof params.horizontal === 'undefined') ? false : params.horizontal
         });
       }
@@ -43,9 +44,16 @@
       // it with the output of the function
       trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
+      // form element
+      var trial_form_id = _join(plugin_id_name, "form");
+      display_element.append($('<form>', {
+        "id": trial_form_id
+      }));
+      var $trial_form = $("#" + trial_form_id);
+
       // show preamble text
       var preamble_id_name = _join(plugin_id_name, 'preamble');
-      display_element.append($('<div>', {
+      $trial_form.append($('<div>', {
         "id": preamble_id_name,
         "class":preamble_id_name
       }));
@@ -59,7 +67,7 @@
           question_classes.push(_join(plugin_id_name, 'horizontal'));
         }
 
-        display_element.append($('<div>', {
+        $trial_form.append($('<div>', {
           "id": _join(plugin_id_name, i),
           "class": question_classes.join(' ')
         }));
@@ -81,7 +89,6 @@
             "id": option_id_name,
             "class": _join(plugin_id_name, 'option')
           }));
-          // console.log($(option_id_selector));
 
           // add label and question text
           var option_label = '<label class="' + plugin_id_name + '-text">' + trial.options[i][j] + '</label>';
@@ -91,15 +98,28 @@
           var input_id_name = _join(plugin_id_name, 'response', i);
           $(option_id_selector + " label").prepend('<input type="radio" name="' + input_id_name + '" value="' + trial.options[i][j] + '">');
         }
+
+        if (trial.required && trial.required[i]) {
+          // add "question required" asterisk
+          $(question_selector + " p").append("<span class='required'>*</span>")
+
+          // add required property
+          $(question_selector + " input:radio").prop("required", true);
+        }
       }
 
       // add submit button
-      display_element.append($('<button>', {
+      $trial_form.append($('<input>', {
+        'type': 'submit',
         'id': plugin_id_name + '-next',
-        'class': plugin_id_name
+        'class': plugin_id_name,
+        'value': 'Submit Answers'
       }));
-      $(plugin_id_selector + "-next").html('Submit Answers');
-      $(plugin_id_selector + "-next").click(function() {
+
+      $trial_form.submit(function(event) {
+
+        event.preventDefault();
+
         // measure response time
         var endTime = (new Date()).getTime();
         var response_time = endTime - startTime;

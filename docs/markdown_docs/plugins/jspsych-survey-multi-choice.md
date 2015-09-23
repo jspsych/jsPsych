@@ -10,8 +10,11 @@ Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 questions | array | *undefined* | Each array element is an array of strings. The strings are the prompts/questions that will be associated with a group of options (radio buttons). All questions within an array will get presented on the same page (trial). The length of the questions array determines the number of trials.
 options | array |  *undefined* | Each array element is an array of arrays. The innermost arrays contain a set of options to display for an individual question. The middle level of arrays groups together the sets of labels that appear in a single trial. This level should correspond to the `questions` array.
+required | array | null | Each array element is an array of arrays. The innermost arrays contain a boolean option make an individual question require some form of input (using the HTML5 `required` attribute). If this parameter is undefined, all questions will be optional. Note: The HTML5 `required` attribute is [not currently supported by the Safari browser][1].
 horizontal | boolean | false | If true, then questions are centred and options are displayed horizontally.
 preamble | array | empty string | Array of HTML formatted strings to display at the top of each page above all the questions. Each element of the array corresponds to a trial/page of questions.
+
+[1]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Browser_compatibility
 
 ## Data Generated
 
@@ -39,6 +42,7 @@ var multi_choice_block = {
     type: 'survey-multi-choice',
     questions: [page_1_questions, page_2_questions],
     options: [[page_1_options, page_1_options], [page_2_options]],  // need one scale for every question on a page
+    required: [[true, false], [true]],  // set whether questions are required
     // horizontal: true  // centers questions and makes options display horizontally
 };
 ```
