@@ -46,11 +46,11 @@
 
       // show preamble text
       display_element.append($('<div>', {
-        "id": 'jspsych-survey-likert-preamble',
-        "class": 'jspsych-survey-likert-preamble'
+        "id": 'jspsych-survey-text-preamble',
+        "class": 'jspsych-survey-text-preamble'
       }));
 
-      $('#jspsych-survey-likert-preamble').html(trial.preamble);
+      $('#jspsych-survey-text-preamble').html(trial.preamble);
 
       // add questions
       for (var i = 0; i < trial.questions.length; i++) {
