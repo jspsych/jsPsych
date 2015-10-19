@@ -30,6 +30,7 @@
         trials[i].timing_x = params.timing_x || 1000; // defaults to 1000msec.
         trials[i].timing_xab_gap = params.timing_xab_gap || 1000; // defaults to 1000msec.
         trials[i].timing_ab = params.timing_ab || -1; // defaults to -1, meaning infinite time on AB. If a positive number is used, then AB will only be displayed for that length.
+        trials[i].timing_response = params.timing_response || -1; //
         // optional parameters
         trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
         trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
@@ -134,13 +135,16 @@
           }, trial.timing_ab));
         }
 
+        // if timing_response > 0, then we end the trial after timing_response milliseconds
+        if (trial.timing_response > 0) {
+    			var t2 = setTimeout(function() {
+    				end_trial({rt: -1, correct: false, key: -1});
+    			}, trial.timing_response);
+    			setTimeoutHandlers.push(t2);
+    		}
+
         // create the function that triggers when a key is pressed.
         var after_response = function(info) {
-
-          // kill any remaining setTimeout handlers
-          for (var i = 0; i < setTimeoutHandlers.length; i++) {
-            clearTimeout(setTimeoutHandlers[i]);
-          }
 
           var correct = false; // true when the correct response is chosen
 
@@ -156,11 +160,24 @@
             }
           }
 
+          info.correct = correct;
+
+          end_trial(info);
+
+        };
+
+        var end_trial = function(info) {
+          // kill any remaining setTimeout handlers
+          for (var i = 0; i < setTimeoutHandlers.length; i++) {
+            clearTimeout(setTimeoutHandlers[i]);
+          }
+
+          jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
 
           // create object to store data from trial
           var trial_data = {
             "rt": info.rt,
-            "correct": correct,
+            "correct": info.correct,
             "stimulus": JSON.stringify([trial.x_path, trial.a_path, trial.b_path]),
             "key_press": info.key
           };
@@ -168,14 +185,11 @@
 
           display_element.html(''); // remove all
 
-          xab_trial_complete = true;
-
           // move on to the next trial after timing_post_trial milliseconds
           jsPsych.finishTrial();
+        }
 
-        };
-
-        jsPsych.pluginAPI.getKeyboardResponse({
+        var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
           callback_function: after_response,
           valid_responses: [trial.left_key, trial.right_key],
           rt_method: 'date',
