@@ -22,16 +22,8 @@
 
       for (var i = 0; i < trials.length; i++) {
         trials[i] = {};
-        trials[i].x_path = params.stimuli[i][0];
-        // if there is only a pair of stimuli, then the first is the target and is shown twice.
-        // if there is a triplet, then the first is X, the second is the target, and the third is foil (useful for non-exact-match XAB).
-        if (params.stimuli[i].length == 2) {
-          trials[i].a_path = params.stimuli[i][0];
-          trials[i].b_path = params.stimuli[i][1];
-        } else {
-          trials[i].a_path = params.stimuli[i][1];
-          trials[i].b_path = params.stimuli[i][2];
-        }
+        trials[i].stimuli = params.stimuli[i];
+
         trials[i].left_key = params.left_key || 81; // defaults to 'q'
         trials[i].right_key = params.right_key || 80; // defaults to 'p'
         // timing parameters
@@ -52,6 +44,19 @@
       // this evaluates the function and replaces
       // it with the output of the function
       trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
+
+      // unpack the stimuli array
+      trial.x_path = trial.stimuli[0];
+
+      // if there is only a pair of stimuli, then the first is the target and is shown twice.
+      // if there is a triplet, then the first is X, the second is the target, and the third is foil (useful for non-exact-match XAB).
+      if (trial.stimuli.length == 2) {
+        trial.a_path = trial.stimuli[0];
+        trial.b_path = trial.stimuli[1];
+      } else {
+        trial.a_path = trial.stimuli[1];
+        trial.b_path = trial.stimuli[2];
+      }
 
       // this array holds handlers from setTimeout calls
       // that need to be cleared if the trial ends early
