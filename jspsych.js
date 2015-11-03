@@ -688,7 +688,26 @@
 			var dataObj = module.getData();
 			return JSON.stringify(dataObj);
 		};
-		
+
+		module.fromURL = function(){
+			// adapted from stackoverflow: http://stackoverflow.com/posts/12049737/revisions
+			var getVars = {};
+			if(document.location.toString().indexOf('?') !== -1) {
+						var query = document.location
+													 .toString()
+													 .replace(/^.*?\?/, '')
+													 .replace(/#.*$/, '')
+													 .split('&');
+
+						for(var i=0, l=query.length; i<l; i++) {
+							 var aux = decodeURIComponent(query[i]).split('=');
+							 getVars[aux[0]] = aux[1];
+						}
+				}
+				return getVars
+		};
+
+
 		module.localSave = function(filename, format) {
 
 			var data_string;
