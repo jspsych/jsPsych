@@ -684,6 +684,11 @@
 			return JSON2CSV(dataObj);
 		};
 
+		module.dataAsJSON = function() {
+			var dataObj = module.getData();
+			return JSON.stringify(dataObj);
+		};
+		
 		module.localSave = function(filename, format) {
 
 			var data_string;
