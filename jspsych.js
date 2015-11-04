@@ -707,6 +707,17 @@
 				return getVars
 		};
 
+		module.uniqueId = function(stringLength){
+			// adapted from http://stackoverflow.com/posts/10727155/revisions
+			var result = '';
+			var length = (typeof stringLength == 'undefined') ? 32 : stringLength;
+			var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			for (var i = length; i > 0; --i){
+				result += chars[Math.round(Math.random() * (chars.length - 1))];
+			}
+			return result;
+		};
+
 
 		module.localSave = function(filename, format) {
 
