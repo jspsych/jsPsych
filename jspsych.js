@@ -229,6 +229,7 @@
 
 			var chunk = {};
 
+			chunk.definition = chunk_definition;
 			chunk.timeline = parseChunkDefinition(chunk_definition.timeline);
 			chunk.parentChunk = parent_chunk;
 			chunk.relID = relative_id;
@@ -389,8 +390,19 @@
 				this.currentTrialInTimeline = 0;
 				this.done = false;
 				this.iteration++;
-				for(var i = 0; i < this.timeline.length; i++){
-					this.timeline[i].reset();
+				var eval=false;
+				for (i=0;i<this.timeline.length;i++){
+					if (this.timeline[i].evaluate_block){
+						eval=true;
+						break
+					}
+				}
+				if (eval){
+					this.timeline = parseChunkDefinition(this.definition.timeline)
+				}else{
+						for(var i = 0; i < this.timeline.length; i++){
+							this.timeline[i].reset();
+						}
 				}
 			};
 
@@ -422,6 +434,17 @@
 							throw new Error("Failed attempt to create trials using plugin type " + plugin_name + ". Is the plugin loaded?");
 						}
 
+						// call function parameters if flagged evaluate_block = true
+						chunk_timeline[i].evaluate_block = (typeof chunk_timeline[i].evaluate_block === 'undefined') ? false : chunk_timeline[i].evaluate_block;
+						if (chunk_timeline[i].evaluate_block){
+							var keys = Object.keys(chunk_timeline[i]);
+							for (var j = 0; j < keys.length; j++) {
+								if (typeof chunk_timeline[i][keys[j]] == "function") {
+									chunk_timeline[i][keys[j]] = chunk_timeline[i][keys[j]].call();
+								}
+							}
+						}
+
 						var trials = jsPsych[plugin_name].create(chunk_timeline[i]);
 
 						// add chunk level data to all trials
@@ -442,7 +465,7 @@
 						var repetitions = (typeof chunk_timeline[i].repetitions === 'undefined') ? 1 : chunk_timeline[i].repetitions;
 
 						for(var j = 0; j < repetitions; j++) {
-							timeline.push(createBlock(trials, randomize_order));
+							timeline.push(createBlock(trials, randomize_order, chunk_timeline[i].evaluate_block));
 						}
 					}
 				}
@@ -454,7 +477,7 @@
 
 		}
 
-		function createBlock(trial_list, randomize_order) {
+		function createBlock(trial_list, randomize_order, eval_block) {
 
 			var block = {
 
@@ -463,6 +486,8 @@
 				trials: trial_list,
 
 				type: 'block',
+
+				evaluate_block: eval_block,
 
 				randomize_order: randomize_order,
 
@@ -658,6 +683,41 @@
 			var dataObj = module.getData();
 			return JSON2CSV(dataObj);
 		};
+
+		module.dataAsJSON = function() {
+			var dataObj = module.getData();
+			return JSON.stringify(dataObj);
+		};
+
+		module.fromURL = function(){
+			// adapted from stackoverflow: http://stackoverflow.com/posts/12049737/revisions
+			var getVars = {};
+			if(document.location.toString().indexOf('?') !== -1) {
+						var query = document.location
+													 .toString()
+													 .replace(/^.*?\?/, '')
+													 .replace(/#.*$/, '')
+													 .split('&');
+
+						for(var i=0, l=query.length; i<l; i++) {
+							 var aux = decodeURIComponent(query[i]).split('=');
+							 getVars[aux[0]] = aux[1];
+						}
+				}
+				return getVars
+		};
+
+		module.uniqueId = function(stringLength){
+			// adapted from http://stackoverflow.com/posts/10727155/revisions
+			var result = '';
+			var length = (typeof stringLength == 'undefined') ? 32 : stringLength;
+			var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			for (var i = length; i > 0; --i){
+				result += chars[Math.round(Math.random() * (chars.length - 1))];
+			}
+			return result;
+		};
+
 
 		module.localSave = function(filename, format) {
 
