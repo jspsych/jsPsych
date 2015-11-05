@@ -175,7 +175,8 @@
 			}
 		};
 
-		core.endExperiment = function(){
+		core.endExperiment = function(endMessage){
+			if (typeof endMessage != 'undefined') {root_chunk.endMessage = endMessage;}
 			root_chunk.end();
 		}
 
@@ -594,6 +595,10 @@
 
 		function finishExperiment() {
 			opts.on_finish(jsPsych.data.getData());
+			if (typeof root_chunk.endMessage != 'undefined'){
+				var display_element = jsPsych.getDisplayElement();
+				display_element.html(root_chunk.endMessage);
+			}
 		}
 
 		function doTrial(trial) {
