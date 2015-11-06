@@ -175,7 +175,8 @@
 			}
 		};
 
-		core.endExperiment = function(){
+		core.endExperiment = function(endMessage){
+			if (typeof endMessage != 'undefined') {root_chunk.endMessage = endMessage;}
 			root_chunk.end();
 		}
 
@@ -229,6 +230,7 @@
 
 			var chunk = {};
 
+			chunk.definition = chunk_definition;
 			chunk.timeline = parseChunkDefinition(chunk_definition.timeline);
 			chunk.parentChunk = parent_chunk;
 			chunk.relID = relative_id;
@@ -389,8 +391,19 @@
 				this.currentTrialInTimeline = 0;
 				this.done = false;
 				this.iteration++;
-				for(var i = 0; i < this.timeline.length; i++){
-					this.timeline[i].reset();
+				var eval=false;
+				for (i=0;i<this.timeline.length;i++){
+					if (this.timeline[i].evaluate_block){
+						eval=true;
+						break
+					}
+				}
+				if (eval){
+					this.timeline = parseChunkDefinition(this.definition.timeline)
+				}else{
+						for(var i = 0; i < this.timeline.length; i++){
+							this.timeline[i].reset();
+						}
 				}
 			};
 
@@ -422,6 +435,24 @@
 							throw new Error("Failed attempt to create trials using plugin type " + plugin_name + ". Is the plugin loaded?");
 						}
 
+						// call function parameters if flagged evaluate_block = true
+						chunk_timeline[i].evaluate_block = (typeof chunk_timeline[i].evaluate_block === 'undefined') ? false : chunk_timeline[i].evaluate_block;
+						if (chunk_timeline[i].evaluate_block){
+								if (typeof chunk_timeline[i]['functions'] == 'undefined'){
+									chunk_timeline[i].functions = {};
+									var keys = Object.keys(chunk_timeline[i]);
+									for (var j = 0; j < keys.length; j++) {
+										if (typeof chunk_timeline[i][keys[j]] == "function") {
+											chunk_timeline[i]['functions'][keys[j]] = chunk_timeline[i][keys[j]];
+										}
+									}
+								}
+								var funKeys = Object.keys(chunk_timeline[i].functions);
+								for (var j = 0; j < funKeys.length; j++){
+									chunk_timeline[i][funKeys[j]] = chunk_timeline[i].functions[funKeys[j]].call();
+								}
+						}
+
 						var trials = jsPsych[plugin_name].create(chunk_timeline[i]);
 
 						// add chunk level data to all trials
@@ -442,7 +473,7 @@
 						var repetitions = (typeof chunk_timeline[i].repetitions === 'undefined') ? 1 : chunk_timeline[i].repetitions;
 
 						for(var j = 0; j < repetitions; j++) {
-							timeline.push(createBlock(trials, randomize_order));
+							timeline.push(createBlock(trials, randomize_order, chunk_timeline[i].evaluate_block));
 						}
 					}
 				}
@@ -454,7 +485,7 @@
 
 		}
 
-		function createBlock(trial_list, randomize_order) {
+		function createBlock(trial_list, randomize_order, eval_block) {
 
 			var block = {
 
@@ -463,6 +494,8 @@
 				trials: trial_list,
 
 				type: 'block',
+
+				evaluate_block: eval_block,
 
 				randomize_order: randomize_order,
 
@@ -569,6 +602,10 @@
 
 		function finishExperiment() {
 			opts.on_finish(jsPsych.data.getData());
+			if (typeof root_chunk.endMessage != 'undefined'){
+				var display_element = jsPsych.getDisplayElement();
+				display_element.html(root_chunk.endMessage);
+			}
 		}
 
 		function doTrial(trial) {
@@ -658,6 +695,41 @@
 			var dataObj = module.getData();
 			return JSON2CSV(dataObj);
 		};
+
+		module.dataAsJSON = function() {
+			var dataObj = module.getData();
+			return JSON.stringify(dataObj);
+		};
+
+		module.fromURL = function(){
+			// adapted from stackoverflow: http://stackoverflow.com/posts/12049737/revisions
+			var getVars = {};
+			if(document.location.toString().indexOf('?') !== -1) {
+						var query = document.location
+													 .toString()
+													 .replace(/^.*?\?/, '')
+													 .replace(/#.*$/, '')
+													 .split('&');
+
+						for(var i=0, l=query.length; i<l; i++) {
+							 var aux = decodeURIComponent(query[i]).split('=');
+							 getVars[aux[0]] = aux[1];
+						}
+				}
+				return getVars
+		};
+
+		module.uniqueId = function(stringLength){
+			// adapted from http://stackoverflow.com/posts/10727155/revisions
+			var result = '';
+			var length = (typeof stringLength == 'undefined') ? 32 : stringLength;
+			var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			for (var i = length; i > 0; --i){
+				result += chars[Math.round(Math.random() * (chars.length - 1))];
+			}
+			return result;
+		};
+
 
 		module.localSave = function(filename, format) {
 
@@ -1165,7 +1237,9 @@
 					held_keys.push(e.which);
 
 					parameters.callback_function({
-						key: e.which,
+						key: e.which, //leave in for backwards compatibility
+						key_code: e.which,
+						key_string: keyCharacterLookup[e.which],
 						rt: key_time - start_time
 					});
 
@@ -1352,6 +1426,109 @@
 			'[': 219,
 			'\\': 220,
 			']': 221
+		};
+
+		module.convertKeyCodeToKeyCharacter = function(code){
+			var character;
+			if(typeof keylookup[code] !== 'undefined'){
+				character = keylookup[code];
+			}
+			return character;
+		}
+
+		// keyCharacter lookup associative array
+		var keyCharacterLookup = {
+			8:"backspace",
+			9:"tab",
+			13:"enter",
+			16:"shift",
+			17:"ctrl",
+			18:"alt",
+			19:"pause",
+			20:"capslock",
+			27:"esc",
+			32:"*space*",
+			33:"pageup",
+			34:"pagedown",
+			35:"end",
+			36:"home",
+			37:"leftarrow",
+			38:"uparrow",
+			39:"rightarrow",
+			40:"downarrow",
+			45:"insert",
+			46:"delete",
+			48:"0",
+			49:"1",
+			50:"2",
+			51:"3",
+			52:"4",
+			53:"5",
+			54:"6",
+			55:"7",
+			56:"8",
+			57:"9",
+			65:"A",
+			66:"B",
+			67:"C",
+			68:"D",
+			69:"E",
+			70:"F",
+			71:"G",
+			72:"H",
+			73:"I",
+			74:"J",
+			75:"K",
+			76:"L",
+			77:"M",
+			78:"N",
+			79:"O",
+			80:"P",
+			81:"Q",
+			82:"R",
+			83:"S",
+			84:"T",
+			85:"U",
+			86:"V",
+			87:"W",
+			88:"X",
+			89:"Y",
+			90:"Z",
+			96:"0numpad",
+			97:"1numpad",
+			98:"2numpad",
+			99:"3numpad",
+			100:"4numpad",
+			101:"5numpad",
+			102:"6numpad",
+			103:"7numpad",
+			104:"8numpad",
+			105:"9numpad",
+			106:"multiply",
+			107:"plus",
+			109:"minus",
+			110:"decimal",
+			111:"divide",
+			112:"F1",
+			113:"F2",
+			114:"F3",
+			115:"F4",
+			116:"F5",
+			117:"F6",
+			118:"F7",
+			119:"F8",
+			120:"F9",
+			121:"F10",
+			122:"F11",
+			123:"F12",
+			187:"=",
+			188:",",
+			190:".",
+			191:"/",
+			192:"`",
+			219:"[",
+			220:"\\",
+			221:"]"
 		};
 
 		module.evaluateFunctionParameters = function(trial, protect) {
