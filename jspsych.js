@@ -438,12 +438,19 @@
 						// call function parameters if flagged evaluate_block = true
 						chunk_timeline[i].evaluate_block = (typeof chunk_timeline[i].evaluate_block === 'undefined') ? false : chunk_timeline[i].evaluate_block;
 						if (chunk_timeline[i].evaluate_block){
-							var keys = Object.keys(chunk_timeline[i]);
-							for (var j = 0; j < keys.length; j++) {
-								if (typeof chunk_timeline[i][keys[j]] == "function") {
-									chunk_timeline[i][keys[j]] = chunk_timeline[i][keys[j]].call();
+								if (typeof chunk_timeline[i]['functions'] == 'undefined'){
+									chunk_timeline[i].functions = {};
+									var keys = Object.keys(chunk_timeline[i]);
+									for (var j = 0; j < keys.length; j++) {
+										if (typeof chunk_timeline[i][keys[j]] == "function") {
+											chunk_timeline[i]['functions'][keys[j]] = chunk_timeline[i][keys[j]];
+										}
+									}
 								}
-							}
+								var funKeys = Object.keys(chunk_timeline[i].functions);
+								for (var j = 0; j < funKeys.length; j++){
+									chunk_timeline[i][funKeys[j]] = chunk_timeline[i].functions[funKeys[j]].call();
+								}
 						}
 
 						var trials = jsPsych[plugin_name].create(chunk_timeline[i]);
