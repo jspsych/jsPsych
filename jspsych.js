@@ -559,7 +559,7 @@
 						if(extend && typeof trials_arr[i][param_name] !== 'undefined'){
 							trials_arr[i][param_name] = $.extend({}, trials_arr[i][param_name], param)
 						} else {
-							trials_arr[i][param_name] = param;
+							trials_arr[i][param_name] = (typeof trials_arr[i][param_name] === 'undefined') ? param : trials_arr[i][param_name];
 						}
 					}
 				}

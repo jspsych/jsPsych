@@ -15,7 +15,8 @@
     plugin.create = function(params) {
       var trials = new Array(1);
       trials[0] = {
-        "func": params.func
+        "func": params.func,
+        "timing_post_trial": typeof params.timing_post_trial == 'undefined' ? 0 : params.timing_post_trial
       };
       return trials;
     };

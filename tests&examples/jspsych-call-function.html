@@ -13,13 +13,19 @@
 
   var trials = {
     type: 'call-function',
-    func: function(){ alert('plugin is working.')}
+    func: function(){ console.log(Date.now()) }
+  };
+
+  // this is to check if the default for timing_post_trial works.
+  var next_trial = {
+    type: 'call-function',
+    func: function(){ console.log(Date.now()) }
   };
 
 
   jsPsych.init({
     display_element: $('#jspsych-target'),
-    experiment_structure: [trials]
+    experiment_structure: [trials, next_trial]
   });
 
 
