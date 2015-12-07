@@ -12,7 +12,7 @@ In many cases, data collection will essentially be automatic and hidden. Plugins
 
 ### Adding data to all trials
 
-Often it is useful to add a piece of data to *all* of the trials in the experiment. For example, appending the subject ID to each trial. This can be done easily with the `jsPsych.addProperties` function. Here is an example:
+Often it is useful to add a piece of data to *all* of the trials in the experiment. For example, appending the subject ID to each trial. This can be done easily with the `jsPsych.data.addProperties` function. Here is an example:
 
 ```
 // generate a random subject ID
@@ -23,7 +23,7 @@ var condition_assignment = jsPsych.randomization.sample(['conditionA', 'conditio
 
 // record the condition assignment in the jsPsych data
 // this adds a property called 'subject' and a property called 'condition' to every trial
-jsPsych.addProperties({
+jsPsych.data.addProperties({
   subject: subject_id,
   condition: condition_assignment
 });
