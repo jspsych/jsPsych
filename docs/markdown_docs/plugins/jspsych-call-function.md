@@ -1,6 +1,6 @@
 # jspsych-call-function
 
-This plugin executes a specified function. This allows the experimenter to run arbitrary code at any point during the experiment. 
+This plugin executes a specified function. This allows the experimenter to run arbitrary code at any point during the experiment.
 
 The function cannot take any arguments. If arguments are needed, then an anonymous function should be used to wrap the function call (see examples below).
 
@@ -11,6 +11,7 @@ This table lists the parameters associated with this plugin. Parameters with a d
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 func | function | *undefined* | The function to call.
+timing_post_trial | numeric | 0 | Unlike other plugins where the default value of this parameter is 1,000ms, the default here is 0.
 
 
 ## Data Generated
