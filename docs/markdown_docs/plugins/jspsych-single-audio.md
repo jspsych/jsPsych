@@ -45,7 +45,7 @@ var block = {
 
 ```javascript
 var block = {
-	type: 'single-stim',
+	type: 'single-audio',
 	stimuli: ['sound/sound.mp3'],
 	choices: ['h','s']
 }
