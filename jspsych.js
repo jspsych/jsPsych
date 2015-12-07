@@ -1059,7 +1059,8 @@
 		}
 
 		function shuffle(array) {
-			var m = array.length,
+			var copy_array = array.slice(0);
+			var m = copy_array.length,
 				t, i;
 
 			// While there remain elements to shuffle…
@@ -1069,12 +1070,12 @@
 				i = Math.floor(Math.random() * m--);
 
 				// And swap it with the current element.
-				t = array[m];
-				array[m] = array[i];
-				array[i] = t;
+				t = copy_array[m];
+				copy_array[m] = copy_array[i];
+				copy_array[i] = t;
 			}
 
-			return array;
+			return copy_array;
 		}
 
 		return module;
