@@ -53,9 +53,9 @@
 
           var nav_html = "<div class='jspsych-instructions-nav'>";
           if (current_page != 0 && trial.allow_backward) {
-            nav_html += "<button id='jspsych-instructions-back'>&lt; Previous</button>";
+            nav_html += "<button id='jspsych-instructions-back' class='jspsych-btn'>&lt; Previous</button>";
           }
-          nav_html += "<button id='jspsych-instructions-next'>Next &gt;</button></div>"
+          nav_html += "<button id='jspsych-instructions-next' class='jspsych-btn'>Next &gt;</button></div>"
 
           display_element.append(nav_html);
 
