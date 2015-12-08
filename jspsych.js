@@ -1409,7 +1409,14 @@
 			return r;
 		}
 
-		// audio
+		// audio //
+
+		// temporary patch for Safari
+		if (window.hasOwnProperty('webkitAudioContext') && !window.hasOwnProperty('AudioContext')) {
+    	window.AudioContext = webkitAudioContext;
+		}
+		// end patch
+
 		var context = (typeof window.AudioContext !== 'undefined') ? new AudioContext() : null;
 		var audio_buffers = [];
 
