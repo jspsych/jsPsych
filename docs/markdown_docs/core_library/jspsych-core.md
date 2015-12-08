@@ -241,6 +241,7 @@ on_data_update | function | Function to execute every time data is stored using 
 show_progress_bar | boolean | If true, then [a progress bar](../features/progress-bar.md) is shown at the top of the page.
 max_load_time | numeric | The maximum number of milliseconds to wait for audio content to preload. If the wait time is exceeded, then an error message is logged and the experiment stops. The default value is 30 seconds.
 skip_load_check | boolean | If true, then the experiment will not wait for audio content to load before starting. The default value is false.
+fullscreen | boolean | If true, the experiment will run in fullscreen mode. See the [feature page](../features/fullscreen.md) for more details.
 
 ### Return value
 
