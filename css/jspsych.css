@@ -57,21 +57,6 @@ input[type="text"] {
   font-size: 14px;
 }
 
-/*button {
-  padding: 0.8em;
-  background-color: #eaeaea;
-  border: 1px solid #eaeaea;
-  color: #555;
-  font-weight: bold;
-  font-family: 'Open Sans', 'Arial', sans-serif;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-button:hover {
-  border: 1px solid #ccc;
-}*/
-
 /* borrowing Bootstrap style for btn elements, but combining styles a bit */
 .jspsych-btn {
   display: inline-block;
@@ -277,7 +262,45 @@ button:hover {
   margin-left:-6px;
 }
 
-/* PLUGIN: jspsych-visual-search-circle */
+/*
+ *
+ * PLUGIN: jspsych-survey-multi-choice
+ *
+ */
+
+.jspsych-survey-multi-choice-question {
+  margin-top: 2em;
+  margin-bottom: 2em;
+ }
+
+.jspsych-survey-multi-choice-text span.required {
+  color: darkred;
+}
+
+.jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {
+  text-align: center;
+}
+
+.jspsych-survey-multi-choice-option {
+  line-height: 2;
+}
+.jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option {
+  display: inline-block;
+  margin-left: 1em;
+  margin-right: 1em;
+  vertical-align: top;
+}
+
+label.jspsych-survey-multi-choice-text input[type="radio"] {
+  margin-right: 1em;
+}
+
+#jspsych-survey-multi-choice-next {
+  display: block;
+  margin: auto;
+}
+
+/** PLUGIN: jspsych-visual-search-circle **/
 
 #jspsych-visual-search-circle-svg {
   display: block;
