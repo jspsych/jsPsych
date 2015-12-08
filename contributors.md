@@ -3,5 +3,6 @@ The following people have contributed to the development of jsPsych by writing c
 * Josh de Leeuw - https://github.com/jodeleeuw
 * Jonas Lambers
 * Shane Martin - https://github.com/shamrt
-* Marian Sauter - https://github.com/mariansauter/
+* Marian Sauter - https://github.com/mariansauter
+* Tim Vergenz - https://github.com/vergenzt
 * Erik Weitnauer - https://github.com/eweitnauer
