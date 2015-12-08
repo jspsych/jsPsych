@@ -589,7 +589,7 @@
 		function updateProgressBar() {
 			var progress = jsPsych.progress();
 
-			var percentComplete = 100 * ((progress.current_chunk) / progress.total_chunks);
+			var percentComplete = Math.min(100,100 * ((progress.current_chunk+1) / progress.total_chunks));
 
 			$('#jspsych-progressbar-inner').css('width', percentComplete + "%");
 		}
