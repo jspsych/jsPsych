@@ -58,6 +58,36 @@ var listener_id = jsPsych.pluginAPI.getKeyboardResponse(after_response, ['p','q'
 // cancel keyboard listener
 jsPsych.pluginAPI.cancelKeyboardResponse(listener_id);
 ```
+---
+## jsPsych.pluginAPI.convertKeyCharacterToKeyCode
+
+```
+jsPsych.pluginAPI.convertKeyCharacterToKeyCode(character)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+character | string | The string representation of keyboard key.
+
+### Return value
+
+Returns the numeric keycode associated with the `character` parameter.
+
+### Description
+
+Converts between the string representation of a key and the numeric key code associated with that key.
+
+### Examples
+
+```javascript
+var keycode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode('a')
+// keycode is 65
+
+keycode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode('space')
+// keycode is 32
+```
 
 ---
 ## jsPsych.pluginAPI.enforceArray
@@ -157,7 +187,7 @@ var after_response = function(info){
 
 var listener = jsPsych.pluginAPI.getKeyboardResponse({
   callback_function:after_response,
-  valid_responses: [], 
+  valid_responses: [],
   rt_method: 'date',
   persist: true
 });
