@@ -74,7 +74,7 @@ var jsPsych = (function() {
     DOM_target.addClass('jspsych-display-element');
 
     // create experiment structure
-    timeline = new TimelineNode(opts.timeline);
+    timeline = new TimelineNode({timeline:opts.timeline});
 
     // wait for everything to load
     if (opts.skip_load_check) {
@@ -260,6 +260,9 @@ var jsPsych = (function() {
     // flag to force the node to be finished
     var done_flag = false;
 
+    // reference to self
+    var self = this;
+
     // constructor
     var _construct = function() {
       // store a link to the parent of this node
@@ -276,7 +279,7 @@ var jsPsych = (function() {
       if (typeof parameters.timeline !== 'undefined') {
         // create a TimelineNode for each element in the timeline
         for (var i = 0; i < parameters.timeline.length; i++) {
-          timeline.push(new TimelineNode(parameters.timeline[i], this, i));
+          timeline.push(new TimelineNode(parameters.timeline[i], self, i));
         }
         // store the loop function if it exists
         if (typeof parameters.loop_function !== 'undefined') {
@@ -447,11 +450,13 @@ var jsPsych = (function() {
     // the ID reflects the current iteration through this node.
     this.ID = function() {
       var id = "";
-      if (typeof parent_node != 'undefined') {
+      if (typeof parent_node == 'undefined') {
+        return "0." + current_iteration;
+      } else {
         id += parent_node.ID() + "-";
+        id += relative_id + "." + current_iteration;
+        return id;
       }
-      id += relative_id + "." + current_iteration;
-      return id;
     }
 
     // get the ID of the active trial
@@ -1430,3 +1435,14 @@ jsPsych.pluginAPI = (function() {
 })();
 
 // methods used in multiple modules
+function flatten(arr, out) {
+		out = (typeof out === 'undefined') ? [] : out;
+		for (var i = 0; i < arr.length; i++) {
+			if (Array.isArray(arr[i])) {
+				flatten(arr[i], out);
+			} else {
+				out.push(arr[i]);
+			}
+		}
+		return out;
+	}
