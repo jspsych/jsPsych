@@ -76,13 +76,13 @@ jsPsych["single-stim"] = (function() {
         "key_press": response.key
       };
 
-      jsPsych.data.write(trial_data);
+      //jsPsych.data.write(trial_data);
 
       // clear the display
       display_element.html('');
 
       // move on to the next trial
-      jsPsych.finishTrial();
+      jsPsych.finishTrial(trial_data);
     };
 
     // function to handle responses by the subject

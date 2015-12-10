@@ -73,7 +73,7 @@ var jsPsych = (function() {
     // add CSS class to DOM_target
     DOM_target.addClass('jspsych-display-element');
 
-    // create experiment structure
+    // create experiment timeline
     timeline = new TimelineNode({timeline:opts.timeline});
 
     // wait for everything to load
@@ -132,17 +132,21 @@ var jsPsych = (function() {
     return DOM_target;
   };
 
-  core.finishTrial = function() {
-    // logic to advance to next trial?
+  core.finishTrial = function(data) {
+    // write the data from the trial
+    data = typeof data == 'undefined' ? {} : data;
+    jsPsych.data.write(data);
+
+    // get back the data with all of the defaults in
+    var trial_data = jsPsych.data.getDataByTrialIndex(global_trial_index);
 
     // handle callback at plugin level
     if (typeof current_trial.on_finish === 'function') {
-      var trial_data = jsPsych.data.getDataByTrialIndex(global_trial_index);
       current_trial.on_finish(trial_data);
     }
 
     // handle callback at whole-experiment level
-    opts.on_trial_finish();
+    opts.on_trial_finish(trial_data);
 
     // wait for iti
     if (typeof current_trial.timing_post_trial == 'undefined') {
@@ -214,19 +218,6 @@ var jsPsych = (function() {
         console.error('Experiment failed to load all resouces in time alloted');
       }
     }, refresh_rate);
-
-  }
-
-  function parseExpStructure(experiment_structure) {
-
-    if (!Array.isArray(experiment_structure)) {
-      throw new Error("Invalid experiment structure. Experiment structure must be an array");
-    }
-
-    return createExperimentChunk({
-      chunk_type: 'root',
-      timeline: experiment_structure
-    });
 
   }
 
@@ -581,8 +572,7 @@ jsPsych.data = (function() {
 
     var default_data = {
       'trial_type': trial.type,
-      'trial_index': progress.current_trial_local,
-      'trial_index_global': progress.current_trial_global,
+      'trial_index': progress.current_trial_global,
       'time_elapsed': jsPsych.totalTime(),
       'internal_chunk_id': jsPsych.currentChunkID()
     };

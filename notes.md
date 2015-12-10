@@ -4,3 +4,5 @@ Major things that are changing for revision that will be noticeable.
 - timeline parameter controls whether node is trial or timeline.
 - one trial per declaration, no more built-in shortcut to declare a big block
 - allow declaring default iti in jspsych.init
+- pass trial data to experiment wide on_trial_finish() event handler
+- trial_index is now a global trial index, local trial index removed.

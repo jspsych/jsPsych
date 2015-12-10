@@ -19,7 +19,8 @@
     stimulus: 'img/happy_face_1.jpg',
     choices: [89,78], // Y or N
     prompt: '<p class="center-content">Have you seen this face before? Y or N.</p>',
-    data: {trial_data: true}
+    data: {trial_data: true},
+    //timing_post_trial: 0
   }
 
   var trial_2 = {
@@ -34,7 +35,8 @@
     jsPsych.init({
       display_element: $('#jspsych-target'),
       timeline: [trial_1, trial_2],
-      on_finish: function(){ jsPsych.data.displayData(); }
+      on_finish: function(){ jsPsych.data.displayData(); },
+      default_iti: 250
     });
   }
 
