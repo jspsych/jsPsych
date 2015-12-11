@@ -268,9 +268,15 @@ var jsPsych = (function() {
       // check if there is a timeline parameter
       // if there is, then this is not a trial node
       if (typeof parameters.timeline !== 'undefined') {
+        // extract all of the node level data and parameters
+        var node_data = $.extend(true, {}, parameters);
+        delete node_data.timeline;
+        delete node_data.conditional_function;
+        delete node_data.loop_function;
+
         // create a TimelineNode for each element in the timeline
         for (var i = 0; i < parameters.timeline.length; i++) {
-          timeline.push(new TimelineNode(parameters.timeline[i], self, i));
+          timeline.push(new TimelineNode($.extend(true, {}, node_data, parameters.timeline[i]), self, i));
         }
         // store the loop function if it exists
         if (typeof parameters.loop_function !== 'undefined') {
