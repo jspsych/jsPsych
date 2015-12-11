@@ -2,7 +2,7 @@
  * jspsych-single-stim
  * Josh de Leeuw
  *
- * plugin for displaying a stimulus and getting a keyboard response
+ * plugin for displaying a stimulus and getting a keyboard and/or mouse response
  *
  * documentation: docs.jspsych.org
  *
@@ -29,6 +29,7 @@
 				// optional parameters
 				trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
 				trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
+				trials[i].mouse_response = (typeof params.mouse_response === 'undefined') ? false : params.mouse_response;
 			}
 			return trials;
 		};
@@ -80,6 +81,10 @@
 					jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
 				}
 
+				// kill mouse listeners
+				if (trial.mouse_response)
+					$(document).unbind('click', mouse_listener);
+
 				// gather the data to store for the trial
 				var trial_data = {
 					"rt": response.rt,
@@ -113,8 +118,22 @@
 				}
 			};
 
-			// start the response listener
-			if(JSON.stringify(trial.choices) != JSON.stringify(["none"])) {
+			// mouse listener
+			var mouse_listener = function(e)
+			{
+				var rt = (new Date()).getTime() - start_time;
+				$(document).unbind('click', mouse_listener);
+				after_response({key: 'mouse', rt: rt});
+			};
+
+			// start the response listeners
+			if (trial.mouse_response)
+			{
+				var start_time = (new Date()).getTime();
+				$(document).click(mouse_listener);
+			}
+			
+			if (JSON.stringify(trial.choices) != JSON.stringify(["none"])) {
 				var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
 					callback_function: after_response,
 					valid_responses: trial.choices,
@@ -139,7 +158,6 @@
 				}, trial.timing_response);
 				setTimeoutHandlers.push(t2);
 			}
-
 		};
 
 		return plugin;
