@@ -7,31 +7,25 @@
  *
  **/
 
-(function($) {
-  jsPsych['call-function'] = (function() {
+jsPsych['call-function'] = (function() {
 
-    var plugin = {};
+  var plugin = {};
 
-    plugin.create = function(params) {
-      var trials = new Array(1);
-      trials[0] = {
-        "func": params.func,
-        "timing_post_trial": typeof params.timing_post_trial == 'undefined' ? 0 : params.timing_post_trial
-      };
-      return trials;
+  plugin.trial = function(display_element, trial) {
+
+    // one of the only plugins where we override the default experiment level
+    // value of this parameter
+    trial.timing_post_trial = typeof trial.timing_post_trial == 'undefined' ? 0 : trial.timing_post_trial
+
+    var return_val = trial.func();
+
+    var trial_data = {
+      value: return_val
     };
 
-    plugin.trial = function(display_element, trial) {
-      var return_val = trial.func();
 
-      jsPsych.data.write({
-        value: return_val
-      });
+    jsPsych.finishTrial(trial_data);
+  };
 
-
-      jsPsych.finishTrial();
-    };
-
-    return plugin;
-  })();
-})(jQuery);
+  return plugin;
+})();
