@@ -18,7 +18,7 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-configurations | array | *undefined* | Array of stimulus configurations. Each configuration is an array of 1s and 0s. A 1 represents the presence of a line segment, and a 0 represents the absence of a line segment. The number of elements in a configuration array should be the number of possible line segments in the stimulus. For the default size of 3x3, this is 20 (6 horizontal + 6 vertical + 8 diagonal). The order of the lines in the array are horizontal, vertical, and then diagonal. The easiest way to see this is just to try different configurations. This represents the target configuration, as the stimulus will be blank initially.
+configuration | array | *undefined* | Array of stimulus configurations. Each configuration is an array of 1s and 0s. A 1 represents the presence of a line segment, and a 0 represents the absence of a line segment. The number of elements in a configuration array should be the number of possible line segments in the stimulus. For the default size of 3x3, this is 20 (6 horizontal + 6 vertical + 8 diagonal). The order of the lines in the array are horizontal, vertical, and then diagonal. The easiest way to see this is just to try different configurations. This represents the target configuration, as the stimulus will be blank initially.
 show_feedback | boolean | false | Show corrective feedback after the subject submits a response.
 grid_spacing | numeric | 75 | Distance in pixels between the rows and columns.
 circle_radius | numeric | 20 | Radius in pixels of the circles.
