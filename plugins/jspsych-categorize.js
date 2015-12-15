@@ -13,7 +13,7 @@ jsPsych.categorize = (function() {
   plugin.trial = function(display_element, trial) {
 
     // default parameters
-    trial.text_answer = (typeof trial.text_answer === 'undefined') ? "" : trial.text_answer[i];
+    trial.text_answer = (typeof trial.text_answer === 'undefined') ? "" : trial.text_answer;
     trial.correct_text = (typeof trial.correct_text === 'undefined') ? "<p class='feedback'>Correct</p>" : trial.correct_text;
     trial.incorrect_text = (typeof trial.incorrect_text === 'undefined') ? "<p class='feedback'>Incorrect</p>" : trial.incorrect_text;
     trial.show_stim_with_feedback = (typeof trial.show_stim_with_feedback === 'undefined') ? true : trial.show_stim_with_feedback;

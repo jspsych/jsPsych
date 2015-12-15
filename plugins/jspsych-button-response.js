@@ -8,163 +8,145 @@
  *
  **/
 
-(function($) {
-	jsPsych["button-response"] = (function() {
+jsPsych["button-response"] = (function() {
 
-		var plugin = {};
+  var plugin = {};
 
-		plugin.create = function(params) {
+  plugin.trial = function(display_element, trial) {
 
-			params = jsPsych.pluginAPI.enforceArray(params, ['stimuli', 'choices']);
+    // default trial parameters
+    trial.button_html = trial.button_html || '<button class="jspsych-btn">%choice%</button>';
+    trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
+    trial.timing_stim = trial.timing_stim || -1; // if -1, then show indefinitely
+    trial.timing_response = trial.timing_response || -1; // if -1, then wait for response forever
+    trial.is_html = (typeof trial.is_html === 'undefined') ? false : trial.is_html;
+    trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
-			var trials = new Array(params.stimuli.length);
-			for (var i = 0; i < trials.length; i++) {
-				trials[i] = {};
-				trials[i].a_path = params.stimuli[i];
-				trials[i].choices = params.choices;
-				trials[i].button_html = params.button_html || '<button class="jspsych-btn">%choice%</button>';
-				trials[i].response_ends_trial = (typeof params.response_ends_trial === 'undefined') ? true : params.response_ends_trial;
-				// timing parameters
-				trials[i].timing_stim = params.timing_stim || -1; // if -1, then show indefinitely
-				trials[i].timing_response = params.timing_response || -1; // if -1, then wait for response forever
-				// optional parameters
-				trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
-				trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
-			}
-			return trials;
-		};
+    // if any trial variables are functions
+    // this evaluates the function and replaces
+    // it with the output of the function
+    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
-		plugin.trial = function(display_element, trial) {
+    // this array holds handlers from setTimeout calls
+    // that need to be cleared if the trial ends early
+    var setTimeoutHandlers = [];
 
-			// if any trial variables are functions
-			// this evaluates the function and replaces
-			// it with the output of the function
-			trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
+    // display stimulus
+    if (!trial.is_html) {
+      display_element.append($('<img>', {
+        src: trial.stimulus,
+        id: 'jspsych-button-response-stimulus',
+        class: 'block-center'
+      }));
+    } else {
+      display_element.append($('<div>', {
+        html: trial.stimulus,
+        id: 'jspsych-button-response-stimulus',
+        class: 'block-center'
+      }));
+    }
 
-			// this array holds handlers from setTimeout calls
-			// that need to be cleared if the trial ends early
-			var setTimeoutHandlers = [];
+    //display buttons
+    var buttons = [];
+    if (Array.isArray(trial.button_html)) {
+      if (trial.button_html.length == trial.choices.length) {
+        buttons = trial.button_html;
+      } else {
+        console.error('Error in button-response plugin. The length of the button_html array does not equal the length of the choices array');
+      }
+    } else {
+      for (var i = 0; i < trial.choices.length; i++) {
+        buttons.push(trial.button_html);
+      }
+    }
+    display_element.append('<div id="jspsych-button-response-btngroup" class="center-content block-center"></div>')
+    for (var i = 0; i < trial.choices.length; i++) {
+      var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
+      $('#jspsych-button-response-btngroup').append(
+        $(str).attr('id', 'jspsych-button-response-button-' + i).data('choice', i).addClass('jspsych-button-response-button').on('click', function(e) {
+          var choice = $('#' + this.id).data('choice');
+          after_response(choice);
+        })
+      );
+    }
 
-			// display stimulus
-			if (!trial.is_html) {
-				display_element.append($('<img>', {
-					src: trial.a_path,
-					id: 'jspsych-button-response-stimulus',
-					class: 'block-center'
-				}));
-			} else {
-				display_element.append($('<div>', {
-					html: trial.a_path,
-					id: 'jspsych-button-response-stimulus',
-					class: 'block-center'
-				}));
-			}
+    //show prompt if there is one
+    if (trial.prompt !== "") {
+      display_element.append(trial.prompt);
+    }
 
-			//display buttons
-			var buttons = [];
-			if(Array.isArray(trial.button_html)){
-				if(trial.button_html.length == trial.choices.length){
-					buttons = trial.button_html;
-				} else {
-					console.error('Error in button-response plugin. The length of the button_html array does not equal the length of the choices array');
-				}
-			} else {
-				for(var i=0;i < trial.choices.length; i++){
-					buttons.push(trial.button_html);
-				}
-			}
-			display_element.append('<div id="jspsych-button-response-btngroup" class="center-content block-center"></div>')
-			for(var i=0; i<trial.choices.length; i++){
-				var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
-				$('#jspsych-button-response-btngroup').append(
-					$(str).
-					attr('id','jspsych-button-response-button-'+i).
-					data('choice',i).
-					addClass('jspsych-button-response-button').
-					on('click', function(e){
-						var choice = $('#'+this.id).data('choice');
-						after_response(choice);
-					})
-				);
-			}
+    // store response
+    var response = {
+      rt: -1,
+      button: -1
+    };
 
-			//show prompt if there is one
-			if (trial.prompt !== "") {
-				display_element.append(trial.prompt);
-			}
+    // start time
+    var start_time = 0;
 
-			// store response
-			var response = {rt: -1, button: -1};
+    // function to handle responses by the subject
+    function after_response(choice) {
 
-			// start time
-			var start_time = 0;
+      // measure rt
+      var end_time = Date.now();
+      var rt = end_time - start_time;
+      response.button = choice;
+      response.rt = rt;
 
-			// function to handle responses by the subject
-			function after_response(choice) {
+      // after a valid response, the stimulus will have the CSS class 'responded'
+      // which can be used to provide visual feedback that a response was recorded
+      $("#jspsych-button-response-stimulus").addClass('responded');
 
-				// measure rt
-				var end_time = Date.now();
-				var rt = end_time - start_time;
-				response.button = choice;
-				response.rt = rt;
+      // disable all the buttons after a response
+      $('.jspsych-button-response-button').off('click').attr('disabled', 'disabled');
 
-				// after a valid response, the stimulus will have the CSS class 'responded'
-				// which can be used to provide visual feedback that a response was recorded
-				$("#jspsych-button-response-stimulus").addClass('responded');
+      if (trial.response_ends_trial) {
+        end_trial();
+      }
+    };
 
-				// disable all the buttons after a response
-				$('.jspsych-button-response-button').off('click').attr('disabled','disabled');
+    // function to end trial when it is time
+    function end_trial() {
 
-				if (trial.response_ends_trial) {
-					end_trial();
-				}
-			};
+      // kill any remaining setTimeout handlers
+      for (var i = 0; i < setTimeoutHandlers.length; i++) {
+        clearTimeout(setTimeoutHandlers[i]);
+      }
 
-			// function to end trial when it is time
-			function end_trial() {
+      // gather the data to store for the trial
+      var trial_data = {
+        "rt": response.rt,
+        "stimulus": trial.stimulus,
+        "button_pressed": response.button
+      };
 
-				// kill any remaining setTimeout handlers
-				for (var i = 0; i < setTimeoutHandlers.length; i++) {
-					clearTimeout(setTimeoutHandlers[i]);
-				}
+      // clear the display
+      display_element.html('');
 
-				// gather the data to store for the trial
-				var trial_data = {
-					"rt": response.rt,
-					"stimulus": trial.a_path,
-					"button_pressed": response.button
-				};
+      // move on to the next trial
+      jsPsych.finishTrial(trial_data);
+    };
 
-				jsPsych.data.write(trial_data);
+    // start timing
+    start_time = Date.now();
 
-				// clear the display
-				display_element.html('');
+    // hide image if timing is set
+    if (trial.timing_stim > 0) {
+      var t1 = setTimeout(function() {
+        $('#jspsych-button-response-stimulus').css('visibility', 'hidden');
+      }, trial.timing_stim);
+      setTimeoutHandlers.push(t1);
+    }
 
-				// move on to the next trial
-				jsPsych.finishTrial();
-			};
+    // end trial if time limit is set
+    if (trial.timing_response > 0) {
+      var t2 = setTimeout(function() {
+        end_trial();
+      }, trial.timing_response);
+      setTimeoutHandlers.push(t2);
+    }
 
-			// start timing
-			start_time = Date.now();
+  };
 
-			// hide image if timing is set
-			if (trial.timing_stim > 0) {
-				var t1 = setTimeout(function() {
-					$('#jspsych-button-response-stimulus').css('visibility', 'hidden');
-				}, trial.timing_stim);
-				setTimeoutHandlers.push(t1);
-			}
-
-			// end trial if time limit is set
-			if (trial.timing_response > 0) {
-				var t2 = setTimeout(function() {
-					end_trial();
-				}, trial.timing_response);
-				setTimeoutHandlers.push(t2);
-			}
-
-		};
-
-		return plugin;
-	})();
-})(jQuery);
+  return plugin;
+})();

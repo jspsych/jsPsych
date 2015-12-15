@@ -100,6 +100,7 @@ jsPsych["categorize-animation"] = (function() {
 
 
     var keyboard_listener;
+    var trial_data = {};
 
     var after_response = function(info) {
       // ignore the response if animation is playing and subject
@@ -115,14 +116,12 @@ jsPsych["categorize-animation"] = (function() {
 
       responded = true;
 
-      var trial_data = {
-        "stimulus": trial.stimuli[0],
+      trial_data = {
+        "stimulus": JSON.stringify(trial.stimuli),
         "rt": info.rt,
         "correct": correct,
         "key_press": info.key
       };
-
-      jsPsych.data.write(trial_data);
 
       jsPsych.pluginAPI.cancelKeyboardResponse(keyboard_listener);
 
@@ -139,7 +138,7 @@ jsPsych["categorize-animation"] = (function() {
     function endTrial() {
       clearInterval(animate_interval); // stop animation!
       display_element.html(''); // clear everything
-      jsPsych.finishTrial();
+      jsPsych.finishTrial(trial_data);
     }
   };
 

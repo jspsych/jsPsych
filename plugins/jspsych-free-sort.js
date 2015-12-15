@@ -90,7 +90,7 @@ jsPsych['free-sort'] = (function() {
 
     display_element.append($('<button>', {
       "id": "jspsych-free-sort-done-btn",
-      "class": "jspsych-free-sort",
+      "class": "jspsych-btn jspsych-free-sort",
       "html": "Done",
       "click": function() {
         var end_time = (new Date()).getTime();

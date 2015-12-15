@@ -5,18 +5,17 @@
  * documentation: docs.jspsych.org
  */
 
-
 jsPsych.animation = (function() {
 
   var plugin = {};
 
   plugin.trial = function(display_element, trial) {
 
-    trials.frame_time = trial.frame_time || 250;
-    trials.frame_isi = trial.frame_isi || 0;
-    trials.sequence_reps = trial.sequence_reps || 1;
-    trials.choices = trial.choices || [];
-    trials.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
+    trial.frame_time = trial.frame_time || 250;
+    trial.frame_isi = trial.frame_isi || 0;
+    trial.sequence_reps = trial.sequence_reps || 1;
+    trial.choices = trial.choices || [];
+    trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
     // if any trial variables are functions
     // this evaluates the function and replaces
