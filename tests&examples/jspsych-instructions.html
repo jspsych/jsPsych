@@ -11,7 +11,7 @@
   </body>
   <script>
 
-  var block = {
+  var trial = {
     type: 'instructions',
     pages: [
       'Welcome to the experiment. Click next to begin.',
@@ -23,7 +23,7 @@
 
   jsPsych.init({
     display_element: $('#jspsych-target'),
-    experiment_structure: [block],
+    timeline: [trial],
     on_finish: function(){ jsPsych.data.displayData(); }
   });
 
