@@ -14,7 +14,6 @@
  *
  **/
 
-(function($) {
   jsPsych["visual-search-circle"] = (function() {
 
     var plugin = {};
@@ -43,6 +42,15 @@
     };
 
     plugin.trial = function(display_element, trial) {
+
+      // default values
+      trial.target_size = trial.target_size || [50, 50];
+      trial.fixation_size = trial.fixation_size || [16, 16];
+      trial.circle_diameter = trial.circle_diameter || 250;
+      trial.target_present_key = trial.target_present_key || 74;
+      trial.target_absent_key = trial.target_absent_key || 70;
+      trial.timing_max_search = (typeof trial.timing_max_search === 'undefined') ? -1 : trial.timing_max_search;
+      trial.timing_fixation = (typeof trial.timing_fixation === 'undefined') ? 1000 : trial.timing_fixation;
 
       trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
@@ -194,12 +202,8 @@
           set_size: trial.set_size
         };
 
-        // this line merges together the trial_data object and the generic
-        // data object (trial.data), and then stores them.
-        jsPsych.data.write(trial_data);
-
         // go to next trial
-        jsPsych.finishTrial();
+        jsPsych.finishTrial(trial_data);
       }
     };
 
@@ -215,4 +219,3 @@
 
     return plugin;
   })();
-})(jQuery);
