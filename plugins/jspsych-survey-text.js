@@ -60,7 +60,7 @@ jsPsych['survey-text'] = (function() {
     // add submit button
     display_element.append($('<button>', {
       'id': 'jspsych-survey-text-next',
-      'class': 'jspsych-survey-text'
+      'class': 'jspsych-btn jspsych-survey-text'
     }));
     $("#jspsych-survey-text-next").html('Submit Answers');
     $("#jspsych-survey-text-next").click(function() {

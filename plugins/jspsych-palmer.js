@@ -197,7 +197,7 @@ jsPsych.palmer = (function() {
     // start recording the time
     var startTime = (new Date()).getTime();
 
-    display_element.append($('<button id="jspsych-palmer-submitButton" type="button">Submit Answer</button>'));
+    display_element.append($('<button id="jspsych-palmer-submitButton" class="jspsych-btn" type="button">Submit Answer</button>'));
     $('#jspsych-palmer-submitButton').click(function() {
       save_data();
     });

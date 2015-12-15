@@ -12,8 +12,7 @@
   <script>
 
   // defining groups of questions that will go together.
-  var page_1_questions = ["I like vegetables.", "I hate eggs."];
-  var page_2_questions = ["I like fruit."];
+  var page_1_questions = ["I like vegetables.", "I like fruit."]
 
   // definiting two different response scales that can be used.
   var page_1_options = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
@@ -21,18 +20,17 @@
 
   var multi_choice_block = {
       type: 'survey-multi-choice',
-      questions: [page_1_questions, page_2_questions],
-      options: [[page_1_options, page_1_options], [page_2_options]],  // need one scale for every question on a page
-      required: [[true, false], [true]],  // set whether questions are required
+      questions: page_1_questions,
+      options: [page_1_options, page_2_options],  // need one scale for every question on a page
+      required: [true, false]   // set whether questions are required
       // horizontal: true  // centres questions and makes options display horizontally
   };
 
-
   jsPsych.init({
     display_element: $('#jspsych-target'),
-    experiment_structure: [multi_choice_block],
+    timeline: [multi_choice_block],
     on_finish: function() {
-      console.log(jsPsych.data.displayData());
+      jsPsych.data.displayData();
     }
   });
 

@@ -16,22 +16,16 @@
 
   var block_1 = {
     type: 'xab',
-    stimuli: [['img/happy_face_1.jpg', 'img/happy_face_2.jpg']],
+    stimuli: ['img/happy_face_1.jpg', 'img/happy_face_2.jpg'],
     prompt: "<p class='center-content'>Press Q if the face you just saw is on the left. Press P if the face you just saw is on the right.</p>",
     timing_response: 2000
-  }
-
-  var block_2 = {
-    type: 'xab',
-    stimuli: [['img/happy_face_1.jpg', 'img/happy_face_2.jpg']],
-    prompt: "<p class='center-content'>Press Q if the face you just saw is on the left. Press P if the face you just saw is on the right.</p>",
-    timing_response: -1
   }
 
   function start(){
     jsPsych.init({
       display_element: $('#jspsych-target'),
-      experiment_structure: [block_1, block_2]
+      timeline: [block_1],
+      on_finish: function() { jsPsych.data.displayData(); }
     });
   }
 

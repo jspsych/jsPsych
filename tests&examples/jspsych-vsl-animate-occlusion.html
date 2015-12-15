@@ -23,7 +23,8 @@
   function start(){
     jsPsych.init({
       display_element: $('#jspsych-target'),
-      experiment_structure: [block]
+      timeline: [block],
+      on_finish: function() { jsPsych.data.displayData(); }
     });
   }
 

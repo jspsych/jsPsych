@@ -17,7 +17,7 @@ jsPsych['reconstruction'] = (function() {
   plugin.trial = function(display_element, trial) {
 
     // default parameter values
-    trial.starting_value = (typeof trial.starting_value == 'undefined') ? 0.5 : trial.starting_value[i];
+    trial.starting_value = (typeof trial.starting_value == 'undefined') ? 0.5 : trial.starting_value;
     trial.step_size = trial.step_size || 0.05;
     trial.key_increase = trial.key_increase || 'h';
     trial.key_decrease = trial.key_decrease || 'g';
@@ -73,11 +73,11 @@ jsPsych['reconstruction'] = (function() {
 
       // add submit button
       display_element.append($('<button>', {
-        'id': 'jspsych-survey-text-next',
-        'class': 'jspsych-survey-text'
+        'id': 'jspsych-reconstruction-next',
+        'class': 'jspsych-btn jspsych-reconstruction'
       }));
-      $("#jspsych-survey-text-next").html('Submit Answers');
-      $("#jspsych-survey-text-next").click(endTrial);
+      $("#jspsych-reconstruction-next").html('Submit Answers');
+      $("#jspsych-reconstruction-next").click(endTrial);
     }
 
     function endTrial() {

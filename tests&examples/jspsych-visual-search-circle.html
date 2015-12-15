@@ -12,19 +12,20 @@
   </body>
   <script>
 
-  var trials = {
+  var trial = {
     type: 'visual-search-circle',
     target: 'img/normalN.gif',
     foil: 'img/backwardN.gif',
     fixation_image: 'img/fixation.gif',
-    target_present: [true, false, true, false],
-    set_size: [2,3,4,6]
+    target_present: true,
+    set_size: 4
   };
 
   function start(){
     jsPsych.init({
       display_element: $('#jspsych-target'),
-      experiment_structure: [trials]
+      timeline: [trial],
+      on_finish: function() { jsPsych.data.displayData(); }
     });
   }
 

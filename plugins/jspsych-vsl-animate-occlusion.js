@@ -37,7 +37,6 @@ jsPsych['vsl-animate-occlusion'] = (function() {
   plugin.trial = function(display_element, trial) {
 
     // default trial parameters
-    trial = {};
     trial.timing_cycle = trial.timing_cycle || 1000;
     trial.canvas_size = trial.canvas_size || [400, 400];
     trial.image_size = trial.image_size || [100, 100];
@@ -84,13 +83,13 @@ jsPsych['vsl-animate-occlusion'] = (function() {
     var next_direction = (trial.initial_direction == "right") ? 0 : 1;
 
     function next_step() {
-      if (trial.stims.length == which_image) {
+      if (trial.stimuli.length == which_image) {
         endTrial();
       } else {
 
         var d = directions[next_direction];
         next_direction === 0 ? next_direction = 1 : next_direction = 0;
-        var i = trial.stims[which_image];
+        var i = trial.stimuli[which_image];
         which_image++;
 
         c.animate(d[0].params, d[0].ms, mina.linear, function() {
@@ -112,7 +111,7 @@ jsPsych['vsl-animate-occlusion'] = (function() {
 
     var paper = Snap("#jspsych-vsl-animate-occlusion-canvas");
 
-    var c = paper.image(trial.stims[which_image], trial.canvas_size[0] / 2 - trial.image_size[0] / 2, trial.canvas_size[1] / 2 - trial.image_size[1] / 2, trial.image_size[0], trial.image_size[1]).attr({
+    var c = paper.image(trial.stimuli[which_image], trial.canvas_size[0] / 2 - trial.image_size[0] / 2, trial.canvas_size[1] / 2 - trial.image_size[1] / 2, trial.image_size[0], trial.image_size[1]).attr({
       "id": 'jspsych-vsl-animate-occlusion-moving-image'
     });
 
@@ -156,7 +155,7 @@ jsPsych['vsl-animate-occlusion'] = (function() {
       jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
 
       var trial_data = {
-        "stimuli": JSON.stringify(trial.stims),
+        "stimuli": JSON.stringify(trial.stimuli),
         "responses": JSON.stringify(responses)
       };
 
