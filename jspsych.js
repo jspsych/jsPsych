@@ -86,11 +86,12 @@ var jsPsych = (function() {
 
   core.progress = function() {
 
+    var percent_complete = timeline.percentComplete()
+
     var obj = {
       "total_trials": timeline.length(),
       "current_trial_global": global_trial_index,
-      "total_chunks": undefined, // TODO: implement this
-      "current_chunk": undefined // TODO: implement this
+      "percent_complete": percent_complete
     };
 
     return obj;
@@ -349,16 +350,16 @@ var jsPsych = (function() {
           // if this returns true, then the node below is complete, and we need to
           // advance this node.
           current_location++;
-          if (this.isComplete()) {
+          if (this.checkCompletion()) {
             return true;
           } else {
             // we advanced the node, now we need to check if the node we advanced
             // to is also complete, and keep advancing until we find a node that
             // is not complete, or until this node is complete.
-            while (!this.isComplete() && timeline[current_location].isComplete()) {
+            while (!this.checkCompletion() && timeline[current_location].checkCompletion()) {
               current_location++;
             }
-            if (this.isComplete()) {
+            if (this.checkCompletion()) {
               return true;
             } else {
               return false;
@@ -372,13 +373,14 @@ var jsPsych = (function() {
       } else {
         // if we get here, then this is a trial node, and the node is complete
         current_location++;
+        done_flag = true;
         return true;
       }
     }
 
     // return true if the node is completely done (no more possible trials)
     // otherwise, return false
-    this.isComplete = function() {
+    this.checkCompletion = function() {
       // if the done_flag is true, the node is complete no matter what.
       if (done_flag) {
         return true;
@@ -386,6 +388,7 @@ var jsPsych = (function() {
 
       // check for trial nodes
       if (timeline.length == 0 && current_location > 0) {
+        done_flag = true;
         return true;
       }
 
@@ -400,9 +403,11 @@ var jsPsych = (function() {
             if (loop_function(this.generatedData())) {
               this.reset();
             } else {
+              done_flag = true;
               return true;
             }
           } else {
+            done_flag = true;
             return true;
           }
         }
@@ -413,12 +418,31 @@ var jsPsych = (function() {
             return false;
           } else {
             // skip the timeline
+            done_flag = true;
             return true;
           }
         }
       }
 
       return false;
+    }
+
+    // check the status of the done flag
+    this.isComplete = function() {
+      return done_flag;
+    }
+
+    // return the percentage of trials completed, grouped at the first child level
+    // counts a set of trials as complete when the child node is done
+    this.percentComplete = function() {
+      var total_trials = this.length();
+      var completed_trials = 0;
+      for(var i=0; i<timeline.length; i++){
+        if(timeline[i].isComplete()){
+          completed_trials += timeline[i].length();
+        }
+      }
+      return (completed_trials/total_trials * 100)
     }
 
     // reset the location pointer to the start of the timeline, and reset all the
@@ -554,9 +578,7 @@ var jsPsych = (function() {
   function updateProgressBar() {
     var progress = jsPsych.progress();
 
-    var percentComplete = Math.min(100, 100 * ((progress.current_chunk + 1) / progress.total_chunks));
-
-    $('#jspsych-progressbar-inner').css('width', percentComplete + "%");
+    $('#jspsych-progressbar-inner').css('width', progress.percent_complete + "%");
   }
 
   return core;
