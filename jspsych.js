@@ -296,6 +296,13 @@ var jsPsych = (function() {
       }
       // if there is no timeline parameter, then this node is a trial node
       else {
+        // check to see if a valid trial type is defined
+        var trial_type = parameters.type;
+        if(typeof trial_type == 'undefined') {
+          console.error('Trial level node is missing the "type" parameter. The parameters for the node are: '+JSON.stringify(parameters));
+        } else if(typeof jsPsych[trial_type] == 'undefined') {
+          console.error('No plugin loaded for trials of type "'+trial_type+'"');
+        }
         // create a deep copy of the parameters for the trial
         trial_data = $.extend(true, {}, parameters);
       }
