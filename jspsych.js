@@ -397,7 +397,7 @@ var jsPsych = (function() {
         if (current_location >= timeline.length) {
           // check if there is a loop function
           if (typeof loop_function !== 'undefined') {
-            if (loop_function()) {
+            if (loop_function(this.generatedData())) {
               this.reset();
             } else {
               return true;
