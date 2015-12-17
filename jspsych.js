@@ -305,6 +305,10 @@ var jsPsych = (function() {
     // returns true if the node is complete after advance
     // returns false otherwise
     this.advance = function() {
+      // first check to see if this node is done
+      if(done_flag){
+        return true;
+      }
       // propogate down to the current trial, and update the current_location
       // of that node (effectively ending that node)
       if (timeline.length !== 0) {
@@ -687,7 +691,7 @@ jsPsych.data = (function() {
 
   module.getDataByTrialIndex = function(trial_index) {
     for (var i = 0; i < allData.length; i++) {
-      if (allData[i].trial_index_global == trial_index) {
+      if (allData[i].trial_index == trial_index) {
         return allData[i];
       }
     }

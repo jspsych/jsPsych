@@ -29,19 +29,24 @@
   var block = {
     type: 'single-stim',
     choices: [89, 78], // Y or N
-    prompt: '<p class="center-content">Press Y to Continue. Press N to end the experiment</p>',
+    prompt: '<p class="center-content">Press Y to Continue. Press N to end this node of the experiment.</p>',
     on_finish: function(data) {
       if (data.key_press == 78) {
-        jsPsych.endExperiment();
+        jsPsych.endCurrentChunk();
       }
     },
     timeline: trials
   }
 
+  var after_block = {
+    type: 'single-stim',
+    stimulus: '<p>The next node</p>',
+    is_html: true
+  }
 
   jsPsych.init({
     display_element: $('#jspsych-target'),
-    timeline: [block],
+    timeline: [block, after_block],
     on_finish: function() {
       jsPsych.data.displayData();
     }
