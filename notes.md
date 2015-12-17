@@ -9,3 +9,6 @@ Major things that are changing for revision that will be noticeable.
 - can declare any parameter at the node level, and then it is applied to all nested objects below that.
 - progress bar behaves differently
 - lots of small plugin parameter changes
+- auto preload
+- preloadImages is now in the pluginAPI namespace
+- changes to all the audio preloading methods

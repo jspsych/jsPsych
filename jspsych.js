@@ -58,6 +58,7 @@ var jsPsych = (function() {
         return undefined;
       },
       'show_progress_bar': false,
+      'auto_preload': true,
       'max_load_time': 30000,
       'skip_load_check': false,
       'fullscreen': false,
@@ -74,13 +75,15 @@ var jsPsych = (function() {
     DOM_target.addClass('jspsych-display-element');
 
     // create experiment timeline
-    timeline = new TimelineNode({timeline:opts.timeline});
+    timeline = new TimelineNode({
+      timeline: opts.timeline
+    });
 
-    // wait for everything to load
-    if (opts.skip_load_check) {
-      startExperiment(opts.fullscreen);
+    // preloading
+    if(opts.auto_preload){
+      jsPsych.pluginAPI.autoPreload(timeline, startExperiment);
     } else {
-      allLoaded(startExperiment, opts.max_load_time, opts.fullscreen);
+      startExperiment();
     }
   };
 
@@ -103,30 +106,6 @@ var jsPsych = (function() {
 
   core.totalTime = function() {
     return (new Date()).getTime() - exp_start_time.getTime();
-  };
-
-  core.preloadImages = function(images, callback_complete, callback_load) {
-
-    // flatten the images array
-    images = flatten(images);
-
-    var n_loaded = 0;
-    var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
-    var finishfn = (typeof callback_complete === 'undefined') ? function() {} : callback_complete;
-
-    for (var i = 0; i < images.length; i++) {
-      var img = new Image();
-
-      img.onload = function() {
-        n_loaded++;
-        loadfn(n_loaded);
-        if (n_loaded == images.length) {
-          finishfn();
-        }
-      };
-
-      img.src = images[i];
-    }
   };
 
   core.getDisplayElement = function() {
@@ -205,23 +184,6 @@ var jsPsych = (function() {
     return timeline.activeID();
   };
 
-  function allLoaded(callback, max_wait, fullscreen) {
-
-    var refresh_rate = 1000;
-    var max_wait = max_wait || 30000;
-    var start = (new Date()).getTime();
-
-    var interval = setInterval(function() {
-      if (jsPsych.pluginAPI.audioLoaded()) {
-        clearInterval(interval);
-        callback(fullscreen);
-      } else if ((new Date()).getTime() - max_wait > start) {
-        console.error('Experiment failed to load all resouces in time alloted');
-      }
-    }, refresh_rate);
-
-  }
-
   function TimelineNode(parameters, parent, relativeID) {
 
     // a unique ID for this node, relative to the parent
@@ -299,10 +261,10 @@ var jsPsych = (function() {
       else {
         // check to see if a valid trial type is defined
         var trial_type = parameters.type;
-        if(typeof trial_type == 'undefined') {
-          console.error('Trial level node is missing the "type" parameter. The parameters for the node are: '+JSON.stringify(parameters));
-        } else if(typeof jsPsych[trial_type] == 'undefined') {
-          console.error('No plugin loaded for trials of type "'+trial_type+'"');
+        if (typeof trial_type == 'undefined') {
+          console.error('Trial level node is missing the "type" parameter. The parameters for the node are: ' + JSON.stringify(parameters));
+        } else if (typeof jsPsych[trial_type] == 'undefined') {
+          console.error('No plugin loaded for trials of type "' + trial_type + '"');
         }
         // create a deep copy of the parameters for the trial
         trial_data = $.extend(true, {}, parameters);
@@ -437,12 +399,12 @@ var jsPsych = (function() {
     this.percentComplete = function() {
       var total_trials = this.length();
       var completed_trials = 0;
-      for(var i=0; i<timeline.length; i++){
-        if(timeline[i].isComplete()){
+      for (var i = 0; i < timeline.length; i++) {
+        if (timeline[i].isComplete()) {
           completed_trials += timeline[i].length();
         }
       }
-      return (completed_trials/total_trials * 100)
+      return (completed_trials / total_trials * 100)
     }
 
     // reset the location pointer to the start of the timeline, and reset all the
@@ -500,9 +462,30 @@ var jsPsych = (function() {
     this.generatedData = function() {
       return jsPsych.data.getTrialsFromChunk(this.ID());
     }
+
+    // get all the trials of a particular type
+    this.trialsOfType = function(type) {
+      if (timeline.length == 0) {
+        if (trial_data.type == type) {
+          return trial_data;
+        } else {
+          return [];
+        }
+      } else {
+        var trials = [];
+        for (var i = 0; i < timeline.length; i++) {
+          var t = timeline[i].trialsOfType(type);
+          trials = trials.concat(t);
+        }
+        return trials;
+      }
+    }
   }
 
-  function startExperiment(fullscreen) {
+  function startExperiment() {
+
+    var fullscreen = opts.fullscreen;
+
     // fullscreen setup
     if (fullscreen) {
       // check if keys are allowed in fullscreen mode
@@ -579,6 +562,11 @@ var jsPsych = (function() {
     var progress = jsPsych.progress();
 
     $('#jspsych-progressbar-inner').css('width', progress.percent_complete + "%");
+  }
+
+  function preloadStimuli() {
+    // for now, this checks if there are any audio stimuli that need to be preloaded
+    // it could be extended to check if there are image files that need to be preloaded
   }
 
   return core;
@@ -1073,23 +1061,12 @@ jsPsych.randomization = (function() {
 
 jsPsych.pluginAPI = (function() {
 
-  /* for future centralized key handling... */
-  /*$(document).on('keydown', keyHandler);
+  var module = {};
 
-  function keyHandler(e){
-
-  	// record time
-
-  	// dispatch events
-
-  }*/
-
-  // keyboard listeners
+  // keyboard listeners //
   var keyboard_listeners = [];
 
   var held_keys = [];
-
-  var module = {};
 
   module.getKeyboardResponse = function(parameters) {
     //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key?
@@ -1221,7 +1198,6 @@ jsPsych.pluginAPI = (function() {
     return code;
   }
 
-  // keycode lookup associative array
   var keylookup = {
     'backspace': 8,
     'tab': 9,
@@ -1344,6 +1320,8 @@ jsPsych.pluginAPI = (function() {
     ']': 221
   };
 
+  // plugin parameter evaluation //
+
   module.evaluateFunctionParameters = function(trial, protect) {
 
     // keys that are always protected
@@ -1353,7 +1331,7 @@ jsPsych.pluginAPI = (function() {
 
     protect = protect.concat(always_protected);
 
-    var keys = getKeys(trial);
+    var keys = Object.keys(trial);
 
     for (var i = 0; i < keys.length; i++) {
 
@@ -1375,32 +1353,6 @@ jsPsych.pluginAPI = (function() {
 
   };
 
-  module.enforceArray = function(params, possible_arrays) {
-
-    // function to check if something is an array, fallback
-    // to string method if browser doesn't support Array.isArray
-    var ckArray = Array.isArray || function(a) {
-      return toString.call(a) == '[object Array]';
-    };
-
-    for (var i = 0; i < possible_arrays.length; i++) {
-      if (typeof params[possible_arrays[i]] !== 'undefined') {
-        params[possible_arrays[i]] = ckArray(params[possible_arrays[i]]) ? params[possible_arrays[i]] : [params[possible_arrays[i]]];
-      }
-    }
-
-    return params;
-  };
-
-  function getKeys(obj) {
-    var r = [];
-    for (var k in obj) {
-      if (!obj.hasOwnProperty(k)) continue;
-      r.push(k);
-    }
-    return r;
-  }
-
   // audio //
 
   // temporary patch for Safari
@@ -1411,30 +1363,6 @@ jsPsych.pluginAPI = (function() {
 
   var context = (typeof window.AudioContext !== 'undefined') ? new AudioContext() : null;
   var audio_buffers = [];
-
-  module.loadAudioFile = function(path) {
-
-    var bufferID = path;
-    if (typeof audio_buffers.bufferID !== 'undefined') {
-      return bufferID;
-    }
-    audio_buffers[bufferID] = 'tmp';
-
-    var request = new XMLHttpRequest();
-    request.open('GET', path, true);
-    request.responseType = 'arraybuffer';
-    request.onload = function() {
-      context.decodeAudioData(request.response, function(buffer) {
-        audio_buffers[bufferID] = buffer;
-      }, function() {
-        console.error('Error loading audio file: ' + path);
-      });
-    }
-    request.send();
-
-    return bufferID;
-
-  }
 
   module.getAudioBuffer = function(audioID) {
 
@@ -1447,13 +1375,135 @@ jsPsych.pluginAPI = (function() {
 
   }
 
-  module.audioLoaded = function() {
-    for (var i = 0; i < audio_buffers.length; i++) {
-      if (audio_buffers[i] == 'tmp') {
-        return false;
+  // preloading stimuli //
+
+  var preloads = [];
+
+  module.preloadAudioFiles = function(files, callback_complete, callback_load) {
+
+    files = flatten(files);
+
+    var n_loaded = 0;
+    var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
+    var finishfn = (typeof callback_complete === 'undefined') ? function() {} : callback_complete;
+
+    if(files.length==0){
+      finishfn();
+      return;
+    }
+
+    for (var i = 0; i < files.length; i++) {
+      var bufferID = files[i];
+      if (typeof audio_buffers.bufferID !== 'undefined') {
+        n_loaded++;
+        loadfn(n_loaded);
+        if(n_loaded == files.length) {
+          finishfn();
+        }
+      }
+      audio_buffers[bufferID] = 'tmp';
+
+      var request = new XMLHttpRequest();
+      request.open('GET', bufferID, true);
+      request.responseType = 'arraybuffer';
+      request.onload = function() {
+        context.decodeAudioData(request.response, function(buffer) {
+          audio_buffers[bufferID] = buffer;
+          n_loaded++;
+          loadfn(n_loaded);
+          if(n_loaded == files.length) {
+            finishfn();
+          }
+        }, function() {
+          console.error('Error loading audio file: ' + bufferID);
+        });
+      }
+      request.send();
+    }
+
+  }
+
+  module.preloadImages = function(images, callback_complete, callback_load) {
+
+    // flatten the images array
+    images = flatten(images);
+
+    var n_loaded = 0;
+    var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
+    var finishfn = (typeof callback_complete === 'undefined') ? function() {} : callback_complete;
+
+    if(images.length==0){
+      finishfn();
+      return;
+    }
+
+    for (var i = 0; i < images.length; i++) {
+      var img = new Image();
+
+      img.onload = function() {
+        n_loaded++;
+        loadfn(n_loaded);
+        if (n_loaded == images.length) {
+          finishfn();
+        }
+      };
+
+      img.onerror = function() {
+        n_loaded++;
+        loadfn(n_loaded);
+        if (n_loaded == images.length) {
+          finishfn();
+        }
+      }
+
+      img.src = images[i];
+    }
+  };
+
+  module.registerPreload = function(plugin_name, parameter, media_type) {
+    if (!(media_type == 'audio' || media_type == 'image')) {
+      console.error('Invalid media_type parameter for jsPsych.pluginAPI.registerPreload. Please check the plugin file.');
+    }
+
+    var preload = {
+      plugin: plugin_name,
+      parameter: parameter,
+      media_type: media_type
+    }
+
+    preloads.push(preload);
+  }
+
+  module.autoPreload = function(timeline, callback) {
+    // list of items to preload
+    var images = [];
+    var audio = [];
+
+    // construct list
+    for (var i = 0; i < preloads.length; i++) {
+      var type = preloads[i].plugin;
+      var param = preloads[i].parameter;
+      var media = preloads[i].media_type;
+      var trials = timeline.trialsOfType(type);
+      for (var j = 0; j < trials.length; j++) {
+        if (typeof trials[j][param] !== 'undefined') {
+          if (media == 'image') {
+            images = images.concat(flatten([trials[j][param]]));
+          } else if (media == 'audio') {
+            audio = audio.concat(flatten([trials[j][param]]));
+          }
+        }
       }
     }
-    return true;
+
+    // do the preloading
+    // first the images, then when the images are complete
+    // wait for the audio files to finish
+    module.preloadImages(images, function() {
+      module.preloadAudioFiles(audio, function() {
+        callback();
+      });
+    });
   }
 
   return module;
@@ -1461,13 +1511,13 @@ jsPsych.pluginAPI = (function() {
 
 // methods used in multiple modules
 function flatten(arr, out) {
-		out = (typeof out === 'undefined') ? [] : out;
-		for (var i = 0; i < arr.length; i++) {
-			if (Array.isArray(arr[i])) {
-				flatten(arr[i], out);
-			} else {
-				out.push(arr[i]);
-			}
-		}
-		return out;
-	}
+  out = (typeof out === 'undefined') ? [] : out;
+  for (var i = 0; i < arr.length; i++) {
+    if (Array.isArray(arr[i])) {
+      flatten(arr[i], out);
+    } else {
+      out.push(arr[i]);
+    }
+  }
+  return out;
+}
