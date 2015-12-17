@@ -15,24 +15,7 @@ jsPsych['vsl-animate-occlusion'] = (function() {
 
   var plugin = {};
 
-  plugin.create = function(params) {
-
-    var trials = new Array(1);
-
-    trials[0] = {};
-    trials[0].type = "vsl-animate-occlusion";
-    trials[0].stims = params.stimuli;
-    trials[0].timing_cycle = params.timing_cycle || 1000;
-    trials[0].canvas_size = params.canvas_size || [400, 400];
-    trials[0].image_size = params.image_size || [100, 100];
-    trials[0].initial_direction = params.initial_direction || "left";
-    trials[0].occlude_center = (typeof params.occlude_center === 'undefined') ? true : params.occlude_center;
-    trials[0].choices = params.choices || []; // spacebar
-    trials[0].timing_pre_movement = (typeof params.timing_pre_movement === 'undefined') ? 500 : params.timing_pre_movement;
-    //trials[0].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
-
-    return trials;
-  };
+  jsPsych.pluginAPI.registerPreload('vsl-animate-occlusion', 'stimuli', 'image');
 
   plugin.trial = function(display_element, trial) {
 

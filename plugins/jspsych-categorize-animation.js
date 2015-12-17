@@ -10,6 +10,8 @@ jsPsych["categorize-animation"] = (function() {
 
   var plugin = {};
 
+  jsPsych.pluginAPI.registerPreload('categorize-animation', 'stimuli', 'image');
+
   plugin.trial = function(display_element, trial) {
 
     // set default values

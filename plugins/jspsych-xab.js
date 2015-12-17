@@ -12,6 +12,8 @@ jsPsych.xab = (function() {
 
   var plugin = {};
 
+  jsPsych.pluginAPI.registerPreload('xab', 'stimuli', 'image');
+
   plugin.trial = function(display_element, trial) {
 
     // default trial values

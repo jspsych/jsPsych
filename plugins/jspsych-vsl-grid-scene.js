@@ -15,6 +15,8 @@ jsPsych['vsl-grid-scene'] = (function() {
 
   var plugin = {};
 
+  jsPsych.pluginAPI.registerPreload('vsl-grid-scene', 'stimuli', 'image');
+
   plugin.trial = function(display_element, trial) {
 
     // default parameter values

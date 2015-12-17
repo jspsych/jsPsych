@@ -18,6 +18,10 @@
 
     var plugin = {};
 
+    jsPsych.pluginAPI.registerPreload('visual-search-circle', 'target', 'image');
+    jsPsych.pluginAPI.registerPreload('visual-search-circle', 'foil', 'image');
+    jsPsych.pluginAPI.registerPreload('visual-search-circle', 'fixation_image', 'image');
+
     plugin.create = function(params) {
 
       var trials = new Array(params.target_present.length);

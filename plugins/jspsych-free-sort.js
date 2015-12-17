@@ -11,15 +11,17 @@ jsPsych['free-sort'] = (function() {
 
   var plugin = {};
 
+  jsPsych.pluginAPI.registerPreload('free-sort', 'stimuli', 'image');
+
   plugin.trial = function(display_element, trial) {
 
     // default values
-    trial.stim_height = trial.stim_height || 100,
-      trial.stim_width = trial.stim_width || 100,
-      trial.prompt = (typeof trial.prompt === 'undefined') ? '' : trial.prompt,
-      trial.prompt_location = trial.prompt_location || "above",
-      trial.sort_area_width = trial.sort_area_width || 800,
-      trial.sort_area_height = trial.sort_area_height || 800
+    trial.stim_height = trial.stim_height || 100;
+    trial.stim_width = trial.stim_width || 100;
+    trial.prompt = (typeof trial.prompt === 'undefined') ? '' : trial.prompt;
+    trial.prompt_location = trial.prompt_location || "above";
+    trial.sort_area_width = trial.sort_area_width || 800;
+    trial.sort_area_height = trial.sort_area_height || 800;
 
     // if any trial variables are functions
     // this evaluates the function and replaces

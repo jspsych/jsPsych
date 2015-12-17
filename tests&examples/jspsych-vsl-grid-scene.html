@@ -27,15 +27,11 @@
     stimuli: scenes
   };
 
-  function start(){
     jsPsych.init({
       display_element: $('#jspsych-target'),
       timeline: [block],
       on_finish: function() { jsPsych.data.displayData(); }
     });
-  }
-
-  jsPsych.preloadImages(images, start);
 
   </script>
 </html>

@@ -12,6 +12,8 @@ jsPsych['same-different'] = (function() {
 
   var plugin = {};
 
+  jsPsych.pluginAPI.registerPreload('same-different', 'stimuli', 'image');
+
   plugin.trial = function(display_element, trial) {
 
     // default parameters

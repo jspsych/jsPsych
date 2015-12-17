@@ -13,6 +13,8 @@ jsPsych.similarity = (function() {
 
   var plugin = {};
 
+  jsPsych.pluginAPI.registerPreload('similarity', 'stimuli', 'image');
+
   plugin.trial = function(display_element, trial) {
 
     // default parameters

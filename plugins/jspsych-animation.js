@@ -9,6 +9,8 @@ jsPsych.animation = (function() {
 
   var plugin = {};
 
+  jsPsych.pluginAPI.registerPreload('animation', 'stimuli', 'image');
+
   plugin.trial = function(display_element, trial) {
 
     trial.frame_time = trial.frame_time || 250;

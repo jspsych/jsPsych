@@ -1,24 +1,27 @@
 <!doctype html>
 <html>
-  <head>
-    <script src="js/jquery.min.js"></script>
-    <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-categorize.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css"></link>
-    <style>
-      img { width: 300px; }
-    </style>
-  </head>
-  <body>
-    <div id="jspsych-target"></div>
-  </body>
-  <script>
 
+<head>
+  <script src="js/jquery.min.js"></script>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-categorize.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="jspsych-target"></div>
+</body>
+<script>
   var trials = {
     type: 'categorize',
     stimulus: 'img/happy_face_1.jpg',
     key_answer: 72,
-    choices: [72,83],
+    choices: [72, 83],
     text_answer: 'happy',
     correct_text: "<p class='center-content'>Correct. This face is %ANS%.</p>",
     incorrect_text: "<p class='center-content'>Incorrect. This face is %ANS%. Please press the correct key to continue.</p>",
@@ -28,15 +31,13 @@
     force_correct_button_press: true
   };
 
-  function start(){
-    jsPsych.init({
-      display_element: $('#jspsych-target'),
-      timeline: [trials],
-      on_finish: function(){jsPsych.data.displayData();}
-    });
-  }
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    timeline: [trials],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+</script>
 
-  jsPsych.preloadImages(['img/happy_face_1.jpg','img/sad_face_2.jpg'], start);
-
-  </script>
 </html>
