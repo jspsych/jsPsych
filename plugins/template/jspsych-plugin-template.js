@@ -17,7 +17,7 @@ jsPsych["PLUGIN-NAME"] = (function() {
     // to dynamically adjust the contents of a trial as a result
     // of other trials, among other uses. you can leave this out,
     // but in general it should be included
-    trial = jsPsych.evaluateFunctionParameters(trial);
+    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
     // data saving
     var trial_data = {
