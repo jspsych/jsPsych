@@ -343,6 +343,38 @@ function getAverageResponseTime() {
 ```
 
 ---
+## jsPsych.data.getURLVariable
+
+```
+jsPsych.data.getURLVariable(var_name)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+var_name | string | Which variable to get the value of.
+
+### Return value
+
+Returns the value of a variable passed in through the query string.
+
+### Description
+
+For extracting a particular variable passed in through a URL query string.
+
+### Examples
+
+```javascript
+
+// if the URL of the page is: experiment.html?subject=1234&condition=test
+
+console.log(jsPsych.data.getURLVariable('subject')) // logs "1234"
+console.log(jsPsych.data.getURLVariable('condition')) // logs "test"
+
+```
+
+---
 ## jsPsych.data.localSave
 
 ```
@@ -371,6 +403,35 @@ Saves a CSV or JSON file on the computer running the experiment. If conducting a
 ```javascript
 jsPsych.data.localSave('mydata.csv', 'csv');
 ```
+
+---
+## jsPsych.data.urlVariables
+
+```
+jsPsych.data.urlVariables()
+```
+
+### Return value
+
+Returns an object (associative array) of the variables in the URL query string.
+
+### Description
+
+For extracting variables passed in through a URL query string.
+
+### Examples
+
+```javascript
+
+// if the URL of the page is: experiment.html?subject=1234&condition=test
+
+var urlvar = jsPsych.data.urlVariables();
+console.log(urlvar.subject) // logs "1234"
+console.log(urlvar.condition) // logs "test"
+
+```
+
+
 
 ---
 ## jsPsych.data.write

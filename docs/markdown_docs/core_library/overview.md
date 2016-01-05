@@ -31,8 +31,10 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.data.getLastTrialData](jspsych-data.md#jspsychdatagetlasttrialdata)
 * [jsPsych.data.getTrialsOfType](jspsych-data.md#jspsychdatagettrialsoftype)
 * [jsPsych.data.getTrialsFromChunk](jspsych-data.md#jspsychdatagettrialsfromchunk)
+* [jsPsych.data.getURLVariable](jspsych-data.md#jspsychdatageturlvariable)
 * [jsPsych.data.localSave](jspsych-data.md#jspsychdatalocalsave)
 * [jsPsych.data.write](jspsych-data.md#jspsychdatawrite)
+* [jsPsych.data.urlVariables](jspsych-data.md#jspsychdataurlvariables)
 
 ### [Turk module](jspsych-turk.md)
 

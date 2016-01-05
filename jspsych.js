@@ -744,6 +744,13 @@ jsPsych.data = (function() {
     $('#jspsych-data-display').text(data_string);
   };
 
+  module.urlVariables = function() {
+    return query_string;
+  }
+
+  module.getURLVariable = function(whichvar){
+    return query_string[whichvar];
+  }
   // private function to save text file on local drive
 
   function saveTextToFile(textstr, filename) {
@@ -815,6 +822,23 @@ jsPsych.data = (function() {
 
     return result;
   }
+
+  // this function is from StackOverflow:
+  // http://stackoverflow.com/posts/3855394
+
+  var query_string = (function(a) {
+    if (a == "") return {};
+    var b = {};
+    for (var i = 0; i < a.length; ++i)
+    {
+        var p=a[i].split('=', 2);
+        if (p.length == 1)
+            b[p[0]] = "";
+        else
+            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+    }
+    return b;
+})(window.location.search.substr(1).split('&'));
 
   return module;
 
