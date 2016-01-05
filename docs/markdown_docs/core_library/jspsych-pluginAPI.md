@@ -3,6 +3,39 @@
 The pluginAPI module contains functions that are useful when developing new plugins.
 
 ---
+## jsPsych.pluginAPI.autoPreload
+
+```
+jsPsych.pluginAPI.autoPreload(timeline, callback)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+timeline | TimelineNode object | A TimelineNode object that contains an arbitrary set of trials.
+callback | function | A function to execute when loading is complete
+
+### Return value
+
+Returns nothing.
+
+### Description
+
+Attempts to preload all image files and audio files that will be used to run the trials on the timeline. Content will only preload from plugins that have used the `registerPreload` method to define the media types of their parameters.
+
+The callback function executes once all of the files are preloaded.
+
+This method is used internally by the core jsPsych code. It is not recommended that you call it manually.
+
+### Examples
+
+```javascript
+// you probably shouldn't use this method
+```
+
+
+---
 ## jsPsych.pluginAPI.cancelAllKeyboardResponses
 
 ```
@@ -90,40 +123,35 @@ keycode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode('space')
 ```
 
 ---
-## jsPsych.pluginAPI.enforceArray
+## jsPsych.pluginAPI.getAudioBuffer
 
 ```
-jsPsych.pluginAPI.enforceArray(params, possible_arrays)
+jsPsych.pluginAPI.getAudioBuffer(filepath)
 ```
 
 ### Parameters
 
 Parameter | Type | Description
 ----------|------|------------
-params | object | An object of `key: value` pairs.
-possible_arrays | array | Array of strings where each string is a key from `params` indicating which `keys` should have arrays as the `value`.
+filepath | string | The path to the audio file that was preloaded.
 
 ### Return value
 
-Returns a copy of `params` where all of the `keys` in `possible_arrays` are guaranteed to be arrays.
+Returns an audio buffer compatible with the WebAudio API for the given filepath.
 
 ### Description
 
-This function checks if specified parameters are arrays. If they are not arrays, then it converts them to arrays. Practically, this is used for cases where a plugin calls for an array, but a single value is also a reasonable option. An example would be specifying a stimulus for the `single-stim` plugin. Technically, the plugin requires the stimuli to be specified in an array. Each element of the array is then given its own trial. However, a single element array to present one trial is possible. This function means that users can declare the single element array as either an array or just the value that would be the element in the array.
+Gets an AudioBuffer that can be played with the WebAudio API. The file must be preloaded with `preloadAudioFiles` or the automatic preload (`autoPreload`).
 
 ### Examples
 
 ```javascript
-
-// a snippet from the text plugin
-plugin.create = function(params) {
-
-  params = jsPsych.pluginAPI.enforceArray(params, ['text','data']);
-
-  // other stuff here ...
-
-};
-
+// the code below is used to play audio in the single-audio plugin
+var source = context.createBufferSource();
+source.buffer = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
+source.connect(context.destination);
+startTime = context.currentTime + 0.1;
+source.start(startTime);
 ```
 
 ---
@@ -209,7 +237,7 @@ protect | array | An array of strings, indicating which parameters in the `trial
 
 ### Return value
 
-Returns a new trial object with all values that were functions replaced by the return value of the function.
+Returns a the trial object with all values that were functions replaced by the return value of the function.
 
 ### Description
 
@@ -230,10 +258,78 @@ plugin.trial = function(display_element, trial) {
 
 ```
 
-## jsPsych.preloadImages
+---
+## jsPsych.pluginAPI.preloadImages
 
 ```
-jsPsych.preloadImages(images, callback_complete, callback_load)
+jsPsych.pluginAPI.preloadImages(images, callback_complete, callback_load)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+files | array | An array of audio file paths to load. The array can be nested (e.g. if images are in multiple arrays to help sort by condition or task).
+callback_complete | function | A function to execute when all the files have been loaded.
+callback_load | function | A function to execute after each file has been loaded. A single parameter is passed to this function which contains the number of files that have been loaded so far.
+
+### Return value
+
+Returns nothing.
+
+### Description
+
+Use this function to preload audio files that are not part of a plugin with automatic preloading. Audio files in official plugins will automatically preload. See [Media Preloading](../features/media-preloading.md) for more information.
+
+It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the files are loaded. Thus, it is possible that an audio file would be required for playing before it is done preloading. The `callback_complete` function will only execute after all the audio files are loaded, and can be used to control the flow of the experiment (e.g. by starting the experiment in the `callback_complete` function).
+
+The `callback_load` function can be used to indicate progress. See example below.
+
+### Examples
+
+#### Basic use
+```javascript
+
+var sounds = ['file1.mp3', 'file2.mp3', 'file3.mp3'];
+
+jsPsych.preloadAudioFiles(sounds, function(){ startExperiment(); });
+
+function startExperiment(){
+    jsPsych.init({
+        timeline: exp
+    });
+}
+
+```
+
+#### Show progress of loading
+
+```javascript
+var sounds = ['file1.mp3', 'file2.mp3', 'file3.mp3'];
+
+jsPsych.preloadAudioFiles(sounds, function(){ startExperiment(); }, function(nLoaded) { updateLoadedCount(nLoaded); });
+
+function updateLoadedCount(nLoaded){
+	var percentcomplete = nLoaded / sounds.length * 100;
+
+	// could put something fancier here, like a progress bar
+	// or updating text in the DOM.
+	console.log('Loaded '+percentcomplete+'% of audio files');
+}
+
+function startExperiment(){
+    jsPsych.init({
+        timeline: exp
+    });
+}
+```
+
+
+---
+## jsPsych.pluginAPI.preloadImages
+
+```
+jsPsych.pluginAPI.preloadImages(images, callback_complete, callback_load)
 ```
 
 ### Parameters
@@ -250,9 +346,9 @@ Returns nothing.
 
 ### Description
 
-Use this function to preload image files. See [Image Preloading](../features/image-preloading.md) in the documentation.
+Use this function to preload image files that are not part of a plugin with automatic preloading. Image files in official plugins will automatically preload. See [Media Preloading](../features/media-preloading.md) for more information.
 
-It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the images are loaded. Thus, it is possible that an image would be required for display before it is done preloading. The `callback_complete` function will only exectute after all the images are loaded, and can be used to control the flow of the experiment (e.g. by starting the experiment in the `callback_complete` function).
+It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the images are loaded. Thus, it is possible that an image would be required for display before it is done preloading. The `callback_complete` function will only execute after all the images are loaded, and can be used to control the flow of the experiment (e.g. by starting the experiment in the `callback_complete` function).
 
 The `callback_load` function can be used to indicate progress, if the number of images to be loaded is known ahead of time. See example below.
 
@@ -267,7 +363,7 @@ jsPsych.preloadImages(images, function(){ startExperiment(); });
 
 function startExperiment(){
     jsPsych.init({
-        experiment_structure: exp
+        timeline: exp
     });
 }
 
@@ -290,7 +386,34 @@ function updateLoadedCount(nLoaded){
 
 function startExperiment(){
     jsPsych.init({
-        experiment_structure: exp
+        timeline: exp
     });
 }
 ```
+
+---
+## jsPsych.pluginAPI.registerPreload
+
+```
+jsPsych.pluginAPI.registerPreload(plugin_name, parameter, media_type)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+plugin_name | string | The name of the plugin. e.g., 'single-stim'.
+parameter | string | The name of the parameter that is a media file. e.g., 'stimulus'
+media_type | string | The type of media, either 'image' or 'audio'.
+
+### Return value
+
+Nothing.
+
+### Description
+
+Use this method in a plugin file to mark a parameter as containing an element that should be preloaded. The method should be called in the plugin file such that it gets called when the file is loaded.
+
+### Example
+
+For an example, see the [single-stim](https://github.com/jodeleeuw/jsPsych/blob/master/plugins/jspsych-single-stim.js) and [single-audio](https://github.com/jodeleeuw/jsPsych/blob/master/plugins/jspsych-single-audio.js) plugins.
