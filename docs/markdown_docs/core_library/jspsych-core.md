@@ -166,9 +166,9 @@ Ends the experiment, skipping all remaining trials.
 #### End the experiment if a particular response is given
 
 ```javascript
-var block_1 = {
+var trial = {
   type: 'single-stim',
-  stimuli: images,
+  stimulus: 'image1.jpg',
   choices: [89,78], // Y or N
   prompt: '<p class="center-content">Press Y to Continue. Press N to end the experiment</p>',
   on_finish: function(data){
@@ -183,12 +183,15 @@ var block_1 = {
 ## jsPsych.finishTrial
 
 ```
-jsPsych.finishTrial()
+jsPsych.finishTrial(data)
 ```
 
 ### Parameters
 
-None.
+Parameter | Type | Description
+----------|------|------------
+data | object | The data to store for the trial.
+
 
 ### Return value
 
@@ -198,6 +201,7 @@ Returns nothing.
 
 This method tells jsPsych that the current trial is over. It is used in all of the plugins to end the current trial. When the trial ends a few things happen:
 
+* The data is stored using `jsPsych.data.write()`
 * The on_finish callback function is executed for the trial
 * The on_trial_finish callback function is executed
 * The progress bar is updated if it is being displayed
@@ -209,7 +213,7 @@ This method tells jsPsych that the current trial is over. It is used in all of t
 ```javascript
 
 // this code would be in a plugin
-jsPsych.finishTrial();
+jsPsych.finishTrial({correct_response: true});
 
 ```
 ---
@@ -252,12 +256,12 @@ Parameter | Type | Description
 ----------|------|------------
 settings | object | The settings object for initializing jsPsych. See table below.
 
-The settings object can contain several parameters. The only *required* parameter is `experiment_structure`.
+The settings object can contain several parameters. The only *required* parameter is `timeline`.
 
 Parameter | Type | Description
 --------- | ---- | -----------
-experiment_structure | array | An array containing the chunks and/or blocks that describe the experiment to run. See [Creating an Experiment: Chunks, Blocks, & Trials](../features/chunks-blocks-trials).
-display_element | jQuery object | A jQuery-selected DOM element, e.g. `$('#target')` selects the element with the `id='target'` attribute. If left blank, then jsPsych will use the `<body>` element to display content (creating it if necessary).
+timeline | array | An array containing the objects that describe the experiment timeline. See [Creating an Experiment: The Timeline](../features/timeline.md).
+display_element | jQuery object | A jQuery-selected DOM element, e.g., `$('#target')` selects the element with the `id='target'` attribute. If left blank, then jsPsych will use the `<body>` element to display content (creating it if necessary).
 on_finish | function | Function to execute when the experiment ends.
 on_trial_start | function | Function to execute when a new trial begins.
 on_trial_finish | function | Function to execute when a trial ends.
@@ -266,6 +270,7 @@ show_progress_bar | boolean | If true, then [a progress bar](../features/progres
 max_load_time | numeric | The maximum number of milliseconds to wait for audio content to preload. If the wait time is exceeded, then an error message is logged and the experiment stops. The default value is 30 seconds.
 skip_load_check | boolean | If true, then the experiment will not wait for audio content to load before starting. The default value is false.
 fullscreen | boolean | If true, the experiment will run in fullscreen mode. See the [feature page](../features/fullscreen.md) for more details.
+default_iti | numeric | The default inter-trial interval in ms. The default value if none is specified is 1,000ms.
 
 ### Return value
 
@@ -277,9 +282,9 @@ This method configures and starts the experiment.
 
 ### Example
 
-```javascript
+See any of the plugin examples in the [tests & examples folder](https://github.com/jodeleeuw/jsPsych/tree/master/tests%26examples) in the GitHub repository.
 
-```
+
 ---
 ## jsPsych.initSettings
 
@@ -305,73 +310,9 @@ Gets the object containing the settings for the current experiment.
 var settings = jsPsych.initSettings();
 
 // check the experiment structure
-console.log(JSON.stringify(settings.experiment_structure));
-```
----
-## jsPsych.preloadImages
-
-```
-jsPsych.preloadImages(images, callback_complete, callback_load)
+console.log(JSON.stringify(settings.timeline));
 ```
 
-### Parameters
-
-Parameter | Type | Description
-----------|------|------------
-images | array | An array of image paths to load. The array can be nested (e.g. if images are in multiple arrays to help sort by condition or task).
-callback_complete | function | A function to execute when all the images have been loaded.
-callback_load | function | A function to execute after each image has been loaded. A single parameter is passed to this function which contains the number of images that have been loaded so far.
-
-### Return value
-
-Returns nothing.
-
-### Description
-
-Use this function to preload image files. See [Image Preloading](../features/image-preloading.md) in the documentation.
-
-It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the images are loaded. Thus, it is possible that an image would be required for display before it is done preloading. The `callback_complete` function will only exectute after all the images are loaded, and can be used to control the flow of the experiment (e.g. by starting the experiment in the `callback_complete` function).
-
-The `callback_load` function can be used to indicate progress, if the number of images to be loaded is known ahead of time. See example below.
-
-### Examples
-
-#### Basic use
-```javascript
-
-var images = ['img/file1.png', 'img/file2.png', 'img/file3.png'];
-
-jsPsych.preloadImages(images, function(){ startExperiment(); });
-
-function startExperiment(){
-    jsPsych.init({
-        experiment_structure: exp
-    });
-}
-
-```
-
-#### Show progress of loading
-
-```javascript
-var images = ['img/file1.png', 'img/file2.png', 'img/file3.png'];
-
-jsPsych.preloadImages(images, function(){ startExperiment(); }, function(nLoaded) { updateLoadedCount(nLoaded); });
-
-function updateLoadedCount(nLoaded){
-	var percentcomplete = nLoaded / images.length * 100;
-
-	// could put something fancier here, like a progress bar
-	// or updating text in the DOM.
-	console.log('Loaded '+percentcomplete+'% of images');
-}
-
-function startExperiment(){
-    jsPsych.init({
-        experiment_structure: exp
-    });
-}
-```
 ---
 ## jsPsych.progress
 
@@ -391,9 +332,7 @@ Property  | Type | Description
 ----------|------|------------
 total_trials | numeric | Indicates the number of trials in the experiment. Note that this does not count possible loops or skipped trials due to conditional statements.
 current_trial_global | numeric | Returns the trial index of the current trial in a global scope. Every trial will increase this count by 1.
-current_trial_local | numeric | Returns the trial index of the current trial relative to the current chunk. For example, if the trial is the 4th trial to execute within a chunk, then the value of this will be `4`.
-total_chunks | numeric | Returns the total number of top-level chunks. (Chunks embedded in other chunks don't count).
-current_chunk | numeric | Returns the index of the current top-level chunk.
+percent_complete | numeric | Estimates the percent of the experiment that is complete. Works as expected for experiments without conditional or looping timelines. For complex timelines, the percent is an approximation.
 
 
 ### Description
@@ -406,9 +345,7 @@ This method returns information about the length of the experiment and the subje
 
 var progress = jsPsych.progress();
 
-var percent_complete = progress.current_chunk / progress.total_chunks * 100;
-
-alert('You have completed approximately '+percent_complete+'% of the experiment');
+alert('You have completed approximately '+progress.percent_complete+'% of the experiment');
 
 ```
 ---
@@ -459,5 +396,6 @@ Gets the total time the subject has been in the experiment.
 ```javascript
 
 var time = jsPsych.totalTime();
+console.log(time);
 
 ```
