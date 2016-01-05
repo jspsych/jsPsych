@@ -91,6 +91,39 @@ full_design = {
 ```
 
 ---
+## jsPsych.randomization.randomID
+
+```
+jsPsych.randomization.randomID(length)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+length | integer | The length of the randomly generated ID
+
+### Return value
+
+Returns a string of length `length` where each character is randomly selected from the numbers 0-9 and all lowercase English letters a-z.
+
+### Description
+
+Generates a random string that is likely to be unique. If length is undefined, then the string length is 32.
+
+### Example
+
+```javascript
+
+console.log(jsPsych.randomization.randomID());
+// outputs: "t7dwz0e713pc8juuaayyfvpkdd9un239"
+
+console.log(jsPsych.randomization.randomID(8));
+// outputs: "3xtpcbck"
+
+```
+
+---
 ## jsPsych.randomization.repeat
 
 ```

@@ -1064,6 +1064,16 @@ jsPsych.randomization = (function() {
     return with_repetitions;
   }
 
+  module.randomID = function(length){
+    var result = '';
+    var length = (typeof length == 'undefined') ? 32 : length;
+    var chars = '0123456789abcdefghjklmnopqrstuvwxyz';
+    for(var i = 0; i<length; i++){
+      result += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return result;
+  }
+
   function unpackArray(array) {
 
     var out = {};
