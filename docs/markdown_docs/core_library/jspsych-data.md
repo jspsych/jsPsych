@@ -98,6 +98,29 @@ var csvString = jsPsych.data.dataAsCSV();
 ```
 
 ---
+## jsPsych.data.dataAsJSON
+
+```
+jsPsych.data.dataAsJSON()
+```
+
+### Return value
+
+Returns a string in JSON format
+
+### Description
+
+Generate a JSON formatted string containing all of the data generated in the experiment.
+
+### Examples
+
+#### Basic example
+```javascript
+var jsonString = jsPsych.data.dataAsJSON();
+```
+
+
+---
 ## jsPsych.data.displayData
 
 ```

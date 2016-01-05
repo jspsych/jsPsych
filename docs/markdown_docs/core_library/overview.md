@@ -24,6 +24,7 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.data.addDataToLastTrial](jspsych-data.md#jspsychdataadddatatolasttrial)
 * [jsPsych.data.addProperties](jspsych-data.md#jspsychdataaddproperties)
 * [jsPsych.data.dataAsCSV](jspsych-data.md#jspsychdatadataascsv)
+* [jsPsych.data.dataAsJSON](jspsych-data.md#jspsychdatadataasjson)
 * [jsPsych.data.displayData](jspsych-data.md#jspsychdatadisplaydata)
 * [jsPsych.data.getData](jspsych-data.md#jspsychdatagetdata)
 * [jsPsych.data.getLastChunkData](jspsych-data.md#jspsychdatagetlastchunkdata)
