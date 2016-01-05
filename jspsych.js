@@ -554,8 +554,14 @@ var jsPsych = (function() {
     // call experiment wide callback
     opts.on_trial_start();
 
+    // check if trial has it's own display element
+    var display_element = DOM_target;
+    if(typeof trial.display_element !== 'undefined'){
+      display_element = trial.display_element;
+    }
+
     // execute trial method
-    jsPsych.plugins[trial.type].trial(DOM_target, trial);
+    jsPsych.plugins[trial.type].trial(display_element, trial);
   }
 
   function drawProgressBar() {
