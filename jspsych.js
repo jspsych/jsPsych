@@ -164,7 +164,8 @@ var jsPsych = (function() {
     }
   };
 
-  core.endExperiment = function() {
+  core.endExperiment = function(end_message) {
+    timeline.end_message = end_message;
     timeline.end();
   }
 
@@ -534,6 +535,10 @@ var jsPsych = (function() {
 
   function finishExperiment() {
     opts.on_finish(jsPsych.data.getData());
+
+    if(typeof timeline.end_message !== 'undefined'){
+      DOM_target.html(timeline.end_message);
+    }
 
     if (document.exitFullscreen) {
       document.exitFullscreen();

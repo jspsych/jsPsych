@@ -122,12 +122,14 @@ var first_chunk = {
 ## jsPsych.endExperiment
 
 ```
-jsPsych.endExperiment()
+jsPsych.endExperiment(end_message)
 ```
 
 ### Parameters
 
-None.
+Parameter | Type | Description
+--------- | ---- | -----------
+end_message | string | A message to display on the screen after the experiment is over.
 
 ### Return value
 
@@ -149,7 +151,7 @@ var block_1 = {
   prompt: '<p class="center-content">Press Y to Continue. Press N to end the experiment</p>',
   on_finish: function(data){
     if(data.key_press == 78){
-      jsPsych.endExperiment();
+      jsPsych.endExperiment('The experiment was ended by pressing N.');
     }
   }
 }
