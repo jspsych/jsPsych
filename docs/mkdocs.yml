@@ -11,49 +11,54 @@ include_next_prev: false
 docs_dir: markdown_docs
 site_favicon: favicon.ico
 pages:
-- ['index.md', 'Introduction']
-- ['tutorials/hello-world.md', 'Tutorials', 'The Basics: Hello World']
-- ['tutorials/go-nogo-task.md', 'Tutorials', 'Demo Experiment: Simple Reaction Time Task']
-- ['core_library/overview.md', 'Core Library API', 'Overview']
-- ['core_library/jspsych-core.md', 'Core Library API', 'jsPsych core']
-- ['core_library/jspsych-data.md', 'Core Library API', 'jsPsych.data']
-- ['core_library/jspsych-randomization.md', 'Core Library API', 'jsPsych.randomization']
-- ['core_library/jspsych-turk.md', 'Core Library API', 'jsPsych.turk']
-- ['core_library/jspsych-pluginAPI.md', 'Core Library API', 'jsPsych.pluginAPI']
-- ['plugins/overview.md', 'Plugins', 'Overview']
-- ['plugins/creating-a-plugin.md', 'Plugins', 'Creating a New Plugin']
-- ['plugins/jspsych-animation.md', 'Plugins', 'jspsych-animation']
-- ['plugins/jspsych-call-function.md', 'Plugins', 'jspsych-call-function']
-- ['plugins/jspsych-categorize.md', 'Plugins', 'jspsych-categorize']
-- ['plugins/jspsych-categorize-animation.md', 'Plugins', 'jspsych-categorize-animation']
-- ['plugins/jspsych-free-sort.md', 'Plugins', 'jspsych-free-sort']
-- ['plugins/jspsych-html.md', 'Plugins', 'jspsych-html']
-- ['plugins/jspsych-instructions.md', 'Plugins', 'jspsych-instructions']
-- ['plugins/jspsych-multi-stim-multi-response.md', 'Plugins', 'jspsych-multi-stim-multi-response']
-- ['plugins/jspsych-palmer.md', 'Plugins', 'jspsych-palmer']
-- ['plugins/jspsych-reconstruction.md', 'Plugins', 'jspsych-reconstruction']
-- ['plugins/jspsych-same-different.md', 'Plugins', 'jspsych-same-different']
-- ['plugins/jspsych-similarity.md', 'Plugins', 'jspsych-similarity']
-- ['plugins/jspsych-single-audio.md', 'Plugins', 'jspsych-single-audio']
-- ['plugins/jspsych-single-stim.md', 'Plugins', 'jspsych-single-stim']
-- ['plugins/jspsych-survey-likert.md', 'Plugins', 'jspsych-survey-likert']
-- ['plugins/jspsych-survey-multi-choice.md', 'Plugins', 'jspsych-survey-multi-choice']
-- ['plugins/jspsych-survey-text.md', 'Plugins', 'jspsych-survey-text']
-- ['plugins/jspsych-text.md', 'Plugins', 'jspsych-text']
-- ['plugins/jspsych-visual-search-circle.md', 'Plugins', 'jspsych-visual-search-circle']
-- ['plugins/jspsych-vsl-animate-occlusion.md', 'Plugins', 'jspsych-vsl-animate-occlusion']
-- ['plugins/jspsych-vsl-grid-scene.md', 'Plugins', 'jspsych-vsl-grid-scene']
-- ['plugins/jspsych-xab.md', 'Plugins', 'jspsych-xab']
-- ['features/chunks-blocks-trials.md', 'Features', 'Creating an Experiment: Chunks, Blocks, & Trials']
-- ['features/progress-bar.md', 'Features', 'Automatic Progress Bar']
-- ['features/mturk.md', 'Features', 'Integrating with Mechanical Turk']
-- ['features/data.md', 'Features', 'Data Storage']
-- ['features/randomization-repetition.md', 'Features', 'Randomization & Repetition']
-- ['features/functions-as-parameters.md', 'Features', 'Using Functions as Plugin Parameters']
-- ['features/callbacks.md', 'Features', 'Event-related Callback Functions']
-- ['features/media-preloading.md', 'Features', 'Media Preloading']
-- ['features/fullscreen.md', 'Features', 'Fullscreen Experiments']
-- ['support.md', 'Support']
-- ['about/about.md', 'About', 'About jsPsych']
-- ['about/license.md', 'About', 'License']
-- ['about/contributing.md', 'About', 'Contributing to jsPsych']
+- Introduction: 'index.md'
+- Tutorials:
+  - 'The Basics: Hello World': 'tutorials/hello-world.md'
+  - 'Demo Experiment: Simple Reaction Time Task': 'tutorials/go-nogo-task.md'
+- Core Library API:
+  - 'Overview': 'core_library/overview.md'
+  - 'jsPsych core': 'core_library/jspsych-core.md'
+  - 'jsPsych.data': 'core_library/jspsych-data.md'
+  - 'jsPsych.randomization': 'core_library/jspsych-randomization.md'
+  - 'jsPsych.turk': 'core_library/jspsych-turk.md'
+  - 'jsPsych.pluginAPI': 'core_library/jspsych-pluginAPI.md'
+- Plugins:
+  - 'Overview': 'plugins/overview.md'
+  - 'Creating a New Plugin': 'plugins/creating-a-plugin.md'
+  - 'jspsych-animation': 'plugins/jspsych-animation.md'
+  - 'jspsych-call-function': 'plugins/jspsych-call-function.md'
+  - 'jspsych-categorize': 'plugins/jspsych-categorize.md'
+  - 'jspsych-categorize-animation': 'plugins/jspsych-categorize-animation.md'
+  - 'jspsych-free-sort': 'plugins/jspsych-free-sort.md'
+  - 'jspsych-html': 'plugins/jspsych-html.md'
+  - 'jspsych-instructions': 'plugins/jspsych-instructions.md'
+  - 'jspsych-multi-stim-multi-response': 'plugins/jspsych-multi-stim-multi-response.md'
+  - 'jspsych-palmer': 'plugins/jspsych-palmer.md'
+  - 'jspsych-reconstruction': 'plugins/jspsych-reconstruction.md'
+  - 'jspsych-same-different': 'plugins/jspsych-same-different.md'
+  - 'jspsych-similarity': 'plugins/jspsych-similarity.md'
+  - 'jspsych-single-audio': 'plugins/jspsych-single-audio.md'
+  - 'jspsych-single-stim': 'plugins/jspsych-single-stim.md'
+  - 'jspsych-survey-likert': 'plugins/jspsych-survey-likert.md'
+  - 'jspsych-survey-multi-choice': 'plugins/jspsych-survey-multi-choice.md'
+  - 'jspsych-survey-text': 'plugins/jspsych-survey-text.md'
+  - 'jspsych-text': 'plugins/jspsych-text.md'
+  - 'jspsych-visual-search-circle': 'plugins/jspsych-visual-search-circle.md'
+  - 'jspsych-vsl-animate-occlusion': 'plugins/jspsych-vsl-animate-occlusion.md'
+  - 'jspsych-vsl-grid-scene': 'plugins/jspsych-vsl-grid-scene.md'
+  - 'jspsych-xab': 'plugins/jspsych-xab.md'
+- Features:
+  - 'Creating an Experiment: The Timeline': 'features/timeline.md'
+  - 'Automatic Progress Bar': 'features/progress-bar.md'
+  - 'Integrating with Mechanical Turk': 'features/mturk.md'
+  - 'Data Storage': 'features/data.md'
+  - 'Randomization & Repetition': 'features/randomization-repetition.md'
+  - 'Dynamic Content:  Using Functions as Plugin Parameters': 'features/functions-as-parameters.md'
+  - 'Event-related Callback Functions': 'features/callbacks.md'
+  - 'Media Preloading': 'features/media-preloading.md'
+  - 'Fullscreen Experiments': 'features/fullscreen.md'
+- Support: 'support.md'
+- About:
+  - 'About jsPsych': 'about/about.md'
+  - 'License': 'about/license.md'
+  - 'Contributing to jsPsych': 'about/contributing.md'

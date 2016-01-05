@@ -237,7 +237,7 @@ display_element | jQuery object | A jQuery-selected DOM element, e.g. `$('#targe
 on_finish | function | Function to execute when the experiment ends.
 on_trial_start | function | Function to execute when a new trial begins.
 on_trial_finish | function | Function to execute when a trial ends.
-on_data_update | function | Function to execute every time data is stored using the `jsPsych.data.write` method. All plugins use this method to save data, so this function runs every time a plugin stores new data.
+on_data_update | function | Function to execute every time data is stored using the `jsPsych.data.write` method. All plugins use this method to save data (via a call to `jsPsych.finishTrial`, so this function runs every time a plugin stores new data.
 show_progress_bar | boolean | If true, then [a progress bar](../features/progress-bar.md) is shown at the top of the page.
 max_load_time | numeric | The maximum number of milliseconds to wait for audio content to preload. If the wait time is exceeded, then an error message is logged and the experiment stops. The default value is 30 seconds.
 skip_load_check | boolean | If true, then the experiment will not wait for audio content to load before starting. The default value is false.

@@ -368,11 +368,13 @@ Returns nothing.
 
 ### Description
 
-This method is used by plugins for writing data. You should probably not use it to add data. Instead use [jsPsych.data.addProperties](#addProperties).
+This method is used by `jsPsych.finishTrial` for writing data. You should probably not use it to add data. Instead use [jsPsych.data.addProperties](#addProperties).
 
 ### Examples
 
 ```javascript
+
+// don't use this! data should only be written once per trial. use jsPsych.finishTrial to save data.
 
 var trial_data = {
 	correct: true,
