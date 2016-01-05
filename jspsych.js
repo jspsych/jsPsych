@@ -169,7 +169,7 @@ var jsPsych = (function() {
     timeline.end();
   }
 
-  core.endCurrentChunk = function() {
+  core.endCurrentTimeline = function() {
     timeline.endActiveNode();
   }
 
@@ -181,7 +181,7 @@ var jsPsych = (function() {
     return opts;
   };
 
-  core.currentChunkID = function() {
+  core.currentTimelineNodeID = function() {
     return timeline.activeID();
   };
 
@@ -614,7 +614,7 @@ jsPsych.data = (function() {
       'trial_type': trial.type,
       'trial_index': progress.current_trial_global,
       'time_elapsed': jsPsych.totalTime(),
-      'internal_chunk_id': jsPsych.currentChunkID()
+      'internal_node_id': jsPsych.currentTimelineNodeID()
     };
 
     var ext_data_object = $.extend({}, data_object, trial.data, default_data, dataProperties);
@@ -692,7 +692,7 @@ jsPsych.data = (function() {
 
     var trials = [];
     for (var i = 0; i < data.length; i++) {
-      if (data[i].internal_chunk_id.slice(0, chunk_id.length) === chunk_id) {
+      if (data[i].internal_node_id.slice(0, chunk_id.length) === chunk_id) {
         trials.push(data[i]);
       }
     }
@@ -718,7 +718,7 @@ jsPsych.data = (function() {
 
   module.getLastChunkData = function() {
     var lasttrial = module.getLastTrialData();
-    var chunk_id = lasttrial.internal_chunk_id;
+    var chunk_id = lasttrial.internal_node_id;
     if (typeof chunk_id === 'undefined') {
       return [];
     } else {

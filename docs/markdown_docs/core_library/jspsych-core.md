@@ -1,10 +1,10 @@
 # The jsPsych core library
 
 ---
-## jsPsych.currentChunkID
+## jsPsych.currentTimelineNodeID
 
 ```
-jsPsych.currentChunkID()
+jsPsych.currentTimelineNodeID()
 ```
 
 ### Parameters
@@ -13,39 +13,40 @@ None.
 
 ### Return value
 
-Returns the chunk ID of the chunk that is currently active.
+Returns the ID of the TimelineNode that is currently active.
 
 ### Description
 
-Gets the chunk ID of the active chunk. The chunk ID is a string that follows a specific format:
+Gets the ID of the active TimelineNode. The ID is a string that follows a specific format:
 
-* `"0-0"` is the chunk ID of the first top-level chunk
-* `"1-0"` is the chunk ID of the second top-level chunk
-* `"2-0"` is the chunk ID of the third top-level chunk, and so on...
+* `"0.0"` is the ID of the first top-level TimelineNode
+* `"1.0"` is the ID of the second top-level TimelineNode
+* `"2.0"` is the ID of the third top-level TimelineNode, and so on...
 
-If a chunk iterates multiple times (in a while chunk, for example), then the iterations are indicated in the second number:
+If a TimelineNode iterates multiple times (using the loop function, for example), then the iterations are indicated in the second number:
 
-* `"0-0"` is the chunk ID of the first top-level chunk during the first iteration
-* `"0-1"` is the chunk ID of the first top-level chunk during the second iteration
-* `"0-2"` is the chunk ID of the first top-level chunk during the third iteration, and so on...
+* `"0.0"` is the ID of the first top-level TimelineNode during the first iteration
+* `"0.1"` is the ID of the first top-level TimelineNode during the second iteration
+* `"0.2"` is the ID of the first top-level TimelineNode during the third iteration, and so on...
 
-If chunks are nested in other chunks, then the hierarchical structure is shown with `"."`:
+If TimelineNodes are nested in other TimelineNodes, then the hierarchical structure is shown with `"."`:
 
-* `"0-0.1-0"` is the chunk ID of the second chunk on the timeline of the first top-level chunk.
-* `"0-0.2-0"` is the chunk ID of the third chunk on the timeline of the first top-level chunk, and so on...
+* `"0.0-1.0"` is the ID of the second TimelineNode on the timeline of the first top-level TimelineNode.
+* `"0.0-2.0"` is the ID of the third TimelineNode on the timeline of the first top-level TimelineNode, and so on...
 
 The rules about iterations apply throughout the hierarchical ID:
 
-* `"0-2.1-3"` is the chunk ID of the second chunk, executing for the fourth time, on the timeline of the first top-level chunk, executing for the third time.
+* `"0.2-1.3"` is the ID of the second TimelineNode, executing for the fourth time, on the timeline of the first top-level TimelineNode, executing for the third time.
 
 
 ### Example
 
 ```javascript
-var chunkid = jsPsych.currentChunkID();
+var id = jsPsych.currentTimelineNodeID();
 
-console.log('The current chunk ID is '+chunkid);
+console.log('The current TimelineNode ID is '+id);
 ```
+
 ---
 ## jsPsych.currentTrial
 
@@ -74,10 +75,10 @@ var trial = jsPsych.currentTrial();
 console.log('The current trial is using the '+trial.type+' plugin');
 ```
 ---
-## jsPsych.endCurrentChunk
+## jsPsych.endCurrentTimeline
 
 ```
-jsPsych.endCurrentChunk()
+jsPsych.endCurrentTimeline
 ```
 
 ### Parameters
@@ -90,7 +91,7 @@ None.
 
 ### Description
 
-Ends the current chunk, skipping all remaining trials in the chunk.
+Ends the current timeline. If timelines are nested, then only the timeline that contains the current trial is ended.
 
 ### Example
 
@@ -98,23 +99,44 @@ Ends the current chunk, skipping all remaining trials in the chunk.
 
 ```javascript
 
-var block_1 = {
-  type: 'single-stim',
-  stimuli: images,
-  choices: [89,78], // Y or N
-  prompt: '<p class="center-content">Press Y to Continue. Press N to exit the chunk.</p>',
-  on_finish: function(data){
-    if(data.key_press == 78){
-      jsPsych.endCurrentChunk();
-    }
-  }
+var images = [
+  "img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif",
+  "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif",
+  "img/9.gif", "img/10.gif"
+];
+
+var trials = [];
+for (var i = 0; i < images.length; i++) {
+  trials.push({
+    stimulus: images[i]
+  });
 }
 
-var first_chunk = {
-  chunk_type: 'while',
-  timeline: [block_1],
-  continue_function: function() { return true; }
+var block = {
+  type: 'single-stim',
+  choices: [89, 78], // Y or N
+  prompt: '<p class="center-content">Press Y to Continue. Press N to end this node of the experiment.</p>',
+  on_finish: function(data) {
+    if (data.key_press == 78) {
+      jsPsych.endCurrentTimeline();
+    }
+  },
+  timeline: trials
 }
+
+var after_block = {
+  type: 'single-stim',
+  stimulus: '<p>The next node</p>',
+  is_html: true
+}
+
+jsPsych.init({
+  display_element: $('#jspsych-target'),
+  timeline: [block, after_block],
+  on_finish: function() {
+    jsPsych.data.displayData();
+  }
+});
 
 ```
 

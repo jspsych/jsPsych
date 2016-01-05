@@ -6,9 +6,9 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 
 ### [Core](jspsych-core.md)
 
-* [jsPsych.currentChunkID](jspsych-core.md#jspsychcurrentchunkID)
+* [jsPsych.currentTimelineNodeID](jspsych-core.md#jspsychcurrentchunkID)
 * [jsPsych.currentTrial](jspsych-core.md#jspsychcurrenttrial)
-* [jsPsych.endCurrentChunk](jspsych-core.md#jspsychendcurrentchunk)
+* [jsPsych.endCurrentTimeline](jspsych-core.md#jspsychendcurrenttimeline)
 * [jsPsych.endExperiment](jspsych-core.md#jspsychendexperiment)
 * [jsPsych.finishTrial](jspsych-core.md#jspsychfinishtrial)
 * [jsPsych.getDisplayElement](jspsych-core.md#jspsychgetdisplayelement)
