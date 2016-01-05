@@ -933,7 +933,7 @@ jsPsych.randomization = (function() {
       out = unpackArray(out);
     }
 
-    return shuffle(out);
+    return out;
   }
 
   module.shuffle = function(arr) {

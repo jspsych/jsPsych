@@ -16,6 +16,13 @@
   var repeated_list = jsPsych.randomization.repeat([1,2,3,4,5],3);
   console.log(JSON.stringify(repeated_list));
 
+  var unpack_repeat = [
+    {item: 'a', value: 1},
+    {item: 'b', value: 2},
+    {item: 'c', value: 3}
+  ];
+  console.log(JSON.stringify(jsPsych.randomization.repeat(unpack_repeat,2,true)));
+
   var no_neighbor_repeats = jsPsych.randomization.shuffleNoRepeats(repeated_list);
   console.log(JSON.stringify(no_neighbor_repeats));
 
