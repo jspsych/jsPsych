@@ -465,7 +465,7 @@ var jsPsych = (function() {
 
     // get all the data generated within this node
     this.generatedData = function() {
-      return jsPsych.data.getTrialsFromChunk(this.ID());
+      return jsPsych.data.getTrialsFromTimelineNode(this.ID());
     }
 
     // get all the trials of a particular type
@@ -685,14 +685,14 @@ jsPsych.data = (function() {
     return trials;
   };
 
-  module.getTrialsFromChunk = function(chunk_id) {
+  module.getDataByTimelineNode = function(node_id) {
     var data = module.getData();
 
     data = flatten(data);
 
     var trials = [];
     for (var i = 0; i < data.length; i++) {
-      if (data[i].internal_node_id.slice(0, chunk_id.length) === chunk_id) {
+      if (data[i].internal_node_id.slice(0, node_id.length) === node_id) {
         trials.push(data[i]);
       }
     }
@@ -716,14 +716,14 @@ jsPsych.data = (function() {
     return undefined;
   }
 
-  module.getLastChunkData = function() {
+  module.getLastTimelineData = function() {
     var lasttrial = module.getLastTrialData();
-    var chunk_id = lasttrial.internal_node_id;
-    if (typeof chunk_id === 'undefined') {
+    var node_id = lasttrial.internal_node_id;
+    if (typeof node_id === 'undefined') {
       return [];
     } else {
-      var lastchunkdata = module.getTrialsFromChunk(chunk_id);
-      return lastchunkdata;
+      var lastnodedata = module.getTrialsFromTimelineNode(node_id);
+      return lastnodedata;
     }
   }
 

@@ -6,7 +6,7 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 
 ### [Core](jspsych-core.md)
 
-* [jsPsych.currentTimelineNodeID](jspsych-core.md#jspsychcurrentchunkID)
+* [jsPsych.currentTimelineNodeID](jspsych-core.md#jspsychcurrenttimelinenodeid)
 * [jsPsych.currentTrial](jspsych-core.md#jspsychcurrenttrial)
 * [jsPsych.endCurrentTimeline](jspsych-core.md#jspsychendcurrenttimeline)
 * [jsPsych.endExperiment](jspsych-core.md#jspsychendexperiment)
@@ -26,10 +26,12 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.data.dataAsJSON](jspsych-data.md#jspsychdatadataasjson)
 * [jsPsych.data.displayData](jspsych-data.md#jspsychdatadisplaydata)
 * [jsPsych.data.getData](jspsych-data.md#jspsychdatagetdata)
-* [jsPsych.data.getLastChunkData](jspsych-data.md#jspsychdatagetlastchunkdata)
+* [jsPsych.data.getDataByTimelineNode](jspsych-data.md#jspsychdatagetdatabytimelinenode)
+* [jsPsych.data.getDataByTrialIndex](jspsych-data.md#jspsychdatagetdatabytrialindex)
+* [jsPsych.data.getLastTimelineData](jspsych-data.md#jspsychdatagetlasttimelinedata)
 * [jsPsych.data.getLastTrialData](jspsych-data.md#jspsychdatagetlasttrialdata)
 * [jsPsych.data.getTrialsOfType](jspsych-data.md#jspsychdatagettrialsoftype)
-* [jsPsych.data.getTrialsFromChunk](jspsych-data.md#jspsychdatagettrialsfromchunk)
+
 * [jsPsych.data.getURLVariable](jspsych-data.md#jspsychdatageturlvariable)
 * [jsPsych.data.localSave](jspsych-data.md#jspsychdatalocalsave)
 * [jsPsych.data.write](jspsych-data.md#jspsychdatawrite)
