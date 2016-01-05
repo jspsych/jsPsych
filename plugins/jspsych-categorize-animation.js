@@ -6,7 +6,7 @@
  **/
 
 
-jsPsych["categorize-animation"] = (function() {
+jsPsych.plugins["categorize-animation"] = (function() {
 
   var plugin = {};
 

@@ -8,7 +8,7 @@
  *
  **/
 
-jsPsych["single-audio"] = (function() {
+jsPsych.plugins["single-audio"] = (function() {
 
   var plugin = {};
 

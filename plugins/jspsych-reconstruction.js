@@ -10,7 +10,7 @@
  */
 
 
-jsPsych['reconstruction'] = (function() {
+jsPsych.plugins['reconstruction'] = (function() {
 
   var plugin = {};
 

@@ -7,7 +7,7 @@
  *
  **/
 
-jsPsych['call-function'] = (function() {
+jsPsych.plugins['call-function'] = (function() {
 
   var plugin = {};
 

@@ -7,7 +7,7 @@
  */
 
 
-jsPsych['free-sort'] = (function() {
+jsPsych.plugins['free-sort'] = (function() {
 
   var plugin = {};
 

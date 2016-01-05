@@ -8,7 +8,7 @@
  *
  */
 
-jsPsych['same-different'] = (function() {
+jsPsych.plugins['same-different'] = (function() {
 
   var plugin = {};
 

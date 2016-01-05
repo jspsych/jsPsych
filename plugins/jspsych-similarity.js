@@ -9,7 +9,7 @@
  */
 
 
-jsPsych.similarity = (function() {
+jsPsych.plugins.similarity = (function() {
 
   var plugin = {};
 

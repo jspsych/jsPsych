@@ -11,7 +11,7 @@
  *
  */
 
-jsPsych['vsl-animate-occlusion'] = (function() {
+jsPsych.plugins['vsl-animate-occlusion'] = (function() {
 
   var plugin = {};
 

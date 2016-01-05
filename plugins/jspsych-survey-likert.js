@@ -8,7 +8,7 @@
  *
  */
 
-jsPsych['survey-likert'] = (function() {
+jsPsych.plugins['survey-likert'] = (function() {
 
   var plugin = {};
 

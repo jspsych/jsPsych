@@ -9,7 +9,7 @@
  *
  */
 
-jsPsych.instructions = (function() {
+jsPsych.plugins.instructions = (function() {
 
   var plugin = {};
 

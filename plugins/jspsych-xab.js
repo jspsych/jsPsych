@@ -8,7 +8,7 @@
  *
  */
 
-jsPsych.xab = (function() {
+jsPsych.plugins.xab = (function() {
 
   var plugin = {};
 

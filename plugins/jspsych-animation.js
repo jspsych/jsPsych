@@ -5,7 +5,7 @@
  * documentation: docs.jspsych.org
  */
 
-jsPsych.animation = (function() {
+jsPsych.plugins.animation = (function() {
 
   var plugin = {};
 

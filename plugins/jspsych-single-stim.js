@@ -9,7 +9,7 @@
  **/
 
 
-jsPsych["single-stim"] = (function() {
+jsPsych.plugins["single-stim"] = (function() {
 
   var plugin = {};
 

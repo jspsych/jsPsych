@@ -2,7 +2,7 @@
  * Example plugin template
  */
 
-jsPsych["PLUGIN-NAME"] = (function() {
+jsPsych.plugins["PLUGIN-NAME"] = (function() {
 
   var plugin = {};
 

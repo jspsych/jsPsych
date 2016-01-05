@@ -9,7 +9,7 @@
  */
 
 
-jsPsych['survey-text'] = (function() {
+jsPsych.plugins['survey-text'] = (function() {
 
   var plugin = {};
 

@@ -6,7 +6,7 @@
  **/
 
 
-jsPsych.categorize = (function() {
+jsPsych.plugins.categorize = (function() {
 
   var plugin = {};
 

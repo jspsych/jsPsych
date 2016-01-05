@@ -9,7 +9,7 @@
  */
 
 
-jsPsych['survey-multi-choice'] = (function() {
+jsPsych.plugins['survey-multi-choice'] = (function() {
 
   var plugin = {};
 

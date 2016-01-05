@@ -6,7 +6,7 @@ the plugin will wait of a specified time before it proceeds.
 documentation: docs.jspsych.org
 */
 
-jsPsych.html = (function() {
+jsPsych.plugins.html = (function() {
 
   var plugin = {};
 

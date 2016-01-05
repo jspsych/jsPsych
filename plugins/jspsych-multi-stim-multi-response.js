@@ -10,7 +10,7 @@
  **/
 
 
-jsPsych["multi-stim-multi-response"] = (function() {
+jsPsych.plugins["multi-stim-multi-response"] = (function() {
 
   var plugin = {};
 

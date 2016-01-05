@@ -11,7 +11,7 @@
  *
  */
 
-jsPsych['vsl-grid-scene'] = (function() {
+jsPsych.plugins['vsl-grid-scene'] = (function() {
 
   var plugin = {};
 

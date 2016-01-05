@@ -7,7 +7,7 @@ Creating new plugins is the way to add new kinds of tasks to jsPsych. A task can
 Plugin files follow a specific template. Adherence to the template is what allows jsPsych to run a plugin without knowing anything about what the plugin is doing. What makes plugins so flexible is that the template imposes very few requirements on the code. Here's what an empty plugin template looks like:
 
 ```
-jsPsych['plugin-name'] = (function(){
+jsPsych.plugins['plugin-name'] = (function(){
 
   var plugin = {};
 

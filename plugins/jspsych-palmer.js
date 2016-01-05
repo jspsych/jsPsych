@@ -16,7 +16,7 @@
  */
 
 
-jsPsych.palmer = (function() {
+jsPsych.plugins.palmer = (function() {
 
   var plugin = {};
 
