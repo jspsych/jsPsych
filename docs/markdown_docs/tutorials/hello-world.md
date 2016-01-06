@@ -1,6 +1,6 @@
-# jsPsych "Hello World" experiment
+# jsPsych "Hello world" experiment
 
-In the long tradition of `hello world` examples, this tutorial creates an experiment that outputs the phrase "Hello World" to the browser. Though useless as an actual experiment, the process is helpful for learning the basics of using the jsPsych library. This tutorial will assume that you know very little about how to set up a web page.
+In the long tradition of **"Hello world!"** examples, this tutorial creates an experiment that outputs the phrase "Hello world!" to the browser. Though useless as an actual experiment, the process is helpful for learning the basics of using the jsPsych library. This tutorial will assume that you know very little about how to set up a web page.
 
 ## Step 1: Download the jsPsych library
 
@@ -45,7 +45,7 @@ Add the above code to the experiment.html file and save it. If you then open the
 
 ## Step 5: Import the jsPsych library
 
-To use jsPsych, add a `<script>` tag to import the library. You'll need to import the jQuery library as well, which jsPsych depends on. Make sure to import jQuery before jsPsych. jQuery can be imported directly from a hosted version on Google's servers.
+To use jsPsych, add a `<script>` tag to import the library. You'll need to import the jQuery library as well, which jsPsych depends on. Make sure to import jQuery before jsPsych. jQuery can be imported directly from [a hosted version on Google's servers](https://developers.google.com/speed/libraries/#jquery).
 
 ```html
 <!doctype html>
@@ -60,7 +60,7 @@ To use jsPsych, add a `<script>` tag to import the library. You'll need to impor
 </html>
 ```
 
-You may also want to import the jsPsych stylesheet, which applies a basic set of visual styles to the experiment to make it visually pleasing. This requires adding a `link` tag to the `<head>` section of the document.
+You may also want to import the jsPsych stylesheet, which applies a basic set of visual styles to the experiment to make it visually pleasing. This requires adding a `<link>` tag to the `<head>` section of the document.
 
 ```html
 <!doctype html>
