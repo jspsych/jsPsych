@@ -1,5 +1,5 @@
 site_name: jsPsych
-theme: flatly
+theme: readthedocs
 repo_url: 'https://github.com/jodeleeuw/jsPsych'
 repo_name: 'GitHub'
 extra_css:
@@ -14,7 +14,17 @@ pages:
 - Introduction: 'index.md'
 - Tutorials:
   - 'The Basics: Hello World': 'tutorials/hello-world.md'
-  - 'Demo Experiment: Simple Reaction Time Task': 'tutorials/go-nogo-task.md'
+  - 'Demo Experiment: Simple Reaction Time Task': 'tutorials/rt-task.md'
+- Features:
+  - 'Creating an Experiment: The Timeline': 'features/timeline.md'
+  - 'Automatic Progress Bar': 'features/progress-bar.md'
+  - 'Integrating with Mechanical Turk': 'features/mturk.md'
+  - 'Data Storage': 'features/data.md'
+  - 'Randomization & Repetition': 'features/randomization-repetition.md'
+  - 'Dynamic Content:  Using Functions as Plugin Parameters': 'features/functions-as-parameters.md'
+  - 'Event-related Callback Functions': 'features/callbacks.md'
+  - 'Media Preloading': 'features/media-preloading.md'
+  - 'Fullscreen Experiments': 'features/fullscreen.md'
 - Core Library API:
   - 'Overview': 'core_library/overview.md'
   - 'jsPsych core': 'core_library/jspsych-core.md'
@@ -47,16 +57,6 @@ pages:
   - 'jspsych-vsl-animate-occlusion': 'plugins/jspsych-vsl-animate-occlusion.md'
   - 'jspsych-vsl-grid-scene': 'plugins/jspsych-vsl-grid-scene.md'
   - 'jspsych-xab': 'plugins/jspsych-xab.md'
-- Features:
-  - 'Creating an Experiment: The Timeline': 'features/timeline.md'
-  - 'Automatic Progress Bar': 'features/progress-bar.md'
-  - 'Integrating with Mechanical Turk': 'features/mturk.md'
-  - 'Data Storage': 'features/data.md'
-  - 'Randomization & Repetition': 'features/randomization-repetition.md'
-  - 'Dynamic Content:  Using Functions as Plugin Parameters': 'features/functions-as-parameters.md'
-  - 'Event-related Callback Functions': 'features/callbacks.md'
-  - 'Media Preloading': 'features/media-preloading.md'
-  - 'Fullscreen Experiments': 'features/fullscreen.md'
 - Support: 'support.md'
 - About:
   - 'About jsPsych': 'about/about.md'

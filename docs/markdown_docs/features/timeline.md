@@ -1,150 +1,116 @@
 # Creating an Experiment: The Timeline
 
-To create an experiment in jsPsych, you'll need to define the experiment structure. jsPsych experiments consist of three different structures: chunks, blocks, & trials. This page goes into detail about each kind of structure, and the features related to each.
+To create an experiment using jsPsych, you need to specify a timeline that describes the experiment. The timeline is an ordered set of trials. You must create the timeline before launching the experiment. The bulk of the code you will write for an experiment will be code to create the timeline. This page walks through the creation of timelines, including very basic examples and more advanced features.
 
-## The timeline analogy
+## A single trial
 
-A useful analogy for understanding chunks, blocks, & trials is a timeline. We can think of an experiment as being drawn on a timeline. The simplest version of the timeline would mark the occurrence of each **trial** in the experiment:
-
-Sometimes, we might repeat the same kind of trial over and over again, just changing what stimulus is shown or with some other minor modification. jsPsych can group these trials together into a **block**, making it faster to define the structure of the experiment. With blocks, a timeline might look something like this:
-
-But, what if we wanted to group trials together that weren't the same kind (i.e. didn't use the same plugin) but shared some other relationship? This is what a **chunk** does. Chunks are simply groups of blocks, but conceptually they are treated as if they are a whole separate timeline in jsPsych. This allows for more complex experiment designs, such as loops and conditional *if* statemens. With chunks, timelines can get very complicated if needed:
-
-## Defining an experiment
-
-The `jsPsych.init` method requires that an experiment definition is passed in as the value of the `experiment_structure` parameter.
+To create a trial, you need to create an object that describes the trial. The most important feature of this object is the `type` parameter. This tells jsPsych which plugin file to use to run the trial. For example, if you want to use the text plugin to display a short message, the trial object would look like this:
 
 ```javascript
-jsPsych.init({
-	experiment_structure: exp
-})
-```
-
-The `exp` variable above needs to be an array, with each element of the array being either a chunk or a block.
-
-To create a block, define a JavaScript object with a `type` property set to the particular plugin that the block uses. For example, to create a block using the `jspsych-single-stim` plugin, the corresponding object would look something like:
-
-```javascript
-var single_stim_block = {
-	type: 'single-stim',
-	stimulus: ['img/happy_face.png', 'img/sad_face.png']
-}
-
-jsPsych.init({
-	experiment_structure: [single_stim_block]
-})
-```
-
-The above block contains two trials. The first trial will show the image file `img/happy_face.png` and the second will show `img/sad_face.png`. Different plugins have different methods for specifying multiple trials within a block. Check the documentation of the plugin that you are using for more details about how that plugin works.
-
-To show instructions before the faces appear, define another block and add it to the `experiment_structure` array:
-
-```javascript
-var instructions_block = {
+var trial = {
 	type: 'text',
-	text: 'Press H if the face is happy. Press S if the face is sad.'
+	text: 'hello world!'
 }
-
-var single_stim_block = {
-	type: 'single-stim',
-	stimulus: ['img/happy_face.png', 'img/sad_face.png']
-}
-
-jsPsych.init({
-	experiment_structure: [instructions_block, single_stim_block]
-})
 ```
 
-Let's imagine that we want subjects to keep viewing the faces until they get the correct response for each one. We can use a chunk to loop over the trials. To create a chunk, create an object with a `chunk_type` property set to a [valid chunk type]() and a `timeline` property containing an array of chunks and blocks within the chunk. Some chunk types will require other properties to be set as well:
+The parameters for this object will depend on the plugin that you choose. Each plugin defines the set of parameters that are needed to run a trial with that plugin. Visit the documentation for a plugin to learn about the parameters that you can use with that plugin.
+
+To create a timeline with the single trial and run the experiment, just embed the trial object in an array. A timeline is simply an array of trials.
 
 ```javascript
-var instructions_block = {
+var timeline = [trial];
+
+jsPsych.init({
+	timeline: timeline
+});
+```
+
+To actually create and run this simple example, complete the [hello world tutorial](../tutorials/hello-world.md).
+
+## Multiple trials
+
+Scaling up to multiple trials is easy. Just create an object for each trial, and add each object to the array.
+
+```javascript
+// with lots of trials, it might be easier to add the trials
+// to the timeline array as they are defined.
+var timeline = [];
+
+var trial_1 = {
 	type: 'text',
-	text: 'Press H if the face is happy. Press S if the face is sad.'
+	text: 'This is trial 1.'
 }
+timeline.push(trial_1);
 
-var single_stim_block = {
+var trial_2 = {
+	type: 'text',
+	text: 'This is trial 2.'
+}
+timeline.push(trial_2);
+
+var trial_3 = {
+	type: 'text',
+	text: 'This is trial 3.'
+}
+timeline.push(trial_3);
+```
+
+## Nested timelines
+
+Each object on the timeline can also have it's own timeline. This is useful for a lot of reasons. The first is that it allows you to define common parameters across trials once and have them apply to all the trials on the nested timeline. The example below creates a series of trials using the single-stim plugin, where the only thing that changes from trial-to-trial is the image file being displayed on the screen.
+
+```javascript
+var judgment_trials = {
 	type: 'single-stim',
-	stimulus: ['img/happy_face.png', 'img/sad_face.png']
+	prompt: '<p>Press a number 1-7 to indicate how unusual the image is.</p>',
+	choices: ['1','2','3','4','5','6','7'],
+	timeline: [
+		{stimulus: 'image1.png'},
+		{stimulus: 'image2.png'},
+		{stimulus: 'image3.png'}
+	]
 }
-
-var looping_chunk = {
-	chunk_type: 'while',
-	timeline: [single_stim_block],
-	continue_function: function(data){
-		// code here to check if they got both answers correct.
-		// this is a bit too complicated for a simple tutorial
-		// about chunks and blocks, so imagine that the variable
-		// correct is true is they got both answers right, and
-		// false otherwise.
-
-		if(correct) { return false; }
-		else { return true; }
-	}
-}
-
-jsPsych.init({
-	experiment_structure: [instructions_block, looping_chunk]
-})
 ```
 
-## Getting formal about definitions
+In the above code, the `type`, `prompt`, and `choices` parameters are automatically applied to all of the objects in the `timeline` array. This creates three trials with the same `type`, `prompt`, and `choices` parameters, but different values for the `stimulus` parameter.
 
-What **exactly** are chunks, blocks, and trials?
-
-A **trial** defines the parameters that will be used for a single execution of a plugin's `plugin.trial` method. Since all experiments are defined in terms of plugins, this is the atomic unit of a jsPsych experiment.
-
-A **block** is a collection of trials in which each trial uses the same plugin. Since it is very common in behavioral research to have multiple trials of the same type in a row with different stimuli, jsPsych experiments are defined at the block level by default. When creating the `experiment_structure` array for the `jsPsych.init` method, each element of the array can be either a block or a chunk.
-
-A **chunk** is a collection of chunks or blocks that will be run in order. There are a few different kinds of chunks, which can be used to create experiments that loop or experiments that change which parts execute based on what the subject has done so far.
-
-All three types are defined as JavaScript objects within the jsPsych code.
-
-## Chunk types
-
-There are different types of chunks; each defines a different way of executing the chunk's timeline. To specify the chunk type, set the `chunk_type` property of the chunk definition object.
+You can also override the values by declaring a new value in the `timeline` array. In the example below, the second trial will display a different prompt message.
 
 ```javascript
-var chunk = {
-	chunk_type: 'linear',
-	timeline: [block1, block2]
+var judgment_trials = {
+	type: 'single-stim',
+	prompt: '<p>Press a number 1-7 to indicate how unusual the image is.</p>',
+	choices: ['1','2','3','4','5','6','7'],
+	timeline: [
+		{stimulus: 'image1.png'},
+		{stimulus: 'image2.png', prompt: '<p>Press 1 for this trial.</p>'},
+		{stimulus: 'image3.png'}
+	]
 }
 ```
 
-### Linear
+Timelines can be nested any number of times.
 
-A linear chunk executes the timeline once and then is complete.
+## Randomizing the order of trials on a timeline
 
-If the `experiment_structure` property in `jsPsych.init` contains blocks, they will be converted to linear chunks internally.
-
-### While
-
-A while chunk can be used for looping. It executes the timeline and then calls the `continue_function` to see if it should execute the timeline again. If the `continue_function` returns `true`, then the chunk executes again. If the function returns `false`, the chunk is complete.
-
-The `continue_function` will be passed the data generated by the most recent execution of the chunk as the first parameter. The data will be an array; each item in the array will be the data for a single trial.
+You can randomize the order that the trials on timeline occur by setting the parameter `randomize_order` to `true`.
 
 ```javascript
-var while_chunk = {
-	chunk_type: 'while',
-	timeline: [block1, block2],
-	continue_function: function(data){
-		// check to see if the average RT was under 1s
-		var sum_rt = 0;
-		for(var i=0; i < data.length; i++){
-			sum_rt += data.rt;
-		}
-		var average_rt = sum_rt / data.length;
-		if(average_rt < 1000){
-			// end the loop
-			return false;
-		} else {
-			// keep going until they are faster!
-			return true;
-		}
-	}
+var judgment_trials = {
+	type: 'single-stim',
+	prompt: '<p>Press a number 1-7 to indicate how unusual the image is.</p>',
+	choices: ['1','2','3','4','5','6','7'],
+	timeline: [
+		{stimulus: 'image1.png'},
+		{stimulus: 'image2.png'},
+		{stimulus: 'image3.png'}
+	],
+	randomize_order: true
 }
 ```
 
-### If
+If the timeline repeats multiple times (through a loop), then the order will be re-randomized at the start of each iteration.
 
-An if chunk will only execute if some condition is met.
+## Looping timelines
+
+## Conditional timelines
