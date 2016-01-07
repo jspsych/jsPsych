@@ -722,7 +722,8 @@ jsPsych.data = (function() {
     if (typeof node_id === 'undefined') {
       return [];
     } else {
-      var lastnodedata = module.getTrialsFromTimelineNode(node_id);
+      var parent_node_id = node_id.substr(0,node_id.lastIndexOf('-'));
+      var lastnodedata = module.getDataByTimelineNode(parent_node_id);
       return lastnodedata;
     }
   }
