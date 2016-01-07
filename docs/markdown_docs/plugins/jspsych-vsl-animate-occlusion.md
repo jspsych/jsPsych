@@ -42,7 +42,7 @@ var images = ["img/1.gif","img/2.gif","img/3.gif","img/4.gif","img/5.gif","img/6
 
 // create vsl block for jspsych
 var vsl_block = {
-    type: 'vsl-animate-occlusion',
-    stimuli: images
+  type: 'vsl-animate-occlusion',
+  stimuli: images
 };
 ```

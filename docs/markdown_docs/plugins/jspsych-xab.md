@@ -8,7 +8,7 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-stimuli | array | *undefined* | Array of arrays. Each interior array represents the stimuli for a single trial. Each interior array can be two or three elements. If it is two elements, then the plugin will show the first element as X and as the target during the A/B portion (the second element will be the foil). If it is three elements, then the first is X the second is the target (A) and the third is the foil (B). This is useful if X and A are not identical, but A is still the correct choice (e.g. a categorization experiment where the goal is to pick the item that is in the same category). Stimuli can be paths to images, or html strings.
+stimuli | array | *undefined* | Array of two or three elements. If it is two elements, then the plugin will show the first element as X and as the target during the A/B portion (the second element will be the foil). If it is three elements, then the first is X the second is the target (A) and the third is the foil (B). This is useful if X and A are not identical, but A is still the correct choice (e.g. a categorization experiment where the goal is to pick the item that is in the same category). Stimuli can be paths to images, or html strings.
 is_html | boolean | false | If the elements of the `stimuli` array are strings containing HTML content, then this parameter must be set to true.
 left_key | numeric or string | 'Q' | Which key the subject should press to indicate that the target is on the left side.
 right_key | numeric or string | 'P' | Which key the subject should press to indicate that the target is on the right side.
@@ -24,9 +24,7 @@ In addition to the [default data collected by all plugins](overview#datacollecte
 
 Name | Type | Value
 -----|------|------
-stimulus_x | string | Either the path to the image file or the string containing the HTML formatted content that was the X stimulus on this trial.
-stimulus_a | string | Either the path to the image file or the string containing the HTML formatted content that was the A stimulus on this trial.
-stimulus_b | string | Either the path to the image file or the string containing the HTML formatted content that was the B stimulus on this trial.
+stimulus | string | JSON-encoded array of the stimuli used in the trial.
 key_press | numeric | Indicates which key the subject pressed. The value is the [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) corresponding to the subject's response.
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the A and B stimuli first appear on the screen until the subject's response.
 correct | boolean | True if the subject picks the correct answer.
@@ -38,7 +36,7 @@ correct | boolean | True if the subject picks the correct answer.
 ```javascript
 var block = {
 	type: 'xab',
-	stimuli: [['img/happy_face.png', 'img/sad_face.png']],
+	stimuli: ['img/happy_face.png', 'img/sad_face.png'],
 	prompt: "Press Q if the face you just saw is on the left. Press P if the face you just saw is on the right."
 }
 ```
@@ -48,7 +46,7 @@ var block = {
 ```javascript
 var block = {
 	type: 'xab',
-	stimuli: [['img/happy_joe_face.png', 'img/sad_joe_face.png', 'img/sad_fred_face.png']],
+	stimuli: ['img/happy_joe_face.png', 'img/sad_joe_face.png', 'img/sad_fred_face.png'],
 	prompt: "Press Q if the person you just saw is on the left. Press P if the person you just saw is on the right."
 }
 ```

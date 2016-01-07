@@ -14,8 +14,8 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-target_present | array | *undefined* | Array of boolean values indicating if the target will appear in the search array. The length of the array determines the number of trials.
-set_size | numeric | *undefined* | Array of integers. Each element represents the number of items in the search array for the corresponding trial.
+target_present | boolean | *undefined* | Is the target present?
+set_size | numeric | *undefined* | How many items should be displayed?
 target | string | *undefined* | Path to image file that is the search target.
 foil | string | *undefined* | Path to image file that is the foil/distractor.
 fixation_image | string | *undefined* | Path to image file that is a fixation target.
