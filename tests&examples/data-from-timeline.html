@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+
+<head>
+  <script src="js/jquery.min.js"></script>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-single-stim.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="jspsych-target"></div>
+</body>
+<script>
+  var trial_1 = {
+    stimulus: 'img/happy_face_1.jpg',
+  }
+
+  var trial_2 = {
+    stimulus: 'img/sad_face_1.jpg',
+  }
+
+  var trial_3 = {
+    stimulus: '<p>:)</p>',
+    is_html: true
+  }
+
+  var node = {
+    type: 'single-stim',
+    timeline: [trial_1, trial_2, trial_3],
+    choices: [89, 78], // Y or N
+    prompt: '<p class="center-content">Have you seen this face before? Y or N.</p>',
+    data: {
+      node_data: true
+    },
+    on_finish: function(){
+      console.log(JSON.stringify(jsPsych.data.getLastTimelineData()));
+    }
+  }
+
+
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    timeline: [node],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+</script>
+
+</html>
