@@ -14,17 +14,20 @@
 
   var images = ["img/1.gif","img/2.gif","img/3.gif","img/4.gif","img/5.gif","img/6.gif","img/7.gif","img/8.gif","img/9.gif","img/10.gif"];
 
-  var scenes =
+  var scene =
     [
-      ["img/1.gif", "img/2.gif", 0],
-      [ 0, "img/3.gif", 0],
-      ["img/5.gif", "img/4.gif", 0]
+      [0,"img/8.gif","img/9.gif",0,0],
+      ["img/1.gif", "img/2.gif", 0, 0,0],
+      [ 0, "img/3.gif", 0, 0, 0],
+      ["img/5.gif", "img/4.gif", 0, 0, 0],
+      [0,0,0,0,0]
     ]
-  ];
+  ;
 
   var block = {
     type: 'vsl-grid-scene',
-    stimuli: scenes
+    stimuli: scene,
+    image_size: [50,50]
   };
 
     jsPsych.init({
