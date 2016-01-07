@@ -417,13 +417,20 @@ var jsPsych = (function() {
     this.reset = function() {
       current_location = 0;
       done_flag = false;
-      for (var i = 0; i < timeline.length; i++) {
-        timeline[i].reset();
+      if (timeline.length > 0) {
+        for (var i = 0; i < timeline.length; i++) {
+          timeline[i].reset();
+        }
+
+        if (randomize_order === true) {
+          timeline = jsPsych.randomization.shuffle(timeline);
+        }
+      } else {
+        // reset the parameters of this trial to the original parameters, which
+        // will reset any functions-as-parameters to the function.
+        trial_data = $.extend(true, {}, parameters);
       }
       current_iteration++;
-      if (randomize_order === true) {
-        timeline = jsPsych.randomization.shuffle(timeline);
-      }
     }
 
     // mark this node as finished
@@ -465,7 +472,7 @@ var jsPsych = (function() {
 
     // get all the data generated within this node
     this.generatedData = function() {
-      return jsPsych.data.getTrialsFromTimelineNode(this.ID());
+      return jsPsych.data.getDataByTimelineNode(this.ID());
     }
 
     // get all the trials of a particular type
