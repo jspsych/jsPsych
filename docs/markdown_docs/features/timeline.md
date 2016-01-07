@@ -113,4 +113,61 @@ If the timeline repeats multiple times (through a loop), then the order will be 
 
 ## Looping timelines
 
+Any timeline can be looped using the `loop_function` option. The loop function should be a function that evaluates to `true` if the timeline should repeat, and `false` if the timeline should end. The loop function will be evaluated after the timeline is completed.
+
+```javascript
+var trial = {
+	type: 'text',
+	text: 'Hello. This is in a loop. Press R to repeat this trial, or C to continue.'
+}
+
+var loop_node = {
+	timeline: [trial],
+	loop_function: function(data){
+		if(jsPsych.pluginAPI.convertKeyCharacterToKeyCode('r') == data[0].key_press){
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+```
+
 ## Conditional timelines
+
+A timeline can be skipped based on the evaluation of a function using the `conditional_function` option. If the conditional function evaluates to `true`, the timeline will execute normally. If the conditional function evaluates to `false`, then the timeline will be skipped. The conditional function is evaluated whenever the timeline is about to run the first trial.
+
+```javascript
+var pre_if_trial = {
+	type: 'text',
+	text: 'The next trial is in a conditional statement. Press S to skip it, or V to view it.'
+}
+
+var if_trial = {
+	type: 'text',
+	text: 'You chose to view the trial. Press any key to continue.'
+}
+
+var if_node = {
+	timeline: [if_trial],
+	conditional_function: function(){
+		var data = jsPsych.data.getLastTrialData();
+		if(data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('s')){
+			return false;
+		} else {
+			return true;
+		}
+	}
+}
+
+var after_if_trial = {
+	type: 'text',
+	text: 'This is the trial after the conditional.'
+}
+
+jsPsych.init({
+	display_element: $('#jspsych-target'),
+	timeline: [pre_if_trial, if_node, after_if_trial],
+	on_finish: function(){jsPsych.data.displayData(); }
+});
+```
