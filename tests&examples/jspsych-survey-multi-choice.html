@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-survey-multi-choice.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  // defining groups of questions that will go together.
+  var page_1_questions = ["I like vegetables.", "I like fruit."]
+
+  // definiting two different response scales that can be used.
+  var page_1_options = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
+  var page_2_options = ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neural", "Somewhat Agree", "Agree", "Strongly Agree"];
+
+  var multi_choice_block = {
+      type: 'survey-multi-choice',
+      questions: page_1_questions,
+      options: [page_1_options, page_2_options],  // need one scale for every question on a page
+      required: [true, false]   // set whether questions are required
+      // horizontal: true  // centres questions and makes options display horizontally
+  };
+
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    timeline: [multi_choice_block],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+
+
+  </script>
+</html>

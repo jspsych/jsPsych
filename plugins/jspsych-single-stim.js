@@ -8,140 +8,130 @@
  *
  **/
 
-(function($) {
-	jsPsych["single-stim"] = (function() {
 
-		var plugin = {};
+jsPsych.plugins["single-stim"] = (function() {
 
-		plugin.create = function(params) {
+  var plugin = {};
 
-			params = jsPsych.pluginAPI.enforceArray(params, ['stimuli', 'choices']);
+  jsPsych.pluginAPI.registerPreload('single-stim', 'stimulus', 'image');
 
-			var trials = new Array(params.stimuli.length);
-			for (var i = 0; i < trials.length; i++) {
-				trials[i] = {};
-				trials[i].a_path = params.stimuli[i];
-				trials[i].choices = params.choices || [];
-				trials[i].response_ends_trial = (typeof params.response_ends_trial === 'undefined') ? true : params.response_ends_trial;
-				// timing parameters
-				trials[i].timing_stim = params.timing_stim || -1; // if -1, then show indefinitely
-				trials[i].timing_response = params.timing_response || -1; // if -1, then wait for response forever
-				// optional parameters
-				trials[i].is_html = (typeof params.is_html === 'undefined') ? false : params.is_html;
-				trials[i].prompt = (typeof params.prompt === 'undefined') ? "" : params.prompt;
-			}
-			return trials;
-		};
+  plugin.trial = function(display_element, trial) {
 
+    // if any trial variables are functions
+    // this evaluates the function and replaces
+    // it with the output of the function
+    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
+    // set default values for the parameters
+    trial.choices = trial.choices || [];
+    trial.response_ends_trial = (typeof trial.response_ends_trial == 'undefined') ? true : trial.response_ends_trial;
+    trial.timing_stim = trial.timing_stim || -1;
+    trial.timing_response = trial.timing_response || -1;
+    trial.is_html = (typeof trial.is_html == 'undefined') ? false : trial.is_html;
+    trial.prompt = trial.prompt || "";
 
-		plugin.trial = function(display_element, trial) {
+    // this array holds handlers from setTimeout calls
+    // that need to be cleared if the trial ends early
+    var setTimeoutHandlers = [];
 
-			// if any trial variables are functions
-			// this evaluates the function and replaces
-			// it with the output of the function
-			trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
+    // display stimulus
+    if (!trial.is_html) {
+      display_element.append($('<img>', {
+        src: trial.stimulus,
+        id: 'jspsych-single-stim-stimulus'
+      }));
+    } else {
+      display_element.append($('<div>', {
+        html: trial.stimulus,
+        id: 'jspsych-single-stim-stimulus'
+      }));
+    }
 
-			// this array holds handlers from setTimeout calls
-			// that need to be cleared if the trial ends early
-			var setTimeoutHandlers = [];
+    //show prompt if there is one
+    if (trial.prompt !== "") {
+      display_element.append(trial.prompt);
+    }
 
-			// display stimulus
-			if (!trial.is_html) {
-				display_element.append($('<img>', {
-					src: trial.a_path,
-					id: 'jspsych-single-stim-stimulus'
-				}));
-			} else {
-				display_element.append($('<div>', {
-					html: trial.a_path,
-					id: 'jspsych-single-stim-stimulus'
-				}));
-			}
+    // store response
+    var response = {
+      rt: -1,
+      key: -1
+    };
 
-			//show prompt if there is one
-			if (trial.prompt !== "") {
-				display_element.append(trial.prompt);
-			}
+    // function to end trial when it is time
+    var end_trial = function() {
 
-			// store response
-			var response = {rt: -1, key: -1};
+      // kill any remaining setTimeout handlers
+      for (var i = 0; i < setTimeoutHandlers.length; i++) {
+        clearTimeout(setTimeoutHandlers[i]);
+      }
 
-			// function to end trial when it is time
-			var end_trial = function() {
+      // kill keyboard listeners
+      if (typeof keyboardListener !== 'undefined') {
+        jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+      }
 
-				// kill any remaining setTimeout handlers
-				for (var i = 0; i < setTimeoutHandlers.length; i++) {
-					clearTimeout(setTimeoutHandlers[i]);
-				}
+      // gather the data to store for the trial
+      var trial_data = {
+        "rt": response.rt,
+        "stimulus": trial.stimulus,
+        "key_press": response.key
+      };
 
-				// kill keyboard listeners
-				if(typeof keyboardListener !== 'undefined'){
-					jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
-				}
+      //jsPsych.data.write(trial_data);
 
-				// gather the data to store for the trial
-				var trial_data = {
-					"rt": response.rt,
-					"stimulus": trial.a_path,
-					"key_press": response.key
-				};
+      // clear the display
+      display_element.html('');
 
-				jsPsych.data.write(trial_data);
+      // move on to the next trial
+      jsPsych.finishTrial(trial_data);
+    };
 
-				// clear the display
-				display_element.html('');
+    // function to handle responses by the subject
+    var after_response = function(info) {
 
-				// move on to the next trial
-				jsPsych.finishTrial();
-			};
+      // after a valid response, the stimulus will have the CSS class 'responded'
+      // which can be used to provide visual feedback that a response was recorded
+      $("#jspsych-single-stim-stimulus").addClass('responded');
 
-			// function to handle responses by the subject
-			var after_response = function(info) {
+      // only record the first response
+      if (response.key == -1) {
+        response = info;
+      }
 
-				// after a valid response, the stimulus will have the CSS class 'responded'
-				// which can be used to provide visual feedback that a response was recorded
-				$("#jspsych-single-stim-stimulus").addClass('responded');
+      if (trial.response_ends_trial) {
+        end_trial();
+      }
+    };
 
-				// only record the first response
-				if(response.key == -1){
-					response = info;
-				}
+    // start the response listener
+    if (JSON.stringify(trial.choices) != JSON.stringify(["none"])) {
+      var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: 'date',
+        persist: false,
+        allow_held_key: false
+      });
+    }
 
-				if (trial.response_ends_trial) {
-					end_trial();
-				}
-			};
+    // hide image if timing is set
+    if (trial.timing_stim > 0) {
+      var t1 = setTimeout(function() {
+        $('#jspsych-single-stim-stimulus').css('visibility', 'hidden');
+      }, trial.timing_stim);
+      setTimeoutHandlers.push(t1);
+    }
 
-			// start the response listener
-			if(JSON.stringify(trial.choices) != JSON.stringify(["none"])) {
-				var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-					callback_function: after_response,
-					valid_responses: trial.choices,
-					rt_method: 'date',
-					persist: false,
-					allow_held_key: false
-				});
-			}
+    // end trial if time limit is set
+    if (trial.timing_response > 0) {
+      var t2 = setTimeout(function() {
+        end_trial();
+      }, trial.timing_response);
+      setTimeoutHandlers.push(t2);
+    }
 
-			// hide image if timing is set
-			if (trial.timing_stim > 0) {
-				var t1 = setTimeout(function() {
-					$('#jspsych-single-stim-stimulus').css('visibility', 'hidden');
-				}, trial.timing_stim);
-				setTimeoutHandlers.push(t1);
-			}
+  };
 
-			// end trial if time limit is set
-			if (trial.timing_response > 0) {
-				var t2 = setTimeout(function() {
-					end_trial();
-				}, trial.timing_response);
-				setTimeoutHandlers.push(t2);
-			}
-
-		};
-
-		return plugin;
-	})();
-})(jQuery);
+  return plugin;
+})();

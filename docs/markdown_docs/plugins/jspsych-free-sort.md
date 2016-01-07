@@ -8,7 +8,7 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-stimuli | array | *undefined* | Each element of this array is also an array. The innermost arrays contain a set of image paths (strings) to show as a group. Each innermost array represents a single trial. The length of the outer array determines the number of trials in the block.
+stimuli | array | *undefined* | Each element of this array is an image path.
 stim_height | numeric | 100 | The height of the images in pixels.
 stim_width | numeric | 100 | The width of the images in pixels.
 sort_area_height | numeric | 800 | The height of the container that subjects can move the stimuli in. Stimuli will be constrained to this area.
@@ -33,16 +33,14 @@ rt | numeric | The response time in milliseconds for the subject to finish all s
 #### Basic example
 
 ```javascript
-// declare an array to hold the stimuli
 var sorting_stimuli = [];
 for (var i = 1; i <= 12; i++) {
     sorting_stimuli.push("img/cell_img_" + i + ".jpg");
 }
 
-// create free-sort block for jspsych
-var sort_block = {
+var sort_trial = {
     type: 'free-sort',
-    stimuli: [sorting_stimuli],
+    stimuli: sorting_stimuli,
     prompt: "<p>Click and drag the images below to sort them so that similar items are close together.</p>"
 };
 ```

@@ -11,15 +11,22 @@
   </body>
   <script>
 
-  var trials = {
+  var trial = {
     type: 'call-function',
-    func: function(){ alert('plugin is working.')}
+    func: function(){ console.log(Date.now()); return true; }
+  };
+
+  // this is to check if the default for timing_post_trial works.
+  var next_trial = {
+    type: 'call-function',
+    func: function(){ console.log(Date.now()); return true; }
   };
 
 
   jsPsych.init({
     display_element: $('#jspsych-target'),
-    experiment_structure: [trials]
+    timeline: [trial, next_trial],
+    on_finish: function(){jsPsych.data.displayData();}
   });
 
 

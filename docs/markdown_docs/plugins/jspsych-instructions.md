@@ -29,7 +29,7 @@ rt | numeric | The response time in milliseconds for the subject to view all of 
 #### Showing simple text instructions
 
 ```javascript
-var block = {
+var trial = {
 	type: 'instructions',
 	pages: [
 		'Welcome to the experiment. Click next to begin.',
@@ -43,7 +43,7 @@ var block = {
 #### Including images
 
 ```javascript
-var block = {
+var trial = {
 	type: 'instructions',
 	pages: [
 		'Welcome to the experiment. Click next to begin.',

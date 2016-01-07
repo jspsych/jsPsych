@@ -19,7 +19,7 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-stimuli | array | *undefined* | Each element of the array is a pair of stimuli. Each pair is represented as an array with two entries, one for each stimulus. A stimulus can be either a path to an image file or a string containing valid HTML markup. Stimuli will be shown in the order that they are defined in the array. Each pair will be presented in its own trial, and thus the length of this array determines the total number of trials.
+stimuli | array | *undefined* | A pair of stimuli. Each pair is represented as an array with two entries, one for each stimulus. A stimulus can be either a path to an image file or a string containing valid HTML markup. Stimuli will be shown in the order that they are defined in the array.
 is_html | boolean | false | If the elements of the `stimuli` array are strings containing HTML content, then this parameter must be set to true.
 labels | array | `['Not at all similar', 'Identical']` | Array of strings to label the slider. Labels will be evenly spaced based on how many are in the array, with the outermost elements always anchored to the ends of the slider.
 intervals | numeric | 100 | How many different choices are available on the slider. For example, 5 will limit the options to 5 different places on the slider. Default value is 100, to simulate a smooth slider.
@@ -37,8 +37,7 @@ In addition to the [default data collected by all plugins](overview#datacollecte
 
 Name | Type | Value
 -----|------|------
-stimulus | string | Either the path to the image file or the string containing the HTML formatted content that the subject saw first on this trial.
-stimulus_2 | string | Either the path to the image file or the string containing the HTML formatted content that the subject saw second on this trial.
+stimulus | string | A JSON-encoded array of the two stimuli presented in the trial.
 sim_score | numeric | The position of the slider when the subject submitted their response. Larger numbers are to the right on the slider. The range will depend on the value of the `intervals` parameter.
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the response slider first appears on the screen until the subject's response.
 

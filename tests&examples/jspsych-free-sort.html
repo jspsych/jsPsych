@@ -15,13 +15,14 @@
 
   var trials = {
     type: 'free-sort',
-    stimuli: [['img/happy_face_1.jpg','img/happy_face_2.jpg','img/happy_face_3.jpg','img/happy_face_4.jpg']]
+    stimuli: ['img/happy_face_1.jpg','img/happy_face_2.jpg','img/happy_face_3.jpg','img/happy_face_4.jpg']
   };
 
 
   jsPsych.init({
     display_element: $('#jspsych-target'),
-    experiment_structure: [trials]
+    timeline: [trials],
+    on_finish: function(){jsPsych.data.displayData();}
   });
 
 

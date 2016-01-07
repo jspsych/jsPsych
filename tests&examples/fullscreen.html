@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+
+<head>
+  <script src="js/jquery.min.js"></script>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-single-stim.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="jspsych-target"></div>
+</body>
+<script>
+  var block_1 = {
+    type: 'single-stim',
+    stimulus: 'img/happy_face_1.jpg',
+    choices: [89, 78], // Y or N
+    prompt: '<p class="center-content">Have you seen this face before? Y or N.</p>'
+  }
+
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    timeline: [block_1],
+    fullscreen: true,
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+</script>
+
+</html>

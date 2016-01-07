@@ -1,17 +1,6 @@
 # jspsych-survey-likert plugin
 
-The survey-likert plugin displays a set of questions with Likert scale responses. The subject uses a draggable slider to respond to the questions.
-
-## Dependency
-
-This plugin requires the jQuery UI javascript library and accompanying CSS theme. To use this library, you must include both. Google hosts versions of both, which you can use in your project by including the following two lines in the `<head>` section of the HTML document:
-
-```html
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/black-tie/jquery-ui.min.css" rel="stylesheet" type="text/css"></link>
-```
-
-This example uses the 'black-tie' theme, but any theme should work.
+The survey-likert plugin displays a set of questions with Likert scale responses. The subject responds by selecting a radio button.
 
 ## Parameters
 
@@ -19,11 +8,8 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-questions | array | *undefined* | Each array element is an array of strings. The strings are the prompts/questions that will be associated with a slider. All questions within an array will get presented on the same page (trial). The length of the questions array determines the number of trials.
-labels | array |  *undefined* | Each array element is an array of arrays. The innermost arrays contain a set of labels to display for an individual question. The middle level of arrays groups together the sets of labels that appear in a single trial. This level should correspond to the `questions` array.
-intervals | array | *undefined* | Each array element is an array of integers. The integers define how many different levels of a response there are (i.e. how many choices exist for each question). The length of the inner arrays should correspond the the length of the inner arrays for the `questions` array. The number of intervals does not have to match the number of labels.
-show_ticks | boolean | true | If true, then tick marks will be displayed on the sliders to indicate where the acceptable responses lie on the slider.
-preamble | array | empty string | Array of HTML formatted strings to display at the top of each page above all the questions. Each element of the array corresponds to a trial/page of questions.
+questions | array | *undefined* | Each array element a string. The strings are the prompts/questions that will be associated with a slider.
+labels | array |  *undefined* | Each array element is an array of strings. The innermost arrays contain a set of labels to display for an individual question. If you want to use blank responses and only label the end points or some subset of the options, just insert a blank string for the unlabeled responses.
 
 ## Data Generated
 
@@ -41,16 +27,13 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
 ```javascript
 // defining groups of questions that will go together.
 var page_1_questions = ["I like vegetables.", "I hate eggs."];
-var page_2_questions = ["I like fruit."];
 
-// definiting two different response scales that can be used.
+// defining two different response scales that can be used.
 var scale_1 = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
-var scale_2 = ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neural", "Somewhat Agree", "Agree", "Strongly Agree"];
 
-var likert_block = {
+var likert_page = {
     type: 'survey-likert',
-    questions: [page_1_questions, page_2_questions],
-    labels: [[scale_1, scale_2], [scale_1]], // need one scale for every question on a page
-    intervals: [[5,7], [9]] // note the the intervals and labels don't necessarily need to match.
+    questions: ["I like vegetables.", "I like fruit."],
+    labels: [scale_1, scale_1], // need one scale for every question on a page
 };
 ```

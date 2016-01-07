@@ -3,306 +3,304 @@
  *
  * This stylesheet provides minimal styling to make jsPsych
  * experiments look polished without any additional styles.
- *
  */
 
-/*
- *
- * fonts and type
- *
- */
+
+/* fonts and type */
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
-
 html {
- font-family: 'Open Sans', 'Arial', sans-serif;
- font-size: 18px;
- line-height: 1.6em;
+  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-size: 18px;
+  line-height: 1.6em;
 }
-
 body {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
-
 p {
-    clear:both;
+  clear: both;
 }
-
 .very-small {
-    font-size: 50%;
+  font-size: 50%;
 }
-
 .small {
-    font-size: 75%;
+  font-size: 75%;
 }
-
 .large {
-    font-size: 125%;
+  font-size: 125%;
 }
-
 .very-large {
-    font-size: 150%;
+  font-size: 150%;
 }
 
-/*
- *
- * Classes for changing location of things
- *
- */
+/* Classes for changing location of things */
 
 .left {
-    float: left;
+  float: left;
 }
-
 .right {
-    float: right;
+  float: right;
 }
-
 .center-content {
-    text-align: center;
+  text-align: center;
 }
 
-/*
- *
- * Form elements like input fields and buttons
- *
- */
+.block-center {
+  margin: 1em auto;
+  display: block;
+}
+/* Form elements like input fields and buttons */
 
 input[type="text"] {
-    font-family: 'Open Sans', 'Arial', sans-sefif;
-    font-size: 14px;
+  font-family: 'Open Sans', 'Arial', sans-sefif;
+  font-size: 14px;
 }
 
-button {
-    padding: 0.8em;
-    background-color: #eaeaea;
-    border: 1px solid #eaeaea;
-    color: #555;
-    font-weight: bold;
-    font-family: 'Open Sans', 'Arial', sans-serif;
-    font-size: 14px;
-    cursor: pointer;
+/* borrowing Bootstrap style for btn elements, but combining styles a bit */
+.jspsych-btn {
+  display: inline-block;
+  padding: 6px 12px;
+  margin: 0px 8px;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: 'Open Sans', 'Arial', sans-serif;
+  cursor: pointer;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
 }
 
-button:hover {
-    border:1px solid #ccc;
+.jspsych-btn:hover {
+  background-color: #ddd;
+  border-color: #aaa;
 }
 
-/*
- *
- * Container holding jsPsych content
- *
- */
-
+/* Container holding jsPsych content */
 
 .jspsych-display-element {
-    width: 800px;
-    margin: 50px auto 50px auto;
+  width: 800px;
+  margin: 50px auto 50px auto;
 }
 
-/*
- *
- * jsPsych progress bar
- *
- */
+/* jsPsych progress bar */
 
 #jspsych-progressbar-container {
-	color: #777;
-	border-bottom: 2px solid #dedede;
-	background-color: #f3f3f3;
-	margin-bottom: 1em;
-	text-align: center;
-	padding: 10px 0px;
+  color: #777;
+  border-bottom: 2px solid #dedede;
+  background-color: #f3f3f3;
+  margin-bottom: 1em;
+  text-align: center;
+  padding: 10px 0px;
 }
-
-#jspsych-progressbar-container s {
-
-}
-
+#jspsych-progressbar-container s {}
 #jspsych-progressbar-outer {
-	background-color: #dedede;
-	border-radius: 5px;
-	padding: 1px;
-	width: 800px;
-	margin: auto;
+  background-color: #dedede;
+  border-radius: 5px;
+  padding: 1px;
+  width: 800px;
+  margin: auto;
 }
-
 #jspsych-progressbar-inner {
-	background-color: #aaa; /* #3EB3D7; */
-	width: 0%;
-	height: 1em;
-	border-radius: 5px;
+  background-color: #aaa;
+  /* #3EB3D7; */
+  width: 0%;
+  height: 1em;
+  border-radius: 5px;
 }
 
-/*
- *
- * PLUGIN: jspsych-animation
- *
- */
+/* PLUGIN: jspsych-animation */
 
 #jspsych-animation-image {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/*
- *
- * PLUGIN: jspsych-categorize-animation
- *
- */
+/* PLUGIN: jspsych-categorize-animation */
 
 #jspsych-categorize-animation-stimulus {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/*
- *
- * PLUGIN: jspsych-categorize
- *
- */
+/* PLUGIN: jspsych-categorize */
 
 #jspsych-categorize-stimulus {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
-
 .feedback {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/*
- *
- * PLUGIN: jspsych-free-sort
- *
- */
+/* PLUGIN: jspsych-free-sort */
 
 #jspsych-free-sort-arena {
-    margin-left: auto;
-    margin-right: auto;
-    border: 2px solid #444;
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px solid #444;
 }
-
 .jspsych-free-sort-draggable {
   cursor: move;
 }
-
 #jspsych-free-sort-done-btn {
   display: block;
   margin: auto;
   margin-top: 25px;
 }
 
-/*
- *
- * PLUGIN: jspsych-instructions
- *
- */
+/* PLUGIN: jspsych-instructions */
 
- .jspsych-instructions-nav {
-   text-align: center;
-   margin-top: 2em;
- }
+.jspsych-instructions-nav {
+  text-align: center;
+  margin-top: 2em;
+}
+.jspsych-instructions-nav button {
+  margin: 20px;
+}
 
- .jspsych-instructions-nav button {
-   margin: 20px;
- }
-/*
- *
- * PLUGIN: jspsych-multi-stim-multi-response
- *
- */
+/* PLUGIN: jspsych-multi-stim-multi-response */
 
 #jspsych-multi-stim-multi-response-stimulus {
   display: block;
   margin: auto;
 }
 
-/*
- *
- * PLUGIN: jspsych-palmer
- *
- */
+/* PLUGIN: jspsych-palmer */
 
 #jspsych-palmer-snapCanvas {
-    margin-left: auto;
-    margin-right: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/*
- *
- * PLUGIN: jspsych-same-different
- *
- */
+/* PLUGIN: jspsych-same-different */
 
 .jspsych-same-different-stimulus {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/*
- *
- * PLUGIN: jspsych-single-stim
- *
- */
+/* PLUGIN: jspsych-single-stim */
 
 #jspsych-single-stim-stimulus {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* PLUGIN: jspsych-survey-text */
+
+.jspsych-survey-text {
+  margin: 0.25em 0em;
+}
+.jspsych-survey-text-question {
+  margin: 2em 0em;
+}
+
+/* PLUGIN: jspsych-survey-likert */
+
+.jspsych-survey-likert-statement {
+  display:block;
+  font-size: 18px;
+  padding-top: 30px;
+  margin-bottom:10px;
+}
+.jspsych-survey-likert-opts {
+  list-style:none;
+  width:100%;
+  margin:0;
+  padding:0 0 35px;
+  display:block;
+  font-size: 14px;
+  line-height:1.1em;
+}
+
+.jspsych-survey-likert-opt-label {
+  line-height: 1.1em;
+}
+
+.jspsych-survey-likert-opts:before {
+  content: '';
+  position:relative;
+  top:11px;
+  /*left:9.5%;*/
+  display:block;
+  background-color:#efefef;
+  height:4px;
+  width:100%;
+}
+
+.jspsych-survey-likert-opts:last-of-type {
+  border-bottom: 0;
+}
+
+.jspsych-survey-likert-opts li {
+  display:inline-block;
+  /*width:19%;*/
+  text-align:center;
+  vertical-align: top;
+}
+
+.jspsych-survey-likert-opts li input[type=radio] {
+  display:block;
+  position:relative;
+  top:0;
+  left:50%;
+  margin-left:-6px;
 }
 
 /*
  *
- * PLUGIN: jspsych-survey-text
+ * PLUGIN: jspsych-survey-multi-choice
  *
  */
 
- .jspsych-survey-text {
-     margin: 0.25em 0em;
- }
-
- .jspsych-survey-text-question {
-     margin: 2em 0em;
- }
-
- /*
-  *
-  * PLUGIN: jspsych-survey-likert
-  *
-  */
-
-.jspsych-survey-likert-sliderlabels {
-  font-size: 75%;
-  line-height: 1.15em;
-}
-
-.jspsych-survey-likert-question {
+.jspsych-survey-multi-choice-question {
   margin-top: 2em;
   margin-bottom: 2em;
+ }
+
+.jspsych-survey-multi-choice-text span.required {
+  color: darkred;
 }
 
-.jspsych-survey-likert-text {
+.jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {
   text-align: center;
 }
 
-#jspsych-survey-likert-next {
+.jspsych-survey-multi-choice-option {
+  line-height: 2;
+}
+.jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option {
+  display: inline-block;
+  margin-left: 1em;
+  margin-right: 1em;
+  vertical-align: top;
+}
+
+label.jspsych-survey-multi-choice-text input[type="radio"] {
+  margin-right: 1em;
+}
+
+#jspsych-survey-multi-choice-next {
   display: block;
   margin: auto;
 }
 
-/*
-*
-* PLUGIN: jspsych-visual-search-circle
-*
-*/
+/** PLUGIN: jspsych-visual-search-circle **/
 
 #jspsych-visual-search-circle-svg {
   display: block;
@@ -310,25 +308,17 @@ button:hover {
   margin-right: auto;
 }
 
-/*
- *
- * PLUGIN: jspsych-vsl-animate-occlusion
- *
- */
+/* PLUGIN: jspsych-vsl-animate-occlusion */
 
 #jspsych-vsl-animate-occlusion-canvas {
   display: block;
   margin: auto;
 }
 
-/*
- *
- * PLUGIN: jspsych-xab
- *
- */
+/* PLUGIN: jspsych-xab */
 
- .jspsych-xab-stimulus {
-   display: block;
-   margin-left: auto;
-   margin-right: auto;
- }
+.jspsych-xab-stimulus {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -8,7 +8,7 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-stimuli | array | *undefined* | Each element of the array is an array containing strings. The strings are paths to image files. Each array of strings specifies a single sequence, and each sequence will be its own trial. The length of this array determines the total number of trials.
+stimuli | array | *undefined* | Each element of the array is a path to an image file.
 frame_time | numeric | 250 | How long to display each image (in milliseconds).
 frame_isi | numeric | 0 | If greater than 0, then a gap will be shown between each image in the sequence. This parameter specifies the length of the gap.
 sequence_reps | numeric | 1 | How many times to show the entire sequence. There will be no gap (other than the gap specified by `frame_isi`) between repetitions.
@@ -27,18 +27,15 @@ responses | JSON string | An array, encoded in JSON format. Each element of the 
 
 ## Examples
 
-These examples show how to define a block using the animation plugin to achieve various goals.
-
 #### Displaying a single sequence multiple times
 
 ```javascript
 // declare variable to hold animation sequence
 var animation_sequence = ["img/face_1.jpg", "img/face_2.jpg", "img/face_3.jpg", "img/face_4.jpg", "img/face_3.jpg", "img/face_2.jpg"];
 
-// create animation block for jspsych
-var animation_block = {
+var animation_trial = {
     type: 'animation',
-    stimuli: [animation_sequence],
+    stimuli: animation_sequence,
     sequence_reps: 3
 };
 ```

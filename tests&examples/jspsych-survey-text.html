@@ -15,19 +15,18 @@
 
   // defining groups of questions that will go together.
   var page_1_questions = ["How old are you?", "Where were you born?"];
-  var page_2_questions = ["What is your favorite food?"];
 
   var survey_block = {
       type: 'survey-text',
-      questions: [page_1_questions, page_2_questions],
+      questions: page_1_questions
   };
 
 
   jsPsych.init({
     display_element: $('#jspsych-target'),
-    experiment_structure: [survey_block]
+    timeline: [survey_block],
+    on_finish: function() { jsPsych.data.displayData(); }
   });
-
 
   </script>
 </html>

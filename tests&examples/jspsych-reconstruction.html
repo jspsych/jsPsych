@@ -22,12 +22,13 @@
   var block_1 = {
     type: 'reconstruction',
     stim_function: sample_function,
-    starting_value: [0.25, 0.5, 0.75]
+    starting_value: 0.25
   }
 
   jsPsych.init({
     display_element: $('#jspsych-target'),
-    experiment_structure: [block_1]
+    timeline: [block_1],
+    on_finish: function() { jsPsych.data.displayData(); }
   });
 
   </script>

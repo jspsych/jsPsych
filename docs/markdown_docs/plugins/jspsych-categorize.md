@@ -8,8 +8,8 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-stimuli | array | *undefined* | Each element of the array is a stimulus. A stimulus can be either a path to an image file or a string containing valid HTML markup. Each stimulus will be presented in its own trial, and thus the length of this array determines the total number of trials.
-is_html | boolean | false | If the elements of the `stimuli` array are strings containing HTML content, then this parameter must be set to true.
+stimulus | string | *undefined* | The stimulus to display. Either HTML-formatted, or the path to an image.
+is_html | boolean | false | If `stimulus` is an HTML-formatted string, this parameter needs to be set to `true`.
 key_answer | array | *undefined* | Each element of the array is a [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) indicating the correct response for the corresponding trial. The length of this array should match the `stimuli` array.
 choices | array | *undefined* | This array contains the keys that the subject is allowed to press in order to respond to the stimulus. Keys can be specified as their [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) or as characters (e.g. `'a'`, `'q'`).
 text_answer | array | "" | Array of strings representing a label that is associated with each correct answer. Used in conjunction with the `correct_text` and `incorrect_text` parameters.
@@ -38,45 +38,14 @@ correct | boolean | `true` if the subject got the correct answer, `false` otherw
 
 ## Examples
 
-These examples show how to define a block using the categorize plugin to achieve various goals.
-
 #### Categorizing HTML content
 
 ```javascript
-// number of trials
-var n_trials = 6;
-
-// this is an example of using HTML objects as stimuli.
-// you could also use images.
-var numbers = ["1", "2", "3", "4", "5"];
-var letters = ["I", "Z", "B", "A", "S"];
-
-var stimuli = [];
-var answers = [];
-var text_answers = [];
-
-// randomly choose stimuli
-for (var i = 0; i < n_trials; i++) {
-    if (Math.floor(Math.random() * 2) === 0) {
-        // pick a number
-        stimuli.push("<div id='stimulus'><p>" + numbers[Math.floor(Math.random() * numbers.length)] + "</p></div>");
-        answers.push(81);
-        text_answers.push("number");
-    }
-    else {
-        // pick a letter
-        stimuli.push("<div id='stimulus'><p>" + letters[Math.floor(Math.random() * letters.length)] + "</p></div>");
-        answers.push(80);
-        text_answers.push("letter");
-    }
-}
-
-// create categorization block for jspsych
-var categorization_block = {
+var categorization_trial = {
     type: 'categorize',
-    stimuli: stimuli,
-    key_answer: answers,
-    text_answer: text_answers,
+    stimulus: '<p>B</p>',
+    key_answer: 80,
+    text_answer: 'letter',
     choices: [80, 81],
     correct_text: "<p class='prompt'>Correct, this is a %ANS%.</p>",
     incorrect_text: "<p class='prompt'>Incorrect, this is a %ANS%.</p>",

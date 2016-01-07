@@ -11,9 +11,9 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-stimuli | array | *undefined* | Array of stimuli. Each stimulus is an array that defines a grid. Grids should be declared as two dimensional arrays in `[row][col]` order, with paths to image files in the locations where images are displayed, and 0 in blank spaces. See example below.
+stimuli | array | *undefined* | An array that defines a grid. Grids should be declared as two dimensional arrays in `[row][col]` order, with paths to image files in the locations where images are displayed, and 0 in blank spaces. See example below.
 image_size | array | `[100, 100]` | Array specifying the width and height of the images to show. Grid cells will also be this size, with 10% padding.
-timing_duration | numeric | 2000 | How long to show the stimulus for in milliseconds. 
+timing_duration | numeric | 2000 | How long to show the stimulus for in milliseconds.
 
 ## Data Generated
 
@@ -49,23 +49,17 @@ var grid_stimulus = jsPsych['vsl-grid-scene'].generate_stimulus(pattern, image_s
 #### Basic example
 
 ```javascript
-var scenes = [
-    [
-        ["img/1.gif", "img/2.gif", 0],
-        [ 0, "img/3.gif", 0],
-        ["img/5.gif", "img/4.gif", 0]
-    ],
-    [
-        [ 0, 0, "img/6.gif"],
-        [ "img/10.gif", "img/7.gif", 0],
-        [ 0,"img/8.gif", "img/9.gif" ]
-    ]
-];
+var scene = [
+  ["img/1.gif", "img/2.gif", 0],
+  [ 0, "img/3.gif", 0],
+  ["img/5.gif", "img/4.gif", 0]
+]
+
 
 // create vsl block for jspsych
 var vsl_block = {
     type: 'vsl-grid-scene',
-    stimuli: scenes
+    stimuli: scene
 };
 
 ```

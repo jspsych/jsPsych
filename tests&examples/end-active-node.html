@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+
+<head>
+  <script src="js/jquery.min.js"></script>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-single-stim.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="jspsych-target"></div>
+</body>
+<script>
+  var images = ["img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif", "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif", "img/9.gif", "img/10.gif"];
+
+  var trials = [];
+  for (var i = 0; i < images.length; i++) {
+    trials.push({
+      stimulus: images[i]
+    });
+  }
+
+  var block = {
+    type: 'single-stim',
+    choices: [89, 78], // Y or N
+    prompt: '<p class="center-content">Press Y to Continue. Press N to end this node of the experiment.</p>',
+    on_finish: function(data) {
+      if (data.key_press == 78) {
+        jsPsych.endCurrentTimeline();
+      }
+    },
+    timeline: trials
+  }
+
+  var after_block = {
+    type: 'single-stim',
+    stimulus: '<p>The next node</p>',
+    is_html: true
+  }
+
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    timeline: [block, after_block],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+</script>
+
+</html>

@@ -24,7 +24,7 @@
   // show stimulus using single-stim plugin
   var stim_block = {
       type: 'single-stim',
-      stimuli: [stimulus],
+      stimulus: stimulus,
       is_html: true,
       timing_response: 2000,
       response_ends_trial: false
@@ -32,7 +32,7 @@
 
   var test_block = {
       type: 'palmer',
-      configurations: [[0,1,0,0,1,1,0,0,1,1,0,0,1,0,0,0,1,0,0,1]],
+      configuration: [0,1,0,0,1,1,0,0,1,1,0,0,1,0,0,0,1,0,0,1],
       editable: true,
       show_feedback: true,
       timing_feedback: 2000,
@@ -42,7 +42,8 @@
 
   jsPsych.init({
     display_element: $('#jspsych-target'),
-    experiment_structure: [stim_block, test_block]
+    timeline: [stim_block, test_block],
+    on_finish: function() { jsPsych.data.displayData(); }
   });
 
   </script>

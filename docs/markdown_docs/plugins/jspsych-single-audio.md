@@ -12,7 +12,7 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-stimuli | array | *undefined* | Each element of the array is a stimulus. A stimulus is a path to an audio file. Each stimulus will be presented in its own trial, and thus the length of this array determines the total number of trials.
+stimulus | string | *undefined* | Path to an audio file.
 choices | array | [ ] | This array contains the keys that the subject is allowed to press in order to respond to the stimulus. Keys can be specified as their [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) or as characters (e.g. `'a'`, `'q'`). The default value of an empty array means that all keys will be accepted as valid responses.
 prompt | string | "" | This string can contain HTML markup. Any content here will be displayed on the screen. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g. which key to press).
 timing_response | numeric | -1 | How long to wait for the subject to make a response before ending the trial in milliseconds. If the subject fails to make a response before this timer is reached, the the subject's response will be recorded as -1 for the trial and the trial will end. If the value of this parameter is -1, then the trial will wait for a response indefinitely.
@@ -30,23 +30,21 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
 
 ## Examples
 
-These examples show how to define a block using the single-stim plugin to achieve various goals.
-
 #### Playing a sound
 
 ```javascript
-var block = {
+var trial = {
 	type: 'single-audio',
-	stimuli: ['sound/sound.mp3']
+	stimulus: 'sound/sound.mp3'
 }
 ```
 
 #### Restricting which keys the subject can use to respond
 
 ```javascript
-var block = {
-	type: 'single-stim',
-	stimuli: ['sound/sound.mp3'],
+var trial = {
+	type: 'single-audio',
+	stimulus: 'sound/sound.mp3',
 	choices: ['h','s']
 }
 ```

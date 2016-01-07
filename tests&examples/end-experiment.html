@@ -1,44 +1,51 @@
 <!doctype html>
 <html>
-  <head>
-    <script src="js/jquery.min.js"></script>
-    <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-single-stim.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css"></link>
-    <style>
-      img { width: 300px; }
-    </style>
-  </head>
-  <body>
-    <div id="jspsych-target"></div>
-  </body>
-  <script>
 
-  var images = ["img/1.gif","img/2.gif","img/3.gif","img/4.gif","img/5.gif","img/6.gif","img/7.gif","img/8.gif","img/9.gif","img/10.gif"];
-
-  var block_1 = {
-    type: 'single-stim',
-    stimuli: images,
-    choices: [89,78], // Y or N
-    prompt: '<p class="center-content">Press Y to Continue. Press N to end the experiment</p>',
-    on_finish: function(data){
-      if(data.key_press == 78){
-        jsPsych.endExperiment();
-      }
+<head>
+  <script src="js/jquery.min.js"></script>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-single-stim.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
     }
-  }
+  </style>
+</head>
 
-  function start(){
-    jsPsych.init({
-      display_element: $('#jspsych-target'),
-      experiment_structure: [block_1],
-      on_finish: function(){
-        jsPsych.data.displayData();
-      }
+<body>
+  <div id="jspsych-target"></div>
+</body>
+<script>
+  var images = ["img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif", "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif", "img/9.gif", "img/10.gif"];
+
+  var trials = [];
+  for (var i = 0; i < images.length; i++) {
+    trials.push({
+      stimulus: images[i]
     });
   }
 
-  jsPsych.preloadImages(images, start);
+  var block = {
+    type: 'single-stim',
+    choices: [89, 78], // Y or N
+    prompt: '<p class="center-content">Press Y to Continue. Press N to end the experiment</p>',
+    on_finish: function(data) {
+      if (data.key_press == 78) {
+        jsPsych.endExperiment('The experiment was ended. This is the end message.');
+      }
+    },
+    timeline: trials
+  }
 
-  </script>
+
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    timeline: [block],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+</script>
+
 </html>

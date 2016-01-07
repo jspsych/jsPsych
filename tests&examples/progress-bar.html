@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-single-stim.js"></script>
+    <script src="../plugins/jspsych-text.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <style>
+      img { width: 300px; }
+    </style>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+
+  var trial_1 = {
+    type: 'single-stim',
+    stimulus: 'img/happy_face_1.jpg',
+    choices: [89,78], // Y or N
+    prompt: '<p class="center-content">Have you seen this face before? Y or N.</p>'
+  }
+
+  var trial_2 = {
+    type: 'single-stim',
+    stimulus: 'img/happy_face_2.jpg',
+    choices: [89,78], // Y or N
+    prompt: '<p class="center-content">Have you seen this face before? Y or N.</p>'
+  }
+
+  var trial_3 = {
+    type: 'single-stim',
+    stimulus: 'img/happy_face_3.jpg',
+    choices: [89,78], // Y or N
+    prompt: '<p class="center-content">Have you seen this face before? Y or N.</p>'
+  }
+
+  var cnt = 0;
+  
+  var block_set = {
+    timeline: [trial_1,trial_2,trial_3],
+    loop_function: function() { cnt++; return cnt<2;}
+  }
+
+  var end_screen = {
+    type: 'text',
+    text: 'The experiment is over.'
+  }
+
+  function start(){
+    jsPsych.init({
+      display_element: $('#jspsych-target'),
+      timeline: [trial_1, trial_2, trial_3, block_set, end_screen],
+      show_progress_bar: true,
+      on_finish: function(){ jsPsych.data.displayData(); }
+    });
+  }
+
+  jsPsych.preloadImages(['img/happy_face_1.jpg','img/happy_face_2.jpg','img/happy_face_3.jpg'], start);
+
+  </script>
+</html>
