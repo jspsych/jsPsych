@@ -8,8 +8,8 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-questions | array | *undefined* | Each array element is an array of strings. The strings are the prompts/questions that will be associated with a slider. All questions within an array will get presented on the same page (trial). The length of the questions array determines the number of trials.
-labels | array |  *undefined* | Each array element is an array of arrays. The innermost arrays contain a set of labels to display for an individual question. The length of this array will determine the number of response options for that question. If you want to use blank responses and only label the end points or some subset of the options, just insert a blank string for the unlabelled responses. The middle level of arrays groups together the sets of labels that appear in a single trial. This level should correspond to the `questions` array.
+questions | array | *undefined* | Each array element a string. The strings are the prompts/questions that will be associated with a slider.
+labels | array |  *undefined* | Each array element is an array of strings. The innermost arrays contain a set of labels to display for an individual question. If you want to use blank responses and only label the end points or some subset of the options, just insert a blank string for the unlabeled responses.
 
 ## Data Generated
 
@@ -27,15 +27,13 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
 ```javascript
 // defining groups of questions that will go together.
 var page_1_questions = ["I like vegetables.", "I hate eggs."];
-var page_2_questions = ["I like fruit."];
 
 // defining two different response scales that can be used.
 var scale_1 = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
-var scale_2 = ["Strongly Disagree", "", "", "Neutral", "", "", "Strongly Agree"];
 
-var likert_block = {
+var likert_page = {
     type: 'survey-likert',
-    questions: [page_1_questions, page_2_questions],
-    labels: [[scale_1, scale_2], [scale_1]], // need one scale for every question on a page
+    questions: ["I like vegetables.", "I like fruit."],
+    labels: [scale_1, scale_1], // need one scale for every question on a page
 };
 ```

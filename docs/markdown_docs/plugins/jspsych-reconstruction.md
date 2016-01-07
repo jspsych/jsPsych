@@ -11,7 +11,7 @@ This table lists the parameters associated with this plugin. Parameters with a d
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 stim_function | function | *undefined* | A function with a single parameter that returns an HTML-formatted string representing the stimulus.
-starting_value | array | [0.5] | The starting values of the stimulus parameter. Each element in the array will be a different trial.
+starting_value | numeric | 0.5 | The starting value of the stimulus parameter.
 step_size | numeric | 0.05 | The change in the stimulus parameter caused by pressing one of the modification keys.
 key_increase | key code | 'h' | The key to press for increasing the parameter value.
 key_decrease | key code | 'g' | The key to press for decreasing the parameter value.
@@ -28,6 +28,8 @@ rt | numeric | The length of time, in milliseconds, that the trial lasted.
 
 ## Examples
 
+#### Make a block larger and smaller
+
 ```javascript
 var sample_function = function(param){
 	var size = 50 + Math.floor(param*250);
@@ -37,9 +39,9 @@ var sample_function = function(param){
 	return html;
 }
 
-var block = {
+var trial = {
 	type: 'reconstruction',
 	stim_function: sample_function,
-	starting_value: [0.25, 0.5, 0.75]
+	starting_value: 0.25
 }
 ```

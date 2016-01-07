@@ -8,9 +8,9 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-stimuli | array | *undefined* | Each element of the array is a pair of stimuli. Each pair is represented as an array with two entries, one for each stimulus. A stimulus can be either a path to an image file or a string containing valid HTML markup. Stimuli will be shown in the order that they are defined in the array. Each pair will be presented in its own trial, and thus the length of this array determines the total number of trials.
-is_html | boolean | false | If the elements of the `stimuli` array are strings containing HTML content, then this parameter must be set to true. 
-answer | array | *undefined* | Array of strings, where each string is either `'same'` or `'different'`. This array should be the same length as `stimuli` and the answers should correspond to the pairs in the `stimuli` array.
+stimuli | array | *undefined* | A pair of stimuli, represented as an array with two entries, one for each stimulus. A stimulus can be either a path to an image file or a string containing valid HTML markup. Stimuli will be shown in the order that they are defined in the array.
+is_html | boolean | false | If the elements of the `stimuli` array are strings containing HTML content, then this parameter must be set to true.
+answer | string | *undefined* | Either `'same'` or `'different'`.
 same_key | numeric or string | 'Q' | The key that subjects should press to indicate that the two stimuli are the same.
 different_key | numeric or string | 'P' | The key that subjects should press to indicate that the two stimuli are different.
 timing_first_stim | numeric | 1000 | How long to show the first stimulus for in milliseconds. If the value of this parameter is `-1` then the stimulus will be shown until the subject presses any key.
@@ -25,9 +25,9 @@ In addition to the [default data collected by all plugins](overview#datacollecte
 
 Name | Type | Value
 -----|------|------
-stimulus | string | An array of length 2 containing either the path to the image file or the string containing the HTML formatted content that the subject saw for each trial.
+stimulus | string | An JSON-encoded array of length 2 containing either the path to the image file or the string containing the HTML formatted content that the subject saw for each trial.
 key_press | numeric | Indicates which key the subject pressed. The value is the [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) corresponding to the subject's response.
-rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the second stimulus first appears on the screen until the subject's response. 
+rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the second stimulus first appears on the screen until the subject's response.
 correct | boolean | `true` if the subject's response matched the `answer` for this trial.
 answer | string | The correct answer to the trial, either `'same'` or `'different'`.
 
@@ -39,5 +39,3 @@ rt_stim1 | numeric | The response time in milliseconds for the subject to contin
 key_press_stim1 | numeric | Indicates which key the subject pressed to continue. The value is the [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) corresponding to the subject's response.
 
 ## Examples
-
-

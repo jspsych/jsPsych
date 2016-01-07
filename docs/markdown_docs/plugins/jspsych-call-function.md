@@ -24,8 +24,6 @@ value | any | The return value of the called function.
 
 ## Examples
 
-These examples show how to define a block using the single-stim plugin to achieve various goals.
-
 #### Calling a simple function
 
 ```javascript

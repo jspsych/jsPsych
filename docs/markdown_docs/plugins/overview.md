@@ -31,7 +31,7 @@ var single_stim_block = {
 }
 ```
 
-## Parameters available plugins
+## Parameters available in all plugins
 
 Each plugin specifies its own set of parameters. Check the documentation for a plugin to see what parameters are available and what they do.
 
