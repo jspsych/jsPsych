@@ -1,6 +1,6 @@
 # Event-related callback functions
 
-jsPsych offers the ability to call arbitrary functions in response to certain events occuring, like the end of a trial or when new data is saved. This page summarizes the different opportunities for callback functions and how to specify them.
+jsPsych offers the ability to call arbitrary functions in response to certain events occurring, like the end of a trial or when new data is saved. This page summarizes the different opportunities for callback functions and how to specify them.
 
 ---
 
@@ -11,7 +11,7 @@ The `on_data_update` callback can be declared in the `jsPsych.init` method. The 
 #### Sample use
 ```javascript
 jsPsych.init({
-  experiment_structure: exp,
+  timeline: exp,
   on_data_update: function(data) {
     console.log('Just added new data. The contents of the data are: '+JSON.stringify(data));
   }
@@ -21,14 +21,14 @@ jsPsych.init({
 
 ## on_finish (trial)
 
-The `on_finish` callback can be added to any trial in the declaration of the trial block. The callback will trigger whenever a trial in that block ends. The callback function will be passed a single argument, containing the data object from the trial.
+The `on_finish` callback can be added to any trial. The callback will trigger whenever the trial ends. The callback function will be passed a single argument, containing the data object from the trial.
 
 #### Sample use
 ```javascript
-var block = {
+var trial = {
   type: 'single-stim',
-  stimuli: ['imgA.png', 'imgB.png'],
-  on_finish: function(data) { 
+  stimulus: 'imgA.png',
+  on_finish: function(data) {
     console.log('The trial just ended.');
     console.log(JSON.stringify(data));
   }
@@ -43,7 +43,7 @@ The `on_finish` callback can be declared in the `jsPsych.init` method. The callb
 #### Sample use
 ```javascript
 jsPsych.init({
-  experiment_structure: exp,
+  timeline: exp,
   on_finish: function(data) {
     console.log('The experiment is over! Here is all the data: '+JSON.stringify(data));
   }
@@ -54,12 +54,12 @@ jsPsych.init({
 
 ## on_trial_finish
 
-The `on_trial_finish` callback can be declared in the `jsPsych.init` method. The callback will trigger at the end of every trial in the experiment. If you want a callback to trigger only for the end of certain trials, use the [`on_finish`](#onfinishtrial) callback. There are no parameters passed to the callback function.
+The `on_trial_finish` callback can be declared in the `jsPsych.init` method. The callback will trigger at the end of every trial in the experiment. If you want a callback to trigger only for the end of certain trials, use the [`on_finish`](#onfinishtrial) callback on the trial object. There are no parameters passed to the callback function.
 
 #### Sample use
 ```javascript
 jsPsych.init({
-  experiment_structure: exp,
+  timeline: exp,
   on_trial_finish: function() {
     console.log('A trial just ended.');
   }
@@ -74,7 +74,7 @@ The `on_trial_start` callback can be declared in the `jsPsych.init` method. The 
 #### Sample use
 ```javascript
 jsPsych.init({
-  experiment_structure: exp,
+  timeline: exp,
   on_trial_start: function() {
     console.log('A trial just started.');
   }

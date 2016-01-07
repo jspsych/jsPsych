@@ -1,14 +1,14 @@
 # Data Storage
 
-There are two very different kinds of data storage: data stored in *memory* and data stored *permanently*. Data stored permanently exists even after the browser running jsPsych closes, typically in a database or in a file on a web server. Data stored in memory exists only as long the browser window running jsPsych is open.
+There are two very different kinds of data storage: data stored in **memory** and data stored **permanently**. Data stored permanently exists even after the browser running jsPsych closes, typically in a database or in a file on a web server. Data stored in memory exists only as long the browser window running jsPsych is open.
 
-jsPsych has many features for interacting with data stored in *memory*, but relatively few for *permanent* data storage. This is a deliberate choice, mainly because there are dozens of ways that data could be stored permanently and this strategy avoids locking in one particular solution. However, saving data permanently is obviously a crucial component of any experiment, and this page contains a few suggestions on how to accomplish permanent data storage.
+jsPsych has many features for interacting with data stored in memory, but relatively few for permanent data storage. This is a deliberate choice, mainly because there are dozens of ways that data could be stored permanently and this strategy avoids locking in one particular solution. However, saving data permanently is obviously a crucial component of any experiment, and the second half of this page contains a few suggestions on how to accomplish permanent data storage.
 
 ## Storing data in jsPsych's data structure
 
 jsPsych has a centralized array of data that is filled in as the experiment runs. Each trial adds an entry to this array, and you can access the content of the array with various functions, including `jsPsych.data.getData()`, which returns the entire contents of jsPsych's data array.
 
-In many cases, data collection will essentially be automatic and hidden. Plugins save data without any specific intervention, so it is not uncommon to have the only interaction with the data be at the end of the experiment when it is time to save it in a more permanent manner (see sections below about how to do this). However, there are some situations in which you may want to interact with the data; in particular, you may want to store additional data that the plugins are not recording, like a subject identifier or condition assignment. You may also want to add data on a trial by trial basis; for example, in a Stroop paradigm you would want to label which trials are congruent and which are incongruent. These scenarios are explored below.
+In many cases, data collection will be automatic and hidden. Plugins save data on their own, so it is not uncommon to have the only interaction with the data be at the end of the experiment when it is time to save it in a more permanent manner (see sections below about how to do this). However, there are some situations in which you may want to interact with the data; in particular, you may want to store additional data that the plugins are not recording, like a subject identifier or condition assignment. You may also want to add data on a trial by trial basis. For example, in a Stroop paradigm you would want to label which trials are congruent and which are incongruent. These scenarios are explored below.
 
 ### Adding data to all trials
 
@@ -19,7 +19,7 @@ Often it is useful to add a piece of data to *all* of the trials in the experime
 var subject_id = Math.floor(Math.random()*100000);
 
 // pick a random condition for the subject at the start of the experiment
-var condition_assignment = jsPsych.randomization.sample(['conditionA', 'conditionB', 'conditionC'],1);
+var condition_assignment = jsPsych.randomization.sample(['conditionA', 'conditionB', 'conditionC'],1)[0];
 
 // record the condition assignment in the jsPsych data
 // this adds a property called 'subject' and a property called 'condition' to every trial
@@ -29,59 +29,34 @@ jsPsych.data.addProperties({
 });
 ```
 
-### Adding data to a particular trial or block
+### Adding data to a particular trial or set of trials
 
 Data can be added to a particular trial by setting the `data` parameter for the trial. The `data` parameter is an object of key-value pairs, and each pair is added to the data for that trial.
 
 ```
 var trial = {
   type: 'single-stim',
-  stimuli: ['imgA.jpg'],
+  stimulus: 'imgA.jpg',
   data: { image_type: 'A' }
 }
 ```
 
-If you have multiple trials defined in the same block, then the data is added to each trial:
+Data declared in this way is also saved in the trials on any nested timelines:
 
 ```
 var block = {
   type: 'single-stim',
-  stimuli: ['imgA1.jpg', 'imgA2.jpg', 'imgA3.jpg'],
-  data: { image_type: 'A' }
-}
-```
-
-However, if you specify an array for the data parameter that has the same length as the number of trials in the block, then the data is recorded individually for each trial:
-
-```
-var block = {
-  type: 'single-stim',
-  stimuli: ['imgA1.jpg', 'imgB1.jpg', 'imgC1.jpg'],
-  data: [{ image_type: 'A' }, { image_type: 'B' }, { image_type: 'C' }]
-}
-```
-
-### Adding data to a chunk of trials
-
-Data can be added at the chunk level as well. This can be useful to indicate different portions of the experiment, such as a training and test.
-
-```
-var training_chunk = {
-  chunk_type: 'linear',
-  timeline: [training_trials],
-  data: {phase: 'training'}
-}
-
-var test_chunk = {
-  chunk_type: 'linear',
-  timeline: [test_trials],
-  data: {phase: 'test'}
+  data: { image_type: 'A' },
+  timeline: [
+    {stimulus: 'imgA1.jpg'},
+    {stimulus: 'imgA2.jpg'}
+  ]
 }
 ```
 
 ## Storing data permanently as a file
 
-This is one of the simplest methods for saving jsPsych data on the server that is running the experiment. It involves a short PHP script and a few lines of JavaScript code. This method will save each participant's data as a CSV file on the server. **This method will only work if you are running on a web server with PHP installed, or a local server with PHP (e.g. [XAMPP](https://www.apachefriends.org/index.html)).**
+This is one of the simplest methods for saving jsPsych data on the server that is running the experiment. It involves a short PHP script and a few lines of JavaScript code. This method will save each participant's data as a CSV file on the server. **This method will only work if you are running on a web server with PHP installed, or a local server with PHP (e.g., [XAMPP](https://www.apachefriends.org/index.html)).**
 
 This method uses a simple PHP script to write files to the server:
 
@@ -170,19 +145,19 @@ var_dump($trials);
 // for each element in the trials array, insert the row into the mysql table
 for($i=0;$i<count($trials);$i++)
 {
-    $to_insert = (array)($trials[$i]);
-    // add any optional, static parameters that got passed in (like subject id or condition)
-    for($j=0;$j<count($opt_data_names);$j++){
-        $to_insert[$opt_data_names[$j]] = $opt_data[$opt_data_names[$j]];
-    }
-    $result = mysql_insert($tab, $to_insert);
+	$to_insert = (array)($trials[$i]);
+	// add any optional, static parameters that got passed in (like subject id or condition)
+	for($j=0;$j<count($opt_data_names);$j++){
+		$to_insert[$opt_data_names[$j]] = $opt_data[$opt_data_names[$j]];
+	}
+	$result = mysql_insert($tab, $to_insert);
 }
 
 // confirm the results
 if (!$result) {
-    die('Invalid query: ' . mysql_error());
+	die('Invalid query: ' . mysql_error());
 } else {
-    print "successful insert!";
+	print "successful insert!";
 }
 
 ?>
