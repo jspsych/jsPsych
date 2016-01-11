@@ -4,7 +4,7 @@ You can run your experiment in fullscreen mode by setting the `fullscreen` param
 
 ```javascript
 jsPsych.init({
-  experiment_structure: timeline,
+  timeline: timeline,
   fullscreen: true
 });
 ```
