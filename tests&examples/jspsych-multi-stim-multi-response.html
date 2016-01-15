@@ -24,7 +24,7 @@
       [89, 78]
     ], // Y or N
     timing_stim: [1000, -1],
-    prompt: '<p class="center-content">Did the face get happier? Y or N.</p>'
+    prompt: '<p class="center-content">Is the second person happier than the first? Y or N.</p>'
   }
 
   var trial_2 = {
@@ -38,15 +38,13 @@
     prompt: '<p class="center-content">Rate the happiness of the person on a scale of 1-5, and press Y or N to indicate if you have seen the face before.</p>'
   }
 
-  function start() {
-    jsPsych.init({
-      display_element: $('#jspsych-target'),
-      timeline: [trial_1, trial_2],
-      on_finish: function() {
-        jsPsych.data.displayData();
-      }
-    });
-  }
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    timeline: [trial_1, trial_2],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
 </script>
 
 </html>
