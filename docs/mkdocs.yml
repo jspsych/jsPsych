@@ -35,6 +35,7 @@ pages:
   - 'Overview': 'plugins/overview.md'
   - 'Creating a New Plugin': 'plugins/creating-a-plugin.md'
   - 'jspsych-animation': 'plugins/jspsych-animation.md'
+  - 'jspsych-button-response': 'plugins/jspsych-button-response.md'
   - 'jspsych-call-function': 'plugins/jspsych-call-function.md'
   - 'jspsych-categorize': 'plugins/jspsych-categorize.md'
   - 'jspsych-categorize-animation': 'plugins/jspsych-categorize-animation.md'
