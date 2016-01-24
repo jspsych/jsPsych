@@ -20,7 +20,7 @@ For questions about using the library, please post to the [jsPsych e-mail list](
 Contact
 -------
 
-jsPsych was created by Josh de Leeuw ([@jodeleeu](https://github.com/jodeleeuw)) at Indiana University.
+jsPsych was created by Josh de Leeuw ([@jodeleeuw](https://github.com/jodeleeuw)) at Indiana University.
 
 Citation
 --------
