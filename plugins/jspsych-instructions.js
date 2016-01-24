@@ -35,17 +35,26 @@ jsPsych.plugins.instructions = (function() {
     var last_page_update_time = start_time;
 
     function show_current_page() {
-      display_element.html(trial.pages[current_page]);
-
       if (trial.show_clickable_nav) {
 
         var nav_html = "<div class='jspsych-instructions-nav'>";
-        if (current_page != 0 && trial.allow_backward) {
-          nav_html += "<button id='jspsych-instructions-back' class='jspsych-btn'>&lt; Previous</button>";
+        if (current_page == trial.pages.length-1) {
+          nav_html += "<button id='jspsych-instructions-next'>End Instructions</button>"
+        } else {
+          nav_html += "<button id='jspsych-instructions-next'>Next</button>"
         }
-        nav_html += "<button id='jspsych-instructions-next' class='jspsych-btn'>Next &gt;</button></div>"
+        if (current_page != 0 && trial.allow_backward) {
+          nav_html += "<button id='jspsych-instructions-back'>Previous</button>";
+        }
+        
+        nav_html += "</div>"
 
-        display_element.append(nav_html);
+        // Place nav_html into the container div for the instruction page and display
+        if (trial.pages[current_page].slice(-6) == '</div>') {
+          display_element.html(trial.pages[current_page].slice(0,-6) + nav_html + '</div>')
+        } else {
+          display_element.html(trial.pages[current_page] + nav_html + '</div>')
+        }
 
         if (current_page != 0 && trial.allow_backward) {
           $('#jspsych-instructions-back').on('click', function() {
