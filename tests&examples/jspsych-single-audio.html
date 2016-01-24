@@ -19,7 +19,10 @@
 
   var block_1 = {
     type: 'single-audio',
-    stimulus: 'sound/sound.mp3'
+    timeline: [
+      {stimulus: 'sound/sound.mp3'},
+      {stimulus: 'sound/hammer.mp3'}
+    ]
   }
 
   jsPsych.init({

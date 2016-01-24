@@ -1452,23 +1452,13 @@ jsPsych.pluginAPI = (function() {
       return;
     }
 
-    for (var i = 0; i < files.length; i++) {
-      var bufferID = files[i];
-      if (typeof audio_buffers.bufferID !== 'undefined') {
-        n_loaded++;
-        loadfn(n_loaded);
-        if(n_loaded == files.length) {
-          finishfn();
-        }
-      }
-      audio_buffers[bufferID] = 'tmp';
-
+    function load_audio_file(source){
       var request = new XMLHttpRequest();
-      request.open('GET', bufferID, true);
+      request.open('GET', source, true);
       request.responseType = 'arraybuffer';
       request.onload = function() {
         context.decodeAudioData(request.response, function(buffer) {
-          audio_buffers[bufferID] = buffer;
+          audio_buffers[source] = buffer;
           n_loaded++;
           loadfn(n_loaded);
           if(n_loaded == files.length) {
@@ -1479,6 +1469,19 @@ jsPsych.pluginAPI = (function() {
         });
       }
       request.send();
+    }
+
+    for (var i = 0; i < files.length; i++) {
+      var bufferID = files[i];
+      if (typeof audio_buffers[bufferID] !== 'undefined') {
+        n_loaded++;
+        loadfn(n_loaded);
+        if(n_loaded == files.length) {
+          finishfn();
+        }
+      }
+      audio_buffers[bufferID] = 'tmp';
+      load_audio_file(bufferID);
     }
 
   }
