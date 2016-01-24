@@ -27,7 +27,7 @@ jsPsych.plugins.text = (function() {
     display_element.html(trial.text);
 
     var after_response = function(info) {
-
+      clearTimeout(t1);
       display_element.html(''); // clear the display
 
       var trialdata = {
@@ -40,7 +40,7 @@ jsPsych.plugins.text = (function() {
     };
 
     var mouse_listener = function(e) {
-
+      clearTimeout(t1);
       var rt = (new Date()).getTime() - start_time;
 
       display_element.unbind('click', mouse_listener);
