@@ -587,11 +587,6 @@ var jsPsych = (function() {
     $('#jspsych-progressbar-inner').css('width', progress.percent_complete + "%");
   }
 
-  function preloadStimuli() {
-    // for now, this checks if there are any audio stimuli that need to be preloaded
-    // it could be extended to check if there are image files that need to be preloaded
-  }
-
   return core;
 })();
 
