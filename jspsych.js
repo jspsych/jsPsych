@@ -237,6 +237,7 @@ var jsPsych = (function() {
         delete node_data.timeline;
         delete node_data.conditional_function;
         delete node_data.loop_function;
+        delete node_data.randomize_order;
 
         // create a TimelineNode for each element in the timeline
         for (var i = 0; i < parameters.timeline.length; i++) {

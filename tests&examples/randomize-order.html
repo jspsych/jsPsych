@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-text.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  var first = {
+    type: 'text',
+    text: 'Welcome. Press any key to begin.'
+  }
+
+  var overall = {
+    type: 'text',
+    randomize_order: true,
+    timeline: [
+      {timeline:[
+        {text: 'a'},
+        {text: 'b'}
+      ]},
+      {timeline:[
+        {text: '1'},
+        {text: '2'}
+      ]}
+    ]
+  }
+
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    timeline: [first,overall],
+    default_iti: 0,
+    on_finish: function() { jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>
