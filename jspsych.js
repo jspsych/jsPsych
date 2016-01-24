@@ -69,8 +69,12 @@ var jsPsych = (function() {
     opts = $.extend({}, defaults, options);
 
     // set target
-    DOM_target = opts.display_element;
-
+    if (typeof window[opts.display_element] == 'function') {
+      DOM_target = window[opts.display_element]()
+    } else {
+      DOM_target = opts.display_element;
+    }    
+    
     // add CSS class to DOM_target
     DOM_target.addClass('jspsych-display-element');
 
@@ -506,7 +510,7 @@ var jsPsych = (function() {
       if (keyboardNotAllowed) {
         go();
       } else {
-        DOM_target.append('<div style=""><p>The experiment will launch in fullscreen mode when you click the button below.</p><button id="jspsych-fullscreen-btn" class="jspsych-btn">Launch Experiment</button></div>');
+        DOM_target.append('<div class = jspsych-instructions-nav><p>The experiment will launch in fullscreen mode when you click the button below.</p><button id="jspsych-fullscreen-btn" class="jspsych-btn">Launch Experiment</button></div>');
         $('#jspsych-fullscreen-btn').on('click', function() {
           var element = document.documentElement;
           if (element.requestFullscreen) {
