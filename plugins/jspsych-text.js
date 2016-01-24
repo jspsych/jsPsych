@@ -68,13 +68,12 @@ jsPsych.plugins.text = (function() {
 
     // end trial if time limit is set
     if (trial.timing_response > 0) {
-      var t1 = setTimeout(function() {
+      setTimeout(function() {
         after_response({
           key: -1,
           rt: -1
         });
       }, trial.timing_response);
-      setTimeoutHandlers.push(t1);
     }
 
   };
