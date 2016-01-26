@@ -259,10 +259,10 @@ plugin.trial = function(display_element, trial) {
 ```
 
 ---
-## jsPsych.pluginAPI.preloadImages
+## jsPsych.pluginAPI.preloadAudioFiles
 
 ```
-jsPsych.pluginAPI.preloadImages(images, callback_complete, callback_load)
+jsPsych.pluginAPI.preloadAudioFiles(files, callback_complete, callback_load)
 ```
 
 ### Parameters
