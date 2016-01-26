@@ -19,7 +19,7 @@
   var circle_size = 20; // radius in pixels
   var configuration = [0,1,0,0,1,1,0,0,1,1,0,0,1,0,0,0,1,0,0,1]; // see definition above
 
-  var stimulus = jsPsych.palmer.generate_stimulus(square_size, grid_spacing, circle_size, configuration);
+  var stimulus = jsPsych.plugins.palmer.generate_stimulus(square_size, grid_spacing, circle_size, configuration);
 
   // show stimulus using single-stim plugin
   var stim_block = {
