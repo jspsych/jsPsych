@@ -15,6 +15,7 @@ pages:
 - Tutorials:
   - 'The Basics: Hello World': 'tutorials/hello-world.md'
   - 'Demo Experiment: Simple Reaction Time Task': 'tutorials/rt-task.md'
+  - 'Flanker Task': 'tutorials/flanker.md'
 - Features:
   - 'Creating an Experiment: The Timeline': 'features/timeline.md'
   - 'Data Storage': 'features/data.md'
