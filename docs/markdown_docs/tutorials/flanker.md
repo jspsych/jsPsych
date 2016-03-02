@@ -8,7 +8,7 @@ feedback on the participant's performance at the end of the experiment.
 ##Part 1: Setting up the HTML file
 
 As always, we need to create an HTML file which references the Javascript plugins and CSS required. For this experiment,
-we will only use the [jspsych-text](../plugins/jspsych-text.md) and [jspsych-single-stim](../plugins/jspsych-single-stim.md)
+we will only use the [jspsych-text](https://github.com/jodeleeuw/jsPsych/blob/master/plugins/jspsych-text.js) and [jspsych-single-stim](https://github.com/jodeleeuw/jsPsych/blob/master/plugins/jspsych-single-stim.js)
 plugins which can be specified in the `<head>` of the file.
 
 
