@@ -1,7 +1,7 @@
 The following people have contributed to the development of jsPsych by writing code, documentation, and/or suggesting major improvements (in alphabetical order):
 * Jason Carpenter
-* Jana Klaus - https://github.com/janakl4us
 * Josh de Leeuw - https://github.com/jodeleeuw
+* Jana Klaus - https://github.com/janakl4us
 * Jonas Lambers
 * Shane Martin - https://github.com/shamrt
 * Adrian Oesch - https://github.com/adrianoesch
