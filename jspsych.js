@@ -967,7 +967,12 @@ jsPsych.randomization = (function() {
     var allsamples = [];
     for (var i = 0; i < array.length; i++) {
       for (var j = 0; j < repetitions[i]; j++) {
-        allsamples.push(array[i]);
+        if(array[i] == null || typeof array[i] != 'object'){
+          allsamples.push(array[i]);
+        } else {
+          allsamples.push($.extend(true, {}, array[i]));
+        }
+
       }
     }
 

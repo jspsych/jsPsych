@@ -26,5 +26,12 @@
   var no_neighbor_repeats = jsPsych.randomization.shuffleNoRepeats(repeated_list);
   console.log(JSON.stringify(no_neighbor_repeats));
 
+  // check to make sure everything is deep copy
+  var arr = [];
+  for(i=0;i<5;i++){arr.push({i:i})};
+  var arr = jsPsych.randomization.repeat(arr,4);
+  for(j=0;j<arr.length;j++){arr[j].j=j};
+  console.log(JSON.stringify(arr))
+
   </script>
 </html>
