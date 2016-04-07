@@ -208,69 +208,13 @@ var jsPsych = (function() {
     var progress = {
       current_location: -1, // where on the timeline (which timelinenode)
       current_variable_set: 0, // which set of variables to use from timeline_variables
-      current_repetition: -1, // how many times through the variable set on this run of the node
+      current_repetition: 0, // how many times through the variable set on this run of the node
       current_iteration: 0, // how many times this node has been revisited
       done: false
     }
 
     // reference to self
     var self = this;
-
-    // constructor
-    var _construct = function() {
-
-      // store a link to the parent of this node
-      parent_node = parent;
-
-      // create the ID for this node
-      if (typeof parent == 'undefined') {
-        relative_id = 0;
-      } else {
-        relative_id = relativeID;
-      }
-
-      // check if there is a timeline parameter
-      // if there is, then this node has its own timeline
-      if (typeof parameters.timeline !== 'undefined') {
-
-        // create timeline properties
-        timeline_parameters = {
-          timeline: [],
-          loop_function: parameters.loop_function,
-          conditional_function: parameters.conditional_function,
-          randomize_order: typeof parameters.randomize_order == 'undefined' ? false : parameters.randomize_order,
-          repetitions: typeof parameters.repetitions == 'undefined' ? 1 : parameters.repetitions,
-          timeline_variables: typeof parameters.timeline_variables == 'undefined' ? [{}] : parameters.timeline_variables
-        };
-
-        // extract all of the node level data and parameters
-        var node_data = $.extend(true, {}, parameters);
-        delete node_data.timeline;
-        delete node_data.conditional_function;
-        delete node_data.loop_function;
-        delete node_data.randomize_order;
-        delete node_data.repetitions;
-        delete node_data.timeline_variables;
-
-        // create a TimelineNode for each element in the timeline
-        for (var i = 0; i < parameters.timeline.length; i++) {
-          timeline_parameters.timeline.push(new TimelineNode($.extend(true, {}, node_data, parameters.timeline[i]), self, i));
-        }
-
-      }
-      // if there is no timeline parameter, then this node is a trial node
-      else {
-        // check to see if a valid trial type is defined
-        var trial_type = parameters.type;
-        if (typeof trial_type == 'undefined') {
-          console.error('Trial level node is missing the "type" parameter. The parameters for the node are: ' + JSON.stringify(parameters));
-        } else if (typeof jsPsych.plugins[trial_type] == 'undefined') {
-          console.error('No plugin loaded for trials of type "' + trial_type + '"');
-        }
-        // create a deep copy of the parameters for the trial
-        trial_parameters = $.extend(true, {}, parameters);
-      }
-    }();
 
     // recursively get the next trial to run.
     // if this node is a leaf (trial), then return the trial.
@@ -289,33 +233,6 @@ var jsPsych = (function() {
       }
     }
 
-    // start this timeline
-    // moves it from 'waiting' status (progress.current_location == -1)
-    // to 'active' status (progress.current_location > -1)
-    // and performs any sampling/randomization needed
-    this.start = function() {
-
-      // check if there is a conditional function
-      if(typeof timeline_parameters != 'undefined'){
-        if(typeof timeline_parameters.conditional_function !== 'undefined'){
-          var conditional_result = timeline_parameters.conditional_function();
-          if(conditional_result == false){
-            return false;
-          }
-        }
-      }
-
-      // set up order for progressing through the timeline variables
-      if(typeof timeline_parameters !== 'undefined') {
-        this.nextRepetiton();
-      }
-
-      // set the location to the head of the timeline
-      progress.current_location = 0;
-
-      return true;
-    }
-
     this.markCurrentTrialComplete = function() {
       if(typeof timeline_parameters == 'undefined'){
         progress.done = true;
@@ -324,9 +241,19 @@ var jsPsych = (function() {
       }
     }
 
+    this.nextRepetiton = function() {
+      this.setTimelineVariablesOrder();
+      progress.current_location = -1;
+      progress.current_variable_set = 0;
+      progress.current_repetition++;
+      for (var i = 0; i < timeline_parameters.timeline.length; i++) {
+        timeline_parameters.timeline[i].reset();
+      }
+    }
+
     // set the order for going through the timeline variables array
     // TODO: this is where all the sampling options can be implemented
-    this.nextRepetiton = function() {
+    this.setTimelineVariablesOrder = function() {
       var order = [];
       for(var i=0; i<timeline_parameters.timeline_variables.length; i++){
         order.push(i);
@@ -337,15 +264,15 @@ var jsPsych = (function() {
       }
 
       progress.order = order;
-
-      this.reset();
-      progress.current_repetition++;
     }
 
     // next variable set
     this.nextSet = function() {
-      this.reset();
+      progress.current_location = -1;
       progress.current_variable_set++;
+      for (var i = 0; i < timeline_parameters.timeline.length; i++) {
+        timeline_parameters.timeline[i].reset();
+      }
     }
 
     // update the current trial node to be completed
@@ -353,128 +280,94 @@ var jsPsych = (function() {
     // returns false otherwise
     this.advance = function() {
 
-      // first check to see if this node is done
-      if(progress.done){
-        return true;
-      }
-
-      // if this node has a timeline, propogate down to the current trial.
-      if (typeof timeline_parameters !== 'undefined'){
-
-        // first, check completion of the current location on this timeline.
-        var location_complete = timeline_parameters.timeline[progress.current_location].checkCompletion();
-
-        // if it returns true, then the node at the current location is complete
-        // and this timeline can move to the next location.
-        if (location_complete) {
-
-          // we need to advance this node.
-          progress.current_location++;
-
-          // as long as we haven't reached the end of the timline, keep searching for the next node to run
-          var have_node_to_run = false;
-          while(progress.current_location < timeline.length && have_node_to_run == false){
-
-            // check to see if the node currently pointed at is done
-            var target_complete = timeline_parameters.timeline[progress.current_location].checkCompletion();
-            if(!target_complete){
-              have_node_to_run = true;
-            } else {
-              progress.current_location++;
-            }
-
-          }
-
-          // if we've reached the end of the timeline, there are a few steps to see what to do next...
-          if (progress.current_location >= timeline_parameters.timeline.length) {
-
-            // first, check the timeline_variables to see if we need to loop through again
-            if(progress.current_variable_set < progress.order.length - 1){
-              this.nextSet();
-              return parent_node.advance();
-            }
-
-            // if we're all done with the timeline_variables, then check to see if there are more repetitions
-            else if(progress.current_repetition < timeline_parameters.repetitions - 1){
-              this.nextRepetiton();
-              return parent_node.advance();
-            }
-
-            // finally, if we're all done with the repetitions, check if there is a loop function.
-            else if (typeof timeline_parameters.loop_function !== 'undefined') {
-              if (timeline_parameters.loop_function(this.generatedData())) {
-                this.reset(); // TODO: fix this probably...
-                return parent_node.advance();
-              } else {
-                done_flag = true;
-                return true;
-              }
-            } else {
-              done_flag = true;
-              return true;
-            }
-          }
-
-          // otherwise we should have a node to run
-          else {
-            return false;
-          }
-        }
-
-        // current location not complete
-        // call advance on the current location
-        else {
-          return timeline_parameters.timeline[progress.current_location].advance();
-        }
-      }
-
-      // if we get here, then this is a trial node, and the node is not complete
-      else {
-        return false;
-      }
-
-    }
-
-    // return true if the node is completely done (no more possible trials)
-    // otherwise, return false
-    this.checkCompletion = function() {
-
-      // if the done flag is true, the node is complete no matter what.
+      // first check to see if done
       if (progress.done) {
         return true;
       }
 
-      // when progress.done is NOT true...
-      else {
-
-        // if there is no timeline, then the node cannot be complete yet
-        // because trial level nodes will always have progress.done == true
-        // after they are complete
-        if(typeof timeline_parameters == 'undefined'){
-          return false;
-        }
-
-        // if there is a timeline...
-        else {
-          // check to see if the node has not started yet
-          if (progress.current_location == -1){
-            // try to start the node
-            // if this returns false, then the node is not going to run.
-            var startable = this.start();
-            if(startable){
-              // advance to the first valid trial in the node
-              var complete = this.advance();
+      // if node has not started yet (progress.current_location == -1),
+      // then try to start the node.
+      if (progress.current_location == -1) {
+        // check for conditonal function on nodes with timelines
+        if (typeof timeline_parameters != 'undefined') {
+          if (typeof timeline_parameters.conditional_function !== 'undefined') {
+            var conditional_result = timeline_parameters.conditional_function();
+            // if the conditional_function() returns false, then the timeline
+            // doesn't run and is marked as complete.
+            if (conditional_result == false) {
+              progress.done = true;
+              return true;
             }
-            var finished = !startable || complete;
-            return finished;
+            // if the conditonal_function() returns true, then the node can start
+            else {
+              progress.current_location = 0;
+            }
           }
-          // if we get here, then there is a timeline with nodes that are eligible to run.
+          // if there is no conditional_function, then the node can start
           else {
-            return false;
+            progress.current_location = 0;
           }
         }
+        // if the node does not have a timeline, then it can start
+        progress.current_location = 0;
+        // call advance again on this node now that it is pointing to a new location
+        return this.advance();
       }
 
+      // if this node has a timeline, propogate down to the current trial.
+      if (typeof timeline_parameters !== 'undefined') {
+
+        var have_node_to_run = false;
+        // keep incrementing the location in the timeline until one of the nodes reached is incomplete
+        while (progress.current_location < timeline_parameters.timeline.length && have_node_to_run == false) {
+
+          // check to see if the node currently pointed at is done
+          var target_complete = timeline_parameters.timeline[progress.current_location].advance();
+          if (!target_complete) {
+            have_node_to_run = true;
+            return false;
+          } else {
+            progress.current_location++;
+          }
+
+        }
+
+        // if we've reached the end of the timeline (which, if the code is here, we have)
+        // there are a few steps to see what to do next...
+
+        // first, check the timeline_variables to see if we need to loop through again
+        // with a new set of variables
+        if (progress.current_variable_set < progress.order.length - 1) {
+          // reset the progress of the node to be with the new set
+          this.nextSet();
+          // then try to advance this node again.
+          return this.advance();
+        }
+
+        // if we're all done with the timeline_variables, then check to see if there are more repetitions
+        else if (progress.current_repetition < timeline_parameters.repetitions - 1) {
+          this.nextRepetiton();
+          return this.advance();
+        }
+
+        // if we're all done with the repetitions, check if there is a loop function.
+        else if (typeof timeline_parameters.loop_function !== 'undefined') {
+          if (timeline_parameters.loop_function(this.generatedData())) {
+            this.reset(); // TODO: fix this probably...
+            return parent_node.advance();
+          } else {
+            progress.done = true;
+            return true;
+          }
+        }
+
+        // no more loops on this timeline, we're done!
+        else {
+          progress.done = true;
+          return true;
+        }
+
+      }
     }
 
     // check the status of the done flag
@@ -542,22 +435,25 @@ var jsPsych = (function() {
       return (completed_trials / total_trials * 100)
     }
 
-    // reset the location pointer to the start of the timeline, and reset all the
-    // child nodes on the timeline.
+    // resets the node and all subnodes to original state
+    // but increments the current_iteration counter
     this.reset = function() {
       progress.current_location = -1;
-      done_flag = false;
+      progress.current_repetition = 0;
+      progress.current_variable_set = 0;
+      progress.current_iteration++;
+      progress.done = false;
       if (typeof timeline_parameters != 'undefined') {
         for (var i = 0; i < timeline_parameters.timeline.length; i++) {
           timeline_parameters.timeline[i].reset();
         }
       }
-      //progress.current_iteration++;
+
     }
 
     // mark this node as finished
     this.end = function() {
-      done_flag = true;
+      progress.done = true;
     }
 
     // recursively end whatever sub-node is running the current trial
@@ -614,6 +510,65 @@ var jsPsych = (function() {
         return trials;
       }
     }
+
+    // constructor
+    var _construct = function() {
+
+      // store a link to the parent of this node
+      parent_node = parent;
+
+      // create the ID for this node
+      if (typeof parent == 'undefined') {
+        relative_id = 0;
+      } else {
+        relative_id = relativeID;
+      }
+
+      // check if there is a timeline parameter
+      // if there is, then this node has its own timeline
+      if (typeof parameters.timeline !== 'undefined') {
+
+        // create timeline properties
+        timeline_parameters = {
+          timeline: [],
+          loop_function: parameters.loop_function,
+          conditional_function: parameters.conditional_function,
+          randomize_order: typeof parameters.randomize_order == 'undefined' ? false : parameters.randomize_order,
+          repetitions: typeof parameters.repetitions == 'undefined' ? 1 : parameters.repetitions,
+          timeline_variables: typeof parameters.timeline_variables == 'undefined' ? [{}] : parameters.timeline_variables
+        };
+
+        self.setTimelineVariablesOrder();
+
+        // extract all of the node level data and parameters
+        var node_data = $.extend(true, {}, parameters);
+        delete node_data.timeline;
+        delete node_data.conditional_function;
+        delete node_data.loop_function;
+        delete node_data.randomize_order;
+        delete node_data.repetitions;
+        delete node_data.timeline_variables;
+
+        // create a TimelineNode for each element in the timeline
+        for (var i = 0; i < parameters.timeline.length; i++) {
+          timeline_parameters.timeline.push(new TimelineNode($.extend(true, {}, node_data, parameters.timeline[i]), self, i));
+        }
+
+      }
+      // if there is no timeline parameter, then this node is a trial node
+      else {
+        // check to see if a valid trial type is defined
+        var trial_type = parameters.type;
+        if (typeof trial_type == 'undefined') {
+          console.error('Trial level node is missing the "type" parameter. The parameters for the node are: ' + JSON.stringify(parameters));
+        } else if (typeof jsPsych.plugins[trial_type] == 'undefined') {
+          console.error('No plugin loaded for trials of type "' + trial_type + '"');
+        }
+        // create a deep copy of the parameters for the trial
+        trial_parameters = $.extend(true, {}, parameters);
+      }
+
+    }();
   }
 
   function startExperiment() {
@@ -658,7 +613,6 @@ var jsPsych = (function() {
       exp_start_time = new Date();
 
       // begin!
-      timeline.start();
       timeline.advance();
       doTrial(timeline.trial());
     }
