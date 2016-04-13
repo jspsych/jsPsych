@@ -679,6 +679,9 @@ jsPsych.data = (function() {
   // data properties for all trials
   var dataProperties = {};
 
+  // cache the query_string
+  var query_string;
+
   module.getData = function() {
     return $.extend(true, [], allData); // deep clone
   };
@@ -831,10 +834,16 @@ jsPsych.data = (function() {
   };
 
   module.urlVariables = function() {
+    if(typeof query_string == 'undefined'){
+      query_string = getQueryString();
+    }
     return query_string;
   }
 
   module.getURLVariable = function(whichvar){
+    if(typeof query_string == 'undefined'){
+      query_string = getQueryString();
+    }
     return query_string[whichvar];
   }
   // private function to save text file on local drive
@@ -909,10 +918,11 @@ jsPsych.data = (function() {
     return result;
   }
 
-  // this function is from StackOverflow:
+  // this function is modified from StackOverflow:
   // http://stackoverflow.com/posts/3855394
 
-  var query_string = (function(a) {
+  function getQueryString() {
+    var a = window.location.search.substr(1).split('&');
     if (a == "") return {};
     var b = {};
     for (var i = 0; i < a.length; ++i)
@@ -924,7 +934,7 @@ jsPsych.data = (function() {
             b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
     }
     return b;
-})(window.location.search.substr(1).split('&'));
+  }
 
   return module;
 
