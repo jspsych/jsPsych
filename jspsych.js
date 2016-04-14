@@ -495,16 +495,16 @@ var jsPsych = (function() {
 
     // get all the trials of a particular type
     this.trialsOfType = function(type) {
-      if (timeline.length == 0) {
-        if (trial_data.type == type) {
-          return trial_data;
+      if (typeof timeline_parameters == 'undefined'){
+        if (trial_parameters.type == type) {
+          return trial_parameters;
         } else {
           return [];
         }
       } else {
         var trials = [];
-        for (var i = 0; i < timeline.length; i++) {
-          var t = timeline[i].trialsOfType(type);
+        for (var i = 0; i < timeline_parameters.timeline.length; i++) {
+          var t = timeline_parameters.timeline[i].trialsOfType(type);
           trials = trials.concat(t);
         }
         return trials;
@@ -1508,12 +1508,12 @@ jsPsych.pluginAPI = (function() {
   // audio //
 
   // temporary patch for Safari
-  if (window.hasOwnProperty('webkitAudioContext') && !window.hasOwnProperty('AudioContext')) {
+  if (typeof window !== 'undefined' && window.hasOwnProperty('webkitAudioContext') && !window.hasOwnProperty('AudioContext')) {
     window.AudioContext = webkitAudioContext;
   }
   // end patch
 
-  var context = (typeof window.AudioContext !== 'undefined') ? new AudioContext() : null;
+  var context = (typeof window !== 'undefined' && typeof window.AudioContext !== 'undefined') ? new AudioContext() : null;
   var audio_buffers = [];
 
   module.getAudioBuffer = function(audioID) {
