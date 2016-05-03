@@ -246,8 +246,7 @@ timeline.push(blue_trial, orange_trial);
           "<p class='small'><strong>Press the F key</strong></p></div>" +
           "<div class='right center-content'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Do not press a key</strong></p></div>" +
-          "<p>Press any key to begin.</p>",
-      timing_post_trial: 2000
+          "<p>Press any key to begin.</p>"
     };
 
     /* define test trials */
@@ -387,7 +386,7 @@ We need the `displayData` function to execute when the experiment ends. One way 
 
 ```javascript
 jsPsych.init({
-  experiment_structure: experiment,
+  timeline: timeline,
   on_finish: function() {
     jsPsych.data.displayData();
   }
@@ -520,7 +519,7 @@ var debrief_block = {
 We need to add the debrief block to the experiment definition array.
 
 ```javascript
-experiment.push(debrief_block);
+timeline.push(debrief_block);
 ```
 
 ## The final code
