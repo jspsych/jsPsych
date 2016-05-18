@@ -134,13 +134,13 @@ var jsPsych = (function() {
     // wait for iti
     if (typeof current_trial.timing_post_trial == 'undefined') {
       if (opts.default_iti > 0) {
-        setTimeout(next_trial, opts.default_iti);
+        setTimeout(nextTrial, opts.default_iti);
       } else {
         nextTrial();
       }
     } else {
       if (current_trial.timing_post_trial > 0) {
-        setTimeout(next_trial, current_trial.timing_post_trial);
+        setTimeout(nextTrial, current_trial.timing_post_trial);
       } else {
         nextTrial();
       }
@@ -175,7 +175,7 @@ var jsPsych = (function() {
   core.addNodeToEndOfTimeline = function(new_timeline, preload_callback){
     timeline.insert(new_timeline);
     if(opts.auto_preload){
-      jsPsych.pluginAPI.autoPreload(new_timeline, preload_callback);
+      jsPsych.pluginAPI.autoPreload(timeline, preload_callback);
     } else {
       preload_callback();
     }
