@@ -24,6 +24,9 @@ var jsPsych = (function() {
   var DOM_target;
   // time that the experiment began
   var exp_start_time;
+  // is the experiment paused?
+  var paused = false;
+  var waiting = false;
 
   //
   // public methods
@@ -133,37 +136,16 @@ var jsPsych = (function() {
       if (opts.default_iti > 0) {
         setTimeout(next_trial, opts.default_iti);
       } else {
-        next_trial();
+        nextTrial();
       }
     } else {
       if (current_trial.timing_post_trial > 0) {
         setTimeout(next_trial, current_trial.timing_post_trial);
       } else {
-        next_trial();
+        nextTrial();
       }
     }
-
-    function next_trial() {
-      global_trial_index++;
-
-      // advance timeline
-      timeline.markCurrentTrialComplete();
-      var complete = timeline.advance();
-
-      // update progress bar if shown
-      if (opts.show_progress_bar === true) {
-        updateProgressBar();
-      }
-
-      // check if experiment is over
-      if (complete) {
-        finishExperiment();
-        return;
-      }
-
-      doTrial(timeline.trial());
-    }
-  };
+  }
 
   core.endExperiment = function(end_message) {
     timeline.end_message = end_message;
@@ -190,8 +172,25 @@ var jsPsych = (function() {
     return timeline.timelineVariable(varname);
   }
 
-  core.addNodeToEndOfTimeline = function(new_timeline){
+  core.addNodeToEndOfTimeline = function(new_timeline, preload_callback){
     timeline.insert(new_timeline);
+    if(opts.auto_preload){
+      jsPsych.pluginAPI.autoPreload(new_timeline, preload_callback);
+    } else {
+      preload_callback();
+    }
+  }
+
+  core.pauseExperiment = function(){
+    paused = true;
+  }
+
+  core.resumeExperiment = function(){
+    paused = false;
+    if(waiting){
+      waiting = false;
+      nextTrial();
+    }
   }
 
   function TimelineNode(parameters, parent, relativeID) {
@@ -655,6 +654,33 @@ var jsPsych = (function() {
       document.webkitExitFullscreen();
     }
 
+  }
+
+  function nextTrial() {
+    // if experiment is paused, don't do anything.
+    if(paused) {
+      waiting = true;
+      return;
+    }
+
+    global_trial_index++;
+
+    // advance timeline
+    timeline.markCurrentTrialComplete();
+    var complete = timeline.advance();
+
+    // update progress bar if shown
+    if (opts.show_progress_bar === true) {
+      updateProgressBar();
+    }
+
+    // check if experiment is over
+    if (complete) {
+      finishExperiment();
+      return;
+    }
+
+    doTrial(timeline.trial());
   }
 
   function doTrial(trial) {
