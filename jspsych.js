@@ -190,6 +190,10 @@ var jsPsych = (function() {
     return timeline.timelineVariable(varname);
   }
 
+  core.addNodeToEndOfTimeline = function(new_timeline){
+    timeline.insert(new_timeline);
+  }
+
   function TimelineNode(parameters, parent, relativeID) {
 
     // a unique ID for this node, relative to the parent
@@ -203,6 +207,10 @@ var jsPsych = (function() {
 
     // parameters for nodes that contain timelines
     var timeline_parameters;
+
+    // stores trial information on a node that contains a timeline
+    // used for adding new trials
+    var node_trial_data;
 
     // track progress through the node
     var progress = {
@@ -511,6 +519,17 @@ var jsPsych = (function() {
       }
     }
 
+    // add new trials to end of this timeline
+    this.insert = function(parameters){
+      if(typeof timeline_parameters == 'undefined'){
+        console.error('Cannot add new trials to a trial-level node.');
+      } else {
+        timeline_parameters.timeline.push(
+          new TimelineNode($.extend(true, {}, node_trial_data, parameters), self, timeline_parameters.timeline.length)
+        );
+      }
+    }
+
     // constructor
     var _construct = function() {
 
@@ -548,6 +567,7 @@ var jsPsych = (function() {
         delete node_data.randomize_order;
         delete node_data.repetitions;
         delete node_data.timeline_variables;
+        node_trial_data = node_data; // store for later...
 
         // create a TimelineNode for each element in the timeline
         for (var i = 0; i < parameters.timeline.length; i++) {
