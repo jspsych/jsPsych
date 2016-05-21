@@ -615,7 +615,7 @@ var jsPsych = (function() {
           }
           $('#jspsych-fullscreen-btn').off('click');
           DOM_target.html('');
-          go();
+          setTimeout(go, 1000);
         });
       }
     } else {
