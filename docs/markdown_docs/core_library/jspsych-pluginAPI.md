@@ -292,7 +292,7 @@ The `callback_load` function can be used to indicate progress. See example below
 
 var sounds = ['file1.mp3', 'file2.mp3', 'file3.mp3'];
 
-jsPsych.preloadAudioFiles(sounds, function(){ startExperiment(); });
+jsPsych.pluginAPI.preloadAudioFiles(sounds, function(){ startExperiment(); });
 
 function startExperiment(){
     jsPsych.init({
@@ -307,7 +307,7 @@ function startExperiment(){
 ```javascript
 var sounds = ['file1.mp3', 'file2.mp3', 'file3.mp3'];
 
-jsPsych.preloadAudioFiles(sounds, function(){ startExperiment(); }, function(nLoaded) { updateLoadedCount(nLoaded); });
+jsPsych.pluginAPI.preloadAudioFiles(sounds, function(){ startExperiment(); }, function(nLoaded) { updateLoadedCount(nLoaded); });
 
 function updateLoadedCount(nLoaded){
 	var percentcomplete = nLoaded / sounds.length * 100;
@@ -359,7 +359,7 @@ The `callback_load` function can be used to indicate progress, if the number of 
 
 var images = ['img/file1.png', 'img/file2.png', 'img/file3.png'];
 
-jsPsych.preloadImages(images, function(){ startExperiment(); });
+jsPsych.pluginAPI.preloadImages(images, function(){ startExperiment(); });
 
 function startExperiment(){
     jsPsych.init({
@@ -374,7 +374,7 @@ function startExperiment(){
 ```javascript
 var images = ['img/file1.png', 'img/file2.png', 'img/file3.png'];
 
-jsPsych.preloadImages(images, function(){ startExperiment(); }, function(nLoaded) { updateLoadedCount(nLoaded); });
+jsPsych.pluginAPI.preloadImages(images, function(){ startExperiment(); }, function(nLoaded) { updateLoadedCount(nLoaded); });
 
 function updateLoadedCount(nLoaded){
 	var percentcomplete = nLoaded / images.length * 100;
