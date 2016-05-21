@@ -21,6 +21,7 @@ jsPsych.plugins["single-audio"] = (function() {
     // default parameters
     trial.choices = trial.choices || [];
     trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
+    trial.trial_ends_after_audio = (typeof trial.trial_ends_after_audio === 'undefined') ? false : trial.trial_ends_after_audio;
     // timing parameters
     trial.timing_response = trial.timing_response || -1; // if -1, then wait for response forever
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
@@ -40,6 +41,13 @@ jsPsych.plugins["single-audio"] = (function() {
     source.connect(context.destination);
     startTime = context.currentTime + 0.1;
     source.start(startTime);
+
+    // set up end event if trial needs it
+    if(trial.trial_ends_after_audio){
+      source.onended = function() {
+        end_trial();
+      }
+    }
 
     // show prompt if there is one
     if (trial.prompt !== "") {
