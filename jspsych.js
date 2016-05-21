@@ -1687,7 +1687,7 @@ jsPsych.pluginAPI = (function() {
       var media = preloads[i].media_type;
       var trials = timeline.trialsOfType(type);
       for (var j = 0; j < trials.length; j++) {
-        if (typeof trials[j][param] !== 'undefined') {
+        if (typeof trials[j][param] !== 'undefined' && typeof trials[j][param] !== 'function') {
           if (media == 'image') {
             images = images.concat(flatten([trials[j][param]]));
           } else if (media == 'audio') {
