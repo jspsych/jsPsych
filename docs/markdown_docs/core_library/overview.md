@@ -14,8 +14,10 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.finishTrial](jspsych-core.md#jspsychfinishtrial)
 * [jsPsych.getDisplayElement](jspsych-core.md#jspsychgetdisplayelement)
 * [jsPsych.init](jspsych-core.md#jspsychinit)
-* [jsPsych.initSettings](jspsych-core.md#jspsychinitSettings)
+* [jsPsych.initSettings](jspsych-core.md#jspsychinitsettings)
+* [jsPsych.pauseExperiment](jspsych-core.md#jspsychpauseexperiment)
 * [jsPsych.progress](jspsych-core.md#jspsychprogress)
+* [jsPsych.resumeExperiment](jspsych-core.md#jspsychresumeexperiment)
 * [jsPsych.startTime](jspsych-core.md#jspsychstarttime)
 * [jsPsych.totalTime](jspsych-core.md#jspsychtotaltime)
 
