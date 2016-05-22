@@ -1,6 +1,43 @@
 # The jsPsych core library
 
 ---
+## jsPsych.addNodeToEndOfTimeline
+```
+jsPsych.addNodeToEndOfTimeline(node_parameters)
+```
+
+### Parameters
+
+Parameter | Type | Description
+--------- | ---- | -----------
+node_parameters | object | An object defining a timeline. It must have, at a minimum, a `timeline` parameter with a valid timeline array as the value for that parameter.
+
+### Return value
+
+None.
+
+### Description
+
+Adds the timeline to the end of the experiment.
+
+### Example
+
+#### End the experiment if a particular response is given
+
+```javascript
+var trial = {
+  type: 'text',
+  text: 'This is a new trial.'
+}
+
+var new_timeline = {
+  timeline: [trial]
+}
+
+jsPsych.addNodeToEndOfTimeline(new_timeline)
+```
+
+---
 ## jsPsych.currentTimelineNodeID
 
 ```
