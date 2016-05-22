@@ -13,10 +13,12 @@ html {
   font-family: 'Open Sans', 'Arial', sans-serif;
   font-size: 18px;
   line-height: 1.6em;
+  height: 100%;
 }
 body {
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 p {
   clear: both;
@@ -89,6 +91,7 @@ input[type="text"] {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
 }
 
 .jspsych-content {

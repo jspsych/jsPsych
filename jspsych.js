@@ -72,11 +72,11 @@ var jsPsych = (function() {
     opts = $.extend({}, defaults, options);
 
     // set target
-    display_element.append('<div id="jspsych-content"></div>')
+    opts.display_element.append('<div id="jspsych-content"></div>')
     DOM_target = $('#jspsych-content');
 
     // add CSS class to DOM_target
-    display_element.addClass('jspsych-display-element')
+    opts.display_element.addClass('jspsych-display-element')
     DOM_target.addClass('jspsych-content');
 
     // create experiment timeline

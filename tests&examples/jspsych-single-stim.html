@@ -14,7 +14,6 @@
 </head>
 
 <body>
-  <div id="jspsych-target"></div>
 </body>
 <script>
   var trial_1 = {
@@ -42,7 +41,6 @@
 
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [node],
     on_finish: function() {
       jsPsych.data.displayData();
