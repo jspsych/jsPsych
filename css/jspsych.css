@@ -86,8 +86,13 @@ input[type="text"] {
 /* Container holding jsPsych content */
 
 .jspsych-display-element {
-  width: 800px;
-  margin: 50px auto 50px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.jspsych-content {
+  margin: 50px;
 }
 
 /* jsPsych progress bar */
