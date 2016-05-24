@@ -94,6 +94,14 @@ input[type="text"] {
   height: 100%;
 }
 
+.jspsych-top {
+  align-items: flex-start;
+}
+
+.jspsych-middle {
+  align-items: center;
+}
+
 .jspsych-content {
   margin: 50px;
 }
