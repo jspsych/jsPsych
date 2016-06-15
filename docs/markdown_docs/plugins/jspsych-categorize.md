@@ -10,9 +10,9 @@ Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 stimulus | string | *undefined* | The stimulus to display. Either HTML-formatted, or the path to an image.
 is_html | boolean | false | If `stimulus` is an HTML-formatted string, this parameter needs to be set to `true`.
-key_answer | array | *undefined* | Each element of the array is a [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) indicating the correct response for the corresponding trial. The length of this array should match the `stimuli` array.
+key_answer | numeric | *undefined* | The [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) indicating the correct response.
 choices | array | *undefined* | This array contains the keys that the subject is allowed to press in order to respond to the stimulus. Keys can be specified as their [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) or as characters (e.g. `'a'`, `'q'`).
-text_answer | array | "" | Array of strings representing a label that is associated with each correct answer. Used in conjunction with the `correct_text` and `incorrect_text` parameters.
+text_answer | string | "" | A label that is associated with the correct answer. Used in conjunction with the `correct_text` and `incorrect_text` parameters.
 correct_text | string | "Correct." | String to show when the correct answer is given. Can contain HTML formatting. The special string `%ANS%` can be used within the string. If present, the plugin will put the `text_answer` for the trial in place of the %ANS% string (see example below).
 incorrect_text | string | "Wrong." | String to show when the wrong answer is given. Can contain HTML formatting. The special string `%ANS%` can be used within the string. If present, the plugin will put the `text_answer` for the trial in place of the %ANS% string (see example below).
 prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g. which key to press).
