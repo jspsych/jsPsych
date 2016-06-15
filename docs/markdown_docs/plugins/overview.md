@@ -44,7 +44,7 @@ Parameter | Type | Default Value | Description
 timing_post_trial | numeric | 1000 | Sets the time, in milliseconds, between the current trial and the next trial.
 on_finish | function | *undefined* | A callback function to execute when the trial finishes. See [this page](../features/callbacks.md) for more details.
 data | object | *undefined* | An object containing additional data to store for the trial. See [this page](../features/data.md) for more details.
-display_element | jQuery DOM selection | Change the target display at the trial level by specifying a new target for content. 
+display_element | jQuery DOM selection | Change the target display at the trial level by specifying a new target for content.
 
 ## Data collected by plugins
 
@@ -84,6 +84,7 @@ This table is a description of all plugins that are currently bundled with jsPsy
  [jspsych&#8209;survey&#8209;multi&#8209;choice](jspsych-survey-multi-choice) | Displays multiple choice questions.
  [jspsych&#8209;survey&#8209;text](jspsych-survey-text) | Shows a prompt with a text box. The subject writes a response and then submits by clicking a button.
  [jspsych&#8209;text](jspsych-text) | Shows HTML-formatted text on the screen.
+ [jspsych&#8209;video](jspsych-video) | Displays a video file and autoadvances to the next trial when the video is complete.
  [jspsych&#8209;visual&#8209;search&#8209;circle](jspsych-visual-search-circle) | A customizable visual-search task modelled after [Wang, Cavanagh, & Green (1994)](http://dx.doi.org/10.3758/BF03206946). The subject indicates whether or not a target is present among a set of distractors. The stimuli are displayed in a circle, evenly-spaced, equidistant from a fixation point.
  [jspsych&#8209;vsl&#8209;animate&#8209;occlusion](jspsych-vsl-animate-occlusion) | A visual statistical learning paradigm based on [Fiser & Aslin (2002)](http://dx.doi.org/10.1037//0278-7393.28.3.458). A sequence of stimuli are shown in an oscillatory motion. An occluding rectangle is in the center of the display, and the stimuli change when they are behind the rectangle.
  [jspsych&#8209;vsl&#8209;grid&#8209;scene](jspsych-vsl-grid-scene) | A visual statistical learning paradigm based on [Fiser & Aslin (2001)](http://dx.doi.org/10.1111/1467-9280.00392). A scene made up of individual stimuli arranged in a grid is shown. This plugin can also generate the HTML code to render the stimuli for use in other plugins.

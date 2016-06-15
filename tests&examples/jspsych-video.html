@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-video.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+  <script>
+
+  var trial = {
+    type: 'video',
+    sources: ['video/sample_video.mp4']
+  }
+
+  jsPsych.init({
+    display_element: $('#jspsych-target'),
+    timeline: [trial],
+    on_finish: function() { jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>
