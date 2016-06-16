@@ -15,6 +15,7 @@ jsPsych.plugins.text = (function() {
 
   plugin.trial = function(display_element, trial) {
 
+    trial.timing_response = trial.timing_response || -1;
     trial.cont_key = trial.cont_key || [];
 
     // if any trial variables are functions
@@ -26,7 +27,7 @@ jsPsych.plugins.text = (function() {
     display_element.html(trial.text);
 
     var after_response = function(info) {
-
+      clearTimeout(t1);
       display_element.html(''); // clear the display
 
       var trialdata = {
@@ -39,7 +40,7 @@ jsPsych.plugins.text = (function() {
     };
 
     var mouse_listener = function(e) {
-
+      clearTimeout(t1);
       var rt = (new Date()).getTime() - start_time;
 
       display_element.unbind('click', mouse_listener);
@@ -63,6 +64,16 @@ jsPsych.plugins.text = (function() {
         persist: false,
         allow_held_key: false
       });
+    }
+
+    // end trial if time limit is set
+    if (trial.timing_response > 0) {
+      setTimeout(function() {
+        after_response({
+          key: -1,
+          rt: -1
+        });
+      }, trial.timing_response);
     }
 
   };
