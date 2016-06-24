@@ -721,11 +721,12 @@ jsPsych.plugins = {
   parameterType: {
     BOOL: 0,
     STRING: 1,
-    NUMERIC: 2,
+    INT: 2,
     FUNCTION: 3,
-    KEYCODE: 4
+    KEYCODES: 4,
+    ARRAY: 5
   }
-    
+
 };
 
 jsPsych.data = (function() {
