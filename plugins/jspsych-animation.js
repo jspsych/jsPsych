@@ -11,6 +11,49 @@ jsPsych.plugins.animation = (function() {
 
   jsPsych.pluginAPI.registerPreload('animation', 'stimuli', 'image');
 
+  plugin.info = {
+    name: 'animation',
+    description: '',
+    parameters: {
+      stimuli: {
+        type: [jsPsych.plugins.parameterType.ARRAY],
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      frame_time: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 250,
+        no_function: false,
+        description: ''
+      },
+      frame_isi: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 0,
+        no_function: false,
+        description: ''
+      },
+      sequence_reps: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 1,
+        no_function: false,
+        description: ''
+      },
+      choices: {
+        type: [jsPsych.plugins.parameterType.KEYCODES],
+        default: [],
+        no_function: false,
+        description: ''
+      },
+      prompt: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      }
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     trial.frame_time = trial.frame_time || 250;

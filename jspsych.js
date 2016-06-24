@@ -715,7 +715,18 @@ var jsPsych = (function() {
   return core;
 })();
 
-jsPsych.plugins = {};
+jsPsych.plugins = {
+
+  // enumerate possible parameter types for plugins
+  parameterType: {
+    BOOL: 0,
+    STRING: 1,
+    NUMERIC: 2,
+    FUNCTION: 3,
+    KEYCODE: 4
+  }
+    
+};
 
 jsPsych.data = (function() {
 
