@@ -12,8 +12,6 @@ jsPsych.plugins["single-audio"] = (function() {
 
   var plugin = {};
 
-  var context = new AudioContext();
-
   jsPsych.pluginAPI.registerPreload('single-audio', 'stimulus', 'audio');
 
   plugin.trial = function(display_element, trial) {
@@ -36,6 +34,7 @@ jsPsych.plugins["single-audio"] = (function() {
     var setTimeoutHandlers = [];
 
     // play stimulus
+    var context = jsPsych.pluginAPI.audioContext();
     var source = context.createBufferSource();
     source.buffer = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
     source.connect(context.destination);

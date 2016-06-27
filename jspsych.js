@@ -1577,6 +1577,10 @@ jsPsych.pluginAPI = (function() {
   var context = (typeof window !== 'undefined' && typeof window.AudioContext !== 'undefined') ? new AudioContext() : null;
   var audio_buffers = [];
 
+  module.audioContext = function(){
+    return context;
+  }
+
   module.getAudioBuffer = function(audioID) {
 
     if (audio_buffers[audioID] == 'tmp') {
