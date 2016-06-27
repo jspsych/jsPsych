@@ -22,28 +22,86 @@ jsPsych.plugins["visual-search-circle"] = (function() {
   jsPsych.pluginAPI.registerPreload('visual-search-circle', 'foil', 'image');
   jsPsych.pluginAPI.registerPreload('visual-search-circle', 'fixation_image', 'image');
 
-  plugin.create = function(params) {
-
-    var trials = new Array(params.target_present.length);
-
-    for (var i = 0; i < trials.length; i++) {
-      trials[i] = {};
-      trials[i].target_present = params.target_present[i];
-      trials[i].set_size = params.set_size[i];
-      trials[i].target = params.target;
-      trials[i].foil = params.foil;
-      trials[i].fixation_image = params.fixation_image;
-      trials[i].target_size = params.target_size || [50, 50];
-      trials[i].fixation_size = params.fixation_size || [16, 16];
-      trials[i].circle_diameter = params.circle_diameter || 250;
-      trials[i].target_present_key = params.target_present_key || 74;
-      trials[i].target_absent_key = params.target_absent_key || 70;
-      trials[i].timing_max_search = (typeof params.timing_max_search === 'undefined') ? -1 : params.timing_max_search;
-      trials[i].timing_fixation = (typeof params.timing_fixation === 'undefined') ? 1000 : params.timing_fixation;
+  plugin.info = {
+    name: 'visual-search-circle',
+    description: '',
+    parameters: {
+      target: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      foil: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      fixation_image: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      set_size: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      target_present: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: true,
+        no_function: false,
+        description: ''
+      },
+      target_size: {
+        type: [jsPsych.plugins.parameterType.INT],
+        array: true,
+        default: 50,
+        no_function: false,
+        description: ''
+      },
+      fixation_size: {
+        type: [jsPsych.plugins.parameterType.INT],
+        array: true,
+        default: 16,
+        no_function: false,
+        description: ''
+      },
+      circle_diameter: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 250,
+        no_function: false,
+        description: ''
+      },
+      target_present_key: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        default: 'j',
+        no_function: false,
+        description: ''
+      },
+      target_absent_key: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        default: 'f',
+        no_function: false,
+        description: ''
+      },
+      timing_max_search: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: -1,
+        no_function: false,
+        description: ''
+      },
+      timing_fixation: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 1000,
+        no_function: false,
+        description: ''
+      }
     }
-
-    return trials;
-  };
+  }
 
   plugin.trial = function(display_element, trial) {
 

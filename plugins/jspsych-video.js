@@ -11,7 +11,49 @@ jsPsych.plugins.video = (function() {
 
   var plugin = {};
 
-  //jsPsych.pluginAPI.registerPreload('single-stim', 'stimulus', 'image');
+  plugin.info = {
+    name: 'video',
+    description: '',
+    parameters: {
+      sources: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        array: true,
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      width: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      height: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      autoplay: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: true,
+        no_function: false,
+        description: ''
+      },
+      controls: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: false,
+        no_function: false,
+        description: ''
+      },
+      prompt: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      }
+    }
+  }
 
   plugin.trial = function(display_element, trial) {
 

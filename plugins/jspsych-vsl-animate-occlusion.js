@@ -7,7 +7,7 @@
  *
  * Josh de Leeuw
  *
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-vsl-animate-occlusion
+ * documentation: docs.jspsych.org
  *
  */
 

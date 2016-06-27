@@ -13,6 +13,27 @@ jsPsych.plugins.text = (function() {
 
   var plugin = {};
 
+  plugin.info = {
+    name: 'text',
+    description: '',
+    parameters: {
+      text: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      cont_key: {
+        type: [jsPsych.plugins.parameterType.KEYCODE, jsPsych.plugins.parameterType.SELECT],
+        options: ['mouse'],
+        array: true,
+        default: undefined,
+        no_function: false,
+        description: ''
+      }
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     trial.cont_key = trial.cont_key || [];

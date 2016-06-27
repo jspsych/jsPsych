@@ -14,7 +14,7 @@ jsPsych.plugins['survey-text'] = (function() {
   var plugin = {};
 
   plugin.info = {
-    name: 'survey-multi-choice',
+    name: 'survey-text',
     description: '',
     parameters: {
       questions: {
@@ -24,10 +24,23 @@ jsPsych.plugins['survey-text'] = (function() {
         no_function: false,
         description: ''
       },
-      labels: {
+      premable: {
         type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      },
+      rows: {
+        type: [jsPsych.plugins.parameterType.INT],
         array: true,
-        default: undefined,
+        default: 1,
+        no_function: false,
+        description: ''
+      },
+      columns: {
+        type: [jsPsych.plugins.parameterType.INT],
+        array: true,
+        default: 40,
         no_function: false,
         description: ''
       }
