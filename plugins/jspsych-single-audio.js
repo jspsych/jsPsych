@@ -14,13 +14,56 @@ jsPsych.plugins["single-audio"] = (function() {
 
   jsPsych.pluginAPI.registerPreload('single-audio', 'stimulus', 'audio');
 
+  plugin.info = {
+    name: 'single-audio',
+    description: '',
+    parameters: {
+      stimulus: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      choices: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        array: true
+        default: [],
+        no_function: false,
+        description: ''
+      },
+      prompt: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      },
+      timing_response: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: -1,
+        no_function: false,
+        description: ''
+      },
+      response_ends_trial: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: true,
+        no_function: false,
+        description: ''
+      },
+      trial_ends_after_audio: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: false,
+        no_function: false,
+        description: ''
+      },
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     // default parameters
     trial.choices = trial.choices || [];
     trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
     trial.trial_ends_after_audio = (typeof trial.trial_ends_after_audio === 'undefined') ? false : trial.trial_ends_after_audio;
-    // timing parameters
     trial.timing_response = trial.timing_response || -1; // if -1, then wait for response forever
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 

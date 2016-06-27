@@ -13,6 +13,27 @@ jsPsych.plugins['survey-text'] = (function() {
 
   var plugin = {};
 
+  plugin.info = {
+    name: 'survey-multi-choice',
+    description: '',
+    parameters: {
+      questions: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        array: true,
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      labels: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        array: true,
+        default: undefined,
+        no_function: false,
+        description: ''
+      }
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;

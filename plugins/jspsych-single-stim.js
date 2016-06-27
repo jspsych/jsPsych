@@ -15,6 +15,57 @@ jsPsych.plugins["single-stim"] = (function() {
 
   jsPsych.pluginAPI.registerPreload('single-stim', 'stimulus', 'image');
 
+  plugin.info = {
+    name: 'single-stim',
+    description: '',
+    parameters: {
+      stimulus: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      is_html: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: false,
+        no_function: false,
+        description: ''
+      },
+      choices: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        array: true
+        default: [],
+        no_function: false,
+        description: ''
+      },
+      prompt: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      },
+      timing_stim: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: -1,
+        no_function: false,
+        description: ''
+      },
+      timing_response: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: -1,
+        no_function: false,
+        description: ''
+      },
+      response_ends_trial: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: true,
+        no_function: false,
+        description: ''
+      },
+
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     // if any trial variables are functions
