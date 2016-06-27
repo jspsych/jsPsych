@@ -14,6 +14,69 @@ jsPsych.plugins['same-different'] = (function() {
 
   jsPsych.pluginAPI.registerPreload('same-different', 'stimuli', 'image');
 
+  plugin.info = {
+    name: 'same-different',
+    description: '',
+    parameters: {
+      stimuli: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        array: true,
+        no_function: false,
+        description: ''
+      },
+      is_html: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: false,
+        no_function: false,
+        description: ''
+      },
+      answer: {
+        type: [jsPsych.plugins.parameterType.SELECT],
+        options: ['same', 'different'],
+        default: 75,
+        no_function: false,
+        description: ''
+      },
+      same_key: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        default: 'Q',
+        no_function: false,
+        description: ''
+      },
+      different_key: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        default: 'P',
+        no_function: false,
+        description: ''
+      },
+      timing_first_stim: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 1000,
+        no_function: false,
+        description: ''
+      },
+      timing_gap: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 500,
+        no_function: false,
+        description: ''
+      },
+      timing_second_stim: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 1000,
+        no_function: false,
+        description: ''
+      },
+      prompt: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      }
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     // default parameters

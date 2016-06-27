@@ -14,7 +14,7 @@ jsPsych.plugins['free-sort'] = (function() {
   jsPsych.pluginAPI.registerPreload('free-sort', 'stimuli', 'image');
 
   plugin.info = {
-    name: 'button-response',
+    name: 'free-sort',
     description: '',
     parameters: {
       stimuli: {
@@ -55,7 +55,8 @@ jsPsych.plugins['free-sort'] = (function() {
         description: ''
       },
       prompt_location: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: [jsPsych.plugins.parameterType.SELECT],
+        options: ['above','below'],
         default: 'above',
         no_function: false,
         description: ''

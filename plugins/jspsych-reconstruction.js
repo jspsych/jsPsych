@@ -14,6 +14,43 @@ jsPsych.plugins['reconstruction'] = (function() {
 
   var plugin = {};
 
+  plugin.info = {
+    name: 'reconstruction',
+    description: '',
+    parameters: {
+      stim_function: {
+        type: [jsPsych.plugins.parameterType.FUNCTION],
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      starting_value: {
+        type: [jsPsych.plugins.parameterType.FLOAT],
+        default: 0.5,
+        no_function: false,
+        description: ''
+      },
+      step_size: {
+        type: [jsPsych.plugins.parameterType.FLOAT],
+        default: 0.05,
+        no_function: false,
+        description: ''
+      },
+      key_increase: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        default: 'h',
+        no_function: false,
+        description: ''
+      },
+      key_decrease: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        default: 'g',
+        no_function: false,
+        description: ''
+      }
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     // default parameter values

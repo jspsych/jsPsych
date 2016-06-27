@@ -15,6 +15,76 @@ jsPsych.plugins.similarity = (function() {
 
   jsPsych.pluginAPI.registerPreload('similarity', 'stimuli', 'image');
 
+  plugin.info = {
+    name: 'similarity',
+    description: '',
+    parameters: {
+      stimuli: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        array: true,
+        no_function: false,
+        description: ''
+      },
+      is_html: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: false,
+        no_function: false,
+        description: ''
+      },
+      labels: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        array: true,
+        default: ['Not at all similar', 'Identical'],
+        no_function: false,
+        description: ''
+      },
+      intervals: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 100,
+        no_function: false,
+        description: ''
+      },
+      show_ticks: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: false,
+        no_function: false,
+        description: ''
+      },
+      show_response: {
+        type: [jsPsych.plugins.parameterType.SELECT],
+        options: ['FIRST_STIMULUS', 'SECOND_STIMULUS','POST_STIMULUS'],
+        default: 'SECOND_STIMULUS',
+        no_function: false,
+        description: ''
+      },
+      timing_first_stim: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 1000,
+        no_function: false,
+        description: ''
+      },
+      timing_image_gap: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 1000,
+        no_function: false,
+        description: ''
+      },
+      timing_second_stim: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: -1,
+        no_function: false,
+        description: ''
+      },
+      prompt: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      }
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     // default parameters

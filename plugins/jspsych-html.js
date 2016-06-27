@@ -10,6 +10,43 @@ jsPsych.plugins.html = (function() {
 
   var plugin = {};
 
+  plugin.info = {
+    name: 'html',
+    description: '',
+    parameters: {
+      url: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      cont_key: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        default: null,
+        no_function: false,
+        description: ''
+      },
+      cont_btn: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: null,
+        no_function: false,
+        description: ''
+      },
+      check_fn: {
+        type: [jsPsych.plugins.parameterType.FUNCTION],
+        default: 'function() { return true; }',
+        no_function: false,
+        description: ''
+      },
+      force_refresh: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: false,
+        no_function: false,
+        description: ''
+      }
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     // default parameters

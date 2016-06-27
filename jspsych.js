@@ -722,8 +722,10 @@ jsPsych.plugins = {
     BOOL: 0,
     STRING: 1,
     INT: 2,
-    FUNCTION: 3,
-    KEYCODE: 4
+    FLOAT: 3,
+    FUNCTION: 4,
+    KEYCODE: 5,
+    SELECT: 6
   }
 
 };
