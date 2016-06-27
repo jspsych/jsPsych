@@ -11,6 +11,19 @@ jsPsych.plugins['call-function'] = (function() {
 
   var plugin = {};
 
+  plugin.info = {
+    name: 'call-function',
+    description: '',
+    parameters: {
+      func: {
+        type: [jsPsych.plugins.parameterType.FUNCTION],
+        default: undefined,
+        no_function: false,
+        description: ''
+      }
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     // one of the only plugins where we override the default experiment level
@@ -22,7 +35,6 @@ jsPsych.plugins['call-function'] = (function() {
     var trial_data = {
       value: return_val
     };
-
 
     jsPsych.finishTrial(trial_data);
   };

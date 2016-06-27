@@ -16,9 +16,10 @@ jsPsych.plugins.animation = (function() {
     description: '',
     parameters: {
       stimuli: {
-        type: [jsPsych.plugins.parameterType.ARRAY],
+        type: [jsPsych.plugins.parameterType.STRING],
         default: undefined,
         no_function: false,
+        array: true,
         description: ''
       },
       frame_time: {
@@ -40,9 +41,10 @@ jsPsych.plugins.animation = (function() {
         description: ''
       },
       choices: {
-        type: [jsPsych.plugins.parameterType.KEYCODES],
+        type: [jsPsych.plugins.parameterType.KEYCODE],
         default: [],
         no_function: false,
+        array: true,
         description: ''
       },
       prompt: {

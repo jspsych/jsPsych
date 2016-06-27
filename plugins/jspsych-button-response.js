@@ -29,15 +29,17 @@ jsPsych.plugins["button-response"] = (function() {
         description: ''
       },
       choices: {
-        type: [jsPsych.plugins.parameterType.KEYCODES],
+        type: [jsPsych.plugins.parameterType.KEYCODE],
         default: [],
+        array: true,
         no_function: false,
         description: ''
       },
       button_html: {
-        type: [jsPsych.plugins.parameterType.ARRAY, jsPsych.plugins.parameterType.STRING],
+        type: [jsPsych.plugins.parameterType.STRING],
         default: '<button class="jspsych-btn">%choice%</button>',
         no_function: false,
+        array: true,
         description: ''
       },
       prompt: {

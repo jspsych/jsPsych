@@ -723,8 +723,7 @@ jsPsych.plugins = {
     STRING: 1,
     INT: 2,
     FUNCTION: 3,
-    KEYCODES: 4,
-    ARRAY: 5
+    KEYCODE: 4
   }
 
 };
