@@ -17,6 +17,66 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
 
   jsPsych.pluginAPI.registerPreload('vsl-animate-occlusion', 'stimuli', 'image');
 
+  plugin.info = {
+    name: 'vsl-animate-occlusion',
+    description: '',
+    parameters: {
+      stimuli: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        array: true,
+        no_function: false,
+        description: ''
+      },
+      choices: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        array: true,
+        default: [],
+        no_function: false,
+        description: ''
+      },
+      canvas_size: {
+        type: [jsPsych.plugins.parameterType.INT],
+        array: true,
+        default: [400,400],
+        no_function: false,
+        description: ''
+      },
+      image_size: {
+        type: [jsPsych.plugins.parameterType.INT],
+        array: true,
+        default: [100,100],
+        no_function: false,
+        description: ''
+      },
+      initial_direction: {
+        type: [jsPsych.plugins.parameterType.SELECT],
+        choices: ['left','right']
+        default: 'left',
+        no_function: false,
+        description: ''
+      },
+      occlude_center: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: true,
+        no_function: false,
+        description: ''
+      },
+      timing_cycle: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 1000,
+        no_function: false,
+        description: ''
+      },
+      timing_pre_movement: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 500,
+        no_function: false,
+        description: ''
+      }
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     // default trial parameters

@@ -33,7 +33,7 @@ jsPsych.plugins["single-stim"] = (function() {
       },
       choices: {
         type: [jsPsych.plugins.parameterType.KEYCODE],
-        array: true
+        array: true,
         default: [],
         no_function: false,
         description: ''
