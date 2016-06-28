@@ -34,8 +34,8 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.data.getLastTimelineData](jspsych-data.md#jspsychdatagetlasttimelinedata)
 * [jsPsych.data.getLastTrialData](jspsych-data.md#jspsychdatagetlasttrialdata)
 * [jsPsych.data.getTrialsOfType](jspsych-data.md#jspsychdatagettrialsoftype)
-
 * [jsPsych.data.getURLVariable](jspsych-data.md#jspsychdatageturlvariable)
+* [jsPsych.data.ignore](jspsych-data.md#jspsychdataignore)
 * [jsPsych.data.localSave](jspsych-data.md#jspsychdatalocalsave)
 * [jsPsych.data.write](jspsych-data.md#jspsychdatawrite)
 * [jsPsych.data.urlVariables](jspsych-data.md#jspsychdataurlvariables)

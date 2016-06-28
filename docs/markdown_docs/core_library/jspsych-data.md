@@ -375,6 +375,40 @@ console.log(jsPsych.data.getURLVariable('condition')) // logs "test"
 ```
 
 ---
+## jsPsych.data.ignore
+
+```
+jsPsych.data.ignore(properties)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+properties | array | Array of properties to ignore.
+
+### Return value
+
+Returns nothing.
+
+### Description
+
+This method will **permanently** delete all instances of a particular property in the data. For example, if you do not want to record the `stimulus` parameter when using the single-stim plugin, you can use this method to delete all instances of `stimulus` from the data. You can call this method at any time during the experiment. All previous instances of the property will be deleted, and no future instances will be recorded.
+
+If you need access to a property *during* the experiment, but do not want to record it in the data file, then call this method immediately before saving the data at the end of the experiment.
+
+*Note*: If you use this method to remove `internal_node_id` from the data, some methods in `jsPsych.data` will no longer work properly.
+
+### Examples
+
+#### Remove all instances of 'stimulus' and 'time_elapsed'
+```javascript
+jsPsych.data.ignore(['stimulus', 'time_elapsed']);
+```
+
+
+
+---
 ## jsPsych.data.localSave
 
 ```

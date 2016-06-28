@@ -740,6 +740,9 @@ jsPsych.data = (function() {
   // data properties for all trials
   var dataProperties = {};
 
+  // ignored data fields
+  var ignoredProperties = [];
+
   // cache the query_string
   var query_string;
 
@@ -763,6 +766,10 @@ jsPsych.data = (function() {
 
     var ext_data_object = $.extend({}, data_object, trial.data, default_data, dataProperties);
 
+    for(var i in ignoredProperties){
+      delete ext_data_object[ignoredProperties[i]];
+    }
+
     allData.push(ext_data_object);
 
     var initSettings = jsPsych.initSettings();
@@ -780,6 +787,19 @@ jsPsych.data = (function() {
 
     // now add to list so that it gets appended to all future data
     dataProperties = $.extend({}, dataProperties, properties);
+  };
+
+  module.ignore = function(properties) {
+
+    // first, remove the properties from all data that's already stored
+    for (var i = 0; i < allData.length; i++) {
+      for (var j in properties) {
+        delete allData[i][properties[j]];
+      }
+    }
+
+    // now add to list so that it gets appended to all future data
+    ignoredProperties = ignoredProperties.concat(properties);
   };
 
   module.addDataToLastTrial = function(data) {

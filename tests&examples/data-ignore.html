@@ -24,18 +24,13 @@
     prompt: '<p class="center-content">Have you seen this face before? Y or N.</p>'
   }
 
-  jsPsych.data.addProperties({
-    subject: 1
-  });
-
+  jsPsych.data.ignore(['stimulus']);
 
   jsPsych.init({
     display_element: $('#jspsych-target'),
     timeline: [block_1],
     on_finish: function() {
-      jsPsych.data.addProperties({
-        completed: true
-      });
+      jsPsych.data.ignore(['time_elapsed']);
       // data should have a subject and completed field for each trial.
       jsPsych.data.displayData();
     }
