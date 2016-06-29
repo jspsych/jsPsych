@@ -12,6 +12,8 @@ jsPsych.plugins["button-response"] = (function() {
 
   var plugin = {};
 
+  jsPsych.pluginAPI.registerPreload('button-response', 'stimulus', 'image', function(t){ return !t.is_html || t.is_html == 'undefined'});
+
   plugin.info = {
     name: 'button-response',
     description: '',

@@ -10,7 +10,7 @@ jsPsych.plugins.categorize = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('categorize', 'stimulus', 'image');
+  jsPsych.pluginAPI.registerPreload('categorize', 'stimulus', 'image',function(t){ return !t.is_html || t.is_html == 'undefined'});
 
   plugin.info = {
     name: 'categorize',

@@ -395,7 +395,7 @@ function startExperiment(){
 ## jsPsych.pluginAPI.registerPreload
 
 ```
-jsPsych.pluginAPI.registerPreload(plugin_name, parameter, media_type)
+jsPsych.pluginAPI.registerPreload(plugin_name, parameter, media_type, conditional_function)
 ```
 
 ### Parameters
@@ -405,6 +405,7 @@ Parameter | Type | Description
 plugin_name | string | The name of the plugin. e.g., 'single-stim'.
 parameter | string | The name of the parameter that is a media file. e.g., 'stimulus'
 media_type | string | The type of media, either 'image' or 'audio'.
+conditional_function | function | Only run the preload for a trial if this function returns true, or if this function does not exist.
 
 ### Return value
 
@@ -413,6 +414,8 @@ Nothing.
 ### Description
 
 Use this method in a plugin file to mark a parameter as containing an element that should be preloaded. The method should be called in the plugin file such that it gets called when the file is loaded.
+
+The `conditional_function` function is passed a single argument containing the trial object.
 
 ### Example
 

@@ -12,7 +12,7 @@ jsPsych.plugins['same-different'] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('same-different', 'stimuli', 'image');
+  jsPsych.pluginAPI.registerPreload('same-different', 'stimuli', 'image',function(t){ return !t.is_html || t.is_html == 'undefined'});
 
   plugin.info = {
     name: 'same-different',

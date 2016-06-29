@@ -1700,7 +1700,7 @@ jsPsych.pluginAPI = (function() {
     }
   };
 
-  module.registerPreload = function(plugin_name, parameter, media_type) {
+  module.registerPreload = function(plugin_name, parameter, media_type, conditional_function) {
     if (!(media_type == 'audio' || media_type == 'image')) {
       console.error('Invalid media_type parameter for jsPsych.pluginAPI.registerPreload. Please check the plugin file.');
     }
@@ -1708,7 +1708,8 @@ jsPsych.pluginAPI = (function() {
     var preload = {
       plugin: plugin_name,
       parameter: parameter,
-      media_type: media_type
+      media_type: media_type,
+      conditional_function: conditional_function
     }
 
     preloads.push(preload);
@@ -1724,13 +1725,16 @@ jsPsych.pluginAPI = (function() {
       var type = preloads[i].plugin;
       var param = preloads[i].parameter;
       var media = preloads[i].media_type;
+      var func = preloads[i].conditional_function;
       var trials = timeline.trialsOfType(type);
       for (var j = 0; j < trials.length; j++) {
         if (typeof trials[j][param] !== 'undefined' && typeof trials[j][param] !== 'function') {
-          if (media == 'image') {
-            images = images.concat(flatten([trials[j][param]]));
-          } else if (media == 'audio') {
-            audio = audio.concat(flatten([trials[j][param]]));
+          if ( typeof func == 'undefined' || func(trials[j]) ){
+            if (media == 'image') {
+              images = images.concat(flatten([trials[j][param]]));
+            } else if (media == 'audio') {
+              audio = audio.concat(flatten([trials[j][param]]));
+            }
           }
         }
       }

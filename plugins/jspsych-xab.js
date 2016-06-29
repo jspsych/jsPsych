@@ -12,7 +12,7 @@ jsPsych.plugins.xab = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('xab', 'stimuli', 'image');
+  jsPsych.pluginAPI.registerPreload('xab', 'stimuli', 'image',function(t){ return !t.is_html || t.is_html == 'undefined'});
 
   plugin.info = {
     name: 'single-stim',
