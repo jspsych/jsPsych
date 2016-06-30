@@ -27,7 +27,7 @@ jsPsych.plugins["single-audio"] = (function() {
       choices: {
         type: [jsPsych.plugins.parameterType.KEYCODE],
         array: true
-        default: [],
+        default: jsPsych.ALL_KEYS,
         no_function: false,
         description: ''
       },
@@ -61,7 +61,7 @@ jsPsych.plugins["single-audio"] = (function() {
   plugin.trial = function(display_element, trial) {
 
     // default parameters
-    trial.choices = trial.choices || [];
+    trial.choices = trial.choices || jsPsych.ALL_KEYS;
     trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
     trial.trial_ends_after_audio = (typeof trial.trial_ends_after_audio === 'undefined') ? false : trial.trial_ends_after_audio;
     trial.timing_response = trial.timing_response || -1; // if -1, then wait for response forever

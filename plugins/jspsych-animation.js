@@ -42,7 +42,7 @@ jsPsych.plugins.animation = (function() {
       },
       choices: {
         type: [jsPsych.plugins.parameterType.KEYCODE],
-        default: [],
+        default: jsPsych.ALL_KEYS,
         no_function: false,
         array: true,
         description: ''
@@ -61,7 +61,7 @@ jsPsych.plugins.animation = (function() {
     trial.frame_time = trial.frame_time || 250;
     trial.frame_isi = trial.frame_isi || 0;
     trial.sequence_reps = trial.sequence_reps || 1;
-    trial.choices = trial.choices || [];
+    trial.choices = trial.choices || jsPsych.ALL_KEYS;
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
     // if any trial variables are functions

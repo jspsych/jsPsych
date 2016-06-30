@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+
+<head>
+  <script src="js/jquery.min.js"></script>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-single-stim.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+</body>
+<script>
+  var trial_1 = {
+    stimulus: '<p>All keys</p>',
+    choices: jsPsych.ALL_KEYS
+  }
+
+  var trial_2 = {
+    stimulus: '<p>No keys</p>',
+    timing_response: 2000,
+    choices: jsPsych.NO_KEYS
+  }
+
+
+  var node = {
+    type: 'single-stim',
+    is_html: true,
+    timeline: [trial_1, trial_2],
+  }
+
+
+  jsPsych.init({
+    timeline: [node],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+</script>
+
+</html>

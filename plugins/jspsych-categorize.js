@@ -36,7 +36,7 @@ jsPsych.plugins.categorize = (function() {
       },
       choices: {
         type: [jsPsych.plugins.parameterType.KEYCODE],
-        default: [],
+        default: jsPsych.ALL_KEYS,
         array: true,
         no_function: false,
         description: ''
@@ -113,6 +113,7 @@ jsPsych.plugins.categorize = (function() {
   plugin.trial = function(display_element, trial) {
 
     // default parameters
+    trial.choices = triaul.choices || jsPsych.ALL_KEYS;
     trial.text_answer = (typeof trial.text_answer === 'undefined') ? "" : trial.text_answer;
     trial.correct_text = (typeof trial.correct_text === 'undefined') ? "<p class='feedback'>Correct</p>" : trial.correct_text;
     trial.incorrect_text = (typeof trial.incorrect_text === 'undefined') ? "<p class='feedback'>Incorrect</p>" : trial.incorrect_text;

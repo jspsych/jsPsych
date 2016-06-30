@@ -30,7 +30,7 @@ jsPsych.plugins["categorize-animation"] = (function() {
       },
       choices: {
         type: [jsPsych.plugins.parameterType.KEYCODE],
-        default: [],
+        default: jsPsych.ALL_KEYS,
         no_function: false,
         array: true,
         description: ''
@@ -89,6 +89,7 @@ jsPsych.plugins["categorize-animation"] = (function() {
   plugin.trial = function(display_element, trial) {
 
     // set default values
+    trial.choices = trial.choices || jsPsych.ALL_KEYS;
     trial.sequence_reps = trial.sequence_reps || 1;
     trial.key_answer = trial.key_answer;
     trial.text_answer = (typeof trial.text_answer === 'undefined') ? "" : trial.text_answer;

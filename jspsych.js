@@ -30,6 +30,10 @@ var jsPsych = (function() {
   // done loading?
   var loaded = false;
 
+  // enumerated variables for special parameter types
+  core.ALL_KEYS = 'allkeys';
+  core.NO_KEYS = 'none';
+
   //
   // public methods
   //
@@ -1400,20 +1404,23 @@ jsPsych.pluginAPI = (function() {
       }
 
       var valid_response = false;
-      if (typeof parameters.valid_responses === 'undefined' || parameters.valid_responses.length === 0) {
+      if (typeof parameters.valid_responses === 'undefined' || parameters.valid_responses == jsPsych.ALL_KEYS) {
         valid_response = true;
-      }
-      for (var i = 0; i < parameters.valid_responses.length; i++) {
-        if (typeof parameters.valid_responses[i] == 'string') {
-          if (typeof keylookup[parameters.valid_responses[i]] !== 'undefined') {
-            if (e.which == keylookup[parameters.valid_responses[i]]) {
+      } else {
+        if(parameters.valid_responses != jsPsych.NO_KEYS){
+          for (var i = 0; i < parameters.valid_responses.length; i++) {
+            if (typeof parameters.valid_responses[i] == 'string') {
+              if (typeof keylookup[parameters.valid_responses[i]] !== 'undefined') {
+                if (e.which == keylookup[parameters.valid_responses[i]]) {
+                  valid_response = true;
+                }
+              } else {
+                throw new Error('Invalid key string specified for getKeyboardResponse');
+              }
+            } else if (e.which == parameters.valid_responses[i]) {
               valid_response = true;
             }
-          } else {
-            throw new Error('Invalid key string specified for getKeyboardResponse');
           }
-        } else if (e.which == parameters.valid_responses[i]) {
-          valid_response = true;
         }
       }
       // check if key was already held down
