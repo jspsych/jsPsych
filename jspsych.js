@@ -737,6 +737,9 @@ jsPsych.data = (function() {
   // data storage object
   var allData = [];
 
+  // browser interaction event data
+  var interactionData = [];
+
   // data properties for all trials
   var dataProperties = {};
 
@@ -749,6 +752,10 @@ jsPsych.data = (function() {
   module.getData = function() {
     return $.extend(true, [], allData); // deep clone
   };
+
+  module.getInteractionData = function() {
+    return $.extend(true, [], interactionData);
+  }
 
   module.write = function(data_object) {
 
@@ -927,6 +934,25 @@ jsPsych.data = (function() {
     }
     return query_string[whichvar];
   }
+
+  // blur event capture
+  window.addEventListener('blur', function(){
+    interactionData.push({
+      event: 'blur',
+      trial: jsPsych.progress().current_trial_global,
+      time: jsPsych.totalTime()
+    });
+  });
+
+  // focus event capture
+  window.addEventListener('focus', function(){
+    interactionData.push({
+      event: 'focus',
+      trial: jsPsych.progress().current_trial_global,
+      time: jsPsych.totalTime()
+    });
+  });
+
   // private function to save text file on local drive
 
   function saveTextToFile(textstr, filename) {
