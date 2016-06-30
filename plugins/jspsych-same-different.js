@@ -168,11 +168,14 @@ jsPsych.plugins['same-different'] = (function() {
 
         var correct = false;
 
-        if (info.key == trial.same_key && trial.answer == 'same') {
+        var skey = typeof trial.same_key == 'string' ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.same_key) : trial.same_key;
+        var dkey = typeof trial.different_key == 'string' ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.different_key) : trial.different_key;
+
+        if (info.key == skey && trial.answer == 'same') {
           correct = true;
         }
 
-        if (info.key == trial.different_key && trial.answer == 'different') {
+        if (info.key == dkey && trial.answer == 'different') {
           correct = true;
         }
 
