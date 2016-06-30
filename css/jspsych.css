@@ -89,6 +89,7 @@ input[type="text"] {
 
 .jspsych-display-element {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;
@@ -106,6 +107,13 @@ input[type="text"] {
   margin: 50px;
 }
 
+.jspsych-content-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
 /* jsPsych progress bar */
 
 #jspsych-progressbar-container {
@@ -115,6 +123,7 @@ input[type="text"] {
   margin-bottom: 1em;
   text-align: center;
   padding: 10px 0px;
+  width:100%;
 }
 #jspsych-progressbar-container s {}
 #jspsych-progressbar-outer {

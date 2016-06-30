@@ -721,7 +721,16 @@ var jsPsych = (function() {
   }
 
   function drawProgressBar() {
-    $('body').prepend($('<div id="jspsych-progressbar-container"><span>Completion Progress</span><div id="jspsych-progressbar-outer"><div id="jspsych-progressbar-inner"></div></div></div>'));
+    $('.jspsych-display-element').prepend(
+      '<div id="jspsych-progressbar-container">'+
+      '<span>Completion Progress</span>'+
+      '<div id="jspsych-progressbar-outer">'+
+        '<div id="jspsych-progressbar-inner"></div>'+
+      '</div></div>'
+    );
+    $('.jspsych-content').wrap(
+      '<div class="jspsych-content-wrapper"></div>'
+    );
   }
 
   function updateProgressBar() {
