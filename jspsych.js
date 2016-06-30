@@ -110,6 +110,7 @@ var jsPsych = (function() {
   };
 
   core.totalTime = function() {
+    if(typeof exp_start_time == 'undefined'){ return 0; }
     return (new Date()).getTime() - exp_start_time.getTime();
   };
 
@@ -952,6 +953,20 @@ jsPsych.data = (function() {
       time: jsPsych.totalTime()
     });
   });
+
+  // fullscreen change capture
+  function fullscreenchange(){
+    var type = (document.isFullScreen || document.webkitIsFullScreen || document.mozIsFullScreen) ? 'fullscreenenter' : 'fullscreenexit';
+    interactionData.push({
+      event: type,
+      trial: jsPsych.progress().current_trial_global,
+      time: jsPsych.totalTime()
+    });
+  }
+
+  document.addEventListener('fullscreenchange', fullscreenchange);
+  document.addEventListener('mozfullscreenchange', fullscreenchange);
+  document.addEventListener('webkitfullscreenchange', fullscreenchange);
 
   // private function to save text file on local drive
 
