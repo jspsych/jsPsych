@@ -27,6 +27,8 @@ var jsPsych = (function() {
   // is the experiment paused?
   var paused = false;
   var waiting = false;
+  // done loading?
+  var loaded = false;
 
   //
   // public methods
@@ -38,6 +40,9 @@ var jsPsych = (function() {
     timeline = null;
     global_trial_index = 0;
     current_trial = {};
+    paused = false;
+    waiting = false;
+    loaded = false;
 
     // check if there is a body element on the page
     var default_display_element = $('body');
@@ -62,8 +67,7 @@ var jsPsych = (function() {
       },
       'show_progress_bar': false,
       'auto_preload': true,
-      'max_load_time': 30000,
-      'skip_load_check': false,
+      'max_load_time': 60000,
       'fullscreen': false,
       'default_iti': 1000
     };
@@ -84,9 +88,16 @@ var jsPsych = (function() {
       timeline: opts.timeline
     });
 
-    // preloading
+    // start experiment, with or without preloading
     if(opts.auto_preload){
       jsPsych.pluginAPI.autoPreload(timeline, startExperiment);
+      if(opts.max_load_time > 0){
+        setTimeout(function(){
+          if(!loaded){
+            loadFail();
+          }
+        }, opts.max_load_time);
+      }
     } else {
       startExperiment();
     }
@@ -595,6 +606,8 @@ var jsPsych = (function() {
 
   function startExperiment() {
 
+    loaded = true;
+
     var fullscreen = opts.fullscreen;
 
     // fullscreen setup
@@ -701,6 +714,10 @@ var jsPsych = (function() {
 
     // execute trial method
     jsPsych.plugins[trial.type].trial(display_element, trial);
+  }
+
+  function loadFail(){
+    DOM_target.html('<p>The experiment failed to load.</p>');
   }
 
   function drawProgressBar() {
