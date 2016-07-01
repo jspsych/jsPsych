@@ -92,6 +92,9 @@ var jsPsych = (function() {
       timeline: opts.timeline
     });
 
+    // create listeners for user browser interaction
+    jsPsych.data.createInteractionListeners();
+
     // start experiment, with or without preloading
     if(opts.auto_preload){
       jsPsych.pluginAPI.autoPreload(timeline, startExperiment);
@@ -966,37 +969,39 @@ jsPsych.data = (function() {
     return query_string[whichvar];
   }
 
-  // blur event capture
-  window.addEventListener('blur', function(){
-    interactionData.push({
-      event: 'blur',
-      trial: jsPsych.progress().current_trial_global,
-      time: jsPsych.totalTime()
+  module.createInteractionListeners = function(){
+    // blur event capture
+    window.addEventListener('blur', function(){
+      interactionData.push({
+        event: 'blur',
+        trial: jsPsych.progress().current_trial_global,
+        time: jsPsych.totalTime()
+      });
     });
-  });
 
-  // focus event capture
-  window.addEventListener('focus', function(){
-    interactionData.push({
-      event: 'focus',
-      trial: jsPsych.progress().current_trial_global,
-      time: jsPsych.totalTime()
+    // focus event capture
+    window.addEventListener('focus', function(){
+      interactionData.push({
+        event: 'focus',
+        trial: jsPsych.progress().current_trial_global,
+        time: jsPsych.totalTime()
+      });
     });
-  });
 
-  // fullscreen change capture
-  function fullscreenchange(){
-    var type = (document.isFullScreen || document.webkitIsFullScreen || document.mozIsFullScreen) ? 'fullscreenenter' : 'fullscreenexit';
-    interactionData.push({
-      event: type,
-      trial: jsPsych.progress().current_trial_global,
-      time: jsPsych.totalTime()
-    });
+    // fullscreen change capture
+    function fullscreenchange(){
+      var type = (document.isFullScreen || document.webkitIsFullScreen || document.mozIsFullScreen) ? 'fullscreenenter' : 'fullscreenexit';
+      interactionData.push({
+        event: type,
+        trial: jsPsych.progress().current_trial_global,
+        time: jsPsych.totalTime()
+      });
+    }
+
+    document.addEventListener('fullscreenchange', fullscreenchange);
+    document.addEventListener('mozfullscreenchange', fullscreenchange);
+    document.addEventListener('webkitfullscreenchange', fullscreenchange);
   }
-
-  document.addEventListener('fullscreenchange', fullscreenchange);
-  document.addEventListener('mozfullscreenchange', fullscreenchange);
-  document.addEventListener('webkitfullscreenchange', fullscreenchange);
 
   // private function to save text file on local drive
 
