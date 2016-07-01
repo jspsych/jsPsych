@@ -112,10 +112,10 @@ var jsPsych = (function() {
 
   core.progress = function() {
 
-    var percent_complete = timeline.percentComplete()
+    var percent_complete = typeof timeline == 'undefined' ? 0 : timeline.percentComplete();
 
     var obj = {
-      "total_trials": timeline.length(),
+      "total_trials": typeof timeline == 'undefined' ? undefined : timeline.length(),
       "current_trial_global": global_trial_index,
       "percent_complete": percent_complete
     };
