@@ -51,7 +51,7 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
       },
       initial_direction: {
         type: [jsPsych.plugins.parameterType.SELECT],
-        choices: ['left','right']
+        choices: ['left','right'],
         default: 'left',
         no_function: false,
         description: ''

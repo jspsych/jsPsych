@@ -26,7 +26,7 @@ jsPsych.plugins["single-audio"] = (function() {
       },
       choices: {
         type: [jsPsych.plugins.parameterType.KEYCODE],
-        array: true
+        array: true,
         default: jsPsych.ALL_KEYS,
         no_function: false,
         description: ''

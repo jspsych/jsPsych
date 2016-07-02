@@ -15,7 +15,7 @@ jsPsych.plugins.xab = (function() {
   jsPsych.pluginAPI.registerPreload('xab', 'stimuli', 'image',function(t){ return !t.is_html || t.is_html == 'undefined'});
 
   plugin.info = {
-    name: 'single-stim',
+    name: 'xab',
     description: '',
     parameters: {
       stimulus: {
