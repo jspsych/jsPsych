@@ -36,7 +36,7 @@ jsPsych.plugins.text = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    trial.cont_key = trial.cont_key || [];
+    trial.cont_key = trial.cont_key || jsPsych.ALL_KEYS;
 
     // if any trial variables are functions
     // this evaluates the function and replaces
