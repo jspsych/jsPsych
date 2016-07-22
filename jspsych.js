@@ -69,6 +69,9 @@ var jsPsych = (function() {
       'on_data_update': function(data) {
         return undefined;
       },
+      'on_interaction_data_update': function(data){
+        return undefined;
+      }
       'show_progress_bar': false,
       'auto_preload': true,
       'max_load_time': 60000,
@@ -972,30 +975,36 @@ jsPsych.data = (function() {
   module.createInteractionListeners = function(){
     // blur event capture
     window.addEventListener('blur', function(){
-      interactionData.push({
+      var data = {
         event: 'blur',
         trial: jsPsych.progress().current_trial_global,
         time: jsPsych.totalTime()
-      });
+      };
+      interactionData.push(data);
+      jsPsych.initSettings().on_interaction_data_update(data);
     });
 
     // focus event capture
     window.addEventListener('focus', function(){
-      interactionData.push({
+      var data = {
         event: 'focus',
         trial: jsPsych.progress().current_trial_global,
         time: jsPsych.totalTime()
-      });
+      };
+      interactionData.push(data);
+      jsPsych.initSettings().on_interaction_data_update(data);
     });
 
     // fullscreen change capture
     function fullscreenchange(){
       var type = (document.isFullScreen || document.webkitIsFullScreen || document.mozIsFullScreen) ? 'fullscreenenter' : 'fullscreenexit';
-      interactionData.push({
+      var data = {
         event: type,
         trial: jsPsych.progress().current_trial_global,
         time: jsPsych.totalTime()
-      });
+      };
+      interactionData.push(data);
+      jsPsych.initSettings().on_interaction_data_update(data);
     }
 
     document.addEventListener('fullscreenchange', fullscreenchange);
