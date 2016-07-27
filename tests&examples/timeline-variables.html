@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+
+<head>
+  <script src="js/jquery.min.js"></script>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-single-stim.js"></script>
+  <script src="../plugins/jspsych-single-audio.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="jspsych-target"></div>
+</body>
+<script>
+
+  var timeline_variables = [
+    { v1: 'sound/sound.mp3', v2: 'Person A' },
+    { v1: 'sound/hammer.mp3', v2: 'Person B' }
+  ];
+
+  var node = {
+    timeline_variables: timeline_variables,
+    timeline: [
+      {
+        type: 'single-stim',
+        choices: ['none'], // Y or N
+        stimulus: "<p style='text-align:center; font-size:80px;'>+</p>",
+        timing_response: 500,
+        is_html: true
+      },
+      {
+        type: 'single-audio',
+        choices: [89, 78], // Y or N
+        stimulus: function() { return jsPsych.timelineVariable('v1'); },
+        prompt: function() { return '<p class="center-content">Have you seen '+jsPsych.timelineVariable('v2')+ ' before? Y or N.</p>' }
+      }
+    ],
+    randomize_order: true,
+    repetitions: 2
+  }
+
+  jsPsych.pluginAPI.preloadAudioFiles(['sound/sound.mp3','sound/hammer.mp3'], function() {
+    jsPsych.init({
+      display_element: $('#jspsych-target'),
+      timeline: [node],
+      on_finish: function() {
+        jsPsych.data.displayData();
+      },
+      default_iti: 250
+    });
+  });
+</script>
+
+</html>

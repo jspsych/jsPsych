@@ -20,6 +20,55 @@ jsPsych.plugins.palmer = (function() {
 
   var plugin = {};
 
+  plugin.info = {
+    name: 'palmer',
+    description: '',
+    parameters: {
+      configuration: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: undefined,
+        array: true,
+        no_function: false,
+        description: ''
+      },
+      show_feedback: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: false,
+        no_function: false,
+        description: ''
+      },
+      grid_spacing: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 75,
+        no_function: false,
+        description: ''
+      },
+      circle_radius: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 20,
+        no_function: false,
+        description: ''
+      },
+      square_size: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 3,
+        no_function: false,
+        description: ''
+      },
+      timing_feedback: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 1000,
+        no_function: false,
+        description: ''
+      },
+      prompt: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      }
+    }
+  }
 
   plugin.trial = function(display_element, trial) {
 

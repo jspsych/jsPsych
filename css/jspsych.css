@@ -13,10 +13,12 @@ html {
   font-family: 'Open Sans', 'Arial', sans-serif;
   font-size: 18px;
   line-height: 1.6em;
+  height: 100%;
 }
 body {
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 p {
   clear: both;
@@ -86,8 +88,30 @@ input[type="text"] {
 /* Container holding jsPsych content */
 
 .jspsych-display-element {
-  width: 800px;
-  margin: 50px auto 50px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.jspsych-top {
+  align-items: flex-start;
+}
+
+.jspsych-middle {
+  align-items: center;
+}
+
+.jspsych-content {
+  margin: 50px;
+}
+
+.jspsych-content-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
 }
 
 /* jsPsych progress bar */
@@ -99,6 +123,7 @@ input[type="text"] {
   margin-bottom: 1em;
   text-align: center;
   padding: 10px 0px;
+  width:100%;
 }
 #jspsych-progressbar-container s {}
 #jspsych-progressbar-outer {

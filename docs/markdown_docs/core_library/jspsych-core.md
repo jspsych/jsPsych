@@ -1,6 +1,41 @@
 # The jsPsych core library
 
 ---
+## jsPsych.addNodeToEndOfTimeline
+```
+jsPsych.addNodeToEndOfTimeline(node_parameters)
+```
+
+### Parameters
+
+Parameter | Type | Description
+--------- | ---- | -----------
+node_parameters | object | An object defining a timeline. It must have, at a minimum, a `timeline` parameter with a valid timeline array as the value for that parameter.
+
+### Return value
+
+None.
+
+### Description
+
+Adds the timeline to the end of the experiment.
+
+### Example
+
+```javascript
+var trial = {
+  type: 'text',
+  text: 'This is a new trial.'
+}
+
+var new_timeline = {
+  timeline: [trial]
+}
+
+jsPsych.addNodeToEndOfTimeline(new_timeline)
+```
+
+---
 ## jsPsych.currentTimelineNodeID
 
 ```
@@ -267,8 +302,7 @@ on_trial_start | function | Function to execute when a new trial begins.
 on_trial_finish | function | Function to execute when a trial ends.
 on_data_update | function | Function to execute every time data is stored using the `jsPsych.data.write` method. All plugins use this method to save data (via a call to `jsPsych.finishTrial`, so this function runs every time a plugin stores new data.
 show_progress_bar | boolean | If true, then [a progress bar](../features/progress-bar.md) is shown at the top of the page.
-max_load_time | numeric | The maximum number of milliseconds to wait for audio content to preload. If the wait time is exceeded, then an error message is logged and the experiment stops. The default value is 30 seconds.
-skip_load_check | boolean | If true, then the experiment will not wait for audio content to load before starting. The default value is false.
+max_load_time | numeric | The maximum number of milliseconds to wait for audio content to preload. If the wait time is exceeded an error message is displayed and the experiment stops. The default value is 60 seconds.
 fullscreen | boolean | If true, the experiment will run in fullscreen mode. See the [feature page](../features/fullscreen.md) for more details.
 default_iti | numeric | The default inter-trial interval in ms. The default value if none is specified is 1,000ms.
 
@@ -314,6 +348,41 @@ console.log(JSON.stringify(settings.timeline));
 ```
 
 ---
+## jsPsych.pauseExperiment
+```
+jsPsych.pauseExperiment()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+None.
+
+### Description
+
+Pauses the experiment. The experiment will finish the current trial, but will not execute any additional trials until `jsPsych.resumeExperiment()` is called.
+
+### Example
+
+```javascript
+var trial = {
+  type: 'single-stim',
+  stimulus: 'Press p to take a 30 second break. Otherwise, press c to continue immediately.',
+  is_html: true,
+  choices: ['p','c'],
+  on_finish: function(data){
+    if(data.key_press == 80) { // 80 = p
+      jsPsych.pauseExperiment();
+      setTimeout(jsPsych.resumeExperiment, 30000);
+    }
+  }
+}
+```
+
+---
 ## jsPsych.progress
 
 ```
@@ -348,6 +417,41 @@ var progress = jsPsych.progress();
 alert('You have completed approximately '+progress.percent_complete+'% of the experiment');
 
 ```
+---
+## jsPsych.resumeExperiment
+```
+jsPsych.resumeExperiment()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+None.
+
+### Description
+
+Resumes the experiment after a call to `jsPsych.pauseExperiment()`. If the post trial delay (`timing_post_trial`) has not yet been reached, then the experiment will not continue until the delay is finished. For example, if `timing_post_trial` was 10,000ms and `jsPsych.resumeExperiment()` was called 6,000ms after the previous trial finished, then the experiment would not continue for another 4,000ms.
+
+### Example
+
+```javascript
+var trial = {
+  type: 'single-stim',
+  stimulus: 'Press p to take a 30 second break. Otherwise, press c to continue immediately.',
+  is_html: true,
+  choices: ['p','c'],
+  on_finish: function(data){
+    if(data.key_press == 80) { // 80 = p
+      jsPsych.pauseExperiment();
+      setTimeout(jsPsych.resumeExperiment, 30000);
+    }
+  }
+}
+```
+
 ---
 ## jsPsych.startTime
 

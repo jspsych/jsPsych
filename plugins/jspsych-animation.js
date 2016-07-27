@@ -11,12 +11,57 @@ jsPsych.plugins.animation = (function() {
 
   jsPsych.pluginAPI.registerPreload('animation', 'stimuli', 'image');
 
+  plugin.info = {
+    name: 'animation',
+    description: '',
+    parameters: {
+      stimuli: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        no_function: false,
+        array: true,
+        description: ''
+      },
+      frame_time: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 250,
+        no_function: false,
+        description: ''
+      },
+      frame_isi: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 0,
+        no_function: false,
+        description: ''
+      },
+      sequence_reps: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 1,
+        no_function: false,
+        description: ''
+      },
+      choices: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        default: jsPsych.ALL_KEYS,
+        no_function: false,
+        array: true,
+        description: ''
+      },
+      prompt: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      }
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     trial.frame_time = trial.frame_time || 250;
     trial.frame_isi = trial.frame_isi || 0;
     trial.sequence_reps = trial.sequence_reps || 1;
-    trial.choices = trial.choices || [];
+    trial.choices = trial.choices || jsPsych.ALL_KEYS;
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
     // if any trial variables are functions

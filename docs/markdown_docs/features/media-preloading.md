@@ -39,7 +39,7 @@ var trial = {
 // an array of paths to images that need to be loaded
 var images = ['img/file1.png'];
 
-jsPsych.preloadImages(images, function(){ startExperiment(); });
+jsPsych.pluginAPI.preloadImages(images, function(){ startExperiment(); });
 
 function startExperiment(){
 	jsPsych.init({

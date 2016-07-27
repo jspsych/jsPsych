@@ -6,6 +6,7 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 
 ### [Core](jspsych-core.md)
 
+* [jsPsych.addNodeToEndOfTimeline](jspsych-core.md#jspsychaddnodetoendoftimeline)
 * [jsPsych.currentTimelineNodeID](jspsych-core.md#jspsychcurrenttimelinenodeid)
 * [jsPsych.currentTrial](jspsych-core.md#jspsychcurrenttrial)
 * [jsPsych.endCurrentTimeline](jspsych-core.md#jspsychendcurrenttimeline)
@@ -13,8 +14,10 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.finishTrial](jspsych-core.md#jspsychfinishtrial)
 * [jsPsych.getDisplayElement](jspsych-core.md#jspsychgetdisplayelement)
 * [jsPsych.init](jspsych-core.md#jspsychinit)
-* [jsPsych.initSettings](jspsych-core.md#jspsychinitSettings)
+* [jsPsych.initSettings](jspsych-core.md#jspsychinitsettings)
+* [jsPsych.pauseExperiment](jspsych-core.md#jspsychpauseexperiment)
 * [jsPsych.progress](jspsych-core.md#jspsychprogress)
+* [jsPsych.resumeExperiment](jspsych-core.md#jspsychresumeexperiment)
 * [jsPsych.startTime](jspsych-core.md#jspsychstarttime)
 * [jsPsych.totalTime](jspsych-core.md#jspsychtotaltime)
 
@@ -28,11 +31,12 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.data.getData](jspsych-data.md#jspsychdatagetdata)
 * [jsPsych.data.getDataByTimelineNode](jspsych-data.md#jspsychdatagetdatabytimelinenode)
 * [jsPsych.data.getDataByTrialIndex](jspsych-data.md#jspsychdatagetdatabytrialindex)
+* [jsPsych.data.getInteractionData](jspsych-data.md#jspsychdatagetinteractiondata)
 * [jsPsych.data.getLastTimelineData](jspsych-data.md#jspsychdatagetlasttimelinedata)
 * [jsPsych.data.getLastTrialData](jspsych-data.md#jspsychdatagetlasttrialdata)
 * [jsPsych.data.getTrialsOfType](jspsych-data.md#jspsychdatagettrialsoftype)
-
 * [jsPsych.data.getURLVariable](jspsych-data.md#jspsychdatageturlvariable)
+* [jsPsych.data.ignore](jspsych-data.md#jspsychdataignore)
 * [jsPsych.data.localSave](jspsych-data.md#jspsychdatalocalsave)
 * [jsPsych.data.write](jspsych-data.md#jspsychdatawrite)
 * [jsPsych.data.urlVariables](jspsych-data.md#jspsychdataurlvariables)

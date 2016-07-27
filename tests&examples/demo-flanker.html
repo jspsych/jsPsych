@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Flanker Task</title>
+        <script src="js/jquery.min.js"></script>
+        <script src="../jspsych.js"></script>
+        <script src="../plugins/jspsych-text.js"></script>
+        <script src="../plugins/jspsych-single-stim.js"></script>
+        <link rel="stylesheet" href="../css/jspsych.css">
+    </head>
+    <body>
+    </body>
+    <script>
+        /*set up welcome block*/
+        var welcome = {
+          type: "text",
+          text: "<p style='margin:20%'>Welcome to the experiment. Press any key to begin.</p>"
+        };
+
+        /*set up instructions block*/
+        var instructions = {
+          type: "text",
+          text: "<p style='margin-top:20%; margin-right:10%'>In this task you are required to respond to " +
+                "stimuli displayed on the screen. In the following, you will see five arrows. Your task " +
+                "is to decide as quickly as possible if the arrow in the middle is pointing in the same " +
+                "direction as the others or not. If this is the case ('<strong><<<<<</strong>' or " +
+                "'<strong>>>>>></strong>'), please press the left arrow button on the keyboard. If the " +
+                "middle arrow is pointing in the opposite direction ('<strong><<><<</strong>' or " +
+                "'<strong>>><>></strong>'), please press the right arrow button on the keyboard. You can " +
+                "start the experiment by pressing ENTER.</p>",
+          timing_post_trial: 3000
+        };
+
+        /*defining stimuli*/
+        var test_stimuli = [
+          {
+            stimulus: "img/con1.png",
+            data: { phase: 'congruent'}
+          },
+          {
+            stimulus: "img/con2.png",
+            data: { phase: 'congruent'}
+          },
+          {
+            stimulus: "img/inc1.png",
+            data: { phase: 'incongruent'}
+          },
+          {
+            stimulus: "img/inc2.png",
+            data: { phase: 'incongruent'}
+          }
+        ];
+
+        /*randomising stimuli*/
+        var all_trials = jsPsych.randomization.repeat(test_stimuli, 25);
+
+        /*creating random ISI*/
+        var post_trial_gap = function() {
+            return Math.floor(Math.random() * 1500) + 500;
+        };
+
+        /*defining experimental block*/
+        var test_block = {
+          type: 'single-stim',
+          choices: [37, 39],
+          timing_response: 1500,
+          on_finish: function(data){
+              var correct = false;
+              if(data.phase == 'congruent' &&  data.key_press == '37' && data.rt > -1){
+                correct = true;
+              } else if(data.phase == 'incongruent' && data.key_press == '39' && data.rt > -1){
+                correct = true;
+              }
+              jsPsych.data.addDataToLastTrial({correct: correct});
+            },
+          timeline: all_trials,
+          timing_post_trial: post_trial_gap
+        };
+
+        /*function for getting mean RTs and error rates*/
+        function getSubjectData() {
+
+          var trials = jsPsych.data.getTrialsOfType('single-stim');
+
+          var sum_rt = 0;
+          var correct_trial_count = 0;
+          var correct_rt_count = 0;
+          for (var i = 0; i < trials.length; i++) {
+            if (trials[i].correct == true) {
+              correct_trial_count++;
+              if(trials[i].rt > -1){
+                sum_rt += trials[i].rt;
+                correct_rt_count++;
+              }
+            }
+          }
+          return {
+            rt: Math.floor(sum_rt / correct_rt_count),
+            accuracy: Math.floor(correct_trial_count / trials.length * 100)
+          }
+        };
+
+        /*defining debriefing block*/
+        var debrief_block = {
+          type: "text",
+          text: function() {
+            var subject_data = getSubjectData();
+            return "<p style='margin:20%'>You responded correctly on "+subject_data.accuracy+"% of the trials. " +
+            "Your average response time was <strong>" + subject_data.rt + "ms</strong>. Press any key to complete the "+
+            "experiment. Thank you!</p>";
+          }
+        };
+
+        /*set up experiment structure*/
+        var timeline = [];
+        timeline.push(welcome);
+        timeline.push(instructions);
+        timeline.push(test_block);
+        timeline.push(debrief_block);
+
+        /*start experiment*/
+        jsPsych.init({
+            timeline: timeline,
+            on_finish: function() {
+                jsPsych.data.displayData();
+            }
+        });
+    </script>
+</html>

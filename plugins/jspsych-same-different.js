@@ -12,7 +12,70 @@ jsPsych.plugins['same-different'] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('same-different', 'stimuli', 'image');
+  jsPsych.pluginAPI.registerPreload('same-different', 'stimuli', 'image',function(t){ return !t.is_html || t.is_html == 'undefined'});
+
+  plugin.info = {
+    name: 'same-different',
+    description: '',
+    parameters: {
+      stimuli: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        array: true,
+        no_function: false,
+        description: ''
+      },
+      is_html: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: false,
+        no_function: false,
+        description: ''
+      },
+      answer: {
+        type: [jsPsych.plugins.parameterType.SELECT],
+        options: ['same', 'different'],
+        default: 75,
+        no_function: false,
+        description: ''
+      },
+      same_key: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        default: 'Q',
+        no_function: false,
+        description: ''
+      },
+      different_key: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        default: 'P',
+        no_function: false,
+        description: ''
+      },
+      timing_first_stim: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 1000,
+        no_function: false,
+        description: ''
+      },
+      timing_gap: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 500,
+        no_function: false,
+        description: ''
+      },
+      timing_second_stim: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 1000,
+        no_function: false,
+        description: ''
+      },
+      prompt: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      }
+    }
+  }
 
   plugin.trial = function(display_element, trial) {
 
@@ -105,11 +168,14 @@ jsPsych.plugins['same-different'] = (function() {
 
         var correct = false;
 
-        if (info.key == trial.same_key && trial.answer == 'same') {
+        var skey = typeof trial.same_key == 'string' ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.same_key) : trial.same_key;
+        var dkey = typeof trial.different_key == 'string' ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.different_key) : trial.different_key;
+
+        if (info.key == skey && trial.answer == 'same') {
           correct = true;
         }
 
-        if (info.key == trial.different_key && trial.answer == 'different') {
+        if (info.key == dkey && trial.answer == 'different') {
           correct = true;
         }
 

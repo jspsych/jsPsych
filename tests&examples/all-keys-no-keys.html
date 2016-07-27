@@ -17,26 +17,21 @@
 </body>
 <script>
   var trial_1 = {
-    stimulus: 'img/happy_face_1.jpg',
+    stimulus: '<p>All keys</p>',
+    choices: jsPsych.ALL_KEYS
   }
 
   var trial_2 = {
-    stimulus: 'img/sad_face_1.jpg',
+    stimulus: '<p>No keys</p>',
+    timing_response: 2000,
+    choices: jsPsych.NO_KEYS
   }
 
-  var trial_3 = {
-    stimulus: '<p>:)</p>',
-    is_html: true
-  }
 
   var node = {
     type: 'single-stim',
-    timeline: [trial_1, trial_2, trial_3],
-    choices: [89, 78], // Y or N
-    prompt: '<p class="center-content">Have you seen this face before? Y or N.</p>',
-    data: {
-      node_data: true
-    }
+    is_html: true,
+    timeline: [trial_1, trial_2],
   }
 
 

@@ -13,6 +13,50 @@ jsPsych.plugins.instructions = (function() {
 
   var plugin = {};
 
+  plugin.info = {
+    name: 'instructions',
+    description: '',
+    parameters: {
+      pages: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        array: true,
+        no_function: false,
+        description: ''
+      },
+      key_forward: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        default: 'rightarrow',
+        no_function: false,
+        description: ''
+      },
+      key_backward: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        default: 'leftarrow',
+        no_function: false,
+        description: ''
+      },
+      allow_backward: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: true,
+        no_function: false,
+        description: ''
+      },
+      allow_keys: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: true,
+        no_function: false,
+        description: ''
+      },
+      show_clickable_nav: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: false,
+        no_function: false,
+        description: ''
+      }
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     trial.key_forward = trial.key_forward || 'rightarrow';

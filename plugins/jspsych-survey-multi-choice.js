@@ -13,6 +13,46 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 
   var plugin = {};
 
+  plugin.info = {
+    name: 'survey-multi-choice',
+    description: '',
+    parameters: {
+      questions: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        array: true,
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      options: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        array: true,
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      required: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        array: true,
+        default: false,
+        no_function: false,
+        description: ''
+      },
+      horitzontal: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: false,
+        no_function: false,
+        description: ''
+      },
+      preamble: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      }      
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     var plugin_id_name = "jspsych-survey-multi-choice";

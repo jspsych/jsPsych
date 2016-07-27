@@ -13,7 +13,58 @@ jsPsych.plugins["single-stim"] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('single-stim', 'stimulus', 'image');
+  jsPsych.pluginAPI.registerPreload('single-stim', 'stimulus', 'image', function(t){ return !t.is_html || t.is_html == 'undefined'});
+
+  plugin.info = {
+    name: 'single-stim',
+    description: '',
+    parameters: {
+      stimulus: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      is_html: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: false,
+        no_function: false,
+        description: ''
+      },
+      choices: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        array: true,
+        default: jsPsych.ALL_KEYS,
+        no_function: false,
+        description: ''
+      },
+      prompt: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      },
+      timing_stim: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: -1,
+        no_function: false,
+        description: ''
+      },
+      timing_response: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: -1,
+        no_function: false,
+        description: ''
+      },
+      response_ends_trial: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: true,
+        no_function: false,
+        description: ''
+      },
+
+    }
+  }
 
   plugin.trial = function(display_element, trial) {
 
@@ -23,7 +74,7 @@ jsPsych.plugins["single-stim"] = (function() {
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
     // set default values for the parameters
-    trial.choices = trial.choices || [];
+    trial.choices = trial.choices || jsPsych.ALL_KEYS;
     trial.response_ends_trial = (typeof trial.response_ends_trial == 'undefined') ? true : trial.response_ends_trial;
     trial.timing_stim = trial.timing_stim || -1;
     trial.timing_response = trial.timing_response || -1;

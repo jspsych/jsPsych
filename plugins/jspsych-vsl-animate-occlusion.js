@@ -7,7 +7,7 @@
  *
  * Josh de Leeuw
  *
- * documentation: https://github.com/jodeleeuw/jsPsych/wiki/jspsych-vsl-animate-occlusion
+ * documentation: docs.jspsych.org
  *
  */
 
@@ -17,6 +17,66 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
 
   jsPsych.pluginAPI.registerPreload('vsl-animate-occlusion', 'stimuli', 'image');
 
+  plugin.info = {
+    name: 'vsl-animate-occlusion',
+    description: '',
+    parameters: {
+      stimuli: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        array: true,
+        no_function: false,
+        description: ''
+      },
+      choices: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        array: true,
+        default: jsPsych.ALL_KEYS,
+        no_function: false,
+        description: ''
+      },
+      canvas_size: {
+        type: [jsPsych.plugins.parameterType.INT],
+        array: true,
+        default: [400,400],
+        no_function: false,
+        description: ''
+      },
+      image_size: {
+        type: [jsPsych.plugins.parameterType.INT],
+        array: true,
+        default: [100,100],
+        no_function: false,
+        description: ''
+      },
+      initial_direction: {
+        type: [jsPsych.plugins.parameterType.SELECT],
+        choices: ['left','right'],
+        default: 'left',
+        no_function: false,
+        description: ''
+      },
+      occlude_center: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: true,
+        no_function: false,
+        description: ''
+      },
+      timing_cycle: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 1000,
+        no_function: false,
+        description: ''
+      },
+      timing_pre_movement: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 500,
+        no_function: false,
+        description: ''
+      }
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     // default trial parameters
@@ -25,7 +85,7 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
     trial.image_size = trial.image_size || [100, 100];
     trial.initial_direction = trial.initial_direction || "left";
     trial.occlude_center = (typeof trial.occlude_center === 'undefined') ? true : trial.occlude_center;
-    trial.choices = trial.choices || [];
+    trial.choices = trial.choices || jsPsych.ALL_KEYS;
     trial.timing_pre_movement = (typeof trial.timing_pre_movement === 'undefined') ? 500 : trial.timing_pre_movement;
 
     // if any trial variables are functions

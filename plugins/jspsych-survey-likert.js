@@ -12,6 +12,27 @@ jsPsych.plugins['survey-likert'] = (function() {
 
   var plugin = {};
 
+  plugin.info = {
+    name: 'survey-likert',
+    description: '',
+    parameters: {
+      questions: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        array: true,
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      labels: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        array: true,
+        default: undefined,
+        no_function: false,
+        description: ''
+      }
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     // default parameters for the trial

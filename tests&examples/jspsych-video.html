@@ -3,7 +3,7 @@
   <head>
     <script src="js/jquery.min.js"></script>
     <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-survey-text.js"></script>
+    <script src="../plugins/jspsych-video.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
   <body>
@@ -11,18 +11,14 @@
   </body>
   <script>
 
-  // defining groups of questions that will go together.
-  var page_1_questions = ["How old are you?", "Where were you born?"];
-
-  var survey_block = {
-      type: 'survey-text',
-      questions: page_1_questions
-  };
-
+  var trial = {
+    type: 'video',
+    sources: ['video/sample_video.mp4']
+  }
 
   jsPsych.init({
     display_element: $('#jspsych-target'),
-    timeline: [survey_block],
+    timeline: [trial],
     on_finish: function() { jsPsych.data.displayData(); }
   });
 

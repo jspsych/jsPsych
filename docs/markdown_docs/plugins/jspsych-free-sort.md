@@ -2,6 +2,10 @@
 
 The free-sort plugin displays a collection of images on the screen that the subject can interact with by clicking and dragging. All of the moves that the subject performs are recorded.
 
+## Dependency
+
+This plugin requires the jQuery UI library, available at [https://jqueryui.com/](https://jqueryui.com/). You must include the library in the `<head>` section of your experiment page. You can use the [Google-hosted version of the library](https://developers.google.com/speed/libraries/#jquery-ui).
+
 ## Parameters
 
 This table lists the parameters associated with this plugin. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
