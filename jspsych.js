@@ -71,7 +71,7 @@ var jsPsych = (function() {
       },
       'on_interaction_data_update': function(data){
         return undefined;
-      }
+      },
       'show_progress_bar': false,
       'auto_preload': true,
       'max_load_time': 60000,
