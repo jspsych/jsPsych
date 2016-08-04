@@ -1,5 +1,5 @@
 /**
- * jspsych plugin for categorization trials with feedback
+ * jspsych plugin for IAT with feedback
  * Josh de Leeuw
  *
  * documentation: docs.jspsych.org
@@ -16,14 +16,14 @@ jsPsych.plugins.IAT = (function() {
 
     // default parameters
     trial.text_answer = (typeof trial.text_answer === 'undefined') ? "" : trial.text_answer;
-    trial.correct_text = (typeof trial.correct_text === 'undefined') ? "<p class='feedback'>Correct</p>" : trial.correct_text;
-    trial.incorrect_text = (typeof trial.incorrect_text === 'undefined') ? "<p class='feedback'>Incorrect</p>" : trial.incorrect_text;
+    trial.correct_text = (typeof trial.correct_text === 'undefined') ? "<div class='iat-response'><span style='font-size: 144px; color: #008000;'>O</span></div>" : trial.correct_text;
+    trial.incorrect_text = (typeof trial.incorrect_text === 'undefined') ? "<div class='iat-response'><span style='font-size: 144px; color: #ff0000;'>X</span></div>" : trial.incorrect_text;
     trial.show_stim_with_feedback = (typeof trial.show_stim_with_feedback === 'undefined') ? true : trial.show_stim_with_feedback;
     trial.is_html = (typeof trial.is_html === 'undefined') ? false : trial.is_html;
     trial.force_correct_button_press = (typeof trial.force_correct_button_press === 'undefined') ? false : trial.force_correct_button_press;
     trial.prompt = (typeof trial.prompt === 'undefined') ? '' : trial.prompt;
     trial.show_feedback_on_timeout = (typeof trial.show_feedback_on_timeout === 'undefined') ? false : trial.show_feedback_on_timeout;
-    trial.timeout_message = trial.timeout_message || "<p>Please respond faster.</p>";
+    trial.timeout_message = trial.timeout_message || "<div class ='iat-response'>Please respond faster.</div>";
     // timing params
     trial.timing_stim = trial.timing_stim || -1; // default is to show image until response
     trial.timing_response = trial.timing_response || -1; // default is no max response time
@@ -45,13 +45,13 @@ jsPsych.plugins.IAT = (function() {
       // add image to display
       display_element.append($('<img>', {
         "src": trial.stimulus,
-        "class": 'jspsych-categorize-stimulus',
-        "id": 'jspsych-categorize-stimulus'
+        "class": 'jspsych-IAT-stimulus',
+        "id": 'jspsych-IAT-stimulus'
       }));
     } else {
       display_element.append($('<div>', {
-        "id": 'jspsych-categorize-stimulus',
-        "class": 'jspsych-categorize-stimulus',
+        "id": 'jspsych-IAT-stimulus',
+        "class": 'jspsych-IAT-stimulus',
         "html": trial.stimulus
       }));
     }
@@ -59,7 +59,7 @@ jsPsych.plugins.IAT = (function() {
     // hide image after time if the timing parameter is set
     if (trial.timing_stim > 0) {
       setTimeoutHandlers.push(setTimeout(function() {
-        $('#jspsych-categorize-stimulus').css('visibility', 'hidden');
+        $('#jspsych-IAT-stimulus').css('visibility', 'hidden');
       }, trial.timing_stim));
     }
 
@@ -140,13 +140,13 @@ jsPsych.plugins.IAT = (function() {
             // add image to display
             display_element.append($('<img>', {
               "src": trial.stimulus,
-              "class": 'jspsych-categorize-stimulus',
-              "id": 'jspsych-categorize-stimulus'
+              "class": 'jspsych-IAT-stimulus',
+              "id": 'jspsych-IAT-stimulus'
             }));
           } else {
             display_element.append($('<div>', {
-              "id": 'jspsych-categorize-stimulus',
-              "class": 'jspsych-categorize-stimulus',
+              "id": 'jspsych-IAT-stimulus',
+              "class": 'jspsych-IAT-stimulus',
               "html": trial.stimulus
             }));
           }
