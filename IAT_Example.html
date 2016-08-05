@@ -1,0 +1,458 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Personal IAT</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="jsPsych/jspsych-5.0.3/jspsych.js"></script>
+		<link href="jsPsych/jspsych-5.0.3/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+		<script src="jsPsych/jspsych-5.0.3/plugins/jspsych-text.js"></script>
+		<script src="jsPsych/jspsych-5.0.3/plugins/jspsych-IAT.js"></script>
+		<script src="jsPsych/jspsych-5.0.3/plugins/jspsych-survey-text.js"></script>
+		<script src="jsPsych/jspsych-5.0.3/plugins/jspsych-instructions.js"></script>
+		<script src="jsPsych/jspsych-5.0.3/plugins/jspsych-call-function.js"></script>
+	</head>
+    <body>
+	<div class = "left-side"> </div>
+	<div class = "right-side"> </div>
+	</body>
+	<script>
+	
+	/* randomize time between each trial */
+	var post_trial_gap = function()
+	{
+		return Math.floor( Math.random() * 50) + 100;
+	}
+	
+	/* get participant ID and condition*/
+	var urlvar = jsPsych.data.urlVariables();
+	
+	/* ===============INSTRUCTION BLOCKS==================*/
+	
+	var intro =
+	{
+		type:'instructions'
+		,data:{trial_name: 'introduction'}
+		,pages: 
+		[
+        '<p class ="instructions">Instructions for this task:<br></br>In this task, several words or pictures will be presented'+
+				' and you will have to classify them in groups. This task will take about 5 minutes to complete.'
+				+'<br></br>This task requires that you classify the items as fast as you can while making as few mistakes as possible'
+				+'<br></br>To be able to answer quickly, keep your LEFT INDEX finger on the E key and the RIGHT INDEX finger on'
+				+' the P key.<br></br>The two labels at the top of the screen will show you which words or pictures go with each key.'
+				+'<br></br>Remember, this is a timed sorting task!<br></br>GO AS FAST AS YOU CAN while making as FEW MISTAKES as possible. '
+				+'Going too slow or making too many errors will result in an uninterpretable score.<br></br>Press the space-bar key to proceed.</p>'
+		]
+		,key_forward: 32
+		,on_trial_start: function()
+			{
+				$('div.left-side').empty();
+				$('div.right-side').empty();
+			}
+	}
+	
+	
+	/* define instructions1 block */
+    var instructions1 = 
+	{
+        type: "text"
+		,data:{trial_name: 'instructions'}
+        ,text: '<p class ="left-side-begin">Positive</p>'
+				+'<p class ="right-side-begin">Negative</p>'
+				+'<p class = "instructions">Words representing the categories at the top will appear one-by-one in the middle of the screen.'
+				+'<br></br>When the item belongs to a category on the left, press the E key; when the '
+				+'item belongs to a category on the right, press the P key. Items belong to only one category.<br></br>'
+				+'If you make an error, an <span style="color:red">X</span> will appear. If you are correct, an <span style="color:green">O</span> will appear.'
+				+'<br></br>This is a practice block, it is ok to make some mistakes.<br></br>Press the space-bar to begin.</p>'
+			
+		,timing_post_trial: 2000
+		,cont_key: ['space']
+		,on_trial_start: function()
+			{
+				$('div.left-side').empty();
+				$('div.right-side').empty();
+			}
+	};
+	
+	/* define instructions2 block */
+    var instructions2 = 
+	{
+        type: "text"
+		,data:{trial_name: 'instructions2'}
+        ,text: '<p class ="left-side-begin"><span style="color:blue">Flowers</span></p>'
+				+'<p class ="right-side-begin"><span style="color:blue">Insects</span></p>'
+				+'<p class = "instructions">See above, the categories have changed. the items for sorting have changed as well. The rules, however, are the same.'
+				+'<br></br>When the item belongs to a category on the left, press the E key; when the '
+				+'item belongs to a category on the right, press the P key. Items belong to only one category.<br></br>'
+				+'If you make an error, an <span style="color:red">X</span> will appear. If you are correct, an <span style="color:green">O</span> will appear.'
+				+'<br></br>This is a practice block, it is ok to make some mistakes.<br></br>Press the space-bar to begin.</p>'
+			
+		,timing_post_trial: 2000
+		,cont_key: ['space']
+		,on_trial_start: function()
+			{
+				$('div.left-side').empty();
+				$('div.right-side').empty();
+			}
+	};
+		
+	/* define instructions3 block */
+	var instructions3 = 
+	{
+        type: "text"
+		,data:{trial_name: 'instructions3'}
+        ,text: '<p class ="left-side-begin">Positive<br>or</br><span style="color:blue">Flowers</span></p>'
+				+'<p class ="right-side-begin">Negative<br>or</br><span style="color:blue">Insects</span></p>'
+				+'<p class = "instructions">See above, the four categories now appear together. Remember, each item belongs to only one group. '
+				+'For example, the categories Positive and Negative appear on separate sides above - words associated with <span style="color:blue">Positive</span>' 
+				+' would go in the <span style="color:blue">Positive</span> category, not the <span style="color:blue">Negative</span> category.'
+				+'<br></br>To help you identify the appropriate category, the <span style="color:blue">Positive</span> and <span style="color:blue">Negative</span>'
+				+' words appear in <span style="color:blue">BLUE</span>. Use the E and P keys to categorize items into four groups left and right,'
+				+' and correct errors by hitting the other key. This is a practice block, it is ok to make some mistakes.'
+				+'<br></br>Press the space-bar to begin.</p>'
+			
+		,timing_post_trial: 2000
+		,cont_key: ['space']
+		,on_trial_start: function()
+			{
+				$('div.left-side').empty();
+				$('div.right-side').empty();
+			}
+	
+	};
+	
+	/* define instructions4 */
+	var instructions4 = 
+	{
+        type: "text"
+		,data:{trial_name: 'instructions4'}
+        ,text: '<p class ="left-side-begin">Positive<br>or</br><span style="color:blue">Flowers</span></p>'
+				+'<p class ="right-side-begin">Negative<br>or</br><span style="color:blue">Insects</span></p>'
+				+'<p class="instructions">THIS IS THE TEST! Try to answer as fast as you can, making a few mistakes is OK.'
+				+'<br></br>Press the space-bar to begin.</p>'
+			
+		,timing_post_trial: 2000
+		,cont_key: ['space']
+		,on_trial_start: function()
+			{
+				$('div.left-side').empty();
+				$('div.right-side').empty();
+			}
+	};
+	
+	/* define instructions5 block */
+    var instructions5 = 
+	{
+        type: "text"
+		,data:{trial_name: 'instructions5'}
+        ,text: '<p class ="left-side-begin"><span style="color:blue">Insects</span></p>'
+				+'<p class ="right-side-begin"><span style="color:blue">Flowers</span></p>'
+				+'<p class = "instructions">Words representing the categories at the top will appear one-by-one in the middle of the screen.'
+				+'<br></br>When the item belongs to a category on the left, press the E key; when the '
+				+'item belongs to a category on the right, press the P key. Items belong to only one category.<br></br>'
+				+'If you make an error, an <span style="color:red">X</span> will appear. If you are correct, an <span style="color:green">O</span> will appear.'
+				+'<br></br>This is a practice block, it is ok to make some mistakes.<br></br>Press the space-bar to begin.</p>'
+			
+		,timing_post_trial: 2000
+		,cont_key: ['space']
+		,on_trial_start: function()
+			{
+				$('div.left-side').empty();
+				$('div.right-side').empty();
+			}
+	};
+	
+	/* define instructions6 block */
+	var instructions6 = 
+	{
+        type: "text"
+		,data:{trial_name: 'instructions6'}
+        ,text: '<p class ="left-side-begin">Positive<br>or</br><span style="color:blue">Insects</span></p>'
+				+'<p class ="right-side-begin">Negative<br>or</br><span style="color:blue">Flowers</span></p>'
+				+'<p class = "instructions">See above, the four categories now appear together. Remember, each item belongs to only one group. '
+				+'For example, the categories Positive and Negative appear on separate sides above - words associated with <span style="color:blue">Positive</span>' 
+				+' would go in the <span style="color:blue">Positive</span> category, not the <span style="color:blue">Negative</span> category.'
+				+'<br></br>To help you identify the appropriate category, the <span style="color:blue">Positive</span> and <span style="color:blue">Negative</span>'
+				+' words appear in <span style="color:blue">BLUE</span>. Use the E and P keys to categorize items into four groups left and right,'
+				+' and correct errors by hitting the other key. This is a practice block, it is ok to make some mistakes.'
+				+'<br></br>Press the space-bar to begin.</p>'
+			
+		,timing_post_trial: 2000
+		,cont_key: ['space']
+		,on_trial_start: function()
+			{
+				$('div.left-side').empty();
+				$('div.right-side').empty();
+			}
+	};
+	
+	/* define instructions7 block */
+	var instructions7 = 
+	{
+        type: "text"
+		,data:{trial_name: 'instructions7'}
+        ,text: '<p class ="left-side-begin">Positive<br>or</br><span style="color:blue">Insects</span></p>'
+				+'<p class ="right-side-begin">Negative<br>or</br><span style="color:blue">Flowers</span></p>'
+				+'<p class="instructions">THIS IS THE TEST! Try to answer as fast as you can, making a few mistakes is OK.'
+				+'<br></br>Press the space-bar to begin.</p>'
+			
+		,timing_post_trial: 2000
+		,cont_key: ['space']
+		,on_trial_start: function()
+			{
+				$('div.left-side').empty();
+				$('div.right-side').empty();
+			}
+	};
+	
+	
+	/* ============IMAGE AND WORDS FOR BLOCKS===============*/
+	
+	/* practice blocks */
+	var block1 =
+	[
+		{stimulus: '<p class="IAT-stimuli">Happy</p>', is_html:true, key_answer: 69}
+		,{stimulus: '<p class="IAT-stimuli">Joy</p>', is_html:true, key_answer: 69}
+		,{stimulus: '<p class="IAT-stimuli">Heaven</p>', is_html:true, key_answer: 69}
+		,{stimulus: '<p class="IAT-stimuli">Smile</p>', is_html:true, key_answer: 69}
+		,{stimulus: '<p class="IAT-stimuli">Friend</p>', is_html:true, key_answer: 69}
+		,{stimulus: '<p class="IAT-stimuli">Kill</p>', is_html:true, key_answer: 80}
+		,{stimulus: '<p class="IAT-stimuli">Hate</p>', is_html:true, key_answer: 80}
+		,{stimulus: '<p class="IAT-stimuli">Vomit</p>', is_html:true, key_answer: 80}
+		,{stimulus: '<p class="IAT-stimuli">Evil</p>', is_html:true, key_answer: 80}
+		,{stimulus: '<p class="IAT-stimuli">Nasty</p>', is_html:true, key_answer: 80}
+	];
+	var b1 = jsPsych.randomization.sample(block1,20,true);
+	
+	var block2 =
+	[
+		{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Rose</span></p>', is_html:true, key_answer: 69}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Tulip</span></p>', is_html:true, key_answer: 69}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Sunflower</span></p>', is_html:true, key_answer: 69}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Lilly</span></p>', is_html:true, key_answer: 69}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Daffodil</span></p>', is_html:true, key_answer: 69}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Fly</span></p>', is_html:true, key_answer: 80}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Termite</span></p>', is_html:true, key_answer: 80}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Cockroach</span></p>', is_html:true, key_answer: 80}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Lice</span></p>', is_html:true, key_answer: 80}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Wasp</span></p>', is_html:true, key_answer: 80}
+	];
+	var b2 = jsPsych.randomization.sample(block2,20,true);
+	
+	var block3 = b1.concat(b2);
+	var b3 = jsPsych.randomization.sample(block3,20,true);
+	
+	var block5 =
+	[
+				{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Rose</span></p>', is_html:true, key_answer: 80}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Tulip</span></p>', is_html:true, key_answer: 80}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Sunflower</span></p>', is_html:true, key_answer: 80}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Lilly</span></p>', is_html:true, key_answer: 80}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Daffodil</span></p>', is_html:true, key_answer: 80}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Fly</span></p>', is_html:true, key_answer: 69}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Termite</span></p>', is_html:true, key_answer: 69}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Cockroach</span></p>', is_html:true, key_answer: 69}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Lice</span></p>', is_html:true, key_answer: 69}
+		,{stimulus: '<p class="IAT-stimuli"><span style="color:blue">Wasp</span></p>', is_html:true, key_answer: 69}
+	];
+	var b5 = jsPsych.randomization.sample(block5,20,true);
+	
+	var block6 = b1.concat(b5);
+	var b6 = jsPsych.randomization.sample(block6,20,true);
+	
+	/* test blocks */
+	var b4 = jsPsych.randomization.sample(block3,40,true);
+	var b7 = jsPsych.randomization.sample(block6,40,true);
+	
+		
+	/* =================DEFINE BLOCKS================= */
+	
+	/* define practice trial block */
+	var trial1 =
+	{
+		type: 'IAT'
+		,choices: ['E','P']
+		,data:{trial_name: 'practice'}
+		,timing_post_trial: post_trial_gap
+		,timing_feedback_duration: 150
+		,force_correct_button_press: false
+		,timing_response: 1500
+		,timeline: b1
+		,left_target: '<p>Positive</p>'
+		,right_target: '<p>Negative</p>'
+	
+	};
+	
+	/* define practice trial block 2 */
+	var trial2 =
+	{
+		type: 'IAT'
+		,choices: ['E','P']
+		,data:{trial_name: 'practice'}
+		,timing_post_trial: post_trial_gap
+		,timing_feedback_duration: 150
+		,force_correct_button_press: false
+		,timing_response: 1500
+		,timeline: b2
+		,left_target: '<p><span style="color:blue">Flowers</span></p>'
+		,right_target: '<p><span style="color:blue">Insects</span></p>'
+	
+	};
+	
+	/* define practice trial block 3 */
+	var trial3 =
+	{
+		type: 'IAT'
+		,choices: ['E','P']
+		,data:{trial_name: 'practice_full'}
+		,timing_post_trial: post_trial_gap
+		,timing_feedback_duration: 150
+		,timing_response: 1500
+		,force_correct_button_press: false
+		,timeline: b3
+		,left_target: '<p>Positive<br>or</br><span style="color:blue">Flowers</span></p>'
+		,right_target: '<p>Negative<br>or</br><span style="color:blue">Insects</span></p>'
+	};
+	
+	/* define full trial block */
+	var trial4 =
+	{
+		type: 'IAT'
+		,choices: ['E','P']
+		,data:{trial_name: 'full_trial'}
+		,timing_post_trial: post_trial_gap
+		,timing_feedback_duration: 150
+		,timing_response: 1500
+		,force_correct_button_press: false
+		,timeline: b4
+		,left_target: '<p>Positive<br>or</br><span style="color:blue">Flowers</span></p>'
+		,right_target: '<p>Negative<br>or</br><span style="color:blue">Insects</span></p>'
+	};
+
+	/* define reverse practice trial block */
+	var trial5 =
+	{
+		type: 'IAT'
+		,choices: ['E','P']
+		,data:{trial_name: 'reverse_practice'}
+		,timing_post_trial: post_trial_gap
+		,timing_feedback_duration: 150
+		,timing_response: 1500
+		,force_correct_button_press: false
+		,timeline: b5
+		,left_target: '<p>Insects</p>'
+		,right_target: '<p>Flowers</p>'
+	};
+	
+	/* define reverse practice trial block 2 */
+	var trial6 =
+	{
+		type: 'IAT'
+		,choices: ['E','P']
+		,data:{trial_name: 'reverse_practice_full'}
+		,timing_post_trial: post_trial_gap
+		,timing_feedback_duration: 150
+		,timing_response: 1500
+		,force_correct_button_press: false
+		,timeline: b6
+		,left_target: '<p>Positive<br>or</br><span style="color:blue">Insects</span></p>'
+		,right_target: '<p>Negative<br>or</br><span style="color:blue">Flowers</span></p>'
+	};
+	
+	/* define reverse full trial block */
+	var trial7 =
+	{
+		type: 'IAT'
+		,choices: ['E','P']
+		,data:{trial_name: 'rev_full_trial'}
+		,timing_post_trial: post_trial_gap
+		,timing_feedback_duration: 150
+		,timing_response: 1500
+		,force_correct_button_press: false
+		,timeline: b7
+		,left_target: '<p>Positive<br>or</br><span style="color:blue">Insects</span></p>'
+		,right_target: '<p>Negative<br>or</br><span style="color:blue">Flowers</span></p>'
+	};
+	
+	var debrief =
+	{
+		type: "text"
+		,data:{trial_name: 'debrief'}
+        ,text:'<p class = "instructions">Please press the space-bar key to close this window and go back '
+				+'to the online survey.</p>'
+		,on_trial_start: function()
+			{
+				$('div.left-side').empty();
+				$('div.right-side').empty();
+			}
+		,cont_key: ['space']
+		//,on_finish: function()
+		//{
+		//	window.close();
+		//}
+	}
+	
+	/* ====================CREATE EXPERIMENT TIMELINE AND START IT================= */
+	
+	/* Add respondent ID to each response */
+	jsPsych.data.addProperties({
+		subject: urlvar.subject
+		,condition: urlvar.condition
+	});
+	
+	/* create experiment timeline array */
+	var timeline = [];
+	timeline.push(intro)
+	timeline.push(instructions1);
+	timeline.push(trial1);
+	timeline.push(instructions2);
+	timeline.push(trial2);
+	timeline.push(instructions3);
+	timeline.push(trial3);
+	timeline.push(instructions4);
+	timeline.push(trial4);
+	timeline.push(instructions5);
+	timeline.push(trial5);
+	timeline.push(instructions6);
+	timeline.push(trial6);
+	timeline.push(instructions7);
+	timeline.push(trial7);
+	
+	/* write to server */
+	function saveData(filename, filedata)
+	{
+	  $.ajax({
+      type:'post',
+      cache: false,
+      url: 'iatphp.php', // this is the path to the above PHP script
+      data: {filename: filename, filedata: filedata}
+   });
+	}
+	
+	/* grab data before the end of the experiment */
+	var save_data = {
+	type: 'call-function'
+	,func: function()
+		{
+			saveData(urlvar.subject+".csv", jsPsych.data.dataAsCSV())
+		}
+	,timing_post_trial: 0
+	}
+	
+	/* save data and debrief */
+	timeline.push(save_data);
+	timeline.push(debrief);
+	
+	/* start the experiment */
+
+	jsPsych.init({
+		fullscreen: true
+		,timeline: timeline
+		,on_finish: function()
+		{
+			close();
+		}
+	});
+	
+    </script>
+</html>
+
