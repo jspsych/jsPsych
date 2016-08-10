@@ -304,6 +304,16 @@ var jsPsych = (function() {
         order.push(i);
       }
 
+      if(typeof timeline_parameters.sample !== 'undefined'){
+        if(timeline_parameters.sample.type == 'custom'){
+          order = timeline_parameters.sample.fn(order);
+        } else if(timeline_parameters.sample.type == 'with-replacement'){
+          order = jsPsych.randomization.sample(order, timeline_parameters.sample.size, true);
+        } else if(timeline_parameters.sample.type == 'without-replacement'){
+          order = jsPsych.randomization.sample(order, timeline_parameters.sample.size, false);
+        }
+      }
+
       if(timeline_parameters.randomize_order) {
         order = jsPsych.randomization.shuffle(order);
       }
@@ -589,6 +599,7 @@ var jsPsych = (function() {
           timeline: [],
           loop_function: parameters.loop_function,
           conditional_function: parameters.conditional_function,
+          sample: parameters.sample,
           randomize_order: typeof parameters.randomize_order == 'undefined' ? false : parameters.randomize_order,
           repetitions: typeof parameters.repetitions == 'undefined' ? 1 : parameters.repetitions,
           timeline_variables: typeof parameters.timeline_variables == 'undefined' ? [{}] : parameters.timeline_variables
@@ -604,6 +615,7 @@ var jsPsych = (function() {
         delete node_data.randomize_order;
         delete node_data.repetitions;
         delete node_data.timeline_variables;
+        delete node_data.sample;
         node_trial_data = node_data; // store for later...
 
         // create a TimelineNode for each element in the timeline
