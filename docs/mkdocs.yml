@@ -21,6 +21,7 @@ pages:
   - 'Data Storage': 'features/data.md'
   - 'Dynamic Content:  Using Functions as Plugin Parameters': 'features/functions-as-parameters.md'
   - 'Event-related Callback Functions': 'features/callbacks.md'
+  - 'Record Browser Interactions': 'features/record-browser-interactions.md'
   - 'Media Preloading': 'features/media-preloading.md'
   - 'Fullscreen Experiments': 'features/fullscreen.md'
   - 'Automatic Progress Bar': 'features/progress-bar.md'
