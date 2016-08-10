@@ -95,10 +95,6 @@ jsPsych.plugins['same-different'] = (function() {
     // it with the output of the function
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
-    // this array holds handlers from setTimeout calls
-    // that need to be cleared if the trial ends early
-    var setTimeoutHandlers = [];
-
     // show image
     if (!trial.is_html) {
       display_element.append($('<img>', {
@@ -114,9 +110,9 @@ jsPsych.plugins['same-different'] = (function() {
 
     var first_stim_info;
     if (trial.timing_first_stim > 0) {
-      setTimeoutHandlers.push(setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function() {
         showBlankScreen();
-      }, trial.timing_first_stim));
+      }, trial.timing_first_stim);
     } else {
       function afterKeyboardResponse(info) {
         first_stim_info = info;
@@ -128,9 +124,9 @@ jsPsych.plugins['same-different'] = (function() {
     function showBlankScreen() {
       $('.jspsych-same-different-stimulus').remove();
 
-      setTimeoutHandlers.push(setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function() {
         showSecondStim();
-      }, trial.timing_gap));
+      }, trial.timing_gap);
     }
 
     function showSecondStim() {
@@ -149,9 +145,9 @@ jsPsych.plugins['same-different'] = (function() {
       }
 
       if (trial.timing_second_stim > 0) {
-        setTimeoutHandlers.push(setTimeout(function() {
+        jsPsych.pluginAPI.setTimeout(function() {
           $("#jspsych-same-different-second-stimulus").css('visibility', 'hidden');
-        }, trial.timing_second_stim));
+        }, trial.timing_second_stim);
       }
 
       //show prompt here
@@ -162,9 +158,7 @@ jsPsych.plugins['same-different'] = (function() {
       var after_response = function(info) {
 
         // kill any remaining setTimeout handlers
-        for (var i = 0; i < setTimeoutHandlers.length; i++) {
-          clearTimeout(setTimeoutHandlers[i]);
-        }
+        jsPsych.pluginAPI.clearAllTimeouts();
 
         var correct = false;
 

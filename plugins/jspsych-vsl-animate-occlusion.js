@@ -184,7 +184,7 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
     });
 
     if (trial.timing_pre_movement > 0) {
-      setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function() {
         next_step();
       }, trial.timing_pre_movement);
     } else {

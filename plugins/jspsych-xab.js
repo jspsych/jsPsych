@@ -106,10 +106,6 @@ jsPsych.plugins.xab = (function() {
       trial.b_path = trial.stimuli[2];
     }
 
-    // this array holds handlers from setTimeout calls
-    // that need to be cleared if the trial ends early
-    var setTimeoutHandlers = [];
-
     // how we display the content depends on whether the content is
     // HTML code or an image path.
     if (!trial.is_html) {
@@ -125,7 +121,7 @@ jsPsych.plugins.xab = (function() {
     }
 
     // start a timer of length trial.timing_x to move to the next part of the trial
-    setTimeout(function() {
+    jsPsych.pluginAPI.setTimeout(function() {
       showBlankScreen();
     }, trial.timing_x);
 
@@ -135,7 +131,7 @@ jsPsych.plugins.xab = (function() {
       $('.jspsych-xab-stimulus').remove();
 
       // start timer
-      setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function() {
         showSecondStimulus();
       }, trial.timing_xab_gap);
     }
@@ -177,21 +173,20 @@ jsPsych.plugins.xab = (function() {
 
       // if timing_ab is > 0, then we hide the stimuli after timing_ab milliseconds
       if (trial.timing_ab > 0) {
-        setTimeoutHandlers.push(setTimeout(function() {
+        jsPsych.pluginAPI.setTimeout(function() {
           $('.jspsych-xab-stimulus').css('visibility', 'hidden');
-        }, trial.timing_ab));
+        }, trial.timing_ab);
       }
 
       // if timing_response > 0, then we end the trial after timing_response milliseconds
       if (trial.timing_response > 0) {
-        var t2 = setTimeout(function() {
+        jsPsych.pluginAPI.setTimeout(function() {
           end_trial({
             rt: -1,
             correct: false,
             key: -1
           });
         }, trial.timing_response);
-        setTimeoutHandlers.push(t2);
       }
 
       // create the function that triggers when a key is pressed.
@@ -219,9 +214,7 @@ jsPsych.plugins.xab = (function() {
 
       var end_trial = function(info) {
         // kill any remaining setTimeout handlers
-        for (var i = 0; i < setTimeoutHandlers.length; i++) {
-          clearTimeout(setTimeoutHandlers[i]);
-        }
+        jsPsych.pluginAPI.clearAllTimeouts();
 
         jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
 

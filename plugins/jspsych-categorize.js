@@ -133,10 +133,6 @@ jsPsych.plugins.categorize = (function() {
     // it with the output of the function
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
-    // this array holds handlers from setTimeout calls
-    // that need to be cleared if the trial ends early
-    var setTimeoutHandlers = [];
-
     if (!trial.is_html) {
       // add image to display
       display_element.append($('<img>', {
@@ -154,9 +150,9 @@ jsPsych.plugins.categorize = (function() {
 
     // hide image after time if the timing parameter is set
     if (trial.timing_stim > 0) {
-      setTimeoutHandlers.push(setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function() {
         $('#jspsych-categorize-stimulus').css('visibility', 'hidden');
-      }, trial.timing_stim));
+      }, trial.timing_stim);
     }
 
     // if prompt is set, show prompt
@@ -170,9 +166,7 @@ jsPsych.plugins.categorize = (function() {
     var after_response = function(info) {
 
       // kill any remaining setTimeout handlers
-      for (var i = 0; i < setTimeoutHandlers.length; i++) {
-        clearTimeout(setTimeoutHandlers[i]);
-      }
+      jsPsych.pluginAPI.clearAllTimeouts();
 
       // clear keyboard listener
       jsPsych.pluginAPI.cancelAllKeyboardResponses();
@@ -205,12 +199,12 @@ jsPsych.plugins.categorize = (function() {
     });
 
     if (trial.timing_response > 0) {
-      setTimeoutHandlers.push(setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function() {
         after_response({
           key: -1,
           rt: -1
         });
-      }, trial.timing_response));
+      }, trial.timing_response);
     }
 
     function doFeedback(correct, timeout) {
@@ -263,7 +257,7 @@ jsPsych.plugins.categorize = (function() {
         });
 
       } else {
-        setTimeout(function() {
+        jsPsych.pluginAPI.setTimeout(function() {
           endTrial();
         }, trial.timing_feedback_duration);
       }

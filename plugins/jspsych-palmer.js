@@ -306,7 +306,7 @@ jsPsych.plugins.palmer = (function() {
         }
         display_element.append($.parseHTML("<p id='jspsych-palmer-feedback'>" + feedback + "</p>"));
 
-        setTimeout(function() {
+        jsPsych.pluginAPI.setTimeout(function() {
           next_trial();
         }, trial.timing_feedback);
 

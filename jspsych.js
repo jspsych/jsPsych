@@ -1382,6 +1382,7 @@ jsPsych.pluginAPI = (function() {
   var module = {};
 
   // keyboard listeners //
+
   var keyboard_listeners = [];
 
   var held_keys = [];
@@ -1640,6 +1641,23 @@ jsPsych.pluginAPI = (function() {
     '\\': 220,
     ']': 221
   };
+
+  // timeout registration
+
+  var timeout_handlers = [];
+
+  module.setTimeout = function(callback, delay){
+    var handle = setTimeout(callback, delay);
+    timeout_handlers.push(handle);
+    return handle;
+  }
+
+  module.clearAllTimeouts = function(){
+    for(var i=0;i<timeout_handlers.length; i++){
+      clearTimeout(timeout_handlers[i]);
+    }
+    timeout_handlers = [];
+  }
 
   // plugin parameter evaluation //
 

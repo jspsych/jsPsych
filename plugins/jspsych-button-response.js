@@ -86,10 +86,6 @@ jsPsych.plugins["button-response"] = (function() {
     // it with the output of the function
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
-    // this array holds handlers from setTimeout calls
-    // that need to be cleared if the trial ends early
-    var setTimeoutHandlers = [];
-
     // display stimulus
     if (!trial.is_html) {
       display_element.append($('<img>', {
@@ -168,9 +164,7 @@ jsPsych.plugins["button-response"] = (function() {
     function end_trial() {
 
       // kill any remaining setTimeout handlers
-      for (var i = 0; i < setTimeoutHandlers.length; i++) {
-        clearTimeout(setTimeoutHandlers[i]);
-      }
+      jsPsych.pluginAPI.clearAllTimeouts();
 
       // gather the data to store for the trial
       var trial_data = {
@@ -191,18 +185,16 @@ jsPsych.plugins["button-response"] = (function() {
 
     // hide image if timing is set
     if (trial.timing_stim > 0) {
-      var t1 = setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function() {
         $('#jspsych-button-response-stimulus').css('visibility', 'hidden');
       }, trial.timing_stim);
-      setTimeoutHandlers.push(t1);
     }
 
     // end trial if time limit is set
     if (trial.timing_response > 0) {
-      var t2 = setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function() {
         end_trial();
       }, trial.timing_response);
-      setTimeoutHandlers.push(t2);
     }
 
   };

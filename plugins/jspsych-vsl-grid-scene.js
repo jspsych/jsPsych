@@ -57,7 +57,7 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
 
     display_element.html(plugin.generate_stimulus(trial.stimuli, trial.image_size));
 
-    setTimeout(function() {
+    jsPsych.pluginAPI.setTimeout(function() {
       endTrial();
     }, trial.timing_duration);
 

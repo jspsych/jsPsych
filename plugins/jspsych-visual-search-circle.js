@@ -158,7 +158,7 @@ jsPsych.plugins["visual-search-circle"] = (function() {
       var fixation = paper.image(trial.fixation_image, fix_loc[0], fix_loc[1], trial.fixation_size[0], trial.fixation_size[1]);
 
       // wait
-      setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function() {
         // after wait is over
         show_search_array();
       }, trial.timing_fixation);
@@ -226,7 +226,7 @@ jsPsych.plugins["visual-search-circle"] = (function() {
           }
         } else {
 
-          setTimeout(function() {
+          jsPsych.pluginAPI.setTimeout(function() {
 
             if (!trial_over) {
 

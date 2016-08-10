@@ -115,7 +115,7 @@ jsPsych.plugins.animation = (function() {
       }
 
       if (trial.frame_isi > 0) {
-        setTimeout(function() {
+        jsPsych.pluginAPI.setTimeout(function() {
           $('#jspsych-animation-image').css('visibility', 'hidden');
           current_stim = 'blank';
           // record when blank image was shown

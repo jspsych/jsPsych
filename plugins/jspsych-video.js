@@ -67,10 +67,6 @@ jsPsych.plugins.video = (function() {
     // it with the output of the function
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
-    // this array holds handlers from setTimeout calls
-    // that need to be cleared if the trial ends early
-    var setTimeoutHandlers = [];
-
     // display stimulus
     var video_html = '<video id="jspsych-video-player" width="'+trial.width+'" height="'+trial.height+'" '
     if(trial.autoplay){

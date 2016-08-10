@@ -106,10 +106,6 @@ jsPsych.plugins.similarity = (function() {
     // it with the output of the function
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
-    // this array holds handlers from setTimeout calls
-    // that need to be cleared if the trial ends early
-    var setTimeoutHandlers = [];
-
     // show the images
     if (!trial.is_html) {
       display_element.append($('<img>', {
@@ -127,18 +123,18 @@ jsPsych.plugins.similarity = (function() {
       show_response_slider(display_element, trial);
     }
 
-    setTimeoutHandlers.push(setTimeout(function() {
+    jsPsych.pluginAPI.setTimeout(function() {
       showBlankScreen();
-    }, trial.timing_first_stim));
+    }, trial.timing_first_stim);
 
 
     function showBlankScreen() {
 
       $('#jspsych-sim-stim').css('visibility', 'hidden');
 
-      setTimeoutHandlers.push(setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function() {
         showSecondStim();
-      }, trial.timing_image_gap));
+      }, trial.timing_image_gap);
     }
 
     function showSecondStim() {
@@ -156,12 +152,12 @@ jsPsych.plugins.similarity = (function() {
       }
 
       if (trial.timing_second_stim > 0) {
-        setTimeoutHandlers.push(setTimeout(function() {
+        jsPsych.pluginAPI.setTimeout(function() {
           $("#jspsych-sim-stim").css('visibility', 'hidden');
           if (trial.show_response == "POST_STIMULUS") {
             show_response_slider(display_element, trial);
           }
-        }, trial.timing_second_stim));
+        }, trial.timing_second_stim);
       }
     }
 
@@ -254,9 +250,7 @@ jsPsych.plugins.similarity = (function() {
         var response_time = endTime - startTime;
 
         // kill any remaining setTimeout handlers
-        for (var i = 0; i < setTimeoutHandlers.length; i++) {
-          clearTimeout(setTimeoutHandlers[i]);
-        }
+        jsPsych.pluginAPI.clearAllTimeouts();
 
         var score = $("#slider").slider("value");
         var trial_data = {

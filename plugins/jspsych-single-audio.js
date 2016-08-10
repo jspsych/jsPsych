@@ -72,10 +72,6 @@ jsPsych.plugins["single-audio"] = (function() {
     // it with the output of the function
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
-    // this array holds handlers from setTimeout calls
-    // that need to be cleared if the trial ends early
-    var setTimeoutHandlers = [];
-
     // play stimulus
     var context = jsPsych.pluginAPI.audioContext();
     var source = context.createBufferSource();
@@ -106,9 +102,7 @@ jsPsych.plugins["single-audio"] = (function() {
     var end_trial = function() {
 
       // kill any remaining setTimeout handlers
-      for (var i = 0; i < setTimeoutHandlers.length; i++) {
-        clearTimeout(setTimeoutHandlers[i]);
-      }
+      jsPsych.pluginAPI.clearAllTimeouts();
 
       // stop the audio file if it is playing
       source.stop();
@@ -155,10 +149,9 @@ jsPsych.plugins["single-audio"] = (function() {
     });
     // end trial if time limit is set
     if (trial.timing_response > 0) {
-      var t2 = setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function() {
         end_trial();
       }, trial.timing_response);
-      setTimeoutHandlers.push(t2);
     }
 
   };

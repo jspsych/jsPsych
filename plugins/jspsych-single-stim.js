@@ -81,10 +81,6 @@ jsPsych.plugins["single-stim"] = (function() {
     trial.is_html = (typeof trial.is_html == 'undefined') ? false : trial.is_html;
     trial.prompt = trial.prompt || "";
 
-    // this array holds handlers from setTimeout calls
-    // that need to be cleared if the trial ends early
-    var setTimeoutHandlers = [];
-
     // display stimulus
     if (!trial.is_html) {
       display_element.append($('<img>', {
@@ -113,9 +109,7 @@ jsPsych.plugins["single-stim"] = (function() {
     var end_trial = function() {
 
       // kill any remaining setTimeout handlers
-      for (var i = 0; i < setTimeoutHandlers.length; i++) {
-        clearTimeout(setTimeoutHandlers[i]);
-      }
+      jsPsych.pluginAPI.clearAllTimeouts();
 
       // kill keyboard listeners
       if (typeof keyboardListener !== 'undefined') {
@@ -128,8 +122,6 @@ jsPsych.plugins["single-stim"] = (function() {
         "stimulus": trial.stimulus,
         "key_press": response.key
       };
-
-      //jsPsych.data.write(trial_data);
 
       // clear the display
       display_element.html('');
@@ -156,7 +148,7 @@ jsPsych.plugins["single-stim"] = (function() {
     };
 
     // start the response listener
-    if (JSON.stringify(trial.choices) != JSON.stringify(["none"])) {
+    if (trial.choices != jsPsych.NO_KEYS) {
       var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,
@@ -168,18 +160,16 @@ jsPsych.plugins["single-stim"] = (function() {
 
     // hide image if timing is set
     if (trial.timing_stim > 0) {
-      var t1 = setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function() {
         $('#jspsych-single-stim-stimulus').css('visibility', 'hidden');
       }, trial.timing_stim);
-      setTimeoutHandlers.push(t1);
     }
 
     // end trial if time limit is set
     if (trial.timing_response > 0) {
-      var t2 = setTimeout(function() {
+      jsPsych.pluginAPI.setTimeout(function() {
         end_trial();
       }, trial.timing_response);
-      setTimeoutHandlers.push(t2);
     }
 
   };

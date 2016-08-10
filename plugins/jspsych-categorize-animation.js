@@ -166,7 +166,7 @@ jsPsych.plugins["categorize-animation"] = (function() {
         // set timeout to clear feedback
         if (!timeoutSet) {
           timeoutSet = true;
-          setTimeout(function() {
+          jsPsych.pluginAPI.setTimeout(function() {
             endTrial();
           }, trial.timing_feedback_duration);
         }
