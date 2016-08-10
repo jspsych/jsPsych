@@ -174,6 +174,9 @@ var jsPsych = (function() {
   core.endExperiment = function(end_message) {
     timeline.end_message = end_message;
     timeline.end();
+    jsPsych.pluginAPI.cancelAllKeyboardResponses();
+    jsPsych.pluginAPI.clearAllTimeouts();
+    core.finishTrial();
   }
 
   core.endCurrentTimeline = function() {
