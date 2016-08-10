@@ -4,3 +4,4 @@ Online subjects will use many different kinds of browsers. Depending on the expe
 
 Current exclusion options include:
 * Minimum browser width & height
+* Support for the WebAudio API

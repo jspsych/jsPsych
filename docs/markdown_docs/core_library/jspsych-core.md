@@ -314,6 +314,7 @@ Parameter | Type | Description
 --------- | ---- | -----------
 min_width | numeric | The minimum width of the browser window. If the width is below this value, a message will be displayed to the subject asking them to maximize their browser window. The experiment will sit on this page until the browser window is large enough.
 min_height | numeric | Same as above, but with height.
+audio | boolean | Set to true to require support for the WebAudio API (used by plugins that play audio files).
 
 ### Return value
 

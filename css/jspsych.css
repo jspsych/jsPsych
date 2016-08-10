@@ -104,7 +104,7 @@ input[type="text"] {
 }
 
 .jspsych-content {
-  margin: 50px;
+  max-width: 95%; /* this is mainly an IE 10-11 fix */
 }
 
 .jspsych-content-wrapper {

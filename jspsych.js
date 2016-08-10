@@ -775,6 +775,21 @@ var jsPsych = (function() {
       }
     }
 
+    // WEB AUDIO API
+    if(typeof exclusions.audio !== 'undefined' && exclusions.audio) {
+      if(window.hasOwnProperty('AudioContext') || window.hasOwnProperty('webkitAudioContext')){
+        // clear
+      } else {
+        clear = false;
+        var msg = '<p>Your browser does not support the WebAudio API, which means that you will not '+
+          'be able to complete the experiment.</p><p>Browsers that support the WebAudio API include '+
+          'Chrome, Firefox, Safari, and Edge.</p>';
+        core.getDisplayElement().html(msg);
+        fail();
+        return;
+      }
+    }
+
     // GO?
     if(clear){ success(); }
   }
