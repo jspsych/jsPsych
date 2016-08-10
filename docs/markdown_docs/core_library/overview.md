@@ -60,6 +60,7 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.pluginAPI.autoPreload](jspsych-pluginAPI.md#jspsychpluginapiautopreload)
 * [jsPsych.pluginAPI.cancelAllKeyboardResponses](jspsych-pluginAPI.md#jspsychpluginapicancelallkeyboardresponses)
 * [jsPsych.pluginAPI.cancelKeyboardResponse](jspsych-pluginAPI.md#jspsychpluginapicancelkeyboardresponse)
+* [jsPsych.pluginAPI.clearAllTimeouts](jspsych-pluginAPI.md#jspsychpluginapiclearalltimeouts)
 * [jsPsych.pluginAPI.convertKeyCharacterToKeyCode](jspsych-pluginAPI.md#jspsychpluginapiconvertkeycharactertokeycode)
 * [jsPsych.pluginAPI.getAudioBuffer](jspsych-pluginAPI.md#jspsychpluginapigetaudiobuffer)
 * [jsPsych.pluginAPI.getKeyboardResponse](jspsych-pluginAPI.md#jspsychpluginapigetkeyboardresponse)
@@ -67,3 +68,4 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.pluginAPI.preloadAudioFiles](jspsych-pluginAPI.md#jspsychpluginapipreloadaudiofiles)
 * [jsPsych.pluginAPI.preloadImages](jspsych-pluginAPI.md#jspsychpluginapipreloadimages)
 * [jsPsych.pluginAPI.registerPreload](jspsych-pluginAPI.md#jspsychpluginapiregisterpreload)
+* [jsPsych.pluginAPI.setTimeout](jspsych-pluginAPI.md#settimeout)

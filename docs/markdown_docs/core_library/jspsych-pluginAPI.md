@@ -91,6 +91,28 @@ var listener_id = jsPsych.pluginAPI.getKeyboardResponse(after_response, ['p','q'
 // cancel keyboard listener
 jsPsych.pluginAPI.cancelKeyboardResponse(listener_id);
 ```
+
+---
+## jsPsych.pluginAPI.clearAllTimeouts
+
+```
+jsPsych.pluginAPI.clearAllTimeouts()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+Returns nothing.
+
+### Description
+
+Clears any pending timeouts that were set using jsPsych.pluginAPI.setTimeout()
+
+
+
 ---
 ## jsPsych.pluginAPI.convertKeyCharacterToKeyCode
 
@@ -420,3 +442,37 @@ The `conditional_function` function is passed a single argument containing the t
 ### Example
 
 For an example, see the [single-stim](https://github.com/jodeleeuw/jsPsych/blob/master/plugins/jspsych-single-stim.js) and [single-audio](https://github.com/jodeleeuw/jsPsych/blob/master/plugins/jspsych-single-audio.js) plugins.
+
+---
+## jsPsych.pluginAPI.setTimeout
+
+```
+jsPsych.pluginAPI.setTimeout(callback, delay)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+callback | function | A function to execute after waiting for delay.
+delay | integer | Time to wait in milliseconds.
+
+### Return value
+
+Returns the ID of the setTimeout handle.
+
+### Description
+
+This is simply a call to the standard setTimeout function in JavaScript with the added benefit of registering the setTimeout call in a central list. This is useful for scenarios where some other event (the trial ending, aborting the experiment) should stop the execution of queued timeouts.
+
+### Examples
+
+```javascript
+// print the time
+console.log(Date.now())
+
+// print the time 1s later
+jsPsych.pluginAPI.setTimeout(function(){
+	console.log(Date.now())
+}, 1000);
+```
