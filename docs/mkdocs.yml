@@ -24,6 +24,7 @@ pages:
   - 'Record Browser Interactions': 'features/record-browser-interactions.md'
   - 'Media Preloading': 'features/media-preloading.md'
   - 'Fullscreen Experiments': 'features/fullscreen.md'
+  - 'Exclude Participants Based on Browser Features': 'features/exclude-browser.md'
   - 'Automatic Progress Bar': 'features/progress-bar.md'
   - 'Integrating with Mechanical Turk': 'features/mturk.md'
 - Core Library API:

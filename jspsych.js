@@ -72,6 +72,7 @@ var jsPsych = (function() {
       'on_interaction_data_update': function(data){
         return undefined;
       },
+      'exclusions': {},
       'show_progress_bar': false,
       'auto_preload': true,
       'max_load_time': 60000,
@@ -98,19 +99,29 @@ var jsPsych = (function() {
     // create listeners for user browser interaction
     jsPsych.data.createInteractionListeners();
 
-    // start experiment, with or without preloading
-    if(opts.auto_preload){
-      jsPsych.pluginAPI.autoPreload(timeline, startExperiment);
-      if(opts.max_load_time > 0){
-        setTimeout(function(){
-          if(!loaded){
-            loadFail();
+    // check exclusions before continuing
+    checkExclusions(opts.exclusions,
+      function(){
+        // success! user can continue...
+        // start experiment, with or without preloading
+        if(opts.auto_preload){
+          jsPsych.pluginAPI.autoPreload(timeline, startExperiment);
+          if(opts.max_load_time > 0){
+            setTimeout(function(){
+              if(!loaded){
+                loadFail();
+              }
+            }, opts.max_load_time);
           }
-        }, opts.max_load_time);
+        } else {
+          startExperiment();
+        }
+      },
+      function(){
+        // fail. incompatible user.
+
       }
-    } else {
-      startExperiment();
-    }
+    );
   };
 
   core.progress = function() {
@@ -731,6 +742,41 @@ var jsPsych = (function() {
 
   function loadFail(){
     DOM_target.html('<p>The experiment failed to load.</p>');
+  }
+
+  function checkExclusions(exclusions, success, fail){
+    var clear = true;
+
+    // MINIMUM SIZE
+    if(typeof exclusions.min_width !== 'undefined' || typeof exclusions.min_height !== 'undefined'){
+      var mw = typeof exclusions.min_width !== 'undefined' ? exclusions.min_width : 0;
+      var mh = typeof exclusions.min_height !== 'undefined' ? exclusions.min_height : 0;
+      var w = window.innerWidth;
+      var h = window.innerHeight;
+      if(w < mw || h < mh){
+        clear = false;
+        var interval = setInterval(function(){
+          var w = window.innerWidth;
+          var h = window.innerHeight;
+          if(w < mw || h < mh){
+            var msg = '<p>Your browser window is too small to complete this experiment. '+
+              'Please maximize the size of your browser window. If your browser window is already maximized, '+
+              'you will not be able to complete this experiment.</p>'+
+              '<p>The minimum width is '+mw+'px. Your current width is '+w+'px.</p>'+
+              '<p>The minimum height is '+mh+'px. Your current height is '+h+'px.</p>';
+            core.getDisplayElement().html(msg);
+          } else {
+            clearInterval(interval);
+            core.getDisplayElement().empty();
+            checkExclusions(exclusions, success, fail);
+          }
+        }, 100);
+        return; // prevents checking other exclusions while this is being fixed
+      }
+    }
+
+    // GO?
+    if(clear){ success(); }
   }
 
   function drawProgressBar() {
