@@ -95,7 +95,7 @@ Timelines can be nested any number of times.
 
 A common pattern in behavioral experiments is to repeat the same procedure many times with different stimuli. One shortcut to implement this pattern is with the approach described in the previous section, but this only works if all the trials use the same plugin type. Timeline variables are a more general solution. With timeline variables, you define the procedure once (as a timeline), and specify a set of parameters and their values for each iteration through the timeline.
 
-What follows is an example of how to use timeline variables and their features.
+What follows is an example of how to use timeline variables.
 
 Suppose we want to create an experiment where people see a set of faces with names displayed below the face. In between each face, a fixation cross is displayed on the screen. Without timeline variables, we would need to add many trials to the timeline, alternating between trials showing the fixation cross and trials showing the face and name. This could be done efficiently in a loop or function, but timeline variables make it even easier - as well as adding extra features like sampling and randomization.
 
@@ -106,7 +106,7 @@ var face_name_procedure = {
 	timeline: [
 		{
 			type: 'single-stim',
-			stimulus: '+'
+			stimulus: '+',
 			is_html: true,
 			choices: jsPsych.NO_KEYS,
 			timing_response: 500
@@ -128,31 +128,83 @@ var face_name_procedure = {
 }
 ```
 
-In the above version, there are four separate trials defined in the `timeline_variables` parameter. The `timeline` defines a procedure of showing a fixation cross for 500ms followed by the face and name for 2500ms.  This procedure will repeat four times, with the first trial showing Alex, the second Beth, and so on. The variables are referenced by calling the `jsPsych.timelineVariable()` method. Note that the call to this method is wrapped in a function, as we want the method to execute during the experiment, not during the declaration of the timeline.
+In the above version, there are four separate trials defined in the `timeline_variables` parameter. Each trial has a variable `face` and a variable `name`. The `timeline` defines a procedure of showing a fixation cross for 500ms followed by the face and name for 2500ms.  This procedure will repeat four times, with the first trial showing Alex, the second Beth, and so on. The variables are referenced in the procedure by calling the `jsPsych.timelineVariable()` method. Note that the call to this method is wrapped in a function, as we want the method to execute during the experiment, not during the declaration of the timeline.
 
-
-
-
-
-## Randomizing the order of trials on a timeline
-
-You can randomize the order that the trials on timeline occur by setting the parameter `randomize_order` to `true`.
+If we want to randomize the order of the trials, we can set `randomize_order` to `true`.
 
 ```javascript
-var judgment_trials = {
-	type: 'single-stim',
-	prompt: '<p>Press a number 1-7 to indicate how unusual the image is.</p>',
-	choices: ['1','2','3','4','5','6','7'],
-	timeline: [
-		{stimulus: 'image1.png'},
-		{stimulus: 'image2.png'},
-		{stimulus: 'image3.png'}
+var face_name_procedure = {
+	// timeline parameter hidden to save space ...
+	timeline_variables: [
+		{ face: 'person-1.jpg', name: 'Alex' },
+		{ face: 'person-2.jpg', name: 'Beth' },
+		{ face: 'person-3.jpg', name: 'Chad' },
+		{ face: 'person-4.jpg', name: 'Dave' }
 	],
 	randomize_order: true
 }
 ```
 
-If the timeline repeats multiple times (through a loop), then the order will be re-randomized at the start of each iteration.
+There are also a set of sampling methods that can be used to select a set of trials from the timeline_variables. Sampling is declared by creating a `sample` parameter.
+
+#### Sampling with replacement
+```javascript
+var face_name_procedure = {
+	// timeline parameter hidden to save space ...
+	timeline_variables: [
+		{ face: 'person-1.jpg', name: 'Alex' },
+		{ face: 'person-2.jpg', name: 'Beth' },
+		{ face: 'person-3.jpg', name: 'Chad' },
+		{ face: 'person-4.jpg', name: 'Dave' }
+	],
+	sample: {
+		type: 'with-replacement',
+		size: 10, // 10 trials, with replacement
+	}
+}
+```
+
+#### Sampling without replacement
+```javascript
+var face_name_procedure = {
+	// timeline parameter hidden to save space ...
+	timeline_variables: [
+		{ face: 'person-1.jpg', name: 'Alex' },
+		{ face: 'person-2.jpg', name: 'Beth' },
+		{ face: 'person-3.jpg', name: 'Chad' },
+		{ face: 'person-4.jpg', name: 'Dave' }
+	],
+	sample: {
+		type: 'without-replacement',
+		size: 3, // 3 trials, without replacement
+	}
+}
+```
+
+#### Custom sampling function
+```javascript
+var face_name_procedure = {
+	// timeline parameter hidden to save space ...
+	timeline_variables: [
+		{ face: 'person-1.jpg', name: 'Alex' },
+		{ face: 'person-2.jpg', name: 'Beth' },
+		{ face: 'person-3.jpg', name: 'Chad' },
+		{ face: 'person-4.jpg', name: 'Dave' }
+	],
+	sample: {
+		type: 'custom',
+		fn: function(t){
+			// the first parameter to this function call is an array of integers
+			// from 0 to n-1, where n is the number of trials.
+			// the method needs to return an array of integers specifying the order
+			// that the trials should be executed. this array does not need to
+			// contain all of the integers.
+
+			return t.reverse(); // show the trials in the reverse order
+		}
+	}
+}
+```
 
 ## Looping timelines
 
