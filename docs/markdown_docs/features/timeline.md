@@ -130,6 +130,8 @@ var face_name_procedure = {
 
 In the above version, there are four separate trials defined in the `timeline_variables` parameter. Each trial has a variable `face` and a variable `name`. The `timeline` defines a procedure of showing a fixation cross for 500ms followed by the face and name for 2500ms.  This procedure will repeat four times, with the first trial showing Alex, the second Beth, and so on. The variables are referenced in the procedure by calling the `jsPsych.timelineVariable()` method. Note that the call to this method is wrapped in a function, as we want the method to execute during the experiment, not during the declaration of the timeline.
 
+### Random orders of trials
+
 If we want to randomize the order of the trials, we can set `randomize_order` to `true`.
 
 ```javascript
@@ -144,6 +146,26 @@ var face_name_procedure = {
 	randomize_order: true
 }
 ```
+
+### Repeating trials
+
+If we want to repeat the set of trials multiple times, then we can set `repetitions` to an integer. If `randomize_order` is also `true`, the order will re-randomize before every repetition.
+
+```javascript
+var face_name_procedure = {
+	// timeline parameter hidden to save space ...
+	timeline_variables: [
+		{ face: 'person-1.jpg', name: 'Alex' },
+		{ face: 'person-2.jpg', name: 'Beth' },
+		{ face: 'person-3.jpg', name: 'Chad' },
+		{ face: 'person-4.jpg', name: 'Dave' }
+	],
+	randomize_order: true,
+	repetitions: 3
+}
+```
+
+### Sampling methods
 
 There are also a set of sampling methods that can be used to select a set of trials from the timeline_variables. Sampling is declared by creating a `sample` parameter.
 
