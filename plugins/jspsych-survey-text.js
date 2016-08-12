@@ -81,7 +81,10 @@ jsPsych.plugins['survey-text'] = (function() {
       // create div
       display_element.append($('<div>', {
         "id": 'jspsych-survey-text-' + i,
-        "class": 'jspsych-survey-text-question'
+        "class": 'jspsych-survey-text-question',
+        "css": {
+          "margin": '2em 0em';
+        }
       }));
 
       // add question text

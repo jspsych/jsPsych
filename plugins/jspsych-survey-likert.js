@@ -43,6 +43,17 @@ jsPsych.plugins['survey-likert'] = (function() {
     // it with the output of the function
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
+    // inject CSS for trial
+    var node = display_element.append('<style id="jspsych-survey-likert-css">')
+    var cssstr = ".jspsych-survey-likert-statement { display:block; font-size: 18px; padding-top: 30px; margin-bottom:10px; }"+
+      ".jspsych-survey-likert-opts { list-style:none; width:100%; margin:0; padding:0 0 35px; display:block; font-size: 14px; line-height:1.1em; }"+
+      ".jspsych-survey-likert-opt-label { line-height: 1.1em; }"+
+      ".jspsych-survey-likert-opts:before { content: ''; position:relative; top:11px; /*left:9.5%;*/ display:block; background-color:#efefef; height:4px; width:100%; }"+
+      ".jspsych-survey-likert-opts:last-of-type { border-bottom: 0; }"+
+      ".jspsych-survey-likert-opts li { display:inline-block; /*width:19%;*/ text-align:center; vertical-align: top; }"+
+      ".jspsych-survey-likert-opts li input[type=radio] { display:block; position:relative; top:0; left:50%; margin-left:-6px; }"
+    $('#jspsych-survey-likert-css').html(cssstr);
+
     // show preamble text
     display_element.append($('<div>', {
       "id": 'jspsych-survey-likert-preamble',

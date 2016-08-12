@@ -92,7 +92,8 @@ jsPsych.plugins['free-sort'] = (function() {
       "css": {
         "position": "relative",
         "width": trial.sort_area_width,
-        "height": trial.sort_area_height
+        "height": trial.sort_area_height,
+        "border": '2px solid #444'
       }
     }));
 
@@ -115,7 +116,8 @@ jsPsych.plugins['free-sort'] = (function() {
           "top": coords.y,
           "left": coords.x,
           "width": trial.stim_width,
-          "height": trial.stim_height
+          "height": trial.stim_height,
+          "cursor": 'move'
         }
       }));
 
