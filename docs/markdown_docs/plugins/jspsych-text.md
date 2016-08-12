@@ -9,7 +9,7 @@ This table lists the parameters associated with this plugin. Parameters with a d
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 text | string | *undefined* | A string containing HTML formatted text (no HTML code is necessary, but it is allowed).
-cont_key | array or `'mouse'` | [ ] | This array contains the keys that the subject is allowed to press in order to advance to the next trial. Keys can be specified as their [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) or as characters (e.g. `'a'`, `'q'`). The default value of an empty array means that all keys will be accepted as valid responses. If the value of `'mouse'` is used, then clicking the mouse will advance to the next trial.
+choices | array or `'mouse'` | [ ] | This array contains the keys that the subject is allowed to press in order to advance to the next trial. Keys can be specified as their [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) or as characters (e.g. `'a'`, `'q'`). The default value of an empty array means that all keys will be accepted as valid responses. If the value of `'mouse'` is used, then clicking the mouse will advance to the next trial.
 
 ## Data Generated
 

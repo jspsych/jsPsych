@@ -23,7 +23,7 @@ jsPsych.plugins.text = (function() {
         no_function: false,
         description: ''
       },
-      cont_key: {
+      choices: {
         type: [jsPsych.plugins.parameterType.KEYCODE, jsPsych.plugins.parameterType.SELECT],
         options: ['mouse'],
         array: true,
@@ -36,7 +36,7 @@ jsPsych.plugins.text = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    trial.cont_key = trial.cont_key || jsPsych.ALL_KEYS;
+    trial.choices = trial.choices || jsPsych.ALL_KEYS;
 
     // if any trial variables are functions
     // this evaluates the function and replaces
@@ -73,13 +73,13 @@ jsPsych.plugins.text = (function() {
     };
 
     // check if key is 'mouse'
-    if (trial.cont_key == 'mouse') {
+    if (trial.choices == 'mouse') {
       display_element.click(mouse_listener);
       var start_time = (new Date()).getTime();
     } else {
       jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
-        valid_responses: trial.cont_key,
+        valid_responses: trial.choices,
         rt_method: 'date',
         persist: false,
         allow_held_key: false
