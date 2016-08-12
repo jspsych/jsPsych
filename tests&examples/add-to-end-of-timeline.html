@@ -7,9 +7,6 @@
     <script src="../plugins/jspsych-single-stim.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
-  <body>
-    <div id="jspsych-target"></div>
-  </body>
   <script>
 
   var first = {
@@ -27,7 +24,6 @@
   }
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [first],
     on_finish: function(){jsPsych.data.displayData(); }
   });

@@ -48,15 +48,8 @@ var jsPsych = (function() {
     waiting = false;
     loaded = false;
 
-    // check if there is a body element on the page
-    var default_display_element = $('body');
-    if (default_display_element.length === 0) {
-      $(document.documentElement).append($('<body>'));
-      default_display_element = $('body');
-    }
-
     var defaults = {
-      'display_element': default_display_element,
+      'display_element': undefined,
       'on_finish': function(data) {
         return undefined;
       },
@@ -83,8 +76,21 @@ var jsPsych = (function() {
     // override default options if user specifies an option
     opts = $.extend({}, defaults, options);
 
-    // set target
-    opts.display_element.append('<div id="jspsych-content"></div>')
+    // set DOM element where jsPsych will render content
+    // if undefined, then jsPsych will use the <body> tag and the entire page
+    if(typeof opts.display_element == 'undefined'){
+      // check if there is a body element on the page
+      var body = $('body');
+      if (body.length === 0) {
+        $(document.documentElement).append($('<body>'));
+      }
+      // using the full page, so we need the HTML document to
+      // have 100% height, and body to have no margin
+      $('html').css('height','100%');
+      $('body').css('margin', '0px');
+      opts.display_element = $('body');
+    }
+    opts.display_element.append('<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>')
     DOM_target = $('#jspsych-content');
 
     // add CSS class to DOM_target
@@ -813,9 +819,6 @@ var jsPsych = (function() {
       '<div id="jspsych-progressbar-outer">'+
         '<div id="jspsych-progressbar-inner"></div>'+
       '</div></div>'
-    );
-    $('.jspsych-content').wrap(
-      '<div class="jspsych-content-wrapper"></div>'
     );
   }
 

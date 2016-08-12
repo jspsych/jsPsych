@@ -13,6 +13,8 @@
    justify-content: center;
    align-items: center;
    height: 100%;
+   width: 100%;
+   overflow-y: scroll;
  }
 
  .jspsych-top {
@@ -25,13 +27,16 @@
 
  .jspsych-content {
    max-width: 95%; /* this is mainly an IE 10-11 fix */
+   text-align:center;
+   margin: auto;
  }
 
  .jspsych-content-wrapper {
    display: flex;
    justify-content: center;
    align-items: center;
-   flex: 1;
+   flex: 1 1 auto;
+   width: 100%;
  }
 
 /* fonts and type */
@@ -42,7 +47,6 @@
   font-family: 'Open Sans', 'Arial', sans-serif;
   font-size: 18px;
   line-height: 1.6em;
-  height: 100%;
 }
 
 /* Form elements like input fields and buttons */

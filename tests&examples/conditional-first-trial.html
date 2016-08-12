@@ -6,9 +6,6 @@
     <script src="../plugins/jspsych-text.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
-  <body>
-    <div id="jspsych-target"></div>
-  </body>
   <script>
 
   var if_trial = {
@@ -30,7 +27,6 @@
   }
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [if_node, after_if_trial],
     on_finish: function(){jsPsych.data.displayData(); }
   });

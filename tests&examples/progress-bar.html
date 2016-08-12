@@ -13,10 +13,6 @@
     }
   </style>
 </head>
-
-<body>
-  <div id="jspsych-target"></div>
-</body>
 <script>
   var trial_1 = {
     type: 'single-stim',
@@ -56,7 +52,6 @@
 
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [trial_1, trial_2, trial_3, block_set, end_screen],
     show_progress_bar: true,
     on_finish: function() {
