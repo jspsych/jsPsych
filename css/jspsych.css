@@ -107,3 +107,8 @@ input[type="text"] {
   height: 1em;
   border-radius: 5px;
 }
+
+/* Control appearance of jsPsych.data.displayData() */
+#jspsych-data-display {
+  text-align: left;
+}
