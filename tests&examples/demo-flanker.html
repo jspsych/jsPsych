@@ -14,20 +14,16 @@
         /*set up welcome block*/
         var welcome = {
           type: "text",
-          text: "<p style='margin:20%'>Welcome to the experiment. Press any key to begin.</p>"
+          text: "Welcome to the experiment. Press any key to begin."
         };
 
         /*set up instructions block*/
         var instructions = {
           type: "text",
-          text: "<p style='margin-top:20%; margin-right:10%'>In this task you are required to respond to " +
-                "stimuli displayed on the screen. In the following, you will see five arrows. Your task " +
-                "is to decide as quickly as possible if the arrow in the middle is pointing in the same " +
-                "direction as the others or not. If this is the case ('<strong><<<<<</strong>' or " +
-                "'<strong>>>>>></strong>'), please press the left arrow button on the keyboard. If the " +
-                "middle arrow is pointing in the opposite direction ('<strong><<><<</strong>' or " +
-                "'<strong>>><>></strong>'), please press the right arrow button on the keyboard. You can " +
-                "start the experiment by pressing ENTER.</p>",
+          text: "<p>In this task, you will see five arrows on the screen.</p>"+
+            "<p>Press the left arrow key if the middle arrow is pointing left. (<)</p>"+
+            "<p>Press the right arrow key if the middle arrow is pointing right. (>)</p>"+
+            "<p>Press any key to begin.</p>",
           timing_post_trial: 3000
         };
 
@@ -35,24 +31,24 @@
         var test_stimuli = [
           {
             stimulus: "img/con1.png",
-            data: { phase: 'congruent'}
+            data: { stim_type: 'congruent', direction: 'left'}
           },
           {
             stimulus: "img/con2.png",
-            data: { phase: 'congruent'}
+            data: { stim_type: 'congruent', direction: 'right'}
           },
           {
             stimulus: "img/inc1.png",
-            data: { phase: 'incongruent'}
+            data: { stim_type: 'incongruent', direction: 'right'}
           },
           {
             stimulus: "img/inc2.png",
-            data: { phase: 'incongruent'}
+            data: { stim_type: 'incongruent', direction: 'left'}
           }
         ];
 
         /*randomising stimuli*/
-        var all_trials = jsPsych.randomization.repeat(test_stimuli, 25);
+        var all_trials = jsPsych.randomization.repeat(test_stimuli, 3);
 
         /*creating random ISI*/
         var post_trial_gap = function() {
@@ -66,9 +62,9 @@
           timing_response: 1500,
           on_finish: function(data){
               var correct = false;
-              if(data.phase == 'congruent' &&  data.key_press == '37' && data.rt > -1){
+              if(data.direction == 'left' &&  data.key_press == '37' && data.rt > -1){
                 correct = true;
-              } else if(data.phase == 'incongruent' && data.key_press == '39' && data.rt > -1){
+              } else if(data.direction == 'right' && data.key_press == '39' && data.rt > -1){
                 correct = true;
               }
               jsPsych.data.addDataToLastTrial({correct: correct});
@@ -80,7 +76,7 @@
         /*function for getting mean RTs and error rates*/
         function getSubjectData() {
 
-          var trials = jsPsych.data.getTrialsOfType('single-stim');
+          var trials = jsPsych.data.getData({trial_type: 'single-stim'});
 
           var sum_rt = 0;
           var correct_trial_count = 0;

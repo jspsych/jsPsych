@@ -870,8 +870,43 @@ jsPsych.data = (function() {
   // cache the query_string
   var query_string;
 
-  module.getData = function() {
-    return $.extend(true, [], allData); // deep clone
+  module.getData = function(filters) {
+    var data_clone = $.extend(true, [], allData); // deep clone
+
+    if(typeof filters == 'undefined'){
+      return data_clone;
+    }
+
+    // [{p1: v1, p2:v2}, {p1:v2}]
+    // {p1: v1}
+    if(!Array.isArray(filters)){
+      var f = $.extend(true, [], [filters]);
+    } else {
+      var f = $.extend(true, [], filters);
+    }
+
+    var filtered_data = [];
+    for(var x=0; x < data_clone.length; x++){
+      var keep = false;
+      for(var i=0; i<f.length; i++){
+        var match = true;
+        var keys = Object.keys(f[i]);
+        for(var k=0; k<keys.length; k++){
+          if(typeof data_clone[x][keys[k]] !== 'undefined' && data_clone[x][keys[k]] == f[i][keys[k]]){
+            // matches on this key!
+          } else {
+            match = false;
+          }
+        }
+        if(match) { keep = true; break; } // can break because each filter is OR.
+      }
+      if(keep){
+        filtered_data.push(data_clone[x]);
+      }
+    }
+
+    return filtered_data;
+
   };
 
   module.getInteractionData = function() {
