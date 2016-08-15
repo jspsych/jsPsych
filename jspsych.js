@@ -167,7 +167,7 @@ var jsPsych = (function() {
     jsPsych.data.write(data);
 
     // get back the data with all of the defaults in
-    var trial_data = jsPsych.data.getData({trial_index: global_trial_index});
+    var trial_data = jsPsych.data.getData({trial_index: global_trial_index})[0];
 
     // handle callback at plugin level
     if (typeof current_trial.on_finish === 'function') {
