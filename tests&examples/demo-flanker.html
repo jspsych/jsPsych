@@ -77,22 +77,16 @@
         function getSubjectData() {
 
           var trials = jsPsych.data.getData({trial_type: 'single-stim'});
+          var correct_trials = jsPsych.data.getData({correct: true});
 
           var sum_rt = 0;
-          var correct_trial_count = 0;
-          var correct_rt_count = 0;
-          for (var i = 0; i < trials.length; i++) {
-            if (trials[i].correct == true) {
-              correct_trial_count++;
-              if(trials[i].rt > -1){
-                sum_rt += trials[i].rt;
-                correct_rt_count++;
-              }
-            }
+          for (var i = 0; i < correct_trials.length; i++) {
+            sum_rt += correct_trials[i].rt;
           }
+
           return {
-            rt: Math.floor(sum_rt / correct_rt_count),
-            accuracy: Math.floor(correct_trial_count / trials.length * 100)
+            rt: Math.floor(sum_rt / correct_trials.length),
+            accuracy: Math.floor(correct_trials.length / trials.length * 100)
           }
         };
 
