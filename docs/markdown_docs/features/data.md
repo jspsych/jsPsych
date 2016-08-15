@@ -90,7 +90,7 @@ jsPsych.init({
 
    // code to define the experiment structure would go here...
 
-   on_finish: function(data){ saveData("filename.csv", jsPsych.data.dataAsCSV()) }
+   on_finish: function(data){ saveData("filename.csv", jsPsych.data.getDataAsCSV()) }
 });
 ```
 
