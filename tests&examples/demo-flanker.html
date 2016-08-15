@@ -77,16 +77,23 @@
         function getSubjectData() {
 
           var trials = jsPsych.data.getData({trial_type: 'single-stim'});
-          var correct_trials = jsPsych.data.getData({correct: true});
+          var congruent_trials = jsPsych.data.getData({stim_type: 'congruent', correct: true});
+          var incongruent_trials = jsPsych.data.getData({stim_type: 'incongruent', correct: true});
 
-          var sum_rt = 0;
-          for (var i = 0; i < correct_trials.length; i++) {
-            sum_rt += correct_trials[i].rt;
+          var sum_rt_congruent = 0;
+          for (var i = 0; i < congruent_trials.length; i++) {
+            sum_rt_congruent += congruent_trials[i].rt;
+          }
+
+          var sum_rt_incongruent = 0;
+          for (var i = 0; i < incongruent_trials.length; i++) {
+            sum_rt_incongruent += incongruent_trials[i].rt;
           }
 
           return {
-            rt: Math.floor(sum_rt / correct_trials.length),
-            accuracy: Math.floor(correct_trials.length / trials.length * 100)
+            congruent_rt: Math.floor(sum_rt_congruent / congruent_trials.length),
+            incongruent_rt: Math.floor(sum_rt_incongruent / incongruent_trials.length),
+            accuracy: Math.floor( (congruent_trials.length + incongruent_trials.length) / trials.length * 100)
           }
         };
 
@@ -95,9 +102,10 @@
           type: "text",
           text: function() {
             var subject_data = getSubjectData();
-            return "<p style='margin:20%'>You responded correctly on "+subject_data.accuracy+"% of the trials. " +
-            "Your average response time was <strong>" + subject_data.rt + "ms</strong>. Press any key to complete the "+
-            "experiment. Thank you!</p>";
+            return "<p>You responded correctly on "+subject_data.accuracy+"% of the trials.</p> " +
+            "<p>Your average response time for congruent trials was <strong>" + subject_data.congruent_rt + "ms</strong>.</p>"+
+            "<p>Your average response time for incongruent trials was <strong>" + subject_data.incongruent_rt + "ms</strong>.</p>"+
+            "<p>Press any key to complete the experiment. Thank you!</p>";
           }
         };
 
