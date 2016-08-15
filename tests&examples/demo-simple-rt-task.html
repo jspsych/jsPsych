@@ -74,7 +74,7 @@
 
     function getSubjectData() {
 
-      var trials = jsPsych.data.getTrialsOfType('single-stim');
+      var trials = jsPsych.data.getData({trial_type: 'single-stim'});
 
       var sum_rt = 0;
       var correct_trial_count = 0;

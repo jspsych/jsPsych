@@ -167,7 +167,7 @@ var jsPsych = (function() {
     jsPsych.data.write(data);
 
     // get back the data with all of the defaults in
-    var trial_data = jsPsych.data.getDataByTrialIndex(global_trial_index);
+    var trial_data = jsPsych.data.getData({trial_index: global_trial_index});
 
     // handle callback at plugin level
     if (typeof current_trial.on_finish === 'function') {
@@ -972,44 +972,29 @@ jsPsych.data = (function() {
     allData[allData.length - 1] = $.extend({}, allData[allData.length - 1], data);
   }
 
-  module.dataAsCSV = function() {
-    var dataObj = module.getData();
+  module.getDataAsCSV = function(filters) {
+    var dataObj = module.getData(filters);
     return JSON2CSV(dataObj);
   };
 
-  module.dataAsJSON = function() {
-    var dataObj = module.getData();
+  module.getDataAsJSON = function(filters) {
+    var dataObj = module.getData(filters);
     return JSON.stringify(dataObj);
   };
 
-  module.localSave = function(filename, format) {
+  module.localSave = function(filename, format, filters) {
 
     var data_string;
 
     if (format == 'JSON' || format == 'json') {
-      data_string = JSON.stringify(module.getData());
+      data_string = module.getDataAsJSON(filters)
     } else if (format == 'CSV' || format == 'csv') {
-      data_string = module.dataAsCSV();
+      data_string = module.getDataAsCSV(filters);
     } else {
       throw new Error('invalid format specified for jsPsych.data.localSave');
     }
 
     saveTextToFile(data_string, filename);
-  };
-
-  module.getTrialsOfType = function(trial_type) {
-    var data = module.getData();
-
-    data = flatten(data);
-
-    var trials = [];
-    for (var i = 0; i < data.length; i++) {
-      if (data[i].trial_type == trial_type) {
-        trials.push(data[i]);
-      }
-    }
-
-    return trials;
   };
 
   module.getDataByTimelineNode = function(node_id) {
@@ -1031,17 +1016,8 @@ jsPsych.data = (function() {
     if (allData.length == 0) {
       return {};
     }
-    return allData[allData.length - 1];
+    return $.extend(true, {}, allData[allData.length - 1]);
   };
-
-  module.getDataByTrialIndex = function(trial_index) {
-    for (var i = 0; i < allData.length; i++) {
-      if (allData[i].trial_index == trial_index) {
-        return allData[i];
-      }
-    }
-    return undefined;
-  }
 
   module.getLastTimelineData = function() {
     var lasttrial = module.getLastTrialData();
@@ -1067,7 +1043,7 @@ jsPsych.data = (function() {
     if (format == 'json') {
       data_string = JSON.stringify(module.getData(), undefined, 1);
     } else {
-      data_string = module.dataAsCSV();
+      data_string = module.getDataAsCSV();
     }
 
     var display_element = jsPsych.getDisplayElement();
