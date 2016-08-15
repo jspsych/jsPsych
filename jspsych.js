@@ -89,6 +89,11 @@ var jsPsych = (function() {
       $('html').css('height','100%');
       $('body').css('margin', '0px');
       opts.display_element = $('body');
+    } else {
+      // make sure that the display element exists on the page
+      if(opts.display_element.length == 0) {
+        console.error('The display_element specified in jsPsych.init() does not exist in the DOM.');
+      }
     }
     opts.display_element.append('<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>')
     DOM_target = $('#jspsych-content');
