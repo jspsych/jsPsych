@@ -444,7 +444,7 @@ var jsPsych = (function() {
 
     // check the status of the done flag
     this.isComplete = function() {
-      return done_flag;
+      return progress.done;
     }
 
     // getter method for timeline variables
@@ -499,9 +499,9 @@ var jsPsych = (function() {
     this.percentComplete = function() {
       var total_trials = this.length();
       var completed_trials = 0;
-      for (var i = 0; i < timeline.length; i++) {
-        if (timeline[i].isComplete()) {
-          completed_trials += timeline[i].length();
+      for (var i = 0; i < timeline_parameters.timeline.length; i++) {
+        if (timeline_parameters.timeline[i].isComplete()) {
+          completed_trials += timeline_parameters.timeline[i].length();
         }
       }
       return (completed_trials / total_trials * 100)
