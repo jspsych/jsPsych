@@ -15,9 +15,6 @@
   </style>
 </head>
 
-<body>
-  <div id="jspsych-target"></div>
-</body>
 <script>
   var block_1 = {
     type: 'similarity',
@@ -26,7 +23,6 @@
   }
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [block_1],
     on_finish: function() {
       jsPsych.data.displayData();

@@ -5,14 +5,17 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/snap.svg-min.js"></script>
   <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-text.js"></script>
   <script src="../plugins/jspsych-visual-search-circle.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
 </head>
 
-<body>
-  <div id="jspsych-target"></div>
-</body>
 <script>
+
+  var intro = {
+    type: 'text',
+    text: 'Press J if there is a backwards N. If there is no backwards N press F.'
+  }
 
   var trial_1 = {
     target_present: true,
@@ -32,15 +35,14 @@
 
   var trials = {
     type: 'visual-search-circle',
-    target: 'img/normalN.gif',
-    foil: 'img/backwardN.gif',
+    target: 'img/backwardN.gif',
+    foil: 'img/normalN.gif',
     fixation_image: 'img/fixation.gif',
     timeline: [trial_1, trial_2, trial_3]
   };
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
-    timeline: [trials],
+    timeline: [intro, trials],
     on_finish: function() {
       jsPsych.data.displayData();
     }

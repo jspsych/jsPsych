@@ -6,9 +6,7 @@
     <script src="../plugins/jspsych-survey-likert.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
-  <body>
-    <div id="jspsych-target" class="jspsych-top"></div>
-  </body>
+
   <script>
 
   // defining groups of questions that will go together.
@@ -24,7 +22,6 @@
   };
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [likert_block],
     on_finish: function() { jsPsych.data.displayData(); }
   });

@@ -6,9 +6,6 @@
     <script src="../plugins/jspsych-text.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
-  <body>
-    <div id="jspsych-target"></div>
-  </body>
   <script>
 
   var block = {
@@ -16,9 +13,14 @@
     text: 'Welcome to the experiment. Press any key to begin.'
   }
 
+  var mouse = {
+    type: 'text',
+    choices: 'mouse',
+    text: 'Click the mouse to continue.'
+  }
+
   jsPsych.init({
-    display_element: $('#jspsych-target'),
-    timeline: [block],
+    timeline: [block, mouse],
     on_finish: function() { jsPsych.data.displayData(); }
   });
 

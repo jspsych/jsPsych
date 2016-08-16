@@ -13,9 +13,6 @@
   </style>
 </head>
 
-<body>
-  <div id="jspsych-target"></div>
-</body>
 <script>
   var block = {
     type: 'same-different',
@@ -27,7 +24,6 @@
   }
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [block],
     on_finish: function() {
       jsPsych.data.displayData();

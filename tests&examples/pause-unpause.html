@@ -6,14 +6,12 @@
     <script src="../plugins/jspsych-text.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
-  <body>
-    <div id="jspsych-target"></div>
-  </body>
+
   <script>
 
   var first = {
     type: 'text',
-    text: 'first trial!',
+    text: 'first trial! experiment will pause for 4s in between trials. press any key.',
     timing_post_trial: 0,
     on_finish: function(){
       jsPsych.pauseExperiment();
@@ -27,7 +25,6 @@
   }
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [first, second],
     on_finish: function(){jsPsych.data.displayData(); }
   });

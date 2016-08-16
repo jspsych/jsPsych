@@ -6,9 +6,7 @@
     <script src="../plugins/jspsych-survey-text.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
-  <body>
-    <div id="jspsych-target"></div>
-  </body>
+
   <script>
 
   // defining groups of questions that will go together.
@@ -19,9 +17,7 @@
       questions: page_1_questions
   };
 
-
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [survey_block],
     on_finish: function() { jsPsych.data.displayData(); }
   });
