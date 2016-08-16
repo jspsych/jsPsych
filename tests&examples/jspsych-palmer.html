@@ -8,9 +8,7 @@
     <script src="../plugins/jspsych-single-stim.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
-  <body>
-    <div id="jspsych-target"></div>
-  </body>
+
   <script>
 
   // create a stimulus using the generate_stimulus method
@@ -41,7 +39,6 @@
 
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [stim_block, test_block],
     on_finish: function() { jsPsych.data.displayData(); }
   });

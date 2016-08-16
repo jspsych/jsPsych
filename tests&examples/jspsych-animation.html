@@ -8,9 +8,6 @@
   <link rel="stylesheet" href="../css/jspsych.css"></link>
 </head>
 
-<body>
-  <div id="jspsych-target"></div>
-</body>
 <script>
   var animation_trial = {
     type: 'animation',
@@ -22,7 +19,6 @@
 
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [animation_trial],
     on_finish: function() {
       jsPsych.data.displayData();

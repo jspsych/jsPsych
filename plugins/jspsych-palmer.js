@@ -246,7 +246,7 @@ jsPsych.plugins.palmer = (function() {
     // start recording the time
     var startTime = (new Date()).getTime();
 
-    display_element.append($('<button id="jspsych-palmer-submitButton" class="jspsych-btn" type="button">Submit Answer</button>'));
+    display_element.append($('<p><button id="jspsych-palmer-submitButton" class="jspsych-btn" type="button">Submit Answer</button></p>'));
     $('#jspsych-palmer-submitButton').click(function() {
       save_data();
     });
@@ -335,7 +335,7 @@ jsPsych.plugins.palmer = (function() {
     var size = grid_spacing * (square_size + 1);
 
     // create a div to hold the generated svg object
-    var stim_div = $('body').append($('<div id="jspsych-palmer-container">'));
+    var stim_div = $('html').append($('<div id="jspsych-palmer-container">'));
 
     $('#jspsych-palmer-container').append('<svg id="jspsych-palmer-temp-stim" width="' + size + '" height="' + size + '"></svg>');
 

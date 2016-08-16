@@ -9,9 +9,6 @@
       img { width: 300px; }
     </style>
   </head>
-  <body>
-    <div id="jspsych-target"></div>
-  </body>
   <script>
 
   var br_trial = {
@@ -23,7 +20,6 @@
   };
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [br_trial],
     on_finish: function(){jsPsych.data.displayData();}
   });

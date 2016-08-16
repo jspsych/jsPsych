@@ -13,9 +13,6 @@
   </style>
 </head>
 
-<body>
-  <div id="jspsych-target"></div>
-</body>
 <script>
   var trials = {
     type: 'categorize',
@@ -32,7 +29,6 @@
   };
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [trials],
     on_finish: function() {
       jsPsych.data.displayData();

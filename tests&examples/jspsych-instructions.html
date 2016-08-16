@@ -6,9 +6,7 @@
     <script src="../plugins/jspsych-instructions.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
-  <body>
-    <div id="jspsych-target"></div>
-  </body>
+
   <script>
 
   var trial = {
@@ -22,7 +20,6 @@
   }
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [trial],
     on_finish: function(){ jsPsych.data.displayData(); }
   });

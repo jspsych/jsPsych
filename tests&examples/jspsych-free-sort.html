@@ -8,9 +8,6 @@
     <link rel="stylesheet" href="css/jquery-ui.css"></link>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
-  <body>
-    <div id="jspsych-target"></div>
-  </body>
   <script>
 
   var trials = {
@@ -20,7 +17,6 @@
 
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [trials],
     on_finish: function(){jsPsych.data.displayData();}
   });

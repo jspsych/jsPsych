@@ -13,9 +13,6 @@
   </style>
 </head>
 
-<body>
-  <div id="jspsych-target"></div>
-</body>
 <script>
   var trial_1 = {
     type: 'multi-stim-multi-response',
@@ -39,7 +36,6 @@
   }
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [trial_1, trial_2],
     on_finish: function() {
       jsPsych.data.displayData();
