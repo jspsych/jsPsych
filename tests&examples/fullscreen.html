@@ -13,9 +13,6 @@
   </style>
 </head>
 
-<body>
-  <div id="jspsych-target"></div>
-</body>
 <script>
   var block_1 = {
     type: 'single-stim',
@@ -25,7 +22,6 @@
   }
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [block_1],
     fullscreen: true,
     on_finish: function() {
