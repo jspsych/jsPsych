@@ -524,11 +524,11 @@ var jsPsych = (function() {
 
     // recursively end whatever sub-node is running the current trial
     this.endActiveNode = function() {
-      if (timeline.length == 0) {
+      if (typeof timeline_parameters == 'undefined') {
         this.end();
         parent_node.end();
       } else {
-        timeline[current_location].endActiveNode();
+        timeline_parameters.timeline[progress.current_location].endActiveNode();
       }
     }
 
