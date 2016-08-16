@@ -83,7 +83,7 @@ jsPsych.plugins['survey-text'] = (function() {
         "id": 'jspsych-survey-text-' + i,
         "class": 'jspsych-survey-text-question',
         "css": {
-          "margin": '2em 0em';
+          "margin": '2em 0em'
         }
       }));
 
