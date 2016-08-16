@@ -20,6 +20,7 @@ var jsPsych = (function() {
   // flow control
   var global_trial_index = 0;
   var current_trial = {};
+  var current_trial_finished = false;
   // target DOM element
   var DOM_target;
   // time that the experiment began
@@ -44,6 +45,7 @@ var jsPsych = (function() {
     timeline = null;
     global_trial_index = 0;
     current_trial = {};
+    current_trial_finished = false;
     paused = false;
     waiting = false;
     loaded = false;
@@ -162,6 +164,10 @@ var jsPsych = (function() {
   };
 
   core.finishTrial = function(data) {
+
+    if(current_trial_finished){ return; }
+    current_trial_finished = true;
+
     // write the data from the trial
     data = typeof data == 'undefined' ? {} : data;
     jsPsych.data.write(data);
@@ -727,6 +733,7 @@ var jsPsych = (function() {
     }
 
     global_trial_index++;
+    current_trial_finished = false;
 
     // advance timeline
     timeline.markCurrentTrialComplete();
