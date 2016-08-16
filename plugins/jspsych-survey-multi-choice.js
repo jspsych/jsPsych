@@ -74,7 +74,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 
     // inject CSS for trial
     var node = display_element.append('<style id="jspsych-survey-multi-choice-css">')
-    var cssstr = ".jspsych-survey-multi-choice-question { margin-top: 2em; margin-bottom: 2em; }"+
+    var cssstr = ".jspsych-survey-multi-choice-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }"+
       ".jspsych-survey-multi-choice-text span.required {color: darkred;}"+
       ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {  text-align: center;}"+
       ".jspsych-survey-multi-choice-option { line-height: 2; }"+
