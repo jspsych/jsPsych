@@ -151,6 +151,15 @@ jsPsych.plugins["visual-search-circle"] = (function() {
     display_element.append($('<svg id="jspsych-visual-search-circle-svg" width=' + paper_size + ' height=' + paper_size + '></svg>'));
     var paper = Snap('#jspsych-visual-search-circle-svg');
 
+    // check distractors - array?
+    if(!Array.isArray(trial.foil)){
+      fa = [];
+      for(var i=0; i<trial.set_size; i++){
+        fa.push(trial.foil);
+      }
+      trial.foil = fa;
+    }
+
     show_fixation();
 
     function show_fixation() {
@@ -168,11 +177,15 @@ jsPsych.plugins["visual-search-circle"] = (function() {
 
       var search_array_images = [];
 
+      var to_present = [];
+      if(trial.target_present){
+        to_present.push(trial.target);
+      }
+      to_present = to_present.concat(trial.foil);
+
       for (var i = 0; i < display_locs.length; i++) {
 
-        var which_image = (i == 0 && trial.target_present) ? trial.target : trial.foil;
-
-        var img = paper.image(which_image, display_locs[i][0], display_locs[i][1], trial.target_size[0], trial.target_size[1]);
+        var img = paper.image(to_present[i], display_locs[i][0], display_locs[i][1], trial.target_size[0], trial.target_size[1]);
 
         search_array_images.push(img);
 

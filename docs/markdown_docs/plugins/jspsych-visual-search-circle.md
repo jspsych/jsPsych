@@ -17,7 +17,7 @@ Parameter | Type | Default Value | Description
 target_present | boolean | *undefined* | Is the target present?
 set_size | numeric | *undefined* | How many items should be displayed?
 target | string | *undefined* | Path to image file that is the search target.
-foil | string | *undefined* | Path to image file that is the foil/distractor.
+foil | string or array | *undefined* | Path to image file that is the foil/distractor. Can specify an array of distractors if the distractors are all different images.
 fixation_image | string | *undefined* | Path to image file that is a fixation target.
 target_size | array | `[50, 50]` | Two element array indicating the height and width of the search array element images.
 fixation_size | array | `[16, 16]` | Two element array indicating the height and width of the fixation image.

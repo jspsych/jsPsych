@@ -32,13 +32,19 @@
     set_size: 6
   }
 
+  var trial_4 = {
+    target_present: false,
+    foil: ['img/1.gif', 'img/2.gif', 'img/3.gif'],
+    set_size: 3
+  }
+
 
   var trials = {
     type: 'visual-search-circle',
     target: 'img/backwardN.gif',
     foil: 'img/normalN.gif',
     fixation_image: 'img/fixation.gif',
-    timeline: [trial_1, trial_2, trial_3]
+    timeline: [trial_1, trial_2, trial_3, trial_4]
   };
 
   jsPsych.init({
