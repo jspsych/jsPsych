@@ -137,13 +137,13 @@ Selects some or all of the data generated in the experiment. Each filter is an o
 jsPsych.data.getData();
 
 // select all single-stim trials
-jsPsych.data.getData({trial_type: 'single-stim'});
+jsPsych.data.getData([{trial_type: 'single-stim'}]);
 
 // select all single-stim trials where key_press == 81
-jsPsych.data.getData({trial_type: 'single-stim', key_press: 81});
+jsPsych.data.getData([{trial_type: 'single-stim', key_press: 81}]);
 
 // select trials where trial_type is either single-stim or single-audio.
-jsPsych.data.getData({trial_type: 'single-stim'}, {trial_type: 'single-audio'});
+jsPsych.data.getData([{trial_type: 'single-stim'}, {trial_type: 'single-audio'}]);
 ```
 ---
 ## jsPsych.data.getDataAsCSV
