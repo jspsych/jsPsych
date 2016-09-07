@@ -1,3 +1,6 @@
 
 .DS_Store
 Thumbs.db
+/.settings/
+/.project
+/.tern-project
