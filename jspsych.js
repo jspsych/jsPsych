@@ -841,7 +841,7 @@ var jsPsych = (function() {
   }
 
   //Leave a trace in the DOM that jspsych was loaded
-  $("html").attr("jspsych", "present");
+  document.documentElement.setAttribute('jspsych', 'present');
   
   return core;
 })();
