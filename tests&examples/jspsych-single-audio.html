@@ -18,16 +18,20 @@
   var block_1 = {
     type: 'single-audio',
     timeline: [
-      {stimulus: 'sound/sound.mp3'},
+      {stimulus: function() { return 'sound/sound.mp3'; }},
       {stimulus: 'sound/hammer.mp3'}
     ],
     prompt: 'press any key to advance'
   }
 
-  jsPsych.init({
-    timeline: [block_1],
-    on_finish: function() {jsPsych.data.displayData();}
-  });
+  jsPsych.pluginAPI.preloadAudioFiles(['sound/sound.mp3'], start);
+
+  function start(){
+    jsPsych.init({
+      timeline: [block_1],
+      on_finish: function() {jsPsych.data.displayData();}
+    });
+  }
 
   </script>
 </html>
