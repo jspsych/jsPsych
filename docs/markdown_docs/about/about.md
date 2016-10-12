@@ -1,6 +1,6 @@
 # About jsPsych
 
-jsPsych was created by [Josh de Leeuw](http://pages.iu.edu/~jodeleeu) at Indiana University.
+jsPsych was created by [Josh de Leeuw](http://pages.iu.edu/~jodeleeu). Other contributors to the library are listed in the [contributors document](https://github.com/jodeleeuw/jsPsych/blob/master/contributors.md) in the jsPsych repository.
 
 ### Citation
 
