@@ -5,7 +5,7 @@ This tutorial will step through the creation of a simple response time task. The
 * Creating trials to show instructions.
 * Creating trials to show stimuli and measure response time.
 * Using the randomization methods of the jsPsych library.
-* Tagging trials with additional data to describe within-subject conditions.
+* Tagging trials with additional data to describe conditions.
 * Using functions as trial parameters to generate dynamic content.
 * Using callback functions to process the data for a trial immediately after the trial ends.
 
@@ -14,14 +14,14 @@ This tutorial will step through the creation of a simple response time task. The
 Start by downloading jsPsych and setting up a folder to contain your experiment files. If you are unsure how to do this, follow steps 1-5 in the [Hello World tutorial](hello-world.md). At the end of step 5 in the Hello World tutorial, you should have an experiment page that looks like this:
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>My experiment</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="jspsych-5.0/jspsych.js"></script>
-    <script src="jspsych-5.0/plugins/jspsych-text.js"></script>
-    <link href="jspsych-5.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jspsych-6.0/jspsych.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-text.js"></script>
+    <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body>
   </body>
@@ -61,14 +61,14 @@ jsPsych.init({
 ### The complete code so far
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>My experiment</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="jspsych-5.0/jspsych.js"></script>
-    <script src="jspsych-5.0/plugins/jspsych-text.js"></script>
-    <link href="jspsych-5.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jspsych-6.0/jspsych.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-text.js"></script>
+    <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body>
   </body>
@@ -123,14 +123,14 @@ timeline.push(instructions_block);
 ### The complete code so far
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>My experiment</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="jspsych-5.0/jspsych.js"></script>
-    <script src="jspsych-5.0/plugins/jspsych-text.js"></script>
-    <link href="jspsych-5.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jspsych-6.0/jspsych.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-text.js"></script>
+    <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body>
   </body>
@@ -179,7 +179,7 @@ First, to use a plugin we need to load it in the `<head>` section of the experim
 ```html
 <head>
   ...
-  <script src="jspsych-5.0/plugins/jspsych-single-stim.js"></script>
+  <script src="jspsych-6.0/plugins/jspsych-single-stim.js"></script>
   ...
 </head>
 ```
@@ -214,15 +214,15 @@ timeline.push(blue_trial, orange_trial);
 ### The complete code so far
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>My experiment</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="jspsych-5.0/jspsych.js"></script>
-    <script src="jspsych-5.0/plugins/jspsych-text.js"></script>
-    <script src="jspsych-5.0/plugins/jspsych-single-stim.js"></script>
-    <link href="jspsych-5.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jspsych-6.0/jspsych.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-text.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-single-stim.js"></script>
+    <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body>
   </body>
@@ -525,15 +525,15 @@ timeline.push(debrief_block);
 ## The final code
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>My experiment</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="jspsych-5.0/jspsych.js"></script>
-    <script src="jspsych-5.0/plugins/jspsych-text.js"></script>
-    <script src="jspsych-5.0/plugins/jspsych-single-stim.js"></script>
-    <link href="jspsych-5.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jspsych-6.0/jspsych.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-text.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-single-stim.js"></script>
+    <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body>
   </body>
