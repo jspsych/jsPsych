@@ -19,7 +19,7 @@ In addition to the [default data collected by all plugins](overview#datacollecte
 
 Name | Type | Value
 -----|------|------
-responses | JSON string | A string in JSON format containing the responses for each question. The encoded object will have a separate variable for the response to each question, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. Each response is a string containing whatever the subject typed into the associated text box.
+responses | JSON string | A string in JSON format containing the response for each question. The encoded object will have a separate variable for the response to each question, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. Each response is a string containing whatever the subject typed into the associated text box.
 rt | numeric | The response time in milliseconds for the subject to make a response.
 
 ## Examples

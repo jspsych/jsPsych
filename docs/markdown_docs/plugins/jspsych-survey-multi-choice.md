@@ -1,6 +1,6 @@
 # jspsych-survey-multi-choice plugin
 
-The survey-text plugin displays a set of questions with multiple choice response fields. The subject selects a single answer.
+The survey-multi-choice plugin displays a set of questions with multiple choice response fields. The subject selects a single answer.
 
 ## Parameters
 
@@ -22,7 +22,7 @@ In addition to the [default data collected by all plugins](overview#datacollecte
 
 Name | Type | Value
 -----|------|------
-responses | JSON string | A string in JSON format containing the responses for each question. The encoded object will have a separate variable for the response to each question, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. The responses recorded as the name of the option label.
+responses | JSON string | A string in JSON format containing the response for each question. The encoded object will have a separate variable for the response to each question, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. The responses are recorded as the name of the option label.
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response.
 
 ## Examples
