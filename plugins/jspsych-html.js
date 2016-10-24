@@ -63,14 +63,14 @@ jsPsych.plugins.html = (function() {
       url = trial.url + "?time=" + (new Date().getTime());
     }
 
-    display_element.load(trial.url, function() {
+    display_element.load(url, function() {
       var t0 = (new Date()).getTime();
       var finish = function() {
         if (trial.check_fn && !trial.check_fn(display_element)) return;
         if (trial.cont_key) $(document).unbind('keydown', key_listener);
         var trial_data = {
           rt: (new Date()).getTime() - t0,
-          url: trial.url
+          url: url
         };
         display_element.empty();
         jsPsych.finishTrial(trial_data);
