@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".btn1").click(function(){
+		$("#result").css("visibility", "visible");
+	});
+	$(".btn2").click(function(){
+		$("#result").css("visibility", "hidden");
+	});
+});
+</script>
+
+</head>
+<body>
+<div id="iatFrame" style="border:solid;margin-left:auto;margin-right:auto;height:60%;width:50%;">
+	<div id="lb" style="float:left;height:auto;width:50%;text-align:left">
+		<p style="margin-left: 10%">Press "E" for:</p>
+		<p style="margin-left: 5%;color:;font-size:;font-family:;">One catagory</p>
+	</div>
+	<div id="rb" style="float:right;height:auto;width:50%;text-align:right">
+		<p style="margin-right: 10%">Press "I" for:</p>
+		<p style="margin-right: 5%;color:;font-size:;font-family:;">Another catagory</p>
+	</div>
+	<div id="test-object" style="text-align:center;margin-top:20%">
+		<p>
+			<img  src=".\blue.png" width="10%" height="10%"/>
+		</p>
+	</div>
+	<div id="result" style="text-align:center;margin-top:5%;visibility:hidden">
+		<p>
+			<img  src=".\orange.png" width="10%" height="10%"/>
+		</p>
+	</div>
+	<div id="instruction" style="text-align:center;margin-bottom:1%">
+			this is some instructions...this is some instructions...this is some instructions...
+	</div>
+</div>
+<button class="btn1">show</button>
+<button class="btn2">hide</button>
+</body>
+</html>
+
