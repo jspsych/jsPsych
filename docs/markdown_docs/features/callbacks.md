@@ -54,14 +54,15 @@ jsPsych.init({
 
 ## on_trial_finish
 
-The `on_trial_finish` callback can be declared in the `jsPsych.init` method. The callback will trigger at the end of every trial in the experiment. If you want a callback to trigger only for the end of certain trials, use the [`on_finish`](#onfinishtrial) callback on the trial object. There are no parameters passed to the callback function.
+The `on_trial_finish` callback can be declared in the `jsPsych.init` method. The callback will trigger at the end of every trial in the experiment. If you want a callback to trigger only for the end of certain trials, use the [`on_finish`](#onfinishtrial) callback on the trial object. The callback function will be passed a single argument, containing the data object from the trial.
 
 #### Sample use
 ```javascript
 jsPsych.init({
   timeline: exp,
-  on_trial_finish: function() {
+  on_trial_finish: function(data) {
     console.log('A trial just ended.');
+    console.log(JSON.stringify(data));
   }
 });
 ```
