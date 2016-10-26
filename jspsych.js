@@ -1275,6 +1275,63 @@ jsPsych.turk = (function() {
 
 })();
 
+// Prolific Academic integration
+jsPsych.prolific = (function() {
+
+  var module = {};
+
+  // module.info gets information relevant to prolific academic experiments.
+  // returns an object containing the participantId and sessionId
+  module.info = function() {
+
+    var prolific = {};
+
+    var param = function(url, name) {
+      name = name.replace(/[\[]/, '\\\[').replace(/[\]]/, '\\\]');
+      var regexS = '[\\?&]' + name + '=([^&#]*)';
+      var regex = new RegExp(regexS);
+      var results = regex.exec(url);
+      return (results == null) ? '' : results[1];
+    };
+
+    // pull parameters from different urls
+    var sources = [document.referrer, window.parent.location.href, window.location.href];
+    var keys = ['participant', 'session', 'study', 'study_id'];
+    for(var i = 0; i < sources.length; i++) {
+      keys.map(
+      function(key) {
+        var val = param(sources[i], key);
+        if(val || !prolific.hasOwnProperty(key)) {
+          prolific[key] = unescape(val);
+        }
+      });
+    }
+
+    // use study instead of study_id as key
+    if(!prolific.study) {
+      prolific.study = prolific.study_id;
+    }
+    delete prolific.study_id;
+    
+    return prolific;
+
+  };
+
+  // module.submit will complete the submission on prolific academic.
+  module.submit = function(code) {
+
+    var info = jsPsych.prolific.info();
+    if(!info.hasOwnProperty('study')) return;
+
+    var url = '//www.prolific.ac/submissions/' + info.study + '/complete?cc=' + code;
+
+    window.location.href = url;
+  };
+
+  return module;
+
+})();
+
 jsPsych.randomization = (function() {
 
   var module = {};

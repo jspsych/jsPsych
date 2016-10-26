@@ -26,12 +26,14 @@ pages:
   - 'Exclude Participants Based on Browser Features': 'features/exclude-browser.md'
   - 'Automatic Progress Bar': 'features/progress-bar.md'
   - 'Integrating with Mechanical Turk': 'features/mturk.md'
+  - 'Integrating with Prolific Academic': 'features/prolific.md'
 - Core Library API:
   - 'Overview': 'core_library/overview.md'
   - 'jsPsych core': 'core_library/jspsych-core.md'
   - 'jsPsych.data': 'core_library/jspsych-data.md'
   - 'jsPsych.randomization': 'core_library/jspsych-randomization.md'
   - 'jsPsych.turk': 'core_library/jspsych-turk.md'
+  - 'jsPsych.prolific': 'core_library/jspsych-prolific.md'
   - 'jsPsych.pluginAPI': 'core_library/jspsych-pluginAPI.md'
 - Plugins:
   - 'Overview': 'plugins/overview.md'

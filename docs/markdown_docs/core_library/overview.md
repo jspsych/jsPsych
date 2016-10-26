@@ -44,6 +44,11 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.turk.submitToTurk](jspsych-turk.md#jspsychturksubmittoturk)
 * [jsPsych.turk.turkInfo](jspsych-turk.md#jspsychturkturkinfo)
 
+### [Prolific module](jspsych-prolific.md)
+
+* [jsPsych.prolific.submit](jspsych-prolific.md#jspsychprolificsubmit)
+* [jsPsych.prolific.info](jspsych-prolific.md#jspsychprolificinfo)
+
 ### [Randomization module](jspsych-randomization.md)
 
 * [jsPsych.randomization.factorial](jspsych-randomization.md#jspsychrandomizationfactorial)
