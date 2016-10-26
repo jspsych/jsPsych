@@ -30,5 +30,32 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
 #### Basic example with multiple questions on a page.
 
 ```javascript
+    // defining groups of questions that will go together.
+    var page_1_questions = ["I like vegetables.", "I like fruit."];
 
+    // definiting two different response scales that can be used.
+    var page_1_options = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
+    var page_2_options = ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neural", "Somewhat Agree", "Agree", "Strongly Agree"];
+
+    var multi_choice_block = {
+        type: 'survey-multi-choice',
+        questions: page_1_questions,
+        options: [page_1_options, page_2_options],  // need one scale for every question on a page
+        required: [true, false]   // set whether questions are required
+    };
+
+    var multi_choice_block_horizontal = {
+        type: 'survey-multi-choice',
+        questions: page_1_questions,
+        options: [page_1_options, page_2_options],  // need one scale for every question on a page
+        required: [true, false],   // set whether questions are required
+        horizontal: true  // centres questions and makes options display horizontally
+    };
+
+    jsPsych.init({
+      timeline: [multi_choice_block, multi_choice_block_horizontal],
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 ```
