@@ -1189,19 +1189,27 @@ jsPsych.data = (function() {
   // this function is modified from StackOverflow:
   // http://stackoverflow.com/a/3855394
 
-  function getQueryString() {
-    var a = window.location.search.substr(1).split('&');
-    if (a == "") return {};
-    var b = {};
-    for (var i = 0; i < a.length; ++i)
+  function getQueryString(url) {
+    // default url is window location
+    url = (typeof url === 'undefined') ? window.location : url;
+
+    // query part starts after &
+    var query = url.search.substr(1).split('&');
+    
+    // no query part
+    if (query == '') return {};
+    
+    // build parameter object
+    var params = {};
+    for (var i = 0; i < query.length; ++i)
     {
-        var p=a[i].split('=', 2);
+        var p=query[i].split('=', 2);
         if (p.length == 1)
-            b[p[0]] = "";
+            params[p[0]] = '';
         else
-            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+            params[p[0]] = decodeURIComponent(p[1].replace(/\+/g, ' '));
     }
-    return b;
+    return params;
   }
 
   return module;
