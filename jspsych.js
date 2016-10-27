@@ -1187,7 +1187,7 @@ jsPsych.data = (function() {
   }
 
   // this function is modified from StackOverflow:
-  // http://stackoverflow.com/posts/3855394
+  // http://stackoverflow.com/a/3855394
 
   function getQueryString() {
     var a = window.location.search.substr(1).split('&');
