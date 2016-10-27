@@ -1258,7 +1258,7 @@ jsPsych.turk = (function() {
     for (var key in data) {
 
       if (data.hasOwnProperty(key)) {
-        dataString.push(key + "=" + escape(data[key]));
+        dataString.push(key + "=" + encodeURIComponent(data[key]));
       }
     }
 
