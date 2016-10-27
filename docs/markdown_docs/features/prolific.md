@@ -25,7 +25,7 @@ Recording the participant ID at the start of the experiment is also a good way t
 
 ## Submitting results to Prolific Academic
 
-If you are running a study on Prolific Academic, participants will have to provide the completion code to PA after finishing the study. jsPSych makes this a relatively easy task. One strategy is to run the experiment within the iframe provided by PA. Another strategy is to detect whether the experiment is running in an iframe and tell the participant to use the button "Open Study in New Window" to do so.
+If you are running a study on Prolific Academic, participants will have to provide the completion code to PA after finishing the study. jsPSych makes this a relatively easy task. One strategy is to detect whether the experiment is running in an iframe and tell the participant to use the button "Open Study in New Window" to do so.
 If you decide to provide another way to open the experiment in it's own window, you will have to make sure to set the URL parameter `study` accordingly.
 
 Detecting the iframe and submitting to PA could work like this:

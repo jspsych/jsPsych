@@ -23,7 +23,7 @@ Returns nothing.
 
 This method will submit a completion code to Prolific Academic, causing the session to be marked as completed. 
 
-This method will only work when the experiment is either (1) loaded within Prolific Academic, or (2) has been loaded through the "Open Study in New Window" button on the Prolific Academic experiment page or (3) either the `study` or `study_id` URL parameter are set manually. Otherwise the study to submit to can not be identified and this method will return without any action.
+This method will only work when the experiment either (1) has been loaded through the "Open Study in New Window" button on the Prolific Academic experiment page or (2) either the `study` or `study_id` URL parameter is set manually. Otherwise the study to submit to can not be identified and this method will return without any action.
 
 ### Example
 
@@ -64,7 +64,7 @@ Returns an object with six properties:
 
 This method returns basic information about the current Prolific Academic session, including the worker ID, assignment ID, and HIT ID. prolificId={{%PROLIFIC_PID%}}&sessionId={{%SESSION_ID%}}
 
-The `.study` property will only be set, when the experiment is either (1) loaded within Prolific Academic, or (2) loaded through the "Open Study in New Window" button on the Prolific Academic experiment page or (3) either the `study` or `study_id` URL parameter are set manually.
+The `.study` property will only be set, when the experiment either (1) has been loaded loaded through the "Open Study in New Window" button on the Prolific Academic experiment page or (2) either the `study` or `study_id` URL parameter is set manually.
 
 ### Example
 

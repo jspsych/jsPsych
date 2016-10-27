@@ -1285,7 +1285,7 @@ jsPsych.prolific = (function() {
     var prolific = {};
 
     // pull parameters from different urls
-    var sources = [document.referrer, window.parent.location.href, window.location.href];
+    var sources = [document.referrer, window.location];
     var keys = ['participant', 'session', 'study', 'study_id'];
     for(var i = 0; i < sources.length; i++) {
       keys.map(
