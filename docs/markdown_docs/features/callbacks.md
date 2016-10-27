@@ -21,7 +21,7 @@ jsPsych.init({
 
 ## on_finish (trial)
 
-The `on_finish` callback can be added to any trial. The callback will trigger whenever the trial ends. The callback function will be passed a single argument, containing the data object from the trial.
+The `on_finish` callback can be added to any trial. The callback will trigger whenever the trial ends, just before `jsPsych.data.write` will be called. The callback function will be passed a single argument, containing the data object from the trial. This data object can be modified, before it is written to the data module.
 
 #### Sample use
 ```javascript
@@ -30,6 +30,7 @@ var trial = {
   stimulus: 'imgA.png',
   on_finish: function(data) {
     console.log('The trial just ended.');
+    data.response_acc = 1; // response should be compared to correct response for this
     console.log(JSON.stringify(data));
   }
 };
@@ -54,7 +55,7 @@ jsPsych.init({
 
 ## on_trial_finish
 
-The `on_trial_finish` callback can be declared in the `jsPsych.init` method. The callback will trigger at the end of every trial in the experiment. If you want a callback to trigger only for the end of certain trials, use the [`on_finish`](#onfinishtrial) callback on the trial object. The callback function will be passed a single argument, containing the data object from the trial.
+The `on_trial_finish` callback can be declared in the `jsPsych.init` method. The callback will trigger at the end of every trial in the experiment, just after `jsPsych.data.write` has been called. If you want a callback to trigger only for the end of certain trials, use the [`on_finish`](#onfinishtrial) callback on the trial object. The callback function will be passed a single argument, containing the data object from the trial. This data object is read only, any changes to it will not be made to the underlying data.
 
 #### Sample use
 ```javascript
