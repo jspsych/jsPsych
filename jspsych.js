@@ -1870,6 +1870,14 @@ jsPsych.pluginAPI = (function() {
     }
 
   }
+  
+  // images //
+
+  var image_cache = {};
+
+  module.getImageFromCache = function(url) {
+    return image_cache[url];
+  }
 
   module.preloadImages = function(images, callback_complete, callback_load) {
 
@@ -1905,6 +1913,9 @@ jsPsych.pluginAPI = (function() {
       }
 
       img.src = images[i];
+      
+      // put image element in cache
+      image_cache[images[i]] = img;
     }
   };
 
