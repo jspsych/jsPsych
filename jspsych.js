@@ -874,8 +874,8 @@ jsPsych.data = (function() {
   // ignored data fields
   var ignoredProperties = [];
 
-  // cache the query_string
-  var query_string;
+  // cache the query_strings
+  var query_strings = {};
 
   module.getData = function(filters) {
     var data_clone = $.extend(true, [], allData); // deep clone
@@ -1060,18 +1060,18 @@ jsPsych.data = (function() {
     $('#jspsych-data-display').text(data_string);
   };
 
-  module.urlVariables = function() {
-    if(typeof query_string == 'undefined'){
-      query_string = getQueryString();
+  module.urlVariables = function(url) {
+    // default url is window location
+    url = (typeof url === 'undefined') ? window.location : url;
+    
+    if(typeof query_strings[url] === 'undefined'){
+      query_strings[url] = getQueryString(url);
     }
-    return query_string;
+    return query_strings[url];
   }
 
-  module.getURLVariable = function(whichvar){
-    if(typeof query_string == 'undefined'){
-      query_string = getQueryString();
-    }
-    return query_string[whichvar];
+  module.getURLVariable = function(whichvar, url) {
+    return module.urlVariables(url)[whichvar];
   }
 
   module.createInteractionListeners = function(){
@@ -1190,12 +1190,10 @@ jsPsych.data = (function() {
   // http://stackoverflow.com/a/3855394
 
   function getQueryString(url) {
-    // default url is window location
-    url = (typeof url === 'undefined') ? window.location : url;
-
+    // no url given
+    if (typeof url === 'undefined') return {};
     // query part starts after &
     var query = url.search.substr(1).split('&');
-    
     // no query part
     if (query == '') return {};
     
