@@ -1225,26 +1225,18 @@ jsPsych.turk = (function() {
 
     var turk = {};
 
-    var param = function(url, name) {
-      name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-      var regexS = "[\\?&]" + name + "=([^&#]*)";
-      var regex = new RegExp(regexS);
-      var results = regex.exec(url);
-      return (results == null) ? "" : results[1];
-    };
+    var src = jsPsych.data.getURLVariable('assignmentId', window.location) ? window.location : document.referrer;
 
-    var src = param(window.location.href, "assignmentId") ? window.location.href : document.referrer;
-
-    var keys = ["assignmentId", "hitId", "workerId", "turkSubmitTo"];
+    var keys = ['assignmentId', 'hitId', 'workerId', 'turkSubmitTo'];
     keys.map(
 
       function(key) {
-        turk[key] = unescape(param(src, key));
+        turk[key] = jsPsych.data.getURLVariable(key, src);
       });
 
-    turk.previewMode = (turk.assignmentId == "ASSIGNMENT_ID_NOT_AVAILABLE");
+    turk.previewMode = (turk.assignmentId == 'ASSIGNMENT_ID_NOT_AVAILABLE');
 
-    turk.outsideTurk = (!turk.previewMode && turk.hitId === "" && turk.assignmentId == "" && turk.workerId == "")
+    turk.outsideTurk = (!turk.previewMode && turk.hitId === '' && turk.assignmentId === '' && turk.workerId === '')
 
     turk_info = turk;
 
@@ -1270,9 +1262,9 @@ jsPsych.turk = (function() {
       }
     }
 
-    dataString.push("assignmentId=" + assignmentId);
+    dataString.push('assignmentId=' + assignmentId);
 
-    var url = turkSubmitTo + "/mturk/externalSubmit?" + dataString.join("&");
+    var url = turkSubmitTo + '/mturk/externalSubmit?' + dataString.join('&');
 
     window.location.href = url;
   };
@@ -1292,23 +1284,15 @@ jsPsych.prolific = (function() {
 
     var prolific = {};
 
-    var param = function(url, name) {
-      name = name.replace(/[\[]/, '\\\[').replace(/[\]]/, '\\\]');
-      var regexS = '[\\?&]' + name + '=([^&#]*)';
-      var regex = new RegExp(regexS);
-      var results = regex.exec(url);
-      return (results == null) ? '' : results[1];
-    };
-
     // pull parameters from different urls
     var sources = [document.referrer, window.parent.location.href, window.location.href];
     var keys = ['participant', 'session', 'study', 'study_id'];
     for(var i = 0; i < sources.length; i++) {
       keys.map(
       function(key) {
-        var val = param(sources[i], key);
+        var val = jsPsych.data.getURLVariable(key, sources[i]);
         if(val || !prolific.hasOwnProperty(key)) {
-          prolific[key] = unescape(val);
+          prolific[key] = val;
         }
       });
     }
