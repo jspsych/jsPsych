@@ -1228,11 +1228,9 @@ jsPsych.turk = (function() {
     var src = jsPsych.data.getURLVariable('assignmentId', window.location) ? window.location : document.referrer;
 
     var keys = ['assignmentId', 'hitId', 'workerId', 'turkSubmitTo'];
-    keys.map(
-
-      function(key) {
-        turk[key] = jsPsych.data.getURLVariable(key, src);
-      });
+    keys.map(function(key) {
+      turk[key] = jsPsych.data.getURLVariable(key, src);
+    });
 
     turk.previewMode = (turk.assignmentId == 'ASSIGNMENT_ID_NOT_AVAILABLE');
 
@@ -1256,7 +1254,6 @@ jsPsych.turk = (function() {
     var dataString = [];
 
     for (var key in data) {
-
       if (data.hasOwnProperty(key)) {
         dataString.push(key + "=" + encodeURIComponent(data[key]));
       }
@@ -1288,8 +1285,7 @@ jsPsych.prolific = (function() {
     var sources = [document.referrer, window.location];
     var keys = ['participant', 'session', 'study', 'study_id'];
     for(var i = 0; i < sources.length; i++) {
-      keys.map(
-      function(key) {
+      keys.map(function(key) {
         var val = jsPsych.data.getURLVariable(key, sources[i]);
         if(val || !prolific.hasOwnProperty(key)) {
           prolific[key] = val;
