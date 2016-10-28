@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="js/jquery.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-form.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body>
+    <!-- storing html snippets in <script type="text/html"> elements is a good way to keep the code in the same document, while not having the snippet active in the DOM all the time. -->
+    <script type="text/html" id="form-template-age">
+      <form>
+        <!-- Unfortunately, the required attribute doesn't work in Safari. -->
+        <label>How old are you, {{name}}? <input type="number" min="1" max="110" name="age" required /></label><br/>
+        <button type="submit">Next</button>
+      </form>
+    </script>
+    <script>
+      var age_form = {
+        type: 'form',
+        container: '#form-template-age',
+        // This is just a simple replacement. Better templating could be done with libraries, such as MustacheJS, for example: https://github.com/janl/mustache.js
+        load_fn: function(html) { return html.replace('{{name}}', 'Bob'); }
+      };
+
+      jsPsych.init({
+        timeline: [age_form],
+        on_finish: function() {
+          jsPsych.data.displayData();
+        }
+      });
+    </script>
+  </body>
+</html>

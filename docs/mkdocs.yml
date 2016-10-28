@@ -41,6 +41,7 @@ pages:
   - 'jspsych-call-function': 'plugins/jspsych-call-function.md'
   - 'jspsych-categorize': 'plugins/jspsych-categorize.md'
   - 'jspsych-categorize-animation': 'plugins/jspsych-categorize-animation.md'
+  - 'jspsych-form': 'plugins/jspsch-form.md'
   - 'jspsych-free-sort': 'plugins/jspsych-free-sort.md'
   - 'jspsych-html': 'plugins/jspsych-html.md'
   - 'jspsych-instructions': 'plugins/jspsych-instructions.md'
