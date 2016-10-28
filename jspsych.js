@@ -171,6 +171,10 @@ var jsPsych = (function() {
     // set default value for data parameter
     data = typeof data === 'undefined' ? {} : data;
     
+    // add trial.data and dataProperties
+    var dataProperties = jsPsych.data.getProperties();
+    data = $.extend({}, dataProperties, trial.data, data);
+    
     // handle callback at plugin level
     if (typeof current_trial.on_finish === 'function') {
       current_trial.on_finish(data);
@@ -925,9 +929,6 @@ jsPsych.data = (function() {
   module.write = function(data_object) {
 
     var progress = jsPsych.progress();
-    var trial = jsPsych.currentTrial();
-
-    //var trial_opt_data = typeof trial.data == 'function' ? trial.data() : trial.data;
 
     var default_data = {
       'trial_type': trial.type,
@@ -936,7 +937,7 @@ jsPsych.data = (function() {
       'internal_node_id': jsPsych.currentTimelineNodeID()
     };
 
-    var ext_data_object = $.extend({}, data_object, trial.data, default_data, dataProperties);
+    var ext_data_object = $.extend({}, dataProperties, data_object, default_data);
 
     for(var i in ignoredProperties){
       delete ext_data_object[ignoredProperties[i]];
@@ -960,6 +961,10 @@ jsPsych.data = (function() {
     // now add to list so that it gets appended to all future data
     dataProperties = $.extend({}, dataProperties, properties);
   };
+  
+  module.getProperties = function() {
+    return dataProperties;
+  }
 
   module.ignore = function(properties) {
 
