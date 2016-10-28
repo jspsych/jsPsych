@@ -177,6 +177,39 @@ source.start(startTime);
 ```
 
 ---
+## jsPsych.pluginAPI.getImageFromCache
+
+```
+jsPsych.pluginAPI.getAudioBuffer(url)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+url | string | The URL to the image file that was preloaded.
+
+### Return value
+
+Returns an `HTMLImageElement`, which can be added to the dom. Returns `undefined`, if the file was not cached.
+
+### Description
+
+Gets an image DOM element that holds the preloaded image. The file must be preloaded with `preloadImages` or the automatic preload (`autoPreload`).
+
+### Examples
+
+```javascript
+// this code in single-stim
+display_element.append($('<img>', {
+  src: trial.stimulus,
+  id: 'jspsych-single-stim-stimulus'
+}));
+// could be replaced with
+display_element.append($(jsPsych.pluginAPI.getImageFromCache(trial.stimulus)).attr('id', 'jspsych-single-stim-stimulus'));
+```
+
+---
 ## jsPsych.pluginAPI.getKeyboardResponse
 
 ```
