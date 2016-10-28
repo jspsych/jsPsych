@@ -54,11 +54,12 @@ None.
 
 ### Return value
 
-Returns an object with six properties:
+Returns an object with four properties:
 
 * `.session` contains the session ID. This has to be attached to the experiment's URL on Prolific Academic with `sessionId={{%SESSION_ID%}}`.
 * `.participant` contains the prolific ID of the participant taking part in your study. This has to be attached to the experiment's URL on Prolific Academic with `prolificId={{%PROLIFIC_PID%}}`.
 * `.study` contains the study ID. This is the 24 character code given in the completion URL on Prolific Academic, in the part after `submissions/`.
+* `.usingProlific` is a boolean value indicating if the page has been loaded through Prolific Academic and the respective URL parameters are set, or if it is being viewed from another source (e.g. someone directly going to the page URL instead of going through PA).
 
 ### Description 
 

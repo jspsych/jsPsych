@@ -44,13 +44,13 @@ function inIFrame() {
   }
 }
 
-// Check for iframe and for study id
-if(inIframe() && jsPsych.prolific.info().study) {
-  // we are either in an iframe or in a new window but without a study ID - maybe experiment was not openend with the click on the button?
+// Check for iframe and for availability of IDs
+if(inIframe() && jsPsych.prolific.info().usingProlific) {
+  // we are either in an iframe or in a new window but without at least one of the IDs - maybe experiment was not openend with the click on the button?
   // -> we show our iframe / button message
   $('#iframe-detected').show();
 } else {
-  // we are not in an iframe and have a study ID, so we can start the experiment
+  // we are not in an iframe and have all IDs, so we can start the experiment
   jsPsych.init({
     timeline: [ /* timeline definition */ ],
     // submit to PA at the end of the experiment
