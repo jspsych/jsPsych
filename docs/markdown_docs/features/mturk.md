@@ -11,20 +11,19 @@ The [jsPsych.turk](../core_library/jspsych-turk.md) module contains functions th
 When potential subjects view your experiment on Mechanical Turk, they will be able to see a single webpage before deciding whether or not to accept the HIT (start the experiment). This first page is often used as an advertisement for the experiment, similar to posting a flier in a department hallway. The important thing to remember about this page is that potential subjects will be able to interact with it even if they haven't accepted the HIT. Therefore, it can be useful to change the content of the page depending on whether the HIT has been accepted or not. This is relatively easy to do using jsPsych and jQuery:
 
 ```html
-<div id="experiment_link">You must accept the HIT to begin the experiment</div>.
+<div id="turkInfo">You must accept the HIT to begin the experiment</div>.
 
 <script>
 // jsPsych has a method turk.info() which can determine whether or not the
 // HIT has been accepted.
 var turkInfo = jsPsych.turk.info();
 
-// turkInfo.previewMode is true in two cases: when the HIT has not been
-// accepted yet OR when the page is viewed outside of mechanical turk.
-// The second property, outsideTurk, is true when the page is viewed
-// outside of mechanical turk, so together, the statement will be true
-// only when in Turk and when the HIT is not accepted yet.
-if(turkInfo.previewMode && !turkInfo.outsideTurk) {
-  $('#turkInfo').html('<a href="link_to_experiment.html" target="_blank">Click Here to Start Experiment</a>');
+// The default message above ("accept HIT") will be replaced here only if
+// turk is used (so the url parameters are set) but at the same time `turk.info()`
+// identified, that we are not in preview mode anymore
+if(turkInfo.usingTurk && !turkInfo.previewMode) {
+  // load the same page in a new window and use "#" as url to make sure mturk parameters are still appended to the url
+  $('#turkInfo').html('<a href="#" target="_blank">Click Here to Start Experiment</a>');
 }
 </script>
 ```

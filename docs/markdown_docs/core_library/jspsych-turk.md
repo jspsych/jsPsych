@@ -69,7 +69,7 @@ Returns an object with six properties:
 * `.workerId` contains the worker ID of the worker completing the HIT.
 * `.turkSubmitTo` contains the URL for submitting the HIT. This parameter is used in the `jsPsych.turk.submit` method, and is probably not useful outside of that context.
 * `.previewMode` is a boolean value indicating whether or not the worker has accepted the HIT yet. If the page is viewed inside Mechancial Turk and the worker has not clicked 'Accept HIT' then this will be true. If the page is viewed outside Mechanical Turk or the worker has acccepted the HIT, then it will be false.
-* `.outsideTurk` is a boolean value indicating if the page is being viewed within Mechanical Turk, or if it is being viewed from another source (e.g. someone directly going to the page URL instead of going through mturk).
+* `.usingTurk` is a boolean value indicating if the page has been loaded through Mechanical Turk and the respective URL parameters are set, or if it is being viewed from another source (e.g. someone directly going to the page URL instead of going through mturk).
 
 ### Description 
 
@@ -93,9 +93,9 @@ alert('HIT ID is: ' + turkInfo.hitId);
 // OR the worker has accepted the HIT.
 alert('Preview mode? ' + turkInfo.previewMode); 
 
-// true if the page is viewed outside mechanical turk,
-// false otherwise.
-alert('Outside turk? ' + turkInfo.outsideTurk);
+// false if the page is viewed without mechanical turk,
+// true otherwise.
+alert('Using turk? ' + turkInfo.usingTurk);
 ```
 
 
