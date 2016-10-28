@@ -7,4 +7,5 @@ The following people have contributed to the development of jsPsych by writing c
 * Adrian Oesch - https://github.com/adrianoesch
 * Marian Sauter - https://github.com/mariansauter
 * Tim Vergenz - https://github.com/vergenzt
+* Wolfgang Walther
 * Erik Weitnauer - https://github.com/eweitnauer
