@@ -14,9 +14,9 @@ When potential subjects view your experiment on Mechanical Turk, they will be ab
 <div id="experiment_link">You must accept the HIT to begin the experiment</div>.
 
 <script>
-// jsPsych has a method turkInfo() which can determine whether or not the
+// jsPsych has a method turk.info() which can determine whether or not the
 // HIT has been accepted.
-var turkInfo = jsPsych.turkInfo();
+var turkInfo = jsPsych.turk.info();
 
 // turkInfo.previewMode is true in two cases: when the HIT has not been
 // accepted yet OR when the page is viewed outside of mechanical turk.
@@ -36,7 +36,7 @@ One important issue with advertisement pages is that they must be served using t
 Every account on Mechanical Turk is given a unique identification string. Recording this ID is a useful way to keep track of who is doing your experiment. In particular, while Turk has built in tools for preventing the same person from doing a HIT more than once, there may be cases where you don't want subjects to complete related experiments. If you store the worker ID of every person who starts an experiment in a database, then you can exclude people by running a query on the database to check for the ID. jsPsych can get the workerID, assignmentID, and hitID with the turkInfo method.
 
 ```javascript
-var turkInfo = jsPsych.turk.turkInfo();
+var turkInfo = jsPsych.turk.info();
 
 // workerID
 turkInfo.workerId
@@ -63,7 +63,7 @@ On this page, you might include a submit button for workers to indicate that the
 
 <script>
 function sendData() {
-  jsPsych.turk.submitToTurk({
+  jsPsych.turk.submit({
     code: document.getElementById('code').value
   });
 }

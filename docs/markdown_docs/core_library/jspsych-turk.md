@@ -3,10 +3,10 @@
 The jsPsych.turk module contains functions for interacting with Mechanical Turk. 
 
 ---
-## jsPsych.turk.submitToTurk
+## jsPsych.turk.submit
 
 ```
-jsPsych.turk.submitToTurk(data)
+jsPsych.turk.submit(data)
 ```
 
 ### Parameters
@@ -41,7 +41,7 @@ This method will only work when called from within the mechanical turk website. 
 // special code that they get at the end of the experiment.
 
 function sendData() {
-  jsPsych.turk.submitToTurk({
+  jsPsych.turk.submit({
     code: document.getElementById('code').value
   });
 }
@@ -50,10 +50,10 @@ function sendData() {
 
 ---
 
-## jsPsych.turk.turkInfo
+## jsPsych.turk.info
 
 ```
-jsPsych.turk.turkInfo()
+jsPsych.turk.info()
 ```
 
 ### Parameters
@@ -67,7 +67,7 @@ Returns an object with six properties:
 * `.assignmentId` contains the assignment ID string of the HIT.
 * `.hitId` contains the HIT ID.
 * `.workerId` contains the worker ID of the worker completing the HIT.
-* `.turkSubmitTo` contains the URL for submitting the HIT. This parameter is used in the `jsPsych.turk.submitToTurk` method, and is probably not useful outside of that context.
+* `.turkSubmitTo` contains the URL for submitting the HIT. This parameter is used in the `jsPsych.turk.submit` method, and is probably not useful outside of that context.
 * `.previewMode` is a boolean value indicating whether or not the worker has accepted the HIT yet. If the page is viewed inside Mechancial Turk and the worker has not clicked 'Accept HIT' then this will be true. If the page is viewed outside Mechanical Turk or the worker has acccepted the HIT, then it will be false.
 * `.outsideTurk` is a boolean value indicating if the page is being viewed within Mechanical Turk, or if it is being viewed from another source (e.g. someone directly going to the page URL instead of going through mturk).
 
@@ -79,7 +79,7 @@ This method returns basic information about the current Mechanical Turk session,
 
 ```javascript
 
-var turkInfo = jsPsych.turk.turkInfo();
+var turkInfo = jsPsych.turk.info();
 
 alert('Worker ID is: ' + turkInfo.workerId);
 

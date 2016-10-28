@@ -1218,10 +1218,10 @@ jsPsych.turk = (function() {
 
   var module = {};
 
-  // core.turkInfo gets information relevant to mechanical turk experiments. returns an object
+  // module.info gets information relevant to mechanical turk experiments. returns an object
   // containing the workerID, assignmentID, and hitID, and whether or not the HIT is in
   // preview mode, meaning that they haven't accepted the HIT yet.
-  module.turkInfo = function() {
+  module.info = function() {
 
     var turk = {};
 
@@ -1244,10 +1244,10 @@ jsPsych.turk = (function() {
 
   };
 
-  // core.submitToTurk will submit a MechanicalTurk ExternalHIT type
-  module.submitToTurk = function(data) {
+  // module.submit will submit a MechanicalTurk ExternalHIT type
+  module.submit = function(data) {
 
-    var turkInfo = jsPsych.turk.turkInfo();
+    var turkInfo = jsPsych.turk.info();
     var assignmentId = turkInfo.assignmentId;
     var turkSubmitTo = turkInfo.turkSubmitTo;
 
