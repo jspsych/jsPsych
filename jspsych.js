@@ -1225,7 +1225,11 @@ jsPsych.turk = (function() {
 
     var turk = {};
 
-    var src = jsPsych.data.getURLVariable('assignmentId', window.location) ? window.location : document.referrer;
+    // create referrer as anchor element to support .search property in data.getQueryString()
+    var referrer_anchor = document.createElement('a');
+    referrer_anchor.href = document.referrer;
+    
+    var src = jsPsych.data.getURLVariable('assignmentId', window.location) ? window.location : referrer_anchor;
 
     var keys = ['assignmentId', 'hitId', 'workerId', 'turkSubmitTo'];
     keys.map(function(key) {
@@ -1279,8 +1283,11 @@ jsPsych.prolific = (function() {
 
     var prolific = {};
 
+    // create referrer as anchor element to support .search property in data.getQueryString()
+    var referrer_anchor = document.createElement('a');
+    referrer_anchor.href = document.referrer;
     // pull parameters from different urls
-    var sources = [document.referrer, window.location];
+    var sources = [referrer_anchor, window.location];
     var keys = ['participant', 'session', 'study', 'study_id'];
     for(var i = 0; i < sources.length; i++) {
       keys.map(function(key) {
