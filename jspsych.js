@@ -1238,7 +1238,7 @@ jsPsych.turk = (function() {
 
     turk.previewMode = (turk.assignmentId == 'ASSIGNMENT_ID_NOT_AVAILABLE');
 
-    turk.usingTurk = (turk.hitId !== '' && turk.assignmentId !== '' && turk.workerId !== '');
+    turk.usingTurk = (turk.hitId && turk.assignmentId && turk.workerId);
 
     return turk;
 
@@ -1304,7 +1304,7 @@ jsPsych.prolific = (function() {
     }
     delete prolific.study_id;
     
-    prolific.usingProlific = (prolific.participant !== '' && prolific.session !== '' && prolific.study !== '');
+    prolific.usingProlific = (prolific.participant && prolific.session && prolific.study);
     
     return prolific;
 
