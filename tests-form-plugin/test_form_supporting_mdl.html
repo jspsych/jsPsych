@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="form_supporting_mdl.js"></script>
+<head>
+	<title></title>
+</head>
+<body id="b">
+<!-- Simple Textfield -->
+<p>
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <input class="mdl-textfield__input" type="text" id="sample1">
+    <label class="mdl-textfield__label" for="sample1">Text...</label>
+  </div>
+  </p>
+  <p>
+  <div class="mdl-textfield mdl-js-textfield" id="2">
+    <input class="mdl-textfield__input" type="number" pattern="-?[0-9]*(\.[0-9]+)?">
+    <label class="mdl-textfield__label" for="sample2">Number...</label>
+    <span class="mdl-textfield__error">Input is not a number!</span>
+  </div>
+</p>
+</body>
+<script type="text/javascript">
+  var t = new InputText("b", {floating:false});
+  var t = new InputNumber("b");
+  var t = new InputEmail("b");
+  var t = new InputColor("b");
+  var t = new InputTel("b");
+  var t = new InputDate("b");
+  var t = new InputMonth("b");
+  var t = new Button("b", {label:'Submit'});
+  var t = new InputPassword("b");
+</script>
+
+</html>
