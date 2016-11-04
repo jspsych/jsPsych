@@ -1,6 +1,6 @@
 // track unique ids for each element
 var __INPUT_BUTTON = 0; //working on
-var __INPUT_CHECKBOX = 0;
+var __INPUT_CHECKBOX = 0; //working on
 var __INPUT_COLOR = 0; //need improve
 var __INPUT_DATE = 0;
 var __INPUT_DATETIME = 0;
@@ -28,7 +28,7 @@ var __FIELDSET = 0; //working on
 var __IMAGE = 0; //working on?
 var __PLAIN_TEXT = 0; //working on? 
 var __SELECT = 0; //working on
-var __TEXTAREA = 0; //working on
+var __TEXTAREA = 0; 
 
 
 if (!String.prototype.format) {
