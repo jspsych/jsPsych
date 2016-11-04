@@ -1,7 +1,7 @@
 // track unique ids for each element
 var __INPUT_BUTTON = 0; //working on
 var __INPUT_CHECKBOX = 0; //working on
-var __INPUT_COLOR = 0; //need improve
+var __INPUT_COLOR = 0; //working on
 var __INPUT_DATE = 0;
 var __INPUT_DATETIME = 0;
 var __INPUT_DATETIME_LOCAL = 0;
@@ -122,7 +122,6 @@ function Button(parent_id, item={}) {
 	this.onclick = item.onclick || "";
 	this.id = "{0}_{1}".format(this.type, __BUTTON++);
 
-//<i class="material-icons">{1}</i>
 	this.icon = item.icon || "";
 	if (this.icon != "")
 		this.icon = '<i class="material-icons">{0}</i>'.format(this.icon);
@@ -171,17 +170,7 @@ InputTextField.prototype._generate = function() {
 	return '<div class="{0}">{1}<div>'.format(this.style, component);
 };
 
-function InputColor(parent_id, item = {}) {
-	this.type = "color";
-	this.id = item.id || "{0}_{1}".format(this.type, __INPUT_COLOR++);
-	InputTextField.call(this, parent_id, item);
-
-	this.html = this._generate();
-	this.render();
-}
-InputColor.prototype = inherit(InputTextField.prototype);
-
-function InputDate(parent_id, item = {}) {
+function InputDate(parent_id, item={}) {
 	this.type = "date";
 	this.id = item.id || "{0}_{1}".format(this.type, __INPUT_DATE++);
 	InputTextField.call(this, parent_id, item);
@@ -191,7 +180,7 @@ function InputDate(parent_id, item = {}) {
 }
 InputDate.prototype = inherit(InputTextField.prototype);
 
-function InputDatetime(parent_id, item = {}) {
+function InputDatetime(parent_id, item={}) {
 	this.type = "datetime";
 	this.id = item.id || "{0}_{1}".format(this.type, __INPUT_DATETIME++);
 	InputTextField.call(this, parent_id, item);
@@ -201,7 +190,7 @@ function InputDatetime(parent_id, item = {}) {
 }
 InputDatetime.prototype = inherit(InputTextField.prototype);
 
-function InputDatetimeLocal(parent_id, item = {}) {
+function InputDatetimeLocal(parent_id, item={}) {
 	this.type = "datetime-local";
 	this.id = item.id || "{0}_{1}".format(this.type, __INPUT_DATETIME_LOCAL++);
 	InputTextField.call(this, parent_id, item);
@@ -211,7 +200,7 @@ function InputDatetimeLocal(parent_id, item = {}) {
 }
 InputDatetimeLocal.prototype = inherit(InputTextField.prototype);
 
-function InputEmail(parent_id, item = {}) {
+function InputEmail(parent_id, item={}) {
 	this.type = "email";
 	item.floating = (item.floating == false) ? false : true;
 	this.id = item.id || "{0}_{1}".format(this.type, __INPUT_EMAIL++);
@@ -225,7 +214,7 @@ function InputEmail(parent_id, item = {}) {
 InputEmail.prototype = inherit(InputTextField.prototype);
 
 
-function InputMonth(parent_id, item = {}) {
+function InputMonth(parent_id, item={}) {
 	this.type = "month";
 	this.id = item.id || "{0}_{1}".format(this.type, __INPUT_MONTH++);
 	InputTextField.call(this, parent_id, item);
@@ -235,7 +224,7 @@ function InputMonth(parent_id, item = {}) {
 }
 InputMonth.prototype = inherit(InputTextField.prototype);
 
-function InputNumber(parent_id, item = {}) {
+function InputNumber(parent_id, item={}) {
 	this.type = "number";
 	item.floating = (item.floating == false) ? false : true;
 	this.id = item.id || "{0}_{1}".format(this.type, __INPUT_NUMBER++);
@@ -248,7 +237,7 @@ function InputNumber(parent_id, item = {}) {
 }
 InputNumber.prototype = inherit(InputTextField.prototype);
 
-function InputPassword(parent_id, item = {}) {
+function InputPassword(parent_id, item={}) {
 	this.type = "password";
 	item.floating = (item.floating == false) ? false : true;
 	this.id = item.id || "{0}_{1}".format(this.type, __INPUT_PASSWORD++);
@@ -261,7 +250,7 @@ function InputPassword(parent_id, item = {}) {
 }
 InputPassword.prototype = inherit(InputTextField.prototype);
 
-function InputTel(parent_id, item = {}) {
+function InputTel(parent_id, item={}) {
 	this.type = "tel";
 	item.floating = (item.floating == false) ? false : true;
 	this.id = item.id || "{0}_{1}".format(this.type, __INPUT_TEL++);
@@ -274,7 +263,7 @@ function InputTel(parent_id, item = {}) {
 }
 InputTel.prototype = inherit(InputTextField.prototype);
 
-function InputText(parent_id, item = {}) {
+function InputText(parent_id, item={}) {
 	this.type = "text";
 	item.floating = (item.floating == false) ? false : true;
 	this.id = item.id || "{0}_{1}".format(this.type, __INPUT_TEXT++);
@@ -288,7 +277,7 @@ function InputText(parent_id, item = {}) {
 }
 InputText.prototype = inherit(InputTextField.prototype);
 
-function InputTime(parent_id, item = {}) {
+function InputTime(parent_id, item={}) {
 	this.type = "time";
 	item.floating = (item.floating == false) ? false : true;
 	this.id = item.id || "{0}_{1}".format(this.type, __INPUT_TIME++);
@@ -299,7 +288,7 @@ function InputTime(parent_id, item = {}) {
 }
 InputTime.prototype = inherit(InputTextField.prototype);
 
-function InputUrl(parent_id, item = {}) {
+function InputUrl(parent_id, item={}) {
 	this.type = "url";
 	item.floating = (item.floating == false) ? false : true;
 	this.id = item.id || "{0}_{1}".format(this.type, __INPUT_URL++);
@@ -312,7 +301,7 @@ function InputUrl(parent_id, item = {}) {
 }
 InputUrl.prototype = inherit(InputTextField.prototype);
 
-function InputWeek(parent_id, item = {}) {
+function InputWeek(parent_id, item={}) {
 	this.type = "week";
 	this.id = item.id || "{0}_{1}".format(this.type, __INPUT_WEEK++);
 	InputTextField.call(this, parent_id, item);
