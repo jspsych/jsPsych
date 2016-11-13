@@ -6,21 +6,21 @@
 <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="form_supporting_mdl.js"></script>
+<link rel="stylesheet" href="styles.css">
 <head>
 	<title></title>
 </head>
-<body id="b">
+<body>
 </body>
 <script type="text/javascript">
-  var t = new InputText("b", {floating:false});
-  var t = new InputNumber("b");
-  var t = new InputEmail("b");
-  var t = new InputColor("b");
-  var t = new InputTel("b");
-  var t = new InputDate("b");
-  var t = new InputMonth("b");
-  var t = new Button("b", {label:'Submit'});
-  var t = new InputPassword("b");
+  var t = new Form("body", opt={id:"b"}) 
+  var t = new InputText("b");
+  var t = new ToggleGroup("b", {type:"switch", labels: ["One"]});
+  var t = new ToggleGroup("b", {type: "checkbox", labels: ["One", "Two"]});
+  var t = new ToggleGroup("b", {type:"radio", labels: ["One", "Two", "Three", "Four"]});
+  var t = new UploadFile("b");
+  var t = new Textarea("b");
+  var t = new Button("b", {label:'Next', id:"test"});
 </script>
 
 </html>
