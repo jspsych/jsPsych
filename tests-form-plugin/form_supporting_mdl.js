@@ -5,7 +5,6 @@ var __INPUT_DATETIME = 0;
 var __INPUT_DATETIME_LOCAL = 0;
 var __INPUT_EMAIL = 0;
 var __INPUT_FILE = 0;
-var __INPUT_IMAGE = 0; //working on
 var __INPUT_MONTH = 0;
 var __INPUT_NUMBER = 0;
 var __INPUT_PASSWORD = 0;
@@ -21,9 +20,7 @@ var __INPUT_WEEK = 0;
 var __TOGGLE_GROUP = 0;
 
 var __BUTTON = 0;
-var __FIELDSET = 0; //working on
 var __IMAGE = 0; //working on?
-var __PLAIN_TEXT = 0; //working on? 
 var __SELECT = 0; //working on
 var __TEXTAREA = 0;
 
@@ -482,8 +479,14 @@ function ToggleGroup(parent_id, item) {
 	item.type = item.type || "checkbox";
 	item.name = item.name || item.id;
 	item.needQuestion = (item.needQuestion == false) ? false : true;
+	item.images = item.images || [];
+	item.labels = item.labels || [];
 	Tag.call(this, parent_id, item);
 
+	if (this.type == 'radio' && item.images.length > 0) {
+		for (var i in item.images)
+			item.labels.push('<img src="{0}">'.format(item.images[i]));
+	}
 	this.labels = item.labels || [];
 
 	this.html = "";
@@ -558,6 +561,5 @@ jsPsych Forms</div></div></main>'.format(
 	this.render();
 }
 Form.prototype.render = function() {
-	console.log(this.html)
 	$(this.display_element).html(this.html);
 }
