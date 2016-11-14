@@ -20,7 +20,6 @@ var __INPUT_WEEK = 0;
 var __TOGGLE_GROUP = 0;
 
 var __BUTTON = 0;
-var __IMAGE = 0; //working on?
 var __SELECT = 0; //working on
 var __TEXTAREA = 0;
 
@@ -59,6 +58,53 @@ function inherit(proto) {
 	F.prototype = proto;
 	return new F;
 }
+
+// need to work on submit
+function Form(display_element, opt = {}) {
+	this.type = "form";
+	this.display_element = display_element || "body";
+	this.id = opt.id || "{0}_{1}".format(this.type, __FORM++);
+
+	this.layout_color = opt.layout_color || "grey-300";
+
+	this.ribbon_color = opt.ribbon_color || '#3F51B5';
+	this.ribbon_height = opt.ribbon_height || '40vh';
+	this.ribbon_bg = (opt.ribbon_bg) ? "background: url({0});".format(opt.ribbon_bg) : "";
+	this.ribbon_bg_size = opt.ribbon_bg_size || "background-size: contain cover;";
+
+	this.ribbon = '<div style="height: {0};-webkit-flex-shrink: 0;-ms-flex-negative: 0;flex-shrink: 0;background-color: {1};{2}{3}"></div>'.format(
+		this.ribbon_height, this.ribbon_color, this.ribbon_bg, this.ribbon_bg_size);
+
+	this.content_bg_color = opt.content_bg_color || "grey-100";
+	this.context_text_color = opt.context_text_color || "black-800";
+	this.form_title = opt.form_title || "Untitled Form";
+
+	this.form_title_size = opt.form_title_size || "40px";
+	this.form_title_color = opt.form_title_color || "black-800";
+	this.form_title = '<label style="font-size: {0};padding-bottom: 40px; font-weight: bolder;" class="mdl-layout-title mdl-color-text--{1}">{2}</label>'.format(
+		this.form_title_size, this.form_title_color, this.form_title)
+
+	this.content = '<main class="mdl-layout__content" style="margin-top: -35vh;-webkit-flex-shrink: 0;-ms-flex-negative: 0;flex-shrink: 0;">\
+<div class="mdl-grid" style="max-width: 1600px;width: calc(100% - 16px);margin: 0 auto;margin-top: 10vh;">\
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>\
+<div class="mdl-color--{0} mdl-shadow--4dp mdl-cell mdl-cell--8-col" style="border-radius: 2px;padding: 80px 56px;margin-bottom: 80px;">\
+<div class="mdl-color-text--{1}" id="{2}" style="width: 512px;">{3}</div></div>\
+<div class="mdl-layout mdl-color-text--grey-600" style="text-align: center; font-size: 12px; margin-top: -60px">\
+This content is neither created nor endorsed by jsPsych.\
+</div><div class="mdl-layout mdl-color-text--grey-700" style="text-align: center; font-size: 19px; margin-top: -30px">\
+jsPsych Forms</div></div></main>'.format(
+		this.content_bg_color, this.context_text_color, this.id, this.form_title);
+
+
+	this.html = '<form><div class="mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--{0}">{1}{2}</div></form>'.format(
+		this.layout_color, this.ribbon, this.content);
+
+	this.render();
+}
+Form.prototype.render = function() {
+	$(this.display_element).html(this.html);
+}
+
 
 function Tag(parent_id, item) {
 	// standard attributs
@@ -547,48 +593,3 @@ ToggleGroup.prototype._selector = function() {
 	}
 }
 
-
-function Form(display_element, opt = {}) {
-	this.type = "form";
-	this.display_element = display_element || "body";
-	this.id = opt.id || "{0}_{1}".format(this.type, __FORM++);
-
-	this.layout_color = opt.layout_color || "grey-300";
-
-	this.ribbon_color = opt.ribbon_color || '#3F51B5';
-	this.ribbon_height = opt.ribbon_height || '40vh';
-	this.ribbon_bg = (opt.ribbon_bg) ? "background: url({0});".format(opt.ribbon_bg) : "";
-	this.ribbon_bg_size = opt.ribbon_bg_size || "background-size: contain cover;";
-
-	this.ribbon = '<div style="height: {0};-webkit-flex-shrink: 0;-ms-flex-negative: 0;flex-shrink: 0;background-color: {1};{2}{3}"></div>'.format(
-		this.ribbon_height, this.ribbon_color, this.ribbon_bg, this.ribbon_bg_size);
-
-	this.content_bg_color = opt.content_bg_color || "grey-100";
-	this.context_text_color = opt.context_text_color || "black-800";
-	this.form_title = opt.form_title || "Untitled Form";
-
-	this.form_title_size = opt.form_title_size || "40px";
-	this.form_title_color = opt.form_title_color || "black-800";
-	this.form_title = '<label style="font-size: {0};padding-bottom: 40px; font-weight: bolder;" class="mdl-layout-title mdl-color-text--{1}">{2}</label>'.format(
-		this.form_title_size, this.form_title_color, this.form_title)
-
-	this.content = '<main class="mdl-layout__content" style="margin-top: -35vh;-webkit-flex-shrink: 0;-ms-flex-negative: 0;flex-shrink: 0;">\
-<div class="mdl-grid" style="max-width: 1600px;width: calc(100% - 16px);margin: 0 auto;margin-top: 10vh;">\
-<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>\
-<div class="mdl-color--{0} mdl-shadow--4dp mdl-cell mdl-cell--8-col" style="border-radius: 2px;padding: 80px 56px;margin-bottom: 80px;">\
-<div class="mdl-color-text--{1}" id="{2}" style="width: 512px;">{3}</div></div>\
-<div class="mdl-layout mdl-color-text--grey-600" style="text-align: center; font-size: 12px; margin-top: -60px">\
-This content is neither created nor endorsed by jsPsych.\
-</div><div class="mdl-layout mdl-color-text--grey-700" style="text-align: center; font-size: 19px; margin-top: -30px">\
-jsPsych Forms</div></div></main>'.format(
-		this.content_bg_color, this.context_text_color, this.id, this.form_title);
-
-
-	this.html = '<div class="mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--{0}">{1}{2}</div>'.format(
-		this.layout_color, this.ribbon, this.content);
-
-	this.render();
-}
-Form.prototype.render = function() {
-	$(this.display_element).html(this.html);
-}
