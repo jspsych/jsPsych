@@ -414,6 +414,8 @@ function Toggle(parent_id, item = {}) {
 	this.ripple = (item.ripple == false) ? false : true;
 	this.toggle_type = item.toggle_type;
 
+	this.value = item.value || this.label;
+
 	this.checked = (item.checked) ? 'checked="checked"' : "";
 }
 Toggle.prototype = inherit(Tag.prototype);
@@ -427,7 +429,7 @@ Toggle.prototype._generate = function() {
 	html += '<input type="{0}" id="{1}" class="{2}" form="{3}" {4} {5} {6} value="{7}" name="{8}">'.format(
 		this.type, this.id, this.type_class, this.parent_id, this.checked, this.autofocus, this.required, this.value, this.name
 	);
-	html += '{0}</label>'.format(this.content_class);
+	html += this.content_class + '</label>'
 
 	return html;
 };
@@ -436,13 +438,19 @@ function Checkbox(parent_id, item = {}) {
 	item.type = "checkbox";
 	item.id = item.id || "{0}_{1}".format(item.type, __INPUT_CHECKBOX++);
 	item.toggle_type = "checkbox";
+	item.label = item.label || "Checkbox #{0}".format(__INPUT_CHECKBOX - 1);
 	Toggle.call(this, parent_id, item);
 
-	this.label = item.label || "Checkbox #{0}".format(__INPUT_CHECKBOX - 1);
 	this.type_class = 'mdl-checkbox__input';
-	this.content_class = '<span class="mdl-checkbox__label">{0}</span>'.format(this.label);
+	var isImage = this.label.startsWith("<div") && this.label.endsWith("</div>")
+	if (!isImage) 
+		this.content_class = '<span class="mdl-checkbox__label">{0}</span>'.format(this.label);
+	else
+		this.content_class = '<span class="mdl-checkbox__label">{0}</span>'.format(this.value);
 
 	this.html = this._generate();
+	if (isImage)
+		this.html += this.label;
 }
 Checkbox.prototype = inherit(Toggle.prototype);
 
@@ -450,13 +458,19 @@ function Switch(parent_id, item = {}) {
 	item.type = "checkbox";
 	item.id = item.id || "{0}_{1}".format(item.type, __INPUT_CHECKBOX++);
 	item.toggle_type = "switch";
+	item.label = item.label || "Switch #{0}".format(__INPUT_CHECKBOX - 1);
 	Toggle.call(this, parent_id, item);
 
-	this.label = item.label || "Switch #{0}".format(__INPUT_CHECKBOX - 1);
 	this.type_class = 'mdl-switch__input';
-	this.content_class = '<span class="mdl-switch__label">{0}</span>'.format(this.label);
+	var isImage = this.label.startsWith("<div") && this.label.endsWith("</div>")
+	if (!isImage)
+		this.content_class = '<span class="mdl-switch__label">{0}</span>'.format(this.label);
+	else
+		this.content_class = '<span class="mdl-switch__label">{0}</span>'.format(this.value);
 
 	this.html = this._generate();
+	if (isImage)
+		this.html += this.label;
 }
 Switch.prototype = inherit(Toggle.prototype);
 
@@ -464,11 +478,15 @@ function Radio(parent_id, item = {}) {
 	item.type = "radio";
 	item.id = item.id || "{0}_{1}".format(item.type, __INPUT_RADIO++);
 	item.toggle_type = "radio";
+	item.label = item.label || "Radio #{0}".format(__INPUT_RADIO - 1);
 	Toggle.call(this, parent_id, item);
 
-	this.label = item.label || "Radio #{0}".format(__INPUT_RADIO - 1);
 	this.type_class = 'mdl-radio__button';
-	this.content_class = '<span class="mdl-radio__label">{0}</span>'.format(this.label);
+	var isImage = this.label.startsWith("<div") && this.label.endsWith("</div>")
+	if (!isImage)
+		this.content_class = '<span class="mdl-radio__label">{0}</span>'.format(this.label);
+	else
+		this.content_class = '<span class="mdl-radio__label">{0}{1}</span>'.format(this.value, this.label);
 
 	this.html = this._generate();
 }
@@ -481,19 +499,30 @@ function ToggleGroup(parent_id, item) {
 	item.needQuestion = (item.needQuestion == false) ? false : true;
 	item.images = item.images || [];
 	item.labels = item.labels || [];
+	item.values = item.values || [];
 	Tag.call(this, parent_id, item);
 
-	if (this.type == 'radio' && item.images.length > 0) {
-		for (var i in item.images)
-			item.labels.push('<img src="{0}">'.format(item.images[i]));
+	for (var i in item.labels) {
+		if (item.values.length < item.labels.length)
+			item.values.push(item.labels[i]);
 	}
-	this.labels = item.labels || [];
-
+	if (item.images.length > 0) {
+		for (var i in item.images) {
+			item.labels.push('<div class="mdl-card mdl-shadow--2dp" \
+style="width: 256px;height: 256px;background: url({0}) center/cover;"></div>'.format(item.images[i]));
+			if (item.values.length < item.labels.length)
+				item.values.push(item.images[i]);
+		}
+	}
+	this.values = item.values;
+	this.labels = item.labels;
+	
 	this.html = "";
 	var factory = this._selector();
 
 	for (var i in this.labels) {
 		item.label = this.labels[i];
+		item.value = this.values[i];
 		item.id = ""; // initialize item.id
 		this.html += factory(this.parent_id, item).html + "\n";
 	}
