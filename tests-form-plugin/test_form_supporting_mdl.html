@@ -12,18 +12,21 @@
 
 </body>
 <script type="text/javascript">
+
   var schema = {
-    form: {form_title: "Test #1"},
+    form: {form_title: "Test #1", ribbon_bg: "ribbon.jpg", form_description: ""},
     "Question #1": {type: "short answer"},
-    "Question #2": {type: "long answer"},
+    "Question #2": {type: "password"},
     "Question #3": {type: "checkbox", labels: ["option1", "option2"]},
     "Question #4": {type: "radio", labels: ["option1", "option2"]},
     "Question #5": {type: "range"},
     "Question #6": {type: "dropdown", needQuestion: false},
+    "Question #7": {type: "long answer", question_description: ""},
+    "Question #8": {type: "file"},
     onSubmit: {label: "Next"}
   };
 
-  createForm("body", schema);
+  elements = createForm("body", schema);
 
 </script>
 

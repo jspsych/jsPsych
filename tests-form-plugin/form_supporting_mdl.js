@@ -74,7 +74,6 @@ function inherit(proto) {
 
 /*
 */
-// need to work on submit
 function Form(display_element, item = {}) {
 	this.type = "form";
 	this.display_element = display_element || "body";
@@ -96,8 +95,15 @@ function Form(display_element, item = {}) {
 
 	this.form_title_size = item.form_title_size || "40px";
 	this.form_title_color = item.form_title_color || "black-800";
-	this.form_title = '<label style="font-size: {0};padding-bottom: 40px; font-weight: bolder;" class="mdl-layout-title mdl-color-text--{1}">{2}</label>'.format(
-		this.form_title_size, this.form_title_color, this.form_title)
+
+	this.form_description = item.form_description || "";
+	this.form_description_size = item.form_description_size || "12px";
+	this.form_description_color = item.form_description_color || "grey-600";
+	if (this.form_description)
+		this.form_description = '<p style="font-size: {0};padding-top: 20px;" class="mdl-layout-title mdl-color-text--{1}">{2}</p>'.format(this.form_description_size, this.form_description_color, this.form_description);
+
+	this.form_title = '<label style="font-size: {0};padding-bottom: 30px; font-weight: bolder;" class="mdl-layout-title mdl-color-text--{1}">{2}<br>{3}</label>'.format(
+		this.form_title_size, this.form_title_color, this.form_title, this.form_description)
 
 	this.content = '<main class="mdl-layout__content" style="margin-top: -35vh;-webkit-flex-shrink: 0;-ms-flex-negative: 0;flex-shrink: 0;">\
 <div class="mdl-grid" style="max-width: 1600px;width: calc(100% - 16px);margin: 0 auto;margin-top: 10vh;">\
@@ -133,6 +139,15 @@ function Tag(parent_id, item) {
 	this.name = item.name || this.id;
 	this.question_color = item.question_color || "black-800";
 	this.question = "";
+
+	this.question_description = item.question_description || "";
+	this.question_description_size = item.question_description_size || "12px";
+	this.question_description_color = item.question_description_color || "grey-600";
+	if (this.question_description)
+		this.question_description = '<p style="font-size: {0};padding-top: 20px;" class="mdl-layout-title mdl-color-text--{1}">{2}</p>'.format(
+			this.question_description_size, this.question_description_color, this.question_description
+			);
+
 	if (item.needQuestion) {
 		this.question = item.question || "Untitled Question";
 		this.question = '<label class="mdl-layout-title mdl-color-text--{0}" style="font-weight: bold;" >{1}</label>'.format(
@@ -155,7 +170,7 @@ Tag.prototype = {
 	render: function() {
 		if (this.newline)
 			this.html = "<br>" + this.html;
-		$("#{0}".format(this.parent_id)).append(this.html);
+		$("#{0}".format(this.parent_id)).append(this.question + this.question_description + this.html);
 	}
 }
 
@@ -261,7 +276,7 @@ function Range(parent_id, item = {}) {
 		this.label_id, this.value
 	);
 
-	this.html = this.question + '<div class="mdl-textfield mdl-js-textfield" style="box-sizing: border-box;">{12} {6}\
+	this.html = '<div class="mdl-textfield mdl-js-textfield" style="box-sizing: border-box;">{12} {6}\
 <div style="width:{0};"><input class="mdl-slider mdl-js-slider" type="range" form="{7}"\
 id="{1}" min="{2}" max="{3}" value="{4}" step="{5}" {8} {9} {10} {11}></div></div>'.format(
 		this.width, this.id, this.min, this.max, this.value,
@@ -373,12 +388,6 @@ InputTextField.prototype._generate = function() {
 
 	return '<div class="{0}">{1}<div>'.format(this.style, component);
 };
-InputTextField.prototype.render = function() {
-	this.html = this.question + this.html;
-	if (this.newline)
-		this.html = "<br>" + this.html;
-	$("#{0}".format(this.parent_id)).append(this.html);
-}
 
 function InputDate(parent_id, item = {}) {
 	item.type = "date";
@@ -551,7 +560,7 @@ Textarea.prototype._generate = function() {
 			this.id, this.rows, this.cols, this.parent_id, this.maxlength, this.readonly, this.required, this.disabled, this.autofocus, this.wrap, this.name) +
 		'<label class="mdl-textfield__label" for="{0}">{1}</label>'.format(this.id, this.placeholder);
 
-	return this.question + '<div class="{0}">{1}<div>'.format(this.style, component);
+	return '<div class="{0}">{1}<div>'.format(this.style, component);
 }
 
 function Toggle(parent_id, item = {}) {
@@ -679,7 +688,7 @@ style="width: 256px;height: 256px;background: url({0}) center/cover;"></div>'.fo
 		item.id = ""; // initialize item.id
 		this.html += factory(this.parent_id, item).html + "\n";
 	}
-	this.html = this.question + "<br><div>" + this.html + "</div><br>"
+	this.html = "<br><div>" + this.html + "</div><br>"
 	this.render();
 }
 ToggleGroup.prototype = inherit(Tag.prototype);
@@ -765,7 +774,7 @@ function createForm(display_element, opt) {
 			tag = new InputEmail(form_id, item);
 			break;
 			case "file":
-			tag = new InputFile(form_id, item);
+			tag = new UploadFile(form_id, item);
 			break;
 			case "month":
 			tag = new InputMonth(form_id, item);
@@ -794,4 +803,6 @@ function createForm(display_element, opt) {
 
 	var button = new Button(form_id, opt.onSubmit);
 	tags.push(button);
+
+	return tags;
 }
