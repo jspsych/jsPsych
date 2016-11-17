@@ -1,6 +1,6 @@
 /*
 
-Depend on jQuery, Material Design Lite
+Dependency: jQuery, Material Design Lite
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
@@ -73,6 +73,148 @@ function inherit(proto) {
 }
 
 /*
+e.g.
+
+var schema = {
+    form: {form_title: "Test #1", ribbon_bg: "somePicture", form_description: ""},
+	
+	// for more avaliable settings, check the attributes of classes for each type
+    "Question #1": {type: "short answer", label: ""}, 
+    "Question #2": {type: "password"},
+    "Question #3": {type: "checkbox", labels: ["option1", "option2"], images:[1, 2], values:[1, 2, 3, 4]},
+    "Question #4": {type: "radio", labels: ["option1", "option2"]}, // will automatically fill valuse
+    "Question #5": {type: "range"},
+
+    // not display question
+    "Question #6": {type: "dropdown", needQuestion: false},
+	
+	// insert paragraph (similar for form)
+    "Question #7": {type: "long answer", question_description: ""}, // better styled
+    "Question #8<p>Contents</p>": {type: "long answer"}, 
+
+    onSubmit: {label: "Next"}
+  };
+
+
+*/
+function createForm(display_element, opt) {
+	opt.form = opt.form || {};
+	var form = new Form(display_element, opt.form);
+	var form_id = form.id;
+
+	var tags = [];
+	tags.push(form);
+	for (var i in Object.keys(opt)) {
+		i = Object.keys(opt)[i]
+		if (i == "form" || i == "onSubmit")
+			continue;
+		item = opt[i]
+		item.question = item.question || i;
+		var type = item.type;
+		var tag;
+		switch(type) {
+			// major uses
+			case "short answer":
+			item.type = "text";
+			case "text":
+			tag = new InputText(form_id, item);
+			break;
+			case "long answer":
+			item.type = "textarea";
+			case "textarea":
+			tag = new Textarea(form_id, item);
+			break;
+			case "dropdown":
+			tag = new Dropdown(form_id, item);
+			break;
+			case "checkbox":
+			case "switch":
+			case "radio":
+			tag = new ToggleGroup(form_id, item);
+			break;
+			case "range":
+			tag = new Range(form_id, item);
+			break;
+			// minor features
+			case "date":
+			tag = new InputDate(form_id, item);
+			break;
+			case "datetime":
+			tag = new InputDatetime(form_id, item);
+			break;
+			case "datetime-local":
+			tag = new InputDatetimeLocal(form_id, item);
+			break;
+			case "email":
+			tag = new InputEmail(form_id, item);
+			break;
+			case "file":
+			tag = new UploadFile(form_id, item);
+			break;
+			case "month":
+			tag = new InputMonth(form_id, item);
+			break;
+			case "password":
+			tag = new InputPassword(form_id, item);
+			break;
+			case "search":
+			tag = new InputSearch(form_id, item);
+			break;
+			case "telephone":
+			tag = new InputTel(form_id, item);
+			break;
+			case "time":
+			tag = new InputTime(form_id, item);
+			break;
+			case "url":
+			tag = new InputUrl(form_id, item);
+			break;
+			case "week":
+			tag = new InputWeek(form_id, item);
+			break;
+		}
+		tags.push(tag);
+	}
+
+	var button = new Button(form_id, opt.onSubmit);
+	tags.push(button);
+
+	return tags;
+}
+
+
+/*
+############################################################
+# Form
+# Form does the following: render a MDL style form 
+
+#
+# Arbitrary settings:
+# item.type <-- automatically assigned
+# item.id <-- automatically assigned
+#
+# @param parent_id --> the id of its parent element
+# @param item --> a set of values for setting
+
+# @param item.form_title
+# @param item.form_title_size
+# @param item.form_title_color
+# @param item.form_description
+# @param item.form_description_color 
+# @param item.form_description_size 
+
+# layout settings:
+# @param item.layout_color 
+# @param item.ribbon_color 
+# @param item.ribbon_height 
+# @param item.ribbon_bg
+# @param item.ribbon_bg_size
+# @param item.content_bg_color
+# @param item.content_text_color
+############################################################
+# @return
+#
+############################################################
 */
 function Form(display_element, item = {}) {
 	this.type = "form";
@@ -126,7 +268,39 @@ Form.prototype.render = function() {
 	$(this.display_element).html(this.html);
 }
 
+/*
+############################################################
+# Tag does the following:
+#
+# @param parent_id --> the id of its parent element
+# @param item --> an object of values for setting
 
+# @param item.label --> general inner html content
+# @param item.question --> question
+# @param item.question_description --> question description
+# @param item.question_color --> color of of question
+# @param item.question_size --> font size of question
+# @param item.question_description_size --> font size of question description
+# @param item.question_description_color --> color of question description
+# @param item.needQuestion --> whether displaying question
+# @param item.newline --> whether inserting new line when rendering
+
+# @param item.value --> html attribute
+# @param item.name --> html attribute
+# @param item.type --> html attribute
+# @param item.id --> html attribute
+# @param item.disabled --> html attribute
+# @param item.maxlength --> html attribute
+# @param item.readonly --> html attribute
+# @param item.required --> html attribute
+# @param item.autofocus --> html attribute
+# @param item.size --> html attribute
+
+############################################################
+# @return
+#
+############################################################
+*/
 function Tag(parent_id, item) {
 	// standard attributs
 	this.parent_id = parent_id;
@@ -174,7 +348,30 @@ Tag.prototype = {
 	}
 }
 
-
+/*
+############################################################
+# Button **inherits** Tag
+# Button does the following: render a MDL style button
+#
+# Arbitrary settings:
+# item.type <-- automatically assigned
+# item.id   <-- automatically assigned
+# item.needQuestion <-- False
+#		
+# @param parent_id --> the id of its parent element
+# @param item --> an object of values for setting
+# @param item.buttonStyle --> see MDL attribute
+# @param item.color --> see MDL attribute
+# @param item.primary --> see MDL attribute
+# @param item.accent --> see MDL attribute
+# @param item.ripple --> see MDL attribute
+# @param item.icon --> see MDL attribute
+# @param item.onclick --> html attribute
+############################################################
+# @return
+#
+############################################################
+*/
 function Button(parent_id, item = {}) {
 	item.id = item.id || "{0}_{1}".format(item.type, __BUTTON++);
 	item.type = item.type || "button";
@@ -225,6 +422,25 @@ function Button(parent_id, item = {}) {
 }
 Button.prototype = inherit(Tag.prototype);
 
+/*
+############################################################
+# UploadFile **inherits** Tag
+# UploadFile does the following:
+#
+# Arbitrary settings:
+# item.type <-- automatically assigned
+# item.id   <-- automatically assigned
+# item.needQuestion <-- False
+#
+# @param parent_id --> the id of its parent element
+# @param item --> an object of values for setting
+# @param item.fileType --> prompts users to upload certain file type
+# @param item.icon --> see MDL attribute
+############################################################
+# @return
+#
+############################################################
+*/
 function UploadFile(parent_id, item = {}) {
 	item.type = "file";
 	item.id = item.id || "{0}_{1}".format(item.type, __INPUT_FILE++);
@@ -259,6 +475,28 @@ UploadFile.prototype._generate = function() {
 	return html
 }
 
+/*
+############################################################
+# Range **inherits** Tag
+# Range does the following:
+#
+# Arbitrary settings:
+# item.type <-- automatically assigned
+# item.id   <-- automatically assigned
+# item.needQuestion <-- True or assigned by user
+#
+# @param parent_id --> the id of its parent element
+# @param item --> an object of values for setting
+# @param item.width --> html attribute
+# @param item.max --> html attribute
+# @param item.min --> html attribute
+# @param item.step --> html attribute
+# @param item.value_prompt --> prompts users the current value
+############################################################
+# @return
+#
+############################################################
+*/
 function Range(parent_id, item = {}) {
 	item.type = "range";
 	item.id = item.id || "{0}_{1}".format(item.type, __INPUT_RANGE++);
@@ -294,6 +532,27 @@ id="{1}" min="{2}" max="{3}" value="{4}" step="{5}" {8} {9} {10} {11}></div></di
 }
 Range.prototype = inherit(Tag.prototype);
 
+/*
+############################################################
+# Dropdown **inherits** Tag
+# Dropdown does the following:
+#
+# Arbitrary settings:
+# item.type <-- automatically assigned
+# item.id   <-- automatically assigned
+# item.needQuestion <-- True or assigned by user
+#
+# @param parent_id --> the id of its parent element
+# @param item --> an object of values for setting
+# @param item.options --> the labels of the options
+# @param item.option_values --> the values of the options
+# @param item.dropRight --> define from which direction the list drops down, default is "false"
+# @param item.choose_prompt --> prompts the users to choose
+############################################################
+# @return
+#
+############################################################
+*/
 function Dropdown(parent_id, item={}) {
 	item.type = "select";
 	item.id = item.id || "{0}_{1}".format(item.type, __SELECT++);
@@ -347,6 +606,33 @@ Dropdown.prototype._option_factory = function () {
 	return html;
 }
 
+/*
+############################################################
+# InputTextField **inherits** Tag
+# InputTextField does the following: as a superclass for <input> tag
+
+#
+# Arbitrary settings:
+# item.type <-- automatically assigned
+# item.id   <-- automatically assigned
+# item.needQuestion <-- True or assigned by user
+#
+# @param parent_id --> the id of its parent element
+# @param item --> a set of values for setting
+# @param item.expandable --> see MDL attribute
+# @param item.floating --> see MDL attribute
+# @param item.icon --> see MDL attribute
+# @param item.errorInfo --> see MDL attribute, define desired error message, the default is "Your input is not as required!"
+# @param item.pattern --> html attribute
+# @param item.accessKey --> html attribute
+# @param item.defaultValue --> html attribute
+# @param item.alt --> html attribute
+# @param item.tabIndex --> html attribute
+############################################################
+# @return
+#
+############################################################
+*/
 function InputTextField(parent_id, item) {
 	item.needQuestion = (item.needQuestion == false) ? false : true;
 	Tag.call(this, parent_id, item);
@@ -539,7 +825,29 @@ function InputWeek(parent_id, item = {}) {
 }
 InputWeek.prototype = inherit(InputTextField.prototype);
 
+/*
+############################################################
+# Textarea **inherits** InputTextField
+# Textarea does the following:
 
+#
+# Arbitrary settings:
+# item.type <-- automatically assigned
+# item.id   <-- automatically assigned
+# item.needQuestion <-- True or assigned by user
+#
+# @param parent_id --> the id of its parent element
+# @param item --> a set of values for setting
+# @param item.name --> html attribute
+# @param item.placeholder --> html attribute
+# @param item.cols --> html attribute
+# @param item.rows --> html attribute
+# @param item.wrap --> html attribute
+############################################################
+# @return
+#
+############################################################
+*/
 function Textarea(parent_id, item = {}) {
 	item.type = "textarea";
 	item.id = item.id || "{0}_{1}".format(item.type, __TEXTAREA++);
@@ -563,6 +871,26 @@ Textarea.prototype._generate = function() {
 	return '<div class="{0}">{1}<div>'.format(this.style, component);
 }
 
+/*
+############################################################
+# Toggle **inherits** Tag
+# Toggle does the following: as a superclass for checkbox, radio, switch
+
+#
+# Arbitrary settings:
+# item.type <-- automatically assigned
+# item.id   <-- automatically assigned
+# item.needQuestion <-- True or assigned by user
+#
+# @param parent_id --> the id of its parent element
+# @param item --> a set of values for setting
+# @param item.ripple --> see MDL attribute
+# @param item.checked --> html attribute
+############################################################
+# @return
+#
+############################################################
+*/
 function Toggle(parent_id, item = {}) {
 	item.newline = item.newline || false;
 	Tag.call(this, parent_id, item);
@@ -654,6 +982,31 @@ function Radio(parent_id, item = {}) {
 }
 Radio.prototype = inherit(Toggle.prototype);
 
+
+/*
+############################################################
+# ToggleGroup **inherits** Tag
+# ToggleGroup does the following: renders a group of toggles
+# **note:
+#        if item.values is not assigned, it will first take values
+#        from item.labels and then from item.images until 
+#        item.values have the same size as item.labels + item.images
+#        
+# Arbitrary settings:
+# item.type <-- automatically assigned
+# item.id   <-- automatically assigned
+# item.needQuestion <-- True or assigned by user
+#
+# @param parent_id --> the id of its parent element
+# @param item --> a set of values for setting
+# @param item.images --> an array of images
+# @param item.values --> an array of values
+# @param item.labels --> an array of labels
+############################################################
+# @return
+#
+############################################################
+*/
 function ToggleGroup(parent_id, item) {
 	item.id = item.id || "Toggle group_{0}".format(__TOGGLE_GROUP++);
 	item.type = item.type || "checkbox";
@@ -709,100 +1062,3 @@ ToggleGroup.prototype._selector = function() {
 	}
 }
 
-/*
-e.g.
-
-opt = {
-form: {ribbon-bg: somePicture},  --> form setting and layout
-question#1: {type: someType},
-question#2: {type: someType},
-onSubmit: {},  --> button setting
-}
-
-
-*/
-
-function createForm(display_element, opt) {
-	opt.form = opt.form || {};
-	var form = new Form(display_element, opt.form);
-	var form_id = form.id;
-
-	var tags = [];
-	tags.push(form);
-	for (var i in Object.keys(opt)) {
-		i = Object.keys(opt)[i]
-		if (i == "form" || i == "onSubmit")
-			continue;
-		item = opt[i]
-		item.question = item.question || i;
-		var type = item.type;
-		var tag;
-		switch(type) {
-			// major uses
-			case "short answer":
-			item.type = "text";
-			case "text":
-			tag = new InputText(form_id, item);
-			break;
-			case "long answer":
-			item.type = "textarea";
-			case "textarea":
-			tag = new Textarea(form_id, item);
-			break;
-			case "dropdown":
-			tag = new Dropdown(form_id, item);
-			break;
-			case "checkbox":
-			case "switch":
-			case "radio":
-			tag = new ToggleGroup(form_id, item);
-			break;
-			case "range":
-			tag = new Range(form_id, item);
-			break;
-			// minor features
-			case "date":
-			tag = new InputDate(form_id, item);
-			break;
-			case "datetime":
-			tag = new InputDatetime(form_id, item);
-			break;
-			case "datetime-local":
-			tag = new InputDatetimeLocal(form_id, item);
-			break;
-			case "email":
-			tag = new InputEmail(form_id, item);
-			break;
-			case "file":
-			tag = new UploadFile(form_id, item);
-			break;
-			case "month":
-			tag = new InputMonth(form_id, item);
-			break;
-			case "password":
-			tag = new InputPassword(form_id, item);
-			break;
-			case "search":
-			tag = new InputSearch(form_id, item);
-			break;
-			case "telephone":
-			tag = new InputTel(form_id, item);
-			break;
-			case "time":
-			tag = new InputTime(form_id, item);
-			break;
-			case "url":
-			tag = new InputUrl(form_id, item);
-			break;
-			case "week":
-			tag = new InputWeek(form_id, item);
-			break;
-		}
-		tags.push(tag);
-	}
-
-	var button = new Button(form_id, opt.onSubmit);
-	tags.push(button);
-
-	return tags;
-}
