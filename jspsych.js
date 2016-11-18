@@ -76,33 +76,36 @@ var jsPsych = (function() {
     };
 
     // override default options if user specifies an option
-    opts = $.extend({}, defaults, options);
+    opts = Object.assign({}, defaults, options);
 
     // set DOM element where jsPsych will render content
     // if undefined, then jsPsych will use the <body> tag and the entire page
     if(typeof opts.display_element == 'undefined'){
       // check if there is a body element on the page
-      var body = $('body');
-      if (body.length === 0) {
-        $(document.documentElement).append($('<body>'));
+      var body = document.querySelector('body');
+      if (body === null) {
+        document.documentElement.appendChild(document.createElement('body'));
       }
-      // using the full page, so we need the HTML document to
+      // using the full page, so we need the HTML element to
       // have 100% height, and body to have no margin
-      $('html').css('height','100%');
-      $('body').css('margin', '0px');
-      opts.display_element = $('body');
+      document.querySelector('html').style.height = '100%';
+      document.querySelector('body').style.margin = '0px';
+      opts.display_element = document.querySelector('body');
     } else {
       // make sure that the display element exists on the page
-      if(opts.display_element.length == 0) {
+      var display = document.querySelector('#'+opts.display_element);
+      if(display === null) {
         console.error('The display_element specified in jsPsych.init() does not exist in the DOM.');
+      } else {
+        opts.display_element = display;
       }
     }
-    opts.display_element.append('<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>')
-    DOM_target = $('#jspsych-content');
+    opts.display_element.innerHTML = '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
+    DOM_target = document.querySelector('#jspsych-content');
 
     // add CSS class to DOM_target
-    opts.display_element.addClass('jspsych-display-element')
-    DOM_target.addClass('jspsych-content');
+    opts.display_element.className += ' jspsych-display-element';
+    DOM_target.className += 'jspsych-content';
 
     // create experiment timeline
     timeline = new TimelineNode({
