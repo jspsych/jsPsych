@@ -288,7 +288,7 @@ var jsPsych = (function() {
       if (typeof timeline_parameters == 'undefined') {
         // returns a clone of the trial_parameters to
         // protect functions.
-        return $.extend(true, {}, trial_parameters);
+        return Object.assign({}, trial_parameters);
       } else {
         if (progress.current_location >= timeline_parameters.timeline.length) {
           return null;
@@ -592,7 +592,7 @@ var jsPsych = (function() {
         console.error('Cannot add new trials to a trial-level node.');
       } else {
         timeline_parameters.timeline.push(
-          new TimelineNode($.extend(true, {}, node_trial_data, parameters), self, timeline_parameters.timeline.length)
+          new TimelineNode(Object.assign({}, node_trial_data, parameters), self, timeline_parameters.timeline.length)
         );
       }
     }
@@ -628,7 +628,7 @@ var jsPsych = (function() {
         self.setTimelineVariablesOrder();
 
         // extract all of the node level data and parameters
-        var node_data = $.extend(true, {}, parameters);
+        var node_data = Object.assign({}, parameters);
         delete node_data.timeline;
         delete node_data.conditional_function;
         delete node_data.loop_function;
@@ -640,7 +640,7 @@ var jsPsych = (function() {
 
         // create a TimelineNode for each element in the timeline
         for (var i = 0; i < parameters.timeline.length; i++) {
-          timeline_parameters.timeline.push(new TimelineNode($.extend(true, {}, node_data, parameters.timeline[i]), self, i));
+          timeline_parameters.timeline.push(new TimelineNode(Object.assign({}, node_data, parameters.timeline[i]), self, i));
         }
 
       }
@@ -654,7 +654,7 @@ var jsPsych = (function() {
           console.error('No plugin loaded for trials of type "' + trial_type + '"');
         }
         // create a deep copy of the parameters for the trial
-        trial_parameters = $.extend(true, {}, parameters);
+        trial_parameters = Object.assign({}, parameters);
       }
 
     }();
@@ -673,8 +673,8 @@ var jsPsych = (function() {
       if (keyboardNotAllowed) {
         go();
       } else {
-        DOM_target.append('<div style=""><p>The experiment will launch in fullscreen mode when you click the button below.</p><button id="jspsych-fullscreen-btn" class="jspsych-btn">Launch Experiment</button></div>');
-        $('#jspsych-fullscreen-btn').on('click', function() {
+        DOM_target.innerHTML = '<div style=""><p>The experiment will launch in fullscreen mode when you click the button below.</p><button id="jspsych-fullscreen-btn" class="jspsych-btn">Launch Experiment</button></div>';
+        var listener = DOM_target.querySelector('#jspsych-fullscreen-btn').addEventListener('click', function() {
           var element = document.documentElement;
           if (element.requestFullscreen) {
             element.requestFullscreen();
@@ -685,8 +685,8 @@ var jsPsych = (function() {
           } else if (element.msRequestFullscreen) {
             element.msRequestFullscreen();
           }
-          $('#jspsych-fullscreen-btn').off('click');
-          DOM_target.html('');
+          DOM_target.querySelector('#jspsych-fullscreen-btn').removeEventListener('click', listener);
+          DOM_target.innerHTML = '';
           setTimeout(go, 1000);
         });
       }
@@ -828,19 +828,19 @@ var jsPsych = (function() {
   }
 
   function drawProgressBar() {
-    $('.jspsych-display-element').prepend(
+    var content = document.querySelector('.jspsych-display-element').innerHTML;
+    document.querySelector('.jspsych-display-element').innerHTML =
       '<div id="jspsych-progressbar-container">'+
       '<span>Completion Progress</span>'+
       '<div id="jspsych-progressbar-outer">'+
         '<div id="jspsych-progressbar-inner"></div>'+
-      '</div></div>'
-    );
+      '</div></div>' + content;
   }
 
   function updateProgressBar() {
     var progress = jsPsych.progress();
 
-    $('#jspsych-progressbar-inner').css('width', progress.percent_complete + "%");
+    document.querySelector('#jspsych-progressbar-inner').style.width = progress.percent_complete + "%";
   }
 
   return core;
@@ -937,7 +937,7 @@ jsPsych.data = (function() {
       'internal_node_id': jsPsych.currentTimelineNodeID()
     };
 
-    var ext_data_object = $.extend({}, data_object, trial.data, default_data, dataProperties);
+    var ext_data_object = Object.assign({}, data_object, trial.data, default_data, dataProperties);
 
     for(var i in ignoredProperties){
       delete ext_data_object[ignoredProperties[i]];
@@ -959,7 +959,7 @@ jsPsych.data = (function() {
     }
 
     // now add to list so that it gets appended to all future data
-    dataProperties = $.extend({}, dataProperties, properties);
+    dataProperties = Object.assign({}, dataProperties, properties);
   };
 
   module.ignore = function(properties) {
@@ -979,7 +979,7 @@ jsPsych.data = (function() {
     if (allData.length == 0) {
       throw new Error("Cannot add data to last trial - no data recorded so far");
     }
-    allData[allData.length - 1] = $.extend({}, allData[allData.length - 1], data);
+    allData[allData.length - 1] = Object.assign({}, allData[allData.length - 1], data);
   }
 
   module.getDataAsCSV = function(filters) {
@@ -1026,7 +1026,7 @@ jsPsych.data = (function() {
     if (allData.length == 0) {
       return {};
     }
-    return $.extend(true, {}, allData[allData.length - 1]);
+    return Object.assign({}, allData[allData.length - 1]);
   };
 
   module.getLastTimelineData = function() {
