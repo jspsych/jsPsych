@@ -1,5 +1,5 @@
 /*
- * jspsych-form
+ * jspsych-form (Version 1.0)
  * Junyan Qi
  * 
  * plugin for creating a form from json schema
