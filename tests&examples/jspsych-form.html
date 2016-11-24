@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="../jspsych.js"></script>
+<script src="../plugins/jspsych-form.js"></script>
+<head>
+	<title></title>
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+	var schema = {
+		form: {form_title: 'Test #1'},
+		"Question #1": {type: "short answer"},
+		"Question #2": {type: "password"},
+		"Question #3": {type: "checkbox", labels: ["option1", "option2"]},
+		"Question #4": {type: "radio", labels: ["option1", "option2"]},
+		"Question #5": {type: "range"},
+		"Question #6": {type: "dropdown"},
+		"Question #7": {type: "long answer", question_description: "Some random contents"},
+		"Question #8": {type: "file"},
+		"Question #9<p>Some random contents</p>": {type: "long answer", question_description: ""},
+		"Question #10": {type: "long answer", question_description: "Some random contents"},
+		onSubmit: {label: "Submit"}
+	}
+
+	var form_trial = {
+		type: 'form',
+		schema: schema
+	}
+
+	jsPsych.init({
+		timeline: [form_trial],
+		on_finish: function(){jsPsych.data.displayData();}
+	});
+
+</script>
+
+</html>

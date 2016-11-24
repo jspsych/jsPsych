@@ -81,7 +81,7 @@ var schema = {
 	// for more avaliable settings, check the attributes of classes for each type
     "Question #1": {type: "short answer", label: ""}, 
     "Question #2": {type: "password"},
-    "Question #3": {type: "checkbox", labels: ["option1", "option2"], images:[1, 2], values:[1, 2, 3, 4]},
+    "Question #3": {type: "checkbox", labels: ["option1", "option2"], images:[image1, image2], values:[1, 2, 3, 4]},
     "Question #4": {type: "radio", labels: ["option1", "option2"]}, // will automatically fill valuse
     "Question #5": {type: "range"},
 
@@ -96,23 +96,23 @@ var schema = {
   };
 
 
-*/
-function createForm(display_element, opt) {
-	opt.form = opt.form || {};
-	var form = new Form(display_element, opt.form);
-	var form_id = form.id;
+  */
+  function createForm(display_element, opt) {
+  	opt.form = opt.form || {};
+  	var form = new Form(display_element, opt.form);
+  	var form_id = form.id;
 
-	var tags = [];
-	tags.push(form);
-	for (var i in Object.keys(opt)) {
-		i = Object.keys(opt)[i]
-		if (i == "form" || i == "onSubmit")
-			continue;
-		item = opt[i]
-		item.question = item.question || i;
-		var type = item.type;
-		var tag;
-		switch(type) {
+  	var tags = [];
+  	tags.push(form);
+  	for (var i in Object.keys(opt)) {
+  		i = Object.keys(opt)[i]
+  		if (i == "form" || i == "onSubmit")
+  			continue;
+  		item = opt[i]
+  		item.question = item.question || i;
+  		var type = item.type;
+  		var tag;
+  		switch(type) {
 			// major uses
 			case "short answer":
 			item.type = "text";
@@ -193,7 +193,7 @@ function createForm(display_element, opt) {
 # item.type <-- automatically assigned
 # item.id <-- automatically assigned
 #
-# @param parent_id --> the id of its parent element
+# @param display_element
 # @param item --> a set of values for setting
 
 # @param item.form_title
@@ -239,24 +239,27 @@ function Form(display_element, item = {}) {
 	this.form_title_color = item.form_title_color || "black-800";
 
 	this.form_description = item.form_description || "";
-	this.form_description_size = item.form_description_size || "12px";
+	this.form_description_size = item.form_description_size || "14px";
 	this.form_description_color = item.form_description_color || "grey-600";
-	if (this.form_description)
-		this.form_description = '<p style="font-size: {0};padding-top: 20px;" class="mdl-layout-title mdl-color-text--{1}">{2}</p>'.format(this.form_description_size, this.form_description_color, this.form_description);
 
-	this.form_title = '<label style="font-size: {0};padding-bottom: 30px; font-weight: bolder;" class="mdl-layout-title mdl-color-text--{1}">{2}<br>{3}</label>'.format(
-		this.form_title_size, this.form_title_color, this.form_title, this.form_description)
+	if (this.form_description)
+		this.form_description_html = '<p style="font-size: {0};padding-top: 20px;" class="mdl-layout-title mdl-color-text--{1}">{2}</p>'.format(this.form_description_size, this.form_description_color, this.form_description);
+	else
+		this.form_description_html = "";
+
+	this.form_title_html = '<label style="font-size: {0};padding-bottom: 30px; font-weight: bolder;" class="mdl-layout-title mdl-color-text--{1}">{2}<br>{3}</label>'.format(
+		this.form_title_size, this.form_title_color, this.form_title, this.form_description_html)
 
 	this.content = '<main class="mdl-layout__content" style="margin-top: -35vh;-webkit-flex-shrink: 0;-ms-flex-negative: 0;flex-shrink: 0;">\
-<div class="mdl-grid" style="max-width: 1600px;width: calc(100% - 16px);margin: 0 auto;margin-top: 10vh;">\
-<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>\
-<div class="mdl-color--{0} mdl-shadow--4dp mdl-cell mdl-cell--8-col" style="border-radius: 2px;padding: 80px 56px;margin-bottom: 80px;">\
-<div class="mdl-color-text--{1}" id="{2}" style="width: 512px;">{3}</div></div>\
-<div class="mdl-layout mdl-color-text--grey-600" style="text-align: center; font-size: 12px; margin-top: -60px">\
-This content is neither created nor endorsed by jsPsych.\
-</div><div class="mdl-layout mdl-color-text--grey-700" style="text-align: center; font-size: 19px; margin-top: -30px">\
-jsPsych Forms</div></div></main>'.format(
-		this.content_bg_color, this.context_text_color, this.id, this.form_title);
+	<div class="mdl-grid" style="max-width: 1600px;width: calc(100% - 16px);margin: 0 auto;margin-top: 10vh;">\
+	<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>\
+	<div class="mdl-color--{0} mdl-shadow--4dp mdl-cell mdl-cell--8-col" style="border-radius: 2px;padding: 80px 56px;margin-bottom: 80px;">\
+	<div class="mdl-color-text--{1}" id="{2}" style="width: 512px;">{3}</div></div>\
+	<div class="mdl-layout mdl-color-text--grey-600" style="text-align: center; font-size: 12px; margin-top: -60px">\
+	This content is neither created nor endorsed by jsPsych.\
+	</div><div class="mdl-layout mdl-color-text--grey-700" style="text-align: center; font-size: 19px; margin-top: -30px">\
+	jsPsych Forms</div></div></main>'.format(
+		this.content_bg_color, this.context_text_color, this.id, this.form_title_html);
 
 
 	this.html = '<form><div class="mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--{0}">{1}{2}</div></form>'.format(
@@ -302,49 +305,53 @@ Form.prototype.render = function() {
 ############################################################
 */
 function Tag(parent_id, item) {
-	// standard attributs
-	this.parent_id = parent_id;
+  // standard attributs
+  this.parent_id = parent_id;
 
-	this.label = item.label || "";
-	this.value = item.value || "";
-	this.name = item.name || "";
-	this.type = item.type || "";
-	this.id = item.id || "";
-	this.name = item.name || this.id;
-	this.question_color = item.question_color || "black-800";
-	this.question = "";
+  this.label = item.label || "";
+  this.value = item.value || "";
+  this.name = item.name || "";
+  this.type = item.type || "";
+  this.id = item.id || "";
+  this.name = item.name || this.id;
+  this.question_color = item.question_color || "black-800";
+  this.question = "";
 
-	this.question_description = item.question_description || "";
-	this.question_description_size = item.question_description_size || "12px";
-	this.question_description_color = item.question_description_color || "grey-600";
-	if (this.question_description)
-		this.question_description = '<p style="font-size: {0};padding-top: 20px;" class="mdl-layout-title mdl-color-text--{1}">{2}</p>'.format(
-			this.question_description_size, this.question_description_color, this.question_description
-			);
+  this.question_description = item.question_description || "";
+  this.question_description_size = item.question_description_size || "14px";
+  this.question_description_color = item.question_description_color || "grey-600";
+  if (this.question_description)
+  	this.question_description_html = '<p style="font-size: {0};padding-top: 20px;" class="mdl-layout-title mdl-color-text--{1}">{2}</p>'.format(
+  		this.question_description_size, this.question_description_color, this.question_description
+  		);
+  else
+  	this.question_description_html = "";
 
-	if (item.needQuestion) {
-		this.question = item.question || "Untitled Question";
-		this.question = '<label class="mdl-layout-title mdl-color-text--{0}" style="font-weight: bold;" >{1}</label>'.format(
-			this.question_color, this.question
-			);
-	}
+  if (item.needQuestion) {
+  	this.question = item.question || "Untitled Question";
+  	this.question_html = '<label class="mdl-layout-title mdl-color-text--{0}" style="font-weight: bold;" >{1}</label>'.format(
+  		this.question_color, this.question
+  		);
+  } else {
+  	this.question_html = "";
+  }
 
-	//default settings
-	this.newline = item.newline || false;
-	this.disabled = (item.disabled) ? 'disabled="disabled"' : "";
-	this.maxlength = item.maxlength || "";
-	this.readonly = (item.readonly) ? 'readonly="readonly"' : "";
-	this.required = (item.required) ? 'required="required"' : "";
-	this.autofocus = (item.autofocus) ? 'autofocus="autofocus"' : "";
-	this.size = item.size || "";
+  //default settings
+  this.newline = item.newline || false;
+  this.disabled = (item.disabled) ? 'disabled="disabled"' : "";
+  this.maxlength = item.maxlength || "";
+  this.readonly = (item.readonly) ? 'readonly="readonly"' : "";
+  this.required = (item.required) ? 'required="required"' : "";
+  this.autofocus = (item.autofocus) ? 'autofocus="autofocus"' : "";
+  this.size = item.size || "";
 
-	this.html = "";
+  this.html = "";
 }
 Tag.prototype = {
 	render: function() {
 		if (this.newline)
 			this.html = "<br>" + this.html;
-		$("#{0}".format(this.parent_id)).append(this.question + this.question_description + this.html);
+		$("#{0}".format(this.parent_id)).append(this.question_html + this.question_description_html + this.html);
 	}
 }
 
@@ -357,7 +364,7 @@ Tag.prototype = {
 # item.type <-- automatically assigned
 # item.id   <-- automatically assigned
 # item.needQuestion <-- False
-#		
+#   
 # @param parent_id --> the id of its parent element
 # @param item --> an object of values for setting
 # @param item.buttonStyle --> see MDL attribute
@@ -373,52 +380,52 @@ Tag.prototype = {
 ############################################################
 */
 function Button(parent_id, item = {}) {
-	item.id = item.id || "{0}_{1}".format(item.type, __BUTTON++);
 	item.type = item.type || "button";
+	item.id = item.id || "{0}_{1}".format(item.type, __BUTTON++);
 	Tag.call(this, parent_id, item);
 
-	//MDL style
-	this.addon = ""
-	this.buttonStyle = item.buttonStyle || "raise";
-	switch (this.buttonStyle) {
-		case "raise":
-			this.addon += " mdl-button--raised";
-			break;
-		case "fab":
-			this.addon += " mdl-button--fab";
-			break;
-		case "minifab":
-			this.addon += " mdl-button--mini-fab";
-			break;
-		case "icon":
-			this.addon += " mdl-button--icon";
-			break;
-	}
+  //MDL style
+  this.addon = ""
+  this.buttonStyle = item.buttonStyle || "raise";
+  switch (this.buttonStyle) {
+  	case "raise":
+  	this.addon += " mdl-button--raised";
+  	break;
+  	case "fab":
+  	this.addon += " mdl-button--fab";
+  	break;
+  	case "minifab":
+  	this.addon += " mdl-button--mini-fab";
+  	break;
+  	case "icon":
+  	this.addon += " mdl-button--icon";
+  	break;
+  }
 
-	this.color = (item.color == false) ? false : true;
-	this.addon += ((this.color) ? " mdl-button--colored" : "");
-	this.primary = item.primary || false;
-	this.addon += ((this.primary) ? " mdl-button--primary" : "");
-	this.accent = item.accent || false;
-	this.addon += ((this.accent) ? " mdl-button--accent" : "");
-	this.ripple = (item.ripple == false) ? false : true;
-	this.addon += ((this.ripple) ? " mdl-js-ripple-effect" : "");
+  this.color = (item.color == false) ? false : true;
+  this.addon += ((this.color) ? " mdl-button--colored" : "");
+  this.primary = item.primary || false;
+  this.addon += ((this.primary) ? " mdl-button--primary" : "");
+  this.accent = item.accent || false;
+  this.addon += ((this.accent) ? " mdl-button--accent" : "");
+  this.ripple = (item.ripple == false) ? false : true;
+  this.addon += ((this.ripple) ? " mdl-js-ripple-effect" : "");
 
-	this.style = "mdl-button mdl-js-button" + this.addon;
+  this.style = "mdl-button mdl-js-button" + this.addon;
 
-	this.label = item.label || "Button";
-	this.value = item.value || "";
-	this.onclick = item.onclick || "";
+  this.label = item.label || "Button";
+  this.value = item.value || "";
+  this.onclick = item.onclick || "";
 
 
-	this.icon = item.icon || "";
-	if (this.icon != "")
-		this.icon = '<i class="material-icons">{0}</i>'.format(this.icon);
+  this.icon = item.icon || "";
+  if (this.icon != "")
+  	this.icon = '<i class="material-icons">{0}</i>'.format(this.icon);
 
-	this.html = '<div><button class="{0}" id="{1}" type="{2}" value="{3}" {4} form="{5}" onclick="{6}" name="{9}">{7}{8}</button></div>'.format(
-		this.style, this.id, this.type, this.value, this.disabled, this.parent_id, this.onclick, this.icon, this.label, this.name);
+  this.html = '<div><button class="{0}" id="{1}" type="{2}" value="{3}" {4} form="{5}" onclick="{6}" name="{9}">{7}{8}</button></div>'.format(
+  	this.style, this.id, this.type, this.value, this.disabled, this.parent_id, this.onclick, this.icon, this.label, this.name);
 
-	this.render();
+  this.render();
 }
 Button.prototype = inherit(Tag.prototype);
 
@@ -448,6 +455,7 @@ function UploadFile(parent_id, item = {}) {
 
 	this.label_id = "label_{0}".format(this.id);
 	this.fileType = item.fileType || "Upload a file from here";
+	this.label = item.label || this.fileType;
 	this.icon = item.icon || "cloud_upload";
 	this._style = 'style="position:absolute;top: 0;right: 0;width: 300px;height: 100%;z-index: 4;cursor: pointer;opacity: 0"';
 
@@ -470,7 +478,7 @@ UploadFile.prototype._generate = function() {
 	<input type="file" id="{1}" {2} {3} {4} {5} {6} style="padding-botton: 36px"></div>'.format(
 		this.icon, this.id, this._style, this.label_id, this.fileType,
 		this.required, this.readonly, this.disabled, this.autofocus
-	)
+		)
 
 	return html
 }
@@ -512,15 +520,15 @@ function Range(parent_id, item = {}) {
 	this.value_prompt = item.value_prompt || "value: ";
 	this.value_label = '<label class="mdl-color-text--grey-700" id="{0}" readonly>{1}</label>'.format(
 		this.label_id, this.value
-	);
+		);
 
 	this.html = '<div class="mdl-textfield mdl-js-textfield" style="box-sizing: border-box;">{12} {6}\
-<div style="width:{0};"><input class="mdl-slider mdl-js-slider" type="range" form="{7}"\
-id="{1}" min="{2}" max="{3}" value="{4}" step="{5}" {8} {9} {10} {11}></div></div>'.format(
+	<div style="width:{0};"><input class="mdl-slider mdl-js-slider" type="range" form="{7}"\
+	id="{1}" min="{2}" max="{3}" value="{4}" step="{5}" {8} {9} {10} {11}></div></div>'.format(
 		this.width, this.id, this.min, this.max, this.value,
 		this.step, this.value_label, this.parent_id, this.required,
 		this.readonly, this.autofocus, this.disabled, this.value_prompt
-	);
+		);
 
 	this.render();
 
@@ -556,6 +564,7 @@ Range.prototype = inherit(Tag.prototype);
 function Dropdown(parent_id, item={}) {
 	item.type = "select";
 	item.id = item.id || "{0}_{1}".format(item.type, __SELECT++);
+	item.label = item.label || item.id;
 	item.needQuestion = (item.needQuestion == false) ? false : true;
 	Tag.call(this, parent_id, item);
 
@@ -574,14 +583,14 @@ function Dropdown(parent_id, item={}) {
 	this.choose_prompt = item.choose_prompt || "Choose";
 	this._style = "mdl-menu mdl-js-menu mdl-js-ripple-effect" + ((this.dropRight) ? "mdl-menu--bottom-right" : "mdl-menu--bottom-left");
 
-	this.html = this.question + '<div class="mdl-textfield mdl-js-textfield">\
-<input id="{4}" form="{8}" class="mdl-textfield__input" readonly {5} {6} value="{7}"><button id="{0}" form="{8}" style="right: 0;"\
-class="mdl-button mdl-js-button mdl-button--icon">\
-<i class="material-icons">expand_more</i></button>\
-<ul id="{1}" class="{2}" for="{0}" form="{8}">{3}</ui></div>'.format(
-	this.button_id, this.id, this._style, this._option_factory(), 
-	this.label_id, this.required, this.disabled, this.value, this.parent_id
-	);
+	this.html = '<div class="mdl-textfield mdl-js-textfield">\
+	<input id="{4}" form="{8}" class="mdl-textfield__input" readonly {5} {6} value="{7}"><button id="{0}" form="{8}" style="right: 0;"\
+	class="mdl-button mdl-js-button mdl-button--icon">\
+	<i class="material-icons">expand_more</i></button>\
+	<ul id="{1}" class="{2}" for="{0}" form="{8}">{3}</ui></div>'.format(
+		this.button_id, this.id, this._style, this._option_factory(), 
+		this.label_id, this.required, this.disabled, this.value, this.parent_id
+		);
 
 	this.render();
 	var option_values = this.option_values;
@@ -591,7 +600,7 @@ class="mdl-button mdl-js-button mdl-button--icon">\
 		$("#"+this.option_ids[i]).click(function() {
 			$("#"+label_id).val(option_values[i]);
 		})
-	}	
+	} 
 }
 Dropdown.prototype = inherit(Tag.prototype);
 Dropdown.prototype._option_factory = function () {
@@ -637,34 +646,34 @@ function InputTextField(parent_id, item) {
 	item.needQuestion = (item.needQuestion == false) ? false : true;
 	Tag.call(this, parent_id, item);
 
-	//MDL style
-	this.expandable = item.expandable || false;
-	this.expandable = (this.expandable) ? " mdl-textfield--expandable" : "";
-	this.floating = item.floating || false;
-	this.floating = (this.floating) ? " mdl-textfield--floating-label" : "";
-	this.style = "mdl-textfield mdl-js-textfield{0}{1}".format(this.expandable, this.floating);
+  //MDL style
+  this.expandable = item.expandable || false;
+  this.expandable = (this.expandable) ? " mdl-textfield--expandable" : "";
+  this.floating = item.floating || false;
+  this.floating = (this.floating) ? " mdl-textfield--floating-label" : "";
+  this.style = "mdl-textfield mdl-js-textfield{0}{1}".format(this.expandable, this.floating);
 
-	this.icon = item.icon || "";
-	this.pattern = item.pattern || ".*";
-	this.errorInfo = item.errorInfo || "Your input is not as required!";
+  this.icon = item.icon || "";
+  this.pattern = item.pattern || ".*";
+  this.errorInfo = item.errorInfo || "Your input is not as required!";
 
-	//attributes
-	this.accessKey = item.accessKey || "";
-	this.defaultValue = item.defaultValue || "";
-	this.alt = item.alt || "";
-	this.tabIndex = item.tabIndex || "";
+  //attributes
+  this.accessKey = item.accessKey || "";
+  this.defaultValue = item.defaultValue || "";
+  this.alt = item.alt || "";
+  this.tabIndex = item.tabIndex || "";
 }
 InputTextField.prototype = inherit(Tag.prototype);
 InputTextField.prototype._generate = function() {
 	var component = '<input class="mdl-textfield__input" type="{0}" id="{1}" maxlength="{2}" size="{3}"\
 	{4} {5} pattern="{6}" {7} {8} {9} {10} {11} {12} value="{13}" form="{14}">'.format(
-			this.type, this.id, this.maxlength, this.size,
-			this.required, this.readonly, this.pattern,
-			this.disabled, this.autofocus, this.accessKey,
-			this.alt, this.defaultValue, this.tabIndex,
-			this.value, this.parent_id) +
-		'<label class="mdl-textfield__label" for="{0}">{1}</label>'.format(this.id, this.label) +
-		'<span class="mdl-textfield__error">{0}</span>'.format(this.errorInfo);
+		this.type, this.id, this.maxlength, this.size,
+		this.required, this.readonly, this.pattern,
+		this.disabled, this.autofocus, this.accessKey,
+		this.alt, this.defaultValue, this.tabIndex,
+		this.value, this.parent_id) +
+	'<label class="mdl-textfield__label" for="{0}">{1}</label>'.format(this.id, this.label) +
+	'<span class="mdl-textfield__error">{0}</span>'.format(this.errorInfo);
 
 	if (this.expandable != "")
 		component = '<div class="mdl-textfield__expandable-holder">' + component + '</div>';
@@ -865,8 +874,8 @@ function Textarea(parent_id, item = {}) {
 Textarea.prototype = inherit(Tag.prototype);
 Textarea.prototype._generate = function() {
 	var component = '<textarea class="mdl-textfield__input" id="{0}" rows={1} columns={2} form="{4}" maxlength="{4}" {5} {6} {7} {8} {9} name="{10}"></textarea>'.format(
-			this.id, this.rows, this.cols, this.parent_id, this.maxlength, this.readonly, this.required, this.disabled, this.autofocus, this.wrap, this.name) +
-		'<label class="mdl-textfield__label" for="{0}">{1}</label>'.format(this.id, this.placeholder);
+		this.id, this.rows, this.cols, this.parent_id, this.maxlength, this.readonly, this.required, this.disabled, this.autofocus, this.wrap, this.name) +
+	'<label class="mdl-textfield__label" for="{0}">{1}</label>'.format(this.id, this.placeholder);
 
 	return '<div class="{0}">{1}<div>'.format(this.style, component);
 }
@@ -895,16 +904,16 @@ function Toggle(parent_id, item = {}) {
 	item.newline = item.newline || false;
 	Tag.call(this, parent_id, item);
 
-	// settings for mdl
-	// this.type --> type as a <input> tag 
-	// this.type_class --> template of different type class in mdl i.e. checkbox switch...
-	// this.content_class --> template of different content class in mdl  
-	this.ripple = (item.ripple == false) ? false : true;
-	this.toggle_type = item.toggle_type;
+  // settings for mdl
+  // this.type --> type as a <input> tag 
+  // this.type_class --> template of different type class in mdl i.e. checkbox switch...
+  // this.content_class --> template of different content class in mdl  
+  this.ripple = (item.ripple == false) ? false : true;
+  this.toggle_type = item.toggle_type;
 
-	this.value = item.value || this.label;
+  this.value = item.value || this.label;
 
-	this.checked = (item.checked) ? 'checked="checked"' : "";
+  this.checked = (item.checked) ? 'checked="checked"' : "";
 }
 Toggle.prototype = inherit(Tag.prototype);
 Toggle.prototype._generate = function() {
@@ -913,12 +922,12 @@ Toggle.prototype._generate = function() {
 
 	var html = '<label for="{0}" class="mdl-{1} mdl-js-{1}{2}">'.format(
 		this.id, this.toggle_type, addon
-	);
+		);
 	html += '<input type="{0}" id="{1}" class="{2}" form="{3}" {4} {5} {6} value="{7}" name="{8}" {9}>'.format(
 		this.type, this.id, this.type_class, this.parent_id, 
 		this.checked, this.autofocus, this.required, 
 		this.value, this.name, this.readonly
-	);
+		);
 	html += this.content_class + '</label>'
 
 	return html;
@@ -1011,6 +1020,7 @@ function ToggleGroup(parent_id, item) {
 	item.id = item.id || "Toggle group_{0}".format(__TOGGLE_GROUP++);
 	item.type = item.type || "checkbox";
 	item.name = item.name || item.id;
+	item.label = item.label || item.id;
 	item.needQuestion = (item.needQuestion == false) ? false : true;
 	item.images = item.images || [];
 	item.labels = item.labels || [];
@@ -1024,7 +1034,7 @@ function ToggleGroup(parent_id, item) {
 	if (item.images.length > 0) {
 		for (var i in item.images) {
 			item.labels.push('<div class="mdl-card mdl-shadow--2dp" \
-style="width: 256px;height: 256px;background: url({0}) center/cover;"></div>'.format(item.images[i]));
+				style="width: 256px;height: 256px;background: url({0}) center/cover;"></div>'.format(item.images[i]));
 			if (item.values.length < item.labels.length)
 				item.values.push(item.images[i]);
 		}
@@ -1034,31 +1044,33 @@ style="width: 256px;height: 256px;background: url({0}) center/cover;"></div>'.fo
 
 	this.html = "";
 	var factory = this._selector();
-
+	var product;
+	this.products = [];
 	for (var i in this.labels) {
 		item.label = this.labels[i];
 		item.value = this.values[i];
-		item.id = ""; // initialize item.id
-		this.html += factory(this.parent_id, item).html + "\n";
-	}
-	this.html = "<br><div>" + this.html + "</div><br>"
-	this.render();
+    item.id = ""; // initialize item.idv
+    product = factory(this.parent_id, item);
+    this.products.push(product);
+    this.html += product.html + "\n";
+}
+this.html = "<br><div>" + this.html + "</div><br>"
+this.render();
 }
 ToggleGroup.prototype = inherit(Tag.prototype);
 ToggleGroup.prototype._selector = function() {
 	switch (this.type) {
 		case "checkbox":
-			return function(parent_id, item) {
-				return new Checkbox(parent_id, item);
-			}
+		return function(parent_id, item) {
+			return new Checkbox(parent_id, item);
+		}
 		case "switch":
-			return function(parent_id, item) {
-				return new Switch(parent_id, item);
-			}
+		return function(parent_id, item) {
+			return new Switch(parent_id, item);
+		}
 		case "radio":
-			return function(parent_id, item) {
-				return new Radio(parent_id, item);
-			}
+		return function(parent_id, item) {
+			return new Radio(parent_id, item);
+		}
 	}
 }
-
