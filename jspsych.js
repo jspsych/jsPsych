@@ -713,7 +713,7 @@ var jsPsych = (function() {
     opts.on_finish(jsPsych.data.getData());
 
     if(typeof timeline.end_message !== 'undefined'){
-      DOM_target.html(timeline.end_message);
+      DOM_target.innerHTML = timeline.end_message;
     }
 
     if (document.exitFullscreen) {
@@ -774,7 +774,7 @@ var jsPsych = (function() {
   }
 
   function loadFail(){
-    DOM_target.html('<p>The experiment failed to load.</p>');
+    DOM_target.innerHTML = '<p>The experiment failed to load.</p>';
   }
 
   function checkExclusions(exclusions, success, fail){
@@ -797,10 +797,10 @@ var jsPsych = (function() {
               'you will not be able to complete this experiment.</p>'+
               '<p>The minimum width is '+mw+'px. Your current width is '+w+'px.</p>'+
               '<p>The minimum height is '+mh+'px. Your current height is '+h+'px.</p>';
-            core.getDisplayElement().html(msg);
+            core.getDisplayElement().innerHTML = msg;
           } else {
             clearInterval(interval);
-            core.getDisplayElement().empty();
+            core.getDisplayElement().innerHTML = '';
             checkExclusions(exclusions, success, fail);
           }
         }, 100);
@@ -817,7 +817,7 @@ var jsPsych = (function() {
         var msg = '<p>Your browser does not support the WebAudio API, which means that you will not '+
           'be able to complete the experiment.</p><p>Browsers that support the WebAudio API include '+
           'Chrome, Firefox, Safari, and Edge.</p>';
-        core.getDisplayElement().html(msg);
+        core.getDisplayElement().innerHTML = msg;
         fail();
         return;
       }
@@ -881,7 +881,7 @@ jsPsych.data = (function() {
   var query_string;
 
   module.getData = function(filters) {
-    var data_clone = $.extend(true, [], allData); // deep clone
+    var data_clone = deepExtend([], allData);
 
     if(typeof filters == 'undefined'){
       return data_clone;
@@ -890,9 +890,9 @@ jsPsych.data = (function() {
     // [{p1: v1, p2:v2}, {p1:v2}]
     // {p1: v1}
     if(!Array.isArray(filters)){
-      var f = $.extend(true, [], [filters]);
+      var f = deepExtend([], [filters]);
     } else {
-      var f = $.extend(true, [], filters);
+      var f = deepExtend([], filters);
     }
 
     var filtered_data = [];
@@ -920,7 +920,7 @@ jsPsych.data = (function() {
   };
 
   module.getInteractionData = function() {
-    return $.extend(true, [], interactionData);
+    return deepExtend([], interactionData);
   }
 
   module.write = function(data_object) {
@@ -1058,9 +1058,9 @@ jsPsych.data = (function() {
 
     var display_element = jsPsych.getDisplayElement();
 
-    display_element.append($('<pre id="jspsych-data-display"></pre>'));
+    display_element.innerHTML = '<pre id="jspsych-data-display"></pre>';
 
-    $('#jspsych-data-display').text(data_string);
+    document.getElementById('jspsych-data-display').textContent = data_string;
   };
 
   module.urlVariables = function() {
@@ -1132,16 +1132,9 @@ jsPsych.data = (function() {
 
     var display_element = jsPsych.getDisplayElement();
 
-    display_element.append($('<a>', {
-      id: 'jspsych-download-as-text-link',
-      href: blobURL,
-      css: {
-        display: 'none'
-      },
-      download: filename,
-      html: 'download file'
-    }));
-    $('#jspsych-download-as-text-link')[0].click();
+    display_element.innerHTML = display_element.innerHTML +
+      '<a id="jspsych-download-as-text-link" style="display:none;" download="'+filename'" href="'+blobURL+'">click to download</a>';
+    document.getElementById('jspsych-download-as-text-link').click();
   }
 
   //
@@ -1163,7 +1156,7 @@ jsPsych.data = (function() {
       for (var key in array[j]) {
         var keyString = key + "";
         keyString = '"' + keyString.replace(/"/g, '""') + '",';
-        if ($.inArray(key, columns) == -1) {
+        if (!columns.includes(key)) {
           columns[i] = key;
           line += keyString;
           i++;
@@ -1328,7 +1321,7 @@ jsPsych.randomization = (function() {
         if(array[i] == null || typeof array[i] != 'object'){
           allsamples.push(array[i]);
         } else {
-          allsamples.push($.extend(true, {}, array[i]));
+          allsamples.push(Object.assign({}, array[i]));
         }
 
       }
@@ -1419,7 +1412,7 @@ jsPsych.randomization = (function() {
         for (var k = 0; k < toAdd.length; k++) {
           var newpiece = {};
           newpiece[factorNames[i]] = toAdd[k];
-          factor_combinations.push($.extend({}, base, newpiece));
+          factor_combinations.push(Object.assign({}, base, newpiece));
         }
       }
       factor_combinations.splice(0, n);
@@ -1563,7 +1556,7 @@ jsPsych.pluginAPI = (function() {
           rt: key_time - start_time
         });
 
-        if ($.inArray(listener_id, keyboard_listeners) > -1) {
+        if (keyboard_listeners.includes(listener_id)) {
 
           if (!parameters.persist) {
             // remove keyboard listener
@@ -1574,18 +1567,18 @@ jsPsych.pluginAPI = (function() {
         var after_up = function(up) {
 
           if (up.which == e.which) {
-            $(document).off('keyup', after_up);
+            document.removeEventListener('keyup', after_up);
 
             // mark key as released
-            held_keys.splice($.inArray(e.which, held_keys), 1);
+            held_keys.splice(held_keys.indexOf(e.which), 1);
           }
         };
 
-        $(document).keyup(after_up);
+        document.addEventListener('keyup', after_up);
       }
     };
 
-    $(document).keydown(listener_function);
+    document.addEventListener('keydown', listener_function);
 
     // create listener id object
     listener_id = {
@@ -1602,17 +1595,17 @@ jsPsych.pluginAPI = (function() {
 
   module.cancelKeyboardResponse = function(listener) {
     // remove the listener from the doc
-    $(document).off(listener.type, listener.fn);
+    document.removeEventListener(listener.type, listener.fn);
 
     // remove the listener from the list of listeners
-    if ($.inArray(listener, keyboard_listeners) > -1) {
-      keyboard_listeners.splice($.inArray(listener, keyboard_listeners), 1);
+    if (keyboard_listeners.includes(listener)) {
+      keyboard_listeners.splice(keyboard_listeners.indexOf(listener), 1);
     }
   };
 
   module.cancelAllKeyboardResponses = function() {
     for (var i = 0; i < keyboard_listeners.length; i++) {
-      $(document).off(keyboard_listeners[i].type, keyboard_listeners[i].fn);
+      document.removeEventListener(keyboard_listeners[i].type, keyboard_listeners[i].fn);
     }
     keyboard_listeners = [];
   };
@@ -1976,3 +1969,25 @@ function flatten(arr, out) {
   }
   return out;
 }
+
+function deepExtend(out) {
+  out = out || {};
+
+  for (var i = 1; i < arguments.length; i++) {
+    var obj = arguments[i];
+
+    if (!obj)
+      continue;
+
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (typeof obj[key] === 'object')
+          out[key] = deepExtend(out[key], obj[key]);
+        else
+          out[key] = obj[key];
+      }
+    }
+  }
+
+  return out;
+};
