@@ -28,7 +28,7 @@ INPUTS: display_element {string},
 OUTPUTS: an array, [*Object* Form, [*Object* Tag], *Object* Button]<br/>
 SIDE EFFECT: Render the form.<br/>
 
-**schema.type**:<br/>
+**schema.type**:
 Value | Effect
 ------|-------
 short answer/text|Instantiate a [InputText](#InputText) object.
