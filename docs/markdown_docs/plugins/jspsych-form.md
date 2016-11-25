@@ -104,7 +104,7 @@ item.ripple|boolean|`True`|[see MDL attribute](https://getmdl.io/components/inde
 item.icon|string|`""`|[see MDL attribute](https://getmdl.io/components/index.html#buttons-section)
 
 ### Dropdown <a name="Dropdown"></a>
-*Inheritence:* [Tag](#Tag)
+*Inheritence:* [Tag](#Tag)<br/>
 Drop down a list of option.
 
 Parameter | Type | Default Value | Description
@@ -141,7 +141,7 @@ item.id|string|**Automactically Assigned**|The id of the tag.
 item.needQuestion|boolean|`True`|Whether Displaying Question Title.
 
 ### InputDatetimeLocal
- *Inheritence:* [InputTextField](#InputTextField)
+*Inheritence:* [InputTextField](#InputTextField)
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
@@ -174,7 +174,7 @@ item.id|string|**Automactically Assigned**|The id of the tag.
 item.needQuestion|boolean|`True`|Whether Displaying Question Title.
 
 ### InputNumber
- *Inheritence:* [InputTextField](#InputTextField)
+*Inheritence:* [InputTextField](#InputTextField)
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
@@ -186,7 +186,7 @@ item.needQuestion|boolean|`True`|Whether Displaying Question Title.
 item.label|string|`"Please enter a number..."`|General inner html content.
 
 ### InputEmail
- *Inheritence:* [InputTextField](#InputTextField)
+*Inheritence:* [InputTextField](#InputTextField)
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
