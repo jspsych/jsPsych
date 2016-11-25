@@ -29,7 +29,7 @@ OUTPUTS: an array, [*Object* Form, [*Object* Tag], *Object* Button]<br/>
 SIDE EFFECT: Render the form.<br/>
 
 **schema.type**:
-Default Value | Description
+Parameter | Description
 --------------|------------
 short answer/text|Instantiate a [InputText](#InputText) object.
 long answer/textarea|Instantiate a [Textarea](#Textarea) object.
