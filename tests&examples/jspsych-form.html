@@ -17,7 +17,7 @@
 		form: {form_title: 'Test #1'},
 		"Question #1": {type: "short answer"},
 		"Question #2": {type: "password"},
-		"Question #3": {type: "checkbox", labels: ["option1", "option2"]},
+		"Question #3": {type: "checkbox", labels: ["option1", "option2"], required: true},
 		"Question #4": {type: "radio", labels: ["option1", "option2"]},
 		"Question #5": {type: "range"},
 		"Question #6": {type: "dropdown"},
@@ -35,9 +35,9 @@
 
 	jsPsych.init({
 		timeline: [form_trial],
-		on_finish: function(){jsPsych.data.displayData();}
+		on_finish: function(){ jsPsych.data.displayData(); }
 	});
 
 </script>
 
-</html>
+</html>b

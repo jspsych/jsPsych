@@ -1,5 +1,5 @@
 /*
- * jspsych-form (Version 1.0)
+ * jspsych-form (Version 1.1)
  * Junyan Qi
  * 
  * plugin for creating a form from json schema
@@ -71,20 +71,38 @@ var schema = {
         switch(type) {
           case "select":
           value = $("#" + question.label_id).val();
+          if (question.required != "") {
+            if (!value) {
+              $("#" + question.label_id).focus();
+              return;
+            }
+          }
           break;
           case "checkbox":
           case "radio":
           case "switch":
           value = [];
+          var flag = false;
+          var checed;
           for (var j = 0; j < question.products.length; j++) {
             product = question.products[j];
+            checked = $("#" + product.id).is(":checked");
+            if (checked) flag = true;
             value.push(["item_label: " + product.label, 
               "item_value: " + product.value, 
-              "is_checked:" + $("#" + product.id).is(":checked")]);
+              "is_checked:" + checked]);
+          }
+          if (question.required != "" && !flag) {
+            document.getElementById(question.id).scrollIntoView();
+            return;
           }
           break;
           default:
           value = $("#" + question.id).val();
+          if (question.required != "" && !value) {
+            $("#" + question.id).focus();
+            return;
+          }
           break;
         }
 
@@ -92,11 +110,11 @@ var schema = {
       }
 
       display_element.html('');
+      jsPsych.finishTrial(trial_data);
     }
 
     $("#" + button.id).click(function () {
       end_trial();
-      jsPsych.finishTrial(trial_data);
     })
   };
 
@@ -162,18 +180,18 @@ var schema = {
 
       var __FORM = 0;
 
-      function createForm(display_element, opt) {
-        opt.form = opt.form || {};
-        var form = new Form(display_element, opt.form);
+      function createForm(display_element, schema) {
+        schema.form = schema.form || {};
+        var form = new Form(display_element, schema.form);
         var form_id = form.id;
 
         var questions = []; 
 
-        for (var i in Object.keys(opt)) {
-          i = Object.keys(opt)[i]
+        for (var i in Object.keys(schema)) {
+          i = Object.keys(schema)[i]
           if (i == "form" || i == "onSubmit")
             continue;
-          item = opt[i]
+          item = schema[i]
           item.question = item.question || i;
           var type = item.type;
           var question;
@@ -241,7 +259,7 @@ var schema = {
           questions.push(question);
         }
 
-        var button = new Button(form_id, opt.onSubmit);
+        var button = new Button(form_id, schema.onSubmit);
 
         return [form, questions, button];
       }
@@ -381,6 +399,21 @@ function Tag(parent_id, item) {
   this.question_color = item.question_color || "black-800";
   this.question = "";
 
+  //default settings
+  this.newline = item.newline || false;
+  this.disabled = (item.disabled) ? 'disabled="disabled"' : "";
+  this.maxlength = item.maxlength || "";
+  this.readonly = (item.readonly) ? 'readonly="readonly"' : "";
+  this.required = (item.required) ? 'required="required"' : "";
+  this.autofocus = (item.autofocus) ? 'autofocus="autofocus"' : "";
+  this.size = item.size || "";
+
+  if (this.required != "") {
+    this.star = '<nobr class="mdl-color-text--red-800 style="font-weight: bold;" > *</nobr>';
+  }
+  else
+    this.star = "";
+
   this.question_description = item.question_description || "";
   this.question_description_size = item.question_description_size || "14px";
   this.question_description_color = item.question_description_color || "grey-600";
@@ -391,23 +424,16 @@ function Tag(parent_id, item) {
   else
     this.question_description_html = "";
 
-  if (item.needQuestion) {
+  this.needQuestion = (item.needQuestion == false) ? false : true;
+  if (this.needQuestion) {
     this.question = item.question || "Untitled Question";
-    this.question_html = '<label class="mdl-layout-title mdl-color-text--{0}" style="font-weight: bold;" >{1}</label>'.format(
-      this.question_color, this.question
+    this.question_html = '<label class="mdl-layout-title mdl-color-text--{0}" style="font-weight: bold;" >{1}{2}</label>'.format(
+      this.question_color, this.question, this.star
       );
   } else {
     this.question_html = "";
   }
 
-  //default settings
-  this.newline = item.newline || false;
-  this.disabled = (item.disabled) ? 'disabled="disabled"' : "";
-  this.maxlength = item.maxlength || "";
-  this.readonly = (item.readonly) ? 'readonly="readonly"' : "";
-  this.required = (item.required) ? 'required="required"' : "";
-  this.autofocus = (item.autofocus) ? 'autofocus="autofocus"' : "";
-  this.size = item.size || "";
 
   this.html = "";
 }
@@ -446,6 +472,7 @@ Tag.prototype = {
 function Button(parent_id, item = {}) {
   item.type = item.type || "button";
   item.id = item.id || "{0}_{1}".format(item.type, __BUTTON++);
+  item.needQuestion = false;
   Tag.call(this, parent_id, item);
 
   //MDL style
@@ -477,7 +504,7 @@ function Button(parent_id, item = {}) {
 
   this.style = "mdl-button mdl-js-button" + this.addon;
 
-  this.label = item.label || "Button";
+  this.label = item.label || "Submit";
   this.value = item.value || "";
   this.onclick = item.onclick || "";
 
@@ -519,6 +546,8 @@ function UploadFile(parent_id, item = {}) {
 
   this.label_id = "label_{0}".format(this.id);
   this.fileType = item.fileType || "Upload a file from here";
+  if (!this.needQuestion && this.star != "")
+    this.fileType += this.star;
   this.label = item.label || this.fileType;
   this.icon = item.icon || "cloud_upload";
   this._style = 'style="position:absolute;top: 0;right: 0;width: 300px;height: 100%;z-index: 4;cursor: pointer;opacity: 0"';
@@ -582,6 +611,8 @@ function Range(parent_id, item = {}) {
   this.min = item.min || 0;
   this.step = item.step || 1;
   this.value_prompt = item.value_prompt || "value: ";
+  if (!this.needQuestion && this.star != "")
+    this.value_prompt += this.star;
   this.value_label = '<label class="mdl-color-text--grey-700" id="{0}" readonly>{1}</label>'.format(
     this.label_id, this.value
     );
@@ -726,6 +757,9 @@ function InputTextField(parent_id, item) {
   this.defaultValue = item.defaultValue || "";
   this.alt = item.alt || "";
   this.tabIndex = item.tabIndex || "";
+
+  if (!this.needQuestion && this.star != "")
+    this.label += this.star;
 }
 InputTextField.prototype = inherit(Tag.prototype);
 InputTextField.prototype._generate = function() {
@@ -781,10 +815,9 @@ InputDatetimeLocal.prototype = inherit(InputTextField.prototype);
 function InputEmail(parent_id, item = {}) {
   item.type = "email";
   item.id = item.id || "{0}_{1}".format(item.type, __INPUT_EMAIL++);
+  item.label = item.label || "Please enter you email...";
   InputTextField.call(this, parent_id, item);
-
-  this.label = item.label || "Please enter you email...";
-
+  
   this.html = this._generate();
   this.render();
 }
@@ -804,9 +837,8 @@ InputMonth.prototype = inherit(InputTextField.prototype);
 function InputNumber(parent_id, item = {}) {
   item.type = "number";
   item.id = item.id || "{0}_{1}".format(item.type, __INPUT_NUMBER++);
+  item.label = item.label || "Please enter a number...";
   InputTextField.call(this, parent_id, item);
-
-  this.label = item.label || "Please enter a number...";
 
   this.html = this._generate();
   this.render();
@@ -818,9 +850,8 @@ function InputPassword(parent_id, item = {}) {
   item.id = item.id || "{0}_{1}".format(item.type, __INPUT_PASSWORD++);
   item.needQuestion = item.needQuestion || false;
   item.floating = (item.floating == false) ? false : true;
+  item.label = item.label || "Please enter your password...";
   InputTextField.call(this, parent_id, item);
-
-  this.label = item.label || "Please enter your password...";
 
   this.html = this._generate();
   this.render();
@@ -844,9 +875,8 @@ InputSearch.prototype = inherit(InputTextField.prototype);
 function InputTel(parent_id, item = {}) {
   item.type = "tel";
   item.id = item.id || "{0}_{1}".format(item.type, __INPUT_TEL++);
+  item.label = item.label || "Please enter your telephone number...";
   InputTextField.call(this, parent_id, item);
-
-  this.label = item.label || "Please enter your telephone number...";
 
   this.html = this._generate();
   this.render();
@@ -856,9 +886,8 @@ InputTel.prototype = inherit(InputTextField.prototype);
 function InputText(parent_id, item = {}) {
   item.type = "text";
   item.id = item.id || "{0}_{1}".format(item.type, __INPUT_TEXT++);
+  item.label = item.label || "Please enter some texts...";
   InputTextField.call(this, parent_id, item);
-
-  this.label = item.label || "Please enter some texts...";
 
   this.html = this._generate();
   this.render();
@@ -879,9 +908,8 @@ InputTime.prototype = inherit(InputTextField.prototype);
 function InputUrl(parent_id, item = {}) {
   item.type = "url";
   item.id = item.id || "{0}_{1}".format(item.type, __INPUT_URL++);
+  item.label = item.label || "Please enter the url...";
   InputTextField.call(this, parent_id, item);
-
-  this.label = item.label || "Please enter the url...";
 
   this.html = this._generate();
   this.render();
@@ -928,6 +956,8 @@ function Textarea(parent_id, item = {}) {
 
   this.name = item.name || this.id;
   this.placeholder = item.placeholder || "Text lines";
+  if (!this.needQuestion && this.star != "")
+    this.placeholder += this.star;
   this.cols = item.cols || "30";
   this.rows = item.rows || "10";
   this.wrap = (item.wrap) ? 'wrap="' + item.wrap + '" ' : "";
@@ -1081,7 +1111,7 @@ Radio.prototype = inherit(Toggle.prototype);
 ############################################################
 */
 function ToggleGroup(parent_id, item) {
-  item.id = item.id || "Toggle group_{0}".format(__TOGGLE_GROUP++);
+  item.id = item.id || "Toggle_group_{0}".format(__TOGGLE_GROUP++);
   item.type = item.type || "checkbox";
   item.name = item.name || item.id;
   item.label = item.label || item.id;
@@ -1113,12 +1143,12 @@ function ToggleGroup(parent_id, item) {
   for (var i in this.labels) {
     item.label = this.labels[i];
     item.value = this.values[i];
-    item.id = ""; // initialize item.idv
+    item.id = ""; // initialize item.id
     product = factory(this.parent_id, item);
     this.products.push(product);
     this.html += product.html + "\n";
   }
-  this.html = "<br><div>" + this.html + "</div><br>"
+  this.html = '<br><div id="{0}">'.format(this.id) + this.html + "</div><br>";
   this.render();
 }
 ToggleGroup.prototype = inherit(Tag.prototype);
