@@ -30,7 +30,7 @@ SIDE EFFECT: Render the form.<br/>
 
 **schema.type**:<br/>
 Value | Effect
-------|------------
+------|-------
 short answer/text|Instantiate a [InputText](#InputText) object.
 long answer/textarea|Instantiate a [Textarea](#Textarea) object.
 dropdown|Instantiate a [Dropdown](#Dropdown) object.
