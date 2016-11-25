@@ -1,4 +1,6 @@
 /*
+ * form (Version 1.0)
+ * Junyan Qi
 
 Dependency: jQuery, Material Design Lite
 

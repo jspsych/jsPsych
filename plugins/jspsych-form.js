@@ -1,8 +1,8 @@
 /*
- * jspsych-form (Version 1.1)
+ * jspsych-form (Version 1.0)
  * Junyan Qi
  * 
- * plugin for creating a form from json schema
+ * plugin for creating a form from json schema.
  *
  * documentation: docs.jspsych.org
  *
