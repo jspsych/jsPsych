@@ -2,11 +2,13 @@
  * jspsych-form (Version 1.0)
  * Junyan Qi
  * 
- * plugin for creating a form from json schema.
+ * plugin for generating a form from a json schema.
  *
- * documentation: docs.jspsych.org
+ * Documentation: docs.jspsych.org
  *
  * Dependency: jsPsych, jQuery, Material Design Lite
+ *
+ * 
 
 Required links in the html file:
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">

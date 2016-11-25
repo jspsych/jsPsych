@@ -1,6 +1,9 @@
 /*
  * form (Version 1.0)
+ *
  * Junyan Qi
+ *
+ * The module for jspsych-form.js 
 
 Dependency: jQuery, Material Design Lite
 
