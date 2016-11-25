@@ -1132,8 +1132,7 @@ jsPsych.data = (function() {
 
     var display_element = jsPsych.getDisplayElement();
 
-    display_element.innerHTML = display_element.innerHTML +
-      '<a id="jspsych-download-as-text-link" style="display:none;" download="'+filename'" href="'+blobURL+'">click to download</a>';
+    display_element.innerHTML += '<a id="jspsych-download-as-text-link" style="display:none;" download="'+filename+'" href="'+blobURL+'">click to download</a>';
     document.getElementById('jspsych-download-as-text-link').click();
   }
 

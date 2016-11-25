@@ -83,20 +83,14 @@ jsPsych.plugins["single-stim"] = (function() {
 
     // display stimulus
     if (!trial.is_html) {
-      display_element.append($('<img>', {
-        src: trial.stimulus,
-        id: 'jspsych-single-stim-stimulus'
-      }));
+      display_element.innerHTML = '<img src="'+trial.stimulus+'"+ id="jspsych-single-stim-stimulus"></img>';
     } else {
-      display_element.append($('<div>', {
-        html: trial.stimulus,
-        id: 'jspsych-single-stim-stimulus'
-      }));
+      display_element.innerHTML = '<div id="jspsych-single-stim-stimulus">'+trial.stimulus+'</div>';
     }
 
     //show prompt if there is one
     if (trial.prompt !== "") {
-      display_element.append(trial.prompt);
+      display_element.innerHTML += trial.prompt;
     }
 
     // store response
@@ -124,7 +118,7 @@ jsPsych.plugins["single-stim"] = (function() {
       };
 
       // clear the display
-      display_element.html('');
+      display_element.innerHTML = '';
 
       // move on to the next trial
       jsPsych.finishTrial(trial_data);
@@ -135,7 +129,7 @@ jsPsych.plugins["single-stim"] = (function() {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      $("#jspsych-single-stim-stimulus").addClass('responded');
+      document.getElementById("jspsych-single-stim-stimulus").clasName += ' responded';
 
       // only record the first response
       if (response.key == -1) {
@@ -161,7 +155,7 @@ jsPsych.plugins["single-stim"] = (function() {
     // hide image if timing is set
     if (trial.timing_stim > 0) {
       jsPsych.pluginAPI.setTimeout(function() {
-        $('#jspsych-single-stim-stimulus').css('visibility', 'hidden');
+        document.getElementById('jspsych-single-stim-stimulus').style.visibility = 'hidden';
       }, trial.timing_stim);
     }
 
