@@ -31,10 +31,10 @@ SIDE EFFECT: Render the form.<br/>
 **schema.type**:
 Value | Effect
 ------|-------
-short answer, text|Instantiate a [InputText](#InputText) object.
-long answer, textarea|Instantiate a [Textarea](#Textarea) object.
+"short answer/text"|Instantiate a [InputText](#InputText) object.
+"long answer/textarea"|Instantiate a [Textarea](#Textarea) object.
 dropdown|Instantiate a [Dropdown](#Dropdown) object.
-checkbox, switch, radio|Instantiate a [ToggleGroup](#ToggleGroup) object according to its toggle type.
+"checkbox/switch/radio"|Instantiate a [ToggleGroup](#ToggleGroup) object according to its toggle type.
 range|Instantiate its according object ([see Class](#Class))
 date|Instantiate its according object ([see Class](#Class))
 datetime|Instantiate its according object ([see Class](#Class))
