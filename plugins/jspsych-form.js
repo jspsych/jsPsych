@@ -16,6 +16,7 @@ Required links in the html file:
 <script src="../jspsych.js"></script>
 <script src="../plugins/jspsych-form.js"></script>
   
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
 SCHEMA EXAMPLE:
 
