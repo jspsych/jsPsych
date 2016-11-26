@@ -1,16 +1,14 @@
 /*
- * form (Version 1.0)
+ * form (Version 1.1)
  *
  * Junyan Qi
  *
  * The module for jspsych-form.js 
 
-Dependency: jQuery, Material Design Lite
+Dependency: Material Design Lite
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
-<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
 */
 
@@ -152,14 +150,14 @@ function createForm(display_element, schema) {
             case "week":
             question = new InputWeek(form_id, item);
             break;
+          }
+          questions.push(question);
         }
-        questions.push(question);
-    }
 
-    var button = new Button(form_id, schema.onSubmit);
+        var button = new Button(form_id, schema.onSubmit);
 
-    return [form, questions, button];
-}
+        return [form, questions, button];
+      }
 
 
 /*
@@ -247,7 +245,8 @@ function Form(display_element, item = {}) {
 	this.render();
 }
 Form.prototype.render = function() {
-	$(this.display_element).html(this.html);
+  document.getElementsByTagName(this.display_element)[0].innerHTML = this.html;
+	// $(this.display_element).html(this.html);
 }
 
 /*
@@ -338,7 +337,8 @@ Tag.prototype = {
 	render: function() {
 		if (this.newline)
 			this.html = "<br>" + this.html;
-		$("#{0}".format(this.parent_id)).append(this.question_html + this.question_description_html + this.html);
+    document.getElementById(this.parent_id).insertAdjacentHTML('beforeend', this.question_html + this.question_description_html + this.html);
+		// $("#{0}".format(this.parent_id)).append(this.question_html + this.question_description_html + this.html);
 	}
 }
 
@@ -453,10 +453,14 @@ function UploadFile(parent_id, item = {}) {
 	this.render();
 
 	var label_id = this.label_id;
-	$("#{0}".format(this.id)).change(function() {
-		$("#{0}".format(label_id)).val(this.files[0].name);
-		$("#{0}".format(label_id)).text(this.files[0].name);
-	});
+	document.getElementById(this.id).onchange = function() {
+    document.getElementById(label_id).value = this.files[0].name;
+    document.getElementById(label_id).textContent = this.files[0].name;
+  };
+  /*$("#{0}".format(this.id)).change(function() {
+    $("#{0}".format(label_id)).val(this.files[0].name);
+    $("#{0}".format(label_id)).text(this.files[0].name);
+  });*/
 };
 UploadFile.prototype = inherit(Tag.prototype);
 UploadFile.prototype._generate = function() {
@@ -526,9 +530,14 @@ function Range(parent_id, item = {}) {
 
 	var label_id = this.label_id;
 	var id = this.id;
+  document.getElementById(this.id).onchange = function() {
+    document.getElementById(label_id).textContent = document.getElementById(id).value;
+  };
+  /*
 	$("#" + this.id).change(function() {;
 		$("#" + label_id).text($("#" + id).val());
 	})
+  */
 }
 Range.prototype = inherit(Tag.prototype);
 
@@ -588,11 +597,13 @@ function Dropdown(parent_id, item={}) {
 	var option_values = this.option_values;
 	var label_id = this.label_id;
 	for (let i in this.option_ids) {
-
-		$("#"+this.option_ids[i]).click(function() {
-			$("#"+label_id).val(option_values[i]);
-		})
-	} 
+    document.getElementById(this.option_ids[i]).onclick = function() {
+      document.getElementById(label_id).value = option_values[i];
+    };
+    /*$("#"+this.option_ids[i]).click(function() {
+     $("#"+label_id).val(option_values[i]);
+   })*/
+  } 
 }
 Dropdown.prototype = inherit(Tag.prototype);
 Dropdown.prototype._option_factory = function () {
@@ -1044,9 +1055,9 @@ function ToggleGroup(parent_id, item) {
     product = factory(this.parent_id, item);
     this.products.push(product);
     this.html += product.html + "\n";
-}
-this.html = '<br><div id="{0}">'.format(this.id) + this.html + "</div><br>";
-this.render();
+  }
+  this.html = '<br><div id="{0}">'.format(this.id) + this.html + "</div><br>";
+  this.render();
 }
 ToggleGroup.prototype = inherit(Tag.prototype);
 ToggleGroup.prototype._selector = function() {

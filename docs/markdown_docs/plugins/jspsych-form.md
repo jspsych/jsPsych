@@ -16,7 +16,7 @@ schema|object|{}|A JSON schema that holds the values of settings for creating a 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 form|[*Class* Form](#Form)|{}|Values of settings for the form layout.
-"any question string"|[*Classes* start from here](#Dropdown)|{}|Take the key string as the question title, and the value as question settings.
+"any question string"|[*Classes* start from here](#Dropdown)|*undefined*|Take the key string as the question title, and the value as question settings.
 onSubmit|[*Class* Button](#Button)|{label: "Submit"}|Values of settings for the button in the form.
 
 ## Function

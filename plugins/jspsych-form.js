@@ -1,22 +1,21 @@
 /*
- * jspsych-form (Version 1.0)
+ * jspsych-form (Version 1.1)
  * Junyan Qi
  * 
  * plugin for generating a form from a json schema.
  *
  * Documentation: docs.jspsych.org
  *
- * Dependency: jsPsych, jQuery, Material Design Lite
+ * Dependency: jsPsych, Material Design Lite
  *
  * 
 
 Required links in the html file:
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
-<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="../jspsych.js"></script>
 <script src="../plugins/jspsych-form.js"></script>
+  
 
 SCHEMA EXAMPLE:
 
@@ -72,10 +71,10 @@ var schema = {
         var value;
         switch(type) {
           case "select":
-          value = $("#" + question.label_id).val();
+          value = document.getElementById(question.label_id).value;
           if (question.required != "") {
             if (!value) {
-              $("#" + question.label_id).focus();
+              focus(question.label_id);
               return;
             }
           }
@@ -88,7 +87,7 @@ var schema = {
           var checed;
           for (var j = 0; j < question.products.length; j++) {
             product = question.products[j];
-            checked = $("#" + product.id).is(":checked");
+            checked = document.getElementById(product.id).checked;
             if (checked) flag = true;
             value.push(["item_label: " + product.label, 
               "item_value: " + product.value, 
@@ -96,13 +95,14 @@ var schema = {
           }
           if (question.required != "" && !flag) {
             document.getElementById(question.id).scrollIntoView();
+            focus(question.products[0].id);
             return;
           }
           break;
           default:
-          value = $("#" + question.id).val();
+          value = document.getElementById(question.id).value;
           if (question.required != "" && !value) {
-            $("#" + question.id).focus();
+            focus(question.id);
             return;
           }
           break;
@@ -115,9 +115,9 @@ var schema = {
       jsPsych.finishTrial(trial_data);
     }
 
-    $("#" + button.id).click(function () {
+    document.getElementById(button.id).onclick = function () {
       end_trial();
-    })
+    }
   };
 
      // Help functions
@@ -152,6 +152,10 @@ var schema = {
       function F() {}
       F.prototype = proto;
       return new F;
+    }
+
+    function focus(id) {
+      document.getElementById(id).focus();
     }
 
       // track unique ids for each element
@@ -443,7 +447,8 @@ Tag.prototype = {
   render: function() {
     if (this.newline)
       this.html = "<br>" + this.html;
-    $("#{0}".format(this.parent_id)).append(this.question_html + this.question_description_html + this.html);
+    document.getElementById(this.parent_id).insertAdjacentHTML('beforeend', this.question_html + this.question_description_html + this.html);
+    // $("#{0}".format(this.parent_id)).append(this.question_html + this.question_description_html + this.html);
   }
 }
 
@@ -558,10 +563,14 @@ function UploadFile(parent_id, item = {}) {
   this.render();
 
   var label_id = this.label_id;
-  $("#{0}".format(this.id)).change(function() {
+  document.getElementById(this.id).onchange = function() {
+    document.getElementById(label_id).value = this.files[0].name;
+    document.getElementById(label_id).textContent = this.files[0].name;
+  };
+  /*$("#{0}".format(this.id)).change(function() {
     $("#{0}".format(label_id)).val(this.files[0].name);
     $("#{0}".format(label_id)).text(this.files[0].name);
-  });
+  });*/
 };
 UploadFile.prototype = inherit(Tag.prototype);
 UploadFile.prototype._generate = function() {
@@ -631,9 +640,14 @@ function Range(parent_id, item = {}) {
 
   var label_id = this.label_id;
   var id = this.id;
+  document.getElementById(this.id).onchange = function() {
+    document.getElementById(label_id).textContent = document.getElementById(id).value;
+  };
+  /*
   $("#" + this.id).change(function() {;
     $("#" + label_id).text($("#" + id).val());
   })
+  */
 }
 Range.prototype = inherit(Tag.prototype);
 
@@ -693,16 +707,18 @@ function Dropdown(parent_id, item={}) {
   var option_values = this.option_values;
   var label_id = this.label_id;
   for (let i in this.option_ids) {
-
-    $("#"+this.option_ids[i]).click(function() {
-      $("#"+label_id).val(option_values[i]);
-    })
+    document.getElementById(this.option_ids[i]).onclick = function() {
+      document.getElementById(label_id).value = option_values[i];
+    };
+    /*$("#"+this.option_ids[i]).click(function() {
+     $("#"+label_id).val(option_values[i]);
+   })*/
   } 
 }
 Dropdown.prototype = inherit(Tag.prototype);
 Dropdown.prototype._option_factory = function () {
   var html = '<li disabled class="mdl-menu__item mdl-menu__item--full-bleed-divider">{0}</li>'.format(this.choose_prompt);
-  
+
   for (var i in this.options) {
     html += '<li id="{1}" value="{2}" class="mdl-menu__item">{0}</li>'.format(
       this.options[i], this.option_ids[i], this.option_values[i]
@@ -819,7 +835,7 @@ function InputEmail(parent_id, item = {}) {
   item.id = item.id || "{0}_{1}".format(item.type, __INPUT_EMAIL++);
   item.label = item.label || "Please enter you email...";
   InputTextField.call(this, parent_id, item);
-  
+
   this.html = this._generate();
   this.render();
 }
