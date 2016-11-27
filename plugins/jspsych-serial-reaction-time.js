@@ -32,7 +32,7 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 
     // display stimulus
     var stimulus = this.stimulus(trial.grid, trial.grid_square_size);
-    display_element.html(stimulus);
+    display_element.innerHTML = stimulus;
 
 		if(trial.timing_pre_target <= 0){
 			showTarget();
@@ -44,7 +44,7 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 
 		//show prompt if there is one
     if (trial.prompt !== "") {
-      display_element.append(trial.prompt);
+      display_element.innerHTML += trial.prompt;
     }
 
 		var keyboardListener = {};
@@ -90,7 +90,7 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
       };
 
       // clear the display
-      display_element.html('');
+      display_element.innerHTML = '';
 
       // move on to the next trial
       jsPsych.finishTrial(trial_data);

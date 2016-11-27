@@ -84,11 +84,11 @@ jsPsych.plugins.video = (function() {
     }
     video_html +="</video>"
 
-    display_element.append(video_html);
+    display_element.innerHTML += video_html;
 
     //show prompt if there is one
     if (trial.prompt !== "") {
-      display_element.append(trial.prompt);
+      display_element.innerHTML += trial.prompt;
     }
 
     document.getElementById('jspsych-video-player').onended = function(){

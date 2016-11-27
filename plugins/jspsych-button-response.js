@@ -88,17 +88,9 @@ jsPsych.plugins["button-response"] = (function() {
 
     // display stimulus
     if (!trial.is_html) {
-      display_element.append($('<img>', {
-        src: trial.stimulus,
-        id: 'jspsych-button-response-stimulus',
-        class: 'block-center'
-      }));
+      display_element.innerHTML = '<img src="'+trial.stimulus+'" id="jspsych-button-response-stimulus" class="block-center"></img>';
     } else {
-      display_element.append($('<div>', {
-        html: trial.stimulus,
-        id: 'jspsych-button-response-stimulus',
-        class: 'block-center'
-      }));
+      display_element.innerHTML = '<div id="jspsych-button-response-stimulus" class="block-center">'+trial.stimulus+'</div>';
     }
 
     //display buttons
@@ -114,10 +106,12 @@ jsPsych.plugins["button-response"] = (function() {
         buttons.push(trial.button_html);
       }
     }
-    display_element.append('<div id="jspsych-button-response-btngroup" class="center-content block-center"></div>')
+    display_element.innerHTML += '<div id="jspsych-button-response-btngroup" class="center-content block-center"></div>';
     for (var i = 0; i < trial.choices.length; i++) {
       var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
-      $('#jspsych-button-response-btngroup').append(
+      var btnhtml = document.createDocumentFragment();
+      // FIX ME.......
+      display_element.getElementById('jspsych-button-response-btngroup').innerHTML +=
         $(str).attr('id', 'jspsych-button-response-button-' + i).data('choice', i).addClass('jspsych-button-response-button').on('click', function(e) {
           var choice = $('#' + this.id).data('choice');
           after_response(choice);
@@ -127,7 +121,7 @@ jsPsych.plugins["button-response"] = (function() {
 
     //show prompt if there is one
     if (trial.prompt !== "") {
-      display_element.append(trial.prompt);
+      display_element.innerHTML += trial.prompt;
     }
 
     // store response
@@ -150,10 +144,14 @@ jsPsych.plugins["button-response"] = (function() {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      $("#jspsych-button-response-stimulus").addClass('responded');
+      display_element.getElementById('jspsych-button-response-stimulus').className += ' responded';
 
       // disable all the buttons after a response
-      $('.jspsych-button-response-button').off('click').attr('disabled', 'disabled');
+      var btns = document.querySelector('.jspsych-button-response-button');
+      for(var i=0; i<btns.length; i++){
+        btns[i].removeEventListener('click');
+        btns[i].setAttribute('disabled', 'disabled');
+      }
 
       if (trial.response_ends_trial) {
         end_trial();
@@ -174,7 +172,7 @@ jsPsych.plugins["button-response"] = (function() {
       };
 
       // clear the display
-      display_element.html('');
+      display_element.innerHTML = '';
 
       // move on to the next trial
       jsPsych.finishTrial(trial_data);
@@ -186,7 +184,7 @@ jsPsych.plugins["button-response"] = (function() {
     // hide image if timing is set
     if (trial.timing_stim > 0) {
       jsPsych.pluginAPI.setTimeout(function() {
-        $('#jspsych-button-response-stimulus').css('visibility', 'hidden');
+        display_element.getElementById('jspsych-button-response-stimulus').style.visibility = 'hidden';
       }, trial.timing_stim);
     }
 

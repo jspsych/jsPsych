@@ -89,7 +89,7 @@ jsPsych.plugins["single-audio"] = (function() {
 
     // show prompt if there is one
     if (trial.prompt !== "") {
-      display_element.append(trial.prompt);
+      display_element.innerHTML += trial.prompt;
     }
 
     // store response
@@ -118,7 +118,7 @@ jsPsych.plugins["single-audio"] = (function() {
       };
 
       // clear the display
-      display_element.html('');
+      display_element.innerHTML = '';
 
       // move on to the next trial
       jsPsych.finishTrial(trial_data);

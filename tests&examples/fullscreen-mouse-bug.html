@@ -8,9 +8,6 @@
   <link rel="stylesheet" href="../css/jspsych.css"></link>
 </head>
 
-<body>
-  <div id="jspsych-target"></div>
-</body>
 <script>
   var block_1 = {
     type: 'text',
@@ -19,7 +16,6 @@
   }
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
     timeline: [block_1],
     fullscreen: true,
     on_finish: function() {

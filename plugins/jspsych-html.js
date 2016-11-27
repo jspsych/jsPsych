@@ -63,24 +63,25 @@ jsPsych.plugins.html = (function() {
       url = trial.url + "?time=" + (new Date().getTime());
     }
 
+    // TODO: REMOVE .load() call
     display_element.load(trial.url, function() {
       var t0 = (new Date()).getTime();
       var finish = function() {
-        if (trial.check_fn && !trial.check_fn(display_element)) return;
-        if (trial.cont_key) $(document).unbind('keydown', key_listener);
+        if (trial.check_fn && !trial.check_fn(display_element)) { return };
+        if (trial.cont_key) { document.removeEventListener('keydown', key_listener); }
         var trial_data = {
           rt: (new Date()).getTime() - t0,
           url: trial.url
         };
-        display_element.empty();
+        display_element.innerHTML = '';
         jsPsych.finishTrial(trial_data);
       };
-      if (trial.cont_btn) $('#' + trial.cont_btn).click(finish);
+      if (trial.cont_btn) { display_element.getElementById(trial.cont_btn).attachEventListener('click', finish); }
       if (trial.cont_key) {
         var key_listener = function(e) {
           if (e.which == trial.cont_key) finish();
         };
-        $(document).keydown(key_listener);
+        display_element.attachEventListener('keydown', key_listener);
       }
     });
   };

@@ -169,7 +169,7 @@ jsPsych.plugins['free-sort'] = (function() {
         };
 
         // advance to next part
-        display_element.html("");
+        display_element.innerHTML = '';
         jsPsych.finishTrial(trial_data);
       }
     }));
