@@ -92,13 +92,13 @@ jsPsych.plugins.instructions = (function() {
         display_element.innerHTML += nav_html;
 
         if (current_page != 0 && trial.allow_backward) {
-          display_element.getElementById('jspsych-instructions-back').attachEventListener('click', function() {
+          display_element.querySelector('#jspsych-instructions-back').attachEventListener('click', function() {
             clear_button_handlers();
             back();
           });
         }
 
-        display_element.getElementById('jspsych-instructions-next').attachEventListener('click', function() {
+        display_element.querySelector('#jspsych-instructions-next').attachEventListener('click', function() {
           clear_button_handlers();
           next();
         });
@@ -107,8 +107,8 @@ jsPsych.plugins.instructions = (function() {
     }
 
     function clear_button_handlers() {
-      display_element.getElementById('jspsych-instructions-next').removeEventListener('click');
-      display_element.getElementById('jspsych-instructions-back').removeEventListener('click');
+      display_element.querySelector('#jspsych-instructions-next').removeEventListener('click');
+      display_element.querySelector('#jspsych-instructions-back').removeEventListener('click');
     }
 
     function next() {

@@ -212,7 +212,7 @@ jsPsych.plugins["multi-stim-multi-response"] = (function() {
             whichStimulus++;
             showNextStimulus();
           } else {
-            display_element.getElementById('jspsych-multi-stim-multi-response-stimulus').style.visibility = 'hidden';
+            display_element.querySelector('#jspsych-multi-stim-multi-response-stimulus').style.visibility = 'hidden';
           }
 
         }, trial.timing_stim[whichStimulus]);

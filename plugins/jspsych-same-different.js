@@ -132,7 +132,7 @@ jsPsych.plugins['same-different'] = (function() {
 
       if (trial.timing_second_stim > 0) {
         jsPsych.pluginAPI.setTimeout(function() {
-          display_element.getElementById("jspsych-same-different-second-stimulus").style.visibility = 'hidden';
+          display_element.querySelector('#jspsych-same-different-second-stimulus').style.visibility = 'hidden';
         }, trial.timing_second_stim);
       }
 

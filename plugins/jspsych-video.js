@@ -91,7 +91,7 @@ jsPsych.plugins.video = (function() {
       display_element.innerHTML += trial.prompt;
     }
 
-    document.getElementById('jspsych-video-player').onended = function(){
+    display_element.querySelector('#jspsych-video-player').onended = function(){
       end_trial();
     }
 

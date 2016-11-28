@@ -52,7 +52,7 @@ jsPsych.plugins['survey-likert'] = (function() {
       ".jspsych-survey-likert-opts:last-of-type { border-bottom: 0; }"+
       ".jspsych-survey-likert-opts li { display:inline-block; /*width:19%;*/ text-align:center; vertical-align: top; }"+
       ".jspsych-survey-likert-opts li input[type=radio] { display:block; position:relative; top:0; left:50%; margin-left:-6px; }"
-    document.getElementById('jspsych-survey-likert-css').innerHTML = cssstr;
+    display_element.querySelector('#jspsych-survey-likert-css').innerHTML = cssstr;
 
     // show preamble text
     display_element.append($('<div>', {
@@ -60,7 +60,7 @@ jsPsych.plugins['survey-likert'] = (function() {
       "class": 'jspsych-survey-likert-preamble'
     }));
 
-    display_element.getElementById('jspsych-survey-likert-preamble').innerHTML = trial.preamble;
+    display_element.querySelector('#jspsych-survey-likert-preamble').innerHTML = trial.preamble;
 
     display_element.innerHTML += '<form id="jspsych-survey-likert-form">';
     // add likert scale questions
@@ -79,12 +79,9 @@ jsPsych.plugins['survey-likert'] = (function() {
     }
 
     // add submit button
-    display_element.append($('<button>', {
-      'id': 'jspsych-survey-likert-next',
-      'class': 'jspsych-survey-likert jspsych-btn'
-    }));
-    $("#jspsych-survey-likert-next").html('Submit Answers');
-    $("#jspsych-survey-likert-next").click(function() {
+    display_element.innerHTML += '<button id="jspsych-survey-likert" class="jspsych-survey-likert jspsych-btn">Submit Answers</button>';
+
+    display_element.querySelector('#jspsych-survey-likert-next').attachEventListener('click', function(){
       // measure response time
       var endTime = (new Date()).getTime();
       var response_time = endTime - startTime;

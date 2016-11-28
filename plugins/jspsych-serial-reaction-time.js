@@ -51,11 +51,10 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 
 		function showTarget(){
       if(trial.fade_duration == -1){
-        $('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).css('backgroundColor','#999');
+        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.backgroundColor = '#999';
       } else {
-        $('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).animate({
-          'background-color':'#999'
-        }, trial.fade_duration);
+        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.transition = "background-color "+trial.fade_duration;
+        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.backgroundColor = '#999';
       }
 
 			keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
@@ -125,7 +124,8 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 
 			if (trial.show_response_feedback){
 				var color = response.correct ? '#0f0' : '#f00';
-				$('#jspsych-serial-reaction-time-stimulus-cell-'+responseLoc[1]+'-'+responseLoc[0]).stop().css('background-color',color);
+        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+responseLoc[1]+'-'+responseLoc[0]).style.transition = "";
+        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+responseLoc[1]+'-'+responseLoc[0]).style.backgroundColor = color;
 			}
 
       if (trial.response_ends_trial) {

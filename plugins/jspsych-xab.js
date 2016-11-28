@@ -226,7 +226,7 @@ jsPsych.plugins.xab = (function() {
           "key_press": info.key
         };
 
-        display_element.html(''); // remove all
+        display_element.innerHTML = ''; // remove all
 
         // move on to the next trial after timing_post_trial milliseconds
         jsPsych.finishTrial(trial_data);

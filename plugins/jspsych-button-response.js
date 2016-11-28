@@ -111,7 +111,7 @@ jsPsych.plugins["button-response"] = (function() {
       var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
       var btnhtml = document.createDocumentFragment();
       // FIX ME.......
-      display_element.getElementById('jspsych-button-response-btngroup').innerHTML +=
+      display_element.querySelector('#jspsych-button-response-btngroup').innerHTML +=
         $(str).attr('id', 'jspsych-button-response-button-' + i).data('choice', i).addClass('jspsych-button-response-button').on('click', function(e) {
           var choice = $('#' + this.id).data('choice');
           after_response(choice);
@@ -144,7 +144,7 @@ jsPsych.plugins["button-response"] = (function() {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      display_element.getElementById('jspsych-button-response-stimulus').className += ' responded';
+      display_element.querySelector('#jspsych-button-response-stimulus').className += ' responded';
 
       // disable all the buttons after a response
       var btns = document.querySelector('.jspsych-button-response-button');
@@ -184,7 +184,7 @@ jsPsych.plugins["button-response"] = (function() {
     // hide image if timing is set
     if (trial.timing_stim > 0) {
       jsPsych.pluginAPI.setTimeout(function() {
-        display_element.getElementById('jspsych-button-response-stimulus').style.visibility = 'hidden';
+        display_element.querySelector('#jspsych-button-response-stimulus').style.visibility = 'hidden';
       }, trial.timing_stim);
     }
 

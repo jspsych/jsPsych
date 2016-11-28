@@ -158,7 +158,7 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
       "id": 'jspsych-vsl-animate-occlusion-moving-image'
     });
 
-    document.getElementById('jspsych-vsl-animate-occlusion-moving-image').removeAttribute('preserveAspectRatio');
+    display_element.querySelector('#jspsych-vsl-animate-occlusion-moving-image').removeAttribute('preserveAspectRatio');
 
     if (trial.occlude_center) {
       paper.rect((trial.canvas_size[0] / 2) - (trial.image_size[0] / 2), 0, trial.image_size[0], trial.canvas_size[1]).attr({

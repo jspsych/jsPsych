@@ -142,7 +142,7 @@ jsPsych.plugins.categorize = (function() {
     // hide image after time if the timing parameter is set
     if (trial.timing_stim > 0) {
       jsPsych.pluginAPI.setTimeout(function() {
-        display_element.getElementById('jspsych-categorize-stimulus').style.visibility = 'hidden';
+        display_element.querySelector('#jspsych-categorize-stimulus').style.visibility = 'hidden';
       }, trial.timing_stim);
     }
 

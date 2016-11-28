@@ -129,7 +129,7 @@ jsPsych.plugins["single-stim"] = (function() {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      document.getElementById("jspsych-single-stim-stimulus").clasName += ' responded';
+      display_element.querySelector('#jspsych-single-stim-stimulus').className += ' responded';
 
       // only record the first response
       if (response.key == -1) {
@@ -155,7 +155,7 @@ jsPsych.plugins["single-stim"] = (function() {
     // hide image if timing is set
     if (trial.timing_stim > 0) {
       jsPsych.pluginAPI.setTimeout(function() {
-        document.getElementById('jspsych-single-stim-stimulus').style.visibility = 'hidden';
+        display_element.querySelector('#jspsych-single-stim-stimulus').style.visibility = 'hidden';
       }, trial.timing_stim);
     }
 

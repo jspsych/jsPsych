@@ -108,15 +108,9 @@ jsPsych.plugins.similarity = (function() {
 
     // show the images
     if (!trial.is_html) {
-      display_element.append($('<img>', {
-        "src": trial.stimuli[0],
-        "id": 'jspsych-sim-stim'
-      }));
+      display_element.innerHTML += '<img src="'+trial.stimuli[0]+'" id="jspsych-sim-stim"></img>';
     } else {
-      display_element.append($('<div>', {
-        "html": trial.stimuli[0],
-        "id": 'jspsych-sim-stim'
-      }));
+      display_element.innerHTML += '<div id="jspsych-sim-stim">'+trial.stimuli[0]+'</div>';
     }
 
     if (trial.show_response == "FIRST_STIMULUS") {
@@ -130,7 +124,7 @@ jsPsych.plugins.similarity = (function() {
 
     function showBlankScreen() {
 
-      $('#jspsych-sim-stim').css('visibility', 'hidden');
+      display_element.querySelector('#jspsych-sim-stim').style.visibility = 'hidden';
 
       jsPsych.pluginAPI.setTimeout(function() {
         showSecondStim();
@@ -140,12 +134,12 @@ jsPsych.plugins.similarity = (function() {
     function showSecondStim() {
 
       if (!trial.is_html) {
-        $('#jspsych-sim-stim').attr('src', trial.stimuli[1]);
+        display_element.querySelector('#jspsych-sim-stim').src = trial.stimuli[1];
       } else {
-        $('#jspsych-sim-stim').html(trial.stimuli[1]);
+        display_element.querySelector('#jspsych-sim-stim').innerHTML = trial.stimuli[1];
       }
 
-      $('#jspsych-sim-stim').css('visibility', 'visible');
+      display_element.querySelector('#jspsych-sim-stim').style.visibility = 'visible';
 
       if (trial.show_response == "SECOND_STIMULUS") {
         show_response_slider(display_element, trial);
@@ -153,7 +147,7 @@ jsPsych.plugins.similarity = (function() {
 
       if (trial.timing_second_stim > 0) {
         jsPsych.pluginAPI.setTimeout(function() {
-          $("#jspsych-sim-stim").css('visibility', 'hidden');
+          display_element.querySelector("#jspsych-sim-stim").style.visibility = 'hidden';
           if (trial.show_response == "POST_STIMULUS") {
             show_response_slider(display_element, trial);
           }
@@ -259,7 +253,7 @@ jsPsych.plugins.similarity = (function() {
           "stimulus": JSON.stringify([trial.stimuli[0], trial.stimuli[1]])
         };
         // goto next trial in block
-        display_element.html('');
+        display_element.innerHTML = '';
         jsPsych.finishTrial(trial_data);
       });
     }

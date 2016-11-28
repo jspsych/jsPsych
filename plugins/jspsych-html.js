@@ -76,7 +76,7 @@ jsPsych.plugins.html = (function() {
         display_element.innerHTML = '';
         jsPsych.finishTrial(trial_data);
       };
-      if (trial.cont_btn) { display_element.getElementById(trial.cont_btn).attachEventListener('click', finish); }
+      if (trial.cont_btn) { display_element.querySelector('#'+trial.cont_btn).attachEventListener('click', finish); }
       if (trial.cont_key) {
         var key_listener = function(e) {
           if (e.which == trial.cont_key) finish();

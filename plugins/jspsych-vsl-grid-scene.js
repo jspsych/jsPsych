@@ -55,7 +55,7 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
     // it with the output of the function
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
-    display_element.html(plugin.generate_stimulus(trial.stimuli, trial.image_size));
+    display_element.innerHTML = plugin.generate_stimulus(trial.stimuli, trial.image_size);
 
     jsPsych.pluginAPI.setTimeout(function() {
       endTrial();
@@ -63,7 +63,7 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
 
     function endTrial() {
 
-      display_element.html('');
+      display_element.innerHMTL = '';
 
       var trial_data = {
         "stimulus": JSON.stringify(trial.stimuli)
@@ -78,45 +78,19 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
     var ncols = pattern[0].length;
 
     // create blank element to hold code that we generate
-    $('body').append($('<div>', {
-      id: 'jspsych-vsl-grid-scene-dummy',
-      css: {
-        display: 'none'
-      }
-    }));
+    display_element.innerHTML += '<div id="jspsych-vsl-grid-scene-dummy" css="display: none;"></div>';
 
     // create table
-    $('#jspsych-vsl-grid-scene-dummy').append($('<table>', {
-      id: 'jspsych-vsl-grid-scene-table',
-      css: {
-        'border-collapse': 'collapse',
-        'margin-left': 'auto',
-        'margin-right': 'auto'
-      }
-    }));
+    display_element.getElementById('jspsych-vsl-grid-scene-dummy').innerHTML += '<table id="jspsych-vsl-grid-scene table" '+
+      'style="border-collapse: collapse; margin-left: auto; margin-right: auto;"></table>';
 
     for (var row = 0; row < nrows; row++) {
-      $("#jspsych-vsl-grid-scene-table").append($('<tr>', {
-        id: 'jspsych-vsl-grid-scene-table-row-' + row,
-        css: {
-          height: image_size[1] + "px"
-        }
-      }));
+      display_element.getElementById("jspsych-vsl-grid-scene-table").innerHTML += '<tr id="jspsych-vsl-grid-scene-table-row-'+row+'" css="height: '+image_size[1]+'px;">';
+
       for (var col = 0; col < ncols; col++) {
-        $("#jspsych-vsl-grid-scene-table-row-" + row).append($('<td>', {
-          id: 'jspsych-vsl-grid-scene-table-' + row + '-' + col,
-          css: {
-            padding: image_size[1] / 10 + "px " + image_size[0] / 10 + "px",
-            border: '1px solid #555'
-          }
-        }));
-        $('#jspsych-vsl-grid-scene-table-' + row + '-' + col).append($('<div>', {
-          id: 'jspsych-vsl-grid-scene-table-cell-' + row + '-' + col,
-          css: {
-            width: image_size[0] + "px",
-            height: image_size[1] + "px"
-          }
-        }));
+        display_element.getElementById("jspsych-vsl-grid-scene-table-row-" + row).innerHTML += '<td id="jspsych-vsl-grid-scene-table-' + row + '-' + col +'" '+
+          'style="padding: '+ (image_size[1] / 10) + 'px ' + (image_size[0] / 10) + 'px; border: 1px solid #555;">'+
+          '<div id="jspsych-vsl-grid-scene-table-cell-' + row + '-' + col'" style="width: '+image_size[0]+'px; height: '+image_size[1]+'px;"></div>';
       }
     }
 
@@ -124,19 +98,14 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
     for (var row = 0; row < nrows; row++) {
       for (var col = 0; col < ncols; col++) {
         if (pattern[row][col] !== 0) {
-          $('#jspsych-vsl-grid-scene-table-cell-' + row + '-' + col).append($('<img>', {
-            src: pattern[row][col],
-            css: {
-              width: image_size[0] + "px",
-              height: image_size[1] + "px",
-            }
-          }));
+          display_element.getElementById('jspsych-vsl-grid-scene-table-cell-' + row + '-' + col).innerHTML = '<img '+
+            'src="'+pattern[row][col]+'" style="width: '+image_size[0]+'px; height: '+image_size[1]+'"></img>';
         }
       }
     }
 
-    var html_out = $('#jspsych-vsl-grid-scene-dummy').html();
-    $('#jspsych-vsl-grid-scene-dummy').remove();
+    var html_out = display_element.getElementById('jspsych-vsl-grid-scene-dummy').innerHTML;
+    display_element.getElementById('jspsych-vsl-grid-scene-dummy').outerHTML = '';
 
     return html_out;
 

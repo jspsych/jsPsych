@@ -247,7 +247,7 @@ jsPsych.plugins.palmer = (function() {
     var startTime = (new Date()).getTime();
 
     display_element.innerHTML += '<p><button id="jspsych-palmer-submitButton" class="jspsych-btn" type="button">Submit Answer</button></p>';
-    display_element.getElementById('jspsych-palmer-submitButton').attachEventListener('click', function() {
+    display_element.querySelector('#jspsych-palmer-submitButton').attachEventListener('click', function() {
       save_data();
     });
 
@@ -289,8 +289,8 @@ jsPsych.plugins.palmer = (function() {
 
       if (trial.show_feedback) {
         // hide the button
-        display_element.getElementById('jspsych-palmer-submitButton').style.display = 'none';
-        display_element.getElementById('jspsych-palmer-prompt').style.display = 'none';
+        display_element.querySelector('#jspsych-palmer-submitButton').style.display = 'none';
+        display_element.querySelector('#jspsych-palmer-prompt').style.display = 'none';
 
         showConfiguration(trial.configuration);
         var feedback = "";

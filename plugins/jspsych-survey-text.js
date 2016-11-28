@@ -82,7 +82,7 @@ jsPsych.plugins['survey-text'] = (function() {
     // add submit button
     display_element.innerHTML += '<button id="jspsych-survey-text-next" class="jspsych-btn jspsych-survey-text">Submit Answers</button>';
 
-    display_element.getElementById("jspsych-survey-text-next").attachEventListener('click', function() {
+    display_element.querySelector('#jspsych-survey-text-next').attachEventListener('click', function() {
       // measure response time
       var endTime = (new Date()).getTime();
       var response_time = endTime - startTime;
@@ -104,7 +104,7 @@ jsPsych.plugins['survey-text'] = (function() {
       };
 
       display_element.innerHTML = '';
-      
+
       // next trial
       jsPsych.finishTrial(trialdata);
     });

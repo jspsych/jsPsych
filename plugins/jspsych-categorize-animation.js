@@ -119,7 +119,7 @@ jsPsych.plugins["categorize-animation"] = (function() {
 
     // show animation
     var animate_interval = setInterval(function() {
-      display_element.innerHTML = '';// clear everything
+      display_element.innerHTML = ''; // clear everything
       animate_frame++;
       if (animate_frame == trial.stimuli.length) {
         animate_frame = 0;

@@ -113,7 +113,7 @@ jsPsych.plugins.animation = (function() {
 
       if (trial.frame_isi > 0) {
         jsPsych.pluginAPI.setTimeout(function() {
-          display_element.getElementById('jspsych-animation-image').style.visibility = 'hidden';
+          display_element.querySelector('#jspsych-animation-image').style.visibility = 'hidden';
           current_stim = 'blank';
           // record when blank image was shown
           animation_sequence.push({
@@ -134,7 +134,7 @@ jsPsych.plugins.animation = (function() {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      display_element.getElementById("jspsych-animation-image").className += ' responded';
+      display_element.querySelector('#jspsych-animation-image').className += ' responded';
     }
 
     // hold the jspsych response listener object in memory
