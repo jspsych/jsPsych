@@ -81,14 +81,14 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
     display_element.innerHTML += '<div id="jspsych-vsl-grid-scene-dummy" css="display: none;"></div>';
 
     // create table
-    display_element.getElementById('jspsych-vsl-grid-scene-dummy').innerHTML += '<table id="jspsych-vsl-grid-scene table" '+
+    display_element.querySelector('#jspsych-vsl-grid-scene-dummy').innerHTML += '<table id="jspsych-vsl-grid-scene table" '+
       'style="border-collapse: collapse; margin-left: auto; margin-right: auto;"></table>';
 
     for (var row = 0; row < nrows; row++) {
-      display_element.getElementById("jspsych-vsl-grid-scene-table").innerHTML += '<tr id="jspsych-vsl-grid-scene-table-row-'+row+'" css="height: '+image_size[1]+'px;">';
+      display_element.querySelector('#jspsych-vsl-grid-scene-table').innerHTML += '<tr id="jspsych-vsl-grid-scene-table-row-'+row+'" css="height: '+image_size[1]+'px;">';
 
       for (var col = 0; col < ncols; col++) {
-        display_element.getElementById("jspsych-vsl-grid-scene-table-row-" + row).innerHTML += '<td id="jspsych-vsl-grid-scene-table-' + row + '-' + col +'" '+
+        display_element.querySelector('#jspsych-vsl-grid-scene-table-row-' + row).innerHTML += '<td id="jspsych-vsl-grid-scene-table-' + row + '-' + col +'" '+
           'style="padding: '+ (image_size[1] / 10) + 'px ' + (image_size[0] / 10) + 'px; border: 1px solid #555;">'+
           '<div id="jspsych-vsl-grid-scene-table-cell-' + row + '-' + col'" style="width: '+image_size[0]+'px; height: '+image_size[1]+'px;"></div>';
       }
@@ -98,14 +98,14 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
     for (var row = 0; row < nrows; row++) {
       for (var col = 0; col < ncols; col++) {
         if (pattern[row][col] !== 0) {
-          display_element.getElementById('jspsych-vsl-grid-scene-table-cell-' + row + '-' + col).innerHTML = '<img '+
+          display_element.querySelector('#jspsych-vsl-grid-scene-table-cell-' + row + '-' + col).innerHTML = '<img '+
             'src="'+pattern[row][col]+'" style="width: '+image_size[0]+'px; height: '+image_size[1]+'"></img>';
         }
       }
     }
 
-    var html_out = display_element.getElementById('jspsych-vsl-grid-scene-dummy').innerHTML;
-    display_element.getElementById('jspsych-vsl-grid-scene-dummy').outerHTML = '';
+    var html_out = display_element.querySelector('#jspsych-vsl-grid-scene-dummy').innerHTML;
+    display_element.querySelector('#jspsych-vsl-grid-scene-dummy').outerHTML = '';
 
     return html_out;
 

@@ -166,7 +166,6 @@ var after_block = {
 }
 
 jsPsych.init({
-  display_element: $('#jspsych-target'),
   timeline: [block, after_block],
   on_finish: function() {
     jsPsych.data.displayData();
@@ -264,7 +263,7 @@ None.
 
 ### Return value
 
-Returns the jQuery-object that contains the DOM element used for displaying the experiment.
+Returns the HTML DOM element used for displaying the experiment.
 
 ### Description
 
@@ -276,7 +275,7 @@ Get the DOM element that displays the experiment.
 var el = jsPsych.getDisplayElement();
 
 // hide the jsPsych display
-el.hide();
+el.style.visibility = 'hidden';
 ```
 ---
 ## jsPsych.init
@@ -296,7 +295,7 @@ The settings object can contain several parameters. The only *required* paramete
 Parameter | Type | Description
 --------- | ---- | -----------
 timeline | array | An array containing the objects that describe the experiment timeline. See [Creating an Experiment: The Timeline](../features/timeline.md).
-display_element | jQuery object | A jQuery-selected DOM element, e.g., `$('#target')` selects the element with the `id='target'` attribute. If left blank, then jsPsych will use the `<body>` element to display content (creating it if necessary). You can override this parameter at the trial level as well by specifying a display_element property on any timeline.
+display_element | string | The ID of an HTML element to display the experiment in. If left blank, then jsPsych will use the `<body>` element to display content (creating it if necessary). You can override this parameter at the trial level as well by specifying a display_element property on any timeline.
 on_finish | function | Function to execute when the experiment ends.
 on_trial_start | function | Function to execute when a new trial begins.
 on_trial_finish | function | Function to execute when a trial ends.
