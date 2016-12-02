@@ -109,15 +109,9 @@ jsPsych.plugins.xab = (function() {
     // how we display the content depends on whether the content is
     // HTML code or an image path.
     if (!trial.is_html) {
-      display_element.append($('<img>', {
-        src: trial.x_path,
-        "class": 'jspsych-xab-stimulus'
-      }));
+      display_element.innerHTML = '<img class="jspsych-xab-stimulus" src="'+trial.x_path+'"></img>';
     } else {
-      display_element.append($('<div>', {
-        "class": 'jspsych-xab-stimulus',
-        html: trial.x_path
-      }));
+      display_element.innerHTML = '<div class="jspsych-xab-stimulus">'+trial.x_path+'</div>';
     }
 
     // start a timer of length trial.timing_x to move to the next part of the trial
@@ -128,7 +122,7 @@ jsPsych.plugins.xab = (function() {
 
     function showBlankScreen() {
       // remove the x stimulus
-      $('.jspsych-xab-stimulus').remove();
+      display_element.innerHTML = '';
 
       // start timer
       jsPsych.pluginAPI.setTimeout(function() {
@@ -146,25 +140,18 @@ jsPsych.plugins.xab = (function() {
         images = [trial.b_path, trial.a_path];
       }
 
+      if (!trial.is_html) {
+        display_element.innerHTML = '<img class="jspsych-xab-stimulus" src="'+trial.x_path+'"></img>';
+      } else {
+        display_element.innerHTML = '<div class="jspsych-xab-stimulus">'+trial.x_path+'</div>';
+      }
       // show the options
       if (!trial.is_html) {
-        display_element.append($('<img>', {
-          "src": images[0],
-          "class": 'jspsych-xab-stimulus left'
-        }));
-        display_element.append($('<img>', {
-          "src": images[1],
-          "class": 'jspsych-xab-stimulus right'
-        }));
+        display_element.innerHTML += '<img class="jspsych-xab-stimulus left" src="'+images[0]+'"></img>';
+        display_element.innerHTML += '<img class="jspsych-xab-stimulus right" src="'+images[1]+'"></img>';
       } else {
-        display_element.append($('<div>', {
-          "class": 'jspsych-xab-stimulus left',
-          html: images[0]
-        }));
-        display_element.append($('<div>', {
-          "class": 'jspsych-xab-stimulus right',
-          html: images[1]
-        }));
+        display_element.innerHTML += '<div class="jspsych-xab-stimulus left">'+images[0]+'</div>';
+        display_element.innerHTML += '<div class="jspsych-xab-stimulus right">'+images[1]+'</div>';
       }
 
       if (trial.prompt !== "") {
@@ -174,7 +161,10 @@ jsPsych.plugins.xab = (function() {
       // if timing_ab is > 0, then we hide the stimuli after timing_ab milliseconds
       if (trial.timing_ab > 0) {
         jsPsych.pluginAPI.setTimeout(function() {
-          $('.jspsych-xab-stimulus').css('visibility', 'hidden');
+          var matches = display_element.querySelectorAll('.jspsych-xab-stimulus');
+          for(var i=0; i<matches.length; i++){
+            matches[i].style.visibility = 'hidden';
+          }
         }, trial.timing_ab);
       }
 

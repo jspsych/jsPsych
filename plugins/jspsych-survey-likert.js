@@ -55,17 +55,13 @@ jsPsych.plugins['survey-likert'] = (function() {
     display_element.querySelector('#jspsych-survey-likert-css').innerHTML = cssstr;
 
     // show preamble text
-    display_element.append($('<div>', {
-      "id": 'jspsych-survey-likert-preamble',
-      "class": 'jspsych-survey-likert-preamble'
-    }));
-
-    display_element.querySelector('#jspsych-survey-likert-preamble').innerHTML = trial.preamble;
+    display_element.innerHTML += '<div id="jspsych-survey-likert-preamble" class="jspsych-survey-likert-preamble">'+trial.preamble+'</div>';
 
     display_element.innerHTML += '<form id="jspsych-survey-likert-form">';
+
+    var form_element = display_element.querySelector('#jspsych-survey-likert-form');
     // add likert scale questions
     for (var i = 0; i < trial.questions.length; i++) {
-      form_element = $('#jspsych-survey-likert-form');
       // add question
       form_element.innerHTML += '<label class="jspsych-survey-likert-statement">' + trial.questions[i] + '</label>';
       // add options
@@ -88,16 +84,17 @@ jsPsych.plugins['survey-likert'] = (function() {
 
       // create object to hold responses
       var question_data = {};
-      $("#jspsych-survey-likert-form .jspsych-survey-likert-opts").each(function(index) {
-        var id = $(this).data('radio-group');
-        var response = $('input[name="' + id + '"]:checked').val();
+      var matches = display_element.querySelectorAll('#jspsych-survey-likert-form .jspsych-survey-likert-opts');
+      for(var index = 0; index < matches.length; index++){
+        var id = matches[index].dataset['radio-group'];
+        var response = display_element.querySelector('input[name="' + id + '"]:checked').value;
         if (typeof response == 'undefined') {
           response = -1;
         }
         var obje = {};
         obje[id] = response;
-        $.extend(question_data, obje);
-      });
+        Object.assign(question_data, obje);
+      }
 
       // save data
       var trial_data = {

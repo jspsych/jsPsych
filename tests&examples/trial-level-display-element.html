@@ -29,7 +29,7 @@
   var trial_3 = {
     stimulus: '<p>:)</p>',
     is_html: true,
-    display_element: $('#jspsych-trial-target')
+    display_element: 'jspsych-trial-target'
   }
 
   var node = {
@@ -44,7 +44,7 @@
 
 
   jsPsych.init({
-    display_element: $('#jspsych-target'),
+    display_element: 'jspsych-target',
     timeline: [node],
     on_finish: function() {
       jsPsych.data.displayData();

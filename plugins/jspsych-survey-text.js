@@ -89,14 +89,14 @@ jsPsych.plugins['survey-text'] = (function() {
 
       // create object to hold responses
       var question_data = {};
-      $("div.jspsych-survey-text-question").each(function(index) {
+      var matches = display_element.querySelectorAll('div.jspsych-survey-text-question');
+      for(var index=0; index<matches.length; index++){
         var id = "Q" + index;
-        var val = $(this).children('textarea').val();
+        var val = matches[index].querySelector('textarea').value;
         var obje = {};
         obje[id] = val;
         Object.assign(question_data, obje);
-      });
-
+      }
       // save data
       var trialdata = {
         "rt": response_time,
