@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="modular_form.js"></script>
+</head>
+
+<body id="b">
+</body>
+<script type="text/javascript">
+function myf() {alert(1)}
+	var t = new FormNode("b", {title:'Test', id:'f', bgcolor:"green", bgimg:"./orange.png"})
+	t.render()
+	var t = new PlainText("f", {display_info: "<br>Hello World!", newline: true,  fontsize:"200%", fontcolor: "pink", styles:['font-style:italic;']});
+	t.render();
+	var t = new FieldSet("f", {name:'Test', legend:'Test', id:'Test', bgimg:"./blue.png", bgcolor:"	#CCFF80"});
+	t.render();
+	var t = new InputText("Test", {display_info: {type:'string', display_info:'Firstname', fontsize:"200%", fontcolor:'blue'},  value:'firstname', fontcolor:'red', name:'inputbox'});
+	t.render();
+	var t = new InputText("Test", {display_info: {type: "img", src: './blue.png'}, 
+									value:'what color is the ball', fontcolor:'blue', name:'inputbox'});
+	t.render();
+	
+	var t = new Image("Test",  {src: './blue.png',  bgcolor:'red'});
+	t.render();
+	var t = new Image("Test",  {src: './orange.png', newline: true, bgcolor:'red'});
+	t.render();
+	var t = new Select("Test", {name:'number', options:[{value:'1'},
+					  									 {value: "2"},
+					  									 {label:'>2', options:[{value:"3"}]}
+					  									     ]});
+	t.render();
+	var t = new Button("Test", {name:'Button', display_info:'Button it!', onclick:'myf()'});
+	t.render();
+	var t = new Textarea("Test", {name:'Textarea'});
+	t.render();
+	var t = new InputText("Test", {display_info:'Lastname', value:'lastname'});
+	t.render();
+	var t = new InputCheckbox("Test", {name:'Image', 
+										display_info:{type: "img", src:'./blue.png', height:"2%", width:"2%"}, 
+										value:'blue'});
+	t.render();
+	var t = new InputCheckbox("Test", {name:'Text', 
+										display_info: {type: "string", display_info:"Orange", fontcolor:"orange", fontsize:"150%"}, 
+										value:'blue'});
+	t.render();
+	var t = new InputRadio("Test", {name:'Image', 
+										display_info:{type: "img", src:'./blue.png', height:"2%", width:"2%"}, 
+										value:'blue'});
+	t.render();
+	var t = new InputRadio("Test", {name:'Text', 
+										display_info: {type: "string", display_info:"Orange", fontcolor:"orange", fontsize:"150%"}, 
+										value:'blue'});
+	t.render();
+	var t = new InputPassword("Test", {display_info: 'Password',  value:'', fontcolor:'red', name:'inputbox'});
+	t.render();
+	var t = new InputNumber("Test", {display_info: 'Number',  value:'', fontcolor:'red', name:'inputbox'});
+	t.render();
+
+	var t = new InputButton("f", {display_info: "Button",  value:"Button", fontcolor:"black", name:"inputbox", onclick:'myf()'});
+	t.render()
+	var t = new InputColor("f", {display_info: "Color",  value:"", fontcolor:"black", name:"inputbox"});
+	t.render()
+	var t = new InputDate("f", {display_info: "Date",  value:"", fontcolor:"black", name:"inputbox"});
+	t.render()
+	var t = new InputDatetime("f", {display_info: "Datetime",  value:"", fontcolor:"black", name:"inputbox"});
+	t.render()
+	var t = new InputDatetimeLocal("f", {display_info: "Datetime-local",  value:"", fontcolor:"black", name:"inputbox"});
+	t.render()
+	var t = new InputEmail("f", {display_info: "Email",  value:"", fontcolor:"black", name:"inputbox"});
+	t.render()
+	var t = new InputMonth("f", {display_info: "Month",  value:"", fontcolor:"black", name:"inputbox"});
+	t.render()
+	var t = new InputTel("f", {display_info: "Tel",  value:"", fontcolor:"black", name:"inputbox"});
+	t.render()
+	var t = new InputTime("Test", {display_info: "Time",  value:"", fontcolor:"black", name:"inputbox"});
+	t.render();
+	var t = new InputUrl("f", {display_info: "Url",  value:"", fontcolor:"black", name:"inputbox"});
+	t.render()
+	var t = new InputWeek("f", {display_info: "Week",  value:"", fontcolor:"black", name:"inputbox"});
+	t.render()
+	var t = new InputReset("f", {display_info: "Reset",  value:"reset", fontcolor:"black", name:"inputbox"});
+	t.render()
+	var t = new InputFile("f", {display_info: "File",  value:"s", fontcolor:"black", name:"inputbox"});
+	t.render()
+	var t = new InputRange("f", {display_info: "Range",  value:"", fontcolor:"black", name:"inputbox"});
+	t.render()
+	var t = new InputSearch("f", {display_info: "Search",  value:"", fontcolor:"black", name:"inputbox"});
+	t.render()
+</script>
+</html>
