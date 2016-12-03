@@ -310,9 +310,12 @@ function Form(display_element, item = {}) {
   this.display_element = display_element || "body";
   this.id = item.id || "{0}_{1}".format(this.type, __FORM++);
 
-  this.layout_color = item.layout_color || "grey-300";
+  // this.layout_color = item.layout_color || "grey-300";
+  this.layout_color = item.layout_color || "white-300";
+  this.boxShadow = item.boxShadow || 4;
 
-  this.ribbon_color = item.ribbon_color || '#3F51B5';
+  // this.ribbon_color = item.ribbon_color || '#3F51B5';
+  this.ribbon_color = item.ribbon_color || 'white-300';
   this.ribbon_height = item.ribbon_height || '40vh';
   this.ribbon_bg = (item.ribbon_bg) ? "background: url({0});".format(item.ribbon_bg) : "";
   this.ribbon_bg_size = item.ribbon_bg_size || "background-size: contain cover;";
@@ -320,7 +323,8 @@ function Form(display_element, item = {}) {
   this.ribbon = '<div style="height: {0};-webkit-flex-shrink: 0;-ms-flex-negative: 0;flex-shrink: 0;background-color: {1};{2}{3}"></div>'.format(
     this.ribbon_height, this.ribbon_color, this.ribbon_bg, this.ribbon_bg_size);
 
-  this.content_bg_color = item.content_bg_color || "grey-100";
+  // this.content_bg_color = item.content_bg_color || "grey-100";
+  this.content_bg_color = item.content_bg_color || "white-300";
   this.context_text_color = item.context_text_color || "black-800";
   this.form_title = item.form_title || "Untitled Form";
 
@@ -339,16 +343,26 @@ function Form(display_element, item = {}) {
   this.form_title_html = '<label style="font-size: {0};padding-bottom: 30px; font-weight: bolder;" class="mdl-layout-title mdl-color-text--{1}">{2}<br>{3}</label>'.format(
     this.form_title_size, this.form_title_color, this.form_title, this.form_description_html)
 
+  // this.content = '<main class="mdl-layout__content" style="margin-top: -35vh;-webkit-flex-shrink: 0;-ms-flex-negative: 0;flex-shrink: 0;">\
+  // <div class="mdl-grid" style="max-width: 1600px;width: calc(100% - 16px);margin: 0 auto;margin-top: 10vh;">\
+  // <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>\
+  // <div class="mdl-color--{0} mdl-shadow--4dp mdl-cell mdl-cell--8-col" style="border-radius: 2px;padding: 80px 56px;margin-bottom: 80px;">\
+  // <div class="mdl-color-text--{1}" id="{2}" style="width: 512px;">{3}</div></div>\
+  // <div class="mdl-layout mdl-color-text--grey-600" style="text-align: center; font-size: 12px; margin-top: -60px">\
+  // This content is neither created nor endorsed by jsPsych.\
+  // </div><div class="mdl-layout mdl-color-text--grey-700" style="text-align: center; font-size: 19px; margin-top: -30px">\
+  // jsPsych Forms</div></div></main>'.format(
+  //   this.content_bg_color, this.context_text_color, this.id, this.form_title_html);
+
   this.content = '<main class="mdl-layout__content" style="margin-top: -35vh;-webkit-flex-shrink: 0;-ms-flex-negative: 0;flex-shrink: 0;">\
   <div class="mdl-grid" style="max-width: 1600px;width: calc(100% - 16px);margin: 0 auto;margin-top: 10vh;">\
   <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>\
-  <div class="mdl-color--{0} mdl-shadow--4dp mdl-cell mdl-cell--8-col" style="border-radius: 2px;padding: 80px 56px;margin-bottom: 80px;">\
+  <div class="mdl-color--{0} mdl-shadow--{4}dp mdl-cell mdl-cell--8-col" style="border-radius: 2px;padding: 80px 56px;margin-bottom: 80px;">\
   <div class="mdl-color-text--{1}" id="{2}" style="width: 512px;">{3}</div></div>\
   <div class="mdl-layout mdl-color-text--grey-600" style="text-align: center; font-size: 12px; margin-top: -60px">\
-  This content is neither created nor endorsed by jsPsych.\
   </div><div class="mdl-layout mdl-color-text--grey-700" style="text-align: center; font-size: 19px; margin-top: -30px">\
-  jsPsych Forms</div></div></main>'.format(
-    this.content_bg_color, this.context_text_color, this.id, this.form_title_html);
+  </div></div></main>'.format(
+    this.content_bg_color, this.context_text_color, this.id, this.form_title_html, this.boxShadow);
 
 
   this.html = '<form><div class="mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--{0}">{1}{2}</div></form>'.format(

@@ -70,18 +70,19 @@ Parameter | Type | Default Value | Description
 *id*<a name="FormId"></a>|numeric|**Automactically Assigned**|The id of the form. 
 *type*|string|**"form"**|The type of the form.
 item|object|{}|Values of settings for the form layout.
-item.layout_color|string|`grey-300`|The background color of the layout.
+item.layout_color|string|`white-300`|The background color of the layout.
+item.boxShadow|numeric|4|The darkness of shadow for the box. 0 - 17 
 item.form_title|string|`"Untitled Form"`|The title of the form.
 item.form_title_size|string|`40px`|The font size of the title.
 item.form_title_color|string|`black-800`|The font color of the title.
 item.form_description|string|""|The description of the form.
 item.form_description_size|string|`14px`|The font size of the description of the form.
 item.form_description_color|string|`grey-600`|The font color of the description of the form.
-item.ribbon_color|string|`#3F51B5`|The background color of the ribbon.
+item.ribbon_color|string|`white-300`|The background color of the ribbon.
 item.ribbon_height|string|`40vh`|The height of the ribbon.
 item.ribbon_bg|string|""|The background picture of the ribbon.
 item.ribbon_bg_size|string|`background-size: contain cover;`|The background picture's size of the ribbon.
-item.content_bg_color|string|`grey-100`|The background color of the content.
+item.content_bg_color|string|`white-300`|The background color of the content.
 item.content_text_color|string|`black-800`|The font color of the text in the content.
 
 ### Button
