@@ -193,7 +193,7 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
 
     function endTrial() {
 
-      display_element.html('');
+      display_element.innerHTML = '';
 
       jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
 

@@ -104,7 +104,7 @@ jsPsych.plugins.video = (function() {
       };
 
       // clear the display
-      display_element.html('');
+      display_element.innerHTML = '';
 
       // move on to the next trial
       jsPsych.finishTrial(trial_data);

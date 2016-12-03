@@ -260,7 +260,7 @@ jsPsych.plugins["visual-search-circle"] = (function() {
       }
 
       function clear_display() {
-        display_element.html('');
+        display_element.innerHTML = '';
       }
     }
 

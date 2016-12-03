@@ -155,7 +155,7 @@ jsPsych.plugins.xab = (function() {
       }
 
       if (trial.prompt !== "") {
-        display_element.append(trial.prompt);
+        display_element.innerHTML += trial.prompt;
       }
 
       // if timing_ab is > 0, then we hide the stimuli after timing_ab milliseconds

@@ -239,7 +239,7 @@ jsPsych.plugins.similarity = (function() {
         display_element.append(trial.prompt);
       }
 
-      $("#next").click(function() {
+      display_element.querySelector("#next").attachEventListener('click', function() {
         var endTime = (new Date()).getTime();
         var response_time = endTime - startTime;
 
@@ -252,6 +252,7 @@ jsPsych.plugins.similarity = (function() {
           "rt": response_time,
           "stimulus": JSON.stringify([trial.stimuli[0], trial.stimuli[1]])
         };
+
         // goto next trial in block
         display_element.innerHTML = '';
         jsPsych.finishTrial(trial_data);
