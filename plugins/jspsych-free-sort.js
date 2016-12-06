@@ -105,6 +105,7 @@ jsPsych.plugins['free-sort'] = (function() {
 
       display_element.querySelector("#jspsych-free-sort-arena").innerHTML += '<img '+
         'src="'+trial.stimuli[i]+'" '+
+        'data-src="'+trial.stimuli[i]+'" '+
         'class="jspsych-free-sort-draggable" '+
         'draggable="false" '+
         'style="position: absolute; cursor: move; width:'+trial.stim_width+'px; height:'+trial.stim_height+'px; top:'+coords.y+'px; left:'+coords.x+'px;">'+
@@ -128,27 +129,26 @@ jsPsych.plugins['free-sort'] = (function() {
     for(var i=0;i<draggables.length; i++){
       draggables[i].addEventListener('mousedown', function(event){
         var x = event.pageX - event.currentTarget.offsetLeft;
-        var y = event.pageY - event.currentTarget.offsetTop + window.scrollY;
+        var y = event.pageY - event.currentTarget.offsetTop - window.scrollY;
         var elem = event.currentTarget;
         elem.style.zIndex = ++maxz;
 
         var mousemoveevent = function(e){
-          elem.style.top = (e.clientY - y) + 'px';
-          elem.style.left = (e.clientX - x)+ 'px';
-          console.log(y);
+          elem.style.top =  Math.min(trial.sort_area_height - trial.stim_height, Math.max(0,(e.clientY - y))) + 'px';
+          elem.style.left = Math.min(trial.sort_area_width  - trial.stim_width,  Math.max(0,(e.clientX - x))) + 'px';
         }
-        document.querySelector('#jspsych-free-sort-arena').addEventListener('mousemove', mousemoveevent);
+        document.addEventListener('mousemove', mousemoveevent);
 
         var mouseupevent = function(e){
-          document.querySelector('#jspsych-free-sort-arena').removeEventListener('mousemove', mousemoveevent);
-          console.log({
-            "src": e.currentTarget.src,
-            "x": e.currentTarget.offsetLeft,
-            "y": e.currentTarget.offsetTop
+          document.removeEventListener('mousemove', mousemoveevent);
+          moves.push({
+            "src": elem.dataset.src,
+            "x": elem.offsetLeft,
+            "y": elem.offsetTop
           });
-          elem.removeEventListener('mouseup', mouseupevent);
+          document.removeEventListener('mouseup', mouseupevent);
         }
-        elem.addEventListener('mouseup', mouseupevent);
+        document.addEventListener('mouseup', mouseupevent);
       });
     }
 
@@ -162,7 +162,7 @@ jsPsych.plugins['free-sort'] = (function() {
       var matches = display_element.querySelectorAll('.jspsych-free-sort-draggable');
       for(var i=0; i<matches.length; i++){
         final_locations.push({
-          "src": matches[i].src,
+          "src": matches[i].dataset.src,
           "x": matches[i].style.position.left,
           "y": matches[i].style.position.top
         });
