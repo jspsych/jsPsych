@@ -47,7 +47,6 @@
 
   jsPsych.pluginAPI.preloadAudioFiles(['sound/sound.mp3','sound/hammer.mp3'], function() {
     jsPsych.init({
-      display_element: $('#jspsych-target'),
       timeline: [node],
       on_finish: function() {
         jsPsych.data.displayData();
