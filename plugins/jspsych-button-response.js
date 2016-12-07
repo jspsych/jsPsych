@@ -109,19 +109,17 @@ jsPsych.plugins["button-response"] = (function() {
     display_element.innerHTML += '<div id="jspsych-button-response-btngroup" class="center-content block-center"></div>';
     for (var i = 0; i < trial.choices.length; i++) {
       var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
-      var btnhtml = document.createDocumentFragment();
-      // FIX ME.......
-      display_element.querySelector('#jspsych-button-response-btngroup').innerHTML +=
-        $(str).attr('id', 'jspsych-button-response-button-' + i).data('choice', i).addClass('jspsych-button-response-button').on('click', function(e) {
-          var choice = $('#' + this.id).data('choice');
-          after_response(choice);
-        })
-      );
+      display_element.querySelector('#jspsych-button-response-btngroup').insertAdjacentHTML('beforeend',
+        '<div class="jspsych-button-response-button" id="jspsych-button-response-button-' + i +'" data-choice="'+i+'">'+str+'</div>');
+      display_element.querySelector('#jspsych-button-response-button-' + i).addEventListener('click', function(e){
+        var choice = e.currentTarget.dataset.choice;
+        after_response(choice);
+      });
     }
 
     //show prompt if there is one
     if (trial.prompt !== "") {
-      display_element.innerHTML += trial.prompt;
+      display_element.insertAdjacentHTML('beforeend', trial.prompt);
     }
 
     // store response
@@ -149,7 +147,7 @@ jsPsych.plugins["button-response"] = (function() {
       // disable all the buttons after a response
       var btns = document.querySelector('.jspsych-button-response-button');
       for(var i=0; i<btns.length; i++){
-        btns[i].removeEventListener('click');
+        //btns[i].removeEventListener('click');
         btns[i].setAttribute('disabled', 'disabled');
       }
 
