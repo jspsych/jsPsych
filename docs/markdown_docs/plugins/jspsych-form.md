@@ -442,10 +442,10 @@ item.label|string|Automactically Assigned|The label of the option.
 ```javascript
 
 	var schema = {
-		form: {form_title: 'Test #1'},
+		form: {form_title: 'Test #1', ribbon_bg: "img/ribbon.jpg", layout_color: "grey-300", content_bg_color: "grey-100"},
 		"Question #1": {type: "short answer"},
 		"Question #2": {type: "password"},
-		"Question #3": {type: "checkbox", labels: ["option1", "option2"]},
+		"Question #3": {type: "checkbox", labels: ["option1", "option2"], required: true},
 		"Question #4": {type: "radio", labels: ["option1", "option2"]},
 		"Question #5": {type: "range"},
 		"Question #6": {type: "dropdown"},
