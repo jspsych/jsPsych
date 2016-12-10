@@ -5,7 +5,7 @@
  * documentation: docs.jspsych.org
  *
  **/
-var jsPsych = (function() {
+window.jsPsych = (function() {
 
   var core = {};
 
