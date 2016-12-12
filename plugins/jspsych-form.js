@@ -72,28 +72,51 @@ var schema = {
         var value;
         switch(type) {
           case "select":
-          value = document.getElementById(question.label_id).value;
-          if (question.required != "") {
-            if (!value) {
-              focus(question.label_id);
-              return;
-            }
+          if (question.correct == undefined)
+            value = document.getElementById(question.label_id).value;
+          else {
+            var tempVal = document.getElementById(question.label_id).value;
+            value = {"Result": (question.correct == tempVal) ? "Correct" : "Wrong", 
+            "Expected Answer": question.correct, 
+            "Answer Received": tempVal
+          };
+        }
+        if (question.required != "") {
+          if (!value) {
+            focus(question.label_id);
+            return;
           }
-          break;
-          case "checkbox":
-          case "radio":
-          case "switch":
-          value = [];
-          var flag = false;
-          var checed;
+        }
+        break;
+        case "checkbox":
+        case "radio":
+        case "switch":
+
+        var flag = false;
+        var checed;
+        var asExpected = true;
+        value = {"Result": "Correct", "Expected Answers": [], "Answers Chosen": []};
+
+          // answer check
+          var expectedAnswers = Object.keys(question.correctAnswers);
+          for (var j = 0; j < expectedAnswers.length; j++) {
+            var k = expectedAnswers[j];
+            if (question.correctAnswers[k])
+              value["Expected Answers"].push(k)
+          }
           for (var j = 0; j < question.products.length; j++) {
             product = question.products[j];
             checked = document.getElementById(product.id).checked;
-            if (checked) flag = true;
-            value.push(["item_label: " + product.label, 
-              "item_value: " + product.value, 
-              "is_checked:" + checked]);
+            if (checked) {
+              flag = true;
+              value["Answers Chosen"].push(product.label);
+            }
+            if (product.correct != checked) 
+              asExpected = false;            
           }
+          value["Result"] = (asExpected) ? "Correct" : "Wrong";
+          // answer check
+
           if (question.required != "" && !flag) {
             document.getElementById(question.id).scrollIntoView();
             focus(question.products[0].id);
@@ -101,25 +124,36 @@ var schema = {
           }
           break;
           default:
-          value = document.getElementById(question.id).value;
-          if (question.required != "" && !value) {
-            focus(question.id);
-            return;
-          }
-          break;
-        }
+          if (question.correct == undefined) 
+            value = document.getElementById(question.id).value;
+          else {
+            // standardize
+            var tempVal = "{0}".format(document.getElementById(question.id).value);
+            var correct = "{0}".format(question.correct);
 
-        trial_data[key] = value;
+            value = {"Result": (correct.trim() == tempVal.trim()) ? "Correct" : "Wrong", 
+            "Expected Answer": question.correct, 
+            "Answer Received": document.getElementById(question.id).value
+          };
+        }
+        if (question.required != "" && !value) {
+          focus(question.id);
+          return;
+        }
+        break;
       }
 
-      display_element.html('');
-      jsPsych.finishTrial(trial_data);
+      trial_data[key] = value;
     }
 
-    document.getElementById(button.id).onclick = function () {
-      end_trial();
-    }
-  };
+    display_element.html('');
+    jsPsych.finishTrial(trial_data);
+  }
+
+  document.getElementById(button.id).onclick = function () {
+    end_trial();
+  }
+};
 
      // Help functions
      if (!String.prototype.format) {
@@ -417,6 +451,7 @@ function Tag(parent_id, item) {
   this.type = item.type || "";
   this.id = item.id || "";
   this.name = item.name || this.id;
+  this.correct = item.correct;
   this.question_color = item.question_color || "black-800";
   this.question = "";
 
@@ -728,7 +763,7 @@ function Dropdown(parent_id, item={}) {
     /*$("#"+this.option_ids[i]).click(function() {
      $("#"+label_id).val(option_values[i]);
    })*/
-  } 
+ } 
 }
 Dropdown.prototype = inherit(Tag.prototype);
 Dropdown.prototype._option_factory = function () {
@@ -1138,6 +1173,7 @@ Radio.prototype = inherit(Toggle.prototype);
 # @param item.images --> an array of images
 # @param item.values --> an array of values
 # @param item.labels --> an array of labels
+# @param item.correctAnswers --> an array of correct answers
 ############################################################
 # @return
 #
@@ -1152,6 +1188,7 @@ function ToggleGroup(parent_id, item) {
   item.images = item.images || [];
   item.labels = item.labels || [];
   item.values = item.values || [];
+  item.correctAnswers = item.correctAnswers || [];
   Tag.call(this, parent_id, item);
 
   for (var i in item.labels) {
@@ -1168,6 +1205,9 @@ function ToggleGroup(parent_id, item) {
   }
   this.values = item.values;
   this.labels = item.labels;
+  this.correctAnswers = {};
+  for (var i = 0; i < item.correctAnswers.length; i++) 
+    this.correctAnswers[item.correctAnswers[i]] = true;
 
   this.html = "";
   var factory = this._selector();
@@ -1177,6 +1217,9 @@ function ToggleGroup(parent_id, item) {
     item.label = this.labels[i];
     item.value = this.values[i];
     item.id = ""; // initialize item.id
+    if (this.correctAnswers[item.label] == undefined) 
+      this.correctAnswers[item.label] = false;
+    item.correct = this.correctAnswers[item.label];
     product = factory(this.parent_id, item);
     this.products.push(product);
     this.html += product.html + "\n";

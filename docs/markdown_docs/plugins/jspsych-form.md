@@ -330,6 +330,7 @@ item.needQuestion|boolean|`True`|Whether Displaying Question Title.
 item.labels|array|[]|An array of labels for the options.
 item.images|array|[]|An array of images for the options.
 item.values|array|[]|An array of values for the options. If None, will take values from item.labels first and then item.images, i.e item.values.length = item.labels.length + item.images.length.
+item.correctAnswers|array|[]|An array of expected answers.
 
 ### UploadFile
 *Inheritence:* [Tag](#Tag)<br/>
@@ -352,10 +353,11 @@ Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 *parent_id*|numeric|[Form.id](#FormId)|The id of its parent element
 item|object|{}|An object of values for setting
-item.type|string|**Automactically Assigned**|The type of the tag.
-item.id|string|**Automactically Assigned**|The id of the tag.
+item.type|string|**Automactically Assigned**|The type of the tag
+item.id|string|**Automactically Assigned**|The id of the tag
 item.needQuestion|boolean|`True`|Whether Displaying Question Title
 item.label|string||General Inner Html Content
+item.correct|custom|undefined| The expected Answer
 item.question|string|"Untitled Question"|Question Title.
 item.question_description|string|""|Question Description
 item.question_color|string|`black-800`|Color Of Question
@@ -443,10 +445,10 @@ item.label|string|Automactically Assigned|The label of the option.
 
 	var schema = {
 		form: {form_title: 'Test #1', ribbon_bg: "img/ribbon.jpg", layout_color: "grey-300", content_bg_color: "grey-100"},
-		"Question #1": {type: "short answer"},
+		"Question #1": {type: "short answer", correct: "Answer #1", required: true},
 		"Question #2": {type: "password"},
-		"Question #3": {type: "checkbox", labels: ["option1", "option2"], required: true},
-		"Question #4": {type: "radio", labels: ["option1", "option2"]},
+		"Question #3": {type: "checkbox", labels: ["option1", "option2"], required: true, correctAnswers: ["option1", "option2"]},
+		"Question #4": {type: "radio", labels: ["option1", "option2"], correctAnswers: ["option1"]},
 		"Question #5": {type: "range"},
 		"Question #6": {type: "dropdown"},
 		"Question #7": {type: "long answer", question_description: "Some random contents"},
