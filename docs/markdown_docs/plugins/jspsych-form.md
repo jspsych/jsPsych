@@ -95,7 +95,7 @@ item|object|{}|An object of values for setting.
 item.type|string|**"button"**|The type of the tag.
 item.id|string|**Automactically Assigned**|The id of the tag.
 item.needQuestion|boolean|**False**|Whether Displaying Question Title.
-item.onclick|string/function|**""**|Currently not supported, and will be taken care by the plugin automatically.
+item.onclick|function|undefined|Add customized submit actions. If it has output, the output will occupy the key "\#Customized Output\#" in trial_data. (Pre-defined actions are: 1. check if all required fields are filled 2. Compare inputs with expected answers if provided)
 item.label|string|`"Submit"`|The label for the button.
 item.buttonStyle|string|`"raise"`|[see MDL attribute](https://getmdl.io/components/index.html#buttons-section)
 item.color|boolean|`True`|[see MDL attribute](https://getmdl.io/components/index.html#buttons-section)
@@ -357,8 +357,8 @@ item.type|string|**Automactically Assigned**|The type of the tag
 item.id|string|**Automactically Assigned**|The id of the tag
 item.needQuestion|boolean|`True`|Whether Displaying Question Title
 item.label|string||General Inner Html Content
-item.correct|custom|undefined| The expected Answer
-item.question|string|"Untitled Question"|Question Title.
+item.correct|custom|undefined| The Expected Answer
+item.question|string|"Untitled Question"|Question Title
 item.question_description|string|""|Question Description
 item.question_color|string|`black-800`|Color Of Question
 item.question_description_size|string|`14px`|Font Size Of Question Description
@@ -443,19 +443,24 @@ item.label|string|Automactically Assigned|The label of the option.
 
 ```javascript
 
+	function clickToSubmit() {
+		document.getElementById("custom_id_1").value += "Customize actions when submit buttons is pressed.";
+		alert("This is a test. Check Question #7 to see the effect.");
+		return {"Customized output": "Customize actions when submit buttons is pressed."};
+	}
+	
 	var schema = {
 		form: {form_title: 'Test #1', ribbon_bg: "img/ribbon.jpg", layout_color: "grey-300", content_bg_color: "grey-100"},
 		"Question #1": {type: "short answer", correct: "Answer #1", required: true},
 		"Question #2": {type: "password"},
-		"Question #3": {type: "checkbox", labels: ["option1", "option2"], required: true, correctAnswers: ["option1", "option2"]},
+		"Question #3": {type: "checkbox", labels: ["option1", "option2"], correctAnswers: ["option1", "option2"]},
 		"Question #4": {type: "radio", labels: ["option1", "option2"], correctAnswers: ["option1"]},
 		"Question #5": {type: "range"},
 		"Question #6": {type: "dropdown"},
-		"Question #7": {type: "long answer", question_description: "Some random contents"},
-		"Question #8": {type: "file"},
-		"Question #9<p>Some random contents</p>": {type: "long answer", question_description: ""},
-		"Question #10": {type: "long answer", question_description: "Some random contents"},
-		onSubmit: {label: "Submit"}
+		"Question #7": {type: "long answer", question_description: "Some random contents", id: "custom_id_1"},
+		"Question #8<p>Some random contents</p>": {type: "long answer", question_description: ""},
+		"Question #9": {type: "file"},
+		onSubmit: {label: "Submit", onclick: clickToSubmit}
 	}
 
 	var form_trial = {

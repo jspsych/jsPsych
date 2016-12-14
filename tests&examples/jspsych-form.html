@@ -15,20 +15,25 @@
 
 </body>
 <script type="text/javascript">
+
+	function clickToSubmit() {
+		document.getElementById("custom_id_1").value += "Customize actions when submit buttons is pressed.";
+		alert("This is a test. Check Question #7 to see the effect.");
+		return {"Customized output": "Customize actions when submit buttons is pressed."};
+	}
 	
 	var schema = {
 		form: {form_title: 'Test #1', ribbon_bg: "img/ribbon.jpg", layout_color: "grey-300", content_bg_color: "grey-100"},
 		"Question #1": {type: "short answer", correct: "Answer #1", required: true},
 		"Question #2": {type: "password"},
-		"Question #3": {type: "checkbox", labels: ["option1", "option2"], required: true, correctAnswers: ["option1", "option2"]},
+		"Question #3": {type: "checkbox", labels: ["option1", "option2"], correctAnswers: ["option1", "option2"]},
 		"Question #4": {type: "radio", labels: ["option1", "option2"], correctAnswers: ["option1"]},
 		"Question #5": {type: "range"},
 		"Question #6": {type: "dropdown"},
-		"Question #7": {type: "long answer", question_description: "Some random contents"},
-		"Question #8": {type: "file"},
-		"Question #9<p>Some random contents</p>": {type: "long answer", question_description: ""},
-		"Question #10": {type: "long answer", question_description: "Some random contents"},
-		onSubmit: {label: "Submit"}
+		"Question #7": {type: "long answer", question_description: "Some random contents", id: "custom_id_1"},
+		"Question #8<p>Some random contents</p>": {type: "long answer", question_description: ""},
+		"Question #9": {type: "file"},
+		onSubmit: {label: "Submit", onclick: clickToSubmit}
 	}
 
 	var form_trial = {
