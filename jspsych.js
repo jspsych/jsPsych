@@ -72,7 +72,7 @@ window.jsPsych = (function() {
       'auto_preload': true,
       'max_load_time': 60000,
       'fullscreen': false,
-      'default_iti': 1000
+      'default_iti': 0
     };
 
     // override default options if user specifies an option
@@ -87,9 +87,12 @@ window.jsPsych = (function() {
         document.documentElement.appendChild(document.createElement('body'));
       }
       // using the full page, so we need the HTML element to
-      // have 100% height, and body to have no margin
+      // have 100% height, and body to be full width and height with
+      // no margin
       document.querySelector('html').style.height = '100%';
       document.querySelector('body').style.margin = '0px';
+      document.querySelector('body').style.height = '100%';
+      document.querySelector('body').style.width = '100%';
       opts.display_element = document.querySelector('body');
     } else {
       // make sure that the display element exists on the page
@@ -2031,5 +2034,39 @@ if (typeof Object.assign != 'function') {
       }
     }
     return to;
+  };
+}
+
+// polyfill for Array.includes to support IE
+if (!Array.prototype.includes) {
+  Array.prototype.includes = function(searchElement /*, fromIndex*/) {
+    'use strict';
+    if (this == null) {
+      throw new TypeError('Array.prototype.includes called on null or undefined');
+    }
+
+    var O = Object(this);
+    var len = parseInt(O.length, 10) || 0;
+    if (len === 0) {
+      return false;
+    }
+    var n = parseInt(arguments[1], 10) || 0;
+    var k;
+    if (n >= 0) {
+      k = n;
+    } else {
+      k = len + n;
+      if (k < 0) {k = 0;}
+    }
+    var currentElement;
+    while (k < len) {
+      currentElement = O[k];
+      if (searchElement === currentElement ||
+         (searchElement !== searchElement && currentElement !== currentElement)) { // NaN !== NaN
+        return true;
+      }
+      k++;
+    }
+    return false;
   };
 }
