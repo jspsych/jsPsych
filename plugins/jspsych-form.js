@@ -67,11 +67,10 @@ var schema = {
 
     function end_trial() {
 
-      if (trial.schema.onSubmit.onclick != undefined) {
+      var customized_output = undefined;
+      if (trial.schema.onSubmit.onclick != undefined) 
         var customized_output = docReady(trial.schema.onSubmit.onclick);
-        if (customized_output)
-          trial_data["#Customized Output#"] = customized_output;
-      }
+      
 
       for (var i = 0; i < questions.length; i++) {
         var question = questions[i]
@@ -175,6 +174,9 @@ var schema = {
 
           trial_data[key] = value;
         }
+
+        if (customized_output) 
+          trial_data["#Customized Output#"] = customized_output;
 
         display_element.html('');
         jsPsych.finishTrial(trial_data);
