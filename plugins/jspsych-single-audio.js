@@ -72,18 +72,25 @@ jsPsych.plugins["single-audio"] = (function() {
     // it with the output of the function
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
-    // play stimulus
+    // setup stimulus
     var context = jsPsych.pluginAPI.audioContext();
-    var source = context.createBufferSource();
-    source.buffer = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
-    source.connect(context.destination);
-    startTime = context.currentTime + 0.1;
-    source.start(startTime);
+    if(context !== null){
+      var source = context.createBufferSource();
+      source.buffer = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
+      source.connect(context.destination);
+    } else {
+      var audio = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
+      audio.currentTime = 0;
+    }
 
     // set up end event if trial needs it
     if(trial.trial_ends_after_audio){
-      source.onended = function() {
-        end_trial();
+      if(context !== null){
+        source.onended = function() {
+          end_trial();
+        }
+      } else {
+        audio.addEventListener('end', end_trial);
       }
     }
 
@@ -105,7 +112,11 @@ jsPsych.plugins["single-audio"] = (function() {
       jsPsych.pluginAPI.clearAllTimeouts();
 
       // stop the audio file if it is playing
-      source.stop();
+      if(context !== null){
+        source.stop();
+      } else {
+        audio.stop();
+      }
 
       // kill keyboard listeners
       jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
@@ -137,16 +148,35 @@ jsPsych.plugins["single-audio"] = (function() {
       }
     };
 
+    // start audio
+    if(context !== null){
+      startTime = context.currentTime + 0.1;
+      source.start(startTime);
+    } else {
+      audio.play();
+    }
+
     // start the response listener
-    var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-      callback_function: after_response,
-      valid_responses: trial.choices,
-      rt_method: 'audio',
-      persist: false,
-      allow_held_key: false,
-      audio_context: context,
-      audio_context_start_time: startTime
-    });
+    if(context !== null) {
+      var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: 'audio',
+        persist: false,
+        allow_held_key: false,
+        audio_context: context,
+        audio_context_start_time: startTime
+      });
+    } else {
+      var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: 'date',
+        persist: false,
+        allow_held_key: false
+      });
+    }
+
     // end trial if time limit is set
     if (trial.timing_response > 0) {
       jsPsych.pluginAPI.setTimeout(function() {

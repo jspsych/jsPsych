@@ -1832,7 +1832,7 @@ jsPsych.pluginAPI = (function() {
       return;
     }
 
-    function load_audio_file(source){
+    function load_audio_file_webaudio(source){
       var request = new XMLHttpRequest();
       request.open('GET', source, true);
       request.responseType = 'arraybuffer';
@@ -1851,6 +1851,19 @@ jsPsych.pluginAPI = (function() {
       request.send();
     }
 
+    function load_audio_file_html5audio(source){
+      var audio = new Audio();
+      audio.addEventListener('canplaythrough', function(){
+        audio_buffers[source] = audio;
+        n_loaded++;
+        loadfn(n_loaded);
+        if(n_loaded == files.length){
+          finishfn();
+        }
+      });
+      audio.src = source;
+    }
+
     for (var i = 0; i < files.length; i++) {
       var bufferID = files[i];
       if (typeof audio_buffers[bufferID] !== 'undefined') {
@@ -1861,7 +1874,11 @@ jsPsych.pluginAPI = (function() {
         }
       }
       audio_buffers[bufferID] = 'tmp';
-      load_audio_file(bufferID);
+      if(module.audioContext() !== null){
+        load_audio_file_webaudio(bufferID);
+      } else {
+        load_audio_file_html5audio(bufferID);
+      }
     }
 
   }
@@ -1990,3 +2007,29 @@ function deepExtend(out) {
 
   return out;
 };
+
+// polyfill for Object.assign to support IE
+if (typeof Object.assign != 'function') {
+  Object.assign = function (target, varArgs) { // .length of function is 2
+    'use strict';
+    if (target == null) { // TypeError if undefined or null
+      throw new TypeError('Cannot convert undefined or null to object');
+    }
+
+    var to = Object(target);
+
+    for (var index = 1; index < arguments.length; index++) {
+      var nextSource = arguments[index];
+
+      if (nextSource != null) { // Skip over if undefined or null
+        for (var nextKey in nextSource) {
+          // Avoid bugs when hasOwnProperty is shadowed
+          if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+            to[nextKey] = nextSource[nextKey];
+          }
+        }
+      }
+    }
+    return to;
+  };
+}
