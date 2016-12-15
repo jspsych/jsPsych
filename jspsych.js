@@ -868,7 +868,7 @@ jsPsych.data = (function() {
   var module = {};
 
   // data storage object
-  var allData = [];
+  var allData = DataCollection();
 
   // browser interaction event data
   var interactionData = [];
@@ -882,8 +882,86 @@ jsPsych.data = (function() {
   // cache the query_string
   var query_string;
 
+  // DataCollection
+  function DataCollection(){
+
+    var data_collection = {};
+
+    data_collection.trials = [];
+
+    data_collection.push = function(new_data){
+      data_collection.trials.push(new_data);
+    }
+
+    data_collection.readOnly = function(){
+      return deepExtend([], data_collection.trials);
+    }
+
+    data_collection.addProperties = function(properties){
+
+    }
+
+    data_collection.filter = function(){
+      // filter based on object matches, or property presence
+    }
+
+    data_collection.select = function(){
+      // select only one column of data
+    }
+
+    return data_collection;
+  }
+
+  // DataColumn class
+  function DataColumn(){
+    var data_column = {};
+
+    data_column.values = [];
+
+    data_column.sum = function(){
+      var s = 0;
+      for(var i=0; i<data_column.values; i++){
+        s += data_column.values[i];
+      }
+      return s;
+    }
+
+    data_column.mean = function(){
+      return data_column.sum() / data_column.count();
+    }
+
+    data_column.median = function(){
+      if (data_column.values.length == 0) {return undefined};
+      var numbers = data_column.values.slice(0).sort(function(a,b){ return a - b; });
+      var middle = Math.floor(numbers.length / 2);
+      var isEven = numbers.length % 2 === 0;
+      return isEven ? (numbers[middle] + numbers[middle - 1]) / 2 : numbers[middle];
+    }
+
+    data_column.count = function(){
+      return data_column.values.length;
+    }
+
+    data_column.sd = function(){
+      var mean = data_column.mean();
+      var sum_square_error = 0;
+      for(var i=0; i<data_column.values.length; i++){
+        sum_square_error += (data_column.values[i] - mean)^2;
+      }
+      var mse = sum_square_error / data_column.values.length;
+      var rmse = sqrt(mse);
+      return rmse;
+    }
+
+    data_column.frequencies = function(){
+
+    }
+
+
+  }
+
   module.getData = function(filters) {
-    var data_clone = deepExtend([], allData);
+    var data_clone = allData.readOnly();
 
     if(typeof filters == 'undefined'){
       return data_clone;
