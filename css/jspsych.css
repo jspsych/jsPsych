@@ -12,9 +12,23 @@
    flex-direction: column;
    justify-content: center;
    align-items: center;
-   height: 100%;
-   width: 100%;
+   /*height: 100%;
+   width: 100%;*/
    overflow-y: scroll;
+ }
+
+ .jspsych-content-wrapper {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex: 1 1 100%;
+   width: 100%;
+ }
+
+ .jspsych-content {
+   max-width: 95%; /* this is mainly an IE 10-11 fix */
+   text-align: center;
+   /*margin: auto;*/
  }
 
  .jspsych-top {
@@ -25,19 +39,7 @@
    align-items: center;
  }
 
- .jspsych-content {
-   max-width: 95%; /* this is mainly an IE 10-11 fix */
-   text-align:center;
-   margin: auto;
- }
 
- .jspsych-content-wrapper {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   flex: 1 1 auto;
-   width: 100%;
- }
 
 /* fonts and type */
 
