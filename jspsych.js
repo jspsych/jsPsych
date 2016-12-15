@@ -831,13 +831,12 @@ window.jsPsych = (function() {
   }
 
   function drawProgressBar() {
-    var content = document.querySelector('.jspsych-display-element').innerHTML;
-    document.querySelector('.jspsych-display-element').innerHTML =
+    document.querySelector('.jspsych-display-element').insertAdjacentHTML('afterbegin',
       '<div id="jspsych-progressbar-container">'+
       '<span>Completion Progress</span>'+
       '<div id="jspsych-progressbar-outer">'+
         '<div id="jspsych-progressbar-inner"></div>'+
-      '</div></div>' + content;
+      '</div></div>');
   }
 
   function updateProgressBar() {
