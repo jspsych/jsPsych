@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-single-stim.js"></script>
   <script src="../plugins/jspsych-text.js"></script>
@@ -12,7 +10,7 @@
       width: 300px;
     }
   </style>
-</head>
+
 <script>
   var trial_1 = {
     type: 'single-stim',
@@ -52,12 +50,12 @@
 
 
   jsPsych.init({
-    timeline: [trial_1, trial_2, trial_3, block_set, end_screen],
+    timeline: [trial_1, trial_2, trial_3], //block_set, end_screen],
     show_progress_bar: true,
     on_finish: function() {
       jsPsych.data.displayData();
     }
   });
 </script>
-
+</head>
 </html>
