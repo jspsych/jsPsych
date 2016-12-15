@@ -83,7 +83,7 @@ jsPsych.plugins["single-stim"] = (function() {
 
     // display stimulus
     if (!trial.is_html) {
-      display_element.innerHTML = '<img src="'+trial.stimulus+'"+ id="jspsych-single-stim-stimulus"></img>';
+      display_element.innerHTML = '<img src="'+trial.stimulus+'" id="jspsych-single-stim-stimulus"></img>';
     } else {
       display_element.innerHTML = '<div id="jspsych-single-stim-stimulus">'+trial.stimulus+'</div>';
     }
