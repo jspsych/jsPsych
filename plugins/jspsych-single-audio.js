@@ -115,7 +115,7 @@ jsPsych.plugins["single-audio"] = (function() {
       if(context !== null){
         source.stop();
       } else {
-        audio.stop();
+        audio.pause();
       }
 
       // kill keyboard listeners
@@ -123,7 +123,7 @@ jsPsych.plugins["single-audio"] = (function() {
 
       // gather the data to store for the trial
       var trial_data = {
-        "rt": response.rt * 1000,
+        "rt": context !== null ? response.rt * 1000 : response.rt,
         "stimulus": trial.stimulus,
         "key_press": response.key
       };
