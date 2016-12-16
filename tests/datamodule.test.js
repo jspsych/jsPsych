@@ -12,6 +12,7 @@ describe('#addProperties', function(){
     document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     // check if data contains testprop
+    expect(jsPsych.data.getData().select('rt').count()).toBe(1);
     expect(jsPsych.data.getData().select('testprop').count()).toBe(1);
   });
 })
