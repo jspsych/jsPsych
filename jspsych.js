@@ -1059,7 +1059,7 @@ jsPsych.data = (function() {
       return o;
     }
 
-
+    return data_column;
   }
 
   module.getData = function() {
