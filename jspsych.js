@@ -1228,6 +1228,9 @@ jsPsych.data = (function() {
     document.addEventListener('webkitfullscreenchange', fullscreenchange);
   }
 
+  module._customInsert = function(data){
+    allData = DataCollection(data);
+  }
   // private function to save text file on local drive
 
   function saveTextToFile(textstr, filename) {
