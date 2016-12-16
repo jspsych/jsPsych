@@ -871,42 +871,123 @@ jsPsych.data = (function() {
   var allData = DataCollection();
 
   // browser interaction event data
-  var interactionData = [];
+  var interactionData = DataCollection();
 
   // data properties for all trials
   var dataProperties = {};
-
-  // ignored data fields
-  var ignoredProperties = [];
 
   // cache the query_string
   var query_string;
 
   // DataCollection
-  function DataCollection(){
+  function DataCollection(data){
 
     var data_collection = {};
 
-    data_collection.trials = [];
+    var trials = typeof data === 'undefined' ? [] : data;
 
     data_collection.push = function(new_data){
-      data_collection.trials.push(new_data);
+      trials.push(new_data);
+      return data_collection;
+    }
+
+    data_collection.top = function(){
+      if(trials.length <= 1){
+        return data_collection;
+      } else {
+        return DataCollection(trials[trials.length-1]);
+      }
+    }
+
+    data_collection.data = function(){
+      return trials;
     }
 
     data_collection.readOnly = function(){
-      return deepExtend([], data_collection.trials);
+      return DataCollection(deepExtend([], trials));
     }
 
-    data_collection.addProperties = function(properties){
-
+    data_collection.addToAll = function(properties){
+      for (var i = 0; i < trials.length; i++) {
+        for (var key in properties) {
+          trials[i][key] = properties[key];
+        }
+      }
+      return data_collection;
     }
 
-    data_collection.filter = function(){
-      // filter based on object matches, or property presence
+    data_collection.filter = function(filters){
+      // [{p1: v1, p2:v2}, {p1:v2}]
+      // {p1: v1}
+      if(!Array.isArray(filters)){
+        var f = deepExtend([], [filters]);
+      } else {
+        var f = deepExtend([], filters);
+      }
+
+      var filtered_data = [];
+      for(var x=0; x < trials.length; x++){
+        var keep = false;
+        for(var i=0; i<f.length; i++){
+          var match = true;
+          var keys = Object.keys(f[i]);
+          for(var k=0; k<keys.length; k++){
+            if(typeof trials[x][keys[k]] !== 'undefined' && trials[x][keys[k]] == f[i][keys[k]]){
+              // matches on this key!
+            } else {
+              match = false;
+            }
+          }
+          if(match) { keep = true; break; } // can break because each filter is OR.
+        }
+        if(keep){
+          filtered_data.push(trials[x]);
+        }
+      }
+
+      var out = DataCollection(filtered_data);
+
+      return out;
     }
 
-    data_collection.select = function(){
-      // select only one column of data
+    data_collection.filterCustom = function(fn){
+      var included = [];
+      for(var i=0; i<data_collection.length; i++){
+        if(fn(data_collection[i])){
+          included.push(data_collection[i]);
+        }
+      }
+      return DataCollection(included);
+    }
+
+    data_collection.select = function(column){
+      var values = [];
+      for(var i=0; i<trials.length; i++){
+        if(typeof trials[i][column] !== 'undefined'){
+          values.push(trials[i][column]);
+        }
+      }
+      var out = DataColumn();
+      out.values = values;
+      return out;
+    }
+
+    data_collection.ignore = function(columns){
+      var o = deepExtend([], trials);
+      for (var i = 0; i < o.length; i++) {
+        for (var j in columns) {
+          delete o[i][columns[j]];
+        }
+      }
+      return DataCollection(o);
+    }
+
+    data_collection.csv = function(){
+      return JSON2CSV(trials);
+    }
+
+    data_collection.json = function(){
+      return JSON.stringify(trials);
     }
 
     return data_collection;
@@ -954,53 +1035,39 @@ jsPsych.data = (function() {
     }
 
     data_column.frequencies = function(){
+      var unique = {}
+      for(var i=0; i<data_column.values.length; i++){
+        var v = data_column.values[i];
+        if(typeof unique[v] == 'undefined'){
+          unique[v] = 1;
+        } else {
+          unique[v]++;
+        }
+      }
+      return unique;
+    }
 
+    data_column.subset = function(eval_fn){
+      var out = [];
+      for(var i=0; i<data_column.values.length; i++){
+        if(eval_fn(data_column.values[i])){
+          out.push(data_column.values[i]);
+        }
+      }
+      var o = DataColumn();
+      o.values = out;
+      return o;
     }
 
 
   }
 
-  module.getData = function(filters) {
-    var data_clone = allData.readOnly();
-
-    if(typeof filters == 'undefined'){
-      return data_clone;
-    }
-
-    // [{p1: v1, p2:v2}, {p1:v2}]
-    // {p1: v1}
-    if(!Array.isArray(filters)){
-      var f = deepExtend([], [filters]);
-    } else {
-      var f = deepExtend([], filters);
-    }
-
-    var filtered_data = [];
-    for(var x=0; x < data_clone.length; x++){
-      var keep = false;
-      for(var i=0; i<f.length; i++){
-        var match = true;
-        var keys = Object.keys(f[i]);
-        for(var k=0; k<keys.length; k++){
-          if(typeof data_clone[x][keys[k]] !== 'undefined' && data_clone[x][keys[k]] == f[i][keys[k]]){
-            // matches on this key!
-          } else {
-            match = false;
-          }
-        }
-        if(match) { keep = true; break; } // can break because each filter is OR.
-      }
-      if(keep){
-        filtered_data.push(data_clone[x]);
-      }
-    }
-
-    return filtered_data;
-
+  module.getData = function() {
+    return allData;
   };
 
   module.getInteractionData = function() {
-    return deepExtend([], interactionData);
+    return interactionData;
   }
 
   module.write = function(data_object) {
@@ -1032,27 +1099,11 @@ jsPsych.data = (function() {
   module.addProperties = function(properties) {
 
     // first, add the properties to all data that's already stored
-    for (var i = 0; i < allData.length; i++) {
-      for (var key in properties) {
-        allData[i][key] = properties[key];
-      }
-    }
+    allData.addToAll(properties);
 
     // now add to list so that it gets appended to all future data
     dataProperties = Object.assign({}, dataProperties, properties);
-  };
 
-  module.ignore = function(properties) {
-
-    // first, remove the properties from all data that's already stored
-    for (var i = 0; i < allData.length; i++) {
-      for (var j in properties) {
-        delete allData[i][properties[j]];
-      }
-    }
-
-    // now add to list so that it gets appended to all future data
-    ignoredProperties = ignoredProperties.concat(properties);
   };
 
   module.addDataToLastTrial = function(data) {
@@ -1061,16 +1112,6 @@ jsPsych.data = (function() {
     }
     allData[allData.length - 1] = Object.assign({}, allData[allData.length - 1], data);
   }
-
-  module.getDataAsCSV = function(filters) {
-    var dataObj = module.getData(filters);
-    return JSON2CSV(dataObj);
-  };
-
-  module.getDataAsJSON = function(filters) {
-    var dataObj = module.getData(filters);
-    return JSON.stringify(dataObj);
-  };
 
   module.localSave = function(filename, format, filters) {
 
@@ -1088,32 +1129,22 @@ jsPsych.data = (function() {
   };
 
   module.getDataByTimelineNode = function(node_id) {
-    var data = module.getData();
+    var data = allData.filterCustom(function(x){
+      return x.internal_node_id.slice(0, node_id.length) === node_id;
+    });
 
-    data = flatten(data);
-
-    var trials = [];
-    for (var i = 0; i < data.length; i++) {
-      if (data[i].internal_node_id.slice(0, node_id.length) === node_id) {
-        trials.push(data[i]);
-      }
-    }
-
-    return trials;
+    return data;
   };
 
   module.getLastTrialData = function() {
-    if (allData.length == 0) {
-      return {};
-    }
-    return Object.assign({}, allData[allData.length - 1]);
+    return allData.top();
   };
 
   module.getLastTimelineData = function() {
     var lasttrial = module.getLastTrialData();
-    var node_id = lasttrial.internal_node_id;
+    var node_id = lasttrial.data[0].internal_node_id;
     if (typeof node_id === 'undefined') {
-      return [];
+      return DataCollection();
     } else {
       var parent_node_id = node_id.substr(0,node_id.lastIndexOf('-'));
       var lastnodedata = module.getDataByTimelineNode(parent_node_id);
@@ -1131,9 +1162,9 @@ jsPsych.data = (function() {
     var data_string;
 
     if (format == 'json') {
-      data_string = JSON.stringify(module.getData(), undefined, 1);
+      data_string = module.getData().json();
     } else {
-      data_string = module.getDataAsCSV();
+      data_string = module.getData().csv();
     }
 
     var display_element = jsPsych.getDisplayElement();
