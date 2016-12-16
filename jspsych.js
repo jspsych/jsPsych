@@ -899,7 +899,7 @@ jsPsych.data = (function() {
       }
     }
 
-    data_collection.data = function(){
+    data_collection.values = function(){
       return trials;
     }
 
