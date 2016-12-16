@@ -910,7 +910,7 @@ jsPsych.data = (function() {
 
     data_collection.addToAll = function(properties){
       for (var i = 0; i < trials.length; i++) {
-        for (var key in properties) {
+        for (var key in Object.keys(properties)) {
           trials[i][key] = properties[key];
         }
       }
@@ -1066,7 +1066,6 @@ jsPsych.data = (function() {
   module.reset = function(){
     allData = DataCollection();
     interactionData = DataCollection();
-    dataProperties = {};
   }
 
   module.getData = function() {
