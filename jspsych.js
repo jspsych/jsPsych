@@ -1030,7 +1030,7 @@ jsPsych.data = (function() {
         sum_square_error += (data_column.values[i] - mean)^2;
       }
       var mse = sum_square_error / data_column.values.length;
-      var rmse = sqrt(mse);
+      var rmse = Math.sqrt(mse);
       return rmse;
     }
 
