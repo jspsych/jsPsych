@@ -1001,7 +1001,7 @@ jsPsych.data = (function() {
 
     data_column.sum = function(){
       var s = 0;
-      for(var i=0; i<data_column.values; i++){
+      for(var i=0; i<data_column.values.length; i++){
         s += data_column.values[i];
       }
       return s;
