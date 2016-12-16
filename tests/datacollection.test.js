@@ -18,7 +18,7 @@ describe('DataCollection', function(){
     expect(jsPsych.data.getData().select('rt').count()).toBe(5);
   });
   test('#sd', function(){
-    expect(jsPsych.data.getData().select('rt').sd()).toBe(Math.sqrt((200^2+100^2+100^2+200^2)/5));
+    expect(jsPsych.data.getData().select('rt').sd()).toBe(Math.sqrt((Math.pow(200,2)+Math.pow(100,2)+Math.pow(100,2)+Math.pow(200,2))/5));
   });
   test('#median', function(){
     expect(jsPsych.data.getData().select('rt').median()).toBe(300);
