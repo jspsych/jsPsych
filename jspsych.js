@@ -49,6 +49,7 @@ window.jsPsych = (function() {
     paused = false;
     waiting = false;
     loaded = false;
+    jsPsych.data.reset();
 
     var defaults = {
       'display_element': undefined,
@@ -1060,6 +1061,12 @@ jsPsych.data = (function() {
     }
 
     return data_column;
+  }
+
+  module.reset = function(){
+    allData = DataCollection();
+    interactionData = DataCollection();
+    dataProperties = {};
   }
 
   module.getData = function() {
