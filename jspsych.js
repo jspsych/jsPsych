@@ -1093,10 +1093,6 @@ jsPsych.data = (function() {
 
     var ext_data_object = Object.assign({}, data_object, trial.data, default_data, dataProperties);
 
-    for(var i in ignoredProperties){
-      delete ext_data_object[ignoredProperties[i]];
-    }
-
     allData.push(ext_data_object);
 
     var initSettings = jsPsych.initSettings();
