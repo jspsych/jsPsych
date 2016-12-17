@@ -180,7 +180,7 @@ window.jsPsych = (function() {
     jsPsych.data.write(data);
 
     // get back the data with all of the defaults in
-    var trial_data = jsPsych.data.getData({trial_index: global_trial_index})[0];
+    var trial_data = jsPsych.data.getData().filter({trial_index: global_trial_index});
 
     // handle callback at plugin level
     if (typeof current_trial.on_finish === 'function') {
@@ -896,12 +896,16 @@ jsPsych.data = (function() {
       if(trials.length <= 1){
         return data_collection;
       } else {
-        return DataCollection(trials[trials.length-1]);
+        return DataCollection([trials[trials.length-1]]);
       }
     }
 
     data_collection.values = function(){
       return trials;
+    }
+
+    data_collection.count = function(){
+      return trials.length;
     }
 
     data_collection.readOnly = function(){
@@ -953,9 +957,9 @@ jsPsych.data = (function() {
 
     data_collection.filterCustom = function(fn){
       var included = [];
-      for(var i=0; i<data_collection.length; i++){
-        if(fn(data_collection[i])){
-          included.push(data_collection[i]);
+      for(var i=0; i<trials.length; i++){
+        if(fn(trials[i])){
+          included.push(trials[i]);
         }
       }
       return DataCollection(included);
