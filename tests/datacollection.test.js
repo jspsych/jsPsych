@@ -1,11 +1,11 @@
 require('../jspsych.js');
 
 var data = [
-  {rt: 100},
-  {rt: 200},
-  {rt: 300},
-  {rt: 400},
-  {rt: 500}
+  {rt: 100, filter: true},
+  {rt: 200, filter: false},
+  {rt: 300, filter: true},
+  {rt: 400, filter: false},
+  {rt: 500, filter: false}
 ];
 
 jsPsych.data._customInsert(data);
@@ -25,5 +25,11 @@ describe('DataCollection', function(){
   });
   test('#subset', function(){
     expect(jsPsych.data.getData().select('rt').subset(function(x){ return x > 300; }).count()).toBe(2);
+  });
+  test('#filter', function(){
+    expect(jsPsych.data.getData().filter({filter: true}).count()).toBe(2);
+  });
+  test('#filterCustom', function(){
+    expect(jsPsych.data.getData().filterCustom(function(x){ return x.rt > 200 && x.filter == false}).count()).toBe(2);
   })
 });
