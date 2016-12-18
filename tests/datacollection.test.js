@@ -22,12 +22,32 @@ describe('DataCollection', function(){
   });
   test('#select', function(){
     expect(JSON.stringify(jsPsych.data.getData().select('rt').values)).toBe(JSON.stringify([100,200,300,400,500]));
-  })
-
-  // addToAll
-  // addToLast
-  // readOnly
-  // push
-  // count
-  // values
+  });
+  test('#addToAll', function(){
+    expect(jsPsych.data.getData().readOnly().addToAll({added: 5}).select('added').count()).toBe(5);
+  });
+  test('#addToLast', function(){
+    jsPsych.data.getData().addToLast({lastonly: true});
+    expect(jsPsych.data.getData().values()[4].lastonly).toBe(true);
+  });
+  test('#readOnly', function(){
+    var d = jsPsych.data.getData().readOnly().values();
+    d[0].rt = 0;
+    expect(jsPsych.data.getData().values()[0].rt).toBe(100);
+  });
+  test('not #readOnly', function(){
+    var d = jsPsych.data.getData().values();
+    d[0].rt = 0;
+    expect(jsPsych.data.getData().values()[0].rt).toBe(0);
+  });
+  test('#count', function(){
+    expect(jsPsych.data.getData().count()).toBe(5);
+  });
+  test('#push', function(){
+    jsPsych.data.getData().push({rt: 600, filter: true});
+    expect(jsPsych.data.getData().count()).toBe(6);
+  });
+  test('#values', function(){
+    expect(JSON.stringify(jsPsych.data.getData().values())).toBe(JSON.stringify(data));
+  });
 });

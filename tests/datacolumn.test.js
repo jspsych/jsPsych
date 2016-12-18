@@ -26,4 +26,7 @@ describe('DataCollection', function(){
   test('#subset', function(){
     expect(jsPsych.data.getData().select('rt').subset(function(x){ return x > 300; }).count()).toBe(2);
   });
+  test('#frequencies', function(){
+    expect(jsPsych.data.getData().select('filter').frequencies()).toEqual({true:2, false: 3})
+  });
 });
