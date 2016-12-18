@@ -921,6 +921,15 @@ jsPsych.data = (function() {
       return data_collection;
     }
 
+    data_collection.addToLast = function(properties){
+      if(trials.length != 0){
+        for (var key in properties) {
+          trials[trials.length-1][key] = properties[key];
+        }
+      }
+      return data_collection;
+    }
+
     data_collection.filter = function(filters){
       // [{p1: v1, p2:v2}, {p1:v2}]
       // {p1: v1}
@@ -978,6 +987,9 @@ jsPsych.data = (function() {
     }
 
     data_collection.ignore = function(columns){
+      if(!Array.isArray(columns)){
+        columns = [columns];
+      }
       var o = deepExtend([], trials);
       for (var i = 0; i < o.length; i++) {
         for (var j in columns) {
@@ -993,6 +1005,20 @@ jsPsych.data = (function() {
 
     data_collection.json = function(){
       return JSON.stringify(trials);
+    }
+
+    data_collection.localSave = function(format, filename){
+      var data_string;
+
+      if (format == 'JSON' || format == 'json') {
+        data_string = data_collection.json();
+      } else if (format == 'CSV' || format == 'csv') {
+        data_string = data_collection.csv();
+      } else {
+        throw new Error('Invalid format specified for localSave. Must be "JSON" or "CSV".');
+      }
+
+      saveTextToFile(data_string, filename);
     }
 
     return data_collection;
@@ -1072,11 +1098,6 @@ jsPsych.data = (function() {
     interactionData = DataCollection();
   }
 
-  module._fullreset = function(){
-    module.reset();
-    dataProperties = {};
-  }
-
   module.getData = function() {
     return allData;
   };
@@ -1118,26 +1139,8 @@ jsPsych.data = (function() {
   };
 
   module.addDataToLastTrial = function(data) {
-    if (allData.length == 0) {
-      throw new Error("Cannot add data to last trial - no data recorded so far");
-    }
-    allData[allData.length - 1] = Object.assign({}, allData[allData.length - 1], data);
+    allData.addToLast(data);
   }
-
-  module.localSave = function(filename, format, filters) {
-
-    var data_string;
-
-    if (format == 'JSON' || format == 'json') {
-      data_string = module.getDataAsJSON(filters)
-    } else if (format == 'CSV' || format == 'csv') {
-      data_string = module.getDataAsCSV(filters);
-    } else {
-      throw new Error('invalid format specified for jsPsych.data.localSave');
-    }
-
-    saveTextToFile(data_string, filename);
-  };
 
   module.getDataByTimelineNode = function(node_id) {
     var data = allData.filterCustom(function(x){
@@ -1153,7 +1156,7 @@ jsPsych.data = (function() {
 
   module.getLastTimelineData = function() {
     var lasttrial = module.getLastTrialData();
-    var node_id = lasttrial.data[0].internal_node_id;
+    var node_id = lasttrial.select('internal_node_id').values[0];
     if (typeof node_id === 'undefined') {
       return DataCollection();
     } else {
@@ -1173,9 +1176,9 @@ jsPsych.data = (function() {
     var data_string;
 
     if (format == 'json') {
-      data_string = module.getData().json();
+      data_string = allData.json();
     } else {
-      data_string = module.getData().csv();
+      data_string = allData.csv();
     }
 
     var display_element = jsPsych.getDisplayElement();
@@ -1239,11 +1242,17 @@ jsPsych.data = (function() {
     document.addEventListener('webkitfullscreenchange', fullscreenchange);
   }
 
+  // public methods for testing purposes. not recommended for use.
   module._customInsert = function(data){
     allData = DataCollection(data);
   }
-  // private function to save text file on local drive
 
+  module._fullreset = function(){
+    module.reset();
+    dataProperties = {};
+  }
+
+  // private function to save text file on local drive
   function saveTextToFile(textstr, filename) {
     var blobToSave = new Blob([textstr], {
       type: 'text/plain'
@@ -1257,7 +1266,7 @@ jsPsych.data = (function() {
 
     var display_element = jsPsych.getDisplayElement();
 
-    display_element.innerHTML += '<a id="jspsych-download-as-text-link" style="display:none;" download="'+filename+'" href="'+blobURL+'">click to download</a>';
+    display_element.insertAdjacentHTML('beforeend','<a id="jspsych-download-as-text-link" style="display:none;" download="'+filename+'" href="'+blobURL+'">click to download</a>');
     document.getElementById('jspsych-download-as-text-link').click();
   }
 
