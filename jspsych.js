@@ -1616,7 +1616,18 @@ jsPsych.pluginAPI = (function() {
 
   var keyboard_listeners = [];
 
-  var held_keys = [];
+  var held_keys = {};
+
+  // keyboard events
+  document.addEventListener('keydown', function(e){
+    for(var i=0; i<keyboard_listeners.length; i++){
+      keyboard_listeners[i].fn(e);
+    }
+    held_keys[e.keyCode] = true;
+  });
+  document.addEventListener('keyup', function(e){
+    held_keys[e.keyCode] = false;
+  });
 
   module.getKeyboardResponse = function(parameters) {
     //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key?
@@ -1672,17 +1683,12 @@ jsPsych.pluginAPI = (function() {
       // check if key was already held down
 
       if (((typeof parameters.allow_held_key == 'undefined') || !parameters.allow_held_key) && valid_response) {
-        for (i in held_keys) {
-          if (held_keys[i] == e.keyCode) {
-            valid_response = false;
-            break;
-          }
+        if (typeof held_keys[e.keyCode] !== 'undefined' && held_keys[e.keyCode] == true) {
+          valid_response = false;
         }
       }
 
       if (valid_response) {
-
-        held_keys.push(e.keyCode);
 
         parameters.callback_function({
           key: e.keyCode,
@@ -1696,22 +1702,8 @@ jsPsych.pluginAPI = (function() {
             module.cancelKeyboardResponse(listener_id);
           }
         }
-
-        var after_up = function(up) {
-
-          if (up.keyCode == e.keyCode) {
-            document.removeEventListener('keyup', after_up);
-
-            // mark key as released
-            held_keys.splice(held_keys.indexOf(e.keyCode), 1);
-          }
-        };
-
-        document.addEventListener('keyup', after_up);
       }
     };
-
-    document.addEventListener('keydown', listener_function);
 
     // create listener id object
     listener_id = {
@@ -1727,9 +1719,6 @@ jsPsych.pluginAPI = (function() {
   };
 
   module.cancelKeyboardResponse = function(listener) {
-    // remove the listener from the doc
-    document.removeEventListener(listener.type, listener.fn);
-
     // remove the listener from the list of listeners
     if (keyboard_listeners.includes(listener)) {
       keyboard_listeners.splice(keyboard_listeners.indexOf(listener), 1);
@@ -1737,9 +1726,6 @@ jsPsych.pluginAPI = (function() {
   };
 
   module.cancelAllKeyboardResponses = function() {
-    for (var i = 0; i < keyboard_listeners.length; i++) {
-      document.removeEventListener(keyboard_listeners[i].type, keyboard_listeners[i].fn);
-    }
     keyboard_listeners = [];
   };
 

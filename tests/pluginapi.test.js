@@ -32,4 +32,23 @@ describe('#getKeyboardResponse', function(){
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     expect(callback.mock.calls.length).toBe(0);
   });
+  test('should not respond to held keys when allow_held_key is false', function(){
+    var callback = jest.fn();
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    jsPsych.pluginAPI.getKeyboardResponse({callback_function: callback, valid_responses: jsPsych.ALL_KEYS, allow_held_key: false});
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    expect(callback.mock.calls.length).toBe(0);
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    expect(callback.mock.calls.length).toBe(1);
+  });
+  test('should respond to held keys when allow_held_key is true', function(){
+    var callback = jest.fn();
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    jsPsych.pluginAPI.getKeyboardResponse({callback_function: callback, valid_responses: jsPsych.ALL_KEYS, allow_held_key: true});
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    expect(callback.mock.calls.length).toBe(1);
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+  });
 })
