@@ -2094,7 +2094,8 @@ jsPsych.pluginAPI = (function() {
   return module;
 })();
 
-// methods used in multiple modules
+// methods used in multiple modules //
+
 function flatten(arr, out) {
   out = (typeof out === 'undefined') ? [] : out;
   for (var i = 0; i < arr.length; i++) {

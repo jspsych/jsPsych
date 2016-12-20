@@ -52,3 +52,83 @@ describe('#getKeyboardResponse', function(){
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
   });
 })
+
+describe('#cancelKeyboardResponse', function(){
+  test('should cancel a keyboard response listener', function(){
+    var callback = jest.fn();
+    var listener = jsPsych.pluginAPI.getKeyboardResponse({callback_function: callback});
+    expect(callback.mock.calls.length).toBe(0);
+    jsPsych.pluginAPI.cancelKeyboardResponse(listener);
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    expect(callback.mock.calls.length).toBe(0);
+  });
+});
+
+describe('#cancelAllKeyboardResponses', function(){
+  test('should cancel all keyboard response listeners', function(){
+    var callback = jest.fn();
+    jsPsych.pluginAPI.getKeyboardResponse({callback_function: callback});
+    expect(callback.mock.calls.length).toBe(0);
+    jsPsych.pluginAPI.cancelAllKeyboardResponses();
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    expect(callback.mock.calls.length).toBe(0);
+  });
+});
+
+describe('#convertKeyCharacterToKeyCode', function(){
+  test('should return the keyCode for a particular character', function(){
+    expect(jsPsych.pluginAPI.convertKeyCharacterToKeyCode('q')).toBe(81);
+    expect(jsPsych.pluginAPI.convertKeyCharacterToKeyCode('1')).toBe(49);
+    expect(jsPsych.pluginAPI.convertKeyCharacterToKeyCode('space')).toBe(32);
+    expect(jsPsych.pluginAPI.convertKeyCharacterToKeyCode('enter')).toBe(13);
+  });
+})
+
+describe('#evaluateFunctionParameters', function(){
+  test('should convert functions to their return value', function(){
+    var trial = {
+      p: function() { return 1; }
+    }
+    jsPsych.pluginAPI.evaluateFunctionParameters(trial);
+    expect(trial.p).toBe(1);
+  });
+  test('should allow protecting functions', function(){
+    var trial = {
+      p: function() { return 1; }
+    }
+    jsPsych.pluginAPI.evaluateFunctionParameters(trial, ['p']);
+    expect(typeof trial.p).toBe('function');
+  });
+  test('should always protect on_finish', function(){
+    var trial = {
+      on_finish: function() { return 1; }
+    }
+    jsPsych.pluginAPI.evaluateFunctionParameters(trial);
+    expect(typeof trial.on_finish).toBe('function');
+  });
+})
+
+describe('#setTimeout', function(){
+  test('basic setTimeout control with centralized storage', function(){
+    jest.useFakeTimers();
+    var callback = jest.fn();
+    jsPsych.pluginAPI.setTimeout(callback, 1000);
+    expect(callback).not.toBeCalled();
+    jest.runAllTimers();
+    expect(callback).toBeCalled();
+  })
+})
+
+describe('#clearAllTimeouts', function(){
+  test('clear timeouts before they execute', function(){
+    jest.useFakeTimers();
+    var callback = jest.fn();
+    jsPsych.pluginAPI.setTimeout(callback, 5000);
+    expect(callback).not.toBeCalled();
+    jsPsych.pluginAPI.clearAllTimeouts();
+    jest.runAllTimers();
+    expect(callback).not.toBeCalled();
+  })
+})
