@@ -1657,13 +1657,13 @@ jsPsych.pluginAPI = (function() {
           for (var i = 0; i < parameters.valid_responses.length; i++) {
             if (typeof parameters.valid_responses[i] == 'string') {
               if (typeof keylookup[parameters.valid_responses[i]] !== 'undefined') {
-                if (e.which == keylookup[parameters.valid_responses[i]]) {
+                if (e.keyCode == keylookup[parameters.valid_responses[i]]) {
                   valid_response = true;
                 }
               } else {
                 throw new Error('Invalid key string specified for getKeyboardResponse');
               }
-            } else if (e.which == parameters.valid_responses[i]) {
+            } else if (e.keyCode == parameters.valid_responses[i]) {
               valid_response = true;
             }
           }
@@ -1673,7 +1673,7 @@ jsPsych.pluginAPI = (function() {
 
       if (((typeof parameters.allow_held_key == 'undefined') || !parameters.allow_held_key) && valid_response) {
         for (i in held_keys) {
-          if (held_keys[i] == e.which) {
+          if (held_keys[i] == e.keyCode) {
             valid_response = false;
             break;
           }
@@ -1682,10 +1682,10 @@ jsPsych.pluginAPI = (function() {
 
       if (valid_response) {
 
-        held_keys.push(e.which);
+        held_keys.push(e.keyCode);
 
         parameters.callback_function({
-          key: e.which,
+          key: e.keyCode,
           rt: key_time - start_time
         });
 
@@ -1699,11 +1699,11 @@ jsPsych.pluginAPI = (function() {
 
         var after_up = function(up) {
 
-          if (up.which == e.which) {
+          if (up.keyCode == e.keyCode) {
             document.removeEventListener('keyup', after_up);
 
             // mark key as released
-            held_keys.splice(held_keys.indexOf(e.which), 1);
+            held_keys.splice(held_keys.indexOf(e.keyCode), 1);
           }
         };
 
