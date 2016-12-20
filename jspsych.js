@@ -2006,12 +2006,13 @@ jsPsych.pluginAPI = (function() {
         if(n_loaded == files.length) {
           finishfn();
         }
-      }
-      audio_buffers[bufferID] = 'tmp';
-      if(module.audioContext() !== null){
-        load_audio_file_webaudio(bufferID);
       } else {
-        load_audio_file_html5audio(bufferID);
+        audio_buffers[bufferID] = 'tmp';
+        if(module.audioContext() !== null){
+          load_audio_file_webaudio(bufferID);
+        } else {
+          load_audio_file_html5audio(bufferID);
+        }
       }
     }
 
