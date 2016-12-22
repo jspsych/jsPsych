@@ -84,7 +84,16 @@ describe('#convertKeyCharacterToKeyCode', function(){
     expect(jsPsych.pluginAPI.convertKeyCharacterToKeyCode('space')).toBe(32);
     expect(jsPsych.pluginAPI.convertKeyCharacterToKeyCode('enter')).toBe(13);
   });
-})
+});
+
+describe('#convertKeyCodeToKeyCharacter', function(){
+  test('should return the keyCode for a particular character', function(){
+    expect(jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(81)).toBe('q');
+    expect(jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(49)).toBe('1');
+    expect(jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(32)).toBe('space');
+    expect(jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(13)).toBe('enter');
+  });
+});
 
 describe('#evaluateFunctionParameters', function(){
   test('should convert functions to their return value', function(){

@@ -1050,17 +1050,30 @@ jsPsych.data = (function() {
       return isEven ? (numbers[middle] + numbers[middle - 1]) / 2 : numbers[middle];
     }
 
+    data_column.min = function(){
+      return Math.min.apply(null, data_column.values);
+    }
+
+    data_column.max = function(){
+      return Math.max.apply(null, data_column.values);
+    }
+
     data_column.count = function(){
       return data_column.values.length;
     }
 
-    data_column.sd = function(){
+    data_column.variance = function(){
       var mean = data_column.mean();
       var sum_square_error = 0;
       for(var i=0; i<data_column.values.length; i++){
         sum_square_error += Math.pow(data_column.values[i] - mean,2);
       }
       var mse = sum_square_error / data_column.values.length;
+      return mse;
+    }
+
+    data_column.sd = function(){
+      var mse = data_column.variance();
       var rmse = Math.sqrt(mse);
       return rmse;
     }
@@ -1735,6 +1748,15 @@ jsPsych.pluginAPI = (function() {
       code = keylookup[character];
     }
     return code;
+  }
+
+  module.convertKeyCodeToKeyCharacter = function(code){
+    for(var i in Object.keys(keylookup)){
+      if(keylookup[Object.keys(keylookup)[i]] == code){
+        return Object.keys(keylookup)[i];
+      }
+    }
+    return undefined;
   }
 
   var keylookup = {

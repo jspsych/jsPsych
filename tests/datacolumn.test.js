@@ -17,6 +17,15 @@ describe('DataCollection', function(){
   test('#count', function(){
     expect(jsPsych.data.getData().select('rt').count()).toBe(5);
   });
+  test('#min', function(){
+    expect(jsPsych.data.getData().select('rt').min()).toBe(100);
+  });
+  test('#max', function(){
+    expect(jsPsych.data.getData().select('rt').max()).toBe(500);
+  });
+  test('#variance', function(){
+    expect(jsPsych.data.getData().select('rt').variance()).toBe((Math.pow(200,2)+Math.pow(100,2)+Math.pow(100,2)+Math.pow(200,2))/5);
+  });
   test('#sd', function(){
     expect(jsPsych.data.getData().select('rt').sd()).toBe(Math.sqrt((Math.pow(200,2)+Math.pow(100,2)+Math.pow(100,2)+Math.pow(200,2))/5));
   });
