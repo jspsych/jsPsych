@@ -79,6 +79,7 @@ var schema = {
         var type = question.type;
         var value;
         switch (type) {
+          // codes for select component
           case "select":
 
           // check answer
@@ -103,6 +104,8 @@ var schema = {
           }
           // check required field
           break;
+
+          // codes for toggle type component
           case "checkbox":
           case "radio":
           case "switch":
@@ -145,13 +148,15 @@ var schema = {
             // check required field
 
             break;
+
+            // codes for other type questions
             default:
 
             // check answer
             if (question.correct == undefined)
               value = document.getElementById(question.id).value;
             else {
-              // standardize
+              // standardize the inputs to string
               var tempVal = "{0}".format(document.getElementById(question.id).value);
               var correct = "{0}".format(question.correct);
 
@@ -511,6 +516,7 @@ var schema = {
     } else
     this.star = "";
 
+    // processing question_description
     this.question_description = item.question_description || "";
     this.question_description_size = item.question_description_size || "14px";
     this.question_description_color = item.question_description_color || "grey-600";
@@ -1232,6 +1238,7 @@ Dropdown.prototype._option_factory = function() {
     item.correctAnswers = item.correctAnswers || [];
     Tag.call(this, parent_id, item);
 
+    // Process for standardizing item.values. Details are in the above comment
     for (var i in item.labels) {
       if (item.values.length < item.labels.length)
         item.values.push(item.labels[i]);
@@ -1246,8 +1253,13 @@ Dropdown.prototype._option_factory = function() {
           item.values.push(item.images[i]);
       }
     }
+    // end of process for standardizing item.values
+
     this.values = item.values;
     this.labels = item.labels;
+
+    // check if user chooses the correct answer
+    // Here is the initializtion
     this.correctAnswers = {};
     for (var i = 0; i < item.correctAnswers.length; i++)
       this.correctAnswers[item.correctAnswers[i]] = true;
@@ -1260,9 +1272,13 @@ Dropdown.prototype._option_factory = function() {
       item.label = this.labels[i];
       item.value = this.values[i];
       item.id = ""; // initialize item.id
+
+      // check if user chooses the correct answer
+      // Here does the check by if object this.correctAnswers has the key whose name == item.value
       if (this.correctAnswers[item.value] == undefined)
         this.correctAnswers[item.value] = false;
       item.correct = this.correctAnswers[item.value];
+
       product = factory(this.parent_id, item);
       this.products.push(product);
       this.html += product.html + "\n";
