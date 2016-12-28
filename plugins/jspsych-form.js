@@ -128,7 +128,7 @@ var schema = {
               checked = document.getElementById(product.id).checked;
               if (checked) {
                 flag = true;
-                value["Answers Chosen"].push(product.label);
+                value["Answers Chosen"].push(product.value);
               }
               if (product.correct != checked)
                 asExpected = false;
@@ -1234,7 +1234,9 @@ Dropdown.prototype._option_factory = function() {
 
     for (var i in item.labels) {
       if (item.values.length < item.labels.length)
-        item.values = [item.labels[i]] + item.values;
+        item.values.push(item.labels[i]);
+      else
+        break;
     }
     if (item.images.length > 0) {
       for (var i in item.images) {
@@ -1258,9 +1260,9 @@ Dropdown.prototype._option_factory = function() {
       item.label = this.labels[i];
       item.value = this.values[i];
       item.id = ""; // initialize item.id
-      if (this.correctAnswers[item.label] == undefined)
-        this.correctAnswers[item.label] = false;
-      item.correct = this.correctAnswers[item.label];
+      if (this.correctAnswers[item.value] == undefined)
+        this.correctAnswers[item.value] = false;
+      item.correct = this.correctAnswers[item.value];
       product = factory(this.parent_id, item);
       this.products.push(product);
       this.html += product.html + "\n";
