@@ -14,6 +14,10 @@ describe('DataCollection', function(){
   test('#filter', function(){
     expect(jsPsych.data.getData().filter({filter: true}).count()).toBe(2);
   });
+  test('#filter OR', function(){
+    expect(jsPsych.data.getData().filter([{filter: true}, {rt: 300}]).count()).toBe(2);
+    expect(jsPsych.data.getData().filter([{filter: true}, {rt: 200}]).count()).toBe(3);
+  })
   test('#filterCustom', function(){
     expect(jsPsych.data.getData().filterCustom(function(x){ return x.rt > 200 && x.filter == false}).count()).toBe(2);
   });
