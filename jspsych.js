@@ -900,6 +900,24 @@ jsPsych.data = (function() {
       }
     }
 
+    data_collection.first = function(n){
+      if(typeof n=='undefined'){ n = 1 }
+      var out = [];
+      for(var i=0; i<n; i++){
+        out.push(trials[i]);
+      }
+      return DataCollection(out);
+    }
+
+    data_collection.last = function(n){
+      if(typeof n=='undefined'){ n = 1 }
+      var out = [];
+      for(var i=trials.length-n; i<trials.length; i++){
+        out.push(trials[i]);
+      }
+      return DataCollection(out);
+    }
+
     data_collection.values = function(){
       return trials;
     }

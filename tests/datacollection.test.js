@@ -50,8 +50,24 @@ describe('DataCollection', function(){
   test('#push', function(){
     jsPsych.data.getData().push({rt: 600, filter: true});
     expect(jsPsych.data.getData().count()).toBe(6);
+    data = [
+      {rt: 100, filter: true},
+      {rt: 200, filter: false},
+      {rt: 300, filter: true},
+      {rt: 400, filter: false},
+      {rt: 500, filter: false}
+    ];
+    jsPsych.data._customInsert(data);
   });
   test('#values', function(){
     expect(JSON.stringify(jsPsych.data.getData().values())).toBe(JSON.stringify(data));
+  });
+  test('#first', function(){
+    expect(jsPsych.data.getData().first(3).count()).toBe(3);
+    expect(jsPsych.data.getData().first(2).values()[1].rt).toBe(200);
+  });
+  test('#last', function(){
+    expect(jsPsych.data.getData().last(2).count(2)).toBe(2);
+    expect(jsPsych.data.getData().last(2).values()[0].rt).toBe(400);
   });
 });
