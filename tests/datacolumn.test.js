@@ -38,4 +38,8 @@ describe('DataCollection', function(){
   test('#frequencies', function(){
     expect(jsPsych.data.getData().select('filter').frequencies()).toEqual({true:2, false: 3})
   });
+  test('#all', function(){
+    expect(jsPsych.data.getData().select('rt').all(function(x){ return x < 600})).toBe(true);
+    expect(jsPsych.data.getData().select('filter').all(function(x){ return x; })).toBe(false);
+  });
 });

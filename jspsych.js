@@ -1091,6 +1091,15 @@ jsPsych.data = (function() {
       return unique;
     }
 
+    data_column.all = function(eval_fn){
+      for(var i=0; i<data_column.values.length; i++){
+        if(!eval_fn(data_column.values[i])){
+          return false;
+        }
+      }
+      return true;
+    }
+
     data_column.subset = function(eval_fn){
       var out = [];
       for(var i=0; i<data_column.values.length; i++){
