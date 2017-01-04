@@ -81,17 +81,19 @@ jsPsych.plugins["single-stim"] = (function() {
     trial.is_html = (typeof trial.is_html == 'undefined') ? false : trial.is_html;
     trial.prompt = trial.prompt || "";
 
+    var new_html = '';
     // display stimulus
     if (!trial.is_html) {
-      display_element.innerHTML = '<img src="'+trial.stimulus+'" id="jspsych-single-stim-stimulus"></img>';
+      new_html = '<img src="'+trial.stimulus+'" id="jspsych-single-stim-stimulus"></img>';
     } else {
-      display_element.innerHTML = '<div id="jspsych-single-stim-stimulus">'+trial.stimulus+'</div>';
+      new_html = '<div id="jspsych-single-stim-stimulus">'+trial.stimulus+'</div>';
     }
 
-    //show prompt if there is one
-    if (trial.prompt !== "") {
-      display_element.innerHTML += trial.prompt;
-    }
+    // add prompt
+    new_html += trial.prompt;
+
+    // draw
+    display_element.innerHTML = new_html;
 
     // store response
     var response = {

@@ -96,7 +96,7 @@ jsPsych.plugins["single-audio"] = (function() {
 
     // show prompt if there is one
     if (trial.prompt !== "") {
-      display_element.innerHTML += trial.prompt;
+      display_element.innerHTML = trial.prompt;
     }
 
     // store response
