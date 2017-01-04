@@ -63,8 +63,7 @@ jsPsych.plugins.html = (function() {
       url = trial.url + "?time=" + (new Date().getTime());
     }
 
-    // TODO: REMOVE .load() call
-    display_element.load(trial.url, function() {
+    load(display_element, url, function() {
       var t0 = (new Date()).getTime();
       var finish = function() {
         if (trial.check_fn && !trial.check_fn(display_element)) { return };
@@ -85,6 +84,19 @@ jsPsych.plugins.html = (function() {
       }
     });
   };
+
+  // helper to load via XMLHttpRequest
+  function load(element, file, callback){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", file, true);
+    xmlhttp.onreadystatechange = function(){
+        if(xmlhttp.status == 200 && xmlhttp.readyState == 4){ //Check if loaded
+            element.innerHTML = xmlHttp.responseText;
+            callback();
+        }
+    }
+    xmlhttp.send();
+  }
 
   return plugin;
 })();

@@ -42,3 +42,20 @@ sim_score | numeric | The position of the slider when the subject submitted thei
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the response slider first appears on the screen until the subject's response.
 
 ## Example
+
+#### Comparing emotional expressions
+
+```javascript
+    var block_1 = {
+      type: 'similarity',
+      stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
+      prompt: '<p class="center-content">How similar are these pictures?</p>'
+    }
+
+    jsPsych.init({
+      timeline: [block_1],
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
+```

@@ -39,3 +39,43 @@ rt_stim1 | numeric | The response time in milliseconds for the subject to contin
 key_press_stim1 | numeric | Indicates which key the subject pressed to continue. The value is the [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) corresponding to the subject's response.
 
 ## Examples
+
+#### Presenting two different emotional expressions
+
+```javascript
+    var block = {
+      type: 'same-different',
+      stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
+      prompt: "<p class='center-content'>Press S if the faces had the same emotional expression. Press D if the faces had different emotional expressions.</p>",
+      same_key: 'S',
+      different_key: 'D',
+      answer: 'different'
+    }
+
+    jsPsych.init({
+      timeline: [block],
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
+```
+
+#### Presenting the same emotional expression
+
+```javascript
+    var block = {
+      type: 'same-different',
+      stimuli: ['img/happy_face_1.jpg', 'img/happy_face_3.jpg'],
+      prompt: "<p class='center-content'>Press S if the faces had the same emotional expression. Press D if the faces had different emotional expressions.</p>",
+      same_key: 'S',
+      different_key: 'D',
+      answer: 'same'
+    }
+
+    jsPsych.init({
+      timeline: [block],
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
+```
