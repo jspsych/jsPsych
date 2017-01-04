@@ -68,6 +68,8 @@ window.jsPsych = (function() {
       'on_interaction_data_update': function(data){
         return undefined;
       },
+      'preload_images': [],
+      'preload_audio': [],
       'exclusions': {},
       'show_progress_bar': false,
       'auto_preload': true,
@@ -124,18 +126,35 @@ window.jsPsych = (function() {
       function(){
         // success! user can continue...
         // start experiment, with or without preloading
-        if(opts.auto_preload){
-          jsPsych.pluginAPI.autoPreload(timeline, startExperiment);
-          if(opts.max_load_time > 0){
-            setTimeout(function(){
-              if(!loaded){
-                loadFail();
-              }
-            }, opts.max_load_time);
-          }
+        if(opts.preload_images.length > 0){
+          jsPsych.pluginAPI.preloadImages(opts.preload_images, load_audio);
         } else {
-          startExperiment();
+          load_audio();
         }
+
+        function load_audio(){
+          if(opts.preload_audio.length > 0){
+            jsPsych.pluginAPI.preloadAudioFiles(opts.preload_audio, auto_preload);
+          } else {
+            auto_preload();
+          }
+        }
+
+        function auto_preload(){
+          if(opts.auto_preload){
+            jsPsych.pluginAPI.autoPreload(timeline, startExperiment);
+            if(opts.max_load_time > 0){
+              setTimeout(function(){
+                if(!loaded){
+                  loadFail();
+                }
+              }, opts.max_load_time);
+            }
+          } else {
+            startExperiment();
+          }
+        }
+
       },
       function(){
         // fail. incompatible user.
@@ -889,6 +908,11 @@ jsPsych.data = (function() {
 
     data_collection.push = function(new_data){
       trials.push(new_data);
+      return data_collection;
+    }
+
+    data_collection.join = function(other_data_collection){
+      trials = trials.concat(other_data_collection.values());
       return data_collection;
     }
 
@@ -1988,6 +2012,8 @@ jsPsych.pluginAPI = (function() {
 
   var preloads = [];
 
+  var img_cache = {};
+
   module.preloadAudioFiles = function(files, callback_complete, callback_load) {
 
     files = flatten(files);
@@ -2087,6 +2113,8 @@ jsPsych.pluginAPI = (function() {
       }
 
       img.src = images[i];
+
+      img_cache[images[i]] = img;
     }
   };
 
