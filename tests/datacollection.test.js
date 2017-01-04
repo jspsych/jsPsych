@@ -70,4 +70,11 @@ describe('DataCollection', function(){
     expect(jsPsych.data.getData().last(2).count(2)).toBe(2);
     expect(jsPsych.data.getData().last(2).values()[0].rt).toBe(400);
   });
+  test('#join', function(){
+    var dc1 = jsPsych.data.getData().filter({filter: true});
+    var dc2 = jsPsych.data.getData().filter({rt: 500});
+    var data = dc1.join(dc2);
+    expect(data.count()).toBe(3);
+    expect(data.values()[2].rt).toBe(500);
+  });
 });
