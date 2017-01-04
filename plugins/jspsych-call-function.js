@@ -26,8 +26,9 @@ jsPsych.plugins['call-function'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    // one of the only plugins where we override the default experiment level
-    // value of this parameter
+    // a rare case where we override the default experiment level
+    // value of this parameter, since this plugin should be invisible
+    // to the subject of the experiment
     trial.timing_post_trial = typeof trial.timing_post_trial == 'undefined' ? 0 : trial.timing_post_trial
 
     var return_val = trial.func();

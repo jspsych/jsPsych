@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-single-stim.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+</body>
+<script>
+  var trial_1 = {
+    type: 'single-stim',
+    stimulus: 'The experiment has begun!',
+    is_html: true
+  }
+
+
+  jsPsych.init({
+    timeline: [trial_1],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    exclusions: {
+      min_width: 1000,
+      min_height: 500,
+      audio: true
+    },
+    default_iti: 250
+  });
+</script>
+
+</html>

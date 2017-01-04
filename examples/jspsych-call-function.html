@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-call-function.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+
+  <script>
+
+  var trial = {
+    type: 'call-function',
+    func: function(){ return Date.now(); }
+  };
+
+  // this is to check if the plugin specific default for timing_post_trial works.
+  var next_trial = {
+    type: 'call-function',
+    func: function(){ return Date.now(); }
+  };
+
+
+  jsPsych.init({
+    timeline: [trial, next_trial],
+    on_finish: function(){ jsPsych.data.displayData(); }
+  });
+
+
+  </script>
+</html>

@@ -79,7 +79,7 @@ jsPsych.plugins.instructions = (function() {
     var last_page_update_time = start_time;
 
     function show_current_page() {
-      display_element.html(trial.pages[current_page]);
+      display_element.innerHTML = trial.pages[current_page];
 
       if (trial.show_clickable_nav) {
 
@@ -89,16 +89,16 @@ jsPsych.plugins.instructions = (function() {
         }
         nav_html += "<button id='jspsych-instructions-next' class='jspsych-btn'>Next &gt;</button></div>"
 
-        display_element.append(nav_html);
+        display_element.innerHTML += nav_html;
 
         if (current_page != 0 && trial.allow_backward) {
-          $('#jspsych-instructions-back').on('click', function() {
+          display_element.querySelector('#jspsych-instructions-back').attachEventListener('click', function() {
             clear_button_handlers();
             back();
           });
         }
 
-        $('#jspsych-instructions-next').on('click', function() {
+        display_element.querySelector('#jspsych-instructions-next').attachEventListener('click', function() {
           clear_button_handlers();
           next();
         });
@@ -107,8 +107,8 @@ jsPsych.plugins.instructions = (function() {
     }
 
     function clear_button_handlers() {
-      $('#jspsych-instructions-next').off('click');
-      $('#jspsych-instructions-back').off('click');
+      display_element.querySelector('#jspsych-instructions-next').removeEventListener('click');
+      display_element.querySelector('#jspsych-instructions-back').removeEventListener('click');
     }
 
     function next() {
@@ -155,7 +155,7 @@ jsPsych.plugins.instructions = (function() {
         jsPsych.pluginAPI.cancelKeyboardResponse(keyboard_listener);
       }
 
-      display_element.html('');
+      display_element.innerHTML = '';
 
       var trial_data = {
         "view_history": JSON.stringify(view_history),

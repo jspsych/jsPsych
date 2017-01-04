@@ -44,11 +44,11 @@ jsPsych.plugins.text = (function() {
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
     // set the HTML of the display target to replaced_text.
-    display_element.html(trial.text);
+    display_element.innerHTML = trial.text;
 
     var after_response = function(info) {
 
-      display_element.html(''); // clear the display
+      display_element.innerHTML = ''; // clear the display
 
       var trialdata = {
         "rt": info.rt,
@@ -63,7 +63,7 @@ jsPsych.plugins.text = (function() {
 
       var rt = (new Date()).getTime() - start_time;
 
-      display_element.unbind('click', mouse_listener);
+      display_element.removeEventListener('click', mouse_listener);
 
       after_response({
         key: 'mouse',
@@ -74,7 +74,7 @@ jsPsych.plugins.text = (function() {
 
     // check if key is 'mouse'
     if (trial.choices == 'mouse') {
-      display_element.click(mouse_listener);
+      display_element.attachEventListener(mouse_listener);
       var start_time = (new Date()).getTime();
     } else {
       jsPsych.pluginAPI.getKeyboardResponse({

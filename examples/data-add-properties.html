@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-single-stim.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+
+<script>
+  var block_1 = {
+    type: 'single-stim',
+    stimulus: 'img/happy_face_1.jpg',
+    choices: [89, 78], // Y or N
+    prompt: '<p class="center-content">The data displayed on the next page should have a subject and completed property. Press Y or N.</p>'
+  }
+
+  jsPsych.data.addProperties({
+    subject: 1
+  });
+
+
+  jsPsych.init({
+    timeline: [block_1],
+    on_finish: function() {
+      jsPsych.data.addProperties({
+        completed: true
+      });
+      // data should have a subject and completed field for each trial.
+      jsPsych.data.displayData();
+    }
+  });
+</script>
+
+</html>

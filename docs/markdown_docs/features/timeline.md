@@ -283,7 +283,6 @@ var after_if_trial = {
 }
 
 jsPsych.init({
-	display_element: $('#jspsych-target'),
 	timeline: [pre_if_trial, if_node, after_if_trial],
 	on_finish: function(){jsPsych.data.displayData(); }
 });

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-serial-reaction-time.js"></script>
+  <script src="../plugins/jspsych-text.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+</head>
+
+<script>
+
+  var timeline = [
+    {
+      type: 'serial-reaction-time',
+      target: [0,0],
+      grid_square_size: 100
+    },
+    {
+      type: 'serial-reaction-time',
+      target: [0,1]
+    },
+    {
+      type: 'serial-reaction-time',
+      target: [0,0]
+    },
+    {
+      type: 'serial-reaction-time',
+      target: [0,1]
+    }
+  ];
+
+  var locations = [
+    [0,0],
+    [0,1],
+    [0,2],
+    [0,3]
+  ];
+
+  locations = jsPsych.randomization.shuffle(locations);
+
+  var timeline_2 = {
+    timeline: [
+      {
+        type: 'serial-reaction-time',
+        target: function(){ return jsPsych.timelineVariable('target1'); },
+        grid_square_size: 80
+      },
+      {
+        type: 'serial-reaction-time',
+        target: function(){ return jsPsych.timelineVariable('target2'); },
+        grid_square_size: 80
+      }
+    ],
+    timeline_variables: [
+      {target1: locations[0], target2: locations[1]},
+      {target1: locations[2], target2: locations[3]}
+    ],
+    randomize_order: true,
+    repetitions: 10
+  }
+
+  jsPsych.init({
+    timeline: [timeline_2],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 0
+  });
+</script>
+
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-text.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <script>
+
+  var block = {
+    type: 'text',
+    text: 'Welcome to the experiment. Press any key to begin.'
+  }
+
+  var mouse = {
+    type: 'text',
+    choices: 'mouse',
+    text: 'Click the mouse to continue.'
+  }
+
+  jsPsych.init({
+    timeline: [block, mouse],
+    on_finish: function() { jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>

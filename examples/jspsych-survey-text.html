@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-survey-text.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+
+  <script>
+
+  // defining groups of questions that will go together.
+  var page_1_questions = ["How old are you?", "Where were you born?"];
+
+  var survey_block = {
+      type: 'survey-text',
+      questions: page_1_questions
+  };
+
+  jsPsych.init({
+    timeline: [survey_block],
+    on_finish: function() { jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>

@@ -81,23 +81,19 @@ jsPsych.plugins["single-stim"] = (function() {
     trial.is_html = (typeof trial.is_html == 'undefined') ? false : trial.is_html;
     trial.prompt = trial.prompt || "";
 
+    var new_html = '';
     // display stimulus
     if (!trial.is_html) {
-      display_element.append($('<img>', {
-        src: trial.stimulus,
-        id: 'jspsych-single-stim-stimulus'
-      }));
+      new_html = '<img src="'+trial.stimulus+'" id="jspsych-single-stim-stimulus"></img>';
     } else {
-      display_element.append($('<div>', {
-        html: trial.stimulus,
-        id: 'jspsych-single-stim-stimulus'
-      }));
+      new_html = '<div id="jspsych-single-stim-stimulus">'+trial.stimulus+'</div>';
     }
 
-    //show prompt if there is one
-    if (trial.prompt !== "") {
-      display_element.append(trial.prompt);
-    }
+    // add prompt
+    new_html += trial.prompt;
+
+    // draw
+    display_element.innerHTML = new_html;
 
     // store response
     var response = {
@@ -124,7 +120,7 @@ jsPsych.plugins["single-stim"] = (function() {
       };
 
       // clear the display
-      display_element.html('');
+      display_element.innerHTML = '';
 
       // move on to the next trial
       jsPsych.finishTrial(trial_data);
@@ -135,7 +131,7 @@ jsPsych.plugins["single-stim"] = (function() {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      $("#jspsych-single-stim-stimulus").addClass('responded');
+      display_element.querySelector('#jspsych-single-stim-stimulus').className += ' responded';
 
       // only record the first response
       if (response.key == -1) {
@@ -161,7 +157,7 @@ jsPsych.plugins["single-stim"] = (function() {
     // hide image if timing is set
     if (trial.timing_stim > 0) {
       jsPsych.pluginAPI.setTimeout(function() {
-        $('#jspsych-single-stim-stimulus').css('visibility', 'hidden');
+        display_element.querySelector('#jspsych-single-stim-stimulus').style.visibility = 'hidden';
       }, trial.timing_stim);
     }
 

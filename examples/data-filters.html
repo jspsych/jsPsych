@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-text.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+
+<script>
+  var trial_1 = {
+    data: { prop: 1, type: 1 }
+  }
+
+  var trial_2 = {
+    data: { prop: 1, type: 2}
+  }
+
+  var trial_3 = {
+    data: { prop: 2, type: 1}
+  }
+
+  var trial_4 = {
+    data: { prop: 2, type: 2}
+  }
+
+  var node = {
+    type: 'text',
+    timeline: [trial_1, trial_2, trial_3, trial_4],
+    text: "Press any key. 4 times. Then check console."
+  }
+
+
+  jsPsych.init({
+    timeline: [node],
+    on_finish: function() {
+      console.log(jsPsych.data.getDataAsJSON([{prop: 1}, {type: 2}]));
+      console.log(jsPsych.data.getDataAsJSON([{prop: 1, type: 1}, {type: 2, prop: 2}]));
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+</script>
+
+</html>

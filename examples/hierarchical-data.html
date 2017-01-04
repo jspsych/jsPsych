@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-text.js"></script>
+  <script src="../plugins/jspsych-single-stim.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+
+<script>
+
+  var description = {
+    type: 'text',
+    text: 'The two single-stim trials should have a which_trial property and a node_level_data property. Press any key.'
+  }
+
+  var trial_1 = {
+    stimulus: 'img/happy_face_1.jpg',
+    data: {
+      which_trial: "trial 1"
+    }
+  }
+
+  var trial_2 = {
+    stimulus: 'img/sad_face_1.jpg',
+    data: {
+      which_trial: "trial 2"
+    }
+  }
+
+  var timeline_node = {
+    timeline: [trial_1, trial_2],
+    data: {
+      node_level_data: true
+    },
+    type: 'single-stim',
+    choices: [89, 78], // Y or N
+    prompt: '<p class="center-content">Have you seen this face before? Y or N.</p>',
+  }
+
+  jsPsych.init({
+    timeline: [description, timeline_node],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+</script>
+
+</html>

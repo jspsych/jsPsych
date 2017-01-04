@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-button-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <style>
+      img { width: 300px; }
+    </style>
+  </head>
+  <script>
+
+  var br_trial = {
+    type: 'button-response',
+    stimulus: 'img/happy_face_1.jpg',
+    choices: ['Happy', 'Sad'],
+    prompt: "<p class='center-content'>What emotion is this person showing?</p>",
+    button_html: "<a class='jspsych-btn'>%choice%</a>"
+  };
+
+  jsPsych.init({
+    timeline: [br_trial],
+    on_finish: function(){jsPsych.data.displayData();}
+  });
+
+  </script>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-video.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+
+  <script>
+
+  var trial = {
+    type: 'video',
+    sources: ['video/sample_video.mp4']
+  }
+
+  jsPsych.init({
+    timeline: [trial],
+    on_finish: function() { jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>

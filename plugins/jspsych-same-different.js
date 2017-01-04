@@ -97,15 +97,9 @@ jsPsych.plugins['same-different'] = (function() {
 
     // show image
     if (!trial.is_html) {
-      display_element.append($('<img>', {
-        src: trial.stimuli[0],
-        "class": 'jspsych-same-different-stimulus'
-      }));
+      display_element.innerHTML = '<img class="jspsych-same-different-stimulus" src="'+trial.stimuli[0]+'"></img>';
     } else {
-      display_element.append($('<div>', {
-        html: trial.stimuli[0],
-        "class": 'jspsych-same-different-stimulus'
-      }));
+      display_element.innerHTML = '<div class="jspsych-same-different-stimulus">'+trial.stimuli[0]+'</div>';
     }
 
     var first_stim_info;
@@ -122,7 +116,7 @@ jsPsych.plugins['same-different'] = (function() {
     }
 
     function showBlankScreen() {
-      $('.jspsych-same-different-stimulus').remove();
+      display_element.querySelector('.jspsych-same-different-stimulus').outerHTML = '';
 
       jsPsych.pluginAPI.setTimeout(function() {
         showSecondStim();
@@ -131,28 +125,20 @@ jsPsych.plugins['same-different'] = (function() {
 
     function showSecondStim() {
       if (!trial.is_html) {
-        display_element.append($('<img>', {
-          src: trial.stimuli[1],
-          "class": 'jspsych-same-different-stimulus',
-          id: 'jspsych-same-different-second-stimulus'
-        }));
+        display_element.innerHTML += '<img class="jspsych-same-different-stimulus" id="jspsych-same-different-second-stimulus" src="'+trial.stimuli[1]+'"></img>';
       } else {
-        display_element.append($('<div>', {
-          html: trial.stimuli[1],
-          "class": 'jspsych-same-different-stimulus',
-          id: 'jspsych-same-different-second-stimulus'
-        }));
+        display_element.innerHTML += '<div class="jspsych-same-different-stimulus" id="jspsych-same-different-second-stimulus">'+trial.stimuli[1]+'</div>';
       }
 
       if (trial.timing_second_stim > 0) {
         jsPsych.pluginAPI.setTimeout(function() {
-          $("#jspsych-same-different-second-stimulus").css('visibility', 'hidden');
+          display_element.querySelector('#jspsych-same-different-second-stimulus').style.visibility = 'hidden';
         }, trial.timing_second_stim);
       }
 
       //show prompt here
       if (trial.prompt !== "") {
-        display_element.append(trial.prompt);
+        display_element.innerHTML += trial.prompt;
       }
 
       var after_response = function(info) {
@@ -185,7 +171,7 @@ jsPsych.plugins['same-different'] = (function() {
           trial_data["key_press_stim1"] = first_stim_info.key;
         }
 
-        display_element.html('');
+        display_element.innerHTML = '';
 
         jsPsych.finishTrial(trial_data);
       }

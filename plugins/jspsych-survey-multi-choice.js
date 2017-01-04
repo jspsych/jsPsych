@@ -73,7 +73,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
     // inject CSS for trial
-    var node = display_element.append('<style id="jspsych-survey-multi-choice-css">')
+    var node = display_element.innerHTML += '<style id="jspsych-survey-multi-choice-css">';
     var cssstr = ".jspsych-survey-multi-choice-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }"+
       ".jspsych-survey-multi-choice-text span.required {color: darkred;}"+
       ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {  text-align: center;}"+
@@ -81,22 +81,16 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}"+
       "label.jspsych-survey-multi-choice-text input[type='radio'] {margin-right: 1em;}"
 
-    $('#jspsych-survey-multi-choice-css').html(cssstr);
+    display_element.querySelector('#jspsych-survey-multi-choice-css').innerHTML = cssstr;
 
     // form element
     var trial_form_id = _join(plugin_id_name, "form");
-    display_element.append($('<form>', {
-      "id": trial_form_id
-    }));
-    var $trial_form = $("#" + trial_form_id);
+    display_element.innerHTML += '<form id="'+trial_form_id'"></form>';
+    var trial_form = display_element.querySelector("#" + trial_form_id);
 
     // show preamble text
     var preamble_id_name = _join(plugin_id_name, 'preamble');
-    $trial_form.append($('<div>', {
-      "id": preamble_id_name,
-      "class": preamble_id_name
-    }));
-    $('#' + preamble_id_name).html(trial.preamble);
+    trial_form.innerHTML += '<div id="'+preamble_id_name+'" class="'+preamble_id_name'">'+trial.preamble+'</div>';
 
     // add multiple-choice questions
     for (var i = 0; i < trial.questions.length; i++) {
@@ -106,17 +100,12 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         question_classes.push(_join(plugin_id_name, 'horizontal'));
       }
 
-      $trial_form.append($('<div>', {
-        "id": _join(plugin_id_name, i),
-        "class": question_classes.join(' ')
-      }));
+      trial_form.innerHTML += '<div id="'+_join(plugin_id_name, i)+'" class="'+question_classes.join(' ')+'"></div>';
 
       var question_selector = _join(plugin_id_selector, i);
 
       // add question text
-      $(question_selector).append(
-        '<p class="' + plugin_id_name + '-text survey-multi-choice">' + trial.questions[i] + '</p>'
-      );
+      display_element.querySelector(question_selector).innerHTML += '<p class="' + plugin_id_name + '-text survey-multi-choice">' + trial.questions[i] + '</p>';
 
       // create option radio buttons
       for (var j = 0; j < trial.options[i].length; j++) {
@@ -124,38 +113,32 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
           option_id_selector = '#' + option_id_name;
 
         // add radio button container
-        $(question_selector).append($('<div>', {
-          "id": option_id_name,
-          "class": _join(plugin_id_name, 'option')
-        }));
+        display_element.querySelector(question_selector).innerHTML += '<div id="'+option_id_name+'" class="'+_join(plugin_id_name, 'option')+'"></div>';
 
         // add label and question text
         var option_label = '<label class="' + plugin_id_name + '-text">' + trial.options[i][j] + '</label>';
-        $(option_id_selector).append(option_label);
+        display_element.querySelector(option_id_selector).innerHTML += option_label;
 
         // create radio button
         var input_id_name = _join(plugin_id_name, 'response', i);
-        $(option_id_selector + " label").prepend('<input type="radio" name="' + input_id_name + '" value="' + trial.options[i][j] + '">');
+        display_element.querySelector(option_id_selector + " label").innerHTML =
+          '<input type="radio" name="' + input_id_name + '" value="' + trial.options[i][j] + '">' +
+          display_element.querySelector(option_id_selector + " label").innerHTML;
       }
 
       if (trial.required && trial.required[i]) {
         // add "question required" asterisk
-        $(question_selector + " p").append("<span class='required'>*</span>")
+        display_element.querySelector(question_selector + " p").innerHMTL += "<span class='required'>*</span>";
 
         // add required property
-        $(question_selector + " input:radio").prop("required", true);
+        display_element.querySelector(question_selector + " input:radio").required = true;
       }
     }
 
     // add submit button
-    $trial_form.append($('<input>', {
-      'type': 'submit',
-      'id': plugin_id_name + '-next',
-      'class': plugin_id_name + ' jspsych-btn',
-      'value': 'Submit Answers'
-    }));
+    trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn">Submit Answers</input>';
 
-    $trial_form.submit(function(event) {
+    trial_form.attachEventListener('submit', function(event) {
 
       event.preventDefault();
 
@@ -165,12 +148,13 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 
       // create object to hold responses
       var question_data = {};
-      $("div." + plugin_id_name + "-question").each(function(index) {
+      var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
+      for(var index=0; index<matches.length; index++){
         var id = "Q" + index;
-        var val = $(this).find("input:radio:checked").val();
+        var val = matches[i].querySelector("input:radio:checked").value;
         var obje = {};
         obje[id] = val;
-        $.extend(question_data, obje);
+        Object.assign(question_data, obje);
       });
 
       // save data
@@ -179,7 +163,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         "responses": JSON.stringify(question_data)
       };
 
-      display_element.html('');
+      display_element.innerHTML = '';
 
       // next trial
       jsPsych.finishTrial(trial_data);

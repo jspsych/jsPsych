@@ -5,7 +5,7 @@
  * documentation: docs.jspsych.org
  *
  **/
-var jsPsych = (function() {
+window.jsPsych = (function() {
 
   var core = {};
 
@@ -49,6 +49,7 @@ var jsPsych = (function() {
     paused = false;
     waiting = false;
     loaded = false;
+    jsPsych.data.reset();
 
     var defaults = {
       'display_element': undefined,
@@ -67,42 +68,50 @@ var jsPsych = (function() {
       'on_interaction_data_update': function(data){
         return undefined;
       },
+      'preload_images': [],
+      'preload_audio': [],
       'exclusions': {},
       'show_progress_bar': false,
       'auto_preload': true,
       'max_load_time': 60000,
       'fullscreen': false,
-      'default_iti': 1000
+      'default_iti': 0
     };
 
     // override default options if user specifies an option
-    opts = $.extend({}, defaults, options);
+    opts = Object.assign({}, defaults, options);
 
     // set DOM element where jsPsych will render content
     // if undefined, then jsPsych will use the <body> tag and the entire page
     if(typeof opts.display_element == 'undefined'){
       // check if there is a body element on the page
-      var body = $('body');
-      if (body.length === 0) {
-        $(document.documentElement).append($('<body>'));
+      var body = document.querySelector('body');
+      if (body === null) {
+        document.documentElement.appendChild(document.createElement('body'));
       }
-      // using the full page, so we need the HTML document to
-      // have 100% height, and body to have no margin
-      $('html').css('height','100%');
-      $('body').css('margin', '0px');
-      opts.display_element = $('body');
+      // using the full page, so we need the HTML element to
+      // have 100% height, and body to be full width and height with
+      // no margin
+      document.querySelector('html').style.height = '100%';
+      document.querySelector('body').style.margin = '0px';
+      document.querySelector('body').style.height = '100%';
+      document.querySelector('body').style.width = '100%';
+      opts.display_element = document.querySelector('body');
     } else {
       // make sure that the display element exists on the page
-      if(opts.display_element.length == 0) {
+      var display = document.querySelector('#'+opts.display_element);
+      if(display === null) {
         console.error('The display_element specified in jsPsych.init() does not exist in the DOM.');
+      } else {
+        opts.display_element = display;
       }
     }
-    opts.display_element.append('<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>')
-    DOM_target = $('#jspsych-content');
+    opts.display_element.innerHTML = '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
+    DOM_target = document.querySelector('#jspsych-content');
 
     // add CSS class to DOM_target
-    opts.display_element.addClass('jspsych-display-element')
-    DOM_target.addClass('jspsych-content');
+    opts.display_element.className += ' jspsych-display-element';
+    DOM_target.className += 'jspsych-content';
 
     // create experiment timeline
     timeline = new TimelineNode({
@@ -117,18 +126,35 @@ var jsPsych = (function() {
       function(){
         // success! user can continue...
         // start experiment, with or without preloading
-        if(opts.auto_preload){
-          jsPsych.pluginAPI.autoPreload(timeline, startExperiment);
-          if(opts.max_load_time > 0){
-            setTimeout(function(){
-              if(!loaded){
-                loadFail();
-              }
-            }, opts.max_load_time);
-          }
+        if(opts.preload_images.length > 0){
+          jsPsych.pluginAPI.preloadImages(opts.preload_images, load_audio);
         } else {
-          startExperiment();
+          load_audio();
         }
+
+        function load_audio(){
+          if(opts.preload_audio.length > 0){
+            jsPsych.pluginAPI.preloadAudioFiles(opts.preload_audio, auto_preload);
+          } else {
+            auto_preload();
+          }
+        }
+
+        function auto_preload(){
+          if(opts.auto_preload){
+            jsPsych.pluginAPI.autoPreload(timeline, startExperiment);
+            if(opts.max_load_time > 0){
+              setTimeout(function(){
+                if(!loaded){
+                  loadFail();
+                }
+              }, opts.max_load_time);
+            }
+          } else {
+            startExperiment();
+          }
+        }
+
       },
       function(){
         // fail. incompatible user.
@@ -173,7 +199,7 @@ var jsPsych = (function() {
     jsPsych.data.write(data);
 
     // get back the data with all of the defaults in
-    var trial_data = jsPsych.data.getData({trial_index: global_trial_index})[0];
+    var trial_data = jsPsych.data.getData().filter({trial_index: global_trial_index});
 
     // handle callback at plugin level
     if (typeof current_trial.on_finish === 'function') {
@@ -285,7 +311,7 @@ var jsPsych = (function() {
       if (typeof timeline_parameters == 'undefined') {
         // returns a clone of the trial_parameters to
         // protect functions.
-        return $.extend(true, {}, trial_parameters);
+        return Object.assign({}, trial_parameters);
       } else {
         if (progress.current_location >= timeline_parameters.timeline.length) {
           return null;
@@ -589,7 +615,7 @@ var jsPsych = (function() {
         console.error('Cannot add new trials to a trial-level node.');
       } else {
         timeline_parameters.timeline.push(
-          new TimelineNode($.extend(true, {}, node_trial_data, parameters), self, timeline_parameters.timeline.length)
+          new TimelineNode(Object.assign({}, node_trial_data, parameters), self, timeline_parameters.timeline.length)
         );
       }
     }
@@ -625,7 +651,7 @@ var jsPsych = (function() {
         self.setTimelineVariablesOrder();
 
         // extract all of the node level data and parameters
-        var node_data = $.extend(true, {}, parameters);
+        var node_data = Object.assign({}, parameters);
         delete node_data.timeline;
         delete node_data.conditional_function;
         delete node_data.loop_function;
@@ -637,7 +663,7 @@ var jsPsych = (function() {
 
         // create a TimelineNode for each element in the timeline
         for (var i = 0; i < parameters.timeline.length; i++) {
-          timeline_parameters.timeline.push(new TimelineNode($.extend(true, {}, node_data, parameters.timeline[i]), self, i));
+          timeline_parameters.timeline.push(new TimelineNode(Object.assign({}, node_data, parameters.timeline[i]), self, i));
         }
 
       }
@@ -651,7 +677,7 @@ var jsPsych = (function() {
           console.error('No plugin loaded for trials of type "' + trial_type + '"');
         }
         // create a deep copy of the parameters for the trial
-        trial_parameters = $.extend(true, {}, parameters);
+        trial_parameters = Object.assign({}, parameters);
       }
 
     }();
@@ -670,8 +696,8 @@ var jsPsych = (function() {
       if (keyboardNotAllowed) {
         go();
       } else {
-        DOM_target.append('<div style=""><p>The experiment will launch in fullscreen mode when you click the button below.</p><button id="jspsych-fullscreen-btn" class="jspsych-btn">Launch Experiment</button></div>');
-        $('#jspsych-fullscreen-btn').on('click', function() {
+        DOM_target.innerHTML = '<div style=""><p>The experiment will launch in fullscreen mode when you click the button below.</p><button id="jspsych-fullscreen-btn" class="jspsych-btn">Launch Experiment</button></div>';
+        var listener = DOM_target.querySelector('#jspsych-fullscreen-btn').addEventListener('click', function() {
           var element = document.documentElement;
           if (element.requestFullscreen) {
             element.requestFullscreen();
@@ -682,8 +708,8 @@ var jsPsych = (function() {
           } else if (element.msRequestFullscreen) {
             element.msRequestFullscreen();
           }
-          $('#jspsych-fullscreen-btn').off('click');
-          DOM_target.html('');
+          DOM_target.querySelector('#jspsych-fullscreen-btn').removeEventListener('click', listener);
+          DOM_target.innerHTML = '';
           setTimeout(go, 1000);
         });
       }
@@ -710,7 +736,7 @@ var jsPsych = (function() {
     opts.on_finish(jsPsych.data.getData());
 
     if(typeof timeline.end_message !== 'undefined'){
-      DOM_target.html(timeline.end_message);
+      DOM_target.innerHTML = timeline.end_message;
     }
 
     if (document.exitFullscreen) {
@@ -771,7 +797,7 @@ var jsPsych = (function() {
   }
 
   function loadFail(){
-    DOM_target.html('<p>The experiment failed to load.</p>');
+    DOM_target.innerHTML = '<p>The experiment failed to load.</p>';
   }
 
   function checkExclusions(exclusions, success, fail){
@@ -794,10 +820,10 @@ var jsPsych = (function() {
               'you will not be able to complete this experiment.</p>'+
               '<p>The minimum width is '+mw+'px. Your current width is '+w+'px.</p>'+
               '<p>The minimum height is '+mh+'px. Your current height is '+h+'px.</p>';
-            core.getDisplayElement().html(msg);
+            core.getDisplayElement().innerHTML = msg;
           } else {
             clearInterval(interval);
-            core.getDisplayElement().empty();
+            core.getDisplayElement().innerHTML = '';
             checkExclusions(exclusions, success, fail);
           }
         }, 100);
@@ -814,7 +840,7 @@ var jsPsych = (function() {
         var msg = '<p>Your browser does not support the WebAudio API, which means that you will not '+
           'be able to complete the experiment.</p><p>Browsers that support the WebAudio API include '+
           'Chrome, Firefox, Safari, and Edge.</p>';
-        core.getDisplayElement().html(msg);
+        core.getDisplayElement().innerHTML = msg;
         fail();
         return;
       }
@@ -825,19 +851,18 @@ var jsPsych = (function() {
   }
 
   function drawProgressBar() {
-    $('.jspsych-display-element').prepend(
+    document.querySelector('.jspsych-display-element').insertAdjacentHTML('afterbegin',
       '<div id="jspsych-progressbar-container">'+
       '<span>Completion Progress</span>'+
       '<div id="jspsych-progressbar-outer">'+
         '<div id="jspsych-progressbar-inner"></div>'+
-      '</div></div>'
-    );
+      '</div></div>');
   }
 
   function updateProgressBar() {
     var progress = jsPsych.progress();
 
-    $('#jspsych-progressbar-inner').css('width', progress.percent_complete + "%");
+    document.querySelector('#jspsych-progressbar-inner').style.width = progress.percent_complete + "%";
   }
 
   return core;
@@ -863,61 +888,286 @@ jsPsych.data = (function() {
   var module = {};
 
   // data storage object
-  var allData = [];
+  var allData = DataCollection();
 
   // browser interaction event data
-  var interactionData = [];
+  var interactionData = DataCollection();
 
   // data properties for all trials
   var dataProperties = {};
 
-  // ignored data fields
-  var ignoredProperties = [];
-
   // cache the query_string
   var query_string;
 
-  module.getData = function(filters) {
-    var data_clone = $.extend(true, [], allData); // deep clone
+  // DataCollection
+  function DataCollection(data){
 
-    if(typeof filters == 'undefined'){
-      return data_clone;
+    var data_collection = {};
+
+    var trials = typeof data === 'undefined' ? [] : data;
+
+    data_collection.push = function(new_data){
+      trials.push(new_data);
+      return data_collection;
     }
 
-    // [{p1: v1, p2:v2}, {p1:v2}]
-    // {p1: v1}
-    if(!Array.isArray(filters)){
-      var f = $.extend(true, [], [filters]);
-    } else {
-      var f = $.extend(true, [], filters);
+    data_collection.join = function(other_data_collection){
+      trials = trials.concat(other_data_collection.values());
+      return data_collection;
     }
 
-    var filtered_data = [];
-    for(var x=0; x < data_clone.length; x++){
-      var keep = false;
-      for(var i=0; i<f.length; i++){
-        var match = true;
-        var keys = Object.keys(f[i]);
-        for(var k=0; k<keys.length; k++){
-          if(typeof data_clone[x][keys[k]] !== 'undefined' && data_clone[x][keys[k]] == f[i][keys[k]]){
-            // matches on this key!
-          } else {
-            match = false;
-          }
+    data_collection.top = function(){
+      if(trials.length <= 1){
+        return data_collection;
+      } else {
+        return DataCollection([trials[trials.length-1]]);
+      }
+    }
+
+    data_collection.first = function(n){
+      if(typeof n=='undefined'){ n = 1 }
+      var out = [];
+      for(var i=0; i<n; i++){
+        out.push(trials[i]);
+      }
+      return DataCollection(out);
+    }
+
+    data_collection.last = function(n){
+      if(typeof n=='undefined'){ n = 1 }
+      var out = [];
+      for(var i=trials.length-n; i<trials.length; i++){
+        out.push(trials[i]);
+      }
+      return DataCollection(out);
+    }
+
+    data_collection.values = function(){
+      return trials;
+    }
+
+    data_collection.count = function(){
+      return trials.length;
+    }
+
+    data_collection.readOnly = function(){
+      return DataCollection(deepExtend([], trials));
+    }
+
+    data_collection.addToAll = function(properties){
+      for (var i = 0; i < trials.length; i++) {
+        for (var key in properties) {
+          trials[i][key] = properties[key];
         }
-        if(match) { keep = true; break; } // can break because each filter is OR.
       }
-      if(keep){
-        filtered_data.push(data_clone[x]);
-      }
+      return data_collection;
     }
 
-    return filtered_data;
+    data_collection.addToLast = function(properties){
+      if(trials.length != 0){
+        for (var key in properties) {
+          trials[trials.length-1][key] = properties[key];
+        }
+      }
+      return data_collection;
+    }
 
+    data_collection.filter = function(filters){
+      // [{p1: v1, p2:v2}, {p1:v2}]
+      // {p1: v1}
+      if(!Array.isArray(filters)){
+        var f = deepExtend([], [filters]);
+      } else {
+        var f = deepExtend([], filters);
+      }
+
+      var filtered_data = [];
+      for(var x=0; x < trials.length; x++){
+        var keep = false;
+        for(var i=0; i<f.length; i++){
+          var match = true;
+          var keys = Object.keys(f[i]);
+          for(var k=0; k<keys.length; k++){
+            if(typeof trials[x][keys[k]] !== 'undefined' && trials[x][keys[k]] == f[i][keys[k]]){
+              // matches on this key!
+            } else {
+              match = false;
+            }
+          }
+          if(match) { keep = true; break; } // can break because each filter is OR.
+        }
+        if(keep){
+          filtered_data.push(trials[x]);
+        }
+      }
+
+      var out = DataCollection(filtered_data);
+
+      return out;
+    }
+
+    data_collection.filterCustom = function(fn){
+      var included = [];
+      for(var i=0; i<trials.length; i++){
+        if(fn(trials[i])){
+          included.push(trials[i]);
+        }
+      }
+      return DataCollection(included);
+    }
+
+    data_collection.select = function(column){
+      var values = [];
+      for(var i=0; i<trials.length; i++){
+        if(typeof trials[i][column] !== 'undefined'){
+          values.push(trials[i][column]);
+        }
+      }
+      var out = DataColumn();
+      out.values = values;
+      return out;
+    }
+
+    data_collection.ignore = function(columns){
+      if(!Array.isArray(columns)){
+        columns = [columns];
+      }
+      var o = deepExtend([], trials);
+      for (var i = 0; i < o.length; i++) {
+        for (var j in columns) {
+          delete o[i][columns[j]];
+        }
+      }
+      return DataCollection(o);
+    }
+
+    data_collection.csv = function(){
+      return JSON2CSV(trials);
+    }
+
+    data_collection.json = function(){
+      return JSON.stringify(trials);
+    }
+
+    data_collection.localSave = function(format, filename){
+      var data_string;
+
+      if (format == 'JSON' || format == 'json') {
+        data_string = data_collection.json();
+      } else if (format == 'CSV' || format == 'csv') {
+        data_string = data_collection.csv();
+      } else {
+        throw new Error('Invalid format specified for localSave. Must be "JSON" or "CSV".');
+      }
+
+      saveTextToFile(data_string, filename);
+    }
+
+    return data_collection;
+  }
+
+  // DataColumn class
+  function DataColumn(){
+    var data_column = {};
+
+    data_column.values = [];
+
+    data_column.sum = function(){
+      var s = 0;
+      for(var i=0; i<data_column.values.length; i++){
+        s += data_column.values[i];
+      }
+      return s;
+    }
+
+    data_column.mean = function(){
+      return data_column.sum() / data_column.count();
+    }
+
+    data_column.median = function(){
+      if (data_column.values.length == 0) {return undefined};
+      var numbers = data_column.values.slice(0).sort(function(a,b){ return a - b; });
+      var middle = Math.floor(numbers.length / 2);
+      var isEven = numbers.length % 2 === 0;
+      return isEven ? (numbers[middle] + numbers[middle - 1]) / 2 : numbers[middle];
+    }
+
+    data_column.min = function(){
+      return Math.min.apply(null, data_column.values);
+    }
+
+    data_column.max = function(){
+      return Math.max.apply(null, data_column.values);
+    }
+
+    data_column.count = function(){
+      return data_column.values.length;
+    }
+
+    data_column.variance = function(){
+      var mean = data_column.mean();
+      var sum_square_error = 0;
+      for(var i=0; i<data_column.values.length; i++){
+        sum_square_error += Math.pow(data_column.values[i] - mean,2);
+      }
+      var mse = sum_square_error / data_column.values.length;
+      return mse;
+    }
+
+    data_column.sd = function(){
+      var mse = data_column.variance();
+      var rmse = Math.sqrt(mse);
+      return rmse;
+    }
+
+    data_column.frequencies = function(){
+      var unique = {}
+      for(var i=0; i<data_column.values.length; i++){
+        var v = data_column.values[i];
+        if(typeof unique[v] == 'undefined'){
+          unique[v] = 1;
+        } else {
+          unique[v]++;
+        }
+      }
+      return unique;
+    }
+
+    data_column.all = function(eval_fn){
+      for(var i=0; i<data_column.values.length; i++){
+        if(!eval_fn(data_column.values[i])){
+          return false;
+        }
+      }
+      return true;
+    }
+
+    data_column.subset = function(eval_fn){
+      var out = [];
+      for(var i=0; i<data_column.values.length; i++){
+        if(eval_fn(data_column.values[i])){
+          out.push(data_column.values[i]);
+        }
+      }
+      var o = DataColumn();
+      o.values = out;
+      return o;
+    }
+
+    return data_column;
+  }
+
+  module.reset = function(){
+    allData = DataCollection();
+    interactionData = DataCollection();
+  }
+
+  module.getData = function() {
+    return allData;
   };
 
   module.getInteractionData = function() {
-    return $.extend(true, [], interactionData);
+    return interactionData;
   }
 
   module.write = function(data_object) {
@@ -934,11 +1184,7 @@ jsPsych.data = (function() {
       'internal_node_id': jsPsych.currentTimelineNodeID()
     };
 
-    var ext_data_object = $.extend({}, data_object, trial.data, default_data, dataProperties);
-
-    for(var i in ignoredProperties){
-      delete ext_data_object[ignoredProperties[i]];
-    }
+    var ext_data_object = Object.assign({}, data_object, trial.data, default_data, dataProperties);
 
     allData.push(ext_data_object);
 
@@ -949,88 +1195,34 @@ jsPsych.data = (function() {
   module.addProperties = function(properties) {
 
     // first, add the properties to all data that's already stored
-    for (var i = 0; i < allData.length; i++) {
-      for (var key in properties) {
-        allData[i][key] = properties[key];
-      }
-    }
+    allData.addToAll(properties);
 
     // now add to list so that it gets appended to all future data
-    dataProperties = $.extend({}, dataProperties, properties);
-  };
+    dataProperties = Object.assign({}, dataProperties, properties);
 
-  module.ignore = function(properties) {
-
-    // first, remove the properties from all data that's already stored
-    for (var i = 0; i < allData.length; i++) {
-      for (var j in properties) {
-        delete allData[i][properties[j]];
-      }
-    }
-
-    // now add to list so that it gets appended to all future data
-    ignoredProperties = ignoredProperties.concat(properties);
   };
 
   module.addDataToLastTrial = function(data) {
-    if (allData.length == 0) {
-      throw new Error("Cannot add data to last trial - no data recorded so far");
-    }
-    allData[allData.length - 1] = $.extend({}, allData[allData.length - 1], data);
+    allData.addToLast(data);
   }
 
-  module.getDataAsCSV = function(filters) {
-    var dataObj = module.getData(filters);
-    return JSON2CSV(dataObj);
-  };
-
-  module.getDataAsJSON = function(filters) {
-    var dataObj = module.getData(filters);
-    return JSON.stringify(dataObj);
-  };
-
-  module.localSave = function(filename, format, filters) {
-
-    var data_string;
-
-    if (format == 'JSON' || format == 'json') {
-      data_string = module.getDataAsJSON(filters)
-    } else if (format == 'CSV' || format == 'csv') {
-      data_string = module.getDataAsCSV(filters);
-    } else {
-      throw new Error('invalid format specified for jsPsych.data.localSave');
-    }
-
-    saveTextToFile(data_string, filename);
-  };
-
   module.getDataByTimelineNode = function(node_id) {
-    var data = module.getData();
+    var data = allData.filterCustom(function(x){
+      return x.internal_node_id.slice(0, node_id.length) === node_id;
+    });
 
-    data = flatten(data);
-
-    var trials = [];
-    for (var i = 0; i < data.length; i++) {
-      if (data[i].internal_node_id.slice(0, node_id.length) === node_id) {
-        trials.push(data[i]);
-      }
-    }
-
-    return trials;
+    return data;
   };
 
   module.getLastTrialData = function() {
-    if (allData.length == 0) {
-      return {};
-    }
-    return $.extend(true, {}, allData[allData.length - 1]);
+    return allData.top();
   };
 
   module.getLastTimelineData = function() {
     var lasttrial = module.getLastTrialData();
-    var node_id = lasttrial.internal_node_id;
+    var node_id = lasttrial.select('internal_node_id').values[0];
     if (typeof node_id === 'undefined') {
-      return [];
+      return DataCollection();
     } else {
       var parent_node_id = node_id.substr(0,node_id.lastIndexOf('-'));
       var lastnodedata = module.getDataByTimelineNode(parent_node_id);
@@ -1048,16 +1240,16 @@ jsPsych.data = (function() {
     var data_string;
 
     if (format == 'json') {
-      data_string = JSON.stringify(module.getData(), undefined, 1);
+      data_string = allData.json();
     } else {
-      data_string = module.getDataAsCSV();
+      data_string = allData.csv();
     }
 
     var display_element = jsPsych.getDisplayElement();
 
-    display_element.append($('<pre id="jspsych-data-display"></pre>'));
+    display_element.innerHTML = '<pre id="jspsych-data-display"></pre>';
 
-    $('#jspsych-data-display').text(data_string);
+    document.getElementById('jspsych-data-display').textContent = data_string;
   };
 
   module.urlVariables = function() {
@@ -1114,8 +1306,17 @@ jsPsych.data = (function() {
     document.addEventListener('webkitfullscreenchange', fullscreenchange);
   }
 
-  // private function to save text file on local drive
+  // public methods for testing purposes. not recommended for use.
+  module._customInsert = function(data){
+    allData = DataCollection(data);
+  }
 
+  module._fullreset = function(){
+    module.reset();
+    dataProperties = {};
+  }
+
+  // private function to save text file on local drive
   function saveTextToFile(textstr, filename) {
     var blobToSave = new Blob([textstr], {
       type: 'text/plain'
@@ -1129,16 +1330,8 @@ jsPsych.data = (function() {
 
     var display_element = jsPsych.getDisplayElement();
 
-    display_element.append($('<a>', {
-      id: 'jspsych-download-as-text-link',
-      href: blobURL,
-      css: {
-        display: 'none'
-      },
-      download: filename,
-      html: 'download file'
-    }));
-    $('#jspsych-download-as-text-link')[0].click();
+    display_element.insertAdjacentHTML('beforeend','<a id="jspsych-download-as-text-link" style="display:none;" download="'+filename+'" href="'+blobURL+'">click to download</a>');
+    document.getElementById('jspsych-download-as-text-link').click();
   }
 
   //
@@ -1160,7 +1353,7 @@ jsPsych.data = (function() {
       for (var key in array[j]) {
         var keyString = key + "";
         keyString = '"' + keyString.replace(/"/g, '""') + '",';
-        if ($.inArray(key, columns) == -1) {
+        if (!columns.includes(key)) {
           columns[i] = key;
           line += keyString;
           i++;
@@ -1325,7 +1518,7 @@ jsPsych.randomization = (function() {
         if(array[i] == null || typeof array[i] != 'object'){
           allsamples.push(array[i]);
         } else {
-          allsamples.push($.extend(true, {}, array[i]));
+          allsamples.push(Object.assign({}, array[i]));
         }
 
       }
@@ -1416,7 +1609,7 @@ jsPsych.randomization = (function() {
         for (var k = 0; k < toAdd.length; k++) {
           var newpiece = {};
           newpiece[factorNames[i]] = toAdd[k];
-          factor_combinations.push($.extend({}, base, newpiece));
+          factor_combinations.push(Object.assign({}, base, newpiece));
         }
       }
       factor_combinations.splice(0, n);
@@ -1487,7 +1680,18 @@ jsPsych.pluginAPI = (function() {
 
   var keyboard_listeners = [];
 
-  var held_keys = [];
+  var held_keys = {};
+
+  // keyboard events
+  document.addEventListener('keydown', function(e){
+    for(var i=0; i<keyboard_listeners.length; i++){
+      keyboard_listeners[i].fn(e);
+    }
+    held_keys[e.keyCode] = true;
+  });
+  document.addEventListener('keyup', function(e){
+    held_keys[e.keyCode] = false;
+  });
 
   module.getKeyboardResponse = function(parameters) {
     //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key?
@@ -1528,13 +1732,13 @@ jsPsych.pluginAPI = (function() {
           for (var i = 0; i < parameters.valid_responses.length; i++) {
             if (typeof parameters.valid_responses[i] == 'string') {
               if (typeof keylookup[parameters.valid_responses[i]] !== 'undefined') {
-                if (e.which == keylookup[parameters.valid_responses[i]]) {
+                if (e.keyCode == keylookup[parameters.valid_responses[i]]) {
                   valid_response = true;
                 }
               } else {
                 throw new Error('Invalid key string specified for getKeyboardResponse');
               }
-            } else if (e.which == parameters.valid_responses[i]) {
+            } else if (e.keyCode == parameters.valid_responses[i]) {
               valid_response = true;
             }
           }
@@ -1543,46 +1747,27 @@ jsPsych.pluginAPI = (function() {
       // check if key was already held down
 
       if (((typeof parameters.allow_held_key == 'undefined') || !parameters.allow_held_key) && valid_response) {
-        for (i in held_keys) {
-          if (held_keys[i] == e.which) {
-            valid_response = false;
-            break;
-          }
+        if (typeof held_keys[e.keyCode] !== 'undefined' && held_keys[e.keyCode] == true) {
+          valid_response = false;
         }
       }
 
       if (valid_response) {
 
-        held_keys.push(e.which);
-
         parameters.callback_function({
-          key: e.which,
+          key: e.keyCode,
           rt: key_time - start_time
         });
 
-        if ($.inArray(listener_id, keyboard_listeners) > -1) {
+        if (keyboard_listeners.includes(listener_id)) {
 
           if (!parameters.persist) {
             // remove keyboard listener
             module.cancelKeyboardResponse(listener_id);
           }
         }
-
-        var after_up = function(up) {
-
-          if (up.which == e.which) {
-            $(document).off('keyup', after_up);
-
-            // mark key as released
-            held_keys.splice($.inArray(e.which, held_keys), 1);
-          }
-        };
-
-        $(document).keyup(after_up);
       }
     };
-
-    $(document).keydown(listener_function);
 
     // create listener id object
     listener_id = {
@@ -1598,19 +1783,13 @@ jsPsych.pluginAPI = (function() {
   };
 
   module.cancelKeyboardResponse = function(listener) {
-    // remove the listener from the doc
-    $(document).off(listener.type, listener.fn);
-
     // remove the listener from the list of listeners
-    if ($.inArray(listener, keyboard_listeners) > -1) {
-      keyboard_listeners.splice($.inArray(listener, keyboard_listeners), 1);
+    if (keyboard_listeners.includes(listener)) {
+      keyboard_listeners.splice(keyboard_listeners.indexOf(listener), 1);
     }
   };
 
   module.cancelAllKeyboardResponses = function() {
-    for (var i = 0; i < keyboard_listeners.length; i++) {
-      $(document).off(keyboard_listeners[i].type, keyboard_listeners[i].fn);
-    }
     keyboard_listeners = [];
   };
 
@@ -1620,6 +1799,15 @@ jsPsych.pluginAPI = (function() {
       code = keylookup[character];
     }
     return code;
+  }
+
+  module.convertKeyCodeToKeyCharacter = function(code){
+    for(var i in Object.keys(keylookup)){
+      if(keylookup[Object.keys(keylookup)[i]] == code){
+        return Object.keys(keylookup)[i];
+      }
+    }
+    return undefined;
   }
 
   var keylookup = {
@@ -1824,6 +2012,8 @@ jsPsych.pluginAPI = (function() {
 
   var preloads = [];
 
+  var img_cache = {};
+
   module.preloadAudioFiles = function(files, callback_complete, callback_load) {
 
     files = flatten(files);
@@ -1837,7 +2027,7 @@ jsPsych.pluginAPI = (function() {
       return;
     }
 
-    function load_audio_file(source){
+    function load_audio_file_webaudio(source){
       var request = new XMLHttpRequest();
       request.open('GET', source, true);
       request.responseType = 'arraybuffer';
@@ -1856,6 +2046,19 @@ jsPsych.pluginAPI = (function() {
       request.send();
     }
 
+    function load_audio_file_html5audio(source){
+      var audio = new Audio();
+      audio.addEventListener('canplaythrough', function(){
+        audio_buffers[source] = audio;
+        n_loaded++;
+        loadfn(n_loaded);
+        if(n_loaded == files.length){
+          finishfn();
+        }
+      });
+      audio.src = source;
+    }
+
     for (var i = 0; i < files.length; i++) {
       var bufferID = files[i];
       if (typeof audio_buffers[bufferID] !== 'undefined') {
@@ -1864,9 +2067,14 @@ jsPsych.pluginAPI = (function() {
         if(n_loaded == files.length) {
           finishfn();
         }
+      } else {
+        audio_buffers[bufferID] = 'tmp';
+        if(module.audioContext() !== null){
+          load_audio_file_webaudio(bufferID);
+        } else {
+          load_audio_file_html5audio(bufferID);
+        }
       }
-      audio_buffers[bufferID] = 'tmp';
-      load_audio_file(bufferID);
     }
 
   }
@@ -1905,6 +2113,8 @@ jsPsych.pluginAPI = (function() {
       }
 
       img.src = images[i];
+
+      img_cache[images[i]] = img;
     }
   };
 
@@ -1961,7 +2171,8 @@ jsPsych.pluginAPI = (function() {
   return module;
 })();
 
-// methods used in multiple modules
+// methods used in multiple modules //
+
 function flatten(arr, out) {
   out = (typeof out === 'undefined') ? [] : out;
   for (var i = 0; i < arr.length; i++) {
@@ -1972,4 +2183,86 @@ function flatten(arr, out) {
     }
   }
   return out;
+}
+
+function deepExtend(out) {
+  out = out || {};
+
+  for (var i = 1; i < arguments.length; i++) {
+    var obj = arguments[i];
+
+    if (!obj)
+      continue;
+
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (typeof obj[key] === 'object')
+          out[key] = deepExtend(out[key], obj[key]);
+        else
+          out[key] = obj[key];
+      }
+    }
+  }
+
+  return out;
+};
+
+// polyfill for Object.assign to support IE
+if (typeof Object.assign != 'function') {
+  Object.assign = function (target, varArgs) { // .length of function is 2
+    'use strict';
+    if (target == null) { // TypeError if undefined or null
+      throw new TypeError('Cannot convert undefined or null to object');
+    }
+
+    var to = Object(target);
+
+    for (var index = 1; index < arguments.length; index++) {
+      var nextSource = arguments[index];
+
+      if (nextSource != null) { // Skip over if undefined or null
+        for (var nextKey in nextSource) {
+          // Avoid bugs when hasOwnProperty is shadowed
+          if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+            to[nextKey] = nextSource[nextKey];
+          }
+        }
+      }
+    }
+    return to;
+  };
+}
+
+// polyfill for Array.includes to support IE
+if (!Array.prototype.includes) {
+  Array.prototype.includes = function(searchElement /*, fromIndex*/) {
+    'use strict';
+    if (this == null) {
+      throw new TypeError('Array.prototype.includes called on null or undefined');
+    }
+
+    var O = Object(this);
+    var len = parseInt(O.length, 10) || 0;
+    if (len === 0) {
+      return false;
+    }
+    var n = parseInt(arguments[1], 10) || 0;
+    var k;
+    if (n >= 0) {
+      k = n;
+    } else {
+      k = len + n;
+      if (k < 0) {k = 0;}
+    }
+    var currentElement;
+    while (k < len) {
+      currentElement = O[k];
+      if (searchElement === currentElement ||
+         (searchElement !== searchElement && currentElement !== currentElement)) { // NaN !== NaN
+        return true;
+      }
+      k++;
+    }
+    return false;
+  };
 }

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-text.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+</head>
+
+<script>
+  var block_1 = {
+    type: 'text',
+    text: 'This trial should display. Click to continue.',
+    choices: 'mouse'
+  }
+
+  jsPsych.init({
+    timeline: [block_1],
+    fullscreen: true,
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+</script>
+
+</html>

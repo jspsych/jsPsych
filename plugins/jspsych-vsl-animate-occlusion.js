@@ -150,7 +150,7 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
       }
     }
 
-    display_element.append($("<svg id='jspsych-vsl-animate-occlusion-canvas' width=" + trial.canvas_size[0] + " height=" + trial.canvas_size[1] + "></svg>"));
+    display_element.innerHTML += "<svg id='jspsych-vsl-animate-occlusion-canvas' width=" + trial.canvas_size[0] + " height=" + trial.canvas_size[1] + "></svg>";
 
     var paper = Snap("#jspsych-vsl-animate-occlusion-canvas");
 
@@ -158,7 +158,7 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
       "id": 'jspsych-vsl-animate-occlusion-moving-image'
     });
 
-    document.getElementById('jspsych-vsl-animate-occlusion-moving-image').removeAttribute('preserveAspectRatio');
+    display_element.querySelector('#jspsych-vsl-animate-occlusion-moving-image').removeAttribute('preserveAspectRatio');
 
     if (trial.occlude_center) {
       paper.rect((trial.canvas_size[0] / 2) - (trial.image_size[0] / 2), 0, trial.image_size[0], trial.canvas_size[1]).attr({
@@ -193,7 +193,7 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
 
     function endTrial() {
 
-      display_element.html('');
+      display_element.innerHTML = '';
 
       jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
 

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-reconstruction.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <script>
+
+  var sample_function = function(param){
+    var size = 50 + Math.floor(param*250);
+    var html = '<div style="display: block; margin: auto; height: 300px;">'+
+      '<div style="display: block; margin: auto; background-color: #000000; '+
+      'width: '+size+'px; height: '+size+'px;"></div></div><p>Press H or G.</p>';
+    return html;
+  }
+
+  var block_1 = {
+    type: 'reconstruction',
+    stim_function: sample_function,
+    starting_value: 0.25
+  }
+
+  jsPsych.init({
+    timeline: [block_1],
+    on_finish: function() { jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>
