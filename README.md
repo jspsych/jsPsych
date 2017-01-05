@@ -20,14 +20,14 @@ Contributions to the code are welcome. Please use the [Issue tracker system](htt
 Citation
 --------
 
-If you use this library in academic work, please cite the [paper that describes jsPsych](http://link.springer.com/article/10.3758%2Fs13428-014-0458-y)
+If you use this library in academic work, please cite the [paper that describes jsPsych](http://link.springer.com/article/10.3758%2Fs13428-014-0458-y):
 
 de Leeuw, J.R. (2015). jsPsych: A JavaScript library for creating behavioral experiments in a Web browser. *Behavior Research Methods*, _47_(1), 1-12. doi:10.3758/s13428-014-0458-y
 
 Response times
 --------------
 
-Wondering if jsPsych can be used for research that depends on accurate response time measurement? In general, the answer is yes. Response time measurements in jsPsych (and JavaScript in general) are comparable in noise to those taken in standard lab software like Psychophysics Toolbox and E-Prime. Response times measured in JavaScript tend to be a little bit longer (10-40ms). See the following references for extensive work on this topic.
+Wondering if jsPsych can be used for research that depends on accurate response time measurement? In general, the answer is yes. Response time measurements in jsPsych (and JavaScript in general) are comparable to those taken in standard lab software like Psychophysics Toolbox and E-Prime. Response times measured in JavaScript tend to be a little bit longer (10-40ms), but have similar variance. See the following references for extensive work on this topic.
 
 * [de Leeuw, J. R., & Motz, B. A. (2016). Psychophysics in a Web browser? Comparing response times collected with JavaScript and Psychophysics Toolbox in a visual search task. *Behavior Research Methods*, *48*(1), 1-12.](http://link.springer.com/article/10.3758%2Fs13428-015-0567-2)
 * [Hilbig, B. E. (in press). Reaction time effects in lab- versus web-based research: Experimental evidence. *Behavior Research Methods*.](http://dx.doi.org/10.3758/s13428-015-0678-9)
