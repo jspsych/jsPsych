@@ -5,6 +5,7 @@ The following people have contributed to the development of jsPsych by writing c
 * Jonas Lambers
 * Shane Martin - https://github.com/shamrt
 * Adrian Oesch - https://github.com/adrianoesch
+* Junyan Qi - https://github.com/GavinQ1
 * Marian Sauter - https://github.com/mariansauter
 * Tim Vergenz - https://github.com/vergenzt
 * Erik Weitnauer - https://github.com/eweitnauer
