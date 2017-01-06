@@ -159,11 +159,11 @@ filepath | string | The path to the audio file that was preloaded.
 
 ### Return value
 
-Returns an audio buffer compatible with the WebAudio API for the given filepath.
+Returns buffered audio file for playback. If the browser supports it the buffer will be playable with the WebAudio API. Otherwise, the returned buffer will be an HTML5 Audio object.
 
 ### Description
 
-Gets an AudioBuffer that can be played with the WebAudio API. The file must be preloaded with `preloadAudioFiles` or the automatic preload (`autoPreload`).
+Gets an AudioBuffer that can be played with the WebAudio API or an Audio object that can be played with HTML5 Audio. The file must be preloaded with `preloadAudioFiles` or the automatic preload (`autoPreload`).
 
 ### Examples
 

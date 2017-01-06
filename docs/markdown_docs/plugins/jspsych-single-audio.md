@@ -2,7 +2,7 @@
 
 This plugin plays audio files and records responses generated with the keyboard.
 
-Audio files are played using the [WebAudio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API). This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times.
+If the browser supports it, audio files are played using the [WebAudio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API). This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio.
 
 Audio files are automatically preloaded by jsPsych.
 
