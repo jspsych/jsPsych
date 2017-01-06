@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    
+
     <script src="../jspsych.js"></script>
     <script src="../plugins/jspsych-single-audio.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
@@ -24,14 +24,12 @@
     prompt: 'press any key to advance'
   }
 
-  jsPsych.pluginAPI.preloadAudioFiles(['sound/sound.mp3'], start);
+  jsPsych.init({
+    timeline: [block_1],
+    preload_audio: ['sound/sound.mp3']
+    on_finish: function() {jsPsych.data.displayData();}
+  });
 
-  function start(){
-    jsPsych.init({
-      timeline: [block_1],
-      on_finish: function() {jsPsych.data.displayData();}
-    });
-  }
 
   </script>
 </html>

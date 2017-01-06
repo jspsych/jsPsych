@@ -45,15 +45,15 @@
     repetitions: 2
   }
 
-  jsPsych.pluginAPI.preloadAudioFiles(['sound/sound.mp3','sound/hammer.mp3'], function() {
-    jsPsych.init({
-      timeline: [node],
-      on_finish: function() {
-        jsPsych.data.displayData();
-      },
-      default_iti: 250
-    });
+  jsPsych.init({
+    timeline: [node],
+    preload_audio: ['sound/sound.mp3','sound/hammer.mp3'],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
   });
+
 </script>
 
 </html>

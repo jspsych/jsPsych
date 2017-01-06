@@ -303,7 +303,9 @@ on_data_update | function | Function to execute every time data is stored using 
 on_interaction_data_update | function | Function to execute every time a new interaction event occurs. Interaction events include clicking on a different window (blur), returning to the experiment window (focus), entering full screen mode (fullscreenenter), and exiting full screen mode (fullscreenexit).
 exclusions | object | Specifies restrictions on the browser the subject can use to complete the experiment. See list of options below.
 show_progress_bar | boolean | If true, then [a progress bar](../features/progress-bar.md) is shown at the top of the page.
-max_load_time | numeric | The maximum number of milliseconds to wait for audio content to preload. If the wait time is exceeded an error message is displayed and the experiment stops. The default value is 60 seconds.
+preload_audio | array | An array of audio files to preload before starting the experiment.
+preload_images | array | An array of image files to preload before starting the experiment.
+max_load_time | numeric | The maximum number of milliseconds to wait for content to preload. If the wait time is exceeded an error message is displayed and the experiment stops. The default value is 60 seconds.
 fullscreen | boolean | If true, the experiment will run in fullscreen mode. See the [feature page](../features/fullscreen.md) for more details.
 default_iti | numeric | The default inter-trial interval in ms. The default value if none is specified is 0ms.
 

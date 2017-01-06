@@ -23,9 +23,9 @@ jsPsych.init({
 });
 ```
 
-If you are using images in your experiment but they are not being passed directly as parameters to the trials, then you may need to manually preload the image files.
+If you are using images or audio in your experiment but they are not being passed directly as parameters to the trials (e.g., because you are using functions as parameters that return the image or audio), then you may need to manually preload the image files.
 
-jsPsych has an image preloading function in the core library. For full documentation, see the [API reference page](../core_library/jspsych-pluginAPI.md#jspsychpluginapipreloadimages). The function will load all of the images listed in an array, and then call a function when the loading is complete. Below is a brief example.
+You can specify an array of image files and an array of audio files for preloading in the `jsPsych.init()` method. These files will load before the experiment starts.
 
 ```javascript
 // this trial will not preload the images, because the image file is being used
@@ -36,16 +36,19 @@ var trial = {
 	is_html: true
 }
 
+var audio_trial = {
+	type: 'single-audio',
+	stimulus: function() { return 'audio/foo.mp3' }
+}
+
 // an array of paths to images that need to be loaded
 var images = ['img/file1.png'];
+var audio = ['audio/foo.mp3'];
 
-jsPsych.pluginAPI.preloadImages(images, function(){ startExperiment(); });
+jsPsych.init({
+	timeline: [trial],
+	audio_preload: audio,
+	image_preload: images
+});
 
-function startExperiment(){
-	jsPsych.init({
-		timeline: [trial]
-	});
-}
 ```
-
-Note: If you are using HTML strings as stimuli, such as in the single-stim plugin, you will see a series of error messages in the JavaScript console about failing to find files. These messages can be ignored.
