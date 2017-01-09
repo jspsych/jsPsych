@@ -201,13 +201,17 @@ window.jsPsych = (function() {
     // get back the data with all of the defaults in
     var trial_data = jsPsych.data.getData().filter({trial_index: global_trial_index});
 
+    // for trial-level callbacks, we just want to pass in a reference to the values
+    // of the DataCollection, for easy access and editing.
+    var trial_data_values = trial_data.values()[0];
+
     // handle callback at plugin level
     if (typeof current_trial.on_finish === 'function') {
-      current_trial.on_finish(trial_data);
+      current_trial.on_finish(trial_data_values);
     }
 
     // handle callback at whole-experiment level
-    opts.on_trial_finish(trial_data);
+    opts.on_trial_finish(trial_data_values);
 
     // wait for iti
     if (typeof current_trial.timing_post_trial == 'undefined') {
@@ -733,6 +737,7 @@ window.jsPsych = (function() {
   }
 
   function finishExperiment() {
+
     opts.on_finish(jsPsych.data.getData());
 
     if(typeof timeline.end_message !== 'undefined'){
