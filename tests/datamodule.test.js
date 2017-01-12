@@ -136,7 +136,7 @@ describe('#displayData', function(){
     jsPsych.data.displayData('json');
     // get display element HTML
     var html = jsPsych.getDisplayElement().innerHTML;
-    expect(html).toBe('<pre id="jspsych-data-display">'+JSON.stringify(data)+'</pre>');
+    expect(html).toBe('<pre id="jspsych-data-display">'+JSON.stringify(data, null, '\t')+'</pre>');
   });
   test('should display in csv format', function(){
     var timeline = [
