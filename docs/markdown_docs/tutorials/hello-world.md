@@ -6,6 +6,8 @@ In the long tradition of **"Hello world!"** examples, this tutorial creates an e
 
 Start by downloading the jsPsych library. The most recent version can always be found on the [GitHub releases page](https://github.com/jodeleeuw/jsPsych/releases).
 
+*Note: the images below show version 4.2, but the process is the same for the most recent version.*
+
 ![releasespage](/img/githubreleases.jpg)
 
 ## Step 2: Create a folder to store your experiment files
@@ -36,6 +38,7 @@ There's some basic code that (nearly) all HTML documents have in common. Here's 
 	<head>
 		<title>My experiment</title>
 	</head>
+	<body></body>
 </html>
 ```
 
@@ -43,16 +46,16 @@ Add the above code to the experiment.html file and save it. If you then open the
 
 ## Step 5: Import the jsPsych library
 
-To use jsPsych, add a `<script>` tag to import the library. You'll need to import the jQuery library as well, which jsPsych depends on. Make sure to import jQuery before jsPsych. jQuery can be imported directly from [a hosted version on Google's servers](https://developers.google.com/speed/libraries/#jquery).
+To use jsPsych, add a `<script>` tag to import the library.
 
 ```html
 <!DOCTYPE html>
 <html>
 	<head>
 		<title>My experiment</title>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="jspsych-6.0/jspsych.js"></script>
 	</head>
+	<body></body>
 </html>
 ```
 
@@ -63,10 +66,10 @@ You may also want to import the jsPsych stylesheet, which applies a basic set of
 <html>
 	<head>
 		<title>My experiment</title>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="jspsych-6.0/jspsych.js"></script>
 		<link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 	</head>
+	<body></body>
 </html>
 ```
 
@@ -79,11 +82,11 @@ For the demo, we want to show some text on the screen. This is exactly what the 
 <html>
 	<head>
 		<title>My experiment</title>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="jspsych-6.0/jspsych.js"></script>
 		<script src="jspsych-6.0/plugins/jspsych-text.js"></script>
 		<link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 	</head>
+	<body></body>
 </html>
 ```
 
@@ -96,11 +99,11 @@ To add JavaScript code directly to the webpage we need to add a set of `<script>
 <html>
 	<head>
 		<title>My experiment</title>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="jspsych-6.0/jspsych.js"></script>
 		<script src="jspsych-6.0/plugins/jspsych-text.js"></script>
 		<link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 	</head>
+	<body></body>
 	<script>
 
 	var hello_trial = {
@@ -112,18 +115,18 @@ To add JavaScript code directly to the webpage we need to add a set of `<script>
 </html>
 ```
 
-Now that we have the trial defined, we just need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.init` function and specifying the `timeline` parameter.
+Now that we have the trial defined we just need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.init` function and specifying the `timeline` parameter.
 
 ```html
 <!DOCTYPE html>
 <html>
 	<head>
 		<title>My experiment</title>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="jspsych-6.0/jspsych.js"></script>
 		<script src="jspsych-6.0/plugins/jspsych-text.js"></script>
 		<link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 	</head>
+	<body></body>
 	<script>
 
 	var hello_trial = {

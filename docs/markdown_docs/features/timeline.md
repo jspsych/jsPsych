@@ -29,7 +29,7 @@ To actually create and run this simple example, complete the [hello world tutori
 
 ## Multiple trials
 
-Scaling up to multiple trials is easy. Just create an object for each trial, and add each object to the array.
+Scaling up to multiple trials is straightforward. Just create an object for each trial, and add each object to the timeline array.
 
 ```javascript
 // with lots of trials, it might be easier to add the trials
@@ -93,9 +93,9 @@ Timelines can be nested any number of times.
 
 ## Timeline variables
 
-A common pattern in behavioral experiments is to repeat the same procedure many times with different stimuli. One shortcut to implement this pattern is with the approach described in the previous section, but this only works if all the trials use the same plugin type. Timeline variables are a more general solution. With timeline variables, you define the procedure once (as a timeline), and specify a set of parameters and their values for each iteration through the timeline.
+A common pattern in behavioral experiments is to repeat the same procedure many times with different stimuli. A procedure might be a single trial, but it also might be a series of trials. One shortcut to implement this pattern is with the approach described in the previous section, but this only works if all the trials use the same plugin type. Timeline variables are a more general solution. With timeline variables, you define the procedure once (as a timeline), and specify a set of parameters and their values for each iteration through the timeline.
 
-What follows is an example of how to use timeline variables.
+What follows is an example of how to use timeline variables. The [simple reaction time tutorial](../tutorials/rt-task.md) also explains how to use timeline variables.
 
 Suppose we want to create an experiment where people see a set of faces with names displayed below the face. In between each face, a fixation cross is displayed on the screen. Without timeline variables, we would need to add many trials to the timeline, alternating between trials showing the fixation cross and trials showing the face and name. This could be done efficiently in a loop or function, but timeline variables make it even easier - as well as adding extra features like sampling and randomization.
 
@@ -113,8 +113,8 @@ var face_name_procedure = {
 		},
 		{
 			type: 'single-stim',
-			stimulus: function(){ return jsPsych.timelineVariable('face'); },
-			prompt: function(){ return "This person's name is "+jsPsych.timelineVariable('name'); },
+			stimulus: jsPsych.timelineVariable('face'),
+			prompt: function(){ return "This person's name is "+jsPsych.timelineVariable('name', true); },
 			choices: jsPsych.NO_KEYS,
 			timing_response: 2500
 		}
