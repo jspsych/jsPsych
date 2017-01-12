@@ -213,6 +213,11 @@ window.jsPsych = (function() {
     // handle callback at whole-experiment level
     opts.on_trial_finish(trial_data_values);
 
+    // after the above callbacks are complete, then the data should be finalized
+    // for this trial. call the on_data_update handler, passing in the same
+    // data object that just went through the trial's finish handlers.
+    opts.on_data_update(trial_data_values);
+
     // wait for iti
     if (typeof current_trial.timing_post_trial == 'undefined') {
       if (opts.default_iti > 0) {
@@ -253,8 +258,12 @@ window.jsPsych = (function() {
     return timeline.activeID();
   };
 
-  core.timelineVariable = function(varname){
-    return timeline.timelineVariable(varname);
+  core.timelineVariable = function(varname, execute){
+    if(execute){
+      return timeline.timelineVariable(varname);
+    } else {
+      return function() { return timeline.timelineVariable(varname); }
+    }
   }
 
   core.addNodeToEndOfTimeline = function(new_timeline, preload_callback){
@@ -1050,7 +1059,10 @@ jsPsych.data = (function() {
       return JSON2CSV(trials);
     }
 
-    data_collection.json = function(){
+    data_collection.json = function(pretty){
+      if(pretty){
+        return JSON.stringify(trials, null, '\t');
+      }
       return JSON.stringify(trials);
     }
 
@@ -1192,9 +1204,6 @@ jsPsych.data = (function() {
     var ext_data_object = Object.assign({}, data_object, trial.data, default_data, dataProperties);
 
     allData.push(ext_data_object);
-
-    var initSettings = jsPsych.initSettings();
-    initSettings.on_data_update(ext_data_object);
   };
 
   module.addProperties = function(properties) {
@@ -1245,7 +1254,7 @@ jsPsych.data = (function() {
     var data_string;
 
     if (format == 'json') {
-      data_string = allData.json();
+      data_string = allData.json(true); // true = pretty print with tabs
     } else {
       data_string = allData.csv();
     }
