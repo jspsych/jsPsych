@@ -133,7 +133,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       }
     }
     // add submit button
-    trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn">Submit Answers</input>';
+    trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn"> next </input>';
 
     trial_form.addEventListener('submit', function(event) {
       event.preventDefault();
@@ -145,17 +145,15 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 
       // create object to hold responses
       var question_data = {};
-      //TODO this is having problems 
       var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
       var inputs = document.getElementsByTagName('input');
       var radios = []
-      for(var i=0;i<inputs.length;i++){
+      for(var i = 0; i < inputs.length; i++){
         if(inputs[i].checked){
           radios.push(inputs[i].value)
         }
       }
       matches.forEach(function(currentEl ,index){
-        console.log("currentEl", currentEl,index)
         var id = "Q" + index;
         var obje = {};
         obje[id] = radios[index];
