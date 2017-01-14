@@ -92,17 +92,14 @@ jsPsych.plugins.instructions = (function() {
         display_element.innerHTML += nav_html;
 
         if (current_page != 0 && trial.allow_backward) {
-          display_element.querySelector('#jspsych-instructions-back').attachEventListener('click', function() {
+          display_element.querySelector('#jspsych-instructions-back').addEventListener('click', function() {
             clear_button_handlers();
-            back();
           });
         }
-
-        display_element.querySelector('#jspsych-instructions-next').attachEventListener('click', function() {
+        
+        display_element.querySelector('#jspsych-instructions-next').addEventListener('click', function() {
           clear_button_handlers();
-          next();
         });
-
       }
     }
 
@@ -112,26 +109,26 @@ jsPsych.plugins.instructions = (function() {
     }
 
     function next() {
-
+    
       add_current_page_to_view_history()
-
+    
       current_page++;
-
+    
       // if done, finish up...
       if (current_page >= trial.pages.length) {
         endTrial();
       } else {
         show_current_page();
       }
-
+    
     }
-
+    
     function back() {
-
+    
       add_current_page_to_view_history()
-
+    
       current_page--;
-
+    
       show_current_page();
     }
 
