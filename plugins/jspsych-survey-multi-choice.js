@@ -136,7 +136,6 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     trial_form.addEventListener('submit', function(event) {
       event.preventDefault();
       var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
-      console.log("are you getting called")
       // measure response time
       var endTime = (new Date()).getTime();
       var response_time = endTime - startTime;
