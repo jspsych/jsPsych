@@ -82,10 +82,8 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 
     // form element
     var trial_form_id = _join(plugin_id_name, "form");
-    console.log("trial_form_id", trial_form_id)
     display_element.innerHTML += '<form id="'+trial_form_id+'"></form>';
     var trial_form = display_element.querySelector("#" + trial_form_id);
-    console.log("trial_form", trial_form)
     // show preamble text
     var preamble_id_name = _join(plugin_id_name, 'preamble');
     trial_form.innerHTML += '<div id="'+preamble_id_name+'" class="'+preamble_id_name+'">'+trial.preamble+'</div>';
@@ -120,7 +118,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         // create radio button
         var input_id_name = _join(plugin_id_name, 'response', i);
         display_element.querySelector(option_id_selector + " label").innerHTML =
-          '<input type="radio" name="'+ input_id_name + '" value="' + trial.options[i][j] + '">' +
+          '<input type="radio" name="' + input_id_name + '" value="' + trial.options[i][j] + '">' +
           display_element.querySelector(option_id_selector + " label").innerHTML;
       }
 
@@ -129,7 +127,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         display_element.querySelector(question_selector + " p").innerHMTL += "<span class='required'>*</span>";
     
         // add required property
-        display_element.querySelector(question_selector + " input").required = true;
+        display_element.querySelector(question_selector + " input[type=radio]").required = true;
       }
     }
     // add submit button
@@ -146,17 +144,11 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       // create object to hold responses
       var question_data = {};
       var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
-      var inputs = document.getElementsByTagName('input');
-      var radios = []
-      for(var i = 0; i < inputs.length; i++){
-        if(inputs[i].checked){
-          radios.push(inputs[i].value)
-        }
-      }
-      matches.forEach(function(currentEl ,index){
+      matches.forEach(function(match, index) {
         var id = "Q" + index;
+        var val = match.querySelector("input[type=radio]:checked").value;
         var obje = {};
-        obje[id] = radios[index];
+        obje[id] = val;
         Object.assign(question_data, obje);
       })
       // save data

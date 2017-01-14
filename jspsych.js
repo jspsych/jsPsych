@@ -99,7 +99,12 @@ window.jsPsych = (function() {
       opts.display_element = document.querySelector('body');
     } else {
       // make sure that the display element exists on the page
-      var display = opts.display_element;
+      var display;
+      if (opts.display_element instanceof Element) {
+        var display = opts.display_element;
+      } else {
+        var display = document.querySelector('#' + opts.display_element);
+      }
       if(display === null) {
         console.error('The display_element specified in jsPsych.init() does not exist in the DOM.');
       } else {
@@ -186,7 +191,6 @@ window.jsPsych = (function() {
   };
 
   core.getDisplayElement = function() {
-    console.log("yo in getDisplayElement", DOM_target);
     return DOM_target;
   };
 
