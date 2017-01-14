@@ -133,7 +133,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       }
     }
     // add submit button
-    trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn"> next </input>';
+    trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn"></input>';
 
     trial_form.addEventListener('submit', function(event) {
       event.preventDefault();
