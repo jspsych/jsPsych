@@ -84,23 +84,22 @@ jsPsych.plugins.instructions = (function() {
       if (trial.show_clickable_nav) {
 
         var nav_html = "<div class='jspsych-instructions-nav'>";
-        // if (current_page != 0 && trial.allow_backward) {
-        //   nav_html += "<button id='jspsych-instructions-back' class='jspsych-btn'>&lt; Previous</button>";
-        // }
-        // nav_html += "<button id='jspsych-instructions-next' class='jspsych-btn'>Next &gt;</button></div>"
+        if (current_page != 0 && trial.allow_backward) {
+          nav_html += "<button id='jspsych-instructions-back' class='jspsych-btn'>&lt; Previous</button>";
+        }
+        nav_html += "<button id='jspsych-instructions-next' class='jspsych-btn'>Next &gt;</button></div>"
 
         display_element.innerHTML += nav_html;
 
-        // if (current_page != 0 && trial.allow_backward) {
-        //   display_element.querySelector('#jspsych-instructions-back').addEventListener('click', function() {
-        //     clear_button_handlers();
-        //   });
-        // }
-        // 
-        // display_element.querySelector('#jspsych-instructions-next').addEventListener('click', function() {
-        //   clear_button_handlers();
-        // });
-
+        if (current_page != 0 && trial.allow_backward) {
+          display_element.querySelector('#jspsych-instructions-back').addEventListener('click', function() {
+            clear_button_handlers();
+          });
+        }
+        
+        display_element.querySelector('#jspsych-instructions-next').addEventListener('click', function() {
+          clear_button_handlers();
+        });
       }
     }
 
@@ -109,29 +108,29 @@ jsPsych.plugins.instructions = (function() {
       display_element.querySelector('#jspsych-instructions-back').removeEventListener('click');
     }
 
-    // function next() {
-    // 
-    //   add_current_page_to_view_history()
-    // 
-    //   current_page++;
-    // 
-    //   // if done, finish up...
-    //   if (current_page >= trial.pages.length) {
-    //     endTrial();
-    //   } else {
-    //     show_current_page();
-    //   }
-    // 
-    // }
-    // 
-    // function back() {
-    // 
-    //   add_current_page_to_view_history()
-    // 
-    //   current_page--;
-    // 
-    //   show_current_page();
-    // }
+    function next() {
+    
+      add_current_page_to_view_history()
+    
+      current_page++;
+    
+      // if done, finish up...
+      if (current_page >= trial.pages.length) {
+        endTrial();
+      } else {
+        show_current_page();
+      }
+    
+    }
+    
+    function back() {
+    
+      add_current_page_to_view_history()
+    
+      current_page--;
+    
+      show_current_page();
+    }
 
     function add_current_page_to_view_history() {
 
