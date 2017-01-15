@@ -1,5 +1,8 @@
-require('../jspsych.js');
-require('../plugins/jspsych-text.js');
+const root = '../../';
+
+require(root + 'jspsych.js');
+
+require(root + 'plugins/jspsych-text.js');
 
 describe('Basic data recording', function(){
   test('should be able to get rt after running experiment', function(){

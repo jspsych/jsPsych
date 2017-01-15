@@ -1,4 +1,6 @@
-require('../jspsych.js');
+const root = '../../';
+
+require(root + 'jspsych.js');
 
 describe('#getKeyboardResponse', function(){
   test('should execute a function after successful keypress', function(){
