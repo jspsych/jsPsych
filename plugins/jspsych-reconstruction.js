@@ -107,7 +107,7 @@ jsPsych.plugins['reconstruction'] = (function() {
       // add submit button
       display_element.innerHTML += '<button id="jspsych-reconstruction-next" class="jspsych-btn jspsych-reconstruction">Submit Answers</button>';
 
-      display_element.querySelector('#jspsych-reconstruction-next').attachEventListener('click', endTrial);
+      display_element.querySelector('#jspsych-reconstruction-next').addEventListener('click', endTrial);
     }
 
     function endTrial() {
