@@ -1,5 +1,5 @@
 /**
- * jspsych-test
+ * jspsych-survey-multi-picture
  * a jspsych plugin for multiple choice survey questions
  *
  * Shane Martin
@@ -9,11 +9,11 @@
  */
 
 
-jsPsych.plugins['test'] = (function() {
+jsPsych.plugins['survey-multi-picture'] = (function() {
   var plugin = {};
 
   plugin.info = {
-    name: 'test',
+    name: 'survey-multi-picture',
     description: '',
     parameters: {
       questions: {
@@ -52,7 +52,7 @@ jsPsych.plugins['test'] = (function() {
     }
   }
   plugin.trial = function(display_element, trial) {
-    var plugin_id_name = "jspsych-test";
+    var plugin_id_name = "jspsych-survey-multi-picture";
     var plugin_id_selector = '#' + plugin_id_name;
     var _join = function( /*args*/ ) {
       var arr = Array.prototype.slice.call(arguments, _join.length);
@@ -70,14 +70,14 @@ jsPsych.plugins['test'] = (function() {
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
     // inject CSS for trial
-    var node = display_element.innerHTML += '<style id="jspsych-test-css">';
-    var cssstr = ".jspsych-test-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }"+
-      ".jspsych-test-text span.required {color: darkred;}"+
-      ".jspsych-test-horizontal .jspsych-test-text {  text-align: center;}"+
-      ".jspsych-test-option { line-height: 2; }"+
-      ".jspsych-test-horizontal .jspsych-test-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}"
+    var node = display_element.innerHTML += '<style id="jspsych-survey-multi-picture-css">';
+    var cssstr = ".jspsych-survey-multi-picture-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }"+
+      ".jspsych-survey-multi-picture-text span.required {color: darkred;}"+
+      ".jspsych-survey-multi-picture-horizontal .jspsych-survey-multi-picture-text {  text-align: center;}"+
+      ".jspsych-survey-multi-picture-option { line-height: 2; }"+
+      ".jspsych-survey-multi-picture-horizontal .jspsych-survey-multi-picture-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}"
 
-    display_element.querySelector('#jspsych-test-css').innerHTML = cssstr;
+    display_element.querySelector('#jspsych-survey-multi-picture-css').innerHTML = cssstr;
 
     // form element
     var trial_form_id = _join(plugin_id_name, "form");
@@ -100,7 +100,7 @@ jsPsych.plugins['test'] = (function() {
       var question_selector = _join(plugin_id_selector, i);
     
       // add question text
-      display_element.querySelector(question_selector).innerHTML += '<p class="' + plugin_id_name + '-text test">' + trial.questions[i] + '</p>';
+      display_element.querySelector(question_selector).innerHTML += '<p class="' + plugin_id_name + '-text survey-multi-picture">' + trial.questions[i] + '</p>';
 
       // create option radio buttons
       for (var j = 0; j < trial.options[i].length; j++) {
@@ -124,14 +124,14 @@ jsPsych.plugins['test'] = (function() {
         // display_element.querySelector(option_id_selector).innerHTML += option_label;
 
         // create radio button
-        // id="jspsych-test-option-0-0"
+        // id="jspsych-survey-multi-picture-option-0-0"
         display_element.querySelector(option_id_selector + " label").innerHTML =
           '<img id="image" src="'+trial.options[i][j].url+'">' +
           display_element.querySelector(option_id_selector + " label").innerHTML;
       }
     }
     // add submit button
-    var matches = display_element.querySelectorAll(".jspsych-test-option");
+    var matches = display_element.querySelectorAll(".jspsych-survey-multi-picture-option");
     console.log("matches", matches)
     matches.forEach(function(currentImageDiv, index){
       console.log("currentimagediv", currentImageDiv)
