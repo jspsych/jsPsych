@@ -752,8 +752,6 @@ window.jsPsych = (function() {
 
   function finishExperiment() {
 
-    opts.on_finish(jsPsych.data.getData());
-
     if(typeof timeline.end_message !== 'undefined'){
       DOM_target.innerHTML = timeline.end_message;
     }
@@ -767,6 +765,8 @@ window.jsPsych = (function() {
     } else if (document.webkitExitFullscreen) {
       document.webkitExitFullscreen();
     }
+
+    opts.on_finish(jsPsych.data.getData());
 
   }
 
