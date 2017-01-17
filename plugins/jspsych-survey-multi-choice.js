@@ -114,7 +114,6 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         // add label and question text
         var option_label = '<label class="' + plugin_id_name + '-text">' + trial.options[i][j] + '</label>';
         display_element.querySelector(option_id_selector).innerHTML += option_label;
-        console.log("option label", option_label)
     
         // create radio button
         var input_id_name = _join(plugin_id_name, 'response', i);

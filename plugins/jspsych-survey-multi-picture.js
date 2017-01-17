@@ -119,22 +119,13 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
           var option_label = '<label class="' + plugin_id_name + '-text"></label>';
           display_element.querySelector(option_id_selector).innerHTML += option_label;
         }
-        // console.log("option label", option_label)
-        // var option_label = '<label class="' + plugin_id_name + '-text">'+trial.options[i].url+'</label>';
-        // display_element.querySelector(option_id_selector).innerHTML += option_label;
-
-        // create radio button
-        // id="jspsych-survey-multi-picture-option-0-0"
         display_element.querySelector(option_id_selector + " label").innerHTML =
           '<img id="image" src="'+trial.options[i][j].url+'">' +
           display_element.querySelector(option_id_selector + " label").innerHTML;
       }
     }
-    // add submit button
     var matches = display_element.querySelectorAll(".jspsych-survey-multi-picture-option");
-    console.log("matches", matches)
     matches.forEach(function(currentImageDiv, index){
-      console.log("currentimagediv", currentImageDiv)
       currentImageDiv.addEventListener('click', function(event){
         var endTime = (new Date()).getTime();
         var response_time = endTime - startTime;
