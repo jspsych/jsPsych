@@ -80,7 +80,7 @@ jsPsych.plugins.html = (function() {
         var key_listener = function(e) {
           if (e.which == trial.cont_key) finish();
         };
-        display_element.attachEventListener('keydown', key_listener);
+        display_element.addEventListener('keydown', key_listener);
       }
     });
   };

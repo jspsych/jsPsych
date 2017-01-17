@@ -186,7 +186,6 @@ window.jsPsych = (function() {
   };
 
   core.getDisplayElement = function() {
-    console.log("yo in getDisplayElement", DOM_target);
     return DOM_target;
   };
 
