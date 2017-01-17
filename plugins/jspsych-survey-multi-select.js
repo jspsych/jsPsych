@@ -121,14 +121,6 @@ jsPsych.plugins['survey-multi-select'] = (function() {
           '<input type="checkbox" name="' + input_id_name + '" value="' + trial.options[i][j] + '">' +
           display_element.querySelector(option_id_selector + " label").innerHTML;
       }
-
-      if (trial.required && trial.required[i]) {
-        // add "question required" asterisk
-        display_element.querySelector(question_selector + " p").innerHMTL += "<span class='required'>*</span>";
-    
-        // add required property
-        display_element.querySelector(question_selector + " input[type=checkbox]").required = true;
-      }
     }
     // add submit button
     trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn"></input>';
@@ -140,13 +132,15 @@ jsPsych.plugins['survey-multi-select'] = (function() {
       var response_time = endTime - startTime;
 
       // create object to hold responses
-      var question_data = {};
       var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
+      var question_data = {};
+      var val = [];
       matches.forEach(function(match, index) {
+        var inputboxes = match.querySelectorAll("input[type=checkbox]:checked")
+        inputboxes.forEach(currentChecked => {
+          val.push(currentChecked.value)
+        })
         var id = 'answer'
-        var val = [];
-        val.push(match.querySelector("input[type=checkbox]:checked").value)
-        console.log("i'm VAL!!!", val)
         var obje = {};
         obje[id] = val;
         Object.assign(question_data, obje);
