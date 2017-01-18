@@ -1,4 +1,7 @@
-require('../jspsych.js');
+const root = '../../';
+
+require(root + 'jspsych.js');
+
 
 describe('#shuffle', function(){
   test('should produce fixed order with mock RNG', function(){

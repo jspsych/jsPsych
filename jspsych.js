@@ -752,8 +752,6 @@ window.jsPsych = (function() {
 
   function finishExperiment() {
 
-    opts.on_finish(jsPsych.data.getData());
-
     if(typeof timeline.end_message !== 'undefined'){
       DOM_target.innerHTML = timeline.end_message;
     }
@@ -767,6 +765,8 @@ window.jsPsych = (function() {
     } else if (document.webkitExitFullscreen) {
       document.webkitExitFullscreen();
     }
+
+    opts.on_finish(jsPsych.data.getData());
 
   }
 
@@ -884,6 +884,9 @@ window.jsPsych = (function() {
     document.querySelector('#jspsych-progressbar-inner').style.width = progress.percent_complete + "%";
   }
 
+  //Leave a trace in the DOM that jspsych was loaded
+  document.documentElement.setAttribute('jspsych', 'present');
+  
   return core;
 })();
 
@@ -2187,6 +2190,32 @@ jsPsych.pluginAPI = (function() {
     });
   }
 
+  /**
+   * Allows communication with user hardware through our custom Google Chrome extension + native C++ program
+   * @param		{object}	mess	The message to be passed to our extension, see its documentation for the expected members of this object.
+   * @author	Daniel Rivas
+   *
+   */
+  module.hardware = function hardware(mess){
+	  //since Chrome extension content-scripts do not share the javascript environment with the page script that loaded jspsych,
+	  //we will need to use hacky methods like communicating through DOM events.
+	  var jspsychEvt = new CustomEvent('jspsych', {detail: mess});
+	  document.dispatchEvent(jspsychEvt);
+	  //And voila! it will be the job of the content script injected by the extension to listen for the event and do the appropriate actions.
+  };
+  
+  /** {boolean} Indicates whether this instance of jspsych has opened a hardware connection through our browser extension */
+  module.hardwareConnected = false;
+  
+  
+  //it might be useful to open up a line of communication from the extension back to this page script,
+  //again, this will have to pass through DOM events. For now speed is of no concern so I will use jQuery
+  document.addEventListener("jspsych-activate", function(evt){
+	  module.hardwareConnected = true;
+  })
+  
+  
+  
   return module;
 })();
 

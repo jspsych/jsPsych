@@ -74,7 +74,7 @@ jsPsych.plugins.text = (function() {
 
     // check if key is 'mouse'
     if (trial.choices == 'mouse') {
-      display_element.attachEventListener(mouse_listener);
+      display_element.addEventListener(mouse_listener);
       var start_time = (new Date()).getTime();
     } else {
       jsPsych.pluginAPI.getKeyboardResponse({

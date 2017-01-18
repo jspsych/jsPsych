@@ -77,7 +77,7 @@ jsPsych.plugins['survey-likert'] = (function() {
     // add submit button
     display_element.innerHTML += '<button id="jspsych-survey-likert" class="jspsych-survey-likert jspsych-btn">Submit Answers</button>';
 
-    display_element.querySelector('#jspsych-survey-likert-next').attachEventListener('click', function(){
+    display_element.querySelector('#jspsych-survey-likert-next').addEventListener('click', function(){
       // measure response time
       var endTime = (new Date()).getTime();
       var response_time = endTime - startTime;

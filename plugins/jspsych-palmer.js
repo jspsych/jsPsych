@@ -247,7 +247,7 @@ jsPsych.plugins.palmer = (function() {
     var startTime = (new Date()).getTime();
 
     display_element.innerHTML += '<p><button id="jspsych-palmer-submitButton" class="jspsych-btn" type="button">Submit Answer</button></p>';
-    display_element.querySelector('#jspsych-palmer-submitButton').attachEventListener('click', function() {
+    display_element.querySelector('#jspsych-palmer-submitButton').addEventListener('click', function() {
       save_data();
     });
 
