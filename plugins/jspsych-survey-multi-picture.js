@@ -1,5 +1,5 @@
 /**
- * jspsych-survey-multi-choice
+ * jspsych-survey-multi-picture
  * a jspsych plugin for multiple choice survey questions
  *
  * Shane Martin
@@ -9,11 +9,11 @@
  */
 
 
-jsPsych.plugins['survey-multi-choice'] = (function() {
+jsPsych.plugins['survey-multi-picture'] = (function() {
   var plugin = {};
 
   plugin.info = {
-    name: 'survey-multi-choice',
+    name: 'survey-multi-picture',
     description: '',
     parameters: {
       questions: {
@@ -52,7 +52,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     }
   }
   plugin.trial = function(display_element, trial) {
-    var plugin_id_name = "jspsych-survey-multi-choice";
+    var plugin_id_name = "jspsych-survey-multi-picture";
     var plugin_id_selector = '#' + plugin_id_name;
     var _join = function( /*args*/ ) {
       var arr = Array.prototype.slice.call(arguments, _join.length);
@@ -70,15 +70,14 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
     // inject CSS for trial
-    var node = display_element.innerHTML += '<style id="jspsych-survey-multi-choice-css">';
-    var cssstr = ".jspsych-survey-multi-choice-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }"+
-      ".jspsych-survey-multi-choice-text span.required {color: darkred;}"+
-      ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {  text-align: center;}"+
-      ".jspsych-survey-multi-choice-option { line-height: 2; }"+
-      ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}"+
-      "label.jspsych-survey-multi-choice-text input[type='radio'] {margin-right: 1em;}"
+    var node = display_element.innerHTML += '<style id="jspsych-survey-multi-picture-css">';
+    var cssstr = ".jspsych-survey-multi-picture-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }"+
+      ".jspsych-survey-multi-picture-text span.required {color: darkred;}"+
+      ".jspsych-survey-multi-picture-horizontal .jspsych-survey-multi-picture-text {  text-align: center;}"+
+      ".jspsych-survey-multi-picture-option { line-height: 2; }"+
+      ".jspsych-survey-multi-picture-horizontal .jspsych-survey-multi-picture-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}"
 
-    display_element.querySelector('#jspsych-survey-multi-choice-css').innerHTML = cssstr;
+    display_element.querySelector('#jspsych-survey-multi-picture-css').innerHTML = cssstr;
 
     // form element
     var trial_form_id = _join(plugin_id_name, "form");
@@ -101,68 +100,50 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       var question_selector = _join(plugin_id_selector, i);
     
       // add question text
-      display_element.querySelector(question_selector).innerHTML += '<p class="' + plugin_id_name + '-text survey-multi-choice">' + trial.questions[i] + '</p>';
+      display_element.querySelector(question_selector).innerHTML += '<p class="' + plugin_id_name + '-text survey-multi-picture">' + trial.questions[i] + '</p>';
 
       // create option radio buttons
       for (var j = 0; j < trial.options[i].length; j++) {
         var option_id_name = _join(plugin_id_name, "option", i, j),
           option_id_selector = '#' + option_id_name;
     
-        // add radio button container
+        // add image container
         display_element.querySelector(question_selector).innerHTML += '<div id="'+option_id_name+'" class="'+_join(plugin_id_name, 'option')+'"></div>';
     
         // add label and question text
-        var option_label = '<label class="' + plugin_id_name + '-text">' + trial.options[i][j] + '</label>';
-        display_element.querySelector(option_id_selector).innerHTML += option_label;
-    
-        // create radio button
-        var input_id_name = _join(plugin_id_name, 'response', i);
+        if(trial.options[i][j].label){
+          var label = trial.options[i][j].label;
+          var option_label = '<label class="' + plugin_id_name + '-text">' + label + '</label>';
+          display_element.querySelector(option_id_selector).innerHTML += option_label;
+        } else {
+          var option_label = '<label class="' + plugin_id_name + '-text"></label>';
+          display_element.querySelector(option_id_selector).innerHTML += option_label;
+        }
         display_element.querySelector(option_id_selector + " label").innerHTML =
-          '<input type="radio" name="' + input_id_name + '" value="' + trial.options[i][j] + '">' +
+          '<img id="image" src="'+trial.options[i][j].url+'">' +
           display_element.querySelector(option_id_selector + " label").innerHTML;
       }
-
-      if (trial.required && trial.required[i]) {
-        // add "question required" asterisk
-        display_element.querySelector(question_selector + " p").innerHMTL += "<span class='required'>*</span>";
-    
-        // add required property
-        display_element.querySelector(question_selector + " input[type=radio]").required = true;
-      }
     }
-    // add submit button
-    trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn"></input>';
-
-    trial_form.addEventListener('submit', function(event) {
-      event.preventDefault();
-      // measure response time
-      var endTime = (new Date()).getTime();
-      var response_time = endTime - startTime;
-
-      // create object to hold responses
-      var question_data = {};
-      var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
-      matches.forEach(function(match, index) {
+    var matches = display_element.querySelectorAll(".jspsych-survey-multi-picture-option");
+    matches.forEach(function(currentImageDiv, index){
+      currentImageDiv.addEventListener('click', function(event){
+        var endTime = (new Date()).getTime();
+        var response_time = endTime - startTime;
+        var question_data = {};
         var id = 'answer'
-
-        var val = match.querySelector("input[type=radio]:checked").value;
+        var val = currentImageDiv.querySelector("#image").src;
         var obje = {};
         obje[id] = val;
         Object.assign(question_data, obje);
+        var trial_data = {
+          "rt": response_time,
+          "responses": JSON.stringify(question_data)
+        };
+        display_element.innerHTML = '';
+        jsPsych.finishTrial(trial_data);
       })
-      // save data
-      var trial_data = {
-        "rt": response_time,
-        "responses": JSON.stringify(question_data)
-      };
-      display_element.innerHTML = '';
-    
-      // next trial
-      jsPsych.finishTrial(trial_data);
-    });
-    
-    var startTime = (new Date()).getTime();
+      var startTime = (new Date()).getTime();
+    })
   };
-
   return plugin;
 })();
