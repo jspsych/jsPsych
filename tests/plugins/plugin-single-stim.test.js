@@ -1,5 +1,7 @@
-require('../jspsych.js');
-require('../plugins/jspsych-single-stim.js');
+const root = '../../';
+
+require(root + 'jspsych.js');
+require(root + 'plugins/jspsych-single-stim.js');
 
 test('jsPsych should be in the window object', function(){
   expect(typeof window.jsPsych).not.toBe('undefined');
