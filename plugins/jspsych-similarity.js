@@ -239,7 +239,7 @@ jsPsych.plugins.similarity = (function() {
         display_element.append(trial.prompt);
       }
 
-      display_element.querySelector("#next").attachEventListener('click', function() {
+      display_element.querySelector("#next").addEventListener('click', function() {
         var endTime = (new Date()).getTime();
         var response_time = endTime - startTime;
 

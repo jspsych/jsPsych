@@ -144,6 +144,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
       matches.forEach(function(match, index) {
         var id = 'answer'
+
         var val = match.querySelector("input[type=radio]:checked").value;
         var obje = {};
         obje[id] = val;

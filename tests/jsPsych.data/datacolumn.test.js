@@ -1,4 +1,6 @@
-require('../jspsych.js');
+const root = '../../';
+
+require(root + 'jspsych.js');
 
 var data = [
   {rt: 100, filter: true},
