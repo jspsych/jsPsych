@@ -74,7 +74,7 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
     var cssstr = ".jspsych-survey-multi-picture-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }"+
       ".jspsych-survey-multi-picture-text span.required {color: darkred;}"+
       ".jspsych-survey-multi-picture-horizontal .jspsych-survey-multi-picture-text {  text-align: center;}"+
-      ".jspsych-survey-multi-picture-option { line-height: 2; }"+
+      ".jspsych-survey-multi-picture-option { line-height: 2; margin-bottom: 10px; }"+
       ".jspsych-survey-multi-picture-horizontal .jspsych-survey-multi-picture-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}"
 
     display_element.querySelector('#jspsych-survey-multi-picture-css').innerHTML = cssstr;
