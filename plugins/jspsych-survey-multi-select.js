@@ -123,8 +123,9 @@ jsPsych.plugins['survey-multi-select'] = (function() {
       }
     }
     // add submit button
+    trial_form.innerHTML +='<div class="fail-message"></div>'
     trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn" value="Next"></input>';
-
+    
     trial_form.addEventListener('submit', function(event) {
       event.preventDefault();
       // measure response time
@@ -145,15 +146,20 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         obje[id] = val;
         Object.assign(question_data, obje);
       })
-      // save data
-      var trial_data = {
-        "rt": response_time,
-        "responses": JSON.stringify(question_data)
-      };
-      display_element.innerHTML = '';
-    
-      // next trial
-      jsPsych.finishTrial(trial_data);
+      if(!val.length) {
+        var inputboxes = display_element.querySelectorAll("input[type=checkbox]")
+        display_element.querySelector(".fail-message").innerHTML = '<span style="color: red;" class="required">*please select at least one option!</span>';
+      } else {
+        // save data
+        var trial_data = {
+          "rt": response_time,
+          "responses": JSON.stringify(question_data)
+        };
+        display_element.innerHTML = '';
+        
+        // next trial
+        jsPsych.finishTrial(trial_data);
+      }
     });
     
     var startTime = (new Date()).getTime();
