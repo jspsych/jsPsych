@@ -73,7 +73,6 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
     var node = display_element.innerHTML += '<style id="jspsych-survey-multi-picture-css">';
     var cssstr = ".jspsych-survey-multi-picture-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }"+
       ".jspsych-survey-multi-picture-text span.required {color: darkred;}"+
-      ".jspsych-survey-multi-picture-question { text-align: left; }"+
       ".jspsych-survey-multi-picture-option { line-height: 2; margin-bottom: 10px; }"+
       ".jspsych-survey-multi-picture-horizontal .jspsych-survey-multi-picture-option { display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}"
 
@@ -100,7 +99,7 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
       var question_selector = _join(plugin_id_selector, i);
     
       // add question text
-      display_element.querySelector(question_selector).innerHTML += '<p class="' + plugin_id_name + '-text survey-multi-picture">' + trial.questions[i] + '</p>';
+      display_element.querySelector(question_selector).innerHTML += '<p id="survey-question" class="' + plugin_id_name + '-text survey-multi-picture">' + trial.questions[i] + '</p>';
 
       // create option radio buttons
       for (var j = 0; j < trial.options[i].length; j++) {
