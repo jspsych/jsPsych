@@ -124,7 +124,6 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 
       if (trial.required && trial.required[i]) {
         var hey = question_selector + " p"
-        console.log("hey", hey)
         // add "question required" asterisk
         display_element.querySelector(question_selector + " p").innerHTML += "<span class='required'>*</span>";
     
