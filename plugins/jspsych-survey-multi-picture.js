@@ -73,9 +73,9 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
     var node = display_element.innerHTML += '<style id="jspsych-survey-multi-picture-css">';
     var cssstr = ".jspsych-survey-multi-picture-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }"+
       ".jspsych-survey-multi-picture-text span.required {color: darkred;}"+
-      ".jspsych-survey-multi-picture-horizontal .jspsych-survey-multi-picture-text {  text-align: center;}"+
+      ".jspsych-survey-multi-picture-question { text-align: left; }"+
       ".jspsych-survey-multi-picture-option { line-height: 2; margin-bottom: 10px; }"+
-      ".jspsych-survey-multi-picture-horizontal .jspsych-survey-multi-picture-option {  display: inline-block;  width: 200px; height: auto; margin-left: 1em;  margin-right: 1em;  vertical-align: top;}"
+      ".jspsych-survey-multi-picture-horizontal .jspsych-survey-multi-picture-option { display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}"
 
     display_element.querySelector('#jspsych-survey-multi-picture-css').innerHTML = cssstr;
 
@@ -120,7 +120,7 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
           display_element.querySelector(option_id_selector).innerHTML += option_label;
         }
         display_element.querySelector(option_id_selector + " label").innerHTML =
-          '<img id="image" src="'+trial.options[i][j].url+'">' +
+          '<img style="width: 250px; height: auto;" id="image" src="'+trial.options[i][j].url+'">' +
           display_element.querySelector(option_id_selector + " label").innerHTML;
       }
     }
