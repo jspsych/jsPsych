@@ -112,14 +112,20 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         display_element.querySelector(question_selector).innerHTML += '<div id="'+option_id_name+'" class="'+_join(plugin_id_name, 'option')+'"></div>';
     
         // add label and question text
-        var option_label = '<label class="' + plugin_id_name + '-text">' + trial.options[i][j] + '</label>';
-        display_element.querySelector(option_id_selector).innerHTML += option_label;
+        var form = document.getElementById(option_id_name)
+        var input_id_name = _join(plugin_id_name, 'response', i);
+        var label = document.createElement('label');
+        label.setAttribute('class', plugin_id_name+'-text');
+        label.innerHTML = trial.options[i][j];
+        label.setAttribute('for', input_id_name)
     
         // create radio button
-        var input_id_name = _join(plugin_id_name, 'response', i);
-        display_element.querySelector(option_id_selector + " label").innerHTML =
-          '<input type="radio" name="' + input_id_name + '" value="' + trial.options[i][j] + '">' +
-          display_element.querySelector(option_id_selector + " label").innerHTML;
+        var input = document.createElement('input');
+        input.setAttribute('type', "radio");
+        input.setAttribute('name', input_id_name);
+        input.setAttribute('value', trial.options[i][j])
+        label.prepend(input);
+        form.appendChild(label)
       }
 
       if (trial.required && trial.required[i]) {
