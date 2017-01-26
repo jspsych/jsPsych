@@ -118,8 +118,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         label.setAttribute('class', plugin_id_name+'-text');
         label.innerHTML = trial.options[i][j];
         label.setAttribute('for', input_id_name)
-        // var option_label = '<label class="' + plugin_id_name + '-text">' + trial.options[i][j] + '</label>';
-        // display_element.querySelector(option_id_selector).innerHTML += option_label;
+
         // create  checkboxes
         var input = document.createElement('input');
         input.setAttribute('type', "checkbox");
@@ -127,10 +126,6 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         input.setAttribute('value', trial.options[i][j])
         label.prepend(input);
         form.appendChild(label)
-        // var input_id_name = _join(plugin_id_name, 'response', i);
-        // display_element.querySelector(option_id_selector + " label").innerHTML =
-        //   '<input type="checkbox" name="' + input_id_name + '" value="' + trial.options[i][j] + '">' +
-        //   display_element.querySelector(option_id_selector + " label").innerHTML;
       }
     }
     // add submit button

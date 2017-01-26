@@ -118,8 +118,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         label.setAttribute('class', plugin_id_name+'-text');
         label.innerHTML = trial.options[i][j];
         label.setAttribute('for', input_id_name)
-        // var option_label = '<label class="' + plugin_id_name + '-text">' + trial.options[i][j] + '</label>';
-        // display_element.querySelector(option_id_selector).innerHTML += option_label;
+
         // create radio button
         var input = document.createElement('input');
         input.setAttribute('type', "radio");
@@ -127,9 +126,6 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         input.setAttribute('value', trial.options[i][j])
         label.prepend(input);
         form.appendChild(label)
-        // display_element.querySelector(option_id_selector + " label").innerHTML =
-        //   '<input type="radio" name="' + input_id_name + '" value="' + trial.options[i][j] + '">' +
-        //   display_element.querySelector(option_id_selector + " label").innerHTML;
       }
 
       if (trial.required && trial.required[i]) {
