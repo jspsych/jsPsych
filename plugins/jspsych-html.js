@@ -91,7 +91,7 @@ jsPsych.plugins.html = (function() {
     xmlhttp.open("GET", file, true);
     xmlhttp.onreadystatechange = function(){
         if(xmlhttp.status == 200 && xmlhttp.readyState == 4){ //Check if loaded
-            element.innerHTML = xmlHttp.responseText;
+            element.innerHTML = xmlhttp.responseText;
             callback();
         }
     }
