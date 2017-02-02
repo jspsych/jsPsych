@@ -113,14 +113,12 @@ jsPsych.init({
 ## jsPsych.data.getData
 
 ```
-jsPsych.data.getData(filters)
+jsPsych.data.get()
 ```
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
-filters | array of objects | Set of filters used to select subset of data.
+None.
 
 ### Return value
 
@@ -134,7 +132,7 @@ Selects some or all of the data generated in the experiment. Each filter is an o
 
 ```javascript
 // select all trials
-jsPsych.data.getData();
+jsPsych.data.get();
 
 // select all single-stim trials
 jsPsych.data.getData([{trial_type: 'single-stim'}]);
