@@ -79,7 +79,7 @@
       type: "text",
       text: function() {
 
-        var trials = jsPsych.data.getData().filter({test_part: 'test'});
+        var trials = jsPsych.data.get().filter({test_part: 'test'});
         var correct_trials = trials.filter({correct: true});
         var accuracy = Math.round(correct_trials.count() / trials.count() * 100);
         var rt = Math.round(correct_trials.select('rt').mean());

@@ -204,7 +204,7 @@ window.jsPsych = (function() {
     jsPsych.data.write(data);
 
     // get back the data with all of the defaults in
-    var trial_data = jsPsych.data.getData().filter({trial_index: global_trial_index});
+    var trial_data = jsPsych.data.get().filter({trial_index: global_trial_index});
 
     // for trial-level callbacks, we just want to pass in a reference to the values
     // of the DataCollection, for easy access and editing.
@@ -766,7 +766,7 @@ window.jsPsych = (function() {
       document.webkitExitFullscreen();
     }
 
-    opts.on_finish(jsPsych.data.getData());
+    opts.on_finish(jsPsych.data.get());
 
   }
 
@@ -1187,7 +1187,7 @@ jsPsych.data = (function() {
     interactionData = DataCollection();
   }
 
-  module.getData = function() {
+  module.get = function() {
     return allData;
   };
 

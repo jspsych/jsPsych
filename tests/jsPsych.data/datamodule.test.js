@@ -14,7 +14,7 @@ describe('Basic data recording', function(){
     document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     // check if data contains rt
-    expect(jsPsych.data.getData().select('rt').count()).toBe(1);
+    expect(jsPsych.data.get().select('rt').count()).toBe(1);
   })
 })
 
@@ -30,7 +30,7 @@ describe('#addProperties', function(){
     document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     // check if data contains testprop
-    expect(jsPsych.data.getData().select('testprop').count()).toBe(1);
+    expect(jsPsych.data.get().select('testprop').count()).toBe(1);
   });
 
   test('should add data to all trials retroactively', function(){
@@ -43,9 +43,9 @@ describe('#addProperties', function(){
     document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     // check if data contains testprop
-    expect(jsPsych.data.getData().select('testprop').count()).toBe(0);
+    expect(jsPsych.data.get().select('testprop').count()).toBe(0);
     jsPsych.data.addProperties({'testprop': 1});
-    expect(jsPsych.data.getData().select('testprop').count()).toBe(1);
+    expect(jsPsych.data.get().select('testprop').count()).toBe(1);
   });
 
 });
@@ -67,8 +67,8 @@ describe('#addDataToLastTrial', function(){
     document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     // check data structure
-    expect(jsPsych.data.getData().select('testA').values[0]).toBe(1);
-    expect(jsPsych.data.getData().select('testB').values[0]).toBe(2);
+    expect(jsPsych.data.get().select('testA').values[0]).toBe(1);
+    expect(jsPsych.data.get().select('testB').values[0]).toBe(2);
   });
 });
 
