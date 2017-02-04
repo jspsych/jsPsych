@@ -79,4 +79,16 @@ describe('DataCollection', function(){
     expect(data.count()).toBe(3);
     expect(data.values()[2].rt).toBe(500);
   });
+  test('#unqiueNames', function(){
+    var data = [
+      {rt: 100, filter: true},
+      {rt: 200, filter: false},
+      {rt: 300, filter: true, v1: false},
+      {rt: 400, filter: false, v2: true},
+      {rt: 500, filter: false, v1: false}
+    ];
+
+    jsPsych.data._customInsert(data);
+    expect(jsPsych.data.get().uniqueNames().length).toBe(4);
+  })
 });
