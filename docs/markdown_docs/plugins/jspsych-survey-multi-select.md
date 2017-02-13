@@ -1,6 +1,6 @@
 # jspsych-survey-multi-select plugin
 
-The survey-multi-select plugin displays a set of questions with multiple choice response fields. The subject selects a single answer.
+The survey-multi-select plugin displays a set of questions with multiple select response fields. The subject could select multiple answers.
 
 ## Parameters
 
@@ -36,23 +36,21 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
     var page_1_options = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
     var page_2_options = ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neural", "Somewhat Agree", "Agree", "Strongly Agree"];
 
-    var multi_choice_block = {
+    var multi_select_block = {
         type: 'survey-multi-select',
         questions: page_1_questions,
         options: [page_1_options, page_2_options],  // need one scale for every question on a page
-        required: [true, false]   // set whether questions are required
     };
 
-    var multi_choice_block_horizontal = {
+    var multi_select_block_horizontal = {
         type: 'survey-multi-select',
         questions: page_1_questions,
         options: [page_1_options, page_2_options],  // need one scale for every question on a page
-        required: [true, false],   // set whether questions are required
         horizontal: true  // centres questions and makes options display horizontally
     };
 
     jsPsych.init({
-      timeline: [multi_choice_block, multi_choice_block_horizontal],
+      timeline: [multi_select_block, multi_select_block_horizontal],
       on_finish: function() {
         jsPsych.data.displayData();
       }
