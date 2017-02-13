@@ -101,7 +101,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       var question_selector = _join(plugin_id_selector, i);
     
       // add question text
-      display_element.querySelector(question_selector).innerHTML += '<p id="survey-question" class="' + plugin_id_name + '-text survey-multi-choice">' + trial.questions[i] + '</p>';
+      display_element.querySelector(question_selector).innerHTML += '<p class="' + plugin_id_name + '-text survey-multi-choice">' + trial.questions[i] + '</p>';
 
       // create option radio buttons
       for (var j = 0; j < trial.options[i].length; j++) {
@@ -118,7 +118,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         label.setAttribute('class', plugin_id_name+'-text');
         label.innerHTML = trial.options[i][j];
         label.setAttribute('for', input_id_name)
-
+    
         // create radio button
         var input = document.createElement('input');
         input.setAttribute('type', "radio");
@@ -129,19 +129,19 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       }
 
       if (trial.required && trial.required[i]) {
-        var hey = question_selector + " p"
         // add "question required" asterisk
-        display_element.querySelector(question_selector + " p").innerHTML += "<span class='required'>*</span>";
+        display_element.querySelector(question_selector + " p").innerHMTL += "<span class='required'>*</span>";
     
         // add required property
         display_element.querySelector(question_selector + " input[type=radio]").required = true;
       }
     }
     // add submit button
-    trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn" value="Next"></input>';
+    trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn"></input>';
 
     trial_form.addEventListener('submit', function(event) {
       event.preventDefault();
+      var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
       // measure response time
       var endTime = (new Date()).getTime();
       var response_time = endTime - startTime;
@@ -150,8 +150,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       var question_data = {};
       var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
       matches.forEach(function(match, index) {
-        var id = 'answer'
-
+        var id = "Q" + index;
         var val = match.querySelector("input[type=radio]:checked").value;
         var obje = {};
         obje[id] = val;
