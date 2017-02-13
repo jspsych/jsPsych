@@ -1,6 +1,6 @@
 # jspsych-survey-multi-picture plugin
 
-The survey-multi-picture plugin displays a set of questions with multiple choice response fields. The subject selects a single answer.
+The survey-multi-picture plugin displays a set of questions with multiple picture response fields. The subject selects a single answer.
 
 ## Parameters
 
