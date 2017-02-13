@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <script src="./jsPsych/jspsych.js" ></script>
+  <script src="./jsPsych/plugins/jspsych-survey-multi-picture.js" ></script>
+</head>
+<body>
+  
+</body>
+  <script>
+  var questions=["Please choose the picture which describes the following sentence: The dog is chased by the cat."]
+  var choices = [{url: "http://www.gameswithwords.org/WhichEnglish/images/1_2.jpg", label:""}, {url: "http://www.gameswithwords.org/WhichEnglish/images/1_1.jpg", label:""}]
+   var multi_choice_block = {
+      type: 'survey-multi-picture',
+      questions: questions,
+      options: [choices],
+      horizontal: true,
+      on_finish: function(data) {
+        console.log("i'm data", data)
+      }
+   };
+    jsPsych.init({
+      display_element: document.body,
+      timeline: [multi_choice_block],
+      on_finish: function(data) {
+      },
+    });
+  </script>
+</html>

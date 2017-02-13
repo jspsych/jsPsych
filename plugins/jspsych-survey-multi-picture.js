@@ -58,7 +58,6 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
       var arr = Array.prototype.slice.call(arguments, _join.length);
       return arr.join(separator = '-');
     }
-
     // trial defaults
     trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
     trial.required = typeof trial.required == 'undefined' ? null : trial.required;
@@ -101,7 +100,7 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
       // add question text
       display_element.querySelector(question_selector).innerHTML += '<p id="survey-question" class="' + plugin_id_name + '-text survey-multi-picture">' + trial.questions[i] + '</p>';
 
-      // create option radio buttons
+      // create option clickble images
       for (var j = 0; j < trial.options[i].length; j++) {
         var option_id_name = _join(plugin_id_name, "option", i, j),
           option_id_selector = '#' + option_id_name;
@@ -129,7 +128,7 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
         var endTime = (new Date()).getTime();
         var response_time = endTime - startTime;
         var question_data = {};
-        var id = 'answer'
+        var id = 'Q' + index;
         var val = currentImageDiv.querySelector("#image").src;
         var obje = {};
         obje[id] = val;

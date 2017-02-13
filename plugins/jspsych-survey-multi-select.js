@@ -124,8 +124,8 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         input.setAttribute('type', "checkbox");
         input.setAttribute('name', input_id_name);
         input.setAttribute('value', trial.options[i][j])
-        label.prepend(input);
         form.appendChild(label)
+        form.insertBefore(input, label)
       }
     }
     // add submit button
@@ -147,7 +147,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         inputboxes.forEach(currentChecked => {
           val.push(currentChecked.value)
         })
-        var id = 'answer'
+        var id = 'Q' + index
         var obje = {};
         obje[id] = val;
         Object.assign(question_data, obje);
