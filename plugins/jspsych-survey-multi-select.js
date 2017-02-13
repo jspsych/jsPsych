@@ -88,7 +88,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     var preamble_id_name = _join(plugin_id_name, 'preamble');
     trial_form.innerHTML += '<div id="'+preamble_id_name+'" class="'+preamble_id_name+'">'+trial.preamble+'</div>';
 
-    // add multiple-choice questions
+    // add multiple-select questions
     for (var i = 0; i < trial.questions.length; i++) {
       // create question container
       var question_classes = [_join(plugin_id_name, 'question')];
@@ -103,12 +103,12 @@ jsPsych.plugins['survey-multi-select'] = (function() {
       // add question text
       display_element.querySelector(question_selector).innerHTML += '<p id="survey-question" class="' + plugin_id_name + '-text survey-multi-select">' + trial.questions[i] + '</p>';
 
-      // create option radio buttons
+      // create option check boxes
       for (var j = 0; j < trial.options[i].length; j++) {
         var option_id_name = _join(plugin_id_name, "option", i, j),
           option_id_selector = '#' + option_id_name;
     
-        // add radio button container
+        // add check box container
         display_element.querySelector(question_selector).innerHTML += '<div id="'+option_id_name+'" class="'+_join(plugin_id_name, 'option')+'"></div>';
     
         // add label and question text
@@ -130,7 +130,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     }
     // add submit button
     trial_form.innerHTML +='<div class="fail-message"></div>'
-    trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn" value="Next"></input>';
+    trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn"></input>';
     
     trial_form.addEventListener('submit', function(event) {
       event.preventDefault();
@@ -152,6 +152,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         obje[id] = val;
         Object.assign(question_data, obje);
       })
+      // adds validation to check if at least one option is selected
       if(!val.length) {
         var inputboxes = display_element.querySelectorAll("input[type=checkbox]")
         display_element.querySelector(".fail-message").innerHTML = '<span style="color: red;" class="required">*please select at least one option!</span>';
