@@ -123,9 +123,9 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         var input = document.createElement('input');
         input.setAttribute('type', "radio");
         input.setAttribute('name', input_id_name);
-        input.setAttribute('value', trial.options[i][j])
-        label.prepend(input);
-        form.appendChild(label)
+        input.setAttribute('value', trial.options[i][j]);
+        form.appendChild(label);
+        form.insertBefore(input, label);
       }
 
       if (trial.required && trial.required[i]) {
