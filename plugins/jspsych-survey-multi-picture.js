@@ -85,7 +85,7 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
     var preamble_id_name = _join(plugin_id_name, 'preamble');
     trial_form.innerHTML += '<div id="'+preamble_id_name+'" class="'+preamble_id_name+'">'+trial.preamble+'</div>';
 
-    // add multiple-choice questions
+    // add multiple-picture questions
     for (var i = 0; i < trial.questions.length; i++) {
       // create question container
       var question_classes = [_join(plugin_id_name, 'question')];
@@ -108,7 +108,7 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
         // add image container
         display_element.querySelector(question_selector).innerHTML += '<div id="'+option_id_name+'" class="'+_join(plugin_id_name, 'option')+'"></div>';
     
-        // add label and question text
+        // add label
         if(trial.options[i][j].label){
           var label = trial.options[i][j].label;
           var option_label = '<label class="' + plugin_id_name + '-text">' + label + '</label>';
