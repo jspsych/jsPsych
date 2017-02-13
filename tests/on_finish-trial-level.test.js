@@ -50,7 +50,7 @@ describe('The on_finish trial level event handler', function(){
       jsPsych.init({
         timeline: [trial],
         on_finish: function() {
-          promise_data.final_key_press = jsPsych.data.getData().values()[0].key_press;
+          promise_data.final_key_press = jsPsych.data.get().values()[0].key_press;
           resolve(promise_data);
         }
       });

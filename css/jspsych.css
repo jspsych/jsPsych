@@ -62,7 +62,7 @@ input[type="text"] {
 .jspsych-btn {
   display: inline-block;
   padding: 6px 12px;
-  margin: 0px 8px;
+  margin: 0px;
   font-size: 14px;
   font-weight: 400;
   font-family: 'Open Sans', 'Arial', sans-serif;

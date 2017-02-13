@@ -204,7 +204,7 @@ window.jsPsych = (function() {
     jsPsych.data.write(data);
 
     // get back the data with all of the defaults in
-    var trial_data = jsPsych.data.getData().filter({trial_index: global_trial_index});
+    var trial_data = jsPsych.data.get().filter({trial_index: global_trial_index});
 
     // for trial-level callbacks, we just want to pass in a reference to the values
     // of the DataCollection, for easy access and editing.
@@ -766,7 +766,7 @@ window.jsPsych = (function() {
       document.webkitExitFullscreen();
     }
 
-    opts.on_finish(jsPsych.data.getData());
+    opts.on_finish(jsPsych.data.get());
 
   }
 
@@ -886,7 +886,7 @@ window.jsPsych = (function() {
 
   //Leave a trace in the DOM that jspsych was loaded
   document.documentElement.setAttribute('jspsych', 'present');
-  
+
   return core;
 })();
 
@@ -1063,6 +1063,21 @@ jsPsych.data = (function() {
       return DataCollection(o);
     }
 
+    data_collection.uniqueNames = function(){
+      var names = [];
+
+      for(var i=0; i<trials.length; i++){
+        var keys = Object.keys(trials[i]);
+        for(var j=0; j<keys.length; j++){
+          if(!names.includes(keys[j])){
+            names.push(keys[j]);
+          }
+        }
+      }
+
+      return names;
+    }
+
     data_collection.csv = function(){
       return JSON2CSV(trials);
     }
@@ -1187,7 +1202,7 @@ jsPsych.data = (function() {
     interactionData = DataCollection();
   }
 
-  module.getData = function() {
+  module.get = function() {
     return allData;
   };
 
@@ -2203,19 +2218,19 @@ jsPsych.pluginAPI = (function() {
 	  document.dispatchEvent(jspsychEvt);
 	  //And voila! it will be the job of the content script injected by the extension to listen for the event and do the appropriate actions.
   };
-  
+
   /** {boolean} Indicates whether this instance of jspsych has opened a hardware connection through our browser extension */
   module.hardwareConnected = false;
-  
-  
+
+
   //it might be useful to open up a line of communication from the extension back to this page script,
   //again, this will have to pass through DOM events. For now speed is of no concern so I will use jQuery
   document.addEventListener("jspsych-activate", function(evt){
 	  module.hardwareConnected = true;
   })
-  
-  
-  
+
+
+
   return module;
 })();
 

@@ -15,7 +15,7 @@ var trial = {
 // the sound file is also preloaded automatically
 var sound_trial = {
 	type: 'single-audio',
-	stimulus: 'snd/hello.mp3'
+	stimulus: 'audio/hello.mp3'
 }
 
 jsPsych.init({

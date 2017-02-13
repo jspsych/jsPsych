@@ -75,7 +75,7 @@ jsPsych.plugins['survey-likert'] = (function() {
     }
 
     // add submit button
-    display_element.innerHTML += '<button id="jspsych-survey-likert" class="jspsych-survey-likert jspsych-btn">Submit Answers</button>';
+    display_element.innerHTML += '<button id="jspsych-survey-likert-next" class="jspsych-survey-likert jspsych-btn">Submit Answers</button>';
 
     display_element.querySelector('#jspsych-survey-likert-next').addEventListener('click', function(){
       // measure response time
@@ -86,7 +86,7 @@ jsPsych.plugins['survey-likert'] = (function() {
       var question_data = {};
       var matches = display_element.querySelectorAll('#jspsych-survey-likert-form .jspsych-survey-likert-opts');
       for(var index = 0; index < matches.length; index++){
-        var id = matches[index].dataset['radio-group'];
+        var id = matches[index].dataset['radioGroup'];
         var response = display_element.querySelector('input[name="' + id + '"]:checked').value;
         if (typeof response == 'undefined') {
           response = -1;

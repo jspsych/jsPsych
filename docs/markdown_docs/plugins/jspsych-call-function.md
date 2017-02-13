@@ -50,6 +50,6 @@ var myfunc = function(data){
 
 var block = {
 	type: 'call-function',
-	func: function(){ myfunc(jsPsych.data.getData())}
+	func: function(){ myfunc(jsPsych.data.get())}
 }
 ```

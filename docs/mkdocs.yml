@@ -16,7 +16,7 @@ pages:
   - 'Demo Experiment: Simple Reaction Time Task': 'tutorials/rt-task.md'
 - Features:
   - 'Creating an Experiment: The Timeline': 'features/timeline.md'
-  - 'Data Storage': 'features/data.md'
+  - 'Data Storage, Aggregation, and Manipulation': 'features/data.md'
   - 'Dynamic Content:  Using Functions as Plugin Parameters': 'features/functions-as-parameters.md'
   - 'Event-related Callback Functions': 'features/callbacks.md'
   - 'Record Browser Interactions': 'features/record-browser-interactions.md'
