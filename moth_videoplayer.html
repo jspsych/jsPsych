@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+    <title> Moth Study </title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> 
+  <script src="jspsych.js"></script>
+  <script src="plugins/jspsych-single-stim.js"></script>
+  <script src="plugins/jspsych-single-audio.js"></script>
+  <link href="css/jspsych.css" rel="stylesheet"></link>
+  <script src="plugins/jspsych-text.js"></script>
+  <script src="plugins/jspsych-instructions.js"></script>
+  <script src="plugins/jspsych-video.js"></script>
+
+
+
+  <!--<script src="http://code.jquery.com/jquery-latest.js" type="text/javascript"></script>
+  <script src="jspsych-5.0.3/plugins/jspsych-html.js" type="text/javascript"></script>
+  <script src="src/audio_controls.js" type= "text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.3.0/build/cssreset/reset-min.css">
+  <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="src/css/style.css">
+  <script src="http://code.jquery.com/jquery-latest.js" type="text/javascript"></script>-->
+
+  <!-- <script type="text/javascript" src="js/js.js"></script> 
+  <script type="text/javascript" src="src/js/html5slider.js"></script>-->
+</head>
+  <!-- Bootstrap: Latest compiled and minified JavaScript 
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
+</head>
+<body>
+  <div id="jspsych-target"></div>
+</body>
+<script>
+
+/*experiment parameters*/
+
+
+/*create list of times to pause*/
+
+/* instructions */
+// var instructions = {
+//   type: 'instructions',
+//   pages: ['<p>You are going to watch a video clip. The clip will pause  ' +
+//     'and random times and you will be presented with a rating wheel. '+
+//     ' Please rate your emotions at the time of the rating, '+
+//     'and press the continue button to finish the video clip.</p>'+
+//     '<p>Click the button below to begin.</p>'],
+//   // allow_keys: false,
+//   show_clickable_nav: true
+// };
+
+// var audio_pres = {
+//   type: 'single-stim',
+//   stimulus: '<audio autoplay ="true" controls="controls"><source src="Moth_Waschke.mp3" type="audio/mp3"></audio>',
+//   is_html: true
+// };
+
+
+var video_pres = {
+  type: 'video',
+  sources: ['http://clips.vorwaerts-gmbh.de/VfE_html5.mp4'],
+  start: 20.3,
+  stop:26.3
+};
+
+
+/*end message*/
+var end_msg= {
+    type: "text",
+    text: "Thank you for participating! "
+  };
+
+/* loop over video and keep playing until time ==time on list- then pop up
+the rating wheel- have them rate, push to continue- store ratings and time to csv, and play from point paused*/
+
+
+/* create timeline and push objects to timeline*/
+var timeline = [];
+  // timeline.push(instructions);
+  timeline.push(video_pres);
+  timeline.push(end_msg);
+
+/*run the experiment*/
+jsPsych.init({
+  // display_element: $('#jspsych-target'),
+  timeline: timeline
+});
+
+</script>
+</html>
