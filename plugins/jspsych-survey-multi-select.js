@@ -2,8 +2,6 @@
  * jspsych-survey-multi-select
  * a jspsych plugin for multiple choice survey questions
  *
- * Shane Martin
- *
  * documentation: docs.jspsych.org
  *
  */
@@ -61,8 +59,9 @@ jsPsych.plugins['survey-multi-select'] = (function() {
 
     // trial defaults
     trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
-    trial.required = typeof trial.required == 'undefined' ? null : trial.required;
-    trial.horizontal = typeof trial.required == 'undefined' ? false : trial.horizontal;
+    trial.required = typeof trial.required == 'undefined' ? true : trial.required;
+    trial.required_msg = trial.required_msg || '*please select at least one option!';
+    trial.horizontal = typeof trial.horizontal == 'undefined' ? false : trial.horizontal;
 
     // if any trial variables are functions
     // this evaluates the function and replaces
@@ -95,11 +94,11 @@ jsPsych.plugins['survey-multi-select'] = (function() {
       if (trial.horizontal) {
         question_classes.push(_join(plugin_id_name, 'horizontal'));
       }
-    
+
       trial_form.innerHTML += '<div id="'+_join(plugin_id_name, i)+'" class="'+question_classes.join(' ')+'"></div>';
-    
+
       var question_selector = _join(plugin_id_selector, i);
-    
+
       // add question text
       display_element.querySelector(question_selector).innerHTML += '<p id="survey-question" class="' + plugin_id_name + '-text survey-multi-select">' + trial.questions[i] + '</p>';
 
@@ -107,10 +106,10 @@ jsPsych.plugins['survey-multi-select'] = (function() {
       for (var j = 0; j < trial.options[i].length; j++) {
         var option_id_name = _join(plugin_id_name, "option", i, j),
           option_id_selector = '#' + option_id_name;
-    
+
         // add check box container
         display_element.querySelector(question_selector).innerHTML += '<div id="'+option_id_name+'" class="'+_join(plugin_id_name, 'option')+'"></div>';
-    
+
         // add label and question text
         var form = document.getElementById(option_id_name)
         var input_id_name = _join(plugin_id_name, 'response', i);
@@ -131,7 +130,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     // add submit button
     trial_form.innerHTML +='<div class="fail-message"></div>'
     trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn"></input>';
-    
+
     trial_form.addEventListener('submit', function(event) {
       event.preventDefault();
       // measure response time
@@ -153,9 +152,9 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         Object.assign(question_data, obje);
       })
       // adds validation to check if at least one option is selected
-      if(!val.length) {
+      if(trial.required && !val.length) {
         var inputboxes = display_element.querySelectorAll("input[type=checkbox]")
-        display_element.querySelector(".fail-message").innerHTML = '<span style="color: red;" class="required">*please select at least one option!</span>';
+        display_element.querySelector(".fail-message").innerHTML = '<span style="color: red;" class="required">'+trial.required_msg+'</span>';
       } else {
         // save data
         var trial_data = {
@@ -163,12 +162,12 @@ jsPsych.plugins['survey-multi-select'] = (function() {
           "responses": JSON.stringify(question_data)
         };
         display_element.innerHTML = '';
-        
+
         // next trial
         jsPsych.finishTrial(trial_data);
       }
     });
-    
+
     var startTime = (new Date()).getTime();
   };
 
