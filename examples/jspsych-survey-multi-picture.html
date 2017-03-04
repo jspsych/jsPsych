@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
-  <script src="./jsPsych/jspsych.js" ></script>
-  <script src="./jsPsych/plugins/jspsych-survey-multi-picture.js" ></script>
+  <script src="../jspsych.js" ></script>
+  <script src="../plugins/jspsych-survey-multi-picture.js" ></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
 </head>
 <body>
-  
+
 </body>
   <script>
   var questions=["Please choose the picture which describes the following sentence: The dog is chased by the cat."]
@@ -22,7 +23,6 @@
       }
    };
     jsPsych.init({
-      display_element: document.body,
       timeline: [multi_choice_block],
       on_finish: function(data) {
       },
