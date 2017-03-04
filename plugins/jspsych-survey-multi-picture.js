@@ -2,8 +2,6 @@
  * jspsych-survey-multi-picture
  * a jspsych plugin for multiple choice survey questions
  *
- * Shane Martin
- *
  * documentation: docs.jspsych.org
  *
  */
@@ -92,11 +90,11 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
       if (trial.horizontal) {
         question_classes.push(_join(plugin_id_name, 'horizontal'));
       }
-    
+
       trial_form.innerHTML += '<div id="'+_join(plugin_id_name, i)+'" class="'+question_classes.join(' ')+'"></div>';
-    
+
       var question_selector = _join(plugin_id_selector, i);
-    
+
       // add question text
       display_element.querySelector(question_selector).innerHTML += '<p id="survey-question" class="' + plugin_id_name + '-text survey-multi-picture">' + trial.questions[i] + '</p>';
 
@@ -104,10 +102,10 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
       for (var j = 0; j < trial.options[i].length; j++) {
         var option_id_name = _join(plugin_id_name, "option", i, j),
           option_id_selector = '#' + option_id_name;
-    
+
         // add image container
         display_element.querySelector(question_selector).innerHTML += '<div id="'+option_id_name+'" class="'+_join(plugin_id_name, 'option')+'"></div>';
-    
+
         // add label
         if(trial.options[i][j].label){
           var label = trial.options[i][j].label;
@@ -118,7 +116,7 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
           display_element.querySelector(option_id_selector).innerHTML += option_label;
         }
         display_element.querySelector(option_id_selector + " label").innerHTML =
-          '<img style="width: 250px; height: auto;" id="image" src="'+trial.options[i][j].url+'">' +
+          '<img style="width: 250px; height: auto;" class="'+plugin_id_name+'-image" src="'+trial.options[i][j].url+'">' +
           display_element.querySelector(option_id_selector + " label").innerHTML;
       }
     }
@@ -129,7 +127,7 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
         var response_time = endTime - startTime;
         var question_data = {};
         var id = 'Q' + index;
-        var val = currentImageDiv.querySelector("#image").src;
+        var val = currentImageDiv.querySelector('.'+plugin_id_name+'-image').src;
         var obje = {};
         obje[id] = val;
         Object.assign(question_data, obje);
