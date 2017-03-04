@@ -11,13 +11,17 @@
 
 </body>
   <script>
-   var questions=["What is your favorite color?"]
-   var choices = ["red", "yellow", "green", "blue", "black"]
+   var questions=["Which of these colors do you like?", "Which of these foods do you like?"]
+   var choices = [
+     ["Red", "Yellow", "Green", "Blue", "Black"],
+     ["Apples", "Bananas", "Carrots", "Donuts", "Eggplant"]
+   ]
    var multi_choice_block = {
       type: 'survey-multi-select',
       questions: questions,
-      options: [choices],
+      options: choices,
       horizontal: true,
+      required: true,
       on_finish: function(data) {
         console.log("i'm data", data)
       }
