@@ -140,8 +140,9 @@ jsPsych.plugins['survey-multi-select'] = (function() {
       // create object to hold responses
       var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
       var question_data = {};
-      var val = [];
+      var has_response = [];
       matches.forEach(function(match, index) {
+        var val = [];
         var inputboxes = match.querySelectorAll("input[type=checkbox]:checked")
         inputboxes.forEach(currentChecked => {
           val.push(currentChecked.value)
@@ -150,9 +151,10 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         var obje = {};
         obje[id] = val;
         Object.assign(question_data, obje);
+        if(val.length == 0){ has_response.push(false); } else { has_response.push(true); }
       })
       // adds validation to check if at least one option is selected
-      if(trial.required && !val.length) {
+      if(trial.required && has_response.includes(false)) {
         var inputboxes = display_element.querySelectorAll("input[type=checkbox]")
         display_element.querySelector(".fail-message").innerHTML = '<span style="color: red;" class="required">'+trial.required_msg+'</span>';
       } else {
