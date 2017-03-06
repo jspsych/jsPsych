@@ -47,8 +47,8 @@ var audio = ['audio/foo.mp3'];
 
 jsPsych.init({
 	timeline: [trial],
-	audio_preload: audio,
-	image_preload: images
+	preload_audio: audio,
+	preload_images: images
 });
 
 ```
