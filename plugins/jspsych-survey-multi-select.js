@@ -144,7 +144,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
       matches.forEach(function(match, index) {
         var val = [];
         var inputboxes = match.querySelectorAll("input[type=checkbox]:checked")
-        inputboxes.forEach(currentChecked => {
+        inputboxes.forEach(function(currentChecked){
           val.push(currentChecked.value)
         })
         var id = 'Q' + index
