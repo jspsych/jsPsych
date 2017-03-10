@@ -87,9 +87,11 @@ jsPsych.plugins['survey-likert'] = (function() {
       var matches = display_element.querySelectorAll('#jspsych-survey-likert-form .jspsych-survey-likert-opts');
       for(var index = 0; index < matches.length; index++){
         var id = matches[index].dataset['radioGroup'];
-        var response = display_element.querySelector('input[name="' + id + '"]:checked').value;
-        if (typeof response == 'undefined') {
-          response = -1;
+        var el = display_element.querySelector('input[name="' + id + '"]:checked');
+        if (el === null) {
+          var response = "";
+        } else {
+          var response = el.value;
         }
         var obje = {};
         obje[id] = response;
