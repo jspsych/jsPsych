@@ -95,11 +95,11 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       if (trial.horizontal) {
         question_classes.push(_join(plugin_id_name, 'horizontal'));
       }
-    
+
       trial_form.innerHTML += '<div id="'+_join(plugin_id_name, i)+'" class="'+question_classes.join(' ')+'"></div>';
-    
+
       var question_selector = _join(plugin_id_selector, i);
-    
+
       // add question text
       display_element.querySelector(question_selector).innerHTML += '<p class="' + plugin_id_name + '-text survey-multi-choice">' + trial.questions[i] + '</p>';
 
@@ -107,10 +107,10 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       for (var j = 0; j < trial.options[i].length; j++) {
         var option_id_name = _join(plugin_id_name, "option", i, j),
           option_id_selector = '#' + option_id_name;
-    
+
         // add radio button container
         display_element.querySelector(question_selector).innerHTML += '<div id="'+option_id_name+'" class="'+_join(plugin_id_name, 'option')+'"></div>';
-    
+
         // add label and question text
         var form = document.getElementById(option_id_name)
         var input_id_name = _join(plugin_id_name, 'response', i);
@@ -118,7 +118,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         label.setAttribute('class', plugin_id_name+'-text');
         label.innerHTML = trial.options[i][j];
         label.setAttribute('for', input_id_name)
-    
+
         // create radio button
         var input = document.createElement('input');
         input.setAttribute('type', "radio");
@@ -131,7 +131,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       if (trial.required && trial.required[i]) {
         // add "question required" asterisk
         display_element.querySelector(question_selector + " p").innerHMTL += "<span class='required'>*</span>";
-    
+
         // add required property
         display_element.querySelector(question_selector + " input[type=radio]").required = true;
       }
@@ -151,7 +151,11 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
       matches.forEach(function(match, index) {
         var id = "Q" + index;
-        var val = match.querySelector("input[type=radio]:checked").value;
+        if(match.querySelector("input[type=radio]:checked") !== null){
+          var val = match.querySelector("input[type=radio]:checked").value;
+        } else {
+          var val = "";
+        }
         var obje = {};
         obje[id] = val;
         Object.assign(question_data, obje);
@@ -162,11 +166,11 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         "responses": JSON.stringify(question_data)
       };
       display_element.innerHTML = '';
-    
+
       // next trial
       jsPsych.finishTrial(trial_data);
     });
-    
+
     var startTime = (new Date()).getTime();
   };
 
