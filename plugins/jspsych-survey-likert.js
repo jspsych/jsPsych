@@ -91,7 +91,7 @@ jsPsych.plugins['survey-likert'] = (function() {
         if (el === null) {
           var response = "";
         } else {
-          var response = el.value;
+          var response = parseInt(el.value);
         }
         var obje = {};
         obje[id] = response;
