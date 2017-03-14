@@ -37,6 +37,7 @@ jsPsych.plugins['survey-likert'] = (function() {
 
     // default parameters for the trial
     trial.preamble = typeof trial.preamble === 'undefined' ? "" : trial.preamble;
+    trial.required = typeof trial.required === 'undefined' ? false : trial.required;
 
     // if any trial variables are functions
     // this evaluates the function and replaces
@@ -68,16 +69,21 @@ jsPsych.plugins['survey-likert'] = (function() {
       var width = 100 / trial.labels[i].length;
       options_string = '<ul class="jspsych-survey-likert-opts" data-radio-group="Q' + i + '">';
       for (var j = 0; j < trial.labels[i].length; j++) {
-        options_string += '<li style="width:' + width + '%"><input type="radio" name="Q' + i + '" value="' + j + '"><label class="jspsych-survey-likert-opt-label">' + trial.labels[i][j] + '</label></li>';
+        options_string += '<li style="width:' + width + '%"><input type="radio" name="Q' + i + '" value="' + j + '"';
+        if(trial.required){
+          options_string += ' required';
+        }
+        options_string += '><label class="jspsych-survey-likert-opt-label">' + trial.labels[i][j] + '</label></li>';
       }
       options_string += '</ul>';
       form_element.innerHTML += options_string;
     }
 
     // add submit button
-    display_element.innerHTML += '<button id="jspsych-survey-likert-next" class="jspsych-survey-likert jspsych-btn">Submit Answers</button>';
+    form_element.innerHTML += '<input type="submit" id="jspsych-survey-likert-next" class="jspsych-survey-likert jspsych-btn" value="Submit Answers"></input>';
 
-    display_element.querySelector('#jspsych-survey-likert-next').addEventListener('click', function(){
+    form_element.addEventListener('submit', function(e){
+      e.preventDefault();
       // measure response time
       var endTime = (new Date()).getTime();
       var response_time = endTime - startTime;
