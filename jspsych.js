@@ -56,7 +56,7 @@ window.jsPsych = (function() {
       'on_finish': function(data) {
         return undefined;
       },
-      'on_trial_start': function() {
+      'on_trial_start': function(trial) {
         return undefined;
       },
       'on_trial_finish': function() {
@@ -800,10 +800,10 @@ window.jsPsych = (function() {
 
   function doTrial(trial) {
 
-    current_trial = trial;
-
     // call experiment wide callback
-    opts.on_trial_start();
+    opts.on_trial_start(trial);
+
+    current_trial = trial;
 
     // check if trial has it's own display element
     var display_element = DOM_target;
