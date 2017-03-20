@@ -1341,6 +1341,66 @@ jsPsych.data = (function() {
     document.addEventListener('fullscreenchange', fullscreenchange);
     document.addEventListener('mozfullscreenchange', fullscreenchange);
     document.addEventListener('webkitfullscreenchange', fullscreenchange);
+
+    // changing zoom capture
+    document.addEventListener('keydown', (event) => {
+      if ((event.keyCode == 107 && event.ctrlKey)||(event.keyCode == 61 && event.ctrlKey && event.shiftKey))0 {
+        var data = {
+          event: 'key_zoom_increase',
+          trial: jsPsych.progress().current_trial_global,
+          time: jsPsych.totalTime()
+        };
+        interactionData.push(data);
+        jsPsych.initSettings().on_interaction_data_update(data);
+      }
+      if ((event.keyCode == 109 || event.keyCode == 173) && event.ctrlKey) {
+        var data = {
+          event: 'key_zoom_decrease',
+          trial: jsPsych.progress().current_trial_global,
+          time: jsPsych.totalTime()
+        };
+        interactionData.push(data);
+        jsPsych.initSettings().on_interaction_data_update(data);
+      }
+    });
+    document.addEventListener('wheel', (event) => {
+      if ((event.deltaY < 0) && event.ctrlKey) {
+        var data = {
+          event: "mouse_zoom_increased",
+          trial: jsPsych.progress().current_trial_global,
+          time: jsPsych.totalTime()
+        };
+        interactionData.push(data);
+        jsPsych.initSettings().on_interaction_data_update(data);
+      }
+      if ((event.deltaY > 0) && event.ctrlKey) {
+        var data = {
+          event: "mouse_zoom_decreased",
+          trial: jsPsych.progress().current_trial_global,
+          time: jsPsych.totalTime()
+        };
+        interactionData.push(data);
+        jsPsych.initSettings().on_interaction_data_update(data);
+      }
+    });
+
+    // tab switching capture https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
+    var hidden, visibilityChange;
+    if (typeof document.hidden !== "undefined") { hidden = "hidden"; visibilityChange = "visibilitychange"; }
+    else if (typeof document.msHidden !== "undefined") { hidden = "msHidden"; visibilityChange = "msvisibilitychange"; }
+    else if (typeof document.webkitHidden !== "undefined") { hidden = "webkitHidden"; visibilityChange = "webkitvisibilitychange"; }
+    function handleVisibilityChange() {
+      if (document[hidden] && document.readyState == "complete") {
+        var data = {
+          event: 'tab_switch',
+          trial: jsPsych.progress().current_trial_global,
+          time: jsPsych.totalTime()
+        };
+        interactionData.push(data);
+        jsPsych.initSettings().on_interaction_data_update(data);
+      }
+    }
+    document.addEventListener(visibilityChange, handleVisibilityChange);
   }
 
   // public methods for testing purposes. not recommended for use.
