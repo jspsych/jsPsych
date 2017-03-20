@@ -102,7 +102,7 @@ jsPsych.plugins['reconstruction'] = (function() {
 
       //console.log(param);
 
-      display_element.innerHTML = '<div id="jspsych-reconstruction-stim-container">'+trial.stim_function(param)+'</div>');
+      display_element.innerHTML = '<div id="jspsych-reconstruction-stim-container">'+trial.stim_function(param)+'</div>';
 
       // add submit button
       display_element.innerHTML += '<button id="jspsych-reconstruction-next" class="jspsych-btn jspsych-reconstruction">Submit Answers</button>';
