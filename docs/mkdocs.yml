@@ -46,6 +46,7 @@ pages:
   - 'jspsych-multi-stim-multi-response': 'plugins/jspsych-multi-stim-multi-response.md'
   - 'jspsych-palmer': 'plugins/jspsych-palmer.md'
   - 'jspsych-reconstruction': 'plugins/jspsych-reconstruction.md'
+  - 'jspsych-resize': 'plugins/jspsych-resize.md'
   - 'jspsych-same-different': 'plugins/jspsych-same-different.md'
   - 'jspsych-similarity': 'plugins/jspsych-similarity.md'
   - 'jspsych-single-audio': 'plugins/jspsych-single-audio.md'
