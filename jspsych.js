@@ -1344,7 +1344,7 @@ jsPsych.data = (function() {
 
     // changing zoom capture
     document.addEventListener('keydown', (event) => {
-      if ((event.keyCode == 107 && event.ctrlKey)||(event.keyCode == 61 && event.ctrlKey && event.shiftKey))0 {
+      if ((event.keyCode == 107 && event.ctrlKey)||(event.keyCode == 61 && event.ctrlKey && event.shiftKey)) {
         var data = {
           event: 'key_zoom_increase',
           trial: jsPsych.progress().current_trial_global,
