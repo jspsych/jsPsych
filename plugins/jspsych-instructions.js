@@ -77,7 +77,17 @@ jsPsych.plugins.instructions = (function() {
     var start_time = (new Date()).getTime();
 
     var last_page_update_time = start_time;
-
+    
+    function btnListener(evt){
+    	evt.target.removeEventListener('click', btnListener);
+    	if(this.id === "jspsych-instructions-back"){
+    		back();
+    	}
+    	else if(this.id === 'jspsych-instructions-next'){
+    		next();
+    	}
+    }
+    
     function show_current_page() {
       display_element.innerHTML = trial.pages[current_page];
 
@@ -90,22 +100,13 @@ jsPsych.plugins.instructions = (function() {
         nav_html += "<button id='jspsych-instructions-next' class='jspsych-btn'>Next &gt;</button></div>"
 
         display_element.innerHTML += nav_html;
-
+        
         if (current_page != 0 && trial.allow_backward) {
-          display_element.querySelector('#jspsych-instructions-back').addEventListener('click', function() {
-            clear_button_handlers();
-          });
+          display_element.querySelector('#jspsych-instructions-back').addEventListener('click', btnListener);
         }
         
-        display_element.querySelector('#jspsych-instructions-next').addEventListener('click', function() {
-          clear_button_handlers();
-        });
+        display_element.querySelector('#jspsych-instructions-next').addEventListener('click', btnListener);
       }
-    }
-
-    function clear_button_handlers() {
-      display_element.querySelector('#jspsych-instructions-next').removeEventListener('click');
-      display_element.querySelector('#jspsych-instructions-back').removeEventListener('click');
     }
 
     function next() {
