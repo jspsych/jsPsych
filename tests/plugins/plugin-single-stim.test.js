@@ -1,5 +1,7 @@
 const root = '../../';
 
+jest.useFakeTimers();
+
 describe('single-stim plugin', function(){
 
   beforeEach(function(){
@@ -109,10 +111,13 @@ describe('single-stim plugin', function(){
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus"><p>hello</p></div><div id="foo">this is the prompt</div>');
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+
   });
 
   test('timing_stim should set visibility of content to hidden after time has elapsed', function(){
-    jest.useFakeTimers();
 
     var trial = {
       type: 'single-stim',
@@ -131,10 +136,12 @@ describe('single-stim plugin', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus" style="visibility: hidden;"><p>hello</p></div>');
 
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+
   });
 
   test('timing_response should end trial after time has elapsed', function(){
-    jest.useFakeTimers();
 
     var trial = {
       type: 'single-stim',
@@ -160,7 +167,8 @@ describe('single-stim plugin', function(){
       type: 'single-stim',
       stimulus: '<p>hello</p>',
       is_html: true,
-      response_ends_trial: false
+      response_ends_trial: false,
+      timing_response: 500
     }
 
     jsPsych.init({
@@ -171,5 +179,45 @@ describe('single-stim plugin', function(){
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus" class=" responded"><p>hello</p></div>');
+
+    jest.runAllTimers();
+  });
+
+  test('should accept functions as parameters', function(){
+
+    var trial = {
+      type: 'single-stim',
+      stimulus: function(){ return '<p>hello</p>'; },
+      is_html: function(){ return true; },
+      choices: function(){ return ['j']; },
+      prompt: function(){ return '<div>prompt</div>'; },
+      timing_response: function(){ return 1000; },
+      timing_stim: function(){ return 500; },
+      response_ends_trial: function(){ return false; }
+    }
+
+    jsPsych.init({
+      timeline: [trial]
+    });
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus"><p>hello</p></div><div>prompt</div>');
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus"><p>hello</p></div><div>prompt</div>');
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus"><p>hello</p></div><div>prompt</div>');
+
+    jest.runTimersToTime(500);
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus" style="visibility: hidden;"><p>hello</p></div><div>prompt</div>');
+
+    jest.runTimersToTime(1000);
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe('');
   });
 });
