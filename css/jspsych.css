@@ -98,7 +98,6 @@ input[type="text"] {
 #jspsych-progressbar-outer {
   background-color: #dedede;
   border-radius: 5px;
-  padding: 1px;
   width: 800px;
   margin: auto;
 }
