@@ -121,7 +121,8 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
       }
     }
     var matches = display_element.querySelectorAll(".jspsych-survey-multi-picture-option");
-    matches.forEach(function(currentImageDiv, index){
+    for(var index=0; index<matches.length; index++){
+      currentImageDiv = matches[index];
       currentImageDiv.addEventListener('click', function(event){
         var endTime = (new Date()).getTime();
         var response_time = endTime - startTime;
@@ -137,9 +138,9 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
         };
         display_element.innerHTML = '';
         jsPsych.finishTrial(trial_data);
-      })
-      var startTime = (new Date()).getTime();
-    })
+      });
+    }
+    var startTime = (new Date()).getTime();
   };
   return plugin;
 })();

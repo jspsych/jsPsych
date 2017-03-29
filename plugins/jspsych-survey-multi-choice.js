@@ -149,8 +149,9 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       // create object to hold responses
       var question_data = {};
       var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
-      matches.forEach(function(match, index) {
-        var id = "Q" + index;
+      for(var i=0; i<matches.length; i++){
+        match = matches[i];
+        var id = "Q" + i;
         if(match.querySelector("input[type=radio]:checked") !== null){
           var val = match.querySelector("input[type=radio]:checked").value;
         } else {
@@ -159,7 +160,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         var obje = {};
         obje[id] = val;
         Object.assign(question_data, obje);
-      })
+      }
       // save data
       var trial_data = {
         "rt": response_time,
