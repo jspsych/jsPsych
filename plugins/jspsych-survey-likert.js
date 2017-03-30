@@ -38,6 +38,7 @@ jsPsych.plugins['survey-likert'] = (function() {
     // default parameters for the trial
     trial.preamble = typeof trial.preamble === 'undefined' ? "" : trial.preamble;
     trial.required = typeof trial.required === 'undefined' ? false : trial.required;
+    trial.button_label = typeof trial.button_label === 'undefined' ? 'Submit Answers' : trial.button_label;
 
     // if any trial variables are functions
     // this evaluates the function and replaces
@@ -80,7 +81,7 @@ jsPsych.plugins['survey-likert'] = (function() {
     }
 
     // add submit button
-    form_element.innerHTML += '<input type="submit" id="jspsych-survey-likert-next" class="jspsych-survey-likert jspsych-btn" value="Submit Answers"></input>';
+    form_element.innerHTML += '<input type="submit" id="jspsych-survey-likert-next" class="jspsych-survey-likert jspsych-btn" value="'+trial.button_label+'"></input>';
 
     form_element.addEventListener('submit', function(e){
       e.preventDefault();
