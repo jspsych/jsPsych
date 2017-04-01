@@ -42,8 +42,8 @@ var category_block = {
 
 var instructions_block = {
   type: 'text',
-  text: "<div style='position: absolute; left: 190px; bottom: 575px;'><p>Press E for:<br> " + 
-  "<strong>YOUNG</strong></p></div>" + "<div style='position: absolute; right: 190px; bottom: 575px;'><p>Press I for:<br>" + "<strong>OLD</strong></p></div>" + 
+  text: "<div style='position: fixed; left: 100px; top: 80px;'><p>Press E for:<br> " + 
+  "<strong>YOUNG</strong></p></div>" + "<div style='position: fixed; right: 100px; top: 80px;'><p>Press I for:<br>" + "<strong>OLD</strong></p></div>" + 
   "<div style='position: relative; width: 900px;'>" +
   "<p>Put a left finger on the <strong>E</strong> key for items that belong to the Old People category. Put a right finger on the " +
   "<strong>I</strong> key for items that belong to the Young People " +
@@ -93,8 +93,8 @@ var trial_block = {
 
 var instructions_block2 = {
   type: 'text',
-  text: "<div style='position: absolute; left: 190px; bottom: 575px;'>Press E for:<br> " + 
-  "<strong>BAD</strong></div>" + "<div style='position: absolute; right: 190px; bottom: 575px;'>" +
+  text: "<div style='position: fixed; left: 100px; top: 80px;'>Press E for:<br> " + 
+  "<strong>BAD</strong></div>" + "<div style='position: fixed; right: 100px; top: 80px;'>" +
   "Press I for:<br>" + "<strong>GOOD</strong></div>" + 
   "<div style='position: relative; width: 900px;'>" + 
   "<p>Put a left finger on the <strong>E</strong> key for items that " +
@@ -149,9 +149,9 @@ var trial_block2 = {
 
 var instructions_block3 = {
   type: 'text',
-  text: "<div style='float: left;'>Press 'E' for:<br> " + 
-  "<strong>Bad</strong><br>" + "or<br>" + "<strong>Old People</strong></div>" + "<div style='float:right;'>" +
-  "Press 'I' for:<br>" + "<strong>Good</strong><br>" + "or<br>" + "<strong>Young People</strong></div>" + 
+  text: "<div style='position: fixed; left: 100px; top: 80px;'>Press 'E' for:<br> " + 
+  "<strong>BAD</strong><br>" + "or<br>" + "<strong>OLD PEOPLE</strong></div>" + "<div style='position: fixed; right: 100px; top: 80px;'>" +
+  "Press 'I' for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG PEOPLE</strong></div>" + 
   "<p style='padding-top: 100px'>Use <strong>E</strong> for Bad and for " +
   "Old People<br>" + "Use <strong>I</strong> for Good and for Young People<br>" + 
   "Each item belongs to only one category.<br><br>" + "If you " +
@@ -424,7 +424,7 @@ var trial_block4 = {
   var timeline = [];
 // timeline.push(welcome_block);
 // timeline.push(category_block);
-// timeline.push(instructions_block);
+//timeline.push(instructions_block);
 timeline.push(trial_block);
 timeline.push(instructions_block2);
 timeline.push(trial_block2);

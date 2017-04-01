@@ -9,7 +9,7 @@
  **/
 
 
-jsPsych.plugins["iat"] = (function() {
+ jsPsych.plugins["iat"] = (function() {
 
   var plugin = {};
 
@@ -44,8 +44,9 @@ jsPsych.plugins["iat"] = (function() {
     trial.is_html = (typeof trial.is_html == 'undefined') ? false : trial.is_html;
     trial.prompt = trial.prompt || "";
 
+
     //Creates extra styling needed 
-    var node = display_element.innerHTML += '<style id="jspsych-iat-css">';
+    var node = display_element.innerHTML += "<style id='jspsych-iat-css'>";
     var cssstr = ".jspsych-iat-left {float: left; margin: 0px 150px 30px 0px;}" + 
     ".jspsych-iat-right {float: right; margin: 0px 0px 30px 150px;}" 
 
@@ -60,56 +61,60 @@ jsPsych.plugins["iat"] = (function() {
     }
 
     var html_str = "";
-    html_str += "<div style='position: relative; width: 900px;' id='jspsych-iat-stim'>";
+    html_str += "<div style='position: relative; width: 100%; height: 100%' id='jspsych-iat-stim'>";
 
     if (!trial.is_html) {
-      html_str += "<div style='position: fixed; width: 170px; height: 110px; left: 560px; bottom: 380px;'><img src='"+trial.stimulus+"' id='jspsych-iat-stim'></img></div>";
+      html_str += "<div style='align:center;'><img src='"+trial.stimulus+"' id='jspsych-iat-stim'></img></div>";
     } else {
-      html_str += '<div style="position: fixed; width: 170px; height: 110px; left: 560px; bottom: 380px;"><p id="jspsych-iat-stim">'+trial.stimulus+'</p></div>';
+      html_str += "<div style='align:center;'><p id='jspsych-iat-stim'>"+trial.stimulus+"</p></div>";
     } 
 
     html_str += "<div id='trial_left_align' style='position: fixed; left: 100px; top: 80px;'>";
 
     if(trial.left_category_label.length == 1) {
-      html_str += '<p>Press ' + trial.left_category_key.toUpperCase() + ' for:<br> ' + 
-      trial.left_category_label[0].toUpperCase().bold() + '</p>';
+      html_str += "<p>Press " + trial.left_category_key.toUpperCase() + " for:<br> " + 
+      trial.left_category_label[0].toUpperCase().bold() + "</p>";
     } else {
-      html_str += '<p>Press ' + trial.left_category_key.toUpperCase() + ' for:<br> ' + 
-      trial.left_category_label[0].toUpperCase().bold() + '<br>' + 'or<br>' +
-      trial.left_category_label[1].toUpperCase().bold() + '</p>';
+      html_str += "<p>Press " + trial.left_category_key.toUpperCase() + " for:<br> " + 
+      trial.left_category_label[0].toUpperCase().bold() + "<br>" + "or<br>" +
+      trial.left_category_label[1].toUpperCase().bold() + "</p>";
     }
     
     html_str += "</div><div id='trial_right_align' style='position: fixed; right: 100px; top: 80px;'>";
 
     if(trial.right_category_label.length == 1) {
-      html_str += '<p>Press ' + trial.right_category_key.toUpperCase() + ' for:<br> ' + 
+      html_str += "<p>Press " + trial.right_category_key.toUpperCase() + " for:<br> " + 
       trial.right_category_label[0].toUpperCase().bold() + '</p>';
     } else {
-      html_str += '<p>Press ' + trial.right_category_key.toUpperCase() + ' for:<br> ' + 
-      trial.right_category_label[0].toUpperCase().bold() + '<br>' + 'or<br>' + 
-      trial.right_category_label[1].toUpperCase().bold() + '</p>';
+      html_str += "<p>Press " + trial.right_category_key.toUpperCase() + " for:<br> " + 
+      trial.right_category_label[0].toUpperCase().bold() + "<br>" + "or<br>" + 
+      trial.right_category_label[1].toUpperCase().bold() + "</p>";
     }
     
-    html_str += "</div><div id='wrongImg' style='position: fixed; width: 800px; height:100px; left: 250px; bottom: 150px;'>";
+    html_str += "</div><div id='wrongImg' style='position:relative; top: 100px'>";
 
     if(trial.display_feedback == true) {
 
 
-      html_str += '<div><img src="' + trial.image_when_wrong + '" style="visibility: hidden;" id="wrongImgID"></img></div>';
+      html_str += "<div id='wrongImgContainer' style='align:center'><img src='" + trial.image_when_wrong + "' style='visibility: hidden;' id='wrongImgID'></img></div>";
       var wImg = document.getElementById("wrongImgID");
       //wImg.style.visibility = "hidden"; 
 
       if(trial.key_to_move_forward.length == 0) {
-        html_str += '<p>If you press the wrong key, a ' + trial.wrong_image_name + ' will appear. Press any key to continue.</p>';
+        html_str += "<p>If you press the wrong key, a " + trial.wrong_image_name + " will appear. Press any key to continue.</p>";
       } else if(trial.key_to_move_forward.length == 1) {
-        html_str += '<p>If you press the wrong key, a ' + trial.wrong_image_name + ' appear. Press ' + trial.key_to_move_forward[0] + ' to continue.</p>';
+        if(trial.key_to_move_forward[0] == "other key") {
+          html_str += "<p>If you press the wrong key, a " + trial.wrong_image_name + " will appear. Press the other key to continue.</p>"
+        } else {
+        html_str += "<p>If you press the wrong key, a " + trial.wrong_image_name + " will appear. Press " + trial.key_to_move_forward[0] + " to continue.</p>";
+      }
       } else {
-        html_str += '<p>If you press the wrong key, a ' + trial.wrong_image_name + ' appear. Press ' + 
-        keysToContinue + ' ' + trial.key_to_move_forward[lastKey] + ' to continue.</p>';
+        html_str += "<p>If you press the wrong key, a " + trial.wrong_image_name + " will appear. Press " + 
+        keysToContinue + " " + trial.key_to_move_forward[lastKey] + " to continue.</p>";
       }
     } 
     else {
-        html_str += '<p>Trial will continue automatically.</p>';
+      html_str += "<p>Trial will continue automatically.</p>";
     }
 
     html_str += "</div></div>";
@@ -150,7 +155,7 @@ jsPsych.plugins["iat"] = (function() {
 
       jsPsych.data.write(trial_data);
       jsPsych.data.addDataToLastTrial(trial_data);
-    
+
       // clears the display
       display_element.innerHTML = '';
 
@@ -158,7 +163,7 @@ jsPsych.plugins["iat"] = (function() {
       jsPsych.finishTrial(trial_data);
     };
 
-  
+
     var leftKeyCode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.left_category_key); 
     var rightKeyCode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.right_category_key);
     
@@ -168,7 +173,7 @@ jsPsych.plugins["iat"] = (function() {
       var wImg = document.getElementById("wrongImgID");
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-       display_element.querySelector('#jspsych-iat-stim').className += ' responded';
+      display_element.querySelector('#jspsych-iat-stim').className += ' responded';
 
       // only record the first response
       if (response.key == -1 ) {
@@ -187,43 +192,53 @@ jsPsych.plugins["iat"] = (function() {
             wImg.style.visibility = "visible";
           }
           if (trial.response_ends_trial && trial.display_feedback == true) {
+            if(trial.key_to_move_forward[0] == "other key") {
               var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
                 callback_function: end_trial,
-                valid_responses: trial.key_to_move_forward
+                valid_responses: [trial.right_category_key]
               });
+            } else {
+            var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
+              callback_function: end_trial,
+              valid_responses: trial.key_to_move_forward
+            });}
           } else if(trial.response_ends_trial && trial.display_feedback != true) {
-              var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
-                callback_function: end_trial,
-                valid_responses: []
-              });
+            var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
+              callback_function: end_trial,
+              valid_responses: []
+            });
           }
         }
-        } 
-
-        else if(trial.stim_key_association == "left") {
-          if(response.rt > -1 && response.key == leftKeyCode) {
-            response.correct = true;
-            if(trial.response_ends_trial) {
-              end_trial();
-            }
-          } else {
-            response.correct = false;
-            if(trial.display_feedback == true) {
+      } else if(trial.stim_key_association == "left") {
+        if(response.rt > -1 && response.key == leftKeyCode) {
+          response.correct = true;
+          if(trial.response_ends_trial) {
+            end_trial();
+          }
+        } else {
+          response.correct = false;
+          if(trial.display_feedback == true) {
             wImg.style.visibility = "visible";
-            }
-            if (trial.response_ends_trial && trial.display_feedback == true) {
+          }
+          if (trial.response_ends_trial && trial.display_feedback == true) {
+            if(trial.key_to_move_forward[0] == "other key") {
               var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
                 callback_function: end_trial,
-                valid_responses: trial.key_to_move_forward
+                valid_responses: [trial.left_category_key]
               });
+            } else {
+            var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
+              callback_function: end_trial,
+              valid_responses: trial.key_to_move_forward
+            });}
           } else if(trial.response_ends_trial && trial.display_feedback != true) {
-              var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
-                callback_function: end_trial,
-                valid_responses: []
-              });
+            var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
+              callback_function: end_trial,
+              valid_responses: []
+            });
           }
-          }
-        } 
+        }
+      } 
     };
 
     // start the response listener
