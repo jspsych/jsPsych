@@ -60,6 +60,12 @@ jsPsych.plugins['free-sort'] = (function() {
         default: 'above',
         no_function: false,
         description: ''
+      },
+      button_label: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: 'Done',
+        no_function: false,
+        description: ''
       }
     }
   }
@@ -73,6 +79,7 @@ jsPsych.plugins['free-sort'] = (function() {
     trial.prompt_location = trial.prompt_location || "above";
     trial.sort_area_width = trial.sort_area_width || 800;
     trial.sort_area_height = trial.sort_area_height || 800;
+    trial.button_label = typeof trial.button_label === 'undefined' ? 'Done' : trial.button_label;
 
     // if any trial variables are functions
     // this evaluates the function and replaces
@@ -118,7 +125,7 @@ jsPsych.plugins['free-sort'] = (function() {
       });
     }
 
-    display_element.innerHTML += '<button id="jspsych-free-sort-done-btn" class="jspsych-btn">Done</button>';
+    display_element.innerHTML += '<button id="jspsych-free-sort-done-btn" class="jspsych-btn">'+trial.button_label+'</button>';
 
     var maxz = 1;
 

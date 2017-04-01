@@ -66,6 +66,12 @@ jsPsych.plugins.palmer = (function() {
         default: '',
         no_function: false,
         description: ''
+      },
+      button_label: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: 'Done',
+        no_function: false,
+        description: ''
       }
     }
   }
@@ -80,6 +86,7 @@ jsPsych.plugins.palmer = (function() {
     trial.timing_item = trial.timing_item || 1000;
     trial.timing_feedback = trial.timing_feedback || 1000;
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
+    trial.button_label = typeof trial.button_label === 'undefined' ? 'Submit Answers' : trial.button_label;
 
     // if any trial variables are functions
     // this evaluates the function and replaces
@@ -246,7 +253,7 @@ jsPsych.plugins.palmer = (function() {
     // start recording the time
     var startTime = (new Date()).getTime();
 
-    display_element.innerHTML += '<p><button id="jspsych-palmer-submitButton" class="jspsych-btn" type="button">Submit Answer</button></p>';
+    display_element.innerHTML += '<p><button id="jspsych-palmer-submitButton" class="jspsych-btn" type="button">'+trial.button_label+'</button></p>';
     display_element.querySelector('#jspsych-palmer-submitButton').addEventListener('click', function() {
       save_data();
     });
