@@ -48,6 +48,12 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         default: '',
         no_function: false,
         description: ''
+      },
+      button_label: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
       }
     }
   }
@@ -63,6 +69,8 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
     trial.required = typeof trial.required == 'undefined' ? null : trial.required;
     trial.horizontal = typeof trial.required == 'undefined' ? false : trial.horizontal;
+    //If button_label is empty, the browser's language will be used to determine the button label.
+    trial.button_label = typeof trial.button_label === 'undefined' ? '' : trial.button_label;
 
     // if any trial variables are functions
     // this evaluates the function and replaces
@@ -113,16 +121,18 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 
         // add label and question text
         var form = document.getElementById(option_id_name)
-        var input_id_name = _join(plugin_id_name, 'response', i);
+        var input_name = _join(plugin_id_name, 'response', i);
+        var input_id = _join(plugin_id_name, 'response', i, j);
         var label = document.createElement('label');
         label.setAttribute('class', plugin_id_name+'-text');
         label.innerHTML = trial.options[i][j];
-        label.setAttribute('for', input_id_name)
+        label.setAttribute('for', input_id)
 
         // create radio button
         var input = document.createElement('input');
         input.setAttribute('type', "radio");
-        input.setAttribute('name', input_id_name);
+        input.setAttribute('name', input_name);
+        input.setAttribute('id', input_id);
         input.setAttribute('value', trial.options[i][j]);
         form.appendChild(label);
         form.insertBefore(input, label);
@@ -137,8 +147,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       }
     }
     // add submit button
-    trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn"></input>';
-
+    trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn"' + (trial.button_label ? ' value="'+trial.button_label + '"': '') + '></input>';
     trial_form.addEventListener('submit', function(event) {
       event.preventDefault();
       var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
