@@ -24,7 +24,7 @@ jsPsych.plugins['survey-text'] = (function() {
         no_function: false,
         description: ''
       },
-      premable: {
+      preamble: {
         type: [jsPsych.plugins.parameterType.STRING],
         default: '',
         no_function: false,
@@ -43,6 +43,19 @@ jsPsych.plugins['survey-text'] = (function() {
         default: 40,
         no_function: false,
         description: ''
+      },
+      values: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        array: true,
+        default: '',
+        no_function: false,
+        description: ''
+      },
+      button_label: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: 'Submit Answers'
       }
     }
   }

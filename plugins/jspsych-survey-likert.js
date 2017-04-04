@@ -29,6 +29,12 @@ jsPsych.plugins['survey-likert'] = (function() {
         default: undefined,
         no_function: false,
         description: ''
+      },
+      button_label: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: 'Submit Answers',
+        no_function: false,
+        description: ''
       }
     }
   }

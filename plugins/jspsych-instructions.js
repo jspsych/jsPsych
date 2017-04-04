@@ -53,6 +53,18 @@ jsPsych.plugins.instructions = (function() {
         default: false,
         no_function: false,
         description: ''
+      },
+      button_label_previous: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: 'Previous',
+        no_function: false,
+        description: ''
+      },
+      button_label_next: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: 'Next',
+        no_function: false,
+        description: ''
       }
     }
   }
@@ -64,6 +76,8 @@ jsPsych.plugins.instructions = (function() {
     trial.allow_backward = (typeof trial.allow_backward === 'undefined') ? true : trial.allow_backward;
     trial.allow_keys = (typeof trial.allow_keys === 'undefined') ? true : trial.allow_keys;
     trial.show_clickable_nav = (typeof trial.show_clickable_nav === 'undefined') ? false : trial.show_clickable_nav;
+    trial.button_label_previous = (typeof trial.button_label_previous === 'undefined') ? 'Previous' : trial.button_label_previous;
+    trial.button_label_next = (typeof trial.button_label_next === 'undefined') ? 'Next' : trial.button_label_next;
 
     // if any trial variables are functions
     // this evaluates the function and replaces
@@ -77,7 +91,7 @@ jsPsych.plugins.instructions = (function() {
     var start_time = (new Date()).getTime();
 
     var last_page_update_time = start_time;
-    
+
     function btnListener(evt){
     	evt.target.removeEventListener('click', btnListener);
     	if(this.id === "jspsych-instructions-back"){
@@ -87,7 +101,7 @@ jsPsych.plugins.instructions = (function() {
     		next();
     	}
     }
-    
+
     function show_current_page() {
       display_element.innerHTML = trial.pages[current_page];
 
@@ -95,41 +109,41 @@ jsPsych.plugins.instructions = (function() {
 
         var nav_html = "<div class='jspsych-instructions-nav'>";
         if (current_page != 0 && trial.allow_backward) {
-          nav_html += "<button id='jspsych-instructions-back' class='jspsych-btn'>&lt; Previous</button>";
+          nav_html += "<button id='jspsych-instructions-back' class='jspsych-btn'>&lt; "+trial.button_label_previous+"</button>";
         }
-        nav_html += "<button id='jspsych-instructions-next' class='jspsych-btn'>Next &gt;</button></div>"
+        nav_html += "<button id='jspsych-instructions-next' class='jspsych-btn'>"+trial.button_label_next+" &gt;</button></div>"
 
         display_element.innerHTML += nav_html;
-        
+
         if (current_page != 0 && trial.allow_backward) {
           display_element.querySelector('#jspsych-instructions-back').addEventListener('click', btnListener);
         }
-        
+
         display_element.querySelector('#jspsych-instructions-next').addEventListener('click', btnListener);
       }
     }
 
     function next() {
-    
+
       add_current_page_to_view_history()
-    
+
       current_page++;
-    
+
       // if done, finish up...
       if (current_page >= trial.pages.length) {
         endTrial();
       } else {
         show_current_page();
       }
-    
+
     }
-    
+
     function back() {
-    
+
       add_current_page_to_view_history()
-    
+
       current_page--;
-    
+
       show_current_page();
     }
 
