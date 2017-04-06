@@ -43,7 +43,7 @@ var category_block = {
 var instructions_block = {
   type: 'text',
   text: "<div style='position: fixed; left: 100px; top: 80px;'><p>Press E for:<br> " + 
-  "<strong>YOUNG</strong></p></div>" + "<div style='position: fixed; right: 100px; top: 80px;'><p>Press I for:<br>" + "<strong>OLD</strong></p></div>" + 
+  "<strong>OLD</strong></p></div>" + "<div style='position: fixed; right: 100px; top: 80px;'><p>Press I for:<br>" + "<strong>YOUNG</strong></p></div>" + 
   "<div style='position: relative; width: 900px;'>" +
   "<p>Put a left finger on the <strong>E</strong> key for items that belong to the Old People category. Put a right finger on the " +
   "<strong>I</strong> key for items that belong to the Young People " +
@@ -65,27 +65,27 @@ var trial_block = {
     wrong_image_name: 'red X',
     display_feedback: true, 
     timing_response: 3000, //Only if display_feedback is false 
-    left_category_key: 'E',
-    right_category_key: 'I',
-    left_category_label: ['young'],
-    right_category_label: ['old'],
-    key_to_move_forward: [],
+    left_category_key: 'e',
+    right_category_key: 'i',
+    left_category_label: ['old'],
+    right_category_label: ['young'],
+    key_to_move_forward: [jsPsych.ALL_KEYS],
     response_ends_trial: true
   }
   ],
   timeline_variables: [
-  {stimulus: "age/of1.jpg", stim_key_association: "right"},
-  {stimulus: "age/of2.jpg", stim_key_association: "right"},
-  {stimulus: "age/of3.jpg", stim_key_association: "right"},
-  {stimulus: "age/om1.jpg", stim_key_association: "right"},
-  {stimulus: "age/om2.jpg", stim_key_association: "right"},
-  {stimulus: "age/om3.jpg", stim_key_association: "right"},
-  {stimulus: "age/yf1.jpg", stim_key_association: "left"},
-  {stimulus: "age/yf4.jpg", stim_key_association: "left"},
-  {stimulus: "age/yf5.jpg", stim_key_association: "left"},
-  {stimulus: "age/ym2.jpg", stim_key_association: "left"},
-  {stimulus: "age/ym3.jpg", stim_key_association: "left"},
-  {stimulus: "age/ym5.jpg", stim_key_association: "left"}
+  {stimulus: "age/of1.jpg", stim_key_association: "left"},
+  {stimulus: "age/of2.jpg", stim_key_association: "left"},
+  {stimulus: "age/of3.jpg", stim_key_association: "left"},
+  {stimulus: "age/om1.jpg", stim_key_association: "left"},
+  {stimulus: "age/om2.jpg", stim_key_association: "left"},
+  {stimulus: "age/om3.jpg", stim_key_association: "left"},
+  {stimulus: "age/yf1.jpg", stim_key_association: "right"},
+  {stimulus: "age/yf4.jpg", stim_key_association: "right"},
+  {stimulus: "age/yf5.jpg", stim_key_association: "right"},
+  {stimulus: "age/ym2.jpg", stim_key_association: "right"},
+  {stimulus: "age/ym3.jpg", stim_key_association: "right"},
+  {stimulus: "age/ym5.jpg", stim_key_association: "right"}
   ],
   randomize_order: true,
   repititions: 2
@@ -121,7 +121,7 @@ var trial_block2 = {
     right_category_key: 'I',
     left_category_label: ['bad'],
     right_category_label: ['good'],
-    key_to_move_forward: [],
+    key_to_move_forward: [jsPsych.ALL_KEYS],
     response_ends_trial: true
   }
   ],
@@ -150,8 +150,8 @@ var trial_block2 = {
 var instructions_block3 = {
   type: 'text',
   text: "<div style='position: fixed; left: 100px; top: 80px;'>Press 'E' for:<br> " + 
-  "<strong>BAD</strong><br>" + "or<br>" + "<strong>OLD PEOPLE</strong></div>" + "<div style='position: fixed; right: 100px; top: 80px;'>" +
-  "Press 'I' for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG PEOPLE</strong></div>" + 
+  "<strong>BAD</strong><br>" + "or<br>" + "<strong>OLD</strong></div>" + "<div style='position: fixed; right: 100px; top: 80px;'>" +
+  "Press 'I' for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG</strong></div>" + 
   "<p style='padding-top: 100px'>Use <strong>E</strong> for Bad and for " +
   "Old People<br>" + "Use <strong>I</strong> for Good and for Young People<br>" + 
   "Each item belongs to only one category.<br><br>" + "If you " +
@@ -173,9 +173,9 @@ var trial_block3 = {
     timing_response: 3000, //Only if display_feedback is false 
     left_category_key: 'E',
     right_category_key: 'I',
-    left_category_label: ['bad', 'old people'],
-    right_category_label: ['good', 'young people'],
-    key_to_move_forward: [],
+    left_category_label: ['bad', 'old'],
+    right_category_label: ['good', 'young'],
+    key_to_move_forward: [jsPsych.ALL_KEYS],
     response_ends_trial: true
   }
   ],
@@ -215,9 +215,9 @@ var trial_block3 = {
 
 var instructions_block4 = {
   type: 'text',
-  text: "<div style='float: left;'>Press 'E' for:<br> " + 
-  "<strong>Bad</strong><br>" + "or<br>" + "<strong>Old People</strong></div>" + "<div style='float:right;'>" +
-  "Press 'I' for:<br>" + "<strong>Good</strong><br>" + "or<br>" + "<strong>Young People</strong></div>" + 
+  text: "<div style='position: fixed; left: 100px; top: 80px;'>Press 'E' for:<br> " + 
+  "<strong>BAD</strong><br>" + "or<br>" + "<strong>OLD</strong></div>" + "<div style='position: fixed; right: 100px; top: 80px;'>" +
+  "Press 'I' for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG</strong></div>" + 
   "<p style='padding-top: 100px'>This is the same as the previous part.<br>" + "Use <strong>E</strong> for Bad and for " +
   "Old People<br>" + "Use <strong>I</strong> for Good and for Young People<br>" + 
   "Each item belongs to only one category.<br><br>" + "If you " +
@@ -239,9 +239,9 @@ var trial_block4 = {
       timing_response: 3000, //Only if display_feedback is false 
       left_category_key: 'E',
       right_category_key: 'I',
-      left_category_label: ['bad', 'old people'],
-      right_category_label: ['good', 'young people'],
-      key_to_move_forward: [],
+      left_category_label: ['bad', 'old'],
+      right_category_label: ['good', 'young'],
+      key_to_move_forward: [jsPsych.ALL_KEYS],
       response_ends_trial: true
     }
     ],
@@ -281,8 +281,8 @@ var trial_block4 = {
 
   var instructions_block5 = {
     type: 'text',
-    text: "<div style='float: left;'>Press 'E' for:<br>" + "<strong>Young People</strong></div>" +
-    "<div style='float: right;'>Press 'I' for:<br>" + "<strong>Old People</strong></div>" +
+    text: "<div style='position: fixed; left: 100px; top: 80px;'>Press 'E' for:<br>" + "<strong>YOUNG</strong></div>" +
+    "<div style='position: fixed; right: 100px; top: 80px;'>Press 'I' for:<br>" + "<strong>OLD</strong></div>" +
     "<p style='padding-top: 100px'>Watch out, the labels have changed positions!<br>" +
     "Use <strong>E</strong> for Young People<br>" + "Use <strong>I</strong> for Old People<br><br>" +
     "If you make a mistake, a red X will appear. Press the keys listed below " +
@@ -303,9 +303,9 @@ var trial_block4 = {
       timing_response: 3000, //Only if display_feedback is false 
       left_category_key: 'E',
       right_category_key: 'I',
-      left_category_label: ['young people'],
-      right_category_label: ['old people'],
-      key_to_move_forward: [],
+      left_category_label: ['young'],
+      right_category_label: ['old'],
+      key_to_move_forward: [jsPsych.ALL_KEYS],
       response_ends_trial: true
     }
     ],
@@ -329,9 +329,9 @@ var trial_block4 = {
 
   var instructions_block6 = {
     type: 'text',
-    text: "<div style='float: left;'>Press 'E' for:<br>" + "<strong>Bad</strong><br>" + "or<br>" +
-    "<strong>Old People</strong></div>" + "<div style='float: right;'>Press 'I' for:<br>" + "<strong>Good</strong><br>" + "or<br>" +
-    "<strong>Young People</strong></div>" +
+    text: "<div style='position: fixed; left: 100px; top: 80px;'>Press 'E' for:<br>" + "<strong>BAD</strong><br>" + "or<br>" +
+    "<strong>OLD</strong></div>" + "<div style='position: fixed; right: 100px; top: 80px;'>Press 'I' for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" +
+    "<strong>YOUNG</strong></div>" +
     "<p style='padding-top: 100px'>Use <strong>E</strong> for Bad and for Old People<br>" + 
     "Use <strong>I</strong> for Good and for Young People<br><br>" +
     "If you make a mistake, a red X will appear. Press the keys listed below " +
@@ -352,9 +352,9 @@ var trial_block4 = {
       timing_response: 3000, //Only if display_feedback is false 
       left_category_key: 'E',
       right_category_key: 'I',
-      left_category_label: ['bad', 'old people'],
-      right_category_label: ['good', 'young people'],
-      key_to_move_forward: []
+      left_category_label: ['bad', 'old'],
+      right_category_label: ['good', 'young'],
+      key_to_move_forward: [jsPsych.ALL_KEYS],
     }
     ],
     timeline_variables: [
@@ -393,8 +393,8 @@ var trial_block4 = {
 
   var instructions_block7 = {
     type: 'text',
-    text: "<div style='float: left;'>Press 'E' for:<br>" + "<strong>Bad</strong><br>" + "or<br>" +
-    "<strong>Old People</strong></div>" + "<div style='float: right;'>Press 'I' for:<br>" + "<strong>Good</strong><br>" + "or<br>" +
+    text: "<div style='position: fixed; left: 100px; top: 80px;'>Press 'E' for:<br>" + "<strong>Bad</strong><br>" + "or<br>" +
+    "<strong>Old People</strong></div>" + "<div style='position: fixed; right: 100px; top: 80px;'>Press 'I' for:<br>" + "<strong>Good</strong><br>" + "or<br>" +
     "<strong>Young People</strong></div>" +
     "<p style='padding-top: 100px'>This is the same as the previous part<br>" + 
     "Use <strong>E</strong> for Bad and for Old People<br>" + 
@@ -424,12 +424,12 @@ var trial_block4 = {
   var timeline = [];
 // timeline.push(welcome_block);
 // timeline.push(category_block);
-//timeline.push(instructions_block);
-timeline.push(trial_block);
-timeline.push(instructions_block2);
-timeline.push(trial_block2);
-timeline.push(instructions_block3);
-timeline.push(trial_block3);
+// timeline.push(instructions_block);
+// timeline.push(trial_block);
+// timeline.push(instructions_block2);
+// timeline.push(trial_block2);
+// timeline.push(instructions_block3);
+// timeline.push(trial_block3);
 timeline.push(instructions_block4);
 timeline.push(trial_block4);
 timeline.push(instructions_block5);

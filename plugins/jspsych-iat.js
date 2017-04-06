@@ -1,6 +1,6 @@
 /**
  * jspsych-single-stim
- * Josh de Leeuw
+ * Kristin Diep 
  *
  * plugin for displaying a stimulus and getting a keyboard response
  *
@@ -40,6 +40,7 @@
     trial.right_category_label = trial.right_category_label || ['right']; 
     trial.stim_key_association = trial.stim_key_association || 'undefined';
     trial.response_ends_trial = (typeof trial.response_ends_trial == 'undefined') ? true : trial.response_ends_trial;
+    trial.timing_response = trial.timing_response || 0;
     trial.key_to_move_forward = trial.key_to_move_forward || jsPsych.ALL_KEYS;
     trial.is_html = (typeof trial.is_html == 'undefined') ? false : trial.is_html;
     trial.prompt = trial.prompt || "";
@@ -64,9 +65,9 @@
     html_str += "<div style='position: relative; width: 100%; height: 100%' id='jspsych-iat-stim'>";
 
     if (!trial.is_html) {
-      html_str += "<div style='align:center;'><img src='"+trial.stimulus+"' id='jspsych-iat-stim'></img></div>";
+      html_str += "<div style='position: relative; width: 100%; height: 100%'><img src='"+trial.stimulus+"' id='jspsych-iat-stim'></img></div>";
     } else {
-      html_str += "<div style='align:center;'><p id='jspsych-iat-stim'>"+trial.stimulus+"</p></div>";
+      html_str += "<div style='position: relative; width: 100%; height: 100%'><p id='jspsych-iat-stim'>"+trial.stimulus+"</p></div>";
     } 
 
     html_str += "<div id='trial_left_align' style='position: fixed; left: 100px; top: 80px;'>";
@@ -100,11 +101,11 @@
       var wImg = document.getElementById("wrongImgID");
       //wImg.style.visibility = "hidden"; 
 
-      if(trial.key_to_move_forward.length == 0) {
-        html_str += "<p>If you press the wrong key, a " + trial.wrong_image_name + " will appear. Press any key to continue.</p>";
-      } else if(trial.key_to_move_forward.length == 1) {
+      if(trial.key_to_move_forward.length == 1) {
         if(trial.key_to_move_forward[0] == "other key") {
           html_str += "<p>If you press the wrong key, a " + trial.wrong_image_name + " will appear. Press the other key to continue.</p>"
+        } else if(trial.key_to_move_forward[0] == jsPsych.ALL_KEYS) {
+          html_str += "<p>If you press the wrong key, a " + trial.wrong_image_name + " will appear. Press any key to continue.</p>"
         } else {
         html_str += "<p>If you press the wrong key, a " + trial.wrong_image_name + " will appear. Press " + trial.key_to_move_forward[0] + " to continue.</p>";
       }
@@ -205,7 +206,7 @@
           } else if(trial.response_ends_trial && trial.display_feedback != true) {
             var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
               callback_function: end_trial,
-              valid_responses: []
+              valid_responses: [jsPsych.ALL_KEYS]
             });
           }
         }
@@ -234,7 +235,7 @@
           } else if(trial.response_ends_trial && trial.display_feedback != true) {
             var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
               callback_function: end_trial,
-              valid_responses: []
+              valid_responses: [jsPsych.ALL_KEYS]
             });
           }
         }
@@ -258,7 +259,7 @@
       jsPsych.pluginAPI.setTimeout(function() {
         end_trial();
       }, trial.timing_response);
-    }
+    } 
 
   };
 
