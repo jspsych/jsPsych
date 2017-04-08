@@ -25,7 +25,7 @@ jsPsych.plugins["resize"] = (function() {
     trial.prompt = trial.prompt || ' ';
     trial.pixels_per_unit = trial.pixels_per_unit ||  100;
     trial.starting_size = trial.starting_size || 100;
-    trial.button_text = trial.button_text || "Done";
+    trial.button_label = trial.button_label || "Done";
 
     var aspect_ratio = trial.item_width / trial.item_height;
 
@@ -43,7 +43,7 @@ jsPsych.plugins["resize"] = (function() {
     html += '<div id="jspsych-resize-handle" style="cursor: nwse-resize; background-color: steelblue; width: 10px; height: 10px; border: 2px solid lightsteelblue; position: absolute; bottom: 0; right: 0;"></div>';
     html += '</div>';
     html += trial.prompt;
-    html += '<a class="jspsych-btn" id="jspsych-resize-btn">'+trial.button_text+'</a>';
+    html += '<a class="jspsych-btn" id="jspsych-resize-btn">'+trial.button_label+'</a>';
 
     // render
     display_element.innerHTML = html;
