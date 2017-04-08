@@ -30,6 +30,8 @@ window.jsPsych = (function() {
   var waiting = false;
   // done loading?
   var loaded = false;
+  // debug mode
+  var debug = false;
 
   // enumerated variables for special parameter types
   core.ALL_KEYS = 'allkeys';
@@ -49,6 +51,7 @@ window.jsPsych = (function() {
     paused = false;
     waiting = false;
     loaded = false;
+    debug = false;
     jsPsych.data.reset();
 
     var defaults = {
@@ -80,6 +83,22 @@ window.jsPsych = (function() {
 
     // override default options if user specifies an option
     opts = Object.assign({}, defaults, options);
+
+    // set keyboard shortcuts if debug is true
+    // CTRL+K to skip trials
+    // CTRL+SHIFT+K skip a timeline
+    if(opts.debug){
+        window.onkeydown = function(e){
+            if(e.shiftKey && e.ctrlKey && e.keyCode==75){
+                // skip timelines
+                e.preventDefault();
+                core.endCurrentTimeline();
+            }else if(e.ctrlKey && e.keyCode==75){
+                e.preventDefault();
+                // skip trials
+            }
+        }
+    }
 
     // set DOM element where jsPsych will render content
     // if undefined, then jsPsych will use the <body> tag and the entire page
