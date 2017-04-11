@@ -230,4 +230,37 @@ describe('conditional function', function(){
 
 describe('endCurrentTimeline', function(){
 
+  test('stops the current timeline, skipping to the end after the trial completes', function(){
+    var t = {
+      timeline: [
+        {
+          type: 'text',
+          text: 'foo',
+          on_finish: function(){
+            jsPsych.endCurrentTimeline();
+          }
+        },
+        {
+          type: 'text',
+          text: 'bar',
+        }
+      ]
+    }
+
+    jsPsych.init({
+      timeline: [t, {type: 'text', text: 'woo'}]
+    });
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe('foo');
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe('woo');
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+
+  });
+
 });
