@@ -6,7 +6,7 @@
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-text.js"></script>
   <script src="../plugins/jspsych-iat.js"></script>
-  <link href="../css/jspsych.css" rel="stylesheet" type="text/css"></link>
+  <link href="../css/jspsych.css" rel="stylesheet"></link>
 </head>
 <body>
 </body>
@@ -42,15 +42,14 @@ var category_block = {
 
 var instructions_block = {
   type: 'text',
-  text: "<div style='position: fixed; left: 100px; top: 80px;'><p>Press E for:<br> " + 
-  "<strong>OLD</strong></p></div>" + "<div style='position: fixed; right: 100px; top: 80px;'><p>Press I for:<br>" + "<strong>YOUNG</strong></p></div>" + 
-  "<div style='position: relative; width: 900px;'>" +
-  "<p>Put a left finger on the <strong>E</strong> key for items that belong to the Old People category. Put a right finger on the " +
+  text: "<div style='position: absolute; top: 18%; left: 20%'><p>Press E for:<br><strong>OLD</strong></p></div>" + 
+  "<div style='position: absolute; top: 18%; right: 20%'><p>Press I for:<br><strong>YOUNG</strong></p></div>" + 
+  "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Put a left finger on the <strong>E</strong> key for items that belong to the Old People category. Put a right finger on the " +
   "<strong>I</strong> key for items that belong to the Young People " +
   "category. Items will appear one at a time.<br><br>" + "If you " +
   "make a mistake, a red X will appear. Press the keys listed below " +
   "to continue. Go as fast as you can while being accurate.<br><br> " +
-  "Press the any key when you are ready to start.</p></div>",
+  "Press the any key when you are ready to start.</div>",
 };
 
 
@@ -61,7 +60,7 @@ var trial_block = {
     stimulus: jsPsych.timelineVariable('stimulus'),
     stim_key_association: jsPsych.timelineVariable('stim_key_association'),
     is_html: false,
-    image_when_wrong: 'redX.png',
+    image_when_wrong: 'img/redX.png',
     wrong_image_name: 'red X',
     display_feedback: true, 
     timing_response: 3000, //Only if display_feedback is false 
@@ -74,18 +73,18 @@ var trial_block = {
   }
   ],
   timeline_variables: [
-  {stimulus: "age/of1.jpg", stim_key_association: "left"},
-  {stimulus: "age/of2.jpg", stim_key_association: "left"},
-  {stimulus: "age/of3.jpg", stim_key_association: "left"},
-  {stimulus: "age/om1.jpg", stim_key_association: "left"},
-  {stimulus: "age/om2.jpg", stim_key_association: "left"},
-  {stimulus: "age/om3.jpg", stim_key_association: "left"},
-  {stimulus: "age/yf1.jpg", stim_key_association: "right"},
-  {stimulus: "age/yf4.jpg", stim_key_association: "right"},
-  {stimulus: "age/yf5.jpg", stim_key_association: "right"},
-  {stimulus: "age/ym2.jpg", stim_key_association: "right"},
-  {stimulus: "age/ym3.jpg", stim_key_association: "right"},
-  {stimulus: "age/ym5.jpg", stim_key_association: "right"}
+  {stimulus: "img/age/of1.jpg", stim_key_association: "left"},
+  {stimulus: "img/age/of2.jpg", stim_key_association: "left"},
+  {stimulus: "img/age/of3.jpg", stim_key_association: "left"},
+  {stimulus: "img/age/om1.jpg", stim_key_association: "left"},
+  {stimulus: "img/age/om2.jpg", stim_key_association: "left"},
+  {stimulus: "img/age/om3.jpg", stim_key_association: "left"},
+  {stimulus: "img/age/yf1.jpg", stim_key_association: "right"},
+  {stimulus: "img/age/yf4.jpg", stim_key_association: "right"},
+  {stimulus: "img/age/yf5.jpg", stim_key_association: "right"},
+  {stimulus: "img/age/ym2.jpg", stim_key_association: "right"},
+  {stimulus: "img/age/ym3.jpg", stim_key_association: "right"},
+  {stimulus: "img/age/ym5.jpg", stim_key_association: "right"}
   ],
   randomize_order: true,
   repititions: 2
@@ -93,17 +92,15 @@ var trial_block = {
 
 var instructions_block2 = {
   type: 'text',
-  text: "<div style='position: fixed; left: 100px; top: 80px;'>Press E for:<br> " + 
-  "<strong>BAD</strong></div>" + "<div style='position: fixed; right: 100px; top: 80px;'>" +
-  "Press I for:<br>" + "<strong>GOOD</strong></div>" + 
-  "<div style='position: relative; width: 900px;'>" + 
-  "<p>Put a left finger on the <strong>E</strong> key for items that " +
+  text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br><strong>BAD</strong></div>" + 
+  "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br><strong>GOOD</strong></div>" + 
+  "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Put a left finger on the <strong>E</strong> key for items that " +
   "belong to the Bad category. Put a right finger on the " +
   "<strong>I</strong> key for items that belong to the Good " +
   "category. Items will appear one at a time.<br><br>" + "If you " +
   "make a mistake, a red X will appear. Press the keys listed below " +
   "to continue. Go as fast as you can while being accurate.<br><br> " +
-  "Press the any key when you are ready to start.</p></div>",
+  "Press the any key when you are ready to start.</div>",
 };
 
 var trial_block2 = {
@@ -113,7 +110,7 @@ var trial_block2 = {
     is_html: true,
     stimulus: jsPsych.timelineVariable('stimulus'),
     stim_key_association: jsPsych.timelineVariable('stim_key_association'),
-    image_when_wrong: 'redX.png',
+    image_when_wrong: 'img/redX.png',
     wrong_image_name: 'red X',
     display_feedback: true, 
     timing_response: 3000, //Only if display_feedback is false 
@@ -149,15 +146,15 @@ var trial_block2 = {
 
 var instructions_block3 = {
   type: 'text',
-  text: "<div style='position: fixed; left: 100px; top: 80px;'>Press 'E' for:<br> " + 
-  "<strong>BAD</strong><br>" + "or<br>" + "<strong>OLD</strong></div>" + "<div style='position: fixed; right: 100px; top: 80px;'>" +
-  "Press 'I' for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG</strong></div>" + 
-  "<p style='padding-top: 100px'>Use <strong>E</strong> for Bad and for " +
+  text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br> " + 
+  "<strong>BAD</strong><br>" + "or<br>" + "<strong>OLD</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>" +
+  "Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG</strong></div>" + 
+  "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Use <strong>E</strong> for Bad and for " +
   "Old People<br>" + "Use <strong>I</strong> for Good and for Young People<br>" + 
   "Each item belongs to only one category.<br><br>" + "If you " +
   "make a mistake, a red X will appear. Press the keys listed below " +
   "to continue. Go as fast as you can while being accurate.<br><br> " +
-  "Press the any key when you are ready to start.</p>",
+  "Press the any key when you are ready to start.</div>",
 };
 
 var trial_block3 = {
@@ -167,7 +164,7 @@ var trial_block3 = {
     is_html: jsPsych.timelineVariable('is_html'),
     stimulus: jsPsych.timelineVariable('stimulus'),
     stim_key_association: jsPsych.timelineVariable('stim_key_association'),
-    image_when_wrong: 'redX.png',
+    image_when_wrong: 'img/redX.png',
     wrong_image_name: 'red X',
     display_feedback: true, 
     timing_response: 3000, //Only if display_feedback is false 
@@ -180,18 +177,18 @@ var trial_block3 = {
   }
   ],
   timeline_variables: [
-  {stimulus: "age/of1.jpg", stim_key_association: "left", is_html: false},
-  {stimulus: "age/of2.jpg", stim_key_association: "left", is_html: false},
-  {stimulus: "age/of3.jpg", stim_key_association: "left", is_html: false},
-  {stimulus: "age/om1.jpg", stim_key_association: "left", is_html: false},
-  {stimulus: "age/om2.jpg", stim_key_association: "left", is_html: false},
-  {stimulus: "age/om3.jpg", stim_key_association: "left", is_html: false},
-  {stimulus: "age/yf1.jpg", stim_key_association: "right", is_html: false},
-  {stimulus: "age/yf4.jpg", stim_key_association: "right", is_html: false},
-  {stimulus: "age/yf5.jpg", stim_key_association: "right", is_html: false},
-  {stimulus: "age/ym2.jpg", stim_key_association: "right", is_html: false},
-  {stimulus: "age/ym3.jpg", stim_key_association: "right", is_html: false},
-  {stimulus: "age/ym5.jpg", stim_key_association: "right", is_html: false},
+  {stimulus: "img/age/of1.jpg", stim_key_association: "left", is_html: false},
+  {stimulus: "img/age/of2.jpg", stim_key_association: "left", is_html: false},
+  {stimulus: "img/age/of3.jpg", stim_key_association: "left", is_html: false},
+  {stimulus: "img/age/om1.jpg", stim_key_association: "left", is_html: false},
+  {stimulus: "img/age/om2.jpg", stim_key_association: "left", is_html: false},
+  {stimulus: "img/age/om3.jpg", stim_key_association: "left", is_html: false},
+  {stimulus: "img/age/yf1.jpg", stim_key_association: "right", is_html: false},
+  {stimulus: "img/age/yf4.jpg", stim_key_association: "right", is_html: false},
+  {stimulus: "img/age/yf5.jpg", stim_key_association: "right", is_html: false},
+  {stimulus: "img/age/ym2.jpg", stim_key_association: "right", is_html: false},
+  {stimulus: "img/age/ym3.jpg", stim_key_association: "right", is_html: false},
+  {stimulus: "img/age/ym5.jpg", stim_key_association: "right", is_html: false},
   {stimulus: "Humiliate", stim_key_association: "left", is_html: true},
   {stimulus: "Evil", stim_key_association: "left", is_html: true},
   {stimulus: "Grief", stim_key_association: "left", is_html: true},
@@ -215,15 +212,15 @@ var trial_block3 = {
 
 var instructions_block4 = {
   type: 'text',
-  text: "<div style='position: fixed; left: 100px; top: 80px;'>Press 'E' for:<br> " + 
-  "<strong>BAD</strong><br>" + "or<br>" + "<strong>OLD</strong></div>" + "<div style='position: fixed; right: 100px; top: 80px;'>" +
-  "Press 'I' for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG</strong></div>" + 
-  "<p style='padding-top: 100px'>This is the same as the previous part.<br>" + "Use <strong>E</strong> for Bad and for " +
+  text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br> " + 
+  "<strong>BAD</strong><br>" + "or<br>" + "<strong>OLD</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>" +
+  "Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG</strong></div>" + 
+  "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>This is the same as the previous part.<br>" + "Use <strong>E</strong> for Bad and for " +
   "Old People<br>" + "Use <strong>I</strong> for Good and for Young People<br>" + 
   "Each item belongs to only one category.<br><br>" + "If you " +
   "make a mistake, a red X will appear. Press the keys listed below " +
   "to continue. Go as fast as you can while being accurate.<br><br> " +
-  "Press the any key when you are ready to start.</p>",
+  "Press the any key when you are ready to start.</div>",
 };
 
 var trial_block4 = {
@@ -233,7 +230,7 @@ var trial_block4 = {
     is_html: jsPsych.timelineVariable('is_html'),
     stimulus: jsPsych.timelineVariable('stimulus'),
     stim_key_association: jsPsych.timelineVariable('stim_key_association'),
-    image_when_wrong: 'redX.png',
+    image_when_wrong: 'img/redX.png',
     wrong_image_name: 'red X',
     display_feedback: true, 
       timing_response: 3000, //Only if display_feedback is false 
@@ -246,18 +243,18 @@ var trial_block4 = {
     }
     ],
     timeline_variables: [
-    {stimulus: "age/of1.jpg", stim_key_association: "left", is_html: false},
-    {stimulus: "age/of2.jpg", stim_key_association: "left", is_html: false},
-    {stimulus: "age/of3.jpg", stim_key_association: "left", is_html: false},
-    {stimulus: "age/om1.jpg", stim_key_association: "left", is_html: false},
-    {stimulus: "age/om2.jpg", stim_key_association: "left", is_html: false},
-    {stimulus: "age/om3.jpg", stim_key_association: "left", is_html: false},
-    {stimulus: "age/yf1.jpg", stim_key_association: "right", is_html: false},
-    {stimulus: "age/yf4.jpg", stim_key_association: "right", is_html: false},
-    {stimulus: "age/yf5.jpg", stim_key_association: "right", is_html: false},
-    {stimulus: "age/ym2.jpg", stim_key_association: "right", is_html: false},
-    {stimulus: "age/ym3.jpg", stim_key_association: "right", is_html: false},
-    {stimulus: "age/ym5.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/of1.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/of2.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/of3.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/om1.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/om2.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/om3.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/yf1.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/yf4.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/yf5.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/ym2.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/ym3.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/ym5.jpg", stim_key_association: "right", is_html: false},
     {stimulus: "Humiliate", stim_key_association: "left", is_html: true},
     {stimulus: "Evil", stim_key_association: "left", is_html: true},
     {stimulus: "Grief", stim_key_association: "left", is_html: true},
@@ -281,13 +278,13 @@ var trial_block4 = {
 
   var instructions_block5 = {
     type: 'text',
-    text: "<div style='position: fixed; left: 100px; top: 80px;'>Press 'E' for:<br>" + "<strong>YOUNG</strong></div>" +
-    "<div style='position: fixed; right: 100px; top: 80px;'>Press 'I' for:<br>" + "<strong>OLD</strong></div>" +
-    "<p style='padding-top: 100px'>Watch out, the labels have changed positions!<br>" +
+    text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>YOUNG</strong></div>" +
+    "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>OLD</strong></div>" +
+    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Watch out, the labels have changed positions!<br>" +
     "Use <strong>E</strong> for Young People<br>" + "Use <strong>I</strong> for Old People<br><br>" +
     "If you make a mistake, a red X will appear. Press the keys listed below " +
     "to continue. Go as fast as you can while being accurate.<br><br> " +
-    "Press the any key when you are ready to start.</p>"
+    "Press the any key when you are ready to start.</div>"
   };
 
   var trial_block5 = {
@@ -297,7 +294,7 @@ var trial_block4 = {
       is_html: false,
       stimulus: jsPsych.timelineVariable('stimulus'),
       stim_key_association: jsPsych.timelineVariable('stim_key_association'),
-      image_when_wrong: 'redX.png',
+      image_when_wrong: 'img/redX.png',
       wrong_image_name: 'red X',
       display_feedback: true, 
       timing_response: 3000, //Only if display_feedback is false 
@@ -310,18 +307,18 @@ var trial_block4 = {
     }
     ],
     timeline_variables: [
-    {stimulus: "age/of1.jpg", stim_key_association: "right"},
-    {stimulus: "age/of2.jpg", stim_key_association: "right"},
-    {stimulus: "age/of3.jpg", stim_key_association: "right"},
-    {stimulus: "age/om1.jpg", stim_key_association: "right"},
-    {stimulus: "age/om2.jpg", stim_key_association: "right"},
-    {stimulus: "age/om3.jpg", stim_key_association: "right"},
-    {stimulus: "age/yf1.jpg", stim_key_association: "left"},
-    {stimulus: "age/yf4.jpg", stim_key_association: "left"},
-    {stimulus: "age/yf5.jpg", stim_key_association: "left"},
-    {stimulus: "age/ym2.jpg", stim_key_association: "left"},
-    {stimulus: "age/ym3.jpg", stim_key_association: "left"},
-    {stimulus: "age/ym5.jpg", stim_key_association: "left"}
+    {stimulus: "img/age/of1.jpg", stim_key_association: "right"},
+    {stimulus: "img/age/of2.jpg", stim_key_association: "right"},
+    {stimulus: "img/age/of3.jpg", stim_key_association: "right"},
+    {stimulus: "img/age/om1.jpg", stim_key_association: "right"},
+    {stimulus: "img/age/om2.jpg", stim_key_association: "right"},
+    {stimulus: "img/age/om3.jpg", stim_key_association: "right"},
+    {stimulus: "img/age/yf1.jpg", stim_key_association: "left"},
+    {stimulus: "img/age/yf4.jpg", stim_key_association: "left"},
+    {stimulus: "img/age/yf5.jpg", stim_key_association: "left"},
+    {stimulus: "img/age/ym2.jpg", stim_key_association: "left"},
+    {stimulus: "img/age/ym3.jpg", stim_key_association: "left"},
+    {stimulus: "img/age/ym5.jpg", stim_key_association: "left"}
     ],
     randomize_order: true,
     repititions: 2
@@ -329,14 +326,14 @@ var trial_block4 = {
 
   var instructions_block6 = {
     type: 'text',
-    text: "<div style='position: fixed; left: 100px; top: 80px;'>Press 'E' for:<br>" + "<strong>BAD</strong><br>" + "or<br>" +
-    "<strong>OLD</strong></div>" + "<div style='position: fixed; right: 100px; top: 80px;'>Press 'I' for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" +
+    text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>BAD</strong><br>" + "or<br>" +
+    "<strong>OLD</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" +
     "<strong>YOUNG</strong></div>" +
-    "<p style='padding-top: 100px'>Use <strong>E</strong> for Bad and for Old People<br>" + 
+    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Use <strong>E</strong> for Bad and for Old People<br>" + 
     "Use <strong>I</strong> for Good and for Young People<br><br>" +
     "If you make a mistake, a red X will appear. Press the keys listed below " +
     "to continue. Go as fast as you can while being accurate.<br><br> " +
-    "Press the any key when you are ready to start.</p>"
+    "Press the any key when you are ready to start.</div>"
   };
 
   var trial_block6 = {
@@ -346,7 +343,7 @@ var trial_block4 = {
       is_html: jsPsych.timelineVariable('is_html'),
       stimulus: jsPsych.timelineVariable('stimulus'),
       stim_key_association: jsPsych.timelineVariable('stim_key_association'),
-      image_when_wrong: 'redX.png',
+      image_when_wrong: 'img/redX.png',
       wrong_image_name: 'red X',
       display_feedback: true, 
       timing_response: 3000, //Only if display_feedback is false 
@@ -358,18 +355,18 @@ var trial_block4 = {
     }
     ],
     timeline_variables: [
-    {stimulus: "age/of1.jpg", stim_key_association: "left", is_html: false},
-    {stimulus: "age/of2.jpg", stim_key_association: "left", is_html: false},
-    {stimulus: "age/of3.jpg", stim_key_association: "left", is_html: false},
-    {stimulus: "age/om1.jpg", stim_key_association: "left", is_html: false},
-    {stimulus: "age/om2.jpg", stim_key_association: "left", is_html: false},
-    {stimulus: "age/om3.jpg", stim_key_association: "left", is_html: false},
-    {stimulus: "age/yf1.jpg", stim_key_association: "right", is_html: false},
-    {stimulus: "age/yf4.jpg", stim_key_association: "right", is_html: false},
-    {stimulus: "age/yf5.jpg", stim_key_association: "right", is_html: false},
-    {stimulus: "age/ym2.jpg", stim_key_association: "right", is_html: false},
-    {stimulus: "age/ym3.jpg", stim_key_association: "right", is_html: false},
-    {stimulus: "age/ym5.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/of1.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/of2.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/of3.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/om1.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/om2.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/om3.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/yf1.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/yf4.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/yf5.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/ym2.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/ym3.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/ym5.jpg", stim_key_association: "right", is_html: false},
     {stimulus: "Humiliate", stim_key_association: "left", is_html: true},
     {stimulus: "Evil", stim_key_association: "left", is_html: true},
     {stimulus: "Grief", stim_key_association: "left", is_html: true},
@@ -393,16 +390,16 @@ var trial_block4 = {
 
   var instructions_block7 = {
     type: 'text',
-    text: "<div style='position: fixed; left: 100px; top: 80px;'>Press 'E' for:<br>" + "<strong>Bad</strong><br>" + "or<br>" +
-    "<strong>Old People</strong></div>" + "<div style='position: fixed; right: 100px; top: 80px;'>Press 'I' for:<br>" + "<strong>Good</strong><br>" + "or<br>" +
+    text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>Bad</strong><br>" + "or<br>" +
+    "<strong>Old People</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>Good</strong><br>" + "or<br>" +
     "<strong>Young People</strong></div>" +
-    "<p style='padding-top: 100px'>This is the same as the previous part<br>" + 
+    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>This is the same as the previous part<br>" + 
     "Use <strong>E</strong> for Bad and for Old People<br>" + 
     "Use <strong>I</strong> for Good and for Young People<br>" +
     "Each item belongs to only one category<br><br>" +
     "If you make a mistake, a red X will appear. Press the keys listed below " +
     "to continue. Go as fast as you can while being accurate.<br><br> " +
-    "Press the any key when you are ready to start.</p>"
+    "Press the any key when you are ready to start.</div>"
   };
 
   var debrief_block = {
@@ -422,29 +419,29 @@ var trial_block4 = {
   };
 
   var timeline = [];
-// timeline.push(welcome_block);
-// timeline.push(category_block);
-// timeline.push(instructions_block);
-// timeline.push(trial_block);
-// timeline.push(instructions_block2);
-// timeline.push(trial_block2);
-// timeline.push(instructions_block3);
-// timeline.push(trial_block3);
-timeline.push(instructions_block4);
-timeline.push(trial_block4);
-timeline.push(instructions_block5);
-timeline.push(trial_block5);
-timeline.push(instructions_block6);
-timeline.push(trial_block6);
-timeline.push(instructions_block7);
-timeline.push(trial_block6);
-timeline.push(debrief_block);
+  timeline.push(welcome_block);
+  timeline.push(category_block);
+  timeline.push(instructions_block);
+  timeline.push(trial_block);
+  timeline.push(instructions_block2);
+  timeline.push(trial_block2);
+  timeline.push(instructions_block3);
+  timeline.push(trial_block3);
+  timeline.push(instructions_block4);
+  timeline.push(trial_block4);
+  timeline.push(instructions_block5);
+  timeline.push(trial_block5);
+  timeline.push(instructions_block6);
+  timeline.push(trial_block6);
+  timeline.push(instructions_block7);
+  timeline.push(trial_block6);
+  timeline.push(debrief_block);
 
-jsPsych.init({
-  timeline: timeline,
-  on_finish: function() {
-    jsPsych.data.displayData();
-  }
-});
-</script>
-</html>
+  jsPsych.init({
+    timeline: timeline,
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+  </script>
+  </html>

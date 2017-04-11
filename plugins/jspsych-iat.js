@@ -41,17 +41,17 @@
     trial.stim_key_association = trial.stim_key_association || 'undefined';
     trial.response_ends_trial = (typeof trial.response_ends_trial == 'undefined') ? true : trial.response_ends_trial;
     trial.timing_response = trial.timing_response || 0;
-    trial.key_to_move_forward = trial.key_to_move_forward || jsPsych.ALL_KEYS;
+    trial.key_to_move_forward = trial.key_to_move_forward || [jsPsych.ALL_KEYS];
     trial.is_html = (typeof trial.is_html == 'undefined') ? false : trial.is_html;
     trial.prompt = trial.prompt || "";
 
 
     //Creates extra styling needed 
-    var node = display_element.innerHTML += "<style id='jspsych-iat-css'>";
-    var cssstr = ".jspsych-iat-left {float: left; margin: 0px 150px 30px 0px;}" + 
-    ".jspsych-iat-right {float: right; margin: 0px 0px 30px 150px;}" 
+    //var node = display_element.innerHTML += "<style id='jspsych-iat-css'>";
+    // var cssstr = ".jspsych-iat-left {float: left; margin: 0px 150px 30px 0px;}" + 
+    // ".jspsych-iat-right {float: right; margin: 0px 0px 30px 150px;}" 
 
-    display_element.querySelector('#jspsych-iat-css').innerHTML = cssstr;
+    //display_element.querySelector('#jspsych-iat-css').innerHTML = cssstr;
 
     //Get keys to continue and put them in a string 
     var i;
@@ -61,43 +61,43 @@
       keysToContinue += trial.key_to_move_forward[i] + ", ";
     }
 
-    var html_str = "";
-    html_str += "<div style='position: relative; width: 100%; height: 100%' id='jspsych-iat-stim'>";
+    var html_str = " ";
+    //html_str += "<div class='main_layout' style='position: relative; height: 100vh; width: 100vh' id='jspsych-iat-stim'>";
 
     if (!trial.is_html) {
-      html_str += "<div style='position: relative; width: 100%; height: 100%'><img src='"+trial.stimulus+"' id='jspsych-iat-stim'></img></div>";
+      html_str += "<div style='position: absolute; height: 20%; width: 100%; margin-left: auto; margin-right: auto; top: 42%; left: 0; right: 0'><img src='"+trial.stimulus+"' id='jspsych-iat-stim'></img></div>";
     } else {
-      html_str += "<div style='position: relative; width: 100%; height: 100%'><p id='jspsych-iat-stim'>"+trial.stimulus+"</p></div>";
+      html_str += "<div style='position: absolute; height: 20%; width: 100%; margin-left: auto; margin-right: auto; top: 42%; left: 0; right: 0'><p id='jspsych-iat-stim'>" + trial.stimulus + "</p></div>";
     } 
 
-    html_str += "<div id='trial_left_align' style='position: fixed; left: 100px; top: 80px;'>";
+    html_str += "<div id='trial_left_align' style='position: absolute; top: 18%; left: 20%'>";
 
     if(trial.left_category_label.length == 1) {
       html_str += "<p>Press " + trial.left_category_key.toUpperCase() + " for:<br> " + 
-      trial.left_category_label[0].toUpperCase().bold() + "</p>";
+      trial.left_category_label[0].toUpperCase().bold() + "</p></div>";
     } else {
       html_str += "<p>Press " + trial.left_category_key.toUpperCase() + " for:<br> " + 
       trial.left_category_label[0].toUpperCase().bold() + "<br>" + "or<br>" +
-      trial.left_category_label[1].toUpperCase().bold() + "</p>";
+      trial.left_category_label[1].toUpperCase().bold() + "</p></div>";
     }
     
-    html_str += "</div><div id='trial_right_align' style='position: fixed; right: 100px; top: 80px;'>";
+    html_str += "<div id='trial_right_align' style='position: absolute; top: 18%; right: 20%'>";
 
     if(trial.right_category_label.length == 1) {
       html_str += "<p>Press " + trial.right_category_key.toUpperCase() + " for:<br> " + 
-      trial.right_category_label[0].toUpperCase().bold() + '</p>';
+      trial.right_category_label[0].toUpperCase().bold() + '</p></div>';
     } else {
       html_str += "<p>Press " + trial.right_category_key.toUpperCase() + " for:<br> " + 
       trial.right_category_label[0].toUpperCase().bold() + "<br>" + "or<br>" + 
-      trial.right_category_label[1].toUpperCase().bold() + "</p>";
+      trial.right_category_label[1].toUpperCase().bold() + "</p></div>";
     }
     
-    html_str += "</div><div id='wrongImg' style='position:relative; top: 100px'>";
+    html_str += "<div id='wrongImg' style='position:relative; top: 300px; margin-left: auto; margin-right: auto; left: 0; right: 0'>";
 
     if(trial.display_feedback == true) {
 
 
-      html_str += "<div id='wrongImgContainer' style='align:center'><img src='" + trial.image_when_wrong + "' style='visibility: hidden;' id='wrongImgID'></img></div>";
+      html_str += "<div id='wrongImgContainer' style='position: absolute; top: -75px; margin-left: auto; margin-right: auto; left: 0; right: 0'><img src='" + trial.image_when_wrong + "' style='visibility: hidden;' id='wrongImgID'></img></div>";
       var wImg = document.getElementById("wrongImgID");
       //wImg.style.visibility = "hidden"; 
 
@@ -118,7 +118,7 @@
       html_str += "<p>Trial will continue automatically.</p>";
     }
 
-    html_str += "</div></div>";
+    html_str += "</div>";
     
     display_element.innerHTML += html_str;
 
