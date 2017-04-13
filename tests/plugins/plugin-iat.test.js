@@ -24,7 +24,7 @@ describe('iat plugin', function(){
     });
 
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('<img src="../media/blue.png" id="jspsych-iat-stim">');
+    expect(jsPsych.getDisplayElement.innerHTML).toMatchSnapshot();
   });
 
   test('displays html when is_html is true', function(){
@@ -38,32 +38,18 @@ describe('iat plugin', function(){
       timeline: [trial]
     });
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-iat-stimu"><p>hello</p></div>');
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
   });
 
-  test('display should clear after key press', function(){
-    var trial = {
-      type: 'iat',
-      stimulus: '<p>hello</p>',
-      is_html: true
-    }
-
-    jsPsych.init({
-      timeline: [trial]
-    });
-
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
-
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('');
-  });
-
-  test('display should not clear after key press when choices is jsPsych.NO_KEYS', function(){
+  test('display should only clear when left key is pressed', function(){
     var trial = {
       type: 'iat',
       stimulus: '<p>hello</p>',
       is_html: true,
-      choices: jsPsych.NO_KEYS
+      left_category_key: 'f',
+      left_category_label: ['FRIENDLY'],
+      stim_key_association: 'left',
+      key_to_move_forward: ['f']
     }
 
     jsPsych.init({
@@ -73,31 +59,170 @@ describe('iat plugin', function(){
     document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-iat-stim"><p>hello</p></div>');
-  });
-
-  test('display should only clear when key is in choices array', function(){
-    var trial = {
-      type: 'iat',
-      stimulus: '<p>hello</p>',
-      is_html: true,
-      choices: ['f']
-    }
-
-    jsPsych.init({
-      timeline: [trial]
-    });
-
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
-
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-iat-stim"><p>hello</p></div>');
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
 
     document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('');
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
   });
+
+  test('display should only clear when right key is pressed', function(){
+    var trial = {
+      type: 'iat',
+      stimulus: '<p>hello</p>',
+      is_html: true,
+      right_category_key: 'j',
+      right_category_label: ['UNFRIENDLY'],
+      stim_key_association: 'right',
+      key_to_move_forward: ['j']
+    }
+
+    jsPsych.init({
+      timeline: [trial]
+    });
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 74}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 74}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
+
+  });
+
+  test('display should clear when any key is pressed', function(){
+    var trial = {
+      type: 'iat',
+      stimulus: '<p>hello</p>',
+      is_html: true,
+      right_category_key: 'j',
+      right_category_label: ['UNFRIENDLY'],
+      stim_key_association: 'right',
+      key_to_move_forward: [jsPsych.ALL_KEYS]
+    }
+
+    jsPsych.init({
+      timeline: [trial]
+    });
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
+
+  });
+
+  test('display should only when "other key" is pressed', function(){
+    var trial = {
+      type: 'iat',
+      stimulus: '<p>hello</p>',
+      is_html: true,
+      left_category_key: 'f',
+      right_category_key: 'j',
+      left_category_label: ['FRIENDLY'],
+      right_category_label: ['UNFRIENDLY'],
+      stim_key_association: 'left',
+      key_to_move_forward: ['other key']
+    }
+
+    jsPsych.init({
+      timeline: [trial]
+    });
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 74}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 74}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
+
+  });
+
+
+  test('display should clear if key press is associated with category label', function(){
+    var trial = {
+      type: 'iat',
+      stimulus: '<p>hello</p>',
+      is_html: true,
+      left_category_key: 'f',
+      right_category_key: 'j',
+      left_category_label: ['FRIENDLY'],
+      right_category_label: ['UNFRIENDLY'],
+      stim_key_association: 'left'
+    }
+
+    jsPsych.init({
+      timeline: [trial]
+    });
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode:70}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode:70}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
+  });
+
+  test('should display wrong image when wrong key is pressed', function(){
+    var trial = {
+      type: 'iat',
+      stimulus: '<p>hello</p>',
+      image_when_wrong: '../media/redX.png',
+      wrong_image_name: 'red X',
+      is_html: true,
+      left_category_key: 'f',
+      right_category_key: 'j',
+      left_category_label: ['FRIENDLY'],
+      right_category_label: ['UNFRIENDLY'],
+      stim_key_association: 'left',
+      key_to_move_forward: ['f']
+    }
+
+    jsPsych.init({
+      timeline: [trial]
+    });
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode:74}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode:74}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
+  });
+
+  test('when wrong image is displayed, display should clear after pressing key to move forward', function(){
+    var trial = {
+      type: 'iat',
+      stimulus: '<p>hello</p>',
+      image_when_wrong: '../media/redX.png',
+      wrong_image_name: 'red X',
+      is_html: true,
+      left_category_key: 'f',
+      right_category_key: 'j',
+      left_category_label: ['FRIENDLY'],
+      right_category_label: ['UNFRIENDLY'],
+      stim_key_association: 'left',
+      key_to_move_forward: ['f']
+    }
+
+    jsPsych.init({
+      timeline: [trial]
+    });
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode:74}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode:74}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode:70}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode:70}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
+  });
+
 
   test('prompt should append html below stimulus', function(){
     var trial = {
@@ -111,7 +236,7 @@ describe('iat plugin', function(){
       timeline: [trial]
     });
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-iat-stim"><p>hello</p></div><div id="foo">this is the prompt</div>');
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
 
     document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
@@ -132,11 +257,11 @@ describe('iat plugin', function(){
       timeline: [trial]
     });
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-iat-stim"><p>hello</p></div>');
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
 
     jest.runAllTimers();
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('');
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
 
   });
 
@@ -157,18 +282,25 @@ describe('iat plugin', function(){
     document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-iat-stim" class=" responded"><p>hello</p></div>');
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
 
     jest.runAllTimers();
   });
 
-  test('should accept functions as parameters', function(){
+  test('should accept functions as parameters(timing_response in use)', function(){
 
     var trial = {
       type: 'iat',
       stimulus: function(){ return '<p>hello</p>'; },
       is_html: function(){ return true; },
-      choices: function(){ return ['j']; },
+      display_feedback: function(){ return false; },
+      image_when_wrong: function(){ return '../media/redX.png'; },
+      wrong_image_name: function(){return 'red X'; },
+      left_category_key: function(){ return 'E'; },
+      right_category_key: function(){ return 'I'; },
+      left_category_label: function(){return ['FRIENDLY']; },
+      right_category_label: function(){return ['UNFRIENDLY']; },
+      stim_key_association: function(){return 'left'; },
       prompt: function(){ return '<div>prompt</div>'; },
       timing_response: function(){ return 1000; },
       response_ends_trial: function(){ return false; }
@@ -178,24 +310,69 @@ describe('iat plugin', function(){
       timeline: [trial]
     });
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-iat-stim"><p>hello</p></div><div>prompt</div>');
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
 
     document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-iat-stim"><p>hello</p></div><div>prompt</div>');
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
 
     document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-iat-stim"><p>hello</p></div><div>prompt</div>');
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
 
     jest.runTimersToTime(500);
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-iat-stim" style="visibility: hidden;"><p>hello</p></div><div>prompt</div>');
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
 
     jest.runTimersToTime(1000);
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('');
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
+  });
+
+  test('should accept functions as parameters(timing_response is not in use)', function(){
+
+    var trial = {
+      type: 'iat',
+      stimulus: function(){ return '<p>hello</p>'; },
+      is_html: function(){ return true; },
+      display_feedback: function(){ return true; },
+      image_when_wrong: function(){ return '../media/redX.png'; },
+      wrong_image_name: function(){return 'red X'; },
+      left_category_key: function(){ return 'E'; },
+      right_category_key: function(){ return 'I'; },
+      left_category_label: function(){return ['FRIENDLY']; },
+      right_category_label: function(){return ['UNFRIENDLY']; },
+      stim_key_association: function(){return 'left'; },
+      key_to_move_forward: function(){return ['other key']; },
+      prompt: function(){ return '<div>prompt</div>'; },
+      timing_response: function(){ return 1000; },
+      response_ends_trial: function(){ return false; }
+    }
+
+    jsPsych.init({
+      timeline: [trial]
+    });
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
+
+    jest.runTimersToTime(500);
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
+
+    jest.runTimersToTime(1000);
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatchSnapshot();
   });
 });

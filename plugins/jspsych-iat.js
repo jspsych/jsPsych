@@ -60,6 +60,7 @@
     for(i = 0; i < lastKey; i++) {
       keysToContinue += trial.key_to_move_forward[i] + ", ";
     }
+  
 
     var html_str = " ";
     //html_str += "<div class='main_layout' style='position: relative; height: 100vh; width: 100vh' id='jspsych-iat-stim'>";
@@ -73,23 +74,23 @@
     html_str += "<div id='trial_left_align' style='position: absolute; top: 18%; left: 20%'>";
 
     if(trial.left_category_label.length == 1) {
-      html_str += "<p>Press " + trial.left_category_key.toUpperCase() + " for:<br> " + 
-      trial.left_category_label[0].toUpperCase().bold() + "</p></div>";
+      html_str += "<p>Press " + trial.left_category_key + " for:<br> " + 
+      trial.left_category_label[0].bold() + "</p></div>";
     } else {
-      html_str += "<p>Press " + trial.left_category_key.toUpperCase() + " for:<br> " + 
-      trial.left_category_label[0].toUpperCase().bold() + "<br>" + "or<br>" +
-      trial.left_category_label[1].toUpperCase().bold() + "</p></div>";
+      html_str += "<p>Press " + trial.left_category_key + " for:<br> " + 
+      trial.left_category_label[0].bold() + "<br>" + "or<br>" +
+      trial.left_category_label[1].bold() + "</p></div>";
     }
     
     html_str += "<div id='trial_right_align' style='position: absolute; top: 18%; right: 20%'>";
 
     if(trial.right_category_label.length == 1) {
-      html_str += "<p>Press " + trial.right_category_key.toUpperCase() + " for:<br> " + 
-      trial.right_category_label[0].toUpperCase().bold() + '</p></div>';
+      html_str += "<p>Press " + trial.right_category_key + " for:<br> " + 
+      trial.right_category_label[0].bold() + '</p></div>';
     } else {
-      html_str += "<p>Press " + trial.right_category_key.toUpperCase() + " for:<br> " + 
-      trial.right_category_label[0].toUpperCase().bold() + "<br>" + "or<br>" + 
-      trial.right_category_label[1].toUpperCase().bold() + "</p></div>";
+      html_str += "<p>Press " + trial.right_category_key + " for:<br> " + 
+      trial.right_category_label[0].bold() + "<br>" + "or<br>" + 
+      trial.right_category_label[1].bold() + "</p></div>";
     }
     
     html_str += "<div id='wrongImg' style='position:relative; top: 300px; margin-left: auto; margin-right: auto; left: 0; right: 0'>";

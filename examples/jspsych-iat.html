@@ -29,13 +29,13 @@ var category_block = {
   '<strong>Good</strong>:<br>' + 'Fabulous, Excitement, Glorious, Cheerful, Cherish, ' +
   'Enjoy, Delightful, Joyous<br><br>' + '<strong>Bad</strong>:<br>' + 'Humiliate, ' +
   'Evil, Grief, Yucky, Detest, Poison, Abuse, Despise<br><br>' + 
-  '<strong>Old</strong>:<br>' + "<img src='age/of1.jpg'></img>  " + 
-  "<img src='age/of2.jpg'></img>  " + "<img src='age/of3.jpg'></img>  " + 
-  "<img src='age/om1.jpg'></img>  " + "<img src='age/om2.jpg'></img>  " +
-  "<img src='age/om3.jpg'></img><br><br>" + '<strong>Young</strong>:<br>' +
-  "<img src='age/yf1.jpg'></img>  " + "<img src='age/yf4.jpg'></img>  " +
-  "<img src='age/yf5.jpg'></img>  " + "<img src='age/ym2.jpg'></img>  " +
-  "<img src='age/ym3.jpg'></img>  " + "<img src='age/ym5.jpg'></img><br><br>" +
+  '<strong>Old</strong>:<br>' + "<img src='img/age/of1.jpg'></img>  " + 
+  "<img src='img/age/of2.jpg'></img>  " + "<img src='img/age/of3.jpg'></img>  " + 
+  "<img src='img/age/om1.jpg'></img>  " + "<img src='img/age/om2.jpg'></img>  " +
+  "<img src='img/age/om3.jpg'></img><br><br>" + '<strong>Young</strong>:<br>' +
+  "<img src='img/age/yf1.jpg'></img>  " + "<img src='img/age/yf4.jpg'></img>  " +
+  "<img src='img/age/yf5.jpg'></img>  " + "<img src='img/age/ym2.jpg'></img>  " +
+  "<img src='img/age/ym3.jpg'></img>  " + "<img src='img/age/ym5.jpg'></img><br><br>" +
   "Press any key to continue.</p>",
   timing_post_trial: 1500
 };
@@ -64,10 +64,10 @@ var trial_block = {
     wrong_image_name: 'red X',
     display_feedback: true, 
     timing_response: 3000, //Only if display_feedback is false 
-    left_category_key: 'e',
-    right_category_key: 'i',
-    left_category_label: ['old'],
-    right_category_label: ['young'],
+    left_category_key: 'E',
+    right_category_key: 'I',
+    left_category_label: ['OLD'],
+    right_category_label: ['YOUNG'],
     key_to_move_forward: [jsPsych.ALL_KEYS],
     response_ends_trial: true
   }
@@ -116,8 +116,8 @@ var trial_block2 = {
     timing_response: 3000, //Only if display_feedback is false 
     left_category_key: 'E',
     right_category_key: 'I',
-    left_category_label: ['bad'],
-    right_category_label: ['good'],
+    left_category_label: ['BAD'],
+    right_category_label: ['GOOD'],
     key_to_move_forward: [jsPsych.ALL_KEYS],
     response_ends_trial: true
   }
@@ -170,8 +170,8 @@ var trial_block3 = {
     timing_response: 3000, //Only if display_feedback is false 
     left_category_key: 'E',
     right_category_key: 'I',
-    left_category_label: ['bad', 'old'],
-    right_category_label: ['good', 'young'],
+    left_category_label: ['BAD', 'OLD'],
+    right_category_label: ['GOOD', 'YOUNG'],
     key_to_move_forward: [jsPsych.ALL_KEYS],
     response_ends_trial: true
   }
@@ -236,8 +236,8 @@ var trial_block4 = {
       timing_response: 3000, //Only if display_feedback is false 
       left_category_key: 'E',
       right_category_key: 'I',
-      left_category_label: ['bad', 'old'],
-      right_category_label: ['good', 'young'],
+      left_category_label: ['BAD', 'OLD'],
+      right_category_label: ['GOOD', 'YOUNG'],
       key_to_move_forward: [jsPsych.ALL_KEYS],
       response_ends_trial: true
     }
@@ -300,8 +300,8 @@ var trial_block4 = {
       timing_response: 3000, //Only if display_feedback is false 
       left_category_key: 'E',
       right_category_key: 'I',
-      left_category_label: ['young'],
-      right_category_label: ['old'],
+      left_category_label: ['YOUNG'],
+      right_category_label: ['OLD'],
       key_to_move_forward: [jsPsych.ALL_KEYS],
       response_ends_trial: true
     }
@@ -349,8 +349,8 @@ var trial_block4 = {
       timing_response: 3000, //Only if display_feedback is false 
       left_category_key: 'E',
       right_category_key: 'I',
-      left_category_label: ['bad', 'old'],
-      right_category_label: ['good', 'young'],
+      left_category_label: ['BAD', 'OLD'],
+      right_category_label: ['GOOD', 'YOUNG'],
       key_to_move_forward: [jsPsych.ALL_KEYS],
     }
     ],
