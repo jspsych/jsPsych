@@ -34,13 +34,14 @@
     // set default values for the parameters
     trial.display_feedback = trial.display_feedback || false;
     trial.image_when_wrong = trial.image_when_wrong || 'undefined';
-    trial.left_category_key = trial.left_category_key || 'e';
-    trial.right_category_key = trial.right_category_key || 'i';
+    trial.wrong_image_name = trial.wrong_image_name || 'wrong image';
+    trial.left_category_key = trial.left_category_key || 'E';
+    trial.right_category_key = trial.right_category_key || 'I';
     trial.left_category_label = trial.left_category_label || ['left'];
     trial.right_category_label = trial.right_category_label || ['right']; 
     trial.stim_key_association = trial.stim_key_association || 'undefined';
     trial.response_ends_trial = (typeof trial.response_ends_trial == 'undefined') ? true : trial.response_ends_trial;
-    trial.timing_response = trial.timing_response || 0;
+    trial.timing_response = trial.timing_response || -1;
     trial.key_to_move_forward = trial.key_to_move_forward || [jsPsych.ALL_KEYS];
     trial.is_html = (typeof trial.is_html == 'undefined') ? false : trial.is_html;
     trial.prompt = trial.prompt || "";
