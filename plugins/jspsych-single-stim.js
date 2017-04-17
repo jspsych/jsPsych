@@ -154,14 +154,14 @@ jsPsych.plugins["single-stim"] = (function() {
       });
     }
 
-    // hide image if timing is set
+    // hide stimulus if timing_stim is set
     if (trial.timing_stim > 0) {
       jsPsych.pluginAPI.setTimeout(function() {
         display_element.querySelector('#jspsych-single-stim-stimulus').style.visibility = 'hidden';
       }, trial.timing_stim);
     }
 
-    // end trial if time limit is set
+    // end trial if timing_response is set
     if (trial.timing_response > 0) {
       jsPsych.pluginAPI.setTimeout(function() {
         end_trial();

@@ -29,6 +29,12 @@ jsPsych.plugins['survey-likert'] = (function() {
         default: undefined,
         no_function: false,
         description: ''
+      },
+      button_label: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: 'Submit Answers',
+        no_function: false,
+        description: ''
       }
     }
   }
@@ -37,6 +43,8 @@ jsPsych.plugins['survey-likert'] = (function() {
 
     // default parameters for the trial
     trial.preamble = typeof trial.preamble === 'undefined' ? "" : trial.preamble;
+    trial.required = typeof trial.required === 'undefined' ? false : trial.required;
+    trial.button_label = typeof trial.button_label === 'undefined' ? 'Submit Answers' : trial.button_label;
 
     // if any trial variables are functions
     // this evaluates the function and replaces
@@ -45,9 +53,9 @@ jsPsych.plugins['survey-likert'] = (function() {
 
     // inject CSS for trial
     var node = display_element.innerHTML += '<style id="jspsych-survey-likert-css"></style>';
-    var cssstr = ".jspsych-survey-likert-statement { display:block; font-size: 18px; padding-top: 30px; margin-bottom:10px; }"+
+    var cssstr = ".jspsych-survey-likert-statement { display:block; font-size: 16px; padding-top: 40px; margin-bottom:10px; }"+
       ".jspsych-survey-likert-opts { list-style:none; width:100%; margin:0; padding:0 0 35px; display:block; font-size: 14px; line-height:1.1em; }"+
-      ".jspsych-survey-likert-opt-label { line-height: 1.1em; }"+
+      ".jspsych-survey-likert-opt-label { line-height: 1.1em; color: #444; }"+
       ".jspsych-survey-likert-opts:before { content: ''; position:relative; top:11px; /*left:9.5%;*/ display:block; background-color:#efefef; height:4px; width:100%; }"+
       ".jspsych-survey-likert-opts:last-of-type { border-bottom: 0; }"+
       ".jspsych-survey-likert-opts li { display:inline-block; /*width:19%;*/ text-align:center; vertical-align: top; }"+
@@ -68,16 +76,21 @@ jsPsych.plugins['survey-likert'] = (function() {
       var width = 100 / trial.labels[i].length;
       options_string = '<ul class="jspsych-survey-likert-opts" data-radio-group="Q' + i + '">';
       for (var j = 0; j < trial.labels[i].length; j++) {
-        options_string += '<li style="width:' + width + '%"><input type="radio" name="Q' + i + '" value="' + j + '"><label class="jspsych-survey-likert-opt-label">' + trial.labels[i][j] + '</label></li>';
+        options_string += '<li style="width:' + width + '%"><input type="radio" name="Q' + i + '" value="' + j + '"';
+        if(trial.required){
+          options_string += ' required';
+        }
+        options_string += '><label class="jspsych-survey-likert-opt-label">' + trial.labels[i][j] + '</label></li>';
       }
       options_string += '</ul>';
       form_element.innerHTML += options_string;
     }
 
     // add submit button
-    display_element.innerHTML += '<button id="jspsych-survey-likert" class="jspsych-survey-likert jspsych-btn">Submit Answers</button>';
+    form_element.innerHTML += '<input type="submit" id="jspsych-survey-likert-next" class="jspsych-survey-likert jspsych-btn" value="'+trial.button_label+'"></input>';
 
-    display_element.querySelector('#jspsych-survey-likert-next').addEventListener('click', function(){
+    form_element.addEventListener('submit', function(e){
+      e.preventDefault();
       // measure response time
       var endTime = (new Date()).getTime();
       var response_time = endTime - startTime;
@@ -86,10 +99,12 @@ jsPsych.plugins['survey-likert'] = (function() {
       var question_data = {};
       var matches = display_element.querySelectorAll('#jspsych-survey-likert-form .jspsych-survey-likert-opts');
       for(var index = 0; index < matches.length; index++){
-        var id = matches[index].dataset['radio-group'];
-        var response = display_element.querySelector('input[name="' + id + '"]:checked').value;
-        if (typeof response == 'undefined') {
-          response = -1;
+        var id = matches[index].dataset['radioGroup'];
+        var el = display_element.querySelector('input[name="' + id + '"]:checked');
+        if (el === null) {
+          var response = "";
+        } else {
+          var response = parseInt(el.value);
         }
         var obje = {};
         obje[id] = response;

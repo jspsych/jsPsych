@@ -112,10 +112,13 @@ jsPsych.plugins["single-audio"] = (function() {
       jsPsych.pluginAPI.clearAllTimeouts();
 
       // stop the audio file if it is playing
+      // remove end event listeners if they exist
       if(context !== null){
         source.stop();
+        source.onended = function() { }
       } else {
         audio.pause();
+        audio.removeEventListener('end', end_trial);
       }
 
       // kill keyboard listeners

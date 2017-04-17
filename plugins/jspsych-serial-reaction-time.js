@@ -19,6 +19,7 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
     trial.grid = trial.grid || [[1,1,1,1]];
     trial.choices = trial.choices || [['3','5','7','9']];
     trial.grid_square_size = trial.grid_square_size || 100;
+    trial.target_color = trial.target_color || "#999";
     trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
     trial.timing_pre_target = (typeof trial.timing_pre_target === 'undefined') ? 0 : trial.timing_pre_target;
     trial.timing_max_duration = trial.timing_max_duration || -1; // if -1, then wait for response forever
@@ -29,6 +30,9 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 
     // create a flattened version of the choices array
     var flat_choices = flatten(trial.choices);
+    while(flat_choices.indexOf('') > -1){
+      flat_choices.splice(flat_choices.indexOf(''),1);
+    }
 
     // display stimulus
     var stimulus = this.stimulus(trial.grid, trial.grid_square_size);
@@ -51,15 +55,15 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 
 		function showTarget(){
       if(trial.fade_duration == -1){
-        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.backgroundColor = '#999';
+        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.backgroundColor = trial.target_color;
       } else {
         display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.transition = "background-color "+trial.fade_duration;
-        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.backgroundColor = '#999';
+        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.backgroundColor = trial.target_color;
       }
 
 			keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
-        valid_responses: trial.flat_choices,
+        valid_responses: flat_choices,
         allow_held_key: false
       });
 
@@ -124,8 +128,8 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 
 			if (trial.show_response_feedback){
 				var color = response.correct ? '#0f0' : '#f00';
-        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+responseLoc[1]+'-'+responseLoc[0]).style.transition = "";
-        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+responseLoc[1]+'-'+responseLoc[0]).style.backgroundColor = color;
+        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+responseLoc[0]+'-'+responseLoc[1]).style.transition = "";
+        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+responseLoc[0]+'-'+responseLoc[1]).style.backgroundColor = color;
 			}
 
       if (trial.response_ends_trial) {

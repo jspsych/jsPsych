@@ -24,7 +24,7 @@ jsPsych.plugins['survey-text'] = (function() {
         no_function: false,
         description: ''
       },
-      premable: {
+      preamble: {
         type: [jsPsych.plugins.parameterType.STRING],
         default: '',
         no_function: false,
@@ -43,6 +43,19 @@ jsPsych.plugins['survey-text'] = (function() {
         default: 40,
         no_function: false,
         description: ''
+      },
+      values: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        array: true,
+        default: '',
+        no_function: false,
+        description: ''
+      },
+      button_label: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: 'Submit Answers'
       }
     }
   }
@@ -50,6 +63,8 @@ jsPsych.plugins['survey-text'] = (function() {
   plugin.trial = function(display_element, trial) {
 
     trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
+    trial.button_label = typeof trial.button_label === 'undefined' ? 'Submit Answers' : trial.button_label;
+
     if (typeof trial.rows == 'undefined') {
       trial.rows = [];
       for (var i = 0; i < trial.questions.length; i++) {
@@ -60,6 +75,12 @@ jsPsych.plugins['survey-text'] = (function() {
       trial.columns = [];
       for (var i = 0; i < trial.questions.length; i++) {
         trial.columns.push(40);
+      }
+    }
+    if (typeof trial.values == 'undefined') {
+      trial.values = [];
+      for (var i = 0; i < trial.questions.length; i++) {
+        trial.values.push("");
       }
     }
 
@@ -75,12 +96,12 @@ jsPsych.plugins['survey-text'] = (function() {
     for (var i = 0; i < trial.questions.length; i++) {
       display_element.innerHTML += '<div id="jspsych-survey-text-"'+i+'" class="jspsych-survey-text-question" style="margin: 2em 0em;">'+
         '<p class="jspsych-survey-text">' + trial.questions[i] + '</p>'+
-        '<textarea name="#jspsych-survey-text-response-' + i + '" cols="' + trial.columns[i] + '" rows="' + trial.rows[i] + '"></textarea>'+
+        '<textarea name="#jspsych-survey-text-response-' + i + '" cols="' + trial.columns[i] + '" rows="' + trial.rows[i] + '">'+trial.values[i]+'</textarea>'+
         '</div>';
     }
 
     // add submit button
-    display_element.innerHTML += '<button id="jspsych-survey-text-next" class="jspsych-btn jspsych-survey-text">Submit Answers</button>';
+    display_element.innerHTML += '<button id="jspsych-survey-text-next" class="jspsych-btn jspsych-survey-text">'+trial.button_label+'</button>';
 
     display_element.querySelector('#jspsych-survey-text-next').addEventListener('click', function() {
       // measure response time

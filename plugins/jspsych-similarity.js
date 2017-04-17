@@ -81,6 +81,12 @@ jsPsych.plugins.similarity = (function() {
         default: '',
         no_function: false,
         description: ''
+      },
+      button_label: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: 'Submit Answers'
       }
     }
   }
@@ -100,6 +106,8 @@ jsPsych.plugins.similarity = (function() {
 
     trial.is_html = (typeof trial.is_html === 'undefined') ? false : trial.is_html;
     trial.prompt = (typeof trial.prompt === 'undefined') ? '' : trial.prompt;
+    
+    trial.button_label = typeof trial.button_label === 'undefined' ? 'Submit Answers' : trial.button_label;
 
     // if any trial variables are functions
     // this evaluates the function and replaces
@@ -231,7 +239,7 @@ jsPsych.plugins.similarity = (function() {
       display_element.append($('<button>', {
         'id': 'next',
         'class': 'sim',
-        'html': 'Submit Answer'
+        'html': trial.button_label
       }));
 
       // if prompt is set, show prompt

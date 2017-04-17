@@ -90,7 +90,7 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
       for (var col = 0; col < ncols; col++) {
         display_element.querySelector('#jspsych-vsl-grid-scene-table-row-' + row).innerHTML += '<td id="jspsych-vsl-grid-scene-table-' + row + '-' + col +'" '+
           'style="padding: '+ (image_size[1] / 10) + 'px ' + (image_size[0] / 10) + 'px; border: 1px solid #555;">'+
-          '<div id="jspsych-vsl-grid-scene-table-cell-' + row + '-' + col'" style="width: '+image_size[0]+'px; height: '+image_size[1]+'px;"></div>';
+          '<div id="jspsych-vsl-grid-scene-table-cell-' + row + '-' + col + '" style="width: '+image_size[0]+'px; height: '+image_size[1]+'px;"></div>';
       }
     }
 
