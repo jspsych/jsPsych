@@ -13,21 +13,42 @@ jsPsych.plugins.fullscreen = (function() {
     name: 'fullscreen',
     description: '',
     parameters: {
-      pages: {
-        type: [jsPsych.plugins.parameterType.STRING],
-        default: undefined,
-        array: true,
+      fullscreen_mode: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: true,
+        array: false,
         no_function: false,
         description: ''
-      }
+      },
+      message: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '<p>The experiment will switch to full screen mode when you press the button below</p>',
+        array: false,
+        no_function: false,
+        description: ''
+      },
+      button_label: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: "Go",
+        array: false,
+        no_function: false,
+        description: ''
+      },
+      delay_after: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 1000,
+        array: false,
+        no_function: false,
+        description: ''
+      },
     }
   }
 
   plugin.trial = function(display_element, trial) {
 
     trial.fullscreen_mode = typeof trial.fullscreen_mode === 'undefinded' ? true : trial.fullscreen_mode;
-    trial.message = trial.message || '';
-    trial.button_label = trial.button_label || '';
+    trial.message = trial.message || '<p>The experiment will switch to full screen mode when you press the button below</p>';
+    trial.button_label = trial.button_label || 'Go';
     trial.delay_after = trial.delay_after || 1000;
 
     // if any trial variables are functions
