@@ -76,6 +76,7 @@ jsPsych.plugins.fullscreen = (function() {
           } else if (element.msRequestFullscreen) {
             element.msRequestFullscreen();
           }
+          endTrial();
         });
       } else {
         if (document.exitFullscreen) {
@@ -87,14 +88,14 @@ jsPsych.plugins.fullscreen = (function() {
         } else if (document.webkitExitFullscreen) {
           document.webkitExitFullscreen();
         }
+        endTrial();
       }
-      endTrial();
     }
 
     function endTrial() {
-      jsPsych.pluginAPI.setTimeout(function(){
+      display_element.innerHTML = '';
 
-        display_element.innerHTML = '';
+      jsPsych.pluginAPI.setTimeout(function(){
 
         var trial_data = {
           success: !keyboardNotAllowed
