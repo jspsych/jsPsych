@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    
+
     <script src="../jspsych.js"></script>
     <script src="../plugins/jspsych-survey-text.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
@@ -14,7 +14,9 @@
 
   var survey_block = {
       type: 'survey-text',
-      questions: page_1_questions
+      questions: page_1_questions,
+      rows: [1, 8],
+      columns: [50, 20]
   };
 
   jsPsych.init({

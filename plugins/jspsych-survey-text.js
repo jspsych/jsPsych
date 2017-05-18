@@ -90,18 +90,24 @@ jsPsych.plugins['survey-text'] = (function() {
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
     // show preamble text
-    display_element.innerHTML += '<div id="jspsych-survey-text-preamble" class="jspsych-survey-text-preamble">'+trial.preamble+'</div>';
+    var html = '<div id="jspsych-survey-text-preamble" class="jspsych-survey-text-preamble">'+trial.preamble+'</div>';
 
     // add questions
     for (var i = 0; i < trial.questions.length; i++) {
-      display_element.innerHTML += '<div id="jspsych-survey-text-"'+i+'" class="jspsych-survey-text-question" style="margin: 2em 0em;">'+
-        '<p class="jspsych-survey-text">' + trial.questions[i] + '</p>'+
-        '<textarea name="#jspsych-survey-text-response-' + i + '" cols="' + trial.columns[i] + '" rows="' + trial.rows[i] + '">'+trial.values[i]+'</textarea>'+
-        '</div>';
+      html += '<div id="jspsych-survey-text-"'+i+'" class="jspsych-survey-text-question" style="margin: 2em 0em;">';
+      html += '<p class="jspsych-survey-text">' + trial.questions[i] + '</p>';
+      if(trial.rows[i] == 1){
+        html += '<input type="text" name="#jspsych-survey-text-response-' + i + '">'+trial.values[i]+'</input>';
+      } else {
+        html += '<textarea name="#jspsych-survey-text-response-' + i + '" cols="' + trial.columns[i] + '" rows="' + trial.rows[i] + '">'+trial.values[i]+'</textarea>';
+      }
+      html += '</div>';
     }
 
     // add submit button
-    display_element.innerHTML += '<button id="jspsych-survey-text-next" class="jspsych-btn jspsych-survey-text">'+trial.button_label+'</button>';
+    html += '<button id="jspsych-survey-text-next" class="jspsych-btn jspsych-survey-text">'+trial.button_label+'</button>';
+
+    display_element.innerHTML = html;
 
     display_element.querySelector('#jspsych-survey-text-next').addEventListener('click', function() {
       // measure response time
@@ -113,7 +119,7 @@ jsPsych.plugins['survey-text'] = (function() {
       var matches = display_element.querySelectorAll('div.jspsych-survey-text-question');
       for(var index=0; index<matches.length; index++){
         var id = "Q" + index;
-        var val = matches[index].querySelector('textarea').value;
+        var val = matches[index].querySelector('textarea, input').value;
         var obje = {};
         obje[id] = val;
         Object.assign(question_data, obje);
