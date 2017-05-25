@@ -82,6 +82,7 @@ jsPsych.plugins['same-different'] = (function() {
     // default parameters
     trial.same_key = trial.same_key || 81; // default is 'q'
     trial.different_key = trial.different_key || 80; // default is 'p'
+    trial.advance_key = trial.advance_key || jsPsych.ALL_KEYS
     // timing parameters
     trial.timing_first_stim = trial.timing_first_stim || 1000; // if -1, the first stim is shown until any key is pressed
     trial.timing_second_stim = trial.timing_second_stim || 1000; // if -1, then second stim is shown until response.
@@ -112,11 +113,17 @@ jsPsych.plugins['same-different'] = (function() {
         first_stim_info = info;
         showBlankScreen();
       }
-      jsPsych.pluginAPI.getKeyboardResponse(afterKeyboardResponse, [], 'date', false);
+      jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: afterKeyboardResponse,
+        valid_responses: trial.advance_key,
+        rt_method: 'date',
+        persist: false,
+        allow_held_key: false
+      });
     }
 
     function showBlankScreen() {
-      display_element.querySelector('.jspsych-same-different-stimulus').outerHTML = '';
+      display_element.innerHTML = '';
 
       jsPsych.pluginAPI.setTimeout(function() {
         showSecondStim();
@@ -125,14 +132,14 @@ jsPsych.plugins['same-different'] = (function() {
 
     function showSecondStim() {
       if (!trial.is_html) {
-        display_element.innerHTML += '<img class="jspsych-same-different-stimulus" id="jspsych-same-different-second-stimulus" src="'+trial.stimuli[1]+'"></img>';
+        display_element.innerHTML += '<img class="jspsych-same-different-stimulus" src="'+trial.stimuli[1]+'"></img>';
       } else {
-        display_element.innerHTML += '<div class="jspsych-same-different-stimulus" id="jspsych-same-different-second-stimulus">'+trial.stimuli[1]+'</div>';
+        display_element.innerHTML += '<div class="jspsych-same-different-stimulus">'+trial.stimuli[1]+'</div>';
       }
 
       if (trial.timing_second_stim > 0) {
         jsPsych.pluginAPI.setTimeout(function() {
-          display_element.querySelector('#jspsych-same-different-second-stimulus').style.visibility = 'hidden';
+          display_element.querySelector('.jspsych-same-different-stimulus').style.visibility = 'hidden';
         }, trial.timing_second_stim);
       }
 
