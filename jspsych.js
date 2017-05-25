@@ -2012,6 +2012,7 @@ jsPsych.pluginAPI = (function() {
   module.preloadAudioFiles = function(files, callback_complete, callback_load) {
 
     files = jsPsych.utils.flatten(files);
+    files = jsPsych.utils.unique(files);
 
     var n_loaded = 0;
     var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
@@ -2078,6 +2079,7 @@ jsPsych.pluginAPI = (function() {
 
     // flatten the images array
     images = jsPsych.utils.flatten(images);
+    images = jsPsych.utils.unique(images);
 
     var n_loaded = 0;
     var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
