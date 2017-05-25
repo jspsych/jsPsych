@@ -359,6 +359,12 @@ window.jsPsych = (function() {
     // set the order for going through the timeline variables array
     // TODO: this is where all the sampling options can be implemented
     this.setTimelineVariablesOrder = function() {
+
+      // check to make sure this node has variables
+      if(typeof timeline_parameters === 'undefined' || typeof timeline_parameters.timeline_variables === 'undefined'){
+        return;
+      }
+
       var order = [];
       for(var i=0; i<timeline_parameters.timeline_variables.length; i++){
         order.push(i);
