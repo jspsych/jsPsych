@@ -74,7 +74,6 @@ window.jsPsych = (function() {
       'show_progress_bar': false,
       'auto_preload': true,
       'max_load_time': 60000,
-      'fullscreen': false,
       'default_iti': 0
     };
 
@@ -705,65 +704,24 @@ window.jsPsych = (function() {
 
     loaded = true;
 
-    var fullscreen = opts.fullscreen;
-
-    // fullscreen setup
-    if (fullscreen) {
-      // check if keys are allowed in fullscreen mode
-      var keyboardNotAllowed = typeof Element !== 'undefined' && 'ALLOW_KEYBOARD_INPUT' in Element;
-      if (keyboardNotAllowed) {
-        go();
-      } else {
-        DOM_target.innerHTML = '<div style=""><p>The experiment will launch in fullscreen mode when you click the button below.</p><button id="jspsych-fullscreen-btn" class="jspsych-btn">Launch Experiment</button></div>';
-        var listener = DOM_target.querySelector('#jspsych-fullscreen-btn').addEventListener('click', function() {
-          var element = document.documentElement;
-          if (element.requestFullscreen) {
-            element.requestFullscreen();
-          } else if (element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
-          } else if (element.webkitRequestFullscreen) {
-            element.webkitRequestFullscreen();
-          } else if (element.msRequestFullscreen) {
-            element.msRequestFullscreen();
-          }
-          DOM_target.querySelector('#jspsych-fullscreen-btn').removeEventListener('click', listener);
-          DOM_target.innerHTML = '';
-          setTimeout(go, 1000);
-        });
-      }
-    } else {
-      go();
+    // show progress bar if requested
+    if (opts.show_progress_bar === true) {
+      drawProgressBar();
     }
 
-    function go() {
-      // show progress bar if requested
-      if (opts.show_progress_bar === true) {
-        drawProgressBar();
-      }
+    // record the start time
+    exp_start_time = new Date();
 
-      // record the start time
-      exp_start_time = new Date();
+    // begin!
+    timeline.advance();
+    doTrial(timeline.trial());
 
-      // begin!
-      timeline.advance();
-      doTrial(timeline.trial());
-    }
   }
 
   function finishExperiment() {
 
     if(typeof timeline.end_message !== 'undefined'){
       DOM_target.innerHTML = timeline.end_message;
-    }
-
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
     }
 
     opts.on_finish(jsPsych.data.get());
