@@ -46,7 +46,7 @@ jsPsych.plugins.fullscreen = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    trial.fullscreen_mode = typeof trial.fullscreen_mode === 'undefinded' ? true : trial.fullscreen_mode;
+    trial.fullscreen_mode = typeof trial.fullscreen_mode === 'undefined' ? true : trial.fullscreen_mode;
     trial.message = trial.message || '<p>The experiment will switch to full screen mode when you press the button below</p>';
     trial.button_label = trial.button_label || 'Go';
     trial.delay_after = trial.delay_after || 1000;
@@ -93,6 +93,7 @@ jsPsych.plugins.fullscreen = (function() {
     }
 
     function endTrial() {
+
       display_element.innerHTML = '';
 
       jsPsych.pluginAPI.setTimeout(function(){
@@ -104,6 +105,7 @@ jsPsych.plugins.fullscreen = (function() {
         jsPsych.finishTrial(trial_data);
 
       }, trial.delay_after);
+
     }
 
   };
