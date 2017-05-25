@@ -29,7 +29,7 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
     // create a flattened version of the choices array
-    var flat_choices = flatten(trial.choices);
+    var flat_choices = jsPsych.utils.flatten(trial.choices);
     while(flat_choices.indexOf('') > -1){
       flat_choices.splice(flat_choices.indexOf(''),1);
     }

@@ -931,7 +931,7 @@ jsPsych.data = (function() {
     }
 
     data_collection.readOnly = function(){
-      return DataCollection(deepExtend([], trials));
+      return DataCollection(jsPsych.utils.deepExtend([], trials));
     }
 
     data_collection.addToAll = function(properties){
@@ -956,9 +956,9 @@ jsPsych.data = (function() {
       // [{p1: v1, p2:v2}, {p1:v2}]
       // {p1: v1}
       if(!Array.isArray(filters)){
-        var f = deepExtend([], [filters]);
+        var f = jsPsych.utils.deepExtend([], [filters]);
       } else {
-        var f = deepExtend([], filters);
+        var f = jsPsych.utils.deepExtend([], filters);
       }
 
       var filtered_data = [];
@@ -1012,7 +1012,7 @@ jsPsych.data = (function() {
       if(!Array.isArray(columns)){
         columns = [columns];
       }
-      var o = deepExtend([], trials);
+      var o = jsPsych.utils.deepExtend([], trials);
       for (var i = 0; i < o.length; i++) {
         for (var j in columns) {
           delete o[i][columns[j]];
@@ -2011,7 +2011,7 @@ jsPsych.pluginAPI = (function() {
 
   module.preloadAudioFiles = function(files, callback_complete, callback_load) {
 
-    files = flatten(files);
+    files = jsPsych.utils.flatten(files);
 
     var n_loaded = 0;
     var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
@@ -2077,7 +2077,7 @@ jsPsych.pluginAPI = (function() {
   module.preloadImages = function(images, callback_complete, callback_load) {
 
     // flatten the images array
-    images = flatten(images);
+    images = jsPsych.utils.flatten(images);
 
     var n_loaded = 0;
     var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
@@ -2144,9 +2144,9 @@ jsPsych.pluginAPI = (function() {
         if (typeof trials[j][param] !== 'undefined' && typeof trials[j][param] !== 'function') {
           if ( typeof func == 'undefined' || func(trials[j]) ){
             if (media == 'image') {
-              images = images.concat(flatten([trials[j][param]]));
+              images = images.concat(jsPsych.utils.flatten([trials[j][param]]));
             } else if (media == 'audio') {
-              audio = audio.concat(flatten([trials[j][param]]));
+              audio = audio.concat(jsPsych.utils.flatten([trials[j][param]]));
             }
           }
         }
@@ -2193,40 +2193,56 @@ jsPsych.pluginAPI = (function() {
 })();
 
 // methods used in multiple modules //
+jsPsych.utils = (function() {
 
-function flatten(arr, out) {
-  out = (typeof out === 'undefined') ? [] : out;
-  for (var i = 0; i < arr.length; i++) {
-    if (Array.isArray(arr[i])) {
-      flatten(arr[i], out);
-    } else {
-      out.push(arr[i]);
-    }
-  }
-  return out;
-}
+	var module = {};
 
-function deepExtend(out) {
-  out = out || {};
+	module.flatten = function(arr, out) {
+		out = (typeof out === 'undefined') ? [] : out;
+		for (var i = 0; i < arr.length; i++) {
+			if (Array.isArray(arr[i])) {
+				module.flatten(arr[i], out);
+			} else {
+				out.push(arr[i]);
+			}
+		}
+		return out;
+	}
 
-  for (var i = 1; i < arguments.length; i++) {
-    var obj = arguments[i];
+	module.unique = function(arr) {
+		var out = [];
+		for (var i = 0; i < out.length; i++) {
+			if (arr.indexOf(arr[i]) == i) {
+				out.push(arr[i]);
+			}
+		}
+		return out;
+	}
 
-    if (!obj)
-      continue;
+	module.deepExtend = function(out, obj) {
+		out = out || {};
 
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        if (typeof obj[key] === 'object')
-          out[key] = deepExtend(out[key], obj[key]);
-        else
-          out[key] = obj[key];
-      }
-    }
-  }
+		for (var i = 1; i < arguments.length; i++) {
+			var obj = arguments[i];
 
-  return out;
-};
+			if (!obj)
+				continue;
+
+			for (var key in obj) {
+				if (obj.hasOwnProperty(key)) {
+					if (typeof obj[key] === 'object')
+						out[key] = module.deepExtend(out[key], obj[key]);
+					else
+						out[key] = obj[key];
+				}
+			}
+		}
+
+		return out;
+	}
+
+	return module;
+})();
 
 // polyfill for Object.assign to support IE
 if (typeof Object.assign != 'function') {
