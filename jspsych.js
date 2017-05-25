@@ -468,7 +468,7 @@ window.jsPsych = (function() {
         // if we're all done with the repetitions, check if there is a loop function.
         else if (typeof timeline_parameters.loop_function !== 'undefined') {
           if (timeline_parameters.loop_function(this.generatedData())) {
-            this.reset(); // TODO: fix this probably...
+            this.reset();
             return parent_node.advance();
           } else {
             progress.done = true;
@@ -558,6 +558,7 @@ window.jsPsych = (function() {
       progress.current_variable_set = 0;
       progress.current_iteration++;
       progress.done = false;
+      this.setTimelineVariablesOrder();
       if (typeof timeline_parameters != 'undefined') {
         for (var i = 0; i < timeline_parameters.timeline.length; i++) {
           timeline_parameters.timeline[i].reset();
