@@ -2211,7 +2211,7 @@ jsPsych.utils = (function() {
 
 	module.unique = function(arr) {
 		var out = [];
-		for (var i = 0; i < out.length; i++) {
+		for (var i = 0; i < arr.length; i++) {
 			if (arr.indexOf(arr[i]) == i) {
 				out.push(arr[i]);
 			}
