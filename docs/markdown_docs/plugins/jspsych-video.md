@@ -14,6 +14,8 @@ height | numeric | heigh of the video file | The height of the video display in 
 prompt | string | empty string | A message (any valid HTML) to display beneath the video element.
 autoplay | boolean | true | If true, the video will begin playing as soon as it has loaded.
 controls | boolean | false | If true, controls for the video player will be available to the subject. They will be able to pause the video or move the playback to any point in the video.
+start | numeric | 0 | If given a value, the video will start at this time point in seconds. 
+stop| numeric | *undefined* | If given a value, the video will stop at this time point in seconds. 
 
 ## Data Generated
 

@@ -75,7 +75,8 @@ This table is a description of all plugins that are currently bundled with jsPsy
  [jspsych&#8209;instructions](jspsych-instructions) | For displaying instructions to the subject.
  [jspsych&#8209;multi&#8209;stim&#8209;multi&#8209;response](jspsych-multi-stim-multi-response) | A more generalized version of the single-stim plugin. Can display multiple stimuli in a single trial, and collect multiple responses in a single trial.
  [jspsych&#8209;palmer](jspsych-palmer) | Shows grid-like stimuli inspired by Stephen Palmer's work. The stimuli are editable: subjects can add and subtract parts interactively. Also contains a method for generating the HTML code to render the stimuli, allowing them to be used in other plugins.
- [jspsych&#8209;reconstruction](jspsych-reconstruction) | The subject interacts with a stimulus by modifying a parameter of the stimulus and observing the change in the stimulus in real-time.  
+ [jspsych&#8209;reconstruction](jspsych-reconstruction) | The subject interacts with a stimulus by modifying a parameter of the stimulus and observing the change in the stimulus in real-time.
+ [jspsych&#8209;resize](jspsych-resize) | Calibrate the display so that materials display with a known physical size.
  [jspsych&#8209;same&#8209;different](jspsych-same-different) | A same-different judgment task. A stimulus is shown, followed by a brief gap, and then another stimulus is shown. The subject indicates whether the stimuli are the same or different.
  [jspsych&#8209;similarity](jspsych-similarity) | Two stimuli are shown sequentially, and the subject indicates how similar they are by dragging a slider object.
  [jspsych&#8209;single&#8209;audio](jspsych-single-audio) | A basic plugin for playing an audio stimulus and getting a keyboard response.
