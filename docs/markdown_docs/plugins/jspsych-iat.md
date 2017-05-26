@@ -41,7 +41,7 @@ correct | boolean | Boolean of whether the user's key press was correct for the 
 ```javascript 
 var trial_block = {
 type: 'iat',
-stimulus: img/blue.png
+stimulus: 'img/blue.png',
 stim_key_association: 'left', 
 is_html: false,
 image_when_wrong: 'img/redX.png',
