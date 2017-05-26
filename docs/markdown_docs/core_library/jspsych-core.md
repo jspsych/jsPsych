@@ -306,7 +306,6 @@ show_progress_bar | boolean | If true, then [a progress bar](../features/progres
 preload_audio | array | An array of audio files to preload before starting the experiment.
 preload_images | array | An array of image files to preload before starting the experiment.
 max_load_time | numeric | The maximum number of milliseconds to wait for content to preload. If the wait time is exceeded an error message is displayed and the experiment stops. The default value is 60 seconds.
-fullscreen | boolean | If true, the experiment will run in fullscreen mode. See the [feature page](../features/fullscreen.md) for more details.
 default_iti | numeric | The default inter-trial interval in ms. The default value if none is specified is 0ms.
 
 Possible values for the exclusions parameter above.

@@ -51,9 +51,22 @@ jsPsych.plugins.video = (function() {
         default: '',
         no_function: false,
         description: ''
+      },
+      start: {
+        type: [jsPsych.plugins.parameterType.FLOAT],
+        default: false,
+        no_function: false,
+        description: 'time to start the clip'
+      },
+      stop: {
+        type: [jsPsych.plugins.parameterType.FLOAT],
+        default: false,
+        no_function: false,
+        description: 'time to stop the clip'
       }
     }
   }
+
 
   plugin.trial = function(display_element, trial) {
 
@@ -80,8 +93,22 @@ jsPsych.plugins.video = (function() {
       var s = trial.sources[i];
       var type = s.substr(s.lastIndexOf('.') + 1);
       type = type.toLowerCase();
-      video_html+='<source src="'+s+'" type="video/'+type+'">';
-    }
+      
+      // adding start stop parameters if specified
+      video_html+='<source src="'+s
+      
+      if (trial.start) {
+        video_html+= '#t=' + trial.start;
+      } else { 
+        video_html+= '#t=0';
+      }
+
+      if (trial.stop) {
+        video_html+= ',' + trial.stop
+      }
+
+      video_html+='" type="video/'+type+'">';
+    } 
     video_html +="</video>"
 
     display_element.innerHTML += video_html;

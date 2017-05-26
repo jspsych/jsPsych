@@ -74,7 +74,6 @@ window.jsPsych = (function() {
       'show_progress_bar': false,
       'auto_preload': true,
       'max_load_time': 60000,
-      'fullscreen': false,
       'default_iti': 0
     };
 
@@ -360,6 +359,12 @@ window.jsPsych = (function() {
     // set the order for going through the timeline variables array
     // TODO: this is where all the sampling options can be implemented
     this.setTimelineVariablesOrder = function() {
+
+      // check to make sure this node has variables
+      if(typeof timeline_parameters === 'undefined' || typeof timeline_parameters.timeline_variables === 'undefined'){
+        return;
+      }
+
       var order = [];
       for(var i=0; i<timeline_parameters.timeline_variables.length; i++){
         order.push(i);
@@ -469,7 +474,7 @@ window.jsPsych = (function() {
         // if we're all done with the repetitions, check if there is a loop function.
         else if (typeof timeline_parameters.loop_function !== 'undefined') {
           if (timeline_parameters.loop_function(this.generatedData())) {
-            this.reset(); // TODO: fix this probably...
+            this.reset();
             return parent_node.advance();
           } else {
             progress.done = true;
@@ -559,6 +564,7 @@ window.jsPsych = (function() {
       progress.current_variable_set = 0;
       progress.current_iteration++;
       progress.done = false;
+      this.setTimelineVariablesOrder();
       if (typeof timeline_parameters != 'undefined') {
         for (var i = 0; i < timeline_parameters.timeline.length; i++) {
           timeline_parameters.timeline[i].reset();
@@ -705,65 +711,24 @@ window.jsPsych = (function() {
 
     loaded = true;
 
-    var fullscreen = opts.fullscreen;
-
-    // fullscreen setup
-    if (fullscreen) {
-      // check if keys are allowed in fullscreen mode
-      var keyboardNotAllowed = typeof Element !== 'undefined' && 'ALLOW_KEYBOARD_INPUT' in Element;
-      if (keyboardNotAllowed) {
-        go();
-      } else {
-        DOM_target.innerHTML = '<div style=""><p>The experiment will launch in fullscreen mode when you click the button below.</p><button id="jspsych-fullscreen-btn" class="jspsych-btn">Launch Experiment</button></div>';
-        var listener = DOM_target.querySelector('#jspsych-fullscreen-btn').addEventListener('click', function() {
-          var element = document.documentElement;
-          if (element.requestFullscreen) {
-            element.requestFullscreen();
-          } else if (element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
-          } else if (element.webkitRequestFullscreen) {
-            element.webkitRequestFullscreen();
-          } else if (element.msRequestFullscreen) {
-            element.msRequestFullscreen();
-          }
-          DOM_target.querySelector('#jspsych-fullscreen-btn').removeEventListener('click', listener);
-          DOM_target.innerHTML = '';
-          setTimeout(go, 1000);
-        });
-      }
-    } else {
-      go();
+    // show progress bar if requested
+    if (opts.show_progress_bar === true) {
+      drawProgressBar();
     }
 
-    function go() {
-      // show progress bar if requested
-      if (opts.show_progress_bar === true) {
-        drawProgressBar();
-      }
+    // record the start time
+    exp_start_time = new Date();
 
-      // record the start time
-      exp_start_time = new Date();
+    // begin!
+    timeline.advance();
+    doTrial(timeline.trial());
 
-      // begin!
-      timeline.advance();
-      doTrial(timeline.trial());
-    }
   }
 
   function finishExperiment() {
 
     if(typeof timeline.end_message !== 'undefined'){
       DOM_target.innerHTML = timeline.end_message;
-    }
-
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
     }
 
     opts.on_finish(jsPsych.data.get());
@@ -973,7 +938,7 @@ jsPsych.data = (function() {
     }
 
     data_collection.readOnly = function(){
-      return DataCollection(deepExtend([], trials));
+      return DataCollection(jsPsych.utils.deepExtend([], trials));
     }
 
     data_collection.addToAll = function(properties){
@@ -998,9 +963,9 @@ jsPsych.data = (function() {
       // [{p1: v1, p2:v2}, {p1:v2}]
       // {p1: v1}
       if(!Array.isArray(filters)){
-        var f = deepExtend([], [filters]);
+        var f = jsPsych.utils.deepExtend([], [filters]);
       } else {
-        var f = deepExtend([], filters);
+        var f = jsPsych.utils.deepExtend([], filters);
       }
 
       var filtered_data = [];
@@ -1054,7 +1019,7 @@ jsPsych.data = (function() {
       if(!Array.isArray(columns)){
         columns = [columns];
       }
-      var o = deepExtend([], trials);
+      var o = jsPsych.utils.deepExtend([], trials);
       for (var i = 0; i < o.length; i++) {
         for (var j in columns) {
           delete o[i][columns[j]];
@@ -2053,7 +2018,8 @@ jsPsych.pluginAPI = (function() {
 
   module.preloadAudioFiles = function(files, callback_complete, callback_load) {
 
-    files = flatten(files);
+    files = jsPsych.utils.flatten(files);
+    files = jsPsych.utils.unique(files);
 
     var n_loaded = 0;
     var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
@@ -2119,7 +2085,8 @@ jsPsych.pluginAPI = (function() {
   module.preloadImages = function(images, callback_complete, callback_load) {
 
     // flatten the images array
-    images = flatten(images);
+    images = jsPsych.utils.flatten(images);
+    images = jsPsych.utils.unique(images);
 
     var n_loaded = 0;
     var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
@@ -2186,9 +2153,9 @@ jsPsych.pluginAPI = (function() {
         if (typeof trials[j][param] !== 'undefined' && typeof trials[j][param] !== 'function') {
           if ( typeof func == 'undefined' || func(trials[j]) ){
             if (media == 'image') {
-              images = images.concat(flatten([trials[j][param]]));
+              images = images.concat(jsPsych.utils.flatten([trials[j][param]]));
             } else if (media == 'audio') {
-              audio = audio.concat(flatten([trials[j][param]]));
+              audio = audio.concat(jsPsych.utils.flatten([trials[j][param]]));
             }
           }
         }
@@ -2235,40 +2202,56 @@ jsPsych.pluginAPI = (function() {
 })();
 
 // methods used in multiple modules //
+jsPsych.utils = (function() {
 
-function flatten(arr, out) {
-  out = (typeof out === 'undefined') ? [] : out;
-  for (var i = 0; i < arr.length; i++) {
-    if (Array.isArray(arr[i])) {
-      flatten(arr[i], out);
-    } else {
-      out.push(arr[i]);
-    }
-  }
-  return out;
-}
+	var module = {};
 
-function deepExtend(out) {
-  out = out || {};
+	module.flatten = function(arr, out) {
+		out = (typeof out === 'undefined') ? [] : out;
+		for (var i = 0; i < arr.length; i++) {
+			if (Array.isArray(arr[i])) {
+				module.flatten(arr[i], out);
+			} else {
+				out.push(arr[i]);
+			}
+		}
+		return out;
+	}
 
-  for (var i = 1; i < arguments.length; i++) {
-    var obj = arguments[i];
+	module.unique = function(arr) {
+		var out = [];
+		for (var i = 0; i < arr.length; i++) {
+			if (arr.indexOf(arr[i]) == i) {
+				out.push(arr[i]);
+			}
+		}
+		return out;
+	}
 
-    if (!obj)
-      continue;
+	module.deepExtend = function(out, obj) {
+		out = out || {};
 
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        if (typeof obj[key] === 'object')
-          out[key] = deepExtend(out[key], obj[key]);
-        else
-          out[key] = obj[key];
-      }
-    }
-  }
+		for (var i = 1; i < arguments.length; i++) {
+			var obj = arguments[i];
 
-  return out;
-};
+			if (!obj)
+				continue;
+
+			for (var key in obj) {
+				if (obj.hasOwnProperty(key)) {
+					if (typeof obj[key] === 'object')
+						out[key] = module.deepExtend(out[key], obj[key]);
+					else
+						out[key] = obj[key];
+				}
+			}
+		}
+
+		return out;
+	}
+
+	return module;
+})();
 
 // polyfill for Object.assign to support IE
 if (typeof Object.assign != 'function') {
