@@ -1,5 +1,5 @@
 /**
- * jspsych-single-stim
+ * jspsych-iat
  * Kristin Diep 
  *
  * plugin for displaying a stimulus and getting a keyboard response
@@ -13,7 +13,7 @@
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('iat', 'stimulus', 'image');
+  jsPsych.pluginAPI.registerPreload('iat', 'stimulus', 'image', function(t){return !t.is_html || t.is_html == 'undefined'});
 
   
   plugin.trial = function(display_element, trial) {
@@ -43,16 +43,7 @@
     trial.response_ends_trial = (typeof trial.response_ends_trial == 'undefined') ? true : trial.response_ends_trial;
     trial.timing_response = trial.timing_response || -1;
     trial.key_to_move_forward = trial.key_to_move_forward || [jsPsych.ALL_KEYS];
-    trial.is_html = (typeof trial.is_html == 'undefined') ? false : trial.is_html;
     trial.prompt = trial.prompt || "";
-
-
-    //Creates extra styling needed 
-    //var node = display_element.innerHTML += "<style id='jspsych-iat-css'>";
-    // var cssstr = ".jspsych-iat-left {float: left; margin: 0px 150px 30px 0px;}" + 
-    // ".jspsych-iat-right {float: right; margin: 0px 0px 30px 150px;}" 
-
-    //display_element.querySelector('#jspsych-iat-css').innerHTML = cssstr;
 
     //Get keys to continue and put them in a string 
     var i;
