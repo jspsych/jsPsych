@@ -67,7 +67,7 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
     // inject CSS for trial
-    var node = display_element.innerHTML += '<style id="jspsych-survey-multi-picture-css">';
+    display_element.innerHTML = '<style id="jspsych-survey-multi-picture-css"></style>';
     var cssstr = ".jspsych-survey-multi-picture-question { margin-top: 2em; margin-bottom: 2em; text-align: center; }"+
       ".jspsych-survey-multi-picture-text span.required {color: darkred;}"+
       ".jspsych-survey-multi-picture-option { line-height: 2; margin-bottom: 10px; }"+

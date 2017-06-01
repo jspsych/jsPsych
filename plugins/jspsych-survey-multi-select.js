@@ -77,7 +77,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
     // inject CSS for trial
-    var node = display_element.innerHTML += '<style id="jspsych-survey-multi-select-css">';
+    display_element.innerHTML = '<style id="jspsych-survey-multi-select-css"></style>';
     var cssstr = ".jspsych-survey-multi-select-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }"+
       ".jspsych-survey-multi-select-text span.required {color: darkred;}"+
       ".jspsych-survey-multi-select-horizontal .jspsych-survey-multi-select-text {  text-align: center;}"+
