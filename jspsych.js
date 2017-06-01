@@ -833,6 +833,10 @@ window.jsPsych = (function() {
     document.querySelector('#jspsych-progressbar-inner').style.width = progress.percent_complete + "%";
   }
 
+  core.setProgressBar = function(proportion_complete){
+    document.querySelector('#jspsych-progressbar-inner').style.width = (proportion_complete*100) + "%";
+  }
+
   //Leave a trace in the DOM that jspsych was loaded
   document.documentElement.setAttribute('jspsych', 'present');
 
