@@ -29,6 +29,7 @@
     jsPsych.init({
       timeline: [multi_choice_block],
       on_finish: function(data) {
+        jsPsych.data.displayData();
       },
     });
   </script>
