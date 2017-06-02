@@ -73,6 +73,7 @@ window.jsPsych = (function() {
       'exclusions': {},
       'show_progress_bar': false,
       'auto_preload': true,
+      'show_preload_progress_bar': true,
       'max_load_time': 60000,
       'default_iti': 0
     };
@@ -130,35 +131,18 @@ window.jsPsych = (function() {
       function(){
         // success! user can continue...
         // start experiment, with or without preloading
-        if(opts.preload_images.length > 0){
-          jsPsych.pluginAPI.preloadImages(opts.preload_images, load_audio);
+        if(opts.auto_preload){
+          jsPsych.pluginAPI.autoPreload(timeline, startExperiment, opts.preload_images, opts.preload_audio, opts.show_preload_progress_bar);
+          if(opts.max_load_time > 0){
+            setTimeout(function(){
+              if(!loaded){
+                loadFail();
+              }
+            }, opts.max_load_time);
+          }
         } else {
-          load_audio();
+          startExperiment();
         }
-
-        function load_audio(){
-          if(opts.preload_audio.length > 0){
-            jsPsych.pluginAPI.preloadAudioFiles(opts.preload_audio, auto_preload);
-          } else {
-            auto_preload();
-          }
-        }
-
-        function auto_preload(){
-          if(opts.auto_preload){
-            jsPsych.pluginAPI.autoPreload(timeline, startExperiment);
-            if(opts.max_load_time > 0){
-              setTimeout(function(){
-                if(!loaded){
-                  loadFail();
-                }
-              }, opts.max_load_time);
-            }
-          } else {
-            startExperiment();
-          }
-        }
-
       },
       function(){
         // fail. incompatible user.
@@ -847,6 +831,11 @@ window.jsPsych = (function() {
     var progress = jsPsych.progress();
 
     document.querySelector('#jspsych-progressbar-inner').style.width = progress.percent_complete + "%";
+  }
+
+  core.setProgressBar = function(proportion_complete){
+    proportion_complete = Math.max(Math.min(1,proportion_complete),0);
+    document.querySelector('#jspsych-progressbar-inner').style.width = (proportion_complete*100) + "%";
   }
 
   //Leave a trace in the DOM that jspsych was loaded
@@ -2137,10 +2126,10 @@ jsPsych.pluginAPI = (function() {
     preloads.push(preload);
   }
 
-  module.autoPreload = function(timeline, callback) {
+  module.autoPreload = function(timeline, callback, images, audio, progress_bar) {
     // list of items to preload
-    var images = [];
-    var audio = [];
+    images = typeof images === 'undefined' ? [] : images;
+    audio = typeof audio === 'undefined' ? [] : audio;
 
     // construct list
     for (var i = 0; i < preloads.length; i++) {
@@ -2162,14 +2151,35 @@ jsPsych.pluginAPI = (function() {
       }
     }
 
+    images = jsPsych.utils.unique(images);
+    audio  = jsPsych.utils.unique(audio);
+
+    var total_n = images.length + audio.length;
+    var loaded = 0;
+
+    if(progress_bar){
+      var pb_html = "<div id='jspsych-loading-progress-bar-container' style='height: 10px; width: 300px; background-color: #ddd;'>";
+      pb_html += "<div id='jspsych-loading-progress-bar' style='height: 10px; width: 0%; background-color: #777;'></div>";
+      pb_html += "</div>";
+      jsPsych.getDisplayElement().innerHTML = pb_html;
+    }
+
+    function update_loading_progress_bar(){
+      loaded++;
+      if(progress_bar){
+        var percent_loaded = (loaded/total_n)*100;
+        jsPsych.getDisplayElement().querySelector('#jspsych-loading-progress-bar').style.width = percent_loaded+"%";
+      }
+    }
+
     // do the preloading
     // first the images, then when the images are complete
     // wait for the audio files to finish
     module.preloadImages(images, function() {
       module.preloadAudioFiles(audio, function() {
         callback();
-      });
-    });
+      }, update_loading_progress_bar);
+    }, update_loading_progress_bar);
   }
 
   /**
