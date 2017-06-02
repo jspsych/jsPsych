@@ -87,9 +87,11 @@
     
     html_str += "<div id='wrongImg' style='position:relative; top: 300px; margin-left: auto; margin-right: auto; left: 0; right: 0'>";
 
-    if(trial.display_feedback == true) {
+    if(!trial.response_ends_trial) {
+      html_str += "<p>Trial will continue automatically.</p>";
+    }
 
-
+    if(trial.response_ends_trial && trial.display_feedback == true) {
       html_str += "<div id='wrongImgContainer' style='position: absolute; top: -75px; margin-left: auto; margin-right: auto; left: 0; right: 0'><img src='" + trial.image_when_wrong + "' style='visibility: hidden;' id='wrongImgID'></img></div>";
       var wImg = document.getElementById("wrongImgID");
       //wImg.style.visibility = "hidden"; 
@@ -106,9 +108,20 @@
         html_str += "<p>If you press the wrong key, a " + trial.wrong_image_name + " will appear. Press " + 
         keysToContinue + " " + trial.key_to_move_forward[lastKey] + " to continue.</p>";
       }
-    } 
-    else {
-      html_str += "<p>Trial will continue automatically.</p>";
+    } else if (trial.response_ends_trial && trial.display_feedback != true) {
+      html_str += "<div id='wrongImgContainer' style='position: absolute; top: -75px; margin-left: auto; margin-right: auto; left: 0; right: 0'></div>";
+      if(trial.key_to_move_forward.length == 1) {
+        if(trial.key_to_move_forward[0] == "other key") {
+          html_str += "<p>If you press the wrong key, press the other key to continue.</p>"
+        } else if(trial.key_to_move_forward[0] == jsPsych.ALL_KEYS) {
+          html_str += "<p>If you press the wrong key, press any key to continue.</p>"
+        } else {
+        html_str += "<p>If you press the wrong key, press " + trial.key_to_move_forward[0] + " to continue.</p>";
+        }
+        } else {
+        html_str += "<p>If you press the wrong key, press " + 
+        keysToContinue + " " + trial.key_to_move_forward[lastKey] + " to continue.</p>";
+      }
     }
 
     html_str += "</div>";
@@ -177,15 +190,16 @@
       if(trial.stim_key_association == "right") {
         if(response.rt > -1 && response.key == rightKeyCode) {
           response.correct = true;
-          if(trial.response_ends_trial) {
+          if (trial.response_ends_trial) {
             end_trial();
           }
         } else {
           response.correct = false;
-          if(trial.display_feedback == true) {
+          if(!trial.response_ends_trial && trial.display_feedback == true) {
             wImg.style.visibility = "visible";
           }
           if (trial.response_ends_trial && trial.display_feedback == true) {
+            wImg.style.visibility = "visible";
             if(trial.key_to_move_forward[0] == "other key") {
               var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
                 callback_function: end_trial,
@@ -196,25 +210,28 @@
               callback_function: end_trial,
               valid_responses: trial.key_to_move_forward
             });}
-          } else if(trial.response_ends_trial && trial.display_feedback != true) {
+           } else if(trial.response_ends_trial && trial.display_feedback != true) {
             var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
               callback_function: end_trial,
               valid_responses: [jsPsych.ALL_KEYS]
             });
+          } else if(!trial.response_ends_trial && trial.display_feedback != true) {
+            end_trial();
           }
         }
       } else if(trial.stim_key_association == "left") {
         if(response.rt > -1 && response.key == leftKeyCode) {
           response.correct = true;
-          if(trial.response_ends_trial) {
+          if (trial.response_ends_trial) {
             end_trial();
           }
         } else {
           response.correct = false;
-          if(trial.display_feedback == true) {
+          if(!trial.response_ends_trial && trial.display_feedback == true) {
             wImg.style.visibility = "visible";
           }
           if (trial.response_ends_trial && trial.display_feedback == true) {
+            wImg.style.visibility = "visible";
             if(trial.key_to_move_forward[0] == "other key") {
               var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
                 callback_function: end_trial,
@@ -230,6 +247,8 @@
               callback_function: end_trial,
               valid_responses: [jsPsych.ALL_KEYS]
             });
+          } else if(!trial.response_ends_trial && trial.display_feedback != true) {
+            end_trial();
           }
         }
       } 
@@ -248,7 +267,7 @@
     
 
     // end trial if time limit is set
-    if (trial.timing_response > 0 && trial.display_feedback != true) {
+    if (trial.timing_response > 0 && trial.response_ends_trial != true) {
       jsPsych.pluginAPI.setTimeout(function() {
         end_trial();
       }, trial.timing_response);
