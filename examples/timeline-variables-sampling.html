@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  
+
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-single-stim.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
@@ -30,7 +30,7 @@
       {
         type: 'single-stim',
         choices: jsPsych.ALL_KEYS,
-        stimulus: function(){ return jsPsych.timelineVariable('v1'); },
+        stimulus: jsPsych.timelineVariable('v1'),
         is_html: true
       }
     ],
