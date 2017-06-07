@@ -10,8 +10,8 @@
  .jspsych-display-element {
    display: flex;
    flex-direction: column;
-   justify-content: center;
-   align-items: center;
+   /*justify-content: center;
+   align-items: center;*/
    /*height: 100%;
    width: 100%;*/
    overflow-y: scroll;
@@ -19,8 +19,9 @@
 
  .jspsych-content-wrapper {
    display: flex;
-   justify-content: center;
-   align-items: center;
+   /*justify-content: center;
+   align-items: center;*/
+   margin: auto; /* this does the same thing as above two lines in this case */
    flex: 1 1 100%;
    width: 100%;
  }
