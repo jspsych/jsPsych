@@ -15,13 +15,13 @@
 </head>
 
 <body>
-  <div id="jspsych-target"></div>
 </body>
 <script>
 
   var timeline_variables = [
-    { v1: 'sound/sound.mp3', v2: 'Person A' },
-    { v1: 'sound/hammer.mp3', v2: 'Person B' }
+    { v1: 'img/happy_face_1.jpg', v2: 'Ann' },
+    { v1: 'img/happy_face_2.jpg', v2: 'Jackson' },
+    { v1: 'img/happy_face_3.jpg', v2: 'Riley' }
   ];
 
   var node = {
@@ -35,10 +35,10 @@
         is_html: true
       },
       {
-        type: 'single-audio',
+        type: 'single-stim',
         choices: [89, 78], // Y or N
-        stimulus: function() { return jsPsych.timelineVariable('v1'); },
-        prompt: function() { return '<p class="center-content">Have you seen '+jsPsych.timelineVariable('v2')+ ' before? Y or N.</p>' }
+        stimulus: jsPsych.timelineVariable('v1'),
+        prompt: function() { return '<p class="center-content">Have you seen '+jsPsych.timelineVariable('v2', true)+ ' before? Y or N.</p>' }
       }
     ],
     randomize_order: true,
@@ -47,7 +47,7 @@
 
   jsPsych.init({
     timeline: [node],
-    preload_audio: ['sound/sound.mp3','sound/hammer.mp3'],
+    preload_images: ['img/happy_face_1.jpg', 'img/happy_face_2.jpg', 'img/happy_face_3.jpg'],
     on_finish: function() {
       jsPsych.data.displayData();
     },
