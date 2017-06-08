@@ -24,7 +24,8 @@ grid_spacing | numeric | 75 | Distance in pixels between the rows and columns.
 circle_radius | numeric | 20 | Radius in pixels of the circles.
 square_size | numeric | 3 | Number of rows and columns in the stimulus.
 timing_feedback | numeric | 1000 | How long to show the feedback for in milliseconds.
-prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to
+prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus.
+button_label | string | 'Done' | The text that appears on the button to finish the trial.
 
 ## Data Generated
 
