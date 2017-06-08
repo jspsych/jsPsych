@@ -30,8 +30,8 @@ describe('same-different plugin', function(){
     jest.runTimersToTime(500);
     expect(jsPsych.getDisplayElement().innerHTML).toBe('<img class="jspsych-same-different-stimulus" src="../media/blue.png">');
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 81}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 81}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 81}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 81}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 
@@ -52,14 +52,14 @@ describe('same-different plugin', function(){
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('<img class="jspsych-same-different-stimulus" src="../media/blue.png">');
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 81}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 81}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 81}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 81}));
     expect(jsPsych.getDisplayElement().innerHTML).toBe('');
     jest.runTimersToTime(500);
     expect(jsPsych.getDisplayElement().innerHTML).toBe('<img class="jspsych-same-different-stimulus" src="../media/blue.png">');
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 81}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 81}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 81}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 81}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 

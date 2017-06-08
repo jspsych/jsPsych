@@ -123,6 +123,9 @@ window.jsPsych = (function() {
       timeline: opts.timeline
     });
 
+    // create keyboard event listeners
+    jsPsych.pluginAPI.createKeyboardEventListeners(opts.display_element);
+
     // create listeners for user browser interaction
     jsPsych.data.createInteractionListeners();
 
@@ -1673,16 +1676,18 @@ jsPsych.pluginAPI = (function() {
 
   var held_keys = {};
 
-  // keyboard events
-  document.addEventListener('keydown', function(e){
-    for(var i=0; i<keyboard_listeners.length; i++){
-      keyboard_listeners[i].fn(e);
-    }
-    held_keys[e.keyCode] = true;
-  });
-  document.addEventListener('keyup', function(e){
-    held_keys[e.keyCode] = false;
-  });
+  module.createKeyboardEventListeners = function(root_element){
+    // keyboard events
+    root_element.addEventListener('keydown', function(e){
+      for(var i=0; i<keyboard_listeners.length; i++){
+        keyboard_listeners[i].fn(e);
+      }
+      held_keys[e.keyCode] = true;
+    });
+    root_element.addEventListener('keyup', function(e){
+      held_keys[e.keyCode] = false;
+    });
+  }
 
   module.getKeyboardResponse = function(parameters) {
     //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key?

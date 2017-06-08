@@ -51,8 +51,8 @@ describe('single-stim plugin', function(){
       timeline: [trial]
     });
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('');
   });
@@ -69,8 +69,8 @@ describe('single-stim plugin', function(){
       timeline: [trial]
     });
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus"><p>hello</p></div>');
   });
@@ -87,13 +87,13 @@ describe('single-stim plugin', function(){
       timeline: [trial]
     });
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus"><p>hello</p></div>');
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('');
   });
@@ -112,8 +112,8 @@ describe('single-stim plugin', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus"><p>hello</p></div><div id="foo">this is the prompt</div>');
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
   });
 
@@ -136,8 +136,8 @@ describe('single-stim plugin', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus" style="visibility: hidden;"><p>hello</p></div>');
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
   });
 
@@ -175,8 +175,8 @@ describe('single-stim plugin', function(){
       timeline: [trial]
     });
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus" class=" responded"><p>hello</p></div>');
 
@@ -202,13 +202,13 @@ describe('single-stim plugin', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus"><p>hello</p></div><div>prompt</div>');
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus"><p>hello</p></div><div>prompt</div>');
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus"><p>hello</p></div><div>prompt</div>');
 
