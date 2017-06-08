@@ -10,6 +10,7 @@ Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 questions | array | *undefined* | An array of strings. The strings are the prompts for the subject to respond to. Each string gets its own response field.
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions.
+values | array | `[""]` | An array of strings. The strings will be used to populate the response fields with editable answers.
 rows | array | 1 | The number of rows for the response text box. Array length must match `questions` array, with a numeric value for each entry indicating the number of rows for that question's box.
 columns | array | 40 | The number of columns for the response text box. Array length must match `questions` array, with a numeric value for each entry indicating the number of columns for that question's box.
 
