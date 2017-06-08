@@ -44,7 +44,6 @@ Parameter | Type | Default Value | Description
 timing_post_trial | numeric | 1000 | Sets the time, in milliseconds, between the current trial and the next trial.
 on_finish | function | *undefined* | A callback function to execute when the trial finishes. See [this page](../features/callbacks.md) for more details.
 data | object | *undefined* | An object containing additional data to store for the trial. See [this page](../features/data.md) for more details.
-display_element | jQuery DOM selection | Change the target display at the trial level by specifying a new target for content.
 
 ## Data collected by plugins
 
@@ -71,6 +70,7 @@ This table is a description of all plugins that are currently bundled with jsPsy
  [jspsych&#8209;categorize](jspsych-categorize) | The subject responds to a stimulus using the keyboard and can be given feedback about the correctness of their response.
  [jspsych&#8209;categorize&#8209;animation](jspsych-categorize-animation) | A mash-up of the animation and categorize plugin. The subject responds to an animation and can be given feedback about their response.
  [jspsych&#8209;free&#8209;sort](jspsych-free-sort) | Displays a set of images on the screen in random locations. Subjects can click and drag the images to move them around the screen. Records all the moves made by the subject, so the sequence of moves can be recovered from the data.
+ [jspsych&#8209;fullscreen](jspsych-fullscreen) | Toggles the experiment in and out of fullscreen mode.
  [jspsych&#8209;html](jspsych-html) | Displays an external HTML page (such as a consent form) and lets the subject respond by clicking a button or pressing a key. Plugin can validate their response, which is useful for making sure that a subject has granted consent before starting the experiment.
  [jspsych&#8209;instructions](jspsych-instructions) | For displaying instructions to the subject.
  [jspsych&#8209;multi&#8209;stim&#8209;multi&#8209;response](jspsych-multi-stim-multi-response) | A more generalized version of the single-stim plugin. Can display multiple stimuli in a single trial, and collect multiple responses in a single trial.
