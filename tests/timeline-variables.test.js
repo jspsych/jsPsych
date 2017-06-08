@@ -56,12 +56,12 @@ describe('sampling', function(){
     for(var i=0; i<reps/2; i++){
       var html = jsPsych.getDisplayElement().innerHTML;
       result_1.push(html);
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
       var html = jsPsych.getDisplayElement().innerHTML;
       result_2.push(html);
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     }
 
     expect(result_1).not.toEqual(result_2);

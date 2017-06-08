@@ -11,8 +11,8 @@ describe('Basic data recording', function(){
     ];
     jsPsych.init({timeline:timeline});
     // click through first trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     // check if data contains rt
     expect(jsPsych.data.get().select('rt').count()).toBe(1);
   })
@@ -27,8 +27,8 @@ describe('#addProperties', function(){
     jsPsych.data.addProperties({'testprop': 1});
     jsPsych.init({timeline:timeline});
     // click through first trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     // check if data contains testprop
     expect(jsPsych.data.get().select('testprop').count()).toBe(1);
   });
@@ -40,8 +40,8 @@ describe('#addProperties', function(){
     ];
     jsPsych.init({timeline:timeline});
     // click through first trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     // check if data contains testprop
     expect(jsPsych.data.get().select('testprop').count()).toBe(0);
     jsPsych.data.addProperties({'testprop': 1});
@@ -64,8 +64,8 @@ describe('#addDataToLastTrial', function(){
     ];
     jsPsych.init({timeline:timeline});
     // click through first trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     // check data structure
     expect(jsPsych.data.get().select('testA').values[0]).toBe(1);
     expect(jsPsych.data.get().select('testB').values[0]).toBe(2);
@@ -81,11 +81,11 @@ describe('#getLastTrialData', function(){
     ];
     jsPsych.init({timeline:timeline});
     // click through first trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     // click through second trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     // check data structure
     expect(jsPsych.data.getLastTrialData().select('trial_index').values[0]).toBe(1);
   });
@@ -113,8 +113,8 @@ describe('#getLastTimelineData', function(){
     jsPsych.init({timeline:timeline});
     // click through all four trials
     for(var i=0; i<4; i++){
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     }
     // check data structure
     expect(jsPsych.data.getLastTimelineData().count()).toBe(2);
@@ -130,8 +130,8 @@ describe('#displayData', function(){
     ];
     jsPsych.init({timeline:timeline});
     // click through first trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     // overwrite data with custom data
     var data = [{col1: 1, col2: 2}, {col1: 3, col2: 4}]
     jsPsych.data._customInsert(data);
@@ -147,8 +147,8 @@ describe('#displayData', function(){
     ];
     jsPsych.init({timeline:timeline});
     // click through first trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
     // overwrite data with custom data
     var data = [{col1: 1, col2: 2}, {col1: 3, col2: 4}]
     jsPsych.data._customInsert(data);

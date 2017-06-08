@@ -24,8 +24,8 @@ describe('The data parameter', function(){
         }
       });
 
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
       //resolve();
     })).then(function(data) { expect(data).toBe(true) });
@@ -57,11 +57,11 @@ describe('The data parameter', function(){
         }
       });
 
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
       //resolve();
     })).then(function(data) { expect(data).toBe(2) });
@@ -97,11 +97,11 @@ describe('The data parameter', function(){
         }
       });
 
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
       //resolve();
     })).then(function(data) { expect(data).toBe(2) });

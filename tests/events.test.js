@@ -23,8 +23,8 @@ describe('on_finish (trial)', function(){
         }
       });
 
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     })).then(function(data) { expect(data.key_data).toBe(32) });
   });
@@ -54,8 +54,8 @@ describe('on_finish (trial)', function(){
         }
       });
 
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
       //resolve();
     })).then(function(pd) {
@@ -88,8 +88,8 @@ describe('on_trial_finish (experiment level)', function(){
         }
       });
 
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
       //resolve();
     })).then(function(pd) {
@@ -121,8 +121,8 @@ describe('on_trial_finish (experiment level)', function(){
         }
       });
 
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
       //resolve();
     })).then(function(pd) {
@@ -155,8 +155,8 @@ describe('on_data_update', function(){
         }
       });
 
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
       //resolve();
     })).then(function(pd) {
@@ -190,8 +190,8 @@ describe('on_data_update', function(){
         }
       });
 
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
       //resolve();
     })).then(function(pd) {
@@ -225,8 +225,8 @@ describe('on_data_update', function(){
         }
       });
 
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
       //resolve();
     })).then(function(pd) {
@@ -260,8 +260,8 @@ describe('on_trial_start', function(){
         }
       });
 
-      document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
       //resolve();
     })).then(function(pd) {
@@ -291,7 +291,7 @@ describe('on_trial_start', function(){
     var display_element = jsPsych.getDisplayElement();
     expect(display_element.innerHTML).toBe('goodbye');
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
   });
 });

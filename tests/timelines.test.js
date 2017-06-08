@@ -31,14 +31,14 @@ describe('loop function', function(){
     });
 
     // first trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(jsPsych.data.get().count()).toBe(1);
 
     // second trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(jsPsych.data.get().count()).toBe(2);
 
@@ -63,14 +63,14 @@ describe('loop function', function(){
     });
 
     // first trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(jsPsych.data.get().count()).toBe(1);
 
     // second trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(jsPsych.data.get().count()).toBe(1);
 
@@ -102,16 +102,16 @@ describe('loop function', function(){
     });
 
     // first trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     // second trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     // third trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(data_count).toEqual([1,1,1]);
     expect(jsPsych.data.get().count()).toBe(3);
@@ -146,8 +146,8 @@ describe('conditional function', function(){
     expect(jsPsych.getDisplayElement().innerHTML).toBe('bar');
 
     // clear
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
   });
 
   test('completes the timeline when returns true', function(){
@@ -173,14 +173,14 @@ describe('conditional function', function(){
     expect(jsPsych.getDisplayElement().innerHTML).toBe('foo');
 
     // next
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('bar');
 
     // clear
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
   });
 
   test('executes on every loop of the timeline', function(){
@@ -214,14 +214,14 @@ describe('conditional function', function(){
     expect(conditional_count).toBe(1);
 
     // first trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(conditional_count).toBe(2);
 
     // second trial
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(conditional_count).toBe(2);
   });
@@ -253,13 +253,13 @@ describe('endCurrentTimeline', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('foo');
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe('woo');
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
   });
 
