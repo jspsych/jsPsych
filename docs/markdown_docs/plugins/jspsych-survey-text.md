@@ -13,6 +13,7 @@ preamble | string | empty string | HTML formatted string to display at the top o
 values | array | `[""]` | An array of strings. The strings will be used to populate the response fields with editable answers.
 rows | array | 1 | The number of rows for the response text box. Array length must match `questions` array, with a numeric value for each entry indicating the number of rows for that question's box.
 columns | array | 40 | The number of columns for the response text box. Array length must match `questions` array, with a numeric value for each entry indicating the number of columns for that question's box.
+button_label | string | 'Submit Answers' | The text that appears on the button to finish the trial.
 
 ## Data Generated
 

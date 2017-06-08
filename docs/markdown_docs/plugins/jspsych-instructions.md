@@ -14,6 +14,9 @@ key_backward | key code | 'leftarrow' | This is the key that the subject can pre
 allow_backward | boolean | true | If true, the subject can return to previous pages of the instructions. If false, they may only advace to the next page.
 allow_keys | boolean | true | If true, the subject can use keyboard keys to navigate the pages. If false, they may not.
 show_clickable_nav | boolean | false | If true, then a `Previous` and `Next` button will be displayed beneath the instructions. Subjects can click the buttons to navigate.
+button_label_previous | string | 'Previous' | The text that appears on the button to go backwards.
+button_label_next | string | 'Next' | The text that appears on the button to go forwards.
+
 
 ## Data Generated
 

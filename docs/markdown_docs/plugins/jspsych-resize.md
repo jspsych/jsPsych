@@ -12,7 +12,7 @@ item_height | numeric | 1 | The height of the item to be measured. Any units can
 item_width | numeric | 1 | The width of the item to be measured.
 pixels_per_unit | numeric | 100 | After the scaling factor is applied, this many pixels will equal one unit of measurement.
 prompt | string | `''` | HTML content to display below the resizable box, and above the button.
-button_text | string | `'Done'` | Label to display on the button to complete calibration.
+button_label | string | 'Done' | Label to display on the button to complete calibration.
 starting_size | numeric | 100 | The initial size of the box, in pixels, along the largest dimension. The aspect ratio will be set automatically to match the item width and height.
 
 ## Examples
