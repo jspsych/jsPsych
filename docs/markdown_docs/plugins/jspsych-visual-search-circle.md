@@ -4,10 +4,6 @@ This plugin presents a customizable visual-search task modelled after [Wang, Cav
 
 ![Sample Visual Search Stimulus](/img/visual_search_example.jpg)
 
-## Dependency
-
-This plugin requires the Snap.svg library, available at [http://www.snapsvg.io](http://www.snapsvg.io). You must include the library in the `<head>` section of your experiment page.
-
 ## Parameters
 
 This table lists the parameters associated with this plugin. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.

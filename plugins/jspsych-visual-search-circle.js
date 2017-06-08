@@ -8,8 +8,6 @@
  *
  * based on code written for psychtoolbox by Ben Motz
  *
- * requires Snap.svg library (snapsvg.io)
- *
  * documentation: docs.jspsych.org
  *
  **/
@@ -116,12 +114,6 @@ jsPsych.plugins["visual-search-circle"] = (function() {
 
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
-    // screen information
-    var screenw = display_element.width();
-    var screenh = display_element.height();
-    var centerx = screenw / 2;
-    var centery = screenh / 2;
-
     // circle params
     var diam = trial.circle_diameter; // pixels
     var radi = diam / 2;
@@ -148,8 +140,8 @@ jsPsych.plugins["visual-search-circle"] = (function() {
     }
 
     // get target to draw on
-    display_element.innerHTML += '<svg id="jspsych-visual-search-circle-svg" width=' + paper_size + ' height=' + paper_size + '></svg>';
-    var paper = Snap('#jspsych-visual-search-circle-svg');
+    display_element.innerHTML += '<div id="jspsych-visual-search-circle-container" style="position: relative; width:' + paper_size + 'px; height:' + paper_size + 'px"></div>';
+    var paper = display_element.querySelector("#jspsych-visual-search-circle-container");
 
     // check distractors - array?
     if(!Array.isArray(trial.foil)){
@@ -164,7 +156,8 @@ jsPsych.plugins["visual-search-circle"] = (function() {
 
     function show_fixation() {
       // show fixation
-      var fixation = paper.image(trial.fixation_image, fix_loc[0], fix_loc[1], trial.fixation_size[0], trial.fixation_size[1]);
+      //var fixation = paper.image(trial.fixation_image, fix_loc[0], fix_loc[1], trial.fixation_size[0], trial.fixation_size[1]);
+      paper.innerHTML += "<img src='"+trial.fixation_image+"' style='position: absolute; top:"+fix_loc[0]+"px; left:"+fix_loc[1]+"px; width:"+trial.fixation_size[0]+"px; height:"+trial.fixation_size[1]+"px;'></img>";
 
       // wait
       jsPsych.pluginAPI.setTimeout(function() {
@@ -185,9 +178,11 @@ jsPsych.plugins["visual-search-circle"] = (function() {
 
       for (var i = 0; i < display_locs.length; i++) {
 
-        var img = paper.image(to_present[i], display_locs[i][0], display_locs[i][1], trial.target_size[0], trial.target_size[1]);
+        paper.innerHTML += "<img src='"+to_present[i]+"' style='position: absolute; top:"+display_locs[i][0]+"px; left:"+display_locs[i][1]+"px; width:"+trial.target_size[0]+"px; height:"+trial.target_size[1]+"px;'></img>";
 
-        search_array_images.push(img);
+        //var img = paper.image(to_present[i], display_locs[i][0], display_locs[i][1], trial.target_size[0], trial.target_size[1]);
+
+        //search_array_images.push(img);
 
       }
 
