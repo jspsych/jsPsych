@@ -235,7 +235,7 @@ Any timeline can be looped using the `loop_function` option. The loop function s
 ```javascript
 var trial = {
 	type: 'text',
-	text: 'Hello. This is in a loop. Press R to repeat this trial, or C to continue.'
+	text: 'This trial is in a loop. Press R to repeat this trial, or C to continue.'
 }
 
 var loop_node = {
