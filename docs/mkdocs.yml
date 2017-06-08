@@ -16,8 +16,8 @@ pages:
   - 'Demo Experiment: Simple Reaction Time Task': 'tutorials/rt-task.md'
 - Features:
   - 'Creating an Experiment: The Timeline': 'features/timeline.md'
+  - 'Advanced Options for Trials': 'features/trial.md'
   - 'Data Storage, Aggregation, and Manipulation': 'features/data.md'
-  - 'Dynamic Content:  Using Functions as Plugin Parameters': 'features/functions-as-parameters.md'
   - 'Event-related Callback Functions': 'features/callbacks.md'
   - 'Record Browser Interactions': 'features/record-browser-interactions.md'
   - 'Media Preloading': 'features/media-preloading.md'
@@ -41,6 +41,7 @@ pages:
   - 'jspsych-categorize': 'plugins/jspsych-categorize.md'
   - 'jspsych-categorize-animation': 'plugins/jspsych-categorize-animation.md'
   - 'jspsych-free-sort': 'plugins/jspsych-free-sort.md'
+  - 'jspsych-fullscreen': 'plugins/jspsych-fullscreen.md'
   - 'jspsych-html': 'plugins/jspsych-html.md'
   - 'jspsych-instructions': 'plugins/jspsych-instructions.md'
   - 'jspsych-multi-stim-multi-response': 'plugins/jspsych-multi-stim-multi-response.md'
