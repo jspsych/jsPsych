@@ -90,7 +90,7 @@ jsPsych.plugins["single-audio"] = (function() {
           end_trial();
         }
       } else {
-        audio.addEventListener('end', end_trial);
+        audio.addEventListener('ended', function(){ end_trial(); });
       }
     }
 
@@ -118,7 +118,7 @@ jsPsych.plugins["single-audio"] = (function() {
         source.onended = function() { }
       } else {
         audio.pause();
-        audio.removeEventListener('end', end_trial);
+        audio.removeEventListener('ended', end_trial);
       }
 
       // kill keyboard listeners

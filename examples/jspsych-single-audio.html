@@ -20,10 +20,11 @@
     type: 'single-audio',
     trial_ends_after_audio: true,
     timeline: [
+      {stimulus: 'sound/tone.mp3'},
       {stimulus: function() { return 'sound/sound.mp3'; }},
       {stimulus: 'sound/hammer.mp3'}
     ],
-    prompt: 'press any key to advance'
+    prompt: 'the trial should advance automatically after sound completes, or press any key to advance'
   }
 
   jsPsych.init({
