@@ -72,6 +72,7 @@ window.jsPsych = (function() {
       'preload_audio': [],
       'exclusions': {},
       'show_progress_bar': false,
+      'auto_update_progress_bar': true,
       'auto_preload': true,
       'show_preload_progress_bar': true,
       'max_load_time': 60000,
@@ -737,7 +738,7 @@ window.jsPsych = (function() {
     var complete = timeline.advance();
 
     // update progress bar if shown
-    if (opts.show_progress_bar === true) {
+    if (opts.show_progress_bar === true && opts.auto_update_progress_bar == true) {
       updateProgressBar();
     }
 
