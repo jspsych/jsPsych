@@ -13,4 +13,28 @@ jsPsych.init({
 });
 ```
 
-The progress bar updates after every every node on the top-level timeline updates. In other words, the progress bar updates after each TimelineNode in the main timeline array is completed. This avoids distracting updates in the middle of trials that are composed of multiple plugins, or confusing updates due to looping or conditional structures that may or may not execute depending on the actions of the subject. This also allows some flexibility for the programmer; by nesting timelines in a deliberate manner, the timing of progress bar updates can be controlled.
+The progress bar updates after every node on the top-level timeline updates. This avoids distracting updates in the middle of trials that are composed of multiple plugins, or confusing updates due to looping or conditional structures that may or may not execute depending on the actions of the subject. This also allows some flexibility for the programmer; by nesting timelines in a deliberate manner, the timing of progress bar updates can be controlled.
+
+## Manual Control
+
+The progress bar can also be manually controlled using the function `jsPsych.setProgressBar()`. This function takes a numeric value between 0 and 1, representing the proportion of the progress bar to fill.
+
+```js
+var trial = {
+	type: 'text',
+	text: 'Almost done...',
+	on_finish: function(){
+		jsPsych.setProgressBar(0.85); // set progress bar to 85% full.
+	}
+}
+```
+
+If you are going to use manual progress bar control, you may want to disable the automatic progress bar updates by setting the `auto_update_progress_bar` property in `jsPsych.init()` to `false`.
+
+```js
+jsPsych.init({
+	timeline: exp,
+	show_progress_bar: true,
+	auto_update_progress_bar: false
+});
+```
