@@ -88,26 +88,32 @@ input[type="text"] {
 /* jsPsych progress bar */
 
 #jspsych-progressbar-container {
-  color: #777;
-  border-bottom: 2px solid #dedede;
-  background-color: #f3f3f3;
+  color: #555;
+  border-bottom: 1px solid #dedede;
+  background-color: #f9f9f9;
   margin-bottom: 1em;
   text-align: center;
-  padding: 10px 0px;
-  width:100%;
+  padding: 8px 0px;
+  width: 100%;
+  line-height: 1em;
+}
+#jspsych-progressbar-container span {
+  font-size: 14px;
+  padding-right: 14px;
 }
 #jspsych-progressbar-outer {
-  background-color: #dedede;
-  border-radius: 5px;
-  width: 800px;
+  background-color: #eee;
+  width: 50%;
   margin: auto;
+  height: 14px;
+  display: inline-block;
+  vertical-align: middle;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
 }
 #jspsych-progressbar-inner {
   background-color: #aaa;
-  /* #3EB3D7; */
   width: 0%;
-  height: 1em;
-  border-radius: 5px;
+  height: 100%;
 }
 
 /* Control appearance of jsPsych.data.displayData() */
