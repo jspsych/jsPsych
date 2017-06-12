@@ -107,7 +107,7 @@ describe('The data parameter', function(){
     })).then(function(data) { expect(data).toBe(2) });
   });
 
-  test('should record data to all nested trials with timeline variables even when nested trials have own data', function(){
+  test.skip('should record data to all nested trials with timeline variables even when nested trials have own data', function(){
 
     require(root + 'jspsych.js');
     require(root + 'plugins/jspsych-text.js');
