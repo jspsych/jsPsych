@@ -21,5 +21,8 @@
   "homepage": "https://github.com/jodeleeuw/jsPsych#readme",
   "devDependencies": {
     "jest": "^20.0.4"
+  },
+  "jest": {
+    "resetModules": true
   }
 }
