@@ -24,18 +24,23 @@ describe('text plugin', function(){
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('Hello World!');
+
+		document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+		document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+
+		expect(jsPsych.getDisplayElement().innerHTML).toBe("");
 	});
 
-	test('display should clear when continue key is pressed', function(){
+	test('when key in choices is pressed, window should display next trail', function(){
 		var trial = {
 			type: 'text',
 			text: 'Testing',
-			cont_key: ['f']
+			choices: ['f']
 		};
 
 		var trial2 = {
 			type: 'text',
-			text: 'Second trial'
+			text: 'Second Trial'
 		};
 
 		var timeline = [];
@@ -51,7 +56,7 @@ describe('text plugin', function(){
 		document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
 		document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
-		expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+		expect(jsPsych.getDisplayElement().innerHTML).toBe('Second Trial');
 
 	});
 });

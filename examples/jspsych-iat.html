@@ -406,8 +406,8 @@ var trial_block4 = {
     type: "text",
     text: function() {
       var sum = 0;
-      var IATtrials = jsPsych.data.getData().filter({trial_type: 'iat'});
-      var numTrials = jsPsych.data.getData().filter({trial_type: 'iat'}).count();
+      var IATtrials = jsPsych.data.get().filter({trial_type: 'iat'});
+      var numTrials = jsPsych.data.get().filter({trial_type: 'iat'}).count();
       var n_correct = IATtrials.filter({correct: true}).count();
       var total_iat_trials = IATtrials.count();
       var percent_correct = Math.floor( n_correct / total_iat_trials * 100 );
@@ -419,22 +419,22 @@ var trial_block4 = {
   };
 
   var timeline = [];
-  timeline.push(welcome_block);
-  timeline.push(category_block);
-  timeline.push(instructions_block);
-  timeline.push(trial_block);
-  timeline.push(instructions_block2);
-  timeline.push(trial_block2);
-  timeline.push(instructions_block3);
-  timeline.push(trial_block3);
-  timeline.push(instructions_block4);
-  timeline.push(trial_block4);
-  timeline.push(instructions_block5);
-  timeline.push(trial_block5);
-  timeline.push(instructions_block6);
-  timeline.push(trial_block6);
-  timeline.push(instructions_block7);
-  timeline.push(trial_block6);
+  // timeline.push(welcome_block);
+  // timeline.push(category_block);
+  //timeline.push(instructions_block);
+   timeline.push(trial_block);
+  // timeline.push(instructions_block2);
+  // timeline.push(trial_block2);
+  // timeline.push(instructions_block3);
+  // timeline.push(trial_block3);
+  // timeline.push(instructions_block4);
+  // timeline.push(trial_block4);
+  // timeline.push(instructions_block5);
+  // timeline.push(trial_block5);
+  // timeline.push(instructions_block6);
+  // timeline.push(trial_block6);
+  // timeline.push(instructions_block7);
+  // timeline.push(trial_block6);
   timeline.push(debrief_block);
 
   jsPsych.init({

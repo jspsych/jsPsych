@@ -16,7 +16,16 @@ describe('iat plugin', function(){
   test('displays image by default', function(){
     var trial = {
       type: 'iat',
-      stimulus: '../media/blue.png'
+      stimulus: '../media/blue.png',
+      is_html: true,
+      response_ends_trial: true,
+      display_feedback: false,
+      left_category_key: 'f',
+      right_category_key: 'j',
+      left_category_label: ['FRIENDLY'],
+      right_category_label: ['UNFRIENDLY'],
+      stim_key_association: 'left',
+      timing_response: 500
     }
 
     jsPsych.init({
@@ -24,13 +33,26 @@ describe('iat plugin', function(){
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(/blue.png/);
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
 
   test('displays html stimulus when is_html is true', function(){
     var trial = {
       type: 'iat',
       stimulus: '<p>hello</p>',
-      is_html: true
+      is_html: true,
+      response_ends_trial: true,
+      display_feedback: false,
+      left_category_key: 'f',
+      right_category_key: 'j',
+      left_category_label: ['FRIENDLY'],
+      right_category_label: ['UNFRIENDLY'],
+      stim_key_association: 'left',
+      timing_response: 500
     }
 
     jsPsych.init({
@@ -38,6 +60,11 @@ describe('iat plugin', function(){
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(/hello/);
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
 
   test('display should only clear when left key is pressed', function(){
@@ -168,9 +195,14 @@ describe('iat plugin', function(){
       timeline: [trial]
     });
 
-
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p>Press j for:<br> <b>UNFRIENDLY</b>'));
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p>Press f for:<br> <b>FRIENDLY</b>'));
+  
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode:70}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode:70}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+
   });
 
   test('should display wrong image when wrong key is pressed', function(){
@@ -199,10 +231,12 @@ describe('iat plugin', function(){
     document.dispatchEvent(new KeyboardEvent('keydown', {keyCode:74}));
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode:74}));
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode:74}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode:74}));
-
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/redX.png\" style=\"visibility: visible;\" id=\"wrongImgID\">'));
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
 
 
@@ -210,7 +244,17 @@ describe('iat plugin', function(){
     var trial = {
       type: 'iat',
       stimulus: '<p>hello</p>',
+      image_when_wrong: '../media/redX.png',
+      wrong_image_name: 'red X',
       is_html: true,
+      display_feedback: true,
+      left_category_key: 'f',
+      right_category_key: 'j',
+      left_category_label: ['FRIENDLY'],
+      right_category_label: ['UNFRIENDLY'],
+      stim_key_association: 'left',
+      key_to_move_forward: [jsPsych.ALL_KEYS],
+      response_ends_trial: true,
       prompt: '<div id="foo">this is the prompt</div>'
     }
 
@@ -220,6 +264,10 @@ describe('iat plugin', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<div id="foo">this is the prompt</div>'));
 
+    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
 
   test('timing_response should end trial after time has elapsed; only if display_feedback is false', function(){
@@ -272,15 +320,15 @@ describe('iat plugin', function(){
     jest.runAllTimers();
   });
 
-  test('should accept functions as parameters(timing_response in use)', function(){
+  test('should accept functions as parameters(timing_response in use, response ends trial false)', function(){
 
     var trial = {
       type: 'iat',
       stimulus: function(){ return '<p>hello</p>'; },
       is_html: function(){ return true; },
-      display_feedback: function(){ return false; },
+      display_feedback: function(){ return true; },
       image_when_wrong: function(){ return '../media/redX.png'; },
-      wrong_image_name: function(){return 'red X'; },
+      wrong_image_name: function(){ return 'red X'; },
       left_category_key: function(){ return 'e'; },
       right_category_key: function(){ return 'i'; },
       left_category_label: function(){return ['FRIENDLY']; },
@@ -302,9 +350,10 @@ describe('iat plugin', function(){
     document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 73}));
     document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 73}));
 
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p id=\"jspsych-iat-stim\"></p><p>hello</p><p></p>'));
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/redX.png\" style=\"visibility: visible;\" id=\"wrongImgID\">'));
+    //expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p id=\"jspsych-iat-stim\"></p><p>hello</p><p></p>'));
 
-    jest.runTimersToTime(1000);
+    jest.runTimersToTime(1100);
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });

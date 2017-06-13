@@ -85,15 +85,21 @@
       trial.right_category_label[1].bold() + "</p></div>";
     }
     
-    html_str += "<div id='wrongImg' style='position:relative; top: 300px; margin-left: auto; margin-right: auto; left: 0; right: 0'>";
+    html_str += "<div id='wrongImgID' style='position:relative; top: 300px; margin-left: auto; margin-right: auto; left: 0; right: 0'>";
 
-    if(!trial.response_ends_trial) {
+    if(!trial.response_ends_trial && trial.display_feedback == true) {
+      html_str += "<div id='wrongImgContainer' style='visibility: hidden; position: absolute; top: -75px; margin-left: auto; margin-right: auto; left: 0; right: 0'><img src='" + trial.image_when_wrong + "' id='wrongImgID'></img></div>";
+      var wImg = document.getElementById("wrongImgContainer");
+      html_str += "<p>Trial will continue automatically.</p>";
+    }
+
+    if(!trial.response_ends_trial && !trial.display_feedback) {
       html_str += "<p>Trial will continue automatically.</p>";
     }
 
     if(trial.response_ends_trial && trial.display_feedback == true) {
-      html_str += "<div id='wrongImgContainer' style='position: absolute; top: -75px; margin-left: auto; margin-right: auto; left: 0; right: 0'><img src='" + trial.image_when_wrong + "' style='visibility: hidden;' id='wrongImgID'></img></div>";
-      var wImg = document.getElementById("wrongImgID");
+      html_str += "<div id='wrongImgContainer' style='visibility: hidden; position: absolute; top: -75px; margin-left: auto; margin-right: auto; left: 0; right: 0'><img src='" + trial.image_when_wrong + "' id='wrongImgID'></img></div>";
+      var wImg = document.getElementById("wrongImgContainer");
       //wImg.style.visibility = "hidden"; 
 
       if(trial.key_to_move_forward.length == 1) {
@@ -177,7 +183,7 @@
 
     // function to handle responses by the subject
     var after_response = function(info) {
-      var wImg = document.getElementById("wrongImgID");
+      var wImg = document.getElementById("wrongImgContainer");
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
       display_element.querySelector('#jspsych-iat-stim').className += ' responded';
@@ -216,7 +222,7 @@
               valid_responses: [jsPsych.ALL_KEYS]
             });
           } else if(!trial.response_ends_trial && trial.display_feedback != true) {
-            end_trial();
+            // end_trial();
           }
         }
       } else if(trial.stim_key_association == "left") {
@@ -248,7 +254,7 @@
               valid_responses: [jsPsych.ALL_KEYS]
             });
           } else if(!trial.response_ends_trial && trial.display_feedback != true) {
-            end_trial();
+            // end_trial();
           }
         }
       } 
