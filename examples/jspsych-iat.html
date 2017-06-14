@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My experiment</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-text.js"></script>
+  <script src="../plugins/jspsych-iat.js"></script>
+  <link href="../css/jspsych.css" rel="stylesheet"></link>
+</head>
+<body>
+</body>
+<script>
+
+var welcome_block = {
+  type: 'text',
+  text: '<p>Welcome to the Age Task. In this study you will ' +
+  'complete an Implicit Association Test(IAT) in which you ' +
+  'will be asked to sort pictures and words into groups as ' +
+  'fast as you can. At the end, you will receive your IAT ' +
+  'result along with information about what it means.<br><br> ' + 'Press any key to begin.</p>',
+  timing_post_trial: 1500
+};
+
+var category_block = {
+  type: 'text',
+  text: '<p>Next, you will use the "E" and "I" computer keys ' + 'to categorize items into groups as fast as you can. ' +
+  'These are the four groups and the items that belong to each:<br><br>' + 
+  '<strong>Good</strong>:<br>' + 'Fabulous, Excitement, Glorious, Cheerful, Cherish, ' +
+  'Enjoy, Delightful, Joyous<br><br>' + '<strong>Bad</strong>:<br>' + 'Humiliate, ' +
+  'Evil, Grief, Yucky, Detest, Poison, Abuse, Despise<br><br>' + 
+  '<strong>Old</strong>:<br>' + "<img src='img/age/of1.jpg'></img>  " + 
+  "<img src='img/age/of2.jpg'></img>  " + "<img src='img/age/of3.jpg'></img>  " + 
+  "<img src='img/age/om1.jpg'></img>  " + "<img src='img/age/om2.jpg'></img>  " +
+  "<img src='img/age/om3.jpg'></img><br><br>" + '<strong>Young</strong>:<br>' +
+  "<img src='img/age/yf1.jpg'></img>  " + "<img src='img/age/yf4.jpg'></img>  " +
+  "<img src='img/age/yf5.jpg'></img>  " + "<img src='img/age/ym2.jpg'></img>  " +
+  "<img src='img/age/ym3.jpg'></img>  " + "<img src='img/age/ym5.jpg'></img><br><br>" +
+  "Press any key to continue.</p>",
+  timing_post_trial: 1500
+};
+
+var instructions_block = {
+  type: 'text',
+  text: "<div style='position: absolute; top: 18%; left: 20%'><p>Press E for:<br><strong>OLD</strong></p></div>" + 
+  "<div style='position: absolute; top: 18%; right: 20%'><p>Press I for:<br><strong>YOUNG</strong></p></div>" + 
+  "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Put a left finger on the <strong>E</strong> key for items that belong to the Old People category. Put a right finger on the " +
+  "<strong>I</strong> key for items that belong to the Young People " +
+  "category. Items will appear one at a time.<br><br>" + "If you " +
+  "make a mistake, a red X will appear. Press the keys listed below " +
+  "to continue. Go as fast as you can while being accurate.<br><br> " +
+  "Press the any key when you are ready to start.</div>",
+};
+
+
+var trial_block = {
+  timeline: [
+  {
+    type: 'iat',
+    stimulus: jsPsych.timelineVariable('stimulus'),
+    stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+    is_html: false,
+    image_when_wrong: 'img/redX.png',
+    wrong_image_name: 'red X',
+    display_feedback: true, 
+    timing_response: 3000, //Only if display_feedback is false 
+    left_category_key: 'E',
+    right_category_key: 'I',
+    left_category_label: ['OLD'],
+    right_category_label: ['YOUNG'],
+    key_to_move_forward: [jsPsych.ALL_KEYS],
+    response_ends_trial: true
+  }
+  ],
+  timeline_variables: [
+  {stimulus: "img/age/of1.jpg", stim_key_association: "left"},
+  {stimulus: "img/age/of2.jpg", stim_key_association: "left"},
+  {stimulus: "img/age/of3.jpg", stim_key_association: "left"},
+  {stimulus: "img/age/om1.jpg", stim_key_association: "left"},
+  {stimulus: "img/age/om2.jpg", stim_key_association: "left"},
+  {stimulus: "img/age/om3.jpg", stim_key_association: "left"},
+  {stimulus: "img/age/yf1.jpg", stim_key_association: "right"},
+  {stimulus: "img/age/yf4.jpg", stim_key_association: "right"},
+  {stimulus: "img/age/yf5.jpg", stim_key_association: "right"},
+  {stimulus: "img/age/ym2.jpg", stim_key_association: "right"},
+  {stimulus: "img/age/ym3.jpg", stim_key_association: "right"},
+  {stimulus: "img/age/ym5.jpg", stim_key_association: "right"}
+  ],
+  randomize_order: true,
+  repititions: 2
+};
+
+var instructions_block2 = {
+  type: 'text',
+  text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br><strong>BAD</strong></div>" + 
+  "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br><strong>GOOD</strong></div>" + 
+  "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Put a left finger on the <strong>E</strong> key for items that " +
+  "belong to the Bad category. Put a right finger on the " +
+  "<strong>I</strong> key for items that belong to the Good " +
+  "category. Items will appear one at a time.<br><br>" + "If you " +
+  "make a mistake, a red X will appear. Press the keys listed below " +
+  "to continue. Go as fast as you can while being accurate.<br><br> " +
+  "Press the any key when you are ready to start.</div>",
+};
+
+var trial_block2 = {
+  timeline: [
+  {
+    type: 'iat',
+    is_html: true,
+    stimulus: jsPsych.timelineVariable('stimulus'),
+    stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+    image_when_wrong: 'img/redX.png',
+    wrong_image_name: 'red X',
+    display_feedback: true, 
+    timing_response: 3000, //Only if display_feedback is false 
+    left_category_key: 'E',
+    right_category_key: 'I',
+    left_category_label: ['BAD'],
+    right_category_label: ['GOOD'],
+    key_to_move_forward: [jsPsych.ALL_KEYS],
+    response_ends_trial: true
+  }
+  ],
+  timeline_variables: [
+  {stimulus: "Humiliate", stim_key_association: "left"},
+  {stimulus: "Evil", stim_key_association: "left"},
+  {stimulus: "Grief", stim_key_association: "left"},
+  {stimulus: "Yucky", stim_key_association: "left"},
+  {stimulus: "Detest", stim_key_association: "left"},
+  {stimulus: "Poison", stim_key_association: "left"},
+  {stimulus: "Abuse", stim_key_association: "left"},
+  {stimulus: "Despise", stim_key_association: "left"},
+  {stimulus: "Fabulous", stim_key_association: "right"},
+  {stimulus: "Excitement", stim_key_association: "right"},
+  {stimulus: "Glorious", stim_key_association: "right"},
+  {stimulus: "Cheerful", stim_key_association: "right"},
+  {stimulus: "Cherish", stim_key_association: "right"},
+  {stimulus: "Enjoy", stim_key_association: "right"},
+  {stimulus: "Delightful", stim_key_association: "right"},
+  {stimulus: "Joyous", stim_key_association: "right"}
+  ],
+  randomize_order: true,
+  repititions: 2
+};
+
+var instructions_block3 = {
+  type: 'text',
+  text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br> " + 
+  "<strong>BAD</strong><br>" + "or<br>" + "<strong>OLD</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>" +
+  "Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG</strong></div>" + 
+  "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Use <strong>E</strong> for Bad and for " +
+  "Old People<br>" + "Use <strong>I</strong> for Good and for Young People<br>" + 
+  "Each item belongs to only one category.<br><br>" + "If you " +
+  "make a mistake, a red X will appear. Press the keys listed below " +
+  "to continue. Go as fast as you can while being accurate.<br><br> " +
+  "Press the any key when you are ready to start.</div>",
+};
+
+var trial_block3 = {
+  timeline: [
+  {
+    type: 'iat',
+    is_html: jsPsych.timelineVariable('is_html'),
+    stimulus: jsPsych.timelineVariable('stimulus'),
+    stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+    image_when_wrong: 'img/redX.png',
+    wrong_image_name: 'red X',
+    display_feedback: true, 
+    timing_response: 3000, //Only if display_feedback is false 
+    left_category_key: 'E',
+    right_category_key: 'I',
+    left_category_label: ['BAD', 'OLD'],
+    right_category_label: ['GOOD', 'YOUNG'],
+    key_to_move_forward: [jsPsych.ALL_KEYS],
+    response_ends_trial: true
+  }
+  ],
+  timeline_variables: [
+  {stimulus: "img/age/of1.jpg", stim_key_association: "left", is_html: false},
+  {stimulus: "img/age/of2.jpg", stim_key_association: "left", is_html: false},
+  {stimulus: "img/age/of3.jpg", stim_key_association: "left", is_html: false},
+  {stimulus: "img/age/om1.jpg", stim_key_association: "left", is_html: false},
+  {stimulus: "img/age/om2.jpg", stim_key_association: "left", is_html: false},
+  {stimulus: "img/age/om3.jpg", stim_key_association: "left", is_html: false},
+  {stimulus: "img/age/yf1.jpg", stim_key_association: "right", is_html: false},
+  {stimulus: "img/age/yf4.jpg", stim_key_association: "right", is_html: false},
+  {stimulus: "img/age/yf5.jpg", stim_key_association: "right", is_html: false},
+  {stimulus: "img/age/ym2.jpg", stim_key_association: "right", is_html: false},
+  {stimulus: "img/age/ym3.jpg", stim_key_association: "right", is_html: false},
+  {stimulus: "img/age/ym5.jpg", stim_key_association: "right", is_html: false},
+  {stimulus: "Humiliate", stim_key_association: "left", is_html: true},
+  {stimulus: "Evil", stim_key_association: "left", is_html: true},
+  {stimulus: "Grief", stim_key_association: "left", is_html: true},
+  {stimulus: "Yucky", stim_key_association: "left", is_html: true},
+  {stimulus: "Detest", stim_key_association: "left", is_html: true},
+  {stimulus: "Poison", stim_key_association: "left", is_html: true},
+  {stimulus: "Abuse", stim_key_association: "left", is_html: true},
+  {stimulus: "Despise", stim_key_association: "left", is_html: true},
+  {stimulus: "Fabulous", stim_key_association: "right", is_html: true},
+  {stimulus: "Excitement", stim_key_association: "right", is_html: true},
+  {stimulus: "Glorious", stim_key_association: "right", is_html: true},
+  {stimulus: "Cheerful", stim_key_association: "right", is_html: true},
+  {stimulus: "Cherish", stim_key_association: "right", is_html: true},
+  {stimulus: "Enjoy", stim_key_association: "right", is_html: true},
+  {stimulus: "Delightful", stim_key_association: "right", is_html: true},
+  {stimulus: "Joyous", stim_key_association: "right", is_html: true}
+  ],
+  randomize_order: true,
+  repititions: 2
+};
+
+var instructions_block4 = {
+  type: 'text',
+  text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br> " + 
+  "<strong>BAD</strong><br>" + "or<br>" + "<strong>OLD</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>" +
+  "Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG</strong></div>" + 
+  "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>This is the same as the previous part.<br>" + "Use <strong>E</strong> for Bad and for " +
+  "Old People<br>" + "Use <strong>I</strong> for Good and for Young People<br>" + 
+  "Each item belongs to only one category.<br><br>" + "If you " +
+  "make a mistake, a red X will appear. Press the keys listed below " +
+  "to continue. Go as fast as you can while being accurate.<br><br> " +
+  "Press the any key when you are ready to start.</div>",
+};
+
+var trial_block4 = {
+  timeline: [
+  {
+    type: 'iat',
+    is_html: jsPsych.timelineVariable('is_html'),
+    stimulus: jsPsych.timelineVariable('stimulus'),
+    stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+    image_when_wrong: 'img/redX.png',
+    wrong_image_name: 'red X',
+    display_feedback: true, 
+      timing_response: 3000, //Only if display_feedback is false 
+      left_category_key: 'E',
+      right_category_key: 'I',
+      left_category_label: ['BAD', 'OLD'],
+      right_category_label: ['GOOD', 'YOUNG'],
+      key_to_move_forward: [jsPsych.ALL_KEYS],
+      response_ends_trial: true
+    }
+    ],
+    timeline_variables: [
+    {stimulus: "img/age/of1.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/of2.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/of3.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/om1.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/om2.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/om3.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/yf1.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/yf4.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/yf5.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/ym2.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/ym3.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/ym5.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "Humiliate", stim_key_association: "left", is_html: true},
+    {stimulus: "Evil", stim_key_association: "left", is_html: true},
+    {stimulus: "Grief", stim_key_association: "left", is_html: true},
+    {stimulus: "Yucky", stim_key_association: "left", is_html: true},
+    {stimulus: "Detest", stim_key_association: "left", is_html: true},
+    {stimulus: "Poison", stim_key_association: "left", is_html: true},
+    {stimulus: "Abuse", stim_key_association: "left", is_html: true},
+    {stimulus: "Despise", stim_key_association: "left", is_html: true},
+    {stimulus: "Fabulous", stim_key_association: "right", is_html: true},
+    {stimulus: "Excitement", stim_key_association: "right", is_html: true},
+    {stimulus: "Glorious", stim_key_association: "right", is_html: true},
+    {stimulus: "Cheerful", stim_key_association: "right", is_html: true},
+    {stimulus: "Cherish", stim_key_association: "right", is_html: true},
+    {stimulus: "Enjoy", stim_key_association: "right", is_html: true},
+    {stimulus: "Delightful", stim_key_association: "right", is_html: true},
+    {stimulus: "Joyous", stim_key_association: "right", is_html: true}
+    ],
+    randomize_order: true,
+    repititions: 2
+  };
+
+  var instructions_block5 = {
+    type: 'text',
+    text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>YOUNG</strong></div>" +
+    "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>OLD</strong></div>" +
+    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Watch out, the labels have changed positions!<br>" +
+    "Use <strong>E</strong> for Young People<br>" + "Use <strong>I</strong> for Old People<br><br>" +
+    "If you make a mistake, a red X will appear. Press the keys listed below " +
+    "to continue. Go as fast as you can while being accurate.<br><br> " +
+    "Press the any key when you are ready to start.</div>"
+  };
+
+  var trial_block5 = {
+    timeline: [
+    {
+      type: 'iat',
+      is_html: false,
+      stimulus: jsPsych.timelineVariable('stimulus'),
+      stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+      image_when_wrong: 'img/redX.png',
+      wrong_image_name: 'red X',
+      display_feedback: true, 
+      timing_response: 3000, //Only if display_feedback is false 
+      left_category_key: 'E',
+      right_category_key: 'I',
+      left_category_label: ['YOUNG'],
+      right_category_label: ['OLD'],
+      key_to_move_forward: [jsPsych.ALL_KEYS],
+      response_ends_trial: true
+    }
+    ],
+    timeline_variables: [
+    {stimulus: "img/age/of1.jpg", stim_key_association: "right"},
+    {stimulus: "img/age/of2.jpg", stim_key_association: "right"},
+    {stimulus: "img/age/of3.jpg", stim_key_association: "right"},
+    {stimulus: "img/age/om1.jpg", stim_key_association: "right"},
+    {stimulus: "img/age/om2.jpg", stim_key_association: "right"},
+    {stimulus: "img/age/om3.jpg", stim_key_association: "right"},
+    {stimulus: "img/age/yf1.jpg", stim_key_association: "left"},
+    {stimulus: "img/age/yf4.jpg", stim_key_association: "left"},
+    {stimulus: "img/age/yf5.jpg", stim_key_association: "left"},
+    {stimulus: "img/age/ym2.jpg", stim_key_association: "left"},
+    {stimulus: "img/age/ym3.jpg", stim_key_association: "left"},
+    {stimulus: "img/age/ym5.jpg", stim_key_association: "left"}
+    ],
+    randomize_order: true,
+    repititions: 2
+  };
+
+  var instructions_block6 = {
+    type: 'text',
+    text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>BAD</strong><br>" + "or<br>" +
+    "<strong>OLD</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" +
+    "<strong>YOUNG</strong></div>" +
+    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Use <strong>E</strong> for Bad and for Old People<br>" + 
+    "Use <strong>I</strong> for Good and for Young People<br><br>" +
+    "If you make a mistake, a red X will appear. Press the keys listed below " +
+    "to continue. Go as fast as you can while being accurate.<br><br> " +
+    "Press the any key when you are ready to start.</div>"
+  };
+
+  var trial_block6 = {
+    timeline: [
+    {
+      type: 'iat',
+      is_html: jsPsych.timelineVariable('is_html'),
+      stimulus: jsPsych.timelineVariable('stimulus'),
+      stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+      image_when_wrong: 'img/redX.png',
+      wrong_image_name: 'red X',
+      display_feedback: true, 
+      timing_response: 3000, //Only if display_feedback is false 
+      left_category_key: 'E',
+      right_category_key: 'I',
+      left_category_label: ['BAD', 'OLD'],
+      right_category_label: ['GOOD', 'YOUNG'],
+      key_to_move_forward: [jsPsych.ALL_KEYS],
+    }
+    ],
+    timeline_variables: [
+    {stimulus: "img/age/of1.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/of2.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/of3.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/om1.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/om2.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/om3.jpg", stim_key_association: "left", is_html: false},
+    {stimulus: "img/age/yf1.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/yf4.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/yf5.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/ym2.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/ym3.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "img/age/ym5.jpg", stim_key_association: "right", is_html: false},
+    {stimulus: "Humiliate", stim_key_association: "left", is_html: true},
+    {stimulus: "Evil", stim_key_association: "left", is_html: true},
+    {stimulus: "Grief", stim_key_association: "left", is_html: true},
+    {stimulus: "Yucky", stim_key_association: "left", is_html: true},
+    {stimulus: "Detest", stim_key_association: "left", is_html: true},
+    {stimulus: "Poison", stim_key_association: "left", is_html: true},
+    {stimulus: "Abuse", stim_key_association: "left", is_html: true},
+    {stimulus: "Despise", stim_key_association: "left", is_html: true},
+    {stimulus: "Fabulous", stim_key_association: "right", is_html: true},
+    {stimulus: "Excitement", stim_key_association: "right", is_html: true},
+    {stimulus: "Glorious", stim_key_association: "right", is_html: true},
+    {stimulus: "Cheerful", stim_key_association: "right", is_html: true},
+    {stimulus: "Cherish", stim_key_association: "right", is_html: true},
+    {stimulus: "Enjoy", stim_key_association: "right", is_html: true},
+    {stimulus: "Delightful", stim_key_association: "right", is_html: true},
+    {stimulus: "Joyous", stim_key_association: "right", is_html: true}
+    ],
+    randomize_order: true,
+    repititions: 2
+  };
+
+  var instructions_block7 = {
+    type: 'text',
+    text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>Bad</strong><br>" + "or<br>" +
+    "<strong>Old People</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>Good</strong><br>" + "or<br>" +
+    "<strong>Young People</strong></div>" +
+    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>This is the same as the previous part<br>" + 
+    "Use <strong>E</strong> for Bad and for Old People<br>" + 
+    "Use <strong>I</strong> for Good and for Young People<br>" +
+    "Each item belongs to only one category<br><br>" +
+    "If you make a mistake, a red X will appear. Press the keys listed below " +
+    "to continue. Go as fast as you can while being accurate.<br><br> " +
+    "Press the any key when you are ready to start.</div>"
+  };
+
+  var debrief_block = {
+    type: "text",
+    text: function() {
+      var sum = 0;
+      var IATtrials = jsPsych.data.get().filter({trial_type: 'iat'});
+      var numTrials = jsPsych.data.get().filter({trial_type: 'iat'}).count();
+      var n_correct = IATtrials.filter({correct: true}).count();
+      var total_iat_trials = IATtrials.count();
+      var percent_correct = Math.floor( n_correct / total_iat_trials * 100 );
+      var responseTime = IATtrials.select('rt').mean();
+      
+      return "<p>You responded correctly on " + percent_correct + "% of the trials. " +
+      "Your average response time was " + "<strong>" + responseTime + "ms</strong></p>";
+    }
+  };
+
+  var timeline = [];
+  // timeline.push(welcome_block);
+  // timeline.push(category_block);
+  //timeline.push(instructions_block);
+   timeline.push(trial_block);
+  // timeline.push(instructions_block2);
+  // timeline.push(trial_block2);
+  // timeline.push(instructions_block3);
+  // timeline.push(trial_block3);
+  // timeline.push(instructions_block4);
+  // timeline.push(trial_block4);
+  // timeline.push(instructions_block5);
+  // timeline.push(trial_block5);
+  // timeline.push(instructions_block6);
+  // timeline.push(trial_block6);
+  // timeline.push(instructions_block7);
+  // timeline.push(trial_block6);
+  timeline.push(debrief_block);
+
+  jsPsych.init({
+    timeline: timeline,
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+  </script>
+  </html>
