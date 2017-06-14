@@ -25,8 +25,8 @@ describe('text plugin', function(){
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('Hello World!');
 
-		document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-		document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+		document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+		document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe("");
 	});
@@ -53,8 +53,8 @@ describe('text plugin', function(){
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('Testing');
 
-		document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-		document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+		document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+		document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('Second Trial');
 

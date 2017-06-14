@@ -34,8 +34,8 @@ describe('iat plugin', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(/blue.png/);
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
@@ -61,8 +61,8 @@ describe('iat plugin', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(/hello/);
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
@@ -82,13 +82,13 @@ describe('iat plugin', function(){
       timeline: [trial]
     });
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('<p id=\"jspsych-iat-stim\"></p><p>hello</p><p></p>');
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
@@ -108,13 +108,13 @@ describe('iat plugin', function(){
       timeline: [trial]
     });
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p id=\"jspsych-iat-stim\"></p><p>hello</p><p></p>'));
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 74}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 74}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 74}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 74}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
 
@@ -137,13 +137,13 @@ describe('iat plugin', function(){
       timeline: [trial]
     });
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p id=\"jspsych-iat-stim\" class=\" responded\"></p><p>hello</p>'));
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
 
@@ -166,13 +166,13 @@ describe('iat plugin', function(){
       timeline: [trial]
     });
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 74}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 74}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 74}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 74}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p id=\"jspsych-iat-stim\" class=\" responded\"></p><p>hello</p>'));
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
 
@@ -197,9 +197,9 @@ describe('iat plugin', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p>Press j for:<br> <b>UNFRIENDLY</b>'));
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p>Press f for:<br> <b>FRIENDLY</b>'));
-  
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode:70}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode:70}));
+
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode:70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode:70}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
 
@@ -226,15 +226,15 @@ describe('iat plugin', function(){
       timeline: [trial]
     });
 
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/redX.png\" style=\"visibility: hidden;\" id=\"wrongImgID\">'));
+    expect(jsPsych.getDisplayElement().querySelector('#wrongImgContainer').style.visibility).toBe('hidden');
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode:74}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode:74}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode:74}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode:74}));
 
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/redX.png\" style=\"visibility: visible;\" id=\"wrongImgID\">'));
+    expect(jsPsych.getDisplayElement().querySelector('#wrongImgContainer').style.visibility).toBe('visible');
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
@@ -264,8 +264,8 @@ describe('iat plugin', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<div id="foo">this is the prompt</div>'));
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
@@ -277,7 +277,7 @@ describe('iat plugin', function(){
       stimulus: '<p>hello</p>',
       is_html: true,
       display_feedback: false,
-      response_ends_trial: false, 
+      response_ends_trial: false,
       timing_response: 500
     }
 
@@ -312,8 +312,8 @@ describe('iat plugin', function(){
       timeline: [trial]
     });
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p id=\"jspsych-iat-stim\" class=\" responded\"></p><p>hello</p>'));
 
@@ -347,10 +347,10 @@ describe('iat plugin', function(){
 
     jest.runTimersToTime(500);
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 73}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 73}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 73}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 73}));
 
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/redX.png\" style=\"visibility: visible;\" id=\"wrongImgID\">'));
+    expect(jsPsych.getDisplayElement().querySelector('#wrongImgContainer').style.visibility).toBe('visible');
     //expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p id=\"jspsych-iat-stim\"></p><p>hello</p><p></p>'));
 
     jest.runTimersToTime(1100);
@@ -384,19 +384,19 @@ describe('iat plugin', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p id=\"jspsych-iat-stim\"></p><p>hello</p>'));
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 73}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 73}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 73}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 73}));
 
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p id=\"jspsych-iat-stim\"></p><p>hello</p>'));
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p id=\"jspsych-iat-stim\" class=\" responded\"></p><p>hello</p>'));
 
     jest.runTimersToTime(1000);
 
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p id=\"jspsych-iat-stim\"></p><p>hello</p>'));
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p id=\"jspsych-iat-stim\" class=\" responded\"></p><p>hello</p>'));
 
     jest.runTimersToTime(1500);
 
-    document.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 69}));
-    document.dispatchEvent(new KeyboardEvent('keyup', {keyCode: 69}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 69}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 69}));
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
