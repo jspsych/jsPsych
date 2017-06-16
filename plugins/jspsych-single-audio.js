@@ -122,7 +122,7 @@ jsPsych.plugins["single-audio"] = (function() {
       }
 
       // kill keyboard listeners
-      jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+      jsPsych.pluginAPI.cancelAllKeyboardResponses();
 
       // gather the data to store for the trial
       var trial_data = {
