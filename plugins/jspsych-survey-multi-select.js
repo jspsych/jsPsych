@@ -65,7 +65,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
 
     // trial defaults
     trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
-    trial.required = typeof trial.required == 'undefined' ? true : trial.required;
+    trial.required = typeof trial.required == 'undefined' ? false : trial.required;
     trial.required_msg = trial.required_msg || '*please select at least one option!';
     trial.horizontal = typeof trial.horizontal == 'undefined' ? false : trial.horizontal;
     //If button_label is empty, the browser's language will be used to determine the button label.
