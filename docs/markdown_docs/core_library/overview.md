@@ -23,21 +23,18 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 
 ### [Data module](jspsych-data.md)
 
-* [jsPsych.data.addDataToLastTrial](jspsych-data.md#jspsychdataadddatatolasttrial)
 * [jsPsych.data.addProperties](jspsych-data.md#jspsychdataaddproperties)
 * [jsPsych.data.displayData](jspsych-data.md#jspsychdatadisplaydata)
-* [jsPsych.data.getData](jspsych-data.md#jspsychdatagetdata)
-* [jsPsych.data.getDataAsCSV](jspsych-data.md#jspsychdatagetdataascsv)
-* [jsPsych.data.getDataAsJSON](jspsych-data.md#jspsychdatagetdataasjson)
+* [jsPsych.data.get](jspsych-data.md#jspsychdataget)
 * [jsPsych.data.getDataByTimelineNode](jspsych-data.md#jspsychdatagetdatabytimelinenode)
 * [jsPsych.data.getInteractionData](jspsych-data.md#jspsychdatagetinteractiondata)
 * [jsPsych.data.getLastTimelineData](jspsych-data.md#jspsychdatagetlasttimelinedata)
 * [jsPsych.data.getLastTrialData](jspsych-data.md#jspsychdatagetlasttrialdata)
 * [jsPsych.data.getURLVariable](jspsych-data.md#jspsychdatageturlvariable)
-* [jsPsych.data.ignore](jspsych-data.md#jspsychdataignore)
-* [jsPsych.data.localSave](jspsych-data.md#jspsychdatalocalsave)
-* [jsPsych.data.write](jspsych-data.md#jspsychdatawrite)
 * [jsPsych.data.urlVariables](jspsych-data.md#jspsychdataurlvariables)
+* [jsPsych.data.write](jspsych-data.md#jspsychdatawrite)
+* [DataCollection](jspsych-data.md#datacollection)
+* [DataColumn](jspsych-data.md#datacolumn)
 
 ### [Turk module](jspsych-turk.md)
 
