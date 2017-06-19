@@ -1,4 +1,5 @@
 const root = '../../';
+const utils = require('../testing-utils.js');
 
 jest.useFakeTimers();
 
@@ -25,8 +26,7 @@ describe('text plugin', function(){
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('Hello World!');
 
-		document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-		document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+		utils.pressKey(70);
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe("");
 	});
@@ -53,9 +53,8 @@ describe('text plugin', function(){
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('Testing');
 
-		document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-		document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
-
+		utils.pressKey(70);
+		
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('Second Trial');
 
 	});
