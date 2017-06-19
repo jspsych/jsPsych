@@ -115,6 +115,9 @@ window.jsPsych = (function() {
     opts.display_element.innerHTML = '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
     DOM_target = document.querySelector('#jspsych-content');
 
+    // add tabIndex attribute to scope event listeners
+    opts.display_element.tabIndex = 0;
+
     // add CSS class to DOM_target
     opts.display_element.className += ' jspsych-display-element';
     DOM_target.className += 'jspsych-content';

@@ -17,6 +17,10 @@
    overflow-y: scroll;
  }
 
+ .jspsych-display-element:focus {
+   outline: none;
+ }
+
  .jspsych-content-wrapper {
    display: flex;
    /*justify-content: center;
