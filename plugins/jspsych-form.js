@@ -1,30 +1,30 @@
 /*
  * jspsych-form (Version 1.1)
  * Junyan Qi
- * 
+ *
  * plugin for generating a form from a json schema.
  *
  * Documentation: docs.jspsych.org
  *
  * Dependency: jsPsych, Material Design Lite
  *
- * 
+ *
 
 Required links in the html file:
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
 <script src="../jspsych.js"></script>
 <script src="../plugins/jspsych-form.js"></script>
-  
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
 SCHEMA EXAMPLE:
 
 var schema = {
     form: {form_title: "Test #1", ribbon_bg: "somePicture", form_description: ""},
-  
+
   ## for more avaliable settings, check the attributes of classes for each type
-    "Question #1": {type: "short answer", label: ""}, 
+    "Question #1": {type: "short answer", label: ""},
     "Question #2": {type: "password"},
     "Question #3": {type: "checkbox", labels: ["option1", "option2"], images:[image1, image2], values:[1, 2, 3, 4]},
     "Question #4": {type: "radio", labels: ["option1", "option2"]}, ## will automatically fill valuse
@@ -32,10 +32,10 @@ var schema = {
 
     ## not display question
     "Question #6": {type: "dropdown", needQuestion: false},
-  
+
   ## insert paragraph (similar for form)
     "Question #7": {type: "long answer", question_description: ""}, ## better styled
-    "Question #8<p>Contents</p>": {type: "long answer"}, 
+    "Question #8<p>Contents</p>": {type: "long answer"},
 
     onSubmit: {label: "Next"}
   };
@@ -68,9 +68,9 @@ var schema = {
     function end_trial() {
 
       var customized_output = undefined;
-      if (trial.schema.onSubmit.onclick != undefined) 
+      if (trial.schema.onSubmit.onclick != undefined)
         var customized_output = docReady(trial.schema.onSubmit.onclick);
-      
+
 
       for (var i = 0; i < questions.length; i++) {
         var question = questions[i]
@@ -180,7 +180,7 @@ var schema = {
           trial_data[key] = value;
         }
 
-        if (customized_output) 
+        if (customized_output)
           trial_data["#Customized Output#"] = customized_output;
 
         display_element.html('');
@@ -232,11 +232,11 @@ var schema = {
 
   function docReady(callback) {
     if (callback == undefined) return;
-    if (document.readyState === "complete" || 
-      document.readyState !== "loading" && 
-      !document.documentElement.doScroll) 
+    if (document.readyState === "complete" ||
+      document.readyState !== "loading" &&
+      !document.documentElement.doScroll)
       return callback();
-    else 
+    else
       document.addEventListener("DOMContentLoaded", callback);
   }
 
@@ -356,7 +356,7 @@ var schema = {
   /*
   ############################################################
   # Form
-  # Form does the following: render a MDL style form 
+  # Form does the following: render a MDL style form
 
   #
   # Arbitrary settings:
@@ -370,13 +370,13 @@ var schema = {
   # @param item.form_title_size
   # @param item.form_title_color
   # @param item.form_description
-  # @param item.form_description_color 
-  # @param item.form_description_size 
+  # @param item.form_description_color
+  # @param item.form_description_size
 
   # layout settings:
-  # @param item.layout_color 
-  # @param item.ribbon_color 
-  # @param item.ribbon_height 
+  # @param item.layout_color
+  # @param item.ribbon_color
+  # @param item.ribbon_height
   # @param item.ribbon_bg
   # @param item.ribbon_bg_size
   # @param item.content_bg_color
@@ -452,7 +452,7 @@ var schema = {
     this.render();
   }
   Form.prototype.render = function() {
-    $(this.display_element).html(this.html);
+    this.display_element.innerHTML = this.html;
   }
 
   /*
@@ -558,7 +558,7 @@ var schema = {
   # item.type <-- automatically assigned
   # item.id   <-- automatically assigned
   # item.needQuestion <-- False
-  #   
+  #
   # @param parent_id --> the id of its parent element
   # @param item --> an object of values for setting
   # @param item.buttonStyle --> see MDL attribute
@@ -1114,9 +1114,9 @@ Dropdown.prototype._option_factory = function() {
     Tag.call(this, parent_id, item);
 
     // settings for mdl
-    // this.type --> type as a <input> tag 
+    // this.type --> type as a <input> tag
     // this.type_class --> template of different type class in mdl i.e. checkbox switch...
-    // this.content_class --> template of different content class in mdl  
+    // this.content_class --> template of different content class in mdl
     this.ripple = (item.ripple == false) ? false : true;
     this.toggle_type = item.toggle_type;
 
@@ -1207,9 +1207,9 @@ Dropdown.prototype._option_factory = function() {
   # ToggleGroup does the following: renders a group of toggles
   # **note:
   #        if item.values is not assigned, it will first take values
-  #        from item.labels and then from item.images until 
+  #        from item.labels and then from item.images until
   #        item.values have the same size as item.labels + item.images
-  #        
+  #
   # Arbitrary settings:
   # item.type <-- automatically assigned
   # item.id   <-- automatically assigned

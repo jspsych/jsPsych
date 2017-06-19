@@ -5,8 +5,10 @@
 <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
 <script src="../jspsych.js"></script>
 <script src="../plugins/jspsych-form.js"></script>
+<script src="../plugins/jspsych-text.js"></script>
+<link rel="stylesheet" href="../css/jspsych.css"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
 
 <head>
 	<title></title>
@@ -21,9 +23,9 @@
 		document.getElementById("custom_id_1").value += "Customize actions when submit buttons is pressed.";
 		return {"Customized output": "Customize actions when submit buttons is pressed."};
 	}
-	
+
 	var schema = {
-		form: {form_title: 'Test #1', ribbon_bg: "img/ribbon.jpg", layout_color: "grey-300", content_bg_color: "grey-100"},
+		form: {form_title: 'Test #1'}, // , ribbon_bg: "img/ribbon.jpg", layout_color: "grey-300", content_bg_color: "grey-100"},
 		"Question #1": {type: "short answer", correct: "Answer #1", required: true},
 		"Question #2": {type: "password"},
 		"Question #3": {type: "checkbox", labels: ["option1", "option2"], correctAnswers: ["value1", "value2"], values:["value1", "value2"]},
@@ -36,13 +38,18 @@
 		onSubmit: {label: "Submit", onclick: clickToSubmit}
 	}
 
+	var text_trial = {
+		type: 'text',
+		text: 'Press any key to view form.'
+	}
+
 	var form_trial = {
 		type: 'form',
 		schema: schema
 	}
 
 	jsPsych.init({
-		timeline: [form_trial],
+		timeline: [text_trial, form_trial],
 		on_finish: function(){ jsPsych.data.displayData(); }
 	});
 
