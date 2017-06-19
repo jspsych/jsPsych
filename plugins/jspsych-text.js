@@ -24,10 +24,15 @@ jsPsych.plugins.text = (function() {
         description: ''
       },
       choices: {
-        type: [jsPsych.plugins.parameterType.KEYCODE, jsPsych.plugins.parameterType.SELECT],
-        options: ['mouse'],
+        type: [jsPsych.plugins.parameterType.KEYCODE],
         array: true,
         default: undefined,
+        no_function: false,
+        description: ''
+      },
+      allow_mouse_click: {
+        type: [jsPsych.plugins.parameterType.BOOL],
+        default: false,
         no_function: false,
         description: ''
       }
@@ -37,6 +42,7 @@ jsPsych.plugins.text = (function() {
   plugin.trial = function(display_element, trial) {
 
     trial.choices = trial.choices || jsPsych.ALL_KEYS;
+    trial.allow_mouse_click = typeof trial.allow_mouse_click == 'undefined' ? false : trial.allow_mouse_click;
 
     // if any trial variables are functions
     // this evaluates the function and replaces
@@ -46,10 +52,16 @@ jsPsych.plugins.text = (function() {
     // set the HTML of the display target to replaced_text.
     display_element.innerHTML = trial.text;
 
+    var keyboardListener = null;
+
     var after_response = function(info) {
 
       display_element.innerHTML = ''; // clear the display
 
+      if(keyboardListener !== null){
+        jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+      }
+      
       var trialdata = {
         "rt": info.rt,
         "key_press": info.key
@@ -73,18 +85,18 @@ jsPsych.plugins.text = (function() {
     };
 
     // check if key is 'mouse'
-    if (trial.choices == 'mouse') {
+    if (trial.allow_mouse_click) {
       display_element.addEventListener(mouse_listener);
       var start_time = (new Date()).getTime();
-    } else {
-      jsPsych.pluginAPI.getKeyboardResponse({
-        callback_function: after_response,
-        valid_responses: trial.choices,
-        rt_method: 'date',
-        persist: false,
-        allow_held_key: false
-      });
     }
+    keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+      callback_function: after_response,
+      valid_responses: trial.choices,
+      rt_method: 'date',
+      persist: false,
+      allow_held_key: false
+    });
+
 
   };
 
