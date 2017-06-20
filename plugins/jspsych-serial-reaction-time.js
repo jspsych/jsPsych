@@ -80,12 +80,12 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 		}
 
     function showFeedback() {
-      if(response.rt == -1){
+      if(response.rt == -1 || trial.show_response_feedback == false){
         endTrial();
       } else {
         var color = response.correct ? '#0f0' : '#f00';
-        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+responseLoc[0]+'-'+responseLoc[1]).style.transition = "";
-        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+responseLoc[0]+'-'+responseLoc[1]).style.backgroundColor = color;
+        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+response.responseLoc[0]+'-'+response.responseLoc[1]).style.transition = "";
+        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+response.responseLoc[0]+'-'+response.responseLoc[1]).style.backgroundColor = color;
         jsPsych.pluginAPI.setTimeout(endTrial, trial.feedback_duration);
       }
     }
@@ -134,7 +134,7 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 					}
 				}
 			}
-
+      response.responseLoc = responseLoc;
 			response.correct = (JSON.stringify(responseLoc) == JSON.stringify(trial.target));
 
 			if (trial.response_ends_trial) {
