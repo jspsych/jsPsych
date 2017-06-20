@@ -63,7 +63,7 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
 
     function endTrial() {
 
-      display_element.innerHMTL = '';
+      display_element.innerHTML = '';
 
       var trial_data = {
         "stimulus": JSON.stringify(trial.stimuli)

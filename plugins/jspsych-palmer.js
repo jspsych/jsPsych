@@ -323,7 +323,7 @@ jsPsych.plugins.palmer = (function() {
 
     function next_trial() {
 
-      display_element.innerHMTL = '';
+      display_element.innerHTML = '';
 
       // next trial
       jsPsych.finishTrial(trial_data);
