@@ -368,6 +368,8 @@ window.jsPsych = (function() {
           order = jsPsych.randomization.sample(order, timeline_parameters.sample.size, true);
         } else if(timeline_parameters.sample.type == 'without-replacement'){
           order = jsPsych.randomization.sample(order, timeline_parameters.sample.size, false);
+        } else if(timeline_parameters.sample.type == 'fixed-repetitions'){
+          order = jsPsych.randomization.repeat(order, timeline_parameters.sample.size, false);
         }
       }
 
