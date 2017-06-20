@@ -27,10 +27,7 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
 
     var startTime = -1;
     var response = {
-      rt: -1,
-      row: -1,
-      column: -1,
-      correct: false
+      rt: -1
     }
 
     // display stimulus
@@ -52,16 +49,12 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
     }
 
 		function showTarget(){
-
       display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).addEventListener('mousedown', function(e){
         if(startTime == -1){
           return;
         } else {
           var info = {}
           info.rt = Date.now() - startTime;
-          var node = e.target;
-          info.row = parseInt(node.dataset.row);
-          info.column = parseInt(node.dataset.column);
           after_response(info);
         }
       });
