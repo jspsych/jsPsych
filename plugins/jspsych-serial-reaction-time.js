@@ -23,8 +23,8 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
     trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
     trial.timing_pre_target = (typeof trial.timing_pre_target === 'undefined') ? 0 : trial.timing_pre_target;
     trial.timing_max_duration = trial.timing_max_duration || -1; // if -1, then wait for response forever
-    trial.show_response_feedback = (typeof trial.show_response_feedback === 'undefined') ? true : trial.show_response_feedback;
-    trial.feedback_duration = (typeof trial.feedback_duration === 'undefined') ? 50 : trial.feedback_duration;
+    trial.show_response_feedback = (typeof trial.show_response_feedback === 'undefined') ? false : trial.show_response_feedback;
+    trial.feedback_duration = (typeof trial.feedback_duration === 'undefined') ? 200 : trial.feedback_duration;
     trial.fade_duration = (typeof trial.fade_duration === 'undefined') ? -1 : trial.fade_duration;
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
@@ -53,6 +53,12 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 
 		var keyboardListener = {};
 
+    var response = {
+      rt: -1,
+      key: false,
+      correct: false
+    }
+
 		function showTarget(){
       if(trial.fade_duration == -1){
         display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.backgroundColor = trial.target_color;
@@ -68,10 +74,21 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
       });
 
 			if(trial.timing_max_duration > -1){
-				jsPsych.pluginAPI.setTimeout(endTrial, trial.timing_max_duration);
+				jsPsych.pluginAPI.setTimeout(showFeedback, trial.timing_max_duration);
 			}
 
 		}
+
+    function showFeedback() {
+      if(response.rt == -1){
+        endTrial();
+      } else {
+        var color = response.correct ? '#0f0' : '#f00';
+        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+responseLoc[0]+'-'+responseLoc[1]).style.transition = "";
+        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+responseLoc[0]+'-'+responseLoc[1]).style.backgroundColor = color;
+        jsPsych.pluginAPI.setTimeout(endTrial, trial.feedback_duration);
+      }
+    }
 
     function endTrial() {
 
@@ -100,12 +117,6 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 
     };
 
-		var response = {
-      rt: -1,
-      key: false,
-      correct: false
-    }
-
     // function to handle responses by the subject
     function after_response(info) {
 
@@ -126,14 +137,12 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 
 			response.correct = (JSON.stringify(responseLoc) == JSON.stringify(trial.target));
 
-			if (trial.show_response_feedback){
-				var color = response.correct ? '#0f0' : '#f00';
-        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+responseLoc[0]+'-'+responseLoc[1]).style.transition = "";
-        display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+responseLoc[0]+'-'+responseLoc[1]).style.backgroundColor = color;
-			}
-
-      if (trial.response_ends_trial) {
-        endTrial();
+			if (trial.response_ends_trial) {
+        if (trial.show_response_feedback){
+  				showFeedback(response.correct);
+  			} else {
+          endTrial();
+        }
       }
     };
 
