@@ -32,8 +32,9 @@
 
     // set default values for the parameters
     trial.display_feedback = typeof trial.display_feedback == 'undefined' ? false : trial.display_feedback;
-    trial.image_when_wrong = trial.image_when_wrong || 'undefined';
-    trial.wrong_image_name = trial.wrong_image_name || 'wrong image';
+    trial.html_when_wrong = trial.html_when_wrong || '<span style="color: red; font-size: 80px">X</span>';
+    trial.bottom_instructions = trial.bottom_instructions || "<p>If you press the wrong key, a red X will appear. Press any key to continue.</p>";
+    trial.force_correct_key_press = trial.force_correct_key_press || false; //If true, key_to_move_forward is no longer needed
     trial.left_category_key = trial.left_category_key || 'E';
     trial.right_category_key = trial.right_category_key || 'I';
     trial.left_category_label = trial.left_category_label || ['left'];
@@ -42,13 +43,6 @@
     trial.response_ends_trial = (typeof trial.response_ends_trial == 'undefined') ? true : trial.response_ends_trial;
     trial.timing_response = trial.timing_response || -1;
     trial.key_to_move_forward = trial.key_to_move_forward || jsPsych.ALL_KEYS;
-
-    //Get keys to continue and put them in a string
-    var keysToContinue = "";
-    var lastKey = trial.key_to_move_forward.length - 1;
-    for(var i = 0; i < lastKey; i++) {
-      keysToContinue += trial.key_to_move_forward[i] + ", ";
-    }
 
     var html_str = "";
 
@@ -82,47 +76,11 @@
 
     html_str += "<div id='wrongImgID' style='position:relative; top: 300px; margin-left: auto; margin-right: auto; left: 0; right: 0'>";
 
-    if(!trial.response_ends_trial && trial.display_feedback == true) {
-      html_str += "<div id='wrongImgContainer' style='visibility: hidden; position: absolute; top: -75px; margin-left: auto; margin-right: auto; left: 0; right: 0'><img src='" + trial.image_when_wrong + "' id='wrongImgID'></img></div>";
-      var wImg = document.getElementById("wrongImgContainer");
-      html_str += "<p>Trial will continue automatically.</p>";
-    }
-
-    if(!trial.response_ends_trial && !trial.display_feedback) {
-      html_str += "<p>Trial will continue automatically.</p>";
-    }
-
-    if(trial.response_ends_trial && trial.display_feedback == true) {
-      html_str += "<div id='wrongImgContainer' style='visibility: hidden; position: absolute; top: -75px; margin-left: auto; margin-right: auto; left: 0; right: 0'><img src='" + trial.image_when_wrong + "' id='wrongImgID'></img></div>";
-      var wImg = document.getElementById("wrongImgContainer");
-      //wImg.style.visibility = "hidden";
-
-      if(trial.key_to_move_forward.length == 1) {
-        if(trial.key_to_move_forward[0] == "other key") {
-          html_str += "<p>If you press the wrong key, a " + trial.wrong_image_name + " will appear. Press the other key to continue.</p>"
-        } else if(trial.key_to_move_forward[0] == jsPsych.ALL_KEYS) {
-          html_str += "<p>If you press the wrong key, a " + trial.wrong_image_name + " will appear. Press any key to continue.</p>"
-        } else {
-        html_str += "<p>If you press the wrong key, a " + trial.wrong_image_name + " will appear. Press " + trial.key_to_move_forward[0] + " to continue.</p>";
-      }
-      } else {
-        html_str += "<p>If you press the wrong key, a " + trial.wrong_image_name + " will appear. Press " +
-        keysToContinue + " " + trial.key_to_move_forward[lastKey] + " to continue.</p>";
-      }
-    } else if (trial.response_ends_trial && trial.display_feedback != true) {
-      html_str += "<div id='wrongImgContainer' style='position: absolute; top: -75px; margin-left: auto; margin-right: auto; left: 0; right: 0'></div>";
-      if(trial.key_to_move_forward.length == 1) {
-        if(trial.key_to_move_forward[0] == "other key") {
-          html_str += "<p>If you press the wrong key, press the other key to continue.</p>"
-        } else if(trial.key_to_move_forward[0] == jsPsych.ALL_KEYS) {
-          html_str += "<p>If you press the wrong key, press any key to continue.</p>"
-        } else {
-        html_str += "<p>If you press the wrong key, press " + trial.key_to_move_forward[0] + " to continue.</p>";
-        }
-        } else {
-        html_str += "<p>If you press the wrong key, press " +
-        keysToContinue + " " + trial.key_to_move_forward[lastKey] + " to continue.</p>";
-      }
+    if(trial.display_feedback === true) {
+      html_str += "<div id='wrongImgContainer' style='visibility: hidden; position: absolute; top: -75px; margin-left: auto; margin-right: auto; left: 0; right: 0'><p>"+trial.html_when_wrong+"</p></div>";
+      html_str += "<div>"+trial.bottom_instructions+"</div>";
+    } else {
+      html_str += "<div>"+trial.bottom_instructions+"</div>";
     }
 
     html_str += "</div>";
@@ -191,7 +149,7 @@
           }
           if (trial.response_ends_trial && trial.display_feedback == true) {
             wImg.style.visibility = "visible";
-            if(trial.key_to_move_forward[0] == "other key") {
+            if(trial.force_correct_key_press) {
               var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
                 callback_function: end_trial,
                 valid_responses: [trial.right_category_key]
@@ -207,7 +165,7 @@
               valid_responses: [jsPsych.ALL_KEYS]
             });
           } else if(!trial.response_ends_trial && trial.display_feedback != true) {
-            // end_trial();
+      
           }
         }
       } else if(trial.stim_key_association == "left") {
@@ -223,7 +181,7 @@
           }
           if (trial.response_ends_trial && trial.display_feedback == true) {
             wImg.style.visibility = "visible";
-            if(trial.key_to_move_forward[0] == "other key") {
+            if(trial.force_correct_key_press) {
               var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
                 callback_function: end_trial,
                 valid_responses: [trial.left_category_key]
@@ -239,7 +197,7 @@
               valid_responses: [jsPsych.ALL_KEYS]
             });
           } else if(!trial.response_ends_trial && trial.display_feedback != true) {
-            // end_trial();
+  
           }
         }
       }

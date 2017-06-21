@@ -13,4 +13,19 @@ describe('animation plugin', function(){
 		expect(typeof window.jsPsych.plugins['animation']).not.toBe('undefined');
 	});
 
+	test('displays stimuli', function(){
+		var animation_sequence = ['img/face_1.jpg', 'img/face_2.jpg'];
+
+		var trial = {
+			type: 'animation',
+			stimuli: animation_sequence
+		}
+
+		jsPsych.init({
+			timeline: [trial]
+		});
+
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="img/face_1.jpg" id="jspsych-animation-image"></img>');
+	});
+
 });

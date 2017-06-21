@@ -12,8 +12,9 @@ Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 stimulus | string | *undefined* | The stimulus to display. Either HTML-formatted, or the path to an image.
 is_html | boolean | false | If `stimulus` is an HTML-formatted string, this parameter needs to be set to `true`.
-image_when_wrong | string | *undefined* | Displays image feedback when user presses wrong key. Only needed when display_feedback == true.
-wrong_image_name | string | 'wrong image' | The name associated with image_when_wrong.
+htm_when_wrong | string | '<span style="color: red; font-size: 80px">X</span>' | The image to display when a user presses the wrong key.
+bottom_instructions | string | "<p>If you press the wrong key, a red X will appear. Press any key to continue.</p>" | Instructions about making a wrong key press and whether another key press is needed to continue. 
+force_correct_key_press | boolean | false | If this is true and the user presses the wrong key then they have to press the other key to continue. An example would be two keys 'E' and 'I'. If the key associated with the stimulus is 'E' and key 'I' was pressed, then pressing 'E' is needed to continue the trial. When this is true, then parameter key_to_move_forward is not used. 
 display_feedback | boolean | false | If true, then image_when_wrong and wrong_image_name is required. If false, timing_response is needed and trial will continue automatically.
 left_category_key | string | 'E' | Key press that is associated with the left_category_label.
 right_category_key | string | 'I' | Key press that is associated with the right_category_label.
@@ -43,15 +44,15 @@ var trial_block = {
   stimulus: 'img/blue.png',
   stim_key_association: 'left',
   is_html: false,
-  image_when_wrong: 'img/redX.png',
-  wrong_image_name: 'red X',
+  html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+  bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+  force_correct_key_press: true,
   display_feedback: true,
   timing_response: 3000, //Only if display_feedback is false
   left_category_key: 'E',
   right_category_key: 'I',
   left_category_label: ['OLD'],
   right_category_label: ['YOUNG'],
-  key_to_move_forward: [jsPsych.ALL_KEYS],
   response_ends_trial: true
 }
 

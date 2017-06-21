@@ -60,15 +60,15 @@ var trial_block = {
     stimulus: jsPsych.timelineVariable('stimulus'),
     stim_key_association: jsPsych.timelineVariable('stim_key_association'),
     is_html: false,
-    image_when_wrong: 'img/redX.png',
-    wrong_image_name: 'red X',
+    html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+    bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+    force_correct_key_press: true,
     display_feedback: true, 
     timing_response: 3000, //Only if display_feedback is false 
     left_category_key: 'E',
     right_category_key: 'I',
     left_category_label: ['OLD'],
     right_category_label: ['YOUNG'],
-    key_to_move_forward: [jsPsych.ALL_KEYS],
     response_ends_trial: true
   }
   ],
@@ -110,15 +110,15 @@ var trial_block2 = {
     is_html: true,
     stimulus: jsPsych.timelineVariable('stimulus'),
     stim_key_association: jsPsych.timelineVariable('stim_key_association'),
-    image_when_wrong: 'img/redX.png',
-    wrong_image_name: 'red X',
+    html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+    bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+    force_correct_key_press: true,
     display_feedback: true, 
     timing_response: 3000, //Only if display_feedback is false 
     left_category_key: 'E',
     right_category_key: 'I',
     left_category_label: ['BAD'],
     right_category_label: ['GOOD'],
-    key_to_move_forward: [jsPsych.ALL_KEYS],
     response_ends_trial: true
   }
   ],
@@ -164,15 +164,15 @@ var trial_block3 = {
     is_html: jsPsych.timelineVariable('is_html'),
     stimulus: jsPsych.timelineVariable('stimulus'),
     stim_key_association: jsPsych.timelineVariable('stim_key_association'),
-    image_when_wrong: 'img/redX.png',
-    wrong_image_name: 'red X',
+    html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+    bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+    force_correct_key_press: true,
     display_feedback: true, 
     timing_response: 3000, //Only if display_feedback is false 
     left_category_key: 'E',
     right_category_key: 'I',
     left_category_label: ['BAD', 'OLD'],
     right_category_label: ['GOOD', 'YOUNG'],
-    key_to_move_forward: [jsPsych.ALL_KEYS],
     response_ends_trial: true
   }
   ],
@@ -226,19 +226,19 @@ var instructions_block4 = {
 var trial_block4 = {
   timeline: [
   {
-    type: 'iat',
-    is_html: jsPsych.timelineVariable('is_html'),
-    stimulus: jsPsych.timelineVariable('stimulus'),
-    stim_key_association: jsPsych.timelineVariable('stim_key_association'),
-    image_when_wrong: 'img/redX.png',
-    wrong_image_name: 'red X',
-    display_feedback: true, 
+      type: 'iat',
+      is_html: jsPsych.timelineVariable('is_html'),
+      stimulus: jsPsych.timelineVariable('stimulus'),
+      stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+      html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+      bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+      force_correct_key_press: true,
+      display_feedback: true, 
       timing_response: 3000, //Only if display_feedback is false 
       left_category_key: 'E',
       right_category_key: 'I',
       left_category_label: ['BAD', 'OLD'],
       right_category_label: ['GOOD', 'YOUNG'],
-      key_to_move_forward: [jsPsych.ALL_KEYS],
       response_ends_trial: true
     }
     ],
@@ -294,15 +294,15 @@ var trial_block4 = {
       is_html: false,
       stimulus: jsPsych.timelineVariable('stimulus'),
       stim_key_association: jsPsych.timelineVariable('stim_key_association'),
-      image_when_wrong: 'img/redX.png',
-      wrong_image_name: 'red X',
+      html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+      bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+      force_correct_key_press: true,
       display_feedback: true, 
       timing_response: 3000, //Only if display_feedback is false 
       left_category_key: 'E',
       right_category_key: 'I',
       left_category_label: ['YOUNG'],
       right_category_label: ['OLD'],
-      key_to_move_forward: [jsPsych.ALL_KEYS],
       response_ends_trial: true
     }
     ],
@@ -343,15 +343,16 @@ var trial_block4 = {
       is_html: jsPsych.timelineVariable('is_html'),
       stimulus: jsPsych.timelineVariable('stimulus'),
       stim_key_association: jsPsych.timelineVariable('stim_key_association'),
-      image_when_wrong: 'img/redX.png',
-      wrong_image_name: 'red X',
+      html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+      bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+      force_correct_key_press: true,
       display_feedback: true, 
       timing_response: 3000, //Only if display_feedback is false 
       left_category_key: 'E',
       right_category_key: 'I',
       left_category_label: ['BAD', 'OLD'],
       right_category_label: ['GOOD', 'YOUNG'],
-      key_to_move_forward: [jsPsych.ALL_KEYS],
+      response_ends_trial: true
     }
     ],
     timeline_variables: [
@@ -419,22 +420,22 @@ var trial_block4 = {
   };
 
   var timeline = [];
-  // timeline.push(welcome_block);
-  // timeline.push(category_block);
-  //timeline.push(instructions_block);
-   timeline.push(trial_block);
-  // timeline.push(instructions_block2);
-  // timeline.push(trial_block2);
-  // timeline.push(instructions_block3);
-  // timeline.push(trial_block3);
-  // timeline.push(instructions_block4);
-  // timeline.push(trial_block4);
-  // timeline.push(instructions_block5);
-  // timeline.push(trial_block5);
-  // timeline.push(instructions_block6);
-  // timeline.push(trial_block6);
-  // timeline.push(instructions_block7);
-  // timeline.push(trial_block6);
+  timeline.push(welcome_block);
+  timeline.push(category_block);
+  timeline.push(instructions_block);
+  timeline.push(trial_block);
+  timeline.push(instructions_block2);
+  timeline.push(trial_block2);
+  timeline.push(instructions_block3);
+  timeline.push(trial_block3);
+  timeline.push(instructions_block4);
+  timeline.push(trial_block4);
+  timeline.push(instructions_block5);
+  timeline.push(trial_block5);
+  timeline.push(instructions_block6);
+  timeline.push(trial_block6);
+  timeline.push(instructions_block7);
+  timeline.push(trial_block6);
   timeline.push(debrief_block);
 
   jsPsych.init({
