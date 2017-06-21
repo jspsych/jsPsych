@@ -23,11 +23,14 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
     trial.timing_pre_target = (typeof trial.timing_pre_target === 'undefined') ? 0 : trial.timing_pre_target;
     trial.timing_max_duration = trial.timing_max_duration || -1; // if -1, then wait for response forever
     trial.fade_duration = (typeof trial.fade_duration === 'undefined') ? -1 : trial.fade_duration;
+    trial.allow_nontarget_responses = (typeof trial.allow_nontarget_responses === 'undefined') ? false : trial.allow_nontarget_responses;
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
     var startTime = -1;
     var response = {
-      rt: -1
+      rt: -1,
+      row: -1,
+      column: -1
     }
 
     // display stimulus
@@ -49,15 +52,25 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
     }
 
 		function showTarget(){
-      display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).addEventListener('mousedown', function(e){
-        if(startTime == -1){
-          return;
-        } else {
-          var info = {}
-          info.rt = Date.now() - startTime;
-          after_response(info);
-        }
-      });
+      var resp_targets;
+      if(trial.allow_nontarget_responses){
+        resp_targets = [display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1])]
+      } else {
+        resp_targets = display_element.querySelectorAll('.jspsych-serial-reaction-time-stimulus-cell');
+      }
+      for(var i=0; i<resp_targets.length; i++){
+        resp_targets[i].addEventListener('mousedown', function(e){
+          if(startTime == -1){
+            return;
+          } else {
+            var info = {}
+            info.row = e.currentTarget.getAttribute('data-row');
+            info.column = e.currentTarget.getAttribute('data-column');
+            info.rt = Date.now() - startTime;
+            after_response(info);
+          }
+        });
+      }
 
       startTime = Date.now();
 
@@ -83,7 +96,10 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
       var trial_data = {
         "rt": response.rt,
 				"grid": JSON.stringify(trial.grid),
-				"target": JSON.stringify(trial.target)
+				"target": JSON.stringify(trial.target),
+        "response_row": response.row,
+        "response_column": response.column,
+        "correct": response.row == trial.target[0] && response.column == trial.target[1]
       };
 
       // clear the display

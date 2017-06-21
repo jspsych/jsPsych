@@ -73,7 +73,8 @@
         grid: grid,
         target: getNextPredictor,
         target_color: getColor,
-        grid_square_size: square_size
+        grid_square_size: square_size,
+        allow_nontarget_responses: true
       },
       {
         type: 'serial-reaction-time-mouse',
@@ -83,7 +84,7 @@
         grid_square_size: square_size
       }
     ],
-    repetitions: 24,
+    repetitions: 6,
   }
 
   jsPsych.init({
