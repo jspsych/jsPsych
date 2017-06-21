@@ -13,4 +13,21 @@ describe('call-function plugin', function(){
 		expect(typeof window.jsPsych.plugins['call-function']).not.toBe('undefined');
 	});
 
+	test('calls function', function(){
+		var myFunc = function() {
+			return '<p>I am a function</p>';
+		}
+
+		var trial = {
+			type: 'call-function',
+			func: myFunc
+		}
+
+		jsPsych.init({
+			timeline: [trial]
+		});
+
+		expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+	});
+
 });
