@@ -2,12 +2,11 @@
 <html>
 
 <head>
-
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-html.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
 </head>
-
+<body></body>
 <script>
   /*
     this demo will only work if run online or with special permissions enable offline
@@ -26,11 +25,11 @@
   };
 
   var consent_block = {
-    "type": "html",
-    "force_refresh": true,
-    "url": "external_html/simple_consent.html",
-    "cont_btn": "start",
-    "check_fn": check_consent
+    type: "html",
+    force_refresh: true,
+    url: "external_html/simple_consent.html",
+    cont_btn: "start",
+    check_fn: check_consent
   }
 
   jsPsych.init({

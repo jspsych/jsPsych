@@ -2,7 +2,6 @@
 <html>
 
 <head>
-  
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-categorize-animation.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
@@ -12,8 +11,9 @@
     }
   </style>
 </head>
-
+<body></body>
 <script>
+
   var trials = {
     type: 'categorize-animation',
     stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
@@ -22,9 +22,8 @@
     text_answer: 'different',
     correct_text: "<p class='center-content'>Correct. The faces had %ANS% expressions.</p>",
     incorrect_text: "<p class='center-content'>Incorrect. The faces had %ANS% expressions.</p>",
-    prompt: "<p class='center-content'>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expressions.</p>",
+    prompt: "<p class='center-content'>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
   };
-
 
   jsPsych.init({
     timeline: [trials],
@@ -32,6 +31,7 @@
       jsPsych.data.displayData();
     }
   });
+
 </script>
 
 </html>
