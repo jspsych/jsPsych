@@ -50,10 +50,7 @@ window.jsPsych = (function() {
     waiting = false;
     loaded = false;
     jsPsych.data.reset();
-    // below code resets event listeners that may have lingered from
-    // a previous incomplete experiment loaded in same DOM.
-    jsPsych.pluginAPI.clearAllKeyboardResponses();
-    jsPsych.pluginAPI.clearAllTimeouts();
+
 
     var defaults = {
       'display_element': undefined,
@@ -133,9 +130,11 @@ window.jsPsych = (function() {
       timeline: opts.timeline
     });
 
+    // below code resets event listeners that may have lingered from
+    // a previous incomplete experiment loaded in same DOM.
+    jsPsych.pluginAPI.reset(opts.display_element);
     // create keyboard event listeners
     jsPsych.pluginAPI.createKeyboardEventListeners(opts.display_element);
-
     // create listeners for user browser interaction
     jsPsych.data.createInteractionListeners();
 
@@ -1688,17 +1687,26 @@ jsPsych.pluginAPI = (function() {
 
   var held_keys = {};
 
+  var root_keydown_listener = function(e){
+    for(var i=0; i<keyboard_listeners.length; i++){
+      keyboard_listeners[i].fn(e);
+    }
+    held_keys[e.keyCode] = true;
+  }
+  var root_keyup_listener = function(e){
+    held_keys[e.keyCode] = false;
+  }
+
+  module.reset = function(root_element){
+    keyboard_listeners = [];
+    held_keys = {};
+    root_element.removeEventListener('keydown', root_keydown_listener);
+    root_element.removeEventListener('keyup', root_keyup_listener);
+  }
+
   module.createKeyboardEventListeners = function(root_element){
-    // keyboard events
-    root_element.addEventListener('keydown', function(e){
-      for(var i=0; i<keyboard_listeners.length; i++){
-        keyboard_listeners[i].fn(e);
-      }
-      held_keys[e.keyCode] = true;
-    });
-    root_element.addEventListener('keyup', function(e){
-      held_keys[e.keyCode] = false;
-    });
+    root_element.addEventListener('keydown', root_keydown_listener);
+    root_element.addEventListener('keyup', root_keyup_listener);
   }
 
   module.getKeyboardResponse = function(parameters) {
