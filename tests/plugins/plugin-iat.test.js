@@ -239,37 +239,6 @@ describe('iat plugin', function(){
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
 
-
-  test('prompt should append html below stimulus', function(){
-    var trial = {
-      type: 'iat',
-      stimulus: '<p>hello</p>',
-      image_when_wrong: '../media/redX.png',
-      wrong_image_name: 'red X',
-      is_html: true,
-      display_feedback: true,
-      left_category_key: 'f',
-      right_category_key: 'j',
-      left_category_label: ['FRIENDLY'],
-      right_category_label: ['UNFRIENDLY'],
-      stim_key_association: 'left',
-      key_to_move_forward: [jsPsych.ALL_KEYS],
-      response_ends_trial: true,
-      prompt: '<div id="foo">this is the prompt</div>'
-    }
-
-    jsPsych.init({
-      timeline: [trial]
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<div id="foo">this is the prompt</div>'));
-
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
-
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
-  });
-
   test('timing_response should end trial after time has elapsed; only if display_feedback is false', function(){
 
     var trial = {
@@ -334,7 +303,6 @@ describe('iat plugin', function(){
       left_category_label: function(){return ['FRIENDLY']; },
       right_category_label: function(){return ['UNFRIENDLY']; },
       stim_key_association: function(){return 'left'; },
-      prompt: function(){ return '<div>prompt</div>'; },
       timing_response: function(){ return 1000; },
       response_ends_trial: function(){ return false; }
     }
@@ -351,7 +319,6 @@ describe('iat plugin', function(){
     document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 73}));
 
     expect(jsPsych.getDisplayElement().querySelector('#wrongImgContainer').style.visibility).toBe('visible');
-    //expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p id=\"jspsych-iat-stim\"></p><p>hello</p><p></p>'));
 
     jest.runTimersToTime(1100);
 
@@ -373,7 +340,6 @@ describe('iat plugin', function(){
       right_category_label: function(){return ['UNFRIENDLY']; },
       stim_key_association: function(){return 'left'; },
       key_to_move_forward: function(){return [jsPsych.ALL_KEYS]; },
-      prompt: function(){ return '<div>prompt</div>'; },
       timing_response: function(){ return 1000; },
       response_ends_trial: function(){ return true; }
     }
