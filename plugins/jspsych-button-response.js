@@ -114,7 +114,7 @@ jsPsych.plugins["button-response"] = (function() {
       display_element.querySelector('#jspsych-button-response-btngroup').insertAdjacentHTML('beforeend',
         '<div class="jspsych-button-response-button" style="display: inline-block; margin:'+trial.margin_vertical+' '+trial.margin_horizontal+'" id="jspsych-button-response-button-' + i +'" data-choice="'+i+'">'+str+'</div>');
       display_element.querySelector('#jspsych-button-response-button-' + i).addEventListener('click', function(e){
-        var choice = e.currentTarget.dataset.choice;
+        var choice = e.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
         after_response(choice);
       });
     }

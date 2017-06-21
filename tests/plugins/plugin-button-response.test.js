@@ -1,4 +1,5 @@
 const root = '../../';
+const utils = require('../testing-utils.js');
 
 jest.useFakeTimers();
 
@@ -126,14 +127,10 @@ describe('button-response', function(){
     	});
 
   		document.querySelector('#jspsych-button-response-button-0').click();
+			console.log(jsPsych.getDisplayElement().innerHTML);
 
-    	expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-single-stim-stimulus" class=" responded"><p>hello</p');
+    	expect(jsPsych.getDisplayElement().querySelector('#jspsych-button-response-stimulus').className).toMatch("responded");
 
     	jest.runAllTimers();
   	});
 });
-
-
-
-
-
