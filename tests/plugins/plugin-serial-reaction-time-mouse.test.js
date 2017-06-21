@@ -29,11 +29,11 @@ describe('serial-reaction-time-mouse plugin', function(){
 		expect(document.querySelector('#jspsych-serial-reaction-time-stimulus-cell-0-2').style.backgroundColor).toBe('');
 		expect(document.querySelector('#jspsych-serial-reaction-time-stimulus-cell-0-3').style.backgroundColor).toBe('');
 
-		utils.clickTarget(document.querySelector('#jspsych-serial-reaction-time-stimulus-cell-0-1'));
+		utils.mouseDownMouseUpTarget(document.querySelector('#jspsych-serial-reaction-time-stimulus-cell-0-1'));
 
 		expect(jsPsych.getDisplayElement().innerHTML).not.toBe('');
 
-		utils.clickTarget(document.querySelector('#jspsych-serial-reaction-time-stimulus-cell-0-0'));
+		utils.mouseDownMouseUpTarget(document.querySelector('#jspsych-serial-reaction-time-stimulus-cell-0-0'));
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 
