@@ -50,6 +50,10 @@ window.jsPsych = (function() {
     waiting = false;
     loaded = false;
     jsPsych.data.reset();
+    // below code resets event listeners that may have lingered from
+    // a previous incomplete experiment loaded in same DOM.
+    jsPsych.pluginAPI.clearAllKeyboardResponses();
+    jsPsych.pluginAPI.clearAllTimeouts();
 
     var defaults = {
       'display_element': undefined,
