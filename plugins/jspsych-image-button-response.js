@@ -100,9 +100,15 @@ jsPsych.plugins["image-button-response"] = (function() {
     display_element.innerHTML += '<div id="jspsych-image-button-response-btngroup"></div>';
     for (var i = 0; i < trial.choices.length; i++) {
       var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
+<<<<<<< HEAD:plugins/jspsych-image-button-response.js
       display_element.querySelector('#jspsych-image-button-response-btngroup').insertAdjacentHTML('beforeend',
         '<div class="jspsych-image-button-response-button" style="display: inline-block; margin:'+trial.margin_vertical+' '+trial.margin_horizontal+'" id="jspsych-image-button-response-button-' + i +'" data-choice="'+i+'">'+str+'</div>');
       display_element.querySelector('#jspsych-image-button-response-button-' + i).addEventListener('click', function(e){
+=======
+      display_element.querySelector('#jspsych-button-response-btngroup').insertAdjacentHTML('beforeend',
+        '<div class="jspsych-button-response-button" style="display: inline-block; margin:'+trial.margin_vertical+' '+trial.margin_horizontal+'" id="jspsych-button-response-button-' + i +'" data-choice="'+i+'">'+str+'</div>');
+      display_element.querySelector('#jspsych-button-response-button-' + i).addEventListener('click', function(e){
+>>>>>>> fix button-response tests:plugins/jspsych-button-response.js
         var choice = e.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
         after_response(choice);
       });
