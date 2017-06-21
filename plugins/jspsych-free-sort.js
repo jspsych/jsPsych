@@ -88,12 +88,13 @@ jsPsych.plugins['free-sort'] = (function() {
 
     var start_time = (new Date()).getTime();
 
+    var html = "";
     // check if there is a prompt and if it is shown above
     if (trial.prompt && trial.prompt_location == "above") {
-      display_element.innerHTML += trial.prompt;
+      html += trial.prompt;
     }
 
-    display_element.innerHTML += '<div '+
+    html += '<div '+
       'id="jspsych-free-sort-arena" '+
       'class="jspsych-free-sort-arena" '+
       'style="position: relative; width:'+trial.sort_area_width+'px; height:'+trial.sort_area_height+'px; border:2px solid #444;"'+
@@ -101,8 +102,10 @@ jsPsych.plugins['free-sort'] = (function() {
 
     // check if prompt exists and if it is shown below
     if (trial.prompt && trial.prompt_location == "below") {
-      display_element.innerHTML += trial.prompt;
+      html += trial.prompt;
     }
+
+    display_element.innerHTML = html;
 
     // store initial location data
     var init_locations = [];
