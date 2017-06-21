@@ -93,7 +93,7 @@ jsPsych.plugins["single-stim"] = (function() {
     new_html += trial.prompt;
 
     // draw
-    display_element.innerHTL = new_html;
+    display_element.innerHTML = new_html;
 
     // store response
     var response = {
