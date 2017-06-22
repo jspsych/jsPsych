@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My experiment</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <title>IAT Example</title>
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-text.js"></script>
   <script src="../plugins/jspsych-iat.js"></script>
@@ -15,22 +14,21 @@
 var welcome_block = {
   type: 'text',
   text: '<p>Welcome to the Age Task. In this study you will ' +
-  'complete an Implicit Association Test(IAT) in which you ' +
+  'complete an Implicit Association Test (IAT) in which you ' +
   'will be asked to sort pictures and words into groups as ' +
-  'fast as you can. At the end, you will receive your IAT ' +
-  'result along with information about what it means.<br><br> ' + 'Press any key to begin.</p>',
+  'fast as you can.</p><p>Press any key to begin.</p>',
   timing_post_trial: 1500
 };
 
 var category_block = {
   type: 'text',
   text: '<p>Next, you will use the "E" and "I" computer keys ' + 'to categorize items into groups as fast as you can. ' +
-  'These are the four groups and the items that belong to each:<br><br>' + 
+  'These are the four groups and the items that belong to each:<br><br>' +
   '<strong>Good</strong>:<br>' + 'Fabulous, Excitement, Glorious, Cheerful, Cherish, ' +
   'Enjoy, Delightful, Joyous<br><br>' + '<strong>Bad</strong>:<br>' + 'Humiliate, ' +
-  'Evil, Grief, Yucky, Detest, Poison, Abuse, Despise<br><br>' + 
-  '<strong>Old</strong>:<br>' + "<img src='img/age/of1.jpg'></img>  " + 
-  "<img src='img/age/of2.jpg'></img>  " + "<img src='img/age/of3.jpg'></img>  " + 
+  'Evil, Grief, Yucky, Detest, Poison, Abuse, Despise<br><br>' +
+  '<strong>Old</strong>:<br>' + "<img src='img/age/of1.jpg'></img>  " +
+  "<img src='img/age/of2.jpg'></img>  " + "<img src='img/age/of3.jpg'></img>  " +
   "<img src='img/age/om1.jpg'></img>  " + "<img src='img/age/om2.jpg'></img>  " +
   "<img src='img/age/om3.jpg'></img><br><br>" + '<strong>Young</strong>:<br>' +
   "<img src='img/age/yf1.jpg'></img>  " + "<img src='img/age/yf4.jpg'></img>  " +
@@ -42,8 +40,8 @@ var category_block = {
 
 var instructions_block = {
   type: 'text',
-  text: "<div style='position: absolute; top: 18%; left: 20%'><p>Press E for:<br><strong>OLD</strong></p></div>" + 
-  "<div style='position: absolute; top: 18%; right: 20%'><p>Press I for:<br><strong>YOUNG</strong></p></div>" + 
+  text: "<div style='position: absolute; top: 18%; left: 20%'><p>Press E for:<br><strong>OLD</strong></p></div>" +
+  "<div style='position: absolute; top: 18%; right: 20%'><p>Press I for:<br><strong>YOUNG</strong></p></div>" +
   "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Put a left finger on the <strong>E</strong> key for items that belong to the Old People category. Put a right finger on the " +
   "<strong>I</strong> key for items that belong to the Young People " +
   "category. Items will appear one at a time.<br><br>" + "If you " +
@@ -63,8 +61,8 @@ var trial_block = {
     html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
     bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
     force_correct_key_press: true,
-    display_feedback: true, 
-    timing_response: 3000, //Only if display_feedback is false 
+    display_feedback: true,
+    timing_response: 3000, //Only if display_feedback is false
     left_category_key: 'E',
     right_category_key: 'I',
     left_category_label: ['OLD'],
@@ -92,8 +90,8 @@ var trial_block = {
 
 var instructions_block2 = {
   type: 'text',
-  text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br><strong>BAD</strong></div>" + 
-  "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br><strong>GOOD</strong></div>" + 
+  text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br><strong>BAD</strong></div>" +
+  "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br><strong>GOOD</strong></div>" +
   "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Put a left finger on the <strong>E</strong> key for items that " +
   "belong to the Bad category. Put a right finger on the " +
   "<strong>I</strong> key for items that belong to the Good " +
@@ -113,8 +111,8 @@ var trial_block2 = {
     html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
     bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
     force_correct_key_press: true,
-    display_feedback: true, 
-    timing_response: 3000, //Only if display_feedback is false 
+    display_feedback: true,
+    timing_response: 3000, //Only if display_feedback is false
     left_category_key: 'E',
     right_category_key: 'I',
     left_category_label: ['BAD'],
@@ -146,11 +144,11 @@ var trial_block2 = {
 
 var instructions_block3 = {
   type: 'text',
-  text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br> " + 
+  text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br> " +
   "<strong>BAD</strong><br>" + "or<br>" + "<strong>OLD</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>" +
-  "Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG</strong></div>" + 
+  "Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG</strong></div>" +
   "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Use <strong>E</strong> for Bad and for " +
-  "Old People<br>" + "Use <strong>I</strong> for Good and for Young People<br>" + 
+  "Old People<br>" + "Use <strong>I</strong> for Good and for Young People<br>" +
   "Each item belongs to only one category.<br><br>" + "If you " +
   "make a mistake, a red X will appear. Press the keys listed below " +
   "to continue. Go as fast as you can while being accurate.<br><br> " +
@@ -167,8 +165,8 @@ var trial_block3 = {
     html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
     bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
     force_correct_key_press: true,
-    display_feedback: true, 
-    timing_response: 3000, //Only if display_feedback is false 
+    display_feedback: true,
+    timing_response: 3000, //Only if display_feedback is false
     left_category_key: 'E',
     right_category_key: 'I',
     left_category_label: ['BAD', 'OLD'],
@@ -212,11 +210,11 @@ var trial_block3 = {
 
 var instructions_block4 = {
   type: 'text',
-  text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br> " + 
+  text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br> " +
   "<strong>BAD</strong><br>" + "or<br>" + "<strong>OLD</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>" +
-  "Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG</strong></div>" + 
+  "Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG</strong></div>" +
   "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>This is the same as the previous part.<br>" + "Use <strong>E</strong> for Bad and for " +
-  "Old People<br>" + "Use <strong>I</strong> for Good and for Young People<br>" + 
+  "Old People<br>" + "Use <strong>I</strong> for Good and for Young People<br>" +
   "Each item belongs to only one category.<br><br>" + "If you " +
   "make a mistake, a red X will appear. Press the keys listed below " +
   "to continue. Go as fast as you can while being accurate.<br><br> " +
@@ -233,8 +231,8 @@ var trial_block4 = {
       html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
       bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
       force_correct_key_press: true,
-      display_feedback: true, 
-      timing_response: 3000, //Only if display_feedback is false 
+      display_feedback: true,
+      timing_response: 3000, //Only if display_feedback is false
       left_category_key: 'E',
       right_category_key: 'I',
       left_category_label: ['BAD', 'OLD'],
@@ -297,8 +295,8 @@ var trial_block4 = {
       html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
       bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
       force_correct_key_press: true,
-      display_feedback: true, 
-      timing_response: 3000, //Only if display_feedback is false 
+      display_feedback: true,
+      timing_response: 3000, //Only if display_feedback is false
       left_category_key: 'E',
       right_category_key: 'I',
       left_category_label: ['YOUNG'],
@@ -329,7 +327,7 @@ var trial_block4 = {
     text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>BAD</strong><br>" + "or<br>" +
     "<strong>OLD</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" +
     "<strong>YOUNG</strong></div>" +
-    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Use <strong>E</strong> for Bad and for Old People<br>" + 
+    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Use <strong>E</strong> for Bad and for Old People<br>" +
     "Use <strong>I</strong> for Good and for Young People<br><br>" +
     "If you make a mistake, a red X will appear. Press the keys listed below " +
     "to continue. Go as fast as you can while being accurate.<br><br> " +
@@ -346,8 +344,8 @@ var trial_block4 = {
       html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
       bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
       force_correct_key_press: true,
-      display_feedback: true, 
-      timing_response: 3000, //Only if display_feedback is false 
+      display_feedback: true,
+      timing_response: 3000, //Only if display_feedback is false
       left_category_key: 'E',
       right_category_key: 'I',
       left_category_label: ['BAD', 'OLD'],
@@ -394,8 +392,8 @@ var trial_block4 = {
     text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>Bad</strong><br>" + "or<br>" +
     "<strong>Old People</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>Good</strong><br>" + "or<br>" +
     "<strong>Young People</strong></div>" +
-    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>This is the same as the previous part<br>" + 
-    "Use <strong>E</strong> for Bad and for Old People<br>" + 
+    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>This is the same as the previous part<br>" +
+    "Use <strong>E</strong> for Bad and for Old People<br>" +
     "Use <strong>I</strong> for Good and for Young People<br>" +
     "Each item belongs to only one category<br><br>" +
     "If you make a mistake, a red X will appear. Press the keys listed below " +
@@ -413,7 +411,7 @@ var trial_block4 = {
       var total_iat_trials = IATtrials.count();
       var percent_correct = Math.floor( n_correct / total_iat_trials * 100 );
       var responseTime = IATtrials.select('rt').mean();
-      
+
       return "<p>You responded correctly on " + percent_correct + "% of the trials. " +
       "Your average response time was " + "<strong>" + responseTime + "ms</strong></p>";
     }
