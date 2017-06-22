@@ -54,6 +54,7 @@ var instructions_block = {
 
 var trial_block = {
   timeline: [
+<<<<<<< HEAD
     {
       type: 'iat-image',
       stimulus: jsPsych.timelineVariable('stimulus'),
@@ -70,6 +71,24 @@ var trial_block = {
       response_ends_trial: true,
       data: { iat_type: 'practice' }
     }
+=======
+  {
+    type: 'iat',
+    stimulus: jsPsych.timelineVariable('stimulus'),
+    stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+    is_html: false,
+    html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+    bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+    force_correct_key_press: true,
+    display_feedback: true,
+    timing_response: 3000, //Only if display_feedback is false
+    left_category_key: 'E',
+    right_category_key: 'I',
+    left_category_label: ['OLD'],
+    right_category_label: ['YOUNG'],
+    response_ends_trial: true
+  }
+>>>>>>> minor cleanup
   ],
   timeline_variables: [
     {stimulus: "img/age/of1.jpg", stim_key_association: "left"},
@@ -104,6 +123,7 @@ var instructions_block2 = {
 
 var trial_block2 = {
   timeline: [
+<<<<<<< HEAD
     {
       type: 'iat-html',
       stimulus: jsPsych.timelineVariable('stimulus'),
@@ -120,6 +140,24 @@ var trial_block2 = {
       response_ends_trial: true,
       data: { iat_type: 'practice' }
     }
+=======
+  {
+    type: 'iat',
+    is_html: true,
+    stimulus: jsPsych.timelineVariable('stimulus'),
+    stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+    html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+    bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+    force_correct_key_press: true,
+    display_feedback: true,
+    timing_response: 3000, //Only if display_feedback is false
+    left_category_key: 'E',
+    right_category_key: 'I',
+    left_category_label: ['BAD'],
+    right_category_label: ['GOOD'],
+    response_ends_trial: true
+  }
+>>>>>>> minor cleanup
   ],
   timeline_variables: [
     {stimulus: "Humiliate", stim_key_association: "left"},
@@ -158,6 +196,7 @@ var instructions_block3 = {
 
 var trial_block3 = {
   timeline: [
+<<<<<<< HEAD
     {
       type: jsPsych.timelineVariable('type'),
       stimulus: jsPsych.timelineVariable('stimulus'),
@@ -174,6 +213,24 @@ var trial_block3 = {
       response_ends_trial: true,
       data: { iat_type: 'practice' }
     }
+=======
+  {
+    type: 'iat',
+    is_html: jsPsych.timelineVariable('is_html'),
+    stimulus: jsPsych.timelineVariable('stimulus'),
+    stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+    html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+    bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+    force_correct_key_press: true,
+    display_feedback: true,
+    timing_response: 3000, //Only if display_feedback is false
+    left_category_key: 'E',
+    right_category_key: 'I',
+    left_category_label: ['BAD', 'OLD'],
+    right_category_label: ['GOOD', 'YOUNG'],
+    response_ends_trial: true
+  }
+>>>>>>> minor cleanup
   ],
   timeline_variables: [
     {type: 'iat-image', stimulus: "img/age/of1.jpg", stim_key_association: "left"},
@@ -224,6 +281,7 @@ var instructions_block4 = {
 
 var trial_block4 = {
   timeline: [
+<<<<<<< HEAD
       {
         type: jsPsych.timelineVariable('type'),
         is_html: jsPsych.timelineVariable('is_html'),
@@ -241,6 +299,24 @@ var trial_block4 = {
         response_ends_trial: true,
         data: { iat_type: 'bad-old' }
       }
+=======
+  {
+      type: 'iat',
+      is_html: jsPsych.timelineVariable('is_html'),
+      stimulus: jsPsych.timelineVariable('stimulus'),
+      stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+      html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+      bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+      force_correct_key_press: true,
+      display_feedback: true,
+      timing_response: 3000, //Only if display_feedback is false
+      left_category_key: 'E',
+      right_category_key: 'I',
+      left_category_label: ['BAD', 'OLD'],
+      right_category_label: ['GOOD', 'YOUNG'],
+      response_ends_trial: true
+    }
+>>>>>>> minor cleanup
     ],
     timeline_variables: [
       {type: 'iat-image', stimulus: "img/age/of1.jpg", stim_key_association: "left"},
@@ -289,6 +365,7 @@ var trial_block4 = {
 
   var trial_block5 = { 
     timeline: [
+<<<<<<< HEAD
       {
         type: 'iat-image',
         is_html: false,
@@ -306,6 +383,24 @@ var trial_block4 = {
         response_ends_trial: true,
         data: { iat_type: 'practice' }
       }
+=======
+    {
+      type: 'iat',
+      is_html: false,
+      stimulus: jsPsych.timelineVariable('stimulus'),
+      stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+      html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+      bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+      force_correct_key_press: true,
+      display_feedback: true,
+      timing_response: 3000, //Only if display_feedback is false
+      left_category_key: 'E',
+      right_category_key: 'I',
+      left_category_label: ['YOUNG'],
+      right_category_label: ['OLD'],
+      response_ends_trial: true
+    }
+>>>>>>> minor cleanup
     ],
     timeline_variables: [
       {type: 'iat-image', stimulus: "img/age/of1.jpg", stim_key_association: "right"},
@@ -328,10 +423,17 @@ var trial_block4 = {
   var instructions_block6 = {
     type: 'text',
     text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>BAD</strong><br>" + "or<br>" +
+<<<<<<< HEAD
     "<strong>YOUNG</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" +
     "<strong>OLD</strong></div>" +
     "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Use <strong>E</strong> for Bad and for Young People<br>" +
     "Use <strong>I</strong> for Good and for Old People<br><br>" +
+=======
+    "<strong>OLD</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" +
+    "<strong>YOUNG</strong></div>" +
+    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Use <strong>E</strong> for Bad and for Old People<br>" +
+    "Use <strong>I</strong> for Good and for Young People<br><br>" +
+>>>>>>> minor cleanup
     "If you make a mistake, a red X will appear. Press the keys listed below " +
     "to continue. Go as fast as you can while being accurate.<br><br> " +
     "Press the any key when you are ready to start.</div>"
@@ -393,11 +495,19 @@ var trial_block4 = {
   var instructions_block7 = {
     type: 'text',
     text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>Bad</strong><br>" + "or<br>" +
+<<<<<<< HEAD
     "<strong>Young People</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>Good</strong><br>" + "or<br>" +
     "<strong>Old People</strong></div>" +
     "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>This is the same as the previous part<br>" +
     "Use <strong>E</strong> for Bad and for Young People<br>" +
     "Use <strong>I</strong> for Good and for Old People<br>" +
+=======
+    "<strong>Old People</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>Good</strong><br>" + "or<br>" +
+    "<strong>Young People</strong></div>" +
+    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>This is the same as the previous part<br>" +
+    "Use <strong>E</strong> for Bad and for Old People<br>" +
+    "Use <strong>I</strong> for Good and for Young People<br>" +
+>>>>>>> minor cleanup
     "Each item belongs to only one category<br><br>" +
     "If you make a mistake, a red X will appear. Press the keys listed below " +
     "to continue. Go as fast as you can while being accurate.<br><br> " +
@@ -461,6 +571,7 @@ var trial_block7 = {
   var debrief_block = {
     type: "text",
     text: function() {
+<<<<<<< HEAD
       // calculate D-score from https://faculty.washington.edu/agg/pdf/GB&N.JPSP.2003.pdf
       // first find mean RT
       var bad_old = jsPsych.data.get().filter({iat_type: 'bad-old'}).filterCustom(function(x) { return x.rt < 10000 });
@@ -478,6 +589,18 @@ var trial_block7 = {
         "<p>When the pairs were BAD/OLD and GOOD/YOUNG, it took you an average of <strong>"+Math.floor(mean_correct_responses_bad_old)+"ms</strong> to respond.</p>"+
         "<p>Your D score, an index of performance that takes into account this difference and the overall level of variability in your responses, is <strong>"+d.toFixed(2)+"</strong></p>"+
         "<p>For reference, the Project Implicit IAT website labels D scores above 0.15 as a slight bias, scores above 0.35 as a moderate bias, and scores above 0.65 a strong bias.</p>"
+=======
+      var sum = 0;
+      var IATtrials = jsPsych.data.get().filter({trial_type: 'iat'});
+      var numTrials = jsPsych.data.get().filter({trial_type: 'iat'}).count();
+      var n_correct = IATtrials.filter({correct: true}).count();
+      var total_iat_trials = IATtrials.count();
+      var percent_correct = Math.floor( n_correct / total_iat_trials * 100 );
+      var responseTime = IATtrials.select('rt').mean();
+
+      return "<p>You responded correctly on " + percent_correct + "% of the trials. " +
+      "Your average response time was " + "<strong>" + responseTime + "ms</strong></p>";
+>>>>>>> minor cleanup
     }
   };
 
