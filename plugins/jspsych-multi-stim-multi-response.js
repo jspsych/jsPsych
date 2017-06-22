@@ -189,6 +189,8 @@ jsPsych.plugins["multi-stim-multi-response"] = (function() {
 
     var whichStimulus = 0;
 
+    display_element.innerHTML = '';
+
     function showNextStimulus() {
 
       // display stimulus
