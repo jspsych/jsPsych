@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  
+
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-single-stim.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
@@ -12,7 +12,7 @@
     }
   </style>
 </head>
-
+<body></body>
 <script>
   var trial_1 = {
     type: 'single-stim',
@@ -32,20 +32,15 @@
   var trial_3 = {
     type: 'single-stim',
     choices: jsPsych.NO_KEYS, // Y or N
-    timing_response: 5000,
-    prompt: '<p class="center-content">No response allowed. 5s wait.</p>',
+    timing_response: 2000,
+    prompt: '<p class="center-content">No response allowed. 2s wait.</p>',
     stimulus: '<p>:)</p>',
     is_html: true
   }
 
-  var node = {
-    type: 'single-stim',
-    timeline: [trial_1, trial_2, trial_3],
-  }
-
 
   jsPsych.init({
-    timeline: [node],
+    timeline: [trial_1, trial_2, trial_3],
     on_finish: function() {
       jsPsych.data.displayData();
     },

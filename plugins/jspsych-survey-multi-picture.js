@@ -123,6 +123,7 @@ jsPsych.plugins['survey-multi-picture'] = (function() {
     var matches = display_element.querySelectorAll(".jspsych-survey-multi-picture-option");
     for(var index=0; index<matches.length; index++){
       currentImageDiv = matches[index];
+      currentImageDiv.cursor = 'pointer';
       currentImageDiv.addEventListener('click', function(event){
         var endTime = (new Date()).getTime();
         var response_time = endTime - startTime;

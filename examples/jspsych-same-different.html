@@ -2,7 +2,6 @@
 <html>
 
 <head>
-  
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-same-different.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
@@ -12,9 +11,9 @@
     }
   </style>
 </head>
-
+<body></body>
 <script>
-  var block = {
+  var trial = {
     type: 'same-different',
     stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
     prompt: "<p class='center-content'>Press S if the faces had the same emotional expression. Press D if the faces had different emotional expressions.</p>",
@@ -24,7 +23,7 @@
   }
 
   jsPsych.init({
-    timeline: [block],
+    timeline: [trial],
     on_finish: function() {
       jsPsych.data.displayData();
     }
