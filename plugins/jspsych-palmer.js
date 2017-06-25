@@ -100,7 +100,7 @@ jsPsych.plugins.palmer = (function() {
 
     var size = trial.grid_spacing * (trial.square_size + 1);
 
-    display_element.innerHTML += "<svg id='jspsych-palmer-snapCanvas' width='" + size + "' height='" + size + "'></svg>";
+    display_element.innerHTML = "<svg id='jspsych-palmer-snapCanvas' width='" + size + "' height='" + size + "'></svg>";
 
     var paper = Snap("#jspsych-palmer-snapCanvas");
 

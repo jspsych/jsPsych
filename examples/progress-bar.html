@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+<<<<<<< HEAD:examples/progress-bar.html
+=======
+
+>>>>>>> update examples; tweak plugin fixes:examples/jspsych-single-stim.html
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-single-stim.js"></script>
   <script src="../plugins/jspsych-text.js"></script>
@@ -10,6 +14,10 @@
       width: 300px;
     }
   </style>
+<<<<<<< HEAD:examples/progress-bar.html
+=======
+</head>
+>>>>>>> update examples; tweak plugin fixes:examples/jspsych-single-stim.html
 <body></body>
 <script>
   var trial_1 = {
@@ -28,6 +36,7 @@
 
   var trial_3 = {
     type: 'single-stim',
+<<<<<<< HEAD:examples/progress-bar.html
     stimulus: 'img/happy_face_3.jpg',
     choices: [89, 78], // Y or N
     prompt: '<p class="center-content">Have you seen this face before? Y or N.</p>'
@@ -52,6 +61,18 @@
   jsPsych.init({
     timeline: [trial_1, trial_2, trial_3], //block_set, end_screen],
     show_progress_bar: true,
+=======
+    choices: jsPsych.NO_KEYS, // Y or N
+    timing_response: 2000,
+    prompt: '<p class="center-content">No response allowed. 2s wait.</p>',
+    stimulus: '<p>:)</p>',
+    is_html: true
+  }
+
+
+  jsPsych.init({
+    timeline: [trial_1, trial_2, trial_3],
+>>>>>>> update examples; tweak plugin fixes:examples/jspsych-single-stim.html
     on_finish: function() {
       jsPsych.data.displayData();
     }
