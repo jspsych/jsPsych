@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
-    
+
     <script src="../jspsych.js"></script>
     <script src="../plugins/jspsych-text.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
-
+  <body></body>
   <script>
 
   var first = {
     type: 'text',
-    text: 'first trial! experiment will pause for 4s in between trials. press any key.',
+    text: 'first trial! experiment will pause for 2s in between trials. press any key.',
     timing_post_trial: 0,
     on_finish: function(){
       jsPsych.pauseExperiment();
-      setTimeout(jsPsych.resumeExperiment, 4000);
+      setTimeout(jsPsych.resumeExperiment, 2000);
     }
   }
 
