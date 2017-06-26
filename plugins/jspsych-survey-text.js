@@ -97,7 +97,7 @@ jsPsych.plugins['survey-text'] = (function() {
       html += '<div id="jspsych-survey-text-"'+i+'" class="jspsych-survey-text-question" style="margin: 2em 0em;">';
       html += '<p class="jspsych-survey-text">' + trial.questions[i] + '</p>';
       if(trial.rows[i] == 1){
-        html += '<input type="text" name="#jspsych-survey-text-response-' + i + '">'+trial.values[i]+'</input>';
+        html += '<input type="text" name="#jspsych-survey-text-response-' + i + '" size="'+trial.columns[i]+'">'+trial.values[i]+'</input>';
       } else {
         html += '<textarea name="#jspsych-survey-text-response-' + i + '" cols="' + trial.columns[i] + '" rows="' + trial.rows[i] + '">'+trial.values[i]+'</textarea>';
       }
