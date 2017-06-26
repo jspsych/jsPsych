@@ -139,12 +139,7 @@ jsPsych.plugins.xab = (function() {
       if (!target_left) {
         images = [trial.b_path, trial.a_path];
       }
-
-      if (!trial.is_html) {
-        display_element.innerHTML = '<img class="jspsych-xab-stimulus" src="'+trial.x_path+'"></img>';
-      } else {
-        display_element.innerHTML = '<div class="jspsych-xab-stimulus">'+trial.x_path+'</div>';
-      }
+      
       // show the options
       if (!trial.is_html) {
         display_element.innerHTML += '<img class="jspsych-xab-stimulus left" src="'+images[0]+'"></img>';
