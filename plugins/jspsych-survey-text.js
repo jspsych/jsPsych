@@ -53,9 +53,9 @@ jsPsych.plugins['survey-text'] = (function() {
       },
       button_label: {
         type: [jsPsych.plugins.parameterType.STRING],
-        default: '',
+        default: 'Next',
         no_function: false,
-        description: 'Submit Answers'
+        description: ''
       }
     }
   }
@@ -63,7 +63,7 @@ jsPsych.plugins['survey-text'] = (function() {
   plugin.trial = function(display_element, trial) {
 
     trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
-    trial.button_label = typeof trial.button_label === 'undefined' ? 'Submit Answers' : trial.button_label;
+    trial.button_label = typeof trial.button_label === 'undefined' ? 'Next' : trial.button_label;
 
     if (typeof trial.rows == 'undefined') {
       trial.rows = [];

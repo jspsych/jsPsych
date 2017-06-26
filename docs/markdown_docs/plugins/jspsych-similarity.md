@@ -29,7 +29,7 @@ timing_first_stim | numeric | 1000 | How long to show the first stimulus for in 
 timing_second_stim | numeric | -1 |  How long to show the second stimulus for in milliseconds. -1 will show the stimulus until a response is made by the subject.
 timing_image_gap | numeric | 1000 | How long to show a blank screen in between the two stimuli.
 prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take.
-button_label | string | 'Submit Answers' | The text that appears on the button to finish the trial.
+button_label | string | 'Next' | The text that appears on the button to finish the trial.
 
 
 ## Data Generated

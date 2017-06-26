@@ -39,7 +39,7 @@ jsPsych.plugins['survey-likert'] = (function() {
       },
       button_label: {
         type: [jsPsych.plugins.parameterType.STRING],
-        default: 'Submit Answers',
+        default: 'Next',
         no_function: false,
         description: ''
       }
@@ -51,7 +51,7 @@ jsPsych.plugins['survey-likert'] = (function() {
     // default parameters for the trial
     trial.preamble = typeof trial.preamble === 'undefined' ? "" : trial.preamble;
     trial.required = typeof trial.required === 'undefined' ? false : trial.required;
-    trial.button_label = typeof trial.button_label === 'undefined' ? 'Submit Answers' : trial.button_label;
+    trial.button_label = typeof trial.button_label === 'undefined' ? 'Next' : trial.button_label;
 
     // if any trial variables are functions
     // this evaluates the function and replaces
