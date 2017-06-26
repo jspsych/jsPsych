@@ -86,7 +86,7 @@ jsPsych.plugins.palmer = (function() {
     trial.timing_item = trial.timing_item || 1000;
     trial.timing_feedback = trial.timing_feedback || 1000;
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
-    trial.button_label = typeof trial.button_label === 'undefined' ? 'Submit' : trial.button_label;
+    trial.button_label = typeof trial.button_label === 'undefined' ? 'Next' : trial.button_label;
 
     // if any trial variables are functions
     // this evaluates the function and replaces

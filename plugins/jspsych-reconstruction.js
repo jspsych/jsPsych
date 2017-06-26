@@ -53,9 +53,13 @@ jsPsych.plugins['reconstruction'] = (function() {
         default: 'Next',
         no_function: false,
 <<<<<<< HEAD
+<<<<<<< HEAD
         description: ''
 =======
         description: 'Submit'
+>>>>>>> change default button label
+=======
+        description: ''
 >>>>>>> change default button label
       }
     }
@@ -69,9 +73,13 @@ jsPsych.plugins['reconstruction'] = (function() {
     trial.key_increase = trial.key_increase || 'h';
     trial.key_decrease = trial.key_decrease || 'g';
 <<<<<<< HEAD
+<<<<<<< HEAD
     trial.button_label = typeof trial.button_label === 'undefined' ? 'Next' : trial.button_label;
 =======
     trial.button_label = typeof trial.button_label === 'undefined' ? 'Submit' : trial.button_label;
+>>>>>>> change default button label
+=======
+    trial.button_label = typeof trial.button_label === 'undefined' ? 'Next' : trial.button_label;
 >>>>>>> change default button label
 
     // if any trial variables are functions
