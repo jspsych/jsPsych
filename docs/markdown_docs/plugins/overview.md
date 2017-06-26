@@ -84,7 +84,8 @@ This table is a description of all plugins that are currently bundled with jsPsy
  [jspsych&#8209;single&#8209;audio](jspsych-single-audio) | A basic plugin for playing an audio stimulus and getting a keyboard response.
  [jspsych&#8209;single&#8209;stim](jspsych-single-stim) | A basic plugin for displaying a stimulus and getting a keyboard response.
  [jspsych&#8209;survey&#8209;likert](jspsych-survey-likert) | Displays likert-style questions.
- [jspsych&#8209;survey&#8209;multi&#8209;choice](jspsych-survey-multi-choice) | Displays multiple choice questions.
+ [jspsych&#8209;survey&#8209;multi&#8209;choice](jspsych-survey-multi-choice) | Displays multiple choice questions with one answer allowed per question.
+ [jspsych&#8209;survey&#8209;multi&#8209;select](jspsych-survey-multi-select) | Displays multiple choice questions with multiple answes allowed per question.
  [jspsych&#8209;survey&#8209;text](jspsych-survey-text) | Shows a prompt with a text box. The subject writes a response and then submits by clicking a button.
  [jspsych&#8209;text](jspsych-text) | Shows HTML-formatted text on the screen.
  [jspsych&#8209;video](jspsych-video) | Displays a video file and autoadvances to the next trial when the video is complete.
