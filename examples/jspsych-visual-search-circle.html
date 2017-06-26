@@ -2,19 +2,19 @@
 <html>
 
 <head>
-  
+
   <script src="js/snap.svg-min.js"></script>
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-text.js"></script>
   <script src="../plugins/jspsych-visual-search-circle.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
 </head>
-
+<body></body>
 <script>
 
   var intro = {
     type: 'text',
-    text: 'Press J if there is a backwards N. If there is no backwards N press F.'
+    text: '<p>You will see a set of Ns on the following screens. Press J if there is a backwards N. If there is no backwards N press F.</p><p>Press any key to begin.</p>'
   }
 
   var trial_1 = {
@@ -34,7 +34,7 @@
 
   var trial_4 = {
     target_present: false,
-    foil: ['img/1.gif', 'img/2.gif', 'img/3.gif'],
+    foil: ['img/1.gif', 'img/2.gif', 'img/3.gif'], // example of using multiple foils.
     set_size: 3
   }
 

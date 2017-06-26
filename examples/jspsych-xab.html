@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-xab.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
   <style>
     img {
       width: 300px;
+      margin: 20px;
     }
   </style>
 </head>
-
+<body></body>
 <script>
-  var block_1 = {
+
+  var trial = {
     type: 'xab',
     stimuli: ['img/happy_face_1.jpg', 'img/happy_face_2.jpg'],
     prompt: "<p class='center-content'>Press Q if the face you just saw is on the left. Press P if the face you just saw is on the right.</p>",
@@ -22,7 +22,7 @@
   }
 
   jsPsych.init({
-    timeline: [block_1],
+    timeline: [trial],
     on_finish: function() {
       jsPsych.data.displayData();
     }
