@@ -93,13 +93,13 @@ jsPsych.plugins.video = (function() {
       var s = trial.sources[i];
       var type = s.substr(s.lastIndexOf('.') + 1);
       type = type.toLowerCase();
-      
+
       // adding start stop parameters if specified
       video_html+='<source src="'+s
-      
+
       if (trial.start) {
         video_html+= '#t=' + trial.start;
-      } else { 
+      } else {
         video_html+= '#t=0';
       }
 
@@ -108,15 +108,15 @@ jsPsych.plugins.video = (function() {
       }
 
       video_html+='" type="video/'+type+'">';
-    } 
+    }
     video_html +="</video>"
-
-    display_element.innerHTML += video_html;
 
     //show prompt if there is one
     if (trial.prompt !== "") {
-      display_element.innerHTML += trial.prompt;
+      video_html += trial.prompt;
     }
+
+    display_element.innerHTML = video_html;
 
     display_element.querySelector('#jspsych-video-player').onended = function(){
       end_trial();
