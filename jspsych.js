@@ -22,6 +22,7 @@ window.jsPsych = (function() {
   var current_trial = {};
   var current_trial_finished = false;
   // target DOM element
+  var DOM_container;
   var DOM_target;
   // time that the experiment began
   var exp_start_time;
@@ -114,6 +115,7 @@ window.jsPsych = (function() {
       }
     }
     opts.display_element.innerHTML = '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
+    DOM_container = opts.display_element;
     DOM_target = document.querySelector('#jspsych-content');
 
     // add tabIndex attribute to scope event listeners
@@ -188,6 +190,10 @@ window.jsPsych = (function() {
   core.getDisplayElement = function() {
     return DOM_target;
   };
+
+  core.getDisplayContainerElement = function(){
+    return DOM_container;
+  }
 
   core.finishTrial = function(data) {
 

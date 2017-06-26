@@ -61,7 +61,7 @@ jsPsych.plugins.text = (function() {
       if(keyboardListener !== null){
         jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
       }
-      
+
       var trialdata = {
         "rt": info.rt,
         "key_press": info.key
@@ -75,7 +75,7 @@ jsPsych.plugins.text = (function() {
 
       var rt = (new Date()).getTime() - start_time;
 
-      display_element.removeEventListener('click', mouse_listener);
+      jsPsych.getDisplayContainerElement().removeEventListener('click', mouse_listener);
 
       after_response({
         key: 'mouse',
@@ -86,7 +86,7 @@ jsPsych.plugins.text = (function() {
 
     // check if key is 'mouse'
     if (trial.allow_mouse_click) {
-      display_element.addEventListener(mouse_listener);
+      jsPsych.getDisplayContainerElement().addEventListener('click', mouse_listener);
       var start_time = (new Date()).getTime();
     }
     keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
