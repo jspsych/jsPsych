@@ -79,7 +79,6 @@ This table is a description of all plugins that are currently bundled with jsPsy
  [jspsych&#8209;same&#8209;different](jspsych-same-different) | A same-different judgment task. A stimulus is shown, followed by a brief gap, and then another stimulus is shown. The subject indicates whether the stimuli are the same or different.
  [jspsych&#8209;serial&#8209;reaction&#8209;time](jspsych-serial-reaction-time) | A set of boxes are displayed on the screen and one of them changes color. The subject presses a key that corresponds to the different color box as fast as possible.
   [jspsych&#8209;serial&#8209;reaction&#8209;time&#8209;mouse](jspsych-serial-reaction-time-mouse) | A set of boxes are displayed on the screen and one of them changes color. The subjects clicks the box that changed color as fast as possible.
- [jspsych&#8209;similarity](jspsych-similarity) | Two stimuli are shown sequentially, and the subject indicates how similar they are by dragging a slider object.
  [jspsych&#8209;single&#8209;audio](jspsych-single-audio) | A basic plugin for playing an audio stimulus and getting a keyboard response.
  [jspsych&#8209;single&#8209;stim](jspsych-single-stim) | A basic plugin for displaying a stimulus and getting a keyboard response.
  [jspsych&#8209;survey&#8209;likert](jspsych-survey-likert) | Displays likert-style questions.
