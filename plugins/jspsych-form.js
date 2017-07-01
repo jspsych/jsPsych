@@ -183,7 +183,7 @@ var schema = {
         if (customized_output)
           trial_data["#Customized Output#"] = customized_output;
 
-        display_element.html('');
+        display_element.innerHTML = '';
         jsPsych.finishTrial(trial_data);
       }
 
@@ -393,7 +393,7 @@ var schema = {
 
     // this.layout_color = item.layout_color || "grey-300";
     this.layout_color = item.layout_color || "white-300";
-    this.boxShadow = item.boxShadow || 4;
+    this.boxShadow = item.boxShadow || 0;
 
     // this.ribbon_color = item.ribbon_color || '#3F51B5';
     this.ribbon_color = item.ribbon_color || 'white-300';
@@ -435,18 +435,18 @@ var schema = {
     // jsPsych Forms</div></div></main>'.format(
     //   this.content_bg_color, this.context_text_color, this.id, this.form_title_html);
 
-    this.content = '<main class="mdl-layout__content" style="margin-top: -35vh;-webkit-flex-shrink: 0;-ms-flex-negative: 0;flex-shrink: 0;">\
+    this.content = '<main class="mdl-layout__content" style="position: relative;margin-top: -35vh;-webkit-flex-shrink: 0;-ms-flex-negative: 0;flex-shrink: 0;">\
     <div class="mdl-grid" style="max-width: 1600px;width: calc(100% - 16px);margin: 0 auto;margin-top: 10vh;">\
     <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>\
     <div class="mdl-color--{0} mdl-shadow--{4}dp mdl-cell mdl-cell--8-col" style="border-radius: 2px;padding: 80px 56px;margin-bottom: 80px;">\
-    <div class="mdl-color-text--{1}" id="{2}" style="width: 512px;">{3}</div></div>\
+    <div class="mdl-color-text--{1}" id="{2}" style="">{3}</div></div>\
     <div class="mdl-layout mdl-color-text--grey-600" style="text-align: center; font-size: 12px; margin-top: -60px">\
     </div><div class="mdl-layout mdl-color-text--grey-700" style="text-align: center; font-size: 19px; margin-top: -30px">\
     </div></div></main>'.format(
       this.content_bg_color, this.context_text_color, this.id, this.form_title_html, this.boxShadow);
 
 
-    this.html = '<form><div class="mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--{0}">{1}{2}</div></form>'.format(
+    this.html = '<form><div style="text-align: left;">{1}{2}</div></form>'.format(
       this.layout_color, this.ribbon, this.content);
 
     this.render();
@@ -879,13 +879,12 @@ Dropdown.prototype._option_factory = function() {
   InputTextField.prototype = inherit(Tag.prototype);
   InputTextField.prototype._generate = function() {
     var component = '<input class="mdl-textfield__input" type="{0}" id="{1}" maxlength="{2}" size="{3}"\
-    {4} {5} pattern="{6}" {7} {8} {9} {10} {11} {12} value="{13}" form="{14}">'.format(
+    {4} {5} pattern="{6}" {7} {8} {9} {10} {11} {12} value="{13}" form="{14}" placeholder="{15}"">'.format(
       this.type, this.id, this.maxlength, this.size,
       this.required, this.readonly, this.pattern,
       this.disabled, this.autofocus, this.accessKey,
       this.alt, this.defaultValue, this.tabIndex,
-      this.value, this.parent_id) +
-    '<label class="mdl-textfield__label" for="{0}">{1}</label>'.format(this.id, this.label) +
+      this.value, this.parent_id, this.label) +
     '<span class="mdl-textfield__error">{0}</span>'.format(this.errorInfo);
 
     if (this.expandable != "")
@@ -1082,9 +1081,8 @@ Dropdown.prototype._option_factory = function() {
   }
   Textarea.prototype = inherit(Tag.prototype);
   Textarea.prototype._generate = function() {
-    var component = '<textarea class="mdl-textfield__input" id="{0}" rows={1} columns={2} form="{4}" maxlength="{4}" {5} {6} {7} {8} {9} name="{10}"></textarea>'.format(
-      this.id, this.rows, this.cols, this.parent_id, this.maxlength, this.readonly, this.required, this.disabled, this.autofocus, this.wrap, this.name) +
-    '<label class="mdl-textfield__label" for="{0}">{1}</label>'.format(this.id, this.placeholder);
+    var component = '<textarea class="mdl-textfield__input" id="{0}" rows={1} columns={2} form="{4}" maxlength="{4}" {5} {6} {7} {8} {9} name="{10}" placeholder="{11}"></textarea>'.format(
+      this.id, this.rows, this.cols, this.parent_id, this.maxlength, this.readonly, this.required, this.disabled, this.autofocus, this.wrap, this.name, this.placeholder) 
 
     return '<div class="{0}">{1}<div>'.format(this.style, component);
   }
