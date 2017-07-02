@@ -23,7 +23,10 @@ jsPsych.plugins['slider-response'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
+    trial.min = trial.min || 0;
+    trial.max = trial.max || 100;
+    trial.step = trial.step || 1;
+
     trial.button_label = typeof trial.button_label === 'undefined' ? 'Next' : trial.button_label;
     //trial.slider_width = trial.slider_width || 400;
     // if any trial variables are functions
@@ -31,14 +34,10 @@ jsPsych.plugins['slider-response'] = (function() {
     // it with the output of the function
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
-    // show preamble text
-    var html = '<div id="jspsych-slider-response-preamble" class="jspsych-slider-response-preamble">'+trial.preamble+'</div>';
-
-    // add questions
-
-    html += '<div id="jspsych-slider-response" class="jspsych-slider-response-question" style="margin: 2em 0em;">';
+    var html = '<div id="jspsych-slider-response" class="jspsych-slider-response-question" style="margin: 100px 0px;">';
     html += '<div class="jspsych-slider-response-question-text">' + trial.stimulus + '</div>';
-    html += '<div class="jspsych-slider-response-container" style="position:relative;"><input type="range" style="width: 100%;" name="jspsych-slider-response-response"></input>';
+    html += '<div class="jspsych-slider-response-container" style="position:relative;">';
+    html += '<input type="range" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" name="jspsych-slider-response-response"></input>';
     html += '<div>'
     for(var j=0; j < trial.labels.length; j++){
       var width = 100/(trial.labels.length-1);
