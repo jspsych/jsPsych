@@ -13,6 +13,8 @@ jsPsych.plugins['slider-response'] = (function() {
 
   var plugin = {};
 
+  jsPsych.pluginAPI.registerPreload('slider-response', 'stimulus', 'image', function(t){ return !t.is_html || t.is_html == 'undefined'});
+
   plugin.info = {
     name: 'slider-response',
     description: '',
@@ -26,9 +28,9 @@ jsPsych.plugins['slider-response'] = (function() {
     trial.min = trial.min || 0;
     trial.max = trial.max || 100;
     trial.step = trial.step || 1;
-
+    trial.is_html = typeof trial.is_html === 'undefined' ? false : trial.is_html;
     trial.button_label = typeof trial.button_label === 'undefined' ? 'Next' : trial.button_label;
-    //trial.slider_width = trial.slider_width || 400;
+
     // if any trial variables are functions
     // this evaluates the function and replaces
     // it with the output of the function
@@ -37,7 +39,7 @@ jsPsych.plugins['slider-response'] = (function() {
     var html = '<div id="jspsych-slider-response" class="jspsych-slider-response-question" style="margin: 100px 0px;">';
     html += '<div class="jspsych-slider-response-question-text">' + trial.stimulus + '</div>';
     html += '<div class="jspsych-slider-response-container" style="position:relative;">';
-    html += '<input type="range" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" name="jspsych-slider-response-response"></input>';
+    html += '<input type="range" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-slider-response-response"></input>';
     html += '<div>'
     for(var j=0; j < trial.labels.length; j++){
       var width = 100/(trial.labels.length-1);
@@ -60,20 +62,10 @@ jsPsych.plugins['slider-response'] = (function() {
       var endTime = (new Date()).getTime();
       var response_time = endTime - startTime;
 
-      // create object to hold responses
-      var question_data = {};
-      var matches = display_element.querySelectorAll('div.jspsych-slider-response-question');
-      for(var index=0; index<matches.length; index++){
-        var id = "Q" + index;
-        var val = matches[index].querySelector('input').value;
-        var obje = {};
-        obje[id] = val;
-        Object.assign(question_data, obje);
-      }
       // save data
       var trialdata = {
         "rt": response_time,
-        "responses": JSON.stringify(question_data)
+        "response": display_element.querySelector('#jspsych-slider-response-response').value
       };
 
       display_element.innerHTML = '';
