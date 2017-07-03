@@ -57,6 +57,13 @@ return "<p>Your average response time for congruent " +
 <sub>
 
 ```javascript
+
+
+
+
+
+
+
   var trial = {
     type: 'instructions',
     pages: [
@@ -74,6 +81,13 @@ return "<p>Your average response time for congruent " +
     timeline: [trial],
     on_finish: function(){ jsPsych.data.displayData(); }
   });
+  
+  
+  
+  
+  
+  
+  
   ```
   
 </sub>
