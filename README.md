@@ -66,11 +66,13 @@ return "<p>Your average response time for congruent " +
 
 
 
+
   var trial = {
     type: 'instructions',
     pages: [
       'Welcome to the experiment. Click next to begin.',
-      '<div>In this experiment, you will be given a series of images and asked a question.<br>' +
+      '<div>In this experiment, you will be given a ' +
+      'series of images and asked a question.<br>' +
       'Answer with the keys "y" or "n".',
       'Here is an example:<br><br> ' +
       '<img src="img/age/of2.jpg"></img><br><br>' +
@@ -83,6 +85,7 @@ return "<p>Your average response time for congruent " +
     timeline: [trial],
     on_finish: function(){ jsPsych.data.displayData(); }
   });
+  
   
   
   
