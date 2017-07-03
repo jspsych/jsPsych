@@ -2,9 +2,9 @@
 
 jsPsych is a JavaScript library for creating behavioral experiments that run in a web browser. jsPsych creates a framework for defining experiments and provides a set of flexible plugins that create different kinds of tasks a subject could complete during an experiment. By assembling different plugins together and customizing the parameters of each, it is possible to create many different types of experiments.
 
-<div markdown="1" style="width: 50%;">
-![Demo](https://user-images.githubusercontent.com/14092539/27804246-df170e8e-5ffb-11e7-8257-361afe46861b.gif)
-</div>
+<div display="flex"/>
+<img src="https://user-images.githubusercontent.com/14092539/27804246-df170e8e-5ffb-11e7-8257-361afe46861b.gif" align="right" width=50% />
+
 
 <div markdown="2" style="width: 50%;">
 
@@ -41,6 +41,7 @@ return "<p>Your average response time for congruent trials was <strong>" + congr
 };
 ```
 
+</div>
 </div>
 
 ![Demo](https://user-images.githubusercontent.com/14092539/27794834-cc32c936-5fd1-11e7-9c37-f2dc5cabe32d.gif)
