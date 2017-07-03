@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Flanker Task</title>
+        <script src="../jspsych.js"></script>
+        <script src="../plugins/jspsych-text.js"></script>
+        <script src="../plugins/jspsych-single-stim.js"></script>
+        <link rel="stylesheet" href="../css/jspsych.css">
+        <style>
+        #jspsych-single-stim-stimulus {
+            font-size: 500%;
+        }
+        </style>
+    </head>
+    <body>
+    </body>
+    <script>
+        var test_stimuli = [
+          { stimulus: "<<<<<", data: { stim_type: 'congruent', direction: 'left'} },
+          { stimulus: ">>>>>", data: { stim_type: 'congruent', direction: 'right'} },
+          { stimulus: "<<><<", data: { stim_type: 'incongruent', direction: 'right'} },
+          { stimulus: ">><>>", data: { stim_type: 'incongruent', direction: 'left'} }
+        ];
+
+        var test = {
+          timeline: [{
+            type: 'single-stim',
+            choices: [37, 39],
+            is_html: true,
+            stimulus: jsPsych.timelineVariable('stimulus'),
+            data: jsPsych.timelineVariable('data'),
+            timing_response: 1500,
+            response_ends_trial: false
+          }],
+          timeline_variables: test_stimuli,
+          sample: {type: 'fixed-repetitions', size: 2}
+        };
+
+        var debrief = {
+          type: "text",
+          text: function() {
+            var congruent_rt = Math.round(jsPsych.data.get().filter({stim_type: 'congruent'}).select('rt').mean());
+            var incongruent_rt = Math.round(jsPsych.data.get().filter({stim_type: 'incongruent'}).select('rt').mean());
+            return "<p>Your average response time for congruent trials was <strong>" + congruent_rt + "ms</strong>.</p>"+
+            "<p>Your average response time for incongruent trials was <strong>" + incongruent_rt + "ms</strong>.</p>";
+          }
+        };
+
+        var timeline = [];
+        timeline.push(test);
+        timeline.push(debrief);
+
+        jsPsych.init({
+            timeline: timeline,
+            on_finish: function() {
+                jsPsych.data.displayData();
+            }
+        });
+    </script>
+</html>
