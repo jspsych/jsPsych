@@ -64,6 +64,8 @@ return "<p>Your average response time for congruent " +
 
 
 
+
+
   var trial = {
     type: 'instructions',
     pages: [
@@ -88,10 +90,15 @@ return "<p>Your average response time for congruent " +
   
   
   
+  
+  
   ```
   
 </sub>
 </div>
+</div>
+
+
 Documentation
 -------------
 
