@@ -7,6 +7,7 @@ jsPsych is a JavaScript library for creating behavioral experiments that run in 
 
 
 <div markdown="2" style="width: 50%;">
+<sub>
 
 ```javascript
 var test_stimuli = [
@@ -41,6 +42,7 @@ return "<p>Your average response time for congruent trials was <strong>" + congr
 };
 ```
 
+</sub>
 </div>
 </div>
 
