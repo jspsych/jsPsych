@@ -11,10 +11,10 @@ jsPsych is a JavaScript library for creating behavioral experiments that run in 
 
 ```javascript
 var test_stimuli = [
-{ stimulus: "<<<<<", data: { stim_type: 'congruent', direction: 'left'} },
-{ stimulus: ">>>>>", data: { stim_type: 'congruent', direction: 'right'} },
-{ stimulus: "<<><<", data: { stim_type: 'incongruent', direction: 'right'} },
-{ stimulus: ">><>>", data: { stim_type: 'incongruent', direction: 'left'} }
+{ stimulus: "<<<<<", data: { stim_type: 'congruent'} },
+{ stimulus: ">>>>>", data: { stim_type: 'congruent'} },
+{ stimulus: "<<><<", data: { stim_type: 'incongruent'} },
+{ stimulus: ">><>>", data: { stim_type: 'incongruent'} }
 ];
 
 var test = {
@@ -34,10 +34,14 @@ sample: {type: 'fixed-repetitions', size: 2}
 var debrief = {
 type: "text",
 text: function() {
-var congruent_rt = Math.round(jsPsych.data.get().filter({stim_type: 'congruent'}).select('rt').mean());
-var incongruent_rt = Math.round(jsPsych.data.get().filter({stim_type: 'incongruent'}).select('rt').mean());
-return "<p>Your average response time for congruent trials was <strong>" + congruent_rt + "ms</strong>.</p>"+
-"<p>Your average response time for incongruent trials was <strong>" + incongruent_rt + "ms</strong>.</p>";
+var congruent_rt = Math.round(jsPsych.data.get()
+.filter({stim_type: 'congruent'}).select('rt').mean());
+var incongruent_rt = Math.round(jsPsych.data.get()
+.filter({stim_type: 'incongruent'}).select('rt').mean());
+return "<p>Your average response time for congruent " + 
+"trials was <strong>" + congruent_rt + "ms</strong>.</p>"+
+"<p>Your average response time for incongruent trials " +
+"was <strong>" + incongruent_rt + "ms</strong>.</p>";
 }
 };
 ```
