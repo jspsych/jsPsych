@@ -94,7 +94,6 @@ return "<p>Your average response time for congruent " +
   
   
   
-  
   ```
   
 </sub>
