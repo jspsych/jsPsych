@@ -6,43 +6,43 @@ jsPsych is a JavaScript library for creating behavioral experiments that run in 
 <img src="https://user-images.githubusercontent.com/14092539/27804246-df170e8e-5ffb-11e7-8257-361afe46861b.gif" align="right" width=50% height=525/>
 
 
-<div markdown="2" style="width: 50%;">
+<div markdown="1" style="width: 50%;">
 <sub>
 
 ```javascript
 var test_stimuli = [
-  { stimulus: "<<<<<", data: { stim_type: 'congruent'} },
-  { stimulus: ">>>>>", data: { stim_type: 'congruent'} },
-  { stimulus: "<<><<", data: { stim_type: 'incongruent'} },
-  { stimulus: ">><>>", data: { stim_type: 'incongruent'} }
+{ stimulus: "<<<<<", data: { stim_type: 'congruent'} },
+{ stimulus: ">>>>>", data: { stim_type: 'congruent'} },
+{ stimulus: "<<><<", data: { stim_type: 'incongruent'} },
+{ stimulus: ">><>>", data: { stim_type: 'incongruent'} }
 ];
 
 var test = {
-  timeline: [{
-    type: 'single-stim',
-    choices: [37, 39],
-    is_html: true,
-    stimulus: jsPsych.timelineVariable('stimulus'),
-    data: jsPsych.timelineVariable('data'),
-    timing_response: 1500,
-    response_ends_trial: false
-  }],
-  timeline_variables: test_stimuli,
-  sample: {type: 'fixed-repetitions', size: 2}
+timeline: [{
+type: 'single-stim',
+choices: [37, 39],
+is_html: true,
+stimulus: jsPsych.timelineVariable('stimulus'),
+data: jsPsych.timelineVariable('data'),
+timing_response: 1500,
+response_ends_trial: false
+}],
+timeline_variables: test_stimuli,
+sample: {type: 'fixed-repetitions', size: 2}
 };
 
 var debrief = {
-  type: "text",
-  text: function() {
-    var congruent_rt = Math.round(jsPsych.data.get()
-      .filter({stim_type: 'congruent'}).select('rt').mean());
-    var incongruent_rt = Math.round(jsPsych.data.get()
-      .filter({stim_type: 'incongruent'}).select('rt').mean());
-    return "<p>Your average response time for congruent " + 
-    "trials was <strong>" + congruent_rt + "ms</strong>.</p>"+
-    "<p>Your average response time for incongruent trials " +
-    "was <strong>" + incongruent_rt + "ms</strong>.</p>";
-  }
+type: "text",
+text: function() {
+var congruent_rt = Math.round(jsPsych.data.get()
+.filter({stim_type: 'congruent'}).select('rt').mean());
+var incongruent_rt = Math.round(jsPsych.data.get()
+.filter({stim_type: 'incongruent'}).select('rt').mean());
+return "<p>Your average response time for congruent " + 
+"trials was <strong>" + congruent_rt + "ms</strong>.</p>"+
+"<p>Your average response time for incongruent trials " +
+"was <strong>" + incongruent_rt + "ms</strong>.</p>";
+}
 };
 ```
 
