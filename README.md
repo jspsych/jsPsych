@@ -50,9 +50,34 @@ return "<p>Your average response time for congruent " +
 </div>
 </div>
 
-![Demo](https://user-images.githubusercontent.com/14092539/27794834-cc32c936-5fd1-11e7-9c37-f2dc5cabe32d.gif)
-![Demo](https://user-images.githubusercontent.com/14092539/27794978-4fe9c2c0-5fd2-11e7-8a96-28d72fa103d1.gif)
+<div display="flex">
+<img src="https://user-images.githubusercontent.com/14092539/27807582-c9e2c242-600f-11e7-942e-60866c18228e.gif" align="right" width=50% height=525 />
 
+<div markdown="2" style="width: 50%;">
+<sub>
+
+```javascript
+  var trial = {
+    type: 'instructions',
+    pages: [
+      'Welcome to the experiment. Click next to begin.',
+      '<div>In this experiment, you will be given a series of images and asked a question.<br>' +
+      'Answer with the keys "y" or "n".',
+      'Here is an example:<br><br> ' +
+      '<img src="img/age/of2.jpg"></img><br><br>' +
+      'Is this person OLD or YOUNG?'
+    ],
+    show_clickable_nav: true
+  }
+
+  jsPsych.init({
+    timeline: [trial],
+    on_finish: function(){ jsPsych.data.displayData(); }
+  });
+  ```
+  
+</sub>
+</div>
 Documentation
 -------------
 
