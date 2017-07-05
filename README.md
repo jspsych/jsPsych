@@ -2,7 +2,7 @@
 
 jsPsych is a JavaScript library for creating behavioral experiments that run in a web browser. jsPsych creates a framework for defining experiments and provides a set of flexible plugins that create different kinds of tasks a subject could complete during an experiment. By assembling different plugins together and customizing the parameters of each, it is possible to create many different types of experiments.
 
-<div display="flex"/>
+<div display="flex">
 <img src="https://user-images.githubusercontent.com/14092539/27804246-df170e8e-5ffb-11e7-8257-361afe46861b.gif" align="right" width=50% height=525/>
 
 
@@ -99,6 +99,52 @@ return "<p>Your average response time for congruent " +
 </div>
 </div>
 
+
+<div display="flex">
+<img src="https://user-images.githubusercontent.com/14092539/27866004-b8aa4f28-6162-11e7-9eaf-02c08226cfca.gif" align="right"
+width=50% height=525/>
+
+<div markdown="2" style="width: 50%;">
+<sub>
+
+```javascript
+  var trial_1 = {
+    type: 'single-stim',
+    stimulus: 'img/happy_face_1.jpg',
+    choices: [89, 78], // Y or N
+    prompt: '<p class="center-content">Is this face happy? Y or N.</p>'
+  }
+
+  var trial_2 = {
+    type: 'single-stim',
+    stimulus: 'img/sad_face_2.jpg',
+    choices: [89, 78], // Y or N
+    timing_response: 5000,
+    prompt: '<p class="center-content">Is this face happy? Y or N. (5s time limit).</p>'
+  }
+
+  var trial_3 = {
+    type: 'single-stim',
+    choices: jsPsych.NO_KEYS, // Y or N
+    timing_response: 2000,
+    prompt: '<p class="center-content">No response allowed at this point. 2s wait.</p>',
+    stimulus: '<p></p>',
+    is_html: true
+  }
+
+
+  jsPsych.init({
+    timeline: [trial_1, trial_2, trial_3],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+```
+
+</sub>
+
+</div>
 
 Documentation
 -------------
