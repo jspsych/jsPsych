@@ -64,6 +64,7 @@ width=50% height=525/>
 ```javascript
 
 
+
  var trial_1 = {
     type: 'single-stim',
     stimulus: 'img/age/ym3.jpg',
@@ -94,6 +95,7 @@ width=50% height=525/>
     timeline: [trial_1, trial_2, trial_3],
     default_iti: 250
   });
+  
   
   
 ```
