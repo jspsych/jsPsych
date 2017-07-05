@@ -68,7 +68,8 @@ width=50% height=525/>
     type: 'single-stim',
     stimulus: 'img/happy_face_1.jpg',
     choices: [89, 78], // Y or N
-    prompt: '<p class="center-content">Is this face happy? Y or N.</p>'
+    prompt: '<p class="center-content">
+    Is this face happy? Y or N.</p>'
   }
 
   var trial_2 = {
@@ -76,14 +77,16 @@ width=50% height=525/>
     stimulus: 'img/sad_face_2.jpg',
     choices: [89, 78], // Y or N
     timing_response: 5000,
-    prompt: '<p class="center-content">Is this face happy? Y or N. (5s time limit).</p>'
+    prompt: '<p class="center-content">
+    Is this face happy? Y or N. (5s time limit).</p>'
   }
 
   var trial_3 = {
     type: 'single-stim',
     choices: jsPsych.NO_KEYS, // Y or N
     timing_response: 2000,
-    prompt: '<p class="center-content">No response allowed at this point. 2s wait.</p>',
+    prompt: '<p class="center-content"
+    >No response allowed at this point. 2s wait.</p>',
     stimulus: '<p></p>',
     is_html: true
   }
