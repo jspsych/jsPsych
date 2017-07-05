@@ -4,12 +4,13 @@ jsPsych is a JavaScript library for creating behavioral experiments that run in 
 
 Here is a simple example of how to use the instructions plugin:
 <div display="flex">
-<img src="https://user-images.githubusercontent.com/14092539/27807582-c9e2c242-600f-11e7-942e-60866c18228e.gif" align="right" width=50% height=525 />
+<img src="https://user-images.githubusercontent.com/14092539/27882312-2e010dd4-619a-11e7-89f8-8bf5dbdc0449.gif" align="right" width=50% height=525 />
 
 <div markdown="2" style="width: 50%;">
 <sub>
 
 ```javascript
+
 
 
 
@@ -35,7 +36,6 @@ Here is a simple example of how to use the instructions plugin:
 
   jsPsych.init({
     timeline: [trial],
-    on_finish: function(){ jsPsych.data.displayData(); }
   });
   
   
