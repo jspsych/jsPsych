@@ -24,8 +24,8 @@ Here is a simple example of how to use the instructions plugin:
     type: 'instructions',
     pages: [
       'Welcome to the experiment. Click next to begin.',
-      '<div>In this experiment, you will be given a ' +
-      'series of images and asked a question.<br>' +
+      '<div>In this experiment, you will view a ' +
+      'series of images and answer questions.<br>' +
       'Answer with the keys "y" or "n".',
       'Here is an example:<br><br> ' +
       '<img src="img/age/of2.jpg"></img><br><br>' +
@@ -68,27 +68,24 @@ width=50% height=525/>
  var trial_1 = {
     type: 'single-stim',
     stimulus: 'img/age/ym3.jpg',
-    choices: [69, 73], // E or I
-    prompt: '<p class="center-content">'+
-    'Is this person OLD or YOUNG?</p>'
+    choices: [E, I],
+    prompt:'Is this person OLD or YOUNG?'
   }
 
   var trial_2 = {
     type: 'single-stim',
     stimulus: 'img/age/of3.jpg',
-    choices: [69, 73], // E or I
+    choices: [E, I],
     timing_response: 5000,
-    prompt: '<p class="center-content">'+
-    'Is this person OLD or YOUNG?</p>'
+    prompt:'Is this person OLD or YOUNG?'
   }
 
   var trial_3 = {
     type: 'single-stim',
     stimulus: 'img/age/yf5.jpg',
-    choices: [69, 73], // E or I
+    choices: [E, I], // E or I
     timing_response: 5000,
-    prompt: '<p class="center-content">'+
-    'Is this person OLD or YOUNG?</p>'
+    prompt:'Is this person OLD or YOUNG?'
   }
   
   jsPsych.init({
@@ -123,7 +120,7 @@ var test_stimuli = [
 var test = {
 timeline: [{
 type: 'single-stim',
-choices: [37, 39],
+choices: [37, 39], //Left arrow, right arrow
 is_html: true,
 stimulus: jsPsych.timelineVariable('stimulus'),
 data: jsPsych.timelineVariable('data'),
