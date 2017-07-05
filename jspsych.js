@@ -376,9 +376,9 @@ window.jsPsych = (function() {
         if(timeline_parameters.sample.type == 'custom'){
           order = timeline_parameters.sample.fn(order);
         } else if(timeline_parameters.sample.type == 'with-replacement'){
-          order = jsPsych.randomization.sample(order, timeline_parameters.sample.size, true);
+          order = jsPsych.randomization.sampleWithReplacement(order, timeline_parameters.sample.size, timeline_parameters.sample.weights);
         } else if(timeline_parameters.sample.type == 'without-replacement'){
-          order = jsPsych.randomization.sample(order, timeline_parameters.sample.size, false);
+          order = jsPsych.randomization.sampleWithoutReplacement(order, timeline_parameters.sample.size);
         } else if(timeline_parameters.sample.type == 'fixed-repetitions'){
           order = jsPsych.randomization.repeat(order, timeline_parameters.sample.size, false);
         }
@@ -1581,22 +1581,45 @@ jsPsych.randomization = (function() {
     return random_shuffle;
   }
 
-  module.sample = function(arr, size, withReplacement) {
-    if (withReplacement == false) {
-      if (size > arr.length) {
-        console.error("jsPsych.randomization.sample cannot take a sample " +
-          "larger than the size of the set of items to sample from when " +
-          "sampling without replacement.");
+  module.sampleWithoutReplacement = function(arr, size){
+    if (size > arr.length) {
+      console.error("Cannot take a sample " +
+        "larger than the size of the set of items to sample.");
+    }
+    return jsPsych.randomization.shuffle(arr).slice(0,size);
+  }
+
+  module.sampleWithReplacement = function(arr, size, weights) {
+    var normalized_weights = [];
+    if(typeof weights !== 'undefined'){
+      if(weights.length !== arr.length){
+        console.error('The length of the weights array must equal the length of the array '+
+        'to be sampled from.');
+      }
+      var weight_sum = 0;
+      for(var i=0; i<weights.length; i++){
+        weight_sum += weights[i];
+      }
+      for(var i=0; i<weights.length; i++){
+        normalized_weights.push( weights[i] / weight_sum );
+      }
+    } else {
+      for(var i=0; i<arr.length; i++){
+        normalized_weights.push( 1 / arr.length );
       }
     }
+
+    var cumulative_weights = [normalized_weights[0]];
+    for(var i=1; i<normalized_weights.length; i++){
+      cumulative_weights.push(normalized_weights[i] + cumulative_weights[i-1]);
+    }
+
     var samp = [];
-    var shuff_arr = shuffle(arr);
     for (var i = 0; i < size; i++) {
-      if (!withReplacement) {
-        samp.push(shuff_arr.pop());
-      } else {
-        samp.push(shuff_arr[Math.floor(Math.random() * shuff_arr.length)]);
-      }
+      var rnd = Math.random();
+      var index = 0;
+      while(rnd > cumulative_weights[index]) { index++; }
+      samp.push(arr[index]);
     }
     return samp;
   }
