@@ -88,8 +88,6 @@ width=50% height=525/>
     stimulus: '<p></p>',
     is_html: true
   }
-
-
   jsPsych.init({
     timeline: [trial_1, trial_2, trial_3],
     on_finish: function() {
