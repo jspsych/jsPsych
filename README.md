@@ -108,6 +108,8 @@ width=50% height=525/>
 <sub>
 
 ```javascript
+
+
   var trial_1 = {
     type: 'single-stim',
     stimulus: 'img/happy_face_1.jpg',
@@ -140,6 +142,8 @@ width=50% height=525/>
     },
     default_iti: 250
   });
+  
+  
 ```
 
 </sub>
