@@ -68,24 +68,24 @@ width=50% height=525/>
  var trial_1 = {
     type: 'single-stim',
     stimulus: 'img/age/ym3.jpg',
-    choices: [E, I],
-    prompt:'Is this person OLD or YOUNG?'
+    choices: ['E', 'I'],
+    prompt:'<p>Is this person OLD or YOUNG?</p>'
   }
 
   var trial_2 = {
     type: 'single-stim',
     stimulus: 'img/age/of3.jpg',
-    choices: [E, I],
+    choices: ['E', 'I'],
     timing_response: 5000,
-    prompt:'Is this person OLD or YOUNG?'
+    prompt:'<p>Is this person OLD or YOUNG?</p>'
   }
 
   var trial_3 = {
     type: 'single-stim',
     stimulus: 'img/age/yf5.jpg',
-    choices: [E, I], // E or I
+    choices: ['E', 'I'],
     timing_response: 5000,
-    prompt:'Is this person OLD or YOUNG?'
+    prompt:'<p>Is this person OLD or YOUNG?</p>'
   }
   
   jsPsych.init({
