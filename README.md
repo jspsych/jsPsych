@@ -55,47 +55,45 @@ Here is a simple example of how to use the instructions plugin:
 
 This is an example of the single-stim plugin:
 <div display="flex">
-<img src="https://user-images.githubusercontent.com/14092539/27867805-c5b8d47c-6168-11e7-88f2-23809eb3110f.gif" align="right"
+<img src="https://user-images.githubusercontent.com/14092539/27881925-8c1a2fba-6198-11e7-9899-a30c517bbabc.gif" align="right"
 width=50% height=525/>
 
 <div markdown="2" style="width: 50%;">
 <sub>
 
 ```javascript
-  var trial_1 = {
+
+ var trial_1 = {
     type: 'single-stim',
-    stimulus: 'img/happy_face_1.jpg',
-    choices: [89, 78], // Y or N
+    stimulus: 'img/age/ym3.jpg',
+    choices: [69, 73], // E or I
     prompt: '<p class="center-content">'+
-    'Is this face happy? Y or N.</p>'
+    'Is this person OLD or YOUNG?</p>'
   }
 
   var trial_2 = {
     type: 'single-stim',
-    stimulus: 'img/sad_face_2.jpg',
-    choices: [89, 78], // Y or N
+    stimulus: 'img/age/of3.jpg',
+    choices: [69, 73], // E or I
     timing_response: 5000,
     prompt: '<p class="center-content">'+
-    'Is this face happy? Y or N. (5s time limit).</p>'
+    'Is this person OLD or YOUNG?</p>'
   }
 
   var trial_3 = {
     type: 'single-stim',
-    choices: jsPsych.NO_KEYS, // Y or N
-    timing_response: 2000,
+    stimulus: 'img/age/yf5.jpg',
+    choices: [69, 73], // E or I
+    timing_response: 5000,
     prompt: '<p class="center-content">'+
-    'No response allowed at this point. 2s wait.</p>',
-    stimulus: '<p></p>',
-    is_html: true
+    'Is this person OLD or YOUNG?</p>'
   }
   
   jsPsych.init({
     timeline: [trial_1, trial_2, trial_3],
-    on_finish: function() {
-      jsPsych.data.displayData();
-    },
     default_iti: 250
   });
+  
 ```
 
 </sub>
