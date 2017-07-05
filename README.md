@@ -104,7 +104,7 @@ width=50% height=525/>
 
 And for a slightly longer experiment example, here is a flanker experiment which uses the text and single-stim plugins:
 <div display="flex">
-<img src="https://user-images.githubusercontent.com/14092539/27804246-df170e8e-5ffb-11e7-8257-361afe46861b.gif" align="right" width=50% height=525/>
+<img src="https://user-images.githubusercontent.com/14092539/27867906-07da2b80-6169-11e7-9ccb-10bc4fc51178.gif" align="right" width=50% height=525/>
 
 
 <div markdown="1" style="width: 50%;">
