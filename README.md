@@ -55,7 +55,7 @@ Here is a simple example of how to use the instructions plugin:
 
 This is an example of the single-stim plugin:
 <div display="flex">
-<img src="https://user-images.githubusercontent.com/14092539/27866004-b8aa4f28-6162-11e7-9eaf-02c08226cfca.gif" align="right"
+<img src="https://user-images.githubusercontent.com/14092539/27867805-c5b8d47c-6168-11e7-88f2-23809eb3110f.gif" align="right"
 width=50% height=525/>
 
 <div markdown="2" style="width: 50%;">
