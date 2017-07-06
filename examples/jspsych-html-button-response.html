@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-html-button-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <style>
+      img { width: 300px; }
+    </style>
+  </head>
+  <body></body>
+  <script>
+
+  var timeline = [];
+
+  timeline.push({
+    type: 'html-button-response',
+    stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
+    choices: ['Green', 'Blue', 'Red'],
+    prompt: "<p>What color is this word?</p>"
+  });
+
+  timeline.push({
+    type: 'html-button-response',
+    stimulus: '<p style="color: green; font-size: 48px; font-weight: bold;">GREEN</p>',
+    choices: ['Green', 'Blue', 'Red'],
+    stimulus_duration: 1000,
+    prompt: "<p>What color is this word? (word disappears after 1s)</p>"
+  });
+
+  timeline.push({
+    type: 'html-button-response',
+    stimulus: '<p style="color: blue; font-size: 48px; font-weight: bold;">RED</p>',
+    choices: ['Green', 'Blue', 'Red'],
+    trial_duration: 2000,
+    response_ends_trial: false,
+    prompt: "<p>What color is this word? (trial ends after 2s)</p>"
+  });
+
+  jsPsych.init({
+    timeline: timeline,
+    on_finish: function(){jsPsych.data.displayData();}
+  });
+
+  </script>
+</html>
