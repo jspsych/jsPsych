@@ -663,7 +663,7 @@ window.jsPsych = (function() {
 
       // check if there is a timeline parameter
       // if there is, then this node has its own timeline
-      if (typeof parameters.timeline !== 'undefined') {
+      if ((typeof parameters.timeline !== 'undefined') || (typeof jsPsych.plugins[trial_type] == 'function')) {
 
         // create timeline properties
         timeline_parameters = {
@@ -701,7 +701,7 @@ window.jsPsych = (function() {
         var trial_type = parameters.type;
         if (typeof trial_type == 'undefined') {
           console.error('Trial level node is missing the "type" parameter. The parameters for the node are: ' + JSON.stringify(parameters));
-        } else if (typeof jsPsych.plugins[trial_type] == 'undefined') {
+        } else if ((typeof jsPsych.plugins[trial_type] == 'undefined') && (typeof jsPsych.plugins[trial_type] != "function () { return timeline.timelineVariable(varname); }")) {
           console.error('No plugin loaded for trials of type "' + trial_type + '"');
         }
         // create a deep copy of the parameters for the trial
@@ -773,6 +773,8 @@ window.jsPsych = (function() {
     opts.on_trial_start(trial);
 
     current_trial = trial;
+
+    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
     // check if trial has it's own display element
     var display_element = DOM_target;
