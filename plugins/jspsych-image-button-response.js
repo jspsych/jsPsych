@@ -136,7 +136,7 @@ jsPsych.plugins["image-button-response"] = (function() {
       display_element.querySelector('#jspsych-image-button-response-stimulus').className += ' responded';
 
       // disable all the buttons after a response
-      var btns = document.querySelector('.jspsych-image-button-response-button');
+      var btns = document.querySelectorAll('.jspsych-image-button-response-button button');
       for(var i=0; i<btns.length; i++){
         //btns[i].removeEventListener('click');
         btns[i].setAttribute('disabled', 'disabled');

@@ -89,6 +89,13 @@ input[type="text"] {
   border-color: #aaa;
 }
 
+.jspsych-btn:disabled {
+  background-color: #eee;
+  color: #aaa;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
 /* jsPsych progress bar */
 
 #jspsych-progressbar-container {
