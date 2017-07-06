@@ -188,3 +188,4 @@ jsPsych.plugins["image-button-response"] = (function() {
 
   return plugin;
 })();
+
