@@ -1,17 +1,17 @@
 /** (July 2012, Erik Weitnauer)
-The html-plugin will load and display an arbitrary number of html pages. To proceed to the next, the
+The html-plugin will load and display an external html pages. To proceed to the next, the
 user might either press a button on the page or a specific key. Afterwards, the page get hidden and
 the plugin will wait of a specified time before it proceeds.
 
 documentation: docs.jspsych.org
 */
 
-jsPsych.plugins.html = (function() {
+jsPsych.plugins['external-html'] = (function() {
 
   var plugin = {};
 
   plugin.info = {
-    name: 'html',
+    name: 'external-html',
     description: '',
     parameters: {
       url: {
