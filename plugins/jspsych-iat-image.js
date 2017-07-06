@@ -9,11 +9,11 @@
  **/
 
 
- jsPsych.plugins["iat"] = (function() {
+ jsPsych.plugins["iat-image"] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('iat', 'stimulus', 'image', function(t){return !t.is_html || t.is_html == 'undefined'});
+  jsPsych.pluginAPI.registerPreload('iat-image', 'stimulus', 'image');
 
 
   plugin.trial = function(display_element, trial) {
@@ -46,12 +46,8 @@
 
     var html_str = "";
 
-    if (!trial.is_html) {
-      html_str += "<div style='position: absolute; height: 20%; width: 100%; margin-left: auto; margin-right: auto; top: 42%; left: 0; right: 0'><img src='"+trial.stimulus+"' id='jspsych-iat-stim'></img></div>";
-    } else {
-      html_str += "<div style='position: absolute; height: 20%; width: 100%; margin-left: auto; margin-right: auto; top: 42%; left: 0; right: 0'><p id='jspsych-iat-stim'>" + trial.stimulus + "</p></div>";
-    }
-
+    html_str += "<div style='position: absolute; height: 20%; width: 100%; margin-left: auto; margin-right: auto; top: 42%; left: 0; right: 0'><img src='"+trial.stimulus+"' id='jspsych-iat-stim'></img></div>";
+   
     html_str += "<div id='trial_left_align' style='position: absolute; top: 18%; left: 20%'>";
 
     if(trial.left_category_label.length == 1) {

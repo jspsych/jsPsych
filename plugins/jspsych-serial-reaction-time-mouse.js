@@ -53,7 +53,15 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
 
 		function showTarget(){
       var resp_targets;
+<<<<<<< HEAD
+<<<<<<< HEAD
       if(!trial.allow_nontarget_responses){
+=======
+      if(trial.allow_nontarget_responses){
+>>>>>>> update srt mouse with extra option
+=======
+      if(!trial.allow_nontarget_responses){
+>>>>>>> fix backwards plugin
         resp_targets = [display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1])]
       } else {
         resp_targets = display_element.querySelectorAll('.jspsych-serial-reaction-time-stimulus-cell');
