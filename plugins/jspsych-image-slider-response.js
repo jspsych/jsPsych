@@ -56,8 +56,8 @@ jsPsych.plugins['image-slider-response'] = (function() {
     // it with the output of the function
     trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
-    var html = '<div id="jspsych-image-slider-response" class="jspsych-image-slider-response-question" style="margin: 100px 0px;">';
-    html += '<div class="jspsych-image-slider-response-stimulus"><img src="' + trial.stimulus + '"></div>';
+    var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 100px 0px;">';
+    html += '<div id="jspsych-image-slider-response-stimulus"><img src="' + trial.stimulus + '"></div>';
     html += '<div class="jspsych-image-slider-response-container" style="position:relative;">';
     html += '<input type="range" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-image-slider-response-response"></input>';
     html += '<div>'
@@ -90,7 +90,7 @@ jsPsych.plugins['image-slider-response'] = (function() {
       response.rt = endTime - startTime;
       response.response = display_element.querySelector('#jspsych-image-slider-response-response').value;
 
-      if(response_ends_trial){
+      if(trial.response_ends_trial){
         end_trial();
       } else {
         display_element.querySelector('#jspsych-image-slider-response-next').disabled = true;
@@ -99,6 +99,9 @@ jsPsych.plugins['image-slider-response'] = (function() {
     });
 
     function end_trial(){
+
+      jsPsych.pluginAPI.clearAllTimeouts();
+
       // save data
       var trialdata = {
         "rt": response.rt,
