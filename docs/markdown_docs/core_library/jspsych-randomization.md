@@ -232,10 +232,10 @@ output: shuffledArray = {
 */
 ```
 ---
-## jsPsych.randomization.sample
+## jsPsych.randomization.sampleWithReplacement
 
 ```
-jsPsych.randomization.sample(array, sampleSize, withReplacement)
+jsPsych.randomization.sampleWithReplacement(array, sampleSize, weights)
 ```
 
 ### Parameters
@@ -244,7 +244,7 @@ Parameter | Type | Description
 ----------|------|------------
 array | array | The array of values to sample from
 sampleSize | numeric | The number of samples to draw
-withReplacement | boolean | If `true`, then sampling will be with replacement. Otherwise, sampling is without replacement.
+weights | array | The relative weight of each element in `array`. This array is normalized, so the values do not need to sum to 1. The length must match the length of `array`.
 
 ### Return value
 
@@ -252,7 +252,51 @@ An array containing the sample.
 
 ### Description
 
-This method returns a sample drawn at random from a set of values. Sampling can be with replacement (items can be chosen more than once) or without replacement (items may only be chosen once).
+This method returns a sample drawn at random from a set of values with replacement. The relative probability of drawing each item can be controlled by specifying the `weights`.
+
+### Examples
+
+#### Sample with equal probability
+
+```javascript
+
+var myArray = [1,2,3,4,5];
+var sample = jsPsych.randomization.sampleWithReplacement(myArray, 10);
+
+// output: sample = [3, 1, 2, 2, 5, 1, 4, 3, 1, 5];
+```
+
+#### Sample with unequal probability
+
+```javascript
+
+var myArray = [1,2,3,4,5];
+var sample = jsPsych.randomization.sampleWithReplacement(myArray, 10, [6,1,1,1,1]);
+
+// output: sample = [3, 4, 5, 1, 2, 1, 3, 1, 1, 1];
+```
+
+---
+## jsPsych.randomization.sampleWithoutReplacement
+
+```
+jsPsych.randomization.sampleWithoutReplacement(array, sampleSize)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+array | array | The array of values to sample from
+sampleSize | numeric | The number of samples to draw
+
+### Return value
+
+An array containing the sample.
+
+### Description
+
+This method returns a sample drawn at random from a set of values without replacement. The sample size must be less than or equal to the length of the array.
 
 ### Examples
 
@@ -261,19 +305,9 @@ This method returns a sample drawn at random from a set of values. Sampling can 
 ```javascript
 
 var myArray = [1,2,3,4,5];
-var sample = jsPsych.randomization.sample(myArray, 2, false);
+var sample = jsPsych.randomization.sampleWithoutReplacement(myArray, 2);
 
 // output: sample = [3,2];
-```
-
-#### Sample with replacement
-
-```javascript
-
-var myArray = [1,2,3,4,5];
-var sample = jsPsych.randomization.sample(myArray, 8, true);
-
-// output: sample = [3,2,1,5,3,3,4,2];
 ```
 
 ---

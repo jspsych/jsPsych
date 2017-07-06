@@ -19,7 +19,7 @@ Often it is useful to add a piece of data to *all* of the trials in the experime
 var subject_id = jsPsych.randomization.randomID(15);
 
 // pick a random condition for the subject at the start of the experiment
-var condition_assignment = jsPsych.randomization.sample(['conditionA', 'conditionB', 'conditionC'],1)[0];
+var condition_assignment = jsPsych.randomization.sampleWithoutReplacement(['conditionA', 'conditionB', 'conditionC'], 1)[0];
 
 // record the condition assignment in the jsPsych data
 // this adds a property called 'subject' and a property called 'condition' to every trial

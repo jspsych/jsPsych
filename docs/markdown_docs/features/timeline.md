@@ -186,6 +186,24 @@ var face_name_procedure = {
 }
 ```
 
+#### Sampling with replacement, unequal probabilities
+```javascript
+var face_name_procedure = {
+	// timeline parameter hidden to save space ...
+	timeline_variables: [
+		{ face: 'person-1.jpg', name: 'Alex' },
+		{ face: 'person-2.jpg', name: 'Beth' },
+		{ face: 'person-3.jpg', name: 'Chad' },
+		{ face: 'person-4.jpg', name: 'Dave' }
+	],
+	sample: {
+		type: 'with-replacement',
+		size: 10, // 10 trials, with replacement
+		weights: [3, 1, 1, 1], // The Alex trial is three times as likely to be sampled as the others.
+	}
+}
+```
+
 #### Sampling without replacement
 ```javascript
 var face_name_procedure = {
@@ -215,7 +233,7 @@ var face_name_procedure = {
 	],
 	sample: {
 		type: 'fixed-repetitions',
-		size: 3, // 12 trials, 3 of each person, order is randomized.
+		size: 3, // 3 repetitions of each trial, 12 total trials, order is randomized.
 	}
 }
 ```

@@ -148,7 +148,7 @@ timeline.push(instructions);
       type: "text",
       text: "Welcome to the experiment. Press any key to begin."
     };
-    timeline.push(welcome_block);
+    timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
@@ -234,7 +234,7 @@ timeline.push(blue_trial, orange_trial);
       type: "text",
       text: "Welcome to the experiment. Press any key to begin."
     };
-    timeline.push(welcome_block);
+    timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
@@ -354,7 +354,7 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
       type: "text",
       text: "Welcome to the experiment. Press any key to begin."
     };
-    timeline.push(welcome_block);
+    timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
@@ -454,7 +454,7 @@ var test_procedure = {
       type: "text",
       text: "Welcome to the experiment. Press any key to begin."
     };
-    timeline.push(welcome_block);
+    timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
@@ -514,7 +514,7 @@ var test_procedure = {
 
 One aspect of the experiment that could be improved is the duration of the fixation cross. As the experiment stands right now, the timing of the circles appearing is very predictable. We can change that by using a different value for the `timing_response` parameter in the `fixation` trial for each trial. But how can we do that and keep the simple code structure we have now where we only have to define the fixation trial once? One option would be to add another timeline variable, like `"fixation_duration"` and use that to control the timing. But another option is to specify the `timing_response` parameter as a function. If a parameter is a function, jsPsych will execute the function every time the trial runs. That means that if the function returns different results probabilistically, we can get a different parameter value every time the trial runs.
 
-To do that here, we'll use one of the built-in randomization methods in [jsPsych's randomization module](../core_library/jspsych-randomization.md). `jsPsych.randomization.sample()` takes an array of items to sample from and generates a new array of length *N* by sampling either with or without replacement.
+To do that here, we'll use one of the built-in randomization methods in [jsPsych's randomization module](../core_library/jspsych-randomization.md). `jsPsych.randomization.sampleWithoutReplacement()` takes an array of items to sample from and generates a new array of length *N* by sampling without replacement.
 
 ```javascript
 var fixation = {
@@ -523,12 +523,12 @@ var fixation = {
   is_html: true,
   choices: jsPsych.NO_KEYS,
   timing_response: function(){
-    return jsPsych.randomization.sample([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+    return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
   }
 }
 ```
 
-In the code above, we replaced the `timing_response: 1000` parameter in `fixation` with a function. Inside the function, we take a sample from the array `[250, 500, 750, 1000, 1250, 1500, 1750, 2000]` of size 1 (second parameter to `jsPsych.randomization.sample`). The return value from calling `jsPsych.randomization.sample` is an array of length 1, so we add the `[0]` selection at the end to get the value out of the array.
+In the code above, we replaced the `timing_response: 1000` parameter in `fixation` with a function. Inside the function, we take a sample from the array `[250, 500, 750, 1000, 1250, 1500, 1750, 2000]` of size 1 (second parameter to `jsPsych.randomization.sampleWithoutReplacement`). The return value from calling `jsPsych.randomization.sampleWithoutReplacement` is an array of length 1, so we add the `[0]` selection at the end to get the value out of the array.
 
 ### The complete code so far
 
@@ -553,7 +553,7 @@ In the code above, we replaced the `timing_response: 1000` parameter in `fixatio
       type: "text",
       text: "Welcome to the experiment. Press any key to begin."
     };
-    timeline.push(welcome_block);
+    timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
@@ -584,7 +584,7 @@ In the code above, we replaced the `timing_response: 1000` parameter in `fixatio
       is_html: true,
       choices: jsPsych.NO_KEYS,
       timing_response: function(){
-        return jsPsych.randomization.sample([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+        return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
       }
     }
 
@@ -649,7 +649,7 @@ jsPsych.init({
       type: "text",
       text: "Welcome to the experiment. Press any key to begin."
     };
-    timeline.push(welcome_block);
+    timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
@@ -680,7 +680,7 @@ jsPsych.init({
       is_html: true,
       choices: jsPsych.NO_KEYS,
       timing_response: function(){
-        return jsPsych.randomization.sample([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+        return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
       }
     }
 
@@ -746,7 +746,7 @@ var fixation = {
   is_html: true,
   choices: jsPsych.NO_KEYS,
   timing_response: function(){
-    return jsPsych.randomization.sample([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+    return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
   },
   data: {test_part: 'fixation'}
 }
@@ -775,7 +775,7 @@ var fixation = {
       type: "text",
       text: "Welcome to the experiment. Press any key to begin."
     };
-    timeline.push(welcome_block);
+    timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
@@ -806,7 +806,7 @@ var fixation = {
       is_html: true,
       choices: jsPsych.NO_KEYS,
       timing_response: function(){
-        return jsPsych.randomization.sample([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+        return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
       },
       data: {test_part: 'fixation'}
     }
@@ -885,7 +885,7 @@ The `data.key_press` value is a numeric key code indicating which key the subjec
       type: "text",
       text: "Welcome to the experiment. Press any key to begin."
     };
-    timeline.push(welcome_block);
+    timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
@@ -916,7 +916,7 @@ The `data.key_press` value is a numeric key code indicating which key the subjec
       is_html: true,
       choices: jsPsych.NO_KEYS,
       timing_response: function(){
-        return jsPsych.randomization.sample([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+        return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
       },
       data: {test_part: 'fixation'}
     }
@@ -1011,7 +1011,7 @@ This code is available in the examples folder in the jsPsych download. It is cal
       type: "text",
       text: "Welcome to the experiment. Press any key to begin."
     };
-    timeline.push(welcome_block);
+    timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
@@ -1043,7 +1043,7 @@ This code is available in the examples folder in the jsPsych download. It is cal
       is_html: true,
       choices: jsPsych.NO_KEYS,
       timing_response: function(){
-        return jsPsych.randomization.sample([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+        return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
       },
       data: {test_part: 'fixation'}
     }

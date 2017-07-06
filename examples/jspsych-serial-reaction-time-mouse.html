@@ -43,10 +43,10 @@
       order = jsPsych.randomization.shuffle(order);
       current_idx = 0;
     }
-    var predictor = jsPsych.randomization.sample(locations, 1)[0];
+    var predictor = jsPsych.randomization.sampleWithoutReplacement(locations, 1)[0];
     if(last_target !== null){
       while(predictor[0] == last_target[0] && predictor[1] == last_target[1]){
-        predictor = jsPsych.randomization.sample(locations, 1)[0];
+        predictor = jsPsych.randomization.sampleWithoutReplacement(locations, 1)[0];
       }
     }
     last_predictor = predictor;
