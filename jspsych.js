@@ -874,7 +874,11 @@ jsPsych.plugins = {
     FLOAT: 3,
     FUNCTION: 4,
     KEYCODE: 5,
-    SELECT: 6
+    SELECT: 6,
+    HMTL_STRING: 7,
+    IMAGE: 8,
+    AUDIO: 9,
+    VIDEO: 10
   }
 
 };

@@ -25,19 +25,19 @@ jsPsych.plugins["visual-search-circle"] = (function() {
     description: '',
     parameters: {
       target: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: [jsPsych.plugins.parameterType.IMAGE],
         default: undefined,
         no_function: false,
         description: ''
       },
       foil: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: [jsPsych.plugins.parameterType.IMAGE],
         default: undefined,
         no_function: false,
         description: ''
       },
       fixation_image: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: [jsPsych.plugins.parameterType.IMAGE],
         default: undefined,
         no_function: false,
         description: ''
