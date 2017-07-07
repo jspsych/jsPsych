@@ -14,8 +14,6 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     trial.grid = trial.grid || [[1,1,1,1]];
     trial.choices = trial.choices || [['3','5','7','9']];
     trial.grid_square_size = trial.grid_square_size || 100;

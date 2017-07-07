@@ -14,8 +14,6 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     trial.grid = trial.grid || [[1,1,1,1]];
     trial.grid_square_size = trial.grid_square_size || 100;
     trial.target_color = trial.target_color || "#999";

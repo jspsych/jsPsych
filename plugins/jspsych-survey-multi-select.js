@@ -71,10 +71,6 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     //If button_label is empty, the browser's language will be used to determine the button label.
     trial.button_label = typeof trial.button_label === 'undefined' ? '' : trial.button_label;
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
     // inject CSS for trial
     display_element.innerHTML = '<style id="jspsych-survey-multi-select-css"></style>';

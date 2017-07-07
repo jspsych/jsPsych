@@ -14,11 +14,6 @@ jsPsych.plugins["resize"] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     // default trial paramters
     trial.item_height = trial.item_height || 1;
     trial.item_width = trial.item_width || 1;

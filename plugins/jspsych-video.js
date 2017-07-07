@@ -75,11 +75,6 @@ jsPsych.plugins.video = (function() {
     trial.autoplay = typeof trial.autoplay == 'undefined' ? true : trial.autoplay;
     trial.controls = typeof trial.controls == 'undefined' ? false : trial.controls;
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     // display stimulus
     var video_html = '<video id="jspsych-video-player" width="'+trial.width+'" height="'+trial.height+'" '
     if(trial.autoplay){

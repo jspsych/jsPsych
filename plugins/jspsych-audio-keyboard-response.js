@@ -67,11 +67,6 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
     trial.timing_response = trial.timing_response || -1; // if -1, then wait for response forever
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     // setup stimulus
     var context = jsPsych.pluginAPI.audioContext();
     if(context !== null){

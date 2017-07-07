@@ -64,11 +64,6 @@ jsPsych.plugins.animation = (function() {
     trial.choices = trial.choices || jsPsych.ALL_KEYS;
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     var interval_time = trial.frame_time + trial.frame_isi;
     var animate_frame = -1;
     var reps = 0;

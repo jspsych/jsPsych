@@ -1,6 +1,6 @@
 /**
  * jspsych-audio-button-response
- * Kristin Diep 
+ * Kristin Diep
  *
  * plugin for playing an audio file and getting a keyboard response
  *
@@ -19,7 +19,7 @@ jsPsych.plugins["audio-button-response"] = (function() {
 		parameters: {
 			stimulus: {
 				type: [jsPsych.plugins.parameterType.AUDIO],
-				default: undefined, 
+				default: undefined,
 				no_function: false,
 				description: ''
 			},
@@ -74,11 +74,6 @@ jsPsych.plugins["audio-button-response"] = (function() {
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
     trial.margin_vertical = trial.margin_vertical || "0px";
     trial.margin_horizontal = trial.margin_horizontal || "8px";
-
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
     // setup stimulus
     var context = jsPsych.pluginAPI.audioContext();

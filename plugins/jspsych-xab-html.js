@@ -79,11 +79,6 @@ jsPsych.plugins['xab-html'] = (function() {
     trial.timing_response = trial.timing_response || -1; //
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     // unpack the stimuli array
     trial.x_path = trial.stimuli[0];
 

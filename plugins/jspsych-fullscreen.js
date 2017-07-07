@@ -51,11 +51,6 @@ jsPsych.plugins.fullscreen = (function() {
     trial.button_label = trial.button_label || 'Go';
     trial.delay_after = trial.delay_after || 1000;
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     // check if keys are allowed in fullscreen mode
     var keyboardNotAllowed = typeof Element !== 'undefined' && 'ALLOW_KEYBOARD_INPUT' in Element;
     if (keyboardNotAllowed) {

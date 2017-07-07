@@ -76,11 +76,6 @@ jsPsych.plugins["image-button-response"] = (function() {
     trial.margin_vertical = trial.margin_vertical || "0px";
     trial.margin_horizontal = trial.margin_horizontal || "8px";
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     // display stimulus
     display_element.innerHTML = '<img src="'+trial.stimulus+'" id="jspsych-image-button-response-stimulus"></img>';
 
@@ -188,4 +183,3 @@ jsPsych.plugins["image-button-response"] = (function() {
 
   return plugin;
 })();
-

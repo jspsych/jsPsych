@@ -53,10 +53,6 @@ jsPsych.plugins['survey-likert'] = (function() {
     trial.required = typeof trial.required === 'undefined' ? false : trial.required;
     trial.button_label = typeof trial.button_label === 'undefined' ? 'Next' : trial.button_label;
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
     var html = "";
     // inject CSS for trial

@@ -81,11 +81,6 @@ jsPsych.plugins['free-sort'] = (function() {
     trial.sort_area_height = trial.sort_area_height || 800;
     trial.button_label = typeof trial.button_label === 'undefined' ? 'Done' : trial.button_label;
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     var start_time = (new Date()).getTime();
 
     var html = "";

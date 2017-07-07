@@ -25,11 +25,6 @@
       return arr.join(separator = '-');
     }
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     // set default values for the parameters
     trial.display_feedback = typeof trial.display_feedback == 'undefined' ? false : trial.display_feedback;
     trial.html_when_wrong = trial.html_when_wrong || '<span style="color: red; font-size: 80px">X</span>';
@@ -47,7 +42,7 @@
     var html_str = "";
 
     html_str += "<div style='position: absolute; height: 20%; width: 100%; margin-left: auto; margin-right: auto; top: 42%; left: 0; right: 0'><img src='"+trial.stimulus+"' id='jspsych-iat-stim'></img></div>";
-   
+
     html_str += "<div id='trial_left_align' style='position: absolute; top: 18%; left: 20%'>";
 
     if(trial.left_category_label.length == 1) {
@@ -161,7 +156,7 @@
               valid_responses: [jsPsych.ALL_KEYS]
             });
           } else if(!trial.response_ends_trial && trial.display_feedback != true) {
-      
+
           }
         }
       } else if(trial.stim_key_association == "left") {
@@ -193,7 +188,7 @@
               valid_responses: [jsPsych.ALL_KEYS]
             });
           } else if(!trial.response_ends_trial && trial.display_feedback != true) {
-  
+
           }
         }
       }

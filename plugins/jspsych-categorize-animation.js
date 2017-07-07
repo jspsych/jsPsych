@@ -100,11 +100,6 @@ jsPsych.plugins["categorize-animation"] = (function() {
     trial.timing_feedback_duration = trial.timing_feedback_duration || 2000;
     trial.prompt = (typeof trial.prompt === 'undefined') ? '' : trial.prompt;
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     var animate_frame = -1;
     var reps = 0;
 

@@ -12,7 +12,7 @@
 jsPsych.plugins['html-slider-response'] = (function() {
 
   var plugin = {};
-  
+
   plugin.info = {
     name: 'html-slider-response',
     description: '',
@@ -49,11 +49,7 @@ jsPsych.plugins['html-slider-response'] = (function() {
     trial.trial_duration = trial.trial_duration || -1;
     trial.prompt = trial.prompt || "";
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
+  
     var html = '<div id="jspsych-html-slider-response-wrapper" style="margin: 100px 0px;">';
     html += '<div id="jspsych-html-slider-response-stimulus">' + trial.stimulus + '</div>';
     html += '<div class="jspsych-html-slider-response-container" style="position:relative;">';

@@ -112,8 +112,6 @@ jsPsych.plugins["visual-search-circle"] = (function() {
     trial.timing_max_search = (typeof trial.timing_max_search === 'undefined') ? -1 : trial.timing_max_search;
     trial.timing_fixation = (typeof trial.timing_fixation === 'undefined') ? 1000 : trial.timing_fixation;
 
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     // circle params
     var diam = trial.circle_diameter; // pixels
     var radi = diam / 2;

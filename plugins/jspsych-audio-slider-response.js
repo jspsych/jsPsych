@@ -9,7 +9,7 @@ jsPsych.plugins['audio-slider-response'] = (function() {
     parameters: {
       stimulus: {
 		type: [jsPsych.plugins.parameterType.AUDIO],
-		default: undefined, 
+		default: undefined,
 		no_function: false,
 		description: ''
 	  },
@@ -51,11 +51,6 @@ jsPsych.plugins['audio-slider-response'] = (function() {
     trial.stimulus_duration = trial.stimulus_duration || -1;
     trial.trial_duration = trial.trial_duration || -1;
     trial.prompt = trial.prompt || "";
-
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
     // setup stimulus
     var context = jsPsych.pluginAPI.audioContext();

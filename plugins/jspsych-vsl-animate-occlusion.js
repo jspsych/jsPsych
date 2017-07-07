@@ -88,11 +88,6 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
     trial.choices = trial.choices || jsPsych.ALL_KEYS;
     trial.timing_pre_movement = (typeof trial.timing_pre_movement === 'undefined') ? 500 : trial.timing_pre_movement;
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     // variable to keep track of timing info and responses
     var start_time = 0;
     var responses = [];

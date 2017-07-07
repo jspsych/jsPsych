@@ -50,10 +50,6 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
     trial.image_size = trial.image_size || [100, 100];
     trial.timing_duration = typeof trial.timing_duration === 'undefined' ? 2000 : trial.timing_duration;
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
     display_element.innerHTML = plugin.generate_stimulus(trial.stimuli, trial.image_size);
 

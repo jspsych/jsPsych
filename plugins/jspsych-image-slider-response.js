@@ -51,11 +51,6 @@ jsPsych.plugins['image-slider-response'] = (function() {
     trial.trial_duration = trial.trial_duration || -1;
     trial.prompt = trial.prompt || "";
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 100px 0px;">';
     html += '<div id="jspsych-image-slider-response-stimulus"><img src="' + trial.stimulus + '"></div>';
     html += '<div class="jspsych-image-slider-response-container" style="position:relative;">';

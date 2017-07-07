@@ -79,11 +79,6 @@ jsPsych.plugins.instructions = (function() {
     trial.button_label_previous = (typeof trial.button_label_previous === 'undefined') ? 'Previous' : trial.button_label_previous;
     trial.button_label_next = (typeof trial.button_label_next === 'undefined') ? 'Next' : trial.button_label_next;
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
     var current_page = 0;
 
     var view_history = [];
