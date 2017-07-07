@@ -38,6 +38,6 @@ var trial = {
 	type: 'button-response',
 	stimulus: 'img/happy_face_1.jpg',
 	choices: ['Happy', 'Sad'],
-	prompt: "<p class='center-content'>What emotion is this person showing?</p>"
+	prompt: "<p>What emotion is this person showing?</p>"
 };
 ```

@@ -6,24 +6,16 @@
  **/
 
 
-jsPsych.plugins.categorize = (function() {
+jsPsych.plugins['categorize-html'] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('categorize', 'stimulus', 'image',function(t){ return !t.is_html || t.is_html == 'undefined'});
-
   plugin.info = {
-    name: 'categorize',
+    name: 'categorize-html',
     description: '',
     parameters: {
       stimulus: {
-        type: [jsPsych.plugins.parameterType.STRING],
-        default: undefined,
-        no_function: false,
-        description: ''
-      },
-      is_html: {
-        type: [jsPsych.plugins.parameterType.BOOL],
+        type: [jsPsych.plugins.parameterType.HTML_STRING],
         default: undefined,
         no_function: false,
         description: ''
@@ -118,7 +110,6 @@ jsPsych.plugins.categorize = (function() {
     trial.correct_text = (typeof trial.correct_text === 'undefined') ? "<p class='feedback'>Correct</p>" : trial.correct_text;
     trial.incorrect_text = (typeof trial.incorrect_text === 'undefined') ? "<p class='feedback'>Incorrect</p>" : trial.incorrect_text;
     trial.show_stim_with_feedback = (typeof trial.show_stim_with_feedback === 'undefined') ? true : trial.show_stim_with_feedback;
-    trial.is_html = (typeof trial.is_html === 'undefined') ? false : trial.is_html;
     trial.force_correct_button_press = (typeof trial.force_correct_button_press === 'undefined') ? false : trial.force_correct_button_press;
     trial.prompt = (typeof trial.prompt === 'undefined') ? '' : trial.prompt;
     trial.show_feedback_on_timeout = (typeof trial.show_feedback_on_timeout === 'undefined') ? false : trial.show_feedback_on_timeout;
@@ -128,21 +119,12 @@ jsPsych.plugins.categorize = (function() {
     trial.timing_response = trial.timing_response || -1; // default is no max response time
     trial.timing_feedback_duration = trial.timing_feedback_duration || 2000;
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
-    if (!trial.is_html) {
-      display_element.innerHTML = '<img id="jspsych-categorize-stimulus" class="jspsych-categorize-stimulus" src="'+trial.stimulus+'"></img>';
-    } else {
-      display_element.innerHTML = '<div id="jspsych-categorize-stimulus" class="jspsych-categorize-stimulus">'+trial.stimulus+'</div>';
-    }
+    display_element.innerHTML = '<div id="jspsych-categorize-html-stimulus" class="jspsych-categorize-html-stimulus">'+trial.stimulus+'</div>';
 
     // hide image after time if the timing parameter is set
     if (trial.timing_stim > 0) {
       jsPsych.pluginAPI.setTimeout(function() {
-        display_element.querySelector('#jspsych-categorize-stimulus').style.visibility = 'hidden';
+        display_element.querySelector('#jspsych-categorize-html-stimulus').style.visibility = 'hidden';
       }, trial.timing_stim);
     }
 
@@ -205,11 +187,7 @@ jsPsych.plugins.categorize = (function() {
       } else {
         // show image during feedback if flag is set
         if (trial.show_stim_with_feedback) {
-          if (!trial.is_html) {
-            display_element.innerHTML = '<img id="jspsych-categorize-stimulus" class="jspsych-categorize-stimulus" src="'+trial.stimulus+'"></img>';
-          } else {
-            display_element.innerHTML = '<div id="jspsych-categorize-stimulus" class="jspsych-categorize-stimulus">'+trial.stimulus+'</div>';
-          }
+          display_element.innerHTML = '<div id="jspsych-categorize-html-stimulus" class="jspsych-categorize-html-stimulus">'+trial.stimulus+'</div>';
         }
 
         // substitute answer in feedback string.

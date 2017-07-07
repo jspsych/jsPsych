@@ -46,7 +46,7 @@ key_press_stim1 | numeric | Indicates which key the subject pressed to continue.
     var block = {
       type: 'same-different',
       stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
-      prompt: "<p class='center-content'>Press S if the faces had the same emotional expression. Press D if the faces had different emotional expressions.</p>",
+      prompt: "<p>Press S if the faces had the same emotional expression. Press D if the faces had different emotional expressions.</p>",
       same_key: 'S',
       different_key: 'D',
       answer: 'different'
@@ -66,7 +66,7 @@ key_press_stim1 | numeric | Indicates which key the subject pressed to continue.
     var block = {
       type: 'same-different',
       stimuli: ['img/happy_face_1.jpg', 'img/happy_face_3.jpg'],
-      prompt: "<p class='center-content'>Press S if the faces had the same emotional expression. Press D if the faces had different emotional expressions.</p>",
+      prompt: "<p>Press S if the faces had the same emotional expression. Press D if the faces had different emotional expressions.</p>",
       same_key: 'S',
       different_key: 'D',
       answer: 'same'
