@@ -17,14 +17,15 @@ describe('image-button-response', function(){
 	test('displays image stimulus', function(){
 		var trial = {
 			type: 'image-button-response',
-			stimulus: '../media/blue.png'
+			stimulus: '../media/blue.png',
+			choices: ['button-choice']
 		}
 
 		jsPsych.init({
 			timeline: [trial]
 		});
 
-		expect(jsPsych.getDisplayElement().innerHTML).toBe('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus">');
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus">');
 	}); 
 
 	test('display button label', function(){

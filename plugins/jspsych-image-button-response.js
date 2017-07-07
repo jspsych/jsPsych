@@ -67,6 +67,14 @@ jsPsych.plugins["image-button-response"] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
+    if(typeof trial.choices === 'undefined'){
+      console.error('Required parameter "choices" missing in image-button-response');
+    }
+    if(typeof trial.stimulus === 'undefined'){
+      console.error('Required parameter "stimulus" missing in image-button-response');
+    }
+
+
     // default trial parameters
     trial.button_html = trial.button_html || '<button class="jspsych-btn">%choice%</button>';
     trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
@@ -77,7 +85,7 @@ jsPsych.plugins["image-button-response"] = (function() {
     trial.margin_horizontal = trial.margin_horizontal || "8px";
 
     // display stimulus
-    display_element.innerHTML = '<img src="'+trial.stimulus+'" id="jspsych-image-button-response-stimulus"></img>';
+    var html = '<img src="'+trial.stimulus+'" id="jspsych-image-button-response-stimulus"></img>';
 
     //display buttons
     var buttons = [];
@@ -92,7 +100,8 @@ jsPsych.plugins["image-button-response"] = (function() {
         buttons.push(trial.button_html);
       }
     }
-    display_element.innerHTML += '<div id="jspsych-image-button-response-btngroup"></div>';
+    html += '<div id="jspsych-image-button-response-btngroup"></div>';
+    display_element.innerHTML=html;
     for (var i = 0; i < trial.choices.length; i++) {
       var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
       display_element.querySelector('#jspsych-image-button-response-btngroup').insertAdjacentHTML('beforeend',
