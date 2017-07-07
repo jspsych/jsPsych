@@ -91,6 +91,9 @@ jsPsych.plugins.video = (function() {
     video_html+=">"
     for(var i=0; i<trial.sources.length; i++){
       var s = trial.sources[i];
+      if(s.indexOf('?') > -1){
+        s = s.substring(0, s.indexOf('?'));
+      }
       var type = s.substr(s.lastIndexOf('.') + 1);
       type = type.toLowerCase();
 
