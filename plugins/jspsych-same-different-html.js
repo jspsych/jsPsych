@@ -8,26 +8,18 @@
  *
  */
 
-jsPsych.plugins['same-different'] = (function() {
+jsPsych.plugins['same-different-image'] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('same-different', 'stimuli', 'image',function(t){ return !t.is_html || t.is_html == 'undefined'});
-
   plugin.info = {
-    name: 'same-different',
+    name: 'same-different-image',
     description: '',
     parameters: {
       stimuli: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: [jsPsych.plugins.parameterType.HTML_STRING],
         default: undefined,
         array: true,
-        no_function: false,
-        description: ''
-      },
-      is_html: {
-        type: [jsPsych.plugins.parameterType.BOOL],
-        default: false,
         no_function: false,
         description: ''
       },
@@ -83,25 +75,12 @@ jsPsych.plugins['same-different'] = (function() {
     trial.same_key = trial.same_key || 81; // default is 'q'
     trial.different_key = trial.different_key || 80; // default is 'p'
     trial.advance_key = trial.advance_key || jsPsych.ALL_KEYS
-    // timing parameters
     trial.timing_first_stim = trial.timing_first_stim || 1000; // if -1, the first stim is shown until any key is pressed
     trial.timing_second_stim = trial.timing_second_stim || 1000; // if -1, then second stim is shown until response.
     trial.timing_gap = trial.timing_gap || 500;
-    // optional parameters
-    trial.is_html = (typeof trial.is_html === 'undefined') ? false : trial.is_html;
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
-    // if any trial variables are functions
-    // this evaluates the function and replaces
-    // it with the output of the function
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
-    // show image
-    if (!trial.is_html) {
-      display_element.innerHTML = '<img class="jspsych-same-different-stimulus" src="'+trial.stimuli[0]+'"></img>';
-    } else {
-      display_element.innerHTML = '<div class="jspsych-same-different-stimulus">'+trial.stimuli[0]+'</div>';
-    }
+    display_element.innerHTML = '<div class="jspsych-same-different-stimulus">'+trial.stimuli[0]+'</div>';
 
     var first_stim_info;
     if (trial.timing_first_stim > 0) {
@@ -131,11 +110,9 @@ jsPsych.plugins['same-different'] = (function() {
     }
 
     function showSecondStim() {
-      if (!trial.is_html) {
-        display_element.innerHTML += '<img class="jspsych-same-different-stimulus" src="'+trial.stimuli[1]+'"></img>';
-      } else {
-        display_element.innerHTML += '<div class="jspsych-same-different-stimulus">'+trial.stimuli[1]+'</div>';
-      }
+
+      display_element.innerHTML += '<div class="jspsych-same-different-stimulus">'+trial.stimuli[1]+'</div>';
+
 
       if (trial.timing_second_stim > 0) {
         jsPsych.pluginAPI.setTimeout(function() {

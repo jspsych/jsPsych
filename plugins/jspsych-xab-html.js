@@ -8,26 +8,18 @@
  *
  */
 
-jsPsych.plugins.xab = (function() {
+jsPsych.plugins['xab-html'] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('xab', 'stimuli', 'image',function(t){ return !t.is_html || t.is_html == 'undefined'});
-
   plugin.info = {
-    name: 'xab',
+    name: 'xab-html',
     description: '',
     parameters: {
       stimulus: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: [jsPsych.plugins.parameterType.IMAGE],
         array: true,
         default: undefined,
-        no_function: false,
-        description: ''
-      },
-      is_html: {
-        type: [jsPsych.plugins.parameterType.BOOL],
-        default: false,
         no_function: false,
         description: ''
       },
@@ -85,7 +77,6 @@ jsPsych.plugins.xab = (function() {
     trial.timing_xab_gap = trial.timing_xab_gap || 1000; // defaults to 1000msec.
     trial.timing_ab = trial.timing_ab || -1; // defaults to -1, meaning infinite time on AB. If a positive number is used, then AB will only be displayed for that length.
     trial.timing_response = trial.timing_response || -1; //
-    trial.is_html = (typeof trial.is_html === 'undefined') ? false : trial.is_html;
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
     // if any trial variables are functions
@@ -108,11 +99,9 @@ jsPsych.plugins.xab = (function() {
 
     // how we display the content depends on whether the content is
     // HTML code or an image path.
-    if (!trial.is_html) {
-      display_element.innerHTML = '<img class="jspsych-xab-stimulus" src="'+trial.x_path+'"></img>';
-    } else {
-      display_element.innerHTML = '<div class="jspsych-xab-stimulus">'+trial.x_path+'</div>';
-    }
+
+    display_element.innerHTML = '<div class="jspsych-xab-stimulus" >'+trial.x_path+'</div>';
+
 
     // start a timer of length trial.timing_x to move to the next part of the trial
     jsPsych.pluginAPI.setTimeout(function() {
@@ -139,15 +128,11 @@ jsPsych.plugins.xab = (function() {
       if (!target_left) {
         images = [trial.b_path, trial.a_path];
       }
-      
+
       // show the options
-      if (!trial.is_html) {
-        display_element.innerHTML += '<img class="jspsych-xab-stimulus left" src="'+images[0]+'"></img>';
-        display_element.innerHTML += '<img class="jspsych-xab-stimulus right" src="'+images[1]+'"></img>';
-      } else {
-        display_element.innerHTML += '<div class="jspsych-xab-stimulus left">'+images[0]+'</div>';
-        display_element.innerHTML += '<div class="jspsych-xab-stimulus right">'+images[1]+'</div>';
-      }
+      display_element.innerHTML += '<div class="jspsych-xab-stimulus left">'+images[0]+'</div>';
+      display_element.innerHTML += '<div class="jspsych-xab-stimulus right">'+images[1]+'</div>';
+
 
       if (trial.prompt !== "") {
         display_element.innerHTML += trial.prompt;
