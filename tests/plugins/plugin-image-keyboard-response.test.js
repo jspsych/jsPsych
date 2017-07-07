@@ -91,7 +91,7 @@ describe('image-keyboard-response', function(){
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus">'));
-		jest.runTimersToTime(550);
+		jest.runTimersToTime(500);
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});
 
