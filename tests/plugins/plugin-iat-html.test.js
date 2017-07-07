@@ -31,7 +31,7 @@ describe('iat-html plugin', function(){
       timeline: [trial]
     });
 
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch('<p id=\"jspsych-iat-stim\"></p><p>hello</p><p></p>');
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('<p id=\"jspsych-iat-stim\"></p><p>dogs</p><p></p>');
 
     document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
     document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
