@@ -104,8 +104,7 @@ describe('image-button-response', function(){
 		});
 
 		expect(jsPsych.getDisplayElement().querySelector('#jspsych-image-button-response-stimulus').style.visibility).toMatch("");
-		jest.runTimersToTime(500);
-		expect(jsPsych.getDisplayElement().querySelector('#jspsych-image-button-response-stimulus').style.visibility).toMatch("hidden");
+		5
 	});
 
 	test('should end trial when trial duration is reached', function(){
