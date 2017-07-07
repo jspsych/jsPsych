@@ -129,4 +129,8 @@ jsPsych.plugins['html-slider-response'] = (function() {
   };
 
   return plugin;
+<<<<<<< HEAD
 })();
+=======
+})();
+>>>>>>> audio and html slider response
