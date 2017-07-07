@@ -18,7 +18,7 @@ jsPsych.plugins.instructions = (function() {
     description: '',
     parameters: {
       pages: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: [jsPsych.plugins.parameterType.HTML_STRING],
         default: undefined,
         array: true,
         no_function: false,
