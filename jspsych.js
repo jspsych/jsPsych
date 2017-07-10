@@ -775,7 +775,11 @@ window.jsPsych = (function() {
 
     current_trial = trial;
 
-    trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
+    // process all timeline variables for this trial
+    trial = evaluateTimelineVariables(trial);
+
+    // evaluate variables that are functions
+    trial = evaluateFunctionParameters(trial);
 
     // check if trial has it's own display element
     var display_element = DOM_target;
@@ -785,6 +789,44 @@ window.jsPsych = (function() {
 
     // execute trial method
     jsPsych.plugins[trial.type].trial(display_element, trial);
+  }
+
+  function evaluateTimelineVariables(trial){
+    var keys = Object.keys(trial);
+
+    for (var i = 0; i < keys.length; i++) {
+      if (typeof trial[keys[i]] == "function" && trial[keys[i]].toString() == "function() { return timeline.timelineVariable(varname); }") {
+        trial[keys[i]] = trial[keys[i]].call();
+      }
+    }
+
+    return trial;
+  }
+
+  function evaluateFunctionParameters(trial){
+    // first, eval the trial type if it is a function
+    if(typeof trial.type === 'function'){
+      trial.type = trial.type.call();
+    }
+
+    // now eval the whole trial
+
+    // keys that are always protected
+    var always_protected = ['on_finish'];
+
+    var keys = Object.keys(trial);
+
+    for (var i = 0; i < keys.length; i++) {
+      if(!always_protected.includes(keys[i])){
+        if(jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION){
+          if (typeof trial[keys[i]] == "function") {
+            trial[keys[i]] = trial[keys[i]].call();
+          }
+        }
+      }
+    }
+
+    return trial;
   }
 
   function loadFail(){
