@@ -12,6 +12,68 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
 
   var plugin = {};
 
+  plugin.info = {
+    name: 'serial-reaction-time-mouse',
+    description: '',
+    parameters: {
+      grid: {
+        type: ,
+        array: true,
+        default: [[1,1,1,1]],
+        no_function: false,
+        description: ''
+      },
+      grid_square_size: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: 100,
+        no_function: false,
+        description: ''
+      },
+      target_color: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: "#999",
+        no_function: false,
+        description: ''
+      },
+      response_ends_trial: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        default: true,
+        no_function: false,
+        description: ''
+      },
+      timing_pre_target: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: 0,
+        no_function: false,
+        description: ''
+      },
+      timing_max_duration: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: -1,
+        no_function: false,
+        description: ''
+      },
+      fade_duration: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: -1,
+        no_function: false,
+        description: ''
+      },
+      allow_nontarget_responses: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        default: false,
+        no_function: false,
+        description: ''
+      }, 
+      prompt: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: '',
+        no_function: false,
+        description: ''
+      },
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     trial.grid = trial.grid || [[1,1,1,1]];
@@ -51,15 +113,7 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
 
 		function showTarget(){
       var resp_targets;
-<<<<<<< HEAD
-<<<<<<< HEAD
       if(!trial.allow_nontarget_responses){
-=======
-      if(trial.allow_nontarget_responses){
->>>>>>> update srt mouse with extra option
-=======
-      if(!trial.allow_nontarget_responses){
->>>>>>> fix backwards plugin
         resp_targets = [display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1])]
       } else {
         resp_targets = display_element.querySelectorAll('.jspsych-serial-reaction-time-stimulus-cell');

@@ -18,45 +18,45 @@ jsPsych.plugins['html-slider-response'] = (function() {
     description: '',
     parameters: {
       stimulus: {
-        type: [jsPsych.plugins.parameterType.IMAGE],
+        type: jsPsych.plugins.parameterType.IMAGE,
         default: undefined,
         no_function: false,
         description: ''
       },
       min: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 0,
         no_function: false,
         description: ''
       },
       max: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 100,
         no_function: false,
         description: ''
       },
       step: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 1,
         no_function: false,
         description: ''
       },
       labels: {
-        type: [jsPsych.plugins.parameterType.KEYCODE],
+        type: jsPsych.plugins.parameterType.KEYCODE,
         default: [],
         array: true,
         no_function: false,
         description: ''
       },
       button_label: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: undefined,
         no_function: false,
         array: false,
         description: ''
       },
       prompt: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: '',
         no_function: false,
         description: ''

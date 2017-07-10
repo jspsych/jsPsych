@@ -15,25 +15,107 @@
 
   jsPsych.pluginAPI.registerPreload('iat-image', 'stimulus', 'image');
 
+  plugin.info = {
+    name: 'iat-image',
+    description: '',
+    parameters: {
+      stimulus: {
+        type: jsPsych.plugins.parameterType.IMAGE,
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      left_category_key: {
+        type: jsPsych.plugins.parameterType.HTML, 
+        default: 'E',
+        no_function: false,
+        description: ''
+      },
+      right_category_key: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: 'I',
+        no_function: false,
+        description: ''
+      },
+      left_category_label: {
+        type: jsPsych.plugins.parameterType.STRING,
+        array: true,
+        default: ['left'],
+        no_function: false,
+        description: ''
+      },
+      right_category_label: {
+        type: jsPsych.plugins.parameterType.STRING,
+        array: true,
+        default: ['right'],
+        no_function: false,
+        description: ''
+      },
+      key_to_move_forward: {
+        type: jsPsych.plugins.parameterType.KEYCODE,
+        array: true,
+        default: jsPsych.ALL_KEYS,
+        no_function: false,
+        description: ''
+      },
+      display_feedback: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        default: false,
+        no_function: false,
+        description: ''
+      },
+      html_when_wrong: {
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        default: '<span style="color: red; font-size: 80px">X</span>',
+        no_function: false,
+        description: ''
+      }, 
+      bottom_instructions: {
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        default: '<p>If you press the wrong key, a red X will appear. Press any key to continue.</p>',
+        no_function: false,
+        description: ''
+      },
+      force_correct_key_press: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        default: false,
+        no_function: false,
+        description: ''
+      },
+      stim_key_association: {
+        type: jsPsych.plugins.parameterType.HTML,
+        default: 'undefined',
+        no_function: false,
+        description: ''
+      },
+      response_ends_trial: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        default: true,
+        no_function: false,
+        description: ''
+      },
+      timing_response: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: -1,
+        no_function: false,
+        description: ''
+      },
+    }
+  }
+
 
   plugin.trial = function(display_element, trial) {
 
-    var plugin_id_name = "jspsych-iat";
-    var plugin_id_selector = '#' + plugin_id_name;
-    var _join = function( /*args*/ ) {
-      var arr = Array.prototype.slice.call(arguments, _join.length);
-      return arr.join(separator = '-');
-    }
-
     // set default values for the parameters
-    trial.display_feedback = typeof trial.display_feedback == 'undefined' ? false : trial.display_feedback;
-    trial.html_when_wrong = trial.html_when_wrong || '<span style="color: red; font-size: 80px">X</span>';
-    trial.bottom_instructions = trial.bottom_instructions || "<p>If you press the wrong key, a red X will appear. Press any key to continue.</p>";
-    trial.force_correct_key_press = trial.force_correct_key_press || false; //If true, key_to_move_forward is no longer needed
     trial.left_category_key = trial.left_category_key || 'E';
     trial.right_category_key = trial.right_category_key || 'I';
     trial.left_category_label = trial.left_category_label || ['left'];
     trial.right_category_label = trial.right_category_label || ['right'];
+    trial.key_to_move_forward = trial.key_to_move_forward || jsPsych.ALL_KEYS;
+    trial.display_feedback = typeof trial.display_feedback == 'undefined' ? false : trial.display_feedback;
+    trial.html_when_wrong = trial.html_when_wrong || '<span style="color: red; font-size: 80px">X</span>';
+    trial.bottom_instructions = trial.bottom_instructions || "<p>If you press the wrong key, a red X will appear. Press any key to continue.</p>";
+    trial.force_correct_key_press = trial.force_correct_key_press || false; //If true, key_to_move_forward is no longer needed
     trial.stim_key_association = trial.stim_key_association || 'undefined';
     trial.response_ends_trial = (typeof trial.response_ends_trial == 'undefined') ? true : trial.response_ends_trial;
     trial.trial_duration = trial.trial_duration || -1;
