@@ -5,50 +5,51 @@
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-iat-image.js"></script>
   <script src="../plugins/jspsych-iat-html.js"></script>
+  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
   <link href="../css/jspsych.css" rel="stylesheet"></link>
 </head>
 <body>
 </body>
 <script>
 
-// var welcome_block = {
-//   type: 'text',
-//   text: '<p>Welcome to the Age Task. In this study you will ' +
-//   'complete an Implicit Association Test (IAT) in which you ' +
-//   'will be asked to sort pictures and words into groups as ' +
-//   'fast as you can.</p><p>Press any key to begin.</p>',
-//   timing_post_trial: 1500
-// };
+var welcome_block = {
+  type: 'html-keyboard-response',
+  stimulus: '<p>Welcome to the Age Task. In this study you will ' +
+  'complete an Implicit Association Test (IAT) in which you ' +
+  'will be asked to sort pictures and words into groups as ' +
+  'fast as you can.</p><p>Press any key to begin.</p>',
+  post_trial_gap: 1500
+};
 
-// var category_block = {
-//   type: 'text',
-//   text: '<p>Next, you will use the "E" and "I" computer keys ' + 'to categorize items into groups as fast as you can. ' +
-//   'These are the four groups and the items that belong to each:<br><br>' +
-//   '<strong>Good</strong>:<br>' + 'Fabulous, Excitement, Glorious, Cheerful, Cherish, ' +
-//   'Enjoy, Delightful, Joyous<br><br>' + '<strong>Bad</strong>:<br>' + 'Humiliate, ' +
-//   'Evil, Grief, Yucky, Detest, Poison, Abuse, Despise<br><br>' +
-//   '<strong>Old</strong>:<br>' + "<img src='img/age/of1.jpg'></img>  " +
-//   "<img src='img/age/of2.jpg'></img>  " + "<img src='img/age/of3.jpg'></img>  " +
-//   "<img src='img/age/om1.jpg'></img>  " + "<img src='img/age/om2.jpg'></img>  " +
-//   "<img src='img/age/om3.jpg'></img><br><br>" + '<strong>Young</strong>:<br>' +
-//   "<img src='img/age/yf1.jpg'></img>  " + "<img src='img/age/yf4.jpg'></img>  " +
-//   "<img src='img/age/yf5.jpg'></img>  " + "<img src='img/age/ym2.jpg'></img>  " +
-//   "<img src='img/age/ym3.jpg'></img>  " + "<img src='img/age/ym5.jpg'></img><br><br>" +
-//   "Press any key to continue.</p>",
-//   timing_post_trial: 1500
-// };
+var category_block = {
+  type: 'html-keyboard-response',
+  stimulus: '<p>Next, you will use the "E" and "I" computer keys ' + 'to categorize items into groups as fast as you can. ' +
+  'These are the four groups and the items that belong to each:<br><br>' +
+  '<strong>Good</strong>:<br>' + 'Fabulous, Excitement, Glorious, Cheerful, Cherish, ' +
+  'Enjoy, Delightful, Joyous<br><br>' + '<strong>Bad</strong>:<br>' + 'Humiliate, ' +
+  'Evil, Grief, Yucky, Detest, Poison, Abuse, Despise<br><br>' +
+  '<strong>Old</strong>:<br>' + "<img src='img/age/of1.jpg'></img>  " +
+  "<img src='img/age/of2.jpg'></img>  " + "<img src='img/age/of3.jpg'></img>  " +
+  "<img src='img/age/om1.jpg'></img>  " + "<img src='img/age/om2.jpg'></img>  " +
+  "<img src='img/age/om3.jpg'></img><br><br>" + '<strong>Young</strong>:<br>' +
+  "<img src='img/age/yf1.jpg'></img>  " + "<img src='img/age/yf4.jpg'></img>  " +
+  "<img src='img/age/yf5.jpg'></img>  " + "<img src='img/age/ym2.jpg'></img>  " +
+  "<img src='img/age/ym3.jpg'></img>  " + "<img src='img/age/ym5.jpg'></img><br><br>" +
+  "Press any key to continue.</p>",
+  post_trial_gap: 1500
+};
 
-// var instructions_block = {
-//   type: 'text',
-//   text: "<div style='position: absolute; top: 18%; left: 20%'><p>Press E for:<br><strong>OLD</strong></p></div>" +
-//   "<div style='position: absolute; top: 18%; right: 20%'><p>Press I for:<br><strong>YOUNG</strong></p></div>" +
-//   "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Put a left finger on the <strong>E</strong> key for items that belong to the Old People category. Put a right finger on the " +
-//   "<strong>I</strong> key for items that belong to the Young People " +
-//   "category. Items will appear one at a time.<br><br>" + "If you " +
-//   "make a mistake, a red X will appear. Press the keys listed below " +
-//   "to continue. Go as fast as you can while being accurate.<br><br> " +
-//   "Press the any key when you are ready to start.</div>",
-// };
+var instructions_block = {
+  type: 'html-keyboard-response',
+  stimulus: "<div style='position: absolute; top: 18%; left: 20%'><p>Press E for:<br><strong>OLD</strong></p></div>" +
+  "<div style='position: absolute; top: 18%; right: 20%'><p>Press I for:<br><strong>YOUNG</strong></p></div>" +
+  "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Put a left finger on the <strong>E</strong> key for items that belong to the Old People category. Put a right finger on the " +
+  "<strong>I</strong> key for items that belong to the Young People " +
+  "category. Items will appear one at a time.<br><br>" + "If you " +
+  "make a mistake, a red X will appear. Press the keys listed below " +
+  "to continue. Go as fast as you can while being accurate.<br><br> " +
+  "Press the any key when you are ready to start.</div>",
+};
 
 
 var trial_block = {
@@ -61,7 +62,7 @@ var trial_block = {
       bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
       force_correct_key_press: true,
       display_feedback: true,
-      timing_response: 3000, //Only if display_feedback is false
+      trial_duration: 3000, //Only if display_feedback is false
       left_category_key: 'E',
       right_category_key: 'I',
       left_category_label: ['OLD'],
@@ -85,12 +86,12 @@ var trial_block = {
     {stimulus: "img/age/ym5.jpg", stim_key_association: "right"}
   ],
   randomize_order: true,
-  repititions: 2
+  repetitions: 2
 };
 
 var instructions_block2 = {
-  type: 'text',
-  text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br><strong>BAD</strong></div>" +
+  type: 'html-keyboard-response',
+  stimulus: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br><strong>BAD</strong></div>" +
   "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br><strong>GOOD</strong></div>" +
   "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Put a left finger on the <strong>E</strong> key for items that " +
   "belong to the Bad category. Put a right finger on the " +
@@ -111,7 +112,7 @@ var trial_block2 = {
       bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
       force_correct_key_press: true,
       display_feedback: true,
-      timing_response: 3000, //Only if display_feedback is false
+      trial_duration: 3000, //Only if display_feedback is false
       left_category_key: 'E',
       right_category_key: 'I',
       left_category_label: ['BAD'],
@@ -139,12 +140,12 @@ var trial_block2 = {
     {stimulus: "Joyous", stim_key_association: "right"}
   ],
   randomize_order: true,
-  repititions: 2
+  repetitions: 2
 };
 
 var instructions_block3 = {
-  type: 'text',
-  text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br> " +
+  type: 'html-keyboard-response',
+  stimulus: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br> " +
   "<strong>BAD</strong><br>" + "or<br>" + "<strong>OLD</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>" +
   "Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG</strong></div>" +
   "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Use <strong>E</strong> for Bad and for " +
@@ -165,7 +166,7 @@ var trial_block3 = {
       bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
       force_correct_key_press: true,
       display_feedback: true,
-      timing_response: 3000, //Only if display_feedback is false
+      trial_duration: 3000, //Only if display_feedback is false
       left_category_key: 'E',
       right_category_key: 'I',
       left_category_label: ['BAD', 'OLD'],
@@ -205,12 +206,12 @@ var trial_block3 = {
     {type: 'iat-html', stimulus: "Joyous", stim_key_association: "right"}
   ],
   randomize_order: true,
-  repititions: 1
+  repetitions: 1
 };
 
 var instructions_block4 = {
-  type: 'text',
-  text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br> " +
+  type: 'html-keyboard-response',
+  stimulus: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br> " +
   "<strong>BAD</strong><br>" + "or<br>" + "<strong>OLD</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>" +
   "Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>YOUNG</strong></div>" +
   "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>This is the same as the previous part.<br>" + "Use <strong>E</strong> for Bad and for " +
@@ -232,7 +233,7 @@ var trial_block4 = {
         bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
         force_correct_key_press: true,
         display_feedback: true,
-        timing_response: 3000, //Only if display_feedback is false
+        trial_duration: 3000, //Only if display_feedback is false
         left_category_key: 'E',
         right_category_key: 'I',
         left_category_label: ['BAD', 'OLD'],
@@ -272,12 +273,12 @@ var trial_block4 = {
       {type: 'iat-html', stimulus: "Joyous", stim_key_association: "right"}
     ],
     randomize_order: true,
-    repititions: 2
+    repetitions: 2
   };
 
   var instructions_block5 = {
-    type: 'text',
-    text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>YOUNG</strong></div>" +
+    type: 'html-keyboard-response',
+    stimulus: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>YOUNG</strong></div>" +
     "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>OLD</strong></div>" +
     "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Watch out, the labels have changed positions!<br>" +
     "Use <strong>E</strong> for Young People<br>" + "Use <strong>I</strong> for Old People<br><br>" +
@@ -297,7 +298,7 @@ var trial_block4 = {
         bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
         force_correct_key_press: true,
         display_feedback: true,
-        timing_response: 3000, //Only if display_feedback is false
+        trial_duration: 3000, //Only if display_feedback is false
         left_category_key: 'E',
         right_category_key: 'I',
         left_category_label: ['YOUNG'],
@@ -321,12 +322,12 @@ var trial_block4 = {
       {type: 'iat-image', stimulus: "img/age/ym5.jpg", stim_key_association: "left"}
     ],
     randomize_order: true,
-    repititions: 2
+    repetitions: 2
   };
 
   var instructions_block6 = {
-    type: 'text',
-    text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>BAD</strong><br>" + "or<br>" +
+    type: 'html-keyboard-response',
+    stimulus: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>BAD</strong><br>" + "or<br>" +
     "<strong>YOUNG</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" +
     "<strong>OLD</strong></div>" +
     "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Use <strong>E</strong> for Bad and for Young People<br>" +
@@ -346,7 +347,7 @@ var trial_block4 = {
       bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
       force_correct_key_press: true,
       display_feedback: true,
-      timing_response: 3000, //Only if display_feedback is false
+      trial_duration: 3000, //Only if display_feedback is false
       left_category_key: 'E',
       right_category_key: 'I',
       left_category_label: ['BAD', 'YOUNG'],
@@ -386,12 +387,12 @@ var trial_block4 = {
       {type: 'iat-html', stimulus: "Joyous", stim_key_association: "right"}
     ],
     randomize_order: true,
-    repititions: 1
+    repetitions: 1
   };
 
   var instructions_block7 = {
-    type: 'text',
-    text: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>Bad</strong><br>" + "or<br>" +
+    type: 'html-keyboard-response',
+    stimulus: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>Bad</strong><br>" + "or<br>" +
     "<strong>Young People</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>Good</strong><br>" + "or<br>" +
     "<strong>Old People</strong></div>" +
     "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>This is the same as the previous part<br>" +
@@ -414,7 +415,7 @@ var trial_block7 = {
     bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
     force_correct_key_press: true,
     display_feedback: true,
-    timing_response: 3000, //Only if display_feedback is false
+    trial_duration: 3000, //Only if display_feedback is false
     left_category_key: 'E',
     right_category_key: 'I',
     left_category_label: ['BAD', 'YOUNG'],
@@ -454,12 +455,12 @@ var trial_block7 = {
     {type: 'iat-html', stimulus: "Joyous", stim_key_association: "right"}
   ],
   randomize_order: true,
-  repititions: 2
+  repetitions: 2
 };
 
   var debrief_block = {
-    type: "text",
-    text: function() {
+    type: "html-keyboard-response",
+    stimulus: function() {
       // calculate D-score from https://faculty.washington.edu/agg/pdf/GB&N.JPSP.2003.pdf
       // first find mean RT
       var bad_old = jsPsych.data.get().filter({iat_type: 'bad-old'}).filterCustom(function(x) { return x.rt < 10000 });
@@ -481,23 +482,23 @@ var trial_block7 = {
   };
 
   var timeline = [];
-  // timeline.push(welcome_block);
-  // timeline.push(category_block);
-  // timeline.push(instructions_block);
+  timeline.push(welcome_block);
+  timeline.push(category_block);
+  timeline.push(instructions_block);
   timeline.push(trial_block);
-  // timeline.push(instructions_block2);
+  timeline.push(instructions_block2);
   timeline.push(trial_block2);
-  // timeline.push(instructions_block3);
+  timeline.push(instructions_block3);
   timeline.push(trial_block3);
-  // timeline.push(instructions_block4);
+  timeline.push(instructions_block4);
   timeline.push(trial_block4);
-  // timeline.push(instructions_block5);
+  timeline.push(instructions_block5);
   timeline.push(trial_block5);
-  // timeline.push(instructions_block6);
+  timeline.push(instructions_block6);
   timeline.push(trial_block6);
-  // timeline.push(instructions_block7);
+  timeline.push(instructions_block7);
   timeline.push(trial_block7);
-  // timeline.push(debrief_block);
+  timeline.push(debrief_block);
 
   jsPsych.init({
     timeline: timeline,

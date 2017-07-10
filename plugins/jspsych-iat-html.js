@@ -92,7 +92,7 @@
         no_function: false,
         description: ''
       },
-      timing_response: {
+      trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: -1,
         no_function: false,
