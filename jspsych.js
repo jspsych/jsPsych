@@ -818,7 +818,7 @@ window.jsPsych = (function() {
 
     for (var i = 0; i < keys.length; i++) {
       if(!always_protected.includes(keys[i])){
-        if(jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION){
+        if(keys[i] !== 'type' && jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION){
           if (typeof trial[keys[i]] == "function") {
             trial[keys[i]] = trial[keys[i]].call();
           }
