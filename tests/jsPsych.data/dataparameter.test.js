@@ -1,18 +1,19 @@
 const root = '../../';
+const utils = require('../testing-utils.js');
 
 describe('The data parameter', function(){
   test('should record data to a trial', function(){
 
     require(root + 'jspsych.js');
-    require(root + 'plugins/jspsych-text.js');
+    require(root + 'plugins/jspsych-html-keyboard-response.js');
 
     return (new Promise(function(resolve, reject){
 
       var key_data = null;
 
       var trial = {
-        type: 'text',
-        text: 'hello',
+        type: 'html-keyboard-response',
+        stimulus: 'hello',
         data: {added: true},
       }
 
@@ -24,8 +25,7 @@ describe('The data parameter', function(){
         }
       });
 
-      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      utils.pressKey(32);
 
       //resolve();
     })).then(function(data) { expect(data).toBe(true) });
@@ -34,17 +34,17 @@ describe('The data parameter', function(){
   test('should record data to all nested trials', function(){
 
     require(root + 'jspsych.js');
-    require(root + 'plugins/jspsych-text.js');
+    require(root + 'plugins/jspsych-html-keyboard-response.js');
 
     return (new Promise(function(resolve, reject){
 
       var key_data = null;
 
       var trial = {
-        type: 'text',
+        type: 'html-keyboard-response',
         timeline: [
-          {text: 'a'},
-          {text: 'b'}
+          {stimulus: 'a'},
+          {stimulus: 'b'}
         ],
         data: {added: true},
       }
@@ -57,11 +57,9 @@ describe('The data parameter', function(){
         }
       });
 
-      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      utils.pressKey(32);
 
-      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      utils.pressKey(32);
 
       //resolve();
     })).then(function(data) { expect(data).toBe(2) });
@@ -70,20 +68,20 @@ describe('The data parameter', function(){
   test('should record data to all nested trials with timeline variables', function(){
 
     require(root + 'jspsych.js');
-    require(root + 'plugins/jspsych-text.js');
+    require(root + 'plugins/jspsych-html-keyboard-response.js');
 
     return (new Promise(function(resolve, reject){
 
       var key_data = null;
 
       var vars = [
-        {text: 'a'},
-        {text: 'b'}
+        {stimulus: 'a'},
+        {stimulus: 'b'}
       ];
 
       var trial = {
         timeline: [
-          {type: 'text', text: jsPsych.timelineVariable('text')}
+          {type: 'html-keyboard-response', stimulus: jsPsych.timelineVariable('html-keyboard-response')}
         ],
         timeline_variables: vars,
         data: {added: true},
@@ -97,11 +95,9 @@ describe('The data parameter', function(){
         }
       });
 
-      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      utils.pressKey(32);
 
-      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      utils.pressKey(32);
 
       //resolve();
     })).then(function(data) { expect(data).toBe(2) });
@@ -110,22 +106,22 @@ describe('The data parameter', function(){
   test.skip('should record data to all nested trials with timeline variables even when nested trials have own data', function(){
 
     require(root + 'jspsych.js');
-    require(root + 'plugins/jspsych-text.js');
+    require(root + 'plugins/jspsych-html-keyboard-response.js');
 
     return (new Promise(function(resolve, reject){
 
       var key_data = null;
 
       var vars = [
-        {text: 'a'},
-        {text: 'b'}
+        {stimulus: 'a'},
+        {stimulus: 'b'}
       ];
 
       var trial = {
         timeline: [
           {
-            type: 'text',
-            text: jsPsych.timelineVariable('text'),
+            type: 'html-keyboard-response',
+            stimulus: jsPsych.timelineVariable('stimulus'),
             data: {foo: 1}
           }
         ],
@@ -141,11 +137,9 @@ describe('The data parameter', function(){
         }
       });
 
-      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      utils.pressKey(32);
 
-      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-      document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+      utils.pressKey(32);
 
       //resolve();
     })).then(function(data) { expect(data).toBe(2) });

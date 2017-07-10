@@ -813,12 +813,15 @@ window.jsPsych = (function() {
 
     // keys that are always protected
     var always_protected = ['on_finish'];
+    var common_across_plugins = ['data', 'timing_post_trial'];
 
     var keys = Object.keys(trial);
 
     for (var i = 0; i < keys.length; i++) {
       if(!always_protected.includes(keys[i])){
-        if(keys[i] !== 'type' && jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION){
+        if(keys[i] !== 'type' &&
+          (common_across_plugins.includes(keys[i]) || jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION)
+        ){
           if (typeof trial[keys[i]] == "function") {
             trial[keys[i]] = trial[keys[i]].call();
           }

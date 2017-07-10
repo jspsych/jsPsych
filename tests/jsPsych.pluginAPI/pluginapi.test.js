@@ -1,13 +1,13 @@
 const root = '../../';
 
 require(root + 'jspsych.js');
-require(root + 'plugins/jspsych-text.js');
+require(root + 'plugins/jspsych-html-keyboard-response.js');
 
 describe('#getKeyboardResponse', function(){
   beforeEach(function(){
     var t = {
-      type: 'text',
-      text: 'foo',
+      type: 'html-keyboard-response',
+      stimulus: 'foo',
       choices: ['q']
     }
 
@@ -108,30 +108,6 @@ describe('#convertKeyCodeToKeyCharacter', function(){
     expect(jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(13)).toBe('enter');
   });
 });
-
-describe('#evaluateFunctionParameters', function(){
-  test('should convert functions to their return value', function(){
-    var trial = {
-      p: function() { return 1; }
-    }
-    jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-    expect(trial.p).toBe(1);
-  });
-  test('should allow protecting functions', function(){
-    var trial = {
-      p: function() { return 1; }
-    }
-    jsPsych.pluginAPI.evaluateFunctionParameters(trial, ['p']);
-    expect(typeof trial.p).toBe('function');
-  });
-  test('should always protect on_finish', function(){
-    var trial = {
-      on_finish: function() { return 1; }
-    }
-    jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-    expect(typeof trial.on_finish).toBe('function');
-  });
-})
 
 describe('#setTimeout', function(){
   test('basic setTimeout control with centralized storage', function(){
