@@ -38,25 +38,19 @@ Of course, there are other things that you will probably want the plugin to do b
 
 #### Change the content of the display
 
-There are a few ways to change the content of the display. The `display_element` parameter of the trial method contains the jQuery representation of the DOM element for displaying content, so you can use various jQuery methods for manipulating the content. Two common ones are `append` and `html`.
+There are a few ways to change the content of the display. The `display_element` parameter of the trial method contains the DOM element for displaying content, so you can use various JavaScript methods for interaction with the display element. A common one is to change the `innerHTML`.
 
 ```javascript
-display_element.append('<p>This is the first paragraph</p>');
-display_element.append('<p>This is the second paragraph</p>');
+var html_content = '<p>This is the first paragraph</p>';
+html_content += '<p>This is the second paragraph</p>';
+
+display_element.innerHTML = html_content;
 ```
-
-`append` will *add* content to the display. The above calls would result in two paragraphs being rendered.
-
-```javascript
-display_element.html('<p>This is the first paragraph</p>');
-display_element.html('<p>This paragraph will replace the first one</p>');
-```
-
-`html` will *replace* the content on the display. The above calls will result in only the second paragraph appearing on the screen. It is often appropriate to use the `html` method to clear the display at the end of a trial:
+It is often appropriate to use `innerHTML` to clear the display at the end of a trial:
 
 ```javascript
 // clear the display
-display_element.html('');
+display_element.innerHTML = '';
 ```
 
 #### Write data
