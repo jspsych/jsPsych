@@ -9,7 +9,7 @@
  **/
 
 
- jsPsych.plugins["iat-image"] = (function() {
+ jsPsych.plugins['iat-image'] = (function() {
 
   var plugin = {};
 
