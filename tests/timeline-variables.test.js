@@ -100,7 +100,7 @@ describe('timeline variables are correctly evaluated', function(){
     console.log(jsPsych.getDisplayElement().innerHTML);
   });
 
-  test.only('when used with a plugin that has a FUNCTION parameter type', function(){
+  test('when used with a plugin that has a FUNCTION parameter type', function(){
     require(root + 'plugins/jspsych-call-function.js');
 
     const mockFn = jest.fn();
