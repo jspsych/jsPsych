@@ -16,8 +16,6 @@ Required links in the html file:
 <script src="../jspsych.js"></script>
 <script src="../plugins/jspsych-form.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
 SCHEMA EXAMPLE:
 
 var schema = {
@@ -1082,7 +1080,7 @@ Dropdown.prototype._option_factory = function() {
   Textarea.prototype = inherit(Tag.prototype);
   Textarea.prototype._generate = function() {
     var component = '<textarea class="mdl-textfield__input" id="{0}" rows={1} columns={2} form="{4}" maxlength="{4}" {5} {6} {7} {8} {9} name="{10}" placeholder="{11}"></textarea>'.format(
-      this.id, this.rows, this.cols, this.parent_id, this.maxlength, this.readonly, this.required, this.disabled, this.autofocus, this.wrap, this.name, this.placeholder) 
+      this.id, this.rows, this.cols, this.parent_id, this.maxlength, this.readonly, this.required, this.disabled, this.autofocus, this.wrap, this.name, this.placeholder)
 
     return '<div class="{0}">{1}<div>'.format(this.style, component);
   }
