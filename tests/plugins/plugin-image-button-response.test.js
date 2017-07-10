@@ -28,7 +28,7 @@ describe('image-button-response', function(){
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus">');
 	}); 
 
-	test('display button label', function(){
+	test('display button labels', function(){
 		var trial = {
 			type: 'image-button-response',
 			stimulus: '../media/blue.png',
@@ -76,7 +76,7 @@ describe('image-button-response', function(){
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});
 
-	test('prompt should append below stimulus', function(){
+	test('prompt should append below button', function(){
 		var trial = {
 			type: 'image-button-response',
 			stimulus: '../media/blue.png',
@@ -104,7 +104,8 @@ describe('image-button-response', function(){
 		});
 
 		expect(jsPsych.getDisplayElement().querySelector('#jspsych-image-button-response-stimulus').style.visibility).toMatch("");
-		5
+		jest.runTimersToTime(500);
+		expect(jsPsych.getDisplayElement().querySelector('#jspsych-image-button-response-stimulus').style.visibility).toMatch('hidden');
 	});
 
 	test('should end trial when trial duration is reached', function(){
