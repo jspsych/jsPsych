@@ -42,6 +42,10 @@ window.jsPsych = (function() {
 
   core.init = function(options) {
 
+    if(typeof options.timeline === 'undefined'){
+      console.error('No timeline declared in jsPsych.init. Cannot start experiment.')
+    }
+
     // reset variables
     timeline = null;
     global_trial_index = 0;
@@ -51,8 +55,6 @@ window.jsPsych = (function() {
     waiting = false;
     loaded = false;
     jsPsych.data.reset();
-
-
 
     var defaults = {
       'display_element': undefined,
@@ -702,7 +704,7 @@ window.jsPsych = (function() {
         var trial_type = parameters.type;
         if (typeof trial_type == 'undefined') {
           console.error('Trial level node is missing the "type" parameter. The parameters for the node are: ' + JSON.stringify(parameters));
-        } else if ((typeof jsPsych.plugins[trial_type] == 'undefined') && (typeof jsPsych.plugins[trial_type] != "function () { return timeline.timelineVariable(varname); }")) {
+        } else if ((typeof jsPsych.plugins[trial_type] == 'undefined') && (trial_type != "function () {return timeline.timelineVariable(varname);}")) {
           console.error('No plugin loaded for trials of type "' + trial_type + '"');
         }
         // create a deep copy of the parameters for the trial
@@ -795,15 +797,16 @@ window.jsPsych = (function() {
     var keys = Object.keys(trial);
 
     for (var i = 0; i < keys.length; i++) {
-      if (typeof trial[keys[i]] == "function" && trial[keys[i]].toString() == "function() { return timeline.timelineVariable(varname); }") {
+      if (typeof trial[keys[i]] == "function" && trial[keys[i]].toString() == "function () {return timeline.timelineVariable(varname);}") {
         trial[keys[i]] = trial[keys[i]].call();
       }
     }
-
+  
     return trial;
   }
 
   function evaluateFunctionParameters(trial){
+
     // first, eval the trial type if it is a function
     if(typeof trial.type === 'function'){
       trial.type = trial.type.call();

@@ -66,3 +66,64 @@ describe('sampling', function(){
     expect(result_1).not.toEqual(result_2);
   });
 });
+
+describe('timeline variables are correctly evaluated', function(){
+  test('when used as trial type parameter', function(){
+    require(root + 'plugins/jspsych-html-button-response.js');
+
+    var tvs = [
+      {type: 'html-keyboard-response'},
+      {type: 'html-button-response'}
+    ]
+
+    var timeline = [];
+
+    timeline.push({
+      timeline: [{
+        type: jsPsych.timelineVariable('type'),
+        stimulus: 'hello',
+        choices: ['a','b']
+      }],
+      timeline_variables: tvs
+    });
+
+    jsPsych.init({
+      timeline: timeline
+    });
+
+    expect(jsPsych.getDisplayElement().innerHTML).not.toMatch('button');
+
+    utils.pressKey(65); // 'a'
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('button');
+
+    console.log(jsPsych.getDisplayElement().innerHTML);
+  });
+
+  test.only('when used with a plugin that has a FUNCTION parameter type', function(){
+    require(root + 'plugins/jspsych-call-function.js');
+
+    const mockFn = jest.fn();
+
+    var tvs = [
+      {fn: function() { mockFn('1'); }},
+      {fn: function() { mockFn('2'); }}
+    ]
+
+    var timeline = [];
+
+    timeline.push({
+      timeline: [{
+        type: 'call-function',
+        func: jsPsych.timelineVariable('fn')
+      }],
+      timeline_variables: tvs
+    });
+
+    jsPsych.init({
+      timeline: timeline
+    });
+
+    expect(mockFn.mock.calls.length).toBe(2);
+  })
+})
