@@ -14,28 +14,28 @@ jsPsych.plugins.fullscreen = (function() {
     description: '',
     parameters: {
       fullscreen_mode: {
-        type: [jsPsych.plugins.parameterType.BOOL],
+        type: jsPsych.plugins.parameterType.BOOL,
         default: true,
         array: false,
         no_function: false,
         description: ''
       },
       message: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: '<p>The experiment will switch to full screen mode when you press the button below</p>',
         array: false,
         no_function: false,
         description: ''
       },
       button_label: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: "Go",
         array: false,
         no_function: false,
         description: ''
       },
       delay_after: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 1000,
         array: false,
         no_function: false,

@@ -17,68 +17,68 @@ jsPsych.plugins["categorize-animation"] = (function() {
     description: '',
     parameters: {
       stimuli: {
-        type: [jsPsych.plugins.parameterType.ARRAY],
+        type: jsPsych.plugins.parameterType.IMAGE,
         default: undefined,
         no_function: false,
         description: ''
       },
       key_answer: {
-        type: [jsPsych.plugins.parameterType.KEYCODE],
+        type: jsPsych.plugins.parameterType.KEYCODE,
         default: undefined,
         no_function: false,
         description: ''
       },
       choices: {
-        type: [jsPsych.plugins.parameterType.KEYCODE],
+        type: jsPsych.plugins.parameterType.KEYCODE,
         default: jsPsych.ALL_KEYS,
         no_function: false,
         array: true,
         description: ''
       },
       text_answer: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: '',
         no_function: false,
         description: ''
       },
       correct_text: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: 'Correct.',
         no_function: false,
         description: ''
       },
       incorrect_text: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: 'Wrong.',
         no_function: false,
         description: ''
       },
       frame_time: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 250,
         no_function: false,
         description: ''
       },
       sequence_reps: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 1,
         no_function: false,
         description: ''
       },
       allow_response_before_complete: {
-        type: [jsPsych.plugins.parameterType.BOOL],
+        type: jsPsych.plugins.parameterType.BOOL,
         default: false,
         no_function: false,
         description: ''
       },
       timing_feedback_duration: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 2000,
         no_function: false,
         description: ''
       },
       prompt: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: '',
         no_function: false,
         description: ''

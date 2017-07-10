@@ -18,50 +18,50 @@ jsPsych.plugins.instructions = (function() {
     description: '',
     parameters: {
       pages: {
-        type: [jsPsych.plugins.parameterType.HTML_STRING],
+        type: jsPsych.plugins.parameterType.HTML_STRING,
         default: undefined,
         array: true,
         no_function: false,
         description: ''
       },
       key_forward: {
-        type: [jsPsych.plugins.parameterType.KEYCODE],
+        type: jsPsych.plugins.parameterType.KEYCODE,
         default: 'rightarrow',
         no_function: false,
         description: ''
       },
       key_backward: {
-        type: [jsPsych.plugins.parameterType.KEYCODE],
+        type: jsPsych.plugins.parameterType.KEYCODE,
         default: 'leftarrow',
         no_function: false,
         description: ''
       },
       allow_backward: {
-        type: [jsPsych.plugins.parameterType.BOOL],
+        type: jsPsych.plugins.parameterType.BOOL,
         default: true,
         no_function: false,
         description: ''
       },
       allow_keys: {
-        type: [jsPsych.plugins.parameterType.BOOL],
+        type: jsPsych.plugins.parameterType.BOOL,
         default: true,
         no_function: false,
         description: ''
       },
       show_clickable_nav: {
-        type: [jsPsych.plugins.parameterType.BOOL],
+        type: jsPsych.plugins.parameterType.BOOL,
         default: false,
         no_function: false,
         description: ''
       },
       button_label_previous: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: 'Previous',
         no_function: false,
         description: ''
       },
       button_label_next: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: 'Next',
         no_function: false,
         description: ''

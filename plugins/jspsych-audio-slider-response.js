@@ -8,31 +8,31 @@ jsPsych.plugins['audio-slider-response'] = (function() {
 		description: '',
     parameters: {
       stimulus: {
-		type: [jsPsych.plugins.parameterType.AUDIO],
+		type: jsPsych.plugins.parameterType.AUDIO,
 		default: undefined,
 		no_function: false,
 		description: ''
 	  },
       stimulus_duration: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: -1,
         no_function: false,
         description: ''
       },
       trial_duration: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: -1,
         no_function: false,
         description: ''
       },
       response_ends_trial: {
-        type: [jsPsych.plugins.parameterType.BOOL],
+        type: jsPsych.plugins.parameterType.BOOL,
         default: true,
         no_function: false,
         description: ''
       },
       trial_ends_after_audio: {
-        type: [jsPsych.plugins.parameterType.BOOL],
+        type: jsPsych.plugins.parameterType.BOOL,
        	default: false,
         no_function: false,
         description: ''

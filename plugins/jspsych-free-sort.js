@@ -18,51 +18,51 @@ jsPsych.plugins['free-sort'] = (function() {
     description: '',
     parameters: {
       stimuli: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: undefined,
         array: true,
         no_function: false,
         description: ''
       },
       stim_height: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 100,
         no_function: false,
         description: ''
       },
       stim_width: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 100,
         no_function: false,
         description: ''
       },
       sort_area_height: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 800,
         no_function: false,
         description: ''
       },
       sort_area_width: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 800,
         no_function: false,
         description: ''
       },
       prompt: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: '',
         no_function: false,
         description: ''
       },
       prompt_location: {
-        type: [jsPsych.plugins.parameterType.SELECT],
+        type: jsPsych.plugins.parameterType.SELECT,
         options: ['above','below'],
         default: 'above',
         no_function: false,
         description: ''
       },
       button_label: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: 'Done',
         no_function: false,
         description: ''

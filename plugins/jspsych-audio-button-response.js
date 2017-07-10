@@ -18,45 +18,45 @@ jsPsych.plugins["audio-button-response"] = (function() {
 		description: '',
 		parameters: {
 			stimulus: {
-				type: [jsPsych.plugins.parameterType.AUDIO],
+				type: jsPsych.plugins.parameterType.AUDIO,
 				default: undefined,
 				no_function: false,
 				description: ''
 			},
 			choices: {
-				type: [jsPsych.plugins.parameterType.KEYCODE],
+				type: jsPsych.plugins.parameterType.KEYCODE,
 				default: [],
 				array: true,
 				no_function: false,
 				description: ''
 			},
       		button_html: {
-        		type: [jsPsych.plugins.parameterType.HTML_STRING],
+        		type: jsPsych.plugins.parameterType.HTML_STRING,
         		default: '<button class="jspsych-btn">%choice%</button>',
         		no_function: false,
         		array: true,
         		description: ''
       		},
      	    prompt: {
-        		type: [jsPsych.plugins.parameterType.STRING],
+        		type: jsPsych.plugins.parameterType.STRING,
         		default: '',
         		no_function: false,
         		description: ''
       		},
       		trial_duration: {
-        		type: [jsPsych.plugins.parameterType.INT],
+        		type: jsPsych.plugins.parameterType.INT,
         		default: -1,
         		no_function: false,
         		description: ''
       		},
       		response_ends_trial: {
-        		type: [jsPsych.plugins.parameterType.BOOL],
+        		type: jsPsych.plugins.parameterType.BOOL,
         		default: true,
         		no_function: false,
         		description: ''
       		},
       		trial_ends_after_audio: {
-        		type: [jsPsych.plugins.parameterType.BOOL],
+        		type: jsPsych.plugins.parameterType.BOOL,
        			default: false,
         		no_function: false,
         		description: ''

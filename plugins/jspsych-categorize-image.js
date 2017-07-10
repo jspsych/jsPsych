@@ -17,86 +17,86 @@ jsPsych.plugins['categorize-image'] = (function() {
     description: '',
     parameters: {
       stimulus: {
-        type: [jsPsych.plugins.parameterType.IMAGE],
+        type: jsPsych.plugins.parameterType.IMAGE,
         default: undefined,
         no_function: false,
         description: ''
       },
       key_answer: {
-        type: [jsPsych.plugins.parameterType.KEYCODE],
+        type: jsPsych.plugins.parameterType.KEYCODE,
         default: undefined,
         no_function: false,
         description: ''
       },
       choices: {
-        type: [jsPsych.plugins.parameterType.KEYCODE],
+        type: jsPsych.plugins.parameterType.KEYCODE,
         default: jsPsych.ALL_KEYS,
         array: true,
         no_function: false,
         description: ''
       },
       text_answer: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: '',
         no_function: false,
         description: ''
       },
       correct_text: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: 'Correct.',
         no_function: false,
         description: ''
       },
       incorrect_text: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: 'Wrong.',
         no_function: false,
         description: ''
       },
       prompt: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: '',
         no_function: false,
         description: ''
       },
       force_correct_button_press: {
-        type: [jsPsych.plugins.parameterType.BOOL],
+        type: jsPsych.plugins.parameterType.BOOL,
         default: false,
         no_function: false,
         description: ''
       },
       show_stim_with_feedback: {
-        type: [jsPsych.plugins.parameterType.BOOL],
+        type: jsPsych.plugins.parameterType.BOOL,
         default: true,
         no_function: false,
         description: ''
       },
       show_feedback_on_timeout: {
-        type: [jsPsych.plugins.parameterType.BOOL],
+        type: jsPsych.plugins.parameterType.BOOL,
         default: false,
         no_function: false,
         description: ''
       },
       timeout_message: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: 'Please respond faster.',
         no_function: false,
         description: ''
       },
       timing_stim: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: -1,
         no_function: false,
         description: ''
       },
       timing_response: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: -1,
         no_function: false,
         description: ''
       },
       timing_feedback_duration: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 2000,
         no_function: false,
         description: ''

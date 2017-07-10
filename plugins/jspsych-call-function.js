@@ -16,7 +16,7 @@ jsPsych.plugins['call-function'] = (function() {
     description: '',
     parameters: {
       func: {
-        type: [jsPsych.plugins.parameterType.FUNCTION],
+        type: jsPsych.plugins.parameterType.FUNCTION,
         default: undefined,
         no_function: false,
         description: ''

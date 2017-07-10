@@ -22,21 +22,21 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
     description: '',
     parameters: {
       stimuli: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.IMAGE,
         array: true,
         default: undefined,
         no_function: false,
         description: ''
       },
       image_size: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         array: true,
         default: [100,100],
         no_function: false,
         description: ''
       },
       timing_duration: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 2000,
         no_function: false,
         description: ''

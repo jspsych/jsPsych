@@ -20,19 +20,19 @@ jsPsych.plugins['image-slider-response'] = (function() {
     description: '',
     parameters: {
       stimulus_duration: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: -1,
         no_function: false,
         description: ''
       },
       trial_duration: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: -1,
         no_function: false,
         description: ''
       },
       response_ends_trial: {
-        type: [jsPsych.plugins.parameterType.BOOL],
+        type: jsPsych.plugins.parameterType.BOOL,
         default: true,
         no_function: false,
         description: ''

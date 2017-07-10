@@ -16,50 +16,50 @@ jsPsych.plugins.video = (function() {
     description: '',
     parameters: {
       sources: {
-        type: [jsPsych.plugins.parameterType.VIDEO],
+        type: jsPsych.plugins.parameterType.VIDEO,
         array: true,
         default: undefined,
         no_function: false,
         description: ''
       },
       width: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: undefined,
         no_function: false,
         description: ''
       },
       height: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: undefined,
         no_function: false,
         description: ''
       },
       autoplay: {
-        type: [jsPsych.plugins.parameterType.BOOL],
+        type: jsPsych.plugins.parameterType.BOOL,
         default: true,
         no_function: false,
         description: ''
       },
       controls: {
-        type: [jsPsych.plugins.parameterType.BOOL],
+        type: jsPsych.plugins.parameterType.BOOL,
         default: false,
         no_function: false,
         description: ''
       },
       prompt: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: '',
         no_function: false,
         description: ''
       },
       start: {
-        type: [jsPsych.plugins.parameterType.FLOAT],
+        type: jsPsych.plugins.parameterType.FLOAT,
         default: false,
         no_function: false,
         description: 'time to start the clip'
       },
       stop: {
-        type: [jsPsych.plugins.parameterType.FLOAT],
+        type: jsPsych.plugins.parameterType.FLOAT,
         default: false,
         no_function: false,
         description: 'time to stop the clip'

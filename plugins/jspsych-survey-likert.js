@@ -17,28 +17,28 @@ jsPsych.plugins['survey-likert'] = (function() {
     description: '',
     parameters: {
       questions: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         array: true,
         default: undefined,
         no_function: false,
         description: ''
       },
       labels: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         array: true,
         default: undefined,
         no_function: false,
         description: ''
       },
       required: {
-        type: [jsPsych.plugins.parameterType.BOOL],
+        type: jsPsych.plugins.parameterType.BOOL,
         array: true,
         default: false,
         no_function: false,
         description: ''
       },
       button_label: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: 'Next',
         no_function: false,
         description: ''

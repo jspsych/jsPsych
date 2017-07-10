@@ -16,39 +16,39 @@ jsPsych.plugins.animation = (function() {
     description: '',
     parameters: {
       stimuli: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: undefined,
         no_function: false,
         array: true,
         description: ''
       },
       frame_time: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 250,
         no_function: false,
         description: ''
       },
       frame_isi: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 0,
         no_function: false,
         description: ''
       },
       sequence_reps: {
-        type: [jsPsych.plugins.parameterType.INT],
+        type: jsPsych.plugins.parameterType.INT,
         default: 1,
         no_function: false,
         description: ''
       },
       choices: {
-        type: [jsPsych.plugins.parameterType.KEYCODE],
+        type: jsPsych.plugins.parameterType.KEYCODE,
         default: jsPsych.ALL_KEYS,
         no_function: false,
         array: true,
         description: ''
       },
       prompt: {
-        type: [jsPsych.plugins.parameterType.STRING],
+        type: jsPsych.plugins.parameterType.STRING,
         default: '',
         no_function: false,
         description: ''
