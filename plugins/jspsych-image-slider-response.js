@@ -19,6 +19,50 @@ jsPsych.plugins['image-slider-response'] = (function() {
     name: 'image-slider-response',
     description: '',
     parameters: {
+      stimulus: {
+        type: [jsPsych.plugins.parameterType.IMAGE],
+        default: undefined,
+        no_function: false,
+        description: ''
+      },
+      min: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 0,
+        no_function: false,
+        description: ''
+      },
+      max: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 100,
+        no_function: false,
+        description: ''
+      },
+      step: {
+        type: [jsPsych.plugins.parameterType.INT],
+        default: 1,
+        no_function: false,
+        description: ''
+      },
+      labels: {
+        type: [jsPsych.plugins.parameterType.KEYCODE],
+        default: [],
+        array: true,
+        no_function: false,
+        description: ''
+      },
+      button_label: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: undefined,
+        no_function: false,
+        array: false,
+        description: ''
+      },
+      prompt: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      },
       stimulus_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: -1,
@@ -42,9 +86,11 @@ jsPsych.plugins['image-slider-response'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
+
     trial.min = trial.min || 0;
     trial.max = trial.max || 100;
     trial.step = trial.step || 1;
+    trial.labels = trial.labels || [];
     trial.button_label = typeof trial.button_label === 'undefined' ? 'Next' : trial.button_label;
     trial.response_ends_trial = (typeof trial.response_ends_trial == 'undefined') ? true : trial.response_ends_trial;
     trial.stimulus_duration = trial.stimulus_duration || -1;
