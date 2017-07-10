@@ -42,19 +42,19 @@ jsPsych.plugins['same-different-image'] = (function() {
         no_function: false,
         description: ''
       },
-      timing_first_stim: {
+      first_stim_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: 1000,
         no_function: false,
         description: ''
       },
-      timing_gap: {
+      gap_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: 500,
         no_function: false,
         description: ''
       },
-      timing_second_stim: {
+      second_stim_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: 1000,
         no_function: false,
@@ -75,18 +75,18 @@ jsPsych.plugins['same-different-image'] = (function() {
     trial.same_key = trial.same_key || 81; // default is 'q'
     trial.different_key = trial.different_key || 80; // default is 'p'
     trial.advance_key = trial.advance_key || jsPsych.ALL_KEYS
-    trial.timing_first_stim = trial.timing_first_stim || 1000; // if -1, the first stim is shown until any key is pressed
-    trial.timing_second_stim = trial.timing_second_stim || 1000; // if -1, then second stim is shown until response.
-    trial.timing_gap = trial.timing_gap || 500;
+    trial.first_stim_duration = trial.first_stim_duration || 1000; // if -1, the first stim is shown until any key is pressed
+    trial.second_stim_duration = trial.second_stim_duration || 1000; // if -1, then second stim is shown until response.
+    trial.gap_duration = trial.gap_duration || 500;
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
     display_element.innerHTML = '<div class="jspsych-same-different-stimulus">'+trial.stimuli[0]+'</div>';
 
     var first_stim_info;
-    if (trial.timing_first_stim > 0) {
+    if (trial.first_stim_duration > 0) {
       jsPsych.pluginAPI.setTimeout(function() {
         showBlankScreen();
-      }, trial.timing_first_stim);
+      }, trial.first_stim_duration);
     } else {
       function afterKeyboardResponse(info) {
         first_stim_info = info;
@@ -106,7 +106,7 @@ jsPsych.plugins['same-different-image'] = (function() {
 
       jsPsych.pluginAPI.setTimeout(function() {
         showSecondStim();
-      }, trial.timing_gap);
+      }, trial.gap_duration);
     }
 
     function showSecondStim() {
@@ -114,10 +114,10 @@ jsPsych.plugins['same-different-image'] = (function() {
       display_element.innerHTML += '<div class="jspsych-same-different-stimulus">'+trial.stimuli[1]+'</div>';
 
 
-      if (trial.timing_second_stim > 0) {
+      if (trial.second_stim_duration > 0) {
         jsPsych.pluginAPI.setTimeout(function() {
           display_element.querySelector('.jspsych-same-different-stimulus').style.visibility = 'hidden';
-        }, trial.timing_second_stim);
+        }, trial.second_stim_duration);
       }
 
       //show prompt here

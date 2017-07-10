@@ -77,14 +77,14 @@
         is_html: true,
         choices: jsPsych.NO_KEYS,
         timing_response: 500,
-        timing_post_trial: 0
+        post_trial_gap: 0
       },
       {
         type: 'single-stim',
         stimulus: function(){ return "<p class='stimulus'>"+jsPsych.timelineVariable('word')+"</p>"; },
         is_html: true,
         choices: ['y','n'],
-        timing_post_trial: 500,
+        post_trial_gap: 500,
         data: function(){
           return {
             word_validity: jsPsych.timelineVariable('word_validity'),

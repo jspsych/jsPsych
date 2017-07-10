@@ -23,13 +23,13 @@ var single_stim_trial = {
 }
 ```
 
-Here's an exampe of overriding the default value for `timing_post_trial`:
+Here's an exampe of overriding the default value for `post_trial_gap`:
 
 ```javascript
 var single_stim_trial = {
 	type: 'single-stim',
 	stimulus: 'images/happy_face.jpg',
-	timing_post_trial: 2000
+	post_trial_gap: 2000
 }
 ```
 
@@ -41,7 +41,7 @@ In addition, there is a set of parameters that can be specified for any plugin.
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-timing_post_trial | numeric | 1000 | Sets the time, in milliseconds, between the current trial and the next trial.
+post_trial_gap | numeric | 1000 | Sets the time, in milliseconds, between the current trial and the next trial.
 on_finish | function | *undefined* | A callback function to execute when the trial finishes. See [this page](../features/callbacks.md) for more details.
 data | object | *undefined* | An object containing additional data to store for the trial. See [this page](../features/data.md) for more details.
 

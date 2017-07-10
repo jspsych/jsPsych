@@ -37,7 +37,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         no_function: false,
         description: ''
       },
-      timing_response: {
+      trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: -1,
         no_function: false,
@@ -64,7 +64,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
     trial.choices = trial.choices || jsPsych.ALL_KEYS;
     trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
     trial.trial_ends_after_audio = (typeof trial.trial_ends_after_audio === 'undefined') ? false : trial.trial_ends_after_audio;
-    trial.timing_response = trial.timing_response || -1; // if -1, then wait for response forever
+    trial.trial_duration = trial.trial_duration || -1; // if -1, then wait for response forever
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
     // setup stimulus
@@ -177,10 +177,10 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
     }
 
     // end trial if time limit is set
-    if (trial.timing_response > 0) {
+    if (trial.trial_duration > 0) {
       jsPsych.pluginAPI.setTimeout(function() {
         end_trial();
-      }, trial.timing_response);
+      }, trial.trial_duration);
     }
 
   };

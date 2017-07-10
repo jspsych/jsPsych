@@ -228,15 +228,15 @@ window.jsPsych = (function() {
     opts.on_data_update(trial_data_values);
 
     // wait for iti
-    if (typeof current_trial.timing_post_trial == 'undefined') {
+    if (typeof current_trial.post_trial_gap == 'undefined') {
       if (opts.default_iti > 0) {
         setTimeout(nextTrial, opts.default_iti);
       } else {
         nextTrial();
       }
     } else {
-      if (current_trial.timing_post_trial > 0) {
-        setTimeout(nextTrial, current_trial.timing_post_trial);
+      if (current_trial.post_trial_gap > 0) {
+        setTimeout(nextTrial, current_trial.post_trial_gap);
       } else {
         nextTrial();
       }
@@ -816,7 +816,7 @@ window.jsPsych = (function() {
 
     // keys that are always protected
     var always_protected = ['on_finish'];
-    var common_across_plugins = ['data', 'timing_post_trial'];
+    var common_across_plugins = ['data', 'post_trial_gap'];
 
     var keys = Object.keys(trial);
 

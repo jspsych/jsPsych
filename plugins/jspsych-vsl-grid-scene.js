@@ -35,7 +35,7 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
         no_function: false,
         description: ''
       },
-      timing_duration: {
+      trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: 2000,
         no_function: false,
@@ -48,14 +48,14 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
 
     // default parameter values
     trial.image_size = trial.image_size || [100, 100];
-    trial.timing_duration = typeof trial.timing_duration === 'undefined' ? 2000 : trial.timing_duration;
+    trial.trial_duration = typeof trial.trial_duration === 'undefined' ? 2000 : trial.trial_duration;
 
 
     display_element.innerHTML = plugin.generate_stimulus(trial.stimuli, trial.image_size);
 
     jsPsych.pluginAPI.setTimeout(function() {
       endTrial();
-    }, trial.timing_duration);
+    }, trial.trial_duration);
 
     function endTrial() {
 

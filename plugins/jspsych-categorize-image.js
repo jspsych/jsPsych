@@ -83,19 +83,19 @@ jsPsych.plugins['categorize-image'] = (function() {
         no_function: false,
         description: ''
       },
-      timing_stim: {
+      stimulus_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: -1,
         no_function: false,
         description: ''
       },
-      timing_response: {
+      trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: -1,
         no_function: false,
         description: ''
       },
-      timing_feedback_duration: {
+      feedback_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: 2000,
         no_function: false,
@@ -117,17 +117,17 @@ jsPsych.plugins['categorize-image'] = (function() {
     trial.show_feedback_on_timeout = (typeof trial.show_feedback_on_timeout === 'undefined') ? false : trial.show_feedback_on_timeout;
     trial.timeout_message = trial.timeout_message || "<p>Please respond faster.</p>";
     // timing params
-    trial.timing_stim = trial.timing_stim || -1; // default is to show image until response
-    trial.timing_response = trial.timing_response || -1; // default is no max response time
-    trial.timing_feedback_duration = trial.timing_feedback_duration || 2000;
+    trial.stimulus_duration = trial.stimulus_duration || -1; // default is to show image until response
+    trial.trial_duration = trial.trial_duration || -1; // default is no max response time
+    trial.feedback_duration = trial.feedback_duration || 2000;
 
     display_element.innerHTML = '<img id="jspsych-categorize-image-stimulus" class="jspsych-categorize-image-stimulus" src="'+trial.stimulus+'"></img>';
 
     // hide image after time if the timing parameter is set
-    if (trial.timing_stim > 0) {
+    if (trial.stimulus_duration > 0) {
       jsPsych.pluginAPI.setTimeout(function() {
         display_element.querySelector('#jspsych-categorize-image-stimulus').style.visibility = 'hidden';
-      }, trial.timing_stim);
+      }, trial.stimulus_duration);
     }
 
     // if prompt is set, show prompt
@@ -173,13 +173,13 @@ jsPsych.plugins['categorize-image'] = (function() {
       allow_held_key: false
     });
 
-    if (trial.timing_response > 0) {
+    if (trial.trial_duration > 0) {
       jsPsych.pluginAPI.setTimeout(function() {
         after_response({
           key: -1,
           rt: -1
         });
-      }, trial.timing_response);
+      }, trial.trial_duration);
     }
 
     function doFeedback(correct, timeout) {
@@ -221,7 +221,7 @@ jsPsych.plugins['categorize-image'] = (function() {
       } else {
         jsPsych.pluginAPI.setTimeout(function() {
           endTrial();
-        }, trial.timing_feedback_duration);
+        }, trial.feedback_duration);
       }
 
     }

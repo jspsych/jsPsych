@@ -12,7 +12,7 @@
   var first = {
     type: 'text',
     text: 'first trial! experiment will pause for 2s in between trials. press any key.',
-    timing_post_trial: 0,
+    post_trial_gap: 0,
     on_finish: function(){
       jsPsych.pauseExperiment();
       setTimeout(jsPsych.resumeExperiment, 2000);

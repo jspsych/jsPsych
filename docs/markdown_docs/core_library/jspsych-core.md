@@ -445,7 +445,7 @@ None.
 
 ### Description
 
-Resumes the experiment after a call to `jsPsych.pauseExperiment()`. If the post trial delay (`timing_post_trial`) has not yet been reached, then the experiment will not continue until the delay is finished. For example, if `timing_post_trial` was 10,000ms and `jsPsych.resumeExperiment()` was called 6,000ms after the previous trial finished, then the experiment would not continue for another 4,000ms.
+Resumes the experiment after a call to `jsPsych.pauseExperiment()`. If the post trial delay (`post_trial_gap`) has not yet been reached, then the experiment will not continue until the delay is finished. For example, if `post_trial_gap` was 10,000ms and `jsPsych.resumeExperiment()` was called 6,000ms after the previous trial finished, then the experiment would not continue for another 4,000ms.
 
 ### Example
 

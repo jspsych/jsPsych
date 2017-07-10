@@ -27,7 +27,7 @@
             "<p>Press the left arrow key if the middle arrow is pointing left. (<)</p>"+
             "<p>Press the right arrow key if the middle arrow is pointing right. (>)</p>"+
             "<p>Press any key to begin.</p>",
-          timing_post_trial: 1000
+          post_trial_gap: 1000
         };
 
         /*defining stimuli*/
@@ -67,7 +67,7 @@
               }
               data.correct = correct;
             },
-            timing_post_trial: function() {
+            post_trial_gap: function() {
                 return Math.floor(Math.random() * 1500) + 500;
             }
           }],

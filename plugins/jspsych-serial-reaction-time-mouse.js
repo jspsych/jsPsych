@@ -18,8 +18,8 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
     trial.grid_square_size = trial.grid_square_size || 100;
     trial.target_color = trial.target_color || "#999";
     trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
-    trial.timing_pre_target = (typeof trial.timing_pre_target === 'undefined') ? 0 : trial.timing_pre_target;
-    trial.timing_max_duration = trial.timing_max_duration || -1; // if -1, then wait for response forever
+    trial.pre_target_duration = (typeof trial.pre_target_duration === 'undefined') ? 0 : trial.pre_target_duration;
+    trial.trial_duration = trial.trial_duration || -1; // if -1, then wait for response forever
     trial.fade_duration = (typeof trial.fade_duration === 'undefined') ? -1 : trial.fade_duration;
     trial.allow_nontarget_responses = (typeof trial.allow_nontarget_responses === 'undefined') ? false : trial.allow_nontarget_responses;
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
@@ -36,12 +36,12 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
     display_element.innerHTML = stimulus;
 
 
-		if(trial.timing_pre_target <= 0){
+		if(trial.pre_target_duration <= 0){
 			showTarget();
 		} else {
 			jsPsych.pluginAPI.setTimeout(function(){
 				showTarget();
-			}, trial.timing_pre_target);
+			}, trial.pre_target_duration);
 		}
 
 		//show prompt if there is one
@@ -87,8 +87,8 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
         display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.backgroundColor = trial.target_color;
       }
 
-			if(trial.timing_max_duration > -1){
-				jsPsych.pluginAPI.setTimeout(endTrial, trial.timing_max_duration);
+			if(trial.trial_duration > -1){
+				jsPsych.pluginAPI.setTimeout(endTrial, trial.trial_duration);
 			}
 
 		}

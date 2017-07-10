@@ -62,13 +62,13 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
         no_function: false,
         description: ''
       },
-      timing_cycle: {
+      cycle_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: 1000,
         no_function: false,
         description: ''
       },
-      timing_pre_movement: {
+      pre_movement_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: 500,
         no_function: false,
@@ -80,13 +80,13 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
   plugin.trial = function(display_element, trial) {
 
     // default trial parameters
-    trial.timing_cycle = trial.timing_cycle || 1000;
+    trial.cycle_duration = trial.cycle_duration || 1000;
     trial.canvas_size = trial.canvas_size || [400, 400];
     trial.image_size = trial.image_size || [100, 100];
     trial.initial_direction = trial.initial_direction || "left";
     trial.occlude_center = (typeof trial.occlude_center === 'undefined') ? true : trial.occlude_center;
     trial.choices = trial.choices || jsPsych.ALL_KEYS;
-    trial.timing_pre_movement = (typeof trial.timing_pre_movement === 'undefined') ? 500 : trial.timing_pre_movement;
+    trial.pre_movement_duration = (typeof trial.pre_movement_duration === 'undefined') ? 500 : trial.pre_movement_duration;
 
     // variable to keep track of timing info and responses
     var start_time = 0;
@@ -97,23 +97,23 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
         params: {
           x: trial.canvas_size[0] - trial.image_size[0]
         },
-        ms: trial.timing_cycle / 2
+        ms: trial.cycle_duration / 2
       }, {
         params: {
           x: trial.canvas_size[0] / 2 - trial.image_size[0] / 2
         },
-        ms: trial.timing_cycle / 2
+        ms: trial.cycle_duration / 2
       }],
       [{
         params: {
           x: 0
         },
-        ms: trial.timing_cycle / 2
+        ms: trial.cycle_duration / 2
       }, {
         params: {
           x: trial.canvas_size[0] / 2 - trial.image_size[0] / 2
         },
-        ms: trial.timing_cycle / 2
+        ms: trial.cycle_duration / 2
       }]
     ];
 
@@ -178,10 +178,10 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
       allow_held_key: false
     });
 
-    if (trial.timing_pre_movement > 0) {
+    if (trial.pre_movement_duration > 0) {
       jsPsych.pluginAPI.setTimeout(function() {
         next_step();
-      }, trial.timing_pre_movement);
+      }, trial.pre_movement_duration);
     } else {
       next_step();
     }

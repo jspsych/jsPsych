@@ -20,13 +20,13 @@ jsPsych.plugins.video = (function() {
         array: true,
         default: undefined,
         no_function: false,
-        description: ''
+        description: 'The video file to play.'
       },
       width: {
         type: jsPsych.plugins.parameterType.INT,
         default: undefined,
         no_function: false,
-        description: ''
+        description: 'The width of the video in pixels.'
       },
       height: {
         type: jsPsych.plugins.parameterType.INT,

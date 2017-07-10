@@ -71,7 +71,7 @@ jsPsych.plugins["categorize-animation"] = (function() {
         no_function: false,
         description: ''
       },
-      timing_feedback_duration: {
+      feedback_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: 2000,
         no_function: false,
@@ -97,7 +97,7 @@ jsPsych.plugins["categorize-animation"] = (function() {
     trial.incorrect_text = trial.incorrect_text || "Wrong.";
     trial.allow_response_before_complete = trial.allow_response_before_complete || false;
     trial.frame_time = trial.frame_time || 500;
-    trial.timing_feedback_duration = trial.timing_feedback_duration || 2000;
+    trial.feedback_duration = trial.feedback_duration || 2000;
     trial.prompt = (typeof trial.prompt === 'undefined') ? '' : trial.prompt;
 
     var animate_frame = -1;
@@ -160,7 +160,7 @@ jsPsych.plugins["categorize-animation"] = (function() {
           timeoutSet = true;
           jsPsych.pluginAPI.setTimeout(function() {
             endTrial();
-          }, trial.timing_feedback_duration);
+          }, trial.feedback_duration);
         }
       }
 

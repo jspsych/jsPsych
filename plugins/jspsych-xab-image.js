@@ -43,25 +43,25 @@ jsPsych.plugins['xab-image'] = (function() {
         no_function: false,
         description: ''
       },
-      timing_x: {
+      x_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: 1000,
         no_function: false,
         description: ''
       },
-      timing_xab_gap: {
+      x_durationab_gap: {
         type: jsPsych.plugins.parameterType.INT,
         default: 1000,
         no_function: false,
         description: ''
       },
-      timing_ab: {
+      ab_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: -1,
         no_function: false,
         description: ''
       },
-      timing_response: {
+      trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: -1,
         no_function: false,
@@ -75,10 +75,10 @@ jsPsych.plugins['xab-image'] = (function() {
     // default trial values
     trial.left_key = trial.left_key || 81; // defaults to 'q'
     trial.right_key = trial.right_key || 80; // defaults to 'p'
-    trial.timing_x = trial.timing_x || 1000; // defaults to 1000msec.
-    trial.timing_xab_gap = trial.timing_xab_gap || 1000; // defaults to 1000msec.
-    trial.timing_ab = trial.timing_ab || -1; // defaults to -1, meaning infinite time on AB. If a positive number is used, then AB will only be displayed for that length.
-    trial.timing_response = trial.timing_response || -1; //
+    trial.x_duration = trial.x_duration || 1000; // defaults to 1000msec.
+    trial.x_durationab_gap = trial.x_durationab_gap || 1000; // defaults to 1000msec.
+    trial.ab_duration = trial.ab_duration || -1; // defaults to -1, meaning infinite time on AB. If a positive number is used, then AB will only be displayed for that length.
+    trial.trial_duration = trial.trial_duration || -1; //
     trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
     // unpack the stimuli array
@@ -100,10 +100,10 @@ jsPsych.plugins['xab-image'] = (function() {
     display_element.innerHTML = '<img class="jspsych-xab-stimulus" src="'+trial.x_path+'"></img>';
 
 
-    // start a timer of length trial.timing_x to move to the next part of the trial
+    // start a timer of length trial.x_duration to move to the next part of the trial
     jsPsych.pluginAPI.setTimeout(function() {
       showBlankScreen();
-    }, trial.timing_x);
+    }, trial.x_duration);
 
 
     function showBlankScreen() {
@@ -113,7 +113,7 @@ jsPsych.plugins['xab-image'] = (function() {
       // start timer
       jsPsych.pluginAPI.setTimeout(function() {
         showSecondStimulus();
-      }, trial.timing_xab_gap);
+      }, trial.x_durationab_gap);
     }
 
 
@@ -134,25 +134,25 @@ jsPsych.plugins['xab-image'] = (function() {
         display_element.innerHTML += trial.prompt;
       }
 
-      // if timing_ab is > 0, then we hide the stimuli after timing_ab milliseconds
-      if (trial.timing_ab > 0) {
+      // if ab_duration is > 0, then we hide the stimuli after ab_duration milliseconds
+      if (trial.ab_duration > 0) {
         jsPsych.pluginAPI.setTimeout(function() {
           var matches = display_element.querySelectorAll('.jspsych-xab-stimulus');
           for(var i=0; i<matches.length; i++){
             matches[i].style.visibility = 'hidden';
           }
-        }, trial.timing_ab);
+        }, trial.ab_duration);
       }
 
-      // if timing_response > 0, then we end the trial after timing_response milliseconds
-      if (trial.timing_response > 0) {
+      // if trial_duration > 0, then we end the trial after trial_duration milliseconds
+      if (trial.trial_duration > 0) {
         jsPsych.pluginAPI.setTimeout(function() {
           end_trial({
             rt: -1,
             correct: false,
             key: -1
           });
-        }, trial.timing_response);
+        }, trial.trial_duration);
       }
 
       // create the function that triggers when a key is pressed.
@@ -194,7 +194,6 @@ jsPsych.plugins['xab-image'] = (function() {
 
         display_element.innerHTML = ''; // remove all
 
-        // move on to the next trial after timing_post_trial milliseconds
         jsPsych.finishTrial(trial_data);
       }
 

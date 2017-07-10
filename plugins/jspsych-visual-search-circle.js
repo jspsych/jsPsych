@@ -86,13 +86,13 @@ jsPsych.plugins["visual-search-circle"] = (function() {
         no_function: false,
         description: ''
       },
-      timing_max_search: {
+      trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: -1,
         no_function: false,
         description: ''
       },
-      timing_fixation: {
+      fixation_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: 1000,
         no_function: false,
@@ -109,8 +109,8 @@ jsPsych.plugins["visual-search-circle"] = (function() {
     trial.circle_diameter = trial.circle_diameter || 250;
     trial.target_present_key = trial.target_present_key || 74;
     trial.target_absent_key = trial.target_absent_key || 70;
-    trial.timing_max_search = (typeof trial.timing_max_search === 'undefined') ? -1 : trial.timing_max_search;
-    trial.timing_fixation = (typeof trial.timing_fixation === 'undefined') ? 1000 : trial.timing_fixation;
+    trial.trial_duration = (typeof trial.trial_duration === 'undefined') ? -1 : trial.trial_duration;
+    trial.fixation_duration = (typeof trial.fixation_duration === 'undefined') ? 1000 : trial.fixation_duration;
 
     // circle params
     var diam = trial.circle_diameter; // pixels
@@ -161,7 +161,7 @@ jsPsych.plugins["visual-search-circle"] = (function() {
       jsPsych.pluginAPI.setTimeout(function() {
         // after wait is over
         show_search_array();
-      }, trial.timing_fixation);
+      }, trial.fixation_duration);
     }
 
     function show_search_array() {
@@ -213,9 +213,9 @@ jsPsych.plugins["visual-search-circle"] = (function() {
         allow_held_key: false
       });
 
-      if (trial.timing_max_search > -1) {
+      if (trial.trial_duration > -1) {
 
-        if (trial.timing_max_search == 0) {
+        if (trial.trial_duration == 0) {
           if (!trial_over) {
 
             jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
@@ -248,7 +248,7 @@ jsPsych.plugins["visual-search-circle"] = (function() {
 
               end_trial(rt, correct, key_press);
             }
-          }, trial.timing_max_search);
+          }, trial.trial_duration);
         }
       }
 

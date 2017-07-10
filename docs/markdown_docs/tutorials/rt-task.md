@@ -163,7 +163,7 @@ timeline.push(instructions);
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
           "<p>Press any key to begin.</p>",
-      timing_post_trial: 2000
+      post_trial_gap: 2000
     };
     timeline.push(instructions);
 
@@ -249,7 +249,7 @@ timeline.push(blue_trial, orange_trial);
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
           "<p>Press any key to begin.</p>",
-      timing_post_trial: 2000
+      post_trial_gap: 2000
     };
     timeline.push(instructions);
 
@@ -369,7 +369,7 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
           "<p>Press any key to begin.</p>",
-      timing_post_trial: 2000
+      post_trial_gap: 2000
     };
     timeline.push(instructions);
 
@@ -469,7 +469,7 @@ var test_procedure = {
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
           "<p>Press any key to begin.</p>",
-      timing_post_trial: 2000
+      post_trial_gap: 2000
     };
     timeline.push(instructions);
 
@@ -568,7 +568,7 @@ In the code above, we replaced the `timing_response: 1000` parameter in `fixatio
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
           "<p>Press any key to begin.</p>",
-      timing_post_trial: 2000
+      post_trial_gap: 2000
     };
     timeline.push(instructions);
 
@@ -664,7 +664,7 @@ jsPsych.init({
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
           "<p>Press any key to begin.</p>",
-      timing_post_trial: 2000
+      post_trial_gap: 2000
     };
     timeline.push(instructions);
 
@@ -790,7 +790,7 @@ var fixation = {
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
           "<p>Press any key to begin.</p>",
-      timing_post_trial: 2000
+      post_trial_gap: 2000
     };
     timeline.push(instructions);
 
@@ -900,7 +900,7 @@ The `data.key_press` value is a numeric key code indicating which key the subjec
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
           "<p>Press any key to begin.</p>",
-      timing_post_trial: 2000
+      post_trial_gap: 2000
     };
     timeline.push(instructions);
 
@@ -1026,7 +1026,7 @@ This code is available in the examples folder in the jsPsych download. It is cal
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
           "<p>Press any key to begin.</p>",
-      timing_post_trial: 2000
+      post_trial_gap: 2000
     };
     timeline.push(instructions);
 

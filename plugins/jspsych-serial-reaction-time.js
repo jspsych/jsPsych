@@ -19,8 +19,8 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
     trial.grid_square_size = trial.grid_square_size || 100;
     trial.target_color = trial.target_color || "#999";
     trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
-    trial.timing_pre_target = (typeof trial.timing_pre_target === 'undefined') ? 0 : trial.timing_pre_target;
-    trial.timing_max_duration = trial.timing_max_duration || -1; // if -1, then wait for response forever
+    trial.pre_target_duration = (typeof trial.pre_target_duration === 'undefined') ? 0 : trial.pre_target_duration;
+    trial.trial_duration = trial.trial_duration || -1; // if -1, then wait for response forever
     trial.show_response_feedback = (typeof trial.show_response_feedback === 'undefined') ? false : trial.show_response_feedback;
     trial.feedback_duration = (typeof trial.feedback_duration === 'undefined') ? 200 : trial.feedback_duration;
     trial.fade_duration = (typeof trial.fade_duration === 'undefined') ? -1 : trial.fade_duration;
@@ -36,12 +36,12 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
     var stimulus = this.stimulus(trial.grid, trial.grid_square_size);
     display_element.innerHTML = stimulus;
 
-		if(trial.timing_pre_target <= 0){
+		if(trial.pre_target_duration <= 0){
 			showTarget();
 		} else {
 			jsPsych.pluginAPI.setTimeout(function(){
 				showTarget();
-			}, trial.timing_pre_target);
+			}, trial.pre_target_duration);
 		}
 
 		//show prompt if there is one
@@ -71,8 +71,8 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
         allow_held_key: false
       });
 
-			if(trial.timing_max_duration > -1){
-				jsPsych.pluginAPI.setTimeout(showFeedback, trial.timing_max_duration);
+			if(trial.trial_duration > -1){
+				jsPsych.pluginAPI.setTimeout(showFeedback, trial.trial_duration);
 			}
 
 		}

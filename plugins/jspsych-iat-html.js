@@ -36,7 +36,7 @@
     trial.right_category_label = trial.right_category_label || ['right'];
     trial.stim_key_association = trial.stim_key_association || 'undefined';
     trial.response_ends_trial = (typeof trial.response_ends_trial == 'undefined') ? true : trial.response_ends_trial;
-    trial.timing_response = trial.timing_response || -1;
+    trial.trial_duration = trial.trial_duration || -1;
     trial.key_to_move_forward = trial.key_to_move_forward || jsPsych.ALL_KEYS;
 
     var html_str = "";
@@ -206,10 +206,10 @@
     }
 
     // end trial if time limit is set
-    if (trial.timing_response > 0 && trial.response_ends_trial != true) {
+    if (trial.trial_duration > 0 && trial.response_ends_trial != true) {
       jsPsych.pluginAPI.setTimeout(function() {
         end_trial();
-      }, trial.timing_response);
+      }, trial.trial_duration);
     }
 
   };
