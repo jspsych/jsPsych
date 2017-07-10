@@ -60,7 +60,6 @@ Every jsPsych experiment utilizes the core library (contained in the `jspsych.js
 * [jsPsych.pluginAPI.convertKeyCharacterToKeyCode](jspsych-pluginAPI.md#jspsychpluginapiconvertkeycharactertokeycode)
 * [jsPsych.pluginAPI.getAudioBuffer](jspsych-pluginAPI.md#jspsychpluginapigetaudiobuffer)
 * [jsPsych.pluginAPI.getKeyboardResponse](jspsych-pluginAPI.md#jspsychpluginapigetkeyboardresponse)
-* [jsPsych.pluginAPI.evaluateFunctionParameters](jspsych-pluginAPI.md#jspsychpluginapievaluatefunctionparameters)
 * [jsPsych.pluginAPI.preloadAudioFiles](jspsych-pluginAPI.md#jspsychpluginapipreloadaudiofiles)
 * [jsPsych.pluginAPI.preloadImages](jspsych-pluginAPI.md#jspsychpluginapipreloadimages)
 * [jsPsych.pluginAPI.registerPreload](jspsych-pluginAPI.md#jspsychpluginapiregisterpreload)

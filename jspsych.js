@@ -2043,39 +2043,6 @@ jsPsych.pluginAPI = (function() {
     timeout_handlers = [];
   }
 
-  // plugin parameter evaluation //
-
-  module.evaluateFunctionParameters = function(trial, protect) {
-
-    // keys that are always protected
-    var always_protected = ['on_finish'];
-
-    protect = (typeof protect === 'undefined') ? [] : protect;
-
-    protect = protect.concat(always_protected);
-
-    var keys = Object.keys(trial);
-
-    for (var i = 0; i < keys.length; i++) {
-
-      var process = true;
-      for (var j = 0; j < protect.length; j++) {
-        if (protect[j] == keys[i]) {
-          process = false;
-          break;
-        }
-      }
-
-      if (typeof trial[keys[i]] == "function" && process) {
-        trial[keys[i]] = trial[keys[i]].call();
-      }
-
-    }
-
-    return trial;
-
-  };
-
   // audio //
 
   // temporary patch for Safari

@@ -244,43 +244,6 @@ var listener = jsPsych.pluginAPI.getKeyboardResponse({
 ```
 
 ---
-## jsPsych.pluginAPI.evaluateFunctionParameters
-
-```
-jsPsych.pluginAPI.evaluateFunctionParameters(trial, protect)
-```
-
-### Parameters
-
-Parameter | Type | Description
-----------|------|------------
-trial | object | An object representing the trial (typically the same variable that gets passed to the `plugin.trial` method). It contains `key: value` pairs describing all the trial parameters.
-protect | array | An array of strings, indicating which parameters in the `trial` object should be protected from normalization
-
-### Return value
-
-Returns a the trial object with all values that were functions replaced by the return value of the function.
-
-### Description
-
-This method replaces any parameters that are functions with the output of the function.
-
-### Example
-
-```javascript
-
-// a snippet from a trial method
-
-plugin.trial = function(display_element, trial) {
-
-	trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
-
-	 // the rest of the trial code...
-}
-
-```
-
----
 ## jsPsych.pluginAPI.preloadAudioFiles
 
 ```
