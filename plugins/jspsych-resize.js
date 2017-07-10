@@ -12,6 +12,49 @@ jsPsych.plugins["resize"] = (function() {
 
   var plugin = {};
 
+  plugin.info = {
+    name: 'resize',
+    description: '',
+    parameters: {
+      item_height: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: 1,
+        no_function: false,
+        description: ''
+      },
+      item_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: 1,
+        no_function: false,
+        description: ''
+      }, 
+      prompt: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: '',
+        no_function: false,
+        description: ''
+      },
+      pixels_per_unit: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: 100,
+        no_function: false,
+        description: ''
+      },
+      starting_size: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: 100,
+        no_funciton: false,
+        description: ''
+      },
+      button_label: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: 'Done',
+        no_function: false,
+        description: ''
+      },
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     // default trial paramters

@@ -16,7 +16,9 @@ describe('audio-keyboard-response', function(){
 	test('loads audio stimulus', function(){
 		var trial = {
 			type: 'audio-keyboard-response',
-			stimulus: '../media/blue.png'
+			stimulus: '../media/sound.mp3',
+			choices: ['f','j'],
+			prompt: '<p>this is a prompt</p>'
 		}
 
 		jsPsych.init({

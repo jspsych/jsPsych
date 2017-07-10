@@ -12,6 +12,81 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 
   var plugin = {};
 
+  plugin.info = {
+    name: 'serial-reaction-time',
+    description: '',
+    parameters: {
+      grid: {
+        type: jsPsych.plugins.parameterType.KEYCODE,
+        array: true,
+        default: [[1,1,1,1]],
+        no_function: false,
+        description: ''
+      },
+      choices: {
+        type: jsPsych.plugins.parameterType.KEYCODE,
+        array: true,
+        default: [['3','5','7','9']],
+        no_function: false,
+        description: ''
+      },
+      grid_square_size: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: 100,
+        no_function: false,
+        description: ''
+      },
+      target_color: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: "#999",
+        no_function: false,
+        description: ''
+      },
+      response_ends_trial: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        default: true,
+        no_function: false,
+        description: ''
+      },
+      timing_pre_target: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: 0,
+        no_function: false,
+        description: ''
+      },
+      timing_max_duration: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: -1,
+        no_function: false,
+        description: ''
+      },
+      show_response_feedback: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        default: false,
+        no_function:false,
+        description: ''
+      },
+      feedback_duration: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: 200,
+        no_function: false,
+        description: ''
+      },
+      fade_duration: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: -1,
+        no_function: false,
+        description: ''
+      },
+      prompt: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: '',
+        no_function: false,
+        description: ''
+      },
+    }
+  }
+
   plugin.trial = function(display_element, trial) {
 
     trial.grid = trial.grid || [[1,1,1,1]];

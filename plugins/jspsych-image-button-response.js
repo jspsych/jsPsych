@@ -74,7 +74,6 @@ jsPsych.plugins["image-button-response"] = (function() {
       console.error('Required parameter "stimulus" missing in image-button-response');
     }
 
-
     // default trial parameters
     trial.button_html = trial.button_html || '<button class="jspsych-btn">%choice%</button>';
     trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
