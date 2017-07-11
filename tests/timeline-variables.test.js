@@ -96,8 +96,6 @@ describe('timeline variables are correctly evaluated', function(){
     utils.pressKey(65); // 'a'
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('button');
-
-    console.log(jsPsych.getDisplayElement().innerHTML);
   });
 
   test('when used with a plugin that has a FUNCTION parameter type', function(){
