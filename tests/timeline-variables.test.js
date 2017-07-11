@@ -108,7 +108,7 @@ describe('timeline variables are correctly evaluated', function(){
     var tvs = [
       {fn: function() { mockFn('1'); }},
       {fn: function() { mockFn('2'); }}
-    ]
+    ];
 
     var timeline = [];
 
