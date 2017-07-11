@@ -5,7 +5,6 @@
 
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-serial-reaction-time.js"></script>
-  <script src="../plugins/jspsych-text.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
 </head>
 
@@ -41,13 +40,13 @@
     repetitions: 10
   }
 
-  var instructions = {
-    type: 'text',
-    text: 'Four boxes will be shown on the screen. Press the key associated with the box that is dark. The keys are 3, 5, 7, and 9. Press any key to start.'
-  }
+  // var instructions = {
+  //   type: 'text',
+  //   text: 'Four boxes will be shown on the screen. Press the key associated with the box that is dark. The keys are 3, 5, 7, and 9. Press any key to start.'
+  // }
 
   jsPsych.init({
-    timeline: [instructions, timeline],
+    timeline: [timeline],
     on_finish: function() {
       jsPsych.data.displayData();
     },

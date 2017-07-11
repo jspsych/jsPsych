@@ -7,7 +7,7 @@ describe('fullscreen plugin', function(){
   beforeEach(function(){
     require(root + 'jspsych.js');
     require(root + 'plugins/jspsych-fullscreen.js');
-    require(root + 'plugins/jspsych-text.js');
+    // require(root + 'plugins/jspsych-text.js');
   });
 
   test('loads correctly', function(){

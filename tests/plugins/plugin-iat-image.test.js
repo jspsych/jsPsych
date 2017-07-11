@@ -24,7 +24,7 @@ describe('iat-image plugin', function(){
       left_category_label: ['FRIENDLY'],
       right_category_label: ['UNFRIENDLY'],
       stim_key_association: 'left',
-      timing_response: 500
+      trial_duration: 500
     }
 
     jsPsych.init({
@@ -176,8 +176,7 @@ describe('iat-image plugin', function(){
     var trial = {
       type: 'iat-image',
       stimulus: '../media/blue.png',
-      image_when_wrong: '../media/redX.png',
-      wrong_image_name: 'red X',
+      html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
       display_feedback: true,
       left_category_key: 'f',
       right_category_key: 'j',
@@ -205,14 +204,14 @@ describe('iat-image plugin', function(){
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
 
-  test('timing_response should end trial after time has elapsed; only if display_feedback is false', function(){
+  test('trial_duration should end trial after time has elapsed; only if display_feedback is false', function(){
 
     var trial = {
       type: 'iat-image',
       stimulus: '../media/blue.png',
       display_feedback: false,
       response_ends_trial: false,
-      timing_response: 500
+      trial_duration: 500
     }
 
     jsPsych.init({
@@ -238,7 +237,7 @@ describe('iat-image plugin', function(){
       left_category_label: ['FRIENDLY'],
       right_category_label: ['UNFRIENDLY'],
       stim_key_association: 'left',
-      timing_response: 500
+      trial_duration: 500
     }
 
     jsPsych.init({
@@ -253,20 +252,19 @@ describe('iat-image plugin', function(){
     jest.runAllTimers();
   });
 
-  test('should accept functions as parameters(timing_response in use, response ends trial false)', function(){
+  test('should accept functions as parameters(trial_duration in use, response ends trial false)', function(){
 
     var trial = {
       type: 'iat-image',
       stimulus: function(){ return '../media/blue.png'; },
       display_feedback: function(){ return true; },
-      image_when_wrong: function(){ return '../media/redX.png'; },
-      wrong_image_name: function(){ return 'red X'; },
+      html_when_wrong: function(){ return '<span style="color: red; font-size: 80px">X</span>'; },
       left_category_key: function(){ return 'e'; },
       right_category_key: function(){ return 'i'; },
       left_category_label: function(){return ['FRIENDLY']; },
       right_category_label: function(){return ['UNFRIENDLY']; },
       stim_key_association: function(){return 'left'; },
-      timing_response: function(){ return 1000; },
+      trial_duration: function(){ return 1000; },
       response_ends_trial: function(){ return false; }
     }
 
@@ -288,21 +286,20 @@ describe('iat-image plugin', function(){
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
 
-  test('should accept functions as parameters(timing_response is not in use)', function(){
+  test('should accept functions as parameters(trial_duration is not in use)', function(){
 
     var trial = {
       type: 'iat-image',
       stimulus: function(){ return '../media/blue.png'; },
       display_feedback: function(){ return true; },
-      image_when_wrong: function(){ return '../media/redX.png'; },
-      wrong_image_name: function(){return 'red X'; },
+      html_when_wrong: function(){ return '<span style="color: red; font-size: 80px">X</span>'; },
       left_category_key: function(){ return 'e'; },
       right_category_key: function(){ return 'i'; },
       left_category_label: function(){return ['FRIENDLY']; },
       right_category_label: function(){return ['UNFRIENDLY']; },
       stim_key_association: function(){return 'left'; },
       key_to_move_forward: function(){return [jsPsych.ALL_KEYS]; },
-      timing_response: function(){ return 1000; },
+      trial_duration: function(){ return 1000; },
       response_ends_trial: function(){ return true; }
     }
 

@@ -12,20 +12,4 @@ describe('audio-keyboard-response', function(){
 	test('loads correctly', function(){
 		expect(typeof window.jsPsych.plugins['audio-keyboard-response']).not.toBe('undefined');
 	});
-
-	test('loads audio stimulus', function(){
-		var trial = {
-			type: 'audio-keyboard-response',
-			stimulus: '../media/sound.mp3',
-			choices: ['f','j'],
-			prompt: '<p>this is a prompt</p>'
-		}
-
-		jsPsych.init({
-			timeline: [trial]
-		});
-
-		expect(jsPsych.getDisplayElement().innerHTML).toBe('<img src=\"../media/blue.png\" id=\"jspsych-audio-keyboard-response-stimulus\">');
-	});
-
 });

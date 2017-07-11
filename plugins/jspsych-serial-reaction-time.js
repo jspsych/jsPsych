@@ -17,9 +17,16 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
     description: '',
     parameters: {
       grid: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.BOOL,
         array: true,
         default: [[1,1,1,1]],
+        no_function: false,
+        description: ''
+      },
+      target: {
+        type: jsPsych.plugins.parameterType.INT,
+        array: true,
+        default: undefined,
         no_function: false,
         description: ''
       },
@@ -54,7 +61,7 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
         no_function: false,
         description: ''
       },
-      timing_max_duration: {
+      trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: -1,
         no_function: false,

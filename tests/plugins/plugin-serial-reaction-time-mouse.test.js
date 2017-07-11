@@ -17,7 +17,7 @@ describe('serial-reaction-time-mouse plugin', function(){
 	test('default behavior', function(){
 		var trial = {
 			type: 'serial-reaction-time-mouse',
-			target: [0,0]
+			target: [0,0],
 		}
 
 		jsPsych.init({
