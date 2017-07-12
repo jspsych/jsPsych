@@ -64,6 +64,7 @@ This is an example of the image-keyboard-response plugin:
 
 
 
+
   var trial_1 = {
 	type: "image-keyboard-response",
     stimulus: 'img/happy_face_1.jpg',
