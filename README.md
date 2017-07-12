@@ -123,10 +123,9 @@ var test = {
      stimulus: jsPsych.timelineVariable('stimulus'),
      data: jsPsych.timelineVariable('data'),
      post_trial_gap: 1500,
-     response_ends_trial: true
-   }],
-     timeline_variables: test_stimuli,
-     sample: {type: 'fixed-repetitions', size: 2}};
+     response_ends_trial: true }],
+  timeline_variables: test_stimuli,
+  sample: {type: 'fixed-repetitions', size: 2}};
 var debrief = {
   type: "html-keyboard-response",
   stimulus: function() {
