@@ -98,7 +98,7 @@ describe('timeline variables are correctly evaluated', function(){
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('button');
   });
 
-  test('when used with a plugin that has a FUNCTION parameter type', function(){
+  test('when used with a plugin that has a FUNCTION parameter type', function(done){
     require(root + 'plugins/jspsych-call-function.js');
 
     const mockFn = jest.fn();
@@ -119,9 +119,13 @@ describe('timeline variables are correctly evaluated', function(){
     });
 
     jsPsych.init({
-      timeline: timeline
+      timeline: timeline,
+      on_finish: function(){
+        expect(mockFn.mock.calls.length).toBe(2);
+        done();
+      }
     });
 
-    expect(mockFn.mock.calls.length).toBe(2);
+
   })
 })
