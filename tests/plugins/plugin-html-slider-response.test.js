@@ -18,7 +18,8 @@ describe('html-slider-response', function(){
 		var trial = {
 			type: 'html-slider-response',
 			stimulus: 'this is html',
-			labels: ['left', 'right']
+			labels: ['left', 'right'],
+			button_label: 'button'
 		}
 
 		jsPsych.init({
@@ -33,6 +34,7 @@ describe('html-slider-response', function(){
 			type: 'html-slider-response',
 			stimulus: 'this is html',
 			labels: ['left', 'right'],
+			button_label: 'button'
 		}
 
 		jsPsych.init({
@@ -66,6 +68,7 @@ describe('html-slider-response', function(){
 			min: 2,
 			max: 10,
 			step: 2,
+			button_label: 'button'
 		}
 
 		jsPsych.init({
@@ -82,6 +85,7 @@ describe('html-slider-response', function(){
 			type: 'html-slider-response',
 			stimulus: 'this is html',
 			labels: ['left', 'right'],
+			button_label: 'button',
 			prompt: '<p>This is a prompt</p>'
 		}
 
@@ -97,6 +101,7 @@ describe('html-slider-response', function(){
 			type: 'html-slider-response',
 			stimulus: 'this is html',
 			labels: ['left', 'right'],
+			button_label: 'button',
 			stimulus_duration: 500
 		}
 
@@ -114,6 +119,7 @@ describe('html-slider-response', function(){
 			type: 'html-slider-response',
 			stimulus: 'this is html',
 			labels: ['left', 'right'],
+			button_label: 'button',
 			trial_duration: 500
 
 		}
@@ -132,6 +138,7 @@ describe('html-slider-response', function(){
 			type: 'html-slider-response',
 			stimulus: 'this is html',
 			labels: ['left', 'right'],
+			button_label: 'button',
 			response_ends_trial: true
 		}
 
