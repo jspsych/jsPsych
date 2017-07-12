@@ -13,6 +13,12 @@ Here is a simple example of how to use the instructions plugin:
 
 
 
+
+
+
+
+
+
     var trial = {       
         type: 'instructions',     
         pages: [      
@@ -30,6 +36,10 @@ Here is a simple example of how to use the instructions plugin:
     jsPsych.init({      
         timeline: [trial],        
     });
+    
+    
+    
+    
     
     
     
