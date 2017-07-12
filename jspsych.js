@@ -783,6 +783,9 @@ window.jsPsych = (function() {
     // evaluate variables that are functions
     trial = evaluateFunctionParameters(trial);
 
+    // get default values for parameters
+    trial = setDefaultValues(trial);
+
     // execute trial method
     jsPsych.plugins[trial.type].trial(DOM_target, trial);
   }
@@ -826,6 +829,21 @@ window.jsPsych = (function() {
       }
     }
 
+    return trial;
+  }
+
+  function setDefaultValues(trial){
+    var trial_parameters = Object.keys(jsPsych.plugins[trial.type].info.parameters);
+    for(var i=0; i<trial_parameters.length; i++){
+      if(typeof trial[trial_parameters[i]] == 'undefined'){
+        if(typeof jsPsych.plugins[trial.type].info.parameters[trial_parameters[i]].default == 'undefined'){
+          console.error('You must specify a value for the '+trial_parameters[i]+' parameter in the '+trial.type+' plugin.');
+        } else {
+          console.log(trial)
+          trial[trial_parameters[i]] = jsPsych.plugins[trial.type].info.parameters[trial_parameters[i]].default;
+        }
+      }
+    }
     return trial;
   }
 
