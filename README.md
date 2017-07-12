@@ -105,7 +105,7 @@ This is an example of the image-keyboard-response plugin:
 
 And for a slightly longer experiment example, here is a flanker experiment which uses the html-keyboard-response plugin:
 <div display="flex">
-<img src="https://user-images.githubusercontent.com/14092539/28126802-97b50d08-66f8-11e7-9a45-46561ab51a5f.gif" align="right" width=50% height=525/>
+<img src="https://user-images.githubusercontent.com/14092539/28126802-97b50d08-66f8-11e7-9a45-46561ab51a5f.gif" align="right" width=50% height=550/>
 
 <div markdown="3" style="width: 50%;">
 <sub>
@@ -133,14 +133,14 @@ var debrief = {
   type: "html-keyboard-response",
   stimulus: function() {
     var congruent_rt = Math.round(jsPsych.data.get()
-         .filter({stim_type: 'congruent'}).select('rt').mean());
+        .filter({stim_type: 'congruent'}).select('rt').mean());
     var incongruent_rt = Math.round(jsPsych.data.get()
-         .filter({stim_type: 'incongruent'}).select('rt').mean());
+        .filter({stim_type: 'incongruent'}).select('rt').mean());
     return "<p style='font-size:25px'>" + 
-    "Your average response time for congruent trials was <strong>" + 
+    "Your average response time for congruent trials was <strong>"+ 
     congruent_rt +  "ms</strong>.</p>"+
     "<p style='font-size:25px'>" + 
-    "Your average response time for incongruent trials was <strong>" + 
+    "Your average response time for incongruent trials was <strong>"+ 
     incongruent_rt + "ms</strong>.</p>";
     }
 };
