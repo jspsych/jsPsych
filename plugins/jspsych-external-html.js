@@ -34,7 +34,7 @@ jsPsych.plugins['external-html'] = (function() {
       },
       check_fn: {
         type: jsPsych.plugins.parameterType.FUNCTION,
-        default: 'function() { return true; }',
+        default: function() { return true; },
         no_function: false,
         description: ''
       },
