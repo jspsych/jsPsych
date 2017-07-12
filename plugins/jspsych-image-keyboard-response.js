@@ -62,13 +62,6 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    // set default values for the parameters
-    trial.choices = trial.choices || jsPsych.ALL_KEYS;
-    trial.response_ends_trial = (typeof trial.response_ends_trial == 'undefined') ? true : trial.response_ends_trial;
-    trial.stimulus_duration = trial.stimulus_duration || -1;
-    trial.trial_duration = trial.trial_duration || -1;
-    trial.prompt = trial.prompt || "";
-
     var new_html = '<img src="'+trial.stimulus+'" id="jspsych-image-keyboard-response-stimulus"></img>';
 
     // add prompt

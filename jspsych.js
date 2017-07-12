@@ -704,7 +704,7 @@ window.jsPsych = (function() {
         var trial_type = parameters.type;
         if (typeof trial_type == 'undefined') {
           console.error('Trial level node is missing the "type" parameter. The parameters for the node are: ' + JSON.stringify(parameters));
-        } else if ((typeof jsPsych.plugins[trial_type] == 'undefined') && (trial_type != "function () {return timeline.timelineVariable(varname);}")) {
+        } else if ((typeof jsPsych.plugins[trial_type] == 'undefined') && (trial_type.toString().replace(/\s/g,'') != "function(){returntimeline.timelineVariable(varname);}")) {
           console.error('No plugin loaded for trials of type "' + trial_type + '"');
         }
         // create a deep copy of the parameters for the trial
@@ -783,25 +783,22 @@ window.jsPsych = (function() {
     // evaluate variables that are functions
     trial = evaluateFunctionParameters(trial);
 
-    // check if trial has it's own display element
-    var display_element = DOM_target;
-    if(typeof trial.display_element !== 'undefined'){
-      display_element = trial.display_element;
-    }
+    // get default values for parameters
+    trial = setDefaultValues(trial);
 
     // execute trial method
-    jsPsych.plugins[trial.type].trial(display_element, trial);
+    jsPsych.plugins[trial.type].trial(DOM_target, trial);
   }
 
   function evaluateTimelineVariables(trial){
     var keys = Object.keys(trial);
 
     for (var i = 0; i < keys.length; i++) {
-      if (typeof trial[keys[i]] == "function" && trial[keys[i]].toString() == "function () {return timeline.timelineVariable(varname);}") {
+      if (typeof trial[keys[i]] == "function" && trial[keys[i]].toString().replace(/\s/g,'') == "function(){returntimeline.timelineVariable(varname);}") {
         trial[keys[i]] = trial[keys[i]].call();
       }
     }
-  
+
     return trial;
   }
 
@@ -832,6 +829,21 @@ window.jsPsych = (function() {
       }
     }
 
+    return trial;
+  }
+
+  function setDefaultValues(trial){
+    var trial_parameters = Object.keys(jsPsych.plugins[trial.type].info.parameters);
+    for(var i=0; i<trial_parameters.length; i++){
+      if(typeof trial[trial_parameters[i]] == 'undefined'){
+        if(typeof jsPsych.plugins[trial.type].info.parameters[trial_parameters[i]].default == 'undefined'){
+          console.error('You must specify a value for the '+trial_parameters[i]+' parameter in the '+trial.type+' plugin.');
+        } else {
+          console.log(trial)
+          trial[trial_parameters[i]] = jsPsych.plugins[trial.type].info.parameters[trial_parameters[i]].default;
+        }
+      }
+    }
     return trial;
   }
 
