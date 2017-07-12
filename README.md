@@ -115,8 +115,7 @@ var test_stimuli = [
   { stimulus: "<<<<<", data: { stim_type: 'congruent'} },
   { stimulus: ">>>>>", data: { stim_type: 'congruent'} },
   { stimulus: "<<><<", data: { stim_type: 'incongruent'} },
-  { stimulus: ">><>>", data: { stim_type: 'incongruent'} }
-];
+  { stimulus: ">><>>", data: { stim_type: 'incongruent'} } ];
 var test = {
   timeline: [{
      type: 'html-keyboard-response',
@@ -127,8 +126,7 @@ var test = {
      response_ends_trial: true
    }],
      timeline_variables: test_stimuli,
-     sample: {type: 'fixed-repetitions', size: 2}
-};
+     sample: {type: 'fixed-repetitions', size: 2}};
 var debrief = {
   type: "html-keyboard-response",
   stimulus: function() {
@@ -142,8 +140,7 @@ var debrief = {
     "<p style='font-size:25px'>" + 
     "Your average response time for incongruent trials was <strong>"+ 
     incongruent_rt + "ms</strong>.</p>";
-    }
-};
+    }};
 var timeline = [];
 timeline.push(test);
 timeline.push(debrief);
