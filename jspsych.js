@@ -783,14 +783,8 @@ window.jsPsych = (function() {
     // evaluate variables that are functions
     trial = evaluateFunctionParameters(trial);
 
-    // check if trial has it's own display element
-    var display_element = DOM_target;
-    if(typeof trial.display_element !== 'undefined'){
-      display_element = trial.display_element;
-    }
-
     // execute trial method
-    jsPsych.plugins[trial.type].trial(display_element, trial);
+    jsPsych.plugins[trial.type].trial(DOM_target, trial);
   }
 
   function evaluateTimelineVariables(trial){
