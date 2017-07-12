@@ -81,7 +81,8 @@ describe('The data parameter', function(){
 
       var trial = {
         timeline: [
-          {type: 'html-keyboard-response', stimulus: jsPsych.timelineVariable('html-keyboard-response')}
+          {type: 'html-keyboard-response', 
+          stimulus: jsPsych.timelineVariable('stimulus')}
         ],
         timeline_variables: vars,
         data: {added: true},

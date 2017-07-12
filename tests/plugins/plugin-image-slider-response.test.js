@@ -19,6 +19,7 @@ describe('image-slider-response', function(){
 			type: 'image-slider-response',
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
+			button_label: 'button'
 		}
 
 		jsPsych.init({
@@ -33,6 +34,7 @@ describe('image-slider-response', function(){
 			type: 'image-slider-response',
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
+			button_label: 'button'
 		}
 
 		jsPsych.init({
@@ -63,6 +65,7 @@ describe('image-slider-response', function(){
 			type: 'image-slider-response',
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
+			button_label: 'button',
 			min: 2,
 			max: 10,
 			step: 2,
@@ -82,6 +85,7 @@ describe('image-slider-response', function(){
 			type: 'image-slider-response',
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
+			button_label: 'button',
 			prompt: '<p>This is a prompt</p>'
 		}
 
@@ -97,6 +101,7 @@ describe('image-slider-response', function(){
 			type: 'image-slider-response',
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
+			button_label: 'button',
 			stimulus_duration: 500
 		}
 
@@ -114,6 +119,7 @@ describe('image-slider-response', function(){
 			type: 'image-slider-response',
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
+			button_label: 'button',
 			trial_duration: 500
 
 		}
@@ -132,6 +138,7 @@ describe('image-slider-response', function(){
 			type: 'image-slider-response',
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
+			button_label: 'button',
 			response_ends_trial: true
 		}
 
