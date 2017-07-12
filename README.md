@@ -4,7 +4,7 @@ jsPsych is a JavaScript library for creating behavioral experiments that run in 
 
 Here is a simple example of how to use the instructions plugin:
 <div display="flex">
-<img src="https://user-images.githubusercontent.com/14092539/28125606-12a034a6-66f5-11e7-8ec3-d835a892e343.gif" align="right" width=50% height=525 />
+<img src="https://user-images.githubusercontent.com/14092539/28126774-801ea42e-66f8-11e7-9b6a-c8bad0026bec.gif" align="right" width=50% height=525 />
 
 <div markdown="1" style="width: 50%;">
 <sub>
@@ -45,6 +45,30 @@ Here is a simple example of how to use the instructions plugin:
     
     
 ```
+
+</sub>
+</div>
+</div>
+
+
+This is an example of the image-keyboard-response plugin:
+<div display="flex">
+<img src="https://user-images.githubusercontent.com/14092539/28125911-0504cca2-66f6-11e7-8f5b-c9686f63aaa8.gif" align="right" width=50% height=525/>
+
+<div markdown"2" style="width: 50%;">
+<sub>
+
+</sub>
+</div>
+</div>
+
+
+And for a slightly longer experiment example, here is a flanker experiment which uses the html-keyboard-response plugin:
+<div display="flex">
+<img src="https://user-images.githubusercontent.com/14092539/28126802-97b50d08-66f8-11e7-9a45-46561ab51a5f.gif" align="right" width=50% height=525/>
+
+<div markdown="3" style="width: 50%;">
+<sub>
 
 </sub>
 </div>
