@@ -839,7 +839,6 @@ window.jsPsych = (function() {
         if(typeof jsPsych.plugins[trial.type].info.parameters[trial_parameters[i]].default == 'undefined'){
           console.error('You must specify a value for the '+trial_parameters[i]+' parameter in the '+trial.type+' plugin.');
         } else {
-          console.log(trial)
           trial[trial_parameters[i]] = jsPsych.plugins[trial.type].info.parameters[trial_parameters[i]].default;
         }
       }
