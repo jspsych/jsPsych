@@ -50,13 +50,13 @@ jsPsych.plugins["audio-button-response"] = (function() {
         description: ''
       },
       margin_vertical: {
-        type: jsPsych.parameterType.STRING,
+        type: jsPsych.plugins.parameterType.STRING,
         default: '0px',
         no_function: false,
         description: ''
       },
       margin_horizontal: {
-        type: jsPsych.parameterType.STRING,
+        type: jsPsych.plugins.parameterType.STRING,
         default: '8px',
         no_function: false,
         description: ''
@@ -79,13 +79,13 @@ jsPsych.plugins["audio-button-response"] = (function() {
   	plugin.trial = function(display_element, trial) {
 
     // default trial parameters
-    trial.button_html = trial.button_html || '<button class="jspsych-btn">%choice%</button>';
-    trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
-    trial.trial_ends_after_audio = (typeof trial.trial_ends_after_audio === 'undefined') ? false : trial.trial_ends_after_audio;
-    trial.trial_duration = trial.trial_duration || -1; // if -1, then wait for response forever
-    trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
-    trial.margin_vertical = trial.margin_vertical || "0px";
-    trial.margin_horizontal = trial.margin_horizontal || "8px";
+    // trial.button_html = trial.button_html || '<button class="jspsych-btn">%choice%</button>';
+    // trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
+    // trial.trial_ends_after_audio = (typeof trial.trial_ends_after_audio === 'undefined') ? false : trial.trial_ends_after_audio;
+    // trial.trial_duration = trial.trial_duration || -1; // if -1, then wait for response forever
+    // trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
+    // trial.margin_vertical = trial.margin_vertical || "0px";
+    // trial.margin_horizontal = trial.margin_horizontal || "8px";
 
     // setup stimulus
     var context = jsPsych.pluginAPI.audioContext();
