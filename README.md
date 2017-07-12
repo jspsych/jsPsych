@@ -60,6 +60,39 @@ This is an example of the image-keyboard-response plugin:
 <div markdown"2" style="width: 50%;">
 <sub>
 
+```javascript
+
+
+  var trial_1 = {
+	type: "image-keyboard-response",
+    stimulus: 'img/happy_face_1.jpg',
+	choices: [89, 78],
+	prompt: '<p class="center-content">Is this face happy? Y or N.</p>'
+  }
+
+  var trial_2 = {
+    type: 'image-keyboard-response',
+    stimulus: 'img/sad_face_2.jpg',
+    choices: [89, 78], // Y or N
+    prompt: '<p class="center-content">Is this face happy? Y or N.</p>'
+  }
+
+  var trial_3 = {
+    type: 'image-keyboard-response',
+    stimulus: 'img/happy_face_2.jpg',
+    choices: [89, 78], // Y or N
+    prompt: '<p class="center-content">Is this face happy? Y or N.</p>',
+  }
+
+
+  jsPsych.init({
+    timeline: [trial_1, trial_2, trial_3],
+    default_iti: 250
+  });
+  
+  
+  
+```
 </sub>
 </div>
 </div>
