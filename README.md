@@ -149,10 +149,12 @@ var debrief = {
       .filter({stim_type: 'congruent'}).select('rt').mean());
   var incongruent_rt = Math.round(jsPsych.data.get()
       .filter({stim_type: 'incongruent'}).select('rt').mean());
-  return "<p>Your average response time for congruent trials"+ 
-  "was <strong>"+congruent_rt+"ms</strong>.</p>"+
-  "<p>Your average response time for incongruent trials was"+
-  "<strong>"incongruent_rt + "ms</strong>.</p>";
+  return "<p style='font-size:25px'>Your average response"+
+  "time for congruent trials was <strong>"+congruent_rt+
+  "ms</strong>.</p>"+
+  "<p style='font-size:25px'>Your average response time for"+
+  "incongruent trials was <strong>"incongruent_rt + 
+  "ms</strong>.</p>";
   }
 };
 
