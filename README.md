@@ -67,21 +67,24 @@ This is an example of the image-keyboard-response plugin:
 	type: "image-keyboard-response",
     stimulus: 'img/happy_face_1.jpg',
 	choices: [89, 78],
-	prompt: '<p class="center-content">Is this face happy? Y or N.</p>'
+	prompt: '<p class="center-content">' +
+	'Is this face happy? Y or N.</p>'
   }
 
   var trial_2 = {
     type: 'image-keyboard-response',
     stimulus: 'img/sad_face_2.jpg',
     choices: [89, 78], // Y or N
-    prompt: '<p class="center-content">Is this face happy? Y or N.</p>'
+    prompt: '<p class="center-content">' +
+    'Is this face happy? Y or N.</p>'
   }
 
   var trial_3 = {
     type: 'image-keyboard-response',
     stimulus: 'img/happy_face_2.jpg',
     choices: [89, 78], // Y or N
-    prompt: '<p class="center-content">Is this face happy? Y or N.</p>',
+    prompt: '<p class="center-content">' +
+    'Is this face happy? Y or N.</p>',
   }
 
 
