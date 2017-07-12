@@ -6,7 +6,7 @@ jsPsych is a JavaScript library for creating behavioral experiments that run in 
 Code Demos
 ----------
 
-Demo 1 with the instructions plugin:
+[Demo 1](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_1.html) with the instructions plugin:
 <div display="flex">
 <img src="https://user-images.githubusercontent.com/14092539/28126774-801ea42e-66f8-11e7-9b6a-c8bad0026bec.gif" align="right" width=50% />
 
@@ -62,7 +62,7 @@ Demo 1 with the instructions plugin:
 </div>
 
 
-Demo 2 with the image-keyboard-response plugin:
+[Demo 2](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_2.html) with the image-keyboard-response plugin:
 <div display="flex">
 <img src="https://user-images.githubusercontent.com/14092539/28125911-0504cca2-66f6-11e7-8f5b-c9686f63aaa8.gif" align="right" width=50% />
 
@@ -116,7 +116,7 @@ Demo 2 with the image-keyboard-response plugin:
 </div>
 
 
-And for a slightly longer experiment example, demo 3 with the html-keyboard-response plugin. Also shows data after experiment ends:
+And for a slightly longer experiment example, [demo 3](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_3.html) with the html-keyboard-response plugin. Also shows data after experiment ends:
 <div display="flex">
 <img src="https://user-images.githubusercontent.com/14092539/28126802-97b50d08-66f8-11e7-9a45-46561ab51a5f.gif" align="right" width=50% />
 
