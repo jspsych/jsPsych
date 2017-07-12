@@ -62,6 +62,13 @@ jsPsych.plugins['same-different-image'] = (function() {
         no_function: false,
         description: ''
       },
+      advance_key: {
+        type: jsPsych.plugins.parameterType.KEYCODE,
+        array: true,
+        default: jsPsych.ALL_KEYS,
+        no_function: false,
+        description: ''
+      },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         default: '',
@@ -72,15 +79,6 @@ jsPsych.plugins['same-different-image'] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-
-    // default parameters
-    trial.same_key = trial.same_key || 81; // default is 'q'
-    trial.different_key = trial.different_key || 80; // default is 'p'
-    trial.advance_key = trial.advance_key || jsPsych.ALL_KEYS
-    trial.first_stim_duration = trial.first_stim_duration || 1000; // if -1, the first stim is shown until any key is pressed
-    trial.second_stim_duration = trial.second_stim_duration || 1000; // if -1, then second stim is shown until response.
-    trial.gap_duration = trial.gap_duration || 500;
-    trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
     display_element.innerHTML = '<img class="jspsych-same-different-stimulus" src="'+trial.stimuli[0]+'"></img>';
 

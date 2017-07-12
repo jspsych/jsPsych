@@ -57,14 +57,14 @@ jsPsych.plugins["visual-search-circle"] = (function() {
       target_size: {
         type: jsPsych.plugins.parameterType.INT,
         array: true,
-        default: 50,
+        default: [50, 50],
         no_function: false,
         description: ''
       },
       fixation_size: {
         type: jsPsych.plugins.parameterType.INT,
         array: true,
-        default: 16,
+        default: [16, 16],
         no_function: false,
         description: ''
       },
@@ -102,15 +102,6 @@ jsPsych.plugins["visual-search-circle"] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-
-    // default values
-    trial.target_size = trial.target_size || [50, 50];
-    trial.fixation_size = trial.fixation_size || [16, 16];
-    trial.circle_diameter = trial.circle_diameter || 250;
-    trial.target_present_key = trial.target_present_key || 74;
-    trial.target_absent_key = trial.target_absent_key || 70;
-    trial.trial_duration = (typeof trial.trial_duration === 'undefined') ? -1 : trial.trial_duration;
-    trial.fixation_duration = (typeof trial.fixation_duration === 'undefined') ? 1000 : trial.fixation_duration;
 
     // circle params
     var diam = trial.circle_diameter; // pixels

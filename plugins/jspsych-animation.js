@@ -58,12 +58,6 @@ jsPsych.plugins.animation = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    trial.frame_time = trial.frame_time || 250;
-    trial.frame_isi = trial.frame_isi || 0;
-    trial.sequence_reps = trial.sequence_reps || 1;
-    trial.choices = trial.choices || jsPsych.ALL_KEYS;
-    trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
-
     var interval_time = trial.frame_time + trial.frame_isi;
     var animate_frame = -1;
     var reps = 0;

@@ -59,13 +59,6 @@ jsPsych.plugins['reconstruction'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    // default parameter values
-    trial.starting_value = (typeof trial.starting_value == 'undefined') ? 0.5 : trial.starting_value;
-    trial.step_size = trial.step_size || 0.05;
-    trial.key_increase = trial.key_increase || 'h';
-    trial.key_decrease = trial.key_decrease || 'g';
-    trial.button_label = typeof trial.button_label === 'undefined' ? 'Next' : trial.button_label;
-
     // if any trial variables are functions
     // this evaluates the function and replaces
     // it with the output of the function

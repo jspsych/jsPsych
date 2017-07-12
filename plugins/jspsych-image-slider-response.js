@@ -86,17 +86,6 @@ jsPsych.plugins['image-slider-response'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-
-    trial.min = trial.min || 0;
-    trial.max = trial.max || 100;
-    trial.step = trial.step || 1;
-    trial.labels = trial.labels || [];
-    trial.button_label = typeof trial.button_label === 'undefined' ? 'Next' : trial.button_label;
-    trial.response_ends_trial = (typeof trial.response_ends_trial == 'undefined') ? true : trial.response_ends_trial;
-    trial.stimulus_duration = trial.stimulus_duration || -1;
-    trial.trial_duration = trial.trial_duration || -1;
-    trial.prompt = trial.prompt || "";
-
     var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 100px 0px;">';
     html += '<div id="jspsych-image-slider-response-stimulus"><img src="' + trial.stimulus + '"></div>';
     html += '<div class="jspsych-image-slider-response-container" style="position:relative;">';

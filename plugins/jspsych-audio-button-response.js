@@ -30,39 +30,51 @@ jsPsych.plugins["audio-button-response"] = (function() {
 				no_function: false,
 				description: ''
 			},
-      		button_html: {
-        		type: jsPsych.plugins.parameterType.HTML_STRING,
-        		default: '<button class="jspsych-btn">%choice%</button>',
-        		no_function: false,
-        		array: true,
-        		description: ''
-      		},
-     	    prompt: {
-        		type: jsPsych.plugins.parameterType.STRING,
-        		default: '',
-        		no_function: false,
-        		description: ''
-      		},
-      		trial_duration: {
-        		type: jsPsych.plugins.parameterType.INT,
-        		default: -1,
-        		no_function: false,
-        		description: ''
-      		},
-      		response_ends_trial: {
-        		type: jsPsych.plugins.parameterType.BOOL,
-        		default: true,
-        		no_function: false,
-        		description: ''
-      		},
-      		trial_ends_after_audio: {
-        		type: jsPsych.plugins.parameterType.BOOL,
-       			default: false,
-        		no_function: false,
-        		description: ''
-      	},
-    	}
-  	}
+      button_html: {
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        default: '<button class="jspsych-btn">%choice%</button>',
+        no_function: false,
+        array: true,
+        description: ''
+      },
+      prompt: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: '',
+        no_function: false,
+        description: ''
+      },
+      trial_duration: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: -1,
+        no_function: false,
+        description: ''
+      },
+      margin_vertical: {
+        type: jsPsych.parameterType.STRING,
+        default: '0px',
+        no_function: false,
+        description: ''
+      },
+      margin_horizontal: {
+        type: jsPsych.parameterType.STRING,
+        default: '8px',
+        no_function: false,
+        description: ''
+      },
+      response_ends_trial: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        default: true,
+        no_function: false,
+        description: ''
+      },
+      trial_ends_after_audio: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        default: false,
+        no_function: false,
+        description: ''
+      },
+    }
+  }
 
   	plugin.trial = function(display_element, trial) {
 

@@ -69,16 +69,7 @@ jsPsych.plugins['xab-html'] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-
-    // default trial values
-    trial.left_key = trial.left_key || 81; // defaults to 'q'
-    trial.right_key = trial.right_key || 80; // defaults to 'p'
-    trial.x_duration = trial.x_duration || 1000; // defaults to 1000msec.
-    trial.x_durationab_gap = trial.x_durationab_gap || 1000; // defaults to 1000msec.
-    trial.ab_duration = trial.ab_duration || -1; // defaults to -1, meaning infinite time on AB. If a positive number is used, then AB will only be displayed for that length.
-    trial.trial_duration = trial.trial_duration || -1; //
-    trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
-
+    
     // unpack the stimuli array
     trial.x_path = trial.stimuli[0];
 

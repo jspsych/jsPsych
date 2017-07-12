@@ -70,11 +70,6 @@ jsPsych.plugins.video = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    // set default values for the parameters
-    trial.prompt = trial.prompt || "";
-    trial.autoplay = typeof trial.autoplay == 'undefined' ? true : trial.autoplay;
-    trial.controls = typeof trial.controls == 'undefined' ? false : trial.controls;
-
     // display stimulus
     var video_html = '<video id="jspsych-video-player" width="'+trial.width+'" height="'+trial.height+'" '
     if(trial.autoplay){

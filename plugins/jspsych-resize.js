@@ -57,14 +57,6 @@ jsPsych.plugins["resize"] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    // default trial paramters
-    trial.item_height = trial.item_height || 1;
-    trial.item_width = trial.item_width || 1;
-    trial.prompt = trial.prompt || ' ';
-    trial.pixels_per_unit = trial.pixels_per_unit ||  100;
-    trial.starting_size = trial.starting_size || 100;
-    trial.button_label = trial.button_label || "Done";
-
     var aspect_ratio = trial.item_width / trial.item_height;
 
     // variables to determine div size
