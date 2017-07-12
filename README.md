@@ -2,7 +2,11 @@
 
 jsPsych is a JavaScript library for creating behavioral experiments that run in a web browser. jsPsych creates a framework for defining experiments and provides a set of flexible plugins that create different kinds of tasks a subject could complete during an experiment. By assembling different plugins together and customizing the parameters of each, it is possible to create many different types of experiments.
 
-Here is a simple example of how to use the instructions plugin:
+
+Code Demos
+----------
+
+Demo 1 with the instructions plugin:
 <div display="flex">
 <img src="https://user-images.githubusercontent.com/14092539/28126774-801ea42e-66f8-11e7-9b6a-c8bad0026bec.gif" align="right" width=50% />
 
@@ -58,7 +62,7 @@ Here is a simple example of how to use the instructions plugin:
 </div>
 
 
-This is an example of the image-keyboard-response plugin:
+Demo 2 with the image-keyboard-response plugin:
 <div display="flex">
 <img src="https://user-images.githubusercontent.com/14092539/28125911-0504cca2-66f6-11e7-8f5b-c9686f63aaa8.gif" align="right" width=50% />
 
@@ -112,7 +116,7 @@ This is an example of the image-keyboard-response plugin:
 </div>
 
 
-And for a slightly longer experiment example, here is a flanker experiment which uses the html-keyboard-response plugin:
+And for a slightly longer experiment example, demo 3 with the html-keyboard-response plugin. Also shows data after experiment ends:
 <div display="flex">
 <img src="https://user-images.githubusercontent.com/14092539/28126802-97b50d08-66f8-11e7-9a45-46561ab51a5f.gif" align="right" width=50% />
 
