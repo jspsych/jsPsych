@@ -16,17 +16,17 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
     name: 'serial-reaction-time-mouse',
     description: '',
     parameters: {
-      grid: {
-        type: jsPsych.plugins.parameterType.BOOL,
-        array: true,
-        default: [[1,1,1,1]],
-        no_function: false,
-        description: ''
-      },
       target: {
         type: jsPsych.plugins.parameterType.INT,
         array: true,
         default: undefined,
+        no_function: false,
+        description: ''
+      },
+      grid: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        array: true,
+        default: [[1,1,1,1]],
         no_function: false,
         description: ''
       },
@@ -48,7 +48,7 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
         no_function: false,
         description: ''
       },
-      timing_pre_target: {
+      pre_target_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: 0,
         no_function: false,
@@ -82,16 +82,6 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-
-    trial.grid = trial.grid || [[1,1,1,1]];
-    trial.grid_square_size = trial.grid_square_size || 100;
-    trial.target_color = trial.target_color || "#999";
-    trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
-    trial.pre_target_duration = (typeof trial.pre_target_duration === 'undefined') ? 0 : trial.pre_target_duration;
-    trial.trial_duration = trial.trial_duration || -1; // if -1, then wait for response forever
-    trial.fade_duration = (typeof trial.fade_duration === 'undefined') ? -1 : trial.fade_duration;
-    trial.allow_nontarget_responses = (typeof trial.allow_nontarget_responses === 'undefined') ? false : trial.allow_nontarget_responses;
-    trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
     var startTime = -1;
     var response = {

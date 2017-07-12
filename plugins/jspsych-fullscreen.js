@@ -46,11 +46,6 @@ jsPsych.plugins.fullscreen = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    trial.fullscreen_mode = typeof trial.fullscreen_mode === 'undefined' ? true : trial.fullscreen_mode;
-    trial.message = trial.message || '<p>The experiment will switch to full screen mode when you press the button below</p>';
-    trial.button_label = trial.button_label || 'Go';
-    trial.delay_after = trial.delay_after || 1000;
-
     // check if keys are allowed in fullscreen mode
     var keyboardNotAllowed = typeof Element !== 'undefined' && 'ALLOW_KEYBOARD_INPUT' in Element;
     if (keyboardNotAllowed) {

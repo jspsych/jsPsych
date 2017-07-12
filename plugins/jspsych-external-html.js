@@ -49,11 +49,6 @@ jsPsych.plugins['external-html'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    // default parameters
-    trial.check_fn = trial.check_fn || function() { return true; }
-    trial.force_refresh = (typeof trial.force_refresh === 'undefined') ? false : trial.force_refresh
-
-
     var url = trial.url;
     if (trial.force_refresh) {
       url = trial.url + "?time=" + (new Date().getTime());

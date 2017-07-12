@@ -56,6 +56,18 @@ jsPsych.plugins["image-button-response"] = (function() {
         no_function: false,
         description: ''
       },
+      margin_vertical: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: '0px',
+        no_function: false,
+        description: ''
+      },
+      margin_horizontal: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: '8px',
+        no_function: false,
+        description: ''
+      },  
       response_ends_trial: {
         type: jsPsych.plugins.parameterType.BOOL,
         default: true,
@@ -73,15 +85,6 @@ jsPsych.plugins["image-button-response"] = (function() {
     if(typeof trial.stimulus === 'undefined'){
       console.error('Required parameter "stimulus" missing in image-button-response');
     }
-
-    // default trial parameters
-    trial.button_html = trial.button_html || '<button class="jspsych-btn">%choice%</button>';
-    trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
-    trial.stimulus_duration = trial.stimulus_duration || -1; // if -1, then show indefinitely
-    trial.trial_duration = trial.trial_duration || -1; // if -1, then wait for response forever
-    trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
-    trial.margin_vertical = trial.margin_vertical || "0px";
-    trial.margin_horizontal = trial.margin_horizontal || "8px";
 
     // display stimulus
     var html = '<img src="'+trial.stimulus+'" id="jspsych-image-button-response-stimulus"></img>';

@@ -43,13 +43,13 @@ jsPsych.plugins['categorize-image'] = (function() {
       },
       correct_text: {
         type: jsPsych.plugins.parameterType.STRING,
-        default: 'Correct.',
+        default: "<p class='feedback'>Correct</p>",
         no_function: false,
         description: ''
       },
       incorrect_text: {
         type: jsPsych.plugins.parameterType.STRING,
-        default: 'Wrong.',
+        default: "<p class='feedback'>Incorrect</p>",
         no_function: false,
         description: ''
       },
@@ -79,7 +79,7 @@ jsPsych.plugins['categorize-image'] = (function() {
       },
       timeout_message: {
         type: jsPsych.plugins.parameterType.STRING,
-        default: 'Please respond faster.',
+        default: "<p>Please respond faster.</p>",
         no_function: false,
         description: ''
       },
@@ -105,21 +105,6 @@ jsPsych.plugins['categorize-image'] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-
-    // default parameters
-    trial.choices = trial.choices || jsPsych.ALL_KEYS;
-    trial.text_answer = (typeof trial.text_answer === 'undefined') ? "" : trial.text_answer;
-    trial.correct_text = (typeof trial.correct_text === 'undefined') ? "<p class='feedback'>Correct</p>" : trial.correct_text;
-    trial.incorrect_text = (typeof trial.incorrect_text === 'undefined') ? "<p class='feedback'>Incorrect</p>" : trial.incorrect_text;
-    trial.show_stim_with_feedback = (typeof trial.show_stim_with_feedback === 'undefined') ? true : trial.show_stim_with_feedback;
-    trial.force_correct_button_press = (typeof trial.force_correct_button_press === 'undefined') ? false : trial.force_correct_button_press;
-    trial.prompt = (typeof trial.prompt === 'undefined') ? '' : trial.prompt;
-    trial.show_feedback_on_timeout = (typeof trial.show_feedback_on_timeout === 'undefined') ? false : trial.show_feedback_on_timeout;
-    trial.timeout_message = trial.timeout_message || "<p>Please respond faster.</p>";
-    // timing params
-    trial.stimulus_duration = trial.stimulus_duration || -1; // default is to show image until response
-    trial.trial_duration = trial.trial_duration || -1; // default is no max response time
-    trial.feedback_duration = trial.feedback_duration || 2000;
 
     display_element.innerHTML = '<img id="jspsych-categorize-image-stimulus" class="jspsych-categorize-image-stimulus" src="'+trial.stimulus+'"></img>';
 

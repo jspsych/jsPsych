@@ -65,13 +65,6 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       return arr.join(separator = '-');
     }
 
-    // trial defaults
-    trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
-    trial.required = typeof trial.required == 'undefined' ? null : trial.required;
-    trial.horizontal = typeof trial.required == 'undefined' ? false : trial.horizontal;
-    //If button_label is empty, the browser's language will be used to determine the button label.
-    trial.button_label = typeof trial.button_label === 'undefined' ? '' : trial.button_label;
-
     // inject CSS for trial
     display_element.innerHTML = '<style id="jspsych-survey-multi-choice-css"></style>';
     var cssstr = ".jspsych-survey-multi-choice-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }"+

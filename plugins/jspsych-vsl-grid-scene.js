@@ -46,11 +46,6 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    // default parameter values
-    trial.image_size = trial.image_size || [100, 100];
-    trial.trial_duration = typeof trial.trial_duration === 'undefined' ? 2000 : trial.trial_duration;
-
-
     display_element.innerHTML = plugin.generate_stimulus(trial.stimuli, trial.image_size);
 
     jsPsych.pluginAPI.setTimeout(function() {

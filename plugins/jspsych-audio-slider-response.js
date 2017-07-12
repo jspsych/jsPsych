@@ -19,6 +19,30 @@ jsPsych.plugins['audio-slider-response'] = (function() {
         no_function: false,
         description: ''
       },
+      min: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: 0,
+        no_function: false,
+        description: ''
+      },
+      max: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: 100,
+        no_function: false,
+        description: ''
+      },
+      step: {
+        type: jsPsych.plugins.parameterType.INT,
+        default: 1,
+        no_function: false,
+        description: ''
+      },
+      button_label: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: 'Next',
+        no_function: false,
+        description: ''
+      },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: -1,
@@ -37,20 +61,16 @@ jsPsych.plugins['audio-slider-response'] = (function() {
         no_function: false,
         description: ''
       },
+      prompt: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: '',
+        no_function: false,
+        description: ''
+      }
     }
   }
 
     plugin.trial = function(display_element, trial) {
-
-    trial.min = trial.min || 0;
-    trial.max = trial.max || 100;
-    trial.step = trial.step || 1;
-    trial.button_label = typeof trial.button_label === 'undefined' ? 'Next' : trial.button_label;
-    trial.response_ends_trial = (typeof trial.response_ends_trial == 'undefined') ? true : trial.response_ends_trial;
-    trial.trial_ends_after_audio = (typeof trial.trial_ends_after_audio === 'undefined') ? false : trial.trial_ends_after_audio;
-    trial.stimulus_duration = trial.stimulus_duration || -1;
-    trial.trial_duration = trial.trial_duration || -1;
-    trial.prompt = trial.prompt || "";
 
     // setup stimulus
     var context = jsPsych.pluginAPI.audioContext();

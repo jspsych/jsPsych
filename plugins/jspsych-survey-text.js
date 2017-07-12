@@ -62,8 +62,6 @@ jsPsych.plugins['survey-text'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
-    trial.button_label = typeof trial.button_label === 'undefined' ? 'Next' : trial.button_label;
 
     if (typeof trial.rows == 'undefined') {
       trial.rows = [];

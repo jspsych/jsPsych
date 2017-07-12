@@ -60,13 +60,6 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    // default parameters
-    trial.choices = trial.choices || jsPsych.ALL_KEYS;
-    trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
-    trial.trial_ends_after_audio = (typeof trial.trial_ends_after_audio === 'undefined') ? false : trial.trial_ends_after_audio;
-    trial.trial_duration = trial.trial_duration || -1; // if -1, then wait for response forever
-    trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
-
     // setup stimulus
     var context = jsPsych.pluginAPI.audioContext();
     if(context !== null){

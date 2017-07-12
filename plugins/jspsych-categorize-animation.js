@@ -55,7 +55,7 @@ jsPsych.plugins["categorize-animation"] = (function() {
       },
       frame_time: {
         type: jsPsych.plugins.parameterType.INT,
-        default: 250,
+        default: 500,
         no_function: false,
         description: ''
       },
@@ -87,18 +87,6 @@ jsPsych.plugins["categorize-animation"] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-
-    // set default values
-    trial.choices = trial.choices || jsPsych.ALL_KEYS;
-    trial.sequence_reps = trial.sequence_reps || 1;
-    trial.key_answer = trial.key_answer;
-    trial.text_answer = (typeof trial.text_answer === 'undefined') ? "" : trial.text_answer;
-    trial.correct_text = trial.correct_text || "Correct.";
-    trial.incorrect_text = trial.incorrect_text || "Wrong.";
-    trial.allow_response_before_complete = trial.allow_response_before_complete || false;
-    trial.frame_time = trial.frame_time || 500;
-    trial.feedback_duration = trial.feedback_duration || 2000;
-    trial.prompt = (typeof trial.prompt === 'undefined') ? '' : trial.prompt;
 
     var animate_frame = -1;
     var reps = 0;

@@ -30,6 +30,12 @@ jsPsych.plugins['survey-likert'] = (function() {
         no_function: false,
         description: ''
       },
+      preamble: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: '',
+        no_function: false,
+        description: ''
+      },
       required: {
         type: jsPsych.plugins.parameterType.BOOL,
         array: true,
@@ -47,11 +53,6 @@ jsPsych.plugins['survey-likert'] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-
-    // default parameters for the trial
-    trial.preamble = typeof trial.preamble === 'undefined' ? "" : trial.preamble;
-    trial.required = typeof trial.required === 'undefined' ? false : trial.required;
-    trial.button_label = typeof trial.button_label === 'undefined' ? 'Next' : trial.button_label;
 
 
     var html = "";

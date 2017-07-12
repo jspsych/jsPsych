@@ -72,15 +72,6 @@ jsPsych.plugins['free-sort'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    // default values
-    trial.stim_height = trial.stim_height || 100;
-    trial.stim_width = trial.stim_width || 100;
-    trial.prompt = (typeof trial.prompt === 'undefined') ? '' : trial.prompt;
-    trial.prompt_location = trial.prompt_location || "above";
-    trial.sort_area_width = trial.sort_area_width || 800;
-    trial.sort_area_height = trial.sort_area_height || 800;
-    trial.button_label = typeof trial.button_label === 'undefined' ? 'Done' : trial.button_label;
-
     var start_time = (new Date()).getTime();
 
     var html = "";

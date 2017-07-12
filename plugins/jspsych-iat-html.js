@@ -104,21 +104,6 @@
 
   plugin.trial = function(display_element, trial) {
 
-    // set default values for the parameters
-    trial.left_category_key = trial.left_category_key || 'E';
-    trial.right_category_key = trial.right_category_key || 'I';
-    trial.left_category_label = trial.left_category_label || ['left'];
-    trial.right_category_label = trial.right_category_label || ['right'];
-    trial.key_to_move_forward = trial.key_to_move_forward || jsPsych.ALL_KEYS;
-    trial.display_feedback = typeof trial.display_feedback == 'undefined' ? false : trial.display_feedback;
-    trial.html_when_wrong = trial.html_when_wrong || '<span style="color: red; font-size: 80px">X</span>';
-    trial.bottom_instructions = trial.bottom_instructions || "<p>If you press the wrong key, a red X will appear. Press any key to continue.</p>";
-    trial.force_correct_key_press = trial.force_correct_key_press || false; //If true, key_to_move_forward is no longer needed
-    trial.stim_key_association = trial.stim_key_association || 'undefined';
-    trial.response_ends_trial = (typeof trial.response_ends_trial == 'undefined') ? true : trial.response_ends_trial;
-    trial.trial_duration = trial.trial_duration || -1;
-    trial.key_to_move_forward = trial.key_to_move_forward || jsPsych.ALL_KEYS;
-
     var html_str = "";
 
     html_str += "<div style='position: absolute; height: 20%; width: 100%; margin-left: auto; margin-right: auto; top: 42%; left: 0; right: 0'><p id='jspsych-iat-stim'>" + trial.stimulus + "</p></div>";

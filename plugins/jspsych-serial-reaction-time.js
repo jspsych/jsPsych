@@ -55,7 +55,7 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
         no_function: false,
         description: ''
       },
-      timing_pre_target: {
+      pre_target_duration: {
         type: jsPsych.plugins.parameterType.INT,
         default: 0,
         no_function: false,
@@ -95,18 +95,6 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-
-    trial.grid = trial.grid || [[1,1,1,1]];
-    trial.choices = trial.choices || [['3','5','7','9']];
-    trial.grid_square_size = trial.grid_square_size || 100;
-    trial.target_color = trial.target_color || "#999";
-    trial.response_ends_trial = (typeof trial.response_ends_trial === 'undefined') ? true : trial.response_ends_trial;
-    trial.pre_target_duration = (typeof trial.pre_target_duration === 'undefined') ? 0 : trial.pre_target_duration;
-    trial.trial_duration = trial.trial_duration || -1; // if -1, then wait for response forever
-    trial.show_response_feedback = (typeof trial.show_response_feedback === 'undefined') ? false : trial.show_response_feedback;
-    trial.feedback_duration = (typeof trial.feedback_duration === 'undefined') ? 200 : trial.feedback_duration;
-    trial.fade_duration = (typeof trial.fade_duration === 'undefined') ? -1 : trial.fade_duration;
-    trial.prompt = (typeof trial.prompt === 'undefined') ? "" : trial.prompt;
 
     // create a flattened version of the choices array
     var flat_choices = jsPsych.utils.flatten(trial.choices);

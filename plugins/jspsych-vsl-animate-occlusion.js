@@ -78,16 +78,7 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-
-    // default trial parameters
-    trial.cycle_duration = trial.cycle_duration || 1000;
-    trial.canvas_size = trial.canvas_size || [400, 400];
-    trial.image_size = trial.image_size || [100, 100];
-    trial.initial_direction = trial.initial_direction || "left";
-    trial.occlude_center = (typeof trial.occlude_center === 'undefined') ? true : trial.occlude_center;
-    trial.choices = trial.choices || jsPsych.ALL_KEYS;
-    trial.pre_movement_duration = (typeof trial.pre_movement_duration === 'undefined') ? 500 : trial.pre_movement_duration;
-
+    
     // variable to keep track of timing info and responses
     var start_time = 0;
     var responses = [];
