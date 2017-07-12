@@ -110,6 +110,51 @@ And for a slightly longer experiment example, here is a flanker experiment which
 <div markdown="3" style="width: 50%;">
 <sub>
 
+```javascript
+var test_stimuli = [
+  { stimulus: "<<<<<", data: { stim_type: 'congruent'} },
+  { stimulus: ">>>>>", data: { stim_type: 'congruent'} },
+  { stimulus: "<<><<", data: { stim_type: 'incongruent'} },
+  { stimulus: ">><>>", data: { stim_type: 'incongruent'} }
+];
+var test = {
+  timeline: [{
+     type: 'html-keyboard-response',
+     choices: [37, 39],
+     stimulus: jsPsych.timelineVariable('stimulus'),
+     data: jsPsych.timelineVariable('data'),
+     post_trial_gap: 1500,
+     response_ends_trial: true
+   }],
+     timeline_variables: test_stimuli,
+     sample: {type: 'fixed-repetitions', size: 2}
+};
+var debrief = {
+  type: "html-keyboard-response",
+  stimulus: function() {
+    var congruent_rt = Math.round(jsPsych.data.get()
+         .filter({stim_type: 'congruent'}).select('rt').mean());
+    var incongruent_rt = Math.round(jsPsych.data.get()
+         .filter({stim_type: 'incongruent'}).select('rt').mean());
+    return "<p style='font-size:25px'>" + 
+    "Your average response time for congruent trials was <strong>" + 
+    congruent_rt +  "ms</strong>.</p>"+
+    "<p style='font-size:25px'>" + 
+    "Your average response time for incongruent trials was <strong>" + 
+    incongruent_rt + "ms</strong>.</p>";
+    }
+};
+var timeline = [];
+timeline.push(test);
+timeline.push(debrief);
+jsPsych.init({
+   timeline: timeline,
+   on_finish: function() {
+       jsPsych.data.displayData();
+   }
+});
+```
+
 </sub>
 </div>
 </div>
