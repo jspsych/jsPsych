@@ -77,10 +77,10 @@ These examples are intended to illustrate what jsPsych code and experiments look
 
 
 var trial_1 = {
-	type: "image-keyboard-response",
+  type: "image-keyboard-response",
   stimulus: 'img/happy_face_1.jpg',
-	choices: [89, 78],
-	prompt: '<p>Is this face happy? Y or N.</p>'
+  choices: [89, 78],
+  prompt: '<p>Is this face happy? Y or N.</p>'
 }
 
 var trial_2 = {
