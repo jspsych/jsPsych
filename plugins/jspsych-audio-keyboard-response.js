@@ -20,40 +20,40 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
     parameters: {
       stimulus: {
         type: jsPsych.plugins.parameterType.AUDIO,
+        pretty_name: 'Stimulus',
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'The audio to be played.'
       },
       choices: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Choices',
         array: true,
         default: jsPsych.ALL_KEYS,
-        no_function: false,
-        description: ''
+        description: 'The keys the subject is allowed to press to respond to the stimulus.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'Any content here will be displayed below the stimulus.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Trial duration',
         default: -1,
-        no_function: false,
-        description: ''
+        description: 'The maximum duration to wait for a response.'
       },
       response_ends_trial: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Response ends trial',
         default: true,
-        no_function: false,
-        description: ''
+        description: 'If true, the trial will end when user makes a response.'
       },
       trial_ends_after_audio: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Trial ends after audio',
         default: false,
-        no_function: false,
-        description: ''
+        description: 'If true, then the trial will end as soon as the audio file finishes playing.'
       },
     }
   }

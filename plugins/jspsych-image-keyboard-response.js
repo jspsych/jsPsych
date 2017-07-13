@@ -21,42 +21,41 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
     parameters: {
       stimulus: {
         type: jsPsych.plugins.parameterType.IMAGE,
+        pretty_name: 'stimulus',
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'The image to be displayed'
       },
       choices: {
         type: jsPsych.plugins.parameterType.KEYCODE,
         array: true,
+        pretty_name: 'Choices',
         default: jsPsych.ALL_KEYS,
-        no_function: false,
-        description: ''
+        description: 'The keys the subject is allowed to press to respond to the stimulus.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'Any content here will be displayed below the stimulus.'
       },
       stimulus_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Stimulus duration',
         default: -1,
-        no_function: false,
-        description: ''
+        description: 'How long to hide the stimulus.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Trial duration',
         default: -1,
-        no_function: false,
-        description: ''
+        description: 'How long to show trial before it ends.'
       },
       response_ends_trial: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Response ends trial',
         default: true,
-        no_function: false,
-        description: ''
+        description: 'If true, trial will end when subject makes a response.'
       },
-
     }
   }
 

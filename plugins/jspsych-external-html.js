@@ -16,33 +16,33 @@ jsPsych.plugins['external-html'] = (function() {
     parameters: {
       url: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'URL',
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'The url of the external html page'
       },
       cont_key: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Continue key',
         default: null,
-        no_function: false,
-        description: ''
+        description: 'The key to continue to the next page.'
       },
       cont_btn: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Continue button',
         default: null,
-        no_function: false,
-        description: ''
+        description: 'The button to continue to the next page.'
       },
       check_fn: {
         type: jsPsych.plugins.parameterType.FUNCTION,
+        pretty_name: 'Check function',
         default: function() { return true; },
-        no_function: false,
         description: ''
       },
       force_refresh: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Force refresh',
         default: false,
-        no_function: false,
-        description: ''
+        description: 'Refresh page.'
       }
     }
   }

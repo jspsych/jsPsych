@@ -17,53 +17,53 @@ jsPsych.plugins['xab-html'] = (function() {
     description: '',
     parameters: {
       stimulus: {
-        type: jsPsych.plugins.parameterType.IMAGE,
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Stimulus',
         array: true,
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'Array of 2 or 3 paths to images.'
       },
       left_key: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Left key',
         default: 'q',
-        no_function: false,
-        description: ''
+        description: 'Which key the subject should press to indicate that the target is on the left side.'
       },
       right_key: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Right key',
         default: 'p',
-        no_function: false,
-        description: ''
+        description: 'Which key the subject should press to indicate that the target is on the right side.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'Any content here will be displayed below the stimulus.'
       },
       x_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'X duration',
         default: 1000,
-        no_function: false,
-        description: ''
+        description: 'How long to show the X stimulus for in milliseconds.'
       },
       x_durationab_gap: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'X durationab gap',
         default: 1000,
-        no_function: false,
-        description: ''
+        description: 'How long to show a blank screen in between X and AB in milliseconds.'
       },
       ab_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'AB duration',
         default: -1,
-        no_function: false,
-        description: ''
+        description: 'How long to show A and B in milliseconds.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Trial duration',
         default: -1,
-        no_function: false,
-        description: ''
+        description: 'The maximum duration to wait for a response.'
       }
     }
   }

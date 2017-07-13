@@ -19,53 +19,53 @@ jsPsych.plugins['free-sort'] = (function() {
     parameters: {
       stimuli: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Stimuli',
         default: undefined,
         array: true,
-        no_function: false,
-        description: ''
+        description: 'Images to be displayed.'
       },
       stim_height: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Stimulus height',
         default: 100,
-        no_function: false,
-        description: ''
+        description: 'Height of images in pixels.'
       },
       stim_width: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Stimulus width',
         default: 100,
-        no_function: false,
-        description: ''
+        description: 'Width of images in pixels'
       },
       sort_area_height: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Sort area height',
         default: 800,
-        no_function: false,
-        description: ''
+        description: 'The height of the container that subjects can move the stimuli in.'
       },
       sort_area_width: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Sort area width',
         default: 800,
-        no_function: false,
-        description: ''
+        description: 'The width of the container that subjects can move the stimuli in.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'It can be used to provide a reminder about the action the subject is supposed to take.'
       },
       prompt_location: {
         type: jsPsych.plugins.parameterType.SELECT,
+        pretty_name: 'Prompt location',
         options: ['above','below'],
         default: 'above',
-        no_function: false,
-        description: ''
+        description: 'Indicates whether to show prompt "above" or "below" the sorting area.'
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Button label',
         default: 'Done',
-        no_function: false,
-        description: ''
+        description: 'The text that appears on the button to continue to the next trial.'
       }
     }
   }

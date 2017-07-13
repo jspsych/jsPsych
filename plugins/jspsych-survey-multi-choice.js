@@ -18,42 +18,42 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     parameters: {
       questions: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Questions',
         array: true,
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'The strings that will be associated with a group of options.'
       },
       options: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Options',
         array: true,
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'Displays options for an individual question.'
       },
       required: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Required',
         array: true,
         default: false,
-        no_function: false,
-        description: ''
+        description: 'Subject will be required to pick an option for each question.'
       },
       horitzontal: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Horitzontal',
         default: false,
-        no_function: false,
-        description: ''
+        description: 'If true, then questions are centered and options are displayed horizontally.'
       },
       preamble: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Preamble',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'HTML formatted string to display at the top of the page above all the questions.'
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Button label',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'Label of the button.'
       }
     }
   }

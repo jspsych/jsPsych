@@ -20,39 +20,39 @@ jsPsych.plugins['reconstruction'] = (function() {
     parameters: {
       stim_function: {
         type: jsPsych.plugins.parameterType.FUNCTION,
+        pretty_name: 'Stimulus function',
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'A function with a single parameter that returns an HTML-formatted string representing the stimulus.'
       },
       starting_value: {
         type: jsPsych.plugins.parameterType.FLOAT,
+        pretty_name: 'Starting value',
         default: 0.5,
-        no_function: false,
-        description: ''
+        description: 'The starting value of the stimulus parameter.'
       },
       step_size: {
         type: jsPsych.plugins.parameterType.FLOAT,
+        pretty_name: 'Step size',
         default: 0.05,
-        no_function: false,
-        description: ''
+        description: 'The change in the stimulus parameter caused by pressing one of the modification keys.'
       },
       key_increase: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Key increase',
         default: 'h',
-        no_function: false,
-        description: ''
+        description: 'The key to press for increasing the parameter value.'
       },
       key_decrease: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Key decrease',
         default: 'g',
-        no_function: false,
-        description: ''
+        description: 'The key to press for decreasing the parameter value.'
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Button label',
         default: 'Next',
-        no_function: false,
-        description: ''
+        description: 'The text that appears on the button to finish the trial.'
       }
     }
   }

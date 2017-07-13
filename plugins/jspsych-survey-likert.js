@@ -19,35 +19,35 @@ jsPsych.plugins['survey-likert'] = (function() {
       questions: {
         type: jsPsych.plugins.parameterType.STRING,
         array: true,
+        pretty_name: 'Questions',
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'Questions that are associated with the slider.'
       },
       labels: {
         type: jsPsych.plugins.parameterType.STRING,
         array: true,
+        pretty_name: 'Labels',
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'Labels to display for individual question.'
       },
       preamble: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Preamble',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'String to display at top of the page.'
       },
       required: {
         type: jsPsych.plugins.parameterType.BOOL,
         array: true,
+        pretty_name: 'Required',
         default: false,
-        no_function: false,
-        description: ''
+        description: 'Makes answering questions required.'
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Button label',
         default: 'Next',
-        no_function: false,
-        description: ''
+        description: 'Label of the button.'
       }
     }
   }

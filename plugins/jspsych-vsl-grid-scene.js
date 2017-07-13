@@ -23,23 +23,23 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
     parameters: {
       stimuli: {
         type: jsPsych.plugins.parameterType.IMAGE,
+        pretty_name: 'Stimuli',
         array: true,
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'An array that defines a grid.'
       },
       image_size: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Image size',
         array: true,
         default: [100,100],
-        no_function: false,
-        description: ''
+        description: 'Array specifying the width and height of the images to show.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Trial duration',
         default: 2000,
-        no_function: false,
-        description: ''
+        description: 'How long to show the stimulus for in milliseconds.'
       }
     }
   }

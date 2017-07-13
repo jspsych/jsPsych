@@ -21,84 +21,85 @@
     parameters: {
       stimulus: {
         type: jsPsych.plugins.parameterType.IMAGE,
+        pretty_name: 'Stimulus',
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'The image to be displayed'
       },
       left_category_key: {
         type: jsPsych.plugins.parameterType.HTML, 
+        pretty_name: 'Left category key',
         default: 'E',
-        no_function: false,
-        description: ''
+        description: 'Key press that is associated with the left category label.'
       },
       right_category_key: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Right category key',
         default: 'I',
-        no_function: false,
-        description: ''
+        description: 'Key press that is associated with the right category label.'
       },
       left_category_label: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Left category label',
         array: true,
         default: ['left'],
-        no_function: false,
-        description: ''
+        description: 'The label that is associated with the stimulus. Aligned to the left side of page.'
       },
       right_category_label: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Right category label',
         array: true,
         default: ['right'],
-        no_function: false,
-        description: ''
+        description: 'The label that is associated with the stimulus. Aligned to the right side of the page.'
       },
       key_to_move_forward: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Key to move forward',
         array: true,
         default: jsPsych.ALL_KEYS,
-        no_function: false,
-        description: ''
+        description: 'The keys that allow the user to advance to the next trial if their key press was incorrect.'
       },
       display_feedback: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Display feedback',
         default: false,
-        no_function: false,
-        description: ''
+        description: 'If true, then html when wrong will be displayed when user makes an incorrect key press.'
       },
       html_when_wrong: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'HTML when wrong',
         default: '<span style="color: red; font-size: 80px">X</span>',
-        no_function: false,
-        description: ''
+        description: 'The image to display when a user presses the wrong key.'
       }, 
       bottom_instructions: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Bottom instructions',
         default: '<p>If you press the wrong key, a red X will appear. Press any key to continue.</p>',
-        no_function: false,
-        description: ''
+        description: 'Instructions shown at the bottom of the page.'
       },
       force_correct_key_press: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Force correct key press',
         default: false,
-        no_function: false,
-        description: ''
+        description: 'If true, in order to advance to the next trial after a wrong key press the user will be forced to press the correct key.'
       },
       stim_key_association: {
         type: jsPsych.plugins.parameterType.HTML,
+        pretty_name: 'Stimulus key association',
+        options: ['left', 'right'],
         default: 'undefined',
-        no_function: false,
-        description: ''
+        description: 'Stimulus will be associated with eight "left" or "right".'
       },
       response_ends_trial: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Response ends trial',
         default: true,
-        no_function: false,
-        description: ''
+        description: 'If true, trial will end when user makes a response.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Trial duration',
         default: -1,
-        no_function: false,
-        description: ''
+        description: 'How long to show the trial.'
       },
     }
   }

@@ -17,52 +17,52 @@ jsPsych.plugins.video = (function() {
     parameters: {
       sources: {
         type: jsPsych.plugins.parameterType.VIDEO,
+        pretty_name: 'Sources',
         array: true,
         default: undefined,
-        no_function: false,
         description: 'The video file to play.'
       },
       width: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Width',
         default: undefined,
-        no_function: false,
         description: 'The width of the video in pixels.'
       },
       height: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Height',
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'The height of the video display in pixels.'
       },
       autoplay: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Autoplay',
         default: true,
-        no_function: false,
-        description: ''
+        description: 'If true, the video will begin playing as soon as it has loaded.'
       },
       controls: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Controls',
         default: false,
-        no_function: false,
-        description: ''
+        description: 'If true, the subject will be able to pause the video or move the playback to any point in the video.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'Any content here will be displayed below the video content.'
       },
       start: {
         type: jsPsych.plugins.parameterType.FLOAT,
+        pretty_name: 'Start',
         default: false,
-        no_function: false,
-        description: 'time to start the clip'
+        description: 'Time to start the clip.'
       },
       stop: {
         type: jsPsych.plugins.parameterType.FLOAT,
+        pretty_name: 'Stop',
         default: false,
-        no_function: false,
-        description: 'time to stop the clip'
+        description: 'Time to stop the clip.'
       }
     }
   }

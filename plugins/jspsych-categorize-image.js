@@ -18,52 +18,52 @@ jsPsych.plugins['categorize-image'] = (function() {
     parameters: {
       stimulus: {
         type: jsPsych.plugins.parameterType.IMAGE,
+        pretty_name: 'Stimulus',
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'The image content to be displayed.'
       },
       key_answer: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Key answer',
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'The key to indicate the correct response.'
       },
       choices: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Choices',
         default: jsPsych.ALL_KEYS,
         array: true,
-        no_function: false,
-        description: ''
+        description: 'The keys the subject is allowed to press to respond to the stimulus.'
       },
       text_answer: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Text answer',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'Label that is associated with the correct answer.'
       },
       correct_text: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Correct text',
         default: "<p class='feedback'>Correct</p>",
-        no_function: false,
-        description: ''
+        description: 'String to show when correct answer is given.'
       },
       incorrect_text: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Incorrect text',
         default: "<p class='feedback'>Incorrect</p>",
-        no_function: false,
-        description: ''
+        description: 'String to show when incorrect answer is given.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'Any content here will be displayed below the stimulus.'
       },
       force_correct_button_press: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Force correct button press',
         default: false,
-        no_function: false,
-        description: ''
+        description: 'If set to true, then the subject must press the correct response key after feedback in order to advance to next trial.'
       },
       show_stim_with_feedback: {
         type: jsPsych.plugins.parameterType.BOOL,
@@ -73,33 +73,33 @@ jsPsych.plugins['categorize-image'] = (function() {
       },
       show_feedback_on_timeout: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Show feedback on timeout',
         default: false,
-        no_function: false,
-        description: ''
+        description: 'If true, stimulus will be shown during feedback. If false, only the text feedback will be displayed during feedback.'
       },
       timeout_message: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Timeout message',
         default: "<p>Please respond faster.</p>",
-        no_function: false,
-        description: ''
+        description: 'The message displayed on a timeout non-response.'
       },
       stimulus_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Stimulus duration',
         default: -1,
-        no_function: false,
-        description: ''
+        description: 'How long to hide stimulus.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Trial duration',
         default: -1,
-        no_function: false,
-        description: ''
+        description: 'How long to show trial'
       },
       feedback_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Feedback duration',
         default: 2000,
-        no_function: false,
-        description: ''
+        description: 'How long to show feedback.'
       }
     }
   }

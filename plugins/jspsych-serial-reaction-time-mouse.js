@@ -18,65 +18,65 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
     parameters: {
       target: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Target',
         array: true,
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'The location of the target. The array should be the [row, column] of the target.'
       },
       grid: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Grid',
         array: true,
         default: [[1,1,1,1]],
-        no_function: false,
-        description: ''
+        description: 'This array represents the grid of boxes shown on the screen.'
       },
       grid_square_size: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Grid square size',
         default: 100,
-        no_function: false,
-        description: ''
+        description: 'The width and height in pixels of each square in the grid.'
       },
       target_color: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Target color',
         default: "#999",
-        no_function: false,
-        description: ''
+        description: 'The color of the target square.'
       },
       response_ends_trial: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Response ends trial',
         default: true,
-        no_function: false,
-        description: ''
+        description: 'If true, the trial ends after a key press.'
       },
       pre_target_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Pre-target duration',
         default: 0,
-        no_function: false,
-        description: ''
+        description: 'The number of milliseconds to display the grid before the target changes color.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Trial duration',
         default: -1,
-        no_function: false,
-        description: ''
+        description: 'How long to show the trial'
       },
       fade_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Fade duration',
         default: -1,
-        no_function: false,
-        description: ''
+        description: 'If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds.'
       },
       allow_nontarget_responses: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Allow nontarget response',
         default: false,
-        no_function: false,
-        description: ''
+        description: 'If true, then user can make nontarget response.'
       }, 
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'Any content here will be displayed below the stimulus'
       },
     }
   }
