@@ -18,39 +18,39 @@ jsPsych.plugins["resize"] = (function() {
     parameters: {
       item_height: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Item height',
         default: 1,
-        no_function: false,
-        description: ''
+        description: 'The height of the item to be measured.'
       },
       item_width: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Item width',
         default: 1,
-        no_function: false,
-        description: ''
+        description: 'The width of the item to be measured.'
       }, 
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'The content displayed below the resizable box and above the button.'
       },
       pixels_per_unit: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Pixels per unit',
         default: 100,
-        no_function: false,
-        description: ''
+        description: 'After the scaling factor is applied, this many pixels will equal one unit of measurement.'
       },
       starting_size: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Starting size',
         default: 100,
-        no_funciton: false,
-        description: ''
+        description: 'The initial size of the box, in pixels, along the larget dimension.'
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Button label',
         default: 'Done',
-        no_function: false,
-        description: ''
+        description: 'Label to display on the button to complete calibration.'
       },
     }
   }

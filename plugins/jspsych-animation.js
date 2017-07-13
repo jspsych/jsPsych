@@ -17,41 +17,41 @@ jsPsych.plugins.animation = (function() {
     parameters: {
       stimuli: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Stimuli',
         default: undefined,
-        no_function: false,
         array: true,
-        description: ''
+        description: 'The images to be displayed.'
       },
       frame_time: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Frame time',
         default: 250,
-        no_function: false,
-        description: ''
+        description: 'Duration to display each image.'
       },
       frame_isi: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Frame gap',
         default: 0,
-        no_function: false,
-        description: ''
+        description: 'Length of gap to be shown between each image.'
       },
       sequence_reps: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Sequence repetitions',
         default: 1,
-        no_function: false,
-        description: ''
+        description: 'Number of times to show entire sequence.'
       },
       choices: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Choices',
         default: jsPsych.ALL_KEYS,
-        no_function: false,
         array: true,
-        description: ''
+        description: 'Keys subject uses to respond to stimuli.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'Any content here will be displayed below stimulus.'
       }
     }
   }

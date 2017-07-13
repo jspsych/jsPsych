@@ -8,65 +8,67 @@ jsPsych.plugins['audio-slider-response'] = (function() {
 		description: '',
     parameters: {
       stimulus: {
-		type: jsPsych.plugins.parameterType.AUDIO,
-		default: undefined,
-		no_function: false,
-		description: ''
-	  },
-      stimulus_duration: {
-        type: jsPsych.plugins.parameterType.INT,
-        default: -1,
-        no_function: false,
-        description: ''
+        type: jsPsych.plugins.parameterType.AUDIO,
+        pretty_name: 'Stimulus',
+        default: undefined,
+        description: 'The image to be displayed'
       },
       min: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Min slider',
         default: 0,
-        no_function: false,
-        description: ''
+        description: 'Sets the minimum value of the slider.'
       },
       max: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Max slider',
         default: 100,
-        no_function: false,
-        description: ''
+        description: 'Sets the maximum value of the slider',
       },
       step: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Step',
         default: 1,
-        no_function: false,
-        description: ''
+        description: 'Sets the step of the slider'
+      },
+      labels: {
+        type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name:'Labels',
+        default: [],
+        array: true,
+        description: 'Labels of the slider.',
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
-        default: 'Next',
-        no_function: false,
-        description: ''
-      },
-      trial_duration: {
-        type: jsPsych.plugins.parameterType.INT,
-        default: -1,
-        no_function: false,
-        description: ''
-      },
-      response_ends_trial: {
-        type: jsPsych.plugins.parameterType.BOOL,
-        default: true,
-        no_function: false,
-        description: ''
-      },
-      trial_ends_after_audio: {
-        type: jsPsych.plugins.parameterType.BOOL,
-       	default: false,
-        no_function: false,
-        description: ''
+        pretty_name: 'Button label',
+        default: undefined,
+        array: false,
+        description: 'Label of the button to advance.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
         default: '',
-        no_function: false,
-        description: ''
-      }
+        description: 'Any content here will be displayed below the slider.'
+      },
+      stimulus_duration: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Stimulus duration',
+        default: -1,
+        description: 'How long to hide the stimulus.'
+      },
+      trial_duration: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Trial duration',
+        default: -1,
+        description: 'How long to show the trial.'
+      },
+      response_ends_trial: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Response ends trial',
+        default: true,
+        description: 'If true, trial will end when user makes a response.'
+      },
     }
   }
 

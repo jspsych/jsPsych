@@ -19,61 +19,54 @@ jsPsych.plugins['same-different-image'] = (function() {
     description: '',
     parameters: {
       stimuli: {
-        type: jsPsych.plugins.parameterType.IMAGE,
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Stimuli',
         default: undefined,
         array: true,
-        no_function: false,
-        description: ''
+        description: 'The image to be displayed.'
       },
       answer: {
         type: jsPsych.plugins.parameterType.SELECT,
+        pretty_name: 'Answer',
         options: ['same', 'different'],
         default: 75,
-        no_function: false,
-        description: ''
+        description: 'Either "same" or "different".'
       },
       same_key: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Same key',
         default: 'Q',
-        no_function: false,
         description: ''
       },
       different_key: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Different key',
         default: 'P',
-        no_function: false,
-        description: ''
+        description: 'The key that subjects should press to indicate that the two stimuli are the same.'
       },
       first_stim_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'First stimulus duration',
         default: 1000,
-        no_function: false,
-        description: ''
+        description: 'How long to show the first stimulus for in milliseconds.'
       },
       gap_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Gap duration',
         default: 500,
-        no_function: false,
-        description: ''
+        description: 'How long to show a blank screen in between the two stimuli.'
       },
       second_stim_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Second stimulus duration',
         default: 1000,
-        no_function: false,
-        description: ''
-      },
-      advance_key: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
-        array: true,
-        default: jsPsych.ALL_KEYS,
-        no_function: false,
-        description: ''
+        description: 'How long to show the second stimulus for in milliseconds.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'Any content here will be displayed below the stimulus.'
       }
     }
   }

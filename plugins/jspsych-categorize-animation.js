@@ -18,70 +18,70 @@ jsPsych.plugins["categorize-animation"] = (function() {
     parameters: {
       stimuli: {
         type: jsPsych.plugins.parameterType.IMAGE,
+        pretty_name: 'Stimuli',
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'Array of paths to image files.'
       },
       key_answer: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Key answer',
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'The key to indicate correct response'
       },
       choices: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Choices',
         default: jsPsych.ALL_KEYS,
-        no_function: false,
         array: true,
-        description: ''
+        description: 'The keys subject is allowed to press to respond to stimuli.'
       },
       text_answer: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Text answer',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'Text to describe correct answer.'
       },
       correct_text: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Correct text',
         default: 'Correct.',
-        no_function: false,
-        description: ''
+        description: 'String to show when subject gives correct answer'
       },
       incorrect_text: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Incorrect text',
         default: 'Wrong.',
-        no_function: false,
-        description: ''
+        description: 'String to show when subject gives incorrect answer.'
       },
       frame_time: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Frame time',
         default: 500,
-        no_function: false,
-        description: ''
+        description: 'Duration to display each image.'
       },
       sequence_reps: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Sequence repetitions',
         default: 1,
-        no_function: false,
-        description: ''
+        description: 'How many times to display entire sequence.'
       },
       allow_response_before_complete: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Allow response before complete',
         default: false,
-        no_function: false,
-        description: ''
+        description: 'If true, subject can response before the animation sequence finishes'
       },
       feedback_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Feedback duration',
         default: 2000,
-        no_function: false,
-        description: ''
+        description: 'How long to show feedback'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'Any content here will be displayed below the stimulus.'
       },
     }
   }

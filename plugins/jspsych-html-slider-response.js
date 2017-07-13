@@ -18,66 +18,66 @@ jsPsych.plugins['html-slider-response'] = (function() {
     description: '',
     parameters: {
       stimulus: {
-        type: jsPsych.plugins.parameterType.IMAGE,
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Stimulus',
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'The HTML string to be displayed'
       },
       min: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Min slider',
         default: 0,
-        no_function: false,
-        description: ''
+        description: 'Sets the minimum value of the slider.'
       },
       max: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Max slider',
         default: 100,
-        no_function: false,
-        description: ''
+        description: 'Sets the maximum value of the slider',
       },
       step: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Step',
         default: 1,
-        no_function: false,
-        description: ''
+        description: 'Sets the step of the slider'
       },
       labels: {
         type: jsPsych.plugins.parameterType.KEYCODE,
-        default: undefined,
+        pretty_name:'Labels',
+        default: [],
         array: true,
-        no_function: false,
-        description: ''
+        description: 'Labels of the slider.',
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Button label',
         default: undefined,
-        no_function: false,
         array: false,
-        description: ''
+        description: 'Label of the button to advance.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'Any content here will be displayed below the slider.'
       },
       stimulus_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Stimulus duration',
         default: -1,
-        no_function: false,
-        description: ''
+        description: 'How long to hide the stimulus.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Trial duration',
         default: -1,
-        no_function: false,
-        description: ''
+        description: 'How long to show the trial.'
       },
       response_ends_trial: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Response ends trial',
         default: true,
-        no_function: false,
-        description: ''
+        description: 'If true, trial will end when user makes a response.'
       },
     }
   }

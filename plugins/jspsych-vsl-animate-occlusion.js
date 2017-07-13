@@ -23,56 +23,56 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
     parameters: {
       stimuli: {
         type: jsPsych.plugins.parameterType.IMAGE,
+        pretty_name: 'Stimuli',
         default: undefined,
         array: true,
-        no_function: false,
-        description: ''
+        description: 'A stimulus is a path to an image file.'
       },
       choices: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Choices',
         array: true,
         default: jsPsych.ALL_KEYS,
-        no_function: false,
-        description: ''
+        description: 'This array contains the keys that the subject is allowed to press in order to respond to the stimulus. '
       },
       canvas_size: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Canvas size',
         array: true,
         default: [400,400],
-        no_function: false,
-        description: ''
+        description: 'Array specifying the width and height of the area that the animation will display in.'
       },
       image_size: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Image size',
         array: true,
         default: [100,100],
-        no_function: false,
-        description: ''
+        description: 'Array specifying the width and height of the images to show.'
       },
       initial_direction: {
         type: jsPsych.plugins.parameterType.SELECT,
+        pretty_name: 'Initial direction',
         choices: ['left','right'],
         default: 'left',
-        no_function: false,
-        description: ''
+        description: 'Which direction the stimulus should move first.'
       },
       occlude_center: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Occlude center',
         default: true,
-        no_function: false,
-        description: ''
+        description: 'If true, display a rectangle in the center of the screen that is just wide enough to occlude the image completely as it passes behind.'
       },
       cycle_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Cycle duration',
         default: 1000,
-        no_function: false,
-        description: ''
+        description: 'How long it takes for a stimulus in the sequence to make a complete cycle.'
       },
       pre_movement_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Pre movement duration',
         default: 500,
-        no_function: false,
-        description: ''
+        description: 'How long to wait before the stimuli starts moving from behind the center rectangle.'
       }
     }
   }

@@ -19,52 +19,52 @@ jsPsych.plugins.instructions = (function() {
     parameters: {
       pages: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Pages',
         default: undefined,
         array: true,
-        no_function: false,
-        description: ''
+        description: 'Each element of the array is the content for a single page.'
       },
       key_forward: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Key forward',
         default: 'rightarrow',
-        no_function: false,
-        description: ''
+        description: 'The key the subject can press in order to advance to the next page.'
       },
       key_backward: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Key backward',
         default: 'leftarrow',
-        no_function: false,
-        description: ''
+        description: 'The key that the subject can press to return to the previous page.'
       },
       allow_backward: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Allow backward',
         default: true,
-        no_function: false,
-        description: ''
+        description: 'If true, the subject can return to the previous page of the instructions.'
       },
       allow_keys: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Allow keys',
         default: true,
-        no_function: false,
-        description: ''
+        description: 'If true, the subject can use keyboard keys to navigate the pages.'
       },
       show_clickable_nav: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Show clickable nav',
         default: false,
-        no_function: false,
-        description: ''
+        description: 'If true, then a "Previous" and "Next" button will be displayed beneath the instructions.'
       },
       button_label_previous: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Button label previous',
         default: 'Previous',
-        no_function: false,
-        description: ''
+        description: 'The text that appears on the button to go backwards.'
       },
       button_label_next: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Button label next',
         default: 'Next',
-        no_function: false,
-        description: ''
+        description: 'The text that appears on the button to go forwards.'
       }
     }
   }

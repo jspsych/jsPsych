@@ -20,59 +20,59 @@ jsPsych.plugins["image-button-response"] = (function() {
     parameters: {
       stimulus: {
         type: jsPsych.plugins.parameterType.IMAGE,
+        pretty_name: 'Stimulus',
         default: undefined,
-        no_function: false,
-        description: ''
+        description: 'The image to be displayed'
       },
       choices: {
         type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Choices',
         default: [],
         array: true,
-        no_function: false,
-        description: ''
+        description: 'The labels for the buttons.'
       },
       button_html: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Button html',
         default: '<button class="jspsych-btn">%choice%</button>',
-        no_function: false,
         array: true,
-        description: ''
+        description: 'The html of the button. Can create own style.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
         default: '',
-        no_function: false,
-        description: ''
+        description: 'Any content here will be displayed under the button.'
       },
       stimulus_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Stimulus duration',
         default: -1,
-        no_function: false,
-        description: ''
+        description: 'How long to hide the stimulus.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Trial duration',
         default: -1,
-        no_function: false,
-        description: ''
+        description: 'How long to show the trial.'
       },
       margin_vertical: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Margin vertical',
         default: '0px',
-        no_function: false,
-        description: ''
+        description: 'The vertical margin of the button.'
       },
       margin_horizontal: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Margin horizontal',
         default: '8px',
-        no_function: false,
-        description: ''
+        description: 'The horizontal margin of the button.'
       },  
       response_ends_trial: {
         type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Response ends trial',
         default: true,
-        no_function: false,
-        description: ''
+        description: 'If true, then trial will end when user responds.'
       },
     }
   }
