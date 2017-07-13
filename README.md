@@ -7,7 +7,7 @@ Examples
 
 These examples are intended to illustrate what jsPsych code and experiments look like. There is a larger set of example code in the [examples folder](/examples).
 
-#### #1: [Displaying instructions](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_1.html)
+#### #1: Displaying instructions [(code)](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_1.html)
 <div display="flex">
 <img src="https://user-images.githubusercontent.com/14092539/28126774-801ea42e-66f8-11e7-9b6a-c8bad0026bec.gif" align="right" width=50% />
 <div markdown="1" style="width: 50%;">
@@ -35,7 +35,7 @@ var trial = {
       '<p>In this experiment, you will view a ' +       
       'series of images and answer questions.</p>' +      
       '<p>Answer with the keys "y" or "n".</p>',
-               
+
       '<p>Here is an example:</p>' +        
       '<img src="img/age/of2.jpg"></img>' +       
       '<p>Is this person OLD or YOUNG?</p>'      
@@ -63,7 +63,7 @@ jsPsych.init({
 </div>
 
 
-#### #2: [Displaying images and recording a response](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_2.html)
+#### #2: Displaying images and recording a response [(code)](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_2.html)
 <div display="flex">
 <img src="https://user-images.githubusercontent.com/14092539/28125911-0504cca2-66f6-11e7-8f5b-c9686f63aaa8.gif" align="right" width=50% />
 
@@ -116,7 +116,7 @@ jsPsych.init({
 </div>
 </div>
 
-#### #3: [A flanker task](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_3.html) showing a few advanced features of the library
+#### #3: A flanker task showing a few advanced features of the library [(code)](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_3.html)
 
 <div display="flex">
 <img src="https://user-images.githubusercontent.com/14092539/28126802-97b50d08-66f8-11e7-9a45-46561ab51a5f.gif" align="right" width=50% />
