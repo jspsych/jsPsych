@@ -27,23 +27,25 @@ These examples are intended to illustrate what jsPsych code and experiments look
 
 
 
-    var trial = {       
-        type: 'instructions',     
-        pages: [      
-        'Welcome to the experiment. Click next to begin.',      
-        '<div>In this experiment, you will view a ' +       
-        'series of images and answer questions.<br>' +      
-        'Answer with the keys "y" or "n".',     
-        'Here is an example:<br><br> ' +        
-        '<img src="img/age/of2.jpg"></img><br><br>' +       
-        'Is this person OLD or YOUNG?'      
-        ],        
-        show_clickable_nav: true      
-    }       
+var trial = {       
+    type: 'instructions',     
+    pages: [      
+      'Welcome to the experiment. Click next to begin.',
 
-    jsPsych.init({      
-        timeline: [trial],        
-    });
+      '<p>In this experiment, you will view a ' +       
+      'series of images and answer questions.</p>' +      
+      '<p>Answer with the keys "y" or "n".</p>',
+               
+      '<p>Here is an example:</p>' +        
+      '<img src="img/age/of2.jpg"></img>' +       
+      '<p>Is this person OLD or YOUNG?</p>'      
+    ],        
+    show_clickable_nav: true      
+}       
+
+jsPsych.init({      
+    timeline: [trial],        
+});
 
 
 
@@ -79,22 +81,22 @@ These examples are intended to illustrate what jsPsych code and experiments look
 var trial_1 = {
   type: "image-keyboard-response",
   stimulus: 'img/happy_face_1.jpg',
-  choices: [89, 78],
+  choices: ['y', 'n'],
   prompt: '<p>Is this face happy? Y or N.</p>'
 }
 
 var trial_2 = {
   type: 'image-keyboard-response',
   stimulus: 'img/sad_face_2.jpg',
-  choices: [89, 78], // Y or N
+  choices: ['y', 'n'],
   prompt: '<p>Is this face happy? Y or N.</p>'
 }
 
 var trial_3 = {
   type: 'image-keyboard-response',
   stimulus: 'img/happy_face_2.jpg',
-  choices: [89, 78], // Y or N
-  prompt: '<p>Is this face happy? Y or N.</p>',
+  choices: ['y', 'n'],
+  prompt: '<p>Is this face happy? Y or N.</p>'
 }
 
 
