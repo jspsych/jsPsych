@@ -7,8 +7,9 @@ Examples
 
 These examples are intended to illustrate what jsPsych code and experiments look like. There is a larger set of example code in the [examples folder](/examples).
 
-#1: [Displaying instructions](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_1.html)
-<div display="flex">
+#### #1: Displaying instructions [(code)](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_1.html)
+
+<div>
 <img src="https://user-images.githubusercontent.com/14092539/28126774-801ea42e-66f8-11e7-9b6a-c8bad0026bec.gif" align="right" width=50% />
 <div markdown="1" style="width: 50%;">
 <sub>
