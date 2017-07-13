@@ -62,7 +62,7 @@ These examples are intended to illustrate what jsPsych code and experiments look
 </div>
 
 
-#2: [Displaying images and recording a response](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_2.html)
+#### #2: Displaying images and recording a response [(code)](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_2.html)
 <div display="flex">
 <img src="https://user-images.githubusercontent.com/14092539/28125911-0504cca2-66f6-11e7-8f5b-c9686f63aaa8.gif" align="right" width=50% />
 
@@ -116,7 +116,7 @@ These examples are intended to illustrate what jsPsych code and experiments look
 </div>
 
 
-#3: [A flanker task](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_3.html) showing a few advanced features of the library
+#### #3: A flanker task showing a few advanced features of the library [(code)](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_3.html) 
 
 <div display="flex">
 <img src="https://user-images.githubusercontent.com/14092539/28126802-97b50d08-66f8-11e7-9a45-46561ab51a5f.gif" align="right" width=50% />
