@@ -28,23 +28,25 @@ These examples are intended to illustrate what jsPsych code and experiments look
 
 
 
-    var trial = {       
-        type: 'instructions',     
-        pages: [      
-        'Welcome to the experiment. Click next to begin.',      
-        '<div>In this experiment, you will view a ' +       
-        'series of images and answer questions.<br>' +      
-        'Answer with the keys "y" or "n".',     
-        'Here is an example:<br><br> ' +        
-        '<img src="img/age/of2.jpg"></img><br><br>' +       
-        'Is this person OLD or YOUNG?'      
-        ],        
-        show_clickable_nav: true      
-    }       
+var trial = {       
+  type: 'instructions',     
+  pages: [      
+    'Welcome to the experiment. Click next to begin.',      
+    
+    '<div>In this experiment, you will view a ' +       
+    'series of images and answer questions.<br>' +      
+    'Answer with the keys "y" or "n".',     
+    
+    'Here is an example:<br><br> ' +        
+    '<img src="img/age/of2.jpg"></img><br><br>' +       
+    'Is this person OLD or YOUNG?'      
+  ],        
+  show_clickable_nav: true      
+}       
 
-    jsPsych.init({      
-        timeline: [trial],        
-    });
+jsPsych.init({      
+  timeline: [trial],        
+});
 
 
 
