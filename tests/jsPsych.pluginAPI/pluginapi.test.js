@@ -8,7 +8,7 @@ describe('#getKeyboardResponse', function(){
     var t = {
       type: 'html-keyboard-response',
       stimulus: 'foo',
-      choices: ['q']
+      choices: ['Q']
     }
 
     jsPsych.init({

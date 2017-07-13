@@ -1842,8 +1842,9 @@ jsPsych.pluginAPI = (function() {
         if(parameters.valid_responses != jsPsych.NO_KEYS){
           for (var i = 0; i < parameters.valid_responses.length; i++) {
             if (typeof parameters.valid_responses[i] == 'string') {
-              if (typeof keylookup[parameters.valid_responses[i]] !== 'undefined') {
-                if (e.keyCode == keylookup[parameters.valid_responses[i]]) {
+              var kc = jsPsych.pluginAPI.convertKeyCharacterToKeyCode(parameters.valid_responses[i]);
+              if (typeof kc !== 'undefined') {
+                if (e.keyCode == kc) {
                   valid_response = true;
                 }
               } else {
@@ -1906,6 +1907,7 @@ jsPsych.pluginAPI = (function() {
 
   module.convertKeyCharacterToKeyCode = function(character) {
     var code;
+    character = character.toLowerCase();
     if (typeof keylookup[character] !== 'undefined') {
       code = keylookup[character];
     }
@@ -1980,32 +1982,6 @@ jsPsych.pluginAPI = (function() {
     'x': 88,
     'y': 89,
     'z': 90,
-    'A': 65,
-    'B': 66,
-    'C': 67,
-    'D': 68,
-    'E': 69,
-    'F': 70,
-    'G': 71,
-    'H': 72,
-    'I': 73,
-    'J': 74,
-    'K': 75,
-    'L': 76,
-    'M': 77,
-    'N': 78,
-    'O': 79,
-    'P': 80,
-    'Q': 81,
-    'R': 82,
-    'S': 83,
-    'T': 84,
-    'U': 85,
-    'V': 86,
-    'W': 87,
-    'X': 88,
-    'Y': 89,
-    'Z': 90,
     '0numpad': 96,
     '1numpad': 97,
     '2numpad': 98,
@@ -2021,18 +1997,18 @@ jsPsych.pluginAPI = (function() {
     'minus': 109,
     'decimal': 110,
     'divide': 111,
-    'F1': 112,
-    'F2': 113,
-    'F3': 114,
-    'F4': 115,
-    'F5': 116,
-    'F6': 117,
-    'F7': 118,
-    'F8': 119,
-    'F9': 120,
-    'F10': 121,
-    'F11': 122,
-    'F12': 123,
+    'f1': 112,
+    'f2': 113,
+    'f3': 114,
+    'f4': 115,
+    'f5': 116,
+    'f6': 117,
+    'f7': 118,
+    'f8': 119,
+    'f9': 120,
+    'f10': 121,
+    'f11': 122,
+    'f12': 123,
     '=': 187,
     ',': 188,
     '.': 190,
