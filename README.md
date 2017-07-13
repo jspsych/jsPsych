@@ -1,15 +1,15 @@
 ![logo](http://www.jspsych.org/img/jspsych-logo-readme.jpg)
 
-jsPsych is a JavaScript library for creating behavioral experiments that run in a web browser. jsPsych creates a framework for defining experiments and provides a set of flexible plugins that create different kinds of tasks a subject could complete during an experiment. By assembling different plugins together and customizing the parameters of each, it is possible to create many different types of experiments.
+jsPsych is a JavaScript library for creating behavioral experiments that run in a web browser. jsPsych provides a framework for defining experiments using a set of flexible plugins that create different kinds of tasks a subject could complete during an experiment. By assembling these different plugins together it is possible to create many different types of experiments.
 
-
-Code Demos
+Examples
 ----------
 
-[Demo 1](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_1.html) with the instructions plugin:
+These examples are intended to illustrate what jsPsych code and experiments look like. There is a larger set of example code in the [examples folder](/examples).
+
+#1: [Displaying instructions](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_1.html)
 <div display="flex">
 <img src="https://user-images.githubusercontent.com/14092539/28126774-801ea42e-66f8-11e7-9b6a-c8bad0026bec.gif" align="right" width=50% />
-
 <div markdown="1" style="width: 50%;">
 <sub>
 
@@ -44,25 +44,24 @@ Code Demos
     jsPsych.init({      
         timeline: [trial],        
     });
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-```
 
+
+
+
+
+
+
+
+
+
+
+```
 </sub>
 </div>
 </div>
 
 
-[Demo 2](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_2.html) with the image-keyboard-response plugin:
+#2: [Displaying images and recording a response](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_2.html)
 <div display="flex">
 <img src="https://user-images.githubusercontent.com/14092539/28125911-0504cca2-66f6-11e7-8f5b-c9686f63aaa8.gif" align="right" width=50% />
 
@@ -103,23 +102,23 @@ Code Demos
     timeline: [trial_1, trial_2, trial_3],
     default_iti: 250
   });
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 ```
 </sub>
 </div>
 </div>
 
 
-And for a slightly longer experiment example, [demo 3](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_3.html) with the html-keyboard-response plugin. Also shows data after experiment ends:
+#3: [A flanker task](https://github.com/jspsych/jsPsych/tree/master/examples/demos/demo_3.html) showing a few advanced features of the library
+
 <div display="flex">
 <img src="https://user-images.githubusercontent.com/14092539/28126802-97b50d08-66f8-11e7-9a45-46561ab51a5f.gif" align="right" width=50% />
-
 <div markdown="3" style="width: 50%;">
 <sub>
 
@@ -129,7 +128,7 @@ var test_stimuli = [
   { stimulus: ">>>>>", data: { stim_type: 'congruent'} },
   { stimulus: "<<><<", data: { stim_type: 'incongruent'} },
   { stimulus: ">><>>", data: { stim_type: 'incongruent'} } ];
-  
+
 var test = {
   timeline: [{
      type: 'html-keyboard-response',
@@ -141,7 +140,7 @@ var test = {
   timeline_variables: test_stimuli,
   sample: {type: 'fixed-repetitions', size: 2}
 };
-  
+
 var debrief = {
   type: "html-keyboard-response",
   stimulus: function() {
@@ -153,7 +152,7 @@ var debrief = {
   "time for congruent trials was <strong>"+congruent_rt+
   "ms</strong>.</p>"+
   "<p style='font-size:25px'>Your average response time for"+
-  "incongruent trials was <strong>"incongruent_rt + 
+  "incongruent trials was <strong>"+incongruent_rt+
   "ms</strong>.</p>";
   }
 };
@@ -163,12 +162,8 @@ timeline.push(test);
 timeline.push(debrief);
 jsPsych.init({
    timeline: timeline,
-   on_finish: function() {
-       jsPsych.data.displayData();
-   }
 });
 ```
-
 </sub>
 </div>
 </div>
