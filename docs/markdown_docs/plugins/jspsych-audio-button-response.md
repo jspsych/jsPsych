@@ -25,7 +25,7 @@ prompt | string | "" | This string can contain HTML markup. Any content here wil
 trial_duration | numeric | -1 | How long to wait for the subject to make a response before ending the trial in milliseconds. If the subject fails to make a response before this timer is reached, the subject's response will be recorded as -1 for the trial and the trial will end. If the value of this parameter is -1, the trial will wait for a response indefinitely.
 margin_vertical | String | '0px' | Vertical margin of the button.
 margin_horizontal | String | '8px' | Horizontal margin of button.
-response_ends_trial | boolean | true | If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the `timing_response` parameter). If false, then the trial will continue until the value for `timing_response` is reached. You can use this parameter to force the subject to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
+response_ends_trial | boolean | true | If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `timing_response` is reached. You can use this parameter to force the subject to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
 trial_ends_after_audio | Boolean | false | If true, then the trial will end as soon as the audio file finishes playing.
 
 ## Data Generated
