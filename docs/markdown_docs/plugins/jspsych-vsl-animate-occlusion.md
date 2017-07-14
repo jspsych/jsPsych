@@ -20,8 +20,8 @@ image_size | array | `[100, 100]` | Array specifying the width and height of the
 initial_direction | string | "left" | Which direction the stimulus should move first (subsequent directions will alternate). Choices are "left" or "right".
 occlude_center | boolean | true | If true, display a rectangle in the center of the screen that is just wide enough to occlude the image completely as it passes behind.
 choices | array of keycodes | `jsPsych.ALL_KEYS` | This array contains the keys that the subject is allowed to press in order to respond to the stimulus. Keys can be specified as their [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) or as characters (e.g. `'a'`, `'q'`). The default value of `jsPsych.ALL_KEYS` means that all keys will be accepted as valid responses. Specifying `jsPsych.NO_KEYS` will mean that no responses are allowed.
-timing_cycle | numeric | 1000 | How long it takes for a stimulus in the sequence to make a complete cycle (move to the edge and back to the center) in milliseconds.
-timing_pre_movement | numeric | 500 | How long to wait before the stimuli starts moving from behind the center rectangle.
+cycle_duration | numeric | 1000 | How long it takes for a stimulus in the sequence to make a complete cycle (move to the edge and back to the center) in milliseconds.
+pre_movement_duration | numeric | 500 | How long to wait before the stimuli starts moving from behind the center rectangle.
 
 ## Data Generated
 
