@@ -39,7 +39,7 @@ button_pressed | numeric | Indicates which button the subject pressed. The first
 
 ## Examples
 
-#### Displaying image until subject gives a response
+#### Displaying question until subject gives a response
 
 ```javascript
 var trial = {
