@@ -11,6 +11,8 @@ Parameter | Type | Default Value | Description
 questions | array | *undefined* | Each array element a string. The strings are the prompts/questions that will be associated with a slider.
 labels | array |  *undefined* | Each array element is an array of strings. The innermost arrays contain a set of labels to display for an individual question. If you want to use blank responses and only label the end points or some subset of the options, just insert a blank string for the unlabeled responses.
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions.
+required | boolean | false | Makes answering questions required.
+button_label | string | 'Button label' | Label of the button.
 
 ## Data Generated
 
