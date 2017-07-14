@@ -1,4 +1,4 @@
-# jspsych-categorize
+# jspsych-categorize-html
 
 The categorize html plugin shows an HTML object on the screen. The subject responds by pressing a key. Feedback indicating the correctness of the response is given.
 
