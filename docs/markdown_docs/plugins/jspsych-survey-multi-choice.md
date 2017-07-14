@@ -13,6 +13,7 @@ options | array |  *undefined* | An array of arrays. The innermost arrays contai
 required | array | null | An array of boolean values. Each boolean indicates if a question is required (`true`) or not (`false`), using the HTML5 `required` attribute. The length of this array should correspond to the length of the questions array. If this parameter is undefined, all questions will be optional. Note: The HTML5 `required` attribute is [not currently supported by the Safari browser][1].
 horizontal | boolean | false | If true, then questions are centered and options are displayed horizontally.
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions. 
+button_label | string | 'Button label' | Label of the button.
 
 [1]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Browser_compatibility
 
