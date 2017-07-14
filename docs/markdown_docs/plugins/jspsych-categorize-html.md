@@ -1,6 +1,6 @@
-# jspsych-categorize
+# jspsych-categorize-html
 
-The categorize plugin shows an image or HTML object on the screen. The subject responds by pressing a key. Feedback indicating the correctness of the response is given.
+The categorize html plugin shows an HTML object on the screen. The subject responds by pressing a key. Feedback indicating the correctness of the response is given.
 
 ## Parameters
 
@@ -8,8 +8,7 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-stimulus | string | *undefined* | The stimulus to display. Either HTML-formatted, or the path to an image.
-is_html | boolean | false | If `stimulus` is an HTML-formatted string, this parameter needs to be set to `true`.
+stimulus | html string | *undefined* | The HTML stimulus to display.
 key_answer | numeric | *undefined* | The [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) indicating the correct response.
 choices | array of keycodes | `jsPsych.ALL_KEYS` | This array contains the keys that the subject is allowed to press in order to respond to the stimulus. Keys can be specified as their [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) or as characters (e.g. `'a'`, `'q'`). The default value of `jsPsych.ALL_KEYS` means that all keys will be accepted as valid responses. Specifying `jsPsych.NO_KEYS` will mean that no responses are allowed.
 text_answer | string | "" | A label that is associated with the correct answer. Used in conjunction with the `correct_text` and `incorrect_text` parameters.
@@ -20,9 +19,9 @@ force_correct_button_press | boolean | false | If set to true, then the subject 
 show_stim_with_feedback | boolean | true | If set to true, then the stimulus will be shown during feedback. If false, then only the text feedback will display during feedback.
 show_feedback_on_timeout | boolean | false | If true, then category feedback will be displayed for an incorrect response after a timeout (timing_response is exceeded). If false, then a timeout message will be shown.
 timeout_message | string | "Please respond faster." | The message to show on a timeout non-response.
-timing_stim | numeric | -1 | How long to show the stimulus for (milliseconds). If -1, then the stimulus is shown until a response is given.
-timing_feedback_duration | numeric | 2000 | How long to show the feedback for (milliseconds).
-timing_response | numeric | -1 | The maximum time allowed for a response. If -1, then the experiment will wait indefinitely for a response.
+stimulus_duration | numeric | -1 | How long to show the stimulus for (milliseconds). If -1, then the stimulus is shown until a response is given.
+feedback_duration | numeric | 2000 | How long to show the feedback for (milliseconds).
+trial_duration | numeric | -1 | The maximum time allowed for a response. If -1, then the experiment will wait indefinitely for a response.
 
 
 ## Data Generated
@@ -49,7 +48,6 @@ var categorization_trial = {
     choices: [80, 81],
     correct_text: "<p class='prompt'>Correct, this is a %ANS%.</p>",
     incorrect_text: "<p class='prompt'>Incorrect, this is a %ANS%.</p>",
-    is_html: true,
-    prompt: "<p class='prompt'>Press P for letter. Press Q for number.</p>"
+    prompt: "<p>Press P for letter. Press Q for number.</p>"
 };
 ```
