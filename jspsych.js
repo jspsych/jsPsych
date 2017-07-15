@@ -835,7 +835,7 @@ window.jsPsych = (function() {
   function setDefaultValues(trial){
     var trial_parameters = Object.keys(jsPsych.plugins[trial.type].info.parameters);
     for(var i=0; i<trial_parameters.length; i++){
-      if(typeof trial[trial_parameters[i]] == 'undefined'){
+      if(typeof trial[trial_parameters[i]] == 'undefined' || trial[trial_parameters[i]] === null){
         if(typeof jsPsych.plugins[trial.type].info.parameters[trial_parameters[i]].default == 'undefined'){
           console.error('You must specify a value for the '+trial_parameters[i]+' parameter in the '+trial.type+' plugin.');
         } else {
