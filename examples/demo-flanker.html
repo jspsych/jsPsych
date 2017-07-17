@@ -3,8 +3,8 @@
     <head>
         <title>Flanker Task</title>
         <script src="../jspsych.js"></script>
-        <script src="../plugins/jspsych-text.js"></script>
-        <script src="../plugins/jspsych-single-stim.js"></script>
+        <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="../plugins/jspsych-image-keyboard-response.js"></script>
         <link rel="stylesheet" href="../css/jspsych.css">
     </head>
     <body>
@@ -15,14 +15,14 @@
 
         /*set up welcome block*/
         var welcome = {
-          type: "text",
-          text: "Welcome to the experiment. Press any key to begin."
+          type: "html-keyboard-response",
+          stimulus: "Welcome to the experiment. Press any key to begin."
         };
 
         /*set up instructions block*/
         var instructions = {
-          type: "text",
-          text: "<p>In this task, you will see five arrows on the screen, like the example below.</p>"+
+          type: "html-keyboard-response",
+          stimulus: "<p>In this task, you will see five arrows on the screen, like the example below.</p>"+
             "<img src='img/inc1.png'></img>"+
             "<p>Press the left arrow key if the middle arrow is pointing left. (<)</p>"+
             "<p>Press the right arrow key if the middle arrow is pointing right. (>)</p>"+
@@ -53,9 +53,9 @@
         /* defining test timeline */
         var test = {
           timeline: [{
-            type: 'single-stim',
+            type: 'image-keyboard-response',
             choices: [37, 39],
-            timing_response: 1500,
+            trial_duration: 1500,
             stimulus: jsPsych.timelineVariable('stimulus'),
             data: jsPsych.timelineVariable('data'),
             on_finish: function(data){
@@ -77,8 +77,8 @@
 
         /*defining debriefing block*/
         var debrief = {
-          type: "text",
-          text: function() {
+          type: "html-keyboard-response",
+          stimulus: function() {
             var total_trials = jsPsych.data.get().filter({trial_type: 'single-stim'}).count();
             var accuracy = Math.round(jsPsych.data.get().filter({correct: true}).count() / total_trials * 100);
             var congruent_rt = Math.round(jsPsych.data.get().filter({correct: true, stim_type: 'congruent'}).select('rt').mean());

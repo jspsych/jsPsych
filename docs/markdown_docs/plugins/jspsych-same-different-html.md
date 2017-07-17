@@ -1,6 +1,6 @@
-# jspsych-same-different plugin
+# jspsych-same-different-html plugin
 
-The same-different plugin displays two stimuli sequentially. Stimuli can be images or HTML objects. The subject responds using the keyboard, and indicates whether the stimuli were the same or different. Same does not necessarily mean identical; a category judgment could be made, for example.
+The same-different-html plugin displays two stimuli sequentially. Stimuli are HTML objects. The subject responds using the keyboard, and indicates whether the stimuli were the same or different. Same does not necessarily mean identical; a category judgment could be made, for example.
 
 ## Parameters
 
@@ -8,8 +8,7 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-stimuli | array | *undefined* | A pair of stimuli, represented as an array with two entries, one for each stimulus. A stimulus can be either a path to an image file or a string containing valid HTML markup. Stimuli will be shown in the order that they are defined in the array.
-is_html | boolean | false | If the elements of the `stimuli` array are strings containing HTML content, then this parameter must be set to true.
+stimuli | array | *undefined* | A pair of stimuli, represented as an array with two entries, one for each stimulus. A stimulus is a string containing valid HTML markup. Stimuli will be shown in the order that they are defined in the array.
 answer | string | *undefined* | Either `'same'` or `'different'`.
 same_key | numeric or string | 'Q' | The key that subjects should press to indicate that the two stimuli are the same.
 different_key | numeric or string | 'P' | The key that subjects should press to indicate that the two stimuli are different.
@@ -45,8 +44,8 @@ key_press_stim1 | numeric | Indicates which key the subject pressed to continue.
 ```javascript
     var block = {
       type: 'same-different',
-      stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
-      prompt: "<p>Press S if the faces had the same emotional expression. Press D if the faces had different emotional expressions.</p>",
+      stimuli: ['<p>Climbing</p>y', '<p>Walking</p>'],
+      prompt: "<p>Press S if the texts imply the same amount of physical exertion. Press D if the texts imply different amount of physical exertion.</p>",
       same_key: 'S',
       different_key: 'D',
       answer: 'different'
@@ -65,8 +64,8 @@ key_press_stim1 | numeric | Indicates which key the subject pressed to continue.
 ```javascript
     var block = {
       type: 'same-different',
-      stimuli: ['img/happy_face_1.jpg', 'img/happy_face_3.jpg'],
-      prompt: "<p>Press S if the faces had the same emotional expression. Press D if the faces had different emotional expressions.</p>",
+      stimuli: ['Running', 'Swimming'],
+      prompt: "<pPress S if the texts imply the same amount of physical exertion. Press D if the texts imply different amount of physical exertion.</p>",
       same_key: 'S',
       different_key: 'D',
       answer: 'same'

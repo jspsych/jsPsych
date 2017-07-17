@@ -2,15 +2,15 @@
 <html>
   <head>
     <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-text.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
   <body></body>
   <script>
 
   var trial = {
-    type: 'text',
-    text: 'Hello. This is in a loop. Press R to repeat this trial, or C to continue.',
+    type: 'html-keyboard-response',
+    stimulus: 'Hello. This is in a loop. Press R to repeat this trial, or C to continue.',
     choices: ['r','c']
   }
 
@@ -26,14 +26,14 @@
   }
 
   var pre_if_trial = {
-    type: 'text',
-    text: 'The next trial is in a conditional statement. Press S to skip it, or V to view it.',
+    type: 'html-keyboard-response',
+    stimulus: 'The next trial is in a conditional statement. Press S to skip it, or V to view it.',
     choices: ['s','v']
   }
 
   var if_trial = {
-    type: 'text',
-    text: 'You chose to view the trial. Press any key to continue.'
+    type: 'html-keyboard-response',
+    stimulus: 'You chose to view the trial. Press any key to continue.'
   }
 
   var if_node = {
@@ -49,8 +49,8 @@
   }
 
   var after_if_trial = {
-    type: 'text',
-    text: 'This is the trial after the conditional.'
+    type: 'html-keyboard-response',
+    stimulus: 'This is the trial after the conditional.'
   }
 
   jsPsych.init({

@@ -3,15 +3,15 @@
   <head>
 
     <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-text.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
   <body></body>
   <script>
 
   var first = {
-    type: 'text',
-    text: 'first trial! experiment will pause for 2s in between trials. press any key.',
+    type: 'html-keyboard-response',
+    stimulus: 'first trial! experiment will pause for 2s in between trials. press any key.',
     post_trial_gap: 0,
     on_finish: function(){
       jsPsych.pauseExperiment();
@@ -20,8 +20,8 @@
   }
 
   var second = {
-    type: 'text',
-    text: 'second trial!'
+    type: 'html-keyboard-response',
+    stimulus: 'second trial!'
   }
 
   jsPsych.init({

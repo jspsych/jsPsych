@@ -1,6 +1,6 @@
 # jspsych-xab plugin
 
-The XAB plugin displays either an image or HTML object stimulus (X). After a short gap, the plugin displays two additional stimuli (A and B). The subject selects which of the two stimuli matches X using the keyboard.
+The XAB-html plugin displays an HTML object stimulus (X). After a short gap, the plugin displays two additional stimuli (A and B). The subject selects which of the two stimuli matches X using the keyboard.
 
 ## Parameters
 
@@ -8,8 +8,7 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-stimuli | array | *undefined* | Array of two or three elements. If it is two elements, then the plugin will show the first element as X and as the target during the A/B portion (the second element will be the foil). If it is three elements, then the first is X the second is the target (A) and the third is the foil (B). This is useful if X and A are not identical, but A is still the correct choice (e.g. a categorization experiment where the goal is to pick the item that is in the same category). Stimuli can be paths to images, or html strings.
-is_html | boolean | false | If the elements of the `stimuli` array are strings containing HTML content, then this parameter must be set to true.
+stimuli | array | *undefined* | Array of two or three elements. If it is two elements, then the plugin will show the first element as X and as the target during the A/B portion (the second element will be the foil). If it is three elements, then the first is X the second is the target (A) and the third is the foil (B). This is useful if X and A are not identical, but A is still the correct choice (e.g. a categorization experiment where the goal is to pick the item that is in the same category). Stimuli are html strings.
 left_key | numeric or string | 'Q' | Which key the subject should press to indicate that the target is on the left side.
 right_key | numeric or string | 'P' | Which key the subject should press to indicate that the target is on the right side.
 prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g. which key to press).
@@ -36,8 +35,8 @@ correct | boolean | True if the subject picks the correct answer.
 ```javascript
 var block = {
 	type: 'xab',
-	stimuli: ['img/happy_face.png', 'img/sad_face.png'],
-	prompt: "Press Q if the face you just saw is on the left. Press P if the face you just saw is on the right."
+	stimuli: ['A', 'B'],
+	prompt: "Press Q if the text you just saw is on the left. Press P if the text you just saw is on the right."
 }
 ```
 
@@ -46,7 +45,7 @@ var block = {
 ```javascript
 var block = {
 	type: 'xab',
-	stimuli: ['img/happy_joe_face.png', 'img/sad_joe_face.png', 'img/sad_fred_face.png'],
-	prompt: "Press Q if the person you just saw is on the left. Press P if the person you just saw is on the right."
+	stimuli: ['A', 'B', 'C'],
+	prompt: "Press Q if the text you just saw is on the left. Press P if the text you just saw is on the right."
 }
 ```

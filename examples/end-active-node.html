@@ -4,7 +4,8 @@
 <head>
 
   <script src="../jspsych.js"></script>
-  <script src="../plugins/jspsych-single-stim.js"></script>
+  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-image-keyboard-response.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
   <style>
     img {
@@ -24,7 +25,7 @@
   }
 
   var block = {
-    type: 'single-stim',
+    type: 'image-keyboard-response',
     choices: [89, 78], // Y or N
     prompt: '<p class="center-content">Press Y to Continue. Press N to end this node of the experiment.</p>',
     on_finish: function(data) {
@@ -36,9 +37,8 @@
   }
 
   var after_block = {
-    type: 'single-stim',
+    type: 'html-keyboard-response',
     stimulus: '<p>The next node</p>',
-    is_html: true
   }
 
   jsPsych.init({

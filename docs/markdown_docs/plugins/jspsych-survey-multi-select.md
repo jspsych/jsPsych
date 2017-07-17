@@ -11,9 +11,9 @@ Parameter | Type | Default Value | Description
 questions | array | *undefined* | An array of strings. The strings are the prompts/questions that will be associated with a group of options (check boxes). All questions will get presented on the same page (trial).
 options | array |  *undefined* | An array of arrays. The innermost arrays contain a set of options to display for an individual question. The length of the outer array should be the same as the number of questions.
 required | boolean | true | If true, then at least one option must be selected.
-required_msg | string | `*please select at least one option!` | Message to display if required check is not met.
 horizontal | boolean | false | If true, then questions are centered and options are displayed horizontally.
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions.
+button_label | string | 'Button label' | Label of the button.
 
 ## Data Generated
 

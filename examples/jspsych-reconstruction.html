@@ -2,7 +2,7 @@
 <html>
   <head>
     <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-single-stim.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
     <script src="../plugins/jspsych-reconstruction.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
@@ -19,11 +19,10 @@
   }
 
   var pre_test = {
-    type: 'single-stim',
+    type: 'html-keyboard-response',
     stimulus: '<div style="display: block; margin: auto; height: 300px; width: 300px; position: relative;">'+
       '<div style="display: block; position: absolute; top: '+(150 - 210/2)+'px; left:'+(150 - 210/2)+'px; background-color: #000000; '+
       'width: 210px; height: 210px;"></div></div>',
-    is_html: true,
     choices: ['c'],
     post_trial_gap: 1250,
     prompt: '<p>Study the size of this square carefully. On the next screen you will have to recreate it. When you are ready, press C.</p>'
