@@ -4,19 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
-<<<<<<< HEAD:examples/jspsych-survey-multi-select.html
   <script src="../jspsych.js" ></script>
   <script src="../plugins/jspsych-survey-multi-select.js" ></script>
-=======
-  <script src="../jspsych.js"></script>
-  <script src="../plugins/jspsych-survey-multi-picture.js"></script>
->>>>>>> update examples; tweak plugin fixes:examples/jspsych-survey-multi-picture.html
   <link rel="stylesheet" href="../css/jspsych.css"></link>
 </head>
 
 <body>
 </body>
-<<<<<<< HEAD:examples/jspsych-survey-multi-select.html
   <script>
    var questions=["Which of these colors do you like?", "Which of these foods do you like?"]
    var choices = [
@@ -40,29 +34,4 @@
       },
     });
   </script>
-=======
-<script>
-  var questions = ["Please choose the picture which describes the following sentence: The dog is chased by the cat."]
-  var choices = [{
-    url: "http://www.gameswithwords.org/WhichEnglish/images/1_2.jpg",
-    label: ""
-  }, {
-    url: "http://www.gameswithwords.org/WhichEnglish/images/1_1.jpg",
-    label: ""
-  }]
-  var multi_choice_block = {
-    type: 'survey-multi-picture',
-    questions: questions,
-    options: [choices],
-    horizontal: true
-  };
-  jsPsych.init({
-    timeline: [multi_choice_block],
-    on_finish: function(data) {
-      jsPsych.data.displayData();
-    },
-  });
-</script>
-
->>>>>>> update examples; tweak plugin fixes:examples/jspsych-survey-multi-picture.html
 </html>

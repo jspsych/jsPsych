@@ -3,8 +3,8 @@
   <head>
     <title>My experiment</title>
     <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-text.js"></script>
-    <script src="../plugins/jspsych-single-stim.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="../plugins/jspsych-image-keyboard-response.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
   <body></body>
@@ -15,15 +15,15 @@
 
     /* define welcome message trial */
     var welcome_block = {
-      type: "text",
-      text: "Welcome to the experiment. Press any key to begin."
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the experiment. Press any key to begin."
     };
     timeline.push(welcome_block);
 
     /* define instructions trial */
     var instructions = {
-      type: "text",
-      text: "<p>In this experiment, a circle will appear in the center " +
+      type: "html-keyboard-response",
+      stimulus: "<p>In this experiment, a circle will appear in the center " +
           "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
@@ -45,18 +45,17 @@
     ];
 
     var fixation = {
-      type: 'single-stim',
+      type: 'html-keyboard-response',
       stimulus: '<div style="font-size:60px;">+</div>',
-      is_html: true,
       choices: jsPsych.NO_KEYS,
-      timing_response: function(){
+      trial_duration: function(){
         return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
       },
       data: {test_part: 'fixation'}
     }
 
     var test = {
-      type: "single-stim",
+      type: "image-keyboard-response",
       stimulus: jsPsych.timelineVariable('stimulus'),
       choices: ['f', 'j'],
       data: jsPsych.timelineVariable('data'),
@@ -76,8 +75,8 @@
     /* define debrief */
 
     var debrief_block = {
-      type: "text",
-      text: function() {
+      type: "html-keyboard-response",
+      stimulus: function() {
 
         var trials = jsPsych.data.get().filter({test_part: 'test'});
         var correct_trials = trials.filter({correct: true});

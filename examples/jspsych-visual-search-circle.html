@@ -5,7 +5,7 @@
 
   <script src="js/snap.svg-min.js"></script>
   <script src="../jspsych.js"></script>
-  <script src="../plugins/jspsych-text.js"></script>
+  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
   <script src="../plugins/jspsych-visual-search-circle.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
 </head>
@@ -13,8 +13,8 @@
 <script>
 
   var intro = {
-    type: 'text',
-    text: '<p>You will see a set of Ns on the following screens. Press J if there is a backwards N. If there is no backwards N press F.</p><p>Press any key to begin.</p>'
+    type: 'html-keyboard-response',
+    stimulus: '<p>You will see a set of Ns on the following screens. Press J if there is a backwards N. If there is no backwards N press F.</p><p>Press any key to begin.</p>'
   }
 
   var trial_1 = {

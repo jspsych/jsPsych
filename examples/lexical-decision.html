@@ -4,8 +4,7 @@
 <head>
   
   <script src="../jspsych.js"></script>
-  <script src="../plugins/jspsych-text.js"></script>
-  <script src="../plugins/jspsych-single-stim.js"></script>
+  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
   <style>
   .stimulus { font-size: 32px; }
@@ -16,8 +15,8 @@
   var timeline = [];
 
   var instructions = {
-    type: 'text',
-    text: '<p>Each screen will show either an English word or letters that do not form a word.</p>'+
+    type: 'html-keyboard-response',
+    stimulus: '<p>Each screen will show either an English word or letters that do not form a word.</p>'+
       '<p>Press Y if the letters form a valid word.</p><p>Press N if the letters do not form a valid word.</p>'+
       '<p>When you are ready to begin, press Y or N.</p>',
     choices: ['y','n']
@@ -72,17 +71,15 @@
     randomize_order: true,
     timeline: [
       {
-        type: 'single-stim',
+        type: 'html-keyboard-response',
         stimulus: '<p class="stimulus">+</p>',
-        is_html: true,
         choices: jsPsych.NO_KEYS,
-        timing_response: 500,
+        trial_duration: 500,
         post_trial_gap: 0
       },
       {
-        type: 'single-stim',
+        type: 'html-keyboard-response',
         stimulus: function(){ return "<p class='stimulus'>"+jsPsych.timelineVariable('word')+"</p>"; },
-        is_html: true,
         choices: ['y','n'],
         post_trial_gap: 500,
         data: function(){
@@ -105,8 +102,8 @@
   timeline.push(trials);
 
   var debrief = {
-    type: 'text',
-    text: function(){
+    type: 'html-keyboard-response',
+    stimulus: function(){
       var high_frequency = jsPsych.data.getData({word_frequency: 'high', correct: true});
       var low_frequency = jsPsych.data.getData({word_frequency: 'low', correct: true});
 

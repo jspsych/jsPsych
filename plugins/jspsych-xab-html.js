@@ -16,9 +16,9 @@ jsPsych.plugins['xab-html'] = (function() {
     name: 'xab-html',
     description: '',
     parameters: {
-      stimulus: {
+      stimuli: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
-        pretty_name: 'Stimulus',
+        pretty_name: 'Stimuli',
         array: true,
         default: undefined,
         description: 'Array of 2 or 3 paths to images.'

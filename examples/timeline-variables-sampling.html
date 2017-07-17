@@ -3,7 +3,7 @@
 
 <head>
   <script src="../jspsych.js"></script>
-  <script src="../plugins/jspsych-single-stim.js"></script>
+  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
   <style>
   </style>
@@ -25,10 +25,9 @@
     timeline_variables: timeline_variables,
     timeline: [
       {
-        type: 'single-stim',
+        type: 'html-keyboard-response',
         choices: jsPsych.ALL_KEYS,
         stimulus: jsPsych.timelineVariable('v1'),
-        is_html: true
       }
     ],
     sample: {

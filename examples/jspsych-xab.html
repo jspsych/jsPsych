@@ -2,7 +2,7 @@
 <html>
 <head>
   <script src="../jspsych.js"></script>
-  <script src="../plugins/jspsych-xab.js"></script>
+  <script src="../plugins/jspsych-xab-image.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
   <style>
     img {
@@ -15,10 +15,10 @@
 <script>
 
   var trial = {
-    type: 'xab',
+    type: 'xab-image',
     stimuli: ['img/happy_face_1.jpg', 'img/happy_face_2.jpg'],
     prompt: "<p>Press Q if the face you just saw is on the left. Press P if the face you just saw is on the right.</p>",
-    timing_response: 2000
+    trial_duration: 2000
   }
 
   jsPsych.init({
