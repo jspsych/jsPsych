@@ -150,7 +150,7 @@ for (var i = 0; i < images.length; i++) {
 var block = {
   type: 'single-stim',
   choices: [89, 78], // Y or N
-  prompt: '<p class="center-content">Press Y to Continue. Press N to end this node of the experiment.</p>',
+  prompt: '<p>Press Y to Continue. Press N to end this node of the experiment.</p>',
   on_finish: function(data) {
     if (data.key_press == 78) {
       jsPsych.endCurrentTimeline();
@@ -204,7 +204,7 @@ var trial = {
   type: 'single-stim',
   stimulus: 'image1.jpg',
   choices: [89,78], // Y or N
-  prompt: '<p class="center-content">Press Y to Continue. Press N to end the experiment</p>',
+  prompt: '<p>Press Y to Continue. Press N to end the experiment</p>',
   on_finish: function(data){
     if(data.key_press == 78){
       jsPsych.endExperiment('The experiment was ended by pressing N.');
