@@ -810,18 +810,14 @@ window.jsPsych = (function() {
     }
 
     // now eval the whole trial
-
-    // keys that are always protected
-    var always_protected = ['on_finish'];
-    var common_across_plugins = ['data', 'post_trial_gap'];
-
     var keys = Object.keys(trial);
 
     for (var i = 0; i < keys.length; i++) {
-      if(!always_protected.includes(keys[i])){
-        if(keys[i] !== 'type' &&
-          (common_across_plugins.includes(keys[i]) || jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION)
-        ){
+      if(keys[i] !== 'type'){
+        if(
+          (typeof jsPsych.plugins.universalPluginParameters[keys[i]] !== 'undefined' && jsPsych.plugins.universalPluginParameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION ) ||
+          (typeof jsPsych.plugins[trial.type].info.parameters[keys[i]] !== 'undefined' && jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION)
+        ) {
           if (typeof trial[keys[i]] == "function") {
             trial[keys[i]] = trial[keys[i]].call();
           }
@@ -926,10 +922,12 @@ window.jsPsych = (function() {
   return core;
 })();
 
-jsPsych.plugins = {
+jsPsych.plugins = (function() {
+
+  var module = {};
 
   // enumerate possible parameter types for plugins
-  parameterType: {
+  module.parameterType = {
     BOOL: 0,
     STRING: 1,
     INT: 2,
@@ -940,10 +938,33 @@ jsPsych.plugins = {
     HTML_STRING: 7,
     IMAGE: 8,
     AUDIO: 9,
-    VIDEO: 10
+    VIDEO: 10,
+    OBJECT: 11
   }
 
-};
+  module.universalPluginParameters = {
+    data: {
+      type: module.parameterType.OBJECT,
+      pretty_name: 'Data',
+      default: {},
+      description: 'Data to add to this trial (key-value pairs)'
+    },
+    on_finish: {
+      type: module.parameterType.FUNCTION,
+      pretty_name: 'On finish',
+      default: function() { return; },
+      description: 'Function to execute when trial is finished'
+    },
+    post_trial_gap: {
+      type: module.parameterType.INT,
+      pretty_name: 'Post trial gap',
+      default: undefined,
+      description: 'Length of gap between the end of this trial and the start of the next trial'
+    }
+  }
+
+  return module;
+})();
 
 jsPsych.data = (function() {
 
