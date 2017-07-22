@@ -2322,7 +2322,6 @@ jsPsych.utils = (function() {
 		return out;
 	}
 
-  // need to get this working for arrays and objects!
 	module.deepCopy = function(obj) {
     var out;
     if(Array.isArray(obj)){
@@ -2404,5 +2403,12 @@ if (!Array.prototype.includes) {
       k++;
     }
     return false;
+  };
+}
+
+// polyfill for Array.isArray
+if (!Array.isArray) {
+  Array.isArray = function(arg) {
+    return Object.prototype.toString.call(arg) === '[object Array]';
   };
 }
