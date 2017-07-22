@@ -333,7 +333,7 @@ window.jsPsych = (function() {
       if (typeof timeline_parameters == 'undefined') {
         // returns a clone of the trial_parameters to
         // protect functions.
-        return Object.assign({}, trial_parameters);
+        return jsPsych.utils.deepCopy(trial_parameters);
       } else {
         if (progress.current_location >= timeline_parameters.timeline.length) {
           return null;
@@ -778,13 +778,13 @@ window.jsPsych = (function() {
     current_trial = trial;
 
     // process all timeline variables for this trial
-    trial = evaluateTimelineVariables(trial);
+    evaluateTimelineVariables(trial);
 
     // evaluate variables that are functions
-    trial = evaluateFunctionParameters(trial);
+    evaluateFunctionParameters(trial);
 
     // get default values for parameters
-    trial = setDefaultValues(trial);
+    setDefaultValues(trial);
 
     // execute trial method
     jsPsych.plugins[trial.type].trial(DOM_target, trial);
@@ -794,12 +794,15 @@ window.jsPsych = (function() {
     var keys = Object.keys(trial);
 
     for (var i = 0; i < keys.length; i++) {
+      // timeline variables on the root level
       if (typeof trial[keys[i]] == "function" && trial[keys[i]].toString().replace(/\s/g,'') == "function(){returntimeline.timelineVariable(varname);}") {
         trial[keys[i]] = trial[keys[i]].call();
       }
+      // timeline variables that are nested in objects
+      if (typeof trial[keys[i]] == "object"){
+        evaluateTimelineVariables(trial[keys[i]]);
+      }
     }
-
-    return trial;
   }
 
   function evaluateFunctionParameters(trial){
@@ -824,8 +827,6 @@ window.jsPsych = (function() {
         }
       }
     }
-
-    return trial;
   }
 
   function setDefaultValues(trial){
@@ -839,7 +840,6 @@ window.jsPsych = (function() {
         }
       }
     }
-    return trial;
   }
 
   function loadFail(){
@@ -1034,7 +1034,7 @@ jsPsych.data = (function() {
     }
 
     data_collection.readOnly = function(){
-      return DataCollection(jsPsych.utils.deepExtend([], trials));
+      return DataCollection(jsPsych.utils.deepCopy(trials));
     }
 
     data_collection.addToAll = function(properties){
@@ -1059,9 +1059,9 @@ jsPsych.data = (function() {
       // [{p1: v1, p2:v2}, {p1:v2}]
       // {p1: v1}
       if(!Array.isArray(filters)){
-        var f = jsPsych.utils.deepExtend([], [filters]);
+        var f = jsPsych.utils.deepCopy([filters]);
       } else {
-        var f = jsPsych.utils.deepExtend([], filters);
+        var f = jsPsych.utils.deepCopy(filters);
       }
 
       var filtered_data = [];
@@ -1115,7 +1115,7 @@ jsPsych.data = (function() {
       if(!Array.isArray(columns)){
         columns = [columns];
       }
-      var o = jsPsych.utils.deepExtend([], trials);
+      var o = jsPsych.utils.deepCopy(trials);
       for (var i = 0; i < o.length; i++) {
         for (var j in columns) {
           delete o[i][columns[j]];
@@ -2322,27 +2322,27 @@ jsPsych.utils = (function() {
 		return out;
 	}
 
-	module.deepExtend = function(out, obj) {
-		out = out || {};
-
-		for (var i = 1; i < arguments.length; i++) {
-			var obj = arguments[i];
-
-			if (!obj)
-				continue;
-
-			for (var key in obj) {
-				if (obj.hasOwnProperty(key)) {
-					if (typeof obj[key] === 'object')
-						out[key] = module.deepExtend(out[key], obj[key]);
-					else
-						out[key] = obj[key];
-				}
-			}
-		}
-
-		return out;
-	}
+  // need to get this working for arrays and objects!
+	module.deepCopy = function(obj) {
+    var out;
+    if(Array.isArray(obj)){
+      out = [];
+      for(var i = 0; i<obj.length; i++){
+        out.push(module.deepCopy(obj[i]));
+      }
+      return out;
+    } else if(typeof obj === 'object'){
+      out = {};
+      for(var key in obj){
+        if(obj.hasOwnProperty(key)){
+          out[key] = module.deepCopy(obj[key]);
+        }
+      }
+      return out;
+    } else {
+      return obj;
+    }
+  }
 
 	return module;
 })();

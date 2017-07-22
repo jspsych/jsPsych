@@ -30,3 +30,29 @@ describe('flatten', function(){
     expect(out).toEqual([1,1,2,2,3,3]);
   });
 });
+
+describe('deepCopy', function(){
+  test('works for objects', function(){
+    var o = {a:1,b:{c:2,d:3}};
+    var o2 = jsPsych.utils.deepCopy(o);
+    o2.b.c = 4;
+    expect(o.b.c).toBe(2);
+  });
+  test('works for objects with arrays', function(){
+    var o = {a:1,b:[2,3]};
+    var o2 = jsPsych.utils.deepCopy(o);
+    o2.b[0] = 4;
+    expect(JSON.stringify(o2.b)).toBe(JSON.stringify([4,3]));
+    expect(o.b[0]).toBe(2);
+  });
+  test('works for objects with functions', function(){
+    var c = 0;
+    var o = {a:1, b:function(){c=2}};
+    var o2 = jsPsych.utils.deepCopy(o);
+    o2.b = function(){ c = 1 }
+    o.b();
+    expect(c).toBe(2);
+    o2.b();
+    expect(c).toBe(1);
+  })
+})
