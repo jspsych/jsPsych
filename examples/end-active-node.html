@@ -27,7 +27,7 @@
   var block = {
     type: 'image-keyboard-response',
     choices: [89, 78], // Y or N
-    prompt: '<p class="center-content">Press Y to Continue. Press N to end this node of the experiment.</p>',
+    prompt: '<p>Press Y to Continue. Press N to end this node of the experiment.</p>',
     on_finish: function(data) {
       if (data.key_press == 78) {
         jsPsych.endCurrentTimeline();

@@ -333,7 +333,7 @@ window.jsPsych = (function() {
       if (typeof timeline_parameters == 'undefined') {
         // returns a clone of the trial_parameters to
         // protect functions.
-        return Object.assign({}, trial_parameters);
+        return jsPsych.utils.deepCopy(trial_parameters);
       } else {
         if (progress.current_location >= timeline_parameters.timeline.length) {
           return null;
@@ -778,13 +778,13 @@ window.jsPsych = (function() {
     current_trial = trial;
 
     // process all timeline variables for this trial
-    trial = evaluateTimelineVariables(trial);
+    evaluateTimelineVariables(trial);
 
     // evaluate variables that are functions
-    trial = evaluateFunctionParameters(trial);
+    evaluateFunctionParameters(trial);
 
     // get default values for parameters
-    trial = setDefaultValues(trial);
+    setDefaultValues(trial);
 
     // execute trial method
     jsPsych.plugins[trial.type].trial(DOM_target, trial);
@@ -794,12 +794,15 @@ window.jsPsych = (function() {
     var keys = Object.keys(trial);
 
     for (var i = 0; i < keys.length; i++) {
+      // timeline variables on the root level
       if (typeof trial[keys[i]] == "function" && trial[keys[i]].toString().replace(/\s/g,'') == "function(){returntimeline.timelineVariable(varname);}") {
         trial[keys[i]] = trial[keys[i]].call();
       }
+      // timeline variables that are nested in objects
+      if (typeof trial[keys[i]] == "object"){
+        evaluateTimelineVariables(trial[keys[i]]);
+      }
     }
-
-    return trial;
   }
 
   function evaluateFunctionParameters(trial){
@@ -810,32 +813,26 @@ window.jsPsych = (function() {
     }
 
     // now eval the whole trial
-
-    // keys that are always protected
-    var always_protected = ['on_finish'];
-    var common_across_plugins = ['data', 'post_trial_gap'];
-
     var keys = Object.keys(trial);
 
     for (var i = 0; i < keys.length; i++) {
-      if(!always_protected.includes(keys[i])){
-        if(keys[i] !== 'type' &&
-          (common_across_plugins.includes(keys[i]) || jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION)
-        ){
+      if(keys[i] !== 'type'){
+        if(
+          (typeof jsPsych.plugins.universalPluginParameters[keys[i]] !== 'undefined' && jsPsych.plugins.universalPluginParameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION ) ||
+          (typeof jsPsych.plugins[trial.type].info.parameters[keys[i]] !== 'undefined' && jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION)
+        ) {
           if (typeof trial[keys[i]] == "function") {
             trial[keys[i]] = trial[keys[i]].call();
           }
         }
       }
     }
-
-    return trial;
   }
 
   function setDefaultValues(trial){
     var trial_parameters = Object.keys(jsPsych.plugins[trial.type].info.parameters);
     for(var i=0; i<trial_parameters.length; i++){
-      if(typeof trial[trial_parameters[i]] == 'undefined'){
+      if(typeof trial[trial_parameters[i]] == 'undefined' || trial[trial_parameters[i]] === null){
         if(typeof jsPsych.plugins[trial.type].info.parameters[trial_parameters[i]].default == 'undefined'){
           console.error('You must specify a value for the '+trial_parameters[i]+' parameter in the '+trial.type+' plugin.');
         } else {
@@ -843,7 +840,6 @@ window.jsPsych = (function() {
         }
       }
     }
-    return trial;
   }
 
   function loadFail(){
@@ -926,10 +922,12 @@ window.jsPsych = (function() {
   return core;
 })();
 
-jsPsych.plugins = {
+jsPsych.plugins = (function() {
+
+  var module = {};
 
   // enumerate possible parameter types for plugins
-  parameterType: {
+  module.parameterType = {
     BOOL: 0,
     STRING: 1,
     INT: 2,
@@ -937,13 +935,36 @@ jsPsych.plugins = {
     FUNCTION: 4,
     KEYCODE: 5,
     SELECT: 6,
-    HMTL_STRING: 7,
+    HTML_STRING: 7,
     IMAGE: 8,
     AUDIO: 9,
-    VIDEO: 10
+    VIDEO: 10,
+    OBJECT: 11
   }
 
-};
+  module.universalPluginParameters = {
+    data: {
+      type: module.parameterType.OBJECT,
+      pretty_name: 'Data',
+      default: {},
+      description: 'Data to add to this trial (key-value pairs)'
+    },
+    on_finish: {
+      type: module.parameterType.FUNCTION,
+      pretty_name: 'On finish',
+      default: function() { return; },
+      description: 'Function to execute when trial is finished'
+    },
+    post_trial_gap: {
+      type: module.parameterType.INT,
+      pretty_name: 'Post trial gap',
+      default: undefined,
+      description: 'Length of gap between the end of this trial and the start of the next trial'
+    }
+  }
+
+  return module;
+})();
 
 jsPsych.data = (function() {
 
@@ -1013,7 +1034,7 @@ jsPsych.data = (function() {
     }
 
     data_collection.readOnly = function(){
-      return DataCollection(jsPsych.utils.deepExtend([], trials));
+      return DataCollection(jsPsych.utils.deepCopy(trials));
     }
 
     data_collection.addToAll = function(properties){
@@ -1038,9 +1059,9 @@ jsPsych.data = (function() {
       // [{p1: v1, p2:v2}, {p1:v2}]
       // {p1: v1}
       if(!Array.isArray(filters)){
-        var f = jsPsych.utils.deepExtend([], [filters]);
+        var f = jsPsych.utils.deepCopy([filters]);
       } else {
-        var f = jsPsych.utils.deepExtend([], filters);
+        var f = jsPsych.utils.deepCopy(filters);
       }
 
       var filtered_data = [];
@@ -1094,7 +1115,7 @@ jsPsych.data = (function() {
       if(!Array.isArray(columns)){
         columns = [columns];
       }
-      var o = jsPsych.utils.deepExtend([], trials);
+      var o = jsPsych.utils.deepCopy(trials);
       for (var i = 0; i < o.length; i++) {
         for (var j in columns) {
           delete o[i][columns[j]];
@@ -1842,8 +1863,9 @@ jsPsych.pluginAPI = (function() {
         if(parameters.valid_responses != jsPsych.NO_KEYS){
           for (var i = 0; i < parameters.valid_responses.length; i++) {
             if (typeof parameters.valid_responses[i] == 'string') {
-              if (typeof keylookup[parameters.valid_responses[i]] !== 'undefined') {
-                if (e.keyCode == keylookup[parameters.valid_responses[i]]) {
+              var kc = jsPsych.pluginAPI.convertKeyCharacterToKeyCode(parameters.valid_responses[i]);
+              if (typeof kc !== 'undefined') {
+                if (e.keyCode == kc) {
                   valid_response = true;
                 }
               } else {
@@ -1906,6 +1928,7 @@ jsPsych.pluginAPI = (function() {
 
   module.convertKeyCharacterToKeyCode = function(character) {
     var code;
+    character = character.toLowerCase();
     if (typeof keylookup[character] !== 'undefined') {
       code = keylookup[character];
     }
@@ -1980,32 +2003,6 @@ jsPsych.pluginAPI = (function() {
     'x': 88,
     'y': 89,
     'z': 90,
-    'A': 65,
-    'B': 66,
-    'C': 67,
-    'D': 68,
-    'E': 69,
-    'F': 70,
-    'G': 71,
-    'H': 72,
-    'I': 73,
-    'J': 74,
-    'K': 75,
-    'L': 76,
-    'M': 77,
-    'N': 78,
-    'O': 79,
-    'P': 80,
-    'Q': 81,
-    'R': 82,
-    'S': 83,
-    'T': 84,
-    'U': 85,
-    'V': 86,
-    'W': 87,
-    'X': 88,
-    'Y': 89,
-    'Z': 90,
     '0numpad': 96,
     '1numpad': 97,
     '2numpad': 98,
@@ -2021,18 +2018,18 @@ jsPsych.pluginAPI = (function() {
     'minus': 109,
     'decimal': 110,
     'divide': 111,
-    'F1': 112,
-    'F2': 113,
-    'F3': 114,
-    'F4': 115,
-    'F5': 116,
-    'F6': 117,
-    'F7': 118,
-    'F8': 119,
-    'F9': 120,
-    'F10': 121,
-    'F11': 122,
-    'F12': 123,
+    'f1': 112,
+    'f2': 113,
+    'f3': 114,
+    'f4': 115,
+    'f5': 116,
+    'f6': 117,
+    'f7': 118,
+    'f8': 119,
+    'f9': 120,
+    'f10': 121,
+    'f11': 122,
+    'f12': 123,
     '=': 187,
     ',': 188,
     '.': 190,
@@ -2325,27 +2322,26 @@ jsPsych.utils = (function() {
 		return out;
 	}
 
-	module.deepExtend = function(out, obj) {
-		out = out || {};
-
-		for (var i = 1; i < arguments.length; i++) {
-			var obj = arguments[i];
-
-			if (!obj)
-				continue;
-
-			for (var key in obj) {
-				if (obj.hasOwnProperty(key)) {
-					if (typeof obj[key] === 'object')
-						out[key] = module.deepExtend(out[key], obj[key]);
-					else
-						out[key] = obj[key];
-				}
-			}
-		}
-
-		return out;
-	}
+	module.deepCopy = function(obj) {
+    var out;
+    if(Array.isArray(obj)){
+      out = [];
+      for(var i = 0; i<obj.length; i++){
+        out.push(module.deepCopy(obj[i]));
+      }
+      return out;
+    } else if(typeof obj === 'object'){
+      out = {};
+      for(var key in obj){
+        if(obj.hasOwnProperty(key)){
+          out[key] = module.deepCopy(obj[key]);
+        }
+      }
+      return out;
+    } else {
+      return obj;
+    }
+  }
 
 	return module;
 })();
@@ -2407,5 +2403,12 @@ if (!Array.prototype.includes) {
       k++;
     }
     return false;
+  };
+}
+
+// polyfill for Array.isArray
+if (!Array.isArray) {
+  Array.isArray = function(arg) {
+    return Object.prototype.toString.call(arg) === '[object Array]';
   };
 }
