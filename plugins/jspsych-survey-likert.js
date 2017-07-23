@@ -16,19 +16,18 @@ jsPsych.plugins['survey-likert'] = (function() {
     name: 'survey-likert',
     description: '',
     parameters: {
-      questions: {
-        type: jsPsych.plugins.parameterType.STRING,
+      nested: {
+        type: jsPsych.plugins.parameterType.COMPLEX,
         array: true,
-        pretty_name: 'Questions',
-        default: undefined,
-        description: 'Questions that are associated with the slider.'
-      },
-      labels: {
-        type: jsPsych.plugins.parameterType.STRING,
-        array: true,
-        pretty_name: 'Labels',
-        default: undefined,
-        description: 'Labels to display for individual question.'
+        question: {type: jsPsych.plugins.parameterType.STRING,
+                   pretty_name: 'Questions',
+                   default: undefined,
+                   description: 'Questions that are associated with the slider.'},
+        labels: {type: jsPsych.plugins.parameterType.STRING,
+                 array: true,
+                 pretty_name: 'Labels',
+                 default: undefined,
+                 description: 'Labels to display for individual question.'}
       },
       preamble: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -73,18 +72,18 @@ jsPsych.plugins['survey-likert'] = (function() {
     html += '<form id="jspsych-survey-likert-form">';
 
     // add likert scale questions
-    for (var i = 0; i < trial.questions.length; i++) {
+    for (var i = 0; i < trial.nested.length; i++) {
       // add question
-      html += '<label class="jspsych-survey-likert-statement">' + trial.questions[i] + '</label>';
+      html += '<label class="jspsych-survey-likert-statement">' + trial.nested[i].question + '</label>';
       // add options
-      var width = 100 / trial.labels[i].length;
+      var width = 100 / trial.nested[i].labels.length;
       var options_string = '<ul class="jspsych-survey-likert-opts" data-radio-group="Q' + i + '">';
-      for (var j = 0; j < trial.labels[i].length; j++) {
+      for (var j = 0; j < trial.nested[i].labels.length; j++) {
         options_string += '<li style="width:' + width + '%"><input type="radio" name="Q' + i + '" value="' + j + '"';
         if(trial.required){
           options_string += ' required';
         }
-        options_string += '><label class="jspsych-survey-likert-opt-label">' + trial.labels[i][j] + '</label></li>';
+        options_string += '><label class="jspsych-survey-likert-opt-label">' + trial.nested[i].labels[j] + '</label></li>';
       }
       options_string += '</ul>';
       html += options_string;
