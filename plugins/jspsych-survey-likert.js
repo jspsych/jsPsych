@@ -16,31 +16,30 @@ jsPsych.plugins['survey-likert'] = (function() {
     name: 'survey-likert',
     description: '',
     parameters: {
-      nested: {
+      questions: {
         type: jsPsych.plugins.parameterType.COMPLEX,
         array: true,
-        question: {type: jsPsych.plugins.parameterType.STRING,
-                   pretty_name: 'Questions',
+        nested: {
+          prompt: {type: jsPsych.plugins.parameterType.STRING,
+                     pretty_name: 'Prompt',
+                     default: undefined,
+                     description: 'Questions that are associated with the slider.'},
+          labels: {type: jsPsych.plugins.parameterType.STRING,
+                   array: true,
+                   pretty_name: 'Labels',
                    default: undefined,
-                   description: 'Questions that are associated with the slider.'},
-        labels: {type: jsPsych.plugins.parameterType.STRING,
-                 array: true,
-                 pretty_name: 'Labels',
-                 default: undefined,
-                 description: 'Labels to display for individual question.'}
+                   description: 'Labels to display for individual question.'},
+          required: {type: jsPsych.plugins.parameterType.BOOL,
+                     pretty_name: 'Required',
+                     default: false,
+                     description: 'Makes answering questions required.'}
+        }
       },
       preamble: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Preamble',
         default: '',
         description: 'String to display at top of the page.'
-      },
-      required: {
-        type: jsPsych.plugins.parameterType.BOOL,
-        array: true,
-        pretty_name: 'Required',
-        default: false,
-        description: 'Makes answering questions required.'
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -72,18 +71,18 @@ jsPsych.plugins['survey-likert'] = (function() {
     html += '<form id="jspsych-survey-likert-form">';
 
     // add likert scale questions
-    for (var i = 0; i < trial.nested.length; i++) {
+    for (var i = 0; i < trial.questions.length; i++) {
       // add question
-      html += '<label class="jspsych-survey-likert-statement">' + trial.nested[i].question + '</label>';
+      html += '<label class="jspsych-survey-likert-statement">' + trial.questions[i].prompt + '</label>';
       // add options
-      var width = 100 / trial.nested[i].labels.length;
+      var width = 100 / trial.questions[i].labels.length;
       var options_string = '<ul class="jspsych-survey-likert-opts" data-radio-group="Q' + i + '">';
-      for (var j = 0; j < trial.nested[i].labels.length; j++) {
+      for (var j = 0; j < trial.questions[i].labels.length; j++) {
         options_string += '<li style="width:' + width + '%"><input type="radio" name="Q' + i + '" value="' + j + '"';
-        if(trial.required){
+        if(trial.questions[i].required){
           options_string += ' required';
         }
-        options_string += '><label class="jspsych-survey-likert-opt-label">' + trial.nested[i].labels[j] + '</label></li>';
+        options_string += '><label class="jspsych-survey-likert-opt-label">' + trial.questions[i].labels[j] + '</label></li>';
       }
       options_string += '</ul>';
       html += options_string;

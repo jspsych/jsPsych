@@ -17,7 +17,7 @@
    
    var multi_choice_block = {
       type: 'survey-multi-select',
-      nested: [{question: "Which of these colors do you like?", options: choices1, horizontal: true}, {question: "Which of these foods do you like?", options: choices2, horizontal: true}],
+      questions: [{prompt: "Which of these colors do you like?", options: choices1, horizontal: true}, {prompt: "Which of these foods do you like?", options: choices2, horizontal: true}],
       required: true,
       on_finish: function(data) {
         console.log("i'm data", data)

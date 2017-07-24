@@ -16,26 +16,28 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     name: 'survey-multi-choice',
     description: '',
     parameters: {
-      nested: {
+      questions: {
         type: jsPsych.plugins.parameterType.COMPLEX,
         array: true,
-        question: {type: jsPsych.plugins.parameterType.STRING,
-                   pretty_name: 'Questions',
-                   default: undefined,
-                   description: 'The strings that will be associated with a group of options.'},
-        options: {type: jsPsych.plugins.parameterType.STRING,
-                  pretty_name: 'Options',
-                  array: true,
-                  default: undefined,
-                  description: 'Displays options for an individual question.'},
-        required: {type: jsPsych.plugins.parameterType.BOOL,
-                   pretty_name: 'Required',
-                   default: false,
-                   description: 'Subject will be required to pick an option for each question.'},
-       horitzontal: {type: jsPsych.plugins.parameterType.BOOL,
-                     pretty_name: 'Horitzontal',
+        nested: {
+          prompt: {type: jsPsych.plugins.parameterType.STRING,
+                     pretty_name: 'Prompt',
+                     default: undefined,
+                     description: 'The strings that will be associated with a group of options.'},
+          options: {type: jsPsych.plugins.parameterType.STRING,
+                     pretty_name: 'Options',
+                     array: true,
+                     default: undefined,
+                     description: 'Displays options for an individual question.'},
+          required: {type: jsPsych.plugins.parameterType.BOOL,
+                     pretty_name: 'Required',
                      default: false,
-                     description: 'If true, then questions are centered and options are displayed horizontally.'},
+                     description: 'Subject will be required to pick an option for each question.'},
+          horitzontal: {type: jsPsych.plugins.parameterType.BOOL,
+                        pretty_name: 'Horitzontal',
+                        default: false,
+                        description: 'If true, then questions are centered and options are displayed horizontally.'},
+        }
       },
       preamble: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -79,10 +81,10 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     trial_form.innerHTML += '<div id="'+preamble_id_name+'" class="'+preamble_id_name+'">'+trial.preamble+'</div>';
 
     // add multiple-choice questions
-    for (var i = 0; i < trial.nested.length; i++) {
+    for (var i = 0; i < trial.questions.length; i++) {
         // create question container
         var question_classes = [_join(plugin_id_name, 'question')];
-        if (trial.nested[i].horizontal) {
+        if (trial.questions[i].horizontal) {
           question_classes.push(_join(plugin_id_name, 'horizontal'));
         }
 
@@ -91,10 +93,10 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         var question_selector = _join(plugin_id_selector, i);
 
         // add question text
-        display_element.querySelector(question_selector).innerHTML += '<p class="' + plugin_id_name + '-text survey-multi-choice">' + trial.nested[i].question + '</p>';
+        display_element.querySelector(question_selector).innerHTML += '<p class="' + plugin_id_name + '-text survey-multi-choice">' + trial.questions[i].prompt + '</p>';
 
       // create option radio buttons
-      for (var j = 0; j < trial.nested[i].options.length; j++) {
+      for (var j = 0; j < trial.questions[i].options.length; j++) {
         var option_id_name = _join(plugin_id_name, "option", i, j),
         option_id_selector = '#' + option_id_name;
 
@@ -107,7 +109,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         var input_id = _join(plugin_id_name, 'response', i, j);
         var label = document.createElement('label');
         label.setAttribute('class', plugin_id_name+'-text');
-        label.innerHTML = trial.nested[i].options[j];
+        label.innerHTML = trial.questions[i].options[j];
         label.setAttribute('for', input_id)
 
         // create radio button
@@ -115,12 +117,12 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         input.setAttribute('type', "radio");
         input.setAttribute('name', input_name);
         input.setAttribute('id', input_id);
-        input.setAttribute('value', trial.nested[i].options[j]);
+        input.setAttribute('value', trial.questions[i].options[j]);
         form.appendChild(label);
         form.insertBefore(input, label);
       }
 
-      if (trial.nested[i].required) {
+      if (trial.questions[i].required) {
         // add "question required" asterisk
         display_element.querySelector(question_selector + " p").innerHTML += "<span class='required'>*</span>";
 

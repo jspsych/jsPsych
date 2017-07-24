@@ -17,28 +17,30 @@ jsPsych.plugins['survey-text'] = (function() {
     name: 'survey-text',
     description: '',
     parameters: {
-      nested: {
+      questions: {
         type: jsPsych.plugins.parameterType.COMPLEX,
         array:true,
-        question: {type: jsPsych.plugins.parameterType.STRING,
-                    pretty_name: 'Questions',
-                    default: undefined,
-                    description: 'Prompts for the the subject to response'},
-        value: {type: jsPsych.plugins.parameterType.STRING,
-                pretty_name: 'Value',
-                array: true,
-                default: '',
-                description: 'The strings will be used to populate the response fields with editable answers.'}, 
-        rows: {type: jsPsych.plugins.parameterType.INT,
-                pretty_name: 'Rows',
-                array: true,
-                default: 1,
-                description: 'The number of rows for the response text box.'}, 
-        columns: {type: jsPsych.plugins.parameterType.INT,
-                  pretty_name: 'Columns',
+        nested: {
+          prompt: {type: jsPsych.plugins.parameterType.STRING,
+                   pretty_name: 'Prompt',
+                   default: undefined,
+                   description: 'Prompts for the the subject to response'},
+          value: {type: jsPsych.plugins.parameterType.STRING,
+                  pretty_name: 'Value',
                   array: true,
-                  default: 40,
-                  description: 'The number of columns for the response text box.'}
+                  default: '',
+                  description: 'The strings will be used to populate the response fields with editable answers.'}, 
+          rows: {type: jsPsych.plugins.parameterType.INT,
+                 pretty_name: 'Rows',
+                 array: true,
+                 default: 1,
+                 description: 'The number of rows for the response text box.'}, 
+          columns: {type: jsPsych.plugins.parameterType.INT,
+                    pretty_name: 'Columns',
+                    array: true,
+                    default: 40,
+                    description: 'The number of columns for the response text box.'}
+        }
       },
       preamble: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -58,22 +60,22 @@ jsPsych.plugins['survey-text'] = (function() {
   plugin.trial = function(display_element, trial) {
 
 
-    if (typeof trial.nested[0].rows == 'undefined') {
-      trial.nested[0].rows = [];
-      for (var i = 0; i < trial.nested.length; i++) {
-        trial.nested[i].rows.push(1);
+    if (typeof trial.questions[0].rows == 'undefined') {
+      trial.questions[0].rows = [];
+      for (var i = 0; i < trial.questions.length; i++) {
+        trial.questions[i].rows.push(1);
       }
     }
-    if (typeof trial.nested[0].columns == 'undefined') {
-      trial.nested[0].columns = [];
-      for (var i = 0; i < trial.nested.length; i++) {
-        trial.nested[i].columns.push(40);
+    if (typeof trial.questions[0].columns == 'undefined') {
+      trial.questions[0].columns = [];
+      for (var i = 0; i < trial.questions.length; i++) {
+        trial.questions[i].columns.push(40);
       }
     }
-    if (typeof trial.nested[0].value == 'undefined') {
-      trial.nested[0].value = [];
-      for (var i = 0; i < trial.nested.length; i++) {
-        trial.nested[i].value.push("");
+    if (typeof trial.questions[0].value == 'undefined') {
+      trial.questions[0].value = [];
+      for (var i = 0; i < trial.questions.length; i++) {
+        trial.questions[i].value.push("");
       }
     }
 
@@ -81,13 +83,13 @@ jsPsych.plugins['survey-text'] = (function() {
     var html = '<div id="jspsych-survey-text-preamble" class="jspsych-survey-text-preamble">'+trial.preamble+'</div>';
 
     // add questions
-    for (var i = 0; i < trial.nested.length; i++) {
+    for (var i = 0; i < trial.questions.length; i++) {
       html += '<div id="jspsych-survey-text-"'+i+'" class="jspsych-survey-text-question" style="margin: 2em 0em;">';
-      html += '<p class="jspsych-survey-text">' + trial.nested[i].question + '</p>';
-      if(trial.nested[i].rows == 1){
-        html += '<input type="text" name="#jspsych-survey-text-response-' + i + '" size="'+trial.nested[i].columns+'">'+trial.nested[i].value+'</input>';
+      html += '<p class="jspsych-survey-text">' + trial.questions[i].prompt + '</p>';
+      if(trial.questions[i].rows == 1){
+        html += '<input type="text" name="#jspsych-survey-text-response-' + i + '" size="'+trial.questions[i].columns+'">'+trial.questions[i].value+'</input>';
       } else {
-        html += '<textarea name="#jspsych-survey-text-response-' + i + '" cols="' + trial.nested[i].columns + '" rows="' + trial.nested[i].rows + '">'+trial.nested[i].value+'</textarea>';
+        html += '<textarea name="#jspsych-survey-text-response-' + i + '" cols="' + trial.questions[i].columns + '" rows="' + trial.questions[i].rows + '">'+trial.questions[i].value+'</textarea>';
       }
       html += '</div>';
     }

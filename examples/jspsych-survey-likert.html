@@ -13,8 +13,7 @@
 
   var likert_trial = {
       type: 'survey-likert',
-      nested: [{question: "I like vegetables.", labels: scale}, {question: "I like fruit.", labels: scale}],
-      required: true,
+      questions: [{prompt: "I like vegetables.", labels: scale, required: true}, {prompt: "I like fruit.", labels: scale, required: true}],
   };
 
   jsPsych.init({
