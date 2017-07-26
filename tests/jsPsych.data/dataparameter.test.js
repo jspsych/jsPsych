@@ -156,6 +156,39 @@ describe('The data parameter', function(){
     expect(jsPsych.data.get().filter({added: false}).count()).toBe(1);
   });
 
+  test('timeline variable should be available in trial on_finish', function(){
+    require(root + 'jspsych.js');
+    require(root + 'plugins/jspsych-html-keyboard-response.js');
+
+    var trial = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo',
+          data: {added: jsPsych.timelineVariable('added')},
+          on_finish: function(data){
+            data.added_copy = data.added;
+          }}
+      ],
+      timeline_variables: [
+        {added: true},
+        {added: false}
+      ]
+    }
+
+    jsPsych.init({
+      timeline: [trial]
+    });
+
+    utils.pressKey(32); // trial 1
+    utils.pressKey(32); // trial 2
+
+    console.log(jsPsych.data.get().json())
+
+    expect(jsPsych.data.get().filter({added_copy: true}).count()).toBe(1);
+    expect(jsPsych.data.get().filter({added_copy: false}).count()).toBe(1);
+  });
+
   test.skip('should record data to all nested trials with timeline variables even when nested trials have own data', function(){
 
     require(root + 'jspsych.js');
