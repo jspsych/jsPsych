@@ -16,13 +16,17 @@ describe('survey-multi-select plugin', function(){
 	test('quoted values for options work', function(){
 		var trial = {
 			type: 'survey-multi-select',
-			questions: ['foo'],
-			options: [['Hello "boo"', "yes, 'bar'"]]
+			questions: [{
+				prompt: 'foo',
+				options: ['Hello "boo"', "yes, 'bar'"]
+			}]
 		}
 
 		jsPsych.init({
 			timeline: [trial]
 		});
+
+		console.log(jsPsych.getDisplayElement().innerHTML);
 
 		expect(jsPsych.getDisplayElement().querySelector('#jspsych-survey-multi-select-option-0-0 input').value).toBe('Hello "boo"');
 		expect(jsPsych.getDisplayElement().querySelector('#jspsych-survey-multi-select-option-0-1 input').value).toBe("yes, 'bar'");
