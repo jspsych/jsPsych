@@ -15,31 +15,29 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     description: '',
     parameters: {
       questions: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Questions',
+        type: jsPsych.plugins.parameterType.COMPLEX,
         array: true,
-        default: undefined,
-        description: 'The strings that will be associated with a group of options.'
-      },
-      options: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Options',
-        array: true,
-        default: undefined,
-        description: 'Displays options for an individual question.'
+        nested: {
+          prompt: {type: jsPsych.plugins.parameterType.STRING,
+                    pretty_name: 'Prompt',
+                    default: undefined,
+                    description: 'The strings that will be associated with a group of options.'},
+          options: {type: jsPsych.plugins.parameterType.STRING,
+                    pretty_name: 'Options',
+                    array: true,
+                    default: undefined,
+                    description: 'Displays options for an individual question.'},
+          horitzontal: {type: jsPsych.plugins.parameterType.BOOL,
+                        pretty_name: 'Horitzontal',
+                        default: false,
+                        description: 'If true, then questions are centered and options are displayed horizontally.'},
+        }
       },
       required: {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Required',
-        array: true,
         default: false,
         description: 'Subject will be required to pick an option for each question.'
-      },
-      horizontal: {
-        type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: 'Horizontal',
-        default: false,
-        description: 'If true, then questions are centered and options are displayed horizontally.'
       },
       preamble: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -87,7 +85,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     for (var i = 0; i < trial.questions.length; i++) {
       // create question container
       var question_classes = [_join(plugin_id_name, 'question')];
-      if (trial.horizontal) {
+      if (trial.questions[i].horizontal) {
         question_classes.push(_join(plugin_id_name, 'horizontal'));
       }
 
@@ -96,10 +94,10 @@ jsPsych.plugins['survey-multi-select'] = (function() {
       var question_selector = _join(plugin_id_selector, i);
 
       // add question text
-      display_element.querySelector(question_selector).innerHTML += '<p id="survey-question" class="' + plugin_id_name + '-text survey-multi-select">' + trial.questions[i] + '</p>';
+      display_element.querySelector(question_selector).innerHTML += '<p id="survey-question" class="' + plugin_id_name + '-text survey-multi-select">' + trial.questions[i].prompt + '</p>';
 
       // create option check boxes
-      for (var j = 0; j < trial.options[i].length; j++) {
+      for (var j = 0; j < trial.questions[i].options.length; j++) {
         var option_id_name = _join(plugin_id_name, "option", i, j),
           option_id_selector = '#' + option_id_name;
 
@@ -112,7 +110,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         var input_id = _join(plugin_id_name, 'response', i, j);
         var label = document.createElement('label');
         label.setAttribute('class', plugin_id_name+'-text');
-        label.innerHTML = trial.options[i][j];
+        label.innerHTML = trial.questions[i].options[j];
         label.setAttribute('for', input_id)
 
         // create  checkboxes
@@ -120,7 +118,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         input.setAttribute('type', "checkbox");
         input.setAttribute('name', input_name);
         input.setAttribute('id', input_id);
-        input.setAttribute('value', trial.options[i][j])
+        input.setAttribute('value', trial.questions[i].options[j])
         form.appendChild(label)
         form.insertBefore(input, label)
       }

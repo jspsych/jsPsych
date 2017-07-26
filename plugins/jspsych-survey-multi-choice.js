@@ -17,31 +17,27 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     description: '',
     parameters: {
       questions: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Questions',
+        type: jsPsych.plugins.parameterType.COMPLEX,
         array: true,
-        default: undefined,
-        description: 'The strings that will be associated with a group of options.'
-      },
-      options: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Options',
-        array: true,
-        default: undefined,
-        description: 'Displays options for an individual question.'
-      },
-      required: {
-        type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: 'Required',
-        array: true,
-        default: false,
-        description: 'Subject will be required to pick an option for each question.'
-      },
-      horitzontal: {
-        type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: 'Horitzontal',
-        default: false,
-        description: 'If true, then questions are centered and options are displayed horizontally.'
+        nested: {
+          prompt: {type: jsPsych.plugins.parameterType.STRING,
+                     pretty_name: 'Prompt',
+                     default: undefined,
+                     description: 'The strings that will be associated with a group of options.'},
+          options: {type: jsPsych.plugins.parameterType.STRING,
+                     pretty_name: 'Options',
+                     array: true,
+                     default: undefined,
+                     description: 'Displays options for an individual question.'},
+          required: {type: jsPsych.plugins.parameterType.BOOL,
+                     pretty_name: 'Required',
+                     default: false,
+                     description: 'Subject will be required to pick an option for each question.'},
+          horitzontal: {type: jsPsych.plugins.parameterType.BOOL,
+                        pretty_name: 'Horitzontal',
+                        default: false,
+                        description: 'If true, then questions are centered and options are displayed horizontally.'},
+        }
       },
       preamble: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -86,23 +82,23 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 
     // add multiple-choice questions
     for (var i = 0; i < trial.questions.length; i++) {
-      // create question container
-      var question_classes = [_join(plugin_id_name, 'question')];
-      if (trial.horizontal) {
-        question_classes.push(_join(plugin_id_name, 'horizontal'));
-      }
+        // create question container
+        var question_classes = [_join(plugin_id_name, 'question')];
+        if (trial.questions[i].horizontal) {
+          question_classes.push(_join(plugin_id_name, 'horizontal'));
+        }
 
-      trial_form.innerHTML += '<div id="'+_join(plugin_id_name, i)+'" class="'+question_classes.join(' ')+'"></div>';
+        trial_form.innerHTML += '<div id="'+_join(plugin_id_name, i)+'" class="'+question_classes.join(' ')+'"></div>';
 
-      var question_selector = _join(plugin_id_selector, i);
+        var question_selector = _join(plugin_id_selector, i);
 
-      // add question text
-      display_element.querySelector(question_selector).innerHTML += '<p class="' + plugin_id_name + '-text survey-multi-choice">' + trial.questions[i] + '</p>';
+        // add question text
+        display_element.querySelector(question_selector).innerHTML += '<p class="' + plugin_id_name + '-text survey-multi-choice">' + trial.questions[i].prompt + '</p>';
 
       // create option radio buttons
-      for (var j = 0; j < trial.options[i].length; j++) {
+      for (var j = 0; j < trial.questions[i].options.length; j++) {
         var option_id_name = _join(plugin_id_name, "option", i, j),
-          option_id_selector = '#' + option_id_name;
+        option_id_selector = '#' + option_id_name;
 
         // add radio button container
         display_element.querySelector(question_selector).innerHTML += '<div id="'+option_id_name+'" class="'+_join(plugin_id_name, 'option')+'"></div>';
@@ -113,7 +109,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         var input_id = _join(plugin_id_name, 'response', i, j);
         var label = document.createElement('label');
         label.setAttribute('class', plugin_id_name+'-text');
-        label.innerHTML = trial.options[i][j];
+        label.innerHTML = trial.questions[i].options[j];
         label.setAttribute('for', input_id)
 
         // create radio button
@@ -121,12 +117,12 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         input.setAttribute('type', "radio");
         input.setAttribute('name', input_name);
         input.setAttribute('id', input_id);
-        input.setAttribute('value', trial.options[i][j]);
+        input.setAttribute('value', trial.questions[i].options[j]);
         form.appendChild(label);
         form.insertBefore(input, label);
       }
 
-      if (trial.required && trial.required[i]) {
+      if (trial.questions[i].required) {
         // add "question required" asterisk
         display_element.querySelector(question_selector + " p").innerHTML += "<span class='required'>*</span>";
 

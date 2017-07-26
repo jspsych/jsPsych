@@ -9,15 +9,12 @@
   <body></body>
   <script>
 
-  // defining groups of questions that will go together.
-  var page_1_questions = ["How old are you?", "Where were you born?"];
-
   var survey_block = {
       type: 'survey-text',
-      questions: page_1_questions,
-      values: ['age', 'Location'],
-      rows: [1, 8],
-      columns: [50, 20]
+      questions: [{prompt: 'How old are you?',
+               value: 'age', rows: 1, columns: 50},
+               {prompt: 'Where were you born?',
+                value: 'location', rows: 1, columns: 50}],
   };
 
   jsPsych.init({
