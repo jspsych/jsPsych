@@ -8,9 +8,10 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-questions | array | *undefined* | An array of strings. The strings are the prompts/questions that will be associated with a group of options (radio buttons). All questions will get presented on the same page (trial).
+questions | array | *undefined* | The array that holds the prompt, options, required, and horizontal parameters. 
+prompt | string | *undefined* | An array of strings. The strings are the prompts/questions that will be associated with a group of options (radio buttons). All questions will get presented on the same page (trial).
 options | array |  *undefined* | An array of arrays. The innermost arrays contain a set of options to display for an individual question. The length of the outer array should be the same as the number of questions.
-required | array | null | An array of boolean values. Each boolean indicates if a question is required (`true`) or not (`false`), using the HTML5 `required` attribute. The length of this array should correspond to the length of the questions array. If this parameter is undefined, all questions will be optional. Note: The HTML5 `required` attribute is [not currently supported by the Safari browser][1].
+required | boolean | null | An array of boolean values. Each boolean indicates if a question is required (`true`) or not (`false`), using the HTML5 `required` attribute. The length of this array should correspond to the length of the questions array. If this parameter is undefined, all questions will be optional. Note: The HTML5 `required` attribute is [not currently supported by the Safari browser][1].
 horizontal | boolean | false | If true, then questions are centered and options are displayed horizontally.
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions. 
 button_label | string | 'Button label' | Label of the button.
@@ -39,20 +40,15 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
     var page_2_options = ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neural", "Somewhat Agree", "Agree", "Strongly Agree"];
 
     var multi_choice_block = {
-        type: 'survey-multi-choice',
-        questions: page_1_questions,
-        options: [page_1_options, page_2_options],  // need one scale for every question on a page
-        required: [true, false]   // set whether questions are required
+      type: 'survey-multi-choice',
+      questions: [{prompt: "I like vegetables", options: page_1_options, required:true,}, {prompt: "I like fruit", options: page_2_options, required: false}],
     };
 
     var multi_choice_block_horizontal = {
-        type: 'survey-multi-choice',
-        questions: page_1_questions,
-        options: [page_1_options, page_2_options],  // need one scale for every question on a page
-        required: [true, false],   // set whether questions are required
-        horizontal: true  // centres questions and makes options display horizontally
+      type: 'survey-multi-choice',
+      questions: [{prompt: "I like vegetables", options: page_1_options, required: true, horizontal: true,}, {prompt: "I like fruit", options: page_2_options, required: false, horizontal: false}],
     };
-
+    
     jsPsych.init({
       timeline: [multi_choice_block, multi_choice_block_horizontal],
       on_finish: function() {

@@ -33,8 +33,8 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
                      pretty_name: 'Required',
                      default: false,
                      description: 'Subject will be required to pick an option for each question.'},
-          horitzontal: {type: jsPsych.plugins.parameterType.BOOL,
-                        pretty_name: 'Horitzontal',
+          horizontal: {type: jsPsych.plugins.parameterType.BOOL,
+                        pretty_name: 'Horizontal',
                         default: false,
                         description: 'If true, then questions are centered and options are displayed horizontally.'},
         }

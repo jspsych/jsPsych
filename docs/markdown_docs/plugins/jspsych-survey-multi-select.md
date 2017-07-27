@@ -8,7 +8,8 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-questions | array | *undefined* | An array of strings. The strings are the prompts/questions that will be associated with a group of options (check boxes). All questions will get presented on the same page (trial).
+questions | array | *undefined* | The array that holds the prompt, options, and horizontal parameters. 
+prompt | string | *undefined* | An array of strings. The strings are the prompts/questions that will be associated with a group of options (check boxes). All questions will get presented on the same page (trial).
 options | array |  *undefined* | An array of arrays. The innermost arrays contain a set of options to display for an individual question. The length of the outer array should be the same as the number of questions.
 required | boolean | true | If true, then at least one option must be selected.
 horizontal | boolean | false | If true, then questions are centered and options are displayed horizontally.
@@ -29,24 +30,18 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
 #### Basic example with multiple questions on a page.
 
 ```javascript
-    // defining groups of questions that will go together.
-    var page_1_questions = ["I like vegetables.", "I like fruit."];
-
     // definiting two different response scales that can be used.
     var page_1_options = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
     var page_2_options = ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neural", "Somewhat Agree", "Agree", "Strongly Agree"];
 
     var multi_select_block = {
         type: 'survey-multi-select',
-        questions: page_1_questions,
-        options: [page_1_options, page_2_options],  // need one scale for every question on a page
+        questions: [{prompt: "I like vegetables", options: page_1_options}, {prompt: "I like fruit", options: page_2_options}]
     };
 
     var multi_select_block_horizontal = {
         type: 'survey-multi-select',
-        questions: page_1_questions,
-        options: [page_1_options, page_2_options],  // need one scale for every question on a page
-        horizontal: true  // centers questions and makes options display horizontally
+        questions: [{prompt: "I like vegetables", options: page_1_options, horizontal: true}, {prompt: "I like fruit", options: page_2_options, horiztonal: false}]
     };
 
     jsPsych.init({

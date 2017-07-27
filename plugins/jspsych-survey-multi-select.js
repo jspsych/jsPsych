@@ -27,8 +27,8 @@ jsPsych.plugins['survey-multi-select'] = (function() {
                     array: true,
                     default: undefined,
                     description: 'Displays options for an individual question.'},
-          horitzontal: {type: jsPsych.plugins.parameterType.BOOL,
-                        pretty_name: 'Horitzontal',
+          horizontal: {type: jsPsych.plugins.parameterType.BOOL,
+                        pretty_name: 'Horizontal',
                         default: false,
                         description: 'If true, then questions are centered and options are displayed horizontally.'},
         }
