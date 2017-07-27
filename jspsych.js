@@ -939,7 +939,8 @@ jsPsych.plugins = (function() {
     IMAGE: 8,
     AUDIO: 9,
     VIDEO: 10,
-    OBJECT: 11
+    OBJECT: 11,
+    COMPLEX: 12
   }
 
   module.universalPluginParameters = {
