@@ -19,7 +19,8 @@ jsPsych.plugins['survey-text'] = (function() {
     parameters: {
       questions: {
         type: jsPsych.plugins.parameterType.COMPLEX,
-        array:true,
+        array: true,
+        pretty_name: 'Questions',
         nested: {
           prompt: {type: jsPsych.plugins.parameterType.STRING,
                    pretty_name: 'Prompt',
