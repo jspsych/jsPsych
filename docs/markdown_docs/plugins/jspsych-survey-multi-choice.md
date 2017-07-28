@@ -8,11 +8,7 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-questions | array | *undefined* | The array that holds the prompt, options, required, and horizontal parameters. 
-prompt | string | *undefined* | An array of strings. The strings are the prompts/questions that will be associated with a group of options (radio buttons). All questions will get presented on the same page (trial).
-options | array |  *undefined* | An array of arrays. The innermost arrays contain a set of options to display for an individual question. The length of the outer array should be the same as the number of questions.
-required | boolean | null | An array of boolean values. Each boolean indicates if a question is required (`true`) or not (`false`), using the HTML5 `required` attribute. The length of this array should correspond to the length of the questions array. If this parameter is undefined, all questions will be optional. Note: The HTML5 `required` attribute is [not currently supported by the Safari browser][1].
-horizontal | boolean | false | If true, then questions are centered and options are displayed horizontally.
+questions | array | *undefined* | An array of objects, each object represents a question that appears on the screen. Each object contains a prompt, options, required, and horizontal parameter that will be applied to the question. See examples below for further clarification.`prompt`: Type string, default value is *undefined*. The string is prompt/question that will be associated with a group of options (radio buttons). All questions will get presented on the same page (trial).`options`: Type array, defualt value is *undefined*. An array of strings. The array contains a set of options to display for an individual question.`required`: Type boolean, default value is null. The boolean value indicates if a question is required('true') or not ('false'), using the HTML5 `required` attribute. If this parameter is undefined, the question will be optional. Note: The HTML5 `required` attribute is [not currently supported by the Safari browser][1].`horizontal`:Type boolean, default value is false. If true, then the question is centered and the options are displayed horizontally.
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions. 
 button_label | string | 'Button label' | Label of the button.
 
