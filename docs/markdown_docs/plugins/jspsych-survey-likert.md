@@ -8,10 +8,8 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-questions | array | *undefined* | Each array element a string. The strings are the prompts/questions that will be associated with a slider.
-labels | array |  *undefined* | Each array element is an array of strings. The innermost arrays contain a set of labels to display for an individual question. If you want to use blank responses and only label the end points or some subset of the options, just insert a blank string for the unlabeled responses.
+questions | array | *undefined* | An array of objects, each object represents a question that appears on the screen. Each object contains a prompt, labels and required parameter that will be applied to the question. See examples below for further clarification.`prompt`: Type string, default value is *undefined*. The strings are the question that will be associated with a slider. `labels`: Type array, default value is *undefined*. Each array element is an array of strings. The innermost arrays contain a set of labels to display for an individual question. If you want to use blank responses and only label the end points or some subset of the options, just insert a blank string for the unlabeled responses.`required`: Type boolean, default value is false. Makes answering questions required. 
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions.
-required | boolean | false | Makes answering questions required.
 button_label | string | 'Button label' | Label of the button.
 
 ## Data Generated
@@ -28,15 +26,12 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
 #### Basic example with multiple questions on a page.
 
 ```javascript
-// defining groups of questions that will go together.
-var page_1_questions = ["I like vegetables.", "I hate eggs."];
 
 // defining two different response scales that can be used.
 var scale_1 = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
 
 var likert_page = {
     type: 'survey-likert',
-    questions: ["I like vegetables.", "I like fruit."],
-    labels: [scale_1, scale_1], // need one scale for every question on a page
+    questions: [{prompt: "I like vegetables.", labels: scale_1],
 };
 ```
