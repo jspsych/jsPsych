@@ -24,7 +24,7 @@
         description: 'The HTML string to be displayed.'
       },
       left_category_key: {
-        type: jsPsych.plugins.parameterType.HTML, 
+        type: jsPsych.plugins.parameterType.HTML_STRING, 
         pretty_name: 'Left category key',
         default: 'E',
         description: 'Key press that is associated with the left category label.'
@@ -81,7 +81,7 @@
         description: 'If true, in order to advance to the next trial after a wrong key press the user will be forced to press the correct key.'
       },
       stim_key_association: {
-        type: jsPsych.plugins.parameterType.HTML,
+        type: jsPsych.plugins.parameterType.HTML_STRING,
         pretty_name: 'Stimulus key association',
         options: ['left', 'right'],
         default: 'undefined',
