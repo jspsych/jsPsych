@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-survey-keylogger.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
+
+  var survey_block = {
+      type: 'survey-keylogger',
+      questions: [{prompt: 'What is your name?',
+               value: '', rows: 1, columns: 100},
+               {prompt: 'Please introduce yourself briefly',
+                value: '', rows: 5, columns: 100}]
+  };
+
+  jsPsych.init({
+    timeline: [survey_block],
+    on_finish: function() { jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>
