@@ -1,8 +1,8 @@
-jsPsych.plugins['conditional-run'] = (function () {
+jsPsych.plugins['optional-followup'] = (function () {
 	var plugin = {};
 
 	plugin.info = {
-		name: 'conditional-run',
+		name: 'optional-followup',
 		description: 'Only run the specified plugin if a condition is met',
 		parameters: {
 			'dependentPluginParameters': {
