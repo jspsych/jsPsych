@@ -115,6 +115,16 @@ jsPsych.plugins.video = (function() {
       end_trial();
     }
 
+    // event handler to set timeout to end trial if video is stopped
+    display_element.querySelector('#jspsych-video-player').onplay = function(){
+      if(trial.stop != false){
+        if(trial.start == false){
+          trial.start = 0;
+        }
+        jsPsych.pluginAPI.setTimeout(end_trial, (trial.stop-trial.start)*1000);
+      }
+    }
+
     // function to end trial when it is time
     var end_trial = function() {
 
