@@ -27,7 +27,7 @@ jsPsych.plugins["resize"] = (function() {
         pretty_name: 'Item width',
         default: 1,
         description: 'The width of the item to be measured.'
-      }, 
+      },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
@@ -90,7 +90,6 @@ jsPsych.plugins["resize"] = (function() {
 
     var mousedownevent = function(e){
       e.preventDefault();
-      e.stopPropagation();
       dragging = true;
       origin_x = e.pageX;
       origin_y = e.pageY;
@@ -110,15 +109,15 @@ jsPsych.plugins["resize"] = (function() {
 
     var resizeevent = function(e){
       if(dragging){
-        var dx = (e.pageX - origin_x)*2;
-        var dy = (e.pageY - origin_y)*2;
+        var dx = (e.pageX - origin_x);
+        var dy = (e.pageY - origin_y);
 
-        if(dx >= dy){
-          scale_div.style.width = Math.max(10, cx+dx) + "px";
-          scale_div.style.height = Math.round(Math.max(10, cx+dx) / aspect_ratio ) + "px";
+        if(Math.abs(dx) >= Math.abs(dy)){
+          scale_div.style.width = Math.round(Math.max(20, cx+dx*2)) + "px";
+          scale_div.style.height = Math.round(Math.max(20, cx+dx*2) / aspect_ratio ) + "px";
         } else {
-          scale_div.style.height = Math.max(10, cy+dy) + "px";
-          scale_div.style.width = Math.round(aspect_ratio * Math.max(10, cy+dy)) + "px";
+          scale_div.style.height = Math.round(Math.max(20, cy+dy*2)) + "px";
+          scale_div.style.width = Math.round(aspect_ratio * Math.max(20, cy+dy*2)) + "px";
         }
       }
     }
@@ -130,7 +129,7 @@ jsPsych.plugins["resize"] = (function() {
     var final_height_px, final_width_px;
     function scale() {
       final_width_px = scale_div.offsetWidth;
-      final_height_px = scale_div.offsetHeight;
+      //final_height_px = scale_div.offsetHeight;
 
       var pixels_unit_screen = final_width_px / trial.item_width;
 
