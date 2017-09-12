@@ -73,9 +73,9 @@ You may also want to import the jsPsych stylesheet, which applies a basic set of
 </html>
 ```
 
-## Step 6: Use the jspsych-text plugin to print a message
+## Step 6: Use the jspsych-html-keyboard-response plugin to print a message
 
-For the demo, we want to show some text on the screen. This is exactly what the [jspsych-text plugin](../plugins/jspsych-text.md) is designed to do. To use the plugin, we need to load it with a `<script>` tag.
+For the demo, we want to show some text on the screen. This is exactly what the [jspsych-html-keyboard-response plugin](../plugins/jspsych-html-keyboard-response.md) is designed to do. To use the plugin, we need to load it with a `<script>` tag.
 
 ```html
 <!DOCTYPE html>
@@ -83,14 +83,14 @@ For the demo, we want to show some text on the screen. This is exactly what the 
 	<head>
 		<title>My experiment</title>
 		<script src="jspsych-6.0/jspsych.js"></script>
-		<script src="jspsych-6.0/plugins/jspsych-text.js"></script>
+		<script src="jspsych-6.0/plugins/jspsych-html-keyboard-response.js"></script>
 		<link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 	</head>
 	<body></body>
 </html>
 ```
 
-Once the plugin is loaded, we can create an experiment using the plugin. To declare a trial that uses the text plugin, we create a JavaScript object with the property `type` equal to `'text'`. Then we can specify the other parameters of the plugin in the same object.
+Once the plugin is loaded, we can create an experiment using the plugin. To declare a trial that uses the html-keyboard-response plugin, we create a JavaScript object with the property `type` equal to `'html-keyboard-response'`. Then we can specify the other parameters of the plugin in the same object.
 
 To add JavaScript code directly to the webpage we need to add a set of `<script>` tags after the `<body>` tags.
 
@@ -100,15 +100,15 @@ To add JavaScript code directly to the webpage we need to add a set of `<script>
 	<head>
 		<title>My experiment</title>
 		<script src="jspsych-6.0/jspsych.js"></script>
-		<script src="jspsych-6.0/plugins/jspsych-text.js"></script>
+		<script src="jspsych-6.0/plugins/jspsych-html-keyboard-response.js"></script>
 		<link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 	</head>
 	<body></body>
 	<script>
 
 	var hello_trial = {
-		type: 'text',
-		text: 'Hello world!'
+		type: 'html-keyboard-response',
+		stimulus: 'Hello world!'
 	}
 
 	</script>
@@ -123,19 +123,19 @@ Now that we have the trial defined we just need to tell jsPsych to run an experi
 	<head>
 		<title>My experiment</title>
 		<script src="jspsych-6.0/jspsych.js"></script>
-		<script src="jspsych-6.0/plugins/jspsych-text.js"></script>
+		<script src="jspsych-6.0/plugins/jspsych-html-keyboard-response.js"></script>
 		<link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 	</head>
 	<body></body>
 	<script>
 
 	var hello_trial = {
-		type: 'text',
-		text: 'Hello world!'
+		type: 'html-keyboard-response',
+		stimulus: 'Hello world!'
 	}
 
 	jsPsych.init({
-		timeline: [ hello_trial ]
+		timeline: [hello_trial]
 	})
 
 	</script>
