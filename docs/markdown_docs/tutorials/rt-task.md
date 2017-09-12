@@ -19,7 +19,7 @@ Start by downloading jsPsych and setting up a folder to contain your experiment 
   <head>
     <title>My experiment</title>
     <script src="jspsych-6.0/jspsych.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-text.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-html-keyboard-response.js"></script>
     <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
@@ -36,14 +36,14 @@ All jsPsych experiments are defined by a timeline. The timeline is an array that
 var timeline = [];
 ```
 
-Let's greet the subject with a simple welcome message using the [jspsych-text](../plugins/jspsych-text.md) plugin.
+Let's greet the subject with a simple welcome message using the [jspsych-html-keyboard-response](../plugins/jspsych-html-keyboard-response.md) plugin.
 
-First, we create a trial that uses the jspsych-text plugin and contains a simple string to show the subject.
+First, we create a trial that uses the jspsych-html-keyboard-response plugin and contains a simple string to show the subject.
 
 ```javascript
 var welcome = {
-  type: "text",
-  text: "Welcome to the experiment. Press any key to begin."
+  type: "html-keyboard-response",
+  stimulus: "Welcome to the experiment. Press any key to begin."
 };
 ```
 
@@ -69,7 +69,7 @@ jsPsych.init({
   <head>
     <title>My experiment</title>
     <script src="jspsych-6.0/jspsych.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-text.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-html-keyboard-response.js"></script>
     <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
@@ -80,8 +80,8 @@ jsPsych.init({
 
     /* define welcome message trial */
     var welcome = {
-      type: "text",
-      text: "Welcome to the experiment. Press any key to begin."
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the experiment. Press any key to begin."
     };
     timeline.push(welcome);
 
@@ -101,8 +101,8 @@ The trial definition looks like this:
 
 ```javascript
 var instructions_block = {
-  type: "text",
-  text: "<p>In this experiment, a circle will appear in the center " +
+  type: "html-keyboard-response",
+  stimulus: "<p>In this experiment, a circle will appear in the center " +
       "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
       "press the letter F on the keyboard as fast as you can.</p>" +
       "<p>If the circle is <strong>orange</strong>, press the letter J " +
@@ -134,7 +134,7 @@ timeline.push(instructions);
   <head>
     <title>My experiment</title>
     <script src="jspsych-6.0/jspsych.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-text.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-html-keyboard-response.js"></script>
     <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
@@ -145,15 +145,15 @@ timeline.push(instructions);
 
     /* define welcome message trial */
     var welcome = {
-      type: "text",
-      text: "Welcome to the experiment. Press any key to begin."
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the experiment. Press any key to begin."
     };
     timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
-      type: "text",
-      text: "<p>In this experiment, a circle will appear in the center " +
+      type: "html-keyboard-response",
+      stimulus: "<p>In this experiment, a circle will appear in the center " +
           "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
@@ -177,29 +177,29 @@ timeline.push(instructions);
 
 ## Part 4: Displaying stimuli and getting responses
 
-Creating trials to show the stimuli is conceptually the same as creating a trial to show instructions. The only difference is that we will use the [jspsych-single-stim](../plugins/jspsych-single-stim.md) plugin to show the stimuli. This plugin has different options than the jspsych-text plugin, so the code that defines the trial will look slightly different.
-
-First, to use a plugin we need to load it in the `<head>` section of the experiment page:
+Creating trials to show the stimuli is conceptually the same as creating a trial to show instructions, except that now we are displaying an image instead of text or html. This means we need to use a different plugin: jspsych-image-keyboard-response. We need to start by loading this plugin by adding a `<script>` tag to the document.
 
 ```html
 <head>
-  ...
-  <script src="jspsych-6.0/plugins/jspsych-single-stim.js"></script>
-  ...
+  <title>My experiment</title>
+  <script src="jspsych-6.0/jspsych.js"></script>
+  <script src="jspsych-6.0/plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="jspsych-6.0/plugins/jspsych-image-keyboard-response.js"></script>
+  <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 </head>
 ```
 
-Next, we define the first trial. For now, we will just show each image once. The path to the image file should be set as the `stimulus` parameter. We will also set the option for which keys the subject is allowed to use to respond (`choices`) so that only the 'f' and 'j' keys are valid responses.
+For now, we will just show each image once. The path to the image file should be set as the `stimulus` parameter. We will also set the option for which keys the subject is allowed to use to respond (`choices`) so that only the 'f' and 'j' keys are valid responses.
 
 ```javascript
 var blue_trial = {
-  type: 'single-stim',
+  type: 'image-keyboard-response',
   stimulus: 'img/blue.png',
   choices: ['f', 'j']
 };
 
 var orange_trial = {
-  type: 'single-stim',
+  type: 'image-keyboard-response',
   stimulus: 'img/orange.png',
   choices: ['f', 'j']
 }
@@ -219,8 +219,8 @@ timeline.push(blue_trial, orange_trial);
   <head>
     <title>My experiment</title>
     <script src="jspsych-6.0/jspsych.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-text.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-single-stim.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-image-keyboard-response.js"></script>
     <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
@@ -231,15 +231,15 @@ timeline.push(blue_trial, orange_trial);
 
     /* define welcome message trial */
     var welcome = {
-      type: "text",
-      text: "Welcome to the experiment. Press any key to begin."
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the experiment. Press any key to begin."
     };
     timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
-      type: "text",
-      text: "<p>In this experiment, a circle will appear in the center " +
+      type: "html-keyboard-response",
+      stimulus: "<p>In this experiment, a circle will appear in the center " +
           "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
@@ -255,13 +255,13 @@ timeline.push(blue_trial, orange_trial);
 
     /* test trials */
     var blue_trial = {
-      type: 'single-stim',
+      type: 'image-keyboard-response',
       stimulus: 'img/blue.png',
       choices: ['f', 'j']
     };
 
     var orange_trial = {
-      type: 'single-stim',
+      type: 'image-keyboard-response',
       stimulus: 'img/orange.png',
       choices: ['f', 'j']
     }
@@ -292,23 +292,22 @@ var test_stimuli = [
 ];
 ```
 
-Instead of just showing the blue and orange circles, let's also set up the experiment to show a fixation cross (+) in between trials. We can define a trial to show the fixation cross for a fixed amount of time by using the `timing_response` parameter of the single-stim plugin and setting the `choices` parameter to the special value `jsPsych.NO_KEYS`, which means that no responses will be accepted as a valid response and the trial will last however long the `timing_response` parameter specifies.
+Instead of just showing the blue and orange circles, let's also set up the experiment to show a fixation cross (+) in between trials. We can define a trial to show the fixation cross for a fixed amount of time by using the `trial_duration` parameter of the html-keyboard-response plugin and setting the `choices` parameter to the special value `jsPsych.NO_KEYS`, which means that no responses will be accepted as a valid response and the trial will last however long the `trial_duration` parameter specifies.
 
 ```javascript
 var fixation = {
-  type: 'single-stim',
+  type: 'html-keyboard-response',
   stimulus: '<div style="font-size:60px;">+</div>',
-  is_html: true,
   choices: jsPsych.NO_KEYS,
-  timing_response: 1000,
+  trial_duration: 1000,
 }
 ```
 
-To show the circles, we'll set up another trial with the single-stim plugin, but we'll use the function `jsPsych.timelineVariable()` to indicate that we want jsPsych to substitute the value of the parameter in from the timeline variables.
+To show the circles, we'll set up another trial with the html-keyboard-response plugin, but we'll use the function `jsPsych.timelineVariable()` to indicate that we want jsPsych to substitute the value of the parameter in from the timeline variables.
 
 ```javascript
 var test = {
-  type: "single-stim",
+  type: "image-keyboard-response",
   stimulus: jsPsych.timelineVariable('stimulus'),
   choices: ['f', 'j']
 }
@@ -339,8 +338,8 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
   <head>
     <title>My experiment</title>
     <script src="jspsych-6.0/jspsych.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-text.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-single-stim.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-image-keyboard-response.js"></script>
     <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
@@ -351,15 +350,15 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
 
     /* define welcome message trial */
     var welcome = {
-      type: "text",
-      text: "Welcome to the experiment. Press any key to begin."
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the experiment. Press any key to begin."
     };
     timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
-      type: "text",
-      text: "<p>In this experiment, a circle will appear in the center " +
+      type: "html-keyboard-response",
+      stimulus: "<p>In this experiment, a circle will appear in the center " +
           "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
@@ -380,15 +379,15 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
     ];
 
     var fixation = {
-      type: 'single-stim',
+      type: 'html-keyboard-response',
       stimulus: '<div style="font-size:60px;">+</div>',
       is_html: true,
       choices: jsPsych.NO_KEYS,
-      timing_response: 1000,
+      trial_duration: 1000,
     }
 
     var test = {
-      type: "single-stim",
+      type: "image-keyboard-response",
       stimulus: jsPsych.timelineVariable('stimulus'),
       choices: ['f', 'j']
     }
@@ -439,8 +438,8 @@ var test_procedure = {
   <head>
     <title>My experiment</title>
     <script src="jspsych-6.0/jspsych.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-text.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-single-stim.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-image-keyboard-response.js"></script>
     <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
@@ -451,15 +450,15 @@ var test_procedure = {
 
     /* define welcome message trial */
     var welcome = {
-      type: "text",
-      text: "Welcome to the experiment. Press any key to begin."
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the experiment. Press any key to begin."
     };
     timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
-      type: "text",
-      text: "<p>In this experiment, a circle will appear in the center " +
+      type: "html-keyboard-response",
+      stimulus: "<p>In this experiment, a circle will appear in the center " +
           "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
@@ -480,15 +479,15 @@ var test_procedure = {
     ];
 
     var fixation = {
-      type: 'single-stim',
+      type: 'html-keyboard-response',
       stimulus: '<div style="font-size:60px;">+</div>',
       is_html: true,
       choices: jsPsych.NO_KEYS,
-      timing_response: 1000,
+      trial_duration: 1000,
     }
 
     var test = {
-      type: "single-stim",
+      type: "image-keyboard-response",
       stimulus: jsPsych.timelineVariable('stimulus'),
       choices: ['f', 'j']
     }
@@ -512,23 +511,23 @@ var test_procedure = {
 
 ## Part 7: Using functions to generate parameters
 
-One aspect of the experiment that could be improved is the duration of the fixation cross. As the experiment stands right now, the timing of the circles appearing is very predictable. We can change that by using a different value for the `timing_response` parameter in the `fixation` trial for each trial. But how can we do that and keep the simple code structure we have now where we only have to define the fixation trial once? One option would be to add another timeline variable, like `"fixation_duration"` and use that to control the timing. But another option is to specify the `timing_response` parameter as a function. If a parameter is a function, jsPsych will execute the function every time the trial runs. That means that if the function returns different results probabilistically, we can get a different parameter value every time the trial runs.
+One aspect of the experiment that could be improved is the duration of the fixation cross. As the experiment stands right now, the timing of the circles appearing is very predictable. We can change that by using a different value for the `trial_duration` parameter in the `fixation` trial for each trial. But how can we do that and keep the simple code structure we have now where we only have to define the fixation trial once? One option would be to add another timeline variable, like `"fixation_duration"` and use that to control the timing. But another option is to specify the `trial_duration` parameter as a function. If a parameter is a function, jsPsych will execute the function every time the trial runs. That means that if the function returns different results probabilistically, we can get a different parameter value every time the trial runs.
 
 To do that here, we'll use one of the built-in randomization methods in [jsPsych's randomization module](../core_library/jspsych-randomization.md). `jsPsych.randomization.sampleWithoutReplacement()` takes an array of items to sample from and generates a new array of length *N* by sampling without replacement.
 
 ```javascript
 var fixation = {
-  type: 'single-stim',
+  type: 'html-keyboard-response',
   stimulus: '<div style="font-size:60px;">+</div>',
   is_html: true,
   choices: jsPsych.NO_KEYS,
-  timing_response: function(){
+  trial_duration: function(){
     return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
   }
 }
 ```
 
-In the code above, we replaced the `timing_response: 1000` parameter in `fixation` with a function. Inside the function, we take a sample from the array `[250, 500, 750, 1000, 1250, 1500, 1750, 2000]` of size 1 (second parameter to `jsPsych.randomization.sampleWithoutReplacement`). The return value from calling `jsPsych.randomization.sampleWithoutReplacement` is an array of length 1, so we add the `[0]` selection at the end to get the value out of the array.
+In the code above, we replaced the `trial_duration: 1000` parameter in `fixation` with a function. Inside the function, we take a sample from the array `[250, 500, 750, 1000, 1250, 1500, 1750, 2000]` of size 1 (second parameter to `jsPsych.randomization.sampleWithoutReplacement`). The return value from calling `jsPsych.randomization.sampleWithoutReplacement` is an array of length 1, so we add the `[0]` selection at the end to get the value out of the array.
 
 ### The complete code so far
 
@@ -538,8 +537,8 @@ In the code above, we replaced the `timing_response: 1000` parameter in `fixatio
   <head>
     <title>My experiment</title>
     <script src="jspsych-6.0/jspsych.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-text.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-single-stim.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-image-keyboard-response.js"></script>
     <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
@@ -550,15 +549,15 @@ In the code above, we replaced the `timing_response: 1000` parameter in `fixatio
 
     /* define welcome message trial */
     var welcome = {
-      type: "text",
-      text: "Welcome to the experiment. Press any key to begin."
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the experiment. Press any key to begin."
     };
     timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
-      type: "text",
-      text: "<p>In this experiment, a circle will appear in the center " +
+      type: "html-keyboard-response",
+      stimulus: "<p>In this experiment, a circle will appear in the center " +
           "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
@@ -579,17 +578,17 @@ In the code above, we replaced the `timing_response: 1000` parameter in `fixatio
     ];
 
     var fixation = {
-      type: 'single-stim',
+      type: 'html-keyboard-response',
       stimulus: '<div style="font-size:60px;">+</div>',
       is_html: true,
       choices: jsPsych.NO_KEYS,
-      timing_response: function(){
+      trial_duration: function(){
         return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
       }
     }
 
     var test = {
-      type: "single-stim",
+      type: "image-keyboard-response",
       stimulus: jsPsych.timelineVariable('stimulus'),
       choices: ['f', 'j']
     }
@@ -634,8 +633,8 @@ jsPsych.init({
   <head>
     <title>My experiment</title>
     <script src="jspsych-6.0/jspsych.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-text.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-single-stim.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-image-keyboard-response.js"></script>
     <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
@@ -646,15 +645,15 @@ jsPsych.init({
 
     /* define welcome message trial */
     var welcome = {
-      type: "text",
-      text: "Welcome to the experiment. Press any key to begin."
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the experiment. Press any key to begin."
     };
     timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
-      type: "text",
-      text: "<p>In this experiment, a circle will appear in the center " +
+      type: "html-keyboard-response",
+      stimulus: "<p>In this experiment, a circle will appear in the center " +
           "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
@@ -675,17 +674,17 @@ jsPsych.init({
     ];
 
     var fixation = {
-      type: 'single-stim',
+      type: 'html-keyboard-response',
       stimulus: '<div style="font-size:60px;">+</div>',
       is_html: true,
       choices: jsPsych.NO_KEYS,
-      timing_response: function(){
+      trial_duration: function(){
         return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
       }
     }
 
     var test = {
-      type: "single-stim",
+      type: "image-keyboard-response",
       stimulus: jsPsych.timelineVariable('stimulus'),
       choices: ['f', 'j']
     }
@@ -730,7 +729,7 @@ Now we assign these values to the `data` parameter of the `test` trial.
 
 ```javascript
 var test = {
-  type: "single-stim",
+  type: "image-keyboard-response",
   stimulus: jsPsych.timelineVariable('stimulus'),
   choices: ['f', 'j'],
   data: jsPsych.timelineVariable('data')
@@ -741,11 +740,11 @@ Another kind of tagging that would be useful is to mark each fixation trial as s
 
 ```js
 var fixation = {
-  type: 'single-stim',
+  type: 'html-keyboard-response',
   stimulus: '<div style="font-size:60px;">+</div>',
   is_html: true,
   choices: jsPsych.NO_KEYS,
-  timing_response: function(){
+  trial_duration: function(){
     return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
   },
   data: {test_part: 'fixation'}
@@ -760,8 +759,8 @@ var fixation = {
   <head>
     <title>My experiment</title>
     <script src="jspsych-6.0/jspsych.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-text.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-single-stim.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-image-keyboard-response.js"></script>
     <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
@@ -772,15 +771,15 @@ var fixation = {
 
     /* define welcome message trial */
     var welcome = {
-      type: "text",
-      text: "Welcome to the experiment. Press any key to begin."
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the experiment. Press any key to begin."
     };
     timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
-      type: "text",
-      text: "<p>In this experiment, a circle will appear in the center " +
+      type: "html-keyboard-response",
+      stimulus: "<p>In this experiment, a circle will appear in the center " +
           "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
@@ -801,18 +800,18 @@ var fixation = {
     ];
 
     var fixation = {
-      type: 'single-stim',
+      type: 'html-keyboard-response',
       stimulus: '<div style="font-size:60px;">+</div>',
       is_html: true,
       choices: jsPsych.NO_KEYS,
-      timing_response: function(){
+      trial_duration: function(){
         return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
       },
       data: {test_part: 'fixation'}
     }
 
     var test = {
-      type: "single-stim",
+      type: "image-keyboard-response",
       stimulus: jsPsych.timelineVariable('stimulus'),
       choices: ['f', 'j'],
       data: jsPsych.timelineVariable('data')
@@ -850,7 +849,7 @@ For this example, we'll calculate whether the subject responded correctly, and a
 
 ```javascript
 var test = {
-  type: "single-stim",
+  type: "image-keyboard-response",
   stimulus: jsPsych.timelineVariable('stimulus'),
   choices: ['f', 'j'],
   data: jsPsych.timelineVariable('data'),
@@ -870,8 +869,8 @@ The `data.key_press` value is a numeric key code indicating which key the subjec
   <head>
     <title>My experiment</title>
     <script src="jspsych-6.0/jspsych.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-text.js"></script>
-    <script src="jspsych-6.0/plugins/jspsych-single-stim.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.0/plugins/jspsych-image-keyboard-response.js"></script>
     <link href="jspsych-6.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
@@ -882,15 +881,15 @@ The `data.key_press` value is a numeric key code indicating which key the subjec
 
     /* define welcome message trial */
     var welcome = {
-      type: "text",
-      text: "Welcome to the experiment. Press any key to begin."
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the experiment. Press any key to begin."
     };
     timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
-      type: "text",
-      text: "<p>In this experiment, a circle will appear in the center " +
+      type: "html-keyboard-response",
+      stimulus: "<p>In this experiment, a circle will appear in the center " +
           "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
@@ -911,18 +910,18 @@ The `data.key_press` value is a numeric key code indicating which key the subjec
     ];
 
     var fixation = {
-      type: 'single-stim',
+      type: 'html-keyboard-response',
       stimulus: '<div style="font-size:60px;">+</div>',
       is_html: true,
       choices: jsPsych.NO_KEYS,
-      timing_response: function(){
+      trial_duration: function(){
         return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
       },
       data: {test_part: 'fixation'}
     }
 
     var test = {
-      type: "single-stim",
+      type: "image-keyboard-response",
       stimulus: jsPsych.timelineVariable('stimulus'),
       choices: ['f', 'j'],
       data: jsPsych.timelineVariable('data'),
@@ -960,8 +959,8 @@ We'll use the text plugin. Because the actual text that we want to display chang
 
 ```js
 var debrief_block = {
-  type: "text",
-  text: function() {
+  type: "html-keyboard-response",
+  stimulus: function() {
 
     var trials = jsPsych.data.getData().filter({test_part: 'test'});
     var correct_trials = trials.filter({correct: true});
@@ -996,8 +995,8 @@ This code is available in the examples folder in the jsPsych download. It is cal
   <head>
     <title>My experiment</title>
     <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-text.js"></script>
-    <script src="../plugins/jspsych-single-stim.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="../plugins/jspsych-image-keyboard-response.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
   </head>
   <body></body>
@@ -1008,15 +1007,15 @@ This code is available in the examples folder in the jsPsych download. It is cal
 
     /* define welcome message trial */
     var welcome = {
-      type: "text",
-      text: "Welcome to the experiment. Press any key to begin."
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the experiment. Press any key to begin."
     };
     timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
-      type: "text",
-      text: "<p>In this experiment, a circle will appear in the center " +
+      type: "html-keyboard-response",
+      stimulus: "<p>In this experiment, a circle will appear in the center " +
           "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
@@ -1038,18 +1037,18 @@ This code is available in the examples folder in the jsPsych download. It is cal
     ];
 
     var fixation = {
-      type: 'single-stim',
+      type: 'html-keyboard-response',
       stimulus: '<div style="font-size:60px;">+</div>',
       is_html: true,
       choices: jsPsych.NO_KEYS,
-      timing_response: function(){
+      trial_duration: function(){
         return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
       },
       data: {test_part: 'fixation'}
     }
 
     var test = {
-      type: "single-stim",
+      type: "image-keyboard-response",
       stimulus: jsPsych.timelineVariable('stimulus'),
       choices: ['f', 'j'],
       data: jsPsych.timelineVariable('data'),
@@ -1069,8 +1068,8 @@ This code is available in the examples folder in the jsPsych download. It is cal
     /* define debrief */
 
     var debrief_block = {
-      type: "text",
-      text: function() {
+      type: "html-keyboard-response",
+      stimulus: function() {
 
         var trials = jsPsych.data.getData().filter({test_part: 'test'});
         var correct_trials = trials.filter({correct: true});
