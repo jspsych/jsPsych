@@ -30,17 +30,17 @@ The plugin also includes a public method for generating the grid scene stimuli t
 ```javascript
 
 var pattern = [
-                ["img/1.gif", "img/2.gif", 0],
-                [ 0, "img/3.gif", 0],
-                ["img/5.gif", "img/4.gif", 0]
-            ];
+  ["img/1.gif", "img/2.gif", 0],
+  [ 0, "img/3.gif", 0],
+  ["img/5.gif", "img/4.gif", 0]
+];
 
 var image_size = 100; // pixels
 
-var grid_stimulus = jsPsych['vsl-grid-scene'].generate_stimulus(pattern, image_size);
+var grid_stimulus = jsPsych.plugins['vsl-grid-scene'].generate_stimulus(pattern, image_size);
 
 // grid_stimulus will now contain a string (NOT an HTML DOM object) that you can
-// pass into other plugins that accept HTML stimuli as input, such as jspsych-categorize.
+// pass into other plugins that accept HTML stimuli as input, such as jspsych-html-keyboard-response.
 
 ```
 
