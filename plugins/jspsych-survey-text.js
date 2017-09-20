@@ -30,12 +30,12 @@ jsPsych.plugins['survey-text'] = (function() {
                   pretty_name: 'Value',
                   array: true,
                   default: '',
-                  description: 'The strings will be used to populate the response fields with editable answers.'}, 
+                  description: 'The strings will be used to populate the response fields with editable answers.'},
           rows: {type: jsPsych.plugins.parameterType.INT,
                  pretty_name: 'Rows',
                  array: true,
                  default: 1,
-                 description: 'The number of rows for the response text box.'}, 
+                 description: 'The number of rows for the response text box.'},
           columns: {type: jsPsych.plugins.parameterType.INT,
                     pretty_name: 'Columns',
                     array: true,
@@ -52,7 +52,7 @@ jsPsych.plugins['survey-text'] = (function() {
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
-        default: 'Next',
+        default:  'Continue',
         description: 'The text that appears on the button to finish the trial.'
       }
     }

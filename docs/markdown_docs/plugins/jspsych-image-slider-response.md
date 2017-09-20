@@ -10,7 +10,7 @@ Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 stimulus | string | *undefined* | The path to the image file to be displayed.
 labels | array of keycodes/strings | Labels of the slider
-button_label | String | *undefined* | Label of the button to advance/submit
+button_label | String |  'Continue' | Label of the button to advance/submit
 min | integer | 0 | Sets the minimum value of the slider
 max | integer | 100 | Sets the maximum value of the slider
 step | integer | 1 | Sets the step of the slider
@@ -37,7 +37,6 @@ var trial = {
 	type: 'image-slider-response',
 	stimulus: 'img/happy_face_1.png',
 	labels: ['happy', 'sad'],
-  button_label: 'Submit',
 	prompt: "<p>How happy/sad is this person?</p>",
   response_ends_trial: false
 };

@@ -2,9 +2,9 @@
 
 This plugin plays audio files and records responses generated with a button click.
 
-If the browser supports it, audio files are played using the WebAudio API.This allows for reasonably precise timing 
-of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement 
-of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. Audio 
+If the browser supports it, audio files are played using the WebAudio API.This allows for reasonably precise timing
+of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement
+of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. Audio
 files are automatically preloaded by jsPsych.
 
 The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the subject has failed to respond within a fixed length of time.
@@ -17,7 +17,7 @@ Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 stimulus | audio file | *undefined* | Audio file to be played
 labels | array of keycodes/strings | Labels of the slider
-button_label | String | *undefined* | Label of the button to advance/submit
+button_label | String | 'Continue' | Label of the button to advance/submit
 min | integer | 0 | Sets the minimum value of the slider
 max | integer | 100 | Sets the maximum value of the slider
 step | integer | 1 | Sets the step of the slider
@@ -44,7 +44,6 @@ var trial = {
 	type: 'audio-slider-response',
 	stimulus: 'sound/tone.mp3',
 	labels: ['low', 'high'],
-  button_label: 'Submit',
 	prompt: "<p>Is the pitch high or low?</p>",
   response_ends_trial: false
 };

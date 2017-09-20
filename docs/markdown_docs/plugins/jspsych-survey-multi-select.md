@@ -11,7 +11,7 @@ Parameter | Type | Default Value | Description
 questions | array | *undefined* | An array of objects, each object represents a question that appears on the screen. Each object contains a prompt, options and horizontal parameter that will be applied to the question. See examples below for further clarification.`prompt`: Type string, default value of *undefined*. The string is the prompt/question that will be associated with a group of options (check boxes). All questions will get presented on the same page (trial).`options`: Type array, default value of *undefined*. The array contains a set of options to display for an individual question.`horizontal`: Type boolean, default value of false. If true, the questions are centered and options are displayed horizontally.
 required | boolean | true | If true, then at least one option must be selected.
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions.
-button_label | string | 'Button label' | Label of the button.
+button_label | string |  'Continue' | Label of the button.
 
 ## Data Generated
 

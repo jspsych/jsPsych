@@ -51,7 +51,7 @@ jsPsych.plugins['html-slider-response'] = (function() {
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
-        default: undefined,
+        default:  'Continue',
         array: false,
         description: 'Label of the button to advance.'
       },

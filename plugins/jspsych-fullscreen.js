@@ -30,7 +30,7 @@ jsPsych.plugins.fullscreen = (function() {
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
-        default: "Go",
+        default:  'Continue',
         array: false,
         description: 'The text that appears on the button to enter fullscreen.'
       },

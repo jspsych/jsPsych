@@ -8,9 +8,9 @@ This table lists the parameters associated with this plugin. Parameters with a d
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-questions | array | *undefined* | An array of objects, each object represents a question that appears on the screen. Each object contains a prompt, value, rows, and columns parameter that will be applied to the question. See examples below for further clarification.`prompt`: Type string, default value of *undefined*. The string is the prompt for the subject to respond to. Each question gets its own response field.`value`: Type array, default value of `[""]`. The string will be used to populate the response field with editable answers.`rows`: Type array, default value of 1. The number of rows for the response text box. `columns`: Type array, default value of 40. The number of columns for the response text box. 
+questions | array | *undefined* | An array of objects, each object represents a question that appears on the screen. Each object contains a prompt, value, rows, and columns parameter that will be applied to the question. See examples below for further clarification.`prompt`: Type string, default value of *undefined*. The string is the prompt for the subject to respond to. Each question gets its own response field.`value`: Type array, default value of `[""]`. The string will be used to populate the response field with editable answers.`rows`: Type array, default value of 1. The number of rows for the response text box. `columns`: Type array, default value of 40. The number of columns for the response text box.
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions.
-button_label | string | 'Next' | The text that appears on the button to finish the trial.
+button_label | string |  'Continue' | The text that appears on the button to finish the trial.
 
 ## Data Generated
 

@@ -49,7 +49,7 @@ jsPsych.plugins["resize"] = (function() {
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
-        default: 'Done',
+        default:  'Continue',
         description: 'Label to display on the button to complete calibration.'
       },
     }

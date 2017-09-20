@@ -45,7 +45,7 @@ jsPsych.plugins['survey-likert'] = (function() {
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
-        default: 'Next',
+        default:  'Continue',
         description: 'Label of the button.'
       }
     }

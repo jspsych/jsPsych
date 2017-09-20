@@ -12,7 +12,7 @@ Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 fullscreen_mode | boolean | `true` | A value of `true` causes the experiment to enter fullscreen mode. A value of `false` causes the browser to exit fullscreen mode.
 message | string | `<p>The experiment will switch to full screen mode when you press the button below</p>` | The HTML content to display above the button to enter fullscreen mode.
-button_label | string | 'Go' | The text that appears on the button to enter fullscreen mode.
+button_label | string |  'Continue' | The text that appears on the button to enter fullscreen mode.
 delay_after | numeric | 1000 | The length of time to delay after entering fullscreen mode before ending the trial. This can be useful because entering fullscreen is jarring and most browsers display some kind of message that the browser has entered fullscreen mode.
 
 ## Data Generated
