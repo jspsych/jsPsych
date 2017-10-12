@@ -76,7 +76,7 @@ jsPsych.plugins["audio-button-response"] = (function() {
     }
   }
 
-  	plugin.trial = function(display_element, trial) {
+  plugin.trial = function(display_element, trial) {
 
     // setup stimulus
     var context = jsPsych.pluginAPI.audioContext();
@@ -100,7 +100,7 @@ jsPsych.plugins["audio-button-response"] = (function() {
       }
     }
 
-  	    //display buttons
+  	//display buttons
     var buttons = [];
     if (Array.isArray(trial.button_html)) {
       if (trial.button_html.length == trial.choices.length) {
@@ -113,11 +113,11 @@ jsPsych.plugins["audio-button-response"] = (function() {
         buttons.push(trial.button_html);
       }
     }
-    display_element.innerHTML += '<div id="jspsych-audio-button-response-btngroup"></div>';
+    display_element.innerHTML = '<div id="jspsych-audio-button-response-btngroup"></div>';
     for (var i = 0; i < trial.choices.length; i++) {
       var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
       display_element.querySelector('#jspsych-audio-button-response-btngroup').insertAdjacentHTML('beforeend',
-        '<div class="jspsych-audio-button-response-button" style="display: inline-block; margin:'+trial.margin_vertical+' '+trial.margin_horizontal+'" id="jspsych-audio-button-response-button-' + i +'" data-choice="'+i+'">'+str+'</div>');
+        '<div class="jspsych-audio-button-response-button" style="cursor: pointer; display: inline-block; margin:'+trial.margin_vertical+' '+trial.margin_horizontal+'" id="jspsych-audio-button-response-button-' + i +'" data-choice="'+i+'">'+str+'</div>');
       display_element.querySelector('#jspsych-audio-button-response-button-' + i).addEventListener('click', function(e){
         var choice = e.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
         after_response(choice);
@@ -147,10 +147,6 @@ jsPsych.plugins["audio-button-response"] = (function() {
       response.button = choice;
       response.rt = rt;
 
-      // after a valid response, the stimulus will have the CSS class 'responded'
-      // which can be used to provide visual feedback that a response was recorded
-      display_element.querySelector('#jspsych-audio-button-response-stimulus').className += ' responded';
-
       // disable all the buttons after a response
       var btns = document.querySelectorAll('.jspsych-audio-button-response-button button');
       for(var i=0; i<btns.length; i++){
@@ -165,6 +161,16 @@ jsPsych.plugins["audio-button-response"] = (function() {
 
     // function to end trial when it is time
     function end_trial() {
+			
+			// stop the audio file if it is playing
+			// remove end event listeners if they exist
+			if(context !== null){
+				source.stop();
+				source.onended = function() { }
+			} else {
+				audio.pause();
+				audio.removeEventListener('ended', end_trial);
+			}
 
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
@@ -186,11 +192,12 @@ jsPsych.plugins["audio-button-response"] = (function() {
     // start timing
     start_time = Date.now();
 
-    // hide image if timing is set
-    if (trial.stimulus_duration > 0) {
-      jsPsych.pluginAPI.setTimeout(function() {
-        display_element.querySelector('#jspsych-audio-button-response-stimulus').style.visibility = 'hidden';
-      }, trial.stimulus_duration);
+		// start audio
+    if(context !== null){
+      startTime = context.currentTime + 0.1;
+      source.start(startTime);
+    } else {
+      audio.play();
     }
 
     // end trial if time limit is set
