@@ -8,9 +8,17 @@
  *
  **/
 
+(function (root, factory) {
+ if(typeof define === "function" && define.amd) {
+    define(["jsPsych"], factory);
+ } else if(typeof module === "object" && module.exports) {
+    module.exports = factory(require("jsPsych"));
+ } else {
+    root.jsPsych.plugins["image-keyboard-response"] = factory(root.jsPsych);
+ }
+}(this, function () {
 
-jsPsych.plugins["image-keyboard-response"] = (function() {
-
+  var jsPsych = root.jsPsych;
   var plugin = {};
 
   jsPsych.pluginAPI.registerPreload('image-keyboard-response', 'stimulus', 'image');
@@ -147,4 +155,4 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
   };
 
   return plugin;
-})();
+});
