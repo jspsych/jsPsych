@@ -2,7 +2,7 @@
  * Example plugin template
  */
 
-jsPsych.plugins["PLUGIN-NAME"] = (function() {
+(function plugin() {
 
   var plugin = {};
 
@@ -28,8 +28,19 @@ jsPsych.plugins["PLUGIN-NAME"] = (function() {
     };
 
     // end trial
-    jsPsych.finishTrial(trial_data);
+    // jsPsych.finishTrial(trial_data);
   };
 
   return plugin;
 })();
+
+// jsPsych.plugins["PLUGIN-NAME"]
+(function (root, factory) {
+  if(typeof define === "function" && define.amd) {
+    define([], factory);
+  } else if(typeof module === "object" && module.exports) {
+    module.exports = factory;
+  } else {
+    root.jsPsych.plugins["image-keyboard-response"] = factory;
+  }
+}(this, function () {
