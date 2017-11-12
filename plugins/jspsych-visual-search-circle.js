@@ -11,8 +11,17 @@
  * documentation: docs.jspsych.org
  *
  **/
+const jsPsych = window.jsPsych || require('jspsych');
 
-jsPsych.plugins["visual-search-circle"] = (function() {
+(function (root, factory) {
+  if(typeof define === "function" && define.amd) {
+     define([], factory;
+  } else if(typeof module === "object" && module.exports) {
+     module.exports = factory;
+  } else {
+     root.jsPsych.plugins["visual-search-circle"] = factory;
+  }
+}(this, (function() {
 
   var plugin = {};
 
@@ -256,4 +265,5 @@ jsPsych.plugins["visual-search-circle"] = (function() {
   }
 
   return plugin;
-})();
+})()
+));

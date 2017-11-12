@@ -40,8 +40,17 @@ var schema = {
 
 
   */
+const jsPsych = window.jsPsych || require('jspsych');
 
-  jsPsych.plugins["form"] = (function() {
+(function (root, factory) {
+  if(typeof define === "function" && define.amd) {
+     define([], factory);
+  } else if(typeof module === "object" && module.exports) {
+     module.exports = factory;
+  } else {
+     root.jsPsych.plugins["form"] = factory;
+  }
+}(this, (function() {
 
     var plugin = {};
 
@@ -1302,4 +1311,5 @@ Dropdown.prototype._option_factory = function() {
 
   return plugin;
 
-})();
+})()
+));

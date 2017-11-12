@@ -4,8 +4,17 @@
  * toggle fullscreen mode in the browser
  *
  */
+const jsPsych = window.jsPsych || require('jspsych');
 
-jsPsych.plugins.fullscreen = (function() {
+(function (root, factory) {
+  if(typeof define === "function" && define.amd) {
+     define([], factory);
+  } else if(typeof module === "object" && module.exports) {
+     module.exports = factory;
+  } else {
+     root.jsPsych.plugins.fullscreen = factory;
+  }
+}(this, (function() {
 
   var plugin = {};
 
@@ -101,4 +110,5 @@ jsPsych.plugins.fullscreen = (function() {
   };
 
   return plugin;
-})();
+})()
+));

@@ -5,9 +5,17 @@
  *
  * documentation: docs.jspsych.org
  */
+const jsPsych = window.jsPsych || require('jspsych');
 
-
-jsPsych.plugins['free-sort'] = (function() {
+(function (root, factory) {
+  if(typeof define === "function" && define.amd) {
+     define([], factory);
+  } else if(typeof module === "object" && module.exports) {
+     module.exports = factory;
+  } else {
+     root.jsPsych.plugins['free-sort'] = factory;
+  }
+}(this, (function() {
 
   var plugin = {};
 
@@ -191,4 +199,5 @@ jsPsych.plugins['free-sort'] = (function() {
   }
 
   return plugin;
-})();
+})()
+));

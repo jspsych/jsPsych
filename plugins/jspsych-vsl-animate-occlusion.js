@@ -10,8 +10,17 @@
  * documentation: docs.jspsych.org
  *
  */
+const jsPsych = window.jsPsych || require('jspsych');
 
-jsPsych.plugins['vsl-animate-occlusion'] = (function() {
+(function (root, factory) {
+  if(typeof define === "function" && define.amd) {
+     define([], factory;
+  } else if(typeof module === "object" && module.exports) {
+     module.exports = factory;
+  } else {
+     root.jsPsych.plugins['vsl-animate-occlusion'] = factory;
+  }
+}(this, (function() {
 
   var plugin = {};
 
@@ -78,7 +87,7 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-    
+
     // variable to keep track of timing info and responses
     var start_time = 0;
     var responses = [];
@@ -193,4 +202,5 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
   };
 
   return plugin;
-})();
+})()
+));

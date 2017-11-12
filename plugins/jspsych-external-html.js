@@ -5,8 +5,17 @@ the plugin will wait of a specified time before it proceeds.
 
 documentation: docs.jspsych.org
 */
+const jsPsych = window.jsPsych || require('jspsych');
 
-jsPsych.plugins['external-html'] = (function() {
+(function (root, factory) {
+  if(typeof define === "function" && define.amd) {
+     define([], factory);
+  } else if(typeof module === "object" && module.exports) {
+     module.exports = factory;
+  } else {
+     root.jsPsych.plugins['external-html'] = factory;
+  }
+}(this, (function() {
 
   var plugin = {};
 
@@ -109,4 +118,5 @@ jsPsych.plugins['external-html'] = (function() {
   }
 
   return plugin;
-})();
+})()
+));

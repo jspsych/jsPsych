@@ -9,9 +9,15 @@
  **/
 const jsPsych = window.jsPsych || require('jspsych');
 
-
-
-var plugin = function() {
+(function (root, factory) {
+  if(typeof define === "function" && define.amd) {
+     define([], factory);
+  } else if(typeof module === "object" && module.exports) {
+     module.exports = factory;
+  } else {
+     root.jsPsych.plugins["image-keyboard-response"] = factory;
+  }
+}(this, (function() {
 
   var plugin = {};
 
@@ -149,15 +155,5 @@ var plugin = function() {
   };
 
   return plugin;
-};
-
-
-(function (root, factory) {
-  if(typeof define === "function" && define.amd) {
-     define([], factory());
-  } else if(typeof module === "object" && module.exports) {
-     module.exports = factory();
-  } else {
-     root.jsPsych.plugins["image-keyboard-response"] = factory();
-  }
-}(this, plugin));
+})()
+));

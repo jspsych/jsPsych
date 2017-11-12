@@ -7,9 +7,17 @@
  * documentation: docs.jspsych.org
  *
  **/
+const jsPsych = window.jsPsych || require('jspsych');
 
-
- jsPsych.plugins['iat-html'] = (function() {
+(function (root, factory) {
+  if(typeof define === "function" && define.amd) {
+     define([], factory);
+  } else if(typeof module === "object" && module.exports) {
+     module.exports = factory;
+  } else {
+     root.jsPsych.plugins['iat-html'] = factory;
+  }
+}(this, (function() {
 
   var plugin = {};
 
@@ -24,7 +32,7 @@
         description: 'The HTML string to be displayed.'
       },
       left_category_key: {
-        type: jsPsych.plugins.parameterType.HTML_STRING, 
+        type: jsPsych.plugins.parameterType.HTML_STRING,
         pretty_name: 'Left category key',
         default: 'E',
         description: 'Key press that is associated with the left category label.'
@@ -67,7 +75,7 @@
         pretty_name: 'HTML when wrong',
         default: '<span style="color: red; font-size: 80px">X</span>',
         description: 'The image to display when a user presses the wrong key.'
-      }, 
+      },
       bottom_instructions: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
         pretty_name: 'Bottom instructions',
@@ -281,4 +289,5 @@
   };
 
   return plugin;
-})();
+})()
+));
