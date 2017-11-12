@@ -7,18 +7,12 @@
  * documentation: docs.jspsych.org
  *
  **/
+const jsPsych = window.jsPsych || require('jspsych');
 
-(function (root, factory) {
- if(typeof define === "function" && define.amd) {
-    define(["jsPsych"], factory);
- } else if(typeof module === "object" && module.exports) {
-    module.exports = factory(require("jsPsych"));
- } else {
-    root.jsPsych.plugins["image-keyboard-response"] = factory(root.jsPsych);
- }
-}(this, function () {
 
-  var jsPsych = root.jsPsych;
+
+var plugin = function() {
+
   var plugin = {};
 
   jsPsych.pluginAPI.registerPreload('image-keyboard-response', 'stimulus', 'image');
@@ -155,4 +149,15 @@
   };
 
   return plugin;
-});
+};
+
+
+(function (root, factory) {
+  if(typeof define === "function" && define.amd) {
+     define([], factory());
+  } else if(typeof module === "object" && module.exports) {
+     module.exports = factory();
+  } else {
+     root.jsPsych.plugins["image-keyboard-response"] = factory();
+  }
+}(this, plugin));

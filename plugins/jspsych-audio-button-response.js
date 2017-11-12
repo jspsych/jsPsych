@@ -7,8 +7,10 @@
  * documentation: docs.jspsych.org
  *
  **/
+const jsPsych = window.jsPsych || require('jspsych');
 
-jsPsych.plugins["audio-button-response"] = (function() {
+
+var plugin = function() {
 	var plugin = {};
 
 	jsPsych.pluginAPI.registerPreload('audio-button-response', 'stimulus', 'audio');
@@ -213,4 +215,15 @@ jsPsych.plugins["audio-button-response"] = (function() {
   };
 
   return plugin;
-})();
+};
+
+
+(function (root, factory) {
+  if(typeof define === "function" && define.amd) {
+     define([], factory());
+  } else if(typeof module === "object" && module.exports) {
+     module.exports = factory();
+  } else {
+     root.jsPsych.plugins["audio-button-response"] = factory();
+  }
+}(this, plugin));
