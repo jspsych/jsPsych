@@ -5,11 +5,22 @@
 jsPsych.plugins["PLUGIN-NAME"] = (function() {
 
   var plugin = {};
+  
+  plugin.info = {
+    name: "PLUGIN-NAME",
+    parameters: {
+      parameter_name: {
+        type: jsPsych.plugins.parameterType.INT, // INT, IMAGE, KEYCODE, STRING, FUNCTION, FLOAT
+        default_value: undefined
+      },
+      parameter_name: {
+        type: jsPsych.plugins.parameterType.IMAGE,
+        default_value: undefined
+      }
+    }
+  }
 
   plugin.trial = function(display_element, trial) {
-
-    // set default values for parameters
-    trial.parameter = trial.parameter || 'default value';
 
     // data saving
     var trial_data = {
