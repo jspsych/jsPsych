@@ -8,7 +8,7 @@
  * documentation: docs.jspsych.org
  *
  */
-const jsPsych = window.jsPsych || require('jspsych');
+var jsPsych = window.jsPsych || require('jspsych');
 
 
 (function (root, factory) {

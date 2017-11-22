@@ -5,7 +5,7 @@ the plugin will wait of a specified time before it proceeds.
 
 documentation: docs.jspsych.org
 */
-const jsPsych = window.jsPsych || require('jspsych');
+var jsPsych = window.jsPsych || require('jspsych');
 
 (function (root, factory) {
   if(typeof define === "function" && define.amd) {

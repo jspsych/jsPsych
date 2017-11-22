@@ -40,7 +40,7 @@ var schema = {
 
 
   */
-const jsPsych = window.jsPsych || require('jspsych');
+var jsPsych = window.jsPsych || require('jspsych');
 
 (function (root, factory) {
   if(typeof define === "function" && define.amd) {
