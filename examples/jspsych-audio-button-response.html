@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-audio-button-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body></body>
+  <script>
+
+  var timeline = [];
+
+  timeline.push({
+    type: 'audio-button-response',
+    stimulus: 'sound/speech_green.mp3',
+    choices: ['Green', 'Blue', 'Red'],
+    prompt: "<p>What word was said?</p>"
+  });
+
+  timeline.push({
+    type: 'audio-button-response',
+    stimulus: 'sound/speech_red.mp3',
+    choices: ['Green', 'Blue', 'Red'],
+    trial_duration: 2000,
+    response_ends_trial: false,
+    prompt: "<p>What word was said? (trial ends after 2s)</p>"
+  });
+
+  jsPsych.init({
+    timeline: timeline,
+    on_finish: function(){jsPsych.data.displayData();}
+  });
+
+  </script>
+</html>

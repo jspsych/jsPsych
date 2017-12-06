@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-audio-slider-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+</head>
+<body></body>
+<script>
+
+  var trial_1 = {
+    type: 'audio-slider-response',
+    stimulus: 'sound/speech_joke.mp3',
+    labels: ['Not Funny', 'Funny'],
+    prompt: '<p>How funny is the joke?</p>'
+  }
+
+  jsPsych.init({
+    timeline: [trial_1],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+</script>
+
+</html>
