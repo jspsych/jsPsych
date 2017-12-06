@@ -142,7 +142,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
 
     // start audio
     if(context !== null){
-      startTime = context.currentTime + 0.1;
+      startTime = context.currentTime;
       source.start(startTime);
     } else {
       audio.play();

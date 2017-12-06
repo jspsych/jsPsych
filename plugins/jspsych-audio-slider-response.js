@@ -41,7 +41,7 @@ jsPsych.plugins['audio-slider-response'] = (function() {
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
-        default: undefined,
+        default: 'Continue',
         array: false,
         description: 'Label of the button to advance.'
       },
@@ -72,7 +72,7 @@ jsPsych.plugins['audio-slider-response'] = (function() {
     }
   }
 
-    plugin.trial = function(display_element, trial) {
+  plugin.trial = function(display_element, trial) {
 
     // setup stimulus
     var context = jsPsych.pluginAPI.audioContext();
@@ -97,8 +97,7 @@ jsPsych.plugins['audio-slider-response'] = (function() {
     }
 
     var html = '<div id="jspsych-audio-slider-response-wrapper" style="margin: 100px 0px;">';
-    html += '<div id="jspsych-audio-slider-response-stimulus"><img src="' + trial.stimulus + '"></div>';
-    html += '<div class="jspsych-audio-slider-response-container" style="position:relative;">';
+  	html += '<div class="jspsych-audio-slider-response-container" style="position:relative;">';
     html += '<input type="range" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-audio-slider-response-response"></input>';
     html += '<div>'
     for(var j=0; j < trial.labels.length; j++){
@@ -127,7 +126,12 @@ jsPsych.plugins['audio-slider-response'] = (function() {
     display_element.querySelector('#jspsych-audio-slider-response-next').addEventListener('click', function() {
       // measure response time
       var endTime = (new Date()).getTime();
-      response.rt = endTime - startTime;
+			var rt = endTime - startTime;
+			if(context !== null){
+				endTime = context.currentTime;
+				rt = Math.round((endTime - startTime) * 1000);
+			}
+      response.rt = rt;
       response.response = display_element.querySelector('#jspsych-audio-slider-response-response').value;
 
       if(trial.response_ends_trial){
@@ -142,6 +146,14 @@ jsPsych.plugins['audio-slider-response'] = (function() {
 
       jsPsych.pluginAPI.clearAllTimeouts();
 
+			if(context !== null){
+        source.stop();
+        source.onended = function() { }
+      } else {
+        audio.pause();
+        audio.removeEventListener('ended', end_trial);
+      }
+
       // save data
       var trialdata = {
         "rt": response.rt,
@@ -154,10 +166,13 @@ jsPsych.plugins['audio-slider-response'] = (function() {
       jsPsych.finishTrial(trialdata);
     }
 
-    if (trial.stimulus_duration > 0) {
-      jsPsych.pluginAPI.setTimeout(function() {
-        display_element.querySelector('#jspsych-audio-slider-response-stimulus').style.visibility = 'hidden';
-      }, trial.stimulus_duration);
+		var startTime = (new Date()).getTime();
+		// start audio
+    if(context !== null){
+      startTime = context.currentTime;
+      source.start(startTime);
+    } else {
+      audio.play();
     }
 
     // end trial if trial_duration is set
@@ -167,7 +182,7 @@ jsPsych.plugins['audio-slider-response'] = (function() {
       }, trial.trial_duration);
     }
 
-    var startTime = (new Date()).getTime();
+
   };
 
   return plugin;

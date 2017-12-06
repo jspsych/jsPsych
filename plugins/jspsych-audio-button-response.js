@@ -161,7 +161,7 @@ jsPsych.plugins["audio-button-response"] = (function() {
 
     // function to end trial when it is time
     function end_trial() {
-			
+
 			// stop the audio file if it is playing
 			// remove end event listeners if they exist
 			if(context !== null){
@@ -194,7 +194,7 @@ jsPsych.plugins["audio-button-response"] = (function() {
 
 		// start audio
     if(context !== null){
-      startTime = context.currentTime + 0.1;
+      startTime = context.currentTime;
       source.start(startTime);
     } else {
       audio.play();

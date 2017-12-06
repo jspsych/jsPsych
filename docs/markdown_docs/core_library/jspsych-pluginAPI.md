@@ -172,7 +172,7 @@ Gets an AudioBuffer that can be played with the WebAudio API or an Audio object 
 var source = context.createBufferSource();
 source.buffer = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
 source.connect(context.destination);
-startTime = context.currentTime + 0.1;
+startTime = context.currentTime;
 source.start(startTime);
 ```
 
