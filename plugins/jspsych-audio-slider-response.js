@@ -157,6 +157,7 @@ jsPsych.plugins['audio-slider-response'] = (function() {
       // save data
       var trialdata = {
         "rt": response.rt,
+				"stimulus": trial.stimulus,
         "response": response.response
       };
 
