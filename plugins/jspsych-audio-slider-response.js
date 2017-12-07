@@ -25,6 +25,12 @@ jsPsych.plugins['audio-slider-response'] = (function() {
         default: 100,
         description: 'Sets the maximum value of the slider',
       },
+			start: {
+				type: jsPsych.plugins.parameterType.INT,
+				pretty_name: 'Slider starting value',
+				default: 50,
+				description: 'Sets the starting value of the slider',
+			},
       step: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Step',
@@ -98,7 +104,7 @@ jsPsych.plugins['audio-slider-response'] = (function() {
 
     var html = '<div id="jspsych-audio-slider-response-wrapper" style="margin: 100px 0px;">';
   	html += '<div class="jspsych-audio-slider-response-container" style="position:relative;">';
-    html += '<input type="range" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-audio-slider-response-response"></input>';
+    html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-audio-slider-response-response"></input>';
     html += '<div>'
     for(var j=0; j < trial.labels.length; j++){
       var width = 100/(trial.labels.length-1);
