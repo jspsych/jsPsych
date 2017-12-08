@@ -110,6 +110,9 @@ jsPsych.plugins['reconstruction'] = (function() {
       var endTime = (new Date()).getTime();
       var response_time = endTime - startTime;
 
+      // clear keyboard response
+      jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
+
       // save data
       var trial_data = {
         "rt": response_time,
