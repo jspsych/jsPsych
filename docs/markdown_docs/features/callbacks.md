@@ -49,6 +49,23 @@ jsPsych.init({
   }
 });
 ```
+---
+
+## on_start (trial)
+
+The `on_start` callback can be added to any trial. The callback will trigger right before the trial begins. The callback function will be passed a single argument, containing the trial object. If any of the parameters of the trial are functions or timeline variables, these will be evaluated before `on_start` is called, and the trial object will contain the evaluated value. The trial object is modifiable, and any changes made will affect the trial.
+
+#### Sample use
+```javascript
+var trial = {
+  type: 'single-stim',
+  stimulus: 'imgA.png',
+  on_start: function(trial) {
+    console.log('The trial is about to start.');
+    trial.stimulus = 'imgB.png'; // this will change what stimulus is displayed in the trial
+  }
+};
+```
 
 ---
 
