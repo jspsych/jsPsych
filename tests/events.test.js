@@ -64,6 +64,68 @@ describe('on_finish (trial)', function(){
   });
 });
 
+describe('on_start (trial)', function(){
+
+  test('should get trial data with function parameters evaluated', function(){
+    require('../jspsych.js');
+    require('../plugins/jspsych-html-keyboard-response.js');
+
+    return (new Promise(function(resolve, reject){
+
+      var d = null;
+
+      var trial = {
+        type: 'html-keyboard-response',
+        stimulus: function(){ return 'hello'; },
+        on_start: function(trial){
+          d = trial.stimulus;
+        }
+      }
+
+      jsPsych.init({
+        timeline: [trial],
+        on_finish: function() {
+          resolve(d);
+        }
+      });
+
+      utils.pressKey(32);
+
+    })).then(function(data) { expect(data).toBe('hello') });
+  });
+
+  test('should get trial data with timeline variables evaluated', function(){
+    require('../jspsych.js');
+    require('../plugins/jspsych-html-keyboard-response.js');
+
+    return (new Promise(function(resolve, reject){
+
+      var d = null;
+
+      var trial = {
+        timeline: [{
+          type: 'html-keyboard-response',
+          stimulus: jsPsych.timelineVariable('stimulus'),
+          on_start: function(trial){
+            d = trial.stimulus;
+          }
+        }],
+        timeline_variables: [{stimulus: 'hello'}]
+      }
+
+      jsPsych.init({
+        timeline: [trial],
+        on_finish: function() {
+          resolve(d);
+        }
+      });
+
+      utils.pressKey(32);
+
+    })).then(function(data) { expect(data).toBe('hello') });
+  });
+})
+
 describe('on_trial_finish (experiment level)', function(){
   test('should get an object containing the trial data', function(){
     require('../jspsych.js');

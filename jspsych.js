@@ -772,9 +772,6 @@ window.jsPsych = (function() {
 
   function doTrial(trial) {
 
-    // call experiment wide callback
-    opts.on_trial_start(trial);
-
     current_trial = trial;
 
     // process all timeline variables for this trial
@@ -785,6 +782,14 @@ window.jsPsych = (function() {
 
     // get default values for parameters
     setDefaultValues(trial);
+
+    // call experiment wide callback
+    opts.on_trial_start(trial);
+
+    // call trial specific callback if it exists
+    if(typeof trial.on_start == 'function'){
+      trial.on_start(trial);
+    }
 
     // execute trial method
     jsPsych.plugins[trial.type].trial(DOM_target, trial);
@@ -949,6 +954,12 @@ jsPsych.plugins = (function() {
       pretty_name: 'Data',
       default: {},
       description: 'Data to add to this trial (key-value pairs)'
+    },
+    on_start: {
+      type: module.parameterType.FUNCTION,
+      pretty_name: 'On start',
+      default: function() { return; },
+      description: 'Function to execute when trial begins'
     },
     on_finish: {
       type: module.parameterType.FUNCTION,
