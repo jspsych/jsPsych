@@ -8,8 +8,8 @@ To create a trial, you need to create an object that describes the trial. The mo
 
 ```javascript
 var trial = {
-	type: 'text',
-	text: 'hello world!'
+	type: 'html-keyboard-response',
+	stimulus: 'hello world!'
 }
 ```
 
@@ -37,20 +37,20 @@ Scaling up to multiple trials is straightforward. Just create an object for each
 var timeline = [];
 
 var trial_1 = {
-	type: 'text',
-	text: 'This is trial 1.'
+	type: 'html-keyboard-response',
+	stimulus: 'This is trial 1.'
 }
 timeline.push(trial_1);
 
 var trial_2 = {
-	type: 'text',
-	text: 'This is trial 2.'
+	type: 'html-keyboard-response',
+	stimulus: 'This is trial 2.'
 }
 timeline.push(trial_2);
 
 var trial_3 = {
-	type: 'text',
-	text: 'This is trial 3.'
+	type: 'html-keyboard-response',
+	stimulus: 'This is trial 3.'
 }
 timeline.push(trial_3);
 ```
@@ -268,8 +268,8 @@ Any timeline can be looped using the `loop_function` option. The loop function s
 
 ```javascript
 var trial = {
-	type: 'text',
-	text: 'This trial is in a loop. Press R to repeat this trial, or C to continue.'
+	type: 'html-keyboard-response',
+	stimulus: 'This trial is in a loop. Press R to repeat this trial, or C to continue.'
 }
 
 var loop_node = {
@@ -290,13 +290,13 @@ A timeline can be skipped based on the evaluation of a function using the `condi
 
 ```javascript
 var pre_if_trial = {
-	type: 'text',
-	text: 'The next trial is in a conditional statement. Press S to skip it, or V to view it.'
+	type: 'html-keyboard-response',
+	stimulus: 'The next trial is in a conditional statement. Press S to skip it, or V to view it.'
 }
 
 var if_trial = {
-	type: 'text',
-	text: 'You chose to view the trial. Press any key to continue.'
+	type: 'html-keyboard-response',
+	stimulus: 'You chose to view the trial. Press any key to continue.'
 }
 
 var if_node = {
@@ -314,8 +314,8 @@ var if_node = {
 }
 
 var after_if_trial = {
-	type: 'text',
-	text: 'This is the trial after the conditional.'
+	type: 'html-keyboard-response',
+	stimulus: 'This is the trial after the conditional.'
 }
 
 jsPsych.init({

@@ -24,8 +24,8 @@ Adds the timeline to the end of the experiment.
 
 ```javascript
 var trial = {
-  type: 'text',
-  text: 'This is a new trial.'
+  type: 'html-keyboard-response',
+  stimulus: 'This is a new trial.'
 }
 
 var new_timeline = {

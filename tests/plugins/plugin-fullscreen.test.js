@@ -23,8 +23,8 @@ describe('fullscreen plugin', function(){
     }
 
     var text = {
-      type: 'text',
-      text: 'fullscreen'
+      type: 'html-keyboard-response',
+      stimulus: 'fullscreen'
     }
 
     jsPsych.init({

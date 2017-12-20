@@ -168,7 +168,7 @@ Gets an AudioBuffer that can be played with the WebAudio API or an Audio object 
 ### Examples
 
 ```javascript
-// the code below is used to play audio in the single-audio plugin
+// the code below is used to play audio in the audio-keyboard-response plugin
 var source = context.createBufferSource();
 source.buffer = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
 source.connect(context.destination);

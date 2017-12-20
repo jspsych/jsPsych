@@ -36,8 +36,8 @@ timeline.push({
 });
 
 timeline.push({
-  type: 'text',
-  text: 'This trial will be in fullscreen mode.'
+  type: 'html-keyboard-response',
+  stimulus: 'This trial will be in fullscreen mode.'
 });
 
 // exit fullscreen mode
@@ -47,8 +47,8 @@ timeline.push({
 });
 
 timeline.push({
-  type: 'text',
-  text: 'This trial will NOT be in fullscreen mode.'
+  type: 'html-keyboard-response',
+  stimulus: 'This trial will NOT be in fullscreen mode.'
 });
 
 jsPsych.init({

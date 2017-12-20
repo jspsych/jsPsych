@@ -42,8 +42,8 @@ locations | JSON string | JSON-encoded array where each element of the array is 
 
 ```javascript
     var intro = {
-      type: 'text',
-      text: 'Press J if there is a backwards N. If there is no backwards N press F.'
+      type: 'html-keyboard-response',
+      stimulus: 'Press J if there is a backwards N. If there is no backwards N press F.'
     }
 
     var trial_1 = {
