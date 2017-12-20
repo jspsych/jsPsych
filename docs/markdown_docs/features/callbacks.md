@@ -26,7 +26,7 @@ The `on_finish` callback can be added to any trial. The callback will trigger wh
 #### Sample use
 ```javascript
 var trial = {
-  type: 'single-stim',
+  type: 'image-keyboard-response',
   stimulus: 'imgA.png',
   on_finish: function(data) {
     console.log('The trial just ended.');
@@ -58,7 +58,7 @@ The `on_start` callback can be added to any trial. The callback will trigger rig
 #### Sample use
 ```javascript
 var trial = {
-  type: 'single-stim',
+  type: 'image-keyboard-response',
   stimulus: 'imgA.png',
   on_start: function(trial) {
     console.log('The trial is about to start.');

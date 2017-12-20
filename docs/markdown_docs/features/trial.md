@@ -12,9 +12,8 @@ A trial for the Flanker Task written with jsPsych might look like this:
 
 ```javascript
 var trial = {
-  type: 'single-stim',
+  type: 'html-keyboard-response',
   stimulus: '<<<<<',
-  is_html: true,
   choices: ['f','j'],
   data: {
     stimulus_type: 'congruent',
@@ -33,8 +32,8 @@ The ITI can also be controlled at the trial level through the `post_trial_gap` p
 
 ```javascript
 var trial = {
-  type: 'text',
-  text: 'There will be a 1.5 second blank screen after this trial.',
+  type: 'html-keyboard-response',
+  stimulus: 'There will be a 1.5 second blank screen after this trial.',
   post_trial_gap: 1500
 }
 ```
@@ -45,9 +44,8 @@ Immediately before a trial runs, there is an opportunity to run an arbitrary fun
 
 ```javascript
 var trial = {
-  type: 'single-stim',
+  type: 'html-keyboard-response',
   stimulus: '<<<<<',
-  is_html: true,
   choices: ['f','j'],
   data: {
     stimulus_type: 'congruent',
@@ -68,9 +66,8 @@ This can be useful to calculate new data properties that were unknowable at the 
 
 ```javascript
 var trial = {
-  type: 'single-stim',
+  type: 'html-keyboard-response',
   stimulus: '<<<<<',
-  is_html: true,
   choices: ['f','j'],
   data: {
     stimulus_type: 'congruent',
@@ -97,9 +94,8 @@ Here is a sketch of how this functionality could be used to display feedback to 
 var timeline = [];
 
 var trial = {
-  type: 'single-stim',
+  type: 'html-keyboard-response',
   stimulus: '<<<<<',
-  is_html: true,
   choices: ['f','j'],
   data: {
     stimulus_type: 'congruent',
@@ -115,8 +111,8 @@ var trial = {
 }
 
 var feedback = {
-  type: 'text',
-  text: function(){
+  type: 'html-keyboard-response',
+  stimulus: function(){
     var last_trial_correct = jsPsych.data.get().last(1).values()[0].correct;
     if(last_trial_correct){
       return "<p>Correct!</p>";

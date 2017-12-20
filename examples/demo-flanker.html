@@ -79,7 +79,7 @@
         var debrief = {
           type: "html-keyboard-response",
           stimulus: function() {
-            var total_trials = jsPsych.data.get().filter({trial_type: 'single-stim'}).count();
+            var total_trials = jsPsych.data.get().filter({trial_type: 'image-keyboard-response'}).count();
             var accuracy = Math.round(jsPsych.data.get().filter({correct: true}).count() / total_trials * 100);
             var congruent_rt = Math.round(jsPsych.data.get().filter({correct: true, stim_type: 'congruent'}).select('rt').mean());
             var incongruent_rt = Math.round(jsPsych.data.get().filter({correct: true, stim_type: 'incongruent'}).select('rt').mean());

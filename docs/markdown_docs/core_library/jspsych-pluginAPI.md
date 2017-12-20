@@ -387,7 +387,7 @@ jsPsych.pluginAPI.registerPreload(plugin_name, parameter, media_type, conditiona
 
 Parameter | Type | Description
 ----------|------|------------
-plugin_name | string | The name of the plugin. e.g., 'single-stim'.
+plugin_name | string | The name of the plugin. e.g., 'image-keyboard-response'.
 parameter | string | The name of the parameter that is a media file. e.g., 'stimulus'
 media_type | string | The type of media, either 'image' or 'audio'.
 conditional_function | function | Only run the preload for a trial if this function returns true, or if this function does not exist.
@@ -404,7 +404,7 @@ The `conditional_function` function is passed a single argument containing the t
 
 ### Example
 
-For an example, see the [single-stim](https://github.com/jodeleeuw/jsPsych/blob/master/plugins/jspsych-single-stim.js) and [single-audio](https://github.com/jodeleeuw/jsPsych/blob/master/plugins/jspsych-single-audio.js) plugins.
+For an example, see the [image-keyboard-response](https://github.com/jodeleeuw/jsPsych/blob/master/plugins/jspsych-image-keyboard-response.js) and [audio-keyboard-response](https://github.com/jodeleeuw/jsPsych/blob/master/plugins/jspsych-audio-keyboard-response.js) plugins.
 
 ---
 ## jsPsych.pluginAPI.setTimeout

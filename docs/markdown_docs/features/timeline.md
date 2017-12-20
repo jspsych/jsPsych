@@ -57,11 +57,11 @@ timeline.push(trial_3);
 
 ## Nested timelines
 
-Each object on the timeline can also have it's own timeline. This is useful for many reasons. One is that it allows you to define common parameters across trials once and have them apply to all the trials on the nested timeline. The example below creates a series of trials using the single-stim plugin, where the only thing that changes from trial-to-trial is the image file being displayed on the screen.
+Each object on the timeline can also have it's own timeline. This is useful for many reasons. One is that it allows you to define common parameters across trials once and have them apply to all the trials on the nested timeline. The example below creates a series of trials using the image-keyboard-response plugin, where the only thing that changes from trial-to-trial is the image file being displayed on the screen.
 
 ```javascript
 var judgment_trials = {
-	type: 'single-stim',
+	type: 'image-keyboard-response',
 	prompt: '<p>Press a number 1-7 to indicate how unusual the image is.</p>',
 	choices: ['1','2','3','4','5','6','7'],
 	timeline: [
@@ -78,7 +78,7 @@ You can also override the values by declaring a new value in the `timeline` arra
 
 ```javascript
 var judgment_trials = {
-	type: 'single-stim',
+	type: 'image-keyboard-response',
 	prompt: '<p>Press a number 1-7 to indicate how unusual the image is.</p>',
 	choices: ['1','2','3','4','5','6','7'],
 	timeline: [
@@ -105,14 +105,13 @@ Here's a basic version of the task with timeline variables.
 var face_name_procedure = {
 	timeline: [
 		{
-			type: 'single-stim',
+			type: 'html-keyboard-response',
 			stimulus: '+',
-			is_html: true,
 			choices: jsPsych.NO_KEYS,
 			timing_response: 500
 		},
 		{
-			type: 'single-stim',
+			type: 'image-keyboard-response',
 			stimulus: jsPsych.timelineVariable('face'),
 			prompt: function(){ return "This person's name is "+jsPsych.timelineVariable('name', true); },
 			choices: jsPsych.NO_KEYS,

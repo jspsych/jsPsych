@@ -148,7 +148,7 @@ for (var i = 0; i < images.length; i++) {
 }
 
 var block = {
-  type: 'single-stim',
+  type: 'image-keyboard-response',
   choices: [89, 78], // Y or N
   prompt: '<p>Press Y to Continue. Press N to end this node of the experiment.</p>',
   on_finish: function(data) {
@@ -160,7 +160,7 @@ var block = {
 }
 
 var after_block = {
-  type: 'single-stim',
+  type: 'html-keyboard-response',
   stimulus: '<p>The next node</p>',
   is_html: true
 }
@@ -201,7 +201,7 @@ Ends the experiment, skipping all remaining trials.
 
 ```javascript
 var trial = {
-  type: 'single-stim',
+  type: 'image-keyboard-response',
   stimulus: 'image1.jpg',
   choices: [89,78], // Y or N
   prompt: '<p>Press Y to Continue. Press N to end the experiment</p>',
@@ -381,9 +381,8 @@ Pauses the experiment. The experiment will finish the current trial, but will no
 
 ```javascript
 var trial = {
-  type: 'single-stim',
+  type: 'html-keyboard-response',
   stimulus: 'Press p to take a 30 second break. Otherwise, press c to continue immediately.',
-  is_html: true,
   choices: ['p','c'],
   on_finish: function(data){
     if(data.key_press == 80) { // 80 = p
@@ -451,9 +450,8 @@ Resumes the experiment after a call to `jsPsych.pauseExperiment()`. If the post 
 
 ```javascript
 var trial = {
-  type: 'single-stim',
+  type: 'html-keyboard-response',
   stimulus: 'Press p to take a 30 second break. Otherwise, press c to continue immediately.',
-  is_html: true,
   choices: ['p','c'],
   on_finish: function(data){
     if(data.key_press == 80) { // 80 = p
