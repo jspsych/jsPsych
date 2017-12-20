@@ -39,6 +39,27 @@ var trial = {
 }
 ```
 
+## The on_start event
+
+Immediately before a trial runs, there is an opportunity to run an arbitrary function through the `on_start` event handler. This event handler is passed a single argument containing an *editable* copy of the trial parameters. This event handler can therefore be used to alter the trial based on the state of the experiment, among other uses.
+
+```javascript
+var trial = {
+  type: 'single-stim',
+  stimulus: '<<<<<',
+  is_html: true,
+  choices: ['f','j'],
+  data: {
+    stimulus_type: 'congruent',
+    target_direction: 'left'
+  },
+  on_start: function(trial){
+    trial.stimulus = '<<><<';
+    trial.data.stimulus_type = 'incongruent';
+  }
+}
+```
+
 ## The on_finish event
 
 After a trial is completed, there is an opportunity to run an arbitrary function through the `on_finish` event handler. This event handler is passed a single argument containing an *editable* copy of the data recorded for that trial. This event handler can therefore be used to update the state of the experiment based on the data collected or modify the data collected.
