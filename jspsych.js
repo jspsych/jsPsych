@@ -793,6 +793,11 @@ window.jsPsych = (function() {
 
     // execute trial method
     jsPsych.plugins[trial.type].trial(DOM_target, trial);
+
+    // call trial specific loaded callback if it exists
+    if(typeof trial.on_load == 'function'){
+      trial.on_load();
+    }
   }
 
   function evaluateTimelineVariables(trial){
@@ -966,6 +971,12 @@ jsPsych.plugins = (function() {
       pretty_name: 'On finish',
       default: function() { return; },
       description: 'Function to execute when trial is finished'
+    },
+    on_load: {
+      type: module.parameterType.FUNCTION,
+      pretty_name: 'On load',
+      default: function() { return; },
+      description: 'Function to execute after the trial has loaded'
     },
     post_trial_gap: {
       type: module.parameterType.INT,
