@@ -15,6 +15,7 @@ describe('animation plugin', function(){
 
 	// SKIP FOR NOW
 	test.skip('displays stimuli', function(){
+
 		var animation_sequence = ['img/face_1.jpg', 'img/face_2.jpg'];
 
 		var trial = {
@@ -23,7 +24,8 @@ describe('animation plugin', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial]
+			timeline: [trial],
+			auto_preload: false
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="img/face_1.jpg" id="jspsych-animation-image"></img>');

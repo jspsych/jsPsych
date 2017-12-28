@@ -338,9 +338,6 @@ describe('on_trial_start', function(){
       timeline: [trial],
       on_trial_start: function(trial){
         trial.stimulus = 'goodbye';
-      },
-      on_finish: function(){
-        resolve(promise_data);
       }
     });
 

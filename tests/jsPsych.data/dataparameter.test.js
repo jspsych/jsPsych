@@ -150,8 +150,6 @@ describe('The data parameter', function(){
     utils.pressKey(32); // trial 1
     utils.pressKey(32); // trial 2
 
-    console.log(jsPsych.data.get().json())
-
     expect(jsPsych.data.get().filter({added: true}).count()).toBe(1);
     expect(jsPsych.data.get().filter({added: false}).count()).toBe(1);
   });
@@ -182,8 +180,6 @@ describe('The data parameter', function(){
 
     utils.pressKey(32); // trial 1
     utils.pressKey(32); // trial 2
-
-    console.log(jsPsych.data.get().json())
 
     expect(jsPsych.data.get().filter({added_copy: true}).count()).toBe(1);
     expect(jsPsych.data.get().filter({added_copy: false}).count()).toBe(1);

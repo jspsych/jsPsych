@@ -1,4 +1,5 @@
 const root = '../../';
+const utils = require('../testing-utils.js');
 
 jest.useFakeTimers();
 
@@ -20,10 +21,13 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial]
+			timeline: [trial],
+			auto_preload: false
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('<img src=\"../media/blue.png\" id=\"jspsych-image-keyboard-response-stimulus\">');
+
+		utils.pressKey(70);
 	});
 
 	test('display clears after key press', function(){
@@ -34,13 +38,13 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial]
+			timeline: [trial],
+			auto_preload: false
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus">'));
 
-		document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode:70}));
-		document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode:70}));
+		utils.pressKey(70);
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});
@@ -54,10 +58,12 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial]
+			timeline: [trial],
+			auto_preload: false
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus"><div id="foo">this is a prompt</div>'));
+		utils.pressKey(70);
 	});
 
 	test('should hide stimulus if stimulus-duration is set', function(){
@@ -65,16 +71,18 @@ describe('image-keyboard-response', function(){
 			type: 'image-keyboard-response',
 			stimulus: '../media/blue.png',
 			choices:['f','j'],
-			stimulus_duration: 500, 
+			stimulus_duration: 500,
 		}
 
 		jsPsych.init({
-			timeline: [trial]
+			timeline: [trial],
+			auto_preload: false
 		});
 
 		expect(jsPsych.getDisplayElement().querySelector('#jspsych-image-keyboard-response-stimulus').style.visibility).toMatch("");
 		jest.runTimersToTime(500);
 		expect(jsPsych.getDisplayElement().querySelector('#jspsych-image-keyboard-response-stimulus').style.visibility).toMatch("hidden");
+		utils.pressKey(70);
 
 	});
 
@@ -87,7 +95,8 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial]
+			timeline: [trial],
+			auto_preload: false
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus">'));
@@ -104,13 +113,13 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial]
+			timeline: [trial],
+			auto_preload: false
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus">'));
 
-		document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode:70}));
-		document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode:70}));
+		utils.pressKey(70);
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});

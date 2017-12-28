@@ -1,4 +1,5 @@
 const root = '../../';
+const utils = require('../testing-utils.js');
 
 jest.useFakeTimers();
 
@@ -28,13 +29,13 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial]
+      timeline: [trial],
+			auto_preload: false
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(/blue.png/);
 
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
+    utils.pressKey(70);
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
@@ -50,17 +51,14 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial]
+      timeline: [trial],
+			auto_preload: false
     });
 
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
-
+    utils.pressKey(74);
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-iat-stim">');
 
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
-
+    utils.pressKey(70);
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
 
@@ -75,17 +73,14 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial]
+      timeline: [trial],
+			auto_preload: false
     });
 
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
-
+    utils.pressKey(70);
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/blue.png\" id=\"jspsych-iat-stim\">'));
 
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 74}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 74}));
-
+    utils.pressKey(74);
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
 
   });
@@ -103,17 +98,14 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial]
+      timeline: [trial],
+			auto_preload: false
     });
 
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
-
+    utils.pressKey(70);
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/blue.png\" id=\"jspsych-iat-stim\" class=\" responded\">'));
 
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
-
+    utils.pressKey(32);
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
 
   });
@@ -131,17 +123,14 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial]
+      timeline: [trial],
+			auto_preload: false
     });
 
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 74}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 74}));
-
+    utils.pressKey(74);
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/blue.png\" id=\"jspsych-iat-stim\" class=\" responded\">'));
 
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
-
+    utils.pressKey(70);
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
 
   });
@@ -159,15 +148,14 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial]
+      timeline: [trial],
+			auto_preload: false
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p>Press j for:<br> <b>UNFRIENDLY</b>'));
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p>Press f for:<br> <b>FRIENDLY</b>'));
 
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode:70}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode:70}));
-
+    utils.pressKey(70);
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
 
   });
@@ -188,19 +176,15 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial]
+      timeline: [trial],
+			auto_preload: false
     });
 
     expect(jsPsych.getDisplayElement().querySelector('#wrongImgContainer').style.visibility).toBe('hidden');
-
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode:74}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode:74}));
-
+    utils.pressKey(74);
     expect(jsPsych.getDisplayElement().querySelector('#wrongImgContainer').style.visibility).toBe('visible');
 
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
-
+    utils.pressKey(70);
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
 
@@ -215,7 +199,8 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial]
+      timeline: [trial],
+			auto_preload: false
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/blue.png\" id=\"jspsych-iat-stim\">'));
@@ -241,12 +226,11 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial]
+      timeline: [trial],
+      auto_preload: false
     });
 
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 70}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 70}));
-
+    utils.pressKey(70);
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/blue.png\" id=\"jspsych-iat-stim\" class=\" responded\">'));
 
     jest.runAllTimers();
@@ -269,16 +253,15 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial]
+      timeline: [trial],
+      auto_preload: false
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src="../media/blue.png" id=\"jspsych-iat-stim\">'));
 
     jest.runTimersToTime(500);
 
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 73}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 73}));
-
+    utils.pressKey(73);
     expect(jsPsych.getDisplayElement().querySelector('#wrongImgContainer').style.visibility).toBe('visible');
 
     jest.runTimersToTime(1100);
@@ -304,14 +287,13 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial]
+      timeline: [trial],
+      auto_preload: false
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src="../media/blue.png" id=\"jspsych-iat-stim\">'));
 
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 73}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 73}));
-
+    utils.pressKey(73);
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/blue.png\" id=\"jspsych-iat-stim\" class=\" responded\">'));
 
     jest.runTimersToTime(1000);
@@ -320,9 +302,7 @@ describe('iat-image plugin', function(){
 
     jest.runTimersToTime(1500);
 
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 69}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 69}));
-
+    utils.pressKey(69);
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
 });

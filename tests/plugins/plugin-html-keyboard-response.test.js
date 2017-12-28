@@ -25,6 +25,8 @@ describe('html-keyboard-response', function(){
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('<div id="jspsych-html-keyboard-response-stimulus">this is html</div>');
+
+		utils.pressKey(70);
 	});
 
 	test('display clears after key press', function(){
@@ -58,6 +60,8 @@ describe('html-keyboard-response', function(){
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<div id="jspsych-html-keyboard-response-stimulus">this is html</div><div id="foo">this is a prompt</div>'));
+
+		utils.pressKey(70);
 	});
 
 	test('should hide stimulus if stimulus-duration is set', function(){
@@ -75,6 +79,7 @@ describe('html-keyboard-response', function(){
 		expect(jsPsych.getDisplayElement().querySelector('#jspsych-html-keyboard-response-stimulus').style.visibility).toMatch("");
 		jest.runTimersToTime(500);
 		expect(jsPsych.getDisplayElement().querySelector('#jspsych-html-keyboard-response-stimulus').style.visibility).toMatch("hidden");
+		utils.pressKey(70);
 	});
 
 	test('should end trial when trial duration is reached', function(){
@@ -125,10 +130,10 @@ describe('html-keyboard-response', function(){
 			timeline: [trial]
 		});
 
-	expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'));
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'));
 
-	utils.pressKey(70);
+		utils.pressKey(70);
 
-	expect(document.querySelector('#jspsych-html-keyboard-response-stimulus').className).toBe(' responded');
+		expect(document.querySelector('#jspsych-html-keyboard-response-stimulus').className).toBe(' responded');
 	});
 });

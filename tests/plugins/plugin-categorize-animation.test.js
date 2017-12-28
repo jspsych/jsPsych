@@ -22,7 +22,8 @@ describe('categorize-animation plugin', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial]
+			timeline: [trial],
+			auto_preload: false
 		});
 
 		jest.runTimersToTime(500);
@@ -41,6 +42,7 @@ describe('categorize-animation plugin', function(){
 
 		jsPsych.init({
 			timeline: [trial],
+			auto_preload: false
 		});
 
 		jest.runTimersToTime(1500);
@@ -58,6 +60,7 @@ describe('categorize-animation plugin', function(){
 
 		jsPsych.init({
 			timeline: [trial],
+			auto_preload: false
 		});
 
 		jest.runTimersToTime(1500);
@@ -77,6 +80,7 @@ describe('categorize-animation plugin', function(){
 
 		jsPsych.init({
 			timeline: [trial],
+			auto_preload: false
 		});
 
 		jest.runTimersToTime(1500);
@@ -99,8 +103,9 @@ describe('categorize-animation plugin', function(){
 
   		jsPsych.init({
     			timeline: [trials],
+					auto_preload: false
   		});
-	
+
 		jest.runTimersToTime(1500);
 		utils.pressKey(68);
 		jest.runTimersToTime(1000);
@@ -120,8 +125,9 @@ describe('categorize-animation plugin', function(){
 
   		jsPsych.init({
     			timeline: [trials],
+					auto_preload: false
   		});
-	
+
 		jest.runTimersToTime(1500);
 		utils.pressKey(68);
 		jest.runTimersToTime(1000);
@@ -141,8 +147,9 @@ describe('categorize-animation plugin', function(){
 
   		jsPsych.init({
     			timeline: [trials],
+					auto_preload: false
   		});
-	
+
 		jest.runTimersToTime(1500);
 		utils.pressKey(83);
 		jest.runTimersToTime(1000);
@@ -163,8 +170,9 @@ describe('categorize-animation plugin', function(){
 
   		jsPsych.init({
     		timeline: [trials],
+				auto_preload: false
   		});
-	
+
 		jest.runTimersToTime(1000);
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('<img src=\"img/happy_face_1.jpg\" class=\"jspsych-categorize-animation-stimulus\">');
 		jest.runTimersToTime(500);
@@ -188,8 +196,9 @@ describe('categorize-animation plugin', function(){
 
   		jsPsych.init({
     		timeline: [trials],
+				auto_preload: false
   		});
-	
+
 		jest.runTimersToTime(1000);
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('<img src=\"img/happy_face_1.jpg\" class=\"jspsych-categorize-animation-stimulus\">');
 		jest.runTimersToTime(1000);
@@ -216,8 +225,9 @@ describe('categorize-animation plugin', function(){
 
   		jsPsych.init({
     		timeline: [trials],
+				auto_preload: false
   		});
-	
+
 		jest.runTimersToTime(1500);
 		utils.pressKey(68);
 		jest.runTimersToTime(500);
@@ -239,8 +249,9 @@ describe('categorize-animation plugin', function(){
 
   		jsPsych.init({
     		timeline: [trials],
+				auto_preload: false
   		});
-	
+
 		jest.runTimersToTime(1500);
 		utils.pressKey(68);
 		jest.runTimersToTime(500);

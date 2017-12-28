@@ -26,8 +26,6 @@ describe('survey-multi-select plugin', function(){
 			timeline: [trial]
 		});
 
-		console.log(jsPsych.getDisplayElement().innerHTML);
-
 		expect(jsPsych.getDisplayElement().querySelector('#jspsych-survey-multi-select-option-0-0 input').value).toBe('Hello "boo"');
 		expect(jsPsych.getDisplayElement().querySelector('#jspsych-survey-multi-select-option-0-1 input').value).toBe("yes, 'bar'");
 
