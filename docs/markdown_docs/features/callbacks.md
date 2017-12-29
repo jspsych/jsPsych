@@ -51,6 +51,22 @@ jsPsych.init({
 ```
 ---
 
+## on_load
+
+The `on_load` callback can be added to any trial. The callback will trigger once the trial has completed loading. For most plugins, this will occur once the display has been initially updated but before any user interactions or timed events (e.g., animations) have occurred.
+
+#### Sample use
+```javascript
+var trial = {
+  type: 'image-keyboard-response',
+  stimulus: 'imgA.png',
+  on_load: function() {
+    console.log('The trial just finished loading.');
+  }
+};
+```
+---
+
 ## on_start (trial)
 
 The `on_start` callback can be added to any trial. The callback will trigger right before the trial begins. The callback function will be passed a single argument, containing the trial object. If any of the parameters of the trial are functions or timeline variables, these will be evaluated before `on_start` is called, and the trial object will contain the evaluated value. The trial object is modifiable, and any changes made will affect the trial.

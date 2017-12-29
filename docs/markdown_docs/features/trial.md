@@ -83,6 +83,21 @@ var trial = {
 }
 ```
 
+## The on_load event
+
+The `on_load` callback can be added to any trial. The callback will trigger once the trial has completed loading. For most plugins, this will occur once the display has been initially updated but before any user interactions or timed events (e.g., animations) have occurred.
+
+#### Sample use
+```javascript
+var trial = {
+  type: 'image-keyboard-response',
+  stimulus: 'imgA.png',
+  on_load: function() {
+    console.log('The trial just finished loading.');
+  }
+};
+```
+
 ## Dynamic parameters
 
 Most plugins allow parameters to be functions. In a typical declaration of a jsPsych trial, parameters have to be known at the start of the experiment. This makes it impossible to alter the content of the trial based on the outcome of previous trials. When functions are used as parameters for a block of trials, the function is evaluated at the start of each trial, and the return value of the function is used as the parameter. This enables dynamic updating of the parameter based on data that a subject has generated.
