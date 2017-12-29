@@ -425,9 +425,9 @@ Saves a CSV or JSON file on the computer running the experiment. If conducting a
 **Warning:** This function relies on features which are [currently not supported by all major web browsers](http://caniuse.com/#search=createObjectURL), though adoption rates are increasing rapidly. It will work on the most recent versions of Chrome, Firefox, and Internet Explorer. Safari has partial support. The file will render, but it will display in the browser window and will require using the Save As option manually.
 
 ```javascript
-// first argument is the filename, second is the format.
+// first argument is the format, second is the filename.
 // the format can be either 'csv' or 'json'.
-jsPsych.data.get().localSave('mydata.csv', 'csv');
+jsPsych.data.get().localSave('csv','mydata.csv');
 ```
 
 #### .push()
