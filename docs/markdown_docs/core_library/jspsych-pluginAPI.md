@@ -254,7 +254,7 @@ jsPsych.pluginAPI.preloadAudioFiles(files, callback_complete, callback_load)
 
 Parameter | Type | Description
 ----------|------|------------
-files | array | An array of audio file paths to load. The array can be nested (e.g. if images are in multiple arrays to help sort by condition or task).
+files | array | An array of audio file paths to load. The array can be nested (e.g., if images are in multiple arrays to help sort by condition or task).
 callback_complete | function | A function to execute when all the files have been loaded.
 callback_load | function | A function to execute after each file has been loaded. A single parameter is passed to this function which contains the number of files that have been loaded so far.
 
@@ -266,7 +266,7 @@ Returns nothing.
 
 Use this function to preload audio files that are not part of a plugin with automatic preloading. Audio files in official plugins will automatically preload. See [Media Preloading](../features/media-preloading.md) for more information.
 
-It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the files are loaded. Thus, it is possible that an audio file would be required for playing before it is done preloading. The `callback_complete` function will only execute after all the audio files are loaded, and can be used to control the flow of the experiment (e.g. by starting the experiment in the `callback_complete` function).
+It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the files are loaded. Thus, it is possible that an audio file would be required for playing before it is done preloading. The `callback_complete` function will only execute after all the audio files are loaded, and can be used to control the flow of the experiment (e.g., by starting the experiment in the `callback_complete` function).
 
 The `callback_load` function can be used to indicate progress. See example below.
 
@@ -321,7 +321,7 @@ jsPsych.pluginAPI.preloadImages(images, callback_complete, callback_load)
 
 Parameter | Type | Description
 ----------|------|------------
-images | array | An array of image paths to load. The array can be nested (e.g. if images are in multiple arrays to help sort by condition or task).
+images | array | An array of image paths to load. The array can be nested (e.g., if images are in multiple arrays to help sort by condition or task).
 callback_complete | function | A function to execute when all the images have been loaded.
 callback_load | function | A function to execute after each image has been loaded. A single parameter is passed to this function which contains the number of images that have been loaded so far.
 
@@ -333,7 +333,7 @@ Returns nothing.
 
 Use this function to preload image files that are not part of a plugin with automatic preloading. Image files in official plugins will automatically preload. See [Media Preloading](../features/media-preloading.md) for more information.
 
-It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the images are loaded. Thus, it is possible that an image would be required for display before it is done preloading. The `callback_complete` function will only execute after all the images are loaded, and can be used to control the flow of the experiment (e.g. by starting the experiment in the `callback_complete` function).
+It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the images are loaded. Thus, it is possible that an image would be required for display before it is done preloading. The `callback_complete` function will only execute after all the images are loaded, and can be used to control the flow of the experiment (e.g., by starting the experiment in the `callback_complete` function).
 
 The `callback_load` function can be used to indicate progress, if the number of images to be loaded is known ahead of time. See example below.
 

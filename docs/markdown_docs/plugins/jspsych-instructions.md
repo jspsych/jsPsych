@@ -9,7 +9,7 @@ This table lists the parameters associated with this plugin. Parameters with a d
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 pages | array | *undefined* | Each element of the array is the content for a single page. Each page should be an HTML-formatted string.
-key_forward | key code | 'rightarrow' | This is the key that the subject can press in order to advance to the next page. Keys can be specified as their [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) or as characters (e.g. `'a'`, `'q'`).
+key_forward | key code | 'rightarrow' | This is the key that the subject can press in order to advance to the next page. Keys can be specified as their [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) or as characters (e.g., `'a'`, `'q'`).
 key_backward | key code | 'leftarrow' | This is the key that the subject can press to return to the previous page.
 allow_backward | boolean | true | If true, the subject can return to previous pages of the instructions. If false, they may only advace to the next page.
 allow_keys | boolean | true | If true, the subject can use keyboard keys to navigate the pages. If false, they may not.

@@ -17,7 +17,7 @@ stim_height | numeric | 100 | The height of the images in pixels.
 stim_width | numeric | 100 | The width of the images in pixels.
 sort_area_height | numeric | 800 | The height of the container that subjects can move the stimuli in. Stimuli will be constrained to this area.
 sort_area_width | numeric | 800 | The width of the container that subjects can move the stimuli in. Stimuli will be constrained to this area.
-prompt | string | "" | This string can contain HTML markup. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g. which key to press).
+prompt | string | "" | This string can contain HTML markup. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
 prompt_location | string | "above" | Indicates whether to show the prompt `"above"` or `"below"` the sorting area.
 button_label | string |  'Continue' | The text that appears on the button to continue to the next trial.
 

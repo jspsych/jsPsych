@@ -16,7 +16,7 @@ Parameter | Type | Description
 ----------|------|------------
 factors | object | The `factors` object should contain a property for each different factor. Each property-factor should have a value of an array, with each element of the array corresponding to a level of the factor.
 repetitions | integer | The number of times to repeat each unique combination of the factors in the output sample.
-unpack | boolean | If `true` then the output will be an object with a property for each factor in the original `factors` object. The value of each property-factor will be an array containing the levels of the factor in a random order. The order will be consistent across each property-factor (e.g. the first element of each property-factor will specify one unique combination of the factors). If `false`, then the return value will be an array of objects where each property-factor contains only a single value.
+unpack | boolean | If `true` then the output will be an object with a property for each factor in the original `factors` object. The value of each property-factor will be an array containing the levels of the factor in a random order. The order will be consistent across each property-factor (e.g., the first element of each property-factor will specify one unique combination of the factors). If `false`, then the return value will be an array of objects where each property-factor contains only a single value.
 
 ### Return value
 
