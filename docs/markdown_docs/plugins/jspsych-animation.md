@@ -22,35 +22,19 @@ In addition to the [default data collected by all plugins](overview#datacollecte
 
 Name | Type | Value
 -----|------|------
-animation_sequence | JSON string | An array, encoded in JSON string format. Each element of the array is an object that represents a stimulus in the animation sequence. Each object has a `stimulus` property, which is the image that was displayed, and a `time` property, which is the time in ms, measured from when the sequence began, that the stimulus was displayed.
-responses | JSON string | An array, encoded in JSON format. Each element of the array is an object representing a response given by the subject. Each object has a `stimulus` property, indicating which image was displayed when the key was pressed, an `rt` property, indicating the time of the key press relative to the start of the animation, and a `key_press` property, indicating which key was pressed.
+animation_sequence | JSON | An array, encoded in JSON format. Each element of the array is an object that represents a stimulus in the animation sequence. Each object has a `stimulus` property, which is the image that was displayed, and a `time` property, which is the time in ms, measured from when the sequence began, that the stimulus was displayed.
+responses | JSON | An array, encoded in JSON format. Each element of the array is an object representing a response given by the subject. Each object has a `stimulus` property, indicating which image was displayed when the key was pressed, an `rt` property, indicating the time of the key press relative to the start of the animation, and a `key_press` property, indicating which key was pressed.
 
 ## Examples
 
 #### Displaying a single sequence multiple times
 
 ```javascript
-// declare variable to hold animation sequence
 var animation_sequence = ["img/face_1.jpg", "img/face_2.jpg", "img/face_3.jpg", "img/face_4.jpg", "img/face_3.jpg", "img/face_2.jpg"];
 
 var animation_trial = {
     type: 'animation',
     stimuli: animation_sequence,
-    sequence_reps: 3
-};
-```
-
-#### Specifying two trials with different sequences
-
-```javascript
-// declare variables to hold animation sequences
-var animation_sequence_1 = ["img/face_1.jpg", "img/face_2.jpg", "img/face_3.jpg", "img/face_4.jpg", "img/face_3.jpg", "img/face_2.jpg"];
-var animation_sequence_2 = ["img/face_3.jpg", "img/face_2.jpg", "img/face_4.jpg", "img/face_1.jpg"];
-
-// create animation block for jspsych
-var animation_block = {
-    type: 'animation',
-    stimuli: [animation_sequence_1, animation_sequence_2],
     sequence_reps: 3
 };
 ```

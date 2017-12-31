@@ -4,7 +4,7 @@ This plugin displays an image.The stimulus can be displayed until a response is 
 
 ## Parameters
 
-This table lists the parameters associated with this plugin. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------

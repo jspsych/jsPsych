@@ -57,12 +57,6 @@ jsPsych.plugins['audio-slider-response'] = (function() {
         default: '',
         description: 'Any content here will be displayed below the slider.'
       },
-      stimulus_duration: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Stimulus duration',
-        default: -1,
-        description: 'How long to hide the stimulus.'
-      },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Trial duration',
