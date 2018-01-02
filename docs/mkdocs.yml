@@ -70,8 +70,8 @@ pages:
   - 'jspsych-vsl-grid-scene': 'plugins/jspsych-vsl-grid-scene.md'
   - 'jspsych-xab-html': 'plugins/jspsych-xab-html.md'
   - 'jspsych-xab-image': 'plugins/jspsych-xab-image.md'
-- Support: 'support.md'
 - About:
   - 'About jsPsych': 'about/about.md'
-  - 'License': 'about/license.md'
+  - 'Getting Help': 'about/support.md'
   - 'Contributing to jsPsych': 'about/contributing.md'
+  - 'License': 'about/license.md'
