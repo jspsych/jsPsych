@@ -84,7 +84,7 @@ jsPsych.plugins["visual-search-circle"] = (function() {
         type: jsPsych.plugins.parameterType.KEYCODE,
         pretty_name: 'Target absent key',
         default: 'f',
-        description: 'The key to press if the the target is not present in the search array.'
+        description: 'The key to press if the target is not present in the search array.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,

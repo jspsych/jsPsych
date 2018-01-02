@@ -25,7 +25,7 @@ jsPsych.plugins['survey-text'] = (function() {
           prompt: {type: jsPsych.plugins.parameterType.STRING,
                    pretty_name: 'Prompt',
                    default: undefined,
-                   description: 'Prompts for the the subject to response'},
+                   description: 'Prompts for the subject to response'},
           value: {type: jsPsych.plugins.parameterType.STRING,
                   pretty_name: 'Value',
                   array: true,

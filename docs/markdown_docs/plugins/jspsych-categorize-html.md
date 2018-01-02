@@ -9,11 +9,11 @@ Parameters with a default value of *undefined* must be specified. Other paramete
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 stimulus | html string | *undefined* | The HTML stimulus to display.
-key_answer | numeric | *undefined* | The [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) indicating the correct response.
 choices | array of keycodes | `jsPsych.ALL_KEYS` | This array contains the keys that the subject is allowed to press in order to respond to the stimulus. Keys can be specified as their [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) or as characters (e.g., `'a'`, `'q'`). The default value of `jsPsych.ALL_KEYS` means that all keys will be accepted as valid responses. Specifying `jsPsych.NO_KEYS` will mean that no responses are allowed.
+key_answer | numeric | *undefined* | The [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) indicating the correct response.
 text_answer | string | "" | A label that is associated with the correct answer. Used in conjunction with the `correct_text` and `incorrect_text` parameters.
-correct_text | string | "Correct." | String to show when the correct answer is given. Can contain HTML formatting. The special string `%ANS%` can be used within the string. If present, the plugin will put the `text_answer` for the trial in place of the %ANS% string (see example below).
-incorrect_text | string | "Wrong." | String to show when the wrong answer is given. Can contain HTML formatting. The special string `%ANS%` can be used within the string. If present, the plugin will put the `text_answer` for the trial in place of the %ANS% string (see example below).
+correct_text | string | "Correct." | String to show when the correct answer is given. Can contain HTML formatting. The special string `%ANS%` can be used within the string. If present, the plugin will put the `text_answer` for the trial in place of the `%ANS%` string (see example below).
+incorrect_text | string | "Wrong." | String to show when the wrong answer is given. Can contain HTML formatting. The special string `%ANS%` can be used within the string. If present, the plugin will put the `text_answer` for the trial in place of the `%ANS%` string (see example below).
 prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
 force_correct_button_press | boolean | false | If set to true, then the subject must press the correct response key after feedback is given in order to advance to the next trial.
 show_stim_with_feedback | boolean | true | If set to true, then the stimulus will be shown during feedback. If false, then only the text feedback will display during feedback.
@@ -22,7 +22,6 @@ timeout_message | string | "Please respond faster." | The message to show on a t
 stimulus_duration | numeric | -1 | How long to show the stimulus for (milliseconds). If -1, then the stimulus is shown until a response is given.
 feedback_duration | numeric | 2000 | How long to show the feedback for (milliseconds).
 trial_duration | numeric | -1 | The maximum time allowed for a response. If -1, then the experiment will wait indefinitely for a response.
-
 
 ## Data Generated
 

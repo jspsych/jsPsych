@@ -8,7 +8,6 @@ extra_javascript:
 - js/extra.js
 - js/analytics.js
 docs_dir: markdown_docs
-site_favicon: favicon.ico
 pages:
 - Introduction: 'index.md'
 - Tutorials:

@@ -37,17 +37,17 @@ correct | boolean | `true` if the subject got the correct answer, `false` otherw
 
 ## Examples
 
-#### Categorizing HTML content
+#### Categorizing an image
 
 ```javascript
 var categorization_trial = {
     type: 'categorize',
-    stimulus: 'img/someImage.png',
-    key_answer: 80,
-    text_answer: 'letter',
-    choices: [80, 81],
-    correct_text: "<p class='prompt'>Correct, this is a %ANS%.</p>",
-    incorrect_text: "<p class='prompt'>Incorrect, this is a %ANS%.</p>",
-    prompt: "<p>Press P for letter. Press Q for number.</p>"
+    stimulus: 'img/harrypotter.png',
+    key_answer: 71,
+    text_answer: 'Gryffindor',
+    choices: [71, 72, 82, 83],
+    correct_text: "<p class='prompt'>Correct! This person is a %ANS%.</p>",
+    incorrect_text: "<p class='prompt'>Incorrect. This person is a %ANS%.</p>",
+    prompt: "<p>Is this person a (G)ryffindor, (H)ufflepuff, (R)avenclaw, or (S)lytherin?</p>"
 };
 ```
