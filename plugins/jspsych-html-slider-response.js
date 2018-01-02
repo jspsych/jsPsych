@@ -36,11 +36,11 @@ jsPsych.plugins['html-slider-response'] = (function() {
         description: 'Sets the maximum value of the slider',
       },
       start: {
-				type: jsPsych.plugins.parameterType.INT,
-				pretty_name: 'Slider starting value',
-				default: 50,
-				description: 'Sets the starting value of the slider',
-			},
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Slider starting value',
+        default: 50,
+        description: 'Sets the starting value of the slider',
+      },
       step: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Step',
