@@ -328,8 +328,7 @@ This method configures and starts the experiment.
 
 ### Example
 
-See any of the plugin examples in the [tests & examples folder](https://github.com/jodeleeuw/jsPsych/tree/master/tests%26examples) in the GitHub repository.
-
+See any of the plugin examples in the [examples folder](https://github.com/jodeleeuw/jsPsych/tree/master/examples) in the GitHub repository.
 
 ---
 ## jsPsych.initSettings

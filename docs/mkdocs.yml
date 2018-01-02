@@ -25,7 +25,6 @@ pages:
   - 'Automatic Progress Bar': 'features/progress-bar.md'
   - 'Integrating with Mechanical Turk': 'features/mturk.md'
 - Core Library API:
-  - 'Overview': 'core_library/overview.md'
   - 'jsPsych core': 'core_library/jspsych-core.md'
   - 'jsPsych.data': 'core_library/jspsych-data.md'
   - 'jsPsych.randomization': 'core_library/jspsych-randomization.md'
