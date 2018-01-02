@@ -17,8 +17,8 @@ button_html | HTML string | `'<button class="jspsych-btn">%choice%</button>'` | 
 prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
 trial_duration | numeric | -1 | How long to wait for the subject to make a response before ending the trial in milliseconds. If the subject fails to make a response before this timer is reached, the subject's response will be recorded as -1 for the trial and the trial will end. If the value of this parameter is -1, the trial will wait for a response indefinitely.
 stimulus_duration | numeric | -1 | How long to display the stimulus in milliseconds. The visibility CSS property of the stimulus will be set to `hidden` after this time has elapsed. If this is -1, then the stimulus will remain visible until the trial ends.
-margin_vertical | String | '0px' | Vertical margin of the button.
-margin_horizontal | String | '8px' | Horizontal margin of button.
+margin_vertical | String | '0px' | Vertical margin of the button(s).
+margin_horizontal | String | '8px' | Horizontal margin of the button(s).
 response_ends_trial | boolean | true | If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `timing_response` is reached. You can use this parameter to force the subject to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
 
 ## Data Generated
