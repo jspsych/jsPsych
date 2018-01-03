@@ -16,7 +16,7 @@ markdown_extensions:
       permalink: true
 repo_url: 'https://github.com/jspsych/jsPsych'
 repo_name: 'jspsych/jspsych'
-docs_dir: markdown_docs
+docs_dir: docs
 pages:
 - Introduction: 'index.md'
 - Tutorials:
