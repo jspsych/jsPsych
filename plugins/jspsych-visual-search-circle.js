@@ -169,10 +169,6 @@ jsPsych.plugins["visual-search-circle"] = (function() {
 
         paper.innerHTML += "<img src='"+to_present[i]+"' style='position: absolute; top:"+display_locs[i][0]+"px; left:"+display_locs[i][1]+"px; width:"+trial.target_size[0]+"px; height:"+trial.target_size[1]+"px;'></img>";
 
-        //var img = paper.image(to_present[i], display_locs[i][0], display_locs[i][1], trial.target_size[0], trial.target_size[1]);
-
-        //search_array_images.push(img);
-
       }
 
       var trial_over = false;
@@ -181,11 +177,11 @@ jsPsych.plugins["visual-search-circle"] = (function() {
 
         trial_over = true;
 
-        var correct = 0;
+        var correct = false;
 
-        if (info.key == trial.target_present_key && trial.target_present ||
-          info.key == trial.target_absent_key && !trial.target_present) {
-          correct = 1;
+        if (jsPsych.pluginAPI.compareKeys(info.key,trial.target_present_key) && trial.target_present ||
+            jsPsych.pluginAPI.compareKeys(info.key,trial.target_absent_key) && !trial.target_present) {
+          correct = true;
         }
 
         clear_display();
