@@ -14,8 +14,8 @@ right_key | numeric or string | 'P' | Which key the subject should press to indi
 prompt | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
 timing_x | numeric | 1000 | How long to show the X stimulus for in milliseconds.
 timing_xab_gap | numeric | 1000 | How long to show a blank screen in between X and AB in milliseconds.
-timing_ab | numeric | -1 | How long to show A and B in milliseconds. If the value of this parameter is -1, then the stimuli will remain on the screen until a response is given.
-timing_response | numeric | -1 | The maximum duration to wait for a response, measured from the onset of the AB portion of the trial. If null, then the trial will wait indefinitely for a response.
+timing_ab | numeric | null | How long to show A and B in milliseconds. If the value of this parameter is null, then the stimuli will remain on the screen until a response is given.
+timing_response | numeric | null | The maximum duration to wait for a response, measured from the onset of the AB portion of the trial. If null, then the trial will wait indefinitely for a response.
 
 ## Data Generated
 

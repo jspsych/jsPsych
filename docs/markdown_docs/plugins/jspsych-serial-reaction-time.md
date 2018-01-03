@@ -18,7 +18,7 @@ pre_target_duration | numeric | 0 | The number of milliseconds to display the gr
 trial_duration | numeric | null | The maximum length of time of the trial, not including feedback.
 show_response_feedback | boolean | false | If true, show feedback indicating where the user responded and whether it was correct.
 feedback_duration | numeric | 200 |The length of time in milliseconds to show the feedback.
-fade_duration | numeric | -1 | If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds.
+fade_duration | numeric | null | If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds.
 prompt | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which keys to press).
 
 ## Data Generated
