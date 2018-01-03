@@ -67,8 +67,6 @@ pages:
   - 'jspsych-visual-search-circle': 'plugins/jspsych-visual-search-circle.md'
   - 'jspsych-vsl-animate-occlusion': 'plugins/jspsych-vsl-animate-occlusion.md'
   - 'jspsych-vsl-grid-scene': 'plugins/jspsych-vsl-grid-scene.md'
-  - 'jspsych-xab-html': 'plugins/jspsych-xab-html.md'
-  - 'jspsych-xab-image': 'plugins/jspsych-xab-image.md'
 - About:
   - 'About jsPsych': 'about/about.md'
   - 'Getting Help': 'about/support.md'
