@@ -63,7 +63,7 @@ jsPsych.plugins['same-different-image'] = (function() {
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
-        default: '',
+        default: null,
         description: 'Any content here will be displayed below the stimulus.'
       }
     }
@@ -112,7 +112,7 @@ jsPsych.plugins['same-different-image'] = (function() {
       }
 
       //show prompt here
-      if (trial.prompt !== "") {
+      if (trial.prompt !== null) {
         display_element.innerHTML += trial.prompt;
       }
 

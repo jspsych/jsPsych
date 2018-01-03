@@ -89,7 +89,7 @@ jsPsych.plugins["visual-search-circle"] = (function() {
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Trial duration',
-        default: -1,
+        default: null,
         description: 'The maximum duration to wait for a response.'
       },
       fixation_duration: {
@@ -204,43 +204,26 @@ jsPsych.plugins["visual-search-circle"] = (function() {
         allow_held_key: false
       });
 
-      if (trial.trial_duration > -1) {
+      if (trial.trial_duration !== null) {
 
-        if (trial.trial_duration == 0) {
+        jsPsych.pluginAPI.setTimeout(function() {
+
           if (!trial_over) {
 
             jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
 
             trial_over = true;
 
-            var rt = -1;
+            var rt = null;
             var correct = 0;
-            var key_press = -1;
+            var key_press = null;
 
             clear_display();
 
             end_trial(rt, correct, key_press);
           }
-        } else {
+        }, trial.trial_duration);
 
-          jsPsych.pluginAPI.setTimeout(function() {
-
-            if (!trial_over) {
-
-              jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
-
-              trial_over = true;
-
-              var rt = -1;
-              var correct = 0;
-              var key_press = -1;
-
-              clear_display();
-
-              end_trial(rt, correct, key_press);
-            }
-          }, trial.trial_duration);
-        }
       }
 
       function clear_display() {

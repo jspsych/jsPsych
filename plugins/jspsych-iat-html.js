@@ -96,7 +96,7 @@
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Trial duration',
-        default: -1,
+        default: null,
         description: 'How long to show the trial.'
       },
     }
@@ -147,8 +147,8 @@
 
     // store response
     var response = {
-      rt: -1,
-      key: -1,
+      rt: null,
+      key: null,
       correct: false
     };
 
@@ -189,12 +189,12 @@
       display_element.querySelector('#jspsych-iat-stim').className += ' responded';
 
       // only record the first response
-      if (response.key == -1 ) {
+      if (response.key == null ) {
         response = info;
       }
 
       if(trial.stim_key_association == "right") {
-        if(response.rt > -1 && response.key == rightKeyCode) {
+        if(response.rt !== null && response.key == rightKeyCode) {
           response.correct = true;
           if (trial.response_ends_trial) {
             end_trial();
@@ -226,7 +226,7 @@
           }
         }
       } else if(trial.stim_key_association == "left") {
-        if(response.rt > -1 && response.key == leftKeyCode) {
+        if(response.rt !== null && response.key == leftKeyCode) {
           response.correct = true;
           if (trial.response_ends_trial) {
             end_trial();
@@ -272,7 +272,7 @@
     }
 
     // end trial if time limit is set
-    if (trial.trial_duration > 0 && trial.response_ends_trial != true) {
+    if (trial.trial_duration !== null && trial.response_ends_trial != true) {
       jsPsych.pluginAPI.setTimeout(function() {
         end_trial();
       }, trial.trial_duration);

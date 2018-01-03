@@ -17,7 +17,7 @@ incorrect_text | string | "Wrong." | String to show when the wrong answer is giv
 frame_time | numeric | 500 | How long to display each image (in milliseconds).
 sequence_reps | numeric | 1 | How many times to show the entire sequence.
 allow_response_before_complete | boolean | false | If true, the subject can respond before the animation sequence finishes.
-prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
+prompt | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
 feedback_duration | numeric | 2000 | How long to show the feedback (milliseconds).
 
 ## Data Generated

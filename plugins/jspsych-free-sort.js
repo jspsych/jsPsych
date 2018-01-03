@@ -51,7 +51,7 @@ jsPsych.plugins['free-sort'] = (function() {
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
-        default: '',
+        default: null,
         description: 'It can be used to provide a reminder about the action the subject is supposed to take.'
       },
       prompt_location: {
@@ -76,7 +76,7 @@ jsPsych.plugins['free-sort'] = (function() {
 
     var html = "";
     // check if there is a prompt and if it is shown above
-    if (trial.prompt && trial.prompt_location == "above") {
+    if (trial.prompt !== null && trial.prompt_location == "above") {
       html += trial.prompt;
     }
 
@@ -87,7 +87,7 @@ jsPsych.plugins['free-sort'] = (function() {
       '></div>';
 
     // check if prompt exists and if it is shown below
-    if (trial.prompt && trial.prompt_location == "below") {
+    if (trial.prompt !== null && trial.prompt_location == "below") {
       html += trial.prompt;
     }
 

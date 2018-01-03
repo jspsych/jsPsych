@@ -14,10 +14,10 @@ grid_square_size | numeric | 100 | The width and height in pixels of each square
 target_color | hex color code | `#999` | The color of the target square.
 response_ends_trial | boolean | `true` | If true, the trial ends after a key press. Feedback is displayed if `show_response_feedback` is true.
 pre_target_duration | numeric | 0 | The number of milliseconds to display the grid *before* the target changes color.
-trial_duration | numeric | -1 | The maximum length of time of the trial, not including feedback.
+trial_duration | numeric | null | The maximum length of time of the trial, not including feedback.
 fade_duration | numeric | -1 | If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds.
 allow_nontarget_responses | boolean | false | If true, the user can make nontarget response.
-prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which keys to press).
+prompt | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which keys to press).
 
 ## Data Generated
 

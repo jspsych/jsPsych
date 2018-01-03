@@ -40,7 +40,7 @@ jsPsych.plugins['xab-image'] = (function() {
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
-        default: '',
+        default: null,
         description: 'Any content here will be displayed below the stimulus.'
       },
       x_duration: {
@@ -58,13 +58,13 @@ jsPsych.plugins['xab-image'] = (function() {
       ab_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'AB duration',
-        default: -1,
+        default: null,
         description: 'How long to show A and B in milliseconds.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Trial duration',
-        default: -1,
+        default: null,
         description: 'The maximum duration to wait for a response.'
       }
     }
@@ -121,7 +121,7 @@ jsPsych.plugins['xab-image'] = (function() {
       display_element.innerHTML += '<img class="jspsych-xab-stimulus left" src="'+images[0]+'"></img>';
       display_element.innerHTML += '<img class="jspsych-xab-stimulus right" src="'+images[1]+'"></img>';
 
-      if (trial.prompt !== "") {
+      if (trial.prompt !== null) {
         display_element.innerHTML += trial.prompt;
       }
 
@@ -136,12 +136,12 @@ jsPsych.plugins['xab-image'] = (function() {
       }
 
       // if trial_duration > 0, then we end the trial after trial_duration milliseconds
-      if (trial.trial_duration > 0) {
+      if (trial.trial_duration !== null) {
         jsPsych.pluginAPI.setTimeout(function() {
           end_trial({
-            rt: -1,
+            rt: null,
             correct: false,
-            key: -1
+            key: null
           });
         }, trial.trial_duration);
       }

@@ -40,13 +40,13 @@ jsPsych.plugins["audio-button-response"] = (function() {
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
-        default: '',
+        default: null,
         description: 'Any content here will be displayed below the stimulus.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Trial duration',
-        default: -1,
+        default: null,
         description: 'The maximum duration to wait for a response.'
       },
       margin_vertical: {
@@ -125,14 +125,14 @@ jsPsych.plugins["audio-button-response"] = (function() {
     }
 
     //show prompt if there is one
-    if (trial.prompt !== "") {
+    if (trial.prompt !== null) {
       display_element.insertAdjacentHTML('beforeend', trial.prompt);
     }
 
     // store response
     var response = {
-      rt: -1,
-      button: -1
+      rt: null,
+      button: null
     };
 
     // start time
@@ -201,7 +201,7 @@ jsPsych.plugins["audio-button-response"] = (function() {
     }
 
     // end trial if time limit is set
-    if (trial.trial_duration > 0) {
+    if (trial.trial_duration !== null) {
       jsPsych.pluginAPI.setTimeout(function() {
         end_trial();
       }, trial.trial_duration);

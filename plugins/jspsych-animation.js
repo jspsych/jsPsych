@@ -50,7 +50,7 @@ jsPsych.plugins.animation = (function() {
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
-        default: '',
+        default: null,
         description: 'Any content here will be displayed below stimulus.'
       }
     }
@@ -96,7 +96,7 @@ jsPsych.plugins.animation = (function() {
         "time": (new Date()).getTime() - startTime
       });
 
-      if (trial.prompt !== "") {
+      if (trial.prompt !== null) {
         display_element.innerHTML += trial.prompt;
       }
 

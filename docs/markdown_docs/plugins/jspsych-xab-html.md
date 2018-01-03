@@ -11,11 +11,11 @@ Parameter | Type | Default Value | Description
 stimuli | array | *undefined* | Array of two or three elements. If it is two elements, then the plugin will show the first element as X and as the target during the A/B portion (the second element will be the foil). If it is three elements, then the first is X the second is the target (A) and the third is the foil (B). This is useful if X and A are not identical, but A is still the correct choice (e.g., a categorization experiment where the goal is to pick the item that is in the same category). Stimuli are html strings.
 left_key | numeric or string | 'Q' | Which key the subject should press to indicate that the target is on the left side.
 right_key | numeric or string | 'P' | Which key the subject should press to indicate that the target is on the right side.
-prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
+prompt | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
 timing_x | numeric | 1000 | How long to show the X stimulus for in milliseconds.
 timing_xab_gap | numeric | 1000 | How long to show a blank screen in between X and AB in milliseconds.
 timing_ab | numeric | -1 | How long to show A and B in milliseconds. If the value of this parameter is -1, then the stimuli will remain on the screen until a response is given.
-timing_response | numeric | -1 | The maximum duration to wait for a response, measured from the onset of the AB portion of the trial. If -1, then the trial will wait indefinitely for a response.
+timing_response | numeric | -1 | The maximum duration to wait for a response, measured from the onset of the AB portion of the trial. If null, then the trial will wait indefinitely for a response.
 
 ## Data Generated
 

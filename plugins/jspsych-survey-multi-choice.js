@@ -43,7 +43,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       preamble: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Preamble',
-        default: '',
+        default: null,
         description: 'HTML formatted string to display at the top of the page above all the questions.'
       },
       button_label: {
@@ -79,8 +79,9 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     var trial_form = display_element.querySelector("#" + trial_form_id);
     // show preamble text
     var preamble_id_name = _join(plugin_id_name, 'preamble');
-    trial_form.innerHTML += '<div id="'+preamble_id_name+'" class="'+preamble_id_name+'">'+trial.preamble+'</div>';
-
+    if(trial.preamble !== null){
+      trial_form.innerHTML += '<div id="'+preamble_id_name+'" class="'+preamble_id_name+'">'+trial.preamble+'</div>';
+    }
     // add multiple-choice questions
     for (var i = 0; i < trial.questions.length; i++) {
         // create question container

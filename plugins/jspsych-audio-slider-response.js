@@ -54,13 +54,13 @@ jsPsych.plugins['audio-slider-response'] = (function() {
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
-        default: '',
+        default: null,
         description: 'Any content here will be displayed below the slider.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Trial duration',
-        default: -1,
+        default: null,
         description: 'How long to show the trial.'
       },
       response_ends_trial: {
@@ -111,7 +111,9 @@ jsPsych.plugins['audio-slider-response'] = (function() {
     html += '</div>';
     html += '</div>';
 
-    html += trial.prompt;
+		if (trial.prompt !== null){
+	    html += trial.prompt;
+		}
 
     // add submit button
     html += '<button id="jspsych-audio-slider-response-next" class="jspsych-btn">'+trial.button_label+'</button>';
@@ -119,8 +121,8 @@ jsPsych.plugins['audio-slider-response'] = (function() {
     display_element.innerHTML = html;
 
     var response = {
-      rt: -1,
-      response: -1
+      rt: null,
+      response: null
     };
 
     display_element.querySelector('#jspsych-audio-slider-response-next').addEventListener('click', function() {
@@ -177,7 +179,7 @@ jsPsych.plugins['audio-slider-response'] = (function() {
     }
 
     // end trial if trial_duration is set
-    if (trial.trial_duration > 0) {
+    if (trial.trial_duration !== null) {
       jsPsych.pluginAPI.setTimeout(function() {
         end_trial();
       }, trial.trial_duration);

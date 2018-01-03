@@ -49,19 +49,19 @@ jsPsych.plugins.video = (function() {
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
-        default: '',
+        default: null,
         description: 'Any content here will be displayed below the video content.'
       },
       start: {
         type: jsPsych.plugins.parameterType.FLOAT,
         pretty_name: 'Start',
-        default: false,
+        default: null,
         description: 'Time to start the clip.'
       },
       stop: {
         type: jsPsych.plugins.parameterType.FLOAT,
         pretty_name: 'Stop',
-        default: false,
+        default: null,
         description: 'Time to stop the clip.'
       }
     }
@@ -90,13 +90,13 @@ jsPsych.plugins.video = (function() {
       // adding start stop parameters if specified
       video_html+='<source src="'+trial.sources[i]
 
-      if (trial.start) {
+      if (trial.start !== null) {
         video_html+= '#t=' + trial.start;
       } else {
         video_html+= '#t=0';
       }
 
-      if (trial.stop) {
+      if (trial.stop !== null) {
         video_html+= ',' + trial.stop
       }
 
@@ -105,7 +105,7 @@ jsPsych.plugins.video = (function() {
     video_html +="</video>"
 
     //show prompt if there is one
-    if (trial.prompt !== "") {
+    if (trial.prompt !== null) {
       video_html += trial.prompt;
     }
 
@@ -117,8 +117,8 @@ jsPsych.plugins.video = (function() {
 
     // event handler to set timeout to end trial if video is stopped
     display_element.querySelector('#jspsych-video-player').onplay = function(){
-      if(trial.stop != false){
-        if(trial.start == false){
+      if(trial.stop !== null){
+        if(trial.start == null){
           trial.start = 0;
         }
         jsPsych.pluginAPI.setTimeout(end_trial, (trial.stop-trial.start)*1000);

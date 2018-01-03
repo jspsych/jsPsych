@@ -41,19 +41,19 @@ jsPsych.plugins["image-button-response"] = (function() {
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
-        default: '',
+        default: null,
         description: 'Any content here will be displayed under the button.'
       },
       stimulus_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Stimulus duration',
-        default: -1,
+        default: null,
         description: 'How long to hide the stimulus.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Trial duration',
-        default: -1,
+        default: null,
         description: 'How long to show the trial.'
       },
       margin_vertical: {
@@ -67,7 +67,7 @@ jsPsych.plugins["image-button-response"] = (function() {
         pretty_name: 'Margin horizontal',
         default: '8px',
         description: 'The horizontal margin of the button.'
-      },  
+      },
       response_ends_trial: {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Response ends trial',
@@ -115,14 +115,14 @@ jsPsych.plugins["image-button-response"] = (function() {
     }
 
     //show prompt if there is one
-    if (trial.prompt !== "") {
+    if (trial.prompt !== null) {
       display_element.insertAdjacentHTML('beforeend', trial.prompt);
     }
 
     // store response
     var response = {
-      rt: -1,
-      button: -1
+      rt: null,
+      button: null
     };
 
     // start time
@@ -177,14 +177,14 @@ jsPsych.plugins["image-button-response"] = (function() {
     start_time = Date.now();
 
     // hide image if timing is set
-    if (trial.stimulus_duration > 0) {
+    if (trial.stimulus_duration !== null) {
       jsPsych.pluginAPI.setTimeout(function() {
         display_element.querySelector('#jspsych-image-button-response-stimulus').style.visibility = 'hidden';
       }, trial.stimulus_duration);
     }
 
     // end trial if time limit is set
-    if (trial.trial_duration > 0) {
+    if (trial.trial_duration !== null) {
       jsPsych.pluginAPI.setTimeout(function() {
         end_trial();
       }, trial.trial_duration);

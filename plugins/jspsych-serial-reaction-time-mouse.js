@@ -57,13 +57,13 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Trial duration',
-        default: -1,
+        default: null,
         description: 'How long to show the trial'
       },
       fade_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Fade duration',
-        default: -1,
+        default: null,
         description: 'If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds.'
       },
       allow_nontarget_responses: {
@@ -71,11 +71,11 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
         pretty_name: 'Allow nontarget response',
         default: false,
         description: 'If true, then user can make nontarget response.'
-      }, 
+      },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
-        default: '',
+        default: null,
         description: 'Any content here will be displayed below the stimulus'
       },
     }
@@ -85,9 +85,9 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
 
     var startTime = -1;
     var response = {
-      rt: -1,
-      row: -1,
-      column: -1
+      rt: null,
+      row: null,
+      column: null
     }
 
     // display stimulus
@@ -104,7 +104,7 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
 		}
 
 		//show prompt if there is one
-    if (trial.prompt !== "") {
+    if (trial.prompt !== null) {
       display_element.innerHTML += trial.prompt;
     }
 
@@ -131,14 +131,14 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
 
       startTime = Date.now();
 
-      if(trial.fade_duration == -1){
+      if(trial.fade_duration == null){
         display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.backgroundColor = trial.target_color;
       } else {
         display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.transition = "background-color "+trial.fade_duration;
         display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.backgroundColor = trial.target_color;
       }
 
-			if(trial.trial_duration > -1){
+			if(trial.trial_duration !== null){
 				jsPsych.pluginAPI.setTimeout(endTrial, trial.trial_duration);
 			}
 
@@ -171,7 +171,7 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
     function after_response(info) {
 
 			// only record first response
-      response = response.rt == -1 ? info : response;
+      response = response.rt == null ? info : response;
 
       if (trial.response_ends_trial) {
         endTrial();

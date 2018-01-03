@@ -20,7 +20,7 @@ fixation_size | array | `[16, 16]` | Two element array indicating the height and
 circle_diameter | numeric | 250 | The diameter of the search array circle in pixels.
 target_present_key | numeric | 74 | The key to press if the target is present in the search array.
 target_absent_key | numeric | 70 | The key to press if the target is not present in the search array.
-trial_duration | numeric | -1 | The maximum amount of time the subject is allowed to search before the trial will continue. A value of -1 will allow the subject to search indefinitely.
+trial_duration | numeric | null | The maximum amount of time the subject is allowed to search before the trial will continue. A value of -1 will allow the subject to search indefinitely.
 fixation_duration | numeric | 1000 | How long to show the fixation image for before the search array (in milliseconds).
 
 ## Data Generated

@@ -64,7 +64,7 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Trial duration',
-        default: -1,
+        default: null,
         description: 'How long to show the trial.'
       },
       show_response_feedback: {
@@ -82,13 +82,13 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
       fade_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Fade duration',
-        default: -1,
+        default: null,
         description: 'If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
-        default: '',
+        default: null,
         no_function: false,
         description: ' Any content here will be displayed below the stimulus.'
       },
@@ -116,20 +116,20 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 		}
 
 		//show prompt if there is one
-    if (trial.prompt !== "") {
+    if (trial.prompt !== null) {
       display_element.innerHTML += trial.prompt;
     }
 
 		var keyboardListener = {};
 
     var response = {
-      rt: -1,
+      rt: null,
       key: false,
       correct: false
     }
 
 		function showTarget(){
-      if(trial.fade_duration == -1){
+      if(trial.fade_duration == null){
         display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.backgroundColor = trial.target_color;
       } else {
         display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.transition = "background-color "+trial.fade_duration;
@@ -142,14 +142,14 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
         allow_held_key: false
       });
 
-			if(trial.trial_duration > -1){
+			if(trial.trial_duration > null){
 				jsPsych.pluginAPI.setTimeout(showFeedback, trial.trial_duration);
 			}
 
 		}
 
     function showFeedback() {
-      if(response.rt == -1 || trial.show_response_feedback == false){
+      if(response.rt == null || trial.show_response_feedback == false){
         endTrial();
       } else {
         var color = response.correct ? '#0f0' : '#f00';

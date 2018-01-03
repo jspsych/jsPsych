@@ -39,7 +39,7 @@ jsPsych.plugins['survey-likert'] = (function() {
       preamble: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Preamble',
-        default: '',
+        default: null,
         description: 'String to display at top of the page.'
       },
       button_label: {
@@ -67,8 +67,9 @@ jsPsych.plugins['survey-likert'] = (function() {
     html += '</style>';
 
     // show preamble text
-    html += '<div id="jspsych-survey-likert-preamble" class="jspsych-survey-likert-preamble">'+trial.preamble+'</div>';
-
+    if(trial.preamble !== null){
+      html += '<div id="jspsych-survey-likert-preamble" class="jspsych-survey-likert-preamble">'+trial.preamble+'</div>';
+    }
     html += '<form id="jspsych-survey-likert-form">';
 
     // add likert scale questions

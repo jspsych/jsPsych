@@ -31,7 +31,7 @@ jsPsych.plugins["resize"] = (function() {
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
-        default: '',
+        default: null,
         description: 'The content displayed below the resizable box and above the button.'
       },
       pixels_per_unit: {
@@ -72,7 +72,9 @@ jsPsych.plugins["resize"] = (function() {
     var html ='<div id="jspsych-resize-div" style="border: 2px solid steelblue; height: '+start_div_height+'px; width:'+start_div_width+'px; margin: 7px auto; background-color: lightsteelblue; position: relative;">';
     html += '<div id="jspsych-resize-handle" style="cursor: nwse-resize; background-color: steelblue; width: 10px; height: 10px; border: 2px solid lightsteelblue; position: absolute; bottom: 0; right: 0;"></div>';
     html += '</div>';
-    html += trial.prompt;
+    if (trial.prompt !== null){
+      html += trial.prompt;
+    }
     html += '<a class="jspsych-btn" id="jspsych-resize-btn">'+trial.button_label+'</a>';
 
     // render

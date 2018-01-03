@@ -15,7 +15,7 @@ different_key | numeric or string | 'P' | The key that subjects should press to 
 timing_first_stim | numeric | 1000 | How long to show the first stimulus for in milliseconds. If the value of this parameter is `-1` then the stimulus will be shown until the subject presses any key.
 timing_gap | numeric | 500 | How long to show a blank screen in between the two stimuli.
 timing_second_stim | numeric | 1000 | How long to show the second stimulus for in milliseconds. If the value of this parameter is `-1` then the stimulus will be shown until the subject responds.
-prompt | string | "" | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
+prompt | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
 
 
 ## Data Generated

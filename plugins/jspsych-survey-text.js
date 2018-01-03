@@ -29,7 +29,7 @@ jsPsych.plugins['survey-text'] = (function() {
           value: {type: jsPsych.plugins.parameterType.STRING,
                   pretty_name: 'Value',
                   array: true,
-                  default: '',
+                  default: null,
                   description: 'The strings will be used to populate the response fields with editable answers.'},
           rows: {type: jsPsych.plugins.parameterType.INT,
                  pretty_name: 'Rows',
@@ -46,7 +46,7 @@ jsPsych.plugins['survey-text'] = (function() {
       preamble: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Preamble',
-        default: '',
+        default: null,
         description: 'HTML formatted string to display at the top of the page above all the questions.'
       },
       button_label: {
@@ -81,8 +81,9 @@ jsPsych.plugins['survey-text'] = (function() {
     }
 
     // show preamble text
-    var html = '<div id="jspsych-survey-text-preamble" class="jspsych-survey-text-preamble">'+trial.preamble+'</div>';
-
+    if(trial.preamble !== null){
+      var html = '<div id="jspsych-survey-text-preamble" class="jspsych-survey-text-preamble">'+trial.preamble+'</div>';
+    }
     // add questions
     for (var i = 0; i < trial.questions.length; i++) {
       html += '<div id="jspsych-survey-text-"'+i+'" class="jspsych-survey-text-question" style="margin: 2em 0em;">';

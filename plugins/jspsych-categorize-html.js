@@ -36,7 +36,7 @@ jsPsych.plugins['categorize-html'] = (function() {
       text_answer: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Text answer',
-        default: '',
+        default: null,
         description: 'Label that is associated with the correct answer.'
       },
       correct_text: {
@@ -54,7 +54,7 @@ jsPsych.plugins['categorize-html'] = (function() {
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
-        default: '',
+        default: null,
         description: 'Any content here will be displayed below the stimulus.'
       },
       force_correct_button_press: {
@@ -84,13 +84,13 @@ jsPsych.plugins['categorize-html'] = (function() {
       stimulus_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Stimulus duration',
-        default: -1,
+        default: null,
         description: 'How long to hide stimulus.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Trial duration',
-        default: -1,
+        default: null,
         description: 'How long to show trial'
       },
       feedback_duration: {
@@ -107,14 +107,14 @@ jsPsych.plugins['categorize-html'] = (function() {
     display_element.innerHTML = '<div id="jspsych-categorize-html-stimulus" class="jspsych-categorize-html-stimulus">'+trial.stimulus+'</div>';
 
     // hide image after time if the timing parameter is set
-    if (trial.stimulus_duration > 0) {
+    if (trial.stimulus_duration !== null) {
       jsPsych.pluginAPI.setTimeout(function() {
         display_element.querySelector('#jspsych-categorize-html-stimulus').style.visibility = 'hidden';
       }, trial.stimulus_duration);
     }
 
     // if prompt is set, show prompt
-    if (trial.prompt !== "") {
+    if (trial.prompt !== null) {
       display_element.innerHTML += trial.prompt;
     }
 
@@ -144,7 +144,7 @@ jsPsych.plugins['categorize-html'] = (function() {
 
       display_element.innerHTML = '';
 
-      var timeout = info.rt == -1;
+      var timeout = info.rt == null;
       doFeedback(correct, timeout);
     }
 
@@ -156,11 +156,11 @@ jsPsych.plugins['categorize-html'] = (function() {
       allow_held_key: false
     });
 
-    if (trial.trial_duration > 0) {
+    if (trial.trial_duration !== null) {
       jsPsych.pluginAPI.setTimeout(function() {
         after_response({
-          key: -1,
-          rt: -1
+          key: null,
+          rt: null
         });
       }, trial.trial_duration);
     }
