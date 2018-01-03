@@ -24,12 +24,14 @@
       {
         type: 'serial-reaction-time',
         target: jsPsych.timelineVariable('target1'),
-        grid_square_size: 80
+        grid_square_size: 80,
+        prompt: "<p>Press the key that corresponds to the dark box (use 3, 5, 7, 9)</p>"
       },
       {
         type: 'serial-reaction-time',
         target: jsPsych.timelineVariable('target2'),
-        grid_square_size: 80
+        grid_square_size: 80,
+        prompt: "<p>Press the key that corresponds to the dark box (use 3, 5, 7, 9)</p>"
       }
     ],
     timeline_variables: [
@@ -39,11 +41,6 @@
     randomize_order: true,
     repetitions: 10
   }
-
-  // var instructions = {
-  //   type: 'html-keyboard-response',
-  //   stimulus: 'Four boxes will be shown on the screen. Press the key associated with the box that is dark. The keys are 3, 5, 7, and 9. Press any key to start.'
-  // }
 
   jsPsych.init({
     timeline: [timeline],
