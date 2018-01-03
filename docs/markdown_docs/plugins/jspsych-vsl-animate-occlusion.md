@@ -37,12 +37,19 @@ responses | JSON string | A JSON encoded array containing all response informati
 #### Displaying a simple sequence.
 
 ```javascript
-var images = ["img/1.gif","img/2.gif","img/3.gif","img/4.gif","img/5.gif","img/6.gif","img/7.gif","img/8.gif","img/9.gif","img/10.gif"];
-
-
-// create vsl block for jspsych
-var vsl_block = {
+var trial = {
   type: 'vsl-animate-occlusion',
-  stimuli: images
-};
+  stimuli: [
+    "img/1.gif",
+    "img/2.gif",
+    "img/3.gif",
+    "img/4.gif",
+    "img/5.gif",
+    "img/6.gif",
+    "img/7.gif",
+    "img/8.gif",
+    "img/9.gif",
+    "img/10.gif"
+  ]
+}
 ```

@@ -4,7 +4,6 @@ The VSL (visual statistical learning) grid scene plugin displays images arranged
 
 Fiser, J., & Aslin, R. N. (2001). Unsupervised statistical learning of higher-order spatial structures from visual scenes. *Psychological Science, 12*(6), 499-504.
 
-
 ## Parameters
 
 Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
@@ -55,9 +54,7 @@ var scene = [
   ["img/5.gif", "img/4.gif", 0]
 ]
 
-
-// create vsl block for jspsych
-var vsl_block = {
+var trial = {
     type: 'vsl-grid-scene',
     stimuli: scene
 };

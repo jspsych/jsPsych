@@ -39,42 +39,15 @@ key_press_stim1 | numeric | Indicates which key the subject pressed to continue.
 
 ## Examples
 
-#### Presenting two different emotional expressions
+#### Basic example
 
 ```javascript
-    var block = {
-      type: 'same-different',
-      stimuli: ['<p>Climbing</p>y', '<p>Walking</p>'],
-      prompt: "<p>Press S if the texts imply the same amount of physical exertion. Press D if the texts imply different amount of physical exertion.</p>",
-      same_key: 'S',
-      different_key: 'D',
-      answer: 'different'
-    }
-
-    jsPsych.init({
-      timeline: [block],
-      on_finish: function() {
-        jsPsych.data.displayData();
-      }
-    });
-```
-
-#### Presenting the same emotional expression
-
-```javascript
-    var block = {
-      type: 'same-different',
-      stimuli: ['Running', 'Swimming'],
-      prompt: "<pPress S if the texts imply the same amount of physical exertion. Press D if the texts imply different amount of physical exertion.</p>",
-      same_key: 'S',
-      different_key: 'D',
-      answer: 'same'
-    }
-
-    jsPsych.init({
-      timeline: [block],
-      on_finish: function() {
-        jsPsych.data.displayData();
-      }
-    });
+  var trial = {
+    type: 'same-different',
+    stimuli: ['<p>Climbing</p>', '<p>Walking</p>'],
+    prompt: "<p>Press S if the texts imply the same amount of physical exertion. Press D if the texts imply different amount of physical exertion.</p>",
+    same_key: 'S',
+    different_key: 'D',
+    answer: 'different'
+  }
 ```

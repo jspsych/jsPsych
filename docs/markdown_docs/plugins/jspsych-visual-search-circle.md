@@ -41,45 +41,12 @@ locations | JSON string | JSON-encoded array where each element of the array is 
 #### Search for the backward N
 
 ```javascript
-    var intro = {
-      type: 'html-keyboard-response',
-      stimulus: 'Press J if there is a backwards N. If there is no backwards N press F.'
-    }
-
-    var trial_1 = {
-      target_present: true,
-      set_size: 4
-    }
-
-    var trial_2 = {
-      target_present: true,
-      set_size: 3
-    }
-
-    var trial_3 = {
-      target_present: false,
-      set_size: 6
-    }
-
-    var trial_4 = {
-      target_present: false,
-      foil: ['img/1.gif', 'img/2.gif', 'img/3.gif'],
-      set_size: 3
-    }
-
-
-    var trials = {
-      type: 'visual-search-circle',
-      target: 'img/backwardN.gif',
-      foil: 'img/normalN.gif',
-      fixation_image: 'img/fixation.gif',
-      timeline: [trial_1, trial_2, trial_3, trial_4]
-    };
-
-    jsPsych.init({
-      timeline: [intro, trials],
-      on_finish: function() {
-        jsPsych.data.displayData();
-      }
-    });
+var trial_1 = {
+  type: 'visual-search-circle',
+  target: 'img/backwardN.gif',
+  foil: 'img/normalN.gif',
+  fixation_image: 'img/fixation.gif',
+  target_present: true,
+  set_size: 4
+}
 ```
