@@ -12,18 +12,18 @@ jsPsych.plugins['same-different-image'] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('same-different', 'stimuli', 'image')
+  jsPsych.pluginAPI.registerPreload('same-different-image', 'stimuli', 'image')
 
   plugin.info = {
     name: 'same-different-image',
     description: '',
     parameters: {
       stimuli: {
-        type: jsPsych.plugins.parameterType.HTML_STRING,
+        type: jsPsych.plugins.parameterType.IMAGE,
         pretty_name: 'Stimuli',
         default: undefined,
         array: true,
-        description: 'The image to be displayed.'
+        description: 'The images to be displayed.'
       },
       answer: {
         type: jsPsych.plugins.parameterType.SELECT,
@@ -104,18 +104,18 @@ jsPsych.plugins['same-different-image'] = (function() {
 
     function showSecondStim() {
 
-      display_element.innerHTML += '<img class="jspsych-same-different-stimulus" src="'+trial.stimuli[1]+'"></img>';
+      var html = '<img class="jspsych-same-different-stimulus" src="'+trial.stimuli[1]+'"></img>';
+      //show prompt
+      if (trial.prompt !== null) {
+        html += trial.prompt;
+      }
 
+      display_element.innerHTML = html;
 
       if (trial.second_stim_duration > 0) {
         jsPsych.pluginAPI.setTimeout(function() {
           display_element.querySelector('.jspsych-same-different-stimulus').style.visibility = 'hidden';
         }, trial.second_stim_duration);
-      }
-
-      //show prompt here
-      if (trial.prompt !== null) {
-        display_element.innerHTML += trial.prompt;
       }
 
       var after_response = function(info) {

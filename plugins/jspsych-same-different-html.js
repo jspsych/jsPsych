@@ -102,8 +102,12 @@ jsPsych.plugins['same-different-image'] = (function() {
 
     function showSecondStim() {
 
-      display_element.innerHTML += '<div class="jspsych-same-different-stimulus">'+trial.stimuli[1]+'</div>';
-
+      var html = '<div class="jspsych-same-different-stimulus">'+trial.stimuli[1]+'</div>';
+      //show prompt here
+      if (trial.prompt !== null) {
+        html += trial.prompt;
+      }
+      display_element.innerHTML = html;
 
       if (trial.second_stim_duration > 0) {
         jsPsych.pluginAPI.setTimeout(function() {
@@ -111,10 +115,7 @@ jsPsych.plugins['same-different-image'] = (function() {
         }, trial.second_stim_duration);
       }
 
-      //show prompt here
-      if (trial.prompt !== null) {
-        display_element.innerHTML += trial.prompt;
-      }
+
 
       var after_response = function(info) {
 
