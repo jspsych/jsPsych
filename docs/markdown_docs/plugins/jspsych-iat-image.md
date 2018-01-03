@@ -31,7 +31,7 @@ Name | Type | Value
 stimulus | string | Either the path to the image file or the string containing the HTML formatted content that the subject saw on this trial.
 key_press | numeric | Indicates which key the subject pressed. The value is the [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) corresponding to the subject's response.
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.
-correct | boolean | Boolean of whether the user's key press was correct for the given image or incorrect.
+correct | boolean | boolean of whether the user's key press was correct for the given image or incorrect.
 
 ## Examples
 

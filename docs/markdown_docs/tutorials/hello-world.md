@@ -6,23 +6,23 @@ In the long tradition of **"Hello world!"** examples, this tutorial creates an e
 
 Start by downloading the jsPsych library. The most recent version can always be found on the [GitHub releases page](https://github.com/jodeleeuw/jsPsych/releases).
 
-*Note: the images below show version 4.2, but the process is the same for the most recent version.*
+*Note: the image below shows version 4.2, but the process is the same for the most recent version.*
 
 ![releasespage](/img/githubreleases.jpg)
 
 ## Step 2: Create a folder to store your experiment files
 
-Create a folder on your computer to put the experiment files in. Once you've created the folder, open the downloaded archive from step 1, and move the extracted folder (called `jspsych-6.0` if using v6.0 of jsPsych) into the experiment folder. Here's what it looks like on a Mac:
+Create a folder on your computer to put the experiment files in. Once you've created the folder, open the downloaded archive from step 1, and move the extracted folder (called `jspsych-6.0` if using v6.0 of jsPsych) into the experiment folder. Here's what it looks like on a Windows machine:
 
 ![folder setup](/img/folder-setup.png)
 
 ## Step 3: Create a new HTML file
 
-To edit jsPsych code, you'll need a programming-friendly text editor. Some free options are:
+To edit jsPsych code you'll need a programming-friendly text editor. Some free options are:
 
-* [Atom](https://atom.io) (Windows & Mac OSX)
+* [Atom](https://atom.io) (Windows, OSX, Linux)
 * [Notepad++](http://notepad-plus-plus.org/) (Windows)
-* [TextMate](http://macromates.com/) (Mac OSX)
+* [TextMate](http://macromates.com/) (OSX)
 
 Once you've got a text editor that you like, create a new file in the experiment folder called `experiment.html`
 

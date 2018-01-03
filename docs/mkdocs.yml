@@ -1,12 +1,21 @@
 site_name: jsPsych
-theme: readthedocs
-repo_url: 'https://github.com/jodeleeuw/jsPsych'
-repo_name: 'GitHub'
-extra_css:
-- css/extra.css
-extra_javascript:
-- js/extra.js
-- js/analytics.js
+theme:
+  name: 'material'
+  palette:
+    primary: 'green'
+    accent: 'orange'
+  logo: 'img/jspsych-logo-no-text-mono.svg'
+google_analytics:
+  - 'UA-50563838-1'
+  - 'auto'
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+repo_url: 'https://github.com/jspsych/jsPsych'
+repo_name: 'jspsych/jspsych'
 docs_dir: markdown_docs
 pages:
 - Introduction: 'index.md'
