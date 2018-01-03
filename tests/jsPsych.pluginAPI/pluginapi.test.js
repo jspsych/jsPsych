@@ -91,6 +91,17 @@ describe('#cancelAllKeyboardResponses', function(){
   });
 });
 
+describe('#compareKeys', function(){
+  test('should compare keys regardless of type', function(){
+    expect(jsPsych.pluginAPI.compareKeys('q', 81)).toBe(true);
+    expect(jsPsych.pluginAPI.compareKeys(81, 81)).toBe(true);
+    expect(jsPsych.pluginAPI.compareKeys('q', 'Q')).toBe(true);
+    expect(jsPsych.pluginAPI.compareKeys(80, 81)).toBe(false);
+    expect(jsPsych.pluginAPI.compareKeys('q','1')).toBe(false);
+    expect(jsPsych.pluginAPI.compareKeys('q',80)).toBe(false);
+  });
+});
+
 describe('#convertKeyCharacterToKeyCode', function(){
   test('should return the keyCode for a particular character', function(){
     expect(jsPsych.pluginAPI.convertKeyCharacterToKeyCode('q')).toBe(81);

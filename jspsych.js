@@ -1967,6 +1967,17 @@ jsPsych.pluginAPI = (function() {
     return undefined;
   }
 
+  module.compareKeys = function(key1, key2){
+    // convert to numeric values no matter what
+    if(typeof key1 == 'string') {
+      key1 = module.convertKeyCharacterToKeyCode(key1);
+    }
+    if(typeof key2 == 'string') {
+      key2 = module.convertKeyCharacterToKeyCode(key2);
+    }
+    return key1 == key2;
+  }
+
   var keylookup = {
     'backspace': 8,
     'tab': 9,
