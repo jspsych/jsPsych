@@ -325,7 +325,7 @@ Returns nothing.
 
 ### Description
 
-Use this function to preload audio files that are not part of a plugin with automatic preloading. Audio files in official plugins will automatically preload. See [Media Preloading](../features/media-preloading.md) for more information.
+Use this function to preload audio files that are not part of a plugin with automatic preloading. Audio files in official plugins will automatically preload. See [Media Preloading](../overview/media-preloading.md) for more information.
 
 It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the files are loaded. Thus, it is possible that an audio file would be required for playing before it is done preloading. The `callback_complete` function will only execute after all the audio files are loaded, and can be used to control the flow of the experiment (e.g., by starting the experiment in the `callback_complete` function).
 
@@ -392,7 +392,7 @@ Returns nothing.
 
 ### Description
 
-Use this function to preload image files that are not part of a plugin with automatic preloading. Image files in official plugins will automatically preload. See [Media Preloading](../features/media-preloading.md) for more information.
+Use this function to preload image files that are not part of a plugin with automatic preloading. Image files in official plugins will automatically preload. See [Media Preloading](../overview/media-preloading.md) for more information.
 
 It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the images are loaded. Thus, it is possible that an image would be required for display before it is done preloading. The `callback_complete` function will only execute after all the images are loaded, and can be used to control the flow of the experiment (e.g., by starting the experiment in the `callback_complete` function).
 

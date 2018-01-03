@@ -42,8 +42,8 @@ In addition, there is a set of parameters that can be specified for any plugin.
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 post_trial_gap | numeric | 1000 | Sets the time, in milliseconds, between the current trial and the next trial.
-on_finish | function | *undefined* | A callback function to execute when the trial finishes. See [this page](../features/callbacks.md) for more details.
-data | object | *undefined* | An object containing additional data to store for the trial. See [this page](../features/data.md) for more details.
+on_finish | function | *undefined* | A callback function to execute when the trial finishes. See [this page](../overview/callbacks.md) for more details.
+data | object | *undefined* | An object containing additional data to store for the trial. See [this page](../overview/data.md) for more details.
 
 ## Data collected by plugins
 

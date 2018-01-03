@@ -294,7 +294,7 @@ The settings object can contain several parameters. The only *required* paramete
 
 Parameter | Type | Description
 --------- | ---- | -----------
-timeline | array | An array containing the objects that describe the experiment timeline. See [Creating an Experiment: The Timeline](../features/timeline.md).
+timeline | array | An array containing the objects that describe the experiment timeline. See [Creating an Experiment: The Timeline](../overview/timeline.md).
 display_element | string | The ID of an HTML element to display the experiment in. If left blank, then jsPsych will use the `<body>` element to display content (creating it if necessary). You can override this parameter at the trial level as well by specifying a display_element property on any timeline.
 on_finish | function | Function to execute when the experiment ends.
 on_trial_start | function | Function to execute when a new trial begins.
@@ -302,7 +302,7 @@ on_trial_finish | function | Function to execute when a trial ends.
 on_data_update | function | Function to execute every time data is stored using the `jsPsych.data.write` method. All plugins use this method to save data (via a call to `jsPsych.finishTrial`, so this function runs every time a plugin stores new data.
 on_interaction_data_update | function | Function to execute every time a new interaction event occurs. Interaction events include clicking on a different window (blur), returning to the experiment window (focus), entering full screen mode (fullscreenenter), and exiting full screen mode (fullscreenexit).
 exclusions | object | Specifies restrictions on the browser the subject can use to complete the experiment. See list of options below.
-show_progress_bar | boolean | If true, then [a progress bar](../features/progress-bar.md) is shown at the top of the page.
+show_progress_bar | boolean | If true, then [a progress bar](../overview/progress-bar.md) is shown at the top of the page.
 auto_update_progress_bar | boolean | If true, then the progress bar at the top of the page will automatically update as every top-level timeline or trial is completed.
 show_preload_progress_bar | boolean | If true, then a progress bar is displayed while media files are automatically preloaded.
 preload_audio | array | An array of audio files to preload before starting the experiment.
