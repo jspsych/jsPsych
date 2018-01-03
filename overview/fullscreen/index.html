@@ -32,7 +32,7 @@
     
     
       
-        <title>Record Browser Interactions - jsPsych</title>
+        <title>Fullscreen Experiments - jsPsych</title>
       
     
     
@@ -94,7 +94,7 @@
                 jsPsych
               </span>
               <span class="md-header-nav__topic">
-                Record Browser Interactions
+                Fullscreen Experiments
               </span>
             
           
@@ -336,20 +336,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-      
-    
-    
-    <a href="./" title="Record Browser Interactions" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../record-browser-interactions/" title="Record Browser Interactions" class="md-nav__link">
       Record Browser Interactions
     </a>
-    
   </li>
 
         
@@ -369,11 +360,20 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../fullscreen/" title="Fullscreen Experiments" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+    <a href="./" title="Fullscreen Experiments" class="md-nav__link md-nav__link--active">
       Fullscreen Experiments
     </a>
+    
   </li>
 
         
@@ -1057,27 +1057,42 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/jspsych/jsPsych/edit/master/docs/features/record-browser-interactions.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/jspsych/jsPsych/edit/master/docs/overview/fullscreen.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="record-browser-interactions">Record browser interactions<a class="headerlink" href="#record-browser-interactions" title="Permanent link">&para;</a></h1>
-<p>Participants in an online experiment have the freedom to multitask while performing an experiment. jsPsych automatically records information about when the user clicks on a window that is not the experiment, and about when the user exits full screen mode if the experiment is running in full screen mode. This data is stored separately from the main experiment data, and can be accessed with <a href="../../core_library/jspsych-data/#jspsychdatagetinteractiondata">jsPsych.data.getInteractionData()</a>.</p>
-<p>Each time the user leaves the experiment window, returns to the experiment window, exits full screen mode, or enters full screen mode, the event is recorded in the interaction data. Each event has the following structure.</p>
-<div class="codehilite"><pre><span></span><span class="p">{</span>
-  <span class="nx">event</span><span class="o">:</span> <span class="s1">&#39;focus&#39;</span><span class="p">,</span> <span class="c1">// &#39;focus&#39; or &#39;blur&#39; or &#39;fullscreenenter&#39; or &#39;fullscreenexit&#39;</span>
-  <span class="nx">trial</span><span class="o">:</span> <span class="mi">12</span><span class="p">,</span> <span class="c1">// the index of the active trial when the event happened</span>
-  <span class="nx">time</span><span class="o">:</span> <span class="mi">1240543</span> <span class="c1">// time in ms since the start of the experiment</span>
-<span class="p">}</span>
-</pre></div>
+                <h1 id="fullscreen-experiments">Fullscreen Experiments<a class="headerlink" href="#fullscreen-experiments" title="Permanent link">&para;</a></h1>
+<p>You can run your experiment in fullscreen mode by using the jspsych-fullscreen plugin.</p>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[];</span>
 
+<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;fullscreen&#39;</span><span class="p">,</span>
+  <span class="nx">fullscreen_mode</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">});</span>
 
-<p>You can specify a custom function, in the jsPsych.init() method, that is called whenever one of these events occurs</p>
-<div class="codehilite"><pre><span></span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
-  <span class="nx">on_interaction_data_update</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
-  <span class="p">}</span>
+<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;This trial will be in fullscreen mode.&#39;</span>
+<span class="p">});</span>
+
+<span class="c1">// exit fullscreen mode</span>
+<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;fullscreen&#39;</span><span class="p">,</span>
+  <span class="nx">fullscreen_mode</span><span class="o">:</span> <span class="kc">false</span>
+<span class="p">});</span>
+
+<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;This trial will NOT be in fullscreen mode.&#39;</span>
+<span class="p">});</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span>
 <span class="p">});</span>
 </pre></div>
+
+
+<p>For security reasons, web browsers require that users initiate an action to launch fullscreen mode. The fullscreen plugin displays a button that the user must click to change the display to fullscreen.</p>
+<p>Safari does not support keyboard input when the browser is in fullscreen mode. Therefore, the function will not launch fullscreen mode on Safari. The experiment will ignore any trials using the fullscreen plugin in Safari.</p>
                 
                   
                 
@@ -1096,7 +1111,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../callbacks/" title="Event-related Callback Functions" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../media-preloading/" title="Media Preloading" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1105,19 +1120,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Event-related Callback Functions
+                Media Preloading
               </span>
             </div>
           </a>
         
         
-          <a href="../media-preloading/" title="Media Preloading" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../exclude-browser/" title="Exclude Participants Based on Browser Features" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Media Preloading
+                Exclude Participants Based on Browser Features
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

@@ -288,7 +288,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../features/timeline/" title="Creating an Experiment: The Timeline" class="md-nav__link">
+    <a href="../../overview/timeline/" title="Creating an Experiment: The Timeline" class="md-nav__link">
       Creating an Experiment: The Timeline
     </a>
   </li>
@@ -300,7 +300,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../features/trial/" title="Advanced Options for Trials" class="md-nav__link">
+    <a href="../../overview/trial/" title="Advanced Options for Trials" class="md-nav__link">
       Advanced Options for Trials
     </a>
   </li>
@@ -312,7 +312,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../features/data/" title="Data Storage, Aggregation, and Manipulation" class="md-nav__link">
+    <a href="../../overview/data/" title="Data Storage, Aggregation, and Manipulation" class="md-nav__link">
       Data Storage, Aggregation, and Manipulation
     </a>
   </li>
@@ -324,7 +324,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../features/callbacks/" title="Event-related Callback Functions" class="md-nav__link">
+    <a href="../../overview/callbacks/" title="Event-related Callback Functions" class="md-nav__link">
       Event-related Callback Functions
     </a>
   </li>
@@ -336,7 +336,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../features/record-browser-interactions/" title="Record Browser Interactions" class="md-nav__link">
+    <a href="../../overview/record-browser-interactions/" title="Record Browser Interactions" class="md-nav__link">
       Record Browser Interactions
     </a>
   </li>
@@ -348,7 +348,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../features/media-preloading/" title="Media Preloading" class="md-nav__link">
+    <a href="../../overview/media-preloading/" title="Media Preloading" class="md-nav__link">
       Media Preloading
     </a>
   </li>
@@ -360,7 +360,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../features/fullscreen/" title="Fullscreen Experiments" class="md-nav__link">
+    <a href="../../overview/fullscreen/" title="Fullscreen Experiments" class="md-nav__link">
       Fullscreen Experiments
     </a>
   </li>
@@ -372,7 +372,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../features/exclude-browser/" title="Exclude Participants Based on Browser Features" class="md-nav__link">
+    <a href="../../overview/exclude-browser/" title="Exclude Participants Based on Browser Features" class="md-nav__link">
       Exclude Participants Based on Browser Features
     </a>
   </li>
@@ -384,7 +384,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../features/progress-bar/" title="Automatic Progress Bar" class="md-nav__link">
+    <a href="../../overview/progress-bar/" title="Automatic Progress Bar" class="md-nav__link">
       Automatic Progress Bar
     </a>
   </li>
@@ -396,7 +396,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../features/mturk/" title="Integrating with Mechanical Turk" class="md-nav__link">
+    <a href="../../overview/mturk/" title="Integrating with Mechanical Turk" class="md-nav__link">
       Integrating with Mechanical Turk
     </a>
   </li>
@@ -2643,7 +2643,7 @@
 <h3 id="return-value_9">Return value<a class="headerlink" href="#return-value_9" title="Permanent link">&para;</a></h3>
 <p>Returns nothing.</p>
 <h3 id="description_9">Description<a class="headerlink" href="#description_9" title="Permanent link">&para;</a></h3>
-<p>Use this function to preload audio files that are not part of a plugin with automatic preloading. Audio files in official plugins will automatically preload. See <a href="../../features/media-preloading/">Media Preloading</a> for more information.</p>
+<p>Use this function to preload audio files that are not part of a plugin with automatic preloading. Audio files in official plugins will automatically preload. See <a href="../../overview/media-preloading/">Media Preloading</a> for more information.</p>
 <p>It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the files are loaded. Thus, it is possible that an audio file would be required for playing before it is done preloading. The <code>callback_complete</code> function will only execute after all the audio files are loaded, and can be used to control the flow of the experiment (e.g., by starting the experiment in the <code>callback_complete</code> function).</p>
 <p>The <code>callback_load</code> function can be used to indicate progress. See example below.</p>
 <h3 id="examples_8">Examples<a class="headerlink" href="#examples_8" title="Permanent link">&para;</a></h3>
@@ -2717,7 +2717,7 @@
 <h3 id="return-value_10">Return value<a class="headerlink" href="#return-value_10" title="Permanent link">&para;</a></h3>
 <p>Returns nothing.</p>
 <h3 id="description_10">Description<a class="headerlink" href="#description_10" title="Permanent link">&para;</a></h3>
-<p>Use this function to preload image files that are not part of a plugin with automatic preloading. Image files in official plugins will automatically preload. See <a href="../../features/media-preloading/">Media Preloading</a> for more information.</p>
+<p>Use this function to preload image files that are not part of a plugin with automatic preloading. Image files in official plugins will automatically preload. See <a href="../../overview/media-preloading/">Media Preloading</a> for more information.</p>
 <p>It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the images are loaded. Thus, it is possible that an image would be required for display before it is done preloading. The <code>callback_complete</code> function will only execute after all the images are loaded, and can be used to control the flow of the experiment (e.g., by starting the experiment in the <code>callback_complete</code> function).</p>
 <p>The <code>callback_load</code> function can be used to indicate progress, if the number of images to be loaded is known ahead of time. See example below.</p>
 <h3 id="examples_9">Examples<a class="headerlink" href="#examples_9" title="Permanent link">&para;</a></h3>

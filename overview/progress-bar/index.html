@@ -32,7 +32,7 @@
     
     
       
-        <title>Fullscreen Experiments - jsPsych</title>
+        <title>Automatic Progress Bar - jsPsych</title>
       
     
     
@@ -94,7 +94,7 @@
                 jsPsych
               </span>
               <span class="md-header-nav__topic">
-                Fullscreen Experiments
+                Automatic Progress Bar
               </span>
             
           
@@ -360,20 +360,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-      
-    
-    
-    <a href="./" title="Fullscreen Experiments" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../fullscreen/" title="Fullscreen Experiments" class="md-nav__link">
       Fullscreen Experiments
     </a>
-    
   </li>
 
         
@@ -393,11 +384,47 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../progress-bar/" title="Automatic Progress Bar" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Automatic Progress Bar
+      </label>
+    
+    <a href="./" title="Automatic Progress Bar" class="md-nav__link md-nav__link--active">
       Automatic Progress Bar
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#manual-control" title="Manual Control" class="md-nav__link">
+    Manual Control
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -1047,6 +1074,20 @@
     
   
   
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#manual-control" title="Manual Control" class="md-nav__link">
+    Manual Control
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1057,42 +1098,40 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/jspsych/jsPsych/edit/master/docs/features/fullscreen.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/jspsych/jsPsych/edit/master/docs/overview/progress-bar.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="fullscreen-experiments">Fullscreen Experiments<a class="headerlink" href="#fullscreen-experiments" title="Permanent link">&para;</a></h1>
-<p>You can run your experiment in fullscreen mode by using the jspsych-fullscreen plugin.</p>
-<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[];</span>
-
-<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;fullscreen&#39;</span><span class="p">,</span>
-  <span class="nx">fullscreen_mode</span><span class="o">:</span> <span class="kc">true</span>
-<span class="p">});</span>
-
-<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
-  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;This trial will be in fullscreen mode.&#39;</span>
-<span class="p">});</span>
-
-<span class="c1">// exit fullscreen mode</span>
-<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;fullscreen&#39;</span><span class="p">,</span>
-  <span class="nx">fullscreen_mode</span><span class="o">:</span> <span class="kc">false</span>
-<span class="p">});</span>
-
-<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
-  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;This trial will NOT be in fullscreen mode.&#39;</span>
-<span class="p">});</span>
-
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
-  <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span>
+                <h1 id="automatic-progress-bar">Automatic Progress Bar<a class="headerlink" href="#automatic-progress-bar" title="Permanent link">&para;</a></h1>
+<p>jsPsych can show a progress bar at the top of the experiment page indicating the subject's overall completion progress. The progress bar is rendered outside the jsPsych display element, and it requires the <code>jspsych.css</code> file to be loaded on the page. As of version 6.0, the progress bar looks like this:</p>
+<p><img alt="Progressbar Screenshot" src="../../img/progress_bar.png" /></p>
+<p>To show the progress bar, set the <code>show_progress_bar</code> option in <code>jsPsych.init</code> to <code>true</code>:</p>
+<div class="codehilite"><pre><span></span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+    <span class="nx">timeline</span><span class="o">:</span> <span class="nx">exp</span><span class="p">,</span>
+    <span class="nx">show_progress_bar</span><span class="o">:</span> <span class="kc">true</span>
 <span class="p">});</span>
 </pre></div>
 
 
-<p>For security reasons, web browsers require that users initiate an action to launch fullscreen mode. The fullscreen plugin displays a button that the user must click to change the display to fullscreen.</p>
-<p>Safari does not support keyboard input when the browser is in fullscreen mode. Therefore, the function will not launch fullscreen mode on Safari. The experiment will ignore any trials using the fullscreen plugin in Safari.</p>
+<p>The progress bar updates after every node on the top-level timeline updates. This avoids distracting updates in the middle of trials that are composed of multiple plugins, or confusing updates due to looping or conditional structures that may or may not execute depending on the actions of the subject. This also allows some flexibility for the programmer; by nesting timelines in a deliberate manner, the timing of progress bar updates can be controlled.</p>
+<h2 id="manual-control">Manual Control<a class="headerlink" href="#manual-control" title="Permanent link">&para;</a></h2>
+<p>The progress bar can also be manually controlled using the function <code>jsPsych.setProgressBar()</code>. This function takes a numeric value between 0 and 1, representing the proportion of the progress bar to fill.</p>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;Almost done...&#39;</span><span class="p">,</span>
+    <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">setProgressBar</span><span class="p">(</span><span class="mf">0.85</span><span class="p">);</span> <span class="c1">// set progress bar to 85% full.</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>If you are going to use manual progress bar control, you may want to disable the automatic progress bar updates by setting the <code>auto_update_progress_bar</code> property in <code>jsPsych.init()</code> to <code>false</code>.</p>
+<div class="codehilite"><pre><span></span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+    <span class="nx">timeline</span><span class="o">:</span> <span class="nx">exp</span><span class="p">,</span>
+    <span class="nx">show_progress_bar</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">auto_update_progress_bar</span><span class="o">:</span> <span class="kc">false</span>
+<span class="p">});</span>
+</pre></div>
                 
                   
                 
@@ -1111,7 +1150,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../media-preloading/" title="Media Preloading" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../exclude-browser/" title="Exclude Participants Based on Browser Features" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1120,19 +1159,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Media Preloading
+                Exclude Participants Based on Browser Features
               </span>
             </div>
           </a>
         
         
-          <a href="../exclude-browser/" title="Exclude Participants Based on Browser Features" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../mturk/" title="Integrating with Mechanical Turk" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Exclude Participants Based on Browser Features
+                Integrating with Mechanical Turk
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

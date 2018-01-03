@@ -32,7 +32,7 @@
     
     
       
-        <title>Exclude Participants Based on Browser Features - jsPsych</title>
+        <title>Integrating with Mechanical Turk - jsPsych</title>
       
     
     
@@ -94,7 +94,7 @@
                 jsPsych
               </span>
               <span class="md-header-nav__topic">
-                Exclude Participants Based on Browser Features
+                Integrating with Mechanical Turk
               </span>
             
           
@@ -372,67 +372,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="toc">
-        Exclude Participants Based on Browser Features
-      </label>
-    
-    <a href="./" title="Exclude Participants Based on Browser Features" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../exclude-browser/" title="Exclude Participants Based on Browser Features" class="md-nav__link">
       Exclude Participants Based on Browser Features
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#examples" title="Examples" class="md-nav__link">
-    Examples
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#exclude-browsers-that-are-not-at-least-800x600-pixels" title="Exclude browsers that are not at least 800x600 pixels" class="md-nav__link">
-    Exclude browsers that are not at least 800x600 pixels
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#exclude-browsers-that-do-not-have-access-to-the-webaudio-api" title="Exclude browsers that do not have access to the WebAudio API" class="md-nav__link">
-    Exclude browsers that do not have access to the WebAudio API
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -452,11 +396,75 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../mturk/" title="Integrating with Mechanical Turk" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Integrating with Mechanical Turk
+      </label>
+    
+    <a href="./" title="Integrating with Mechanical Turk" class="md-nav__link md-nav__link--active">
       Integrating with Mechanical Turk
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-jspsychturk-module" title="The jsPsych.turk module" class="md-nav__link">
+    The jsPsych.turk module
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-an-advertisement-page" title="Creating an advertisement page" class="md-nav__link">
+    Creating an advertisement page
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-the-worker-id" title="Getting the worker ID" class="md-nav__link">
+    Getting the worker ID
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#submitting-results-to-mechanical-turk" title="Submitting results to Mechanical Turk" class="md-nav__link">
+    Submitting results to Mechanical Turk
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations" title="Limitations" class="md-nav__link">
+    Limitations
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -1098,29 +1106,37 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#examples" title="Examples" class="md-nav__link">
-    Examples
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#exclude-browsers-that-are-not-at-least-800x600-pixels" title="Exclude browsers that are not at least 800x600 pixels" class="md-nav__link">
-    Exclude browsers that are not at least 800x600 pixels
+  <a href="#the-jspsychturk-module" title="The jsPsych.turk module" class="md-nav__link">
+    The jsPsych.turk module
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#exclude-browsers-that-do-not-have-access-to-the-webaudio-api" title="Exclude browsers that do not have access to the WebAudio API" class="md-nav__link">
-    Exclude browsers that do not have access to the WebAudio API
+      
+        <li class="md-nav__item">
+  <a href="#creating-an-advertisement-page" title="Creating an advertisement page" class="md-nav__link">
+    Creating an advertisement page
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#getting-the-worker-id" title="Getting the worker ID" class="md-nav__link">
+    Getting the worker ID
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#submitting-results-to-mechanical-turk" title="Submitting results to Mechanical Turk" class="md-nav__link">
+    Submitting results to Mechanical Turk
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations" title="Limitations" class="md-nav__link">
+    Limitations
+  </a>
   
 </li>
       
@@ -1138,34 +1154,71 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/jspsych/jsPsych/edit/master/docs/features/exclude-browser.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/jspsych/jsPsych/edit/master/docs/overview/mturk.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="exclude-participants-based-on-browser-features">Exclude Participants Based on Browser Features<a class="headerlink" href="#exclude-participants-based-on-browser-features" title="Permanent link">&para;</a></h1>
-<p>Online subjects will use many different kinds of browsers. Depending on the experiment, it may be important to specify a minimum feature set of the browser. jsPsych makes this straightforward. Simply specify certain exclusion criteria in the <code>jsPsych.init</code> method call. If a subject's browser doesn't meet the criteria the experiment will not start and the subject will see a message explaining the problem. For size restrictions the subject will see a message that displays the current size of their browser window and the minimum size needed to start the experiment, giving the subject an opportunity to enlarge the browser window to continue.</p>
-<p>Current exclusion options:
-<em> Minimum browser width &amp; height
-</em> Support for the WebAudio API</p>
-<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
-<h4 id="exclude-browsers-that-are-not-at-least-800x600-pixels">Exclude browsers that are not at least 800x600 pixels<a class="headerlink" href="#exclude-browsers-that-are-not-at-least-800x600-pixels" title="Permanent link">&para;</a></h4>
-<div class="codehilite"><pre><span></span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
-  <span class="nx">timeline</span><span class="o">:</span> <span class="nx">exp</span><span class="p">,</span>
-  <span class="nx">exclusions</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">min_width</span><span class="o">:</span> <span class="mi">800</span><span class="p">,</span>
-    <span class="nx">min_height</span><span class="o">:</span> <span class="mi">600</span>
-  <span class="p">}</span>
-<span class="p">});</span>
+                <h1 id="integrating-with-mechanical-turk">Integrating with Mechanical Turk<a class="headerlink" href="#integrating-with-mechanical-turk" title="Permanent link">&para;</a></h1>
+<p>A common use of jsPsych is to build an online experiment and find subjects using <a href="http://www.mturk.com/">Mechanical Turk</a>. Once an experiment is available through a web server and data is being <a href="../data/">saved on the server</a>, connecting the experiment with Mechanical Turk takes only a few additional steps. jsPsych has some built-in functionality to assist with this process. </p>
+<h2 id="the-jspsychturk-module">The jsPsych.turk module<a class="headerlink" href="#the-jspsychturk-module" title="Permanent link">&para;</a></h2>
+<p>The <a href="../../core_library/jspsych-turk/">jsPsych.turk</a> module contains functions that are relevant for experiments running on Mechanical Turk.</p>
+<h2 id="creating-an-advertisement-page">Creating an advertisement page<a class="headerlink" href="#creating-an-advertisement-page" title="Permanent link">&para;</a></h2>
+<p>When potential subjects view your experiment on Mechanical Turk, they will be able to see a single webpage before deciding whether or not to accept the HIT (start the experiment). This first page is often used as an advertisement for the experiment, similar to posting a flier in a department hallway. The important thing to remember about this page is that potential subjects will be able to interact with it even if they haven't accepted the HIT. Therefore, it can be useful to change the content of the page depending on whether the HIT has been accepted or not. This is relatively easy to do using jsPsych and jQuery:</p>
+<div class="codehilite"><pre><span></span><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;experiment_link&quot;</span><span class="p">&gt;</span>You must accept the HIT to begin the experiment<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>.
+
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="c1">// jsPsych has a method turkInfo() which can determine whether or not the</span>
+<span class="c1">// HIT has been accepted.</span>
+<span class="kd">var</span> <span class="nx">turkInfo</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">turkInfo</span><span class="p">();</span>
+
+<span class="c1">// turkInfo.previewMode is true in two cases: when the HIT has not been</span>
+<span class="c1">// accepted yet OR when the page is viewed outside of mechanical turk.</span>
+<span class="c1">// The second property, outsideTurk, is true when the page is viewed</span>
+<span class="c1">// outside of mechanical turk, so together, the statement will be true</span>
+<span class="c1">// only when in Turk and when the HIT is not accepted yet.</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">turkInfo</span><span class="p">.</span><span class="nx">previewMode</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">turkInfo</span><span class="p">.</span><span class="nx">outsideTurk</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#turkInfo&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&lt;a href=&quot;link_to_experiment.html&quot; target=&quot;_blank&quot;&gt;Click Here to Start Experiment&lt;/a&gt;&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 </pre></div>
 
 
-<h4 id="exclude-browsers-that-do-not-have-access-to-the-webaudio-api">Exclude browsers that do not have access to the WebAudio API<a class="headerlink" href="#exclude-browsers-that-do-not-have-access-to-the-webaudio-api" title="Permanent link">&para;</a></h4>
-<div class="codehilite"><pre><span></span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
-  <span class="nx">timeline</span><span class="o">:</span> <span class="nx">exp</span><span class="p">,</span>
-  <span class="nx">exclusions</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">audio</span><span class="o">:</span> <span class="kc">true</span>
-  <span class="p">}</span>
-<span class="p">});</span>
+<p>One important issue with advertisement pages is that they must be served using the https protocol, which requires having an SSL certificate on the web server hosting the page. Instructions for how to do this vary depending on what kind of server you are using, so the best advice is to simply Google for instructions on how to acquire and install an SSL certificate on your particular server.</p>
+<h2 id="getting-the-worker-id">Getting the worker ID<a class="headerlink" href="#getting-the-worker-id" title="Permanent link">&para;</a></h2>
+<p>Every account on Mechanical Turk is given a unique identification string. Recording this ID is a useful way to keep track of who is doing your experiment. In particular, while Turk has built in tools for preventing the same person from doing a HIT more than once, there may be cases where you don't want subjects to complete related experiments. If you store the worker ID of every person who starts an experiment in a database, then you can exclude people by running a query on the database to check for the ID. jsPsych can get the workerID, assignmentID, and hitID with the turkInfo method.</p>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">turkInfo</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">turk</span><span class="p">.</span><span class="nx">turkInfo</span><span class="p">();</span>
+
+<span class="c1">// workerID</span>
+<span class="nx">turkInfo</span><span class="p">.</span><span class="nx">workerId</span>
+
+<span class="c1">// hitID</span>
+<span class="nx">turkInfo</span><span class="p">.</span><span class="nx">hitId</span>
+
+<span class="c1">// assignmentID</span>
+<span class="nx">turkInfo</span><span class="p">.</span><span class="nx">assignmentId</span>
 </pre></div>
+
+
+<p>Recording the workerId at the start of the experiment is also a good way to track dropouts.</p>
+<h2 id="submitting-results-to-mechanical-turk">Submitting results to Mechanical Turk<a class="headerlink" href="#submitting-results-to-mechanical-turk" title="Permanent link">&para;</a></h2>
+<p>If you are running a HIT on Mechanical Turk using the ExternalQuestion template, then you'll need to provide a way for subjects to indicate that they have completed the HIT. (If you are using another template, then the template will provide this code for you). jsPSych makes this a relatively easy task. A common strategy for external HITs is to display an HTML page on the Mechanical Turk website that links to your HIT. Subjects click the link, which opens the actual experiment content in a new browser window or tab, allowing the experiment to take up the whole browser window instead of just the iframe that displays content on Mechanical Turk.</p>
+<p>On this page, you might include a submit button for workers to indicate that they have finished the experiment. The page would look something like this:</p>
+<div class="codehilite"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Enter the code you were given:<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;code&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">input</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;sendData();&quot;</span><span class="p">&gt;</span>Submit HIT<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="kd">function</span> <span class="nx">sendData</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">turk</span><span class="p">.</span><span class="nx">submitToTurk</span><span class="p">({</span>
+    <span class="nx">code</span><span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;code&#39;</span><span class="p">).</span><span class="nx">value</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</pre></div>
+
+
+<p>When workers click the button, the contents of the <code>code</code> text field will be sent to Mechanical Turk, and you'll be able to view the subjects and the codes that they entered in the Mechanical Turk GUI. You can then approve or reject work using the Mechanical Turk website.</p>
+<h2 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">&para;</a></h2>
+<p>jsPsych is not designed to communicate with the Mechanical Turk API in a comprehensive manner. If you are looking for software to help you post and manage HITs, then you may want to look at <a href="http://www.psiturk.org">PsiTurk</a>. jsPsych and PsiTurk complement each other nicely, and there is <a href="https://psiturk.org/ee/W4v3TPAsiD6FUVY8PDyajH">an example of combining the two platforms</a> on PsiTurk's experiment exchange.</p>
                 
                   
                 
@@ -1184,7 +1237,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../fullscreen/" title="Fullscreen Experiments" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../progress-bar/" title="Automatic Progress Bar" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1193,19 +1246,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Fullscreen Experiments
+                Automatic Progress Bar
               </span>
             </div>
           </a>
         
         
-          <a href="../progress-bar/" title="Automatic Progress Bar" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../core_library/jspsych-core/" title="jsPsych" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Automatic Progress Bar
+                jsPsych
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

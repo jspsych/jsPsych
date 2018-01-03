@@ -28,61 +28,61 @@
     
         
     <url>
-     <loc>/features/timeline/</loc>
+     <loc>/overview/timeline/</loc>
      <lastmod>2018-01-03</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/features/trial/</loc>
+     <loc>/overview/trial/</loc>
      <lastmod>2018-01-03</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/features/data/</loc>
+     <loc>/overview/data/</loc>
      <lastmod>2018-01-03</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/features/callbacks/</loc>
+     <loc>/overview/callbacks/</loc>
      <lastmod>2018-01-03</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/features/record-browser-interactions/</loc>
+     <loc>/overview/record-browser-interactions/</loc>
      <lastmod>2018-01-03</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/features/media-preloading/</loc>
+     <loc>/overview/media-preloading/</loc>
      <lastmod>2018-01-03</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/features/fullscreen/</loc>
+     <loc>/overview/fullscreen/</loc>
      <lastmod>2018-01-03</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/features/exclude-browser/</loc>
+     <loc>/overview/exclude-browser/</loc>
      <lastmod>2018-01-03</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/features/progress-bar/</loc>
+     <loc>/overview/progress-bar/</loc>
      <lastmod>2018-01-03</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/features/mturk/</loc>
+     <loc>/overview/mturk/</loc>
      <lastmod>2018-01-03</lastmod>
      <changefreq>daily</changefreq>
     </url>

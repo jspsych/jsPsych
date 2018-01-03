@@ -32,7 +32,7 @@
     
     
       
-        <title>Media Preloading - jsPsych</title>
+        <title>Exclude Participants Based on Browser Features - jsPsych</title>
       
     
     
@@ -94,7 +94,7 @@
                 jsPsych
               </span>
               <span class="md-header-nav__topic">
-                Media Preloading
+                Exclude Participants Based on Browser Features
               </span>
             
           
@@ -348,61 +348,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="toc">
-        Media Preloading
-      </label>
-    
-    <a href="./" title="Media Preloading" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../media-preloading/" title="Media Preloading" class="md-nav__link">
       Media Preloading
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#automatic-preloading" title="Automatic Preloading" class="md-nav__link">
-    Automatic Preloading
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#manual-preloading" title="Manual preloading" class="md-nav__link">
-    Manual preloading
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#preloading-progress-bar" title="Preloading progress bar" class="md-nav__link">
-    Preloading progress bar
-  </a>
-  
-</li>
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -422,11 +372,67 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../exclude-browser/" title="Exclude Participants Based on Browser Features" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Exclude Participants Based on Browser Features
+      </label>
+    
+    <a href="./" title="Exclude Participants Based on Browser Features" class="md-nav__link md-nav__link--active">
       Exclude Participants Based on Browser Features
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#examples" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exclude-browsers-that-are-not-at-least-800x600-pixels" title="Exclude browsers that are not at least 800x600 pixels" class="md-nav__link">
+    Exclude browsers that are not at least 800x600 pixels
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exclude-browsers-that-do-not-have-access-to-the-webaudio-api" title="Exclude browsers that do not have access to the WebAudio API" class="md-nav__link">
+    Exclude browsers that do not have access to the WebAudio API
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -1092,23 +1098,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#automatic-preloading" title="Automatic Preloading" class="md-nav__link">
-    Automatic Preloading
+  <a href="#examples" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exclude-browsers-that-are-not-at-least-800x600-pixels" title="Exclude browsers that are not at least 800x600 pixels" class="md-nav__link">
+    Exclude browsers that are not at least 800x600 pixels
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#manual-preloading" title="Manual preloading" class="md-nav__link">
-    Manual preloading
+        
+          <li class="md-nav__item">
+  <a href="#exclude-browsers-that-do-not-have-access-to-the-webaudio-api" title="Exclude browsers that do not have access to the WebAudio API" class="md-nav__link">
+    Exclude browsers that do not have access to the WebAudio API
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#preloading-progress-bar" title="Preloading progress bar" class="md-nav__link">
-    Preloading progress bar
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1126,64 +1138,32 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/jspsych/jsPsych/edit/master/docs/features/media-preloading.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/jspsych/jsPsych/edit/master/docs/overview/exclude-browser.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="media-preloading">Media Preloading<a class="headerlink" href="#media-preloading" title="Permanent link">&para;</a></h1>
-<p>If an experiment uses images or audio files as stimuli, it is a good idea to preload the files before running the experiment. Preloading files means that the subject's browser will download all of the files and store them in local memory on the subject's computer. This is important because loading an image file is much faster if it is already in memory on the subject's computer. Without preloading, there will be noticeable delays in the display of media, which will affect any timing measurements (such as how long an image is displayed, or a subject's response time since first viewing an image).</p>
-<h2 id="automatic-preloading">Automatic Preloading<a class="headerlink" href="#automatic-preloading" title="Permanent link">&para;</a></h2>
-<p>jsPsych will automatically preload audio and image files that are used as parameters for the standard set of plugins.</p>
-<div class="codehilite"><pre><span></span><span class="c1">// the image file img/file1.png is</span>
-<span class="c1">// automatically preloaded before the experiment begins</span>
-<span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">,</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/file1.png&#39;</span>
-<span class="p">}</span>
-
-<span class="c1">// the sound file is also preloaded automatically</span>
-<span class="kd">var</span> <span class="nx">sound_trial</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;audio-keyboard-response&#39;</span><span class="p">,</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;audio/hello.mp3&#39;</span>
-<span class="p">}</span>
-
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
-    <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">trial</span><span class="p">]</span>
-<span class="p">});</span>
-</pre></div>
-
-
-<h2 id="manual-preloading">Manual preloading<a class="headerlink" href="#manual-preloading" title="Permanent link">&para;</a></h2>
-<p>If you are using images or audio in your experiment but they are not being passed directly as parameters to the trials (e.g., because you are using functions as parameters that return the image or audio), then you can manually specify the files to preload.</p>
-<p>You can specify an array of image files (<code>preload_images</code>) and an array of audio files (<code>preload_audio</code>) for preloading in the <code>jsPsych.init()</code> method. These files will load before the experiment starts.</p>
-<div class="codehilite"><pre><span></span><span class="c1">// this trial will not preload the images, because the image file is being used</span>
-<span class="c1">// in an HTML string</span>
-<span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;img src=&quot;img/file1.png&quot;&gt;&lt;/img&gt;&#39;</span><span class="p">,</span>
-<span class="p">}</span>
-
-<span class="kd">var</span> <span class="nx">audio_trial</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;audio-keyboard-response&#39;</span><span class="p">,</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s1">&#39;audio/foo.mp3&#39;</span> <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="c1">// an array of paths to images that need to be loaded</span>
-<span class="kd">var</span> <span class="nx">images</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;img/file1.png&#39;</span><span class="p">];</span>
-<span class="kd">var</span> <span class="nx">audio</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;audio/foo.mp3&#39;</span><span class="p">];</span>
-
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
-    <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">trial</span><span class="p">],</span>
-    <span class="nx">preload_audio</span><span class="o">:</span> <span class="nx">audio</span><span class="p">,</span>
-    <span class="nx">preload_images</span><span class="o">:</span> <span class="nx">images</span>
-<span class="p">});</span>
-</pre></div>
-
-
-<h2 id="preloading-progress-bar">Preloading progress bar<a class="headerlink" href="#preloading-progress-bar" title="Permanent link">&para;</a></h2>
-<p>By default, jsPsych will display a small progress bar while files are being preloaded. This progress bar represents all files that are being automatically preloaded or preloaded from the <code>preload_audio</code> and <code>preload_images</code> arrays. You may wish to turn this off if you are only loading a small number of files, as it will disappear so quickly that the participant may be confused about what it was. You can control whether the preloading progress bar appears by setting the <code>show_preload_progress_bar</code> parameter in <code>jsPsych.init()</code></p>
+                <h1 id="exclude-participants-based-on-browser-features">Exclude Participants Based on Browser Features<a class="headerlink" href="#exclude-participants-based-on-browser-features" title="Permanent link">&para;</a></h1>
+<p>Online subjects will use many different kinds of browsers. Depending on the experiment, it may be important to specify a minimum feature set of the browser. jsPsych makes this straightforward. Simply specify certain exclusion criteria in the <code>jsPsych.init</code> method call. If a subject's browser doesn't meet the criteria the experiment will not start and the subject will see a message explaining the problem. For size restrictions the subject will see a message that displays the current size of their browser window and the minimum size needed to start the experiment, giving the subject an opportunity to enlarge the browser window to continue.</p>
+<p>Current exclusion options:
+<em> Minimum browser width &amp; height
+</em> Support for the WebAudio API</p>
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
+<h4 id="exclude-browsers-that-are-not-at-least-800x600-pixels">Exclude browsers that are not at least 800x600 pixels<a class="headerlink" href="#exclude-browsers-that-are-not-at-least-800x600-pixels" title="Permanent link">&para;</a></h4>
 <div class="codehilite"><pre><span></span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
-    <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span><span class="p">,</span>
-    <span class="nx">show_preload_progress_bar</span><span class="o">:</span> <span class="kc">false</span> <span class="c1">// hide preload progress bar</span>
+  <span class="nx">timeline</span><span class="o">:</span> <span class="nx">exp</span><span class="p">,</span>
+  <span class="nx">exclusions</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">min_width</span><span class="o">:</span> <span class="mi">800</span><span class="p">,</span>
+    <span class="nx">min_height</span><span class="o">:</span> <span class="mi">600</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+
+<h4 id="exclude-browsers-that-do-not-have-access-to-the-webaudio-api">Exclude browsers that do not have access to the WebAudio API<a class="headerlink" href="#exclude-browsers-that-do-not-have-access-to-the-webaudio-api" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">timeline</span><span class="o">:</span> <span class="nx">exp</span><span class="p">,</span>
+  <span class="nx">exclusions</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">audio</span><span class="o">:</span> <span class="kc">true</span>
+  <span class="p">}</span>
 <span class="p">});</span>
 </pre></div>
                 
@@ -1204,7 +1184,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../record-browser-interactions/" title="Record Browser Interactions" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../fullscreen/" title="Fullscreen Experiments" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1213,19 +1193,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Record Browser Interactions
+                Fullscreen Experiments
               </span>
             </div>
           </a>
         
         
-          <a href="../fullscreen/" title="Fullscreen Experiments" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../progress-bar/" title="Automatic Progress Bar" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Fullscreen Experiments
+                Automatic Progress Bar
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
