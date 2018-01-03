@@ -190,7 +190,7 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
     function after_response(info) {
 
 			// only record first response
-      response = response.rt == -1 ? info : response;
+      response = response.rt == null ? info : response;
 
 			// check if the response is correct
 			var responseLoc = [];
