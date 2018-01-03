@@ -9,7 +9,7 @@ Parameters with a default value of *undefined* must be specified. Other paramete
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 stimulus | HTML string | *undefined* | The string to be displayed
-labels | array of strings | Labels displayed at equidistant locations on the slider. For example, two labels will be placed at the ends of the slider. Three labels would place two at the ends and one in the middle. Four will place two at the ends, and the other two will be at 33% and 67% of the slider width.
+labels | array of strings | [] | Labels displayed at equidistant locations on the slider. For example, two labels will be placed at the ends of the slider. Three labels would place two at the ends and one in the middle. Four will place two at the ends, and the other two will be at 33% and 67% of the slider width.
 button_label | string | 'Continue' | Label of the button to end the trial.
 min | integer | 0 | Sets the minimum value of the slider
 max | integer | 100 | Sets the maximum value of the slider

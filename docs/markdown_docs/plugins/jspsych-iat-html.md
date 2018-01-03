@@ -8,11 +8,11 @@ Parameters with a default value of *undefined* must be specified. Other paramete
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-stimulus | string | *undefined* | The stimulus to display. The HTML content to be displayed.
-htm_when_wrong | string | `<span style="color: red; font-size: 80px">X</span>` | The image to display when a user presses the wrong key.
+stimulus | string | *undefined* | The HTML-format stimulus to display.
+html_when_wrong | string | `<span style="color: red; font-size: 80px">X</span>` | The content to display when a user presses the wrong key.
 bottom_instructions | string | `<p>If you press the wrong key, a red X will appear. Press any key to continue.</p>` | Instructions about making a wrong key press and whether another key press is needed to continue.
 force_correct_key_press | boolean | false | If this is true and the user presses the wrong key then they have to press the other key to continue. An example would be two keys 'E' and 'I'. If the key associated with the stimulus is 'E' and key 'I' was pressed, then pressing 'E' is needed to continue the trial. When this is true, then parameter key_to_move_forward is not used.
-display_feedback | boolean | false | If true, then image_when_wrong and wrong_image_name is required. If false, timing_response is needed and trial will continue automatically.
+display_feedback | boolean | false | If true, then `html_when_wrong` and `wrong_image_name` is required. If false, timing_response is needed and trial will continue automatically.
 left_category_key | string | 'E' | Key press that is associated with the left_category_label.
 right_category_key | string | 'I' | Key press that is associated with the right_category_label.
 left_category_label | string | ['left'] | An array that contains the words/labels associated with a certain stimulus. The labels are aligned to the left side of the page.

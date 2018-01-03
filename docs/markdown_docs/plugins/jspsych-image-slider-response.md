@@ -9,10 +9,11 @@ Parameters with a default value of *undefined* must be specified. Other paramete
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 stimulus | string | *undefined* | The path to the image file to be displayed.
-labels | array of keycodes/strings | Labels of the slider
+labels | array of strings | [] | Labels displayed at equidistant locations on the slider. For example, two labels will be placed at the ends of the slider. Three labels would place two at the ends and one in the middle. Four will place two at the ends, and the other two will be at 33% and 67% of the slider width.
 button_label | string |  'Continue' | Label of the button to advance/submit
 min | integer | 0 | Sets the minimum value of the slider
 max | integer | 100 | Sets the maximum value of the slider
+start | integer | 50 | Sets the starting value of the slider
 step | integer | 1 | Sets the step of the slider
 prompt | string | '' | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
 stimulus_duration | numeric | -1 | How long to show the stimulus for in milliseconds. If the value is -1, then the stimulus will be shown until the subject makes a response.
