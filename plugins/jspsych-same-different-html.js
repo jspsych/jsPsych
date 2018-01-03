@@ -8,12 +8,12 @@
  *
  */
 
-jsPsych.plugins['same-different-image'] = (function() {
+jsPsych.plugins['same-different-html'] = (function() {
 
   var plugin = {};
 
   plugin.info = {
-    name: 'same-different-image',
+    name: 'same-different-html',
     description: '',
     parameters: {
       stimuli: {
