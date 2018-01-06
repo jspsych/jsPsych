@@ -78,7 +78,7 @@ jsPsych.plugins["html-button-response"] = (function() {
   plugin.trial = function(display_element, trial) {
 
     // display stimulus
-    display_element.innerHTML = '<div id="jspsych-html-button-response-stimulus">'+trial.stimulus+'</div>';
+    var html = '<div id="jspsych-html-button-response-stimulus">'+trial.stimulus+'</div>';
 
     //display buttons
     var buttons = [];
@@ -93,20 +93,28 @@ jsPsych.plugins["html-button-response"] = (function() {
         buttons.push(trial.button_html);
       }
     }
-    display_element.innerHTML += '<div id="jspsych-html-button-response-btngroup"></div>';
+    html += '<div id="jspsych-html-button-response-btngroup">';
     for (var i = 0; i < trial.choices.length; i++) {
       var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
-      display_element.querySelector('#jspsych-html-button-response-btngroup').insertAdjacentHTML('beforeend',
-        '<div class="jspsych-html-button-response-button" style="display: inline-block; margin:'+trial.margin_vertical+' '+trial.margin_horizontal+'" id="jspsych-html-button-response-button-' + i +'" data-choice="'+i+'">'+str+'</div>');
+      html += '<div class="jspsych-html-button-response-button" style="display: inline-block; margin:'+trial.margin_vertical+' '+trial.margin_horizontal+'" id="jspsych-html-button-response-button-' + i +'" data-choice="'+i+'">'+str+'</div>';
+    }
+    html += '</div>';
+
+    //show prompt if there is one
+    if (trial.prompt !== null) {
+      html += trial.prompt;
+    }
+    display_element.innerHTML = html;
+
+    // start time
+    var start_time = Date.now();
+
+    // add event listeners to buttons
+    for (var i = 0; i < trial.choices.length; i++) {
       display_element.querySelector('#jspsych-html-button-response-button-' + i).addEventListener('click', function(e){
         var choice = e.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
         after_response(choice);
       });
-    }
-
-    //show prompt if there is one
-    if (trial.prompt !== null) {
-      display_element.insertAdjacentHTML('beforeend', trial.prompt);
     }
 
     // store response
@@ -114,9 +122,6 @@ jsPsych.plugins["html-button-response"] = (function() {
       rt: null,
       button: null
     };
-
-    // start time
-    var start_time = 0;
 
     // function to handle responses by the subject
     function after_response(choice) {
@@ -162,9 +167,6 @@ jsPsych.plugins["html-button-response"] = (function() {
       // move on to the next trial
       jsPsych.finishTrial(trial_data);
     };
-
-    // start timing
-    start_time = Date.now();
 
     // hide image if timing is set
     if (trial.stimulus_duration !== null) {

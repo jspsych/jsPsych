@@ -113,20 +113,26 @@ jsPsych.plugins["audio-button-response"] = (function() {
         buttons.push(trial.button_html);
       }
     }
-    display_element.innerHTML = '<div id="jspsych-audio-button-response-btngroup"></div>';
+
+    var html = '<div id="jspsych-audio-button-response-btngroup">';
     for (var i = 0; i < trial.choices.length; i++) {
       var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
-      display_element.querySelector('#jspsych-audio-button-response-btngroup').insertAdjacentHTML('beforeend',
-        '<div class="jspsych-audio-button-response-button" style="cursor: pointer; display: inline-block; margin:'+trial.margin_vertical+' '+trial.margin_horizontal+'" id="jspsych-audio-button-response-button-' + i +'" data-choice="'+i+'">'+str+'</div>');
+      html += '<div class="jspsych-audio-button-response-button" style="cursor: pointer; display: inline-block; margin:'+trial.margin_vertical+' '+trial.margin_horizontal+'" id="jspsych-audio-button-response-button-' + i +'" data-choice="'+i+'">'+str+'</div>';
+    }
+		html += '</div>';
+
+		//show prompt if there is one
+		if (trial.prompt !== null) {
+			html += trial.prompt;
+		}
+
+		display_element.innerHTML = html;
+
+		for (var i = 0; i < trial.choices.length; i++) {
       display_element.querySelector('#jspsych-audio-button-response-button-' + i).addEventListener('click', function(e){
         var choice = e.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
         after_response(choice);
       });
-    }
-
-    //show prompt if there is one
-    if (trial.prompt !== null) {
-      display_element.insertAdjacentHTML('beforeend', trial.prompt);
     }
 
     // store response
@@ -134,9 +140,6 @@ jsPsych.plugins["audio-button-response"] = (function() {
       rt: null,
       button: null
     };
-
-    // start time
-    var start_time = 0;
 
     // function to handle responses by the subject
     function after_response(choice) {
@@ -189,8 +192,8 @@ jsPsych.plugins["audio-button-response"] = (function() {
       jsPsych.finishTrial(trial_data);
     };
 
-    // start timing
-    start_time = Date.now();
+		// start time
+    var start_time = Date.now();
 
 		// start audio
     if(context !== null){
