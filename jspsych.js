@@ -228,7 +228,7 @@ window.jsPsych = (function() {
     opts.on_data_update(trial_data_values);
 
     // wait for iti
-    if (typeof current_trial.post_trial_gap == 'undefined') {
+    if (typeof current_trial.post_trial_gap === null) {
       if (opts.default_iti > 0) {
         setTimeout(nextTrial, opts.default_iti);
       } else {
@@ -809,7 +809,7 @@ window.jsPsych = (function() {
         trial[keys[i]] = trial[keys[i]].call();
       }
       // timeline variables that are nested in objects
-      if (typeof trial[keys[i]] == "object"){
+      if (typeof trial[keys[i]] == "object" && trial[keys[i]] !== null){
         evaluateTimelineVariables(trial[keys[i]]);
       }
     }
@@ -981,7 +981,7 @@ jsPsych.plugins = (function() {
     post_trial_gap: {
       type: module.parameterType.INT,
       pretty_name: 'Post trial gap',
-      default: undefined,
+      default: null,
       description: 'Length of gap between the end of this trial and the start of the next trial'
     }
   }
@@ -2357,6 +2357,7 @@ jsPsych.utils = (function() {
 	}
 
 	module.deepCopy = function(obj) {
+    if(!obj) return obj;
     var out;
     if(Array.isArray(obj)){
       out = [];
