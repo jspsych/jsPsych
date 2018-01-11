@@ -5,17 +5,17 @@
 jsPsych.plugins["PLUGIN-NAME"] = (function() {
 
   var plugin = {};
-  
+
   plugin.info = {
     name: "PLUGIN-NAME",
     parameters: {
       parameter_name: {
-        type: jsPsych.plugins.parameterType.INT, // INT, IMAGE, KEYCODE, STRING, FUNCTION, FLOAT
-        default_value: undefined
+        type: jsPsych.plugins.parameterType.INT, // BOOL, STRING, INT, FLOAT, FUNCTION, KEYCODE, SELECT, HTML_STRING, IMAGE, AUDIO, VIDEO, OBJECT, COMPLEX
+        default: undefined
       },
       parameter_name: {
         type: jsPsych.plugins.parameterType.IMAGE,
-        default_value: undefined
+        default: undefined
       }
     }
   }
