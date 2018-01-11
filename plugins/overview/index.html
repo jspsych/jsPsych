@@ -1187,14 +1187,26 @@
 <tr>
 <td>post_trial_gap</td>
 <td>numeric</td>
-<td>1000</td>
-<td>Sets the time, in milliseconds, between the current trial and the next trial.</td>
+<td>null</td>
+<td>Sets the time, in milliseconds, between the current trial and the next trial. If null, there will be no gap.</td>
 </tr>
 <tr>
 <td>on_finish</td>
 <td>function</td>
-<td><em>undefined</em></td>
+<td><code>function(){ return; }</code></td>
 <td>A callback function to execute when the trial finishes. See <a href="../../overview/callbacks/">this page</a> for more details.</td>
+</tr>
+<tr>
+<td>on_start</td>
+<td>function</td>
+<td><code>function(){ return; }</code></td>
+<td>A callback function to execute when the trial begins, before any loading has occurred. See <a href="../../overview/callbacks/">this page</a> for more details.</td>
+</tr>
+<tr>
+<td>on_load</td>
+<td>function</td>
+<td><code>function(){ return; }</code></td>
+<td>A callback function to execute when the trial has loaded, which typically happens after the initial display of the plugin has loaded. See <a href="../../overview/callbacks/">this page</a> for more details.</td>
 </tr>
 <tr>
 <td>data</td>
