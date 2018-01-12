@@ -243,7 +243,7 @@ function saveData() {
       console.log(response.success);
     }
   };
-  xhr.send(jsPsych.data.getData().json());
+  xhr.send(jsPsych.data.get().json());
 }
 ```
 

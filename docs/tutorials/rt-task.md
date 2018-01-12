@@ -954,7 +954,7 @@ var debrief_block = {
   type: "html-keyboard-response",
   stimulus: function() {
 
-    var trials = jsPsych.data.getData().filter({test_part: 'test'});
+    var trials = jsPsych.data.get().filter({test_part: 'test'});
     var correct_trials = trials.filter({correct: true});
     var accuracy = Math.round(correct_trials.count() / trials.count() * 100);
     var rt = Math.round(correct_trials.select('rt').mean());
@@ -969,7 +969,7 @@ var debrief_block = {
 timeline.push(debrief_block);
 ```
 
-To create the variable `trials`, we use `jsPsych.data.getData()` which returns a jsPsych data collection containing all of the data from the experiment. We can then use `.filter` to select only the trials where `test_part` is `'test'` (a benefit of tagging the trials in part 9). `trials` contains all of the data from the trials where a circle was shown.
+To create the variable `trials`, we use `jsPsych.data.get()` which returns a jsPsych data collection containing all of the data from the experiment. We can then use `.filter` to select only the trials where `test_part` is `'test'` (a benefit of tagging the trials in part 9). `trials` contains all of the data from the trials where a circle was shown.
 
 To get only the correct trials, we can use `.filter()` again to select only the trials from the `trials` data collection where the property `correct` is `true`.
 
@@ -1062,7 +1062,7 @@ This code is available in the examples folder in the jsPsych download. It is cal
       type: "html-keyboard-response",
       stimulus: function() {
 
-        var trials = jsPsych.data.getData().filter({test_part: 'test'});
+        var trials = jsPsych.data.get().filter({test_part: 'test'});
         var correct_trials = trials.filter({correct: true});
         var accuracy = Math.round(correct_trials.count() / trials.count() * 100);
         var rt = Math.round(correct_trials.select('rt').mean());

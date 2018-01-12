@@ -104,8 +104,8 @@
   var debrief = {
     type: 'html-keyboard-response',
     stimulus: function(){
-      var high_frequency = jsPsych.data.getData({word_frequency: 'high', correct: true});
-      var low_frequency = jsPsych.data.getData({word_frequency: 'low', correct: true});
+      var high_frequency = jsPsych.data.get({word_frequency: 'high', correct: true});
+      var low_frequency = jsPsych.data.get({word_frequency: 'low', correct: true});
 
       var high_rt = 0;
       for(var i=0; i<high_frequency.length; i++){
