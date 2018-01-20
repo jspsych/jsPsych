@@ -23,9 +23,9 @@ jsPsych.plugins["html-button-response"] = (function() {
         description: 'The HTML string to be displayed'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Choices',
-        default: [],
+        default: undefined,
         array: true,
         description: 'The labels for the buttons.'
       },

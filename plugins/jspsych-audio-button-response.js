@@ -24,9 +24,9 @@ jsPsych.plugins["audio-button-response"] = (function() {
 				description: 'The audio to be played.'
 			},
 			choices: {
-				type: jsPsych.plugins.parameterType.KEYCODE,
+				type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Choices',
-				default: [],
+				default: undefined,
 				array: true,
 				description: 'The button labels.'
 			},

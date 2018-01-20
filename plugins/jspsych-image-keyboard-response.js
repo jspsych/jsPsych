@@ -21,7 +21,7 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
     parameters: {
       stimulus: {
         type: jsPsych.plugins.parameterType.IMAGE,
-        pretty_name: 'stimulus',
+        pretty_name: 'Stimulus',
         default: undefined,
         description: 'The image to be displayed'
       },

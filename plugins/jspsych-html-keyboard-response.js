@@ -19,7 +19,7 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
     parameters: {
       stimulus: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
-        pretty_name: 'stimulus',
+        pretty_name: 'Stimulus',
         default: undefined,
         description: 'The HTML string to be displayed'
       },
