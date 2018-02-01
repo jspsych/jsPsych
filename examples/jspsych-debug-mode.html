@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../plugins/jspsych-text.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+
+  <script>
+
+  var example_trial1 = {
+        type: 'text',
+        text: 'Some Example'
+  };
+  var example_trial2 = {
+        type: 'text',
+        text: 'Second Example'
+  };
+  var example_trial3 = {
+        type: 'text',
+        text: 'Third Example'
+  };
+  var example_trial4 = {
+        type: 'text',
+        text: 'Fourth Example'
+  };
+  var example_trial5 = {
+        type: 'text',
+        text: 'Fifth Example'
+  };
+  var example_trial6 = {
+        type: 'text',
+        text: 'Sixth Example'
+  };
+
+  jsPsych.init({
+        timeline: [example_trial1, example_trial2, example_trial3, example_trial4, example_trial5, example_trial6],
+        debug: true
+  });
+
+  </script>
+</html>
