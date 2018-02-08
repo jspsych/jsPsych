@@ -2581,7 +2581,7 @@
 <tr>
 <td>display_element</td>
 <td>string</td>
-<td>The ID of an HTML element to display the experiment in. If left blank, then jsPsych will use the <code>&lt;body&gt;</code> element to display content (creating it if necessary). You can override this parameter at the trial level as well by specifying a display_element property on any timeline.</td>
+<td>The ID of an HTML element to display the experiment in. If left blank, jsPsych will use the <code>&lt;body&gt;</code> element to display content (creating it if necessary). All keyboard event listeners are bound to this element. In order for a keyboard event to be detected, this element must have focus (be the last thing that the subject clicked on).</td>
 </tr>
 <tr>
 <td>on_finish</td>
