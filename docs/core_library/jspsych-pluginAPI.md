@@ -266,6 +266,8 @@ Return an object that uniquely identifies the keyboard listener. This object can
 
 Gets a keyboard response from the subject, recording the response time from when the function is first called until a valid response is generated.
 
+The keyboard event listener will be bound to the `display_element` declared in `jsPsych.init()` (or the `<body>` element if no `display_element` is specified). This allows jsPsych experiments to be embedded in websites with other content without disrupting the functionality of other UI elements.
+
 A valid response triggers the `callback_function` specified in the parameters. A single argument is passed to the callback function. The argument contains an object with the properties `key` and `rt`. `key` contains the numeric key code of the response, and `rt` contains the response time.
 
 ### Examples
