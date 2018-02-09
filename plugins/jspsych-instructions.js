@@ -54,6 +54,12 @@ jsPsych.plugins.instructions = (function() {
         default: false,
         description: 'If true, then a "Previous" and "Next" button will be displayed beneath the instructions.'
       },
+      show_page_number: {
+          type: jsPsch.plugins.parameterType.BOOL,
+          pretty_name: 'Show page number',
+          default: true,
+          description: 'If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons.'
+      }
       button_label_previous: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label previous',
@@ -96,10 +102,10 @@ jsPsych.plugins.instructions = (function() {
 
         var nav_html = "<div class='jspsych-instructions-nav' style='padding: 10px 0px;'>";
         if (trial.allow_backward) {
-          let allowed = (current_page > 0)? '' : "disabled='disabled'";
+          let allowed = (current_page > 0  && trial.show_page_number)? '' : "disabled='disabled'";
           nav_html += "<button id='jspsych-instructions-back' class='jspsych-btn' style='margin-right: 5px;' "+allowed+">&lt; "+trial.button_label_previous+"</button>";
         }
-        if (trial.pages.length > 1) {
+        if (trial.pages.length > 1 && trial.show_page_number) {
             nav_html += "<span style='margin: 0 1em;'>Page "+(current_page+1)+"/"+trial.pages.length+"</span>";
         }
         nav_html += "<button id='jspsych-instructions-next' class='jspsych-btn' style='margin-left: 5px;'>"+trial.button_label_next+" &gt;</button></div>"
