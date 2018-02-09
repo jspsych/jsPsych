@@ -95,8 +95,12 @@ jsPsych.plugins.instructions = (function() {
       if (trial.show_clickable_nav) {
 
         var nav_html = "<div class='jspsych-instructions-nav' style='padding: 10px 0px;'>";
-        if (current_page != 0 && trial.allow_backward) {
-          nav_html += "<button id='jspsych-instructions-back' class='jspsych-btn' style='margin-right: 5px;'>&lt; "+trial.button_label_previous+"</button>";
+        if (trial.allow_backward) {
+          let allowed = (current_page > 0)? '' : "disabled='disabled'";
+          nav_html += "<button id='jspsych-instructions-back' class='jspsych-btn' style='margin-right: 5px;' "+allowed+">&lt; "+trial.button_label_previous+"</button>";
+        }
+        if (trial.pages.length > 1) {
+            nav_html += "<span style='margin: 0 1em;'>Page "+(current_page+1)+"/"+trial.pages.length+"</span>";
         }
         nav_html += "<button id='jspsych-instructions-next' class='jspsych-btn' style='margin-left: 5px;'>"+trial.button_label_next+" &gt;</button></div>"
 
