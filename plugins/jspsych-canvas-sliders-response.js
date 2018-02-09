@@ -162,6 +162,16 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
             'Format is an array of length sliderCount. '+
             'Shorter arrays will be padded with the final value.'
       },
+      slider_col_spacing: {
+          type: jsPsych.plugins.parameterType.INT,
+          pretty_name: 'Slider column spacing',
+          default: [25],
+          array: true,
+          description: 'Spacing between columns within each row of sliders. '+
+            'Added as a margin to the left and right of each slider. '+
+            'Each entry in the array refers to an individual row. '+
+            'Shorter arrays will be padded with the final value.'
+      },
       one_slider_only: {
           type: jsPsych.plugins.parameterType.BOOL,
           pretty_name: 'Single slider response only',
@@ -208,7 +218,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
       canvas = '<canvas id="'+trial.canvasId+'" height="'+trial.canvasHeight+
         '" width="'+trial.canvasWidth+'"></canvas>';
     }
-    let html = '<div id="jspsych-canvas-sliders-response-wrapper" style="margin: 100px 0px;">';
+    let html = '<div id="jspsych-canvas-sliders-response-wrapper" style="margin: 20px 0px;">';
     html += '<div id="jspsych-canvas-sliders-response-stimulus">'+canvas+'</div>';
     // Prompt text
     if (trial.prompt !== null) {
@@ -221,26 +231,26 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
     let max_slider_row = null;
     for (let i=0; i<trial.sliderCount; i++) {
         sliders.push({
-            min: (trial.min.length >= i)? trial.min[i] :
+            min: (trial.min.length > i)? trial.min[i] :
                 trial.min[trial.min.length-1],
-            max: (trial.max.length >= i)?  trial.max[i] :
+            max: (trial.max.length > i)?  trial.max[i] :
                 trial.max[trial.max.length-1],
-            start: (trial.start.length >= i)? trial.start[i] :
+            start: (trial.start.length > i)? trial.start[i] :
                 trial.start[trial.start.length-1],
-            step: (trial.step.length >= i)? trial.step[i] :
+            step: (trial.step.length > i)? trial.step[i] :
                 trial.step[trial.step.length-1],
-            labels: (trial.labels.length >= i)? trial.labels[i] :
+            labels: (trial.labels.length > i)? trial.labels[i] :
                 trial.labels[trial.labels.length-1],
-            require_change: (trial.require_change.length >= i)?
+            require_change: (trial.require_change.length > i)?
                 trial.require_change[i] :
                 trial.require_change[trial.require_change.length-1],
-            require_change_warning: (trial.require_change_warning.length >= i)?
+            require_change_warning: (trial.require_change_warning.length > i)?
                 trial.require_change_warning[i] :
                 trial.require_change_warning[trial.require_change_warning.length-1],
         });
         let slider = sliders.pop();
         if (trial.slider_arrangement !== null) {
-            slider.arrangement = (trial.slider_arrangement.length >= i)?
+            slider.arrangement = (trial.slider_arrangement.length > i)?
                 trial.slider_arrangement[i] :
                 trial.slider_arrangement[trial.slider_arrangement.length-1];
             if (max_slider_row === null || slider.arrangement > max_slider_row) {
@@ -250,13 +260,13 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
             slider.arrangement = 0;
         }
         if (trial.slider_prompt !== null) {
-            slider.prompt = (trial.slider_prompt.length >= i)?
+            slider.prompt = (trial.slider_prompt.length > i)?
                 trial.slider_prompt[i] :
                 trial.slider_prompt[trial.slider_prompt.length-1];
         } else {
             slider.prompt = "";
         }
-        slider.hasChanged = false;
+        slider.changedTime = NaN;
         sliders.push(slider)
     }
     let row_count = (max_slider_row === null)? 1 : max_slider_row;
@@ -264,14 +274,18 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
     // Loop the rows of sliders
     for (let i=0; i<row_count; i++) {
         let col = 0;
+        let margin = (trial.slider_col_spacing.length > i)?
+            trial.slider_col_spacing[i] :
+            trial.slider_col_spacing[trial.slider_col_spacing.length-1];
         html += '<div class="jspsych-canvas-sliders-response-slider-row'+
-            i+' jspsych-sliders-row">';
+            i+' jspsych-sliders-row" style="display: inline-flex;">';
         for(let s=0; s<sliders.length; s++) {
             let slider = sliders[s];
             if (max_slider_row === null || slider.arrangement == i) {
                 // Draw the slider
                 html += '<div class="jspsych-canvas-sliders-response-slider-col'+
-                    col+' jspsych-sliders-col">';
+                    col+' jspsych-sliders-col" style="margin-left: '+margin+
+                    'px; margin-right: '+margin+'px">';
                 // prompt
                 html += '<div class="jspsych-canvas-sliders-response-slider-prompt'+s
                     +'jspsych-sliders-prompt">'+slider.prompt+'</div>';
@@ -280,19 +294,20 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
                     '" min="'+slider.min+'" max="'+slider.max+
                     '" step="'+slider.step+'" style="width: 100%; min-width:'+
                     (slider.max-slider.min)+'px" '+
-                    'id="jspsych-canvas-sliders-response-response'+s+'"" '+
-                    'class="jspsych-canvas-sliders-response-response"></input>';
+                    'id="jspsych-canvas-sliders-response-slider'+s+'"" '+
+                    'class="jspsych-canvas-sliders-response-slider"></input>';
                 // labels
                 html += '<div id="jspsych-canvas-sliders-response-labels'+s
-                    +' jspsych-sliders-labels">'
+                    +' jspsych-sliders-labels" style="display: inline-flex; '+
+                    'width: 100%;">';
                 for(let j=0; j < slider.labels.length; j++){
-                  let width = 100/(slider.labels.length-1);
-                  let left_offset = (j * (100 /(slider.labels.length - 1))) - (width/2);
-                  html += '<div class="jspsych-canvas-sliders-response-label"'+
-                  ' id="jspsych-canvas-sliders-response-labelS'+s+'L'+j+
-                  '" style="display: inline-block; position: relative; left:'+left_offset+'%; text-align: center; width: '+width+'%;">';
-                  html += '<span style="text-align: center; font-size: 80%;">'+slider.labels[j]+'</span>';
-                  html += '</div>'
+                    let width = 100/(slider.labels.length);
+                    let left_offset = j * width;
+                    html += '<div class="jspsych-canvas-sliders-response-label"'+
+                    ' id="jspsych-canvas-sliders-response-labelS'+s+'L'+j+
+                    '" style="display: inline-block; position: relative; left:'+left_offset+'%; text-align: center; width: '+width+'%;">';
+                    html += '<span style="text-align: center; font-size: 80%; position: relative; left: -50%">'+slider.labels[j]+'</span>';
+                    html += '</div>'
                 }
                 html += '</div>';
                 html += '</div>';
@@ -318,11 +333,57 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
     // Execute the supplied drawing function
     response.stimulus_properties = trial.stimulus(trial.canvasId);
 
+    // Add listeners to the sliders
+    function onSliderChange() {
+        for (let i=0; i<sliders.length; i++) {
+            let id = 'jspsych-canvas-sliders-response-slider'+i;
+            if (id==this.id) {
+                sliders[i].changedTime = performance.now();
+                break;
+            }
+        }
+        if(trial.one_slider_only) {
+            swapSliderChangeFunction(true);
+            for (let i=0; i<sliders.length; i++) {
+                let id = 'jspsych-canvas-sliders-response-slider'+i;
+                if (id !== this.id) {
+                    display_element.querySelector('#'+id).value = sliders[i].start;
+                }
+            }
+            swapSliderChangeFunction();
+        }
+    }
+
+    function swapSliderChangeFunction(remove=false) {
+        for (let i=0; i<sliders.length; i++) {
+            let s = display_element.querySelector('#jspsych-canvas-sliders-response-slider'+i);
+            if (remove) {
+                s.removeEventListener('change', onSliderChange);
+            } else {
+                s.addEventListener('change', onSliderChange);
+            }
+        }
+    }
+
+    swapSliderChangeFunction();
+
     display_element.querySelector('#jspsych-canvas-sliders-response-next').addEventListener('click', function() {
       // measure response time
       let endTime = (new Date()).getTime();
       response.rt = endTime - startTime;
-      response.response = display_element.querySelector('#jspsych-canvas-sliders-response-response').value;
+      let answers = [];
+      for (let i=0; i<sliders.length; i++) {
+          let value = display_element.querySelector('#jspsych-canvas-sliders-response-slider'+i).value;
+          let slider = sliders[i];
+          slider.value = value;
+          answers.push({
+              id: i,
+              name: slider.prompt,
+              answer: slider.value,
+              lastChangedTime: slider.changedTime
+          });
+      }
+      response.response = answers;
 
       if(trial.response_ends_trial){
         end_trial();
