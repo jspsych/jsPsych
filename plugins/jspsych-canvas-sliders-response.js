@@ -1,12 +1,16 @@
 /**
  * jspsych-canvas-sliders-response
+ *
  * a jspsych plugin for free response to questions presented using canvas
- * drawing tools. This version uses two sliders to record responses. Both
- * slider values will be included in the final data, but it is possible to
- * specify that changing one slider should reset the other to default. This,
- * combined with requiring one of the sliders to be moved prior to accepting
- * the response, allows simulation of a forced choice between two scaled
- * options.
+ * drawing tools. This version uses multiple sliders to record responses. All
+ * slider values will be included in the final data.
+ * Sliders can be designated into groups of various kinds. These groups specify
+ * which sliders need to be moved before the trial can be completed, and
+ * which sliders get reset when other sliders are moved. E.g. one may want to
+ * give a participant a split confidence scale where a response is required on
+ * one of two sliders (but not both). Setting these two sliders to have the
+ * same require_change group and the same exclusive_group identifier will
+ * accomplish this.
  *
  * the canvas drawing is done by a function which is supplied as the stimulus.
  * this function is passed the id of the canvas on which it will draw.
@@ -127,7 +131,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
       require_change: {
           type: jsPsych.plugins.parameterType.INT,
           pretty_name: 'Require change',
-          default: false,
+          default: [0],
           array: true,
           description: 'Whether one of these sliders must have been changed '+
             'before a response is accepted. Format is an array of ints, where '+
@@ -137,7 +141,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
       require_change_warning: {
           type: jsPsych.plugins.parameterType.HTML_STRING,
           pretty_name: 'Require change warning',
-          default: ['<span style="color: red; font-size: 80px">'+
+          default: ['<span style="color: red;">'+
             'At least one of the bars must have been moved to continue.'
             +'</span>'],
           array: true,
@@ -172,12 +176,12 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
             'Each entry in the array refers to an individual row. '+
             'Shorter arrays will be padded with the final value.'
       },
-      one_slider_only: {
-          type: jsPsych.plugins.parameterType.BOOL,
-          pretty_name: 'Single slider response only',
-          default: false,
+      exclusive_group: {
+          type: jsPsych.plugins.parameterType.INT,
+          pretty_name: 'Exclusive slider response group',
+          default: [0],
           description: 'Whether changing one slider resets the other sliders '+
-            'to their starting values.'
+            'in this group to their starting values. Group 0 are not exclusive'
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -247,6 +251,9 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
             require_change_warning: (trial.require_change_warning.length > i)?
                 trial.require_change_warning[i] :
                 trial.require_change_warning[trial.require_change_warning.length-1],
+            exclusive_group: (trial.exclusive_group.length > i)?
+                trial.exclusive_group[i] :
+                trial.exclusive_group[trial.exclusive_group.length-1],
         });
         let slider = sliders.pop();
         if (trial.slider_arrangement !== null) {
@@ -319,6 +326,9 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
     html += '</div>';
     html += '</div>';
 
+    // warning area if sliders are missed
+    html += '<div id="jspsych-canvas-sliders-response-warnings"></div>'
+
     // add submit button
     html += '<button id="jspsych-canvas-sliders-response-next" class="jspsych-btn">'+trial.button_label+'</button>';
 
@@ -335,18 +345,21 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
 
     // Add listeners to the sliders
     function onSliderChange() {
+        let slider = {};
         for (let i=0; i<sliders.length; i++) {
             let id = 'jspsych-canvas-sliders-response-slider'+i;
             if (id==this.id) {
-                sliders[i].changedTime = performance.now();
+                slider = sliders[i];
+                slider.changedTime = performance.now();
                 break;
             }
         }
-        if(trial.one_slider_only) {
+        if(slider.exclusive_group !== 0) {
             swapSliderChangeFunction(true);
             for (let i=0; i<sliders.length; i++) {
                 let id = 'jspsych-canvas-sliders-response-slider'+i;
-                if (id !== this.id) {
+                if (id !== this.id &&
+                    slider.exclusive_group === sliders[i].exclusive_group) {
                     display_element.querySelector('#'+id).value = sliders[i].start;
                 }
             }
@@ -368,6 +381,35 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
     swapSliderChangeFunction();
 
     display_element.querySelector('#jspsych-canvas-sliders-response-next').addEventListener('click', function() {
+      // Validate the sliders (did they move everything they were supposed to?)
+      let groups = [];
+      let warnings = [];
+      for (let i=0; i<sliders.length; i++) {
+          let slider = sliders[i];
+          if (slider.require_change !== 0) {
+            if (!isNaN(slider.changedTime)) {
+                // this group is okay!
+                groups.push(slider.require_change);
+            } else {
+                // note the warning string
+                warnings[slider.require_change] = slider.require_change_warning;
+            }
+          }
+      }
+      let halt = false;
+      let warn_html = '';
+      warnings.forEach(function (w,i) {
+          if (groups.indexOf(i)==-1) {
+              // not moved sliders in this group yet
+              halt = true;
+              warn_html += w;
+          }
+      });
+      // Issue the warnings
+      if (halt) {
+          display_element.querySelector('#jspsych-canvas-sliders-response-warnings').innerHTML = warn_html;
+          return;
+      }
       // measure response time
       let endTime = (new Date()).getTime();
       response.rt = endTime - startTime;
