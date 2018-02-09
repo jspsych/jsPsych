@@ -1,9 +1,14 @@
 /**
- * jspsych-canvas-slider-response
+ * jspsych-canvas-sliders-response
  * a jspsych plugin for free response to questions presented using canvas
- * drawing tools
+ * drawing tools. This version uses two sliders to record responses. Both
+ * slider values will be included in the final data, but it is possible to
+ * specify that changing one slider should reset the other to default. This,
+ * combined with requiring one of the sliders to be moved prior to accepting
+ * the response, allows simulation of a forced choice between two scaled
+ * options.
  *
- * the drawing is done by a function which is supplied as the stimulus.
+ * the canvas drawing is done by a function which is supplied as the stimulus.
  * this function is passed the id of the canvas on which it will draw.
  *
  * the canvas can either be supplied as customised HTML, or a default one
@@ -17,13 +22,14 @@
  */
 
 
-jsPsych.plugins['canvas-slider-response'] = (function() {
+jsPsych.plugins['canvas-sliders-response'] = (function() {
 
   var plugin = {};
 
   plugin.info = {
-    name: 'canvas-slider-response',
-    description: 'Collect slider responses to stimuli drawn on an HTML canvas',
+    name: 'canvas-sliders-response',
+    description: 'Collect multiple slider responses to stimuli '+
+        'drawn on an HTML canvas',
     parameters: {
       stimulus: {
         type: jsPsych.plugins.parameterType.FUNCTION,
@@ -62,33 +68,85 @@ jsPsych.plugins['canvas-slider-response'] = (function() {
       min: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Min slider',
-        default: 0,
-        description: 'Sets the minimum value of the slider.'
+        default: [0],
+        array: true,
+        description: 'Sets the minimum value of the sliders. '+
+            'Format is an array of length sliderCount. '+
+            'Shorter arrays will be padded with the final value.'
       },
       max: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Max slider',
-        default: 100,
-        description: 'Sets the maximum value of the slider',
+        default: [100],
+        array: true,
+        description: 'Sets the maximum value of the sliders. '+
+            'Format is an array of length sliderCount. '+
+            'Shorter arrays will be padded with the final value.'
       },
       start: {
 		type: jsPsych.plugins.parameterType.INT,
 		pretty_name: 'Slider starting value',
-		default: 50,
-		description: 'Sets the starting value of the slider',
+		default: [50],
+        array: true,
+		description: 'Sets the starting value of the sliders. '+
+            'Format is an array of length sliderCount. '+
+            'Shorter arrays will be padded with the final value.'
 			},
       step: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Step',
-        default: 1,
-        description: 'Sets the step of the slider'
+        default: [1],
+        array: true,
+        description: 'Sets the step of the sliders. '+
+            'Format is an array of length sliderCount. '+
+            'Shorter arrays will be padded with the final value.'
       },
       labels: {
-        type: jsPsych.plugins.parameterType.STRING,
+        type: jsPsych.plugins.parameterType.COMPLEX,
         pretty_name:'Labels',
-        default: [],
+        default: [[]],
         array: true,
-        description: 'Labels of the slider.',
+        description: 'Labels of the sliders. '+
+            'Format is an array of length sliderCount. '+
+            'Shorter arrays will be padded with the final value. '+
+            'Each array entry must be an array of strings for the labels '+
+            'which apply to that slider.'
+      },
+      one_slider_only: {
+          type: jsPsych.plugins.parameterType.BOOL,
+          pretty_name: 'Single slider response only',
+          default: false,
+          description: 'Whether changing one slider resets the other sliders '+
+            'to their starting values.'
+      },
+      require_change: {
+          type: jsPsych.plugins.parameterType.INT,
+          pretty_name: 'Require change',
+          default: false,
+          array: true,
+          description: 'Whether one of these sliders must have been changed '+
+            'before a response is accepted. Format is an array of ints, where '+
+            'non-zero ints specify slider sets. At least one slider in each '+
+            'set must be changed before the response is accepted.'
+      },
+      require_change_warning: {
+          type: jsPsych.plugins.parameterType.HTML_STRING,
+          pretty_name: 'Require change warning',
+          default: ['<span style="color: red; font-size: 80px">'+
+            'At least one of the bars must have been moved to continue.'
+            +'</span>'],
+          array: true,
+          description: 'HTML to display when not enough sliders have been '+
+            'moved to continue',
+      },
+      slider_arrangement: {
+          type: jsPsych.plugins.parameterType.INT,
+          pretty_name: 'Slider arrangment',
+          default: null,
+          array: true,
+          description: 'Sliders with the same slider arrangement value '+
+            'will be placed on the same row, with those appearing first '+
+            'placed to the left of those appearing later'.
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -101,7 +159,10 @@ jsPsych.plugins['canvas-slider-response'] = (function() {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
         default: null,
-        description: 'Any content here will be displayed below the slider.'
+        array: true,
+        description: 'Any content here will be displayed below the sliders. '+
+            'Format is an array of length sliderCount. '+
+            'Shorter arrays will be padded with the final value.'
       },
       stimulus_duration: {
         type: jsPsych.plugins.parameterType.INT,
@@ -135,14 +196,14 @@ jsPsych.plugins['canvas-slider-response'] = (function() {
       canvas = '<canvas id="'+trial.canvasId+'" height="'+trial.canvasHeight+
         '" width="'+trial.canvasWidth+'"></canvas>';
     }
-    let html = '<div id="jspsych-canvas-slider-response-wrapper" style="margin: 100px 0px;">';
+    var html = '<div id="jspsych-canvas-slider-response-wrapper" style="margin: 100px 0px;">';
     html += '<div id="jspsych-canvas-slider-response-stimulus">'+canvas+'</div>';
     html += '<div class="jspsych-canvas-slider-response-container" style="position:relative;">';
     html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-canvas-slider-response-response"></input>';
     html += '<div>'
-    for(let j=0; j < trial.labels.length; j++){
-      let width = 100/(trial.labels.length-1);
-      let left_offset = (j * (100 /(trial.labels.length - 1))) - (width/2);
+    for(var j=0; j < trial.labels.length; j++){
+      var width = 100/(trial.labels.length-1);
+      var left_offset = (j * (100 /(trial.labels.length - 1))) - (width/2);
       html += '<div style="display: inline-block; position: absolute; left:'+left_offset+'%; text-align: center; width: '+width+'%;">';
       html += '<span style="text-align: center; font-size: 80%;">'+trial.labels[j]+'</span>';
       html += '</div>'
@@ -163,14 +224,14 @@ jsPsych.plugins['canvas-slider-response'] = (function() {
     // Execute the supplied drawing function
     trial.stimulus(trial.canvasId);
 
-    let response = {
+    var response = {
       rt: null,
       response: null
     };
 
     display_element.querySelector('#jspsych-canvas-slider-response-next').addEventListener('click', function() {
       // measure response time
-      let endTime = (new Date()).getTime();
+      var endTime = (new Date()).getTime();
       response.rt = endTime - startTime;
       response.response = display_element.querySelector('#jspsych-canvas-slider-response-response').value;
 
@@ -187,7 +248,7 @@ jsPsych.plugins['canvas-slider-response'] = (function() {
       jsPsych.pluginAPI.clearAllTimeouts();
 
       // save data
-      let trialdata = {
+      var trialdata = {
         "rt": response.rt,
         "response": response.response
       };
@@ -211,7 +272,7 @@ jsPsych.plugins['canvas-slider-response'] = (function() {
       }, trial.trial_duration);
     }
 
-    let startTime = (new Date()).getTime();
+    var startTime = (new Date()).getTime();
   };
 
   return plugin;
