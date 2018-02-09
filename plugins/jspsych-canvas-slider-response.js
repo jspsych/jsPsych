@@ -23,14 +23,17 @@ jsPsych.plugins['canvas-slider-response'] = (function() {
 
   plugin.info = {
     name: 'canvas-slider-response',
-    description: 'Collect slider responses to stimuli drawn on an HTML canvas',
+    description: '',
     parameters: {
       stimulus: {
         type: jsPsych.plugins.parameterType.FUNCTION,
         pretty_name: 'Stimulus',
         default: undefined,
         description: 'The function to be called with the canvas ID. '+
-          'This should handle drawing operations.'
+          'This should handle drawing operations. The return value of this '+
+          'function is stored in trial.stimulus_properties, which is useful '+
+          'for recording particular properties of the stimulus which are '+
+          'only calculated at runtime.'
       },
       canvasHTML: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
@@ -84,7 +87,7 @@ jsPsych.plugins['canvas-slider-response'] = (function() {
         description: 'Sets the step of the slider'
       },
       labels: {
-        type: jsPsych.plugins.parameterType.STRING,
+        type: jsPsych.plugins.parameterType.KEYCODE,
         pretty_name:'Labels',
         default: [],
         array: true,
@@ -135,14 +138,14 @@ jsPsych.plugins['canvas-slider-response'] = (function() {
       canvas = '<canvas id="'+trial.canvasId+'" height="'+trial.canvasHeight+
         '" width="'+trial.canvasWidth+'"></canvas>';
     }
-    let html = '<div id="jspsych-canvas-slider-response-wrapper" style="margin: 100px 0px;">';
+    var html = '<div id="jspsych-canvas-slider-response-wrapper" style="margin: 100px 0px;">';
     html += '<div id="jspsych-canvas-slider-response-stimulus">'+canvas+'</div>';
     html += '<div class="jspsych-canvas-slider-response-container" style="position:relative;">';
     html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-canvas-slider-response-response"></input>';
     html += '<div>'
-    for(let j=0; j < trial.labels.length; j++){
-      let width = 100/(trial.labels.length-1);
-      let left_offset = (j * (100 /(trial.labels.length - 1))) - (width/2);
+    for(var j=0; j < trial.labels.length; j++){
+      var width = 100/(trial.labels.length-1);
+      var left_offset = (j * (100 /(trial.labels.length - 1))) - (width/2);
       html += '<div style="display: inline-block; position: absolute; left:'+left_offset+'%; text-align: center; width: '+width+'%;">';
       html += '<span style="text-align: center; font-size: 80%;">'+trial.labels[j]+'</span>';
       html += '</div>'
@@ -160,17 +163,18 @@ jsPsych.plugins['canvas-slider-response'] = (function() {
 
     display_element.innerHTML = html;
 
-    // Execute the supplied drawing function
-    trial.stimulus(trial.canvasId);
-
-    let response = {
+    var response = {
       rt: null,
-      response: null
+      response: null,
+      stimulus_properties: null,
     };
+
+    // Execute the supplied drawing function
+    response.stimulus_properties = trial.stimulus(trial.canvasId);
 
     display_element.querySelector('#jspsych-canvas-slider-response-next').addEventListener('click', function() {
       // measure response time
-      let endTime = (new Date()).getTime();
+      var endTime = (new Date()).getTime();
       response.rt = endTime - startTime;
       response.response = display_element.querySelector('#jspsych-canvas-slider-response-response').value;
 
@@ -187,9 +191,10 @@ jsPsych.plugins['canvas-slider-response'] = (function() {
       jsPsych.pluginAPI.clearAllTimeouts();
 
       // save data
-      let trialdata = {
+      var trialdata = {
         "rt": response.rt,
-        "response": response.response
+        "response": response.response,
+        "stimulus_properties": response.stimulus_properties
       };
 
       display_element.innerHTML = '';
@@ -211,7 +216,7 @@ jsPsych.plugins['canvas-slider-response'] = (function() {
       }, trial.trial_duration);
     }
 
-    let startTime = (new Date()).getTime();
+    var startTime = (new Date()).getTime();
   };
 
   return plugin;

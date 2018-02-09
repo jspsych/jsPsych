@@ -1,0 +1,12 @@
+div.jspsych-sliders-row {
+    display: inline-flex;
+}
+
+div.jspsych-sliders-col {
+    margin-left: 25px;
+    margin-right 25px;
+}
+
+div.jspsych-sliders-labels {
+    display: inline-flex;
+}

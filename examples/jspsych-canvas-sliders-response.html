@@ -3,8 +3,10 @@
   <head>
     <title>My experiment</title>
     <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-instructions.js"></script>
     <script src="../plugins/jspsych-html-keyboard-response.js"></script>
-    <script src="../plugins/jspsych-canvas-slider-response.js"></script>
+    <script src="../plugins/jspsych-canvas-sliders-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych-sliders.css"></link>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
     <style type="text/css">
     </style>
@@ -24,9 +26,6 @@
       this.renewGrid();
       this.displayWidth = this.gridWidth*this.dotWidth + (this.gridWidth+2)*this.paddingX;
       this.displayHeight = this.gridHeight*this.dotHeight + (this.gridHeight+2)*this.paddingY;
-    }
-    get html() {
-      return '<strong>hello, grid</strong>';
     }
     // Create a blank grid
     renewGrid() {
@@ -84,10 +83,6 @@
   function drawDots(canvasId) {
     var grid = new DotGrid(200);
     grid.draw(canvasId);
-    // return an object describing the trial so it goes in our data
-    return {
-        dotCount: 200,
-    };
   }
   </script>
   <script>
@@ -97,31 +92,38 @@
 
     /* define welcome message trial */
     var welcome = {
-      type: "html-keyboard-response",
-      stimulus: "Welcome to the experiment. Press any key to begin."
+      type: 'instructions',
+      pages: [
+          "Welcome to the experiment. Press any key to begin.",
+          "<p>In this experiment, a box with dots will appear in the center"+
+          " of the screen. Your task is to use the slider to give an estimate "+
+          "of the number of dots that are in the box.</p>"+
+          "<p>You will not know how many dots there can be in the box, except"+
+          "by observing the boxes on each trial; nevertheless, you should try "+
+          "to use the whole width of the scale, indicating the smallest "+
+          "number of dots by using the left side and the largest number by "+
+          "using the right side.</p>"
+      ],
+      show_clickable_nav: true,
     };
     timeline.push(welcome);
 
-    /* define instructions trial */
-    var instructions = {
-      type: "html-keyboard-response",
-      stimulus: "<p>In this experiment, a box with dots will appear in the center of the screen."+
-  "Your task is to use the slider to give an estimate of the number of dots that"+
-  "are in the box. You will not know how many dots there can be in the box, except"+
-  "by observing the boxes on each trial; nevertheless, you should try to use the"+
-  "whole width of the scale, indicating the smallest number of dots by using the"+
-  "left side and the largest number by using the right side.</p>",
-      post_trial_gap: 2000
-    };
-    timeline.push(instructions);
-
     /* test trials */
-
     var test = {
-      type: "canvas-slider-response",
+      type: "canvas-sliders-response",
       stimulus: drawDots,
-      labels: ['Sparse', 'Dense'],
-      prompt: '<p>How densely populated is this box?</p>',
+      prompt: '<p>Which box had more dots?</p>',
+      sliderCount: 2,
+      labels: [
+          ['Certain', 'Unsure'],
+          ['Unsure', 'Certain']
+      ],
+      slider_prompt: [
+          '<span>Left</span>',
+          '<span>Right</span>'
+      ],
+      one_slider_only: true,
+      require_change: [1, 1],
       canvasWidth: 172,
       canvasHeight: 172
     }
