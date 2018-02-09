@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My experiment</title>
+    <script src="../jsPsych/jspsych.js"></script>
+    <script src="../jsPsych/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="../jsPsych/plugins/jspsych-canvas-slider-response.js"></script>
+    <link rel="stylesheet" href="../jsPsych/css/jspsych.css"></link>
+    <style type="text/css">
+    </style>
+  </head>
+  <body></body>
+  <script type="text/javascript">
+  // This stuff defines a box with dots which is drawn on a canvas.
+  class DotGrid {
+    constructor(nDots, args = {}) {
+      this.dotCount = nDots;
+      this.gridWidth = args.gridWidth || 20;
+      this.gridHeight = args.gridHeight || 20;
+      this.dotWidth = args.dotWidth || 2;
+      this.dotHeight = args.dotHeight || 2;
+      this.paddingX = args.paddingX || 6;
+      this.paddingY = args.paddingY || 6;
+      this.renewGrid();
+      this.displayWidth = this.gridWidth*this.dotWidth + (this.gridWidth+2)*this.paddingX;
+      this.displayHeight = this.gridHeight*this.dotHeight + (this.gridHeight+2)*this.paddingY;
+    }
+    get html() {
+      return '<strong>hello, grid</strong>';
+    }
+    // Create a blank grid
+    renewGrid() {
+      let grid = [];
+      for(let i=0; i<this.gridWidth; i++) {
+        let row = [];
+        for(let j=0; j<this.gridHeight; j++) {
+          row.push(0);
+        }
+        grid.push(row);
+      }
+      this.grid = grid;
+      this.populateGrid();
+      return this;
+    }
+    // Populate a grid with dots
+    populateGrid() {
+      for(let i=0; i<this.dotCount; i++) {
+        let x = Math.floor(Math.random()*this.gridWidth);
+        let y = Math.floor(Math.random()*this.gridHeight);
+        if(this.grid[x][y]==1)
+          i--;
+        else
+          this.grid[x][y] = 1;
+      }
+    }
+    draw(canvasId) {
+      let canvas = document.getElementById(canvasId);
+      let ctx = canvas.getContext('2d');
+      // Draw frame
+      ctx.lineWidth = "3";
+      ctx.rect(0, 0, this.displayWidth, this.displayHeight);
+      ctx.stroke();
+      // Draw dots
+      ctx.lineWidth = "1";
+      for(let x=0; x<this.gridWidth; x++) {
+        for(let y=0; y<this.gridHeight; y++) {
+          if(this.grid[x][y] == 1) {
+            let startX = (x+1)*this.paddingX + x*this.dotWidth;
+            let startY = (y+1)*this.paddingY + y*this.dotHeight;
+            ctx.fillRect(startX, startY, this.dotWidth, this.dotHeight);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+  };
+
+  // This function does the actual drawing on the canvas, and is the one
+  // called by the trial (it is passed in as a stimulus and called with
+  // the id of the canvas supplied).
+  // At the moment this doesn't do anything exciting; it just presents
+  // 200 dots in random places in the box, but we could make it staircase
+  // the number of dots based on past performance, etc.
+  function drawDots(canvasId) {
+    var grid = new DotGrid(200);
+    grid.draw(canvasId);
+  }
+  </script>
+  <script>
+
+    /* create timeline */
+    var timeline = [];
+
+    /* define welcome message trial */
+    var welcome = {
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the experiment. Press any key to begin."
+    };
+    timeline.push(welcome);
+
+    /* define instructions trial */
+    var instructions = {
+      type: "html-keyboard-response",
+      stimulus: "<p>In this experiment, a box with dots will appear in the center of the screen."+
+  "Your task is to use the slider to give an estimate of the number of dots that"+
+  "are in the box. You will not know how many dots there can be in the box, except"+
+  "by observing the boxes on each trial; nevertheless, you should try to use the"+
+  "whole width of the scale, indicating the smallest number of dots by using the"+
+  "left side and the largest number by using the right side.</p>",
+      post_trial_gap: 2000
+    };
+    timeline.push(instructions);
+
+    /* test trials */
+
+    var test = {
+      type: "canvas-slider-response",
+      stimulus: drawDots,
+      labels: ['Sparse', 'Dense'],
+      prompt: '<p>How densely populated is this box?</p>',
+      canvasWidth: 172,
+      canvasHeight: 172
+    }
+
+    var test_procedure = {
+      timeline: [test],
+      repetitions: 5,
+      randomize_order: true
+    }
+    timeline.push(test_procedure);
+
+    /* define debrief */
+
+    var debrief_block = {
+      type: "html-keyboard-response",
+      stimulus: function() {
+        return "<p>You did it beautifully!</p>"+
+          "<p>Press any key to end.</p>"
+        var trials = jsPsych.data.get().filter({test_part: 'test'});
+        var correct_trials = trials.filter({correct: true});
+        var accuracy = Math.round(correct_trials.count() / trials.count() * 100);
+        var rt = Math.round(correct_trials.select('rt').mean());
+
+        return "<p>You responded correctly on "+accuracy+"% of the trials.</p>"+
+        "<p>Your average response time was "+rt+"ms.</p>"+
+        "<p>Press any key to complete the experiment. Thank you!</p>";
+
+      }
+    };
+    timeline.push(debrief_block);
+
+    /* start the experiment */
+    jsPsych.init({
+      timeline: timeline,
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
+  </script>
+</html>
