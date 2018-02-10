@@ -83,7 +83,7 @@ window.jsPsych = (function() {
       'auto_preload': true,
       'show_preload_progress_bar': true,
       'max_load_time': 60000,
-      'max_preload_retries': 10,
+      'max_preload_attempts': 10,
       'default_iti': 0
     };
 
@@ -2160,7 +2160,7 @@ jsPsych.pluginAPI = (function() {
         });
       }
       request.onerror = function(){
-        if(count <= jsPsych.initSettings().max_preload_retries){
+        if(count < jsPsych.initSettings().max_preload_attempts){
           load_audio_file_webaudio(source, count+1);
         } else {
           jsPsych.loadFail();
@@ -2181,21 +2181,21 @@ jsPsych.pluginAPI = (function() {
         }
       });
       audio.addEventListener('onerror', function(){
-        if(count <= jsPsych.initSettings().max_preload_retries){
+        if(count < jsPsych.initSettings().max_preload_attempts){
           load_audio_file_html5audio(source, count+1);
         } else {
           jsPsych.loadFail();
         }
       });
       audio.addEventListener('onstalled', function(){
-        if(count <= jsPsych.initSettings().max_preload_retries){
+        if(count < jsPsych.initSettings().max_preload_attempts){
           load_audio_file_html5audio(source, count+1);
         } else {
           jsPsych.loadFail();
         }
       });
       audio.addEventListener('onabort', function(){
-        if(count <= jsPsych.initSettings().max_preload_retries){
+        if(count < jsPsych.initSettings().max_preload_attempts){
           load_audio_file_html5audio(source, count+1);
         } else {
           jsPsych.loadFail();
@@ -2253,7 +2253,7 @@ jsPsych.pluginAPI = (function() {
       };
 
       img.onerror = function() {
-        if(count <= jsPsych.initSettings().max_preload_retries){
+        if(count < jsPsych.initSettings().max_preload_attempts){
           preload_image(source, count+1);
         } else {
           jsPsych.loadFail();
