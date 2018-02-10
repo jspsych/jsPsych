@@ -31,6 +31,7 @@ window.jsPsych = (function() {
   var waiting = false;
   // done loading?
   var loaded = false;
+  var loadfail = false;
 
   // enumerated variables for special parameter types
   core.ALL_KEYS = 'allkeys';
@@ -54,6 +55,7 @@ window.jsPsych = (function() {
     paused = false;
     waiting = false;
     loaded = false;
+    loadfail = false;
     jsPsych.data.reset();
 
     var defaults = {
@@ -81,6 +83,7 @@ window.jsPsych = (function() {
       'auto_preload': true,
       'show_preload_progress_bar': true,
       'max_load_time': 60000,
+      'max_preload_retries': 10,
       'default_iti': 0
     };
 
@@ -152,7 +155,7 @@ window.jsPsych = (function() {
           jsPsych.pluginAPI.autoPreload(timeline, startExperiment, opts.preload_images, opts.preload_audio, opts.show_preload_progress_bar);
           if(opts.max_load_time > 0){
             setTimeout(function(){
-              if(!loaded){
+              if(!loaded && !loadfail){
                 loadFail();
               }
             }, opts.max_load_time);
@@ -294,6 +297,12 @@ window.jsPsych = (function() {
       waiting = false;
       nextTrial();
     }
+  }
+
+  core.loadFail = function(message){
+    message = message || '<p>The experiment failed to load.</p>';
+    loadfail = true;
+    DOM_target.innerHTML = message;
   }
 
   function TimelineNode(parameters, parent, relativeID) {
@@ -850,10 +859,6 @@ window.jsPsych = (function() {
         }
       }
     }
-  }
-
-  function loadFail(){
-    DOM_target.innerHTML = '<p>The experiment failed to load.</p>';
   }
 
   function checkExclusions(exclusions, success, fail){
@@ -2137,7 +2142,8 @@ jsPsych.pluginAPI = (function() {
       return;
     }
 
-    function load_audio_file_webaudio(source){
+    function load_audio_file_webaudio(source, count){
+      count = count || 1;
       var request = new XMLHttpRequest();
       request.open('GET', source, true);
       request.responseType = 'arraybuffer';
@@ -2153,10 +2159,18 @@ jsPsych.pluginAPI = (function() {
           console.error('Error loading audio file: ' + bufferID);
         });
       }
+      request.onerror = function(){
+        if(count <= jsPsych.initSettings().max_preload_retries){
+          load_audio_file_webaudio(source, count+1);
+        } else {
+          jsPsych.loadFail();
+        }
+      }
       request.send();
     }
 
-    function load_audio_file_html5audio(source){
+    function load_audio_file_html5audio(source, count){
+      count = count || 1;
       var audio = new Audio();
       audio.addEventListener('canplaythrough', function(){
         audio_buffers[source] = audio;
@@ -2164,6 +2178,27 @@ jsPsych.pluginAPI = (function() {
         loadfn(n_loaded);
         if(n_loaded == files.length){
           finishfn();
+        }
+      });
+      audio.addEventListener('onerror', function(){
+        if(count <= jsPsych.initSettings().max_preload_retries){
+          load_audio_file_html5audio(source, count+1);
+        } else {
+          jsPsych.loadFail();
+        }
+      });
+      audio.addEventListener('onstalled', function(){
+        if(count <= jsPsych.initSettings().max_preload_retries){
+          load_audio_file_html5audio(source, count+1);
+        } else {
+          jsPsych.loadFail();
+        }
+      });
+      audio.addEventListener('onabort', function(){
+        if(count <= jsPsych.initSettings().max_preload_retries){
+          load_audio_file_html5audio(source, count+1);
+        } else {
+          jsPsych.loadFail();
         }
       });
       audio.src = source;
@@ -2204,7 +2239,9 @@ jsPsych.pluginAPI = (function() {
       return;
     }
 
-    for (var i = 0; i < images.length; i++) {
+    function preload_image(source, count){
+      count = count || 1;
+
       var img = new Image();
 
       img.onload = function() {
@@ -2216,17 +2253,22 @@ jsPsych.pluginAPI = (function() {
       };
 
       img.onerror = function() {
-        n_loaded++;
-        loadfn(n_loaded);
-        if (n_loaded == images.length) {
-          finishfn();
+        if(count <= jsPsych.initSettings().max_preload_retries){
+          preload_image(source, count+1);
+        } else {
+          jsPsych.loadFail();
         }
       }
 
-      img.src = images[i];
+      img.src = source;
 
-      img_cache[images[i]] = img;
+      img_cache[source] = img;
     }
+
+    for (var i = 0; i < images.length; i++) {
+      preload_image(images[i]);
+    }
+
   };
 
   module.registerPreload = function(plugin_name, parameter, media_type, conditional_function) {
