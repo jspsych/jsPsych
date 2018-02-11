@@ -65,18 +65,6 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
         default: 150,
         description: 'Sets the height of the canvas.'
       },
-      prompt: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Prompt',
-        default: null,
-        description: 'Content to display below the stimulus.'
-      },
-      sliderCount: {
-          type: jsPsych.plugins.parameterType.INT,
-          pretty_name: 'Slider count',
-          default: undefined,
-          description: 'Number of sliders to draw.'
-      },
       min: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Min slider',
@@ -124,6 +112,13 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
             'Each array entry must be an array of strings for the labels '+
             'which apply to that slider.'
       },
+      one_slider_only: {
+          type: jsPsych.plugins.parameterType.BOOL,
+          pretty_name: 'Single slider response only',
+          default: false,
+          description: 'Whether changing one slider resets the other sliders '+
+            'to their starting values.'
+      },
       require_change: {
           type: jsPsych.plugins.parameterType.INT,
           pretty_name: 'Require change',
@@ -146,28 +141,12 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
       },
       slider_arrangement: {
           type: jsPsych.plugins.parameterType.INT,
-          pretty_name: 'Slider arrangement',
+          pretty_name: 'Slider arrangment',
           default: null,
           array: true,
           description: 'Sliders with the same slider arrangement value '+
             'will be placed on the same row, with those appearing first '+
-            'placed to the left of those appearing later.'
-      },
-      slider_prompt: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Prompt',
-        default: null,
-        array: true,
-        description: 'Any content here will be displayed below the sliders. '+
-            'Format is an array of length sliderCount. '+
-            'Shorter arrays will be padded with the final value.'
-      },
-      one_slider_only: {
-          type: jsPsych.plugins.parameterType.BOOL,
-          pretty_name: 'Single slider response only',
-          default: false,
-          description: 'Whether changing one slider resets the other sliders '+
-            'to their starting values.'
+            'placed to the left of those appearing later'.
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -175,6 +154,15 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
         default:  'Continue',
         array: false,
         description: 'Label of the button to advance.'
+      },
+      prompt: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
+        default: null,
+        array: true,
+        description: 'Any content here will be displayed below the sliders. '+
+            'Format is an array of length sliderCount. '+
+            'Shorter arrays will be padded with the final value.'
       },
       stimulus_duration: {
         type: jsPsych.plugins.parameterType.INT,
@@ -204,130 +192,53 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
       canvas = trial.canvasHTML;
     } else {
       // Otherwise create a new default canvas
-      trial.canvasId = '#jspsych-canvas-sliders-response-canvas';
+      trial.canvasId = '#jspsych-canvas-slider-response-canvas';
       canvas = '<canvas id="'+trial.canvasId+'" height="'+trial.canvasHeight+
         '" width="'+trial.canvasWidth+'"></canvas>';
     }
-    let html = '<div id="jspsych-canvas-sliders-response-wrapper" style="margin: 100px 0px;">';
-    html += '<div id="jspsych-canvas-sliders-response-stimulus">'+canvas+'</div>';
-    // Prompt text
-    if (trial.prompt !== null) {
-        html += '<div id="jspsych-canvas-sliders-response-prompt">'+trial.prompt+'</div>';
+    var html = '<div id="jspsych-canvas-slider-response-wrapper" style="margin: 100px 0px;">';
+    html += '<div id="jspsych-canvas-slider-response-stimulus">'+canvas+'</div>';
+    html += '<div class="jspsych-canvas-slider-response-container" style="position:relative;">';
+    html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-canvas-slider-response-response"></input>';
+    html += '<div>'
+    for(var j=0; j < trial.labels.length; j++){
+      var width = 100/(trial.labels.length-1);
+      var left_offset = (j * (100 /(trial.labels.length - 1))) - (width/2);
+      html += '<div style="display: inline-block; position: absolute; left:'+left_offset+'%; text-align: center; width: '+width+'%;">';
+      html += '<span style="text-align: center; font-size: 80%;">'+trial.labels[j]+'</span>';
+      html += '</div>'
     }
-    // Sliders
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
 
-    // Define the sliders
-    const sliders = [];
-    let max_slider_row = null;
-    for (let i=0; i<trial.sliderCount; i++) {
-        sliders.push({
-            min: (trial.min.length >= i)? trial.min[i] :
-                trial.min[trial.min.length-1],
-            max: (trial.max.length >= i)?  trial.max[i] :
-                trial.max[trial.max.length-1],
-            start: (trial.start.length >= i)? trial.start[i] :
-                trial.start[trial.start.length-1],
-            step: (trial.step.length >= i)? trial.step[i] :
-                trial.step[trial.step.length-1],
-            labels: (trial.labels.length >= i)? trial.labels[i] :
-                trial.labels[trial.labels.length-1],
-            require_change: (trial.require_change.length >= i)?
-                trial.require_change[i] :
-                trial.require_change[trial.require_change.length-1],
-            require_change_warning: (trial.require_change_warning.length >= i)?
-                trial.require_change_warning[i] :
-                trial.require_change_warning[trial.require_change_warning.length-1],
-        });
-        let slider = sliders.pop();
-        if (trial.slider_arrangement !== null) {
-            slider.arrangement = (trial.slider_arrangement.length >= i)?
-                trial.slider_arrangement[i] :
-                trial.slider_arrangement[trial.slider_arrangement.length-1];
-            if (max_slider_row === null || slider.arrangement > max_slider_row) {
-                max_slider_row = slider.arrangement;
-            }
-        } else {
-            slider.arrangement = 0;
-        }
-        if (trial.slider_prompt !== null) {
-            slider.prompt = (trial.slider_prompt.length >= i)?
-                trial.slider_prompt[i] :
-                trial.slider_prompt[trial.slider_prompt.length-1];
-        } else {
-            slider.prompt = "";
-        }
-        slider.hasChanged = false;
-        sliders.push(slider)
+    if (trial.prompt !== null){
+      html += trial.prompt;
     }
-    let row_count = (max_slider_row === null)? 1 : max_slider_row;
-    html += '<div class="jspsych-canvas-sliders-response-container" style="position:relative;">';
-    // Loop the rows of sliders
-    for (let i=0; i<row_count; i++) {
-        let col = 0;
-        html += '<div class="jspsych-canvas-sliders-response-slider-row'+
-            i+' jspsych-sliders-row">';
-        for(let s=0; s<sliders.length; s++) {
-            let slider = sliders[s];
-            if (max_slider_row === null || slider.arrangement == i) {
-                // Draw the slider
-                html += '<div class="jspsych-canvas-sliders-response-slider-col'+
-                    col+' jspsych-sliders-col">';
-                // prompt
-                html += '<div class="jspsych-canvas-sliders-response-slider-prompt'+s
-                    +'jspsych-sliders-prompt">'+slider.prompt+'</div>';
-                // slider
-                html += '<input type="range" value="'+slider.start+
-                    '" min="'+slider.min+'" max="'+slider.max+
-                    '" step="'+slider.step+'" style="width: 100%; min-width:'+
-                    (slider.max-slider.min)+'px" '+
-                    'id="jspsych-canvas-sliders-response-response'+s+'"" '+
-                    'class="jspsych-canvas-sliders-response-response"></input>';
-                // labels
-                html += '<div id="jspsych-canvas-sliders-response-labels'+s
-                    +' jspsych-sliders-labels">'
-                for(let j=0; j < slider.labels.length; j++){
-                  let width = 100/(slider.labels.length-1);
-                  let left_offset = (j * (100 /(slider.labels.length - 1))) - (width/2);
-                  html += '<div class="jspsych-canvas-sliders-response-label"'+
-                  ' id="jspsych-canvas-sliders-response-labelS'+s+'L'+j+
-                  '" style="display: inline-block; position: relative; left:'+left_offset+'%; text-align: center; width: '+width+'%;">';
-                  html += '<span style="text-align: center; font-size: 80%;">'+slider.labels[j]+'</span>';
-                  html += '</div>'
-                }
-                html += '</div>';
-                html += '</div>';
-                col++;
-            }
-        }
-        html += '</div>';
-    }
-    html += '</div>';
-    html += '</div>';
 
     // add submit button
-    html += '<button id="jspsych-canvas-sliders-response-next" class="jspsych-btn">'+trial.button_label+'</button>';
+    html += '<button id="jspsych-canvas-slider-response-next" class="jspsych-btn">'+trial.button_label+'</button>';
 
     display_element.innerHTML = html;
 
-    let response = {
+    // Execute the supplied drawing function
+    trial.stimulus(trial.canvasId);
+
+    var response = {
       rt: null,
-      response: null,
-      stimulus_properties: null,
+      response: null
     };
 
-    // Execute the supplied drawing function
-    response.stimulus_properties = trial.stimulus(trial.canvasId);
-
-    display_element.querySelector('#jspsych-canvas-sliders-response-next').addEventListener('click', function() {
+    display_element.querySelector('#jspsych-canvas-slider-response-next').addEventListener('click', function() {
       // measure response time
-      let endTime = (new Date()).getTime();
+      var endTime = (new Date()).getTime();
       response.rt = endTime - startTime;
-      response.response = display_element.querySelector('#jspsych-canvas-sliders-response-response').value;
+      response.response = display_element.querySelector('#jspsych-canvas-slider-response-response').value;
 
       if(trial.response_ends_trial){
         end_trial();
       } else {
-        display_element.querySelector('#jspsych-canvas-sliders-response-next').disabled = true;
+        display_element.querySelector('#jspsych-canvas-slider-response-next').disabled = true;
       }
 
     });
@@ -337,10 +248,9 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
       jsPsych.pluginAPI.clearAllTimeouts();
 
       // save data
-      let trialdata = {
+      var trialdata = {
         "rt": response.rt,
-        "response": response.response,
-        "stimulus_properties": response.stimulus_properties
+        "response": response.response
       };
 
       display_element.innerHTML = '';
@@ -351,7 +261,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
 
     if (trial.stimulus_duration !== null) {
       jsPsych.pluginAPI.setTimeout(function() {
-        display_element.querySelector('#jspsych-canvas-sliders-response-stimulus').style.visibility = 'hidden';
+        display_element.querySelector('#jspsych-canvas-slider-response-stimulus').style.visibility = 'hidden';
       }, trial.stimulus_duration);
     }
 
@@ -362,7 +272,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
       }, trial.trial_duration);
     }
 
-    let startTime = (new Date()).getTime();
+    var startTime = (new Date()).getTime();
   };
 
   return plugin;
