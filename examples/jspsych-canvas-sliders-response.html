@@ -6,52 +6,29 @@
     <script src="../plugins/jspsych-instructions.js"></script>
     <script src="../plugins/jspsych-html-keyboard-response.js"></script>
     <script src="../plugins/jspsych-canvas-sliders-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych-sliders.css"></link>
     <link rel="stylesheet" href="../css/jspsych.css"></link>
     <style type="text/css">
     </style>
   </head>
   <body></body>
   <script type="text/javascript">
-  /**
-   * Defines a pair of boxes with dots which are drawn on a canvas.
-   *
-   */
-  class DoubleDotGrid {
-      /**
-       * @constructor
-       * @param {int} nDotsL - number of dots in the left grid
-       * @param {int} nDotsR - number of dots in the right grid
-       * @param {Object} [args] - additional arguments.
-       * @param {int} [args.gridWidth=20] - number of squares in a row
-       * @param {int} [args.gridHeight=20] - number of squares in a column
-       * @param {int} [args.dotWidth=2] - pixel width of each dot
-       * @param {int} [args.dotHeight=2] - pixel height of each dot
-       * @param {int} [args.paddingX=6] - horizontal padding of the squares (pixels)
-       * @param {int} [args.paddingY=6] - vertical padding of the squares (pixels)
-       * @param {int} [args.spacing=26] - spacing between the boxes
-       */
-    constructor(nDotsL, nDotsR, args = {}) {
-      this.dotCountL = nDotsL;
-      this.dotCountR = nDotsR;
+  // This stuff defines a box with dots which is drawn on a canvas.
+  class DotGrid {
+    constructor(nDots, args = {}) {
+      this.dotCount = nDots;
       this.gridWidth = args.gridWidth || 20;
       this.gridHeight = args.gridHeight || 20;
       this.dotWidth = args.dotWidth || 2;
       this.dotHeight = args.dotHeight || 2;
       this.paddingX = args.paddingX || 6;
       this.paddingY = args.paddingY || 6;
-      this.gridL = this.renewGrid(this.dotCountL);
-      this.gridR = this.renewGrid(this.dotCountR);
-      this.displayWidth = this.gridWidth*this.dotWidth +
-        (this.gridWidth+2)*this.paddingX;
-      this.displayHeight = this.gridHeight*this.dotHeight +
-        (this.gridHeight+2)*this.paddingY;
-      this.spacing = args.spacing || 26;
+      this.renewGrid();
+      this.displayWidth = this.gridWidth*this.dotWidth + (this.gridWidth+2)*this.paddingX;
+      this.displayHeight = this.gridHeight*this.dotHeight + (this.gridHeight+2)*this.paddingY;
     }
-    /** Create a grid
-     * @param {int} dotCount - number of dots to place in the grid
-     * @returns {int[]} A matrix of 0s with *dotCount* 1s inserted
-     */
-    renewGrid(dotCount) {
+    // Create a blank grid
+    renewGrid() {
       let grid = [];
       for(let i=0; i<this.gridWidth; i++) {
         let row = [];
@@ -60,54 +37,40 @@
         }
         grid.push(row);
       }
-      grid = this.populateGrid(grid, dotCount);
-      return grid;
+      this.grid = grid;
+      this.populateGrid();
+      return this;
     }
-    /** Populate a grid with dots
-     * @param {int[]} grid - grid to populate
-     * @param {int} dotCount - number of dots to populate *grid* with
-     * @returns {int[]} *grid* populated with *dotCount* dots (1s)
-     */
-    populateGrid(grid, dotCount) {
-      for(let i=0; i<dotCount; i++) {
+    // Populate a grid with dots
+    populateGrid() {
+      for(let i=0; i<this.dotCount; i++) {
         let x = Math.floor(Math.random()*this.gridWidth);
         let y = Math.floor(Math.random()*this.gridHeight);
-        if(grid[x][y]==1)
+        if(this.grid[x][y]==1)
           i--;
         else
-          grid[x][y] = 1;
+          this.grid[x][y] = 1;
       }
-      return grid;
-    }
-    /** Draw a grid onto an HTML canvas
-     * @param {int[]} grid - grid to draw
-     * @param {object} ctx - HTML canvas on which to draw
-     * @param {bool} offset - if *true*, draw offset horizontally by *this.spacing*
-     */
-    drawGrid(grid, ctx, offset) {
-        let xMin = (offset)? this.spacing+this.displayWidth : 0;
-        // Draw frame
-        ctx.lineWidth = "3";
-        ctx.rect(xMin, 0, this.displayWidth, this.displayHeight);
-        ctx.stroke();
-        // Draw dots
-        ctx.lineWidth = "1";
-        for(let x=0; x<this.gridWidth; x++) {
-          for(let y=0; y<this.gridHeight; y++) {
-            if(grid[x][y] == 1) {
-              let startX = xMin + (x+1)*this.paddingX + x*this.dotWidth;
-              let startY = (y+1)*this.paddingY + y*this.dotHeight;
-              ctx.fillRect(startX, startY, this.dotWidth, this.dotHeight);
-              ctx.stroke();
-            }
-          }
-        }
     }
     draw(canvasId) {
       let canvas = document.getElementById(canvasId);
       let ctx = canvas.getContext('2d');
-      this.drawGrid(this.gridL, ctx, false);
-      this.drawGrid(this.gridR, ctx, true);
+      // Draw frame
+      ctx.lineWidth = "3";
+      ctx.rect(0, 0, this.displayWidth, this.displayHeight);
+      ctx.stroke();
+      // Draw dots
+      ctx.lineWidth = "1";
+      for(let x=0; x<this.gridWidth; x++) {
+        for(let y=0; y<this.gridHeight; y++) {
+          if(this.grid[x][y] == 1) {
+            let startX = (x+1)*this.paddingX + x*this.dotWidth;
+            let startY = (y+1)*this.paddingY + y*this.dotHeight;
+            ctx.fillRect(startX, startY, this.dotWidth, this.dotHeight);
+            ctx.stroke();
+          }
+        }
+      }
     }
   };
 
@@ -118,8 +81,7 @@
   // 200 dots in random places in the box, but we could make it staircase
   // the number of dots based on past performance, etc.
   function drawDots(canvasId) {
-    let dots = (Math.random()<0.5)? [200,185] : [185,200];
-    let grid = new DoubleDotGrid(dots[0], dots[1]);
+    var grid = new DotGrid(200);
     grid.draw(canvasId);
   }
   </script>
@@ -157,13 +119,12 @@
           ['Unsure', 'Certain']
       ],
       slider_prompt: [
-          'Left',
-          'Right'
+          '<span>Left</span>',
+          '<span>Right</span>'
       ],
-      slider_col_spacing: [40],
       one_slider_only: true,
       require_change: [1, 1],
-      canvasWidth: 370,
+      canvasWidth: 172,
       canvasHeight: 172
     }
 
