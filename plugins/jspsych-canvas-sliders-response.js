@@ -28,7 +28,7 @@
 
 jsPsych.plugins['canvas-sliders-response'] = (function() {
 
-  var plugin = {};
+  let plugin = {};
 
   plugin.info = {
     name: 'canvas-sliders-response',
@@ -209,7 +209,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
         description: 'If true, trial will end when user makes a response.'
       },
     }
-  }
+  };
 
   plugin.trial = function(display_element, trial) {
     let canvas = '';
@@ -222,7 +222,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
       canvas = '<canvas id="'+trial.canvasId+'" height="'+trial.canvasHeight+
         '" width="'+trial.canvasWidth+'"></canvas>';
     }
-    let html = '<div id="jspsych-canvas-sliders-response-wrapper" style="margin: 20px 0px;">';
+    let html = '<div id="jspsych-canvas-sliders-response-wrapper" style="margin: 20px 0;">';
     html += '<div id="jspsych-canvas-sliders-response-stimulus">'+canvas+'</div>';
     // Prompt text
     if (trial.prompt !== null) {
@@ -288,7 +288,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
             i+' jspsych-sliders-row" style="display: inline-flex;">';
         for(let s=0; s<sliders.length; s++) {
             let slider = sliders[s];
-            if (max_slider_row === null || slider.arrangement == i) {
+            if (max_slider_row === null || slider.arrangement === i) {
                 // Draw the slider
                 html += '<div class="jspsych-canvas-sliders-response-slider-col'+
                     col+' jspsych-sliders-col" style="margin-left: '+margin+
@@ -327,7 +327,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
     html += '</div>';
 
     // warning area if sliders are missed
-    html += '<div id="jspsych-canvas-sliders-response-warnings"></div>'
+    html += '<div id="jspsych-canvas-sliders-response-warnings"></div>';
 
     // add submit button
     html += '<button id="jspsych-canvas-sliders-response-next" class="jspsych-btn">'+trial.button_label+'</button>';
@@ -348,7 +348,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
         let slider = {};
         for (let i=0; i<sliders.length; i++) {
             let id = 'jspsych-canvas-sliders-response-slider'+i;
-            if (id==this.id) {
+            if (id===this.id) {
                 slider = sliders[i];
                 slider.changedTime = performance.now();
                 break;
@@ -399,7 +399,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
       let halt = false;
       let warn_html = '';
       warnings.forEach(function (w,i) {
-          if (groups.indexOf(i)==-1) {
+          if (groups.indexOf(i) === -1) {
               // not moved sliders in this group yet
               halt = true;
               warn_html += w;

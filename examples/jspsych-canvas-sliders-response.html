@@ -6,7 +6,7 @@
     <script src="../plugins/jspsych-instructions.js"></script>
     <script src="../plugins/jspsych-html-keyboard-response.js"></script>
     <script src="../plugins/jspsych-canvas-sliders-response.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <link rel="stylesheet" href="../css/jspsych.css"/>
     <style type="text/css">
     </style>
   </head>
@@ -72,7 +72,7 @@
       for(let i=0; i<dotCount; i++) {
         let x = Math.floor(Math.random()*this.gridWidth);
         let y = Math.floor(Math.random()*this.gridHeight);
-        if(grid[x][y]==1)
+        if(grid[x][y]===1)
           i--;
         else
           grid[x][y] = 1;
@@ -82,7 +82,7 @@
     /** Draw a grid onto an HTML canvas
      * @param {int[]} grid - grid to draw
      * @param {object} ctx - HTML canvas on which to draw
-     * @param {bool} offset - if *true*, draw offset horizontally by *this.spacing*
+     * @param {boolean} offset - if *true*, draw offset horizontally by *this.spacing*
      */
     drawGrid(grid, ctx, offset) {
         let xMin = (offset)? this.spacing+this.displayWidth : 0;
@@ -94,7 +94,7 @@
         ctx.lineWidth = "1";
         for(let x=0; x<this.gridWidth; x++) {
           for(let y=0; y<this.gridHeight; y++) {
-            if(grid[x][y] == 1) {
+            if(grid[x][y] === 1) {
               let startX = xMin + (x+1)*this.paddingX + x*this.dotWidth;
               let startY = (y+1)*this.paddingY + y*this.dotHeight;
               ctx.fillRect(startX, startY, this.dotWidth, this.dotHeight);
@@ -109,7 +109,7 @@
       this.drawGrid(this.gridL, ctx, false);
       this.drawGrid(this.gridR, ctx, true);
     }
-  };
+  }
 
   // This function does the actual drawing on the canvas, and is the one
   // called by the trial (it is passed in as a stimulus and called with
@@ -126,10 +126,10 @@
   <script>
 
     /* create timeline */
-    var timeline = [];
+    let timeline = [];
 
     /* define welcome message trial */
-    var welcome = {
+    const welcome = {
       type: 'instructions',
       pages: [
           "Welcome to the experiment. Press any key to begin.",
@@ -147,7 +147,7 @@
     timeline.push(welcome);
 
     /* test trials */
-    var test = {
+    const test = {
       type: "canvas-sliders-response",
       stimulus: drawDots,
       prompt: '<p>Which box had more dots?</p>',
@@ -165,31 +165,22 @@
       require_change: [1, 1],
       canvasWidth: 370,
       canvasHeight: 172
-    }
+    };
 
-    var test_procedure = {
+    const test_procedure = {
       timeline: [test],
       repetitions: 5,
       randomize_order: true
-    }
+    };
     timeline.push(test_procedure);
 
     /* define debrief */
 
-    var debrief_block = {
+    let debrief_block = {
       type: "html-keyboard-response",
       stimulus: function() {
         return "<p>You did it beautifully!</p>"+
           "<p>Press any key to end.</p>"
-        var trials = jsPsych.data.get().filter({test_part: 'test'});
-        var correct_trials = trials.filter({correct: true});
-        var accuracy = Math.round(correct_trials.count() / trials.count() * 100);
-        var rt = Math.round(correct_trials.select('rt').mean());
-
-        return "<p>You responded correctly on "+accuracy+"% of the trials.</p>"+
-        "<p>Your average response time was "+rt+"ms.</p>"+
-        "<p>Press any key to complete the experiment. Thank you!</p>";
-
       }
     };
     timeline.push(debrief_block);
