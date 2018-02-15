@@ -4,4 +4,5 @@ Thumbs.db
 /.settings/
 /.project
 /.tern-project
+.idea/
 site/
