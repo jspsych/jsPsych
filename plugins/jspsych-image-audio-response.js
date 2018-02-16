@@ -48,7 +48,7 @@ jsPsych.plugins["image-audio-response"] = (function() {
                 pretty_name: 'Recording light',
                 default: '<div id="jspsych-image-audio-response-light" '+
                     'style="border: 2px solid darkred; background-color: darkred; '+
-                    'width: 50px; height: 50px; border-radius: 50px; margin: auto; '+
+                    'width: 50px; height: 50px; border-radius: 50px; margin: 20px auto; '+
                     'display: block;"></div>',
                 description: 'HTML to display while recording is in progress.'
             },
@@ -57,10 +57,10 @@ jsPsych.plugins["image-audio-response"] = (function() {
                 pretty_name: 'Recording light (off state)',
                 default: '<div id="jspsych-image-audio-response-light" '+
                 'style="border: 2px solid darkred; background-color: inherit; '+
-                'width: 50px; height: 50px; border-radius: 50px; margin: auto; '+
+                'width: 50px; height: 50px; border-radius: 50px; margin: 20px auto; '+
                 'display: block;"></div>',
                 description: 'HTML to display while recording is not in progress.'
-            }
+            },
             prompt: {
                 type: jsPsych.plugins.parameterType.STRING,
                 pretty_name: 'Prompt',
@@ -72,12 +72,6 @@ jsPsych.plugins["image-audio-response"] = (function() {
                 pretty_name: 'Stimulus duration',
                 default: null,
                 description: 'How long to hide the stimulus.'
-            },
-            trial_duration: {
-                type: jsPsych.plugins.parameterType.INT,
-                pretty_name: 'Trial duration',
-                default: null,
-                description: 'How long to show the trial.'
             },
             margin_vertical: {
                 type: jsPsych.plugins.parameterType.STRING,
@@ -102,12 +96,11 @@ jsPsych.plugins["image-audio-response"] = (function() {
 
     plugin.trial = function(display_element, trial) {
 
-        if(typeof trial.choices === 'undefined'){
-            console.error('Required parameter "choices" missing in image-audio-response');
-        }
         if(typeof trial.stimulus === 'undefined'){
             console.error('Required parameter "stimulus" missing in image-audio-response');
         }
+
+        let playbackElements = [];
 
         // display stimulus
         let html = '<img src="'+trial.stimulus+'" id="jspsych-image-audio-response-stimulus"/>';
@@ -119,19 +112,18 @@ jsPsych.plugins["image-audio-response"] = (function() {
         if (trial.prompt !== null) {
             html += trial.prompt;
         }
+        // add button element
+        html += '<div id="jspsych-image-audio-response-buttons"></div>';
 
         display_element.innerHTML = html;
 
         // audio element processing
-        function startRecording(e = null) {
-            // e is non-null if called from an event (i.e. button press)
-            if (e !== null) {
-                // remove existing playback elements
-                playbackElements.forEach(function (id) {
-                    let element = document.getElementById(id);
-                    element.outerHTML = "";
-                });
-            }
+        function startRecording() {
+            // remove existing playback elements
+            playbackElements.forEach(function (id) {
+                let element = document.getElementById(id);
+                element.innerHTML = "";
+            });
             navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(process_audio);
             // Add visual indicators to let people know we're recording
             document.querySelector('#jspsych-image-audio-response-audio-container').innerHTML = trial.recordingLight;
@@ -160,21 +152,17 @@ jsPsych.plugins["image-audio-response"] = (function() {
             recorder = new MediaRecorder(stream);
             recorder.data = [];
             recorder.wrapUp = false;
-            else {
-                console.log("Using default postprocessing function.");
-                recorder.ondataavailable = e => {
-                    // add stream data to chunks
-                    chunks.push(e.data);
-                    if (recorder.wrapUp) {
-                        if (trial.postprocessing !== null) {
-                            onRecordingFinish(chunks => trial.postprocessing);
-                        } else {
-                            onRecordingFinish(chunks);
-                        }
+            recorder.ondataavailable = e => {
+                // add stream data to chunks
+                chunks.push(e.data);
+                if (recorder.wrapUp) {
+                    if (trial.postprocessing !== null) {
+                        onRecordingFinish(chunks => trial.postprocessing);
+                    } else {
+                        onRecordingFinish(chunks);
                     }
-
-                };
-            }
+                }
+            };
 
             // start recording with 1 second time between receiving 'ondataavailable' events
             recorder.start(1000);
@@ -186,8 +174,6 @@ jsPsych.plugins["image-audio-response"] = (function() {
             }, trial.bufferLength);
         }
 
-        let playbackElements = [];
-
         function showPlaybackTools(data) {
             // Audio Player
             let playerDiv = display_element.querySelector('#jspsych-image-audio-response-audio-container');
@@ -198,8 +184,7 @@ jsPsych.plugins["image-audio-response"] = (function() {
             player.src = url;
             player.controls = true;
             // Okay/rerecord buttons
-            let buttonDiv = display_element.appendChild(document.createElement('div'));
-            buttonDiv.id = 'jspsych-image-audio-response-buttons';
+            let buttonDiv = display_element.querySelector('#jspsych-image-audio-response-buttons');
             let okay = buttonDiv.appendChild(document.createElement('button'));
             let rerecord = buttonDiv.appendChild(document.createElement('button'));
             okay.id = 'jspsych-image-audio-response-okay';
@@ -209,16 +194,18 @@ jsPsych.plugins["image-audio-response"] = (function() {
             okay.addEventListener('click', end_trial);
             rerecord.addEventListener('click', startRecording);
             // Save ids of things we want to delete later:
-            playbackElements = [player.id, buttonDiv.id];
+            playbackElements = [playerDiv.id, buttonDiv.id];
         }
 
         function onRecordingFinish(data) {
             // visual indicator
-            document.querySelector('#jspsych-image-audio-response-audio-container').innerHTML = trial.recordingLightOff;
+            let light = document.querySelector('#jspsych-image-audio-response-audio-container');
+            if (light !== null)
+                light.innerHTML = trial.recordingLightOff;
             // measure rt
             let end_time = performance.now();
             let rt = end_time - start_time;
-            response.audioData = data;
+            response.audioData = new Blob(data, {type: 'audio/webm'});
             response.rt = rt;
 
             if (trial.allowPlayback) {
@@ -230,7 +217,6 @@ jsPsych.plugins["image-audio-response"] = (function() {
 
         // function to end trial when it is time
         function end_trial() {
-
             // kill any remaining setTimeout handlers
             jsPsych.pluginAPI.clearAllTimeouts();
 
@@ -254,14 +240,6 @@ jsPsych.plugins["image-audio-response"] = (function() {
                 display_element.querySelector('#jspsych-image-audio-response-stimulus').style.visibility = 'hidden';
             }, trial.stimulus_duration);
         }
-
-        // end trial if time limit is set
-        if (trial.trial_duration !== null) {
-            jsPsych.pluginAPI.setTimeout(function() {
-                end_trial();
-            }, trial.trial_duration);
-        }
-
     };
 
     return plugin;
