@@ -5,3 +5,7 @@ Thumbs.db
 /.project
 /.tern-project
 site/
+.idea/
+package.json
+package-lock.json
+package-lock.json
