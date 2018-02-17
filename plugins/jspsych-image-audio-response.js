@@ -199,6 +199,8 @@ jsPsych.plugins["image-audio-response"] = (function() {
             rerecord.id = 'jspsych-image-audio-response-rerecord';
             okay.textContent = 'Okay';
             rerecord.textContent = 'Rerecord';
+            okay.className = 'jspsych-audio-response-button jspsych-btn';
+            rerecord.className = okay.className;
             okay.addEventListener('click', end_trial);
             rerecord.addEventListener('click', startRecording);
             // Save ids of things we want to delete later:
