@@ -1,21 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="../jspsych.js"></script>
-  <script src="../plugins/jspsych-image-audio-response.js"></script>
-  <link rel="stylesheet" href="../css/jspsych.css"></link>
-  <style>
-    img { width: 300px; }
-  </style>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-image-audio-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <style>
+        img { width: 300px; }
+    </style>
 </head>
 <body></body>
 <script>
 
-    var timeline = [];
+    let timeline = [];
+
+    /**
+     * Function to execute on recorded data. This function should handle saving the data and return a
+     * JSON/csv-friendly value which will be inserted into the results. This allows the saved data to be
+     * related back to the trial which generated it.
+     *
+     * This particular function generates an object URL and returns that.
+     *
+     * @param data - audio data recorded from the user
+     * @returns {string} - JSON/csv-friendly data to be inserted into jspsych results report
+     */
+    const saveFunction = function(data) {
+        const blob = new Blob(data, { type: 'audio/webm' });
+        let url = URL.createObjectURL(blob);
+        return url;
+    };
 
     timeline.push({
         type: 'image-audio-response',
         stimulus: 'img/happy_face_1.jpg',
+        postprocessing: saveFunction,
         prompt: "<p>What emotion is this person showing?</p>",
         allowPlayback: true,
         bufferLength: 6000
@@ -25,6 +42,7 @@
         type: 'image-audio-response',
         stimulus: 'img/happy_face_2.jpg',
         stimulus_duration: 1000,
+        postprocessing: saveFunction,
         prompt: "<p>What emotion is this person showing? (image disappears after 1s)</p>",
         allowPlayback: true
     });
@@ -32,6 +50,7 @@
     timeline.push({
         type: 'image-audio-response',
         stimulus: 'img/happy_face_3.jpg',
+        postprocessing: saveFunction,
         response_ends_trial: false,
         prompt: "<p>What emotion is this person showing? (trial ends after 2s)</p>"
     });

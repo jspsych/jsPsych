@@ -31,15 +31,16 @@ jsPsych.plugins["image-audio-response"] = (function() {
             postprocessing: {
                 type: jsPsych.plugins.parameterType.FUNCTION,
                 pretty_name: 'Postprocessing function',
-                default: null,
+                default: undefined,
                 description: 'Function to execute on the audio data prior to saving. '+
-                'Passed the audio data and the return value is saved in the '+
-                'response object.'
+                    'Passed the audio data and the return value is saved in the '+
+                    'response object. This can be used for saving a file, and generating an id '+
+                    'which relates the file to the trial data in the trial response.'
             },
             allowPlayback: {
                 type: jsPsych.plugins.parameterType.BOOL,
                 pretty_name: 'Allow playback',
-                default: false,
+                default: true,
                 description: 'Whether to allow the participant to play back their '+
                 'recording and re-record if unhappy.'
             },
@@ -88,7 +89,7 @@ jsPsych.plugins["image-audio-response"] = (function() {
             response_ends_trial: {
                 type: jsPsych.plugins.parameterType.BOOL,
                 pretty_name: 'Response ends trial',
-                default: true,
+                default: false,
                 description: 'If true, then trial will end when user responds.'
             }
         }
@@ -98,6 +99,9 @@ jsPsych.plugins["image-audio-response"] = (function() {
 
         if(typeof trial.stimulus === 'undefined'){
             console.error('Required parameter "stimulus" missing in image-audio-response');
+        }
+        if(typeof trial.postprocessing === 'undefined'){
+            console.error('Required parameter "postprocessing" missing in image-audio-response');
         }
 
         let playbackElements = [];
@@ -156,10 +160,14 @@ jsPsych.plugins["image-audio-response"] = (function() {
                 // add stream data to chunks
                 chunks.push(e.data);
                 if (recorder.wrapUp) {
-                    if (trial.postprocessing !== null) {
-                        onRecordingFinish(chunks => trial.postprocessing);
+                    if (typeof trial.postprocessing !== 'undefined') {
+                        onRecordingFinish(trial.postprocessing(chunks));
                     } else {
+                        // should never fire - trial.postprocessing is mandatory
                         onRecordingFinish(chunks);
+                    }
+                    if (trial.allowPlayback) {
+                        showPlaybackTools(chunks);
                     }
                 }
             };
@@ -205,12 +213,10 @@ jsPsych.plugins["image-audio-response"] = (function() {
             // measure rt
             let end_time = performance.now();
             let rt = end_time - start_time;
-            response.audioData = new Blob(data, {type: 'audio/webm'});
+            response.audioData = data;
             response.rt = rt;
 
-            if (trial.allowPlayback) {
-                showPlaybackTools(data);
-            } else if (trial.response_ends_trial) {
+            if (trial.response_ends_trial) {
                 end_trial();
             }
         }
