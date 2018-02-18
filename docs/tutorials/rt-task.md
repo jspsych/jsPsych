@@ -717,7 +717,7 @@ We start by modifying `test_stimuli`:
 ```javascript
 var test_stimuli = [
   { stimulus: "img/blue.png", data: {test_part: 'test', correct_response: 'f'}},
-  { stimulus: "img/orange.png", data: {test_part: 'test', correct_response 'j'}}
+  { stimulus: "img/orange.png", data: {test_part: 'test', correct_response:{test_part: 'test', correct_response: 'j'}}
 ];
 ```
 Now we assign these values to the `data` parameter of the `test` trial.
@@ -790,7 +790,7 @@ var fixation = {
     /* test trials */
     var test_stimuli = [
       { stimulus: "img/blue.png", data: {test_part: 'test', correct_response: 'f'}},
-      { stimulus: "img/orange.png", data: {test_part: 'test', correct_response 'j'}}
+      { stimulus: "img/orange.png", data: {test_part: 'test', correct_response: 'j'}}
     ];
 
     var fixation = {
@@ -899,7 +899,7 @@ The `data.key_press` value is a numeric key code indicating which key the subjec
     /* test trials */
     var test_stimuli = [
       { stimulus: "img/blue.png", data: {test_part: 'test', correct_response: 'f'}},
-      { stimulus: "img/orange.png", data: {test_part: 'test', correct_response 'j'}}
+      { stimulus: "img/orange.png", data: {test_part: 'test', correct_response: 'j'}}
     ];
 
     var fixation = {
