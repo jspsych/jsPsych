@@ -27,26 +27,23 @@ jsPsych.plugins['survey-text'] = (function() {
             type: jsPsych.plugins.parameterType.STRING,
             pretty_name: 'Prompt',
             default: undefined,
-            description: 'Prompts for the subject to response'
+            description: 'Prompt for the subject to response'
           },
           value: {
             type: jsPsych.plugins.parameterType.STRING,
             pretty_name: 'Value',
-            array: true,
-            default: null,
-            description: 'The strings will be used to populate the response fields with editable answers.'
+            default: "",
+            description: 'The string will be used to populate the response field with editable answer.'
           },
           rows: {
             type: jsPsych.plugins.parameterType.INT,
             pretty_name: 'Rows',
-            array: true,
             default: 1,
             description: 'The number of rows for the response text box.'
           },
           columns: {
             type: jsPsych.plugins.parameterType.INT,
             pretty_name: 'Columns',
-            array: true,
             default: 40,
             description: 'The number of columns for the response text box.'
           }
@@ -69,22 +66,19 @@ jsPsych.plugins['survey-text'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    if (typeof trial.questions[0].rows == 'undefined') {
-      trial.questions[0].rows = [];
-      for (var i = 0; i < trial.questions.length; i++) {
-        trial.questions[i].rows.push(1);
+    for (var i = 0; i < trial.questions.length; i++) {
+      if (typeof trial.questions[i].rows == 'undefined') {
+        trial.questions[i].rows = 1;
       }
     }
-    if (typeof trial.questions[0].columns == 'undefined') {
-      trial.questions[0].columns = [];
-      for (var i = 0; i < trial.questions.length; i++) {
-        trial.questions[i].columns.push(40);
+    for (var i = 0; i < trial.questions.length; i++) {
+      if (typeof trial.questions[i].columns == 'undefined') {
+        trial.questions[i].columns = 40;
       }
     }
-    if (typeof trial.questions[0].value == 'undefined') {
-      trial.questions[0].value = [];
-      for (var i = 0; i < trial.questions.length; i++) {
-        trial.questions[i].value.push("");
+    for (var i = 0; i < trial.questions.length; i++) {
+      if (typeof trial.questions[i].value == 'undefined') {
+        trial.questions[i].value = "";
       }
     }
 
