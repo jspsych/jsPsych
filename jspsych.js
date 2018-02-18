@@ -160,7 +160,7 @@ window.jsPsych = (function() {
           if(opts.max_load_time > 0){
             setTimeout(function(){
               if(!loaded && !loadfail){
-                loadFail();
+                core.loadFail();
               }
             }, opts.max_load_time);
           }
