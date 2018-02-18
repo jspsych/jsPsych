@@ -17,6 +17,7 @@
 
   jsPsych.init({
     timeline: [trial_1],
+    use_webaudio: false,
     on_finish: function() {
       jsPsych.data.displayData();
     },

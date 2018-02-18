@@ -308,6 +308,7 @@ show_preload_progress_bar | boolean | If true, then a progress bar is displayed 
 preload_audio | array | An array of audio files to preload before starting the experiment.
 preload_images | array | An array of image files to preload before starting the experiment.
 max_load_time | numeric | The maximum number of milliseconds to wait for content to preload. If the wait time is exceeded an error message is displayed and the experiment stops. The default value is 60 seconds.
+use_webaudio | boolean | If false, then jsPsych will not attempt to use the WebAudio API for audio playback. Instead, HTML5 Audio objects will be used. The WebAudio API offers more precise control over the timing of audio events, and should be used when possible. The default value is true.
 default_iti | numeric | The default inter-trial interval in ms. The default value if none is specified is 0ms.
 
 Possible values for the exclusions parameter above.

@@ -77,6 +77,7 @@ window.jsPsych = (function() {
       },
       'preload_images': [],
       'preload_audio': [],
+      'use_webaudio': true,
       'exclusions': {},
       'show_progress_bar': false,
       'auto_update_progress_bar': true,
@@ -137,6 +138,9 @@ window.jsPsych = (function() {
     timeline = new TimelineNode({
       timeline: opts.timeline
     });
+
+    // initialize audio context based on options and browser capabilities
+    jsPsych.pluginAPI.initAudio();
 
     // below code resets event listeners that may have lingered from
     // a previous incomplete experiment loaded in same DOM.
@@ -2097,15 +2101,18 @@ jsPsych.pluginAPI = (function() {
   }
 
   // audio //
-
-  // temporary patch for Safari
-  if (typeof window !== 'undefined' && window.hasOwnProperty('webkitAudioContext') && !window.hasOwnProperty('AudioContext')) {
-    window.AudioContext = webkitAudioContext;
-  }
-  // end patch
-
-  var context = (typeof window !== 'undefined' && typeof window.AudioContext !== 'undefined') ? new AudioContext() : null;
+  var context = null;
   var audio_buffers = [];
+
+  module.initAudio = function(){
+    // temporary patch for Safari
+    if (typeof window !== 'undefined' && window.hasOwnProperty('webkitAudioContext') && !window.hasOwnProperty('AudioContext')) {
+      window.AudioContext = webkitAudioContext;
+    }
+    // end patch
+
+    context = (typeof window !== 'undefined' && typeof window.AudioContext !== 'undefined' && jsPsych.initSettings().use_webaudio == true) ? new AudioContext() : null;
+  }
 
   module.audioContext = function(){
     return context;
