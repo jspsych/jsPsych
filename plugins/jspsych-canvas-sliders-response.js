@@ -322,7 +322,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
                         'px; margin-right: '+margin+'px; min-width: '+(slider.max-slider.min)+'px;">';
                     // prompt
                     html += '<div class="jspsych-sliders-response-slider-prompt'+s
-                        +'jspsych-sliders-prompt">'+slider.prompt+'</div>';
+                        +' jspsych-sliders-prompt">'+slider.prompt+'</div>';
                     // slider
                     html += '<input type="range" value="'+slider.start+
                         '" min="'+slider.min+'" max="'+slider.max+
@@ -380,7 +380,6 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
 
         // Swap the touched and reset classes on the slider
         function swapClass(el, classIn, classOut) {
-            console.log('swapClass(' + el.id + ', "'+classIn+'", "'+classOut+'")')
             let cls = el.className;
             if (classIn !== null && cls.search(classIn) === -1) {
                 cls += cls[cls.length-1]===' '? classIn : ' '+classIn;
@@ -389,7 +388,6 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
                 cls = cls.replace(classOut, '');
             }
             el.className = cls;
-            console.log(cls);
             return el;
         }
 
@@ -464,8 +462,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
                 return;
             }
             // measure response time
-            let endTime = (new Date()).getTime();
-            response.rt = endTime - startTime;
+            response.rt = performance.now() - startTime;
             let answers = [];
             for (let i=0; i<sliders.length; i++) {
                 let value = display_element.querySelector('#jspsych-canvas-sliders-response-slider'+i).value;
@@ -518,7 +515,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
             }, trial.trial_duration);
         }
 
-        let startTime = (new Date()).getTime();
+        let startTime = performance.now();
     };
 
     return plugin;
