@@ -204,7 +204,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
                 type: jsPsych.plugins.parameterType.STRING,
                 pretty_name: 'Slider class (untouched)',
                 array: true,
-                default: null,
+                default: ['jspsych-sliders-response-slider-untouched'],
                 description: 'Class to apply to a slider when reset. Applied within an exclusive_group.'
             },
             button_label: {
