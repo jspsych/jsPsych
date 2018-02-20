@@ -99,6 +99,16 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
                 'Format is an array of length sliderCount. '+
                 'Shorter arrays will be padded with the final value.'
             },
+            reversed: {
+                type: jsPsych.plugins.parameterType.BOOL,
+                pretty_name: 'Reverse scored',
+                default: [false],
+                array: true,
+                description: 'Reverse scored sliders have their answer '+
+                'reported as max-answer rather than as simply answer. '+
+                'Format is an array of length sliderCount. '+
+                'Shorter arrays will be padded with the final value.'
+            },
             start: {
                 type: jsPsych.plugins.parameterType.INT,
                 pretty_name: 'Slider starting value',
@@ -253,6 +263,8 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
                     trial.min[trial.min.length-1],
                 max: (trial.max.length > i)?  trial.max[i] :
                     trial.max[trial.max.length-1],
+                reversed: (trial.reversed.length > i)? trial.reversed[i] :
+                    trial.reversed[trial.reversed.length-1],
                 start: (trial.start.length > i)? trial.start[i] :
                     trial.start[trial.start.length-1],
                 step: (trial.step.length > i)? trial.step[i] :
@@ -467,7 +479,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
             for (let i=0; i<sliders.length; i++) {
                 let value = display_element.querySelector('#jspsych-canvas-sliders-response-slider'+i).value;
                 let slider = sliders[i];
-                slider.value = value;
+                slider.value = slider.reversed? slider.max - value : value;
                 answers.push({
                     id: i,
                     name: slider.prompt,
