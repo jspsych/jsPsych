@@ -339,11 +339,11 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
                     html += '<input type="range" value="'+slider.start+
                         '" min="'+slider.min+'" max="'+slider.max+
                         '" step="'+slider.step+'" '+
-                        'id="jspsych-canvas-sliders-response-slider'+s+'"" '+
+                        'id="jspsych-canvas-sliders-response-slider'+s+'" '+
                         'class="jspsych-sliders-response-slider"></input>';
                     // labels
                     html += '<div id="jspsych-canvas-sliders-response-labels'+s
-                        +' jspsych-sliders-response-labels">';
+                        +'" class="jspsych-sliders-response-labels">';
                     for(let j=0; j < slider.labels.length; j++){
                         let width = 100/(slider.labels.length);
                         let left_offset = j * width;
@@ -384,7 +384,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
         let response = {
             rt: null,
             response: null,
-            stimulus_properties: null,
+            stimulus_properties: null
         };
 
         // Execute the supplied drawing function
@@ -508,6 +508,9 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
                 "stimulus_properties": response.stimulus_properties
             };
 
+            if(trial.stimulus_duration !== null)
+                trialdata.stimulusOffTime = response.stimulusOffTime;
+
             display_element.innerHTML = '';
 
             // next trial
@@ -517,6 +520,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
         if (trial.stimulus_duration !== null) {
             jsPsych.pluginAPI.setTimeout(function() {
                 display_element.querySelector('#jspsych-canvas-sliders-response-stimulus').style.visibility = 'hidden';
+                response.stimulusOffTime = performance.now();
             }, trial.stimulus_duration);
         }
 
