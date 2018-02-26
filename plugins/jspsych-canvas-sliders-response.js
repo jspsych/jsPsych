@@ -382,6 +382,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
         display_element.innerHTML = html;
 
         let response = {
+            startTime: performance.now(),
             rt: null,
             response: null,
             stimulus_properties: null
@@ -474,7 +475,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
                 return;
             }
             // measure response time
-            response.rt = performance.now() - startTime;
+            response.rt = performance.now() - response.startTime;
             let answers = [];
             for (let i=0; i<sliders.length; i++) {
                 let value = display_element.querySelector('#jspsych-canvas-sliders-response-slider'+i).value;
@@ -503,6 +504,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
 
             // save data
             let trialdata = {
+                "startTime": response.startTime,
                 "rt": response.rt,
                 "response": response.response,
                 "stimulus_properties": response.stimulus_properties
@@ -520,7 +522,7 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
         if (trial.stimulus_duration !== null) {
             jsPsych.pluginAPI.setTimeout(function() {
                 display_element.querySelector('#jspsych-canvas-sliders-response-stimulus').style.visibility = 'hidden';
-                response.stimulusOffTime = performance.now();
+                response.stimulusOffTime = performance.now() - response.startTime;
             }, trial.stimulus_duration);
         }
 
@@ -530,8 +532,6 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
                 end_trial();
             }, trial.trial_duration);
         }
-
-        let startTime = performance.now();
     };
 
     return plugin;
