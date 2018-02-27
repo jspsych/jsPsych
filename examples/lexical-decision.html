@@ -79,7 +79,7 @@
       },
       {
         type: 'html-keyboard-response',
-        stimulus: function(){ return "<p class='stimulus'>"+jsPsych.timelineVariable('word')+"</p>"; },
+        stimulus: function(){ return "<p class='stimulus'>"+jsPsych.timelineVariable('word', true)+"</p>"; },
         choices: ['y','n'],
         post_trial_gap: 500,
         data: function(){
