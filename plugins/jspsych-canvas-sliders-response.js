@@ -261,8 +261,8 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
         if (trial.prompt !== null) {
             html += '<div id="jspsych-canvas-sliders-response-prompt">'+trial.prompt+'</div>';
         }
-        // Sliders
 
+        // Sliders
         // Define the sliders
         const sliders = [];
         let max_slider_row = null;
@@ -327,44 +327,59 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
             slider.changedTime = NaN;
             sliders.push(slider)
         }
-        let row_count = (max_slider_row === null)? 1 : max_slider_row;
+        let row_count = (max_slider_row === null)? 1 : max_slider_row+1;
         html += '<div class="jspsych-sliders-response-container">';
         // Loop the rows of sliders
         for (let i=0; i<row_count; i++) {
             let col = 0;
-            let margin = (trial.slider_col_spacing.length > i)?
-                trial.slider_col_spacing[i] :
-                trial.slider_col_spacing[trial.slider_col_spacing.length-1];
-            html += '<div class="jspsych-sliders-response-slider-row'+i+' jspsych-sliders-row">';
+            html += '<div id="jspsych-sliders-response-slider-row'+i+'" class="'+
+                'jspsych-sliders-row">';
             for(let s=0; s<sliders.length; s++) {
                 let slider = sliders[s];
                 if (max_slider_row === null || slider.arrangement === i) {
                     // Draw the slider
-                    html += '<div class="jspsych-sliders-response-slider-col'+
-                        col+' jspsych-sliders-col" style="margin-left: '+margin+
-                        'px; margin-right: '+margin+'px; min-width: '+(slider.max-slider.min)+'px;">';
+                    let colCount = slider.labels.length * 2;
+                    let tdWidth = 100/colCount;
+                    html += '<div id="jspsych-sliders-response-slider-col'+
+                        col+'" class="jspsych-sliders-col">';
+                    // Draw sliders in tables because rigid formatting is important here
+                    html += '<table id="jspsych-sliders-response-table'+s+'" class="jspsych-sliders-table">';
                     // prompt
-                    html += '<div class="jspsych-sliders-response-slider-prompt'+s
-                        +' jspsych-sliders-prompt">'+slider.prompt+'</div>';
+                    html += '<tr class="jspsych-sliders-prompt"><td colspan="'+colCount+
+                        '" style="width: 100%;" id="jspsych-sliders-response-slider-prompt'+s+
+                        '" class="jspsych-sliders-prompt">'+
+                        slider.prompt+'</td></tr>';
                     // slider
-                    html += '<input type="range" value="'+slider.start+
+                    let spacer = (colCount===2)? '' : '<td class="jspsych-sliders-spacer" style="width: '+
+                        tdWidth.toString()+'%;"></td>';
+                    let colSpan = colCount===2? 2 : colCount/2;
+                    html += '<tr class="jspsych-sliders-slider">'+
+                        spacer+
+                        '<td colspan="'+(colSpan).toString()+'" style="width: '+(tdWidth*colSpan).toString()+'%;" '+
+                        'class="jspsych-sliders-slider" id="jspsych-canvas-sliders-response-sliderCell'+s+'"'+
+                        ' ><input type="range" value="'+slider.start+
                         '" min="'+slider.min+'" max="'+slider.max+
                         '" step="'+slider.step+'" '+
                         'id="jspsych-canvas-sliders-response-slider'+s+'" '+
-                        'class="jspsych-sliders-response-slider"></input>';
+                        'class="jspsych-sliders-response-slider"/></td>'+
+                        spacer+
+                        '</tr>';
                     // labels
-                    html += '<div id="jspsych-canvas-sliders-response-labels'+s
+                    html += '<tr id="jspsych-canvas-sliders-response-labels'+s
                         +'" class="jspsych-sliders-response-labels">';
                     for(let j=0; j < slider.labels.length; j++){
-                        let width = 100/(slider.labels.length);
+                        let width = 100/slider.labels.length;
                         let left_offset = j * width;
-                        html += '<div class="jspsych-sliders-response-label"'+
-                            ' id="jspsych-canvas-sliders-response-labelS'+s+'L'+j+
-                            '" style="left:'+left_offset+'%; width: '+width+'%;">';
+                        let widthStr = (j === slider.labels.length-1)?
+                            "" : 'width: '+(100/slider.labels.length).toString()+'%;';
+                        html += '<td colspan="2" style="width: '+(tdWidth*2).toString()+
+                            '%;" class="jspsych-sliders-response-label"'+
+                            ' id="jspsych-canvas-sliders-response-labelS'+s+'L'+j+'">';
                         html += '<span class="jspsych-sliders-response-label">'+slider.labels[j]+'</span>';
-                        html += '</div>'
+                        html += '</td>'
                     }
-                    html += '</div>';
+                    html += '</tr>';
+                    html += '</table>';
                     html += '</div>';
                     col++;
                 }
@@ -380,17 +395,12 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
         // add submit button
         html += '<button id="jspsych-canvas-sliders-response-next" class="jspsych-btn">'+trial.button_label+'</button>';
 
-        // basic styling - put in style tags so that it's more easily overwritten by styling on the base page
-        html += '<style type="text/css">'+
-            'div.jspsych-sliders-response-wrapper{margin: 20px 0;}'+
-            'div.jspsych-sliders-response-container{position: relative;}'+
-            'div.jspsych-sliders-row{display: inline-flex;}'+
-            'div.jspsych-sliders-response-slider-col{width: 100%;}'+
-            'div.jspsych-sliders-response-labels{display: inline-flex; width: 100%;}'+
-            'span.jspsych-sliders-response-label{text-align: center; font-size: 80%; position: relative; left: -50%} '+
-            'div.jspsych-sliders-response-label{display: inline-block; position: relative; text-align: center;}</style>';
+        // basic styling
+        html += '<style type="text/css">table.jspsych-sliders-table {width: 100%}'+
+            'div.jspsych-sliders-row {display: inline-flex; width: 100%}'+
+            'div.jspsych-sliders-col {width: 100%}</style>';
 
-        display_element.innerHTML = html;
+        display_element.innerHTML += html;
 
         let response = {
             startTime: performance.now(),
