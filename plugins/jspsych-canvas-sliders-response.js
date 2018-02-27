@@ -176,6 +176,15 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
                 'Format is an array of length sliderCount. '+
                 'Shorter arrays will be padded with the final value.'
             },
+            slider_name: {
+                type: jsPsych.plugins.parameterType.STRING,
+                pretty_name: 'Slider name',
+                default: [null],
+                array: true,
+                description: 'Name of the slider (used in the results reporting'+
+                    ' only). Sliders with missing values in this array will not'+
+                    ' have a name associated with them in the results.'
+            },
             slider_col_spacing: {
                 type: jsPsych.plugins.parameterType.INT,
                 pretty_name: 'Slider column spacing',
@@ -280,6 +289,8 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
                 exclusive_group: (trial.exclusive_group.length > i)?
                     trial.exclusive_group[i] :
                     trial.exclusive_group[trial.exclusive_group.length-1],
+                name: (typeof trial.slider_name[i] === 'undefined')?
+                    null : trial.slider_name[i]
             });
             let slider = sliders.pop();
             if (trial.slider_arrangement !== null) {
@@ -483,8 +494,9 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
                 slider.value = slider.reversed? slider.max - value : value;
                 answers.push({
                     id: i,
-                    name: slider.prompt,
+                    name: slider.name,
                     answer: slider.value,
+                    prompt: slider.prompt,
                     lastChangedTime: slider.changedTime
                 });
             }
