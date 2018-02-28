@@ -1,4 +1,4 @@
-# jspsych-categorize-html
+# jspsych-categorize-image
 
 The categorize image plugin shows an image object on the screen. The subject responds by pressing a key. Feedback indicating the correctness of the response is given.
 
