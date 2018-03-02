@@ -131,7 +131,7 @@ jsPsych.plugins['html-slider-response'] = (function() {
       var endTime = (new Date()).getTime();
       response.rt = endTime - startTime;
       if(!Array.isArray(trial.stimulus))
-        response.response = display_element.querySelector('#jspsych-html-slider-response-response').value;
+        response.response = display_element.querySelector('#jspsych-html-slider-response-response0').value;
       else {
         response.response = [];
         for(var i=0; i < trial.stimulus.length; i++) {
