@@ -66,6 +66,9 @@ window.jsPsych = (function() {
       'on_trial_start': function(trial) {
         return undefined;
       },
+      'on_trial_load': function(trial) {
+        return undefined;
+      },
       'on_trial_finish': function() {
         return undefined;
       },
@@ -806,6 +809,9 @@ window.jsPsych = (function() {
 
     // execute trial method
     jsPsych.plugins[trial.type].trial(DOM_target, trial);
+
+    // call experiment wide callback
+    opts.on_trial_load(trial);
 
     // call trial specific loaded callback if it exists
     if(typeof trial.on_load == 'function'){
