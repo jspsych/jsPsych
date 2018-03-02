@@ -89,22 +89,28 @@ jsPsych.plugins['html-slider-response'] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
+    var html = '';
 
-    var html = '<div id="jspsych-html-slider-response-wrapper" style="margin: 100px 0px;">';
-    html += '<div id="jspsych-html-slider-response-stimulus">' + trial.stimulus + '</div>';
-    html += '<div class="jspsych-html-slider-response-container" style="position:relative;">';
-    html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-html-slider-response-response"></input>';
-    html += '<div>'
-    for(var j=0; j < trial.labels.length; j++){
-      var width = 100/(trial.labels.length-1);
-      var left_offset = (j * (100 /(trial.labels.length - 1))) - (width/2);
-      html += '<div style="display: inline-block; position: absolute; left:'+left_offset+'%; text-align: center; width: '+width+'%;">';
-      html += '<span style="text-align: center; font-size: 80%;">'+trial.labels[j]+'</span>';
-      html += '</div>'
+    var stimulus = trial.stimulus;
+    if(!Array.isArray(trial.stimulus))
+      stimulus = [trial.stimulus];
+    for(var i=0; i < stimulus.length; i++) {
+      html += '<div id="jspsych-html-slider-response-wrapper" style="margin: 100px 0px;">';
+      html += '<div id="jspsych-html-slider-response-stimulus">' + stimulus[i] + '</div>';
+      html += '<div class="jspsych-html-slider-response-container" style="position:relative;">';
+      html += '<input type="range" value="' + trial.start + '" min="' + trial.min + '" max="' + trial.max + '" step="' + trial.step + '" style="width: 100%;" id="jspsych-html-slider-response-response'+i+'"></input>';
+      html += '<div>';
+      for(var j=0; j < trial.labels.length; j++){
+        var width = 100/(trial.labels.length-1);
+        var left_offset = (j * (100 /(trial.labels.length - 1))) - (width/2);
+        html += '<div style="display: inline-block; position: absolute; left:'+left_offset+'%; text-align: center; width: '+width+'%;">';
+        html += '<span style="text-align: center; font-size: 80%;">'+trial.labels[j]+'</span>';
+        html += '</div>'
+      }
+      html += '</div>';
+      html += '</div>';
+      html += '</div>';
     }
-    html += '</div>';
-    html += '</div>';
-    html += '</div>';
 
     if (trial.prompt !== null){
       html += trial.prompt;
@@ -124,8 +130,14 @@ jsPsych.plugins['html-slider-response'] = (function() {
       // measure response time
       var endTime = (new Date()).getTime();
       response.rt = endTime - startTime;
-      response.response = display_element.querySelector('#jspsych-html-slider-response-response').value;
-
+      if(!Array.isArray(trial.stimulus))
+        response.response = parseFloat(display_element.querySelector('#jspsych-html-slider-response-response').value);
+      else {
+        response.response = [];
+        for(var i=0; i < trial.stimulus.length; i++) {
+          response.response.push(parseFloat(display_element.querySelector('#jspsych-html-slider-response-response'+i).value));
+        }
+      }
       if(trial.response_ends_trial){
         end_trial();
       } else {
