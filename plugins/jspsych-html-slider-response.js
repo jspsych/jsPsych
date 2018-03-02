@@ -131,11 +131,11 @@ jsPsych.plugins['html-slider-response'] = (function() {
       var endTime = (new Date()).getTime();
       response.rt = endTime - startTime;
       if(!Array.isArray(trial.stimulus))
-        response.response = parseFloat(display_element.querySelector('#jspsych-html-slider-response-response').value);
+        response.response = display_element.querySelector('#jspsych-html-slider-response-response').value;
       else {
         response.response = [];
         for(var i=0; i < trial.stimulus.length; i++) {
-          response.response.push(parseFloat(display_element.querySelector('#jspsych-html-slider-response-response'+i).value));
+          response.response.push(display_element.querySelector('#jspsych-html-slider-response-response'+i).value);
         }
       }
       if(trial.response_ends_trial){
