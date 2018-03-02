@@ -75,9 +75,9 @@ describe('html-slider-response', function(){
 			timeline: [trial]
 		});
 
-		expect(jsPsych.getDisplayElement().querySelector('#jspsych-html-slider-response-response').min).toBe('2');
-		expect(jsPsych.getDisplayElement().querySelector('#jspsych-html-slider-response-response').max).toBe('10');
-		expect(jsPsych.getDisplayElement().querySelector('#jspsych-html-slider-response-response').step).toBe('2');
+		expect(jsPsych.getDisplayElement().querySelector('#jspsych-html-slider-response-response0').min).toBe('2');
+		expect(jsPsych.getDisplayElement().querySelector('#jspsych-html-slider-response-response0').max).toBe('10');
+		expect(jsPsych.getDisplayElement().querySelector('#jspsych-html-slider-response-response0').step).toBe('2');
 	});
 
 	test('should append to bottom on stimulus', function(){
