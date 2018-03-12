@@ -456,9 +456,9 @@ jsPsych.plugins['canvas-sliders-response'] = (function() {
             for (let i=0; i<sliders.length; i++) {
                 let s = display_element.querySelector('#jspsych-canvas-sliders-response-slider'+i);
                 if (remove) {
-                    s.removeEventListener('change', onSliderChange);
+                    s.removeEventListener('input', onSliderChange);
                 } else {
-                    s.addEventListener('change', onSliderChange);
+                    s.addEventListener('input', onSliderChange);
                 }
             }
         }
