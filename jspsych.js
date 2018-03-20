@@ -33,6 +33,16 @@ window.jsPsych = (function() {
   var loaded = false;
   var loadfail = false;
 
+  // storing a single webaudio context to prevent problems with multiple inits
+  // of jsPsych
+  core.webaudio_context = null;
+  // temporary patch for Safari
+  if (typeof window !== 'undefined' && window.hasOwnProperty('webkitAudioContext') && !window.hasOwnProperty('AudioContext')) {
+    window.AudioContext = webkitAudioContext;
+  }
+  // end patch
+  core.webaudio_context = (typeof window !== 'undefined' && typeof window.AudioContext !== 'undefined') ? new AudioContext() : null;
+
   // enumerated variables for special parameter types
   core.ALL_KEYS = 'allkeys';
   core.NO_KEYS = 'none';
@@ -2105,13 +2115,7 @@ jsPsych.pluginAPI = (function() {
   var audio_buffers = [];
 
   module.initAudio = function(){
-    // temporary patch for Safari
-    if (typeof window !== 'undefined' && window.hasOwnProperty('webkitAudioContext') && !window.hasOwnProperty('AudioContext')) {
-      window.AudioContext = webkitAudioContext;
-    }
-    // end patch
-
-    context = (typeof window !== 'undefined' && typeof window.AudioContext !== 'undefined' && jsPsych.initSettings().use_webaudio == true) ? new AudioContext() : null;
+    context = (jsPsych.initSettings().use_webaudio == true) ? jsPsych.webaudio_context : null;
   }
 
   module.audioContext = function(){
