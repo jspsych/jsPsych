@@ -1,6 +1,9 @@
 # jspsych-RDK plugin
 
-This plugin displays a Random Dot Kinematogram (RDK) and allows the subject to report the primary direction of motion by pressing a key on the keyboard. The stimulus is displayed until a keyboard response is given. The trial can be ended automatically if the subject has failed to respond within a fixed length of time.
+This plugin displays a Random Dot Kinematogram (RDK) and allows the subject to report the primary direction of motion by pressing a key on the keyboard. The stimulus can be displayed until a keyboard response is given or until a certain duration of time has passed. The RDK is fully customizable (see documentation below) and can display multiple apertures at the same time, each with its own parameters.
+
+We would appreciate it if you cited this paper when you use the RDK: 
+Rajananda, S., Lau, H. & Odegaard, B., (2018). A Random-Dot Kinematogram for Web-Based Vision Research. Journal of Open Research Software. 6(1), p.6. DOI: [http://doi.org/10.5334/jors.194 ]
 
 For optimal performance, fullscreen mode should be manually triggered by the user (e.g. F11 key in Chrome for Windows). Usage of the default Fullscreen trigger from the JsPsych API library  with this plugin might result in the stimuli being displayed incorrectly.
 
@@ -14,10 +17,12 @@ Parameters can be left unspecified if the default value is acceptable.
 |correct_choice|array or char|undefined|The keys that are considered the correct response for that particular trial. Can be a single char or an array of chars (not ASCII values).  This needs to be linked with the `coherent_direction` parameter (See Examples section below for an illustration.) This is used to determine whether the subject chose the correct response and return that data. |
 |trial_duration|numeric|500|The amount of time that the stimulus is displayed on the screen in ms. If -1, the stimulus will be displayed until the subject keys in a valid response. (`choices` parameter must contain valid keys or else the stimuli will run indefinitely).|
 |response_ends_trial|boolean|true|If true, then the subject's response will end the trial. If false, the stimuli will be presented for the full `trial_duration` (the response will be recorded as long as the subject responds within the trial duration).|
+|number_of_apertures|numeric|1|The number of apertures or RDKs on the screen. If set to more than one, remember to set the location (i.e., aperture_center_x and aperture_center_y) parameters to separate them. <br>In addition, each aperture can be customized individually by passing in an array of values as the parameter (see example below). If a single value (not an array) is passed as the parameter, then all apertures will have the same parameter.|
 |number_of_dots|numeric|300|Number of dots per set. Equivalent to number of dots per frame.|
 |number_of_sets|numeric|1|Number of sets to cycle through. Each frame displays one set of dots. (E.g. If 2 sets of dots, frame 1 will display dots from set 1, frame 2 will display dots from set 2, frame 3 will display sets from set 1, etc.)|
 |coherent_direction|numeric|0|The direction of movement for coherent dots in degrees. 0 degrees is in the 3 o'clock direction, and increasing this number moves counterclockwise. (E.g. 12 o'clock is 90, 9 o'clock is 180, etc.) Range is 0 - 360.|
-|coherence|numeric|0.5|The proportion of dots that move together in the coherent direction. Range is 0 - 1.|
+|coherence|numeric|0.5|The proportion of dots that move together in the coherent direction. Range is 0 to 1.|
+|opposite_coherence|numeric|0|The proportion of moving in the direction opposite of the coherent direction. Range is 0 to (1-coherence).|
 |dot_radius|numeric|2|The radius of each individual dot in pixels.|
 |dot_life|numeric|-1|The number of frames that pass before a dot disappears and reappears in a new frame. -1 denotes that the dot life is infinite (i.e., a dot will only disappear and reappear if it moves out of the aperture).|
 |move_distance|numeric|1|The number of pixel lengths the dot will move in each frame (analogous to speed of dots).|
@@ -30,12 +35,14 @@ Parameters can be left unspecified if the default value is acceptable.
 |reinsert_type|numeric|2|The type of reinsertion of a dot that has gone out of bounds<br><br>1 - Randomly appear anywhere in the aperture<br>2 - Appear on the opposite edge of the aperture. For squares and rectangles, a random point on the opposite edge is chosen as the reinsertion point. For circles and ellipses, the exit point is reflected about center to become the reinsertion point.<br>|
 |aperture_center_x|numeric|window.innerWidth/2|The x-coordinate of the center of the aperture, in pixels.<br>|
 |aperture_center_y|numeric|window.innerHeight/2|The y-coordinate of the center of the aperture, in pixels.<br>|
-|fixation_cross|boolean|true|Whether or not a fixation cross is presented in the middle of the screen.<br>|
+|fixation_cross|boolean|false|Whether or not a fixation cross is presented in the middle of the screen.<br>|
 |fixation_cross_width|numeric|20|The width of the fixation cross in pixels.<br>|
 |fixation_cross_height|numeric|20|The height of the fixation cross in pixels.<br>|
 |fixation_cross_color|string|"black"|The color of the fixation cross.<br>|
 |fixation_cross_thickness|numeric|1|The thickness of the fixation cross in pixels.<br>|
-
+|border|boolean|false|The presence of a border around the aperture.<br>|
+|border_thickness|numeric|1|The thickness of the border in pixels.<br>|
+|border_color|string|"black"|The color of the border.<br>|
 
 ### RDK type parameter
 ** See Fig. 1 in Scase, Braddick, and Raymond (1996) for a visual depiction of these different signal selection rules and noise types.
@@ -63,6 +70,8 @@ In addition to the default data collected by all plugins, this plugin collects a
 |frame_rate|numeric|The average frame rate for the trial. 0 denotes that the subject responded before the appearance of the second frame.|
 |number_of_frames|numeric|The number of frames that was shown in this trial.|
 |frame_rate_array|JSON string|The array that holds the number of miliseconds for each frame in this trial.|
+|canvas_width|numeric|The width of the canvas.|
+|canvas_height|numeric|The height of the canvas.|
 
 ## Example
 
@@ -84,7 +93,7 @@ var trial_left = {
 
 ```javascript
 var test_block = {
-	type: "jspsych-RDK", 
+	type: "RDK", 
 	timing_post_trial: 0,
 	number_of_dots: 200,
 	RDK_type: 3,
@@ -94,3 +103,18 @@ var test_block = {
 	trial_duration: 1000
 };
 ```
+
+#### Displaying a trial with multiple apertures
+
+```javascript
+var test_block = {
+    type: "RDK", 
+    number_of_apertures: 3,
+    trial_duration: 10000,
+    RDK_type: 3,
+    aperture_width: 200, //Applied to all 3 apertures
+    number_of_dots: [50, 200, 100], //Different parameter for each aperture
+    aperture_center_x: [(window.innerWidth/2)-300,window.innerWidth/2,(window.innerWidth/2)+300] //Separate the apertures on the screen (window.innerWidth is the middle of the screen)
+};
+```
+

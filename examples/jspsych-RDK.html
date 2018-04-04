@@ -31,8 +31,9 @@
       RDK_type: 3, //The type of RDK used
       choices: ["a", "l"], //Choices available to be keyed in by participant
       trial_duration: 1000, //Duration of each trial in ms
-      timeline: RDK_trials //The timeline of all the trials
+      timeline: RDK_trials, //The timeline of all the trials
     }
+
 
     
     //---------Run the experiment---------
@@ -43,12 +44,7 @@
       on_finish: function(){ //Execute this when the experiment finishes
         jsPsych.data.displayData(); //Display the data onto the browser screen
       }
-    })
-
-  jsPsych.init({
-    timeline: [survey_block],
-    on_finish: function() { jsPsych.data.displayData(); }
-  });
+    });
 
   </script>
 </html>

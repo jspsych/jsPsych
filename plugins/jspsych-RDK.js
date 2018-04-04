@@ -59,6 +59,12 @@ jsPsych.plugins["RDK"] = (function() {
 		      default: true,
 		      description: "If true, then any valid key will end the trial"
 		    },
+		    number_of_apertures: {
+		      type: jsPsych.plugins.parameterType.INT,
+		      pretty_name: "Number of apertures",
+		      default: 1,
+		      description: "The number of RDK apertures (If more than one, make sure to separate them by setting aperture_center_x and aperture_center_y for each RDK)"
+		    },
 		    number_of_dots: {
 		      type: jsPsych.plugins.parameterType.INT,
 		      pretty_name: "Number of dots",
@@ -82,6 +88,12 @@ jsPsych.plugins["RDK"] = (function() {
 		      pretty_name: "Coherence",
 		      default: 0.5,
 		      description: "The percentage of dots moving in the coherent direction"
+		    },
+		    opposite_coherence: {
+		      type: jsPsych.plugins.parameterType.FLOAT,
+		      pretty_name: "Opposite coherence",
+		      default: 0,
+		      description: "The percentage of dots moving in the direction opposite of the coherent direction"
 		    },
 		    dot_radius: {
 		      type: jsPsych.plugins.parameterType.INT,
@@ -125,6 +137,12 @@ jsPsych.plugins["RDK"] = (function() {
 		      default: "gray",
 		      description: "The background of the stimulus"
 		    },
+		    RDK_type: {
+		      type: jsPsych.plugins.parameterType.INT,
+		      pretty_name: "RDK type",
+		      default: 3,
+		      description: "The Type of RDK (refer to documentation for details)"
+		    },
 		    aperture_type: {
 		      type: jsPsych.plugins.parameterType.INT,
 		      pretty_name: "Aperture Type",
@@ -152,7 +170,7 @@ jsPsych.plugins["RDK"] = (function() {
 		    fixation_cross: {
 		      type: jsPsych.plugins.parameterType.INT, //boolean
 		      pretty_name: "Fixation cross",
-		      default: true,
+		      default: false,
 		      description: "If true, then a fixation cross will be present in the middle of the screen"
 		    },
 		    fixation_cross_width: {
@@ -178,6 +196,24 @@ jsPsych.plugins["RDK"] = (function() {
 		      pretty_name: "Fixation cross thickness",
 		      default: 1,
 		      description: "The thickness of the fixation cross"
+		    },
+		    border: {
+		      type: jsPsych.plugins.parameterType.BOOL,
+		      pretty_name: "Border",
+		      default: false,
+		      description: "The presence of a border around the aperture"
+		    },
+		    border_thickness: {
+		      type: jsPsych.plugins.parameterType.INT,
+		      pretty_name: "Border width",
+		      default: 1,
+		      description: "The thickness of the border in pixels"
+		    },
+		    border_color: {
+		      type: jsPsych.plugins.parameterType.STRING,
+		      pretty_name: "Border Color",
+		      default: 1,
+		      description: "The color of the border"
 		    }
 	    }
 	 }
@@ -192,39 +228,37 @@ jsPsych.plugins["RDK"] = (function() {
 		
 		
 		//Note on '||' logical operator: If the first option is 'undefined', it evalutes to 'false' and the second option is returned as the assignment
-		trial.choices = trial.choices || [];
-		trial.correct_choice = trial.correct_choice; 
-		trial.trial_duration = trial.trial_duration || 500;
-		trial.number_of_dots = trial.number_of_dots || 300;
-		trial.number_of_sets = trial.number_of_sets || 1;
-		trial.coherent_direction = trial.coherent_direction || 0;
-		trial.dot_radius = trial.dot_radius || 2;
-		trial.dot_life = trial.dot_life || -1;
-		trial.move_distance = trial.move_distance || 1;
-		trial.aperture_width = trial.aperture_width || 600;
-		trial.aperture_height = trial.aperture_height || 400;
-		trial.dot_color = trial.dot_color || "white"; 
-		trial.background_color = trial.background_color || "gray";
-		trial.RDK_type = trial.RDK_type || 3;
-		trial.aperture_type = trial.aperture_type || 2;
-		trial.reinsert_type = trial.reinsert_type || 2;
-		trial.aperture_center_x = trial.aperture_center_x || window.innerWidth/2;
-		trial.aperture_center_y = trial.aperture_center_y || window.innerHeight/2;
-		trial.fixation_cross = trial.fixation_cross || false; 
-		trial.fixation_cross_width = trial.fixation_cross_width || 20; 
-		trial.fixation_cross_height = trial.fixation_cross_height || 20; 
-		trial.fixation_cross_color = trial.fixation_cross_color || "black";
-		trial.fixation_cross_thickness = trial.fixation_cross_thickness || 1; 
+		trial.choices = assignParameterValue(trial.choices, []);
+		trial.correct_choice = assignParameterValue(trial.correct_choice, undefined);
+		trial.trial_duration = assignParameterValue(trial.trial_duration, 500);
+		trial.response_ends_trial = assignParameterValue(trial.response_ends_trial, true);
+		trial.number_of_apertures = assignParameterValue(trial.number_of_apertures, 1);
+		trial.number_of_dots = assignParameterValue(trial.number_of_dots, 300);
+		trial.number_of_sets = assignParameterValue(trial.number_of_sets, 1);
+		trial.coherent_direction = assignParameterValue(trial.coherent_direction, 0);
+		trial.coherence = assignParameterValue(trial.coherence, 0.5);
+		trial.opposite_coherence = assignParameterValue(trial.opposite_coherence, 0);
+		trial.dot_radius = assignParameterValue(trial.dot_radius, 2);
+		trial.dot_life = assignParameterValue(trial.dot_life, -1);
+		trial.move_distance = assignParameterValue(trial.move_distance, 1);
+		trial.aperture_width = assignParameterValue(trial.aperture_width, 600);
+		trial.aperture_height = assignParameterValue(trial.aperture_height, 400);
+		trial.dot_color = assignParameterValue(trial.dot_color, "white");
+		trial.background_color = assignParameterValue(trial.background_color, "gray");
+		trial.RDK_type = assignParameterValue(trial.RDK_type, 3);
+		trial.aperture_type = assignParameterValue(trial.aperture_type, 2);
+		trial.reinsert_type = assignParameterValue(trial.reinsert_type, 2);
+		trial.aperture_center_x = assignParameterValue(trial.aperture_center_x, window.innerWidth/2);
+		trial.aperture_center_y = assignParameterValue(trial.aperture_center_y, window.innerHeight/2);
+		trial.fixation_cross = assignParameterValue(trial.fixation_cross, false); 
+		trial.fixation_cross_width = assignParameterValue(trial.fixation_cross_width, 20);
+		trial.fixation_cross_height = assignParameterValue(trial.fixation_cross_height, 20);
+		trial.fixation_cross_color = assignParameterValue(trial.fixation_cross_color, "black");
+		trial.fixation_cross_thickness = assignParameterValue(trial.fixation_cross_thickness, 1);
+		trial.border = assignParameterValue(trial.border, false);
+		trial.border_thickness = assignParameterValue(trial.border_thickness, 1);
+		trial.border_color = assignParameterValue(trial.borderColor, "black");
 		
-		//Coherence can be zero, but logical operators evaluate it to false. So we do it manually
-		if(typeof trial.coherence === 'undefined'){
-			trial.coherence = 0.5;
-		}
-
-		//Logical operators won't work for boolean parameters like they do for non-boolean parameters above, so we do it manually
-		if (typeof trial.response_ends_trial === 'undefined') {
-			trial.response_ends_trial = true;
-		}
 		
 		//For square and circle, set the aperture height == aperture width
 		if (apertureType == 1 || apertureType == 3) {
@@ -232,11 +266,13 @@ jsPsych.plugins["RDK"] = (function() {
 		}
 
 		//Convert the parameter variables to those that the code below can use
-
+		
+		var nApertures = trial.number_of_apertures; //The number of apertures
 		var nDots = trial.number_of_dots; //Number of dots per set (equivalent to number of dots per frame)
 		var nSets = trial.number_of_sets; //Number of sets to cycle through per frame
 		var coherentDirection = trial.coherent_direction; //The direction of the coherentDots in degrees. Starts at 3 o'clock and goes counterclockwise (0 == rightwards, 90 == upwards, 180 == leftwards, 270 == downwards), range 0 - 360
 		var coherence = trial.coherence; //Proportion of dots to move together, range from 0 to 1
+		var oppositeCoherence = trial.opposite_coherence; // The coherence for the dots going the opposite direction as the coherent dots
 		var dotRadius = trial.dot_radius; //Radius of each dot in pixels
 		var dotLife = trial.dot_life; //How many frames a dot will keep following its trajectory before it is redrawn at a random location. -1 denotes infinite life (the dot will only be redrawn if it reaches the end of the aperture).
 		var moveDistance = trial.move_distance; //How many pixels the dots move per frame
@@ -293,11 +329,16 @@ jsPsych.plugins["RDK"] = (function() {
 		var reinsertType = trial.reinsert_type;
 		
 		//Fixation Cross Parameters
-		var fixationCross = trial.fixation_cross; true; //To display or not to display the cross
+		var fixationCross = trial.fixation_cross; //To display or not to display the cross
 		var fixationCrossWidth = trial.fixation_cross_width;  //The width of the fixation cross in pixels
 		var fixationCrossHeight = trial.fixation_cross_height; //The height of the fixation cross in pixels
 		var fixationCrossColor = trial.fixation_cross_color; //The color of the fixation cross
 		var fixationCrossThickness = trial.fixation_cross_thickness; //The thickness of the fixation cross, must be positive number above 1
+		
+		//Border Parameters
+		var border = trial.border; //To display or not to display the border
+		var borderThickness = trial.border_thickness; //The width of the border in pixels
+		var borderColor = trial.border_color; //The color of the border
 
 
 
@@ -327,8 +368,8 @@ jsPsych.plugins["RDK"] = (function() {
 		var ctx = canvas.getContext("2d");
 
 		//Declare variables for width and height, and also set the canvas width and height to the window width and height
-		var width = canvas.width = window.innerWidth;
-		var height = canvas.height = window.innerHeight;
+		var canvasWidth = canvas.width = window.innerWidth;
+		var canvasHeight = canvas.height = window.innerHeight;
 
 		//Set the canvas background color
 		canvas.style.backgroundColor = backgroundColor;
@@ -341,32 +382,49 @@ jsPsych.plugins["RDK"] = (function() {
 		
 		//This is the main part of the trial that makes everything run
 
-		//Declare aperture parameters for initialization based on shape (used in initializeApertureParameters function below)
+		//Global variable for the current aperture number
+		var currentApertureNumber;
+
+		//3D Array to hold the dots (1st D is Apertures, 2nd D is Sets, 3rd D is Dots)
+		var dotArray3d = [];
+
+		//Variables for different apertures (initialized in setUpMultipleApertures function below)
+		var nDotsArray;
+		var nSetsArray;
+		var coherentDirectionArray;
+		var coherenceArray;
+		var oppositeCoherenceArray;
+		var dotRadiusArray;
+		var dotLifeArray;
+		var moveDistanceArray;
+		var apertureWidthArray;
+		var apertureHeightArray;
+		var dotColorArray;
+		var apertureCenterXArray;
+		var apertureCenterYArray;
+					
+		// Set up multiple apertures
+		setUpMultipleApertures();
+
+		//Declare aperture parameters for initialization based on shape (used in initializeApertureDimensions function below)
 		var horizontalAxis;
 		var verticalAxis;
-		
-		//Initialize the aperture parameters
-		initializeApertureParameters();
-		
-		//Declare global variable to store the frame rate of the trial
-		var frameRate = []; //How often the monitor refreshes, in ms. Currently an array to store all the intervals. Will be converted into a single number (the average) in end_trial function.
-		
-		//variable to store how many frames were presented.
-		var numberOfFrames = 0;
-		
-		//Calculate the x and y jump sizes for coherent dots
-		var coherentJumpSizeX = calculateCoherentJumpSizeX(coherentDirection);
-		var coherentJumpSizeY = calculateCoherentJumpSizeY(coherentDirection);
 
-		//Calculate the number of coherent and incoherent dots
-		var nCoherentDots = nDots * coherence;
-		var nIncoherentDots = nDots - nCoherentDots;
+		//Calculate the x and y jump sizes for coherent dots
+		var coherentJumpSizeX;
+		var coherentJumpSizeY;
+
+		//Calculate the number of coherent, opposite coherent, and incoherent dots
+		var nCoherentDots;
+		var nOppositeCoherentDots;
+		var nIncoherentDots;
 
 		//Make the array of arrays containing dot objects
-		var dotArray2d = makeDotArray2d();
+		var dotArray2d;
 
 		var dotArray; //Declare a global variable to hold the current array
-		var currentSet = 0; //Declare and initialize a global variable to cycle through the dot arrays
+		var currentSetArray; //Declare and initialize a global variable to cycle through the dot arrays
+
 		
 		//Initialize stopping condition for animateDotMotion function that runs in a loop
 		var stopDotMotion = false;
@@ -388,6 +446,12 @@ jsPsych.plugins["RDK"] = (function() {
 		
 		//Declare global variable to be defined in startKeyboardListener function and to be used in end_trial function
 		var keyboardListener; 
+		
+		//Declare global variable to store the frame rate of the trial
+		var frameRate = []; //How often the monitor refreshes, in ms. Currently an array to store all the intervals. Will be converted into a single number (the average) in end_trial function.
+		
+		//variable to store how many frames were presented.
+		var numberOfFrames = 0;
 
 		//This runs the dot motion simulation, updating it according to the frame refresh rate of the screen.
 		animateDotMotion();
@@ -452,10 +516,12 @@ jsPsych.plugins["RDK"] = (function() {
 				"correct_choice": trial.correct_choice, //The correct choice
 				"trial_duration": trial.trial_duration, //The trial duration 
 				"response_ends_trial": trial.response_ends_trial, //If the response ends the trial
+				"number_of_apertures": trial.number_of_apertures,
 				"number_of_dots": trial.number_of_dots,
 				"number_of_sets": trial.number_of_sets,
 				"coherent_direction": trial.coherent_direction,
 				"coherence": trial.coherence,
+				"opposite_coherence": trial.opposite_coherence,
 				"dot_radius": trial.dot_radius,
 				"dot_life": trial.dot_life,
 				"move_distance": trial.move_distance,
@@ -468,7 +534,20 @@ jsPsych.plugins["RDK"] = (function() {
 				"reinsert_type": trial.reinsert_type,
 				"frame_rate": frameRate, //The average frame rate for the trial
 				"frame_rate_array": JSON.stringify(frameRateArray), //The array of ms per frame in this trial, in the form of a JSON string
-				"number_of_frames": numberOfFrames //The number of frames in this trial
+				"number_of_frames": numberOfFrames, //The number of frames in this trial
+				"aperture_center_x": trial.aperture_center_x,
+				"aperture_center_y": trial.aperture_center_y,
+				"fixation_cross": trial.fixation_cross,
+				"fixation_cross_width": trial.fixation_cross_width,
+				"fixation_cross_height": trial.fixation_cross_height,
+				"fixation_cross_color": trial.fixation_cross_color,
+				"fixation_cross_thickness": trial.fixation_cross_thickness,
+				"border": trial.border,
+				"border_thickness": trial.border_thickness,
+				"border_color": trial.border_color,
+				"canvas_width": canvasWidth,
+				"canvas_height": canvasHeight
+				
 			}
 			
 			//Remove the canvas as the child of the display_element element
@@ -522,6 +601,120 @@ jsPsych.plugins["RDK"] = (function() {
 
 		//----RDK Functions Begin----
 
+		//Set up the variables for the apertures
+		function setUpMultipleApertures(){
+			nDotsArray = setParameter(nDots);
+			nSetsArray = setParameter(nSets); 
+			coherentDirectionArray = setParameter(coherentDirection); 
+			coherenceArray = setParameter(coherence); 
+			oppositeCoherenceArray = setParameter(oppositeCoherence); 
+			dotRadiusArray = setParameter(dotRadius); 
+			dotLifeArray = setParameter(dotLife); 
+			moveDistanceArray = setParameter(moveDistance); 
+			apertureWidthArray = setParameter(apertureWidth); 
+			apertureHeightArray = setParameter(apertureHeight); 
+			dotColorArray = setParameter(dotColor);  
+			apertureCenterXArray = setParameter(apertureCenterX); 
+			apertureCenterYArray = setParameter(apertureCenterY); 
+			RDKArray = setParameter(RDK);
+			apertureTypeArray = setParameter(apertureType);
+			reinsertTypeArray = setParameter(reinsertType);
+			fixationCrossArray = setParameter(fixationCross);
+			fixationCrossWidthArray = setParameter(fixationCrossWidth);
+			fixationCrossHeightArray = setParameter(fixationCrossHeight);
+			fixationCrossColorArray = setParameter(fixationCrossColor);
+			fixationCrossThicknessArray = setParameter(fixationCrossThickness);
+			borderArray = setParameter(border);
+			borderThicknessArray = setParameter(borderThickness);
+			borderColorArray = setParameter(borderColor);
+			
+			currentSetArray = setParameter(0); //Always starts at zero
+
+
+			//Loop through the number of apertures to make the dots
+			for(currentApertureNumber = 0; currentApertureNumber < nApertures; currentApertureNumber++){
+				
+				//Initialize the parameters to make the 2d dot array (one for each aperture);
+				initializeCurrentApertureParameters();
+        
+				//Make each 2d array and push it into the 3d array
+				dotArray3d.push(makeDotArray2d());
+			}
+		}
+		
+		//Function to set the parameters of the array
+		function setParameter(originalVariable){
+			//Check if it is an array and its length matches the aperture then return the original array
+			if(originalVariable.constructor === Array && originalVariable.length === nApertures){
+				return originalVariable;
+			}
+			//Else if it is not an array, we make it an array with duplicate values
+			else if(originalVariable.constructor !== Array){
+				
+				var tempArray = [];
+				
+				//Make a for loop and duplicate the values
+				for(var i = 0; i < nApertures; i++){
+					tempArray.push(originalVariable);
+				}
+				return tempArray;
+			}
+			//Else if the array is not long enough, then print out that error message
+			else if(originalVariable.constructor === Array && originalVariable.length !== nApertures){
+				console.error("If you have more than one aperture, please ensure that arrays that are passed in as parameters are the same length as the number of apertures. Else you can use a single value without the array");
+			}
+			//Else print a generic error
+			else{
+				console.error("A parameter is incorrectly set. Please ensure that the nApertures parameter is set to the correct value (if using more than one aperture), and all others parameters are set correctly.");
+			}
+		}
+		
+		//Function to set the global variables to the current aperture so that the correct dots are updated and drawn
+		function initializeCurrentApertureParameters(){
+			
+			//Set the global variables to that relevant to the current aperture
+			nDots = nDotsArray[currentApertureNumber];
+			nSets = nSetsArray[currentApertureNumber]; 
+			coherentDirection = coherentDirectionArray[currentApertureNumber]; 
+			coherence = coherenceArray[currentApertureNumber]; 
+			oppositeCoherence = oppositeCoherenceArray[currentApertureNumber]; 
+			dotRadius = dotRadiusArray[currentApertureNumber]; 
+			dotLife = dotLifeArray[currentApertureNumber]; 
+			moveDistance = moveDistanceArray[currentApertureNumber]; 
+			apertureWidth = apertureWidthArray[currentApertureNumber]; 
+			apertureHeight = apertureHeightArray[currentApertureNumber]; 
+			dotColor = dotColorArray[currentApertureNumber]; 
+			apertureCenterX = apertureCenterXArray[currentApertureNumber]; 
+			apertureCenterY = apertureCenterYArray[currentApertureNumber]; 
+			RDK = RDKArray[currentApertureNumber];
+			apertureType = apertureTypeArray[currentApertureNumber];
+			reinsertType = reinsertTypeArray[currentApertureNumber];
+			fixationCross = fixationCrossArray[currentApertureNumber];
+			fixationCrossWidth = fixationCrossWidthArray[currentApertureNumber];
+			fixationCrossHeight = fixationCrossHeightArray[currentApertureNumber];
+			fixationCrossColor = fixationCrossColorArray[currentApertureNumber];
+			fixationCrossThickness = fixationCrossThicknessArray[currentApertureNumber];
+			border = borderArray[currentApertureNumber];
+			borderThickness = borderThicknessArray[currentApertureNumber];
+			borderColor = borderColorArray[currentApertureNumber];
+
+			//Calculate the x and y jump sizes for coherent dots
+			coherentJumpSizeX = calculateCoherentJumpSizeX(coherentDirection);
+			coherentJumpSizeY = calculateCoherentJumpSizeY(coherentDirection);
+
+			//Initialize the aperture parameters
+			initializeApertureDimensions();
+
+			//Calculate the number of coherent, opposite coherent, and incoherent dots
+			nCoherentDots = nDots * coherence;
+			nOppositeCoherentDots = nDots * oppositeCoherence;
+			nIncoherentDots = nDots - (nCoherentDots + nOppositeCoherentDots);
+			
+			//If the 3d array has been made, then choose the 2d array and the current set
+			dotArray2d = dotArray3d.length !==0 ? dotArray3d[currentApertureNumber] : undefined;
+			
+		}// End of initializeCurrentApertureParameters
+		
 		//Calculate coherent jump size in the x direction
 		function calculateCoherentJumpSizeX(coherentDirection) {
 			var angleInRadians = coherentDirection * Math.PI / 180;
@@ -535,7 +728,7 @@ jsPsych.plugins["RDK"] = (function() {
 		}
 
 		//Initialize the parameters for the aperture for further calculation
-		function initializeApertureParameters() {
+		function initializeApertureDimensions() {
 			//For circle and square
 			if (apertureType == 1 || apertureType == 3) {
 				horizontalAxis = verticalAxis = apertureWidth/2;
@@ -646,11 +839,29 @@ jsPsych.plugins["RDK"] = (function() {
 			} //End of for loop
 			return tempArray;
 		}
+		
+		//Function to update all the dots all the apertures and then draw them
+		function updateAndDraw(){
+			
+			//Clear the canvas to draw new dots
+			ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+			
+			// Go through the array, update the dots, and draw them on the canvas
+			for(currentApertureNumber = 0; currentApertureNumber < nApertures; currentApertureNumber++){
+				
+				//Initialize the variables for each parameter
+				initializeCurrentApertureParameters(currentApertureNumber);
+				
+				//Update the dots
+				updateDots();
+				
+				//Draw on the canvas
+				draw();
+			}
+		} 
 
 		//Draw the dots on the canvas after they're updated
 		function draw() {
-			//Clear the canvas to draw new dots
-			ctx.clearRect(0, 0, width, height)
 			//Loop through the dots one by one and draw them
 			for (var i = 0; i < nDots; i++) {
 				dot = dotArray[i];
@@ -666,33 +877,55 @@ jsPsych.plugins["RDK"] = (function() {
 		      //Horizontal line
 		      ctx.beginPath();
 		      ctx.lineWidth = fixationCrossThickness;
-		      ctx.moveTo(width/2 - fixationCrossWidth, height/2);
-		      ctx.lineTo(width/2 + fixationCrossWidth, height/2);
+		      ctx.moveTo(canvasWidth/2 - fixationCrossWidth, canvasHeight/2);
+		      ctx.lineTo(canvasWidth/2 + fixationCrossWidth, canvasHeight/2);
 		      ctx.fillStyle = fixationCrossColor;
 		      ctx.stroke();
 		      
 		      //Vertical line
 		      ctx.beginPath();
 		      ctx.lineWidth = fixationCrossThickness;
-		      ctx.moveTo(width/2, height/2 - fixationCrossHeight);
-		      ctx.lineTo(width/2, height/2 + fixationCrossHeight);
+		      ctx.moveTo(canvasWidth/2, canvasHeight/2 - fixationCrossHeight);
+		      ctx.lineTo(canvasWidth/2, canvasHeight/2 + fixationCrossHeight);
 		      ctx.fillStyle = fixationCrossColor;
 		      ctx.stroke();
 		    }
-		}
+      
+	      	//Draw the border if we want it
+	      	if(border === true){
+	        
+	        	//For circle and ellipse
+	        	if(apertureType === 1 || apertureType === 2){
+	          		ctx.lineWidth = borderThickness;
+	          		ctx.strokeStyle = borderColor;
+	          		ctx.beginPath();
+	          		ctx.ellipse(apertureCenterX, apertureCenterY, horizontalAxis+(borderThickness/2), verticalAxis+(borderThickness/2), 0, 0, Math.PI*2);
+	          		ctx.stroke();
+	        	}//End of if circle or ellipse
+	        
+	        	//For square and rectangle
+	        	if(apertureType === 3 || apertureType === 4){
+	          		ctx.lineWidth = borderThickness;
+	          		ctx.strokeStyle = borderColor;
+	          		ctx.strokeRect(apertureCenterX-horizontalAxis-(borderThickness/2), apertureCenterY-verticalAxis-(borderThickness/2), (horizontalAxis*2)+borderThickness, (verticalAxis*2)+borderThickness);
+	        	}//End of if square or 
+        
+      		}//End of if border === true
+	        
+		}//End of draw
 
 		//Update the dots with their new location
 		function updateDots() {
 			
 			//Cycle through to the next set of dots
-			if (currentSet == nSets - 1) {
-				currentSet = 0;
+			if (currentSetArray[currentApertureNumber] == nSets - 1) {
+				currentSetArray[currentApertureNumber] = 0;
 			} else {
-				currentSet++;
+				currentSetArray[currentApertureNumber] = currentSetArray[currentApertureNumber] + 1;
 			}
 			
 			//Load in the current set of dot array for easy handling
-			dotArray = dotArray2d[currentSet]; //Global variable, so the draw function also uses this array
+			dotArray = dotArray2d[currentSetArray[currentApertureNumber]]; //Global variable, so the draw function also uses this array
 
 			//Loop through the dots one by one and update them accordingly
 			for (var i = 0; i < nDots; i++) {
@@ -997,8 +1230,7 @@ jsPsych.plugins["RDK"] = (function() {
 						timerHasStarted = true;
 					}
 					
-					updateDots(); //Update the dots to their new positions
-					draw(); //Draw the dots on the canvas
+					updateAndDraw(); //Update and draw each of the dots in their respective apertures
 					
 					//If this is before the first frame, then start the timestamp
 					if(previousTimestamp === undefined){
@@ -1015,6 +1247,15 @@ jsPsych.plugins["RDK"] = (function() {
 		}
 
 		//----RDK Functions End----
+	
+		//----General Functions Begin//----
+		
+		//Function to assign the default values for the staircase parameters
+		function assignParameterValue(argument, defaultValue){
+			return typeof argument !== 'undefined' ? argument : defaultValue;
+		}
+		
+		//----General Functions End//----
 
 
 		//-------------------------------------
