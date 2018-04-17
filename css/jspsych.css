@@ -10,11 +10,7 @@
  .jspsych-display-element {
    display: flex;
    flex-direction: column;
-   /*justify-content: center;
-   align-items: center;*/
-   /*height: 100%;
-   width: 100%;*/
-   overflow-y: scroll;
+   overflow-y: auto;
  }
 
  .jspsych-display-element:focus {
@@ -23,9 +19,7 @@
 
  .jspsych-content-wrapper {
    display: flex;
-   /*justify-content: center;
-   align-items: center;*/
-   margin: auto; /* this does the same thing as above two lines in this case */
+   margin: auto;
    flex: 1 1 100%;
    width: 100%;
  }
@@ -43,8 +37,6 @@
  .jspsych-middle {
    align-items: center;
  }
-
-
 
 /* fonts and type */
 
