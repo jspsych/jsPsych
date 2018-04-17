@@ -18,9 +18,9 @@ Start by downloading jsPsych and setting up a folder to contain your experiment 
 <html>
   <head>
     <title>My experiment</title>
-    <script src="jspsych-6.0.1/jspsych.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-html-keyboard-response.js"></script>
-    <link href="jspsych-6.0.1/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jspsych-6.0.2/jspsych.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-html-keyboard-response.js"></script>
+    <link href="jspsych-6.0.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
 </html>
@@ -68,9 +68,9 @@ jsPsych.init({
 <html>
   <head>
     <title>My experiment</title>
-    <script src="jspsych-6.0.1/jspsych.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-html-keyboard-response.js"></script>
-    <link href="jspsych-6.0.1/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jspsych-6.0.2/jspsych.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-html-keyboard-response.js"></script>
+    <link href="jspsych-6.0.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
   <script>
@@ -107,10 +107,12 @@ var instructions_block = {
       "press the letter F on the keyboard as fast as you can.</p>" +
       "<p>If the circle is <strong>orange</strong>, press the letter J " +
       "as fast as you can.</p>" +
+      "<div style='width: 700px;'>"+
       "<div style='float: left;'><img src='img/blue.png'></img>" +
       "<p class='small'><strong>Press the F key</strong></p></div>" +
       "<div class='float: right;'><img src='img/orange.png'></img>" +
       "<p class='small'><strong>Press the J key</strong></p></div>" +
+      "</div>"+
       "<p>Press any key to begin.</p>"
 };
 ```
@@ -133,9 +135,9 @@ timeline.push(instructions);
 <html>
   <head>
     <title>My experiment</title>
-    <script src="jspsych-6.0.1/jspsych.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-html-keyboard-response.js"></script>
-    <link href="jspsych-6.0.1/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jspsych-6.0.2/jspsych.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-html-keyboard-response.js"></script>
+    <link href="jspsych-6.0.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
   <script>
@@ -158,10 +160,12 @@ timeline.push(instructions);
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
           "as fast as you can.</p>" +
+          "<div style='width: 700px;'>"+
           "<div style='float: left;'><img src='img/blue.png'></img>" +
           "<p class='small'><strong>Press the F key</strong></p></div>" +
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
+          "</div>"+
           "<p>Press any key to begin.</p>",
       post_trial_gap: 2000
     };
@@ -182,10 +186,10 @@ Creating trials to show the stimuli is conceptually the same as creating a trial
 ```html
 <head>
   <title>My experiment</title>
-  <script src="jspsych-6.0.1/jspsych.js"></script>
-  <script src="jspsych-6.0.1/plugins/jspsych-html-keyboard-response.js"></script>
-  <script src="jspsych-6.0.1/plugins/jspsych-image-keyboard-response.js"></script>
-  <link href="jspsych-6.0.1/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+  <script src="jspsych-6.0.2/jspsych.js"></script>
+  <script src="jspsych-6.0.2/plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="jspsych-6.0.2/plugins/jspsych-image-keyboard-response.js"></script>
+  <link href="jspsych-6.0.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 </head>
 ```
 
@@ -218,10 +222,10 @@ timeline.push(blue_trial, orange_trial);
 <html>
   <head>
     <title>My experiment</title>
-    <script src="jspsych-6.0.1/jspsych.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-html-keyboard-response.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-image-keyboard-response.js"></script>
-    <link href="jspsych-6.0.1/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jspsych-6.0.2/jspsych.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-image-keyboard-response.js"></script>
+    <link href="jspsych-6.0.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
   <script>
@@ -244,10 +248,12 @@ timeline.push(blue_trial, orange_trial);
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
           "as fast as you can.</p>" +
+          "<div style='width: 700px;'>"+
           "<div style='float: left;'><img src='img/blue.png'></img>" +
           "<p class='small'><strong>Press the F key</strong></p></div>" +
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
+          "</div>"+
           "<p>Press any key to begin.</p>",
       post_trial_gap: 2000
     };
@@ -337,10 +343,10 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
 <html>
   <head>
     <title>My experiment</title>
-    <script src="jspsych-6.0.1/jspsych.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-html-keyboard-response.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-image-keyboard-response.js"></script>
-    <link href="jspsych-6.0.1/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jspsych-6.0.2/jspsych.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-image-keyboard-response.js"></script>
+    <link href="jspsych-6.0.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
   <script>
@@ -363,10 +369,12 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
           "as fast as you can.</p>" +
+          "<div style='width: 700px;'>"+
           "<div style='float: left;'><img src='img/blue.png'></img>" +
           "<p class='small'><strong>Press the F key</strong></p></div>" +
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
+          "</div>"+
           "<p>Press any key to begin.</p>",
       post_trial_gap: 2000
     };
@@ -436,10 +444,10 @@ var test_procedure = {
 <html>
   <head>
     <title>My experiment</title>
-    <script src="jspsych-6.0.1/jspsych.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-html-keyboard-response.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-image-keyboard-response.js"></script>
-    <link href="jspsych-6.0.1/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jspsych-6.0.2/jspsych.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-image-keyboard-response.js"></script>
+    <link href="jspsych-6.0.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
   <script>
@@ -462,10 +470,12 @@ var test_procedure = {
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
           "as fast as you can.</p>" +
+          "<div style='width: 700px;'>"+
           "<div style='float: left;'><img src='img/blue.png'></img>" +
           "<p class='small'><strong>Press the F key</strong></p></div>" +
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
+          "</div>"+
           "<p>Press any key to begin.</p>",
       post_trial_gap: 2000
     };
@@ -533,10 +543,10 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
 <html>
   <head>
     <title>My experiment</title>
-    <script src="jspsych-6.0.1/jspsych.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-html-keyboard-response.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-image-keyboard-response.js"></script>
-    <link href="jspsych-6.0.1/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jspsych-6.0.2/jspsych.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-image-keyboard-response.js"></script>
+    <link href="jspsych-6.0.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
   <script>
@@ -559,10 +569,12 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
           "as fast as you can.</p>" +
+          "<div style='width: 700px;'>"+
           "<div style='float: left;'><img src='img/blue.png'></img>" +
           "<p class='small'><strong>Press the F key</strong></p></div>" +
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
+          "</div>"+
           "<p>Press any key to begin.</p>",
       post_trial_gap: 2000
     };
@@ -628,10 +640,10 @@ jsPsych.init({
 <html>
   <head>
     <title>My experiment</title>
-    <script src="jspsych-6.0.1/jspsych.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-html-keyboard-response.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-image-keyboard-response.js"></script>
-    <link href="jspsych-6.0.1/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jspsych-6.0.2/jspsych.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-image-keyboard-response.js"></script>
+    <link href="jspsych-6.0.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
   <script>
@@ -654,10 +666,12 @@ jsPsych.init({
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
           "as fast as you can.</p>" +
+          "<div style='width: 700px;'>"+
           "<div style='float: left;'><img src='img/blue.png'></img>" +
           "<p class='small'><strong>Press the F key</strong></p></div>" +
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
+          "</div>"+
           "<p>Press any key to begin.</p>",
       post_trial_gap: 2000
     };
@@ -717,7 +731,7 @@ We start by modifying `test_stimuli`:
 ```javascript
 var test_stimuli = [
   { stimulus: "img/blue.png", data: {test_part: 'test', correct_response: 'f'}},
-  { stimulus: "img/orange.png", data: {test_part: 'test', correct_response:{test_part: 'test', correct_response: 'j'}}
+  { stimulus: "img/orange.png", data: {test_part: 'test', correct_response: 'j'}}
 ];
 ```
 Now we assign these values to the `data` parameter of the `test` trial.
@@ -752,10 +766,10 @@ var fixation = {
 <html>
   <head>
     <title>My experiment</title>
-    <script src="jspsych-6.0.1/jspsych.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-html-keyboard-response.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-image-keyboard-response.js"></script>
-    <link href="jspsych-6.0.1/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jspsych-6.0.2/jspsych.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-image-keyboard-response.js"></script>
+    <link href="jspsych-6.0.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
   <script>
@@ -778,10 +792,12 @@ var fixation = {
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
           "as fast as you can.</p>" +
+          "<div style='width: 700px;'>"+
           "<div style='float: left;'><img src='img/blue.png'></img>" +
           "<p class='small'><strong>Press the F key</strong></p></div>" +
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
+          "</div>"+
           "<p>Press any key to begin.</p>",
       post_trial_gap: 2000
     };
@@ -861,10 +877,10 @@ The `data.key_press` value is a numeric key code indicating which key the subjec
 <html>
   <head>
     <title>My experiment</title>
-    <script src="jspsych-6.0.1/jspsych.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-html-keyboard-response.js"></script>
-    <script src="jspsych-6.0.1/plugins/jspsych-image-keyboard-response.js"></script>
-    <link href="jspsych-6.0.1/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jspsych-6.0.2/jspsych.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-image-keyboard-response.js"></script>
+    <link href="jspsych-6.0.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
   <script>
@@ -887,10 +903,12 @@ The `data.key_press` value is a numeric key code indicating which key the subjec
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
           "as fast as you can.</p>" +
+          "<div style='width: 700px;'>"+
           "<div style='float: left;'><img src='img/blue.png'></img>" +
           "<p class='small'><strong>Press the F key</strong></p></div>" +
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
+          "</div>"+
           "<p>Press any key to begin.</p>",
       post_trial_gap: 2000
     };
@@ -986,10 +1004,10 @@ This code is available in the examples folder in the jsPsych download. It is cal
 <html>
   <head>
     <title>My experiment</title>
-    <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
-    <script src="../plugins/jspsych-image-keyboard-response.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <script src="jspsych-6.0.2/jspsych.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.0.2/plugins/jspsych-image-keyboard-response.js"></script>
+    <link href="jspsych-6.0.2/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
   <script>
@@ -1012,10 +1030,12 @@ This code is available in the examples folder in the jsPsych download. It is cal
           "press the letter F on the keyboard as fast as you can.</p>" +
           "<p>If the circle is <strong>orange</strong>, press the letter J " +
           "as fast as you can.</p>" +
+          "<div style='width: 700px;'>"+
           "<div style='float: left;'><img src='img/blue.png'></img>" +
           "<p class='small'><strong>Press the F key</strong></p></div>" +
           "<div class='float: right;'><img src='img/orange.png'></img>" +
           "<p class='small'><strong>Press the J key</strong></p></div>" +
+          "</div>"+
           "<p>Press any key to begin.</p>",
       post_trial_gap: 2000
     };
