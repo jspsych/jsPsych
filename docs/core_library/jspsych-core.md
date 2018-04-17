@@ -3,7 +3,7 @@
 ---
 ## jsPsych.addNodeToEndOfTimeline
 ```
-jsPsych.addNodeToEndOfTimeline(node_parameters)
+jsPsych.addNodeToEndOfTimeline(node_parameters, callback)
 ```
 
 ### Parameters
@@ -11,6 +11,7 @@ jsPsych.addNodeToEndOfTimeline(node_parameters)
 Parameter | Type | Description
 --------- | ---- | -----------
 node_parameters | object | An object defining a timeline. It must have, at a minimum, a `timeline` parameter with a valid timeline array as the value for that parameter.
+callback | function | An optional callback function. If adding the node to the timeline requires any preloading of media assets, this callback will be triggered after preloading is compelte.
 
 ### Return value
 
@@ -20,7 +21,9 @@ None.
 
 Adds the timeline to the end of the experiment.
 
-### Example
+### Examples
+
+#### Without callback
 
 ```javascript
 var trial = {
@@ -33,6 +36,24 @@ var new_timeline = {
 }
 
 jsPsych.addNodeToEndOfTimeline(new_timeline)
+```
+
+### With callback
+
+```javascript
+var first = {
+  type: 'html-keyboard-response',
+  stimulus: 'first trial; new trial added when on_finish is called',
+  on_finish: function(){
+    jsPsych.pauseExperiment();
+    jsPsych.addNodeToEndOfTimeline({
+      timeline: [{
+        type: 'image-keyboard-response',
+        stimulus: 'img/happy_face_4.jpg'
+      }]
+    }, jsPsych.resumeExperiment)
+  }
+}
 ```
 
 ---

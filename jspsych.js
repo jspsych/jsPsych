@@ -294,10 +294,12 @@ window.jsPsych = (function() {
 
   core.addNodeToEndOfTimeline = function(new_timeline, preload_callback){
     timeline.insert(new_timeline);
-    if(opts.auto_preload){
-      jsPsych.pluginAPI.autoPreload(timeline, preload_callback);
-    } else {
-      preload_callback();
+    if(typeof preload_callback !== 'undefinded'){
+      if(opts.auto_preload){
+        jsPsych.pluginAPI.autoPreload(timeline, preload_callback);
+      } else {
+        preload_callback();
+      }
     }
   }
 
