@@ -90,6 +90,10 @@ jsPsych.plugins.video = (function() {
       // adding start stop parameters if specified
       video_html+='<source src="'+trial.sources[i]
 
+      /*
+      // this isn't implemented yet in all browsers, but when it is
+      // revert to this way of doing it.
+
       if (trial.start !== null) {
         video_html+= '#t=' + trial.start;
       } else {
@@ -98,7 +102,7 @@ jsPsych.plugins.video = (function() {
 
       if (trial.stop !== null) {
         video_html+= ',' + trial.stop
-      }
+      }*/
 
       video_html+='" type="video/'+type+'">';
     }
@@ -123,6 +127,10 @@ jsPsych.plugins.video = (function() {
         }
         jsPsych.pluginAPI.setTimeout(end_trial, (trial.stop-trial.start)*1000);
       }
+    }
+
+    if(trial.start !== null){
+      display_element.querySelector('#jspsych-video-player').currentTime = trial.start;
     }
 
     // function to end trial when it is time
