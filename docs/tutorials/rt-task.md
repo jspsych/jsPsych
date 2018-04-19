@@ -100,7 +100,7 @@ We can use the same basic structure from part 2 to create a new trial that shows
 The trial definition looks like this:
 
 ```javascript
-var instructions_block = {
+var instructions = {
   type: "html-keyboard-response",
   stimulus: "<p>In this experiment, a circle will appear in the center " +
       "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
