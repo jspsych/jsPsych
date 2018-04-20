@@ -69,7 +69,7 @@ Plugin | Description
 [jspsych&#8209;animation](jspsych-animation) | Shows a sequence of images at a specified frame rate. Records key presses (including timing information) made by the subject while they are viewing the animation.
 [jspsych&#8209;audio&#8209;button&#8209;response](jspsych-audio-button-response) | Play an audio file and allow the subject to respond by choosing a button to click. The button can be customized extensively, e.g., using images in place of standard buttons.
 [jspsych&#8209;audio&#8209;keyboard&#8209;response](jspsych-audio-keyboard-response) | Play an audio file and allow the subject to respond by pressing a key.
-[jspsych&#8209;audio&#8209;slider&#8209;response](jspsych-audio-keyboard-response) | Play an audio file and allow the subject to respond by moving a slider to indicate a value.
+[jspsych&#8209;audio&#8209;slider&#8209;response](jspsych-audio-slider-response) | Play an audio file and allow the subject to respond by moving a slider to indicate a value.
 [jspsych&#8209;call&#8209;function](jspsych-call-function) | Executes an arbitrary function call. Doesn't display anything to the subject, and the subject is usually unaware that this plugin has even executed. It's useful for performing tasks at specified times in the experiment, such as saving data.
 [jspsych&#8209;categorize&#8209;animation](jspsych-categorize-animation) | The subject responds to an animation and can be given feedback about their response.
 [jspsych&#8209;categorize&#8209;html](jspsych-categorize-html) | The subject responds to an HTML-formatted stimulus using the keyboard and can be given feedback about the correctness of their response.
@@ -79,12 +79,12 @@ Plugin | Description
 [jspsych&#8209;fullscreen](jspsych-fullscreen) | Toggles the experiment in and out of fullscreen mode.
 [jspsych&#8209;html&#8209;button&#8209;response](jspsych-html-button-response) | Display an HTML-formatted stimulus and allow the subject to respond by choosing a button to click. The button can be customized extensively, e.g., using images in place of standard buttons.
 [jspsych&#8209;html&#8209;keyboard&#8209;response](jspsych-html-keyboard-response) | Display an HTML-formatted stimulus and allow the subject to respond by pressing a key.
-[jspsych&#8209;html&#8209;slider&#8209;response](jspsych-html-keyboard-response) | Display an HTML-formatted stimulus and allow the subject to respond by moving a slider to indicate a value.
+[jspsych&#8209;html&#8209;slider&#8209;response](jspsych-html-slider-response) | Display an HTML-formatted stimulus and allow the subject to respond by moving a slider to indicate a value.
 [jspsych&#8209;iat&#8209;html](jspsych-iat-html) | The implicit association task, using HTML-formatted stimuli.
 [jspsych&#8209;iat&#8209;image](jspsych-iat-image) | The implicit association task, using images as stimuli.
 [jspsych&#8209;image&#8209;button&#8209;response](jspsych-image-button-response) | Display an image and allow the subject to respond by choosing a button to click. The button can be customized extensively, e.g., using images in place of standard buttons.
 [jspsych&#8209;image&#8209;keyboard&#8209;response](jspsych-image-keyboard-response) | Display an image and allow the subject to respond by pressing a key.
-[jspsych&#8209;image&#8209;slider&#8209;response](jspsych-image-keyboard-response) | Display an image and allow the subject to respond by moving a slider to indicate a value.
+[jspsych&#8209;image&#8209;slider&#8209;response](jspsych-image-slider-response) | Display an image and allow the subject to respond by moving a slider to indicate a value.
 [jspsych&#8209;instructions](jspsych-instructions) | For displaying instructions to the subject. Allows the subject to navigate between pages of instructions using keys or buttons.
 [jspsych&#8209;reconstruction](jspsych-reconstruction) | The subject interacts with a stimulus by modifying a parameter of the stimulus and observing the change in the stimulus in real-time.
 [jspsych&#8209;resize](jspsych-resize) | Calibrate the display so that materials display with a known physical size.
