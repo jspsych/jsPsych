@@ -50,7 +50,7 @@
 
 /* Form elements like input fields and buttons */
 
-input[type="text"] {
+.jspsych-display-element input[type="text"] {
   font-family: 'Open Sans', 'Arial', sans-serif;
   font-size: 14px;
 }
