@@ -5,7 +5,7 @@
  * documentation: docs.jspsych.org
  *
  **/
-window.jsPsych = (function() {
+var jsPsych = (function() {
 
   var core = {};
 
@@ -2512,3 +2512,12 @@ if (!Array.isArray) {
     return Object.prototype.toString.call(arg) === '[object Array]';
   };
 }
+(function (root, factory) {
+  if(typeof define === "function" && define.amd) {
+     define([], factory);
+  } else if(typeof module === "object" && module.exports) {
+     module.exports = factory;
+  } else {
+     root.jsPsych = factory;
+  }
+}(this, jsPsych));

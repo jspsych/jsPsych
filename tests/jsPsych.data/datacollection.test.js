@@ -1,6 +1,10 @@
+/**
+ * @jest-environment jsdom
+ */
 const root = '../../';
 
-require(root + 'jspsych.js');
+var jsPsych = require(root + 'jspsych.js');
+window.jsPsych = jsPsych
 
 var data = [
   {rt: 100, filter: true},

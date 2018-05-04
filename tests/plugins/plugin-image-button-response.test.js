@@ -1,12 +1,15 @@
-const utils = require('../testing-utils.js');
+/**
+ * @jest-environment jsdom
+ */
 const root = '../../';
-
+var jsPsych = require(root + 'jspsych.js');
+window.jsPsych = jsPsych
+const utils = require('../testing-utils.js');
 jest.useFakeTimers();
 
 describe('image-button-response', function(){
 
 	beforeEach(function(){
-		require(root + 'jspsych.js');
 		require(root + 'plugins/jspsych-image-button-response');
 	});
 

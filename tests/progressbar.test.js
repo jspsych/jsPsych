@@ -1,8 +1,13 @@
+/**
+ * @jest-environment jsdom
+ */
+
 const root = '../';
+var jsPsych = require(root + 'jspsych.js');
+window.jsPsych = jsPsych
 const utils = require('./testing-utils.js');
 
 beforeEach(function(){
-  require(root + 'jspsych.js');
   require(root + 'plugins/jspsych-html-keyboard-response.js');
 });
 

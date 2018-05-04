@@ -1,11 +1,16 @@
+/**
+ * @jest-environment jsdom
+ */
+
 const root = '../../';
+var jsPsych = require(root + 'jspsych.js');
+window.jsPsych = jsPsych
 
 jest.useFakeTimers();
 
 describe('audio-slider-response', function(){
 	
 	beforeEach(function(){
-		require(root + 'jspsych.js');
 		require(root + 'plugins/jspsych-audio-slider-response');
 	});
 

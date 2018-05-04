@@ -1,11 +1,15 @@
+/**
+ * @jest-environment jsdom
+ */
 const root = '../../';
+var jsPsych = require(root + 'jspsych.js');
+window.jsPsych = jsPsych
 
 jest.useFakeTimers();
 
 describe('fullscreen plugin', function(){
 
   beforeEach(function(){
-    require(root + 'jspsych.js');
     require(root + 'plugins/jspsych-fullscreen.js');
     // require(root + 'plugins/jspsych-text.js');
   });

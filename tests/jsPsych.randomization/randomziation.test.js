@@ -1,6 +1,10 @@
-const root = '../../';
+/**
+ * @jest-environment jsdom
+ */
 
-require(root + 'jspsych.js');
+const root = '../../';
+var jsPsych = require(root + 'jspsych.js');
+window.jsPsych = jsPsych
 
 
 describe('#shuffle', function(){

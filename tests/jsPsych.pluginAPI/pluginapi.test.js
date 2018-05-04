@@ -1,6 +1,11 @@
-const root = '../../';
+/**
+ * @jest-environment jsdom
+ */
 
-require(root + 'jspsych.js');
+const root = '../../';
+var jsPsych = require(root + 'jspsych.js');
+window.jsPsych = jsPsych
+
 require(root + 'plugins/jspsych-html-keyboard-response.js');
 
 describe('#getKeyboardResponse', function(){

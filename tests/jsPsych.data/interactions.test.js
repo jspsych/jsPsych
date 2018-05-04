@@ -1,10 +1,15 @@
+/**
+ * @jest-environment jsdom
+ */
 const root = '../../';
+
+var jsPsych = require(root + 'jspsych.js');
+window.jsPsych = jsPsych
 const utils = require('../testing-utils.js');
 
 describe('Data recording', function(){
 
   beforeEach(function(){
-    require(root + 'jspsych.js');
     require(root + 'plugins/jspsych-html-keyboard-response.js');
   })
 
@@ -59,7 +64,6 @@ describe('Data recording', function(){
 describe('on_interaction_data_update', function(){
 
   beforeEach(function(){
-    require(root + 'jspsych.js');
     require(root + 'plugins/jspsych-html-keyboard-response.js');
   })
 
