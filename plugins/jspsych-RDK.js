@@ -844,13 +844,16 @@ jsPsych.plugins["RDK"] = (function() {
 		function updateAndDraw(){
 			
 			//Clear the canvas to draw new dots
-			ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+			//ctx.clearRect(0, 0, canvasWidth, canvasHeight)
 			
 			// Go through the array, update the dots, and draw them on the canvas
 			for(currentApertureNumber = 0; currentApertureNumber < nApertures; currentApertureNumber++){
 				
 				//Initialize the variables for each parameter
 				initializeCurrentApertureParameters(currentApertureNumber);
+				
+				//Clear the canvas by drawing over the current dots
+        		clearDots();
 				
 				//Update the dots
 				updateDots();
@@ -859,6 +862,22 @@ jsPsych.plugins["RDK"] = (function() {
 				draw();
 			}
 		} 
+		
+		//Function that clears the dots on the canvas by drawing over it with the color of the baclground
+	    function clearDots(){
+	      
+	      //Load in the current set of dot array for easy handling
+				dotArray = dotArray2d[currentSetArray[currentApertureNumber]]; //Global variable, so the updateDots and draw functions also uses this array
+	      
+	      //Loop through the dots one by one and draw them
+				for (var i = 0; i < nDots; i++) {
+					dot = dotArray[i];
+					ctx.beginPath();
+					ctx.arc(dot.x, dot.y, dotRadius+1, 0, Math.PI * 2);
+					ctx.fillStyle = backgroundColor;
+					ctx.fill();
+				}
+	    }
 
 		//Draw the dots on the canvas after they're updated
 		function draw() {
@@ -925,7 +944,7 @@ jsPsych.plugins["RDK"] = (function() {
 			}
 			
 			//Load in the current set of dot array for easy handling
-			dotArray = dotArray2d[currentSetArray[currentApertureNumber]]; //Global variable, so the draw function also uses this array
+			//dotArray = dotArray2d[currentSetArray[currentApertureNumber]]; //Global variable, so the draw function also uses this array
 
 			//Loop through the dots one by one and update them accordingly
 			for (var i = 0; i < nDots; i++) {
