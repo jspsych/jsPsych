@@ -109,12 +109,12 @@ var test_block = {
 ```javascript
 var test_block = {
     type: "RDK", 
-    number_of_apertures: 3,
+    number_of_apertures: 3, //This needs to be set if more than one aperture
     trial_duration: 10000,
     RDK_type: 3,
-    aperture_width: 200, //Applied to all 3 apertures
+    aperture_width: 200, //Applied to all apertures if only one value
     number_of_dots: [50, 200, 100], //Different parameter for each aperture
-    aperture_center_x: [(window.innerWidth/2)-300,window.innerWidth/2,(window.innerWidth/2)+300] //Separate the apertures on the screen (window.innerWidth is the middle of the screen)
+    aperture_center_x: [(window.innerWidth/2)-300,window.innerWidth/2,(window.innerWidth/2)+300] //Separate the apertures on the screen (window.innerWidth/2 is the middle of the screen)
 };
 ```
 
