@@ -2121,6 +2121,11 @@ jsPsych.pluginAPI = (function() {
   }
 
   module.audioContext = function(){
+    if(context !== null){
+      if(context.state !== 'running'){
+        context.resume();
+      }
+    }
     return context;
   }
 
