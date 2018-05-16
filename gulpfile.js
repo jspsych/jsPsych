@@ -3,8 +3,6 @@ const umd = require('gulp-umd')
 const patterns = require('umd-templates');
 const path =require('path')
 
-console.log(patterns.jqueryPlugin)
-
 gulp.task('umd', function() {
   gulp.src('lib/plugins/*.js')
     .pipe(umd({
