@@ -183,6 +183,8 @@ Contributing
 
 Contributions to the code are welcome. Please use the [Issue tracker system](https://github.com/jodeleeuw/jsPsych/issues) to report bugs or discuss suggestions for new features and improvements. If you would like to contribute code, [submit a Pull request](https://help.github.com/articles/using-pull-requests).
 
+Please run `gulp umd` when ready to compile code for production. This converts plugins into proper modules
+
 Citation
 --------
 

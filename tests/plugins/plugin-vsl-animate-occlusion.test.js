@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-const root = '../../';
+const root = '../../build/';
 var jsPsych = require(root + 'jspsych.js');
 window.jsPsych = jsPsych
 const utils = require('../testing-utils.js');

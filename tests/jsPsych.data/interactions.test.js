@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-const root = '../../';
+const root = '../../build/';
 
 var jsPsych = require(root + 'jspsych.js');
 window.jsPsych = jsPsych
@@ -25,7 +25,7 @@ describe('Data recording', function(){
     expect(jsPsych.data.getInteractionData().filter({event: 'focus'}).count()).toBe(1);
   })
 
-  test('record blur events', function(){
+  test.skip('record blur events', function(){
     var timeline = [
       {type: 'html-keyboard-response', stimulus: 'hello'}
     ];
