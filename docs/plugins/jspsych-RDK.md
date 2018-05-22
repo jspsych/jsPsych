@@ -3,7 +3,7 @@
 This plugin displays a Random Dot Kinematogram (RDK) and allows the subject to report the primary direction of motion by pressing a key on the keyboard. The stimulus can be displayed until a keyboard response is given or until a certain duration of time has passed. The RDK is fully customizable (see documentation below) and can display multiple apertures at the same time, each with its own parameters.
 
 We would appreciate it if you cited this paper when you use the RDK: 
-Rajananda, S., Lau, H. & Odegaard, B., (2018). A Random-Dot Kinematogram for Web-Based Vision Research. Journal of Open Research Software. 6(1), p.6. DOI: [http://doi.org/10.5334/jors.194 ]
+<b>Rajananda, S., Lau, H. & Odegaard, B., (2018). A Random-Dot Kinematogram for Web-Based Vision Research. Journal of Open Research Software. 6(1), p.6. DOI: [http://doi.org/10.5334/jors.194]</b>
 
 For optimal performance, fullscreen mode should be manually triggered by the user (e.g. F11 key in Chrome for Windows). Usage of the default Fullscreen trigger from the JsPsych API library  with this plugin might result in the stimuli being displayed incorrectly.
 
@@ -111,9 +111,9 @@ var test_block = {
     type: "RDK", 
     number_of_apertures: 3, //This needs to be set if more than one aperture
     trial_duration: 10000,
-    RDK_type: 3,
+    RDK_type: 3, //Applied to all apertures if only one value
     aperture_width: 200, //Applied to all apertures if only one value
-    number_of_dots: [50, 200, 100], //Different parameter for each aperture
+    number_of_dots: [50, 200, 100], //Different parameter for each aperture. Array length must equal number_of_apertures
     aperture_center_x: [(window.innerWidth/2)-300,window.innerWidth/2,(window.innerWidth/2)+300] //Separate the apertures on the screen (window.innerWidth/2 is the middle of the screen)
 };
 ```
