@@ -32,6 +32,6 @@ var scale_1 = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Ag
 
 var likert_page = {
     type: 'survey-likert',
-    questions: [{prompt: "I like vegetables.", labels: scale_1],
+    questions: [{prompt: "I like vegetables.", labels: scale_1}],
 };
 ```

@@ -41,7 +41,7 @@ correct | boolean | `true` if the subject got the correct answer, `false` otherw
 
 ```javascript
 var categorization_trial = {
-    type: 'categorize',
+    type: 'categorize-image',
     stimulus: 'img/harrypotter.png',
     key_answer: 71,
     text_answer: 'Gryffindor',
