@@ -11,6 +11,8 @@ jsPsych.plugins.video = (function() {
 
   var plugin = {};
 
+  jsPsych.pluginAPI.registerPreload('video', 'stimulus', 'video');
+
   plugin.info = {
     name: 'video',
     description: '',
@@ -71,6 +73,8 @@ jsPsych.plugins.video = (function() {
   plugin.trial = function(display_element, trial) {
 
     // display stimulus
+
+
     var video_html = '<video id="jspsych-video-player" width="'+trial.width+'" height="'+trial.height+'" '
     if(trial.autoplay){
       video_html += "autoplay "
@@ -88,7 +92,7 @@ jsPsych.plugins.video = (function() {
       type = type.toLowerCase();
 
       // adding start stop parameters if specified
-      video_html+='<source src="'+trial.sources[i]
+      video_html+='<source '
 
       /*
       // this isn't implemented yet in all browsers, but when it is
@@ -121,6 +125,7 @@ jsPsych.plugins.video = (function() {
 
     // event handler to set timeout to end trial if video is stopped
     display_element.querySelector('#jspsych-video-player').onplay = function(){
+      display_element.src =  jsPsych.pluginAPI.getVideoBuffer(trial.stimulus);
       if(trial.stop !== null){
         if(trial.start == null){
           trial.start = 0;
