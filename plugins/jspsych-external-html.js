@@ -44,6 +44,14 @@ jsPsych.plugins['external-html'] = (function() {
         default: false,
         description: 'Refresh page.'
       }
+      // if execute_Script == true, then all javascript code on the external page
+      // will be executed in the plugin site within your jsPsych test
+      execute_Script: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Execute scripts',
+        default: false,
+        description: 'If true, JS scripts on the external html file will be executed.'
+      }
     }
   }
 
@@ -66,6 +74,17 @@ jsPsych.plugins['external-html'] = (function() {
         display_element.innerHTML = '';
         jsPsych.finishTrial(trial_data);
       };
+
+      // by default, scripts on the external page are not executed with XMLHttpRequest().
+      // To activate their content through DOM manipulation, we need to relocate all script tags
+      if (trial.execute_Script) {
+        for (const scriptElement of display_element.getElementsByTagName("script")) {
+        const relocatedScript = document.createElement("script");
+        relocatedScript.text = scriptElement.text;
+        scriptElement.parentNode.replaceChild(relocatedScript, scriptElement);
+        };
+      }
+
       if (trial.cont_btn) { display_element.querySelector('#'+trial.cont_btn).addEventListener('click', finish); }
       if (trial.cont_key) {
         var key_listener = function(e) {
