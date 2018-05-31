@@ -11,7 +11,7 @@ jsPsych.plugins.video = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('video', 'stimulus', 'video');
+  jsPsych.pluginAPI.registerPreload('video', 'sources', 'video');
 
   plugin.info = {
     name: 'video',
@@ -27,13 +27,13 @@ jsPsych.plugins.video = (function() {
       width: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Width',
-        default: undefined,
+        default: '',
         description: 'The width of the video in pixels.'
       },
       height: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Height',
-        default: undefined,
+        default: '',
         description: 'The height of the video display in pixels.'
       },
       autoplay: {
@@ -75,7 +75,13 @@ jsPsych.plugins.video = (function() {
     // display stimulus
 
 
-    var video_html = '<video id="jspsych-video-player" width="'+trial.width+'" height="'+trial.height+'" '
+    var video_html = '<video id="jspsych-video-player"'
+      if(trial.width) {
+        video_html += ' width="'+trial.width+'"'
+      }
+      if(trial.height) {
+        video_html += ' height="'+trial.height+'"'
+      }
     if(trial.autoplay){
       video_html += "autoplay "
     }
@@ -83,34 +89,8 @@ jsPsych.plugins.video = (function() {
       video_html +="controls "
     }
     video_html+=">"
-    for(var i=0; i<trial.sources.length; i++){
-      var s = trial.sources[i];
-      if(s.indexOf('?') > -1){
-        s = s.substring(0, s.indexOf('?'));
-      }
-      var type = s.substr(s.lastIndexOf('.') + 1);
-      type = type.toLowerCase();
 
-      // adding start stop parameters if specified
-      video_html+='<source '
-
-      /*
-      // this isn't implemented yet in all browsers, but when it is
-      // revert to this way of doing it.
-
-      if (trial.start !== null) {
-        video_html+= '#t=' + trial.start;
-      } else {
-        video_html+= '#t=0';
-      }
-
-      if (trial.stop !== null) {
-        video_html+= ',' + trial.stop
-      }*/
-
-      video_html+='" type="video/'+type+'">';
-    }
-    video_html +="</video>"
+    var file_name = trial.sources[0];
 
     //show prompt if there is one
     if (trial.prompt !== null) {
@@ -118,6 +98,11 @@ jsPsych.plugins.video = (function() {
     }
 
     display_element.innerHTML = video_html;
+
+    var video_blob = jsPsych.pluginAPI.getVideoBuffer(file_name);
+    if(!video_blob) throw(file_name + ' (video) not preloaded')
+
+    display_element.childNodes[0].src = video_blob;
 
     display_element.querySelector('#jspsych-video-player').onended = function(){
       end_trial();

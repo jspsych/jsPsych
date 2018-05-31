@@ -2333,7 +2333,7 @@ jsPsych.pluginAPI = (function() {
                     video_buffers[source] = URL.createObjectURL(videoBlob); // IE10+
                     n_loaded++;
                     loadfn(n_loaded);
-                    if (n_loaded === images.length) {
+                    if (n_loaded === video.length) {
                         finishfn();
                     }
                 }
@@ -2386,7 +2386,9 @@ jsPsych.pluginAPI = (function() {
       var func = preloads[i].conditional_function;
       var trials = timeline.trialsOfType(type);
       for (var j = 0; j < trials.length; j++) {
+
         if (trials[j][param] && typeof trials[j][param] !== 'function') {
+
           if ( !func  || func(trials[j]) ){
             if (media === 'image') {
               images = images.concat(jsPsych.utils.flatten([trials[j][param]]));
@@ -2428,7 +2430,7 @@ jsPsych.pluginAPI = (function() {
     // wait for the audio files to finish
     module.preloadImages(images, function() {
       module.preloadAudioFiles(audio, function() {
-          module.preloadVideoFiles(video, function() {
+          module.preloadVideo(video, function() {
               callback();
           }, update_loading_progress_bar);
       }, update_loading_progress_bar);
