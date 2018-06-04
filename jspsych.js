@@ -219,15 +219,21 @@ window.jsPsych = (function() {
     // handle callback at plugin level
     if (typeof current_trial.on_finish === 'function') {
       if(current_trial.on_finish(trial_data_values) === false)
-        repeat = true;
+        current_trial_finished = false;
     }
 
     // handle callback at whole-experiment level
     if(opts.on_trial_finish(trial_data_values) === false)
-      repeat = true;
+      current_trial_finished = false;
 
     // set the next trial function appropriately for repeats/next trial
-    var doNext = repeat? repeatTrial : nextTrial;
+    var doNext
+    if(current_trial_finished === false) {
+      doNext = repeatTrial;
+      jsPsych.data.unwrite();
+    } else
+      doNext = nextTrial;
+
 
     // after the above callbacks are complete, then the data should be finalized
     // for this trial. call the on_data_update handler, passing in the same
@@ -784,6 +790,8 @@ window.jsPsych = (function() {
           return;
       }
 
+      timeline.advance();
+
       doTrial(timeline.trial());
   }
 
@@ -1032,6 +1040,10 @@ jsPsych.data = (function() {
     data_collection.push = function(new_data){
       trials.push(new_data);
       return data_collection;
+    }
+
+    data_collection.pop = function() {
+      return trials.pop();
     }
 
     data_collection.join = function(other_data_collection){
@@ -1328,6 +1340,10 @@ jsPsych.data = (function() {
     var ext_data_object = Object.assign({}, data_object, trial.data, default_data, dataProperties);
 
     allData.push(ext_data_object);
+  };
+
+  module.unwrite = function() {
+    return allData.pop();
   };
 
   module.addProperties = function(properties) {
