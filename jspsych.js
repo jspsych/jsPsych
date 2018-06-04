@@ -214,13 +214,20 @@ window.jsPsych = (function() {
     // of the DataCollection, for easy access and editing.
     var trial_data_values = trial_data.values()[0];
 
+    // allow the callbacks to force a repeat of the current trial by returning false
+    var repeat = false;
     // handle callback at plugin level
     if (typeof current_trial.on_finish === 'function') {
-      current_trial.on_finish(trial_data_values);
+      if(current_trial.on_finish(trial_data_values) === false)
+        repeat = true;
     }
 
     // handle callback at whole-experiment level
-    opts.on_trial_finish(trial_data_values);
+    if(opts.on_trial_finish(trial_data_values) === false)
+      repeat = true;
+
+    // set the next trial function appropriately for repeats/next trial
+    var doNext = repeat? repeatTrial : nextTrial;
 
     // after the above callbacks are complete, then the data should be finalized
     // for this trial. call the on_data_update handler, passing in the same
@@ -230,15 +237,15 @@ window.jsPsych = (function() {
     // wait for iti
     if (typeof current_trial.post_trial_gap === null) {
       if (opts.default_iti > 0) {
-        setTimeout(nextTrial, opts.default_iti);
+        setTimeout(doNext, opts.default_iti);
       } else {
-        nextTrial();
+        doNext();
       }
     } else {
       if (current_trial.post_trial_gap > 0) {
-        setTimeout(nextTrial, current_trial.post_trial_gap);
+        setTimeout(doNext, current_trial.post_trial_gap);
       } else {
-        nextTrial();
+        doNext();
       }
     }
   }
@@ -768,6 +775,16 @@ window.jsPsych = (function() {
     }
 
     doTrial(timeline.trial());
+  }
+
+  function repeatTrial() {
+      // if experiment is paused, don't do anything.
+      if(paused) {
+          waiting = true;
+          return;
+      }
+
+      doTrial(timeline.trial());
   }
 
   function doTrial(trial) {
