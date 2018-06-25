@@ -175,13 +175,13 @@ jsPsych.plugins.instructions = (function() {
         allow_held_key: false
       });
       // check if key is forwards or backwards and update page
-      if (info.key === trial.key_backward || info.key === jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.key_backward)) {
+      if (jsPsych.pluginAPI.compareKeys(info.key, trial.key_backward)) {
         if (current_page !== 0 && trial.allow_backward) {
           back();
         }
       }
 
-      if (info.key === trial.key_forward || info.key === jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.key_forward)) {
+      if (jsPsych.pluginAPI.compareKeys(info.key, trial.key_forward)) {
         next();
       }
 
