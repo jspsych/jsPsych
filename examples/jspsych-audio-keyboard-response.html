@@ -3,10 +3,20 @@
 <head>
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-audio-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-html-button-response.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
 </head>
 <body></body>
 <script>
+
+  var pre_audio = {
+    type: 'html-button-response',
+    stimulus: 'Recent versions of Chrome require the user to interact with a page before it can play audio. '+
+    'Clicking the button below counts as an interaction. Be aware of this when planning audio experiments if '+
+    'you want the first trial to include audio.',
+    choices: ['Continue']
+  }
+
   var trial_1 = {
     type: 'audio-keyboard-response',
     stimulus: 'sound/speech_blue.mp3',
@@ -31,7 +41,7 @@
   }
 
   jsPsych.init({
-    timeline: [trial_1, trial_2, trial_3],
+    timeline: [pre_audio, trial_1, trial_2, trial_3],
     use_webaudio: false,
     on_finish: function() {
       jsPsych.data.displayData();
