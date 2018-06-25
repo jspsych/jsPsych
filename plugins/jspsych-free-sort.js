@@ -159,8 +159,8 @@ jsPsych.plugins['free-sort'] = (function() {
       for(var i=0; i<matches.length; i++){
         final_locations.push({
           "src": matches[i].dataset.src,
-          "x": matches[i].style.position.left,
-          "y": matches[i].style.position.top
+          "x": parseInt(matches[i].style.left),
+          "y": parseInt(matches[i].style.top)
         });
       }
 
