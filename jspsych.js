@@ -775,7 +775,6 @@ window.jsPsych = (function() {
     }
 
     global_trial_index++;
-    current_trial_finished = false;
 
     // advance timeline
     timeline.markCurrentTrialComplete();
@@ -798,6 +797,7 @@ window.jsPsych = (function() {
   function doTrial(trial) {
 
     current_trial = trial;
+    current_trial_finished = false;
 
     // process all timeline variables for this trial
     evaluateTimelineVariables(trial);
