@@ -1305,17 +1305,17 @@
 <p>This is one of the simplest methods for saving jsPsych data on the server that is running the experiment. It involves a short PHP script and a few lines of JavaScript code. This method will save each participant's data as a CSV file on the server. <strong>This method will only work if you are running on a web server with PHP installed, or a local server with PHP (e.g., <a href="https://www.apachefriends.org/index.html">XAMPP</a>).</strong></p>
 <p>This method uses a simple PHP script to write files to the server:</p>
 <div class="codehilite"><pre><span></span><span class="cp">&lt;?php</span>
-<span class="c1">// the $_POST[] array will contain the passed in filename and filedata</span>
+<span class="nv">$post_data</span> <span class="o">=</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nb">file_get_contents</span><span class="p">(</span><span class="s1">&#39;php://input&#39;</span><span class="p">),</span> <span class="k">true</span><span class="p">);</span> 
 <span class="c1">// the directory &quot;data&quot; must be writable by the server</span>
-<span class="nv">$filename</span> <span class="o">=</span> <span class="s2">&quot;data/&quot;</span><span class="o">.</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">];</span>
-<span class="nv">$data</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;filedata&#39;</span><span class="p">];</span>
+<span class="nv">$name</span> <span class="o">=</span> <span class="s2">&quot;data/&quot;</span><span class="o">.</span><span class="nv">$post_data</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">];</span> 
+<span class="nv">$data</span> <span class="o">=</span> <span class="nv">$post_data</span><span class="p">[</span><span class="s1">&#39;filedata&#39;</span><span class="p">];</span>
 <span class="c1">// write the file to disk</span>
-<span class="nb">file_put_contents</span><span class="p">(</span><span class="nv">$filename</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
+<span class="nb">file_put_contents</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
 <span class="cp">?&gt;</span><span class="x"></span>
 </pre></div>
 
 
-<p>The <code>file_put_contents($filename, $data)</code> method requires permission to write new files. An easy way to solve this is to create a directory on the server that will store the data and use the chmod command to give all users write permission to that directory. In the above example, I prepend the directory <code>data/</code> to the filename, and that directory is writable.</p>
+<p>The <code>file_put_contents($filename, $data)</code> method requires permission to write new files. An easy way to solve this is to create a directory on the server that will store the data and use the chmod command to give all users write permission to that directory. In the above example, the directory <code>data/</code> is used to store files.</p>
 <p>To use the PHP script, the JavaScript that runs jsPsych needs to send the <code>filename</code> and <code>filedata</code> information. This is done through an <a href="http://www.w3schools.com/xml/ajax_intro.asp">AJAX</a> call.</p>
 <div class="codehilite"><pre><span></span><span class="kd">function</span> <span class="nx">saveData</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>

@@ -2721,7 +2721,7 @@ the experiment data. This is a list of all of the methods that are available to 
 
 <h4 id="localsave">.localSave()<a class="headerlink" href="#localsave" title="Permanent link">&para;</a></h4>
 <p>Saves a CSV or JSON file on the computer running the experiment. If conducting an online experiment, this will download the file onto the subject's computer, and is therefore not a recommended data storage solution for online data collection.</p>
-<p><strong>Warning:</strong> This function relies on features which are <a href="http://caniuse.com/#search=createObjectURL">currently not supported by all major web browsers</a>, though adoption rates are increasing rapidly. It will work on the most recent versions of Chrome, Firefox, and Internet Explorer. Safari has partial support. The file will render, but it will display in the browser window and will require using the Save As option manually.</p>
+<p><strong>Warning:</strong> This function may not behave correctly in older browsers. Upgrading to the latest version of any major web browser should solve the problem.</p>
 <div class="codehilite"><pre><span></span><span class="c1">// first argument is the format, second is the filename.</span>
 <span class="c1">// the format can be either &#39;csv&#39; or &#39;json&#39;.</span>
 <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">localSave</span><span class="p">(</span><span class="s1">&#39;csv&#39;</span><span class="p">,</span><span class="s1">&#39;mydata.csv&#39;</span><span class="p">);</span>
