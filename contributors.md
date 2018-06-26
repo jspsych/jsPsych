@@ -8,6 +8,7 @@ The following people have contributed to the development of jsPsych by writing c
 * Shane Martin - https://github.com/shamrt
 * Adrian Oesch - https://github.com/adrianoesch
 * Junyan Qi - https://github.com/GavinQ1
+* Sivananda Rajananda - https://github.com/vrsivananda
 * Dan Rivas - https://github.com/rivasd
 * Marian Sauter - https://github.com/mariansauter
 * Tim Vergenz - https://github.com/vergenzt
