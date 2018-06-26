@@ -13,6 +13,7 @@ cont_key | numeric | null | The key code a key to advance to the next trial. If 
 cont_btn | string | null | The ID of a clickable element on the page. When the element is clicked, the trial will advance.
 check_fn | function | `function(){ return true; }` | This function is called with the jsPsych `display_element` as the only argument when the subject attempts to advance the trial. The trial will only advance if the function return `true`. This can be used to verify that the subject has correctly filled out a form before continuing, for example.
 force_refresh | boolean | false | If `true`, then the plugin will avoid using the cached version of the HTML page to load if one exists.
+execute_script | boolean | false | If `true`, then scripts on the remote page will be executed.
 
 ## Data Generated
 

@@ -43,10 +43,10 @@ jsPsych.plugins['external-html'] = (function() {
         pretty_name: 'Force refresh',
         default: false,
         description: 'Refresh page.'
-      }
+      },
       // if execute_Script == true, then all javascript code on the external page
       // will be executed in the plugin site within your jsPsych test
-      execute_Script: {
+      execute_script: {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Execute scripts',
         default: false,
@@ -77,7 +77,7 @@ jsPsych.plugins['external-html'] = (function() {
 
       // by default, scripts on the external page are not executed with XMLHttpRequest().
       // To activate their content through DOM manipulation, we need to relocate all script tags
-      if (trial.execute_Script) {
+      if (trial.execute_script) {
         for (const scriptElement of display_element.getElementsByTagName("script")) {
         const relocatedScript = document.createElement("script");
         relocatedScript.text = scriptElement.text;
