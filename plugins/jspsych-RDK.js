@@ -5,6 +5,9 @@
 	
 	This code was created in the Consciousness and Metacognition Lab at UCLA, 
 	under the supervision of Brian Odegaard and Hakwan Lau
+
+	We would appreciate it if you cited this paper when you use the RDK: 
+	Rajananda, S., Lau, H. & Odegaard, B., (2018). A Random-Dot Kinematogram for Web-Based Vision Research. Journal of Open Research Software. 6(1), p.6. DOI: [http://doi.org/10.5334/jors.194]
 	
 	----------------------
 	
