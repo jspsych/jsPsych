@@ -129,16 +129,16 @@ This method uses a simple PHP script to write files to the server:
 
 ```php
 <?php
-// the $_POST[] array will contain the passed in filename and filedata
+$post_data = json_decode(file_get_contents('php://input'), true); 
 // the directory "data" must be writable by the server
-$filename = "data/".$_POST['filename'];
-$data = $_POST['filedata'];
+$name = "data/".$post_data['filename']; 
+$data = $post_data['filedata'];
 // write the file to disk
-file_put_contents($filename, $data);
+file_put_contents($name, $data);
 ?>
 ```
 
-The `file_put_contents($filename, $data)` method requires permission to write new files. An easy way to solve this is to create a directory on the server that will store the data and use the chmod command to give all users write permission to that directory. In the above example, I prepend the directory `data/` to the filename, and that directory is writable.
+The `file_put_contents($filename, $data)` method requires permission to write new files. An easy way to solve this is to create a directory on the server that will store the data and use the chmod command to give all users write permission to that directory. In the above example, the directory `data/` is used to store files.
 
 To use the PHP script, the JavaScript that runs jsPsych needs to send the `filename` and `filedata` information. This is done through an [AJAX](http://www.w3schools.com/xml/ajax_intro.asp) call.
 
