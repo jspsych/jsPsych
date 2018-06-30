@@ -2267,7 +2267,7 @@ jsPsych.pluginAPI = (function() {
     var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
     var finishfn = (typeof callback_complete === 'undefined') ? function() {} : callback_complete;
 
-    if(images.length==0){
+    if(images.length === 0){
       finishfn();
       return;
     }
@@ -2280,7 +2280,7 @@ jsPsych.pluginAPI = (function() {
       img.onload = function() {
         n_loaded++;
         loadfn(n_loaded);
-        if (n_loaded == images.length) {
+        if (n_loaded === images.length) {
           finishfn();
         }
       };
@@ -2376,7 +2376,7 @@ jsPsych.pluginAPI = (function() {
     // list of items to preload
     images = images || [];
     audio = audio || [];
-    video = video || video;
+    video = video || [];
 
     // construct list
     for (var i = 0; i < preloads.length; i++) {

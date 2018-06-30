@@ -83,12 +83,12 @@ jsPsych.plugins.video = (function() {
         video_html += ' height="'+trial.height+'"'
       }
     if(trial.autoplay){
-      video_html += "autoplay "
+      video_html += " autoplay "
     }
     if(trial.controls){
-      video_html +="controls "
+      video_html +=" controls "
     }
-    video_html+=">"
+
 
     var file_name = trial.sources[0];
 
@@ -97,12 +97,25 @@ jsPsych.plugins.video = (function() {
       video_html += trial.prompt;
     }
 
-    display_element.innerHTML = video_html;
+    var video_preload_blob = jsPsych.pluginAPI.getVideoBuffer(file_name);
+    if(!video_preload_blob) {
 
-    var video_blob = jsPsych.pluginAPI.getVideoBuffer(file_name);
-    if(!video_blob) throw(file_name + ' (video) not preloaded')
+        if(file_name.indexOf('?') > -1){
+            file_name = file_name.substring(0, file_name.indexOf('?'));
+        }
+        var type = file_name.substr(file_name.lastIndexOf('.') + 1);
+        type = type.toLowerCase();
+        video_html+='><source src="' + file_name + '" type="video/'+type+'"></video>';
+        display_element.innerHTML = video_html;
+    }
 
-    display_element.childNodes[0].src = video_blob;
+    else{
+        video_html+=">"
+        display_element.innerHTML = video_html;
+        display_element.childNodes[0].src = video_preload_blob;
+    }
+
+
 
     display_element.querySelector('#jspsych-video-player').onended = function(){
       end_trial();
@@ -110,7 +123,7 @@ jsPsych.plugins.video = (function() {
 
     // event handler to set timeout to end trial if video is stopped
     display_element.querySelector('#jspsych-video-player').onplay = function(){
-      display_element.src =  jsPsych.pluginAPI.getVideoBuffer(trial.stimulus);
+      if(video_preload_blob)display_element.src = jsPsych.pluginAPI.getVideoBuffer(trial.stimulus);
       if(trial.stop !== null){
         if(trial.start == null){
           trial.start = 0;
