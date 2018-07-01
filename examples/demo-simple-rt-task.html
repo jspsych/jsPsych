@@ -95,6 +95,7 @@
 
     /* start the experiment */
     jsPsych.init({
+        minimum_valid_rt: 2000,
       timeline: timeline,
       on_finish: function() {
         jsPsych.data.displayData();
