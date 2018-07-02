@@ -1874,20 +1874,17 @@ jsPsych.pluginAPI = (function() {
   module.getKeyboardResponse = function(parameters) {
     //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key, minimum_valid_rt?
     parameters.rt_method = (typeof parameters.rt_method === 'undefined') ? 'date' : parameters.rt_method;
-    if (parameters.rt_method != 'date' && parameters.rt_method != 'performance' && parameters.rt_method != 'audio') {
+    if (parameters.rt_method !== 'date' && parameters.rt_method !== 'performance' && parameters.rt_method !== 'audio') {
       console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
       parameters.rt_method = 'date';
     }
 
-    var minimum_valid_rt = jsPsych.initSettings().minimum_valid_rt
-    parameters.minimum_valid_rt = (typeof minimum_valid_rt === 'undefined') ? 0 : minimum_valid_rt;
-
     var start_time;
-    if (parameters.rt_method == 'date') {
+    if (parameters.rt_method === 'date') {
       start_time = (new Date()).getTime();
-    } else if (parameters.rt_method == 'performance') {
+    } else if (parameters.rt_method === 'performance') {
       start_time = performance.now();
-    } else if (parameters.rt_method == 'audio') {
+    } else if (parameters.rt_method === 'audio') {
       start_time = parameters.audio_context_start_time;
     }
 
@@ -1896,36 +1893,41 @@ jsPsych.pluginAPI = (function() {
     var listener_function = function(e) {
 
       var key_time;
-      if (parameters.rt_method == 'date') {
+      if (parameters.rt_method === 'date') {
         key_time = (new Date()).getTime();
-      } else if (parameters.rt_method == 'performance') {
+      } else if (parameters.rt_method === 'performance') {
         key_time = performance.now();
-      } else if (parameters.rt_method == 'audio') {
+      } else if (parameters.rt_method === 'audio') {
         key_time = parameters.audio_context.currentTime
       }
+      var rt = key_time - start_time
 
-        var rt = key_time - start_time
+      // overiding via parameters for testing purposes.
+      var minimum_valid_rt = parameters.minimum_valid_rt
+      if(!minimum_valid_rt){
+        minimum_valid_rt = jsPsych.initSettings().minimum_valid_rt || 0;
+      }
 
-      if(rt <= parameters.minimum_valid_rt){
+      if(rt <= minimum_valid_rt){
         return
       }
 
       var valid_response = false;
-      if (typeof parameters.valid_responses === 'undefined' || parameters.valid_responses == jsPsych.ALL_KEYS) {
+      if (typeof parameters.valid_responses === 'undefined' || parameters.valid_responses === jsPsych.ALL_KEYS) {
         valid_response = true;
       } else {
-        if(parameters.valid_responses != jsPsych.NO_KEYS){
+        if(parameters.valid_responses !== jsPsych.NO_KEYS){
           for (var i = 0; i < parameters.valid_responses.length; i++) {
-            if (typeof parameters.valid_responses[i] == 'string') {
+            if (typeof parameters.valid_responses[i] === 'string') {
               var kc = jsPsych.pluginAPI.convertKeyCharacterToKeyCode(parameters.valid_responses[i]);
               if (typeof kc !== 'undefined') {
-                if (e.keyCode == kc) {
+                if (e.keyCode === kc) {
                   valid_response = true;
                 }
               } else {
                 throw new Error('Invalid key string specified for getKeyboardResponse');
               }
-            } else if (e.keyCode == parameters.valid_responses[i]) {
+            } else if (e.keyCode === parameters.valid_responses[i]) {
               valid_response = true;
             }
           }
@@ -1933,8 +1935,8 @@ jsPsych.pluginAPI = (function() {
       }
       // check if key was already held down
 
-      if (((typeof parameters.allow_held_key == 'undefined') || !parameters.allow_held_key) && valid_response) {
-        if (typeof held_keys[e.keyCode] !== 'undefined' && held_keys[e.keyCode] == true) {
+      if (((typeof parameters.allow_held_key === 'undefined') || !parameters.allow_held_key) && valid_response) {
+        if (typeof held_keys[e.keyCode] !== 'undefined' && held_keys[e.keyCode] === true) {
           valid_response = false;
         }
       }
