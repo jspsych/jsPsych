@@ -1872,14 +1872,15 @@ jsPsych.pluginAPI = (function() {
   }
 
   module.getKeyboardResponse = function(parameters) {
-    //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key?
+    //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key, minimum_valid_rt?
     parameters.rt_method = (typeof parameters.rt_method === 'undefined') ? 'date' : parameters.rt_method;
     if (parameters.rt_method != 'date' && parameters.rt_method != 'performance' && parameters.rt_method != 'audio') {
       console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
       parameters.rt_method = 'date';
     }
-console.log(12222, parameters.minimum_valid_rt,22)
-    parameters.minimum_valid_rt = (typeof parameters.minimum_valid_rt === 'undefined') ? 0 : parameters.minimum_valid_rt;
+
+    var minimum_valid_rt = jsPsych.initSettings().minimum_valid_rt
+    parameters.minimum_valid_rt = (typeof minimum_valid_rt === 'undefined') ? 0 : minimum_valid_rt;
 
     var start_time;
     if (parameters.rt_method == 'date') {
@@ -1904,9 +1905,8 @@ console.log(12222, parameters.minimum_valid_rt,22)
       }
 
         var rt = key_time - start_time
-console.log(rt, parameters.minimum_valid_rt, rt < parameters.minimum_valid_rt)
-      if(rt < parameters.minimum_valid_rt){
 
+      if(rt <= parameters.minimum_valid_rt){
         return
       }
 
