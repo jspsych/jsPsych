@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-cloze.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <style>
+      img { width: 300px; }
+    </style>
+  </head>
+  <body></body>
+  <script>
+
+  var timeline = [];
+
+  timeline.push({
+    type: 'cloze',
+    text: 'Mein Name ist %Hase% und ich weiß von nichts.',
+    allow_mistakes: false,
+    button_text: 'Weiter',
+    mistake_fn: function(){alert("Answers are incorrect!")}
+  });
+
+  // add more cloze text examples
+
+  jsPsych.init({
+    timeline: timeline,
+    on_finish: function(){jsPsych.data.displayData();}
+  });
+
+  </script>
+</html>
