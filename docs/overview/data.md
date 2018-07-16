@@ -131,7 +131,7 @@ This method uses a simple PHP script to write files to the server:
 <?php
 $post_data = json_decode(file_get_contents('php://input'), true); 
 // the directory "data" must be writable by the server
-$name = "data/".$post_data['filename']; 
+$name = "data/".$post_data['filename'].".csv"; 
 $data = $post_data['filedata'];
 // write the file to disk
 file_put_contents($name, $data);
@@ -153,11 +153,13 @@ function saveData(name, data){
 // call the saveData function after the experiment is over
 jsPsych.init({
    // code to define the experiment structure would go here...
-   on_finish: function(){ saveData("experiment_data.csv", jsPsych.data.get().csv()); }
+   on_finish: function(){ saveData("experiment_data", jsPsych.data.get().csv()); }
 });
 ```
 
 To use this in an actual experiment, it would be important to tie the filename to some unique identifier like a subject number. Otherwise the file may be overwritten by collecting new data.
+
+Note that, depending on file permissions, storing the CSV files this way may make them publicly accessible. One fix is to store the CSV files outside the web directory on the server. This requires changing the path in the PHP script above from `/data` to a non-accessible folder. You should only use this solution if you have access to more than just the web directory on your server.
 
 ## Storing data permanently in a MySQL database
 
