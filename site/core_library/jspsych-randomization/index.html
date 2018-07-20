@@ -1,0 +1,2462 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../img/jspsych-favicon.png">
+      <meta name="generator" content="mkdocs-0.17.5, mkdocs-material-2.2.6">
+    
+    
+      
+        <title>jsPsych.randomization - jsPsych</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.6525f7f6.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.792431c1.css">
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+    
+    
+      
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    
+  </head>
+  
+    
+    
+    
+      <body data-md-color-primary="green" data-md-color-accent="orange">
+    
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../.." title="jsPsych" class="md-header-nav__button md-logo">
+          
+            <img src="../../img/jspsych-logo-no-text-mono.svg" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                jsPsych
+              </span>
+              <span class="md-header-nav__topic">
+                jsPsych.randomization
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">&#xE5CD;</button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      jspsych/jspsych
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    <span class="md-nav__button md-logo">
+      
+        <img src="../../img/jspsych-logo-no-text-mono.svg" width="24" height="24">
+      
+    </span>
+    jsPsych
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      jspsych/jspsych
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Introduction" class="md-nav__link">
+      Introduction
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Tutorials
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Tutorials
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../tutorials/hello-world/" title="The Basics: Hello World" class="md-nav__link">
+      The Basics: Hello World
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../tutorials/rt-task/" title="Demo Experiment: Simple Reaction Time Task" class="md-nav__link">
+      Demo Experiment: Simple Reaction Time Task
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Overview
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Overview
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../overview/timeline/" title="Creating an Experiment: The Timeline" class="md-nav__link">
+      Creating an Experiment: The Timeline
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../overview/trial/" title="Advanced Options for Trials" class="md-nav__link">
+      Advanced Options for Trials
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../overview/data/" title="Data Storage, Aggregation, and Manipulation" class="md-nav__link">
+      Data Storage, Aggregation, and Manipulation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../overview/callbacks/" title="Event-related Callback Functions" class="md-nav__link">
+      Event-related Callback Functions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../overview/record-browser-interactions/" title="Record Browser Interactions" class="md-nav__link">
+      Record Browser Interactions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../overview/media-preloading/" title="Media Preloading" class="md-nav__link">
+      Media Preloading
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../overview/fullscreen/" title="Fullscreen Experiments" class="md-nav__link">
+      Fullscreen Experiments
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../overview/exclude-browser/" title="Exclude Participants Based on Browser Features" class="md-nav__link">
+      Exclude Participants Based on Browser Features
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../overview/progress-bar/" title="Automatic Progress Bar" class="md-nav__link">
+      Automatic Progress Bar
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../overview/mturk/" title="Integrating with Mechanical Turk" class="md-nav__link">
+      Integrating with Mechanical Turk
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
+    
+    <label class="md-nav__link" for="nav-4">
+      Core Library API
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Core Library API
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../jspsych-core/" title="jsPsych" class="md-nav__link">
+      jsPsych
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../jspsych-data/" title="jsPsych.data" class="md-nav__link">
+      jsPsych.data
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        jsPsych.randomization
+      </label>
+    
+    <a href="./" title="jsPsych.randomization" class="md-nav__link md-nav__link--active">
+      jsPsych.randomization
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychrandomizationfactorial" title="jsPsych.randomization.factorial" class="md-nav__link">
+    jsPsych.randomization.factorial
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters" title="Parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value" title="Return value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description" title="Description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-full-factorial-design" title="Create full factorial design" class="md-nav__link">
+    Create full factorial design
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-full-factorial-design-with-repeats" title="Create full factorial design with repeats" class="md-nav__link">
+    Create full factorial design with repeats
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-full-factorial-design-unpacked" title="Create full factorial design, unpacked" class="md-nav__link">
+    Create full factorial design, unpacked
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychrandomizationrandomid" title="jsPsych.randomization.randomID" class="md-nav__link">
+    jsPsych.randomization.randomID
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_1" title="Parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_1" title="Return value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_1" title="Description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example" title="Example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychrandomizationrepeat" title="jsPsych.randomization.repeat" class="md-nav__link">
+    jsPsych.randomization.repeat
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_2" title="Parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_2" title="Return value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_2" title="Description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#shuffle-an-array-no-repeats" title="Shuffle an array, no repeats" class="md-nav__link">
+    Shuffle an array, no repeats
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shuffle-an-array-with-repeats" title="Shuffle an array with repeats" class="md-nav__link">
+    Shuffle an array with repeats
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shuffle-an-array-of-objects" title="Shuffle an array of objects" class="md-nav__link">
+    Shuffle an array of objects
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shuffle-an-array-of-objects-with-unpack" title="Shuffle an array of objects, with unpack" class="md-nav__link">
+    Shuffle an array of objects, with unpack
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychrandomizationsamplewithreplacement" title="jsPsych.randomization.sampleWithReplacement" class="md-nav__link">
+    jsPsych.randomization.sampleWithReplacement
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_3" title="Parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_3" title="Return value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_3" title="Description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_2" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sample-with-equal-probability" title="Sample with equal probability" class="md-nav__link">
+    Sample with equal probability
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample-with-unequal-probability" title="Sample with unequal probability" class="md-nav__link">
+    Sample with unequal probability
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychrandomizationsamplewithoutreplacement" title="jsPsych.randomization.sampleWithoutReplacement" class="md-nav__link">
+    jsPsych.randomization.sampleWithoutReplacement
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_4" title="Parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_4" title="Return value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_4" title="Description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_3" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sample-without-replacement" title="Sample without replacement" class="md-nav__link">
+    Sample without replacement
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychrandomizationshuffle" title="jsPsych.randomization.shuffle" class="md-nav__link">
+    jsPsych.randomization.shuffle
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_5" title="Parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_5" title="Return value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_5" title="Description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_4" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#shuffle-an-array" title="Shuffle an array" class="md-nav__link">
+    Shuffle an array
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychrandomizationshufflenorepeats" title="jsPsych.randomization.shuffleNoRepeats" class="md-nav__link">
+    jsPsych.randomization.shuffleNoRepeats
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_6" title="Parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_6" title="Return value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_6" title="Description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_5" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-example" title="Basic example" class="md-nav__link">
+    Basic example
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-equalitytest" title="Custom equalityTest" class="md-nav__link">
+    Custom equalityTest
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../jspsych-turk/" title="jsPsych.turk" class="md-nav__link">
+      jsPsych.turk
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../jspsych-pluginAPI/" title="jsPsych.pluginAPI" class="md-nav__link">
+      jsPsych.pluginAPI
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Plugins
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Plugins
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/overview/" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/creating-a-plugin/" title="Creating a New Plugin" class="md-nav__link">
+      Creating a New Plugin
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-animation/" title="jspsych-animation" class="md-nav__link">
+      jspsych-animation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-audio-button-response/" title="jspsych-audio-button-response" class="md-nav__link">
+      jspsych-audio-button-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-audio-keyboard-response/" title="jspsych-audio-keyboard-response" class="md-nav__link">
+      jspsych-audio-keyboard-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-audio-slider-response/" title="jspsych-audio-slider-response" class="md-nav__link">
+      jspsych-audio-slider-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-call-function/" title="jspsych-call-function" class="md-nav__link">
+      jspsych-call-function
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-categorize-animation/" title="jspsych-categorize-animation" class="md-nav__link">
+      jspsych-categorize-animation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-categorize-html/" title="jspsych-categorize-html" class="md-nav__link">
+      jspsych-categorize-html
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-categorize-image/" title="jspsych-categorize-image" class="md-nav__link">
+      jspsych-categorize-image
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-external-html/" title="jspsych-external-html" class="md-nav__link">
+      jspsych-external-html
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-free-sort/" title="jspsych-free-sort" class="md-nav__link">
+      jspsych-free-sort
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-fullscreen/" title="jspsych-fullscreen" class="md-nav__link">
+      jspsych-fullscreen
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-html-button-response/" title="jspsych-html-button-response" class="md-nav__link">
+      jspsych-html-button-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-html-keyboard-response/" title="jspsych-html-keyboard-response" class="md-nav__link">
+      jspsych-html-keyboard-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-html-slider-response/" title="jspsych-html-slider-response" class="md-nav__link">
+      jspsych-html-slider-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-iat-html/" title="jspsych-iat-html" class="md-nav__link">
+      jspsych-iat-html
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-iat-image/" title="jspsych-iat-image" class="md-nav__link">
+      jspsych-iat-image
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-image-button-response/" title="jspsych-image-button-response" class="md-nav__link">
+      jspsych-image-button-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-image-keyboard-response/" title="jspsych-image-keyboard-response" class="md-nav__link">
+      jspsych-image-keyboard-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-image-slider-response/" title="jspsych-image-slider-response" class="md-nav__link">
+      jspsych-image-slider-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-instructions/" title="jspsych-instructions" class="md-nav__link">
+      jspsych-instructions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-rdk/" title="jspsych-rdk" class="md-nav__link">
+      jspsych-rdk
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-reconstruction/" title="jspsych-reconstruction" class="md-nav__link">
+      jspsych-reconstruction
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-resize/" title="jspsych-resize" class="md-nav__link">
+      jspsych-resize
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-same-different-html/" title="jspsych-same-different-html" class="md-nav__link">
+      jspsych-same-different-html
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-same-different-image/" title="jspsych-same-different-image" class="md-nav__link">
+      jspsych-same-different-image
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-serial-reaction-time/" title="jspsych-serial-reaction-time" class="md-nav__link">
+      jspsych-serial-reaction-time
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-serial-reaction-time-mouse/" title="jspsych-serial-reaction-time-mouse" class="md-nav__link">
+      jspsych-serial-reaction-time-mouse
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-survey-likert/" title="jspsych-survey-likert" class="md-nav__link">
+      jspsych-survey-likert
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-survey-multi-choice/" title="jspsych-survey-multi-choice" class="md-nav__link">
+      jspsych-survey-multi-choice
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-survey-multi-select/" title="jspsych-survey-multi-select" class="md-nav__link">
+      jspsych-survey-multi-select
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-survey-text/" title="jspsych-survey-text" class="md-nav__link">
+      jspsych-survey-text
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-video/" title="jspsych-video" class="md-nav__link">
+      jspsych-video
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-visual-search-circle/" title="jspsych-visual-search-circle" class="md-nav__link">
+      jspsych-visual-search-circle
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-vsl-animate-occlusion/" title="jspsych-vsl-animate-occlusion" class="md-nav__link">
+      jspsych-vsl-animate-occlusion
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-vsl-grid-scene/" title="jspsych-vsl-grid-scene" class="md-nav__link">
+      jspsych-vsl-grid-scene
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      About
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        About
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/about/" title="About jsPsych" class="md-nav__link">
+      About jsPsych
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/support/" title="Getting Help" class="md-nav__link">
+      Getting Help
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/contributing/" title="Contributing to jsPsych" class="md-nav__link">
+      Contributing to jsPsych
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/license/" title="License" class="md-nav__link">
+      License
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychrandomizationfactorial" title="jsPsych.randomization.factorial" class="md-nav__link">
+    jsPsych.randomization.factorial
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters" title="Parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value" title="Return value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description" title="Description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-full-factorial-design" title="Create full factorial design" class="md-nav__link">
+    Create full factorial design
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-full-factorial-design-with-repeats" title="Create full factorial design with repeats" class="md-nav__link">
+    Create full factorial design with repeats
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-full-factorial-design-unpacked" title="Create full factorial design, unpacked" class="md-nav__link">
+    Create full factorial design, unpacked
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychrandomizationrandomid" title="jsPsych.randomization.randomID" class="md-nav__link">
+    jsPsych.randomization.randomID
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_1" title="Parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_1" title="Return value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_1" title="Description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example" title="Example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychrandomizationrepeat" title="jsPsych.randomization.repeat" class="md-nav__link">
+    jsPsych.randomization.repeat
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_2" title="Parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_2" title="Return value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_2" title="Description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#shuffle-an-array-no-repeats" title="Shuffle an array, no repeats" class="md-nav__link">
+    Shuffle an array, no repeats
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shuffle-an-array-with-repeats" title="Shuffle an array with repeats" class="md-nav__link">
+    Shuffle an array with repeats
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shuffle-an-array-of-objects" title="Shuffle an array of objects" class="md-nav__link">
+    Shuffle an array of objects
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shuffle-an-array-of-objects-with-unpack" title="Shuffle an array of objects, with unpack" class="md-nav__link">
+    Shuffle an array of objects, with unpack
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychrandomizationsamplewithreplacement" title="jsPsych.randomization.sampleWithReplacement" class="md-nav__link">
+    jsPsych.randomization.sampleWithReplacement
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_3" title="Parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_3" title="Return value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_3" title="Description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_2" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sample-with-equal-probability" title="Sample with equal probability" class="md-nav__link">
+    Sample with equal probability
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample-with-unequal-probability" title="Sample with unequal probability" class="md-nav__link">
+    Sample with unequal probability
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychrandomizationsamplewithoutreplacement" title="jsPsych.randomization.sampleWithoutReplacement" class="md-nav__link">
+    jsPsych.randomization.sampleWithoutReplacement
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_4" title="Parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_4" title="Return value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_4" title="Description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_3" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sample-without-replacement" title="Sample without replacement" class="md-nav__link">
+    Sample without replacement
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychrandomizationshuffle" title="jsPsych.randomization.shuffle" class="md-nav__link">
+    jsPsych.randomization.shuffle
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_5" title="Parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_5" title="Return value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_5" title="Description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_4" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#shuffle-an-array" title="Shuffle an array" class="md-nav__link">
+    Shuffle an array
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychrandomizationshufflenorepeats" title="jsPsych.randomization.shuffleNoRepeats" class="md-nav__link">
+    jsPsych.randomization.shuffleNoRepeats
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_6" title="Parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_6" title="Return value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_6" title="Description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_5" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-example" title="Basic example" class="md-nav__link">
+    Basic example
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-equalitytest" title="Custom equalityTest" class="md-nav__link">
+    Custom equalityTest
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/jspsych/jsPsych/edit/master/docs/core_library/jspsych-randomization.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="jspsychrandomization">jsPsych.randomization<a class="headerlink" href="#jspsychrandomization" title="Permanent link">&para;</a></h1>
+<p>The jsPsych.randomization module contains methods that are useful for generating random lists of trial variables.</p>
+<hr />
+<h2 id="jspsychrandomizationfactorial">jsPsych.randomization.factorial<a class="headerlink" href="#jspsychrandomizationfactorial" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span>jsPsych.randomization.factorial(factors, repetitions, unpack)
+</pre></div>
+
+
+<h3 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>factors</td>
+<td>object</td>
+<td>The <code>factors</code> object should contain a property for each different factor. Each property-factor should have a value of an array, with each element of the array corresponding to a level of the factor.</td>
+</tr>
+<tr>
+<td>repetitions</td>
+<td>integer</td>
+<td>The number of times to repeat each unique combination of the factors in the output sample.</td>
+</tr>
+<tr>
+<td>unpack</td>
+<td>boolean</td>
+<td>If <code>true</code> then the output will be an object with a property for each factor in the original <code>factors</code> object. The value of each property-factor will be an array containing the levels of the factor in a random order. The order will be consistent across each property-factor (e.g., the first element of each property-factor will specify one unique combination of the factors). If <code>false</code>, then the return value will be an array of objects where each property-factor contains only a single value.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return-value">Return value<a class="headerlink" href="#return-value" title="Permanent link">&para;</a></h3>
+<p>The return value depends on the <code>unpack</code> parameter. See description of the parameter above, and examples below.</p>
+<h3 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h3>
+<p>This method takes a list of factors and their levels, and creates a full factorial design by creating each unique combination of the factors. The returned set of combinations is in a random order.</p>
+<h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
+<h4 id="create-full-factorial-design">Create full factorial design<a class="headerlink" href="#create-full-factorial-design" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">factors</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;a.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;b.jpg&#39;</span><span class="p">],</span>
+    <span class="nx">ms_delay</span><span class="o">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">full_design</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">factorial</span><span class="p">(</span><span class="nx">factors</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+<span class="cm">/*</span>
+<span class="cm">output:</span>
+<span class="cm">full_design = [</span>
+<span class="cm">    {stimulus: &#39;a.jpg&#39;, ms_delay: 200},</span>
+<span class="cm">    {stimulus: &#39;b.jpg&#39;, ms_delay: 200},</span>
+<span class="cm">    {stimulus: &#39;b.jpg&#39;, ms_delay: 100},</span>
+<span class="cm">    {stimulus: &#39;a.jpg&#39;, ms_delay: 100},</span>
+<span class="cm">]</span>
+<span class="cm">*/</span>
+</pre></div>
+
+
+<h4 id="create-full-factorial-design-with-repeats">Create full factorial design with repeats<a class="headerlink" href="#create-full-factorial-design-with-repeats" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">factors</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;a.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;b.jpg&#39;</span><span class="p">],</span>
+    <span class="nx">ms_delay</span><span class="o">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">full_design</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">factorial</span><span class="p">(</span><span class="nx">factors</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+
+<span class="cm">/*</span>
+<span class="cm">output:</span>
+<span class="cm">full_design = [</span>
+<span class="cm">    {stimulus: &#39;b.jpg&#39;, ms_delay: 200},</span>
+<span class="cm">    {stimulus: &#39;b.jpg&#39;, ms_delay: 100},</span>
+<span class="cm">    {stimulus: &#39;b.jpg&#39;, ms_delay: 100},</span>
+<span class="cm">    {stimulus: &#39;a.jpg&#39;, ms_delay: 100},</span>
+<span class="cm">    {stimulus: &#39;a.jpg&#39;, ms_delay: 200},</span>
+<span class="cm">    {stimulus: &#39;b.jpg&#39;, ms_delay: 200},</span>
+<span class="cm">    {stimulus: &#39;a.jpg&#39;, ms_delay: 100},</span>
+<span class="cm">    {stimulus: &#39;a.jpg&#39;, ms_delay: 200},</span>
+<span class="cm">]</span>
+<span class="cm">*/</span>
+</pre></div>
+
+
+<h4 id="create-full-factorial-design-unpacked">Create full factorial design, unpacked<a class="headerlink" href="#create-full-factorial-design-unpacked" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">factors</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;a.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;b.jpg&#39;</span><span class="p">],</span>
+    <span class="nx">ms_delay</span><span class="o">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">full_design</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">factorial</span><span class="p">(</span><span class="nx">factors</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+
+<span class="cm">/*</span>
+<span class="cm">output:</span>
+<span class="cm">full_design = {</span>
+<span class="cm">    stimulus: [&#39;a.jpg&#39;,&#39;b.jpg&#39;,&#39;b.jpg&#39;,&#39;a.jpg&#39;],</span>
+<span class="cm">    ms_delay: [200, 100, 200, 100]</span>
+<span class="cm">]</span>
+<span class="cm">*/</span>
+</pre></div>
+
+
+<hr />
+<h2 id="jspsychrandomizationrandomid">jsPsych.randomization.randomID<a class="headerlink" href="#jspsychrandomizationrandomid" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span>jsPsych.randomization.randomID(length)
+</pre></div>
+
+
+<h3 id="parameters_1">Parameters<a class="headerlink" href="#parameters_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>length</td>
+<td>integer</td>
+<td>The length of the randomly generated ID</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return-value_1">Return value<a class="headerlink" href="#return-value_1" title="Permanent link">&para;</a></h3>
+<p>Returns a string of length <code>length</code> where each character is randomly selected from the numbers 0-9 and all lowercase English letters a-z.</p>
+<h3 id="description_1">Description<a class="headerlink" href="#description_1" title="Permanent link">&para;</a></h3>
+<p>Generates a random string that is likely to be unique. If length is undefined, then the string length is 32.</p>
+<h3 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">randomID</span><span class="p">());</span>
+<span class="c1">// outputs: &quot;t7dwz0e713pc8juuaayyfvpkdd9un239&quot;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">randomID</span><span class="p">(</span><span class="mi">8</span><span class="p">));</span>
+<span class="c1">// outputs: &quot;3xtpcbck&quot;</span>
+</pre></div>
+
+
+<hr />
+<h2 id="jspsychrandomizationrepeat">jsPsych.randomization.repeat<a class="headerlink" href="#jspsychrandomizationrepeat" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span>jsPsych.randomization.repeat(array, repetitions, unpack)
+</pre></div>
+
+
+<h3 id="parameters_2">Parameters<a class="headerlink" href="#parameters_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>array</td>
+<td>array</td>
+<td>The array of values to randomize &amp; repeat.</td>
+</tr>
+<tr>
+<td>repetitions</td>
+<td>integer or array</td>
+<td>The number of times to repeat each element of the <code>array</code> in the final sample. If this parameter is defined as an integer, then each element of <code>array</code> is repeated the same number of times. This parameter can also be an array of the same length as <code>array</code>, in which case each element of <code>array</code> will be repeated the number of times defined in the corresponding position of the <code>repetitions</code> array.</td>
+</tr>
+<tr>
+<td>unpack</td>
+<td>boolean</td>
+<td>If each element of <code>array</code> is an object with an equivalent set of properties, then setting <code>unpack</code> to <code>true</code> will make the return value an object with a property for each of the unique properties among the elements of the <code>array</code>. Each property in the output object will be an array containing the values for that property in the randomized order. The order will be consistent across properties. If this is <code>false</code> then the output is just an array containing a randomized order of the original <code>array</code> elements.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return-value_2">Return value<a class="headerlink" href="#return-value_2" title="Permanent link">&para;</a></h3>
+<p>The return value depends on the <code>unpack</code> parameter. See description of the parameter above, and examples below.</p>
+<h3 id="description_2">Description<a class="headerlink" href="#description_2" title="Permanent link">&para;</a></h3>
+<p>This method takes an array of values and generates a new random order of the array, with the option of repeating each element of the array a specified number of times.</p>
+<p>If the array elements are objects with the same set of properties, then this method can optionally return a single object where each property is a randomized order of the properties defined in the original set of objects. This is useful for randomizing sets of parameters that are used to define a jsPsych block.</p>
+<h3 id="examples_1">Examples<a class="headerlink" href="#examples_1" title="Permanent link">&para;</a></h3>
+<h4 id="shuffle-an-array-no-repeats">Shuffle an array, no repeats<a class="headerlink" href="#shuffle-an-array-no-repeats" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+<span class="c1">// output: shuffledArray = [3,2,4,1,5]</span>
+</pre></div>
+
+
+<h4 id="shuffle-an-array-with-repeats">Shuffle an array with repeats<a class="headerlink" href="#shuffle-an-array-with-repeats" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+
+<span class="c1">// output: shuffledArray = [1,3,4,2,2,4,5,1,5,3]</span>
+</pre></div>
+
+
+<h4 id="shuffle-an-array-of-objects">Shuffle an array of objects<a class="headerlink" href="#shuffle-an-array-of-objects" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">trial1</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/faceA.jpg&#39;</span><span class="p">,</span>
+    <span class="nx">correct_key</span><span class="o">:</span> <span class="mi">80</span><span class="p">,</span>
+    <span class="nx">person_name</span><span class="o">:</span> <span class="s1">&#39;Joe&#39;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">trial2</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/faceB.jpg&#39;</span><span class="p">,</span>
+    <span class="nx">correct_key</span><span class="o">:</span> <span class="mi">80</span><span class="p">,</span>
+    <span class="nx">person_name</span><span class="o">:</span> <span class="s1">&#39;Fred&#39;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">trial3</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/faceC.jpg&#39;</span><span class="p">,</span>
+    <span class="nx">correct_key</span><span class="o">:</span> <span class="mi">81</span><span class="p">,</span>
+    <span class="nx">person_name</span><span class="o">:</span> <span class="s1">&#39;Mary&#39;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span> <span class="nx">trial1</span><span class="p">,</span> <span class="nx">trial2</span><span class="p">,</span> <span class="nx">trial3</span> <span class="p">];</span>
+<span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+
+<span class="c1">// output: shuffledArray = [ trial1, trial3, trial3, trial2, trial1, trial2 ]</span>
+</pre></div>
+
+
+<h4 id="shuffle-an-array-of-objects-with-unpack">Shuffle an array of objects, with unpack<a class="headerlink" href="#shuffle-an-array-of-objects-with-unpack" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">trial1</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/faceA.jpg&#39;</span><span class="p">,</span>
+    <span class="nx">correct_key</span><span class="o">:</span> <span class="mi">80</span><span class="p">,</span>
+    <span class="nx">person_name</span><span class="o">:</span> <span class="s1">&#39;Joe&#39;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">trial2</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/faceB.jpg&#39;</span><span class="p">,</span>
+    <span class="nx">correct_key</span><span class="o">:</span> <span class="mi">80</span><span class="p">,</span>
+    <span class="nx">person_name</span><span class="o">:</span> <span class="s1">&#39;Fred&#39;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">trial3</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/faceC.jpg&#39;</span><span class="p">,</span>
+    <span class="nx">correct_key</span><span class="o">:</span> <span class="mi">81</span><span class="p">,</span>
+    <span class="nx">person_name</span><span class="o">:</span> <span class="s1">&#39;Mary&#39;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span> <span class="nx">trial1</span><span class="p">,</span> <span class="nx">trial2</span><span class="p">,</span> <span class="nx">trial3</span> <span class="p">];</span>
+<span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+
+<span class="cm">/*</span>
+<span class="cm">output: shuffledArray = {</span>
+<span class="cm">    stimulus: [&#39;img/faceB.jpg&#39;,&#39;img/faceA.jpg&#39;,&#39;img/faceC.jpg&#39;,&#39;img/faceA.jpg&#39;,&#39;img/faceC.jpg&#39;,&#39;img/faceB.jpg&#39;],</span>
+<span class="cm">    correct_key: [80, 80, 81, 80, 81, 80],</span>
+<span class="cm">    person_name: [&#39;Fred&#39;,&#39;Joe&#39;, &#39;Mary&#39;, &#39;Joe&#39;, &#39;Mary&#39;, &#39;Fred&#39;]</span>
+<span class="cm">}</span>
+<span class="cm">*/</span>
+</pre></div>
+
+
+<hr />
+<h2 id="jspsychrandomizationsamplewithreplacement">jsPsych.randomization.sampleWithReplacement<a class="headerlink" href="#jspsychrandomizationsamplewithreplacement" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span>jsPsych.randomization.sampleWithReplacement(array, sampleSize, weights)
+</pre></div>
+
+
+<h3 id="parameters_3">Parameters<a class="headerlink" href="#parameters_3" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>array</td>
+<td>array</td>
+<td>The array of values to sample from</td>
+</tr>
+<tr>
+<td>sampleSize</td>
+<td>numeric</td>
+<td>The number of samples to draw</td>
+</tr>
+<tr>
+<td>weights</td>
+<td>array</td>
+<td>The relative weight of each element in <code>array</code>. This array is normalized, so the values do not need to sum to 1. The length must match the length of <code>array</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return-value_3">Return value<a class="headerlink" href="#return-value_3" title="Permanent link">&para;</a></h3>
+<p>An array containing the sample.</p>
+<h3 id="description_3">Description<a class="headerlink" href="#description_3" title="Permanent link">&para;</a></h3>
+<p>This method returns a sample drawn at random from a set of values with replacement. The relative probability of drawing each item can be controlled by specifying the <code>weights</code>.</p>
+<h3 id="examples_2">Examples<a class="headerlink" href="#examples_2" title="Permanent link">&para;</a></h3>
+<h4 id="sample-with-equal-probability">Sample with equal probability<a class="headerlink" href="#sample-with-equal-probability" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">sample</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithReplacement</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+
+<span class="c1">// output: sample = [3, 1, 2, 2, 5, 1, 4, 3, 1, 5];</span>
+</pre></div>
+
+
+<h4 id="sample-with-unequal-probability">Sample with unequal probability<a class="headerlink" href="#sample-with-unequal-probability" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">sample</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithReplacement</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]);</span>
+
+<span class="c1">// output: sample = [3, 4, 5, 1, 2, 1, 3, 1, 1, 1];</span>
+</pre></div>
+
+
+<hr />
+<h2 id="jspsychrandomizationsamplewithoutreplacement">jsPsych.randomization.sampleWithoutReplacement<a class="headerlink" href="#jspsychrandomizationsamplewithoutreplacement" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span>jsPsych.randomization.sampleWithoutReplacement(array, sampleSize)
+</pre></div>
+
+
+<h3 id="parameters_4">Parameters<a class="headerlink" href="#parameters_4" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>array</td>
+<td>array</td>
+<td>The array of values to sample from</td>
+</tr>
+<tr>
+<td>sampleSize</td>
+<td>numeric</td>
+<td>The number of samples to draw</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return-value_4">Return value<a class="headerlink" href="#return-value_4" title="Permanent link">&para;</a></h3>
+<p>An array containing the sample.</p>
+<h3 id="description_4">Description<a class="headerlink" href="#description_4" title="Permanent link">&para;</a></h3>
+<p>This method returns a sample drawn at random from a set of values without replacement. The sample size must be less than or equal to the length of the array.</p>
+<h3 id="examples_3">Examples<a class="headerlink" href="#examples_3" title="Permanent link">&para;</a></h3>
+<h4 id="sample-without-replacement">Sample without replacement<a class="headerlink" href="#sample-without-replacement" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">sample</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+
+<span class="c1">// output: sample = [3,2];</span>
+</pre></div>
+
+
+<hr />
+<h2 id="jspsychrandomizationshuffle">jsPsych.randomization.shuffle<a class="headerlink" href="#jspsychrandomizationshuffle" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span>jsPsych.randomization.shuffle(array)
+</pre></div>
+
+
+<h3 id="parameters_5">Parameters<a class="headerlink" href="#parameters_5" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>array</td>
+<td>array</td>
+<td>The array of values to shuffle</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return-value_5">Return value<a class="headerlink" href="#return-value_5" title="Permanent link">&para;</a></h3>
+<p>Returns an array with the same elements as the input array in a random order.</p>
+<h3 id="description_5">Description<a class="headerlink" href="#description_5" title="Permanent link">&para;</a></h3>
+<p>A simple method for shuffling the order of an array.</p>
+<h3 id="examples_4">Examples<a class="headerlink" href="#examples_4" title="Permanent link">&para;</a></h3>
+<h4 id="shuffle-an-array">Shuffle an array<a class="headerlink" href="#shuffle-an-array" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">(</span><span class="nx">myArray</span><span class="p">);</span>
+
+<span class="c1">// output: shuffledArray = [3,2,4,1,5]</span>
+</pre></div>
+
+
+<hr />
+<h2 id="jspsychrandomizationshufflenorepeats">jsPsych.randomization.shuffleNoRepeats<a class="headerlink" href="#jspsychrandomizationshufflenorepeats" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span>jsPsych.randomization.shuffleNoRepeats(array, equalityTest)
+</pre></div>
+
+
+<h3 id="parameters_6">Parameters<a class="headerlink" href="#parameters_6" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>array</td>
+<td>array</td>
+<td>The array of values to shuffle</td>
+</tr>
+<tr>
+<td>equalityTest</td>
+<td>function</td>
+<td>A function to use to evaluate the equality of neighbors in the array. The function should accept two parameters, which are the two elements to be tested. It should return <code>true</code> if they are equal and <code>false</code> if not. The default function, if none is specified, is to use the <code>===</code> operator. This will work for primitive values, but fail for Objects and Arrays. An example function is given below in the examples.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return-value_6">Return value<a class="headerlink" href="#return-value_6" title="Permanent link">&para;</a></h3>
+<p>Returns an array with the same elements as the input array in a random order, with no repeating neighbors.</p>
+<h3 id="description_6">Description<a class="headerlink" href="#description_6" title="Permanent link">&para;</a></h3>
+<p>Shuffle an array, ensuring that neighboring elements in the array are different.</p>
+<p><em>Warning: if you provide an array that has very few valid permutations with no neighboring elements, then this method will fail and cause the browser to hang.</em></p>
+<h3 id="examples_5">Examples<a class="headerlink" href="#examples_5" title="Permanent link">&para;</a></h3>
+<h4 id="basic-example">Basic example<a class="headerlink" href="#basic-example" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffleNoRepeats</span><span class="p">(</span><span class="nx">myArray</span><span class="p">);</span>
+
+<span class="c1">// output: shuffledArray = [2, 3, 5, 1, 2, 4, 1, 5, 4, 1, 3, 5, 4, 3, 2]</span>
+</pre></div>
+
+
+<h4 id="custom-equalitytest">Custom equalityTest<a class="headerlink" href="#custom-equalitytest" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">myObjects</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s2">&quot;blue&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s2">&quot;red&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s2">&quot;yellow&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s2">&quot;orange&quot;</span><span class="p">}</span>
+<span class="p">];</span>
+
+<span class="kd">var</span> <span class="nx">repeatedSet</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myObjects</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">shuffled</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffleNoRepeats</span><span class="p">(</span><span class="nx">repeatedSet</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">a</span><span class="p">.</span><span class="nx">color</span> <span class="o">===</span> <span class="nx">b</span><span class="p">.</span><span class="nx">color</span> <span class="p">});</span>
+
+<span class="c1">// console.log(JSON.stringify(shuffled))</span>
+<span class="c1">// &quot;[{&quot;color&quot;:&quot;red&quot;},{&quot;color&quot;:&quot;yellow&quot;},{&quot;color&quot;:&quot;blue&quot;},{&quot;color&quot;:&quot;yellow&quot;},{&quot;color&quot;:&quot;orange&quot;},{&quot;color&quot;:&quot;red&quot;},{&quot;color&quot;:&quot;yellow&quot;},{&quot;color&quot;:&quot;orange&quot;},{&quot;color&quot;:&quot;blue&quot;},{&quot;color&quot;:&quot;orange&quot;},{&quot;color&quot;:&quot;red&quot;},{&quot;color&quot;:&quot;blue&quot;}]&quot;</span>
+</pre></div>
+                
+                  
+                
+              
+              
+                
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../jspsych-data/" title="jsPsych.data" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                jsPsych.data
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../jspsych-turk/" title="jsPsych.turk" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                jsPsych.turk
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2012-2018 Josh de Leeuw
+          </div>
+        
+        powered by
+        <a href="http://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+  <div class="md-footer-social">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+      <a href="https://github.com/jspsych" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/joshdeleeuw" class="md-footer-social__link fa fa-twitter"></a>
+    
+  </div>
+
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.cae2244d.js"></script>
+      
+      <script>app.initialize({version:"0.17.5",url:{base:"../.."}})</script>
+      
+    
+    
+      
+        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})});var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})</script>
+      
+    
+  </body>
+</html>

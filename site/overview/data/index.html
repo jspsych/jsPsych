@@ -1,0 +1,1538 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../img/jspsych-favicon.png">
+      <meta name="generator" content="mkdocs-0.17.5, mkdocs-material-2.2.6">
+    
+    
+      
+        <title>Data Storage, Aggregation, and Manipulation - jsPsych</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.6525f7f6.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.792431c1.css">
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+    
+    
+      
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    
+  </head>
+  
+    
+    
+    
+      <body data-md-color-primary="green" data-md-color-accent="orange">
+    
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../.." title="jsPsych" class="md-header-nav__button md-logo">
+          
+            <img src="../../img/jspsych-logo-no-text-mono.svg" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                jsPsych
+              </span>
+              <span class="md-header-nav__topic">
+                Data Storage, Aggregation, and Manipulation
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">&#xE5CD;</button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      jspsych/jspsych
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    <span class="md-nav__button md-logo">
+      
+        <img src="../../img/jspsych-logo-no-text-mono.svg" width="24" height="24">
+      
+    </span>
+    jsPsych
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      jspsych/jspsych
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Introduction" class="md-nav__link">
+      Introduction
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Tutorials
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Tutorials
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../tutorials/hello-world/" title="The Basics: Hello World" class="md-nav__link">
+      The Basics: Hello World
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../tutorials/rt-task/" title="Demo Experiment: Simple Reaction Time Task" class="md-nav__link">
+      Demo Experiment: Simple Reaction Time Task
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Overview
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Overview
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../timeline/" title="Creating an Experiment: The Timeline" class="md-nav__link">
+      Creating an Experiment: The Timeline
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../trial/" title="Advanced Options for Trials" class="md-nav__link">
+      Advanced Options for Trials
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Data Storage, Aggregation, and Manipulation
+      </label>
+    
+    <a href="./" title="Data Storage, Aggregation, and Manipulation" class="md-nav__link md-nav__link--active">
+      Data Storage, Aggregation, and Manipulation
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-in-jspsych-permanent-and-non-permanent-data" title="Data in jsPsych: permanent and non-permanent data." class="md-nav__link">
+    Data in jsPsych: permanent and non-permanent data.
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storing-data-in-jspsychs-data-structure" title="Storing data in jsPsych's data structure" class="md-nav__link">
+    Storing data in jsPsych's data structure
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-data-to-all-trials" title="Adding data to all trials" class="md-nav__link">
+    Adding data to all trials
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-data-to-a-particular-trial-or-set-of-trials" title="Adding data to a particular trial or set of trials" class="md-nav__link">
+    Adding data to a particular trial or set of trials
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aggregating-and-manipulating-jspsych-data" title="Aggregating and manipulating jsPsych data" class="md-nav__link">
+    Aggregating and manipulating jsPsych data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storing-data-permanently-as-a-file" title="Storing data permanently as a file" class="md-nav__link">
+    Storing data permanently as a file
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storing-data-permanently-in-a-mysql-database" title="Storing data permanently in a MySQL database" class="md-nav__link">
+    Storing data permanently in a MySQL database
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../callbacks/" title="Event-related Callback Functions" class="md-nav__link">
+      Event-related Callback Functions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../record-browser-interactions/" title="Record Browser Interactions" class="md-nav__link">
+      Record Browser Interactions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../media-preloading/" title="Media Preloading" class="md-nav__link">
+      Media Preloading
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../fullscreen/" title="Fullscreen Experiments" class="md-nav__link">
+      Fullscreen Experiments
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../exclude-browser/" title="Exclude Participants Based on Browser Features" class="md-nav__link">
+      Exclude Participants Based on Browser Features
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../progress-bar/" title="Automatic Progress Bar" class="md-nav__link">
+      Automatic Progress Bar
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../mturk/" title="Integrating with Mechanical Turk" class="md-nav__link">
+      Integrating with Mechanical Turk
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Core Library API
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Core Library API
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core_library/jspsych-core/" title="jsPsych" class="md-nav__link">
+      jsPsych
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core_library/jspsych-data/" title="jsPsych.data" class="md-nav__link">
+      jsPsych.data
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core_library/jspsych-randomization/" title="jsPsych.randomization" class="md-nav__link">
+      jsPsych.randomization
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core_library/jspsych-turk/" title="jsPsych.turk" class="md-nav__link">
+      jsPsych.turk
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../core_library/jspsych-pluginAPI/" title="jsPsych.pluginAPI" class="md-nav__link">
+      jsPsych.pluginAPI
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Plugins
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Plugins
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/overview/" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/creating-a-plugin/" title="Creating a New Plugin" class="md-nav__link">
+      Creating a New Plugin
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-animation/" title="jspsych-animation" class="md-nav__link">
+      jspsych-animation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-audio-button-response/" title="jspsych-audio-button-response" class="md-nav__link">
+      jspsych-audio-button-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-audio-keyboard-response/" title="jspsych-audio-keyboard-response" class="md-nav__link">
+      jspsych-audio-keyboard-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-audio-slider-response/" title="jspsych-audio-slider-response" class="md-nav__link">
+      jspsych-audio-slider-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-call-function/" title="jspsych-call-function" class="md-nav__link">
+      jspsych-call-function
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-categorize-animation/" title="jspsych-categorize-animation" class="md-nav__link">
+      jspsych-categorize-animation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-categorize-html/" title="jspsych-categorize-html" class="md-nav__link">
+      jspsych-categorize-html
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-categorize-image/" title="jspsych-categorize-image" class="md-nav__link">
+      jspsych-categorize-image
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-external-html/" title="jspsych-external-html" class="md-nav__link">
+      jspsych-external-html
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-free-sort/" title="jspsych-free-sort" class="md-nav__link">
+      jspsych-free-sort
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-fullscreen/" title="jspsych-fullscreen" class="md-nav__link">
+      jspsych-fullscreen
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-html-button-response/" title="jspsych-html-button-response" class="md-nav__link">
+      jspsych-html-button-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-html-keyboard-response/" title="jspsych-html-keyboard-response" class="md-nav__link">
+      jspsych-html-keyboard-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-html-slider-response/" title="jspsych-html-slider-response" class="md-nav__link">
+      jspsych-html-slider-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-iat-html/" title="jspsych-iat-html" class="md-nav__link">
+      jspsych-iat-html
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-iat-image/" title="jspsych-iat-image" class="md-nav__link">
+      jspsych-iat-image
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-image-button-response/" title="jspsych-image-button-response" class="md-nav__link">
+      jspsych-image-button-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-image-keyboard-response/" title="jspsych-image-keyboard-response" class="md-nav__link">
+      jspsych-image-keyboard-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-image-slider-response/" title="jspsych-image-slider-response" class="md-nav__link">
+      jspsych-image-slider-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-instructions/" title="jspsych-instructions" class="md-nav__link">
+      jspsych-instructions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-rdk/" title="jspsych-rdk" class="md-nav__link">
+      jspsych-rdk
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-reconstruction/" title="jspsych-reconstruction" class="md-nav__link">
+      jspsych-reconstruction
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-resize/" title="jspsych-resize" class="md-nav__link">
+      jspsych-resize
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-same-different-html/" title="jspsych-same-different-html" class="md-nav__link">
+      jspsych-same-different-html
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-same-different-image/" title="jspsych-same-different-image" class="md-nav__link">
+      jspsych-same-different-image
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-serial-reaction-time/" title="jspsych-serial-reaction-time" class="md-nav__link">
+      jspsych-serial-reaction-time
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-serial-reaction-time-mouse/" title="jspsych-serial-reaction-time-mouse" class="md-nav__link">
+      jspsych-serial-reaction-time-mouse
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-survey-likert/" title="jspsych-survey-likert" class="md-nav__link">
+      jspsych-survey-likert
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-survey-multi-choice/" title="jspsych-survey-multi-choice" class="md-nav__link">
+      jspsych-survey-multi-choice
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-survey-multi-select/" title="jspsych-survey-multi-select" class="md-nav__link">
+      jspsych-survey-multi-select
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-survey-text/" title="jspsych-survey-text" class="md-nav__link">
+      jspsych-survey-text
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-video/" title="jspsych-video" class="md-nav__link">
+      jspsych-video
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-visual-search-circle/" title="jspsych-visual-search-circle" class="md-nav__link">
+      jspsych-visual-search-circle
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-vsl-animate-occlusion/" title="jspsych-vsl-animate-occlusion" class="md-nav__link">
+      jspsych-vsl-animate-occlusion
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../plugins/jspsych-vsl-grid-scene/" title="jspsych-vsl-grid-scene" class="md-nav__link">
+      jspsych-vsl-grid-scene
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      About
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        About
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/about/" title="About jsPsych" class="md-nav__link">
+      About jsPsych
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/support/" title="Getting Help" class="md-nav__link">
+      Getting Help
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/contributing/" title="Contributing to jsPsych" class="md-nav__link">
+      Contributing to jsPsych
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/license/" title="License" class="md-nav__link">
+      License
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-in-jspsych-permanent-and-non-permanent-data" title="Data in jsPsych: permanent and non-permanent data." class="md-nav__link">
+    Data in jsPsych: permanent and non-permanent data.
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storing-data-in-jspsychs-data-structure" title="Storing data in jsPsych's data structure" class="md-nav__link">
+    Storing data in jsPsych's data structure
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-data-to-all-trials" title="Adding data to all trials" class="md-nav__link">
+    Adding data to all trials
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-data-to-a-particular-trial-or-set-of-trials" title="Adding data to a particular trial or set of trials" class="md-nav__link">
+    Adding data to a particular trial or set of trials
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aggregating-and-manipulating-jspsych-data" title="Aggregating and manipulating jsPsych data" class="md-nav__link">
+    Aggregating and manipulating jsPsych data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storing-data-permanently-as-a-file" title="Storing data permanently as a file" class="md-nav__link">
+    Storing data permanently as a file
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storing-data-permanently-in-a-mysql-database" title="Storing data permanently in a MySQL database" class="md-nav__link">
+    Storing data permanently in a MySQL database
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/jspsych/jsPsych/edit/master/docs/overview/data.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                  <h1>Data Storage, Aggregation, and Manipulation</h1>
+                
+                <h2 id="data-in-jspsych-permanent-and-non-permanent-data">Data in jsPsych: permanent and non-permanent data.<a class="headerlink" href="#data-in-jspsych-permanent-and-non-permanent-data" title="Permanent link">&para;</a></h2>
+<p>There are two very different kinds of data storage: data stored in <strong>memory</strong> and data stored <strong>permanently</strong>. Data stored permanently exists even after the browser running jsPsych closes, typically in a database or in a file on a server. Data stored in memory exists only as long the browser window running jsPsych is open.</p>
+<p>jsPsych has many features for interacting with data stored in memory, but few for permanent data storage. This is a deliberate choice, as there are dozens of ways that data could be stored permanently. jsPsych does not lock you into one particular solution. However, saving data permanently is obviously a crucial component of any experiment, and the second half of this page contains a few suggestions on how to accomplish permanent data storage.</p>
+<h2 id="storing-data-in-jspsychs-data-structure">Storing data in jsPsych's data structure<a class="headerlink" href="#storing-data-in-jspsychs-data-structure" title="Permanent link">&para;</a></h2>
+<p>jsPsych has a centralized collection of data that is built as the experiment runs. Each trial adds to the collection, and you can access the data with various functions, including <code>jsPsych.data.get()</code>, which returns the entire set of data.</p>
+<p>In most cases, data collection will be automatic and hidden. Plugins save data on their own so it is not uncommon to have the only interaction with the data be at the end of the experiment when it is time to save it in a permanent manner (see sections below about how to do this). However, there are some situations in which you may want to interact with the data; in particular, you may want to store additional data that the plugins are not recording, like a subject identifier or condition assignment. You may also want to add data on a trial by trial basis. For example, in a Stroop paradigm you would want to label which trials are congruent and which are incongruent. These scenarios are explored below.</p>
+<h3 id="adding-data-to-all-trials">Adding data to all trials<a class="headerlink" href="#adding-data-to-all-trials" title="Permanent link">&para;</a></h3>
+<p>Often it is useful to add a piece of data to <em>all</em> of the trials in the experiment. For example, appending the subject ID to each trial. This can be done  with the <code>jsPsych.data.addProperties()</code> function. Here is an example:</p>
+<div class="codehilite"><pre><span></span><span class="c1">// generate a random subject ID with 15 characters</span>
+<span class="kd">var</span> <span class="nx">subject_id</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">randomID</span><span class="p">(</span><span class="mi">15</span><span class="p">);</span>
+
+<span class="c1">// pick a random condition for the subject at the start of the experiment</span>
+<span class="kd">var</span> <span class="nx">condition_assignment</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">([</span><span class="s1">&#39;conditionA&#39;</span><span class="p">,</span> <span class="s1">&#39;conditionB&#39;</span><span class="p">,</span> <span class="s1">&#39;conditionC&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+
+<span class="c1">// record the condition assignment in the jsPsych data</span>
+<span class="c1">// this adds a property called &#39;subject&#39; and a property called &#39;condition&#39; to every trial</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">addProperties</span><span class="p">({</span>
+  <span class="nx">subject</span><span class="o">:</span> <span class="nx">subject_id</span><span class="p">,</span>
+  <span class="nx">condition</span><span class="o">:</span> <span class="nx">condition_assignment</span>
+<span class="p">});</span>
+</pre></div>
+
+
+<h3 id="adding-data-to-a-particular-trial-or-set-of-trials">Adding data to a particular trial or set of trials<a class="headerlink" href="#adding-data-to-a-particular-trial-or-set-of-trials" title="Permanent link">&para;</a></h3>
+<p>Data can be added to a particular trial by setting the <code>data</code> parameter for the trial. The <code>data</code> parameter is an object of key-value pairs, and each pair is added to the data for that trial.</p>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;imgA.jpg&#39;</span><span class="p">,</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span> <span class="nx">image_type</span><span class="o">:</span> <span class="s1">&#39;A&#39;</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>Data declared in this way is also saved in the trials on any nested timelines:</p>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">block</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">,</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span> <span class="nx">image_type</span><span class="o">:</span> <span class="s1">&#39;A&#39;</span> <span class="p">},</span>
+  <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span><span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;imgA1.jpg&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;imgA2.jpg&#39;</span><span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h2 id="aggregating-and-manipulating-jspsych-data">Aggregating and manipulating jsPsych data<a class="headerlink" href="#aggregating-and-manipulating-jspsych-data" title="Permanent link">&para;</a></h2>
+<p>When accessing the data with <code>jsPsych.data.get()</code> the returned object is a special data collection object that exposes a number of methods for aggregating and manipulating the data. The full list of methods is detailed in the <a href="../../core_library/jspsych-data/">data module documentation</a>.</p>
+<p>Here are some examples of data collection manipulation.</p>
+<p>All data generated by the image-keyboard-response plugin:</p>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filter</span><span class="p">({</span><span class="nx">trial_type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">});</span>
+</pre></div>
+
+
+<p>All data generated by the categorize-image plugin with a correct response:</p>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filter</span><span class="p">({</span><span class="nx">trial_type</span><span class="o">:</span> <span class="s1">&#39;categorize-image&#39;</span><span class="p">,</span> <span class="nx">correct</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+</pre></div>
+
+
+<p>All data with a response time between 100 and 500ms:</p>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filterCustom</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span> <span class="k">return</span> <span class="nx">x</span><span class="p">.</span><span class="nx">rt</span> <span class="o">&gt;=</span> <span class="mi">100</span> <span class="o">&amp;&amp;</span> <span class="nx">x</span><span class="p">.</span><span class="nx">rt</span> <span class="o">&lt;=</span><span class="mi">500</span> <span class="p">});</span>
+</pre></div>
+
+
+<p>Applying filters consecutively to get all trials from a particular plugin with a response time above 100ms:</p>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filter</span><span class="p">({</span><span class="nx">trial_type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">}).</span><span class="nx">filterCustom</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span> <span class="k">return</span> <span class="nx">x</span><span class="p">.</span><span class="nx">rt</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">;</span> <span class="p">});</span>
+</pre></div>
+
+
+<p>Getting the data from the last n trials:</p>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">last</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+</pre></div>
+
+
+<p>Getting the data from the last n trials with a correct response:</p>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filter</span><span class="p">({</span><span class="nx">correct</span><span class="o">:</span> <span class="kc">true</span><span class="p">}).</span><span class="nx">last</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+</pre></div>
+
+
+<p>Getting the data from the first n trials:</p>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">first</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+</pre></div>
+
+
+<p>Counting the number of trials in a data collection:</p>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filter</span><span class="p">({</span><span class="nx">correct</span><span class="o">:</span> <span class="kc">true</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
+</pre></div>
+
+
+<p>Selecting all of the response times from a data collection:</p>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">response_times</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">);</span>
+</pre></div>
+
+
+<p>Calculating various descriptive statistics on the response times in a data collection:</p>
+<div class="codehilite"><pre><span></span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">mean</span><span class="p">();</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">sum</span><span class="p">();</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">min</span><span class="p">();</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">max</span><span class="p">();</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">variance</span><span class="p">();</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">sd</span><span class="p">();</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">median</span><span class="p">();</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">count</span><span class="p">();</span>
+</pre></div>
+
+
+<h2 id="storing-data-permanently-as-a-file">Storing data permanently as a file<a class="headerlink" href="#storing-data-permanently-as-a-file" title="Permanent link">&para;</a></h2>
+<p>This is one of the simplest methods for saving jsPsych data on the server that is running the experiment. It involves a short PHP script and a few lines of JavaScript code. This method will save each participant's data as a CSV file on the server. <strong>This method will only work if you are running on a web server with PHP installed, or a local server with PHP (e.g., <a href="https://www.apachefriends.org/index.html">XAMPP</a>).</strong></p>
+<p>This method uses a simple PHP script to write files to the server:</p>
+<div class="codehilite"><pre><span></span><span class="cp">&lt;?php</span>
+<span class="nv">$post_data</span> <span class="o">=</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nb">file_get_contents</span><span class="p">(</span><span class="s1">&#39;php://input&#39;</span><span class="p">),</span> <span class="k">true</span><span class="p">);</span> 
+<span class="c1">// the directory &quot;data&quot; must be writable by the server</span>
+<span class="nv">$name</span> <span class="o">=</span> <span class="s2">&quot;data/&quot;</span><span class="o">.</span><span class="nv">$post_data</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span><span class="o">.</span><span class="s2">&quot;.csv&quot;</span><span class="p">;</span> 
+<span class="nv">$data</span> <span class="o">=</span> <span class="nv">$post_data</span><span class="p">[</span><span class="s1">&#39;filedata&#39;</span><span class="p">];</span>
+<span class="c1">// write the file to disk</span>
+<span class="nb">file_put_contents</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+
+
+<p>The <code>file_put_contents($filename, $data)</code> method requires permission to write new files. An easy way to solve this is to create a directory on the server that will store the data and use the chmod command to give all users write permission to that directory. In the above example, the directory <code>data/</code> is used to store files.</p>
+<p>To use the PHP script, the JavaScript that runs jsPsych needs to send the <code>filename</code> and <code>filedata</code> information. This is done through an <a href="http://www.w3schools.com/xml/ajax_intro.asp">AJAX</a> call.</p>
+<div class="codehilite"><pre><span></span><span class="kd">function</span> <span class="nx">saveData</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+  <span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;write_data.php&#39;</span><span class="p">);</span> <span class="c1">// &#39;write_data.php&#39; is the path to the php file described above.</span>
+  <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;application/json&#39;</span><span class="p">);</span>
+  <span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span><span class="nx">filename</span><span class="o">:</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">filedata</span><span class="o">:</span> <span class="nx">data</span><span class="p">}));</span>
+<span class="p">}</span>
+
+<span class="c1">// call the saveData function after the experiment is over</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+   <span class="c1">// code to define the experiment structure would go here...</span>
+   <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">saveData</span><span class="p">(</span><span class="s2">&quot;experiment_data&quot;</span><span class="p">,</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">csv</span><span class="p">());</span> <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+
+<p>To use this in an actual experiment, it would be important to tie the filename to some unique identifier like a subject number. Otherwise the file may be overwritten by collecting new data.</p>
+<p>Note that, depending on file permissions, storing the CSV files this way may make them publicly accessible. One fix is to store the CSV files outside the web directory on the server. This requires changing the path in the PHP script above from <code>/data</code> to a non-accessible folder. You should only use this solution if you have access to more than just the web directory on your server.</p>
+<h2 id="storing-data-permanently-in-a-mysql-database">Storing data permanently in a MySQL database<a class="headerlink" href="#storing-data-permanently-in-a-mysql-database" title="Permanent link">&para;</a></h2>
+<p>The ideal solution for storing data generated by jsPsych is to write it to a database.</p>
+<p>There are dozens of database options. MySQL is one of the most popular <a href="http://en.wikipedia.org/wiki/Relational_database">relational databases</a>, is free to use, and relatively easy <a href="https://www.google.com/search?q=how+to+install+mysql">to install</a>. This code will assume that you have a MySQL database installed on your server that is hosting the jsPsych experiment, and that your server is able to execute PHP code. If you are trying to run on a local machine, you'll need to install a local server environment like <a href="https://www.apachefriends.org/index.html">XAMPP</a>.</p>
+<p>You'll need two PHP scripts. The first is a configuration file for your database. Save it as <code>database_config.php</code> on your server. Within this file are configuration options for the database. You'll need to change these according to how you have configured your MySQL installation.</p>
+<div class="codehilite"><pre><span></span><span class="cp">&lt;?php</span>
+  <span class="nv">$servername</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span><span class="p">;</span>
+  <span class="nv">$port</span> <span class="o">=</span> <span class="mi">3306</span><span class="p">;</span>
+  <span class="nv">$username</span> <span class="o">=</span> <span class="s2">&quot;username&quot;</span><span class="p">;</span>
+  <span class="nv">$password</span> <span class="o">=</span> <span class="s2">&quot;password&quot;</span><span class="p">;</span>
+  <span class="nv">$dbname</span> <span class="o">=</span> <span class="s2">&quot;database&quot;</span><span class="p">;</span>
+  <span class="nv">$table</span> <span class="o">=</span> <span class="s2">&quot;tablename&quot;</span><span class="p">;</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+
+
+<p>The second PHP file will write data to the database. This script reads the database to discover what columns are in the table, and then only allows data to be entered in that matches those columns. This is a security feature. Save this file as <code>write_data.php</code> on your server.</p>
+<div class="codehilite"><pre><span></span><span class="cp">&lt;?php</span>
+
+<span class="c1">// this path should point to your configuration file.</span>
+<span class="k">include</span><span class="p">(</span><span class="s1">&#39;database_config.php&#39;</span><span class="p">);</span>
+
+<span class="nv">$data_array</span> <span class="o">=</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nb">file_get_contents</span><span class="p">(</span><span class="s1">&#39;php://input&#39;</span><span class="p">),</span> <span class="k">true</span><span class="p">);</span>
+
+<span class="k">try</span> <span class="p">{</span>
+  <span class="nv">$conn</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PDO</span><span class="p">(</span><span class="s2">&quot;mysql:host=</span><span class="si">$servername</span><span class="s2">;port=</span><span class="si">$port</span><span class="s2">;dbname=</span><span class="si">$dbname</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">$username</span><span class="p">,</span> <span class="nv">$password</span><span class="p">);</span>
+  <span class="nv">$conn</span><span class="o">-&gt;</span><span class="na">setAttribute</span><span class="p">(</span><span class="nx">PDO</span><span class="o">::</span><span class="na">ATTR_ERRMODE</span><span class="p">,</span> <span class="nx">PDO</span><span class="o">::</span><span class="na">ERRMODE_EXCEPTION</span><span class="p">);</span>
+  <span class="c1">// First stage is to get all column names from the table and store</span>
+  <span class="c1">// them in $col_names array.</span>
+  <span class="nv">$stmt</span> <span class="o">=</span> <span class="nv">$conn</span><span class="o">-&gt;</span><span class="na">prepare</span><span class="p">(</span><span class="s2">&quot;SHOW COLUMNS FROM `</span><span class="si">$table</span><span class="s2">`&quot;</span><span class="p">);</span>
+  <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
+  <span class="nv">$col_names</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+  <span class="k">while</span><span class="p">(</span><span class="nv">$row</span> <span class="o">=</span> <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">fetchColumn</span><span class="p">())</span> <span class="p">{</span>
+    <span class="nv">$col_names</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$row</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="c1">// Second stage is to create prepared SQL statement using the column</span>
+  <span class="c1">// names as a guide to what values might be in the JSON.</span>
+  <span class="c1">// If a value is missing from a particular trial, then NULL is inserted</span>
+  <span class="nv">$sql</span> <span class="o">=</span> <span class="s2">&quot;INSERT INTO </span><span class="si">$table</span><span class="s2"> VALUES(&quot;</span><span class="p">;</span>
+  <span class="k">for</span><span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nb">count</span><span class="p">(</span><span class="nv">$col_names</span><span class="p">);</span> <span class="nv">$i</span><span class="o">++</span><span class="p">){</span>
+    <span class="nv">$name</span> <span class="o">=</span> <span class="nv">$col_names</span><span class="p">[</span><span class="nv">$i</span><span class="p">];</span>
+    <span class="nv">$sql</span> <span class="o">.=</span> <span class="s2">&quot;:</span><span class="si">$name</span><span class="s2">&quot;</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="nv">$i</span> <span class="o">!=</span> <span class="nb">count</span><span class="p">(</span><span class="nv">$col_names</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">){</span>
+      <span class="nv">$sql</span> <span class="o">.=</span> <span class="s2">&quot;, &quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="nv">$sql</span> <span class="o">.=</span> <span class="s2">&quot;);&quot;</span><span class="p">;</span>
+  <span class="nv">$insertstmt</span> <span class="o">=</span> <span class="nv">$conn</span><span class="o">-&gt;</span><span class="na">prepare</span><span class="p">(</span><span class="nv">$sql</span><span class="p">);</span>
+  <span class="k">for</span><span class="p">(</span><span class="nv">$i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nb">count</span><span class="p">(</span><span class="nv">$data_array</span><span class="p">);</span> <span class="nv">$i</span><span class="o">++</span><span class="p">){</span>
+    <span class="k">for</span><span class="p">(</span><span class="nv">$j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$j</span> <span class="o">&lt;</span> <span class="nb">count</span><span class="p">(</span><span class="nv">$col_names</span><span class="p">);</span> <span class="nv">$j</span><span class="o">++</span><span class="p">){</span>
+      <span class="nv">$colname</span> <span class="o">=</span> <span class="nv">$col_names</span><span class="p">[</span><span class="nv">$j</span><span class="p">];</span>
+      <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$data_array</span><span class="p">[</span><span class="nv">$i</span><span class="p">][</span><span class="nv">$colname</span><span class="p">])){</span>
+        <span class="nv">$insertstmt</span><span class="o">-&gt;</span><span class="na">bindValue</span><span class="p">(</span><span class="s2">&quot;:</span><span class="si">$colname</span><span class="s2">&quot;</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="nx">PDO</span><span class="o">::</span><span class="na">PARAM_NULL</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nv">$insertstmt</span><span class="o">-&gt;</span><span class="na">bindValue</span><span class="p">(</span><span class="s2">&quot;:</span><span class="si">$colname</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">$data_array</span><span class="p">[</span><span class="nv">$i</span><span class="p">][</span><span class="nv">$colname</span><span class="p">]);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nv">$insertstmt</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
+  <span class="p">}</span>
+  <span class="k">echo</span> <span class="s1">&#39;{&quot;success&quot;: true}&#39;</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">PDOException</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">echo</span> <span class="s1">&#39;{&quot;success&quot;: false, &quot;message&quot;: &#39;</span> <span class="o">.</span> <span class="nv">$e</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="nv">$conn</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+
+
+<p>To send the data, we use an AJAX request in JavaScript.</p>
+<div class="codehilite"><pre><span></span><span class="kd">function</span> <span class="nx">saveData</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+  <span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;write_data.php&#39;</span><span class="p">);</span> <span class="c1">// change &#39;write_data.php&#39; to point to php script.</span>
+  <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;application/json&#39;</span><span class="p">);</span>
+  <span class="nx">xhr</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">200</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">responseText</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">success</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+  <span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">json</span><span class="p">());</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>You can call the <code>saveData()</code> function using the <code>on_finish</code> handler for the experiment, or by using the <code>call-function</code> plugin.</p>
+<div class="codehilite"><pre><span></span><span class="c1">// with on_finish handler</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">on_finish</span><span class="o">:</span> <span class="nx">saveData</span>
+<span class="p">});</span>
+
+<span class="c1">// with call-function plugin</span>
+<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;call-function&#39;</span><span class="p">,</span>
+  <span class="nx">func</span><span class="o">:</span> <span class="nx">saveData</span>
+<span class="p">});</span>
+</pre></div>
+                
+                  
+                
+              
+              
+                
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../trial/" title="Advanced Options for Trials" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Advanced Options for Trials
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../callbacks/" title="Event-related Callback Functions" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Event-related Callback Functions
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2012-2018 Josh de Leeuw
+          </div>
+        
+        powered by
+        <a href="http://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+  <div class="md-footer-social">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+      <a href="https://github.com/jspsych" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/joshdeleeuw" class="md-footer-social__link fa fa-twitter"></a>
+    
+  </div>
+
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.cae2244d.js"></script>
+      
+      <script>app.initialize({version:"0.17.5",url:{base:"../.."}})</script>
+      
+    
+    
+      
+        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})});var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})</script>
+      
+    
+  </body>
+</html>
