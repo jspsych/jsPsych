@@ -71,6 +71,7 @@ pages:
   - 'jspsych-image-keyboard-response': 'plugins/jspsych-image-keyboard-response.md'
   - 'jspsych-image-slider-response': 'plugins/jspsych-image-slider-response.md'
   - 'jspsych-instructions': 'plugins/jspsych-instructions.md'
+  - 'jspsych-rdk': 'plugins/jspsych-rdk.md'
   - 'jspsych-reconstruction': 'plugins/jspsych-reconstruction.md'
   - 'jspsych-resize': 'plugins/jspsych-resize.md'
   - 'jspsych-same-different-html': 'plugins/jspsych-same-different-html.md'
