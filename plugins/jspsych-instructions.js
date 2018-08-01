@@ -99,21 +99,23 @@ jsPsych.plugins.instructions = (function() {
     }
 
     function show_current_page() {
-      let pagenum_display = "";
-      if(trial.show_page_number) {
-          pagenum_display = "Page "+(current_page+1)+"/"+trial.pages.length;
-      }
       var html = trial.pages[current_page];
+
+      var pagenum_display = "";
+      if(trial.show_page_number) {
+          pagenum_display = "<span style='margin: 0 1em;' class='"+
+          "jspsych-instructions-pagenum'>Page "+(current_page+1)+"/"+trial.pages.length+"</span>";
+      }
+     
       if (trial.show_clickable_nav) {
 
         var nav_html = "<div class='jspsych-instructions-nav' style='padding: 10px 0px;'>";
         if (trial.allow_backward) {
-          let allowed = (current_page > 0 )? '' : "disabled='disabled'";
+          var allowed = (current_page > 0 )? '' : "disabled='disabled'";
           nav_html += "<button id='jspsych-instructions-back' class='jspsych-btn' style='margin-right: 5px;' "+allowed+">&lt; "+trial.button_label_previous+"</button>";
         }
-        if (trial.pages.length > 1) {
-            nav_html += "<span style='margin: 0 1em;' class='"+
-                "jspsych-instructions-pagenum'>"+pagenum_display+"</span>";
+        if (trial.pages.length > 1 && trial.show_page_number) {
+            nav_html += pagenum_display;
         }
         nav_html += "<button id='jspsych-instructions-next' class='jspsych-btn'"+
             "style='margin-left: 5px;'>"+trial.button_label_next+
@@ -126,10 +128,12 @@ jsPsych.plugins.instructions = (function() {
         }
 
         display_element.querySelector('#jspsych-instructions-next').addEventListener('click', btnListener);
-      } else if (trial.show_page_number && trial.pages.length > 1) {
+      } else {
+        if (trial.show_page_number && trial.pages.length > 1) {
           // page numbers for non-mouse navigation
           html += "<div class='jspsych-instructions-pagenum'>"+pagenum_display+"</div>"
-          display_element.innerHTML = html;
+        } 
+        display_element.innerHTML = html;
       }
       
     }
