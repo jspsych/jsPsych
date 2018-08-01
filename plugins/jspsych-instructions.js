@@ -103,15 +103,15 @@ jsPsych.plugins.instructions = (function() {
       if(trial.show_page_number) {
           pagenum_display = "Page "+(current_page+1)+"/"+trial.pages.length;
       }
-      display_element.innerHTML = trial.pages[current_page];
+      var html = trial.pages[current_page];
       if (trial.show_clickable_nav) {
 
         var nav_html = "<div class='jspsych-instructions-nav' style='padding: 10px 0px;'>";
         if (trial.allow_backward) {
-          let allowed = (current_page > 0  && trial.show_page_number)? '' : "disabled='disabled'";
+          let allowed = (current_page > 0 )? '' : "disabled='disabled'";
           nav_html += "<button id='jspsych-instructions-back' class='jspsych-btn' style='margin-right: 5px;' "+allowed+">&lt; "+trial.button_label_previous+"</button>";
         }
-        if (trial.pages.length > 1 && trial.show_page_number) {
+        if (trial.pages.length > 1) {
             nav_html += "<span style='margin: 0 1em;' class='"+
                 "jspsych-instructions-pagenum'>"+pagenum_display+"</span>";
         }
@@ -119,8 +119,8 @@ jsPsych.plugins.instructions = (function() {
             "style='margin-left: 5px;'>"+trial.button_label_next+
             " &gt;</button></div>";
 
-        display_element.innerHTML += nav_html;
-
+        html += nav_html;
+        display_element.innerHTML = html;
         if (current_page != 0 && trial.allow_backward) {
           display_element.querySelector('#jspsych-instructions-back').addEventListener('click', btnListener);
         }
@@ -128,9 +128,10 @@ jsPsych.plugins.instructions = (function() {
         display_element.querySelector('#jspsych-instructions-next').addEventListener('click', btnListener);
       } else if (trial.show_page_number && trial.pages.length > 1) {
           // page numbers for non-mouse navigation
-          display_element.innerHTML += "<div class='jspsych-instructions-pagenum'>"+
-            pagenum_display+"</div>"
+          html += "<div class='jspsych-instructions-pagenum'>"+pagenum_display+"</div>"
+          display_element.innerHTML = html;
       }
+      
     }
 
     function next() {
