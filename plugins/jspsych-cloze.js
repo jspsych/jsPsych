@@ -1,6 +1,11 @@
-/** 
- * Simple Cloze
- */
+/**
+ * jspsych-cloze
+ * Philipp Sprengholz
+ *
+ * plugin for displaying a cloze test
+ *
+ * documentation: docs.jspsych.org
+ **/
 
 jsPsych.plugins['cloze'] = (function () {
 
@@ -14,19 +19,7 @@ jsPsych.plugins['cloze'] = (function () {
                 type: jsPsych.plugins.parameterType.STRING,
                 pretty_name: 'Cloze text',
                 default: undefined,
-                description: 'Cloze text with %input to check% (surrounded by percentage signs)'
-            },
-            allow_mistakes: {
-                type: jsPsych.plugins.parameterType.BOOL,
-                pretty_name: 'Allow mistakes',
-                default: true,
-                description: 'Allow finishing the trial while answers are not correct'
-            },
-            mistake_fn: {
-                type: jsPsych.plugins.parameterType.FUNCTION,
-                pretty_name: 'Mistake function',
-                default: function () {},
-                description: 'Function called in case of wrong answers and if allow_mistakes is set to TRUE'
+                description: 'Cloze text with %input to check%'
             },
             button_text: {
                 type: jsPsych.plugins.parameterType.STRING,
@@ -34,16 +27,27 @@ jsPsych.plugins['cloze'] = (function () {
                 default: 'OK',
                 description: 'The text of the button to finish the trial'
             },
+            check_answers: {
+                type: jsPsych.plugins.parameterType.BOOL,
+                pretty_name: 'Check subjects answers',
+                default: true,
+                description: 'Compares subjects answers with the solution provided in the text'
+            },
+            mistake_fn: {
+                type: jsPsych.plugins.parameterType.FUNCTION,
+                pretty_name: 'Mistake function',
+                default: function () {},
+                description: 'Function called if check_answers is set to TRUE and subjects answers do not equal the solution provided in the text'
+            }
         }
     };
 
     plugin.trial = function (display_element, trial) {
 
-    
+        var html = '<div class="cloze">';
+        var elements = trial.text.split('%');
+        var solutions = [];
 
-        html = '<div class="cloze">';
-        elements = trial.text.split('%');
-        solutions = [];
         for (i=0; i<elements.length; i++)
         {
             if (i%2 === 0)
@@ -59,65 +63,50 @@ jsPsych.plugins['cloze'] = (function () {
         html += '</div>';
         
         display_element.innerHTML = html;
-        
-        attempts = [];
-      
-      
-        
-      
+                
         var check = function() {
 
-            answers_correct = true;
-            attempts.push([]);
+            var answers = [];
+            var answers_correct = true;
+
             for (i=0; i<solutions.length; i++)
             {
-                field = document.getElementById('input'+i);
-                answer = field.value.trim();
-                //answer = field.val().trim();
-                attempts[attempts.length-1].push(answer);
+                var field = document.getElementById('input'+i);
+                answers.push(field.value.trim());
                 
-                if (answer.toLowerCase() !== solutions[i].toLowerCase())
+                if (trial.check_answers)
                 {
-                    field.style.color = 'red';
-                    answers_correct = false;
+                    if (answers[i] !== solutions[i])
+                    {
+                        field.style.color = 'red';
+                        answers_correct = false;
+                    }
+                    else
+                    {
+                        field.style.color = 'black';
+                    }
                 }
-                else
-                {
-                    field.style.color = 'black';
-                }
-            }   
+            }
             
-            var trial_data = {
-                'solution' : solutions,
-                'attempts' : attempts,
-                'answer_correct' : answers_correct
-            };
-            
-
-            if(trial.allow_mistakes)
+            if (!trial.check_answers || (trial.check_answers && answers_correct))
             {
+                var trial_data = {
+                    'solutions' : solutions,
+                    'answers' : answers,
+                    'answers_correct' : answers_correct
+                };
+
                 display_element.innerHTML = '';
-                jsPsych.finishTrial(trial_data); 
+                jsPsych.finishTrial(trial_data);
             }
             else
             {
-                if(answers_correct)
-                {
-                    display_element.innerHTML = '';
-                    jsPsych.finishTrial(trial_data); 
-                }
-            else
-                {
-                    trial.mistake_fn();
-                }
+                trial.mistake_fn();
             }
-
-            
-            
+                
         };
         
         display_element.innerHTML += '<br><button class="jspsych-html-button-response-button" type="button" id="finish_cloze_button">'+trial.button_text+'</button>';
-        
         display_element.querySelector('#finish_cloze_button').addEventListener('click', check);
     };
 
