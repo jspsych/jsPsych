@@ -2,7 +2,7 @@
  * jspsych-cloze
  * Philipp Sprengholz
  *
- * plugin for displaying a cloze test
+ * Plugin for displaying a cloze test and checking participants answers against a correct solution.
  *
  * documentation: docs.jspsych.org
  **/
@@ -19,25 +19,25 @@ jsPsych.plugins['cloze'] = (function () {
                 type: jsPsych.plugins.parameterType.STRING,
                 pretty_name: 'Cloze text',
                 default: undefined,
-                description: 'Cloze text with %input to check%'
+                description: 'The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. %solution%).'
             },
             button_text: {
                 type: jsPsych.plugins.parameterType.STRING,
                 pretty_name: 'Button text',
                 default: 'OK',
-                description: 'The text of the button to finish the trial'
+                description: 'Text of the button participants have to press for finishing the cloze test.'
             },
             check_answers: {
                 type: jsPsych.plugins.parameterType.BOOL,
-                pretty_name: 'Check subjects answers',
-                default: true,
-                description: 'Compares subjects answers with the solution provided in the text'
+                pretty_name: 'Check answers',
+                default: false,
+                description: 'Boolean value indicating if the answers given by participants should be compared against a correct solution given in the text (between % signs) after the button was clicked.'
             },
             mistake_fn: {
                 type: jsPsych.plugins.parameterType.FUNCTION,
                 pretty_name: 'Mistake function',
                 default: function () {},
-                description: 'Function called if check_answers is set to TRUE and subjects answers do not equal the solution provided in the text'
+                description: 'Function called if check_answers is set to TRUE and there is a difference between the participants answers and the correct solution provided in the text.'
             }
         }
     };
@@ -91,9 +91,7 @@ jsPsych.plugins['cloze'] = (function () {
             if (!trial.check_answers || (trial.check_answers && answers_correct))
             {
                 var trial_data = {
-                    'solutions' : solutions,
-                    'answers' : answers,
-                    'answers_correct' : answers_correct
+                    'answers' : answers
                 };
 
                 display_element.innerHTML = '';

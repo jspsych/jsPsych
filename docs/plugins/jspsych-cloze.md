@@ -1,26 +1,15 @@
-# jspsych-html-button-response
+# jspsych-cloze
 
-This plugin displays a text with certain words removed and asks the participant to replace the missing items.
-
-
-
- test, or assessment consisting of a portion of language with certain items, words, or signs removed (cloze text), where the participant is asked to replace the missing language item
-
-This plugin displays HTML content and records responses generated with a button click.The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended
-automatically if the subject has failed to respond within a fixed length of time. The button itself can be customized using
-HTML formatting.
+This plugin displays a text with certain words removed. Participants are asked to replace the missing items. Responses are recorded when clicking a button. Optionally, responses are evaluated and a function is called in case of differences, making it possible to inform participants about mistakes.
 
 ## Parameters
 
-Parameters with a default value of *undefined* must be specified.
-Other parameters can be left unspecified if the default value is acceptable.
-
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-text | HTML string | undefined | The HTML content to be displayed.
-button_text | array of strings | [] | Labels for the buttons. Each different string in the array will generate a different button.
-check_answers | HTML string | `'<button class="jspsych-btn">%choice%</button>'` | A template of HTML for generating the button elements. You can override this to create customized buttons of various kinds. The string `%choice%` will be changed to the corresponding element of the `choices` array. You may also specify an array of strings, if you need different HTML to render for each button. If you do specify an array, the `choices` array and this array must have the same length. The HTML from position 0 in the `button_html` array will be used to create the button for element 0 in the `choices` array, and so on.
-mistake_fn | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
+text | string | undefined | The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. % correct solution %).
+button_text | string | OK | Text of the button participants have to press for finishing the cloze test.
+check_answers | boolean | false | Boolean value indicating if the answers given by participants should be compared against a correct solution given in the text (between % signs) after the button was clicked. If ```true```, answers are checked and in case of differences, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. If ```false```, no checks are performed and the trial automatically ends when clicking the button.
+mistake_fn | function | ```function(){}``` | Function called if ```check_answers``` is set to ```true``` and there is a difference between the participants answers and the correct solution provided in the text.
 
 ## Data Generated
 
@@ -28,30 +17,27 @@ In addition to the [default data collected by all plugins](overview#datacollecte
 
 Name | Type | Value
 -----|------|------
-rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.
-button_pressed | numeric | Indicates which button the subject pressed. The first button in the `choices` array is 0, the second is 1, and so on.
-stimulus | string | The HTML content that was displayed on the screen.
+answers | array of strings | Answers the partcipant gave
 
-## Example
+## Examples
 
-#### Asking the participants for some words
+#### Simple cloze using default settings (no check against correct solution, no custom button text)
 
 ```javascript
 var trial = {
 	type: 'cloze',
-	text: 'The %Elephant% is the largest land animal. It is found in both %Africa% and %Asia%.',
-	button_text: 'Next'
+	text: 'The %% is the largest terrestrial mammal. It lives in both %% and %%.'
 };
 ```
 
-#### Asking the participants for some words
+#### More elaborate example (with check against correct solution, custom error handling and modified button text)
 
 ```javascript
 var trial = {
-	type: 'cloze',
-	text: 'The %Elephant% is the world's largest land animal. It is found in both %Africa% and %Asia%.',
-	button_text: 'Next',
-	allow_mistakes: 'true',
-	mistake_fn: function(){ alert ('Please correct your answers before moving on to the next trial.'); }
+    type: 'cloze',
+    text: 'A rectangle has % 4 % corners and a triangle has % 3 %.',
+    check_answers: true,
+    button_text: 'Next',
+    mistake_fn: function(){alert("Wrong answer. Please check again.")}
 };
 ```
