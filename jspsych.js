@@ -2345,6 +2345,10 @@ jsPsych.pluginAPI = (function() {
     images = jsPsych.utils.unique(images);
     audio  = jsPsych.utils.unique(audio);
 
+    // remove any 0s, nulls, or false values
+    images = images.filter(function(x) { return x != false && x != null})
+    audio = audio.filter(function(x) { return x != false && x != null})
+
     var total_n = images.length + audio.length;
     var loaded = 0;
 
