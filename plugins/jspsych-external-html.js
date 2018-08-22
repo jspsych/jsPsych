@@ -66,7 +66,7 @@ jsPsych.plugins['external-html'] = (function() {
       var t0 = (new Date()).getTime();
       var finish = function() {
         if (trial.check_fn && !trial.check_fn(display_element)) { return };
-        if (trial.cont_key) { document.removeEventListener('keydown', key_listener); }
+        if (trial.cont_key) { display_element.removeEventListener('keydown', key_listener); }
         var trial_data = {
           rt: (new Date()).getTime() - t0,
           url: trial.url
