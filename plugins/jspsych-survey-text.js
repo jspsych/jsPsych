@@ -17,7 +17,7 @@ var jsPsych = window.jsPsych || require('jspsych');
   } else {
      root.jsPsych.plugins['survey-text'] = factory;
   }
-}(this, function() {
+}(this, (function() {
 
   var plugin = {};
 

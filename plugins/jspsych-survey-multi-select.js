@@ -15,7 +15,7 @@ var jsPsych = window.jsPsych || require('jspsych');
   } else {
      root.jsPsych.plugins['survey-multi-select'] = factory;
   }
-}(this, function() {
+}(this, (function() {
   var plugin = {};
 
   plugin.info = {
