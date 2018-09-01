@@ -54,12 +54,6 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
         default: true,
         description: 'If true, trial will end when subject makes a response.'
       },
-      save_stimulus: {
-        type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: 'Save stimulus to data',
-        default: true,
-        description: 'If true, stimulus HTML will be saved to the data for this trial.'
-      },
     }
   }
 
@@ -95,12 +89,10 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
       // gather the data to store for the trial
       var trial_data = {
         "rt": response.rt,
+        "stimulus": trial.stimulus,
         "key_press": response.key
-      };
 
-      if (trial.save_stimulus) {
-        trial_data["stimulus"] = trial.stimulus;
-      }
+      };
 
       // clear the display
       display_element.innerHTML = '';

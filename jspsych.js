@@ -222,6 +222,15 @@ window.jsPsych = (function() {
 
     // write the data from the trial
     data = typeof data == 'undefined' ? {} : data;
+
+    if (current_trial.hasOwnProperty('ignored_data')) {
+      for (let ignored_key of current_trial.ignored_data) {
+        if (data.hasOwnProperty(ignored_key)) {
+          delete data[ignored_key];
+        }
+      }
+    }
+
     jsPsych.data.write(data);
 
     // get back the data with all of the defaults in
