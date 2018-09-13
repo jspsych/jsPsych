@@ -358,6 +358,12 @@ jsPsych.plugins["RDK"] = (function() {
 		
 		//The document body IS 'display_element' (i.e. <body class="jspsych-display-element"> .... </body> )
 		var body = document.getElementsByClassName("jspsych-display-element")[0];
+		
+		//Save the current settings to be restored later
+		var originalMargin = body.style.margin;
+		var originalPadding = body.style.padding;
+		var originalBackgroundColor = body.style.backgroundColor;
+		
 		//Remove the margins and paddings of the display_element
 		body.style.margin = 0;
 		body.style.padding = 0;
@@ -556,8 +562,10 @@ jsPsych.plugins["RDK"] = (function() {
 			//Remove the canvas as the child of the display_element element
 			display_element.innerHTML='';
 			
-			//Restore the margin to JsPsych defaults
-			body.style.margin = "50px auto 50px auto";
+			//Restore the settings to JsPsych defaults
+			body.style.margin = originalMargin;
+			body.style.padding = originalPadding;
+			body.style.backgroundColor = originalBackgroundColor
 
 			//End this trial and move on to the next trial
 			jsPsych.finishTrial(trial_data);
@@ -566,21 +574,19 @@ jsPsych.plugins["RDK"] = (function() {
 
 		//Function to record the first response by the subject
 		function after_response(info) {
-			
-			//Kill the timeout if the subject has responded within the time given
-			window.clearTimeout(timeoutID);
 
 			//If the response has not been recorded, record it
 			if (response.key == -1) {
 				response = info; //Replace the response object created above
 			}
 
-			//If the parameter is set such that the response ends the trial, then end the trial
+			//If the parameter is set such that the response ends the trial, then kill the timeout and end the trial
 			if (trial.response_ends_trial) {
+				window.clearTimeout(timeoutID);
 				end_trial();
 			}
 
-		}; //End of after_response
+		} //End of after_response
 		
 		//Function that determines if the response is correct
 		function correctOrNot(){
