@@ -224,6 +224,13 @@ window.jsPsych = (function() {
     data = typeof data == 'undefined' ? {} : data;
 
     if (current_trial.hasOwnProperty('ignored_data')) {
+      // Single key to ignore
+      if (typeof current_trial.ignored_data === 'string') {
+        if (data.hasOwnProperty(current_trial.ignored_data)) {
+          delete data[current_trial.ignored_data];
+        }
+      }
+      // Multiple keys to ignore
       for (let ignored_key of current_trial.ignored_data) {
         if (data.hasOwnProperty(ignored_key)) {
           delete data[ignored_key];

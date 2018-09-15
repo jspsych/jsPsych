@@ -165,6 +165,19 @@ describe('#ignoredData', function(){
     expect(jsPsych.data.get().select('stimulus').count()).toBe(0);
   });
 
+  test('Ignoring multiple data should cause all to disappear', function(){
+    var timeline = [
+      {type: 'html-keyboard-response', stimulus:'hello', ignored_data:['stimulus', 'rt']}
+    ];
+    jsPsych.init({timeline:timeline});
+    // click through first trial
+    utils.pressKey(32);
+    // check if data contains testprop
+    expect(jsPsych.data.get().select('rt').count()).toBe(0);
+    expect(jsPsych.data.get().select('stimulus').count()).toBe(0);
+    expect(jsPsych.data.get().select('key_press').count()).toBe(1);
+  });
+
   test('Adding ignored data for field nonexistent field does nothing', function(){
     var timeline = [
       {type: 'html-keyboard-response', stimulus:'hello', ignored_data:'nonexistent'}
@@ -175,6 +188,19 @@ describe('#ignoredData', function(){
     // check if data contains testprop
     expect(jsPsych.data.get().select('rt').count()).toBe(1);
     expect(jsPsych.data.get().select('stimulus').count()).toBe(1);
+  });
+
+  test('Ignoring mixture of existent and nonexistent keys', function(){
+    var timeline = [
+      {type: 'html-keyboard-response', stimulus:'hello', ignored_data:['stimulus', 'test']}
+    ];
+    jsPsych.init({timeline:timeline});
+    // click through first trial
+    utils.pressKey(32);
+    // check if data contains testprop
+    expect(jsPsych.data.get().select('rt').count()).toBe(1);
+    expect(jsPsych.data.get().select('stimulus').count()).toBe(0);
+    expect(jsPsych.data.get().select('key_press').count()).toBe(1);
   });
 
 });
