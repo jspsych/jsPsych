@@ -15,7 +15,7 @@ describe('Basic data recording', function(){
     // check if data contains rt
     expect(jsPsych.data.get().select('rt').count()).toBe(1);
   })
-})
+});
 
 describe('#addProperties', function(){
 
@@ -149,4 +149,32 @@ describe('#displayData', function(){
     var html = jsPsych.getDisplayElement().innerHTML;
     expect(html).toBe("<pre id=\"jspsych-data-display\">\"col1\",\"col2\"\r\n\"1\",\"2\"\r\n\"3\",\"4\"\r\n</pre>");
   });
+});
+
+describe('#ignoredData', function(){
+
+  test('Adding ignored data should cause the data to disappear', function(){
+    var timeline = [
+      {type: 'html-keyboard-response', stimulus:'hello', ignored_data:'stimulus'}
+    ];
+    jsPsych.init({timeline:timeline});
+    // click through first trial
+    utils.pressKey(32);
+    // check if data contains testprop
+    expect(jsPsych.data.get().select('rt').count()).toBe(1);
+    expect(jsPsych.data.get().select('stimulus').count()).toBe(0);
+  });
+
+  test('Adding ignored data for field nonexistent field does nothing', function(){
+    var timeline = [
+      {type: 'html-keyboard-response', stimulus:'hello', ignored_data:'nonexistent'}
+    ];
+    jsPsych.init({timeline:timeline});
+    // click through first trial
+    utils.pressKey(32);
+    // check if data contains testprop
+    expect(jsPsych.data.get().select('rt').count()).toBe(1);
+    expect(jsPsych.data.get().select('stimulus').count()).toBe(1);
+  });
+
 });
