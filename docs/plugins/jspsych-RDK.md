@@ -94,7 +94,7 @@ var trial_left = {
 ```javascript
 var test_block = {
 	type: "RDK", 
-	timing_post_trial: 0,
+	post_trial_gap: 0,
 	number_of_dots: 200,
 	RDK_type: 3,
 	choices: ["a", "l"],
