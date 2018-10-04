@@ -50,7 +50,7 @@ jsPsych.plugins['image-slider-response'] = (function() {
         description: 'Sets the step of the slider'
       },
       labels: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.HTML_STRING,
         pretty_name:'Labels',
         default: [],
         array: true,
