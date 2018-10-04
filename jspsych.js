@@ -819,6 +819,9 @@ window.jsPsych = (function() {
     // apply the focus to the DOM (for keyboard events)
     DOM_target.focus();
 
+    // reset the scroll on the DOM target
+    DOM_target.scrollTop = 0;
+
     // execute trial method
     jsPsych.plugins[trial.type].trial(DOM_target, trial);
 
