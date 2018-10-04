@@ -1695,7 +1695,7 @@ jsPsych.randomization = (function() {
     }
 
     var random_shuffle = shuffle(arr);
-    for (var i = 0; i < random_shuffle.length - 2; i++) {
+    for (var i = 0; i < random_shuffle.length - 1; i++) {
       if (equalityTest(random_shuffle[i], random_shuffle[i + 1])) {
         // neighbors are equal, pick a new random neighbor to swap (not the first or last element, to avoid edge cases)
         var random_pick = Math.floor(Math.random() * (random_shuffle.length - 2)) + 1;
