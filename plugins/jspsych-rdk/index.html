@@ -1282,13 +1282,13 @@
 <td>choices</td>
 <td>array</td>
 <td>[]</td>
-<td>The valid keys that the subject can press as a response. Must be an array of chars. If left unspecified, any key is a valid key.</td>
+<td>The valid keys that the subject can press as a response. Must be an array of chars or numbers (corresponding to JavaScript character codes). If left unspecified, any key is a valid key.</td>
 </tr>
 <tr>
 <td>correct_choice</td>
-<td>array or char</td>
+<td>array, char, or number</td>
 <td>undefined</td>
-<td>The keys that are considered the correct response for that particular trial. Can be a single char or an array of chars (not ASCII values).  This needs to be linked with the <code>coherent_direction</code> parameter (See Examples section below for an illustration.) This is used to determine whether the subject chose the correct response and return that data.</td>
+<td>The keys that are considered the correct response for that particular trial. Can be a single char, a single number, an array of chars, or an array of numbers. Numbers here correspond to the JavaScript character codes. This needs to be linked with the <code>coherent_direction</code> parameter (See Examples section below for an illustration.) This is used to determine whether the subject chose the correct response. The boolean indicating whether or not the subject chose the correct response is returned in the <code>correct</code> key of the data object.</td>
 </tr>
 <tr>
 <td>trial_duration</td>
@@ -1513,12 +1513,12 @@
 <tr>
 <td>canvas_width</td>
 <td>numeric</td>
-<td>The width of the canvas.</td>
+<td>The width of the canvas in pixels.</td>
 </tr>
 <tr>
 <td>canvas_height</td>
 <td>numeric</td>
-<td>The height of the canvas.</td>
+<td>The height of the canvas in pixels.</td>
 </tr>
 </tbody>
 </table>
@@ -1539,7 +1539,7 @@
 <h4 id="displaying-a-trial-with-2-choices-and-1-correct-choice">Displaying a trial with 2 choices and 1 correct choice<a class="headerlink" href="#displaying-a-trial-with-2-choices-and-1-correct-choice" title="Permanent link">&para;</a></h4>
 <div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">test_block</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;RDK&quot;</span><span class="p">,</span> 
-    <span class="nx">timing_post_trial</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">post_trial_gap</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
     <span class="nx">number_of_dots</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
     <span class="nx">RDK_type</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
     <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">],</span>
