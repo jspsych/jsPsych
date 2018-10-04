@@ -5,6 +5,7 @@
   
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-html-button-response.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css"></link>
   <style>
   .stimulus { font-size: 32px; }
@@ -15,11 +16,10 @@
   var timeline = [];
 
   var instructions = {
-    type: 'html-keyboard-response',
+    type: 'html-button-response',
     stimulus: '<p>Each screen will show either an English word or letters that do not form a word.</p>'+
-      '<p>Press Y if the letters form a valid word.</p><p>Press N if the letters do not form a valid word.</p>'+
-      '<p>When you are ready to begin, press Y or N.</p>',
-    choices: ['y','n']
+      '<p>Press Y if the letters form a valid word.</p><p>Press N if the letters do not form a valid word.</p>',
+    choices: ['Ready to start']
   }
   timeline.push(instructions);
 
@@ -81,7 +81,7 @@
         type: 'html-keyboard-response',
         stimulus: function(){ return "<p class='stimulus'>"+jsPsych.timelineVariable('word', true)+"</p>"; },
         choices: ['y','n'],
-        post_trial_gap: 500,
+        post_trial_gap: 0,
         data: function(){
           return {
             word_validity: jsPsych.timelineVariable('word_validity'),
