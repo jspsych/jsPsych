@@ -358,6 +358,12 @@ jsPsych.plugins["RDK"] = (function() {
 		
 		//The document body IS 'display_element' (i.e. <body class="jspsych-display-element"> .... </body> )
 		var body = document.getElementsByClassName("jspsych-display-element")[0];
+		
+		//Save the current settings to be restored later
+		var originalMargin = body.style.margin;
+		var originalPadding = body.style.padding;
+		var originalBackgroundColor = body.style.backgroundColor;
+		
 		//Remove the margins and paddings of the display_element
 		body.style.margin = 0;
 		body.style.padding = 0;
@@ -556,8 +562,10 @@ jsPsych.plugins["RDK"] = (function() {
 			//Remove the canvas as the child of the display_element element
 			display_element.innerHTML='';
 			
-			//Restore the margin to JsPsych defaults
-			body.style.margin = "50px auto 50px auto";
+			//Restore the settings to JsPsych defaults
+			body.style.margin = originalMargin;
+			body.style.padding = originalPadding;
+			body.style.backgroundColor = originalBackgroundColor
 
 			//End this trial and move on to the next trial
 			jsPsych.finishTrial(trial_data);
@@ -566,36 +574,49 @@ jsPsych.plugins["RDK"] = (function() {
 
 		//Function to record the first response by the subject
 		function after_response(info) {
-			
-			//Kill the timeout if the subject has responded within the time given
-			window.clearTimeout(timeoutID);
 
 			//If the response has not been recorded, record it
 			if (response.key == -1) {
 				response = info; //Replace the response object created above
 			}
 
-			//If the parameter is set such that the response ends the trial, then end the trial
+			//If the parameter is set such that the response ends the trial, then kill the timeout and end the trial
 			if (trial.response_ends_trial) {
+				window.clearTimeout(timeoutID);
 				end_trial();
 			}
 
-		}; //End of after_response
+		} //End of after_response
 		
 		//Function that determines if the response is correct
 		function correctOrNot(){
 						
 			//Check that the correct_choice has been defined
 			if(typeof trial.correct_choice !== 'undefined'){
-				//Check if the correct_choice variable holds an array
+				//If the correct_choice variable holds an array
 				if(trial.correct_choice.constructor === Array){ //If it is an array
-					trial.correct_choice = trial.correct_choice.map(function(x){return x.toUpperCase();}); //Convert all the values to upper case
-					return trial.correct_choice.includes(String.fromCharCode(response.key)); //If the response is included in the correct_choice array, return true. Else, return false.
+					//If the elements are characters
+					if(typeof trial.correct_choice[0] === 'string' || trial.correct_choice[0] instanceof String){
+						trial.correct_choice = trial.correct_choice.map(function(x){return x.toUpperCase();}); //Convert all the values to upper case
+						return trial.correct_choice.includes(String.fromCharCode(response.key)); //If the response is included in the correct_choice array, return true. Else, return false.
+					}
+					//Else if the elements are numbers (javascript character codes)
+					else if (typeof trial.correct_choice[0] === 'number'){
+						return trial.correct_choice.includes(response.key); //If the response is included in the correct_choice array, return true. Else, return false.
+					}
 				}
 				//Else compare the char with the response key
 				else{
-					//Return true if the user's response matches the correct answer. Return false otherwise.
-					return response.key == trial.correct_choice.toUpperCase().charCodeAt(0);
+					//If the element is a character
+					if(typeof trial.correct_choice === 'string' || trial.correct_choice instanceof String){
+						//Return true if the user's response matches the correct answer. Return false otherwise.
+						return response.key == trial.correct_choice.toUpperCase().charCodeAt(0);
+					}
+					//Else if the element is a number (javascript character codes)
+					else if (typeof trial.correct_choice === 'number'){
+						console.log(response.key == trial.correct_choice);
+						return response.key == trial.correct_choice;
+					}
 				}
 			}
 		}
