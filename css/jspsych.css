@@ -5,9 +5,9 @@
  * experiments look polished without any additional styles.
  */
 
- /* Container holding jsPsych content */
-
  @import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+
+/* Container holding jsPsych content */
 
  .jspsych-display-element {
    display: flex;
