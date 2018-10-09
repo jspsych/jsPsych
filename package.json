@@ -27,6 +27,7 @@
     "testEnvironmentOptions": {
       "fetchExternalResources": true,
       "pretendToBeVisual": true
-    }
+    },
+    "testURL": "http://localhost/"
   }
 }
