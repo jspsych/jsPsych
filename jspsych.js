@@ -949,7 +949,7 @@ window.jsPsych = (function() {
   }
 
   function updateProgressBar() {
-    var progress = jsPsych.progress();
+    var progress = jsPsych.progress().percent_complete;
     core.setProgressBar(progress / 100);
   }
 
