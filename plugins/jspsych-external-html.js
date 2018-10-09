@@ -59,16 +59,16 @@ jsPsych.plugins['external-html'] = (function() {
 
     var url = trial.url;
     if (trial.force_refresh) {
-      url = trial.url + "?time=" + (new Date().getTime());
+      url = trial.url + "?t=" + performance.now();
     }
 
     load(display_element, url, function() {
-      var t0 = (new Date()).getTime();
+      var t0 = performance.now();
       var finish = function() {
         if (trial.check_fn && !trial.check_fn(display_element)) { return };
         if (trial.cont_key) { display_element.removeEventListener('keydown', key_listener); }
         var trial_data = {
-          rt: (new Date()).getTime() - t0,
+          rt: performance.now() - t0,
           url: trial.url
         };
         display_element.innerHTML = '';

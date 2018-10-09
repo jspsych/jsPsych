@@ -485,7 +485,7 @@ jsPsych.plugins["RDK"] = (function() {
 				keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
 					callback_function: after_response, //Function to call once the subject presses a valid key
 					valid_responses: trial.choices, //The keys that will be considered a valid response and cause the callback function to be called
-					rt_method: 'performance', //The type of method to record timing information. 'performance' is not yet supported by all browsers, but it is supported by Chrome. Alternative is 'date', but 'performance' is more precise.
+					rt_method: 'performance', //The type of method to record timing information. 
 					persist: false, //If set to false, keyboard listener will only trigger the first time a valid key is pressed. If set to true, it has to be explicitly cancelled by the cancelKeyboardResponse plugin API.
 					allow_held_key: false //Only register the key once, after this getKeyboardResponse function is called. (Check JsPsych docs for better info under 'jsPsych.pluginAPI.getKeyboardResponse').
 				});

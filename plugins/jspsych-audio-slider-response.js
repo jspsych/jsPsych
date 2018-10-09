@@ -127,7 +127,7 @@ jsPsych.plugins['audio-slider-response'] = (function() {
 
     display_element.querySelector('#jspsych-audio-slider-response-next').addEventListener('click', function() {
       // measure response time
-      var endTime = (new Date()).getTime();
+      var endTime = performance.now();
 			var rt = endTime - startTime;
 			if(context !== null){
 				endTime = context.currentTime;
@@ -169,7 +169,7 @@ jsPsych.plugins['audio-slider-response'] = (function() {
       jsPsych.finishTrial(trialdata);
     }
 
-		var startTime = (new Date()).getTime();
+		var startTime = performance.now();
 		// start audio
     if(context !== null){
       startTime = context.currentTime;

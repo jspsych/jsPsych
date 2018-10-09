@@ -138,7 +138,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       event.preventDefault();
       var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
       // measure response time
-      var endTime = (new Date()).getTime();
+      var endTime = performance.now();
       var response_time = endTime - startTime;
 
       // create object to hold responses
@@ -167,7 +167,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       jsPsych.finishTrial(trial_data);
     });
 
-    var startTime = (new Date()).getTime();
+    var startTime = performance.now();
   };
 
   return plugin;

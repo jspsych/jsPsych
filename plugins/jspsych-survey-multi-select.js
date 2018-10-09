@@ -132,7 +132,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     trial_form.addEventListener('submit', function(event) {
       event.preventDefault();
       // measure response time
-      var endTime = (new Date()).getTime();
+      var endTime = performance.now();
       var response_time = endTime - startTime;
 
       // create object to hold responses
@@ -170,7 +170,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
       }
     });
 
-    var startTime = (new Date()).getTime();
+    var startTime = performance.now();
   };
 
   return plugin;

@@ -1890,16 +1890,14 @@ jsPsych.pluginAPI = (function() {
   module.getKeyboardResponse = function(parameters) {
     //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key?
 
-    parameters.rt_method = (typeof parameters.rt_method === 'undefined') ? 'date' : parameters.rt_method;
-    if (parameters.rt_method != 'date' && parameters.rt_method != 'performance' && parameters.rt_method != 'audio') {
-      console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
-      parameters.rt_method = 'date';
+    parameters.rt_method = (typeof parameters.rt_method === 'undefined') ? 'performance' : parameters.rt_method;
+    if (parameters.rt_method != 'performance' && parameters.rt_method != 'audio') {
+      console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "performance" method.');
+      parameters.rt_method = 'performance';
     }
 
     var start_time;
-    if (parameters.rt_method == 'date') {
-      start_time = (new Date()).getTime();
-    } else if (parameters.rt_method == 'performance') {
+    if (parameters.rt_method == 'performance') {
       start_time = performance.now();
     } else if (parameters.rt_method == 'audio') {
       start_time = parameters.audio_context_start_time;
@@ -1910,9 +1908,7 @@ jsPsych.pluginAPI = (function() {
     var listener_function = function(e) {
 
       var key_time;
-      if (parameters.rt_method == 'date') {
-        key_time = (new Date()).getTime();
-      } else if (parameters.rt_method == 'performance') {
+      if (parameters.rt_method == 'performance') {
         key_time = performance.now();
       } else if (parameters.rt_method == 'audio') {
         key_time = parameters.audio_context.currentTime

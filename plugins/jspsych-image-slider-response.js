@@ -124,7 +124,7 @@ jsPsych.plugins['image-slider-response'] = (function() {
 
     display_element.querySelector('#jspsych-image-slider-response-next').addEventListener('click', function() {
       // measure response time
-      var endTime = (new Date()).getTime();
+      var endTime = performance.now();
       response.rt = endTime - startTime;
       response.response = display_element.querySelector('#jspsych-image-slider-response-response').value;
 
@@ -165,7 +165,7 @@ jsPsych.plugins['image-slider-response'] = (function() {
       }, trial.trial_duration);
     }
 
-    var startTime = (new Date()).getTime();
+    var startTime = performance.now();
   };
 
   return plugin;
