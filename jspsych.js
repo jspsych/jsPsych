@@ -953,7 +953,7 @@ window.jsPsych = (function() {
     core.setProgressBar(progress / 100);
   }
 
-  var progress_bar_amount = null;
+  var progress_bar_amount = 0;
 
   core.setProgressBar = function(proportion_complete){
     proportion_complete = Math.max(Math.min(1,proportion_complete),0);
