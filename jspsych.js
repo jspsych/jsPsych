@@ -950,13 +950,19 @@ window.jsPsych = (function() {
 
   function updateProgressBar() {
     var progress = jsPsych.progress();
-
-    document.querySelector('#jspsych-progressbar-inner').style.width = progress.percent_complete + "%";
+    core.setProgressBar(progress / 100);
   }
+
+  var progress_bar_amount = null;
 
   core.setProgressBar = function(proportion_complete){
     proportion_complete = Math.max(Math.min(1,proportion_complete),0);
     document.querySelector('#jspsych-progressbar-inner').style.width = (proportion_complete*100) + "%";
+    progress_bar_amount = proportion_complete;
+  }
+
+  core.getProgressBarCompleted = function(){
+    return progress_bar_amount;
   }
 
   //Leave a trace in the DOM that jspsych was loaded
