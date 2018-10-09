@@ -275,7 +275,7 @@ jsPsych.finishTrial({correct_response: true});
 ## jsPsych.getDisplayElement
 
 ```
-jsPsych.getDisplayElement
+jsPsych.getDisplayElement()
 ```
 
 ### Parameters
@@ -298,6 +298,32 @@ var el = jsPsych.getDisplayElement();
 // hide the jsPsych display
 el.style.visibility = 'hidden';
 ```
+
+---
+## jsPsych.getProgressBarCompleted
+
+```
+jsPsych.getProgressBarCompleted()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+Returns a value between 0 and 1 representing how full the progress bar currently is.
+
+### Description
+
+Used to get the current value of the progress bar. Works for automated and manual control.
+
+### Example
+
+```javascript
+var progress_bar_amount = jsPsych.getProgressBarCompleted();
+```
+
 ---
 ## jsPsych.init
 
@@ -484,6 +510,36 @@ var trial = {
   }
 }
 ```
+
+---
+## jsPsych.setProgressBar
+
+```
+jsPsych.setProgressBar(value)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+value | numeric | Proprotion (between 0 and 1) to fill the progress bar.
+
+
+### Return value
+
+None.
+
+### Description
+
+Set the progress bar to a custom amount. Proportion must be between 0 and 1. Values larger than 1 are treated as 1.
+
+### Example
+
+```javascript
+jsPsych.setProgressBar(0.85);
+```
+
+
 
 ---
 ## jsPsych.startTime
