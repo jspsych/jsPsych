@@ -85,6 +85,9 @@ window.jsPsych = (function() {
       'on_interaction_data_update': function(data){
         return undefined;
       },
+      'on_close': function(){
+        return undefined;
+      },
       'preload_images': [],
       'preload_audio': [],
       'use_webaudio': true,
@@ -159,6 +162,9 @@ window.jsPsych = (function() {
     jsPsych.pluginAPI.createKeyboardEventListeners(opts.display_element);
     // create listeners for user browser interaction
     jsPsych.data.createInteractionListeners();
+
+    // add event for closing window
+    window.addEventListener('beforeunload', opts.on_close);
 
     // check exclusions before continuing
     checkExclusions(opts.exclusions,

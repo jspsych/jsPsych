@@ -322,6 +322,7 @@ on_trial_start | function | Function to execute when a new trial begins.
 on_trial_finish | function | Function to execute when a trial ends.
 on_data_update | function | Function to execute every time data is stored using the `jsPsych.data.write` method. All plugins use this method to save data (via a call to `jsPsych.finishTrial`, so this function runs every time a plugin stores new data.
 on_interaction_data_update | function | Function to execute every time a new interaction event occurs. Interaction events include clicking on a different window (blur), returning to the experiment window (focus), entering full screen mode (fullscreenenter), and exiting full screen mode (fullscreenexit).
+on_close | function | Function to execute when the user leaves the page. Can be used, for example, to save data before the page is closed.
 exclusions | object | Specifies restrictions on the browser the subject can use to complete the experiment. See list of options below.
 show_progress_bar | boolean | If true, then [a progress bar](../overview/progress-bar.md) is shown at the top of the page.
 auto_update_progress_bar | boolean | If true, then the progress bar at the top of the page will automatically update as every top-level timeline or trial is completed.
