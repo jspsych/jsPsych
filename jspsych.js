@@ -90,6 +90,7 @@ window.jsPsych = (function() {
       },
       'preload_images': [],
       'preload_audio': [],
+      'preload_video': [],
       'use_webaudio': true,
       'exclusions': {},
       'show_progress_bar': false,
@@ -172,7 +173,7 @@ window.jsPsych = (function() {
         // success! user can continue...
         // start experiment, with or without preloading
         if(opts.auto_preload){
-          jsPsych.pluginAPI.autoPreload(timeline, startExperiment, opts.preload_images, opts.preload_audio, opts.show_preload_progress_bar);
+          jsPsych.pluginAPI.autoPreload(timeline, startExperiment, opts.preload_images, opts.preload_audio, opts.preload_video, opts.show_preload_progress_bar);
           if(opts.max_load_time > 0){
             setTimeout(function(){
               if(!loaded && !loadfail){
@@ -2129,12 +2130,18 @@ jsPsych.pluginAPI = (function() {
     timeout_handlers = [];
   }
 
+  // video //
+    var video_buffers = {}
+    module.getVideoBuffer = function(videoID) {
+      return video_buffers[videoID]
+    }
+
   // audio //
   var context = null;
   var audio_buffers = [];
 
   module.initAudio = function(){
-    context = (jsPsych.initSettings().use_webaudio == true) ? jsPsych.webaudio_context : null;
+    context = (jsPsych.initSettings().use_webaudio === true) ? jsPsych.webaudio_context : null;
   }
 
   module.audioContext = function(){
@@ -2148,8 +2155,8 @@ jsPsych.pluginAPI = (function() {
 
   module.getAudioBuffer = function(audioID) {
 
-    if (audio_buffers[audioID] == 'tmp') {
-      console.error('Audio file failed to load in the time alloted.')
+    if (audio_buffers[audioID] === 'tmp') {
+      console.error('Audio file failed to load in the time allotted.')
       return;
     }
 
@@ -2277,7 +2284,7 @@ jsPsych.pluginAPI = (function() {
     var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
     var finishfn = (typeof callback_complete === 'undefined') ? function() {} : callback_complete;
 
-    if(images.length==0){
+    if(images.length === 0){
       finishfn();
       return;
     }
@@ -2290,7 +2297,7 @@ jsPsych.pluginAPI = (function() {
       img.onload = function() {
         n_loaded++;
         loadfn(n_loaded);
-        if (n_loaded == images.length) {
+        if (n_loaded === images.length) {
           finishfn();
         }
       };
@@ -2316,8 +2323,59 @@ jsPsych.pluginAPI = (function() {
 
   };
 
+    module.preloadVideo = function(video, callback_complete, callback_load) {
+
+        // flatten the images array
+        video = jsPsych.utils.flatten(video);
+        video = jsPsych.utils.unique(video);
+
+        var n_loaded = 0;
+        var loadfn = !callback_load ? function() {} : callback_load;
+        var finishfn = !callback_complete ? function() {} : callback_complete;
+
+        if(video.length===0){
+            finishfn();
+            return;
+        }
+
+        function preload_video(source, count){
+            count = count || 1;
+            //based on option 4 here: http://dinbror.dk/blog/how-to-preload-entire-html5-video-before-play-solved/
+            var request = new XMLHttpRequest();
+            request.open('GET', source, true);
+            request.responseType = 'blob';
+            request.onload = function() {
+                if (this.status === 200) {
+                    var videoBlob = this.response;
+                    video_buffers[source] = URL.createObjectURL(videoBlob); // IE10+
+                    n_loaded++;
+                    loadfn(n_loaded);
+                    if (n_loaded === video.length) {
+                        finishfn();
+                    }
+                }
+            };
+
+            request.onerror = function(){
+                if(count < jsPsych.initSettings().max_preload_attempts){
+                    setTimeout(function(){
+                        preload_video(source, count+1)
+                    }, 200);
+                } else {
+                    jsPsych.loadFail();
+                }
+            }
+            request.send();
+        }
+
+        for (var i = 0; i < video.length; i++) {
+            preload_video(video[i]);
+        }
+
+    };
+
   module.registerPreload = function(plugin_name, parameter, media_type, conditional_function) {
-    if (!(media_type == 'audio' || media_type == 'image')) {
+    if (['audio', 'image', 'video'].indexOf(media_type)===-1) {
       console.error('Invalid media_type parameter for jsPsych.pluginAPI.registerPreload. Please check the plugin file.');
     }
 
@@ -2331,10 +2389,11 @@ jsPsych.pluginAPI = (function() {
     preloads.push(preload);
   }
 
-  module.autoPreload = function(timeline, callback, images, audio, progress_bar) {
+  module.autoPreload = function(timeline, callback, images, audio, video, progress_bar) {
     // list of items to preload
-    images = typeof images === 'undefined' ? [] : images;
-    audio = typeof audio === 'undefined' ? [] : audio;
+    images = images || [];
+    audio = audio || [];
+    video = video || [];
 
     // construct list
     for (var i = 0; i < preloads.length; i++) {
@@ -2344,12 +2403,17 @@ jsPsych.pluginAPI = (function() {
       var func = preloads[i].conditional_function;
       var trials = timeline.trialsOfType(type);
       for (var j = 0; j < trials.length; j++) {
-        if (typeof trials[j][param] !== 'undefined' && typeof trials[j][param] !== 'function') {
-          if ( typeof func == 'undefined' || func(trials[j]) ){
-            if (media == 'image') {
+
+        if (trials[j][param] && typeof trials[j][param] !== 'function') {
+
+          if ( !func  || func(trials[j]) ){
+            if (media === 'image') {
               images = images.concat(jsPsych.utils.flatten([trials[j][param]]));
-            } else if (media == 'audio') {
+            } else if (media === 'audio') {
               audio = audio.concat(jsPsych.utils.flatten([trials[j][param]]));
+            }
+            else if (media === 'video') {
+              video = video.concat(jsPsych.utils.flatten([trials[j][param]]));
             }
           }
         }
@@ -2358,12 +2422,15 @@ jsPsych.pluginAPI = (function() {
 
     images = jsPsych.utils.unique(images);
     audio  = jsPsych.utils.unique(audio);
+    video  = jsPsych.utils.unique(video);
 
     // remove any 0s, nulls, or false values
     images = images.filter(function(x) { return x != false && x != null})
     audio = audio.filter(function(x) { return x != false && x != null})
+    video = video.filter(function(x) { return x != false && x != null})
+    
+    var total_n = images.length + audio.length + video.length;
 
-    var total_n = images.length + audio.length;
     var loaded = 0;
 
     if(progress_bar){
@@ -2386,7 +2453,9 @@ jsPsych.pluginAPI = (function() {
     // wait for the audio files to finish
     module.preloadImages(images, function() {
       module.preloadAudioFiles(audio, function() {
-        callback();
+          module.preloadVideo(video, function() {
+              callback();
+          }, update_loading_progress_bar);
       }, update_loading_progress_bar);
     }, update_loading_progress_bar);
   }
