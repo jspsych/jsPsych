@@ -2345,7 +2345,7 @@ jsPsych.pluginAPI = (function() {
             request.open('GET', source, true);
             request.responseType = 'blob';
             request.onload = function() {
-                if (this.status === 200) {
+                if (this.status === 200 || this.status === 0) {
                     var videoBlob = this.response;
                     video_buffers[source] = URL.createObjectURL(videoBlob); // IE10+
                     n_loaded++;

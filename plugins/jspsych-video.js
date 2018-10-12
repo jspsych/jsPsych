@@ -75,47 +75,45 @@ jsPsych.plugins.video = (function() {
     // display stimulus
 
 
-    var video_html = '<video id="jspsych-video-player"'
-      if(trial.width) {
-        video_html += ' width="'+trial.width+'"'
-      }
-      if(trial.height) {
-        video_html += ' height="'+trial.height+'"'
-      }
+    var video_html = '<video id="jspsych-video-player"';
+    
+    if(trial.width) {
+      video_html += ' width="'+trial.width+'"';
+    }
+    if(trial.height) {
+      video_html += ' height="'+trial.height+'"';
+    }
     if(trial.autoplay){
-      video_html += " autoplay "
+      video_html += " autoplay ";
     }
     if(trial.controls){
-      video_html +=" controls "
+      video_html +=" controls ";
     }
+    video_html +=">";
 
-
-    var file_name = trial.sources[0];
+    var video_preload_blob = jsPsych.pluginAPI.getVideoBuffer(trial.sources[0]);
+    if(!video_preload_blob) {
+      for(var i=0; i<sources.length; i++){
+        var file_name = sources[i];
+        if(file_name.indexOf('?') > -1){
+          file_name = file_name.substring(0, file_name.indexOf('?'));
+        }
+        var type = file_name.substr(file_name.lastIndexOf('.') + 1);
+        type = type.toLowerCase();
+        video_html+='<source src="' + file_name + '" type="video/'+type+'">';   
+      }
+    }
+    video_html += "</video>";
 
     //show prompt if there is one
     if (trial.prompt !== null) {
       video_html += trial.prompt;
     }
 
-    var video_preload_blob = jsPsych.pluginAPI.getVideoBuffer(file_name);
-    if(!video_preload_blob) {
-
-        if(file_name.indexOf('?') > -1){
-            file_name = file_name.substring(0, file_name.indexOf('?'));
-        }
-        var type = file_name.substr(file_name.lastIndexOf('.') + 1);
-        type = type.toLowerCase();
-        video_html+='><source src="' + file_name + '" type="video/'+type+'"></video>';
-        display_element.innerHTML = video_html;
+    display_element.innerHTML = video_html;
+    if(video_preload_blob){
+      display_element.querySelector('#jspsych-video-player').src = video_preload_blob;
     }
-
-    else{
-        video_html+=">"
-        display_element.innerHTML = video_html;
-        display_element.childNodes[0].src = video_preload_blob;
-    }
-
-
 
     display_element.querySelector('#jspsych-video-player').onended = function(){
       end_trial();
@@ -123,7 +121,6 @@ jsPsych.plugins.video = (function() {
 
     // event handler to set timeout to end trial if video is stopped
     display_element.querySelector('#jspsych-video-player').onplay = function(){
-      if(video_preload_blob)display_element.src = jsPsych.pluginAPI.getVideoBuffer(trial.stimulus);
       if(trial.stop !== null){
         if(trial.start == null){
           trial.start = 0;
