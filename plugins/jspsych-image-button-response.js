@@ -118,7 +118,7 @@ jsPsych.plugins["image-button-response"] = (function() {
     display_element.innerHTML = html;
 
     // start timing
-    var start_time = Date.now();
+    var start_time = performance.now();
 
     for (var i = 0; i < trial.choices.length; i++) {
       display_element.querySelector('#jspsych-image-button-response-button-' + i).addEventListener('click', function(e){
@@ -137,7 +137,7 @@ jsPsych.plugins["image-button-response"] = (function() {
     function after_response(choice) {
 
       // measure rt
-      var end_time = Date.now();
+      var end_time = performance.now();
       var rt = end_time - start_time;
       response.button = choice;
       response.rt = rt;

@@ -1,8 +1,11 @@
-/* jspsych-text.js
+/* jspsych-instructions.js
  * Josh de Leeuw
  *
  * This plugin displays text (including HTML formatted strings) during the experiment.
  * Use it to show instructions, provide performance feedback, etc...
+ *
+ * Page numbers can be displayed to help with navigation by setting show_page_number
+ * to true.
  *
  * documentation: docs.jspsych.org
  *
@@ -54,6 +57,12 @@ jsPsych.plugins.instructions = (function() {
         default: false,
         description: 'If true, then a "Previous" and "Next" button will be displayed beneath the instructions.'
       },
+      show_page_number: {
+          type: jsPsych.plugins.parameterType.BOOL,
+          pretty_name: 'Show page number',
+          default: false,
+          description: 'If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons.'
+      },
       button_label_previous: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label previous',
@@ -75,7 +84,7 @@ jsPsych.plugins.instructions = (function() {
 
     var view_history = [];
 
-    var start_time = (new Date()).getTime();
+    var start_time = performance.now();
 
     var last_page_update_time = start_time;
 
@@ -90,24 +99,43 @@ jsPsych.plugins.instructions = (function() {
     }
 
     function show_current_page() {
-      display_element.innerHTML = trial.pages[current_page];
+      var html = trial.pages[current_page];
 
+      var pagenum_display = "";
+      if(trial.show_page_number) {
+          pagenum_display = "<span style='margin: 0 1em;' class='"+
+          "jspsych-instructions-pagenum'>Page "+(current_page+1)+"/"+trial.pages.length+"</span>";
+      }
+     
       if (trial.show_clickable_nav) {
 
         var nav_html = "<div class='jspsych-instructions-nav' style='padding: 10px 0px;'>";
-        if (current_page != 0 && trial.allow_backward) {
-          nav_html += "<button id='jspsych-instructions-back' class='jspsych-btn' style='margin-right: 5px;'>&lt; "+trial.button_label_previous+"</button>";
+        if (trial.allow_backward) {
+          var allowed = (current_page > 0 )? '' : "disabled='disabled'";
+          nav_html += "<button id='jspsych-instructions-back' class='jspsych-btn' style='margin-right: 5px;' "+allowed+">&lt; "+trial.button_label_previous+"</button>";
         }
-        nav_html += "<button id='jspsych-instructions-next' class='jspsych-btn' style='margin-left: 5px;'>"+trial.button_label_next+" &gt;</button></div>"
+        if (trial.pages.length > 1 && trial.show_page_number) {
+            nav_html += pagenum_display;
+        }
+        nav_html += "<button id='jspsych-instructions-next' class='jspsych-btn'"+
+            "style='margin-left: 5px;'>"+trial.button_label_next+
+            " &gt;</button></div>";
 
-        display_element.innerHTML += nav_html;
-
+        html += nav_html;
+        display_element.innerHTML = html;
         if (current_page != 0 && trial.allow_backward) {
           display_element.querySelector('#jspsych-instructions-back').addEventListener('click', btnListener);
         }
 
         display_element.querySelector('#jspsych-instructions-next').addEventListener('click', btnListener);
+      } else {
+        if (trial.show_page_number && trial.pages.length > 1) {
+          // page numbers for non-mouse navigation
+          html += "<div class='jspsych-instructions-pagenum'>"+pagenum_display+"</div>"
+        } 
+        display_element.innerHTML = html;
       }
+      
     }
 
     function next() {
@@ -136,7 +164,7 @@ jsPsych.plugins.instructions = (function() {
 
     function add_current_page_to_view_history() {
 
-      var current_time = (new Date()).getTime();
+      var current_time = performance.now();
 
       var page_view_time = current_time - last_page_update_time;
 
@@ -158,7 +186,7 @@ jsPsych.plugins.instructions = (function() {
 
       var trial_data = {
         "view_history": JSON.stringify(view_history),
-        "rt": (new Date()).getTime() - start_time
+        "rt": performance.now() - start_time
       };
 
       jsPsych.finishTrial(trial_data);
@@ -170,18 +198,18 @@ jsPsych.plugins.instructions = (function() {
       keyboard_listener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: [trial.key_forward, trial.key_backward],
-        rt_method: 'date',
+        rt_method: 'performance',
         persist: false,
         allow_held_key: false
       });
       // check if key is forwards or backwards and update page
-      if (info.key === trial.key_backward || info.key === jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.key_backward)) {
+      if (jsPsych.pluginAPI.compareKeys(info.key, trial.key_backward)) {
         if (current_page !== 0 && trial.allow_backward) {
           back();
         }
       }
 
-      if (info.key === trial.key_forward || info.key === jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.key_forward)) {
+      if (jsPsych.pluginAPI.compareKeys(info.key, trial.key_forward)) {
         next();
       }
 
@@ -193,7 +221,7 @@ jsPsych.plugins.instructions = (function() {
       var keyboard_listener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: [trial.key_forward, trial.key_backward],
-        rt_method: 'date',
+        rt_method: 'performance',
         persist: false
       });
     }

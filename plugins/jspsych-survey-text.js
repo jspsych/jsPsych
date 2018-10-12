@@ -107,7 +107,7 @@ jsPsych.plugins['survey-text'] = (function() {
 
     display_element.querySelector('#jspsych-survey-text-next').addEventListener('click', function() {
       // measure response time
-      var endTime = (new Date()).getTime();
+      var endTime = performance.now();
       var response_time = endTime - startTime;
 
       // create object to hold responses
@@ -132,7 +132,7 @@ jsPsych.plugins['survey-text'] = (function() {
       jsPsych.finishTrial(trialdata);
     });
 
-    var startTime = (new Date()).getTime();
+    var startTime = performance.now();
   };
 
   return plugin;

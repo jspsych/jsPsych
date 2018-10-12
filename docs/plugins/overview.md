@@ -86,6 +86,7 @@ Plugin | Description
 [jspsych&#8209;image&#8209;keyboard&#8209;response](jspsych-image-keyboard-response) | Display an image and allow the subject to respond by pressing a key.
 [jspsych&#8209;image&#8209;slider&#8209;response](jspsych-image-slider-response) | Display an image and allow the subject to respond by moving a slider to indicate a value.
 [jspsych&#8209;instructions](jspsych-instructions) | For displaying instructions to the subject. Allows the subject to navigate between pages of instructions using keys or buttons.
+[jspsych&#8209;RDK](jspsych-RDK) | This plugin displays a Random Dot Kinematogram (RDK) and allows the subject to report the primary direction of motion by pressing a key on the keyboard.
 [jspsych&#8209;reconstruction](jspsych-reconstruction) | The subject interacts with a stimulus by modifying a parameter of the stimulus and observing the change in the stimulus in real-time.
 [jspsych&#8209;resize](jspsych-resize) | Calibrate the display so that materials display with a known physical size.
 [jspsych&#8209;same&#8209;different&#8209;html](jspsych-same-different-html) | A same-different judgment task. An HTML-formatted stimulus is shown, followed by a brief gap, and then another stimulus is shown. The subject indicates whether the stimuli are the same or different.

@@ -29,6 +29,12 @@ var trial = {
 }
 ```
 
+You can also get the current value of the progress bar with `jsPsych.getProgressBarCompleted()`
+
+```js
+var proportion_complete = jsPsych.getProgressBarCompleted();
+```
+
 If you are going to use manual progress bar control, you may want to disable the automatic progress bar updates by setting the `auto_update_progress_bar` property in `jsPsych.init()` to `false`.
 
 ```js

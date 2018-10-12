@@ -1,5 +1,5 @@
-const root = '../';
-const utils = require('./testing-utils.js');
+const root = '../../';
+const utils = require('../testing-utils.js');
 
 beforeEach(function(){
   require(root + 'jspsych.js');

@@ -265,7 +265,7 @@
       var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: [trial.left_category_key, trial.right_category_key],
-        rt_method: 'date',
+        rt_method: 'performance',
         persist: false,
         allow_held_key: false
       });

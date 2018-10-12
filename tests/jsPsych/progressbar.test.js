@@ -1,5 +1,5 @@
-const root = '../';
-const utils = require('./testing-utils.js');
+const root = '../../';
+const utils = require('../testing-utils.js');
 
 beforeEach(function(){
   require(root + 'jspsych.js');
@@ -134,6 +134,68 @@ describe('automatic progress bar', function(){
     utils.pressKey(32);
 
     expect(document.querySelector('#jspsych-progressbar-inner').style.width).toBe('80%');
+
+  });
+
+  test('getProgressBarCompleted() -- manual updates', function(){
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: 'foo',
+      on_finish: function(){
+        jsPsych.setProgressBar(0.2);
+      }
+    }
+
+    var trial_2 = {
+      type: 'html-keyboard-response',
+      stimulus: 'foo',
+      on_finish: function(){
+        jsPsych.setProgressBar(0.8);
+      }
+    }
+
+    jsPsych.init({
+      timeline: [trial, trial_2],
+      show_progress_bar: true,
+      auto_update_progress_bar: false
+    });
+
+    utils.pressKey(32);
+
+    expect(jsPsych.getProgressBarCompleted()).toBe(0.2);
+
+    utils.pressKey(32);
+
+    expect(jsPsych.getProgressBarCompleted()).toBe(0.8);
+
+  });
+
+  test('getProgressBarCompleted() -- automatic updates', function(){
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: 'foo'
+    }
+
+    jsPsych.init({
+      timeline: [trial, trial, trial, trial],
+      show_progress_bar: true
+    });
+
+    utils.pressKey(32);
+
+    expect(jsPsych.getProgressBarCompleted()).toBe(0.25);
+
+    utils.pressKey(32);
+
+    expect(jsPsych.getProgressBarCompleted()).toBe(0.50);
+
+    utils.pressKey(32);
+
+    expect(jsPsych.getProgressBarCompleted()).toBe(0.75);
+
+    utils.pressKey(32);
+
+    expect(jsPsych.getProgressBarCompleted()).toBe(1);
 
   });
 

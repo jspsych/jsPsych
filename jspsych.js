@@ -85,6 +85,9 @@ window.jsPsych = (function() {
       'on_interaction_data_update': function(data){
         return undefined;
       },
+      'on_close': function(){
+        return undefined;
+      },
       'preload_images': [],
       'preload_audio': [],
       'preload_video': [],
@@ -160,6 +163,9 @@ window.jsPsych = (function() {
     jsPsych.pluginAPI.createKeyboardEventListeners(opts.display_element);
     // create listeners for user browser interaction
     jsPsych.data.createInteractionListeners();
+
+    // add event for closing window
+    window.addEventListener('beforeunload', opts.on_close);
 
     // check exclusions before continuing
     checkExclusions(opts.exclusions,
@@ -776,7 +782,6 @@ window.jsPsych = (function() {
     }
 
     global_trial_index++;
-    current_trial_finished = false;
 
     // advance timeline
     timeline.markCurrentTrialComplete();
@@ -799,6 +804,7 @@ window.jsPsych = (function() {
   function doTrial(trial) {
 
     current_trial = trial;
+    current_trial_finished = false;
 
     // process all timeline variables for this trial
     evaluateTimelineVariables(trial);
@@ -816,6 +822,12 @@ window.jsPsych = (function() {
     if(typeof trial.on_start == 'function'){
       trial.on_start(trial);
     }
+
+    // apply the focus to the element containing the experiment.
+    DOM_container.focus();
+
+    // reset the scroll on the DOM target
+    DOM_target.scrollTop = 0;
 
     // execute trial method
     jsPsych.plugins[trial.type].trial(DOM_target, trial);
@@ -938,14 +950,20 @@ window.jsPsych = (function() {
   }
 
   function updateProgressBar() {
-    var progress = jsPsych.progress();
-
-    document.querySelector('#jspsych-progressbar-inner').style.width = progress.percent_complete + "%";
+    var progress = jsPsych.progress().percent_complete;
+    core.setProgressBar(progress / 100);
   }
+
+  var progress_bar_amount = 0;
 
   core.setProgressBar = function(proportion_complete){
     proportion_complete = Math.max(Math.min(1,proportion_complete),0);
     document.querySelector('#jspsych-progressbar-inner').style.width = (proportion_complete*100) + "%";
+    progress_bar_amount = proportion_complete;
+  }
+
+  core.getProgressBarCompleted = function(){
+    return progress_bar_amount;
   }
 
   //Leave a trace in the DOM that jspsych was loaded
@@ -1693,7 +1711,7 @@ jsPsych.randomization = (function() {
     }
 
     var random_shuffle = shuffle(arr);
-    for (var i = 0; i < random_shuffle.length - 2; i++) {
+    for (var i = 0; i < random_shuffle.length - 1; i++) {
       if (equalityTest(random_shuffle[i], random_shuffle[i + 1])) {
         // neighbors are equal, pick a new random neighbor to swap (not the first or last element, to avoid edge cases)
         var random_pick = Math.floor(Math.random() * (random_shuffle.length - 2)) + 1;
@@ -1873,16 +1891,14 @@ jsPsych.pluginAPI = (function() {
   module.getKeyboardResponse = function(parameters) {
     //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key?
 
-    parameters.rt_method = (typeof parameters.rt_method === 'undefined') ? 'date' : parameters.rt_method;
-    if (parameters.rt_method != 'date' && parameters.rt_method != 'performance' && parameters.rt_method != 'audio') {
-      console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "date" method.');
-      parameters.rt_method = 'date';
+    parameters.rt_method = (typeof parameters.rt_method === 'undefined') ? 'performance' : parameters.rt_method;
+    if (parameters.rt_method != 'performance' && parameters.rt_method != 'audio') {
+      console.log('Invalid RT method specified in getKeyboardResponse. Defaulting to "performance" method.');
+      parameters.rt_method = 'performance';
     }
 
     var start_time;
-    if (parameters.rt_method == 'date') {
-      start_time = (new Date()).getTime();
-    } else if (parameters.rt_method == 'performance') {
+    if (parameters.rt_method == 'performance') {
       start_time = performance.now();
     } else if (parameters.rt_method == 'audio') {
       start_time = parameters.audio_context_start_time;
@@ -1893,9 +1909,7 @@ jsPsych.pluginAPI = (function() {
     var listener_function = function(e) {
 
       var key_time;
-      if (parameters.rt_method == 'date') {
-        key_time = (new Date()).getTime();
-      } else if (parameters.rt_method == 'performance') {
+      if (parameters.rt_method == 'performance') {
         key_time = performance.now();
       } else if (parameters.rt_method == 'audio') {
         key_time = parameters.audio_context.currentTime
@@ -1931,6 +1945,9 @@ jsPsych.pluginAPI = (function() {
       }
 
       if (valid_response) {
+        // if this is a valid response, then we don't want the key event to trigger other actions
+        // like scrolling via the spacebar.
+        e.preventDefault();
 
         parameters.callback_function({
           key: e.keyCode,
@@ -2407,7 +2424,13 @@ jsPsych.pluginAPI = (function() {
     audio  = jsPsych.utils.unique(audio);
     video  = jsPsych.utils.unique(video);
 
+    // remove any 0s, nulls, or false values
+    images = images.filter(function(x) { return x != false && x != null})
+    audio = audio.filter(function(x) { return x != false && x != null})
+    video = video.filter(function(x) { return x != false && x != null})
+    
     var total_n = images.length + audio.length + video.length;
+
     var loaded = 0;
 
     if(progress_bar){

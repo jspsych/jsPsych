@@ -50,7 +50,7 @@ jsPsych.plugins['image-slider-response'] = (function() {
         description: 'Sets the step of the slider'
       },
       labels: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.HTML_STRING,
         pretty_name:'Labels',
         default: [],
         array: true,
@@ -124,7 +124,7 @@ jsPsych.plugins['image-slider-response'] = (function() {
 
     display_element.querySelector('#jspsych-image-slider-response-next').addEventListener('click', function() {
       // measure response time
-      var endTime = (new Date()).getTime();
+      var endTime = performance.now();
       response.rt = endTime - startTime;
       response.response = display_element.querySelector('#jspsych-image-slider-response-response').value;
 
@@ -165,7 +165,7 @@ jsPsych.plugins['image-slider-response'] = (function() {
       }, trial.trial_duration);
     }
 
-    var startTime = (new Date()).getTime();
+    var startTime = performance.now();
   };
 
   return plugin;

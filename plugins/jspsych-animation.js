@@ -61,7 +61,7 @@ jsPsych.plugins.animation = (function() {
     var interval_time = trial.frame_time + trial.frame_isi;
     var animate_frame = -1;
     var reps = 0;
-    var startTime = (new Date()).getTime();
+    var startTime = performance.now();
     var animation_sequence = [];
     var responses = [];
     var current_stim = "";
@@ -93,7 +93,7 @@ jsPsych.plugins.animation = (function() {
       // record when image was shown
       animation_sequence.push({
         "stimulus": trial.stimuli[animate_frame],
-        "time": (new Date()).getTime() - startTime
+        "time": performance.now() - startTime
       });
 
       if (trial.prompt !== null) {
@@ -107,7 +107,7 @@ jsPsych.plugins.animation = (function() {
           // record when blank image was shown
           animation_sequence.push({
             "stimulus": 'blank',
-            "time": (new Date()).getTime() - startTime
+            "time": performance.now() - startTime
           });
         }, trial.frame_time);
       }
@@ -132,7 +132,7 @@ jsPsych.plugins.animation = (function() {
     var response_listener = jsPsych.pluginAPI.getKeyboardResponse({
       callback_function: after_response,
       valid_responses: trial.choices,
-      rt_method: 'date',
+      rt_method: 'performance',
       persist: true,
       allow_held_key: false
     });

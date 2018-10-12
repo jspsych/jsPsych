@@ -86,7 +86,13 @@ Cancels a specific keyboard listener created by `jsPsych.pluginAPI.getKeyboardRe
 
 ```javascript
 // create a persistent keyboard listener
-var listener_id = jsPsych.pluginAPI.getKeyboardResponse(after_response, ['p','q'], 'date', true);
+var listener_id = jsPsych.pluginAPI.getKeyboardResponse({
+    callback_function: after_response, 
+    valid_responses: ['p','q'], 
+    rt_method: 'performance', 
+    persist: true,
+    allow_held_key: false
+});
 
 // cancel keyboard listener
 jsPsych.pluginAPI.cancelKeyboardResponse(listener_id);
@@ -252,7 +258,7 @@ Parameter | Type | Description
 ----------|------|------------
 callback_function | function | The function to execute whenever a valid keyboard response is generated.
 valid_responses | array | An array of key codes or character strings representing valid responses. Responses not on the list will be ignored. An empty array indicates that all responses are acceptable.
-rt_method | string | Indicates which method of recording time to use. The `'date'` method uses calls to `(new Date()).getTime()` to record timing information. The `'performance'` method uses calls to `performance.now()`, which is a more modern JavaScript feature. The `'performance'` approach is [not supported by all the major browsers yet](http://caniuse.com/#search=performance), but adoption rates are increasing. The `audio` method is used in conjuction with an `audio_context` (set as an additional parameter). This uses the clock time of the `audio_context` when audio stimuli are being played.
+rt_method | string | Indicates which method of recording time to use. The `'performance'` method uses calls to `performance.now()`, which is the standard way of measuring timing in jsPsych. It is [supported by up-to-date versions of all the major browsers](http://caniuse.com/#search=performance). The `audio` method is used in conjuction with an `audio_context` (set as an additional parameter). This uses the clock time of the `audio_context` when audio stimuli are being played.
 audio_context | AudioContext object | The AudioContext of the audio file that is being played.
 audio_context_start_time | numeric | The scheduled time of the sound file in the AudioContext. This will be used as the start time.
 allow_held_key | boolean | If `true`, then responses will be registered from keys that are being held down. If `false`, then a held key can only register a response the first time that `getKeyboardResponse` is called for that key. For example, if a participant holds down the `A` key before the experiment starts, then the first time `getKeyboardResponse` is called, the `A` will register as a key press. However, any future calls to `getKeyboardResponse` will not register the `A` until the participant releases the key and presses it again.
@@ -281,8 +287,8 @@ var after_response = function(info){
 
 jsPsych.pluginAPI.getKeyboardResponse({
   callback_function:after_response,
-  valid_responses: [],
-  rt_method: 'date',
+  valid_responses: jsPsych.ALL_KEYS,
+  rt_method: 'performance',
   persist: false
 });
 ```
@@ -300,8 +306,8 @@ var after_response = function(info){
 
 var listener = jsPsych.pluginAPI.getKeyboardResponse({
   callback_function:after_response,
-  valid_responses: [],
-  rt_method: 'date',
+  valid_responses: jsPsych.ALL_KEYS,
+  rt_method: 'performance',
   persist: true
 });
 ```

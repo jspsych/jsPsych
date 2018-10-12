@@ -11,6 +11,7 @@ Parameters with a default value of *undefined* must be specified. Other paramete
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 func | function | *undefined* | The function to call.
+async | boolean | `false` | Set to true if `func` is an asynchoronous function. If this is true, then the first argument passed to `func` will be a callback that you should call when the async operation is complete. You can pass data to the callback. See example below.
 
 
 ## Data Generated
@@ -31,7 +32,7 @@ var myfunc = function() {
 	return 'you called?';
 }
 
-var block = {
+var trial = {
 	type: 'call-function',
 	func: myfunc
 }
@@ -47,8 +48,33 @@ var myfunc = function(data){
 	// the data to a database.
 }
 
-var block = {
+var trial = {
 	type: 'call-function',
 	func: function(){ myfunc(jsPsych.data.get())}
 }
 ```
+
+#### Async function call
+
+```javascript
+var trial = {
+	type: 'call-function',
+	async: true,
+	func: function(done){
+		// can perform async operations here like
+		// creating an XMLHttpRequest to communicate
+		// with a server
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var response_data = xhttp.responseText;
+				// line below is what causes jsPsych to 
+				// continue to next trial. response_data
+				// will be stored in jsPsych data object.
+				done(response_data);
+			}
+		};
+		xhttp.open("GET", "path_to_server_script.php", true);
+		xhttp.send();
+	}
+}
