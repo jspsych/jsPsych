@@ -793,6 +793,7 @@ jsPsych.plugins["RDK"] = (function() {
 					lifeCount: Math.floor(randomNumberBetween(0, dotLife)), //Counter for the dot's life. Updates every time it is shown in a frame
 					updateType: "" //String to determine how this dot is updated
 				};
+				
 				//randomly set the x and y coordinates
 				dot = resetLocation(dot);
 
@@ -803,6 +804,11 @@ jsPsych.plugins["RDK"] = (function() {
 						dot = setvxvy(dot); // Set dot.vx and dot.vy
 						dot.updateType = "constant direction";
 					}
+			        //For opposite coherent dots
+			        else if(i >= nCoherentDots && i < (nCoherentDots + nOppositeCoherentDots)){
+								dot = setvxvy(dot); // Set dot.vx and dot.vy
+			          dot.updateType = "opposite direction";
+			        }
 					//For incoherent dots
 					else {
 						dot.updateType = "random position";
@@ -816,6 +822,11 @@ jsPsych.plugins["RDK"] = (function() {
 						dot = setvxvy(dot); // Set dot.vx and dot.vy
 						dot.updateType = "constant direction";
 					}
+        			//For opposite coherent dots
+        			else if(i >= nCoherentDots && i < (nCoherentDots + nOppositeCoherentDots)){
+								dot = setvxvy(dot); // Set dot.vx and dot.vy
+        			  dot.updateType = "opposite direction";
+        			}
 					//For incoherent dots
 					else {
 						dot.updateType = "random walk";
@@ -829,6 +840,11 @@ jsPsych.plugins["RDK"] = (function() {
 						dot = setvxvy(dot); // Set dot.vx and dot.vy
 						dot.updateType = "constant direction";
 					}
+        			//For opposite coherent dots
+        			else if(i >= nCoherentDots && i < (nCoherentDots + nOppositeCoherentDots)){
+								dot = setvxvy(dot); // Set dot.vx and dot.vy
+        			  dot.updateType = "opposite direction";
+        			}
 					//For incoherent dots
 					else {
 						setvx2vy2(dot); // Set dot.vx2 and dot.vy2
@@ -840,14 +856,14 @@ jsPsych.plugins["RDK"] = (function() {
 				if (RDK == 4) {
 					//For all dots
 					dot = setvxvy(dot); // Set dot.vx and dot.vy
-					dot.updateType = "constant direction or random position";
+					dot.updateType = "constant direction or opposite direction or random position";
 				} //End of RDK==4
 
 				//For the different && random walk RDK type
 				if (RDK == 5) {
 					//For all dots
 					dot = setvxvy(dot); // Set dot.vx and dot.vy
-					dot.updateType = "constant direction or random walk";
+					dot.updateType = "constant direction or opposite direction or random walk";
 				} //End of RDK==5
 
 				//For the different && random direction RDK type
@@ -856,7 +872,7 @@ jsPsych.plugins["RDK"] = (function() {
 					dot = setvxvy(dot); // Set dot.vx and dot.vy
 					//Each dot will have its own alternate direction of motion
 					setvx2vy2(dot); // Set dot.vx2 and dot.vy2
-					dot.updateType = "constant direction or random direction";
+					dot.updateType = "constant direction or opposite direction or random direction";
 				} //End of RDK==6
 
 				tempArray.push(dot);
@@ -867,7 +883,7 @@ jsPsych.plugins["RDK"] = (function() {
 		//Function to update all the dots all the apertures and then draw them
 		function updateAndDraw(){
       
-      //Three for loops that do things in sequence: clear, update, and draw dots.
+        	//Three for loops that do things in sequence: clear, update, and draw dots.
 			
 			// Clear all the current dots
 			for(currentApertureNumber = 0; currentApertureNumber < nApertures; currentApertureNumber++){
@@ -875,10 +891,9 @@ jsPsych.plugins["RDK"] = (function() {
 				//Initialize the variables for each parameter
 				initializeCurrentApertureParameters(currentApertureNumber);
 				
-        //Clear the canvas by drawing over the current dots
-        clearDots();
-        
-      }
+		        //Clear the canvas by drawing over the current dots
+		        clearDots();
+      		}
 			
 			// Update all the relevant dots
 			for(currentApertureNumber = 0; currentApertureNumber < nApertures; currentApertureNumber++){
@@ -888,8 +903,7 @@ jsPsych.plugins["RDK"] = (function() {
 				
 				//Update the dots
 				updateDots();
-        
-      }
+      		}
 			
 			// Draw all the relevant dots on the canvas
 			for(currentApertureNumber = 0; currentApertureNumber < nApertures; currentApertureNumber++){
@@ -905,24 +919,24 @@ jsPsych.plugins["RDK"] = (function() {
 		//Function that clears the dots on the canvas by drawing over it with the color of the baclground
 	    function clearDots(){
       
-      //Load in the current set of dot array for easy handling
-      var dotArray = dotArray2d[currentSetArray[currentApertureNumber]];
-	      
-	      //Loop through the dots one by one and draw them
-				for (var i = 0; i < nDots; i++) {
-					dot = dotArray[i];
-					ctx.beginPath();
-					ctx.arc(dot.x, dot.y, dotRadius+1, 0, Math.PI * 2);
-					ctx.fillStyle = backgroundColor;
-					ctx.fill();
-				}
-	    }
+	    	//Load in the current set of dot array for easy handling
+	    	var dotArray = dotArray2d[currentSetArray[currentApertureNumber]];
+			    
+			//Loop through the dots one by one and draw them
+			for (var i = 0; i < nDots; i++) {
+				dot = dotArray[i];
+				ctx.beginPath();
+				ctx.arc(dot.x, dot.y, dotRadius+1, 0, Math.PI * 2);
+				ctx.fillStyle = backgroundColor;
+				ctx.fill();
+			}
+		}
 
 		//Draw the dots on the canvas after they're updated
 		function draw() {
       
-      //Load in the current set of dot array for easy handling
-      var dotArray = dotArray2d[currentSetArray[currentApertureNumber]];
+    		//Load in the current set of dot array for easy handling
+    		var dotArray = dotArray2d[currentSetArray[currentApertureNumber]];
       
 			//Loop through the dots one by one and draw them
 			for (var i = 0; i < nDots; i++) {
@@ -936,21 +950,21 @@ jsPsych.plugins["RDK"] = (function() {
 		    //Draw the fixation cross if we want it
 		    if(fixationCross === true){
 		      
-		      //Horizontal line
-		      ctx.beginPath();
-		      ctx.lineWidth = fixationCrossThickness;
-		      ctx.moveTo(canvasWidth/2 - fixationCrossWidth, canvasHeight/2);
-		      ctx.lineTo(canvasWidth/2 + fixationCrossWidth, canvasHeight/2);
-		      ctx.fillStyle = fixationCrossColor;
-		      ctx.stroke();
-		      
-		      //Vertical line
-		      ctx.beginPath();
-		      ctx.lineWidth = fixationCrossThickness;
-		      ctx.moveTo(canvasWidth/2, canvasHeight/2 - fixationCrossHeight);
-		      ctx.lineTo(canvasWidth/2, canvasHeight/2 + fixationCrossHeight);
-		      ctx.fillStyle = fixationCrossColor;
-		      ctx.stroke();
+		    	//Horizontal line
+		    	ctx.beginPath();
+		    	ctx.lineWidth = fixationCrossThickness;
+		    	ctx.moveTo(canvasWidth/2 - fixationCrossWidth, canvasHeight/2);
+		    	ctx.lineTo(canvasWidth/2 + fixationCrossWidth, canvasHeight/2);
+		    	ctx.fillStyle = fixationCrossColor;
+		    	ctx.stroke();
+		    	
+		    	//Vertical line
+		    	ctx.beginPath();
+		    	ctx.lineWidth = fixationCrossThickness;
+		    	ctx.moveTo(canvasWidth/2, canvasHeight/2 - fixationCrossHeight);
+		    	ctx.lineTo(canvasWidth/2, canvasHeight/2 + fixationCrossHeight);
+		    	ctx.fillStyle = fixationCrossColor;
+		    	ctx.stroke();
 		    }
       
 	      	//Draw the border if we want it
@@ -986,8 +1000,8 @@ jsPsych.plugins["RDK"] = (function() {
 				currentSetArray[currentApertureNumber] = currentSetArray[currentApertureNumber] + 1;
 			}
       
-      //Load in the current set of dot array for easy handling
-      var dotArray = dotArray2d[currentSetArray[currentApertureNumber]];
+    		//Load in the current set of dot array for easy handling
+    		var dotArray = dotArray2d[currentSetArray[currentApertureNumber]];
 			
 			//Load in the current set of dot array for easy handling
 			//dotArray = dotArray2d[currentSetArray[currentApertureNumber]]; //Global variable, so the draw function also uses this array
@@ -995,38 +1009,50 @@ jsPsych.plugins["RDK"] = (function() {
 			//Loop through the dots one by one and update them accordingly
 			for (var i = 0; i < nDots; i++) {
 				var dot = dotArray[i]; //Load the current dot into the variable for easy handling
+        
+			    //Generate a random value
+			    var randomValue = Math.random();
 
 				//Update based on the dot's update type
 				if (dot.updateType == "constant direction") {
 					dot = constantDirectionUpdate(dot);
+				} else if (dot.updateType == "opposite direction") {
+					dot = oppositeDirectionUpdate(dot);
 				} else if (dot.updateType == "random position") {
 					dot = resetLocation(dot);
 				} else if (dot.updateType == "random walk") {
 					dot = randomWalkUpdate(dot);
 				} else if (dot.updateType == "random direction") {
 					dot = randomDirectionUpdate(dot);
-				} else if (dot.updateType == "constant direction or random position") {
+				} else if (dot.updateType == "constant direction or opposite direction or random position") {
+			        
 					//Randomly select if the dot goes in a constant direction or random position, weighted based on the coherence level
-					if (Math.random() < coherence) {
+					if (randomValue < coherence) {
 						dot = constantDirectionUpdate(dot);
-					} else {
+					}  else if(randomValue >= coherence && randomValue < (coherence + oppositeCoherence)){
+						dot = oppositeDirectionUpdate(dot);
+					}  else {
 						dot = resetLocation(dot);
 					}
-				} else if (dot.updateType == "constant direction or random walk") {
+				} else if (dot.updateType == "constant direction or opposite direction or random walk") {
 					//Randomly select if the dot goes in a constant direction or random walk, weighted based on the coherence level
-					if (Math.random() < coherence) {
+					if (randomValue < coherence) {
 						dot = constantDirectionUpdate(dot);
+					} else if(randomValue >= coherence && randomValue < (coherence + oppositeCoherence)){
+						dot = oppositeDirectionUpdate(dot);
 					} else {
 						dot = randomWalkUpdate(dot);
 					}
-				} else if (dot.updateType == "constant direction or random direction") {
+				} else if (dot.updateType == "constant direction or opposite direction or random direction") {
 					//Randomly select if the dot goes in a constant direction or random direction, weighted based on the coherence level
-					if (Math.random() < coherence) {
+					if (randomValue < coherence) {
 						dot = constantDirectionUpdate(dot);
+					} else if(randomValue >= coherence && randomValue < (coherence + oppositeCoherence)){
+						dot = oppositeDirectionUpdate(dot);
 					} else {
 						dot = randomDirectionUpdate(dot);
 					}
-				}
+				}//End of if dot.updateType == ...
 
 				//Increment the life count
 				dot.lifeCount++;
@@ -1113,6 +1139,15 @@ jsPsych.plugins["RDK"] = (function() {
 			dot.y += dot.vy;
 			dot.latestXMove = dot.vx;
 			dot.latestYMove = dot.vy;
+			return dot;
+		}
+
+	 	//Updates the x and y coordinates by moving it in the opposite x and y coherent directions
+		function oppositeDirectionUpdate(dot) {
+			dot.x -= dot.vx;
+			dot.y -= dot.vy;
+			dot.latestXMove = -dot.vx;
+			dot.latestYMove = -dot.vy;
 			return dot;
 		}
 
