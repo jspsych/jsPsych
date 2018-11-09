@@ -55,4 +55,28 @@ describe('survey-text plugin', function(){
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});
 
+	test('required parameter works', function(){
+		var trial = {
+			type: 'survey-text',
+			questions: [
+				{prompt: "How old are you?", columns: 50, required: true},
+				{prompt: "Where were you born?", columns: 20}
+			]
+		}
+
+		jsPsych.init({
+			timeline: [trial]
+		});
+
+		utils.clickTarget(document.querySelector('#jspsych-survey-text-next'));
+
+		expect(jsPsych.getDisplayElement().innerHTML).not.toBe('');
+
+		document.querySelector('input[name="#jspsych-survey-text-response-0"]').value = "100";
+
+		utils.clickTarget(document.querySelector('#jspsych-survey-text-next'));
+
+		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
+	});
+
 });
