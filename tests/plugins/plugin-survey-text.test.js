@@ -55,7 +55,8 @@ describe('survey-text plugin', function(){
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});
 
-	test('required parameter works', function(){
+	// might be useful: https://github.com/jsdom/jsdom/issues/544
+	test.skip('required parameter works', function(){
 		var trial = {
 			type: 'survey-text',
 			questions: [
@@ -67,6 +68,8 @@ describe('survey-text plugin', function(){
 		jsPsych.init({
 			timeline: [trial]
 		});
+
+		expect(jsPsych.getDisplayElement().querySelectorAll('p.jspsych-survey-text').length).toBe(2);
 
 		utils.clickTarget(document.querySelector('#jspsych-survey-text-next'));
 
