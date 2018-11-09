@@ -46,6 +46,12 @@ jsPsych.plugins['survey-text'] = (function() {
             pretty_name: 'Columns',
             default: 40,
             description: 'The number of columns for the response text box.'
+          },
+          required: {
+            type: jsPsych.plugins.parameterType.BOOL,
+            pretty_name: 'Required',
+            default: false,
+            description: 'Require a response'
           }
         }
       },
@@ -87,25 +93,29 @@ jsPsych.plugins['survey-text'] = (function() {
     if(trial.preamble !== null){
       html += '<div id="jspsych-survey-text-preamble" class="jspsych-survey-text-preamble">'+trial.preamble+'</div>';
     }
+    // start form
+    html += '<form id="jspsych-survey-text-form">'
     // add questions
     for (var i = 0; i < trial.questions.length; i++) {
       html += '<div id="jspsych-survey-text-"'+i+'" class="jspsych-survey-text-question" style="margin: 2em 0em;">';
       html += '<p class="jspsych-survey-text">' + trial.questions[i].prompt + '</p>';
       var autofocus = i == 0 ? "autofocus" : "";
+      var req = trial.questions[i].required ? "required" : "";
       if(trial.questions[i].rows == 1){
-        html += '<input type="text" name="#jspsych-survey-text-response-' + i + '" size="'+trial.questions[i].columns+'" value="'+trial.questions[i].value+'" '+autofocus+'></input>';
+        html += '<input type="text" name="#jspsych-survey-text-response-' + i + '" size="'+trial.questions[i].columns+'" value="'+trial.questions[i].value+'" '+autofocus+' '+req+'></input>';
       } else {
-        html += '<textarea name="#jspsych-survey-text-response-' + i + '" cols="' + trial.questions[i].columns + '" rows="' + trial.questions[i].rows + '" '+autofocus+'>'+trial.questions[i].value+'</textarea>';
+        html += '<textarea name="#jspsych-survey-text-response-' + i + '" cols="' + trial.questions[i].columns + '" rows="' + trial.questions[i].rows + '" '+autofocus+' '+req+'>'+trial.questions[i].value+'</textarea>';
       }
       html += '</div>';
     }
 
     // add submit button
-    html += '<button id="jspsych-survey-text-next" class="jspsych-btn jspsych-survey-text">'+trial.button_label+'</button>';
+    html += '<input type="submit" id="jspsych-survey-text-next" class="jspsych-btn jspsych-survey-text" value="'+trial.button_label+'"></input>';
 
+    html += '</form>'
     display_element.innerHTML = html;
 
-    display_element.querySelector('#jspsych-survey-text-next').addEventListener('click', function() {
+    display_element.querySelector('#jspsych-survey-text-form').addEventListener('submit', function() {
       // measure response time
       var endTime = performance.now();
       var response_time = endTime - startTime;
