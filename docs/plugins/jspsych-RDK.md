@@ -93,7 +93,7 @@ var trial_left = {
 
 ```javascript
 var test_block = {
-	type: "RDK", 
+	type: "rdk", 
 	post_trial_gap: 0,
 	number_of_dots: 200,
 	RDK_type: 3,
@@ -108,7 +108,7 @@ var test_block = {
 
 ```javascript
 var test_block = {
-    type: "RDK", 
+    type: "rdk", 
     number_of_apertures: 3, //This needs to be set if more than one aperture
     trial_duration: 10000,
     RDK_type: 3, //Applied to all apertures if only one value

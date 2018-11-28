@@ -29,12 +29,12 @@
 */
 		
 		
-jsPsych.plugins["RDK"] = (function() {
+jsPsych.plugins["rdk"] = (function() {
 
 	var plugin = {};
 	
 	plugin.info = {
-	    name: "RDK",
+	    name: "rdk",
 	    parameters: {
 		    choices: {
 		      type: jsPsych.plugins.parameterType.INT,
@@ -260,7 +260,7 @@ jsPsych.plugins["RDK"] = (function() {
 		trial.fixation_cross_thickness = assignParameterValue(trial.fixation_cross_thickness, 1);
 		trial.border = assignParameterValue(trial.border, false);
 		trial.border_thickness = assignParameterValue(trial.border_thickness, 1);
-		trial.border_color = assignParameterValue(trial.borderColor, "black");
+		trial.border_color = assignParameterValue(trial.border_color, "black");
 		
 		
 		//For square and circle, set the aperture height == aperture width
