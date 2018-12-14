@@ -97,7 +97,7 @@ jsPsych.plugins['survey-text'] = (function() {
     html += '<form id="jspsych-survey-text-form">'
     // add questions
     for (var i = 0; i < trial.questions.length; i++) {
-      html += '<div id="jspsych-survey-text-"'+i+'" class="jspsych-survey-text-question" style="margin: 2em 0em;">';
+      html += '<div id="jspsych-survey-text-'+i+'" class="jspsych-survey-text-question" style="margin: 2em 0em;">';
       html += '<p class="jspsych-survey-text">' + trial.questions[i].prompt + '</p>';
       var autofocus = i == 0 ? "autofocus" : "";
       var req = trial.questions[i].required ? "required" : "";
