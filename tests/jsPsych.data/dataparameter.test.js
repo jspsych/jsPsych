@@ -226,4 +226,26 @@ describe('The data parameter', function(){
       //resolve();
     })).then(function(data) { expect(data).toBe(2) });
   });
+
+  test('should accept a function as a parameter', function(done){
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: 'foo',
+      data: {
+        a: function(){ return 1; }
+      }
+    }
+
+    var timeline = [trial];
+
+    jsPsych.init({
+      timeline: timeline,
+      on_finish: function(){
+        expect(jsPsych.data.get().values()[0].a).toBe(1);
+        done();
+      }
+    })
+
+    utils.pressKey(32);
+  })
 });

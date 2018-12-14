@@ -856,21 +856,39 @@ window.jsPsych = (function() {
   function evaluateFunctionParameters(trial){
 
     // first, eval the trial type if it is a function
+    // this lets users set the plugin type with a function
     if(typeof trial.type === 'function'){
       trial.type = trial.type.call();
     }
 
     // now eval the whole trial
+
+    // start by getting a list of the parameters
     var keys = Object.keys(trial);
 
+    // iterate over each parameter
     for (var i = 0; i < keys.length; i++) {
+      // check to make sure parameter is not "type", since that was eval'd above.
       if(keys[i] !== 'type'){
+        // this if statement is checking to see if the parameter type is expected to be a function, in which case we should NOT evaluate it.
+        // the first line checks if the parameter is defined in the universalPluginParameters set
+        // the second line checks the plugin-specific parameters
         if(
           (typeof jsPsych.plugins.universalPluginParameters[keys[i]] !== 'undefined' && jsPsych.plugins.universalPluginParameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION ) ||
           (typeof jsPsych.plugins[trial.type].info.parameters[keys[i]] !== 'undefined' && jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION)
         ) {
           if (typeof trial[keys[i]] == "function") {
             trial[keys[i]] = trial[keys[i]].call();
+          }
+        }
+      }
+      // add a special exception for the data parameter so we can evaluate functions. eventually this could be generalized so that any COMPLEX object type could
+      // be evaluated at the individual parameter level.
+      if(keys[i] == 'data'){
+        var data_params = Object.keys(trial[keys[i]]);
+        for(var j=0; j<data_params.length; j++){
+          if(typeof trial[keys[i]][data_params[j]] == "function") {
+            trial[keys[i]][data_params[j]] = trial[keys[i]][data_params[j]].call();
           }
         }
       }
