@@ -65,6 +65,12 @@ jsPsych.plugins.video = (function() {
         pretty_name: 'Stop',
         default: null,
         description: 'Time to stop the clip.'
+      },
+      rate: {
+        type: jsPsych.plugins.parameterType.FLOAT,
+        pretty_name: 'Rate',
+        default: null,
+        description: 'The playback rate of the video. 1 is normal, <1 is slower, >1 is faster.'
       }
     }
   }
@@ -131,6 +137,10 @@ jsPsych.plugins.video = (function() {
 
     if(trial.start !== null){
       display_element.querySelector('#jspsych-video-player').currentTime = trial.start;
+    }
+
+    if(trial.rate !== null){
+      display_element.querySelector('#jspsych-video-player').playbackRate = trial.rate;
     }
 
     // function to end trial when it is time
