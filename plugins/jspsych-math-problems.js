@@ -102,6 +102,7 @@ jsPsych.plugins['math-problems'] = (function () {
             };
 
             jsPsych.pluginAPI.setTimeout(function () {
+                display_element.innerHTML = '';
                 jsPsych.finishTrial(trial_data);
             }, trial.feedback_duration);
         }
