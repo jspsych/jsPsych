@@ -1,27 +1,27 @@
 /**
- * jsPsych plugin for posing math problems.
- * @name jspsych-math-problems
+ * jsPsych plugin for validating numerical responses.
+ * @name jspsych-html-numerical-response
  * @author Daan Beverdam
  **/
 
-jsPsych.plugins['math-problems'] = (function () {
+jsPsych.plugins['html-numerical-response'] = (function () {
     var plugin = {};
 
     plugin.info = {
-        name: 'math-problems',
-        description: 'A plugin for posing math problems.',
+        name: 'html-numerical-response',
+        description: 'A plugin for displaying a stimulus and validating numerical responses.',
         parameters: {
-            problem: {
-                type: jsPsych.plugins.parameterType.STRING,
-                pretty_name: 'Problem',
+            stimulus: {
+                type: jsPsych.plugins.parameterType.HTML_STRING,
+                pretty_name: 'Stimulus',
                 default: undefined,
-                description: 'Human readable math problem to solve.'
+                description: 'HTML string to be displayed.'
             },
-            solution: {
+            correct_response: {
                 type: jsPsych.plugins.parameterType.NUMBER,
-                pretty_name: 'Solution',
+                pretty_name: 'Correct response',
                 default: undefined,
-                description: 'Numerical solution to the math problem. Can also be an expression.'
+                description: 'The correct numerical response.'
             },
             button_label: {
                 type: jsPsych.plugins.parameterType.STRING,
@@ -33,7 +33,7 @@ jsPsych.plugins['math-problems'] = (function () {
                 type: jsPsych.plugins.parameterType.BOOL,
                 pretty_name: 'Show feedback',
                 default: true,
-                description: 'Whether to show the user if the answer is correct or false.'
+                description: 'Whether to show the user if the response is correct or false.'
             },
             feedback_duration: {
                 type: jsPsych.plugins.parameterType.INT,
@@ -45,18 +45,19 @@ jsPsych.plugins['math-problems'] = (function () {
                 type: jsPsych.plugins.parameterType.STRING,
                 pretty_name: 'Correct label',
                 default: 'Correct!',
-                description: 'What to show to the user on a correct answer.'
+                description: 'What to show to the user on a correct response.'
             },
             incorrect_label: {
                 type: jsPsych.plugins.parameterType.STRING,
                 pretty_name: 'Incorrect label',
                 default: 'Wrong!',
-                description: 'What to show to the user on a incorrect answer.'
+                description: 'What to show to the user on a incorrect response.'
             }
         }
     }
 
     plugin.trial = function (display_element, trial) {
+        display_element.innerHTML = '';
         var form = document.createElement('form');
         form.addEventListener("submit", function (e) {
             e.preventDefault();
@@ -64,7 +65,7 @@ jsPsych.plugins['math-problems'] = (function () {
         }, false);
 
         var problem = document.createElement('div');
-        problem.innerHTML = trial.problem;
+        problem.innerHTML = trial.stimulus;
 
         var button = document.createElement('button');
         button.innerHTML = trial.button_label;
@@ -72,6 +73,7 @@ jsPsych.plugins['math-problems'] = (function () {
 
         var input = document.createElement('input');
         input.type = 'number';
+        input.step = 'any';
 
         form.appendChild(problem);
         form.appendChild(input);
@@ -84,8 +86,8 @@ jsPsych.plugins['math-problems'] = (function () {
             var end_time = performance.now();
             var rt = end_time - start_time;
 
-            var given_solution = parseFloat(input.value);
-            var correct = given_solution == trial.solution;
+            var given_response = parseFloat(input.value);
+            var correct = given_response == trial.correct_response;
 
             if (trial.show_feedback) {
                 if (trial.feedback_duration <= 0) {
@@ -96,8 +98,8 @@ jsPsych.plugins['math-problems'] = (function () {
 
             var trial_data = {
                 rt: rt,
-                correct_solution: trial.solution,
-                given_solution: given_solution,
+                correct_response: trial.correct_response,
+                given_response: given_response,
                 correct: correct
             };
 
