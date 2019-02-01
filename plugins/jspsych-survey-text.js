@@ -105,26 +105,19 @@ jsPsych.plugins['survey-text'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    if (typeof trial.questions[0].rows == 'undefined') {
-      for (var i = 0; i < trial.questions.length; i++) {
+    for (var i = 0; i < trial.questions.length; i++){
+      if (typeof trial.questions[0].rows == 'undefined') {
         trial.questions[i].rows = [];
         trial.questions[i].rows.push(1);
       }
-    }
-    if (typeof trial.questions[0].columns == 'undefined') {
-      for (var i = 0; i < trial.questions.length; i++) {
+      if (typeof trial.questions[0].columns == 'undefined') {
         trial.questions[i].columns = [];
         trial.questions[i].columns.push(40);
       }
-    }
-    if (typeof trial.questions[0].value == 'undefined') {
-      for (var i = 0; i < trial.questions.length; i++) {
+      if (typeof trial.questions[0].value == 'undefined') {
         trial.questions[i].value = [];
         trial.questions[i].value.push("");
       }
-    }
-    
-    for (var i = 0; i < trial.questions.length; i++){
       if (typeof trial.questions[i].language == 'undefined')
         trial.questions[i].language = "spanish";
       if (typeof trial.questions[0].endword == 'undefined')
