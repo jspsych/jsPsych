@@ -49,7 +49,7 @@ rt | numeric | The response time in milliseconds for the subject to finish the t
 // sample function that might be used to check if a subject has given
 // consent to participate.
 var check_consent = function(elem) {
-  if ($('#consent_checkbox').is(':checked')) {
+  if (document.getElementById('consent_checkbox').checked) {
     return true;
   }
   else {
