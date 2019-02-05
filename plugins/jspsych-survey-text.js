@@ -249,13 +249,13 @@ jsPsych.plugins['survey-text'] = (function() {
           textBox.blur();
           textBox.focus();
           var message = '';
-          if (typeof trial.questions[index].error_message == 'undefined') {
-            if (trial.questions[index].language == "english")
-              message = 'Please, verify your answer.';
-            else if (trial.questions[index].language == "spanish")
-              message = 'Por favor, verifique su respuesta.';
-          } else {
+          if (typeof trial.questions[index].error_message !== 'undefined') {
             message = trial.questions[index].error_message;
+          } else {
+            if (trial.questions[index].language === "english")
+              message = 'Please, verify your answer.';
+            else if (trial.questions[index].language === "spanish")
+              message = 'Por favor, verifique su respuesta.';
           }
           display_element.querySelector(".fail-message").innerHTML = '<span style="color: red;" class="required">' + message +'</span>';
           event.stopPropagation();
