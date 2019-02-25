@@ -340,13 +340,16 @@ jsPsych.plugins['survey-text'] = (function() {
         numbers = document.getElementsByClassName('boxNumber')
         mistakes = []
         for(var actual_val=0; actual_val<val.length; actual_val++)  {
+          actual_element = document.getElementsByName('#jspsych-survey-'+ trial.questions[index].type +'-response-' + [index])[actual_val];
+          if (typeof(actual_element) === 'undefined')
+            continue
           if ((trial.questions[index].type == "number" || trial.questions[index].type == "range") || ((trial.questions[index].answers_in_text) && trial.questions[index].list_type[actual_val] === "number")){
             range_cont += 1;
           }
 
           if ((val[actual_val] == "") && required){
             mistakes.push(actual_val);
-            document.getElementsByName('#jspsych-survey-'+ trial.questions[index].type +'-response-' + [index])[actual_val].style.border = "1px solid " + error_color_list[ Math.round((( (mistakes.length - 1) / error_color_list.length) - parseInt((mistakes.length - 1)/ error_color_list.length)) * error_color_list.length) ];
+            actual_element.style.border = "1px solid " + error_color_list[ Math.round((( (mistakes.length - 1) / error_color_list.length) - parseInt((mistakes.length - 1)/ error_color_list.length)) * error_color_list.length) ];
             continue
           }
           validation = true
@@ -362,9 +365,9 @@ jsPsych.plugins['survey-text'] = (function() {
 
           if (!(validation)){
             mistakes.push(actual_val)
-            document.getElementsByName('#jspsych-survey-'+ trial.questions[index].type +'-response-' + [index])[actual_val].style.border = "1px solid " + error_color_list[ Math.round((( (mistakes.length - 1) / 3) - parseInt((mistakes.length - 1)/ 3)) * 3) ];
+            actual_element.style.border = "1px solid " + error_color_list[ Math.round((( (mistakes.length - 1) / 3) - parseInt((mistakes.length - 1)/ 3)) * 3) ];
           } else {
-            document.getElementsByName('#jspsych-survey-'+ trial.questions[index].type +'-response-' + [index])[actual_val].style.border = "";
+            actual_element.style.border = "";
             if (typeof(numbers[actual_val]) !== 'undefined')
               numbers[actual_val].innerHTML = "";
           }
