@@ -1,33 +1,11 @@
 {
-  "name": "jspsych",
-  "version": "6.0.0",
-  "description": "Behavioral experiments in a browser",
+  "name": "pushkin-jspsych",
+  "version": "1.0.0",
+  "description": "A version of jsPsych designed to be imported and reassigned manually to window.jsPsych",
   "main": "jspsych.js",
-  "directories": {
-    "doc": "docs"
-  },
   "scripts": {
-    "test": "jest"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jodeleeuw/jsPsych.git"
-  },
-  "author": "Josh de Leeuw",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/jodeleeuw/jsPsych/issues"
-  },
-  "homepage": "https://github.com/jodeleeuw/jsPsych#readme",
-  "devDependencies": {
-    "jest": "^22.4.4"
-  },
-  "jest": {
-    "resetModules": true,
-    "testEnvironmentOptions": {
-      "fetchExternalResources": true,
-      "pretendToBeVisual": true
-    },
-    "testURL": "http://localhost/"
-  }
+  "author": "L3",
+  "license": "MIT"
 }
