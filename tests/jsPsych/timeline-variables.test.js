@@ -127,5 +127,96 @@ describe('timeline variables are correctly evaluated', function(){
     });
 
 
-  })
+  });
+
+  test('custom sampling returns correct trials', function(){
+    
+    var tvs = [
+      {id: 0},
+      {id: 1},
+      {id: 2},
+      {id: 3}
+    ]
+
+    var timeline = [];
+
+    timeline.push({
+      timeline: [{
+        type: 'html-keyboard-response',
+        stimulus: 'foo',
+        data: {
+          id: jsPsych.timelineVariable('id')
+        }
+      }],
+      timeline_variables: tvs,
+      sample: {
+        type: 'custom',
+        fn: function(){
+          return [2,0];
+        }
+      }
+    });
+
+    jsPsych.init({
+      timeline: timeline
+    });
+
+    utils.pressKey(65);
+    utils.pressKey(65);
+    expect(jsPsych.data.get().select('id').values).toEqual([2,0]);
+
+  });
+
+  test('custom sampling works with a loop', function(){
+    
+    var tvs = [
+      {id: 0},
+      {id: 1},
+      {id: 2},
+      {id: 3}
+    ]
+
+    var timeline = [];
+    var reps = 0;
+    var sample = 3;
+
+    timeline.push({
+      timeline: [{
+        type: 'html-keyboard-response',
+        stimulus: 'foo',
+        data: {
+          id: jsPsych.timelineVariable('id')
+        }
+      }],
+      timeline_variables: tvs,
+      sample: {
+        type: 'custom',
+        fn: function(){
+          return [sample];
+        }
+      },
+      loop_function: function(){
+        reps++;
+        if(reps < 4){
+          sample = 3-reps;
+          return true;
+        } else {
+          return false;
+        }
+      }
+    });
+
+    jsPsych.init({
+      timeline: timeline
+    });
+
+    utils.pressKey(65);
+    utils.pressKey(65);
+    utils.pressKey(65);
+    utils.pressKey(65);
+    expect(jsPsych.data.get().select('id').values).toEqual([3,2,1,0]);
+
+  });
+
+
 })
