@@ -116,6 +116,7 @@ jsPsych.plugins['survey-text'] = (function() {
     display_element.innerHTML = html;
 
     display_element.querySelector('#jspsych-survey-text-form').addEventListener('submit', function() {
+      event.preventDefault();
       // measure response time
       var endTime = performance.now();
       var response_time = endTime - startTime;
