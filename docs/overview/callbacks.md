@@ -38,7 +38,7 @@ jsPsych.init({
 
 ## on_finish (trial)
 
-The `on_finish` callback can be added to any trial. The callback will trigger whenever the trial ends. The callback function will be passed a single argument, containing the data object from the trial.
+The `on_finish` callback can be added to any trial. The callback will trigger whenever the trial ends. The callback function will be passed a single argument, containing the data object from the trial. This data object is *editable*. Any changes made in the on_finish function will be stored in the internal data collection.
 
 #### Sample use
 ```javascript
@@ -46,8 +46,11 @@ var trial = {
   type: 'image-keyboard-response',
   stimulus: 'imgA.png',
   on_finish: function(data) {
-    console.log('The trial just ended.');
-    console.log(JSON.stringify(data));
+    if(data.key_press == 85){
+      data.correct = true;
+    } else {
+      data.correct = false;
+    }
   }
 };
 ```
