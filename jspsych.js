@@ -1470,7 +1470,7 @@ jsPsych.data = (function() {
 
     // fullscreen change capture
     function fullscreenchange(){
-      var type = (document.isFullScreen || document.webkitIsFullScreen || document.mozIsFullScreen) ? 'fullscreenenter' : 'fullscreenexit';
+      var type = (document.isFullScreen || document.webkitIsFullScreen || document.mozIsFullScreen || document.fullscreenElement) ? 'fullscreenenter' : 'fullscreenexit';
       var data = {
         event: type,
         trial: jsPsych.progress().current_trial_global,
