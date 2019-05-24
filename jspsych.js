@@ -2438,11 +2438,11 @@ jsPsych.pluginAPI = (function() {
       }
     }
 
-    images = jsPsych.utils.unique(images);
-    audio  = jsPsych.utils.unique(audio);
-    video  = jsPsych.utils.unique(video);
+    images = jsPsych.utils.unique(jsPsych.utils.flatten(images));
+    audio  = jsPsych.utils.unique(jsPsych.utils.flatten(audio));
+    video  = jsPsych.utils.unique(jsPsych.utils.flatten(video));
 
-    // remove any 0s, nulls, or false values
+    // remove any nulls false values
     images = images.filter(function(x) { return x != false && x != null})
     audio = audio.filter(function(x) { return x != false && x != null})
     video = video.filter(function(x) { return x != false && x != null})
