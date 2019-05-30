@@ -253,4 +253,51 @@ describe('endCurrentTimeline', function(){
 
   });
 
+  test('works inside nested timelines', function(){
+    var t = {
+      timeline: [
+        {
+          timeline: [
+            {
+              type: 'html-keyboard-response',
+              stimulus: 'foo',
+              on_finish: function(){
+                jsPsych.endCurrentTimeline();
+              }
+            },
+            {
+              type: 'html-keyboard-response',
+              stimulus: 'skip me!'
+            }
+          ]
+        },
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'bar'
+        }
+      ]
+    }
+
+    var t2 = {
+      type: 'html-keyboard-response',
+      stimulus: 'woo'
+    }
+
+    jsPsych.init({
+      timeline: [t, t2]
+    });
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+
+    utils.pressKey(32);
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
+
+    utils.pressKey(32);
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('woo');
+
+    utils.pressKey(32);
+  })
+
 });
