@@ -1292,7 +1292,7 @@ jsPsych.data = (function() {
       for(var i=0; i<data_column.values.length; i++){
         sum_square_error += Math.pow(data_column.values[i] - mean,2);
       }
-      var mse = sum_square_error / data_column.values.length;
+      var mse = sum_square_error / (data_column.values.length - 1);
       return mse;
     }
 

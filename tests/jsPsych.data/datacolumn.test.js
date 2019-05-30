@@ -29,10 +29,10 @@ describe('DataColumn', function(){
     expect(jsPsych.data.get().select('rt').max()).toBe(500);
   });
   test('#variance', function(){
-    expect(jsPsych.data.get().select('rt').variance()).toBe((Math.pow(200,2)+Math.pow(100,2)+Math.pow(100,2)+Math.pow(200,2))/5);
+    expect(jsPsych.data.get().select('rt').variance()).toBe((Math.pow(200,2)+Math.pow(100,2)+Math.pow(100,2)+Math.pow(200,2))/(5-1));
   });
   test('#sd', function(){
-    expect(jsPsych.data.get().select('rt').sd()).toBe(Math.sqrt((Math.pow(200,2)+Math.pow(100,2)+Math.pow(100,2)+Math.pow(200,2))/5));
+    expect(jsPsych.data.get().select('rt').sd()).toBe(Math.sqrt((Math.pow(200,2)+Math.pow(100,2)+Math.pow(100,2)+Math.pow(200,2))/(5-1)));
   });
   test('#median', function(){
     expect(jsPsych.data.get().select('rt').median()).toBe(300);
