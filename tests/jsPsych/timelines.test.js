@@ -299,5 +299,4 @@ describe('endCurrentTimeline', function(){
 
     utils.pressKey(32);
   })
-
 });
