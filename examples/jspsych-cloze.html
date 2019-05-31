@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-cloze.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body></body>
+<script>
+
+  var timeline = [];
+
+  // simple example using default settings (no check against correct solution, no custom button text)
+  timeline.push({
+    type: 'cloze',
+    text: 'The %% is the largest terrestrial mammal. It lives in both %% and %%.'
+  });
+
+  // more elaborate example (with check against correct solution, custom error handling and modified button text)
+  timeline.push({
+    type: 'cloze',
+    text: 'A rectangle has % 4 % corners and a triangle has % 3 %.',
+    check_answers: true,
+    button_text: 'Next',
+    mistake_fn: function () { alert("Wrong answer. Please check again.") }
+  });
+
+  jsPsych.init({
+    timeline: timeline,
+    on_finish: function () { jsPsych.data.displayData(); }
+  });
+
+</script>
+
+</html>
