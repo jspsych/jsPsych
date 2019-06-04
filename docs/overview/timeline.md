@@ -93,11 +93,11 @@ Timelines can be nested any number of times.
 
 ## Timeline variables
 
-A common pattern in behavioral experiments is to repeat the same procedure many times with different stimuli. A procedure might be a single trial, but it also might be a series of trials. One shortcut to implement this pattern is with the approach described in the previous section, but this only works if all the trials use the same plugin type. Timeline variables are a more general solution. With timeline variables, you define the procedure once (as a timeline), and specify a set of parameters and their values for each iteration through the timeline.
+A common pattern in behavioral experiments is to repeat the same procedure many times with slightly different parameters. A procedure might be a single trial, but it also might be a series of trials. One shortcut to implement this pattern is with the approach described in the previous section, but this only works if all the trials use the same plugin type. Timeline variables are a more general solution. With timeline variables you define the procedure once (as a timeline) and specify a set of parameters and their values for each iteration through the timeline.
 
 What follows is an example of how to use timeline variables. The [simple reaction time tutorial](../tutorials/rt-task.md) also explains how to use timeline variables.
 
-Suppose we want to create an experiment where people see a set of faces with names displayed below the face. In between each face, a fixation cross is displayed on the screen. Without timeline variables, we would need to add many trials to the timeline, alternating between trials showing the fixation cross and trials showing the face and name. This could be done efficiently in a loop or function, but timeline variables make it even easier - as well as adding extra features like sampling and randomization.
+Suppose we want to create an experiment where people see a set of faces. Perhaps this is a memory experiment and this is the phase of the experiment where the faces are being presented for the first time. In between each face, a fixation cross is displayed on the screen. Without timeline variables, we would need to add many trials to the timeline, alternating between trials showing the fixation cross and trials showing the face and name. This could be done efficiently using a loop or function, but timeline variables make it even easier - as well as adding extra features like sampling and randomization.
 
 Here's a basic version of the task with timeline variables.
 
@@ -108,14 +108,55 @@ var face_name_procedure = {
 			type: 'html-keyboard-response',
 			stimulus: '+',
 			choices: jsPsych.NO_KEYS,
-			timing_response: 500
+			trial_duration: 500
 		},
 		{
 			type: 'image-keyboard-response',
 			stimulus: jsPsych.timelineVariable('face'),
-			prompt: function(){ return "This person's name is "+jsPsych.timelineVariable('name', true); },
 			choices: jsPsych.NO_KEYS,
-			timing_response: 2500
+			trial_duration: 2500
+		}
+	],
+	timeline_variables: [
+		{ face: 'person-1.jpg' },
+		{ face: 'person-2.jpg' },
+		{ face: 'person-3.jpg' },
+		{ face: 'person-4.jpg' }
+	]
+}
+```
+
+In the above version, there are four separate trials defined in the `timeline_variables` parameter. Each trial has a variable `face` and a variable `name`. The `timeline` defines a procedure of showing a fixation cross for 500ms followed by the face and name for 2500ms.  This procedure will repeat four times, with the first trial showing Alex, the second Beth, and so on. The variables are referenced within the procedure by calling the `jsPsych.timelineVariable()` method and passing in the name of the variable.
+
+What if we wanted the stimuli to be a little more complex, with a name displayed below each face? And let's add an additional step where the name is displayed prior to the face appearing. (Maybe this is one condition of an experiment investigating whether the order of name-face or face-name affects retention.)
+
+To do this, we will need to use the `jsPsych.timelineVariable()` method in a slightly different way. Instead of using it as the parameter, we are going to create a dynamic parameter using a function and place the call to `jsPsych.timelineVariable()` inside this function. This will allow us to create an HTML string that has both the image and the name. Note that there is a subtle syntax difference: there is an extra parameter when `jsPsych.timelineVariable()` is called within a function. This `true` value causes the `jsPsych.timelineVariable()` to immediately return the value of the timeline variable. In a normal context, the function `jsPsych.timelineVariable()` returns a function. This is why `jsPsych.timelineVariable()` can be used directly as a parameter even though the parameter is dynamic.
+
+
+```javascript
+var face_name_procedure = {
+	timeline: [
+		{
+			type: 'html-keyboard-response',
+			stimulus: '+',
+			choices: jsPsych.NO_KEYS,
+			trial_duration: 500
+		},
+		{
+			type: 'html-keyboard-response',
+			stimulus: jsPsych.timelineVariable('name'),
+			trial_duration: 1000,
+			choices: jsPsych.NO_KEYS
+		},
+		{
+			type: 'html-keyboard-response',
+			stimulus: function(){
+				var html="<img src='"+jsPsych.timelineVariable('face', true)+"'>";
+				html += "<p>"+jsPsych.timelineVariable('name', true)+"</p>";
+				return html;
+			},			
+			choices: jsPsych.NO_KEYS,
+			trial_duration: 2500
 		}
 	],
 	timeline_variables: [
@@ -126,9 +167,6 @@ var face_name_procedure = {
 	]
 }
 ```
-
-In the above version, there are four separate trials defined in the `timeline_variables` parameter. Each trial has a variable `face` and a variable `name`. The `timeline` defines a procedure of showing a fixation cross for 500ms followed by the face and name for 2500ms.  This procedure will repeat four times, with the first trial showing Alex, the second Beth, and so on. The variables are referenced in the procedure by calling the `jsPsych.timelineVariable()` method. Note that the call to this method is wrapped in a function, as we want the method to execute during the experiment, not during the declaration of the timeline.
-
 ### Random orders of trials
 
 If we want to randomize the order of the trials, we can set `randomize_order` to `true`.

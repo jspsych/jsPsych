@@ -540,8 +540,6 @@ Set the progress bar to a custom amount. Proportion must be between 0 and 1. Val
 jsPsych.setProgressBar(0.85);
 ```
 
-
-
 ---
 ## jsPsych.startTime
 
@@ -566,6 +564,70 @@ Get the time that the experiment began.
 ```javascript
 var start_time = jsPsych.startTime();
 ```
+
+---
+## jsPsych.timelineVariable
+
+```
+jsPsych.timelineVariable(variable, call_immediate)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+variable | string | Name of the timeline variable
+call_immediate | bool | Typically this parameter is `false`, or simply ommitted. When `false`, the return value is a function that returns the timeline variable. This makes `jsPsych.timelineVariable` suitable for dynamic parameters by default. If `true` the function returns the value of the timeline variable immediately.
+
+### Return value
+
+Depends on the value of `call_immediate` parameter. See description above.
+
+### Description
+
+[Timeline variables](/overview/timeline/#timeline-variables) are a powerful technique for generating experiments with repetitive procedures but different parameter values. This function fetches the current value of a particular timeline variable. It must be used in conjunction with a timeline that has timeline variables. See the [timeline variable section](/overview/timeline/#timeline-variables) for details.
+
+### Examples
+
+#### Standard use as a parameter for a trial
+```javascript
+var trial = {
+  type: 'image-keyboard-response',
+  stimulus: jsPsych.timelineVariable('image')
+}
+
+var procedure = {
+  timeline: [trial],
+  timeline_variables: [
+    {image: 'face1.png'},
+    {image: 'face2.png'},
+    {image: 'face3.png'},
+    {image: 'face4.png'}
+  ]
+}
+```
+
+#### Invoking immediately in a function
+```javascript
+var trial = {
+  type: 'html-keyboard-response',
+  stimulus: function(){
+    return "<img style='width:100px; height:100px;' src='"+jsPsych.timelineVariable('image', true)+"'></img>";
+  }
+}
+
+var procedure = {
+  timeline: [trial],
+  timeline_variables: [
+    {image: 'face1.png'},
+    {image: 'face2.png'},
+    {image: 'face3.png'},
+    {image: 'face4.png'}
+  ]
+}
+```
+
+
 ---
 ## jsPsych.totalTime
 
