@@ -351,6 +351,7 @@ on_interaction_data_update | function | Function to execute every time a new int
 on_close | function | Function to execute when the user leaves the page. Can be used, for example, to save data before the page is closed.
 exclusions | object | Specifies restrictions on the browser the subject can use to complete the experiment. See list of options below.
 show_progress_bar | boolean | If true, then [a progress bar](../overview/progress-bar.md) is shown at the top of the page.
+message_progress_bar | string | Message to display next to the progress bar. The default is 'Completion Progress'. 
 auto_update_progress_bar | boolean | If true, then the progress bar at the top of the page will automatically update as every top-level timeline or trial is completed.
 show_preload_progress_bar | boolean | If true, then a progress bar is displayed while media files are automatically preloaded.
 preload_audio | array | An array of audio files to preload before starting the experiment.

@@ -94,6 +94,7 @@ window.jsPsych = (function() {
       'use_webaudio': true,
       'exclusions': {},
       'show_progress_bar': false,
+      'message_progress_bar': 'Completion Progress',
       'auto_update_progress_bar': true,
       'auto_preload': true,
       'show_preload_progress_bar': true,
@@ -752,7 +753,7 @@ window.jsPsych = (function() {
 
     // show progress bar if requested
     if (opts.show_progress_bar === true) {
-      drawProgressBar();
+      drawProgressBar(opts.message_progress_bar);
     }
 
     // record the start time
@@ -958,10 +959,12 @@ window.jsPsych = (function() {
     if(clear){ success(); }
   }
 
-  function drawProgressBar() {
+  function drawProgressBar(msg) {
     document.querySelector('.jspsych-display-element').insertAdjacentHTML('afterbegin',
       '<div id="jspsych-progressbar-container">'+
-      '<span>Completion Progress</span>'+
+      '<span>'+
+      msg+ 
+      '</span>'+
       '<div id="jspsych-progressbar-outer">'+
         '<div id="jspsych-progressbar-inner"></div>'+
       '</div></div>');
