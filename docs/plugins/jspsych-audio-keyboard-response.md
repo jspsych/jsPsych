@@ -2,7 +2,9 @@
 
 This plugin plays audio files and records responses generated with the keyboard.
 
-If the browser supports it, audio files are played using the WebAudio API. This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. Audio files are automatically preloaded by jsPsych.
+If the browser supports it, audio files are played using the WebAudio API. This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. 
+
+Audio files are automatically preloaded by jsPsych. However, if you are using timeline variables or another dynamic method to specify the audio stimulus you will need to [manually preload](/overview/media-preloading/#manual-preloading) the audio.
 
 The trial can end when the subject responds, when the audio file has finished playing, or if the subject has failed to respond within a fixed length of time.
 
