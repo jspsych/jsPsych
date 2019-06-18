@@ -726,9 +726,15 @@ window.jsPsych = (function() {
 
         // create a TimelineNode for each element in the timeline
         for (var i = 0; i < parameters.timeline.length; i++) {
-          timeline_parameters.timeline.push(new TimelineNode(Object.assign({}, node_data, parameters.timeline[i]), self, i));
+          // merge parameters
+          var merged_parameters = Object.assign({}, node_data, parameters.timeline[i]);
+          // merge any data from the parent node into child nodes
+          if(typeof node_data.data == 'object' && typeof parameters.timeline[i].data == 'object'){
+            var merged_data = Object.assign({}, node_data.data, parameters.timeline[i].data);
+            merged_parameters.data = merged_data;
+          }
+          timeline_parameters.timeline.push(new TimelineNode(merged_parameters, self, i));
         }
-
       }
       // if there is no timeline parameter, then this node is a trial node
       else {
