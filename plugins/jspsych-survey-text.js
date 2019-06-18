@@ -102,9 +102,9 @@ jsPsych.plugins['survey-text'] = (function() {
       var autofocus = i == 0 ? "autofocus" : "";
       var req = trial.questions[i].required ? "required" : "";
       if(trial.questions[i].rows == 1){
-        html += '<input type="text" name="#jspsych-survey-text-response-' + i + '" size="'+trial.questions[i].columns+'" value="'+trial.questions[i].value+'" '+autofocus+' '+req+'></input>';
+        html += '<input id="input-'+i+'" type="text" name="#jspsych-survey-text-response-' + i + '" size="'+trial.questions[i].columns+'" value="'+trial.questions[i].value+'" '+autofocus+' '+req+'></input>';
       } else {
-        html += '<textarea name="#jspsych-survey-text-response-' + i + '" cols="' + trial.questions[i].columns + '" rows="' + trial.questions[i].rows + '" '+autofocus+' '+req+'>'+trial.questions[i].value+'</textarea>';
+        html += '<textarea id="input-'+i+'" name="#jspsych-survey-text-response-' + i + '" cols="' + trial.questions[i].columns + '" rows="' + trial.questions[i].rows + '" '+autofocus+' '+req+'>'+trial.questions[i].value+'</textarea>';
       }
       html += '</div>';
     }
@@ -114,6 +114,9 @@ jsPsych.plugins['survey-text'] = (function() {
 
     html += '</form>'
     display_element.innerHTML = html;
+
+    // backup in case autofocus doesn't work
+    display_element.querySelector('#input-0').focus();
 
     display_element.querySelector('#jspsych-survey-text-form').addEventListener('submit', function(e) {
       e.preventDefault();
