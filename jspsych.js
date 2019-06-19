@@ -1721,10 +1721,19 @@ jsPsych.randomization = (function() {
   }
 
   module.shuffle = function(arr) {
+    if(!Array.isArray(arr)){
+      console.error('Argument to jsPsych.randomization.shuffle() must be an array.')
+    }
     return shuffle(arr);
   }
 
   module.shuffleNoRepeats = function(arr, equalityTest) {
+    if(!Array.isArray(arr)){
+      console.error('First argument to jsPsych.randomization.shuffleNoRepeats() must be an array.')
+    }
+    if(typeof equalityTest !== 'undefined' || typeof equalityTest !== 'function'){
+      console.error('Second argument to jsPsych.randomization.shuffleNoRepeats() must be a function.')
+    }
     // define a default equalityTest
     if (typeof equalityTest == 'undefined') {
       equalityTest = function(a, b) {
@@ -1758,6 +1767,10 @@ jsPsych.randomization = (function() {
   }
 
   module.sampleWithoutReplacement = function(arr, size){
+    if(!Array.isArray(arr)){
+      console.error("First argument to jsPsych.randomization.sampleWithoutReplacement() must be an array")
+    }
+    
     if (size > arr.length) {
       console.error("Cannot take a sample " +
         "larger than the size of the set of items to sample.");
@@ -1766,6 +1779,10 @@ jsPsych.randomization = (function() {
   }
 
   module.sampleWithReplacement = function(arr, size, weights) {
+    if(!Array.isArray(arr)){
+      console.error("First argument to jsPsych.randomization.sampleWithReplacement() must be an array")
+    }
+
     var normalized_weights = [];
     if(typeof weights !== 'undefined'){
       if(weights.length !== arr.length){
