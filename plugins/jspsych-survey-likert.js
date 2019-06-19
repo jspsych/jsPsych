@@ -36,6 +36,12 @@ jsPsych.plugins['survey-likert'] = (function() {
                      description: 'Makes answering questions required.'}
         }
       },
+      randomize_question_order: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Randomize Question Order',
+        default: false,
+        description: 'If true, the order of the questions will be randomized'
+      },
       preamble: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Preamble',
@@ -52,7 +58,6 @@ jsPsych.plugins['survey-likert'] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-
 
     var html = "";
     // inject CSS for trial
@@ -72,19 +77,30 @@ jsPsych.plugins['survey-likert'] = (function() {
     }
     html += '<form id="jspsych-survey-likert-form">';
 
-    // add likert scale questions
+    // add likert scale questions ///
+    // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
+    // so that the data are always associated with the same question regardless of order
+    var question_order = [];
+    for(var i=0; i<trial.questions.length; i++){
+      question_order.push(i);
+    }
+    if(trial.randomize_question_order){
+      question_order = jsPsych.randomization.shuffle(question_order);
+    }
+    
     for (var i = 0; i < trial.questions.length; i++) {
+      var question = trial.questions[question_order[i]];
       // add question
-      html += '<label class="jspsych-survey-likert-statement">' + trial.questions[i].prompt + '</label>';
+      html += '<label class="jspsych-survey-likert-statement">' + question.prompt + '</label>';
       // add options
-      var width = 100 / trial.questions[i].labels.length;
-      var options_string = '<ul class="jspsych-survey-likert-opts" data-radio-group="Q' + i + '">';
-      for (var j = 0; j < trial.questions[i].labels.length; j++) {
-        options_string += '<li style="width:' + width + '%"><input type="radio" name="Q' + i + '" value="' + j + '"';
-        if(trial.questions[i].required){
+      var width = 100 / question.labels.length;
+      var options_string = '<ul class="jspsych-survey-likert-opts" data-radio-group="Q' + question_order[i] + '">';
+      for (var j = 0; j < question.labels.length; j++) {
+        options_string += '<li style="width:' + width + '%"><input type="radio" name="Q' + question_order[i] + '" value="' + j + '"';
+        if(question.required){
           options_string += ' required';
         }
-        options_string += '><label class="jspsych-survey-likert-opt-label">' + trial.questions[i].labels[j] + '</label></li>';
+        options_string += '><label class="jspsych-survey-likert-opt-label">' + question.labels[j] + '</label></li>';
       }
       options_string += '</ul>';
       html += options_string;
@@ -122,7 +138,8 @@ jsPsych.plugins['survey-likert'] = (function() {
       // save data
       var trial_data = {
         "rt": response_time,
-        "responses": JSON.stringify(question_data)
+        "responses": JSON.stringify(question_data),
+        "question_order": JSON.stringify(question_order)
       };
 
       display_element.innerHTML = '';
