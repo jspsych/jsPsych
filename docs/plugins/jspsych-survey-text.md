@@ -31,7 +31,7 @@ question_order | JSON string | A string in JSON format containing an array with 
 // defining groups of questions that will go together.
 var survey_trial = {
   type: 'survey-text',
-  questions: [{prompt: "How old are you?"}, {prompt: "Where were you born?"}],
+  questions: [{prompt: "How old are you?"}, {prompt: "Where were you born?", placeholder: "City, State/Province, Country"}],
 };
 ```
 

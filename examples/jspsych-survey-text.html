@@ -13,7 +13,7 @@
     type: 'survey-text',
     questions: [
       {prompt: 'How old are you?', columns: 3, required: true},
-      {prompt: 'Where were you born?', value: 'location', columns: 50}
+      {prompt: 'Where were you born?', placeholder: 'location', columns: 50}
     ],
     randomize_question_order: true
   };
@@ -21,7 +21,7 @@
   var survey_page2 = {
     type: 'survey-text',
     questions: [
-      {prompt: 'Tell me about your day', value: 'How did it start?', rows:10, columns: 50}
+      {prompt: 'Tell me about your day', placeholder: 'How did it start?', rows:10, columns: 50}
     ]
   }
 
