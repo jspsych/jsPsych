@@ -42,7 +42,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
             type: jsPsych.plugins.parameterType.BOOL,
             pretty_name: 'Required',
             default: false,
-            description: 'Subject will be required to pick an option for this question.'
+            description: 'Subject will be required to pick at least one option for this question.'
           },
         }
       },
@@ -63,6 +63,12 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         pretty_name: 'Button label',
         default:  'Continue',
         description: 'Label of the button.'
+      },
+      required_message: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Required message',
+        default: 'You must choose at least one response for this question',
+        description: 'Message that will be displayed if required question is not answered.'
       }
     }
   }
@@ -146,7 +152,22 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     }
     // add submit button
     trial_form.innerHTML += '<div class="fail-message"></div>'
-    trial_form.innerHTML += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn"' + (trial.button_label ? ' value="'+trial.button_label +'"': '') + '></input>';
+    trial_form.innerHTML += '<button id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn">'+trial.button_label+'</button>';
+
+    // validation check on the data first for custom validation handling
+    // then submit the form
+    display_element.querySelector('#jspsych-survey-multi-select-next').addEventListener('click', function(){
+      for(var i=0; i<trial.questions.length; i++){
+        if(trial.questions[i].required){
+          if(display_element.querySelector('#jspsych-survey-multi-select-'+i+' input:checked') == null){
+            display_element.querySelector('#jspsych-survey-multi-select-'+i+' input').setCustomValidity(trial.required_message);
+          } else {
+            display_element.querySelector('#jspsych-survey-multi-select-'+i+' input').setCustomValidity('');
+          }
+        }
+      }
+      trial_form.reportValidity();
+    })
 
     trial_form.addEventListener('submit', function(event) {
       event.preventDefault();
@@ -155,11 +176,10 @@ jsPsych.plugins['survey-multi-select'] = (function() {
       var response_time = endTime - startTime;
 
       // create object to hold responses
-      var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
       var question_data = {};
       var has_response = [];
-      for(var index=0; index<matches.length; index++){
-        match = matches[index];
+      for(var index=0; index<trial.questions.length; index++){
+        var match = display_element.querySelector('#jspsych-survey-multi-select-'+index);
         var val = [];
         var inputboxes = match.querySelectorAll("input[type=checkbox]:checked")
         for(var j=0; j<inputboxes.length; j++){
@@ -172,22 +192,18 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         Object.assign(question_data, obje);
         if(val.length == 0){ has_response.push(false); } else { has_response.push(true); }
       }
-      // adds validation to check if at least one option is selected
-      if(trial.required && has_response.includes(false)) {
-        var inputboxes = display_element.querySelectorAll("input[type=checkbox]")
-        display_element.querySelector(".fail-message").innerHTML = '<span style="color: red;" class="required">'+trial.required_msg+'</span>';
-      } else {
-        // save data
-        var trial_data = {
-          "rt": response_time,
-          "responses": JSON.stringify(question_data),
-          "question_order": JSON.stringify(question_order)
-        };
-        display_element.innerHTML = '';
 
-        // next trial
-        jsPsych.finishTrial(trial_data);
-      }
+      // save data
+      var trial_data = {
+        "rt": response_time,
+        "responses": JSON.stringify(question_data),
+        "question_order": JSON.stringify(question_order)
+      };
+      display_element.innerHTML = '';
+
+      // next trial
+      jsPsych.finishTrial(trial_data);
+      
     });
 
     var startTime = performance.now();
