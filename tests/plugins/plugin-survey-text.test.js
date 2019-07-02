@@ -82,4 +82,34 @@ describe('survey-text plugin', function(){
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});
 
+	test('data are logged with the right question when randomize order is true', function(){
+		var t = {
+			type: 'survey-text',
+			questions: [
+				{ prompt: 'Q0' },
+				{ prompt: 'Q1' },
+				{ prompt: 'Q2' },
+				{ prompt: 'Q3' },
+				{ prompt: 'Q4' }
+			],
+			randomize_question_order: true
+		}
+		jsPsych.init({timeline:[t]});
+
+		document.querySelector('#input-0').value = "a0";
+		document.querySelector('#input-1').value = "a1";
+		document.querySelector('#input-2').value = "a2";
+		document.querySelector('#input-3').value = "a3";
+		document.querySelector('#input-4').value = "a4";
+
+		utils.clickTarget(document.querySelector('#jspsych-survey-text-next'));
+
+		var survey_data = JSON.parse(jsPsych.data.get().values()[0].responses);
+		expect(survey_data.Q0).toBe('a0');
+		expect(survey_data.Q1).toBe('a1');
+		expect(survey_data.Q2).toBe('a2');
+		expect(survey_data.Q3).toBe('a3');
+		expect(survey_data.Q4).toBe('a4');
+	});
+
 });

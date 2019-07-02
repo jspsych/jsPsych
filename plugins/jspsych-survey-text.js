@@ -138,10 +138,10 @@ jsPsych.plugins['survey-text'] = (function() {
 
       // create object to hold responses
       var question_data = {};
-      var matches = display_element.querySelectorAll('div.jspsych-survey-text-question');
-      for(var index=0; index<matches.length; index++){
+      
+      for(var index=0; index < trial.questions.length; index++){
         var id = "Q" + index;
-        var val = matches[index].querySelector('textarea, input').value;
+        var val = document.querySelector('#jspsych-survey-text-'+index).querySelector('textarea, input').value;
         var obje = {};
         obje[id] = val;
         Object.assign(question_data, obje);
