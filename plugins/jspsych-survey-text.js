@@ -114,9 +114,9 @@ jsPsych.plugins['survey-text'] = (function() {
       var autofocus = i == 0 ? "autofocus" : "";
       var req = question.required ? "required" : "";
       if(question.rows == 1){
-        html += '<input id="input-'+question_index+'" type="text" name="#jspsych-survey-text-response-' + question_index + '" size="'+question.columns+'" value="'+question.value+'" '+autofocus+' '+req+' placeholder="'+question.value+'"></input>';
+        html += '<input id="input-'+question_index+'" type="text" name="#jspsych-survey-text-response-' + question_index + '" size="'+question.columns+'" '+autofocus+' '+req+' placeholder="'+question.placeholder+'"></input>';
       } else {
-        html += '<textarea id="input-'+question_index+'" name="#jspsych-survey-text-response-' + question_index + '" cols="' + question.columns + '" rows="' + question.rows + '" '+autofocus+' '+req+' placeholder="'+question.value+'"></textarea>';
+        html += '<textarea id="input-'+question_index+'" name="#jspsych-survey-text-response-' + question_index + '" cols="' + question.columns + '" rows="' + question.rows + '" '+autofocus+' '+req+' placeholder="'+question.placeholder+'"></textarea>';
       }
       html += '</div>';
     }
