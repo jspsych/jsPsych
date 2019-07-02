@@ -29,11 +29,11 @@ jsPsych.plugins['survey-text'] = (function() {
             default: undefined,
             description: 'Prompt for the subject to response'
           },
-          value: {
+          placeholder: {
             type: jsPsych.plugins.parameterType.STRING,
             pretty_name: 'Value',
             default: "",
-            description: 'The string will be used to populate the response field with editable answer.'
+            description: 'Placeholder text in the textfield.'
           },
           rows: {
             type: jsPsych.plugins.parameterType.INT,
@@ -114,9 +114,9 @@ jsPsych.plugins['survey-text'] = (function() {
       var autofocus = i == 0 ? "autofocus" : "";
       var req = question.required ? "required" : "";
       if(question.rows == 1){
-        html += '<input id="input-'+question_index+'" type="text" name="#jspsych-survey-text-response-' + question_index + '" size="'+question.columns+'" value="'+question.value+'" '+autofocus+' '+req+'></input>';
+        html += '<input id="input-'+question_index+'" type="text" name="#jspsych-survey-text-response-' + question_index + '" size="'+question.columns+'" value="'+question.value+'" '+autofocus+' '+req+' placeholder="'+question.value+'"></input>';
       } else {
-        html += '<textarea id="input-'+question_index+'" name="#jspsych-survey-text-response-' + question_index + '" cols="' + question.columns + '" rows="' + question.rows + '" '+autofocus+' '+req+'>'+question.value+'</textarea>';
+        html += '<textarea id="input-'+question_index+'" name="#jspsych-survey-text-response-' + question_index + '" cols="' + question.columns + '" rows="' + question.rows + '" '+autofocus+' '+req+' placeholder="'+question.value+'"></textarea>';
       }
       html += '</div>';
     }
