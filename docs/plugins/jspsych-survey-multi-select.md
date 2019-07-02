@@ -12,6 +12,7 @@ questions | array | *undefined* | An array of objects, each object represents a 
 randomize_question_order | boolean | `false` | If true, the display order of `questions` is randomly determined at the start of the trial. In the data object, `Q0` will still refer to the first question in the array, regardless of where it was presented visually.
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions.
 button_label | string |  'Continue' | Label of the button.
+required_message | string | 'You must choose at least one response for this question' | Message to display if required response is not given.
 
 ## Data Generated
 
