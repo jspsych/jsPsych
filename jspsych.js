@@ -902,13 +902,31 @@ window.jsPsych = (function() {
   }
 
   function setDefaultValues(trial){
-    var trial_parameters = Object.keys(jsPsych.plugins[trial.type].info.parameters);
-    for(var i=0; i<trial_parameters.length; i++){
-      if(typeof trial[trial_parameters[i]] == 'undefined' || trial[trial_parameters[i]] === null){
-        if(typeof jsPsych.plugins[trial.type].info.parameters[trial_parameters[i]].default == 'undefined'){
-          console.error('You must specify a value for the '+trial_parameters[i]+' parameter in the '+trial.type+' plugin.');
+    for(var param in jsPsych.plugins[trial.type].info.parameters){
+      // check if parameter is complex with nested defaults
+      if(jsPsych.plugins[trial.type].info.parameters[param].type == jsPsych.plugins.parameterType.COMPLEX){
+        if(jsPsych.plugins[trial.type].info.parameters[param].array == true){
+          // iterate over each entry in the array
+          for(var i in trial[param]){
+            // check each parameter in the plugin description
+            for(var p in jsPsych.plugins[trial.type].info.parameters[param].nested){
+              if(typeof trial[param][i][p] == 'undefined' || trial[param][i][p] === null){
+                if(typeof jsPsych.plugins[trial.type].info.parameters[param].nested[p].default == 'undefined'){
+                  console.error('You must specify a value for the '+p+' parameter (nested in the '+param+' parameter) in the '+trial.type+' plugin.');
+                } else {
+                  trial[param][i][p] = jsPsych.plugins[trial.type].info.parameters[param].nested[p].default;
+                }
+              }
+            }
+          }
+        }
+      }      
+      // if it's not nested, checking is much easier and do that here:
+      else if(typeof trial[param] == 'undefined' || trial[param] === null){
+        if(typeof jsPsych.plugins[trial.type].info.parameters[param].default == 'undefined'){
+          console.error('You must specify a value for the '+param+' parameter in the '+trial.type+' plugin.');
         } else {
-          trial[trial_parameters[i]] = jsPsych.plugins[trial.type].info.parameters[trial_parameters[i]].default;
+          trial[param] = jsPsych.plugins[trial.type].info.parameters[param].default;
         }
       }
     }
