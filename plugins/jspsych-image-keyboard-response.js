@@ -25,6 +25,24 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
         default: undefined,
         description: 'The image to be displayed'
       },
+      stimulus_height: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Image height',
+        default: null,
+        description: 'Set the image height in pixels'
+      },
+      stimulus_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Image width',
+        default: null,
+        description: 'Set the image width in pixels'
+      },
+      maintain_aspect_ratio: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Maintain aspect ratio',
+        default: true,
+        description: 'Maintain the aspect ratio after setting width or height'
+      },
       choices: {
         type: jsPsych.plugins.parameterType.KEYCODE,
         array: true,
@@ -61,15 +79,29 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    var new_html = '<img src="'+trial.stimulus+'" id="jspsych-image-keyboard-response-stimulus"></img>';
+    // display stimulus
+    var html = '<img src="'+trial.stimulus+'" id="jspsych-image-keyboard-response-stimulus" style="';
+    if(trial.stimulus_height !== null){
+      html += 'height:'+trial.stimulus_height+'px; '
+      if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
+        html += 'width: auto; ';
+      }
+    }
+    if(trial.stimulus_width !== null){
+      html += 'width:'+trial.stimulus_width+'px; '
+      if(trial.stimulus_height == null && trial.maintain_aspect_ratio){
+        html += 'height: auto; ';
+      }
+    }
+    html +='"></img>';
 
     // add prompt
     if (trial.prompt !== null){
-      new_html += trial.prompt;
+      html += trial.prompt;
     }
 
-    // draw
-    display_element.innerHTML = new_html;
+    // render
+    display_element.innerHTML = html;
 
     // store response
     var response = {

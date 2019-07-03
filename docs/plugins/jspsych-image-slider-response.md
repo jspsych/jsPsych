@@ -9,6 +9,9 @@ Parameters with a default value of *undefined* must be specified. Other paramete
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 stimulus | string | *undefined* | The path to the image file to be displayed.
+stimulus_height | integer | null | Set the height of the image in pixels. If left null (no value specified), then the image will display at its natural height.
+stimulus_width | integer | null | Set the width of the image in pixels. If left null (no value specified), then the image will display at its natural width.
+maintain_aspect_ration | boolean | true | If setting *only* the width or *only* the height and this parameter is true, then the other dimension will be scaled to maintain the image's aspect ratio. 
 labels | array of strings | [] | Labels displayed at equidistant locations on the slider. For example, two labels will be placed at the ends of the slider. Three labels would place two at the ends and one in the middle. Four will place two at the ends, and the other two will be at 33% and 67% of the slider width.
 button_label | string |  'Continue' | Label of the button to advance/submit
 min | integer | 0 | Sets the minimum value of the slider

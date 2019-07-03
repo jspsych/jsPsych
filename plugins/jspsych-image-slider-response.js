@@ -25,6 +25,24 @@ jsPsych.plugins['image-slider-response'] = (function() {
         default: undefined,
         description: 'The image to be displayed'
       },
+      stimulus_height: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Image height',
+        default: null,
+        description: 'Set the image height in pixels'
+      },
+      stimulus_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Image width',
+        default: null,
+        description: 'Set the image width in pixels'
+      },
+      maintain_aspect_ratio: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Maintain aspect ratio',
+        default: true,
+        description: 'Maintain the aspect ratio after setting width or height'
+      },
       min: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Min slider',
@@ -93,7 +111,22 @@ jsPsych.plugins['image-slider-response'] = (function() {
   plugin.trial = function(display_element, trial) {
 
     var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 100px 0px;">';
-    html += '<div id="jspsych-image-slider-response-stimulus"><img src="' + trial.stimulus + '"></div>';
+    html += '<div id="jspsych-image-slider-response-stimulus"></div>';
+    var html = '<img src="'+trial.stimulus+'" style="';
+    if(trial.stimulus_height !== null){
+      html += 'height:'+trial.stimulus_height+'px; '
+      if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
+        html += 'width: auto; ';
+      }
+    }
+    if(trial.stimulus_width !== null){
+      html += 'width:'+trial.stimulus_width+'px; '
+      if(trial.stimulus_height == null && trial.maintain_aspect_ratio){
+        html += 'height: auto; ';
+      }
+    }
+    html += '"></img>';
+    html += '</div>';
     html += '<div class="jspsych-image-slider-response-container" style="position:relative;">';
     html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-image-slider-response-response"></input>';
     html += '<div>'
