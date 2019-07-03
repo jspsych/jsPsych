@@ -127,7 +127,7 @@ jsPsych.plugins['image-slider-response'] = (function() {
     }
     html += '"></img>';
     html += '</div>';
-    html += '<div class="jspsych-image-slider-response-container" style="position:relative;">';
+    html += '<div class="jspsych-image-slider-response-container" style="position:relative; margin-bottom:3em;">';
     html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-image-slider-response-response"></input>';
     html += '<div>'
     for(var j=0; j < trial.labels.length; j++){

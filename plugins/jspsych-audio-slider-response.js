@@ -97,7 +97,7 @@ jsPsych.plugins['audio-slider-response'] = (function() {
     }
 
     var html = '<div id="jspsych-audio-slider-response-wrapper" style="margin: 100px 0px;">';
-  	html += '<div class="jspsych-audio-slider-response-container" style="position:relative;">';
+  	html += '<div class="jspsych-audio-slider-response-container" style="position:relative; margin-bottom:3em;">';
     html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-audio-slider-response-response"></input>';
     html += '<div>'
     for(var j=0; j < trial.labels.length; j++){
