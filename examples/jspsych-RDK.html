@@ -30,13 +30,16 @@
 		
 		//The test block where all the trials are nested. The properties here will trickle down to all trials in the timeline unless they have their own properties defined   
 		var test_block = {
-			type: "RDK",
+			type: "rdk",
 			post_trial_gap: 500, //The Inter Trial Interval. You can either have no ITI, or have an ITI but change the display element to be the same color as the stimuli background to prevent flashing between trials
 			number_of_dots: 200, //Total number of dots in each aperture
 			RDK_type: 3, //The type of RDK used
 			choices: ['a', 'l'], //Choices available to be keyed in by participant
 			trial_duration: 1000, //Duration of each trial in ms
 			timeline: RDK_trials, //The timeline of all the trials
+			background_color: "white",
+			dot_color: "black"
+			
 		}
 
 

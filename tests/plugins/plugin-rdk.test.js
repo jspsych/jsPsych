@@ -3,15 +3,15 @@ const utils = require('../testing-utils.js');
 
 jest.useFakeTimers();
 
-describe('RDK plugin', function(){
+describe('rdk plugin', function(){
 
 	beforeEach(function(){
 		require(root + 'jspsych.js');
-		require(root + 'plugins/jspsych-RDK.js');
+		require(root + 'plugins/jspsych-rdk.js');
 	});
 
 	test('loads correctly', function(){
-		expect(typeof window.jsPsych.plugins['RDK']).not.toBe('undefined');
+		expect(typeof window.jsPsych.plugins['rdk']).not.toBe('undefined');
 	});
 
 });
