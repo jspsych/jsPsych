@@ -51,6 +51,12 @@ jsPsych.plugins['audio-slider-response'] = (function() {
         array: false,
         description: 'Label of the button to advance.'
       },
+      require_movement: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Require movement',
+        default: false,
+        description: 'If true, the participant will have to move the slider before continuing.'
+      },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
@@ -116,7 +122,7 @@ jsPsych.plugins['audio-slider-response'] = (function() {
 		}
 
     // add submit button
-    html += '<button id="jspsych-audio-slider-response-next" class="jspsych-btn">'+trial.button_label+'</button>';
+    html += '<button id="jspsych-audio-slider-response-next" class="jspsych-btn" '+ (trial.require_movement ? "disabled" : "") + '>'+trial.button_label+'</button>';
 
     display_element.innerHTML = html;
 
@@ -124,6 +130,12 @@ jsPsych.plugins['audio-slider-response'] = (function() {
       rt: null,
       response: null
     };
+
+    if(trial.require_movement){
+      display_element.querySelector('#jspsych-audio-slider-response-response').addEventListener('change', function(){
+        display_element.querySelector('#jspsych-audio-slider-response-next').disabled = false;
+      })
+    }
 
     display_element.querySelector('#jspsych-audio-slider-response-next').addEventListener('click', function() {
       // measure response time
