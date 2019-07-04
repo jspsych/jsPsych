@@ -123,8 +123,8 @@ jsPsych.plugins['image-slider-response'] = (function() {
   plugin.trial = function(display_element, trial) {
 
     var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 100px 0px;">';
-    html += '<div id="jspsych-image-slider-response-stimulus"></div>';
-    var html = '<img src="'+trial.stimulus+'" style="';
+    html += '<div id="jspsych-image-slider-response-stimulus">';
+    html += '<img src="'+trial.stimulus+'" style="';
     if(trial.stimulus_height !== null){
       html += 'height:'+trial.stimulus_height+'px; '
       if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
