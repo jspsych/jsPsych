@@ -17,6 +17,8 @@
     type: 'html-slider-response',
     stimulus: '<div style="margin: 50px auto; width: 100px; height: 100px; background-color: rgb(46, 26, 122);"></div>',
     labels: ['Purple', 'Blue'],
+    slider_width: 500,
+    require_movement: true,
     prompt: '<p>Is this color closer to purple or blue? Use the slider above.</p>'
   }
 
@@ -25,6 +27,7 @@
     stimulus: '<div style="margin: 50px auto; width: 100px; height: 100px; background-color: rgb(29, 23, 138)"></div>',
     labels: ['Purple', 'Blue'],
     start: 10,
+    slider_width: 500,
     prompt: '<p>Is this color closer to purple or blue? Use the slider above. (5s time limit; custom starting value).</p>',
     trial_duration: 5000
   }
@@ -34,6 +37,7 @@
     stimulus: '<div style="margin: 50px auto; width: 100px; height: 100px; background-color: rgb(63, 17, 129)"></div>',
     labels: ['Purple', 'Blue'],
     prompt: '<p>Is this color closer to purple or blue? Use the slider above. (1s display).</p>',
+    slider_width: 500,
     stimulus_duration: 1000
   }
 

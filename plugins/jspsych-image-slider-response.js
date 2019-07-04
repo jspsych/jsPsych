@@ -74,6 +74,12 @@ jsPsych.plugins['image-slider-response'] = (function() {
         array: true,
         description: 'Labels of the slider.',
       },
+      slider_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name:'Slider width',
+        default: null,
+        description: 'Width of the slider in pixels.'
+      },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
@@ -133,7 +139,11 @@ jsPsych.plugins['image-slider-response'] = (function() {
     }
     html += '"></img>';
     html += '</div>';
-    html += '<div class="jspsych-image-slider-response-container" style="position:relative; margin-bottom:3em;">';
+    html += '<div class="jspsych-image-slider-response-container" style="position:relative; margin: 0 auto 3em auto; ';
+    if(trial.slider_width !== null){
+      html += 'width:'+trial.slider_width+'px;';
+    }
+    html += '">';
     html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-image-slider-response-response"></input>';
     html += '<div>'
     for(var j=0; j < trial.labels.length; j++){
