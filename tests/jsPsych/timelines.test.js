@@ -213,6 +213,53 @@ describe('conditional function', function(){
     expect(conditional_count).toBe(2);
   });
 
+  test('timeline variables from nested timelines are available', function(){
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: 'foo'
+    }
+
+    var trial2 = {
+      type: 'html-keyboard-response',
+      stimulus: jsPsych.timelineVariable('word')
+    }
+
+    var innertimeline = {
+      timeline: [trial],
+      conditional_function: function(){
+        if(jsPsych.timelineVariable('word', true) == 'b'){
+          return false;
+        } else {
+          return true;
+        }
+      }
+    }
+
+    var outertimeline = {
+      timeline: [trial2, innertimeline],
+      timeline_variables: [
+        {word: 'a'},
+        {word: 'b'},
+        {word: 'c'}
+      ]
+    }
+
+    jsPsych.init({
+      timeline: [outertimeline]
+    });
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('a');
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('b');
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('c');
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+    utils.pressKey(32);
+  });
+
 });
 
 describe('endCurrentTimeline', function(){

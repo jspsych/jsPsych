@@ -563,7 +563,11 @@ window.jsPsych = (function() {
       if(typeof timeline_parameters == 'undefined'){
         return this.findTimelineVariable(variable_name);
       } else {
-        return timeline_parameters.timeline[progress.current_location].timelineVariable(variable_name);
+        // if progress.current_location is -1, then the timeline variable is being evaluated
+        // in a function that runs prior to the trial starting, so we should treat that trial
+        // as being the active trial for purposes of finding the value of the timeline variable
+        var loc = Math.max(0, progress.current_location); 
+        return timeline_parameters.timeline[loc].timelineVariable(variable_name);
       }
     }
 
