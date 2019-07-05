@@ -21,7 +21,7 @@ describe('image-slider-response', function(){
 			labels: ['left', 'right'],
 			button_label: 'button',
 			on_load: function(){
-				expect(jsPsych.getDisplayElement().innerHTML).toMatch('<div id="jspsych-image-slider-response-stimulus"><img src="../media/blue.png"></div>');
+				expect(jsPsych.getDisplayElement().innerHTML).toMatch('<div id="jspsych-image-slider-response-stimulus"><img src="../media/blue.png"');
 				utils.clickTarget(document.querySelector('#jspsych-image-slider-response-next'));
 				done();
 			}
@@ -147,7 +147,7 @@ describe('image-slider-response', function(){
 			auto_preload: false
 		});
 
-		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<div id="jspsych-image-slider-response-stimulus"><img src="../media/blue.png"></div>');
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<div id="jspsych-image-slider-response-stimulus"><img src="../media/blue.png"');
 		jest.runTimersToTime(500);
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});
@@ -166,7 +166,7 @@ describe('image-slider-response', function(){
 			auto_preload: false
 		});
 
-		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<div id="jspsych-image-slider-response-stimulus"><img src="../media/blue.png"></div>');
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<div id="jspsych-image-slider-response-stimulus"><img src="../media/blue.png"');
 
 		utils.clickTarget(document.querySelector('#jspsych-image-slider-response-next'));
 
