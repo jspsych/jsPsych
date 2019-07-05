@@ -155,7 +155,7 @@ var jsPsych = window.jsPsych || require('jspsych');
     function after_response(choice) {
 
       // measure rt
-      var end_time = Date.now();
+      var end_time = performance.now();
       var rt = end_time - start_time;
       response.button = choice;
       response.rt = rt;
@@ -203,7 +203,7 @@ var jsPsych = window.jsPsych || require('jspsych');
     };
 
 		// start time
-    var start_time = Date.now();
+    var start_time = performance.now();
 
 		// start audio
     if(context !== null){

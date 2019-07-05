@@ -25,7 +25,7 @@ describe('image-keyboard-response', function(){
 			auto_preload: false
 		});
 
-		expect(jsPsych.getDisplayElement().innerHTML).toBe('<img src=\"../media/blue.png\" id=\"jspsych-image-keyboard-response-stimulus\">');
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src=\"../media/blue.png\" id=\"jspsych-image-keyboard-response-stimulus\"');
 
 		utils.pressKey(70);
 	});
@@ -42,14 +42,14 @@ describe('image-keyboard-response', function(){
 			auto_preload: false
 		});
 
-		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus">'));
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus"');
 
 		utils.pressKey(70);
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});
 
-	test('prompt should append html below stimulus', function(){
+	test('prompt should append html', function(){
 		var trial = {
 			type: 'image-keyboard-response',
 			stimulus: '../media/blue.png',
@@ -62,7 +62,7 @@ describe('image-keyboard-response', function(){
 			auto_preload: false
 		});
 
-		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus"><div id="foo">this is a prompt</div>'));
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<div id="foo">this is a prompt</div>');
 		utils.pressKey(70);
 	});
 
@@ -99,7 +99,7 @@ describe('image-keyboard-response', function(){
 			auto_preload: false
 		});
 
-		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus">'));
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus"');
 		jest.runTimersToTime(500);
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});
@@ -117,7 +117,7 @@ describe('image-keyboard-response', function(){
 			auto_preload: false
 		});
 
-		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus">'));
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus"');
 
 		utils.pressKey(70);
 

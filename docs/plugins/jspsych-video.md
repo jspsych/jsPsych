@@ -16,6 +16,7 @@ autoplay | boolean | true | If true, the video will begin playing as soon as it 
 controls | boolean | false | If true, controls for the video player will be available to the subject. They will be able to pause the video or move the playback to any point in the video.
 start | numeric | null | If given a value, the video will start at this time point in seconds.
 stop| numeric | null | If given a value, the video will stop at this time point in seconds.
+rate | numeric | null | The playback rate of the video. 1 is normal, <1 is slower, >1 is faster.
 
 ## Data Generated
 

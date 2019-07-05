@@ -93,7 +93,7 @@ var jsPsych = window.jsPsych || require('jspsych');
 
     var view_history = [];
 
-    var start_time = (new Date()).getTime();
+    var start_time = performance.now();
 
     var last_page_update_time = start_time;
 
@@ -173,7 +173,7 @@ var jsPsych = window.jsPsych || require('jspsych');
 
     function add_current_page_to_view_history() {
 
-      var current_time = (new Date()).getTime();
+      var current_time = performance.now();
 
       var page_view_time = current_time - last_page_update_time;
 
@@ -195,7 +195,7 @@ var jsPsych = window.jsPsych || require('jspsych');
 
       var trial_data = {
         "view_history": JSON.stringify(view_history),
-        "rt": (new Date()).getTime() - start_time
+        "rt": performance.now() - start_time
       };
 
       jsPsych.finishTrial(trial_data);
@@ -207,7 +207,7 @@ var jsPsych = window.jsPsych || require('jspsych');
       keyboard_listener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: [trial.key_forward, trial.key_backward],
-        rt_method: 'date',
+        rt_method: 'performance',
         persist: false,
         allow_held_key: false
       });
@@ -230,7 +230,7 @@ var jsPsych = window.jsPsych || require('jspsych');
       var keyboard_listener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: [trial.key_forward, trial.key_backward],
-        rt_method: 'date',
+        rt_method: 'performance',
         persist: false
       });
     }

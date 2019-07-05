@@ -20,13 +20,14 @@
   },
   "homepage": "https://github.com/jodeleeuw/jsPsych#readme",
   "devDependencies": {
-    "jest": "^22.0.3"
+    "jest": "^24.8"
   },
   "jest": {
     "resetModules": true,
     "testEnvironmentOptions": {
       "fetchExternalResources": true,
       "pretendToBeVisual": true
-    }
+    },
+    "testURL": "http://localhost/"
   }
 }

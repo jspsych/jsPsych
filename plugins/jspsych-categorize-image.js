@@ -161,7 +161,7 @@ var jsPsych = window.jsPsych || require('jspsych');
     jsPsych.pluginAPI.getKeyboardResponse({
       callback_function: after_response,
       valid_responses: trial.choices,
-      rt_method: 'date',
+      rt_method: 'performance',
       persist: false,
       allow_held_key: false
     });
@@ -206,7 +206,7 @@ var jsPsych = window.jsPsych || require('jspsych');
         jsPsych.pluginAPI.getKeyboardResponse({
           callback_function: after_forced_response,
           valid_responses: [trial.key_answer],
-          rt_method: 'date',
+          rt_method: 'performance',
           persist: false,
           allow_held_key: false
         });

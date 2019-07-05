@@ -20,6 +20,8 @@ var jsPsych = window.jsPsych || require('jspsych');
 
   var plugin = {};
 
+  jsPsych.pluginAPI.registerPreload('video', 'sources', 'video');
+
   plugin.info = {
     name: 'video',
     description: '',
@@ -34,13 +36,13 @@ var jsPsych = window.jsPsych || require('jspsych');
       width: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Width',
-        default: undefined,
+        default: '',
         description: 'The width of the video in pixels.'
       },
       height: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Height',
-        default: undefined,
+        default: '',
         description: 'The height of the video display in pixels.'
       },
       autoplay: {
@@ -72,6 +74,12 @@ var jsPsych = window.jsPsych || require('jspsych');
         pretty_name: 'Stop',
         default: null,
         description: 'Time to stop the clip.'
+      },
+      rate: {
+        type: jsPsych.plugins.parameterType.FLOAT,
+        pretty_name: 'Rate',
+        default: null,
+        description: 'The playback rate of the video. 1 is normal, <1 is slower, >1 is faster.'
       }
     }
   }
@@ -80,42 +88,37 @@ var jsPsych = window.jsPsych || require('jspsych');
   plugin.trial = function(display_element, trial) {
 
     // display stimulus
-    var video_html = '<video id="jspsych-video-player" width="'+trial.width+'" height="'+trial.height+'" '
+
+
+    var video_html = '<video id="jspsych-video-player"';
+    
+    if(trial.width) {
+      video_html += ' width="'+trial.width+'"';
+    }
+    if(trial.height) {
+      video_html += ' height="'+trial.height+'"';
+    }
     if(trial.autoplay){
-      video_html += "autoplay "
+      video_html += " autoplay ";
     }
     if(trial.controls){
-      video_html +="controls "
+      video_html +=" controls ";
     }
-    video_html+=">"
-    for(var i=0; i<trial.sources.length; i++){
-      var s = trial.sources[i];
-      if(s.indexOf('?') > -1){
-        s = s.substring(0, s.indexOf('?'));
+    video_html +=">";
+
+    var video_preload_blob = jsPsych.pluginAPI.getVideoBuffer(trial.sources[0]);
+    if(!video_preload_blob) {
+      for(var i=0; i<trial.sources.length; i++){
+        var file_name = trial.sources[i];
+        if(file_name.indexOf('?') > -1){
+          file_name = file_name.substring(0, file_name.indexOf('?'));
+        }
+        var type = file_name.substr(file_name.lastIndexOf('.') + 1);
+        type = type.toLowerCase();
+        video_html+='<source src="' + file_name + '" type="video/'+type+'">';   
       }
-      var type = s.substr(s.lastIndexOf('.') + 1);
-      type = type.toLowerCase();
-
-      // adding start stop parameters if specified
-      video_html+='<source src="'+trial.sources[i]
-
-      /*
-      // this isn't implemented yet in all browsers, but when it is
-      // revert to this way of doing it.
-
-      if (trial.start !== null) {
-        video_html+= '#t=' + trial.start;
-      } else {
-        video_html+= '#t=0';
-      }
-
-      if (trial.stop !== null) {
-        video_html+= ',' + trial.stop
-      }*/
-
-      video_html+='" type="video/'+type+'">';
     }
-    video_html +="</video>"
+    video_html += "</video>";
 
     //show prompt if there is one
     if (trial.prompt !== null) {
@@ -123,6 +126,9 @@ var jsPsych = window.jsPsych || require('jspsych');
     }
 
     display_element.innerHTML = video_html;
+    if(video_preload_blob){
+      display_element.querySelector('#jspsych-video-player').src = video_preload_blob;
+    }
 
     display_element.querySelector('#jspsych-video-player').onended = function(){
       end_trial();
@@ -140,6 +146,10 @@ var jsPsych = window.jsPsych || require('jspsych');
 
     if(trial.start !== null){
       display_element.querySelector('#jspsych-video-player').currentTime = trial.start;
+    }
+
+    if(trial.rate !== null){
+      display_element.querySelector('#jspsych-video-player').playbackRate = trial.rate;
     }
 
     // function to end trial when it is time

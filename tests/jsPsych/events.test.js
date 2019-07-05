@@ -212,6 +212,45 @@ describe('on_data_update', function(){
     });
   });
 
+  test('should contain data with null values', function(){
+
+    require('../../plugins/jspsych-html-slider-response.js');
+    
+    return (new Promise(function(resolve, reject){
+
+      var promise_data = [];
+
+      var trial = {
+        type: 'html-keyboard-response',
+        stimulus: 'hello',
+        trial_duration: 10
+      }
+
+      var trial_2 = {
+        type: 'html-slider-response',
+        stimulus: 'hello',
+        trial_duration: 10
+      }
+
+      jsPsych.init({
+        timeline: [trial, trial_2],
+        on_data_update: function(data){
+          promise_data.push(data);
+        },
+        on_finish: function(){
+          resolve(promise_data);
+        }
+      });
+
+      //resolve();
+    })).then(function(pd) {
+      expect(pd[0].key_press).not.toBeUndefined();
+      expect(pd[0].key_press).toBeNull();
+      expect(pd[1].response).toBeNull();
+      expect(pd[1].rt).toBeNull();
+    });
+  });
+
   test('should contain data added with on_finish (trial level)', function(){
     
     return (new Promise(function(resolve, reject){

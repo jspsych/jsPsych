@@ -141,7 +141,7 @@ var jsPsych = window.jsPsych || require('jspsych');
         });
 
         // start timer for this trial
-        start_time = (new Date()).getTime();
+        start_time = performance.now();
       }
     }
 
@@ -173,7 +173,7 @@ var jsPsych = window.jsPsych || require('jspsych');
     key_listener = jsPsych.pluginAPI.getKeyboardResponse({
       callback_function: after_response,
       valid_responses: trial.choices,
-      rt_method: 'date',
+      rt_method: 'performance',
       persist: true,
       allow_held_key: false
     });

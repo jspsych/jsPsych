@@ -204,7 +204,7 @@ var jsPsych = window.jsPsych || require('jspsych');
       key_listener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: valid_keys,
-        rt_method: 'date',
+        rt_method: 'performance',
         persist: false,
         allow_held_key: false
       });

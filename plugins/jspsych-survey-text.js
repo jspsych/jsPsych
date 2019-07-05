@@ -37,11 +37,11 @@ var jsPsych = window.jsPsych || require('jspsych');
             default: undefined,
             description: 'Prompt for the subject to response'
           },
-          value: {
+          placeholder: {
             type: jsPsych.plugins.parameterType.STRING,
             pretty_name: 'Value',
             default: "",
-            description: 'The string will be used to populate the response field with editable answer.'
+            description: 'Placeholder text in the textfield.'
           },
           rows: {
             type: jsPsych.plugins.parameterType.INT,
@@ -54,6 +54,12 @@ var jsPsych = window.jsPsych || require('jspsych');
             pretty_name: 'Columns',
             default: 40,
             description: 'The number of columns for the response text box.'
+          },
+          required: {
+            type: jsPsych.plugins.parameterType.BOOL,
+            pretty_name: 'Required',
+            default: false,
+            description: 'Require a response'
           }
         }
       },
@@ -95,35 +101,55 @@ var jsPsych = window.jsPsych || require('jspsych');
     if(trial.preamble !== null){
       html += '<div id="jspsych-survey-text-preamble" class="jspsych-survey-text-preamble">'+trial.preamble+'</div>';
     }
+    // start form
+    html += '<form id="jspsych-survey-text-form">'
+
+    // generate question order
+    var question_order = [];
+    for(var i=0; i<trial.questions.length; i++){
+      question_order.push(i);
+    }
+    if(trial.randomize_question_order){
+      question_order = jsPsych.randomization.shuffle(question_order);
+    }
+
     // add questions
     for (var i = 0; i < trial.questions.length; i++) {
-      html += '<div id="jspsych-survey-text-"'+i+'" class="jspsych-survey-text-question" style="margin: 2em 0em;">';
-      html += '<p class="jspsych-survey-text">' + trial.questions[i].prompt + '</p>';
+      var question = trial.questions[question_order[i]];
+      var question_index = question_order[i];
+      html += '<div id="jspsych-survey-text-'+question_index+'" class="jspsych-survey-text-question" style="margin: 2em 0em;">';
+      html += '<p class="jspsych-survey-text">' + question.prompt + '</p>';
       var autofocus = i == 0 ? "autofocus" : "";
-      if(trial.questions[i].rows == 1){
-        html += '<input type="text" name="#jspsych-survey-text-response-' + i + '" size="'+trial.questions[i].columns+'" value="'+trial.questions[i].value+'" '+autofocus+'></input>';
+      var req = question.required ? "required" : "";
+      if(question.rows == 1){
+        html += '<input id="input-'+question_index+'" type="text" name="#jspsych-survey-text-response-' + question_index + '" size="'+question.columns+'" '+autofocus+' '+req+' placeholder="'+question.placeholder+'"></input>';
       } else {
-        html += '<textarea name="#jspsych-survey-text-response-' + i + '" cols="' + trial.questions[i].columns + '" rows="' + trial.questions[i].rows + '" '+autofocus+'>'+trial.questions[i].value+'</textarea>';
+        html += '<textarea id="input-'+question_index+'" name="#jspsych-survey-text-response-' + question_index + '" cols="' + question.columns + '" rows="' + question.rows + '" '+autofocus+' '+req+' placeholder="'+question.placeholder+'"></textarea>';
       }
       html += '</div>';
     }
 
     // add submit button
-    html += '<button id="jspsych-survey-text-next" class="jspsych-btn jspsych-survey-text">'+trial.button_label+'</button>';
+    html += '<input type="submit" id="jspsych-survey-text-next" class="jspsych-btn jspsych-survey-text" value="'+trial.button_label+'"></input>';
 
+    html += '</form>'
     display_element.innerHTML = html;
 
-    display_element.querySelector('#jspsych-survey-text-next').addEventListener('click', function() {
+    // backup in case autofocus doesn't work
+    display_element.querySelector('#input-'+question_order[0]).focus();
+
+    display_element.querySelector('#jspsych-survey-text-form').addEventListener('submit', function(e) {
+      e.preventDefault();
       // measure response time
-      var endTime = (new Date()).getTime();
+      var endTime = performance.now();
       var response_time = endTime - startTime;
 
       // create object to hold responses
       var question_data = {};
-      var matches = display_element.querySelectorAll('div.jspsych-survey-text-question');
-      for(var index=0; index<matches.length; index++){
+      
+      for(var index=0; index < trial.questions.length; index++){
         var id = "Q" + index;
-        var val = matches[index].querySelector('textarea, input').value;
+        var val = document.querySelector('#jspsych-survey-text-'+index).querySelector('textarea, input').value;
         var obje = {};
         obje[id] = val;
         Object.assign(question_data, obje);
@@ -140,7 +166,7 @@ var jsPsych = window.jsPsych || require('jspsych');
       jsPsych.finishTrial(trialdata);
     });
 
-    var startTime = (new Date()).getTime();
+    var startTime = performance.now();
   };
 
   return plugin;

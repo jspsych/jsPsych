@@ -275,7 +275,7 @@ jsPsych.finishTrial({correct_response: true});
 ## jsPsych.getDisplayElement
 
 ```
-jsPsych.getDisplayElement
+jsPsych.getDisplayElement()
 ```
 
 ### Parameters
@@ -298,6 +298,32 @@ var el = jsPsych.getDisplayElement();
 // hide the jsPsych display
 el.style.visibility = 'hidden';
 ```
+
+---
+## jsPsych.getProgressBarCompleted
+
+```
+jsPsych.getProgressBarCompleted()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+Returns a value between 0 and 1 representing how full the progress bar currently is.
+
+### Description
+
+Used to get the current value of the progress bar. Works for automated and manual control.
+
+### Example
+
+```javascript
+var progress_bar_amount = jsPsych.getProgressBarCompleted();
+```
+
 ---
 ## jsPsych.init
 
@@ -322,12 +348,15 @@ on_trial_start | function | Function to execute when a new trial begins.
 on_trial_finish | function | Function to execute when a trial ends.
 on_data_update | function | Function to execute every time data is stored using the `jsPsych.data.write` method. All plugins use this method to save data (via a call to `jsPsych.finishTrial`, so this function runs every time a plugin stores new data.
 on_interaction_data_update | function | Function to execute every time a new interaction event occurs. Interaction events include clicking on a different window (blur), returning to the experiment window (focus), entering full screen mode (fullscreenenter), and exiting full screen mode (fullscreenexit).
+on_close | function | Function to execute when the user leaves the page. Can be used, for example, to save data before the page is closed.
 exclusions | object | Specifies restrictions on the browser the subject can use to complete the experiment. See list of options below.
 show_progress_bar | boolean | If true, then [a progress bar](../overview/progress-bar.md) is shown at the top of the page.
+message_progress_bar | string | Message to display next to the progress bar. The default is 'Completion Progress'. 
 auto_update_progress_bar | boolean | If true, then the progress bar at the top of the page will automatically update as every top-level timeline or trial is completed.
 show_preload_progress_bar | boolean | If true, then a progress bar is displayed while media files are automatically preloaded.
 preload_audio | array | An array of audio files to preload before starting the experiment.
 preload_images | array | An array of image files to preload before starting the experiment.
+preload_video | array | An array of video files to preload before starting the experiment.
 max_load_time | numeric | The maximum number of milliseconds to wait for content to preload. If the wait time is exceeded an error message is displayed and the experiment stops. The default value is 60 seconds.
 max_preload_attempts | numeric | The maximum number of attempts to preload each file in case of an error. The default value is 10. There is a small delay of 200ms between each attempt.
 use_webaudio | boolean | If false, then jsPsych will not attempt to use the WebAudio API for audio playback. Instead, HTML5 Audio objects will be used. The WebAudio API offers more precise control over the timing of audio events, and should be used when possible. The default value is true.
@@ -485,6 +514,34 @@ var trial = {
 ```
 
 ---
+## jsPsych.setProgressBar
+
+```
+jsPsych.setProgressBar(value)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+value | numeric | Proprotion (between 0 and 1) to fill the progress bar.
+
+
+### Return value
+
+None.
+
+### Description
+
+Set the progress bar to a custom amount. Proportion must be between 0 and 1. Values larger than 1 are treated as 1.
+
+### Example
+
+```javascript
+jsPsych.setProgressBar(0.85);
+```
+
+---
 ## jsPsych.startTime
 
 ```
@@ -508,6 +565,70 @@ Get the time that the experiment began.
 ```javascript
 var start_time = jsPsych.startTime();
 ```
+
+---
+## jsPsych.timelineVariable
+
+```
+jsPsych.timelineVariable(variable, call_immediate)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+variable | string | Name of the timeline variable
+call_immediate | bool | Typically this parameter is `false`, or simply ommitted. When `false`, the return value is a function that returns the timeline variable. This makes `jsPsych.timelineVariable` suitable for dynamic parameters by default. If `true` the function returns the value of the timeline variable immediately.
+
+### Return value
+
+Depends on the value of `call_immediate` parameter. See description above.
+
+### Description
+
+[Timeline variables](/overview/timeline/#timeline-variables) are a powerful technique for generating experiments with repetitive procedures but different parameter values. This function fetches the current value of a particular timeline variable. It must be used in conjunction with a timeline that has timeline variables. See the [timeline variable section](/overview/timeline/#timeline-variables) for details.
+
+### Examples
+
+#### Standard use as a parameter for a trial
+```javascript
+var trial = {
+  type: 'image-keyboard-response',
+  stimulus: jsPsych.timelineVariable('image')
+}
+
+var procedure = {
+  timeline: [trial],
+  timeline_variables: [
+    {image: 'face1.png'},
+    {image: 'face2.png'},
+    {image: 'face3.png'},
+    {image: 'face4.png'}
+  ]
+}
+```
+
+#### Invoking immediately in a function
+```javascript
+var trial = {
+  type: 'html-keyboard-response',
+  stimulus: function(){
+    return "<img style='width:100px; height:100px;' src='"+jsPsych.timelineVariable('image', true)+"'></img>";
+  }
+}
+
+var procedure = {
+  timeline: [trial],
+  timeline_variables: [
+    {image: 'face1.png'},
+    {image: 'face2.png'},
+    {image: 'face3.png'},
+    {image: 'face4.png'}
+  ]
+}
+```
+
+
 ---
 ## jsPsych.totalTime
 

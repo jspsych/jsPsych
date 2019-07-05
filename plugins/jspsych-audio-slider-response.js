@@ -48,11 +48,17 @@ var jsPsych = window.jsPsych || require('jspsych');
         description: 'Sets the step of the slider'
       },
       labels: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.HTML_STRING,
         pretty_name:'Labels',
         default: [],
         array: true,
         description: 'Labels of the slider.',
+      },
+      slider_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name:'Slider width',
+        default: null,
+        description: 'Width of the slider in pixels.'
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -60,6 +66,12 @@ var jsPsych = window.jsPsych || require('jspsych');
         default: 'Continue',
         array: false,
         description: 'Label of the button to advance.'
+      },
+      require_movement: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Require movement',
+        default: false,
+        description: 'If true, the participant will have to move the slider before continuing.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -107,7 +119,11 @@ var jsPsych = window.jsPsych || require('jspsych');
     }
 
     var html = '<div id="jspsych-audio-slider-response-wrapper" style="margin: 100px 0px;">';
-  	html += '<div class="jspsych-audio-slider-response-container" style="position:relative;">';
+  	html += '<div class="jspsych-audio-slider-response-container" style="position:relative; margin: 0 auto 3em auto; ';
+    if(trial.slider_width !== null){
+      html += 'width:'+trial.slider_width+'px;';
+    }
+    html += '">';
     html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-audio-slider-response-response"></input>';
     html += '<div>'
     for(var j=0; j < trial.labels.length; j++){
@@ -126,7 +142,7 @@ var jsPsych = window.jsPsych || require('jspsych');
 		}
 
     // add submit button
-    html += '<button id="jspsych-audio-slider-response-next" class="jspsych-btn">'+trial.button_label+'</button>';
+    html += '<button id="jspsych-audio-slider-response-next" class="jspsych-btn" '+ (trial.require_movement ? "disabled" : "") + '>'+trial.button_label+'</button>';
 
     display_element.innerHTML = html;
 
@@ -135,9 +151,15 @@ var jsPsych = window.jsPsych || require('jspsych');
       response: null
     };
 
+    if(trial.require_movement){
+      display_element.querySelector('#jspsych-audio-slider-response-response').addEventListener('change', function(){
+        display_element.querySelector('#jspsych-audio-slider-response-next').disabled = false;
+      })
+    }
+
     display_element.querySelector('#jspsych-audio-slider-response-next').addEventListener('click', function() {
       // measure response time
-      var endTime = (new Date()).getTime();
+      var endTime = performance.now();
 			var rt = endTime - startTime;
 			if(context !== null){
 				endTime = context.currentTime;
@@ -179,7 +201,7 @@ var jsPsych = window.jsPsych || require('jspsych');
       jsPsych.finishTrial(trialdata);
     }
 
-		var startTime = (new Date()).getTime();
+		var startTime = performance.now();
 		// start audio
     if(context !== null){
       startTime = context.currentTime;

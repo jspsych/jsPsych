@@ -54,6 +54,22 @@ var block = {
 }
 ```
 
+The data object for a trial can also be updated in the `on_finish` event handler. You can override properties or add new ones. This is particularly useful for cases where the value depends on something that happened during the trial.
+
+```js
+var trial = {
+  type: 'image-keyboard-response',
+  stimulus: 'imgA.jpg',
+  on_finish: function(data){
+    if(data.key_press == 65){
+      data.correct = true;
+    } else {
+      data.correct = false;
+    }
+  }
+}
+```
+
 ## Aggregating and manipulating jsPsych data
 
 When accessing the data with `jsPsych.data.get()` the returned object is a special data collection object that exposes a number of methods for aggregating and manipulating the data. The full list of methods is detailed in the [data module documentation](../core_library/jspsych-data.md).
