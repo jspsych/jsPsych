@@ -935,20 +935,22 @@ var jsPsych = (function() {
   }
 
   function evaluateTimelineVariables(trial) {
-    var keys = Object.keys(trial);
+    if (trial !== null) {
+      var keys = Object.keys(trial);
 
-    for (var i = 0; i < keys.length; i++) {
-      // timeline variables on the root level
-      if (
-        typeof trial[keys[i]] == "function" &&
-        trial[keys[i]].toString().replace(/\s/g, "") ==
-          "function(){returntimeline.timelineVariable(varname);}"
-      ) {
-        trial[keys[i]] = trial[keys[i]].call();
-      }
-      // timeline variables that are nested in objects
-      if (typeof trial[keys[i]] == "object" && trial[keys[i]] !== null) {
-        evaluateTimelineVariables(trial[keys[i]]);
+      for (var i = 0; i < keys.length; i++) {
+        // timeline variables on the root level
+        if (
+          typeof trial[keys[i]] == "function" &&
+          trial[keys[i]].toString().replace(/\s/g, "") ==
+            "function(){returntimeline.timelineVariable(varname);}"
+        ) {
+          trial[keys[i]] = trial[keys[i]].call();
+        }
+        // timeline variables that are nested in objects
+        if (typeof trial[keys[i]] == "object" && trial[keys[i]] !== null) {
+          evaluateTimelineVariables(trial[keys[i]]);
+        }
       }
     }
   }
