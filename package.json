@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/jodeleeuw/jsPsych#readme",
   "devDependencies": {
+    "@babel/preset-env": "^7.5.0",
+    "babel-jest": "^23.6.0",
     "jest": "^24.8"
   },
   "jest": {
