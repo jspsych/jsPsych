@@ -1790,6 +1790,42 @@ jsPsych.randomization = (function() {
     return random_shuffle;
   }
 
+  module.shuffleAlternateGroups = function(arr_groups, random_group_order){
+    if(typeof random_group_order == 'undefined'){
+      random_group_order = false;
+    }
+
+    var n_groups = arr_groups.length;
+    if(n_groups == 1){
+      console.warn('jsPsych.randomization.shuffleAlternateGroups was called with only one group. Defaulting to simple shuffle.');
+      return(module.shuffle(arr_groups[0]));
+    }
+
+    var group_order = [];
+    for(var i=0; i<n_groups; i++){
+      group_order.push(i);
+    }
+    if(random_group_order){
+      group_order = module.shuffle(group_order);
+    }
+
+    var randomized_groups = [];
+    var min_length = null;
+    for(var i=0; i<n_groups; i++){
+      min_length = min_length === null ? arr_groups[i].length : Math.min(min_length, arr_groups[i].length);
+      randomized_groups.push(module.shuffle(arr_groups[i]));
+    }
+
+    var out = [];
+    for(var i=0; i<min_length; i++){
+      for(var j=0; j<group_order.length; j++){
+        out.push(randomized_groups[group_order[j]][i])
+      }
+    }
+
+    return out;
+  }
+
   module.sampleWithoutReplacement = function(arr, size){
     if(!Array.isArray(arr)){
       console.error("First argument to jsPsych.randomization.sampleWithoutReplacement() must be an array")
