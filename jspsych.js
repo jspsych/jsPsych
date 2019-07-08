@@ -253,7 +253,7 @@ window.jsPsych = (function() {
     opts.on_data_update(trial_data_values);
 
     // wait for iti
-    if (typeof current_trial.post_trial_gap === null) {
+    if (typeof current_trial.post_trial_gap === null || typeof current_trial.post_trial_gap === 'undefined') {
       if (opts.default_iti > 0) {
         setTimeout(nextTrial, opts.default_iti);
       } else {
@@ -416,6 +416,8 @@ window.jsPsych = (function() {
           order = jsPsych.randomization.sampleWithoutReplacement(order, timeline_parameters.sample.size);
         } else if(timeline_parameters.sample.type == 'fixed-repetitions'){
           order = jsPsych.randomization.repeat(order, timeline_parameters.sample.size, false);
+        } else if(timeline_parameters.sample.type == 'alternate-groups'){
+          
         }
       }
 
