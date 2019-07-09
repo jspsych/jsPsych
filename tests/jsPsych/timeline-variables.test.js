@@ -23,6 +23,38 @@ describe('sampling', function(){
     expect(true).toBe(true);
   });
 
+  test('alternate-groups method produces alternating groups', function(){
+    var trial = {
+      timeline: [{
+        type: 'html-keyboard-response',
+        stimulus: jsPsych.timelineVariable('stimulus')
+      }],
+      timeline_variables: [
+        {stimulus: 'a'},
+        {stimulus: 'a'},
+        {stimulus: 'b'},
+        {stimulus: 'b'},
+        {stimulus: 'c'},
+        {stimulus: 'c'}
+      ],
+      sample: {
+        type: 'alternate-groups',
+        groups: [[0,0,0,0,1,1,1,1],[2,2,2,2,3,3,3,3],[4,4,4,4,5,5,5,5]],
+        randomize_group_order: true
+      }
+    }
+
+    jsPsych.init({timeline: [trial]});
+    var last = jsPsych.getDisplayElement().innerHTML;
+    for(var i=0;i<23;i++){
+      utils.pressKey(32);
+      var curr = jsPsych.getDisplayElement().innerHTML;
+      expect(last).not.toMatch(curr);
+      last = curr;
+    }
+    utils.pressKey(32);
+  })
+
   test('sampling functions run when timeline loops', function(){
 
     var count = 0;

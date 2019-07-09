@@ -204,7 +204,13 @@ var face_name_procedure = {
 
 ### Sampling methods
 
-There are also a set of sampling methods that can be used to select a set of trials from the timeline_variables. Sampling is declared by creating a `sample` parameter.
+There are also a set of sampling methods that can be used to select a set of trials from the timeline_variables. Sampling is declared by creating a `sample` parameter. The `sample` parameter is given an object of arguments. The `type` parameter in this object controls the type of sampling that is done. Valid values for `type` are 
+
+* `"with-replacement"`: Sample `size` items from the timeline variables with the possibility of choosing the same item multiple time.
+* `"without-replacement"`: Sample `size` itesm from timeline variables, with each item being selected a maximum of 1 time.
+* `"fixed-repetitons"`: Repeat each item in the timeline variables `size` times, in a random order. Unlike using the `repetitons` parameter, this method allows for consecutive trials to use the same timeline variable set.
+* `"alternate-groups"`: Sample in an alternating order based on a declared group membership. Groups are defined by the `groups` parameter. This parameter takes an array of arrays, where each inner array is a group and the items in the inner array are the indices of the timeline variables in the `timeline_variables` array that belong to that group.
+* `"custom"`: Write a function that returns a custom order of the timeline variables.
 
 #### Sampling with replacement
 ```javascript
@@ -271,6 +277,24 @@ var face_name_procedure = {
 	sample: {
 		type: 'fixed-repetitions',
 		size: 3, // 3 repetitions of each trial, 12 total trials, order is randomized.
+	}
+}
+```
+
+#### Alternating groups
+```javascript
+var face_name_procedure = {
+	// timeline parameter hidden to save space ...
+	timeline_variables: [
+		{ face: 'person-1.jpg', name: 'Alex' },
+		{ face: 'person-2.jpg', name: 'Beth' },
+		{ face: 'person-3.jpg', name: 'Chad' },
+		{ face: 'person-4.jpg', name: 'Dave' }
+	],
+	sample: {
+		type: 'alternate-groups',
+		groups: [[0,2],[1,3]], // Alex and Chad are in group 1. Beth and Dave are in group 2. 
+		randomize_group_order: false // The first trial will be an item from group 1.
 	}
 }
 ```

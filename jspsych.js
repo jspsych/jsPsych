@@ -417,7 +417,9 @@ window.jsPsych = (function() {
         } else if(timeline_parameters.sample.type == 'fixed-repetitions'){
           order = jsPsych.randomization.repeat(order, timeline_parameters.sample.size, false);
         } else if(timeline_parameters.sample.type == 'alternate-groups'){
-          
+          order = jsPsych.randomization.shuffleAlternateGroups(timeline_parameters.sample.groups, timeline_parameters.sample.randomize_group_order);
+        } else {
+          console.error('Invalid type in timeline sample parameters. Valid options for type are "custom", "with-replacement", "without-replacement", "fixed-repetitions", and "alternate-groups"');
         }
       }
 
