@@ -342,7 +342,7 @@ The settings object can contain several parameters. The only *required* paramete
 Parameter | Type | Description
 --------- | ---- | -----------
 timeline | array | An array containing the objects that describe the experiment timeline. See [Creating an Experiment: The Timeline](../overview/timeline.md).
-display_element | string | The ID of an HTML element to display the experiment in. If left blank, jsPsych will use the `<body>` element to display content (creating it if necessary). All keyboard event listeners are bound to this element. In order for a keyboard event to be detected, this element must have focus (be the last thing that the subject clicked on).
+display_element | string | The ID of an HTML element to display the experiment in. If left blank, jsPsych will use the `<body>` element to display content. All keyboard event listeners are bound to this element. In order for a keyboard event to be detected, this element must have focus (be the last thing that the subject clicked on).
 on_finish | function | Function to execute when the experiment ends.
 on_trial_start | function | Function to execute when a new trial begins.
 on_trial_finish | function | Function to execute when a trial ends.
@@ -361,6 +361,7 @@ max_load_time | numeric | The maximum number of milliseconds to wait for content
 max_preload_attempts | numeric | The maximum number of attempts to preload each file in case of an error. The default value is 10. There is a small delay of 200ms between each attempt.
 use_webaudio | boolean | If false, then jsPsych will not attempt to use the WebAudio API for audio playback. Instead, HTML5 Audio objects will be used. The WebAudio API offers more precise control over the timing of audio events, and should be used when possible. The default value is true.
 default_iti | numeric | The default inter-trial interval in ms. The default value if none is specified is 0ms.
+experiment_width | numeric | The desired width of the jsPsych container in pixels. If left undefined, the width will be 100% of the display element. Usually this is the `<body>` element, and the width will be 100% of the screen size.
 
 Possible values for the exclusions parameter above.
 

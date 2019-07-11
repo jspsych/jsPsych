@@ -100,7 +100,8 @@ window.jsPsych = (function() {
       'show_preload_progress_bar': true,
       'max_load_time': 60000,
       'max_preload_attempts': 10,
-      'default_iti': 0
+      'default_iti': 0,
+      'experiment_width': null
     };
 
     // override default options if user specifies an option
@@ -139,6 +140,7 @@ window.jsPsych = (function() {
     opts.display_element.innerHTML = '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
     DOM_container = opts.display_element;
     DOM_target = document.querySelector('#jspsych-content');
+    
 
     // add tabIndex attribute to scope event listeners
     opts.display_element.tabIndex = 0;
@@ -148,6 +150,11 @@ window.jsPsych = (function() {
       opts.display_element.className += ' jspsych-display-element';
     }
     DOM_target.className += 'jspsych-content';
+
+    // set experiment_width if not null
+    if(opts.experiment_width !== null){
+      DOM_target.style.width = opts.experiment_width + "px";
+    }
 
     // create experiment timeline
     timeline = new TimelineNode({
