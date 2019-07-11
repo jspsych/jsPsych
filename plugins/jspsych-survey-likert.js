@@ -48,6 +48,12 @@ jsPsych.plugins['survey-likert'] = (function() {
         default: null,
         description: 'String to display at top of the page.'
       },
+      scale_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Scale width',
+        default: null,
+        description: 'Width of the likert scales in pixels.'
+      },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
@@ -59,11 +65,17 @@ jsPsych.plugins['survey-likert'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
+    if(trial.scale_width !== null){
+      var w = trial.scale_width + 'px';
+    } else {
+      var w = '100%';
+    }
+
     var html = "";
     // inject CSS for trial
     html += '<style id="jspsych-survey-likert-css">';
     html += ".jspsych-survey-likert-statement { display:block; font-size: 16px; padding-top: 40px; margin-bottom:10px; }"+
-      ".jspsych-survey-likert-opts { list-style:none; width:100%; margin:0; padding:0 0 35px; display:block; font-size: 14px; line-height:1.1em; }"+
+      ".jspsych-survey-likert-opts { list-style:none; width:"+w+"; margin:auto; padding:0 0 35px; display:block; font-size: 14px; line-height:1.1em; }"+
       ".jspsych-survey-likert-opt-label { line-height: 1.1em; color: #444; }"+
       ".jspsych-survey-likert-opts:before { content: ''; position:relative; top:11px; /*left:9.5%;*/ display:block; background-color:#efefef; height:4px; width:100%; }"+
       ".jspsych-survey-likert-opts:last-of-type { border-bottom: 0; }"+

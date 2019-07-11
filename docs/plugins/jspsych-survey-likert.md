@@ -11,6 +11,7 @@ Parameter | Type | Default Value | Description
 questions | array | *undefined* | An array of objects, each object represents a question that appears on the screen. Each object contains a prompt, labels and required parameter that will be applied to the question. See examples below for further clarification.`prompt`: Type string, default value is *undefined*. The strings are the question that will be associated with a slider. `labels`: Type array, default value is *undefined*. Each array element is an array of strings. The innermost arrays contain a set of labels to display for an individual question. If you want to use blank responses and only label the end points or some subset of the options, just insert a blank string for the unlabeled responses.`required`: Type boolean, default value is false. Makes answering questions required.
 randomize_question_order | boolean | `false` | If true, the display order of `questions` is randomly determined at the start of the trial. In the data object, `Q0` will still refer to the first question in the array, regardless of where it was presented visually.
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions.
+scale_width | numeric | null | The width of the likert scale in pixels. If left `null`, then the width of the scale will be equal to the width of the widest content on the page.
 button_label | string |  'Continue' | Label of the button.
 
 ## Data Generated
