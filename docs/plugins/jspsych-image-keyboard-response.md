@@ -1,6 +1,6 @@
 # jspsych-image-keyboard-response
 
-This plugin displays and image and records responses generated with the keyboard.The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the subject has failed to respond within a fixed length of time.
+This plugin displays and image and records responses generated with the keyboard. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the subject has failed to respond within a fixed length of time.
 
 
 ## Parameters
@@ -39,7 +39,7 @@ var trial = {
 	stimulus: 'img/happy_face_1.png',
 	choices: ['e', 'i'],
 	prompt: "<p>Is this person happy or sad? Press 'e' for happy and 'i' for sad.</p>",
-  response_ends_trial: false
+	response_ends_trial: false
 };
 ```
 
