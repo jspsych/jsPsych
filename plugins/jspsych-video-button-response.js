@@ -1,21 +1,21 @@
 /**
- * jspsych-video-keyboard-response
+ * jspsych-video-button-response
  * Josh de Leeuw
  *
- * plugin for playing a video file and getting a keyboard response
+ * plugin for playing a video file and getting a button response
  *
  * documentation: docs.jspsych.org
  *
  **/
 
-jsPsych.plugins["video-keyboard-response"] = (function() {
+jsPsych.plugins["video-button-response"] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('video-keyboard-response', 'stimulus', 'video');
+  jsPsych.pluginAPI.registerPreload('video-button-response', 'stimulus', 'video');
 
   plugin.info = {
-    name: 'video-keyboard-response',
+    name: 'video-button-response',
     description: '',
     parameters: {
       sources: {
@@ -25,17 +25,24 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
         description: 'The video file to play.'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Choices',
+        default: undefined,
         array: true,
-        default: jsPsych.ALL_KEYS,
-        description: 'The keys the subject is allowed to press to respond to the stimulus.'
+        description: 'The labels for the buttons.'
+      },
+      button_html: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Button HTML',
+        default: '<button class="jspsych-btn">%choice%</button>',
+        array: true,
+        description: 'The html of the button. Can create own style.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
         default: null,
-        description: 'Any content here will be displayed below the stimulus.'
+        description: 'Any content here will be displayed below the buttons.'
       },
       width: {
         type: jsPsych.plugins.parameterType.INT,
@@ -91,6 +98,18 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
         default: null,
         description: 'How long to show trial before it ends.'
       },
+      margin_vertical: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Margin vertical',
+        default: '0px',
+        description: 'The vertical margin of the button.'
+      },
+      margin_horizontal: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Margin horizontal',
+        default: '8px',
+        description: 'The horizontal margin of the button.'
+      },
       response_ends_trial: {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Response ends trial',
@@ -104,7 +123,7 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
 
     // setup stimulus
     var video_html = '<div>'
-    video_html += '<video id="jspsych-video-keyboard-response-stimulus"';
+    video_html += '<video id="jspsych-video-button-response-stimulus"';
 
     if(trial.width) {
       video_html += ' width="'+trial.width+'"';
@@ -135,42 +154,72 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
     video_html += "</video>";
     video_html += "</div>";
 
+    //display buttons
+    var buttons = [];
+    if (Array.isArray(trial.button_html)) {
+      if (trial.button_html.length == trial.choices.length) {
+        buttons = trial.button_html;
+      } else {
+        console.error('Error in video-button-response plugin. The length of the button_html array does not equal the length of the choices array');
+      }
+    } else {
+      for (var i = 0; i < trial.choices.length; i++) {
+        buttons.push(trial.button_html);
+      }
+    }
+    video_html += '<div id="jspsych-video-button-response-btngroup">';
+    for (var i = 0; i < trial.choices.length; i++) {
+      var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
+      video_html += '<div class="jspsych-video-button-response-button" style="display: inline-block; margin:'+trial.margin_vertical+' '+trial.margin_horizontal+'" id="jspsych-video-button-response-button-' + i +'" data-choice="'+i+'">'+str+'</div>';
+    }
+    video_html += '</div>';
+
     // add prompt if there is one
     if (trial.prompt !== null) {
       video_html += trial.prompt;
     }
 
     display_element.innerHTML = video_html;
+    
+    var start_time = performance.now();
 
     if(video_preload_blob){
-      display_element.querySelector('#jspsych-video-keyboard-response-stimulus').src = video_preload_blob;
+      display_element.querySelector('#jspsych-video-button-response-stimulus').src = video_preload_blob;
     }
 
-    display_element.querySelector('#jspsych-video-keyboard-response-stimulus').onended = function(){
+    display_element.querySelector('#jspsych-video-button-response-stimulus').onended = function(){
       if(trial.trial_ends_after_video){
         end_trial();
       }
     }
 
     if(trial.start !== null){
-      display_element.querySelector('#jspsych-video-keyboard-response-stimulus').currentTime = trial.start;
+      display_element.querySelector('#jspsych-video-button-response-stimulus').currentTime = trial.start;
     }
 
     if(trial.stop !== null){
-      display_element.querySelector('#jspsych-video-keyboard-response-stimulus').addEventListener('timeupdate', function(e){
-        var currenttime = display_element.querySelector('#jspsych-video-keyboard-response-stimulus').currentTime;
+      display_element.querySelector('#jspsych-video-button-response-stimulus').addEventListener('timeupdate', function(e){
+        var currenttime = display_element.querySelector('#jspsych-video-button-response-stimulus').currentTime;
         if(currenttime >= trial.stop){
-          display_element.querySelector('#jspsych-video-keyboard-response-stimulus').pause();
+          display_element.querySelector('#jspsych-video-button-response-stimulus').pause();
         }
       })
     }
 
-    display_element.querySelector('#jspsych-video-keyboard-response-stimulus').playbackRate = trial.rate;
+    display_element.querySelector('#jspsych-video-button-response-stimulus').playbackRate = trial.rate;
+
+    // add event listeners to buttons
+    for (var i = 0; i < trial.choices.length; i++) {
+      display_element.querySelector('#jspsych-video-button-response-button-' + i).addEventListener('click', function(e){
+        var choice = e.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
+        after_response(choice);
+      });
+    }
 
     // store response
     var response = {
       rt: null,
-      key: null
+      button: null
     };
 
     // function to end trial when it is time
@@ -179,14 +228,11 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
 
-      // kill keyboard listeners
-      jsPsych.pluginAPI.cancelAllKeyboardResponses();
-
       // gather the data to store for the trial
       var trial_data = {
         "rt": response.rt,
         "stimulus": trial.stimulus,
-        "key_press": response.key
+        "button_pressed": response.button
       };
 
       // clear the display
@@ -197,32 +243,29 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
     };
 
     // function to handle responses by the subject
-    var after_response = function(info) {
+    function after_response(choice) {
+
+      // measure rt
+      var end_time = performance.now();
+      var rt = end_time - start_time;
+      response.button = choice;
+      response.rt = rt;
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      display_element.querySelector('#jspsych-video-keyboard-response-stimulus').className += ' responded';
+      display_element.querySelector('#jspsych-video-button-response-stimulus').className += ' responded';
 
-      // only record the first response
-      if (response.key == null) {
-        response = info;
+      // disable all the buttons after a response
+      var btns = document.querySelectorAll('.jspsych-video-button-response-button button');
+      for(var i=0; i<btns.length; i++){
+        //btns[i].removeEventListener('click');
+        btns[i].setAttribute('disabled', 'disabled');
       }
 
       if (trial.response_ends_trial) {
         end_trial();
       }
     };
-
-    // start the response listener
-    if (trial.choices != jsPsych.NO_KEYS) {
-      var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-        callback_function: after_response,
-        valid_responses: trial.choices,
-        rt_method: 'performance',
-        persist: false,
-        allow_held_key: false,
-      });
-    }
 
     // end trial if time limit is set
     if (trial.trial_duration !== null) {
