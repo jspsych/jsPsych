@@ -1,6 +1,6 @@
 # jspsych-image-slider-response
 
-This plugin displays an image.The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the subject has failed to respond within a fixed length of time.
+This plugin displays and image and allows the subject to respond by dragging a slider.
 
 ## Parameters
 

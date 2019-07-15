@@ -1,6 +1,6 @@
 # jspsych-html-slider-response
 
-This plugin displays HTML content. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the subject has failed to respond within a fixed length of time.
+This plugin displays HTML content and allows the subject to respond by dragging a slider.
 
 ## Parameters
 
@@ -11,8 +11,8 @@ Parameter | Type | Default Value | Description
 stimulus | HTML string | *undefined* | The string to be displayed
 labels | array of strings | [] | Labels displayed at equidistant locations on the slider. For example, two labels will be placed at the ends of the slider. Three labels would place two at the ends and one in the middle. Four will place two at the ends, and the other two will be at 33% and 67% of the slider width.
 button_label | string | 'Continue' | Label of the button to end the trial.
-min | integer | 0 | Sets the minimum value of the slider
-max | integer | 100 | Sets the maximum value of the slider
+min | integer | 0 | Sets the minimum value of the slider.
+max | integer | 100 | Sets the maximum value of the slider.
 start | integer | 50 | Sets the starting value of the slider
 step | integer | 1 | Sets the step of the slider. This is the smallest amount by which the slider can change.
 slider_width | integer | null | Set the width of the slider in pixels. If left null, then the width will be equal to the widest element in the display.
@@ -33,8 +33,6 @@ rt | numeric | The time in milliseconds for the subject to make a response. The 
 stimulus | string | The HTML content that was displayed on the screen.
 
 ## Examples
-
-#### Displaying content until subject responds
 
 ```javascript
 var trial = {

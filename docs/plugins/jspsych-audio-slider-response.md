@@ -1,6 +1,6 @@
 # jspsych-audio-slider-response
 
-This plugin plays audio files and records responses generated with a button click.
+This plugin plays an audio file and allows the subject to respond by dragging a slider.
 
 If the browser supports it, audio files are played using the WebAudio API.This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. 
 
