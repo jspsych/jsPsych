@@ -13,7 +13,10 @@
 
   var likert_trial = {
       type: 'survey-likert',
-      questions: [{prompt: "I like vegetables.", labels: scale, required: true}, {prompt: "I like fruit.", labels: scale, required: true}],
+      questions: [
+        {prompt: "I like vegetables.", name: 'Vegetables', labels: scale, required: true}, 
+        {prompt: "I like fruit.", name: 'Fruit', labels: scale, required: true}
+      ],
   };
 
   var likert_trial_random_order = {

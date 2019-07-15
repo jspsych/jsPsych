@@ -21,19 +21,31 @@ jsPsych.plugins['survey-likert'] = (function() {
         array: true,
         pretty_name: 'Questions',
         nested: {
-          prompt: {type: jsPsych.plugins.parameterType.STRING,
-                     pretty_name: 'Prompt',
-                     default: undefined,
-                     description: 'Questions that are associated with the slider.'},
-          labels: {type: jsPsych.plugins.parameterType.STRING,
-                   array: true,
-                   pretty_name: 'Labels',
-                   default: undefined,
-                   description: 'Labels to display for individual question.'},
-          required: {type: jsPsych.plugins.parameterType.BOOL,
-                     pretty_name: 'Required',
-                     default: false,
-                     description: 'Makes answering questions required.'}
+          prompt: {
+            type: jsPsych.plugins.parameterType.STRING,
+            pretty_name: 'Prompt',
+            default: undefined,
+            description: 'Questions that are associated with the slider.'
+          },
+          labels: {
+            type: jsPsych.plugins.parameterType.STRING,
+            array: true,
+            pretty_name: 'Labels',
+            default: undefined,
+            description: 'Labels to display for individual question.'
+          },
+          required: {
+            type: jsPsych.plugins.parameterType.BOOL,
+            pretty_name: 'Required',
+            default: false,
+            description: 'Makes answering the question required.'
+          },
+          name: {
+            type: jsPsych.plugins.parameterType.STRING,
+            pretty_name: 'Question Name',
+            default: '',
+            description: 'Controls the name of data values associated with this question'
+          }
         }
       },
       randomize_question_order: {
@@ -106,7 +118,7 @@ jsPsych.plugins['survey-likert'] = (function() {
       html += '<label class="jspsych-survey-likert-statement">' + question.prompt + '</label>';
       // add options
       var width = 100 / question.labels.length;
-      var options_string = '<ul class="jspsych-survey-likert-opts" data-radio-group="Q' + question_order[i] + '">';
+      var options_string = '<ul class="jspsych-survey-likert-opts" data-name="'+question.name+'" data-radio-group="Q' + question_order[i] + '">';
       for (var j = 0; j < question.labels.length; j++) {
         options_string += '<li style="width:' + width + '%"><input type="radio" name="Q' + question_order[i] + '" value="' + j + '"';
         if(question.required){
@@ -143,7 +155,12 @@ jsPsych.plugins['survey-likert'] = (function() {
           var response = parseInt(el.value);
         }
         var obje = {};
-        obje[id] = response;
+        if(matches[index].attributes['data-name'].value !== ''){
+          var name = matches[index].attributes['data-name'].value;
+        } else {
+          var name = id;
+        }
+        obje[name] = response;
         Object.assign(question_data, obje);
       }
 

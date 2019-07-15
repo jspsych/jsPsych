@@ -21,23 +21,37 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         array: true,
         pretty_name: 'Questions',
         nested: {
-          prompt: {type: jsPsych.plugins.parameterType.STRING,
-                     pretty_name: 'Prompt',
-                     default: undefined,
-                     description: 'The strings that will be associated with a group of options.'},
-          options: {type: jsPsych.plugins.parameterType.STRING,
-                     pretty_name: 'Options',
-                     array: true,
-                     default: undefined,
-                     description: 'Displays options for an individual question.'},
-          required: {type: jsPsych.plugins.parameterType.BOOL,
-                     pretty_name: 'Required',
-                     default: false,
-                     description: 'Subject will be required to pick an option for each question.'},
-          horizontal: {type: jsPsych.plugins.parameterType.BOOL,
-                        pretty_name: 'Horizontal',
-                        default: false,
-                        description: 'If true, then questions are centered and options are displayed horizontally.'},
+          prompt: {
+            type: jsPsych.plugins.parameterType.STRING,
+            pretty_name: 'Prompt',
+            default: undefined,
+            description: 'The strings that will be associated with a group of options.'
+          },
+          options: {
+            type: jsPsych.plugins.parameterType.STRING,
+            pretty_name: 'Options',
+            array: true,
+            default: undefined,
+            description: 'Displays options for an individual question.'
+          },
+          required: {
+            type: jsPsych.plugins.parameterType.BOOL,
+            pretty_name: 'Required',
+            default: false,
+            description: 'Subject will be required to pick an option for each question.'
+          },
+          horizontal: {
+            type: jsPsych.plugins.parameterType.BOOL,
+            pretty_name: 'Horizontal',
+            default: false,
+            description: 'If true, then questions are centered and options are displayed horizontally.'
+          },
+          name: {
+            type: jsPsych.plugins.parameterType.STRING,
+            pretty_name: 'Question Name',
+            default: '',
+            description: 'Controls the name of data values associated with this question'
+          }
         }
       },
       randomize_question_order: {
@@ -106,7 +120,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         question_classes.push('jspsych-survey-multi-choice-horizontal');
       }
 
-      html += '<div id="jspsych-survey-multi-choice-'+question_id+'" class="'+question_classes.join(' ')+'">';
+      html += '<div id="jspsych-survey-multi-choice-'+question_id+'" class="'+question_classes.join(' ')+'"  data-name="'+question.name+'">';
 
       // add question text
       html += '<p class="jspsych-survey-multi-choice-text survey-multi-choice">' + question.prompt 
@@ -143,7 +157,6 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 
     document.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
-      var matches = display_element.querySelectorAll("div." + plugin_id_name + "-question");
       // measure response time
       var endTime = performance.now();
       var response_time = endTime - startTime;
@@ -159,7 +172,11 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
           var val = "";
         }
         var obje = {};
-        obje[id] = val;
+        var name = id;
+        if(match.attributes['data-name'].value !== ''){
+          name = match.attributes['data-name'].value;
+        }
+        obje[name] = val;
         Object.assign(question_data, obje);
       }
       // save data

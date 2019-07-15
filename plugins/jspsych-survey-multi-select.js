@@ -44,6 +44,12 @@ jsPsych.plugins['survey-multi-select'] = (function() {
             default: false,
             description: 'Subject will be required to pick at least one option for this question.'
           },
+          name: {
+            type: jsPsych.plugins.parameterType.STRING,
+            pretty_name: 'Question Name',
+            default: '',
+            description: 'Controls the name of data values associated with this question'
+          }
         }
       },
       randomize_question_order: {
@@ -117,7 +123,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         question_classes.push(_join(plugin_id_name, 'horizontal'));
       }
 
-      trial_form.innerHTML += '<div id="'+_join(plugin_id_name, question_id)+'" class="'+question_classes.join(' ')+'"></div>';
+      trial_form.innerHTML += '<div id="'+_join(plugin_id_name, question_id)+'" data-name="'+question.name+'" class="'+question_classes.join(' ')+'"></div>';
 
       var question_selector = _join(plugin_id_selector, question_id);
 
@@ -188,7 +194,11 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         }
         var id = 'Q' + index
         var obje = {};
-        obje[id] = val;
+        var name = id;
+        if(match.attributes['data-name'].value !== ''){
+          name = match.attributes['data-name'].value;
+        }
+        obje[name] = val;
         Object.assign(question_data, obje);
         if(val.length == 0){ has_response.push(false); } else { has_response.push(true); }
       }
