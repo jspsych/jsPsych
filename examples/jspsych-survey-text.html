@@ -12,8 +12,8 @@
   var survey_page1 = {
     type: 'survey-text',
     questions: [
-      {prompt: 'How old are you?', columns: 3, required: true},
-      {prompt: 'Where were you born?', placeholder: 'location', columns: 50}
+      {prompt: 'How old are you?', columns: 3, required: true, name: 'Age'},
+      {prompt: 'Where were you born?', placeholder: 'City, State/Province, Country', columns: 50, name: 'BirthLocation'}
     ],
     randomize_question_order: true
   };

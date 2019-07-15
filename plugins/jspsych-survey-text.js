@@ -52,6 +52,12 @@ jsPsych.plugins['survey-text'] = (function() {
             pretty_name: 'Required',
             default: false,
             description: 'Require a response'
+          },
+          name: {
+            type: jsPsych.plugins.parameterType.STRING,
+            pretty_name: 'Question Name',
+            default: '',
+            description: 'Controls the name of data values associated with this question'
           }
         }
       },
@@ -114,9 +120,9 @@ jsPsych.plugins['survey-text'] = (function() {
       var autofocus = i == 0 ? "autofocus" : "";
       var req = question.required ? "required" : "";
       if(question.rows == 1){
-        html += '<input id="input-'+question_index+'" type="text" name="#jspsych-survey-text-response-' + question_index + '" size="'+question.columns+'" '+autofocus+' '+req+' placeholder="'+question.placeholder+'"></input>';
+        html += '<input type="text" id="input-'+question_index+'"  name="#jspsych-survey-text-response-' + question_index + '" data-name="'+question.name+'" size="'+question.columns+'" '+autofocus+' '+req+' placeholder="'+question.placeholder+'"></input>';
       } else {
-        html += '<textarea id="input-'+question_index+'" name="#jspsych-survey-text-response-' + question_index + '" cols="' + question.columns + '" rows="' + question.rows + '" '+autofocus+' '+req+' placeholder="'+question.placeholder+'"></textarea>';
+        html += '<textarea id="input-'+question_index+'" name="#jspsych-survey-text-response-' + question_index + '" data-name="'+question.name+'" cols="' + question.columns + '" rows="' + question.rows + '" '+autofocus+' '+req+' placeholder="'+question.placeholder+'"></textarea>';
       }
       html += '</div>';
     }
@@ -141,9 +147,14 @@ jsPsych.plugins['survey-text'] = (function() {
       
       for(var index=0; index < trial.questions.length; index++){
         var id = "Q" + index;
-        var val = document.querySelector('#jspsych-survey-text-'+index).querySelector('textarea, input').value;
+        var q_element = document.querySelector('#jspsych-survey-text-'+index).querySelector('textarea, input'); 
+        var val = q_element.value;
+        var name = q_element.attributes['data-name'].value;
+        if(name == ''){
+          name = id;
+        }        
         var obje = {};
-        obje[id] = val;
+        obje[name] = val;
         Object.assign(question_data, obje);
       }
       // save data
