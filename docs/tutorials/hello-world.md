@@ -21,8 +21,7 @@ Create a folder on your computer to put the experiment files in. Once you've cre
 To edit jsPsych code you'll need a programming-friendly text editor. Some free options are:
 
 * [Atom](https://atom.io) (Windows, OSX, Linux)
-* [Notepad++](http://notepad-plus-plus.org/) (Windows)
-* [TextMate](http://macromates.com/) (OSX)
+* [VSCode](https://code.visualstudio.com/) (Windows, OSX, Linux)
 
 Once you've got a text editor that you like, create a new file in the experiment folder called `experiment.html`
 
