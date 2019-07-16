@@ -2,7 +2,7 @@
 
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
   <head>
     
@@ -19,6 +19,10 @@
       
         <meta name="lang:search.language" content="en">
       
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
         <meta name="lang:search.result.none" content="No matching documents">
       
         <meta name="lang:search.result.one" content="1 matching document">
@@ -28,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../img/jspsych-favicon.png">
-      <meta name="generator" content="mkdocs-0.17.5, mkdocs-material-2.2.6">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.0">
     
     
       
@@ -36,42 +40,80 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.6525f7f6.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.0284f74d.css">
       
-        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.792431c1.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.01803549.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#4caf50">
       
     
     
-      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.74668098.js"></script>
     
     
       
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
-      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-50563838-1", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
   
     
     
-    
-      <body data-md-color-primary="green" data-md-color-accent="orange">
-    
+    <body dir="ltr" data-md-color-primary="green" data-md-color-accent="orange">
   
     <svg class="md-svg">
       <defs>
         
         
-          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
         
       </defs>
     </svg>
-    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
-    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
-    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#jspsych-survey-likert-plugin" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
     
       <header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid">
@@ -84,34 +126,35 @@
         </a>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
-        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
-            
-              <span class="md-header-nav__topic">
-                jsPsych
-              </span>
-              <span class="md-header-nav__topic">
+            <span class="md-header-nav__topic">
+              jsPsych
+            </span>
+            <span class="md-header-nav__topic">
+              
                 jspsych-survey-likert
-              </span>
-            
+              
+            </span>
           
         </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
           
-            <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
-            
 <div class="md-search" data-md-component="search" role="dialog">
-  <label class="md-search__overlay" for="search"></label>
-  <div class="md-search__inner">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
-      <label class="md-icon md-search__icon" for="search"></label>
-      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">&#xE5CD;</button>
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
@@ -125,7 +168,6 @@
     </div>
   </div>
 </div>
-          
         
       </div>
       
@@ -136,20 +178,18 @@
 
   
 
-
-  <a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      jspsych/jspsych
+<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
           </div>
         </div>
       
@@ -170,12 +210,12 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
-  <label class="md-nav__title md-nav__title--site" for="drawer">
-    <span class="md-nav__button md-logo">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../.." title="jsPsych" class="md-nav__button md-logo">
       
-        <img src="../../img/jspsych-logo-no-text-mono.svg" width="24" height="24">
+        <img src="../../img/jspsych-logo-no-text-mono.svg" width="48" height="48">
       
-    </span>
+    </a>
     jsPsych
   </label>
   
@@ -185,20 +225,18 @@
 
   
 
-
-  <a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      jspsych/jspsych
+<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
     </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -314,6 +352,18 @@
   <li class="md-nav__item">
     <a href="../../overview/data/" title="Data Storage, Aggregation, and Manipulation" class="md-nav__link">
       Data Storage, Aggregation, and Manipulation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../overview/experiment-options/" title="Experiment Settings" class="md-nav__link">
+      Experiment Settings
     </a>
   </li>
 
@@ -638,6 +688,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../jspsych-cloze/" title="jspsych-cloze" class="md-nav__link">
+      jspsych-cloze
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../jspsych-external-html/" title="jspsych-external-html" class="md-nav__link">
       jspsych-external-html
     </a>
@@ -864,17 +926,29 @@
           
           
 
+
+  <li class="md-nav__item">
+    <a href="../jspsych-survey-html-form/" title="jspsych-survey-html-form" class="md-nav__link">
+      jspsych-survey-html-form
+    </a>
+  </li>
+
+        
+          
+          
+          
+
   
 
 
   <li class="md-nav__item md-nav__item--active">
     
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
     
       
     
     
-      <label class="md-nav__link md-nav__link--active" for="toc">
+      <label class="md-nav__link md-nav__link--active" for="__toc">
         jspsych-survey-likert
       </label>
     
@@ -889,7 +963,7 @@
     
   
   
-    <label class="md-nav__title" for="toc">Table of contents</label>
+    <label class="md-nav__title" for="__toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
@@ -915,8 +989,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#basic-example-with-multiple-questions-on-a-page" title="Basic example with multiple questions on a page." class="md-nav__link">
-    Basic example with multiple questions on a page.
+  <a href="#basic-example" title="Basic example" class="md-nav__link">
+    Basic example
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multiple-questions-in-a-random-order" title="Multiple questions in a random order" class="md-nav__link">
+    Multiple questions in a random order
   </a>
   
 </li>
@@ -925,6 +1006,8 @@
     </nav>
   
 </li>
+      
+      
       
       
       
@@ -977,8 +1060,32 @@
 
 
   <li class="md-nav__item">
-    <a href="../jspsych-video/" title="jspsych-video" class="md-nav__link">
-      jspsych-video
+    <a href="../jspsych-video-button-response/" title="jspsych-video-button-response" class="md-nav__link">
+      jspsych-video-button-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../jspsych-video-keyboard-response/" title="jspsych-video-keyboard-response" class="md-nav__link">
+      jspsych-video-keyboard-response
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../jspsych-video-slider-response/" title="jspsych-video-slider-response" class="md-nav__link">
+      jspsych-video-slider-response
     </a>
   </li>
 
@@ -1113,7 +1220,7 @@
     
   
   
-    <label class="md-nav__title" for="toc">Table of contents</label>
+    <label class="md-nav__title" for="__toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
@@ -1139,8 +1246,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#basic-example-with-multiple-questions-on-a-page" title="Basic example with multiple questions on a page." class="md-nav__link">
-    Basic example with multiple questions on a page.
+  <a href="#basic-example" title="Basic example" class="md-nav__link">
+    Basic example
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multiple-questions-in-a-random-order" title="Multiple questions in a random order" class="md-nav__link">
+    Multiple questions in a random order
   </a>
   
 </li>
@@ -1149,6 +1263,8 @@
     </nav>
   
 </li>
+      
+      
       
       
       
@@ -1185,13 +1301,25 @@
 <td>questions</td>
 <td>array</td>
 <td><em>undefined</em></td>
-<td>An array of objects, each object represents a question that appears on the screen. Each object contains a prompt, labels and required parameter that will be applied to the question. See examples below for further clarification.<code>prompt</code>: Type string, default value is <em>undefined</em>. The strings are the question that will be associated with a slider. <code>labels</code>: Type array, default value is <em>undefined</em>. Each array element is an array of strings. The innermost arrays contain a set of labels to display for an individual question. If you want to use blank responses and only label the end points or some subset of the options, just insert a blank string for the unlabeled responses.<code>required</code>: Type boolean, default value is false. Makes answering questions required.</td>
+<td>An array of objects, each object represents a question that appears on the screen. Each object contains a prompt, labels and required parameter that will be applied to the question. See examples below for further clarification.<code>prompt</code>: Type string, default value is <em>undefined</em>. The strings are the question that will be associated with a slider. <code>labels</code>: Type array, default value is <em>undefined</em>. Each array element is an array of strings. The innermost arrays contain a set of labels to display for an individual question. If you want to use blank responses and only label the end points or some subset of the options, just insert a blank string for the unlabeled responses.<code>required</code>: Type boolean, default value is false. Makes answering questions required. <code>name</code>: Name of the question. Used for storing data. If left undefined then default names (<code>Q0</code>, <code>Q1</code>, <code>...</code>) will be used for the questions.</td>
+</tr>
+<tr>
+<td>randomize_question_order</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>If true, the display order of <code>questions</code> is randomly determined at the start of the trial. In the data object, <code>Q0</code> will still refer to the first question in the array, regardless of where it was presented visually.</td>
 </tr>
 <tr>
 <td>preamble</td>
 <td>string</td>
 <td>empty string</td>
 <td>HTML formatted string to display at the top of the page above all the questions.</td>
+</tr>
+<tr>
+<td>scale_width</td>
+<td>numeric</td>
+<td>null</td>
+<td>The width of the likert scale in pixels. If left <code>null</code>, then the width of the scale will be equal to the width of the widest content on the page.</td>
 </tr>
 <tr>
 <td>button_label</td>
@@ -1202,7 +1330,7 @@
 </tbody>
 </table>
 <h2 id="data-generated">Data Generated<a class="headerlink" href="#data-generated" title="Permanent link">&para;</a></h2>
-<p>In addition to the <a href="../overview#datacollectedbyplugins">default data collected by all plugins</a>, this plugin collects the following data for each trial.</p>
+<p>In addition to the <a href="overview#datacollectedbyplugins">default data collected by all plugins</a>, this plugin collects the following data for each trial.</p>
 <table>
 <thead>
 <tr>
@@ -1215,23 +1343,57 @@
 <tr>
 <td>responses</td>
 <td>JSON string</td>
-<td>A string in JSON format containing the response for each question. The encoded object will have a separate variable for the response to each question, with the first question in the trial being recorded in <code>Q0</code>, the second in <code>Q1</code>, and so on. The responses are recorded as integers, representing the position of the slider on the scale.</td>
+<td>A string in JSON format containing the response for each question. The encoded object will have a separate variable for the response to each question, with the first question in the trial being recorded in <code>Q0</code>, the second in <code>Q1</code>, and so on. The responses are recorded as integers, representing the position of the slider on the scale. If the <code>name</code> parameter is defined for the question, then the response will use the value of <code>name</code> as the key for the response in the <code>responses</code> object.</td>
 </tr>
 <tr>
 <td>rt</td>
 <td>numeric</td>
 <td>The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response.</td>
 </tr>
+<tr>
+<td>question_order</td>
+<td>JSON string</td>
+<td>A string in JSON format containing an array with the order of questions. For example <code>[2,0,1]</code> would indicate that the first question was <code>trial.questions[2]</code> (the third item in the <code>questions</code> parameter), the second question was <code>trial.questions[0]</code>, and the final question was <code>trial.questions[1]</code>.</td>
+</tr>
 </tbody>
 </table>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
-<h4 id="basic-example-with-multiple-questions-on-a-page">Basic example with multiple questions on a page.<a class="headerlink" href="#basic-example-with-multiple-questions-on-a-page" title="Permanent link">&para;</a></h4>
-<div class="codehilite"><pre><span></span><span class="c1">// defining two different response scales that can be used.</span>
-<span class="kd">var</span> <span class="nx">scale_1</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Strongly Disagree&quot;</span><span class="p">,</span> <span class="s2">&quot;Disagree&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Agree&quot;</span><span class="p">,</span> <span class="s2">&quot;Strongly Agree&quot;</span><span class="p">];</span>
+<h4 id="basic-example">Basic example<a class="headerlink" href="#basic-example" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">scale_1</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="s2">&quot;Strongly Disagree&quot;</span><span class="p">,</span> 
+  <span class="s2">&quot;Disagree&quot;</span><span class="p">,</span> 
+  <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> 
+  <span class="s2">&quot;Agree&quot;</span><span class="p">,</span> 
+  <span class="s2">&quot;Strongly Agree&quot;</span>
+<span class="p">];</span>
 
 <span class="kd">var</span> <span class="nx">likert_page</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;survey-likert&#39;</span><span class="p">,</span>
-    <span class="nx">questions</span><span class="o">:</span> <span class="p">[{</span><span class="nx">prompt</span><span class="o">:</span> <span class="s2">&quot;I like vegetables.&quot;</span><span class="p">,</span> <span class="nx">labels</span><span class="o">:</span> <span class="nx">scale_1</span><span class="p">}],</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;survey-likert&#39;</span><span class="p">,</span>
+  <span class="nx">questions</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span><span class="nx">prompt</span><span class="o">:</span> <span class="s2">&quot;I like vegetables.&quot;</span><span class="p">,</span> <span class="nx">labels</span><span class="o">:</span> <span class="nx">scale_1</span><span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">};</span>
+</pre></div>
+
+
+<h4 id="multiple-questions-in-a-random-order">Multiple questions in a random order<a class="headerlink" href="#multiple-questions-in-a-random-order" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">scale_1</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="s2">&quot;Strongly Disagree&quot;</span><span class="p">,</span> 
+  <span class="s2">&quot;Disagree&quot;</span><span class="p">,</span> 
+  <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> 
+  <span class="s2">&quot;Agree&quot;</span><span class="p">,</span> 
+  <span class="s2">&quot;Strongly Agree&quot;</span>
+<span class="p">];</span>
+
+<span class="kd">var</span> <span class="nx">likert_page</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;survey-likert&#39;</span><span class="p">,</span>
+  <span class="nx">questions</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span><span class="nx">prompt</span><span class="o">:</span> <span class="s2">&quot;I like vegetables.&quot;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Vegetables&#39;</span><span class="p">,</span> <span class="nx">labels</span><span class="o">:</span> <span class="nx">scale_1</span><span class="p">},</span>
+    <span class="p">{</span><span class="nx">prompt</span><span class="o">:</span> <span class="s2">&quot;I like fruit.&quot;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Fruit&#39;</span><span class="p">,</span> <span class="nx">labels</span><span class="o">:</span> <span class="nx">scale_1</span><span class="p">},</span>
+    <span class="p">{</span><span class="nx">prompt</span><span class="o">:</span> <span class="s2">&quot;I like meat.&quot;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Meat&#39;</span><span class="p">,</span> <span class="nx">labels</span><span class="o">:</span> <span class="nx">scale_1</span><span class="p">},</span>
+    <span class="p">{</span><span class="nx">prompt</span><span class="o">:</span> <span class="s2">&quot;I like dairy.&quot;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Dairy&#39;</span><span class="p">,</span> <span class="nx">labels</span><span class="o">:</span> <span class="nx">scale_1</span><span class="p">}</span>
+  <span class="p">],</span>
+  <span class="nx">randomize_question_order</span><span class="o">:</span> <span class="kc">true</span>
 <span class="p">};</span>
 </pre></div>
                 
@@ -1240,6 +1402,8 @@
               
               
                 
+
+
               
             </article>
           </div>
@@ -1252,7 +1416,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../jspsych-serial-reaction-time-mouse/" title="jspsych-serial-reaction-time-mouse" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../jspsych-survey-html-form/" title="jspsych-survey-html-form" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1261,7 +1425,7 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                jspsych-serial-reaction-time-mouse
+                jspsych-survey-html-form
               </span>
             </div>
           </a>
@@ -1289,20 +1453,18 @@
       <div class="md-footer-copyright">
         
           <div class="md-footer-copyright__highlight">
-            Copyright &copy; 2012-2018 Josh de Leeuw
+            Copyright &copy; 2012-2019 Josh de Leeuw
           </div>
         
         powered by
-        <a href="http://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org">MkDocs</a>
         and
         <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
       
-        
   <div class="md-footer-social">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
       <a href="https://github.com/jspsych" class="md-footer-social__link fa fa-github"></a>
     
@@ -1310,21 +1472,15 @@
     
   </div>
 
-      
     </div>
   </div>
 </footer>
       
     </div>
     
-      <script src="../../assets/javascripts/application.cae2244d.js"></script>
+      <script src="../../assets/javascripts/application.245445c6.js"></script>
       
-      <script>app.initialize({version:"0.17.5",url:{base:"../.."}})</script>
-      
-    
-    
-      
-        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})});var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})</script>
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       
     
   </body>
