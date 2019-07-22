@@ -34,6 +34,12 @@ jsPsych.plugins['survey-likert'] = (function() {
             default: undefined,
             description: 'Labels to display for individual question.'
           },
+          tight_scale: {
+            type: jsPsych.plugins.parameterType.BOOL,
+            pretty_name: 'Tight scale',
+            default: false,
+            description: 'Tight scale --> End labels coincide with the end of the scale if set to true.'
+          },
           required: {
             type: jsPsych.plugins.parameterType.BOOL,
             pretty_name: 'Required',
@@ -83,13 +89,19 @@ jsPsych.plugins['survey-likert'] = (function() {
       var w = '100%';
     }
 
+    if(trial.tight_scale){
+      var opt_before=".jspsych-survey-likert-opts:before { content: ''; position:relative; top:11px; left:9.5%; display:block; background-color:#efefef; height:4px; width:82%; }";
+    } else {
+      var opt_before=".jspsych-survey-likert-opts:before { content: ''; position:relative; top:11px;display:block; background-color:#efefef; height:4px; width:100%; }";
+    }
+
     var html = "";
     // inject CSS for trial
     html += '<style id="jspsych-survey-likert-css">';
     html += ".jspsych-survey-likert-statement { display:block; font-size: 16px; padding-top: 40px; margin-bottom:10px; }"+
       ".jspsych-survey-likert-opts { list-style:none; width:"+w+"; margin:auto; padding:0 0 35px; display:block; font-size: 14px; line-height:1.1em; }"+
       ".jspsych-survey-likert-opt-label { line-height: 1.1em; color: #444; }"+
-      ".jspsych-survey-likert-opts:before { content: ''; position:relative; top:11px; /*left:9.5%;*/ display:block; background-color:#efefef; height:4px; width:100%; }"+
+      opt_before+
       ".jspsych-survey-likert-opts:last-of-type { border-bottom: 0; }"+
       ".jspsych-survey-likert-opts li { display:inline-block; /*width:19%;*/ text-align:center; vertical-align: top; }"+
       ".jspsych-survey-likert-opts li input[type=radio] { display:block; position:relative; top:0; left:50%; margin-left:-6px; }"
