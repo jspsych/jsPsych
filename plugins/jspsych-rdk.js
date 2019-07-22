@@ -949,13 +949,12 @@ jsPsych.plugins["rdk"] = (function() {
       
 		    //Draw the fixation cross if we want it
 		    if(fixationCross === true){
-		      
 		    	//Horizontal line
 		    	ctx.beginPath();
 		    	ctx.lineWidth = fixationCrossThickness;
 		    	ctx.moveTo(canvasWidth/2 - fixationCrossWidth, canvasHeight/2);
 		    	ctx.lineTo(canvasWidth/2 + fixationCrossWidth, canvasHeight/2);
-		    	ctx.fillStyle = fixationCrossColor;
+		    	ctx.strokeStyle = fixationCrossColor;
 		    	ctx.stroke();
 		    	
 		    	//Vertical line
@@ -963,7 +962,7 @@ jsPsych.plugins["rdk"] = (function() {
 		    	ctx.lineWidth = fixationCrossThickness;
 		    	ctx.moveTo(canvasWidth/2, canvasHeight/2 - fixationCrossHeight);
 		    	ctx.lineTo(canvasWidth/2, canvasHeight/2 + fixationCrossHeight);
-		    	ctx.fillStyle = fixationCrossColor;
+		    	ctx.strokeStyle = fixationCrossColor;
 		    	ctx.stroke();
 		    }
       
