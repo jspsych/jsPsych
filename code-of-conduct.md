@@ -51,6 +51,6 @@ This code is not exhaustive or complete. It serves to capture our common underst
 
 ## References
 This document was based on, or inspired by, the following Codes of Conduct:
-Ubuntu https://ubuntu.com/community/code-of-conduct
-Microsoft https://opensource.microsoft.com/codeofconduct/
-Contributor Covenant https://www.contributor-covenant.org/version/1/4/code-of-conduct
+* Ubuntu https://ubuntu.com/community/code-of-conduct
+* Microsoft https://opensource.microsoft.com/codeofconduct/
+* Contributor Covenant https://www.contributor-covenant.org/version/1/4/code-of-conduct
