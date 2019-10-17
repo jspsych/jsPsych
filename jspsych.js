@@ -1764,7 +1764,7 @@ jsPsych.randomization = (function() {
     if(!Array.isArray(arr)){
       console.error('First argument to jsPsych.randomization.shuffleNoRepeats() must be an array.')
     }
-    if(typeof equalityTest !== 'undefined' || typeof equalityTest !== 'function'){
+    if(typeof equalityTest !== 'undefined' && typeof equalityTest !== 'function'){
       console.error('Second argument to jsPsych.randomization.shuffleNoRepeats() must be a function.')
     }
     // define a default equalityTest
