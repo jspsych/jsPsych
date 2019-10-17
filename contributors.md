@@ -3,6 +3,7 @@ The following people have contributed to the development of jsPsych by writing c
 * Jason Carpenter
 * Steve Chao - https://github.com/stchao
 * Krisitn Diep - https://github.com/kristiyip
+* Becky Gilbert - https://github.com/becky-gilbert
 * Jana Klaus - https://github.com/janakl4us
 * Jonas Lambers
 * Shane Martin - https://github.com/shamrt
