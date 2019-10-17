@@ -11,7 +11,7 @@ We hope that this community will encourage collaboration between users/groups wi
 
 jsPsych was created with the goal of making web-based behavioral experiments as easy as possible for those who do not have a background in web development or any other kind of computer programming. Thus, novice users are an essential part of this community. The involvement of beginner programmers is not only welcome, but critical for the continued success of the project. 
 
-We gain strength from diversity, and we actively seek participation from those who enhance it. We actively encourage participation from those who come from historically underrepresented groups in software development and STEM.
+Similarly, a core aim of the jsPsych project is to make web-based behavioral experiments accessible to anyone who wishes to utilize them. We can better achieve this goal with diverse voices guiding the project, and we value participation from those who bring different perspectives to our community. We actively encourage participation from those who come from historically underrepresented groups in software development and STEM.
 
 ### Core principles
 * **Be friendly and patient**: Remember that you might not be communicating in someone else's primary spoken or programming language, and that we don’t all have the same background knowledge and experience. 
