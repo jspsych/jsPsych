@@ -268,7 +268,7 @@ jsPsych.plugins["video-slider-response"] = (function() {
       // gather the data to store for the trial
       var trial_data = {
         "rt": response.rt,
-        "stimulus": trial.sources,
+        "stimulus": trial.stimulus,
         "response": response.response
       };
 
