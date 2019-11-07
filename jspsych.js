@@ -672,7 +672,8 @@ window.jsPsych = (function() {
     // get all the trials of a particular type
     this.trialsOfType = function(type) {
       if (typeof timeline_parameters == 'undefined'){
-        if (trial_parameters.type == type) {
+        var trial_type = (typeof trial_parameters.type === 'object') ? trial_parameters.type.info.name : trial_parameters.type;
+        if (trial_type == type) {
           return trial_parameters;
         } else {
           return [];
@@ -757,7 +758,7 @@ window.jsPsych = (function() {
         var trial_type = parameters.type;
         if (typeof trial_type == 'undefined') {
           console.error('Trial level node is missing the "type" parameter. The parameters for the node are: ' + JSON.stringify(parameters));
-        } else if ((typeof jsPsych.plugins[trial_type] == 'undefined') && (trial_type.toString().replace(/\s/g,'') != "function(){returntimeline.timelineVariable(varname);}")) {
+        } else if ((typeof trial_type !== 'object') && (typeof jsPsych.plugins[trial_type] == 'undefined') && (trial_type.toString().replace(/\s/g,'') != "function(){returntimeline.timelineVariable(varname);}")) {
           console.error('No plugin loaded for trials of type "' + trial_type + '"');
         }
         // create a deep copy of the parameters for the trial
@@ -851,7 +852,12 @@ window.jsPsych = (function() {
     DOM_target.scrollTop = 0;
 
     // execute trial method
-    jsPsych.plugins[trial.type].trial(DOM_target, trial);
+    if (typeof trial.type === 'object') {
+      // trial is passed as object, directly execute it
+      trial.type.trial(DOM_target, trial)
+    } else {
+      jsPsych.plugins[trial.type].trial(DOM_target, trial);
+    }
 
     // call trial specific loaded callback if it exists
     if(typeof trial.on_load == 'function'){
@@ -894,9 +900,10 @@ window.jsPsych = (function() {
         // this if statement is checking to see if the parameter type is expected to be a function, in which case we should NOT evaluate it.
         // the first line checks if the parameter is defined in the universalPluginParameters set
         // the second line checks the plugin-specific parameters
+        var plugin_info = typeof trial.type === 'object' ? trial.type.info : jsPsych.plugins[trial.type].info
         if(
           (typeof jsPsych.plugins.universalPluginParameters[keys[i]] !== 'undefined' && jsPsych.plugins.universalPluginParameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION ) ||
-          (typeof jsPsych.plugins[trial.type].info.parameters[keys[i]] !== 'undefined' && jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION)
+          (typeof plugin_info.parameters[keys[i]] !== 'undefined' && plugin_info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION)
         ) {
           if (typeof trial[keys[i]] == "function") {
             trial[keys[i]] = trial[keys[i]].call();
@@ -917,31 +924,32 @@ window.jsPsych = (function() {
   }
 
   function setDefaultValues(trial){
-    for(var param in jsPsych.plugins[trial.type].info.parameters){
+    var plugin_info = typeof trial.type === 'object' ? trial.type.info : jsPsych.plugins[trial.type].info
+    for(var param in plugin_info.parameters){
       // check if parameter is complex with nested defaults
-      if(jsPsych.plugins[trial.type].info.parameters[param].type == jsPsych.plugins.parameterType.COMPLEX){
-        if(jsPsych.plugins[trial.type].info.parameters[param].array == true){
+      if(plugin_info.parameters[param].type == jsPsych.plugins.parameterType.COMPLEX){
+        if(plugin_info.parameters[param].array == true){
           // iterate over each entry in the array
           for(var i in trial[param]){
             // check each parameter in the plugin description
-            for(var p in jsPsych.plugins[trial.type].info.parameters[param].nested){
+            for(var p in plugin_info.parameters[param].nested){
               if(typeof trial[param][i][p] == 'undefined' || trial[param][i][p] === null){
-                if(typeof jsPsych.plugins[trial.type].info.parameters[param].nested[p].default == 'undefined'){
-                  console.error('You must specify a value for the '+p+' parameter (nested in the '+param+' parameter) in the '+trial.type+' plugin.');
+                if(typeof plugin_info.parameters[param].nested[p].default == 'undefined'){
+                  console.error('You must specify a value for the '+p+' parameter (nested in the '+param+' parameter) in the '+plugin_info.name+' plugin.');
                 } else {
-                  trial[param][i][p] = jsPsych.plugins[trial.type].info.parameters[param].nested[p].default;
+                  trial[param][i][p] = plugin_info.parameters[param].nested[p].default;
                 }
               }
             }
           }
         }
-      }      
+      }
       // if it's not nested, checking is much easier and do that here:
       else if(typeof trial[param] == 'undefined' || trial[param] === null){
-        if(typeof jsPsych.plugins[trial.type].info.parameters[param].default == 'undefined'){
-          console.error('You must specify a value for the '+param+' parameter in the '+trial.type+' plugin.');
+        if(typeof plugin_info.parameters[param].default == 'undefined'){
+          console.error('You must specify a value for the '+param+' parameter in the '+plugin_info.name+' plugin.');
         } else {
-          trial[param] = jsPsych.plugins[trial.type].info.parameters[param].default;
+          trial[param] = plugin_info.parameters[param].default;
         }
       }
     }
@@ -1401,7 +1409,7 @@ jsPsych.data = (function() {
     //var trial_opt_data = typeof trial.data == 'function' ? trial.data() : trial.data;
 
     var default_data = {
-      'trial_type': trial.type,
+      'trial_type': typeof trial.type === 'object' ? trial.type.info.name : trial.type,
       'trial_index': progress.current_trial_global,
       'time_elapsed': jsPsych.totalTime(),
       'internal_node_id': jsPsych.currentTimelineNodeID()
