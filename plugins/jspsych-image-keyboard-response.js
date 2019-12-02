@@ -74,13 +74,32 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
         default: true,
         description: 'If true, trial will end when subject makes a response.'
       },
+      stimulus_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Stimulus width',
+        default: null,
+        description: 'How wide is the image'
+      },
+      stimulus_height: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Stimulus height',
+        default: null,
+        description: 'How wide is the image'
+      },
     }
   }
 
   plugin.trial = function(display_element, trial) {
 
     // display stimulus
-    var html = '<img src="'+trial.stimulus+'" id="jspsych-image-keyboard-response-stimulus" style="';
+    var size_spec = '';
+    if (trial.stimulus_height !== null) {
+      size_spec += ' height='+trial.stimulus_height;
+    }
+    if (trial.stimulus_width !== null) {
+      size_spec += ' width='+trial.stimulus_width;
+    }
+    var new_html = '<img src="'+trial.stimulus+'" id="jspsych-image-keyboard-response-stimulus"' + size_spec + ' ></img>';
     if(trial.stimulus_height !== null){
       html += 'height:'+trial.stimulus_height+'px; '
       if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
