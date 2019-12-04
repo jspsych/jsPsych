@@ -117,7 +117,7 @@ jsPsych.plugins["image-button-response"] = (function() {
     if (trial.stimulus_width !== null) {
       size_spec += ' width='+trial.stimulus_width;
     }
-    var new_html = '<img src="'+trial.stimulus+'" id="jspsych-image-keyboard-response-stimulus"' + size_spec + ' ></img>';
+    var html = '<img src="'+trial.stimulus+'" id="jspsych-image-button-response-stimulus"' + size_spec + ' ></img>';
     if(trial.stimulus_height !== null){
       html += 'height:'+trial.stimulus_height+'px; '
       if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
