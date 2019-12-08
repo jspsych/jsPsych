@@ -1,13 +1,13 @@
 {
   "name": "pushkin-jspsych",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A version of jsPsych designed to be imported and reassigned manually to window.jsPsych",
   "main": "build/jspsych.js",
   "files": [
     "build/*"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "babel src -d build"
   },
   "author": "L3",
@@ -17,6 +17,15 @@
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.1",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.15.3"
+    "eslint": "^5.15.3",
+    "jest": "^24.8"
+  },
+  "jest": {
+    "resetModules": true,
+    "testEnvironmentOptions": {
+      "fetchExternalResources": true,
+      "pretendToBeVisual": true
+    },
+    "testURL": "http://localhost/"
   }
 }

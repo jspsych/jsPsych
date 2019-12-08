@@ -90,12 +90,14 @@ const jsPsych = (function() {
       'use_webaudio': true,
       'exclusions': {},
       'show_progress_bar': false,
+      'message_progress_bar': 'Completion Progress',
       'auto_update_progress_bar': true,
       'auto_preload': true,
       'show_preload_progress_bar': true,
       'max_load_time': 60000,
       'max_preload_attempts': 10,
-      'default_iti': 0
+      'default_iti': 0,
+      'experiment_width': null
     };
 
     // override default options if user specifies an option
@@ -134,6 +136,7 @@ const jsPsych = (function() {
     opts.display_element.innerHTML = '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
     DOM_container = opts.display_element;
     DOM_target = document.querySelector('#jspsych-content');
+    
 
     // add tabIndex attribute to scope event listeners
     opts.display_element.tabIndex = 0;
@@ -143,6 +146,11 @@ const jsPsych = (function() {
       opts.display_element.className += ' jspsych-display-element';
     }
     DOM_target.className += 'jspsych-content';
+
+    // set experiment_width if not null
+    if(opts.experiment_width !== null){
+      DOM_target.style.width = opts.experiment_width + "px";
+    }
 
     // create experiment timeline
     timeline = new TimelineNode({
@@ -245,7 +253,7 @@ const jsPsych = (function() {
     opts.on_data_update(trial_data_values);
 
     // wait for iti
-    if (typeof current_trial.post_trial_gap === null) {
+    if (typeof current_trial.post_trial_gap === null || typeof current_trial.post_trial_gap === 'undefined') {
       if (opts.default_iti > 0) {
         setTimeout(nextTrial, opts.default_iti);
       } else {
@@ -387,7 +395,6 @@ const jsPsych = (function() {
     }
 
     // set the order for going through the timeline variables array
-    // TODO: this is where all the sampling options can be implemented
     this.setTimelineVariablesOrder = function() {
 
       // check to make sure this node has variables
@@ -409,6 +416,10 @@ const jsPsych = (function() {
           order = jsPsych.randomization.sampleWithoutReplacement(order, timeline_parameters.sample.size);
         } else if(timeline_parameters.sample.type == 'fixed-repetitions'){
           order = jsPsych.randomization.repeat(order, timeline_parameters.sample.size, false);
+        } else if(timeline_parameters.sample.type == 'alternate-groups'){
+          order = jsPsych.randomization.shuffleAlternateGroups(timeline_parameters.sample.groups, timeline_parameters.sample.randomize_group_order);
+        } else {
+          console.error('Invalid type in timeline sample parameters. Valid options for type are "custom", "with-replacement", "without-replacement", "fixed-repetitions", and "alternate-groups"');
         }
       }
 
@@ -556,7 +567,11 @@ const jsPsych = (function() {
       if(typeof timeline_parameters == 'undefined'){
         return this.findTimelineVariable(variable_name);
       } else {
-        return timeline_parameters.timeline[progress.current_location].timelineVariable(variable_name);
+        // if progress.current_location is -1, then the timeline variable is being evaluated
+        // in a function that runs prior to the trial starting, so we should treat that trial
+        // as being the active trial for purposes of finding the value of the timeline variable
+        var loc = Math.max(0, progress.current_location); 
+        return timeline_parameters.timeline[loc].timelineVariable(variable_name);
       }
     }
 
@@ -719,9 +734,15 @@ const jsPsych = (function() {
 
         // create a TimelineNode for each element in the timeline
         for (var i = 0; i < parameters.timeline.length; i++) {
-          timeline_parameters.timeline.push(new TimelineNode(Object.assign({}, node_data, parameters.timeline[i]), self, i));
+          // merge parameters
+          var merged_parameters = Object.assign({}, node_data, parameters.timeline[i]);
+          // merge any data from the parent node into child nodes
+          if(typeof node_data.data == 'object' && typeof parameters.timeline[i].data == 'object'){
+            var merged_data = Object.assign({}, node_data.data, parameters.timeline[i].data);
+            merged_parameters.data = merged_data;
+          }
+          timeline_parameters.timeline.push(new TimelineNode(merged_parameters, self, i));
         }
-
       }
       // if there is no timeline parameter, then this node is a trial node
       else {
@@ -745,7 +766,7 @@ const jsPsych = (function() {
 
     // show progress bar if requested
     if (opts.show_progress_bar === true) {
-      drawProgressBar();
+      drawProgressBar(opts.message_progress_bar);
     }
 
     // record the start time
@@ -868,13 +889,31 @@ const jsPsych = (function() {
   }
 
   function setDefaultValues(trial){
-    var trial_parameters = Object.keys(jsPsych.plugins[trial.type].info.parameters);
-    for(var i=0; i<trial_parameters.length; i++){
-      if(typeof trial[trial_parameters[i]] == 'undefined' || trial[trial_parameters[i]] === null){
-        if(typeof jsPsych.plugins[trial.type].info.parameters[trial_parameters[i]].default == 'undefined'){
-          console.error('You must specify a value for the '+trial_parameters[i]+' parameter in the '+trial.type+' plugin.');
+    for(var param in jsPsych.plugins[trial.type].info.parameters){
+      // check if parameter is complex with nested defaults
+      if(jsPsych.plugins[trial.type].info.parameters[param].type == jsPsych.plugins.parameterType.COMPLEX){
+        if(jsPsych.plugins[trial.type].info.parameters[param].array == true){
+          // iterate over each entry in the array
+          for(var i in trial[param]){
+            // check each parameter in the plugin description
+            for(var p in jsPsych.plugins[trial.type].info.parameters[param].nested){
+              if(typeof trial[param][i][p] == 'undefined' || trial[param][i][p] === null){
+                if(typeof jsPsych.plugins[trial.type].info.parameters[param].nested[p].default == 'undefined'){
+                  console.error('You must specify a value for the '+p+' parameter (nested in the '+param+' parameter) in the '+trial.type+' plugin.');
+                } else {
+                  trial[param][i][p] = jsPsych.plugins[trial.type].info.parameters[param].nested[p].default;
+                }
+              }
+            }
+          }
+        }
+      }      
+      // if it's not nested, checking is much easier and do that here:
+      else if(typeof trial[param] == 'undefined' || trial[param] === null){
+        if(typeof jsPsych.plugins[trial.type].info.parameters[param].default == 'undefined'){
+          console.error('You must specify a value for the '+param+' parameter in the '+trial.type+' plugin.');
         } else {
-          trial[trial_parameters[i]] = jsPsych.plugins[trial.type].info.parameters[trial_parameters[i]].default;
+          trial[param] = jsPsych.plugins[trial.type].info.parameters[param].default;
         }
       }
     }
@@ -930,10 +969,12 @@ const jsPsych = (function() {
     if(clear){ success(); }
   }
 
-  function drawProgressBar() {
+  function drawProgressBar(msg) {
     document.querySelector('.jspsych-display-element').insertAdjacentHTML('afterbegin',
       '<div id="jspsych-progressbar-container">'+
-      '<span>Completion Progress</span>'+
+      '<span>'+
+      msg+ 
+      '</span>'+
       '<div id="jspsych-progressbar-outer">'+
         '<div id="jspsych-progressbar-inner"></div>'+
       '</div></div>');
@@ -1258,7 +1299,7 @@ jsPsych.data = (function() {
       for(var i=0; i<data_column.values.length; i++){
         sum_square_error += Math.pow(data_column.values[i] - mean,2);
       }
-      var mse = sum_square_error / data_column.values.length;
+      var mse = sum_square_error / (data_column.values.length - 1);
       return mse;
     }
 
@@ -1436,7 +1477,7 @@ jsPsych.data = (function() {
 
     // fullscreen change capture
     function fullscreenchange(){
-      var type = (document.isFullScreen || document.webkitIsFullScreen || document.mozIsFullScreen) ? 'fullscreenenter' : 'fullscreenexit';
+      var type = (document.isFullScreen || document.webkitIsFullScreen || document.mozIsFullScreen || document.fullscreenElement) ? 'fullscreenenter' : 'fullscreenexit';
       var data = {
         event: type,
         trial: jsPsych.progress().current_trial_global,
@@ -1679,10 +1720,19 @@ jsPsych.randomization = (function() {
   }
 
   module.shuffle = function(arr) {
+    if(!Array.isArray(arr)){
+      console.error('Argument to jsPsych.randomization.shuffle() must be an array.')
+    }
     return shuffle(arr);
   }
 
   module.shuffleNoRepeats = function(arr, equalityTest) {
+    if(!Array.isArray(arr)){
+      console.error('First argument to jsPsych.randomization.shuffleNoRepeats() must be an array.')
+    }
+    if(typeof equalityTest !== 'undefined' && typeof equalityTest !== 'function'){
+      console.error('Second argument to jsPsych.randomization.shuffleNoRepeats() must be a function.')
+    }
     // define a default equalityTest
     if (typeof equalityTest == 'undefined') {
       equalityTest = function(a, b) {
@@ -1715,7 +1765,47 @@ jsPsych.randomization = (function() {
     return random_shuffle;
   }
 
+  module.shuffleAlternateGroups = function(arr_groups, random_group_order){
+    if(typeof random_group_order == 'undefined'){
+      random_group_order = false;
+    }
+
+    var n_groups = arr_groups.length;
+    if(n_groups == 1){
+      console.warn('jsPsych.randomization.shuffleAlternateGroups was called with only one group. Defaulting to simple shuffle.');
+      return(module.shuffle(arr_groups[0]));
+    }
+
+    var group_order = [];
+    for(var i=0; i<n_groups; i++){
+      group_order.push(i);
+    }
+    if(random_group_order){
+      group_order = module.shuffle(group_order);
+    }
+
+    var randomized_groups = [];
+    var min_length = null;
+    for(var i=0; i<n_groups; i++){
+      min_length = min_length === null ? arr_groups[i].length : Math.min(min_length, arr_groups[i].length);
+      randomized_groups.push(module.shuffle(arr_groups[i]));
+    }
+
+    var out = [];
+    for(var i=0; i<min_length; i++){
+      for(var j=0; j<group_order.length; j++){
+        out.push(randomized_groups[group_order[j]][i])
+      }
+    }
+
+    return out;
+  }
+
   module.sampleWithoutReplacement = function(arr, size){
+    if(!Array.isArray(arr)){
+      console.error("First argument to jsPsych.randomization.sampleWithoutReplacement() must be an array")
+    }
+    
     if (size > arr.length) {
       console.error("Cannot take a sample " +
         "larger than the size of the set of items to sample.");
@@ -1724,6 +1814,10 @@ jsPsych.randomization = (function() {
   }
 
   module.sampleWithReplacement = function(arr, size, weights) {
+    if(!Array.isArray(arr)){
+      console.error("First argument to jsPsych.randomization.sampleWithReplacement() must be an array")
+    }
+
     var normalized_weights = [];
     if(typeof weights !== 'undefined'){
       if(weights.length !== arr.length){
@@ -2342,10 +2436,16 @@ jsPsych.pluginAPI = (function() {
       }
     }
 
-    images = jsPsych.utils.unique(images);
-    audio  = jsPsych.utils.unique(audio);
+    images = jsPsych.utils.unique(jsPsych.utils.flatten(images));
+    audio  = jsPsych.utils.unique(jsPsych.utils.flatten(audio));
+    video  = jsPsych.utils.unique(jsPsych.utils.flatten(video));
 
-    var total_n = images.length + audio.length;
+    // remove any nulls false values
+    images = images.filter(function(x) { return x != false && x != null})
+    audio = audio.filter(function(x) { return x != false && x != null})
+    video = video.filter(function(x) { return x != false && x != null})
+    
+    var total_n = images.length + audio.length + video.length;
     var loaded = 0;
 
     if(progress_bar){
