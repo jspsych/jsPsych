@@ -1725,7 +1725,7 @@ jsPsych.randomization = (function() {
             repetitions = reps;
           } else {
             // throw warning if too long, and then use the first N
-            repetitions = repetions.slice(0, array.length);
+            repetitions = repetitions.slice(0, array.length);
           }
         }
       }
