@@ -51,7 +51,7 @@ jsPsych.plugins['survey-html-form'] = (function() {
       html += '<div id="jspsych-survey-html-form-preamble" class="jspsych-survey-html-form-preamble">'+trial.preamble+'</div>';
     }
     // start form
-    html += '<form id="jspsych-survey-html-form">'
+    html += '<form id="jspsych-survey-html-form" autocomplete="off">'
 
     // add form HTML / input elements
     html += trial.html;
