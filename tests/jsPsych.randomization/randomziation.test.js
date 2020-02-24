@@ -1,7 +1,8 @@
-const root = '../../';
+// const root = '../../';
 
-require(root + 'jspsych.js');
+// require(root + 'jspsych.js');
 
+import jsPsych from '../../jspsych.js';
 
 describe('#shuffle', function(){
   test('should produce fixed order with mock RNG', function(){
