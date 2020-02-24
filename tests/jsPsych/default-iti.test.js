@@ -1,12 +1,15 @@
-const root = '../../';
 const utils = require('../testing-utils.js');
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-html-keyboard-response.js';
 
 jest.useFakeTimers();
 
-beforeEach(function(){
-  require(root + 'jspsych.js');
-  require(root + 'plugins/jspsych-html-keyboard-response.js');
-});
+// const root = '../../';
+// beforeEach(function(){
+//   require(root + 'jspsych.js');
+//   require(root + 'plugins/jspsych-html-keyboard-response.js');
+// });
 
 describe('default iti parameter', function(){
   test('has a default value of 0', function(){

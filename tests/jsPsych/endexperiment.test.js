@@ -1,9 +1,12 @@
 const utils = require('../testing-utils.js');
 
-beforeEach(function(){
-    require('../../jspsych.js');
-    require('../../plugins/jspsych-html-keyboard-response');
-});
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-html-keyboard-response.js';
+
+// beforeEach(function(){
+//     require('../../jspsych.js');
+//     require('../../plugins/jspsych-html-keyboard-response');
+// });
 
 test('works on basic timeline', function(){
     var timeline = [

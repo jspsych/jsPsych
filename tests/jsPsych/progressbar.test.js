@@ -1,10 +1,13 @@
-const root = '../../';
 const utils = require('../testing-utils.js');
 
-beforeEach(function(){
-  require(root + 'jspsych.js');
-  require(root + 'plugins/jspsych-html-keyboard-response.js');
-});
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-html-keyboard-response.js';
+
+// const root = '../../';
+// beforeEach(function(){
+//   require(root + 'jspsych.js');
+//   require(root + 'plugins/jspsych-html-keyboard-response.js');
+// });
 
 describe('automatic progress bar', function(){
 

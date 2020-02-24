@@ -1,10 +1,13 @@
-const root = '../../';
 const utils = require('../testing-utils.js');
 
-beforeEach(function(){
-  require(root + 'jspsych.js');
-  require(root + 'plugins/jspsych-survey-text.js');
-});
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-survey-text.js';
+
+// const root = '../../';
+// beforeEach(function(){
+//   require(root + 'jspsych.js');
+//   require(root + 'plugins/jspsych-survey-text.js');
+// });
 
 describe('nested defaults', function(){
     test('work in basic situation', function(){

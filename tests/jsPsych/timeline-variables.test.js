@@ -1,10 +1,15 @@
-const root = '../../';
 const utils = require('../testing-utils.js');
 
-beforeEach(function(){
-  require(root + 'jspsych.js');
-  require(root + 'plugins/jspsych-html-keyboard-response.js');
-});
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-html-keyboard-response.js';
+import '../../plugins/jspsych-call-function.js';
+import '../../plugins/jspsych-html-button-response.js';
+
+// const root = '../../';
+// beforeEach(function(){
+//   require(root + 'jspsych.js');
+//   require(root + 'plugins/jspsych-html-keyboard-response.js');
+// });
 
 describe('randomize order', function(){
   test('holder', function(){
@@ -101,7 +106,7 @@ describe('sampling', function(){
 
 describe('timeline variables are correctly evaluated', function(){
   test('when used as trial type parameter', function(){
-    require(root + 'plugins/jspsych-html-button-response.js');
+    // require(root + 'plugins/jspsych-html-button-response.js');
 
     var tvs = [
       {type: 'html-keyboard-response'},
@@ -131,7 +136,7 @@ describe('timeline variables are correctly evaluated', function(){
   });
 
   test('when used with a plugin that has a FUNCTION parameter type', function(done){
-    require(root + 'plugins/jspsych-call-function.js');
+    // require(root + 'plugins/jspsych-call-function.js');
 
     const mockFn = jest.fn();
 
