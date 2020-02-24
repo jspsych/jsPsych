@@ -1,6 +1,8 @@
-const root = '../../';
+// const root = '../../';
 
-require(root + 'jspsych.js');
+// require(root + 'jspsych.js');
+
+import jsPsych from '../../jspsych.js';
 
 describe('unique', function(){
   test('generates unique array when there are duplicates', function(){
