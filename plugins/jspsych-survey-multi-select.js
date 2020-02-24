@@ -81,6 +81,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
   plugin.trial = function(display_element, trial) {
     var plugin_id_name = "jspsych-survey-multi-select";
     var plugin_id_selector = '#' + plugin_id_name;
+    var separator;
     var _join = function( /*args*/ ) {
       var arr = Array.prototype.slice.call(arguments, _join.length);
       return arr.join(separator = '-');
@@ -189,7 +190,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         var val = [];
         var inputboxes = match.querySelectorAll("input[type=checkbox]:checked")
         for(var j=0; j<inputboxes.length; j++){
-          currentChecked = inputboxes[j];
+          var currentChecked = inputboxes[j];
           val.push(currentChecked.value)
         }
         var id = 'Q' + index
