@@ -1,7 +1,10 @@
-const root = '../../';
+// const root = '../../';
 
-require(root + 'jspsych.js');
-require(root + 'plugins/jspsych-html-keyboard-response.js');
+// require(root + 'jspsych.js');
+// require(root + 'plugins/jspsych-html-keyboard-response.js');
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-html-keyboard-response.js';
 
 describe('#getKeyboardResponse', function(){
   beforeEach(function(){
