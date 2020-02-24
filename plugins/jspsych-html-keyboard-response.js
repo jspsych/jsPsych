@@ -7,7 +7,7 @@
  * documentation: docs.jspsych.org
  *
  **/
-
+import jsPsych from '../jspsych.js';
 
 jsPsych.plugins["html-keyboard-response"] = (function() {
 

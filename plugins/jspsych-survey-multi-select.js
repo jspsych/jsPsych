@@ -5,7 +5,7 @@
  * documentation: docs.jspsych.org
  *
  */
-
+import jsPsych from '../jspsych.js';
 
 jsPsych.plugins['survey-multi-select'] = (function() {
   var plugin = {};

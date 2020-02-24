@@ -11,6 +11,7 @@
  *
  *
  */
+import jsPsych from '../jspsych.js';
 
 jsPsych.plugins.instructions = (function() {
 

@@ -1,3 +1,5 @@
+import jsPsych from '../jspsych.js';
+
 jsPsych.plugins['audio-slider-response'] = (function() {
 	var plugin = {};
 

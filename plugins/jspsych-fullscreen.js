@@ -4,6 +4,7 @@
  * toggle fullscreen mode in the browser
  *
  */
+import jsPsych from '../jspsych.js';
 
 jsPsych.plugins.fullscreen = (function() {
 

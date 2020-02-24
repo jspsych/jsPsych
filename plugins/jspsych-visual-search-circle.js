@@ -11,6 +11,7 @@
  * documentation: docs.jspsych.org
  *
  **/
+import jsPsych from '../jspsych.js';
 
 jsPsych.plugins["visual-search-circle"] = (function() {
 

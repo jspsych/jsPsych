@@ -10,6 +10,7 @@
  * documentation: docs.jspsych.org
  *
  */
+import jsPsych from '../jspsych.js';
 
 jsPsych.plugins['vsl-animate-occlusion'] = (function() {
 

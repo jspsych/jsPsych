@@ -27,7 +27,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 */
-		
+import jsPsych from '../jspsych.js';
 		
 jsPsych.plugins["rdk"] = (function() {
 
