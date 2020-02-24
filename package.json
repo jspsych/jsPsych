@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/jodeleeuw/jsPsych#readme",
   "devDependencies": {
-    "jest": "^24.8"
+    "@babel/preset-env": "^7.8.4",
+    "babel-jest": "^25.1.0",
+    "jest": "^24.9.0"
   },
   "jest": {
     "resetModules": true,
@@ -29,5 +31,6 @@
       "pretendToBeVisual": true
     },
     "testURL": "http://localhost/"
-  }
+  },
+  "dependencies": {}
 }
