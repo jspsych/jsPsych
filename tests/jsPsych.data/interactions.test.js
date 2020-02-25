@@ -22,7 +22,8 @@ describe('Data recording', function(){
     // check data
     expect(jsPsych.data.getInteractionData().filter({event: 'focus'}).count()).toBe(1);
   })
-
+  
+  // need to be tested independently(skip 'record focus events test').
   test('record blur events', function(){
     var timeline = [
       {type: 'html-keyboard-response', stimulus: 'hello'}
