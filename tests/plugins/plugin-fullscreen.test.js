@@ -1,17 +1,20 @@
 const root = '../../';
 
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-fullscreen.js';
+
 jest.useFakeTimers();
 
 describe('fullscreen plugin', function(){
 
-  beforeEach(function(){
-    require(root + 'jspsych.js');
-    require(root + 'plugins/jspsych-fullscreen.js');
-    // require(root + 'plugins/jspsych-text.js');
-  });
+  // beforeEach(function(){
+  //   require(root + 'jspsych.js');
+  //   require(root + 'plugins/jspsych-fullscreen.js');
+  //   // require(root + 'plugins/jspsych-text.js');
+  // });
 
   test('loads correctly', function(){
-    expect(typeof window.jsPsych.plugins['fullscreen']).not.toBe('undefined');
+    expect(typeof jsPsych.plugins['fullscreen']).not.toBe('undefined');
   });
 
   // can't test this right now because jsdom doesn't support fullscreen API.

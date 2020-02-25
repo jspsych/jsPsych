@@ -1,17 +1,20 @@
-const root = '../../';
+// const root = '../../';
 const utils = require('../testing-utils.js');
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-survey-likert.js';
 
 jest.useFakeTimers();
 
 describe('survey-likert plugin', function(){
 
-	beforeEach(function(){
-		require(root + 'jspsych.js');
-		require(root + 'plugins/jspsych-survey-likert.js');
-	});
+	// beforeEach(function(){
+	// 	require(root + 'jspsych.js');
+	// 	require(root + 'plugins/jspsych-survey-likert.js');
+	// });
 
 	test('loads correctly', function(){
-		expect(typeof window.jsPsych.plugins['survey-likert']).not.toBe('undefined');
+		expect(typeof jsPsych.plugins['survey-likert']).not.toBe('undefined');
 	});
 
 	test('data are logged with the right question when randomize order is true', function(){

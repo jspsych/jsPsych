@@ -1,16 +1,19 @@
-const root = '../../';
+// const root = '../../';
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-free-sort.js';
 
 jest.useFakeTimers();
 
 describe('free-sort plugin', function(){
 
-	beforeEach(function(){
-		require(root + 'jspsych.js');
-		require(root + 'plugins/jspsych-free-sort.js');
-	});
+	// beforeEach(function(){
+	// 	require(root + 'jspsych.js');
+	// 	require(root + 'plugins/jspsych-free-sort.js');
+	// });
 
 	test('loads correctly', function(){
-		expect(typeof window.jsPsych.plugins['free-sort']).not.toBe('undefined');
+		expect(typeof jsPsych.plugins['free-sort']).not.toBe('undefined');
 	});
 
 	test('should display stimuli', function(){

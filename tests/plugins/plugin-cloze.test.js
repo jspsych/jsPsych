@@ -1,17 +1,20 @@
 const utils = require('../testing-utils.js');
-const root = '../../';
+// const root = '../../';
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-cloze';
 
 jest.useFakeTimers();
 
 describe('cloze', function(){
 
-	beforeEach(function(){
-		require(root + 'jspsych.js');
-		require(root + 'plugins/jspsych-cloze');
-	});
+	// beforeEach(function(){
+	// 	require(root + 'jspsych.js');
+	// 	require(root + 'plugins/jspsych-cloze');
+	// });
 
 	test('loads correctly', function(){
-		expect(typeof window.jsPsych.plugins['cloze']).not.toBe('undefined');
+		expect(typeof jsPsych.plugins['cloze']).not.toBe('undefined');
 	});
 
 	test('displays cloze', function(){

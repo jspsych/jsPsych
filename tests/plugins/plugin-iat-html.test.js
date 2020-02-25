@@ -1,16 +1,19 @@
-const root = '../../';
+// const root = '../../';
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-iat-html.js';
 
 jest.useFakeTimers();
 
 describe('iat-html plugin', function(){
 
-  beforeEach(function(){
-    require(root + 'jspsych.js');
-    require(root + 'plugins/jspsych-iat-html.js');
-  });
+  // beforeEach(function(){
+  //   require(root + 'jspsych.js');
+  //   require(root + 'plugins/jspsych-iat-html.js');
+  // });
 
   test('loads correctly', function(){
-    expect(typeof window.jsPsych.plugins['iat-html']).not.toBe('undefined');
+    expect(typeof jsPsych.plugins['iat-html']).not.toBe('undefined');
   });
 
   test('displays image by default', function(){

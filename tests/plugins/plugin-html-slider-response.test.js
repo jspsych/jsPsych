@@ -1,17 +1,20 @@
 const utils = require('../testing-utils.js');
-const root = '../../';
+// const root = '../../';
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-html-slider-response.js';
 
 jest.useFakeTimers();
 
 describe('html-slider-response', function(){
 
-	beforeEach(function(){
-		require(root + 'jspsych.js');
-		require(root + 'plugins/jspsych-html-slider-response.js');
-	});
+	// beforeEach(function(){
+	// 	require(root + 'jspsych.js');
+	// 	require(root + 'plugins/jspsych-html-slider-response.js');
+	// });
 
 	test('loads correctly', function(){
-		expect(typeof window.jsPsych.plugins['html-slider-response']).not.toBe('undefined');
+		expect(typeof jsPsych.plugins['html-slider-response']).not.toBe('undefined');
 	});
 
 	test('displays html stimulus', function(){

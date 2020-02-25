@@ -1,17 +1,20 @@
-const root = '../../';
+// const root = '../../';
 const utils = require('../testing-utils.js');
 
 jest.useFakeTimers();
 
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-survey-multi-select.js';
+
 describe('survey-multi-select plugin', function(){
 
-	beforeEach(function(){
-		require(root + 'jspsych.js');
-		require(root + 'plugins/jspsych-survey-multi-select.js');
-	});
+	// beforeEach(function(){
+	// 	require(root + 'jspsych.js');
+	// 	require(root + 'plugins/jspsych-survey-multi-select.js');
+	// });
 
 	test('loads correctly', function(){
-		expect(typeof window.jsPsych.plugins['survey-multi-select']).not.toBe('undefined');
+		expect(typeof jsPsych.plugins['survey-multi-select']).not.toBe('undefined');
 	});
 
 	test('quoted values for options work', function(){

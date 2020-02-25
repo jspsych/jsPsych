@@ -1,17 +1,20 @@
-const root = '../../';
+// const root = '../../';
 const utils = require('../testing-utils.js');
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-image-keyboard-response.js';
 
 jest.useFakeTimers();
 
 describe('image-keyboard-response', function(){
 
-	beforeEach(function(){
-		require(root + 'jspsych.js');
-		require(root + 'plugins/jspsych-image-keyboard-response');
-	});
+	// beforeEach(function(){
+	// 	require(root + 'jspsych.js');
+	// 	require(root + 'plugins/jspsych-image-keyboard-response');
+	// });
 
 	test('loads correctly', function(){
-		expect(typeof window.jsPsych.plugins['image-keyboard-response']).not.toBe('undefined');
+		expect(typeof jsPsych.plugins['image-keyboard-response']).not.toBe('undefined');
 	});
 
 	test('displays image stimulus', function(){

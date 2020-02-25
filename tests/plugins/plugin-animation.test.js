@@ -1,16 +1,19 @@
-const root = '../../';
+// const root = '../../';
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-animation';
 
 jest.useFakeTimers();
 
 describe('animation plugin', function(){
 
-	beforeEach(function(){
-		require(root + 'jspsych.js');
-		require(root + 'plugins/jspsych-animation.js');
-	});
+	// beforeEach(function(){
+	// 	require(root + 'jspsych.js');
+	// 	require(root + 'plugins/jspsych-animation.js');
+	// });
 
 	test('loads correctly', function(){
-		expect(typeof window.jsPsych.plugins['animation']).not.toBe('undefined');
+		expect(typeof jsPsych.plugins['animation']).not.toBe('undefined');
 	});
 
 	// SKIP FOR NOW

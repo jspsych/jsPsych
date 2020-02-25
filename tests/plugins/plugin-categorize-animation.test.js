@@ -1,17 +1,20 @@
-const root = '../../';
+// const root = '../../';
 const utils = require('../testing-utils.js');
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-categorize-animation.js';
 
 jest.useFakeTimers();
 
 describe('categorize-animation plugin', function(){
 
-	beforeEach(function(){
-		require(root + 'jspsych.js');
-		require(root + 'plugins/jspsych-categorize-animation.js');
-	});
+	// beforeEach(function(){
+	// 	require(root + 'jspsych.js');
+	// 	require(root + 'plugins/jspsych-categorize-animation.js');
+	// });
 
 	test('loads correctly', function(){
-		expect(typeof window.jsPsych.plugins['categorize-animation']).not.toBe('undefined');
+		expect(typeof jsPsych.plugins['categorize-animation']).not.toBe('undefined');
 	});
 
 	test('displays stimulus every 500ms', function(){

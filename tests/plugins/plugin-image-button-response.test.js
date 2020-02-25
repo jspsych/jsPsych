@@ -1,17 +1,20 @@
 const utils = require('../testing-utils.js');
-const root = '../../';
+// const root = '../../';
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-image-button-response.js';
 
 jest.useFakeTimers();
 
 describe('image-button-response', function(){
 
-	beforeEach(function(){
-		require(root + 'jspsych.js');
-		require(root + 'plugins/jspsych-image-button-response');
-	});
+	// beforeEach(function(){
+	// 	require(root + 'jspsych.js');
+	// 	require(root + 'plugins/jspsych-image-button-response');
+	// });
 
 	test('loads correctly', function(){
-		expect(typeof window.jsPsych.plugins['image-button-response']).not.toBe('undefined');
+		expect(typeof jsPsych.plugins['image-button-response']).not.toBe('undefined');
 	});
 
 	test('displays image stimulus', function(){

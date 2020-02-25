@@ -1,16 +1,19 @@
-const root = '../../';
+// const root = '../../';
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-call-function.js';
 
 jest.useFakeTimers();
 
 describe('call-function plugin', function(){
 
-	beforeEach(function(){
-		require(root + 'jspsych.js');
-		require(root + 'plugins/jspsych-call-function.js');
-	});
+	// beforeEach(function(){
+	// 	require(root + 'jspsych.js');
+	// 	require(root + 'plugins/jspsych-call-function.js');
+	// });
 
 	test('loads correctly', function(){
-		expect(typeof window.jsPsych.plugins['call-function']).not.toBe('undefined');
+		expect(typeof jsPsych.plugins['call-function']).not.toBe('undefined');
 	});
 
 	test('calls function', function(){

@@ -1,17 +1,20 @@
-const root = '../../';
+// const root = '../../';
 const utils = require('../testing-utils.js');
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-instructions.js';
 
 jest.useFakeTimers();
 
 describe('instructions plugin', function(){
 
-	beforeEach(function(){
-		require(root + 'jspsych.js');
-		require(root + 'plugins/jspsych-instructions.js');
-	});
+	// beforeEach(function(){
+	// 	require(root + 'jspsych.js');
+	// 	require(root + 'plugins/jspsych-instructions.js');
+	// });
 
 	test('loads correctly', function(){
-		expect(typeof window.jsPsych.plugins['instructions']).not.toBe('undefined');
+		expect(typeof jsPsych.plugins['instructions']).not.toBe('undefined');
 	});
 
 	test('keys can be specified as numeric codes', function(){

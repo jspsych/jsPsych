@@ -1,17 +1,20 @@
-const root = '../../';
+// const root = '../../';
 const utils = require('../testing-utils.js');
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-survey-text.js';
 
 jest.useFakeTimers();
 
 describe('survey-text plugin', function(){
 
-	beforeEach(function(){
-		require(root + 'jspsych.js');
-		require(root + 'plugins/jspsych-survey-text.js');
-	});
+	// beforeEach(function(){
+	// 	require(root + 'jspsych.js');
+	// 	require(root + 'plugins/jspsych-survey-text.js');
+	// });
 
 	test('loads correctly', function(){
-		expect(typeof window.jsPsych.plugins['survey-text']).not.toBe('undefined');
+		expect(typeof jsPsych.plugins['survey-text']).not.toBe('undefined');
 	});
 
 	test('default parameters work correctly', function(){

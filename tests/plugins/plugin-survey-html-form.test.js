@@ -1,19 +1,22 @@
-const root = '../../';
+// const root = '../../';
 const utils = require('../testing-utils.js');
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-survey-html-form.js';
 
 jest.useFakeTimers();
 
-const TEST_VALUE = 'jsPsych'
+const TEST_VALUE = 'jsPsych';
 
 describe('survey-html-form plugin', function(){
 
-	beforeEach(function(){
-		require(root + 'jspsych.js');
-		require(root + 'plugins/jspsych-survey-html-form.js');
-	});
+	// beforeEach(function(){
+	// 	require(root + 'jspsych.js');
+	// 	require(root + 'plugins/jspsych-survey-html-form.js');
+	// });
 
 	test('loads correctly', function(){
-		expect(typeof window.jsPsych.plugins['survey-html-form']).not.toBe('undefined');
+		expect(typeof jsPsych.plugins['survey-html-form']).not.toBe('undefined');
 	});
 
 	test('default parameters work correctly', function(){
