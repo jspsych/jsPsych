@@ -1,7 +1,7 @@
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-audio-keyboard-response.js';
+import audioKeyboardResponse from '../../plugins/jspsych-audio-keyboard-response.js';
 
 jest.useFakeTimers();
 
@@ -13,6 +13,6 @@ describe('audio-keyboard-response', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['audio-keyboard-response']).not.toBe('undefined');
+		expect(typeof audioKeyboardResponse).not.toBe('undefined');
 	});
 });

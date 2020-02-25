@@ -1,7 +1,7 @@
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-video-slider-response.js';
+import videoSliderResponse from '../../plugins/jspsych-video-slider-response.js';
 
 jest.useFakeTimers();
 
@@ -13,7 +13,7 @@ describe('video-slider-response plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['video-slider-response']).not.toBe('undefined');
+		expect(typeof videoSliderResponse).not.toBe('undefined');
 	});
 
 });

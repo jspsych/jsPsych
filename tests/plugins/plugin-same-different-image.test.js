@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-same-different-image.js';
+import sameDifferentImage from '../../plugins/jspsych-same-different-image.js';
 
 jest.useFakeTimers();
 
@@ -14,7 +14,7 @@ describe('same-different-image plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['same-different-image']).not.toBe('undefined');
+		expect(typeof sameDifferentImage).not.toBe('undefined');
 	});
 
 });

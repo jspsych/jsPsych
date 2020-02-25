@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-rdk.js';
+import jspsychRdk from '../../plugins/jspsych-rdk.js';
 
 jest.useFakeTimers();
 
@@ -14,7 +14,7 @@ describe('rdk plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['rdk']).not.toBe('undefined');
+		expect(typeof jspsychRdk).not.toBe('undefined');
 	});
 
 });

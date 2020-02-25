@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-instructions.js';
+import jspsychInstructions from '../../plugins/jspsych-instructions.js';
 
 jest.useFakeTimers();
 
@@ -14,12 +14,12 @@ describe('instructions plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['instructions']).not.toBe('undefined');
+		expect(typeof jspsychInstructions).not.toBe('undefined');
 	});
 
 	test('keys can be specified as numeric codes', function(){
 		var trial = {
-			type: 'instructions',
+			type: jspsychInstructions,
 			pages: ['page 1', 'page 2'],
 			key_forward: 32
 		}
@@ -41,7 +41,7 @@ describe('instructions plugin', function(){
 
 	test('bug issue #544 reproduce', function(){
 		var trial = {
-			type: 'instructions',
+			type: jspsychInstructions,
 			pages: ['page 1', 'page 2'],
 			key_forward: 32,
 			allow_backward: false

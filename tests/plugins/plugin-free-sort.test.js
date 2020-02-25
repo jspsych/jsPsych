@@ -1,7 +1,7 @@
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-free-sort.js';
+import freeSort from '../../plugins/jspsych-free-sort.js';
 
 jest.useFakeTimers();
 
@@ -13,12 +13,12 @@ describe('free-sort plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['free-sort']).not.toBe('undefined');
+		expect(typeof freeSort).not.toBe('undefined');
 	});
 
 	test('should display stimuli', function(){
 		var trial = {
-			type: 'free-sort',
+			type: freeSort,
 			stimuli: ['img/happy_face_1.jpg','img/happy_face_2.jpg','img/happy_face_3.jpg','img/happy_face_4.jpg']
 		}
 
@@ -35,7 +35,7 @@ describe('free-sort plugin', function(){
 
 	test('should be able to adjust the height and width of free-sort area', function(){
 		var trial = {
-			type: 'free-sort',
+			type: freeSort,
 			stimuli: ['img/happy_face_1.jpg','img/happy_face_2.jpg','img/happy_face_3.jpg','img/happy_face_4.jpg'],
 			sort_area_height: 500,
 			sort_area_width: 700,
@@ -51,7 +51,7 @@ describe('free-sort plugin', function(){
 
 	test('should be able to adjust the height and width of stimuli', function(){
 		var trial = {
-			type: 'free-sort',
+			type: freeSort,
 			stimuli: ['img/happy_face_1.jpg','img/happy_face_2.jpg','img/happy_face_3.jpg','img/happy_face_4.jpg'],
 			stim_height: 200,
 			stim_width: 200,
@@ -67,7 +67,7 @@ describe('free-sort plugin', function(){
 
 	test('should display prompt', function(){
 		var trial = {
-			type: 'free-sort',
+			type: freeSort,
 			stimuli: ['img/happy_face_1.jpg','img/happy_face_2.jpg','img/happy_face_3.jpg','img/happy_face_4.jpg'],
 			prompt: '<p>This is a prompt</p>'
 		}
@@ -82,7 +82,7 @@ describe('free-sort plugin', function(){
 
 	test('should display prompt at bottom if prompt_location is "below"',function(){
 		var trial = {
-			type: 'free-sort',
+			type: freeSort,
 			stimuli: ['img/happy_face_1.jpg','img/happy_face_2.jpg','img/happy_face_3.jpg','img/happy_face_4.jpg'],
 			prompt: '<p>This is a prompt</p>',
 			prompt_location: 'below',
@@ -98,7 +98,7 @@ describe('free-sort plugin', function(){
 
 	test('should be able to change label of button', function(){
 		var trial = {
-			type: 'free-sort',
+			type: freeSort,
 			stimuli: ['img/happy_face_1.jpg','img/happy_face_2.jpg','img/happy_face_3.jpg','img/happy_face_4.jpg'],
 			button_label: 'Finito'
 

@@ -1,7 +1,7 @@
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-visual-search-circle.js';
+import visualSearchCircle from '../../plugins/jspsych-visual-search-circle.js';
 
 jest.useFakeTimers();
 
@@ -13,7 +13,7 @@ describe('visual-search-circle plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['visual-search-circle']).not.toBe('undefined');
+		expect(typeof visualSearchCircle).not.toBe('undefined');
 	});
 
 });

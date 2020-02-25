@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-image-keyboard-response.js';
+import imageKeyboardResponse from '../../plugins/jspsych-image-keyboard-response.js';
 
 jest.useFakeTimers();
 
@@ -14,12 +14,12 @@ describe('image-keyboard-response', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['image-keyboard-response']).not.toBe('undefined');
+		expect(typeof imageKeyboardResponse).not.toBe('undefined');
 	});
 
 	test('displays image stimulus', function(){
 		var trial = {
-			type: 'image-keyboard-response',
+			type: imageKeyboardResponse,
 			stimulus: '../media/blue.png'
 		}
 
@@ -35,7 +35,7 @@ describe('image-keyboard-response', function(){
 
 	test('display clears after key press', function(){
 		var trial = {
-			type: 'image-keyboard-response',
+			type: imageKeyboardResponse,
 			stimulus: '../media/blue.png',
 			choices: ['f','j'],
 		}
@@ -54,7 +54,7 @@ describe('image-keyboard-response', function(){
 
 	test('prompt should append html', function(){
 		var trial = {
-			type: 'image-keyboard-response',
+			type: imageKeyboardResponse,
 			stimulus: '../media/blue.png',
 			choices: ['f','j'],
 			prompt: '<div id="foo">this is a prompt</div>'
@@ -71,7 +71,7 @@ describe('image-keyboard-response', function(){
 
 	test('should hide stimulus if stimulus-duration is set', function(){
 		var trial = {
-			type: 'image-keyboard-response',
+			type: imageKeyboardResponse,
 			stimulus: '../media/blue.png',
 			choices:['f','j'],
 			stimulus_duration: 500,
@@ -91,7 +91,7 @@ describe('image-keyboard-response', function(){
 
 	test('should end trial when trial duration is reached', function(){
 		var trial = {
-			type: 'image-keyboard-response',
+			type: imageKeyboardResponse,
 			stimulus: '../media/blue.png',
 			choices: ['f','j'],
 			trial_duration: 500
@@ -109,7 +109,7 @@ describe('image-keyboard-response', function(){
 
 	test('should end trial when key is pressed', function(){
 		var trial = {
-			type:'image-keyboard-response',
+			type:imageKeyboardResponse,
 			stimulus: '../media/blue.png',
 			choices: ['f','j'],
 			response_ends_trial: true,

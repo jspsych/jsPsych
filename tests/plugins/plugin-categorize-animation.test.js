@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-categorize-animation.js';
+import categorizeAnimation from '../../plugins/jspsych-categorize-animation.js';
 
 jest.useFakeTimers();
 
@@ -14,12 +14,12 @@ describe('categorize-animation plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['categorize-animation']).not.toBe('undefined');
+		expect(typeof categorizeAnimation).not.toBe('undefined');
 	});
 
 	test('displays stimulus every 500ms', function(){
 		var trial = {
-			type: 'categorize-animation',
+			type: categorizeAnimation,
 			stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
 			key_answer: 68
 		}
@@ -37,7 +37,7 @@ describe('categorize-animation plugin', function(){
 
 	test('prompt should display after animation', function(){
 		var trial = {
-			type: 'categorize-animation',
+			type: categorizeAnimation,
 			stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
 			key_answer: 68,
 			prompt: "<p>Press d if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>"
@@ -54,7 +54,7 @@ describe('categorize-animation plugin', function(){
 
 	test('should display correct if key_answer is pressed', function(){
 		var trial = {
-			type: 'categorize-animation',
+			type: categorizeAnimation,
 			stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
 			key_answer: 68,
 			choices: [68, 83],
@@ -74,7 +74,7 @@ describe('categorize-animation plugin', function(){
 
 	test('should display incorrect if different key is pressed', function(){
 		var trial = {
-			type: 'categorize-animation',
+			type: categorizeAnimation,
 			stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
 			key_answer: 68,
 			choices: [68, 83],
@@ -94,7 +94,7 @@ describe('categorize-animation plugin', function(){
 
 	test('text answer should replace %ANS%', function(){
 		var trials = {
-    		type: 'categorize-animation',
+    		type: categorizeAnimation,
     		stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
     		key_answer: 68,
     		choices: [68, 83],
@@ -117,7 +117,7 @@ describe('categorize-animation plugin', function(){
 
 	test('correct text displays when when key_answer is pressed', function(){
 		var trials = {
-    		type: 'categorize-animation',
+    		type: categorizeAnimation,
     		stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
     		key_answer: 68,
     		choices: [68, 83],
@@ -139,7 +139,7 @@ describe('categorize-animation plugin', function(){
 
 	test('correct text displays when when key_answer is pressed', function(){
 		var trials = {
-    		type: 'categorize-animation',
+    		type: categorizeAnimation,
     		stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
     		key_answer: 68,
     		choices: [68, 83],
@@ -161,7 +161,7 @@ describe('categorize-animation plugin', function(){
 
 	test('duration to display image is based on frame_time', function(){
 		var trials = {
-    		type: 'categorize-animation',
+    		type: categorizeAnimation,
     		stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
     		key_answer: 68,
     		choices: [68, 83],
@@ -186,7 +186,7 @@ describe('categorize-animation plugin', function(){
 
 	test('sequence reps', function(){
 		var trials = {
-    		type: 'categorize-animation',
+    		type: categorizeAnimation,
     		stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
     		key_answer: 68,
     		choices: [68, 83],
@@ -214,7 +214,7 @@ describe('categorize-animation plugin', function(){
 
 	test('subject can response before animation is completed', function(){
 		var trials = {
-    		type: 'categorize-animation',
+    		type: categorizeAnimation,
     		stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
     		key_answer: 68,
     		choices: [68, 83],
@@ -239,7 +239,7 @@ describe('categorize-animation plugin', function(){
 
 	test('display should clear after feeback_duration is done', function(){
 		var trials = {
-    		type: 'categorize-animation',
+    		type: categorizeAnimation,
     		stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
     		key_answer: 68,
     		choices: [68, 83],

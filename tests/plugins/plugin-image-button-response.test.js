@@ -2,7 +2,7 @@ const utils = require('../testing-utils.js');
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-image-button-response.js';
+import imageButtonResponse from '../../plugins/jspsych-image-button-response.js';
 
 jest.useFakeTimers();
 
@@ -14,12 +14,12 @@ describe('image-button-response', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['image-button-response']).not.toBe('undefined');
+		expect(typeof imageButtonResponse).not.toBe('undefined');
 	});
 
 	test('displays image stimulus', function(){
 		var trial = {
-			type: 'image-button-response',
+			type: imageButtonResponse,
 			stimulus: '../media/blue.png',
 			choices: ['button-choice']
 		}
@@ -34,7 +34,7 @@ describe('image-button-response', function(){
 
 	test('display button labels', function(){
 		var trial = {
-			type: 'image-button-response',
+			type: imageButtonResponse,
 			stimulus: '../media/blue.png',
 			choices: ['button-choice1', 'button-choice2']
 		}
@@ -50,7 +50,7 @@ describe('image-button-response', function(){
 
 	test('display button html', function(){
 		var trial = {
-			type: 'image-button-response',
+			type: imageButtonResponse,
 			stimulus: '../media/blue.png',
 			choices: ['buttonChoice'],
 			button_html: '<button class="jspsych-custom-button">%choice%</button>',
@@ -66,7 +66,7 @@ describe('image-button-response', function(){
 
 	test('display should clear after button click', function(){
 		var trial = {
-			type: 'image-button-response',
+			type: imageButtonResponse,
 			stimulus: '../media/blue.png',
 		    choices: ['button-choice'],
 		}
@@ -85,7 +85,7 @@ describe('image-button-response', function(){
 
 	test('prompt should append below button', function(){
 		var trial = {
-			type: 'image-button-response',
+			type: imageButtonResponse,
 			stimulus: '../media/blue.png',
 			choices: ['button-choice'],
 			prompt: '<p>This is a prompt</p>'
@@ -101,7 +101,7 @@ describe('image-button-response', function(){
 
 	test('should hide stimulus if stimulus-duration is set', function(){
 		var trial = {
-			type: 'image-button-response',
+			type: imageButtonResponse,
 			stimulus: '../media/blue.png',
 			choices: ['button-choice'],
 			stimulus_duration: 500
@@ -119,7 +119,7 @@ describe('image-button-response', function(){
 
 	test('should end trial when trial duration is reached', function(){
 		var trial = {
-			type: 'image-button-response',
+			type: imageButtonResponse,
 			stimulus: '../media/blue.png',
 			choices: ['f','j'],
 			trial_duration: 500
@@ -137,7 +137,7 @@ describe('image-button-response', function(){
 
 	test('should end trial when button is clicked', function(){
 		var trial = {
-			type: 'image-button-response',
+			type: imageButtonResponse,
 			stimulus: '../media/blue.png',
 			choices: ['button-choice'],
 			response_ends_trial: true,

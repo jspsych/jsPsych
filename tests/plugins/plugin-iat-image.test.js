@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-iat-image.js';
+import iatImage from '../../plugins/jspsych-iat-image.js';
 
 jest.useFakeTimers();
 
@@ -14,12 +14,12 @@ describe('iat-image plugin', function(){
   // });
 
   test('loads correctly', function(){
-    expect(typeof jsPsych.plugins['iat-image']).not.toBe('undefined');
+    expect(typeof iatImage).not.toBe('undefined');
   });
 
   test('displays image by default', function(){
     var trial = {
-      type: 'iat-image',
+      type: iatImage,
       stimulus: '../media/blue.png',
       response_ends_trial: true,
       display_feedback: false,
@@ -45,7 +45,7 @@ describe('iat-image plugin', function(){
 
   test('display should only clear when left key is pressed', function(){
     var trial = {
-      type: 'iat-image',
+      type: iatImage,
       stimulus: '../media/blue.png',
       left_category_key: 'f',
       left_category_label: ['FRIENDLY'],
@@ -67,7 +67,7 @@ describe('iat-image plugin', function(){
 
   test('display should only clear when right key is pressed', function(){
     var trial = {
-      type: 'iat-image',
+      type: iatImage,
       stimulus: '../media/blue.png',
       right_category_key: 'j',
       right_category_label: ['UNFRIENDLY'],
@@ -90,7 +90,7 @@ describe('iat-image plugin', function(){
 
   test('display should clear when any key is pressed', function(){
     var trial = {
-      type: 'iat-image',
+      type: iatImage,
       stimulus: '../media/blue.png',
       left_category_key: 'f',
       right_category_key: 'j',
@@ -115,7 +115,7 @@ describe('iat-image plugin', function(){
 
   test('display should clear only when "other key" is pressed', function(){
     var trial = {
-      type: 'iat-image',
+      type: iatImage,
       stimulus: '../media/blue.png',
       left_category_key: 'f',
       right_category_key: 'j',
@@ -141,7 +141,7 @@ describe('iat-image plugin', function(){
 
   test('labels should be with assigned key characters', function(){
     var trial = {
-      type: 'iat-image',
+      type: iatImage,
       stimulus: '../media/blue.png',
       left_category_key: 'f',
       right_category_key: 'j',
@@ -165,7 +165,7 @@ describe('iat-image plugin', function(){
 
   test('should display wrong image when wrong key is pressed', function(){
     var trial = {
-      type: 'iat-image',
+      type: iatImage,
       stimulus: '../media/blue.png',
       html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
       display_feedback: true,
@@ -194,7 +194,7 @@ describe('iat-image plugin', function(){
   test('trial_duration should end trial after time has elapsed; only if display_feedback is false', function(){
 
     var trial = {
-      type: 'iat-image',
+      type: iatImage,
       stimulus: '../media/blue.png',
       display_feedback: false,
       response_ends_trial: false,
@@ -216,7 +216,7 @@ describe('iat-image plugin', function(){
 
   test('trial should not end when response_ends_trial is false and stimulus should get responded class', function(){
     var trial = {
-      type: 'iat-image',
+      type: iatImage,
       stimulus: '../media/blue.png',
       response_ends_trial: false,
       display_feedback: false,
@@ -242,7 +242,7 @@ describe('iat-image plugin', function(){
   test('should accept functions as parameters(trial_duration in use, response ends trial false)', function(){
 
     var trial = {
-      type: 'iat-image',
+      type: iatImage,
       stimulus: function(){ return '../media/blue.png'; },
       display_feedback: function(){ return true; },
       html_when_wrong: function(){ return '<span style="color: red; font-size: 80px">X</span>'; },
@@ -275,7 +275,7 @@ describe('iat-image plugin', function(){
   test('should accept functions as parameters(trial_duration is not in use)', function(){
 
     var trial = {
-      type: 'iat-image',
+      type: iatImage,
       stimulus: function(){ return '../media/blue.png'; },
       display_feedback: function(){ return true; },
       html_when_wrong: function(){ return '<span style="color: red; font-size: 80px">X</span>'; },

@@ -1,7 +1,7 @@
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-resize.js';
+import jspsychResize from '../../plugins/jspsych-resize.js';
 
 jest.useFakeTimers();
 
@@ -13,7 +13,7 @@ describe('resize plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['resize']).not.toBe('undefined');
+		expect(typeof jspsychResize).not.toBe('undefined');
 	});
 
 });

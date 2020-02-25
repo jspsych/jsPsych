@@ -2,7 +2,7 @@ const utils = require('../testing-utils.js');
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-cloze';
+import jspsychCloze from '../../plugins/jspsych-cloze';
 
 jest.useFakeTimers();
 
@@ -14,12 +14,12 @@ describe('cloze', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['cloze']).not.toBe('undefined');
+		expect(typeof jspsychCloze).not.toBe('undefined');
 	});
 
 	test('displays cloze', function(){
 		var trial = {
-			type: 'cloze',
+			type: jspsychCloze,
 			text: 'This is a %cloze% text.',
 		}
 
@@ -32,7 +32,7 @@ describe('cloze', function(){
 
 	test('displays default button text', function(){
 		var trial = {
-			type: 'cloze',
+			type: jspsychCloze,
 			text: 'This is a %cloze% text.'
 		}
 
@@ -45,7 +45,7 @@ describe('cloze', function(){
 
 	test('displays custom button text', function(){
 		var trial = {
-			type: 'cloze',
+			type: jspsychCloze,
 			text: 'This is a %cloze% text.',
 			button_text: 'Next'
 		}
@@ -59,7 +59,7 @@ describe('cloze', function(){
 
 	test('ends trial on button click when using default settings, i.e. answers are not checked', function(){
 		var trial = {
-			type: 'cloze',
+			type: jspsychCloze,
 			text: 'This is a %cloze% text.'
 		}
 
@@ -73,7 +73,7 @@ describe('cloze', function(){
 
 	test('ends trial on button click when answers are checked and correct', function(){
 		var trial = {
-			type: 'cloze',
+			type: jspsychCloze,
 			text: 'This is a %cloze% text.',
 			check_answers: true
 		}
@@ -89,7 +89,7 @@ describe('cloze', function(){
 
 	test('does not end trial on button click when answers are checked and not correct', function(){
 		var trial = {
-			type: 'cloze',
+			type: jspsychCloze,
 			text: 'This is a %cloze% text.',
 			check_answers: true
 		}
@@ -105,7 +105,7 @@ describe('cloze', function(){
 
 	test('does not call mistake function on button click when answers are checked and correct', function(){
 		var trial = {
-			type: 'cloze',
+			type: jspsychCloze,
 			text: 'This is a %cloze% text.',
 			check_answers: true,
 			mistake_fn: function(){called = true}
@@ -123,7 +123,7 @@ describe('cloze', function(){
 
 	test('calls mistake function on button click when answers are checked and not correct', function(){
 		var trial = {
-			type: 'cloze',
+			type: jspsychCloze,
 			text: 'This is a %cloze% text.',
 			check_answers: true,
 			mistake_fn: function(){called = true}

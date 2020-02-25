@@ -1,7 +1,7 @@
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-video-button-response.js';
+import videoButtonResponse from '../../plugins/jspsych-video-button-response.js';
 
 jest.useFakeTimers();
 
@@ -13,7 +13,7 @@ describe('video-button-response plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['video-button-response']).not.toBe('undefined');
+		expect(typeof videoButtonResponse).not.toBe('undefined');
 	});
 
 });

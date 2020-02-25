@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-categorize-image.js';
+import categorizeImage from '../../plugins/jspsych-categorize-image.js';
 
 jest.useFakeTimers();
 
@@ -14,7 +14,7 @@ describe('categorize-image plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['categorize-image']).not.toBe('undefined');
+		expect(typeof categorizeImage).not.toBe('undefined');
 	});
 
 });

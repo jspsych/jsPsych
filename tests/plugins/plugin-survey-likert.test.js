@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-survey-likert.js';
+import surveyLikert from '../../plugins/jspsych-survey-likert.js';
 
 jest.useFakeTimers();
 
@@ -14,13 +14,13 @@ describe('survey-likert plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['survey-likert']).not.toBe('undefined');
+		expect(typeof surveyLikert).not.toBe('undefined');
 	});
 
 	test('data are logged with the right question when randomize order is true', function(){
 		var scale = ['a','b','c','d','e'];
 		var t = {
-			type: 'survey-likert',
+			type: surveyLikert,
 			questions: [
 				{ prompt: 'Q0', labels: scale },
 				{ prompt: 'Q1', labels: scale },

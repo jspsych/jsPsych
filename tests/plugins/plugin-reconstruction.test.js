@@ -1,7 +1,7 @@
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-reconstruction.js';
+import jspsychReconstruction from '../../plugins/jspsych-reconstruction.js';
 
 jest.useFakeTimers();
 
@@ -13,7 +13,7 @@ describe('reconstruction plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['reconstruction']).not.toBe('undefined');
+		expect(typeof jspsychReconstruction).not.toBe('undefined');
 	});
 
 });

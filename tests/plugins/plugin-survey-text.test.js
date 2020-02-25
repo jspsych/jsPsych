@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-survey-text.js';
+import surveyText from '../../plugins/jspsych-survey-text.js';
 
 jest.useFakeTimers();
 
@@ -14,12 +14,12 @@ describe('survey-text plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['survey-text']).not.toBe('undefined');
+		expect(typeof surveyText).not.toBe('undefined');
 	});
 
 	test('default parameters work correctly', function(){
 		var trial = {
-			type: 'survey-text',
+			type: surveyText,
 			questions: [{prompt: "How old are you?"}, {prompt: "Where were you born?"}]
 		}
 
@@ -38,7 +38,7 @@ describe('survey-text plugin', function(){
 
 	test('specifying only columns works', function(){
 		var trial = {
-			type: 'survey-text',
+			type: surveyText,
 			questions: [
 				{prompt: "How old are you?", columns: 50},
 				{prompt: "Where were you born?", columns: 20}
@@ -61,7 +61,7 @@ describe('survey-text plugin', function(){
 	// might be useful: https://github.com/jsdom/jsdom/issues/544
 	test.skip('required parameter works', function(){
 		var trial = {
-			type: 'survey-text',
+			type: surveyText,
 			questions: [
 				{prompt: "How old are you?", columns: 50, required: true},
 				{prompt: "Where were you born?", columns: 20}
@@ -87,7 +87,7 @@ describe('survey-text plugin', function(){
 
 	test('data are logged with the right question when randomize order is true', function(){
 		var t = {
-			type: 'survey-text',
+			type: surveyText,
 			questions: [
 				{ prompt: 'Q0' },
 				{ prompt: 'Q1' },

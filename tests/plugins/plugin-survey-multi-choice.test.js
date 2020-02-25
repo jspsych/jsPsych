@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-survey-multi-choice.js';
+import surveyMultiChoice from '../../plugins/jspsych-survey-multi-choice.js';
 
 jest.useFakeTimers();
 
@@ -14,13 +14,13 @@ describe('survey-multi-choice plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['survey-multi-choice']).not.toBe('undefined');
+		expect(typeof surveyMultiChoice).not.toBe('undefined');
 	});
 
 	test('data are logged with the right question when randomize order is true', function(){
 		var scale = ['a','b','c','d','e'];
 		var t = {
-			type: 'survey-multi-choice',
+			type: surveyMultiChoice,
 			questions: [
 				{ prompt: 'Q0', options: scale },
 				{ prompt: 'Q1', options: scale },

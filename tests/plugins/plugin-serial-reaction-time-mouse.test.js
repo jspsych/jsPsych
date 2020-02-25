@@ -2,7 +2,7 @@ const utils = require('../testing-utils.js');
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-serial-reaction-time-mouse.js';
+import serialReactionTimeMouse from '../../plugins/jspsych-serial-reaction-time-mouse.js';
 
 jest.useFakeTimers();
 
@@ -14,12 +14,12 @@ describe('serial-reaction-time-mouse plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['serial-reaction-time-mouse']).not.toBe('undefined');
+		expect(typeof serialReactionTimeMouse).not.toBe('undefined');
 	});
 
 	test('default behavior', function(){
 		var trial = {
-			type: 'serial-reaction-time-mouse',
+			type: serialReactionTimeMouse,
 			target: [0,0],
 		}
 

@@ -1,7 +1,7 @@
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-animation';
+import jspsychAnimation from '../../plugins/jspsych-animation';
 
 jest.useFakeTimers();
 
@@ -13,7 +13,7 @@ describe('animation plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['animation']).not.toBe('undefined');
+		expect(typeof jspsychAnimation).not.toBe('undefined');
 	});
 
 	// SKIP FOR NOW
@@ -22,7 +22,7 @@ describe('animation plugin', function(){
 		var animation_sequence = ['img/face_1.jpg', 'img/face_2.jpg'];
 
 		var trial = {
-			type: 'animation',
+			type: jspsychAnimation,
 			stimuli: animation_sequence
 		}
 

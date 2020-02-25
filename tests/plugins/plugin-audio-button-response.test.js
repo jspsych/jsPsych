@@ -1,7 +1,7 @@
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-audio-button-response.js';
+import audioButtonResponse from '../../plugins/jspsych-audio-button-response.js';
 
 jest.useFakeTimers();
 
@@ -13,6 +13,6 @@ describe('audio-button-response', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['audio-button-response']).not.toBe('undefined');
+		expect(typeof audioButtonResponse).not.toBe('undefined');
 	});
 });

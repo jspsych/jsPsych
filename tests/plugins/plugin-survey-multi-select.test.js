@@ -4,7 +4,7 @@ const utils = require('../testing-utils.js');
 jest.useFakeTimers();
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-survey-multi-select.js';
+import surveyMultiSelect from '../../plugins/jspsych-survey-multi-select.js';
 
 describe('survey-multi-select plugin', function(){
 
@@ -14,12 +14,12 @@ describe('survey-multi-select plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['survey-multi-select']).not.toBe('undefined');
+		expect(typeof surveyMultiSelect).not.toBe('undefined');
 	});
 
 	test('quoted values for options work', function(){
 		var trial = {
-			type: 'survey-multi-select',
+			type: surveyMultiSelect,
 			questions: [{
 				prompt: 'foo',
 				options: ['Hello "boo"', "yes, 'bar'"]
@@ -43,7 +43,7 @@ describe('survey-multi-select plugin', function(){
 	test('data are logged with the right question when randomize order is true', function(){
 		var scale = ['a','b','c','d','e'];
 		var t = {
-			type: 'survey-multi-select',
+			type: surveyMultiSelect,
 			questions: [
 				{ prompt: 'Q0', options: scale },
 				{ prompt: 'Q1', options: scale },

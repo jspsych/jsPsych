@@ -2,7 +2,7 @@ const utils = require('../testing-utils.js');
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-image-slider-response.js';
+import imageSliderResponse from '../../plugins/jspsych-image-slider-response.js';
 
 jest.useFakeTimers();
 
@@ -14,12 +14,12 @@ describe('image-slider-response', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['image-slider-response']).not.toBe('undefined');
+		expect(typeof imageSliderResponse).not.toBe('undefined');
 	});
 
 	test('displays image stimulus', function(done){
 		var trial = {
-			type: 'image-slider-response',
+			type: imageSliderResponse,
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
 			button_label: 'button',
@@ -38,7 +38,7 @@ describe('image-slider-response', function(){
 
 	test('displays labels', function(){
 		var trial = {
-			type: 'image-slider-response',
+			type: imageSliderResponse,
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
 			button_label: 'button'
@@ -57,7 +57,7 @@ describe('image-slider-response', function(){
 
 	test('displays button label', function(){
 		var trial = {
-			type: 'image-slider-response',
+			type: imageSliderResponse,
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
 			button_label: 'button'
@@ -75,7 +75,7 @@ describe('image-slider-response', function(){
 
 	test('should set min, max and step', function(){
 		var trial = {
-			type: 'image-slider-response',
+			type: imageSliderResponse,
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
 			button_label: 'button',
@@ -98,7 +98,7 @@ describe('image-slider-response', function(){
 
 	test('prompt should append to bottom of stimulus', function(){
 		var trial = {
-			type: 'image-slider-response',
+			type: imageSliderResponse,
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
 			button_label: 'button',
@@ -117,7 +117,7 @@ describe('image-slider-response', function(){
 
 	test('should hide stimulus if stimulus_duration is set', function(){
 		var trial = {
-			type: 'image-slider-response',
+			type: imageSliderResponse,
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
 			button_label: 'button',
@@ -137,7 +137,7 @@ describe('image-slider-response', function(){
 
 	test('should end trial when trial duration is reached', function(){
 		var trial = {
-			type: 'image-slider-response',
+			type: imageSliderResponse,
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
 			button_label: 'button',
@@ -157,7 +157,7 @@ describe('image-slider-response', function(){
 
 	test('should end trial when button is clicked', function(){
 		var trial = {
-			type: 'image-slider-response',
+			type: imageSliderResponse,
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
 			button_label: 'button',

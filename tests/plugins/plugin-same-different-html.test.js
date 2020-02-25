@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-same-different-html.js';
+import sameDifferentHtml from '../../plugins/jspsych-same-different-html.js';
 
 jest.useFakeTimers();
 
@@ -14,7 +14,7 @@ describe('same-different-html plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['same-different-html']).not.toBe('undefined');
+		expect(typeof sameDifferentHtml).not.toBe('undefined');
 	});
 
 });

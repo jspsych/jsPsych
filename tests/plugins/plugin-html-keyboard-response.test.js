@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-html-keyboard-response.js';
+import htmlKeyboardResponse from '../../plugins/jspsych-html-keyboard-response.js';
 
 jest.useFakeTimers();
 
@@ -14,12 +14,12 @@ describe('html-keyboard-response', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['html-keyboard-response']).not.toBe('undefined');
+		expect(typeof htmlKeyboardResponse).not.toBe('undefined');
 	});
 
 	test('displays html stimulus', function(){
 		var trial = {
-			type: 'html-keyboard-response',
+			type: htmlKeyboardResponse,
 			stimulus: 'this is html'
 		}
 
@@ -34,7 +34,7 @@ describe('html-keyboard-response', function(){
 
 	test('display clears after key press', function(){
 		var trial = {
-			type: 'html-keyboard-response',
+			type: htmlKeyboardResponse,
 			stimulus: 'this is html',
 			choices: ['f', 'j']
 		}
@@ -52,7 +52,7 @@ describe('html-keyboard-response', function(){
 
 	test('prompt should append html below stimulus', function(){
 		var trial = {
-			type: 'html-keyboard-response',
+			type: htmlKeyboardResponse,
 			stimulus: 'this is html',
 			choices: ['f', 'j'],
 			prompt: '<div id="foo">this is a prompt</div>'
@@ -69,7 +69,7 @@ describe('html-keyboard-response', function(){
 
 	test('should hide stimulus if stimulus-duration is set', function(){
 		var trial = {
-			type: 'html-keyboard-response',
+			type: htmlKeyboardResponse,
 			stimulus: 'this is html',
 			choices: ['f','j'],
 			stimulus_duration: 500,
@@ -87,7 +87,7 @@ describe('html-keyboard-response', function(){
 
 	test('should end trial when trial duration is reached', function(){
 		var trial ={
-			type: 'html-keyboard-response',
+			type: htmlKeyboardResponse,
 			stimulus: 'this is html',
 			choices: ['f', 'j'],
 			trial_duration: 500,
@@ -104,7 +104,7 @@ describe('html-keyboard-response', function(){
 
 	test('should end trial when key press', function(){
 		var trial = {
-			type: 'html-keyboard-response',
+			type: htmlKeyboardResponse,
 			stimulus: 'this is html',
 			choices: ['f', 'j'],
 			response_ends_trial: true,
@@ -123,7 +123,7 @@ describe('html-keyboard-response', function(){
 
 	test('class should say responded when key is pressed', function(){
 		var trial = {
-			type: 'html-keyboard-response',
+			type: htmlKeyboardResponse,
 			stimulus: 'this is html',
 			choices: ['f','j'],
 			response_ends_trial: false,

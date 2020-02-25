@@ -1,7 +1,7 @@
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-iat-html.js';
+import iatHtml from '../../plugins/jspsych-iat-html.js';
 
 jest.useFakeTimers();
 
@@ -13,12 +13,12 @@ describe('iat-html plugin', function(){
   // });
 
   test('loads correctly', function(){
-    expect(typeof jsPsych.plugins['iat-html']).not.toBe('undefined');
+    expect(typeof iatHtml).not.toBe('undefined');
   });
 
   test('displays image by default', function(){
     var trial = {
-      type: 'iat-html',
+      type: iatHtml,
       stimulus: '<p>dogs</p>',
       response_ends_trial: true,
       display_feedback: false,
@@ -44,7 +44,7 @@ describe('iat-html plugin', function(){
 
   test('display should only clear when left key is pressed', function(){
     var trial = {
-      type: 'iat-html',
+      type: iatHtml,
       stimulus: '<p>hello</p>',
       left_category_key: 'f',
       left_category_label: ['FRIENDLY'],
@@ -69,7 +69,7 @@ describe('iat-html plugin', function(){
 
   test('display should only clear when right key is pressed', function(){
     var trial = {
-      type: 'iat-html',
+      type: iatHtml,
       stimulus: '<p>hello</p>',
       right_category_key: 'j',
       right_category_label: ['UNFRIENDLY'],
@@ -95,7 +95,7 @@ describe('iat-html plugin', function(){
 
   test('display should clear when any key is pressed', function(){
     var trial = {
-      type: 'iat-html',
+      type: iatHtml,
       stimulus: '<p>hello</p>',
       left_category_key: 'f',
       right_category_key: 'j',
@@ -123,7 +123,7 @@ describe('iat-html plugin', function(){
 
   test('display should clear only when "other key" is pressed', function(){
     var trial = {
-      type: 'iat-html',
+      type: iatHtml,
       stimulus: '<p>hello</p>',
       left_category_key: 'f',
       right_category_key: 'j',
@@ -152,7 +152,7 @@ describe('iat-html plugin', function(){
 
   test('labels should be with assigned key characters', function(){
     var trial = {
-      type: 'iat-html',
+      type: iatHtml,
       stimulus: '<p>hello</p>',
       left_category_key: 'f',
       right_category_key: 'j',
@@ -177,7 +177,7 @@ describe('iat-html plugin', function(){
 
   test('should display wrong image when wrong key is pressed', function(){
     var trial = {
-      type: 'iat-html',
+      type: iatHtml,
       stimulus: '<p>hello</p>',
       html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
       display_feedback: true,
@@ -210,7 +210,7 @@ describe('iat-html plugin', function(){
   test('trial duration should end trial after time has elapsed; only if display_feedback is false', function(){
 
     var trial = {
-      type: 'iat-html',
+      type: iatHtml,
       stimulus: '<p>hello</p>',
       display_feedback: false,
       response_ends_trial: false,
@@ -231,7 +231,7 @@ describe('iat-html plugin', function(){
 
   test('trial should not end when response_ends_trial is false and stimulus should get responded class', function(){
     var trial = {
-      type: 'iat-html',
+      type: iatHtml,
       stimulus: '<p>hello</p>',
       response_ends_trial: false,
       display_feedback: false,
@@ -258,7 +258,7 @@ describe('iat-html plugin', function(){
   test('should accept functions as parameters(trial_duration in use, response ends trial false)', function(){
 
     var trial = {
-      type: 'iat-html',
+      type: iatHtml,
       stimulus: function(){ return '<p>hello</p>'; },
       display_feedback: function(){ return true; },
       html_when_wrong: function(){ return '<span style="color: red; font-size: 80px">X</span>'; },
@@ -292,7 +292,7 @@ describe('iat-html plugin', function(){
   test('should accept functions as parameters(trial_duration is not in use)', function(){
 
     var trial = {
-      type: 'iat-html',
+      type: iatHtml,
       stimulus: function(){ return '<p>hello</p>'; },
       display_feedback: function(){ return true; },
       html_when_wrong: function(){ return '<span style="color: red; font-size: 80px">X</span>'; },

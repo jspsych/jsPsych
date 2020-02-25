@@ -2,7 +2,7 @@ const utils = require('../testing-utils.js');
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-html-button-response.js';
+import htmlButtonResponse from '../../plugins/jspsych-html-button-response.js';
 
 jest.useFakeTimers();
 
@@ -14,12 +14,12 @@ describe('html-button-response', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['html-button-response']).not.toBe('undefined');
+		expect(typeof htmlButtonResponse).not.toBe('undefined');
 	});
 
 	test('displays html stimulus', function(){
 		var trial = {
-			type: 'html-button-response',
+			type: htmlButtonResponse,
 			stimulus: 'this is html',
 			choices: ['button-choice']
 		}
@@ -33,7 +33,7 @@ describe('html-button-response', function(){
 
 	test('display button labels', function(){
 		var trial = {
-			type: 'html-button-response',
+			type: htmlButtonResponse,
 			stimulus: 'this is html',
 			choices: ['button-choice1', 'button-choice2']
 		}
@@ -48,7 +48,7 @@ describe('html-button-response', function(){
 
 	test('display button html', function(){
 		var trial = {
-			type: 'html-button-response',
+			type: htmlButtonResponse,
 			stimulus: 'this is html',
 			choices: ['buttonChoice'],
 			button_html: '<button class="jspsych-custom-button">%choice%</button>',
@@ -63,7 +63,7 @@ describe('html-button-response', function(){
 
 	test('display should clear after button click', function(){
 		var trial = {
-			type: 'html-button-response',
+			type: htmlButtonResponse,
 			stimulus: 'this is html',
 			choices: ['button-choice']
 		}
@@ -81,7 +81,7 @@ describe('html-button-response', function(){
 
 	test('prompt should append below button', function(){
 		var trial = {
-			type: 'html-button-response',
+			type: htmlButtonResponse,
 			stimulus: 'this is html',
 			choices: ['button-choice'],
 			prompt: '<p>this is a prompt</p>'
@@ -96,7 +96,7 @@ describe('html-button-response', function(){
 
 	test('should hide stimulus if stimulus-duration is set', function(){
 		var trial = {
-			type: 'html-button-response',
+			type: htmlButtonResponse,
 			stimulus: 'this is html',
 			choices: ['button-choice'],
 			stimulus_duration: 500
@@ -113,7 +113,7 @@ describe('html-button-response', function(){
 
 	test('should end trial when trial duration is reached', function(){
 		var trial = {
-			type: 'html-button-response',
+			type: htmlButtonResponse,
 			stimulus: 'this is html',
 			choices: ['button-choice'],
 			trial_duration: 500,
@@ -130,7 +130,7 @@ describe('html-button-response', function(){
 
 	test('should end trial when button is clicked', function(){
 		var trial = {
-			type: 'html-button-response',
+			type: htmlButtonResponse,
 			stimulus: 'this is html',
 			choices: ['button-choice'],
 			response_ends_trial: true,
@@ -147,7 +147,7 @@ describe('html-button-response', function(){
 
 	test('class should have responded when button is clicked', function(){
 		var trial = {
-			type: 'html-button-response',
+			type: htmlButtonResponse,
 			stimulus: 'this is html',
 			choices: ['button-choice'],
 			response_ends_trial: false,

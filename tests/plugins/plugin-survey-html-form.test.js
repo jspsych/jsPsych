@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-survey-html-form.js';
+import surveyHtmlForm from '../../plugins/jspsych-survey-html-form.js';
 
 jest.useFakeTimers();
 
@@ -16,12 +16,12 @@ describe('survey-html-form plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['survey-html-form']).not.toBe('undefined');
+		expect(typeof surveyHtmlForm).not.toBe('undefined');
 	});
 
 	test('default parameters work correctly', function(){
 		var trial = {
-			type: 'survey-html-form',
+			type: surveyHtmlForm,
 			html: '<p> I am feeling <input name="first" type="text" />, <input name="second" type="text" />, and <input name="third" type="text" />.</p>'
 		}
 

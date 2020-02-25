@@ -1,7 +1,7 @@
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-video-keyboard-response.js';
+import videoKeyboardResponse from '../../plugins/jspsych-video-keyboard-response.js';
 
 jest.useFakeTimers();
 
@@ -13,7 +13,7 @@ describe('video-keyboard-response plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['video-keyboard-response']).not.toBe('undefined');
+		expect(typeof videoKeyboardResponse).not.toBe('undefined');
 	});
 
 });

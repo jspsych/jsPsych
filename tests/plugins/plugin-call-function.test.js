@@ -1,7 +1,7 @@
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-call-function.js';
+import callFunction from '../../plugins/jspsych-call-function.js';
 
 jest.useFakeTimers();
 
@@ -13,13 +13,13 @@ describe('call-function plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['call-function']).not.toBe('undefined');
+		expect(typeof callFunction).not.toBe('undefined');
 	});
 
 	test('calls function', function(){
 
 		var trial = {
-			type: 'call-function',
+			type: callFunction,
 			func: function(){
 				return 1;
 			}
@@ -34,7 +34,7 @@ describe('call-function plugin', function(){
 
 	test('async function works', function(){
 		var trial = {
-			type: 'call-function',
+			type: callFunction,
 			async: true,
 			func: function(done){
 				var data = 10;

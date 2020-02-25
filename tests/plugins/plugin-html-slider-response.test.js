@@ -2,7 +2,7 @@ const utils = require('../testing-utils.js');
 // const root = '../../';
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-html-slider-response.js';
+import htmlSliderResponse from '../../plugins/jspsych-html-slider-response.js';
 
 jest.useFakeTimers();
 
@@ -14,12 +14,12 @@ describe('html-slider-response', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['html-slider-response']).not.toBe('undefined');
+		expect(typeof htmlSliderResponse).not.toBe('undefined');
 	});
 
 	test('displays html stimulus', function(){
 		var trial = {
-			type: 'html-slider-response',
+			type: htmlSliderResponse,
 			stimulus: 'this is html',
 			labels: ['left', 'right'],
 			button_label: 'button'
@@ -34,7 +34,7 @@ describe('html-slider-response', function(){
 
 	test('displays labels', function(){
 		var trial = {
-			type: 'html-slider-response',
+			type: htmlSliderResponse,
 			stimulus: 'this is html',
 			labels: ['left', 'right'],
 			button_label: 'button'
@@ -50,7 +50,7 @@ describe('html-slider-response', function(){
 
 	test('displays button label', function(){
 		var trial = {
-			type: 'html-slider-response',
+			type: htmlSliderResponse,
 			stimulus: 'this is html',
 			labels: ['left', 'right'],
 			button_label: 'button'
@@ -65,7 +65,7 @@ describe('html-slider-response', function(){
 
 	test('should set min, max and step', function(){
 		var trial = {
-			type: 'html-slider-response',
+			type: htmlSliderResponse,
 			stimulus: 'this is html',
 			labels: ['left', 'right'],
 			min: 2,
@@ -85,7 +85,7 @@ describe('html-slider-response', function(){
 
 	test('should append to bottom on stimulus', function(){
 		var trial = {
-			type: 'html-slider-response',
+			type: htmlSliderResponse,
 			stimulus: 'this is html',
 			labels: ['left', 'right'],
 			button_label: 'button',
@@ -101,7 +101,7 @@ describe('html-slider-response', function(){
 
 	test('should hide stimulus if stimulus_duration is set', function(){
 		var trial = {
-			type: 'html-slider-response',
+			type: htmlSliderResponse,
 			stimulus: 'this is html',
 			labels: ['left', 'right'],
 			button_label: 'button',
@@ -119,7 +119,7 @@ describe('html-slider-response', function(){
 
 	test('should end trial when trial duration is reached', function(){
 		var trial = {
-			type: 'html-slider-response',
+			type: htmlSliderResponse,
 			stimulus: 'this is html',
 			labels: ['left', 'right'],
 			button_label: 'button',
@@ -138,7 +138,7 @@ describe('html-slider-response', function(){
 
 	test('should end trial when button is clicked', function(){
 		var trial = {
-			type: 'html-slider-response',
+			type: htmlSliderResponse,
 			stimulus: 'this is html',
 			labels: ['left', 'right'],
 			button_label: 'button',

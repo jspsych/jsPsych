@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-serial-reaction-time.js';
+import serialReactionTime from '../../plugins/jspsych-serial-reaction-time.js';
 
 jest.useFakeTimers();
 
@@ -14,13 +14,13 @@ describe('serial-reaction-time plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['serial-reaction-time']).not.toBe('undefined');
+		expect(typeof serialReactionTime).not.toBe('undefined');
 	});
 
 	test('default behavior', function(){
 
 		var trial = {
-			type: 'serial-reaction-time',
+			type: serialReactionTime,
 			target: [0,0]
 		}
 
@@ -43,7 +43,7 @@ describe('serial-reaction-time plugin', function(){
 	test('response ends trial is false', function(){
 
 		var trial = {
-			type: 'serial-reaction-time',
+			type: serialReactionTime,
 			target: [0,0],
 			response_ends_trial: false,
 			trial_duration: 1000

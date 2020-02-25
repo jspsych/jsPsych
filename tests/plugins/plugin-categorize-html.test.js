@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-categorize-html.js';
+import categorizeHtml from '../../plugins/jspsych-categorize-html.js';
 
 jest.useFakeTimers();
 
@@ -14,7 +14,7 @@ describe('categorize-html plugin', function(){
 	// });
 
 	test('loads correctly', function(){
-		expect(typeof jsPsych.plugins['categorize-html']).not.toBe('undefined');
+		expect(typeof categorizeHtml).not.toBe('undefined');
 	});
 
 });
