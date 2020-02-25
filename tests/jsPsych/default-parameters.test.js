@@ -1,7 +1,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-survey-text.js';
+import surveyText from '../../plugins/jspsych-survey-text.js';
 
 // const root = '../../';
 // beforeEach(function(){
@@ -12,7 +12,7 @@ import '../../plugins/jspsych-survey-text.js';
 describe('nested defaults', function(){
     test('work in basic situation', function(){
         var t = {
-            type: 'survey-text',
+            type: surveyText,
             questions: [
                 {
                     prompt: 'Question 1.'

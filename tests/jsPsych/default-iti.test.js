@@ -1,7 +1,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-html-keyboard-response.js';
+import htmlKeyboardResponse from '../../plugins/jspsych-html-keyboard-response.js';
 
 jest.useFakeTimers();
 
@@ -14,12 +14,12 @@ jest.useFakeTimers();
 describe('default iti parameter', function(){
   test('has a default value of 0', function(){
     var t = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'foo'
     }
 
     var t2 = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'bar'
     }
 
@@ -33,12 +33,12 @@ describe('default iti parameter', function(){
 
   test('creates a correct delay when set', function(){
     var t = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'foo'
     }
 
     var t2 = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'bar'
     }
 

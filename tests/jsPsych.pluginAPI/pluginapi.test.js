@@ -4,12 +4,12 @@
 // require(root + 'plugins/jspsych-html-keyboard-response.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-html-keyboard-response.js';
+import htmlKeyboardResponse from '../../plugins/jspsych-html-keyboard-response.js';
 
 describe('#getKeyboardResponse', function(){
   beforeEach(function(){
     var t = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'foo',
       choices: ['Q']
     }

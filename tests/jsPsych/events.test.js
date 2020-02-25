@@ -1,8 +1,8 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-html-keyboard-response.js';
-import '../../plugins/jspsych-html-slider-response.js';
+import htmlKeyboardResponse from '../../plugins/jspsych-html-keyboard-response.js';
+import htmlSliderResponse from '../../plugins/jspsych-html-slider-response.js';
 
 // beforeEach(function(){
 //   require('../../jspsych.js');
@@ -17,7 +17,7 @@ describe('on_finish (trial)', function(){
       var key_data = null;
 
       var trial = {
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'hello',
         on_finish: function(data){
           key_data = data.key_press;
@@ -43,7 +43,7 @@ describe('on_finish (trial)', function(){
       var promise_data = {};
 
       var trial = {
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'hello',
         on_finish: function(data){
           data.key_press = 1;
@@ -76,7 +76,7 @@ describe('on_start (trial)', function(){
       var d = null;
 
       var trial = {
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: function(){ return 'hello'; },
         on_start: function(trial){
           d = trial.stimulus;
@@ -103,7 +103,7 @@ describe('on_start (trial)', function(){
 
       var trial = {
         timeline: [{
-          type: 'html-keyboard-response',
+          type: htmlKeyboardResponse,
           stimulus: jsPsych.timelineVariable('stimulus'),
           on_start: function(trial){
             d = trial.stimulus;
@@ -133,7 +133,7 @@ describe('on_trial_finish (experiment level)', function(){
       var promise_data = {};
 
       var trial = {
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'hello'
       }
 
@@ -162,7 +162,7 @@ describe('on_trial_finish (experiment level)', function(){
       var promise_data = {};
 
       var trial = {
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'hello'
       }
 
@@ -194,7 +194,7 @@ describe('on_data_update', function(){
       var promise_data = {};
 
       var trial = {
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'hello'
       }
 
@@ -225,13 +225,13 @@ describe('on_data_update', function(){
       var promise_data = [];
 
       var trial = {
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'hello',
         trial_duration: 10
       }
 
       var trial_2 = {
-        type: 'html-slider-response',
+        type: htmlSliderResponse,
         stimulus: 'hello',
         trial_duration: 10
       }
@@ -262,7 +262,7 @@ describe('on_data_update', function(){
       var promise_data = {};
 
       var trial = {
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'hello',
         on_finish: function(data){
           data.trial_level = true;
@@ -294,7 +294,7 @@ describe('on_data_update', function(){
       var promise_data = {};
 
       var trial = {
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'hello'
       }
 
@@ -329,7 +329,7 @@ describe('on_trial_start', function(){
       var promise_data = {};
 
       var trial = {
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'hello'
       }
 
@@ -354,7 +354,7 @@ describe('on_trial_start', function(){
   test('should allow modification of the trial properties', function(){
     
     var trial = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'hello'
     }
 

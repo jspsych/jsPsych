@@ -5,12 +5,12 @@ const utils = require('../testing-utils.js');
 // require(root + 'plugins/jspsych-html-keyboard-response.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-html-keyboard-response.js';
+import htmlKeyboardResponse from '../../plugins/jspsych-html-keyboard-response.js';
 
 describe('Basic data recording', function(){
   test('should be able to get rt after running experiment', function(){
     var timeline = [
-      {type: 'html-keyboard-response', stimulus:'hello'}
+      {type: htmlKeyboardResponse, stimulus:'hello'}
     ];
     jsPsych.init({timeline:timeline});
     // click through first trial
@@ -24,7 +24,7 @@ describe('#addProperties', function(){
 
   test('should add data to all trials if called before experiment starts', function(){
     var timeline = [
-      {type: 'html-keyboard-response', stimulus:'hello'}
+      {type: htmlKeyboardResponse, stimulus:'hello'}
     ];
     jsPsych.data.addProperties({'testprop': 1});
     jsPsych.init({timeline:timeline});
@@ -37,7 +37,7 @@ describe('#addProperties', function(){
   test('should add data to all trials retroactively', function(){
     jsPsych.data._fullreset();
     var timeline = [
-      {type: 'html-keyboard-response', stimulus:'hello'}
+      {type: htmlKeyboardResponse, stimulus:'hello'}
     ];
     jsPsych.init({timeline:timeline});
     // click through first trial
@@ -55,7 +55,7 @@ describe('#addDataToLastTrial', function(){
     jsPsych.data._fullreset();
     var timeline = [
       {
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'hello',
         on_finish: function(){
           jsPsych.data.addDataToLastTrial({testA: 1, testB: 2});
@@ -75,8 +75,8 @@ describe('#getLastTrialData', function(){
   test('should return a new DataCollection with only the last trial\'s data', function(){
     jsPsych.data._fullreset();
     var timeline = [
-      {type: 'html-keyboard-response', stimulus:'hello'},
-      {type: 'html-keyboard-response', stimulus:'world'}
+      {type: htmlKeyboardResponse, stimulus:'hello'},
+      {type: htmlKeyboardResponse, stimulus:'world'}
     ];
     jsPsych.init({timeline:timeline});
     // click through first trial
@@ -95,15 +95,15 @@ describe('#getLastTimelineData', function(){
       {
         timeline:
         [
-          {type: 'html-keyboard-response', stimulus:'hello'},
-          {type: 'html-keyboard-response', stimulus:'world'},
+          {type: htmlKeyboardResponse, stimulus:'hello'},
+          {type: htmlKeyboardResponse, stimulus:'world'},
         ]
       },
       {
         timeline:
         [
-          {type: 'html-keyboard-response', stimulus:'second'},
-          {type: 'html-keyboard-response', stimulus:'time'},
+          {type: htmlKeyboardResponse, stimulus:'second'},
+          {type: htmlKeyboardResponse, stimulus:'time'},
         ]
       }
     ];
@@ -122,7 +122,7 @@ describe('#getLastTimelineData', function(){
 describe('#displayData', function(){
   test('should display in json format', function(){
     var timeline = [
-      {type: 'html-keyboard-response', stimulus:'hello'}
+      {type: htmlKeyboardResponse, stimulus:'hello'}
     ];
     jsPsych.init({timeline:timeline});
     // click through first trial
@@ -138,7 +138,7 @@ describe('#displayData', function(){
   });
   test('should display in csv format', function(){
     var timeline = [
-      {type: 'html-keyboard-response', stimulus:'hello'}
+      {type: htmlKeyboardResponse, stimulus:'hello'}
     ];
     jsPsych.init({timeline:timeline});
     // click through first trial

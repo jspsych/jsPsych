@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-html-keyboard-response.js';
+import htmlKeyboardResponse from '../../plugins/jspsych-html-keyboard-response.js';
 
 describe('The data parameter', function(){
   test('should record data to a trial', function(){
@@ -15,7 +15,7 @@ describe('The data parameter', function(){
       var key_data = null;
 
       var trial = {
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'hello',
         data: {added: true},
       }
@@ -44,7 +44,7 @@ describe('The data parameter', function(){
       var key_data = null;
 
       var trial = {
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         timeline: [
           {stimulus: 'a'},
           {stimulus: 'b'}
@@ -84,7 +84,7 @@ describe('The data parameter', function(){
 
       var trial = {
         timeline: [
-          {type: 'html-keyboard-response',
+          {type: htmlKeyboardResponse,
           stimulus: jsPsych.timelineVariable('stimulus')}
         ],
         timeline_variables: vars,
@@ -113,7 +113,7 @@ describe('The data parameter', function(){
 
     var trial = {
       timeline: [
-        {type: 'html-keyboard-response', stimulus: 'foo', data: jsPsych.timelineVariable('d')}
+        {type: htmlKeyboardResponse, stimulus: 'foo', data: jsPsych.timelineVariable('d')}
       ],
       timeline_variables: [
         {d: {added: true}},
@@ -138,7 +138,7 @@ describe('The data parameter', function(){
 
     var trial = {
       timeline: [
-        {type: 'html-keyboard-response', stimulus: 'foo', data: {added: jsPsych.timelineVariable('added')}}
+        {type: htmlKeyboardResponse, stimulus: 'foo', data: {added: jsPsych.timelineVariable('added')}}
       ],
       timeline_variables: [
         {added: true},
@@ -164,7 +164,7 @@ describe('The data parameter', function(){
     var trial = {
       timeline: [
         {
-          type: 'html-keyboard-response',
+          type: htmlKeyboardResponse,
           stimulus: 'foo',
           data: {added: jsPsych.timelineVariable('added')},
           on_finish: function(data){
@@ -205,7 +205,7 @@ describe('The data parameter', function(){
       var trial = {
         timeline: [
           {
-            type: 'html-keyboard-response',
+            type: htmlKeyboardResponse,
             stimulus: jsPsych.timelineVariable('stimulus'),
             data: {foo: 1}
           }
@@ -232,7 +232,7 @@ describe('The data parameter', function(){
 
   test('should accept a function as a parameter', function(done){
     var trial = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'foo',
       data: {
         a: function(){ return 1; }

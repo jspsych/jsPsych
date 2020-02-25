@@ -1,7 +1,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-html-keyboard-response.js';
+import htmlKeyboardResponse from '../../plugins/jspsych-html-keyboard-response.js';
 
 // const root = '../../';
 // beforeEach(function(){
@@ -13,7 +13,7 @@ describe('automatic progress bar', function(){
 
   test('progress bar does not display by default', function(){
     var trial = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'foo'
     }
 
@@ -28,7 +28,7 @@ describe('automatic progress bar', function(){
 
   test('progress bar displays when show_progress_bar is true', function(){
     var trial = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'foo'
     }
 
@@ -44,7 +44,7 @@ describe('automatic progress bar', function(){
 
   test('progress bar automatically updates by default', function(){
     var trial = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'foo'
     }
 
@@ -75,7 +75,7 @@ describe('automatic progress bar', function(){
 
   test('progress bar does not automatically update when auto_update_progress_bar is false', function(){
     var trial = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'foo'
     }
 
@@ -107,7 +107,7 @@ describe('automatic progress bar', function(){
 
   test('setProgressBar() manually', function(){
     var trial = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'foo',
       on_finish: function(){
         jsPsych.setProgressBar(0.2);
@@ -115,7 +115,7 @@ describe('automatic progress bar', function(){
     }
 
     var trial_2 = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'foo',
       on_finish: function(){
         jsPsych.setProgressBar(0.8);
@@ -142,7 +142,7 @@ describe('automatic progress bar', function(){
 
   test('getProgressBarCompleted() -- manual updates', function(){
     var trial = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'foo',
       on_finish: function(){
         jsPsych.setProgressBar(0.2);
@@ -150,7 +150,7 @@ describe('automatic progress bar', function(){
     }
 
     var trial_2 = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'foo',
       on_finish: function(){
         jsPsych.setProgressBar(0.8);
@@ -175,7 +175,7 @@ describe('automatic progress bar', function(){
 
   test('getProgressBarCompleted() -- automatic updates', function(){
     var trial = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'foo'
     }
 

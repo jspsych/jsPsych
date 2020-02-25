@@ -2,7 +2,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-html-keyboard-response.js';
+import htmlKeyboardResponse from '../../plugins/jspsych-html-keyboard-response.js';
 
 describe('Data recording', function(){
 
@@ -13,7 +13,7 @@ describe('Data recording', function(){
 
   test('record focus events', function(){
     var timeline = [
-      {type: 'html-keyboard-response', stimulus: 'hello'}
+      {type: htmlKeyboardResponse, stimulus: 'hello'}
     ];
     jsPsych.init({timeline:timeline});
     window.dispatchEvent(new Event('focus'));
@@ -26,7 +26,7 @@ describe('Data recording', function(){
   // need to be tested independently(skip 'record focus events test').
   test('record blur events', function(){
     var timeline = [
-      {type: 'html-keyboard-response', stimulus: 'hello'}
+      {type: htmlKeyboardResponse, stimulus: 'hello'}
     ];
     jsPsych.init({timeline:timeline});
     window.dispatchEvent(new Event('blur'));
@@ -40,7 +40,7 @@ describe('Data recording', function(){
 
   test.skip('record fullscreenenter events', function(){
     var timeline = [
-      {type: 'html-keyboard-response', stimulus: 'hello'}
+      {type: htmlKeyboardResponse, stimulus: 'hello'}
     ];
     jsPsych.init({timeline:timeline});
     // click through first trial
@@ -50,7 +50,7 @@ describe('Data recording', function(){
 
   test.skip('record fullscreenexit events', function(){
     var timeline = [
-      {type: 'html-keyboard-response', stimulus: 'hello'}
+      {type: htmlKeyboardResponse, stimulus: 'hello'}
     ];
     jsPsych.init({timeline:timeline});
     // click through first trial
@@ -72,7 +72,7 @@ describe('on_interaction_data_update', function(){
     var updatefn = jest.fn();
 
     var timeline = [
-      {type: 'html-keyboard-response', stimulus: 'hello'}
+      {type: htmlKeyboardResponse, stimulus: 'hello'}
     ];
     jsPsych.init({
       timeline:timeline,
@@ -89,7 +89,7 @@ describe('on_interaction_data_update', function(){
     var updatefn = jest.fn();
 
     var timeline = [
-      {type: 'html-keyboard-response', stimulus: 'hello'}
+      {type: htmlKeyboardResponse, stimulus: 'hello'}
     ];
     jsPsych.init({
       timeline:timeline,

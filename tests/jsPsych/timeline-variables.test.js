@@ -1,9 +1,9 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-html-keyboard-response.js';
-import '../../plugins/jspsych-call-function.js';
-import '../../plugins/jspsych-html-button-response.js';
+import htmlKeyboardResponse from '../../plugins/jspsych-html-keyboard-response.js';
+import callFunction from '../../plugins/jspsych-call-function.js';
+import htmlButtonResponse from '../../plugins/jspsych-html-button-response.js';
 
 // const root = '../../';
 // beforeEach(function(){
@@ -31,7 +31,7 @@ describe('sampling', function(){
   test('alternate-groups method produces alternating groups', function(){
     var trial = {
       timeline: [{
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: jsPsych.timelineVariable('stimulus')
       }],
       timeline_variables: [
@@ -67,7 +67,7 @@ describe('sampling', function(){
 
     var trial = {
       timeline: [{
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: jsPsych.timelineVariable('stimulus')
       }],
       timeline_variables: [
@@ -109,8 +109,8 @@ describe('timeline variables are correctly evaluated', function(){
     // require(root + 'plugins/jspsych-html-button-response.js');
 
     var tvs = [
-      {type: 'html-keyboard-response'},
-      {type: 'html-button-response'}
+      {type: htmlKeyboardResponse},
+      {type: htmlButtonResponse}
     ]
 
     var timeline = [];
@@ -149,7 +149,7 @@ describe('timeline variables are correctly evaluated', function(){
 
     timeline.push({
       timeline: [{
-        type: 'call-function',
+        type: callFunction,
         func: jsPsych.timelineVariable('fn')
       }],
       timeline_variables: tvs
@@ -179,7 +179,7 @@ describe('timeline variables are correctly evaluated', function(){
 
     timeline.push({
       timeline: [{
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'foo',
         data: {
           id: jsPsych.timelineVariable('id')
@@ -219,7 +219,7 @@ describe('timeline variables are correctly evaluated', function(){
 
     timeline.push({
       timeline: [{
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'foo',
         data: {
           id: jsPsych.timelineVariable('id')

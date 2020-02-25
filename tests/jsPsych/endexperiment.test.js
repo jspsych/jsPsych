@@ -1,7 +1,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-html-keyboard-response.js';
+import htmlKeyboardResponse from '../../plugins/jspsych-html-keyboard-response.js';
 
 // beforeEach(function(){
 //     require('../../jspsych.js');
@@ -11,14 +11,14 @@ import '../../plugins/jspsych-html-keyboard-response.js';
 test('works on basic timeline', function(){
     var timeline = [
         {
-            type: 'html-keyboard-response',
+            type: htmlKeyboardResponse,
             stimulus: 'trial 1',
             on_finish: function(){
                 jsPsych.endExperiment('the end');
             }
         },
         {
-            type: 'html-keyboard-response',
+            type: htmlKeyboardResponse,
             stimulus: 'trial 2'
         }
     ]
@@ -35,7 +35,7 @@ test('works on basic timeline', function(){
 test('works with looping timeline (#541)', function(){
     var timeline = [
         {
-            timeline: [{type: 'html-keyboard-response', stimulus: 'trial 1'}],
+            timeline: [{type: htmlKeyboardResponse, stimulus: 'trial 1'}],
             loop_function: function(){
                 jsPsych.endExperiment('the end')
             }

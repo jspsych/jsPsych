@@ -1,7 +1,7 @@
 const utils = require('../testing-utils.js');
 
 import jsPsych from '../../jspsych.js';
-import '../../plugins/jspsych-html-keyboard-response.js';
+import htmlKeyboardResponse from '../../plugins/jspsych-html-keyboard-response.js';
 
 // const root = '../../';
 // beforeEach(function(){
@@ -17,7 +17,7 @@ describe('loop function', function(){
 
     var trial = {
       timeline: [{
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'foo'
       }],
       loop_function: function(){
@@ -50,7 +50,7 @@ describe('loop function', function(){
 
     var trial = {
       timeline: [{
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'foo'
       }],
       loop_function: function(){
@@ -81,7 +81,7 @@ describe('loop function', function(){
 
     var trial = {
       timeline: [{
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'foo'
       }],
       loop_function: function(data){
@@ -121,7 +121,7 @@ describe('conditional function', function(){
 
     var conditional = {
       timeline: [{
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'foo'
       }],
       conditional_function: function(){
@@ -130,7 +130,7 @@ describe('conditional function', function(){
     }
 
     var trial = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'bar'
     }
 
@@ -147,7 +147,7 @@ describe('conditional function', function(){
   test('completes the timeline when returns true', function(){
     var conditional = {
       timeline: [{
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'foo'
       }],
       conditional_function: function(){
@@ -156,7 +156,7 @@ describe('conditional function', function(){
     }
 
     var trial = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'bar'
     }
 
@@ -182,7 +182,7 @@ describe('conditional function', function(){
 
     var trial = {
       timeline: [{
-        type: 'html-keyboard-response',
+        type: htmlKeyboardResponse,
         stimulus: 'foo'
       }],
       loop_function: function(){
@@ -218,12 +218,12 @@ describe('conditional function', function(){
 
   test('timeline variables from nested timelines are available', function(){
     var trial = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'foo'
     }
 
     var trial2 = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: jsPsych.timelineVariable('word')
     }
 
@@ -271,21 +271,21 @@ describe('endCurrentTimeline', function(){
     var t = {
       timeline: [
         {
-          type: 'html-keyboard-response',
+          type: htmlKeyboardResponse,
           stimulus: 'foo',
           on_finish: function(){
             jsPsych.endCurrentTimeline();
           }
         },
         {
-          type: 'html-keyboard-response',
+          type: htmlKeyboardResponse,
           stimulus: 'bar'
         }
       ]
     }
 
     var t2 = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'woo'
     }
 
@@ -309,27 +309,27 @@ describe('endCurrentTimeline', function(){
         {
           timeline: [
             {
-              type: 'html-keyboard-response',
+              type: htmlKeyboardResponse,
               stimulus: 'foo',
               on_finish: function(){
                 jsPsych.endCurrentTimeline();
               }
             },
             {
-              type: 'html-keyboard-response',
+              type: htmlKeyboardResponse,
               stimulus: 'skip me!'
             }
           ]
         },
         {
-          type: 'html-keyboard-response',
+          type: htmlKeyboardResponse,
           stimulus: 'bar'
         }
       ]
     }
 
     var t2 = {
-      type: 'html-keyboard-response',
+      type: htmlKeyboardResponse,
       stimulus: 'woo'
     }
 
