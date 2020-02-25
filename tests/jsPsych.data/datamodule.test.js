@@ -1,8 +1,11 @@
-const root = '../../';
+// const root = '../../';
 const utils = require('../testing-utils.js');
 
-require(root + 'jspsych.js');
-require(root + 'plugins/jspsych-html-keyboard-response.js');
+// require(root + 'jspsych.js');
+// require(root + 'plugins/jspsych-html-keyboard-response.js');
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-html-keyboard-response.js';
 
 describe('Basic data recording', function(){
   test('should be able to get rt after running experiment', function(){

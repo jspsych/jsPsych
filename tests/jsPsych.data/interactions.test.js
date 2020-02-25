@@ -1,12 +1,15 @@
-const root = '../../';
+// const root = '../../';
 const utils = require('../testing-utils.js');
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-html-keyboard-response.js';
 
 describe('Data recording', function(){
 
-  beforeEach(function(){
-    require(root + 'jspsych.js');
-    require(root + 'plugins/jspsych-html-keyboard-response.js');
-  })
+  // beforeEach(function(){
+  //   require(root + 'jspsych.js');
+  //   require(root + 'plugins/jspsych-html-keyboard-response.js');
+  // })
 
   test('record focus events', function(){
     var timeline = [
@@ -58,10 +61,10 @@ describe('Data recording', function(){
 
 describe('on_interaction_data_update', function(){
 
-  beforeEach(function(){
-    require(root + 'jspsych.js');
-    require(root + 'plugins/jspsych-html-keyboard-response.js');
-  })
+  // beforeEach(function(){
+  //   require(root + 'jspsych.js');
+  //   require(root + 'plugins/jspsych-html-keyboard-response.js');
+  // })
 
   test('fires for blur', function(){
 

@@ -1,11 +1,14 @@
-const root = '../../';
+// const root = '../../';
 const utils = require('../testing-utils.js');
+
+import jsPsych from '../../jspsych.js';
+import '../../plugins/jspsych-html-keyboard-response.js';
 
 describe('The data parameter', function(){
   test('should record data to a trial', function(){
 
-    require(root + 'jspsych.js');
-    require(root + 'plugins/jspsych-html-keyboard-response.js');
+    // require(root + 'jspsych.js');
+    // require(root + 'plugins/jspsych-html-keyboard-response.js');
 
     return (new Promise(function(resolve, reject){
 
@@ -33,8 +36,8 @@ describe('The data parameter', function(){
 
   test('should record data to all nested trials', function(){
 
-    require(root + 'jspsych.js');
-    require(root + 'plugins/jspsych-html-keyboard-response.js');
+    // require(root + 'jspsych.js');
+    // require(root + 'plugins/jspsych-html-keyboard-response.js');
 
     return (new Promise(function(resolve, reject){
 
@@ -67,8 +70,8 @@ describe('The data parameter', function(){
 
   test('should record data to all nested trials with timeline variables', function(){
 
-    require(root + 'jspsych.js');
-    require(root + 'plugins/jspsych-html-keyboard-response.js');
+    // require(root + 'jspsych.js');
+    // require(root + 'plugins/jspsych-html-keyboard-response.js');
 
     return (new Promise(function(resolve, reject){
 
@@ -105,8 +108,8 @@ describe('The data parameter', function(){
   });
 
   test('should work as timeline variable at root level', function(){
-    require(root + 'jspsych.js');
-    require(root + 'plugins/jspsych-html-keyboard-response.js');
+    // require(root + 'jspsych.js');
+    // require(root + 'plugins/jspsych-html-keyboard-response.js');
 
     var trial = {
       timeline: [
@@ -130,8 +133,8 @@ describe('The data parameter', function(){
   });
 
   test('should work as timeline variable at nested level', function(){
-    require(root + 'jspsych.js');
-    require(root + 'plugins/jspsych-html-keyboard-response.js');
+    // require(root + 'jspsych.js');
+    // require(root + 'plugins/jspsych-html-keyboard-response.js');
 
     var trial = {
       timeline: [
@@ -155,8 +158,8 @@ describe('The data parameter', function(){
   });
 
   test('timeline variable should be available in trial on_finish', function(){
-    require(root + 'jspsych.js');
-    require(root + 'plugins/jspsych-html-keyboard-response.js');
+    // require(root + 'jspsych.js');
+    // require(root + 'plugins/jspsych-html-keyboard-response.js');
 
     var trial = {
       timeline: [
@@ -187,8 +190,8 @@ describe('The data parameter', function(){
 
   test('should record data to all nested trials with timeline variables even when nested trials have own data', function(){
 
-    require(root + 'jspsych.js');
-    require(root + 'plugins/jspsych-html-keyboard-response.js');
+    // require(root + 'jspsych.js');
+    // require(root + 'plugins/jspsych-html-keyboard-response.js');
 
     return (new Promise(function(resolve, reject){
 
