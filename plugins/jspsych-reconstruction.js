@@ -10,7 +10,7 @@
  */
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['reconstruction'] = (function() {
+const jspsychReconstruction = (function() {
 
   var plugin = {};
 
@@ -132,3 +132,5 @@ jsPsych.plugins['reconstruction'] = (function() {
 
   return plugin;
 })();
+
+export default jspsychReconstruction;

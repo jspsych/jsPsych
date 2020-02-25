@@ -9,7 +9,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
- jsPsych.plugins['iat-html'] = (function() {
+const iatHtml = (function() {
 
   var plugin = {};
 
@@ -282,3 +282,5 @@ import jsPsych from '../jspsych.js';
 
   return plugin;
 })();
+
+export default iatHtml;

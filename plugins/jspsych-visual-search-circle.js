@@ -13,7 +13,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins["visual-search-circle"] = (function() {
+const visualSearchCircle = (function() {
 
   var plugin = {};
 
@@ -258,3 +258,5 @@ jsPsych.plugins["visual-search-circle"] = (function() {
 
   return plugin;
 })();
+
+export default visualSearchCircle;

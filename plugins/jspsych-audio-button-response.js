@@ -9,7 +9,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins["audio-button-response"] = (function() {
+const audioButtonResponse = (function() {
 	var plugin = {};
 
 	jsPsych.pluginAPI.registerPreload('audio-button-response', 'stimulus', 'audio');
@@ -215,3 +215,5 @@ jsPsych.plugins["audio-button-response"] = (function() {
 
   return plugin;
 })();
+
+export default audioButtonResponse;

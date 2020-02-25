@@ -6,7 +6,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins["categorize-animation"] = (function() {
+const categorizeAnimation = (function() {
 
   var plugin = {};
 
@@ -198,3 +198,5 @@ jsPsych.plugins["categorize-animation"] = (function() {
 
   return plugin;
 })();
+
+export default categorizeAnimation;

@@ -1,6 +1,6 @@
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['audio-slider-response'] = (function() {
+const audioSliderResponse = (function() {
 	var plugin = {};
 
 	jsPsych.pluginAPI.registerPreload('audio-slider-response', 'stimulus', 'audio');
@@ -214,3 +214,5 @@ jsPsych.plugins['audio-slider-response'] = (function() {
 
   return plugin;
 })();
+
+export default audioSliderResponse;

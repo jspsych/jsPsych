@@ -9,7 +9,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins["video-keyboard-response"] = (function() {
+const videoKeyboardResponse = (function() {
 
   var plugin = {};
 
@@ -235,3 +235,5 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
 
   return plugin;
 })();
+
+export default videoKeyboardResponse;

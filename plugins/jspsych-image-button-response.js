@@ -9,7 +9,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins["image-button-response"] = (function() {
+const imageButtonResponse = (function() {
 
   var plugin = {};
 
@@ -223,3 +223,5 @@ jsPsych.plugins["image-button-response"] = (function() {
 
   return plugin;
 })();
+
+export default imageButtonResponse;

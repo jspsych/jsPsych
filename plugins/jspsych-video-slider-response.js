@@ -9,7 +9,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins["video-slider-response"] = (function() {
+const videoSliderResponse = (function() {
 
   var plugin = {};
 
@@ -290,3 +290,5 @@ jsPsych.plugins["video-slider-response"] = (function() {
 
   return plugin;
 })();
+
+export default videoSliderResponse;

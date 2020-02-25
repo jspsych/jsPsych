@@ -7,7 +7,7 @@
  */
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['free-sort'] = (function() {
+const freeSort = (function() {
 
   var plugin = {};
 
@@ -192,3 +192,5 @@ jsPsych.plugins['free-sort'] = (function() {
 
   return plugin;
 })();
+
+export default freeSort;

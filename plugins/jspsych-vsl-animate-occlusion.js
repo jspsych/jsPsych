@@ -12,7 +12,7 @@
  */
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['vsl-animate-occlusion'] = (function() {
+const vslAnimateOcclusion = (function() {
 
   var plugin = {};
 
@@ -195,3 +195,5 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
 
   return plugin;
 })();
+
+export default vslAnimateOcclusion;

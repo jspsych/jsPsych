@@ -8,7 +8,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['call-function'] = (function() {
+const callFunction = (function() {
 
   var plugin = {};
 
@@ -57,3 +57,5 @@ jsPsych.plugins['call-function'] = (function() {
 
   return plugin;
 })();
+
+export default callFunction;

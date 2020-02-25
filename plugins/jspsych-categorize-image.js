@@ -6,7 +6,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['categorize-image'] = (function() {
+const categorizeImage = (function() {
 
   var plugin = {};
 
@@ -220,3 +220,5 @@ jsPsych.plugins['categorize-image'] = (function() {
 
   return plugin;
 })();
+
+export default categorizeImage;

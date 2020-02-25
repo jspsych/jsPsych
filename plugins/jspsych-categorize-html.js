@@ -6,7 +6,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['categorize-html'] = (function() {
+const categorizeHtml = (function() {
 
   var plugin = {};
 
@@ -218,3 +218,5 @@ jsPsych.plugins['categorize-html'] = (function() {
 
   return plugin;
 })();
+
+export default categorizeHtml;

@@ -9,7 +9,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
- jsPsych.plugins['iat-image'] = (function() {
+ const iatImage = (function() {
 
   var plugin = {};
 
@@ -284,3 +284,5 @@ import jsPsych from '../jspsych.js';
 
   return plugin;
 })();
+
+export default iatImage;

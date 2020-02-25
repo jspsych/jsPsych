@@ -9,7 +9,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins["image-keyboard-response"] = (function() {
+const imageKeyboardResponse = (function() {
 
   var plugin = {};
 
@@ -180,3 +180,5 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
 
   return plugin;
 })();
+
+export default imageKeyboardResponse

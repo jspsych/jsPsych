@@ -9,7 +9,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins["video-button-response"] = (function() {
+const videoButtonResponse = (function() {
 
   var plugin = {};
 
@@ -278,3 +278,5 @@ jsPsych.plugins["video-button-response"] = (function() {
 
   return plugin;
 })();
+
+export default videoButtonResponse;

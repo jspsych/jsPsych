@@ -9,7 +9,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins["serial-reaction-time"] = (function() {
+const serialReactionTime = (function() {
 
   var plugin = {};
 
@@ -246,3 +246,5 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 
   return plugin;
 })();
+
+export default serialReactionTime;

@@ -9,7 +9,7 @@
  */
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['same-different-image'] = (function() {
+const sameDifferentImage = (function() {
 
   var plugin = {};
 
@@ -168,3 +168,5 @@ jsPsych.plugins['same-different-image'] = (function() {
 
   return plugin;
 })();
+
+export default sameDifferentImage;

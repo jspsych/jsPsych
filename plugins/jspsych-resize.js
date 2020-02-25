@@ -9,7 +9,7 @@
 **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins["resize"] = (function() {
+const jspsychResize = (function() {
 
   var plugin = {};
 
@@ -165,3 +165,5 @@ jsPsych.plugins["resize"] = (function() {
 
   return plugin;
 })();
+
+export default jspsychResize;

@@ -13,7 +13,7 @@
  */
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins.instructions = (function() {
+const jspsychInstructions = (function() {
 
   var plugin = {};
 
@@ -230,3 +230,5 @@ jsPsych.plugins.instructions = (function() {
 
   return plugin;
 })();
+
+export default jspsychInstructions;

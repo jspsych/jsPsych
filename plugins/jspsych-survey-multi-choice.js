@@ -9,7 +9,7 @@
  */
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['survey-multi-choice'] = (function() {
+const surveyMultiChoice = (function() {
   var plugin = {};
 
   plugin.info = {
@@ -196,3 +196,5 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
 
   return plugin;
 })();
+
+export default surveyMultiChoice;

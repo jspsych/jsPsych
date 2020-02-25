@@ -9,7 +9,7 @@
  */
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['survey-text'] = (function() {
+const surveyText = (function() {
 
   var plugin = {};
 
@@ -174,3 +174,5 @@ jsPsych.plugins['survey-text'] = (function() {
 
   return plugin;
 })();
+
+export default surveyText;

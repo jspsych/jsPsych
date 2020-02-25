@@ -9,7 +9,7 @@
  */
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['image-slider-response'] = (function() {
+const imageSliderResponse = (function() {
 
   var plugin = {};
 
@@ -225,3 +225,5 @@ jsPsych.plugins['image-slider-response'] = (function() {
 
   return plugin;
 })();
+
+export default imageSliderResponse;

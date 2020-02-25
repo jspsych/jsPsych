@@ -29,7 +29,7 @@
 */
 import jsPsych from '../jspsych.js';
 		
-jsPsych.plugins["rdk"] = (function() {
+const jspsychRdk = (function() {
 
 	var plugin = {};
 	
@@ -1367,3 +1367,5 @@ jsPsych.plugins["rdk"] = (function() {
 	//Return the plugin object which contains the trial
 	return plugin;
 })();
+
+export default jspsychRdk;

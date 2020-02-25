@@ -9,7 +9,7 @@
  */
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['survey-likert'] = (function() {
+const surveyLikert = (function() {
 
   var plugin = {};
 
@@ -183,3 +183,5 @@ jsPsych.plugins['survey-likert'] = (function() {
 
   return plugin;
 })();
+
+export default surveyLikert;

@@ -9,7 +9,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins["html-keyboard-response"] = (function() {
+const htmlKeyboardResponse = (function() {
 
   var plugin = {};
 
@@ -147,3 +147,5 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
 
   return plugin;
 })();
+
+export default htmlKeyboardResponse;

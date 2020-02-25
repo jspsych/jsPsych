@@ -9,7 +9,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins["audio-keyboard-response"] = (function() {
+const audioKeyboardResponse = (function() {
 
   var plugin = {};
 
@@ -184,3 +184,5 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
 
   return plugin;
 })();
+
+export default audioKeyboardResponse;

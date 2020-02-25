@@ -7,7 +7,7 @@ documentation: docs.jspsych.org
 */
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['external-html'] = (function() {
+const jspsychHtml = (function() {
 
   var plugin = {};
 

@@ -12,7 +12,7 @@
  */
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['vsl-grid-scene'] = (function() {
+const vslGridScene = (function() {
 
   var plugin = {};
 
@@ -102,3 +102,5 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
 
   return plugin;
 })();
+
+export default vslGridScene;

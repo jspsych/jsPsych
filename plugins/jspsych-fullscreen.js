@@ -6,7 +6,7 @@
  */
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins.fullscreen = (function() {
+const jspsychFullscreen = (function() {
 
   var plugin = {};
 
@@ -103,3 +103,5 @@ jsPsych.plugins.fullscreen = (function() {
 
   return plugin;
 })();
+
+export default jspsychFullscreen;

@@ -8,7 +8,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['cloze'] = (function () {
+const jspsychCloze = (function () {
 
     var plugin = {};
 
@@ -111,3 +111,5 @@ jsPsych.plugins['cloze'] = (function () {
 
     return plugin;
 })();
+
+export default jspsychCloze;

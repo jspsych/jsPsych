@@ -9,7 +9,7 @@
  **/
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
+const serialReactionTimeMouse = (function() {
 
   var plugin = {};
 
@@ -212,3 +212,5 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
 
   return plugin;
 })();
+
+export default serialReactionTimeMouse;

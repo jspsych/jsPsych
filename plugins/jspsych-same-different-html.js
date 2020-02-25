@@ -9,7 +9,7 @@
  */
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['same-different-html'] = (function() {
+const sameDifferentHtml = (function() {
 
   var plugin = {};
 
@@ -167,3 +167,5 @@ jsPsych.plugins['same-different-html'] = (function() {
 
   return plugin;
 })();
+
+export default sameDifferentHtml;

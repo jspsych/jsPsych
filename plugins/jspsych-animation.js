@@ -6,7 +6,7 @@
  */
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins.animation = (function() {
+const animation = (function() {
 
   var plugin = {};
 
@@ -153,3 +153,5 @@ jsPsych.plugins.animation = (function() {
 
   return plugin;
 })();
+
+export default animation;

@@ -9,7 +9,7 @@
  */
 import jsPsych from '../jspsych.js';
 
-jsPsych.plugins['survey-html-form'] = (function() {
+const surveyHtmlForm = (function() {
 
   var plugin = {};
 
@@ -143,3 +143,5 @@ jsPsych.plugins['survey-html-form'] = (function() {
 
   return plugin;
 })();
+
+export default surveyHtmlForm;
