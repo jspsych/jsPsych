@@ -43,7 +43,7 @@ key_press_stim1 | numeric | Indicates which key the subject pressed to continue.
 
 ```javascript
   var trial = {
-    type: 'same-different',
+    type: 'same-different-html',
     stimuli: ['<p>Climbing</p>', '<p>Walking</p>'],
     prompt: "<p>Press S if the texts imply the same amount of physical exertion. Press D if the texts imply different amount of physical exertion.</p>",
     same_key: 'S',
