@@ -1002,7 +1002,23 @@ jsPsych.init({
 });
 ```
 
-## Part 13: Local testing
+## Part 13: Modify experiment.html
+
+Add a `<script>` tag with attribute `type="module"` to load the experiment module:
+
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My experiment</title>
+        <link href="jspsych-7.0.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    </head>
+    <body></body>
+    <script type="module" src="experiment.js"></script>
+</html>
+```
+
+## Part 14: Local testing
 
 To get rid of the CORS block in some browsers, you have to setup a static server.
 
