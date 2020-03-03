@@ -38,7 +38,7 @@ correct | boolean | `true` if the subject's response matched the target.
 #### Basic example with four squares in a single row
 ```javascript
 var trial = {
-  type: 'serial-reaction-time',
+  type: serialReactionTime,
   grid: [[1,1,1,1]],
   target: [0,1]
 }
@@ -47,7 +47,7 @@ var trial = {
 #### 2x2 grid, Showing feedback for 500ms
 ```javascript
 var trial = {
-  type: 'serial-reaction-time',
+  type: serialReactionTime,
   grid: [[1,1],[1,1]],
   choices: [['r','t'],['f','g']],
   target: [1,0],

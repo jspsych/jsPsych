@@ -39,7 +39,7 @@ button_pressed | numeric | Indicates which button the subject pressed. The first
 
 ```javascript
 var trial = {
-	type: 'audio-button-response',
+	type: audioButtonResponse,
 	stimulus: 'sound/tone.mp3',
 	choices: ['Low', 'High'],
 	prompt: "<p>Is the pitch high or low?</p>"
@@ -50,7 +50,7 @@ var trial = {
 
 ```javascript
 var trial = {
-	type: 'audio-button-response',
+	type: audioButtonResponse,
 	stimulus: 'sound/roar.mp3',
 	choices: ['lion.png', 'elephant.png', 'monkey.png'],
 	prompt: "<p>Which animal made the sound?</p>",

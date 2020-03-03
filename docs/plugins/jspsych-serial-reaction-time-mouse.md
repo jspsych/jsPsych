@@ -34,7 +34,7 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
 #### Basic example with four squares in a single row
 ```javascript
 var trial = {
-  type: 'serial-reaction-time-mouse',
+  type: serialReactionTimeMouse,
   grid: [[1,1,1,1]],
   target: [0,1]
 }
@@ -43,7 +43,7 @@ var trial = {
 #### 2x2 grid with extra space in the middle
 ```javascript
 var trial = {
-  type: 'serial-reaction-time',
+  type: serialReactionTime,
   grid: [[1,0,1],[0,0,0],[1,0,1]],
   target: [0,2]
 }

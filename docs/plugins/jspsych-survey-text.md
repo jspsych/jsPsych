@@ -29,7 +29,7 @@ question_order | JSON string | A string in JSON format containing an array with 
 
 ```javascript
 var survey_trial = {
-  type: 'survey-text',
+  type: surveyText,
   questions: [
     {prompt: "How old are you?"}, 
     {prompt: "Where were you born?", placeholder: "City, State/Province, Country"}
@@ -41,7 +41,7 @@ var survey_trial = {
 
 ```javascript
 var survey_trial = {
-  type: 'survey-text',
+  type: surveyText,
   questions: [
     {prompt: "How old are you?", rows: 5, columns: 40}, 
     {prompt: "Where were you born?", rows: 3, columns: 50}
@@ -53,7 +53,7 @@ var survey_trial = {
 
 ```javascript
 var survey_trial = {
-  type: 'survey-text',
+  type: surveyText,
   questions: [
     {prompt: "How old are you?", name: 'Age'}, 
     {prompt: "Where were you born?", name: 'BirthLocation'}

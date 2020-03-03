@@ -38,7 +38,7 @@ stimulus | string | The path of the image that was displayed.
 
 ```javascript
 var trial = {
-	type: 'image-button-response',
+	type: imageButtonResponse,
 	stimulus: 'img/happy_face_1.png',
 	choices: ['Happy', 'Sad'],
 	prompt: "<p>Is this person happy or sad?</p>"

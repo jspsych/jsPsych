@@ -33,7 +33,7 @@ rt | numeric | The response time in milliseconds for the subject to view all of 
 
 ```javascript
 var trial = {
-	type: 'instructions',
+	type: instructions,
 	pages: [
 		'Welcome to the experiment. Click next to begin.',
 		'This is the second page of instructions.',
@@ -47,7 +47,7 @@ var trial = {
 
 ```javascript
 var trial = {
-	type: 'instructions',
+	type: instructions,
 	pages: [
 		'Welcome to the experiment. Click next to begin.',
 		'Here is a picture of what you will do: <img src="instruction_image.jpg"></img>'

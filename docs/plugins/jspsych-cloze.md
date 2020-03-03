@@ -25,7 +25,7 @@ answers | array of strings | Answers the partcipant gave
 
 ```javascript
 var trial = {
-	type: 'cloze',
+	type: cloze,
 	text: 'The %% is the largest terrestrial mammal. It lives in both %% and %%.'
 };
 ```
@@ -34,7 +34,7 @@ var trial = {
 
 ```javascript
 var trial = {
-    type: 'cloze',
+    type: cloze,
     text: 'A rectangle has % 4 % corners and a triangle has % 3 %.',
     check_answers: true,
     button_text: 'Next',

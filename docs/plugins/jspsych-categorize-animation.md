@@ -37,7 +37,7 @@ correct | boolean | `true` if the subject got the correct answer, `false` otherw
 
 ```javascript
 var animation_trial = {
-  type: 'categorize-animation',
+  type: categorizeAnimation,
   stimuli: ["img/face_3.jpg", "img/face_2.jpg", "img/face_4.jpg", "img/face_1.jpg"],
 	choices: [80, 81], // 80 = 'p', 81 = 'q'
 	key_answer: 81, // correct answer is 'q' for both trials
@@ -48,7 +48,7 @@ var animation_trial = {
 
 ```javascript
 var animation_trial = {
-  type: 'categorize-animation',
+  type: categorizeAnimation,
   stimuli: ["img/face_3.jpg", "img/face_2.jpg", "img/face_4.jpg", "img/face_1.jpg"],
   choices: [80, 81], // 80 = 'p', 81 = 'q'
   key_answer: 81, // correct answer is 'q' for both trials

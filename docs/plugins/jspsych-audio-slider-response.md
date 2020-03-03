@@ -43,7 +43,7 @@ stimulus | string | The path of the audio file that was played.
 
 ```javascript
 var trial_1 = {
-	type: 'audio-slider-response',
+	type: audioSliderResponse,
 	stimulus: 'sound/speech_joke.mp3',
 	labels: ['Not Funny', 'Funny'],
 	prompt: '<p>How funny is the joke?</p>'

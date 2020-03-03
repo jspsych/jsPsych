@@ -32,7 +32,7 @@ stimulus | string | The HTML content that was displayed on the screen.
 
 ```javascript
 var trial = {
-	type: 'html-keyboard-response',
+	type: htmlKeyboardResponse,
 	stimulus: '<p>Running</p>',
 	choices: ['e', 'i'],
 	prompt: "<p>Is this activity healthy or unhealthy? Press 'e' for healthy and 'i' for unhealthy.</p>"
@@ -43,7 +43,7 @@ var trial = {
 
 ```javascript
 var trial = {
-	type: 'html-keyboard-response',
+	type: htmlKeyboardResponse,
 	stimulus: '<p style="font-size: 48px;">+</p>',
 	choices: jsPsych.NO_KEYS,
 	trial_duration: 1000,

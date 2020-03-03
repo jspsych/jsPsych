@@ -6,19 +6,17 @@ Plugins provide a structure for a particular task, but often allow for significa
 
 ## Using a plugin
 
-To use a plugin, you'll need to load the plugin's JavaScript file on your experiment page:
+To use a plugin, you'll need to import the plugin's JavaScript file in your experiment JS file (eg. `experiment.js`):
 
-```html
-<head>
-<script src="jspsych/plugins/jspsych-image-keyboard-response.js" type="text/javascript"></script>
-</head>
+```javascript
+import imageKeyboardResponse from './jspsych/plugins/jspsych-image-keyboard-response.js'
 ```
 
 Once a plugin is loaded, you can define a trial that uses that plugin. The following JavaScript code defines a trial using the `jspsych-image-keyboard-response` plugin to display an image file ('images/happy_face.jpg'). This trial uses the default values for valid keys, length of display, and other parameters. You could override these values by adding them to the object.
 
 ```javascript
 var single_stim_trial = {
-	type: 'image-keyboard-response',
+	type: imageKeyboardResponse,
 	stimulus: 'images/happy_face.jpg'
 }
 ```
@@ -27,7 +25,7 @@ Here's an exampe of overriding the default value for `post_trial_gap`:
 
 ```javascript
 var single_stim_trial = {
-	type: 'image-keyboard-response',
+	type: imageKeyboardResponse,
 	stimulus: 'images/happy_face.jpg',
 	post_trial_gap: 2000
 }

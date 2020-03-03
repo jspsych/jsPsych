@@ -35,7 +35,7 @@ stimulus | string | The HTML content that was displayed on the screen.
 
 ```javascript
 var trial = {
-	type: 'html-button-response',
+	type: htmlButtonResponse,
 	stimulus: '<p>Running</p>',
 	choices: ['Healthy', 'Unhealthy'],
 	prompt: "<p>Is this activity healthy or unhealthy?</p>"

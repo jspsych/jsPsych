@@ -43,7 +43,7 @@ stimulus | string | JSON encoding of the `sources` array.
 
 ```javascript
 var trial = {
-	type: 'video-slider-response',
+	type: videoSliderResponse,
 	sources: [
 		'video/sample_video.mp4',
 		'video/sample_video.ogg'

@@ -35,7 +35,7 @@ stimulus | string | The path of the image that was displayed.
 
 ```javascript
 var trial = {
-	type: 'image-keyboard-response',
+	type: imageKeyboardResponse,
 	stimulus: 'img/happy_face_1.png',
 	choices: ['e', 'i'],
 	prompt: "<p>Is this person happy or sad? Press 'e' for happy and 'i' for sad.</p>",
@@ -47,7 +47,7 @@ var trial = {
 
 ```javascript
 var trial = {
-	type: 'image-button-response',
+	type: imageButtonResponse,
 	stimulus: 'img/happy_face_1.png',
 	choices: jsPsych.NO_KEYS,
 	prompt: "<p>Study this face for 5 seconds.</p>",

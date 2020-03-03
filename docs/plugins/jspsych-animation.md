@@ -33,7 +33,7 @@ responses | JSON | An array, encoded in JSON format. Each element of the array i
 var animation_sequence = ["img/face_1.jpg", "img/face_2.jpg", "img/face_3.jpg", "img/face_4.jpg", "img/face_3.jpg", "img/face_2.jpg"];
 
 var animation_trial = {
-    type: 'animation',
+    type: animation,
     stimuli: animation_sequence,
     sequence_reps: 3
 };

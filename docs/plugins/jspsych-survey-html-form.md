@@ -28,7 +28,7 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
 
 ```javascript
 var form_trial = {
-  type: 'survey-html-form',
+  type: surveyHtmlForm,
   preamble: '<p> How are you feeling <b>right now?</b> </p>',
   html: '<p> I am feeling <input name="first" type="text" />, <input name="second" type="text" />, and <input name="third" type="text" />.</p>'
 };

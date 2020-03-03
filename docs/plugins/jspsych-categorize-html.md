@@ -40,7 +40,7 @@ correct | boolean | `true` if the subject got the correct answer, `false` otherw
 
 ```javascript
 var categorization_trial = {
-    type: 'categorize',
+    type: categorizeHtml,
     stimulus: '<p>B</p>',
     key_answer: 80,
     text_answer: 'letter',

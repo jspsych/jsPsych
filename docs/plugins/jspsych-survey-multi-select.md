@@ -30,7 +30,7 @@ question_order | JSON string | A string in JSON format containing an array with 
 
 ```javascript
 var multi_select_block = {
-    type: 'survey-multi-select',
+    type: surveyMultiSelect,
     questions: [
       {
         prompt: "Which of these colors do you like?", 

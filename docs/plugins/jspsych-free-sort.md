@@ -44,7 +44,7 @@ for (var i = 1; i <= 12; i++) {
 }
 
 var sort_trial = {
-    type: 'free-sort',
+    type: freeSort,
     stimuli: sorting_stimuli,
     prompt: "<p>Click and drag the images below to sort them so that similar items are close together.</p>"
 };

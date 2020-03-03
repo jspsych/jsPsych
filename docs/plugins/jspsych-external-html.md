@@ -62,7 +62,7 @@ var check_consent = function(elem) {
 
 // declare the block.
 var trial = {
-  type:'external-html',
+  type:externalHtml,
   url: "external_page.html",
   cont_btn: "start",
   check_fn: check_consent

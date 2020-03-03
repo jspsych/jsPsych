@@ -33,7 +33,7 @@ var myfunc = function() {
 }
 
 var trial = {
-	type: 'call-function',
+	type: callFunction,
 	func: myfunc
 }
 ```
@@ -49,7 +49,7 @@ var myfunc = function(data){
 }
 
 var trial = {
-	type: 'call-function',
+	type: callFunction,
 	func: function(){ myfunc(jsPsych.data.get())}
 }
 ```
@@ -58,7 +58,7 @@ var trial = {
 
 ```javascript
 var trial = {
-	type: 'call-function',
+	type: callFunction,
 	async: true,
 	func: function(done){
 		// can perform async operations here like

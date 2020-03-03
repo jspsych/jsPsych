@@ -38,7 +38,7 @@ var scale_1 = [
 ];
 
 var likert_page = {
-  type: 'survey-likert',
+  type: surveyLikert,
   questions: [
     {prompt: "I like vegetables.", labels: scale_1}
   ]
@@ -57,7 +57,7 @@ var scale_1 = [
 ];
 
 var likert_page = {
-  type: 'survey-likert',
+  type: surveyLikert,
   questions: [
     {prompt: "I like vegetables.", name: 'Vegetables', labels: scale_1},
     {prompt: "I like fruit.", name: 'Fruit', labels: scale_1},

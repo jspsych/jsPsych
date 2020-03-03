@@ -41,7 +41,7 @@ var sample_function = function(param){
 }
 
 var trial = {
-	type: 'reconstruction',
+	type: reconstruction,
 	stim_function: sample_function,
 	starting_value: 0.25
 }

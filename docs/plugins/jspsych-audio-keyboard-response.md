@@ -37,7 +37,7 @@ stimulus | string | Path to the audio file that played during the trial.
 
 ```javascript
 var trial = {
-	type: 'audio-keyboard-response',
+	type: audioKeyboardResponse,
 	stimulus: 'sound/tone.mp3',
 	choices: ['e', 'i'],
 	prompt: "<p>Is the pitch high or low? Press 'e' for low and 'i' for high.</p>",
@@ -49,7 +49,7 @@ var trial = {
 
 ```javascript
 var trial = {
-	type: 'audio-keyboard-response',
+	type: audioKeyboardResponse,
 	stimulus: 'sound/tone.mp3',
 	choices: jsPsych.NO_KEYS,
 	trial_ends_after_audio: true

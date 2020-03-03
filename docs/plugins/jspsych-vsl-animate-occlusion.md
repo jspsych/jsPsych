@@ -38,7 +38,7 @@ responses | JSON string | A JSON encoded array containing all response informati
 
 ```javascript
 var trial = {
-  type: 'vsl-animate-occlusion',
+  type: vslAnimateOcclusion,
   stimuli: [
     "img/1.gif",
     "img/2.gif",

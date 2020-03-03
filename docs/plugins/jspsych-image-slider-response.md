@@ -41,7 +41,7 @@ stimulus | string | The path of the image that was displayed.
 
 ```javascript
 var trial = {
-	type: 'image-slider-response',
+	type: imageSliderResponse,
 	stimulus: 'img/happy_face_1.png',
 	labels: ['happy', 'sad'],
 	prompt: "<p>How happy/sad is this person?</p>",

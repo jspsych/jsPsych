@@ -21,7 +21,7 @@ starting_size | numeric | 100 | The initial size of the box, in pixels, along th
 
 ```javascript
 var inputs = {
-  type: 'resize',
+  type: resize,
   item_width: 3 + 3/8,
   item_height: 2 + 1/8,
   prompt: "<p>Click and drag the lower right corner of the box until the box is the same size as a credit card held up to the screen.</p>",

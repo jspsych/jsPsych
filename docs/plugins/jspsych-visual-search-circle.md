@@ -42,7 +42,7 @@ locations | JSON string | JSON-encoded array where each element of the array is 
 
 ```javascript
 var trial_1 = {
-  type: 'visual-search-circle',
+  type: visualSearchCircle,
   target: 'img/backwardN.gif',
   foil: 'img/normalN.gif',
   fixation_image: 'img/fixation.gif',

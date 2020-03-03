@@ -31,23 +31,23 @@ success | boolean | true if the browser supports fullscreen mode (i.e., is not S
 var timeline = [];
 
 timeline.push({
-  type: 'fullscreen',
+  type: fullScreen,
   fullscreen_mode: true
 });
 
 timeline.push({
-  type: 'html-keyboard-response',
+  type: htmlKeyboardResponse,
   stimulus: 'This trial will be in fullscreen mode.'
 });
 
 // exit fullscreen mode
 timeline.push({
-  type: 'fullscreen',
+  type: fullScreen,
   fullscreen_mode: false
 });
 
 timeline.push({
-  type: 'html-keyboard-response',
+  type: htmlKeyboardResponse,
   stimulus: 'This trial will NOT be in fullscreen mode.'
 });
 

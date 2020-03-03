@@ -30,7 +30,7 @@ var page_1_options = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Stro
 var page_2_options = ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neural", "Somewhat Agree", "Agree", "Strongly Agree"];
 
 var multi_choice_block = {
-  type: 'survey-multi-choice',
+  type: surveyMultiChoice,
   questions: [
     {prompt: "I like vegetables", name: 'Vegetables', options: page_1_options, required:true}, 
     {prompt: "I like fruit", name: 'Fruit', options: page_2_options, required: false}
@@ -38,7 +38,7 @@ var multi_choice_block = {
 };
 
 var multi_choice_block_horizontal = {
-  type: 'survey-multi-choice',
+  type: surveyMultiChoice,
   questions: [
     {prompt: "I like vegetables", options: page_1_options, required: true, horizontal: true,}, 
     {prompt: "I like fruit", options: page_2_options, required: false, horizontal: true}
