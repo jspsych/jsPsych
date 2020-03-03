@@ -24,8 +24,9 @@ const pluginName = (function(){
   }
 
   return plugin;
-
 })();
+
+export default pluginName
 ```
 
 This plugin will work! It defines a plugin called 'plugin-name', and it does absolutely nothing. However, it won't break the experiment, and jsPsych will understand that this is a valid plugin.
