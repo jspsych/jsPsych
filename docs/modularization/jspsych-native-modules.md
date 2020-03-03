@@ -1,1 +1,0 @@
-Based on [@jansim modifications](https://github.com/jspsych/jsPsych/pull/661/) on jsPsych.js, change `window.jsPsych` to `const jsPsych` at the beginnig, add `export default jsPsych` at the end.
