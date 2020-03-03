@@ -18,7 +18,7 @@ Start by downloading jsPsych and setting up a folder to contain your experiment 
 <html>
 	<head>
 		<title>My experiment</title>
-    <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <link href="jspsych-7.0.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
 	</head>
 	<body></body>
 </html>
@@ -32,9 +32,9 @@ Creating trials to show the stimuli is conceptually the same as creating a trial
 
 In `experiment.js`, import the libraries we need at the top:
 ```javascript
-import jsPsych from './jspsych-6.1.0/jspsych.js';
-import htmlKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js';
-import imageKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js';
+import jsPsych from './jspsych-7.0.0/jspsych.js';
+import htmlKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-html-keyboard-response.js';
+import imageKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-image-keyboard-response.js';
 ```
 
 ## Part 3: Display welcome message
@@ -73,9 +73,9 @@ jsPsych.init({
 ### The complete code so far
 
 ```javascript
-  import jsPsych from './jspsych-6.1.0/jspsych.js';
-  import htmlKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js';
-  import imageKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js';
+  import jsPsych from './jspsych-7.0.0/jspsych.js';
+  import htmlKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-html-keyboard-response.js';
+  import imageKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-image-keyboard-response.js';
 
   /* create timeline */
   var timeline = [];
@@ -131,9 +131,9 @@ timeline.push(instructions);
 ### The complete code so far
 
 ```javascript
-import jsPsych from './jspsych-6.1.0/jspsych.js';
-import htmlKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js';
-import imageKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js';
+import jsPsych from './jspsych-7.0.0/jspsych.js';
+import htmlKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-html-keyboard-response.js';
+import imageKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-image-keyboard-response.js';
 
 /* create timeline */
 var timeline = [];
@@ -197,9 +197,9 @@ timeline.push(blue_trial, orange_trial);
 ### The complete code so far
 
 ```javascript
-import jsPsych from './jspsych-6.1.0/jspsych.js';
-import htmlKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js';
-import imageKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js';
+import jsPsych from './jspsych-7.0.0/jspsych.js';
+import htmlKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-html-keyboard-response.js';
+import imageKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-image-keyboard-response.js';
 
 /* create timeline */
 var timeline = [];
@@ -308,9 +308,9 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
 ### The complete code so far
 
 ```javascript
-import jsPsych from './jspsych-6.1.0/jspsych.js';
-import htmlKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js';
-import imageKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js';
+import jsPsych from './jspsych-7.0.0/jspsych.js';
+import htmlKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-html-keyboard-response.js';
+import imageKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-image-keyboard-response.js';
 
 /* create timeline */
 var timeline = [];
@@ -399,9 +399,9 @@ var test_procedure = {
 ### The complete code so far
 
 ```javascript
-import jsPsych from './jspsych-6.1.0/jspsych.js';
-import htmlKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js';
-import imageKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js';
+import jsPsych from './jspsych-7.0.0/jspsych.js';
+import htmlKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-html-keyboard-response.js';
+import imageKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-image-keyboard-response.js';
 
 /* create timeline */
 var timeline = [];
@@ -488,9 +488,9 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
 ### The complete code so far
 
 ```javascript
-import jsPsych from './jspsych-6.1.0/jspsych.js';
-import htmlKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js';
-import imageKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js';
+import jsPsych from './jspsych-7.0.0/jspsych.js';
+import htmlKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-html-keyboard-response.js';
+import imageKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-image-keyboard-response.js';
     
 /* create timeline */
 var timeline = [];
@@ -575,9 +575,9 @@ jsPsych.init({
 ### The complete code so far
 
 ```javascript
-import jsPsych from './jspsych-6.1.0/jspsych.js';
-import htmlKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js';
-import imageKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js';
+import jsPsych from './jspsych-7.0.0/jspsych.js';
+import htmlKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-html-keyboard-response.js';
+import imageKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-image-keyboard-response.js';
 
 /* create timeline */
 var timeline = [];
@@ -691,9 +691,9 @@ var fixation = {
 ### The complete code so far
 
 ```javascript
-import jsPsych from './jspsych-6.1.0/jspsych.js';
-import htmlKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js';
-import imageKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js';
+import jsPsych from './jspsych-7.0.0/jspsych.js';
+import htmlKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-html-keyboard-response.js';
+import imageKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-image-keyboard-response.js';
 
 /* create timeline */
 var timeline = [];
@@ -792,9 +792,9 @@ The `data.key_press` value is a numeric key code indicating which key the subjec
 ### The complete code so far
 
 ```javascript
-import jsPsych from './jspsych-6.1.0/jspsych.js';
-import htmlKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js';
-import imageKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js';
+import jsPsych from './jspsych-7.0.0/jspsych.js';
+import htmlKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-html-keyboard-response.js';
+import imageKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-image-keyboard-response.js';
 
 /* create timeline */
 var timeline = [];
@@ -906,9 +906,9 @@ Finally, to calculate the mean response time on correct trials, we use the `.sel
 ## The final code
 
 ```javascript
-import jsPsych from './jspsych-6.1.0/jspsych.js';
-import htmlKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js';
-import imageKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js';
+import jsPsych from './jspsych-7.0.0/jspsych.js';
+import htmlKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-html-keyboard-response.js';
+import imageKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-image-keyboard-response.js';
 
 /* create timeline */
 var timeline = [];

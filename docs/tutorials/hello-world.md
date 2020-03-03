@@ -12,7 +12,7 @@ Start by downloading the jsPsych library. The most recent version can always be 
 
 ## Step 2: Create a folder to store your experiment files
 
-Create a folder on your computer to put the experiment files in. Once you've created the folder, open the downloaded archive from step 1, and move the extracted folder (called `jspsych-6.0.5` if using v6.0.5 of jsPsych) into the experiment folder. Here's what it looks like on a Windows machine:
+Create a folder on your computer to put the experiment files in. Once you've created the folder, open the downloaded archive from step 1, and move the extracted folder (called `jspsych-7.0.0` if using v7.0.0 of jsPsych) into the experiment folder. Here's what it looks like on a Windows machine:
 
 ![folder setup](/img/folder-setup.png)
 
@@ -45,11 +45,11 @@ Add the above code to the `experiment.html` file and save it. If you then open t
 
 ## Step 5: Setup experiment:
 
-To use jsPsych, import the library at the top in `experiment.js`: `import jsPsych from './jspsych-6.1.0/jspsych.js'`;
+To use jsPsych, import the library at the top in `experiment.js`: `import jsPsych from './jspsych-7.0.0/jspsych.js'`;
 
 For the demo, we want to show some text on the screen. This is exactly what the [jspsych-html-keyboard-response plugin](../plugins/jspsych-html-keyboard-response.md) is designed to do.
 
-To use the plugin, we need to import it in `experiment.js` as well: `import htmlKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js'`
+To use the plugin, we need to import it in `experiment.js` as well: `import htmlKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-html-keyboard-response.js'`
 
 Once the plugin is loaded, we can create an experiment using the plugin. To declare a trial that uses the html-keyboard-response plugin, we create a JavaScript object with the property `type` equal to `'html-keyboard-response'`. Then we can specify the other parameters of the plugin in the same object.
 
@@ -70,8 +70,8 @@ jsPsych.init({
 
 Your `experiment.js` should look like this:
 ```javascript
-	import jsPsych from './jspsych-6.1.0/jspsych.js';
-	import htmlKeyboardResponse from './jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js'
+	import jsPsych from './jspsych-7.0.0/jspsych.js';
+	import htmlKeyboardResponse from './jspsych-7.0.0/plugins/jspsych-html-keyboard-response.js'
 
 	var hello_trial = {
 		type: htmlKeyboardResponse,
@@ -91,7 +91,7 @@ To include the experiment in the html file, add a `<script>` tag with attribute 
 <html>
     <head>
         <title>My experiment</title>
-        <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+        <link href="jspsych-7.0.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
     </head>
     <body></body>
     <script type="module" src="experiment.js"></script>
