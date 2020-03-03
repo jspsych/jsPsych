@@ -27,7 +27,7 @@ Adds the timeline to the end of the experiment.
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: htmlKeyboardResponse,
   stimulus: 'This is a new trial.'
 }
 
@@ -42,13 +42,13 @@ jsPsych.addNodeToEndOfTimeline(new_timeline)
 
 ```javascript
 var first = {
-  type: 'html-keyboard-response',
+  type: htmlKeyboardResponse,
   stimulus: 'first trial; new trial added when on_finish is called',
   on_finish: function(){
     jsPsych.pauseExperiment();
     jsPsych.addNodeToEndOfTimeline({
       timeline: [{
-        type: 'image-keyboard-response',
+        type: imageKeyboardResponse,
         stimulus: 'img/happy_face_4.jpg'
       }]
     }, jsPsych.resumeExperiment)
@@ -169,7 +169,7 @@ for (var i = 0; i < images.length; i++) {
 }
 
 var block = {
-  type: 'image-keyboard-response',
+  type: imageKeyboardResponse,
   choices: [89, 78], // Y or N
   prompt: '<p>Press Y to Continue. Press N to end this node of the experiment.</p>',
   on_finish: function(data) {
@@ -181,7 +181,7 @@ var block = {
 }
 
 var after_block = {
-  type: 'html-keyboard-response',
+  type: htmlKeyboardResponse,
   stimulus: '<p>The next node</p>',
   is_html: true
 }
@@ -222,7 +222,7 @@ Ends the experiment, skipping all remaining trials.
 
 ```javascript
 var trial = {
-  type: 'image-keyboard-response',
+  type: imageKeyboardResponse,
   stimulus: 'image1.jpg',
   choices: [89,78], // Y or N
   prompt: '<p>Press Y to Continue. Press N to end the experiment</p>',
@@ -433,7 +433,7 @@ Pauses the experiment. The experiment will finish the current trial, but will no
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: htmlKeyboardResponse,
   stimulus: 'Press p to take a 30 second break. Otherwise, press c to continue immediately.',
   choices: ['p','c'],
   on_finish: function(data){
@@ -502,7 +502,7 @@ Resumes the experiment after a call to `jsPsych.pauseExperiment()`. If the post 
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: htmlKeyboardResponse,
   stimulus: 'Press p to take a 30 second break. Otherwise, press c to continue immediately.',
   choices: ['p','c'],
   on_finish: function(data){
@@ -594,7 +594,7 @@ Depends on the value of `call_immediate` parameter. See description above.
 #### Standard use as a parameter for a trial
 ```javascript
 var trial = {
-  type: 'image-keyboard-response',
+  type: imageKeyboardResponse,
   stimulus: jsPsych.timelineVariable('image')
 }
 
@@ -612,7 +612,7 @@ var procedure = {
 #### Invoking immediately in a function
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: htmlKeyboardResponse,
   stimulus: function(){
     return "<img style='width:100px; height:100px;' src='"+jsPsych.timelineVariable('image', true)+"'></img>";
   }
