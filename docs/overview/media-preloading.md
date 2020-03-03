@@ -10,13 +10,13 @@ jsPsych will automatically preload audio, video, and image files that are used a
 // the image file img/file1.png is
 // automatically preloaded before the experiment begins
 var trial = {
-	type: 'image-keyboard-response',
+	type: imageKeyboardResponse,
 	stimulus: 'img/file1.png'
 }
 
 // the sound file is also preloaded automatically
 var sound_trial = {
-	type: 'audio-keyboard-response',
+	type: audioKeyboardResponse,
 	stimulus: 'audio/hello.mp3'
 }
 
@@ -41,12 +41,12 @@ You can specify an array of image files (`preload_images`) and an array of audio
 // this trial will not preload the images, because the image file is being used
 // in an HTML string
 var trial = {
-	type: 'html-keyboard-response',
+	type: htmlKeyboardResponse,
 	stimulus: '<img src="img/file1.png"></img>',
 }
 
 var audio_trial = {
-	type: 'audio-keyboard-response',
+	type: audioKeyboardResponse,
 	stimulus: function() { return 'audio/foo.mp3' }
 }
 

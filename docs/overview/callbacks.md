@@ -43,7 +43,7 @@ The `on_finish` callback can be added to any trial. The callback will trigger wh
 #### Sample use
 ```javascript
 var trial = {
-  type: 'image-keyboard-response',
+  type: imageKeyboardResponse,
   stimulus: 'imgA.png',
   on_finish: function(data) {
     if(data.key_press == 85){
@@ -78,7 +78,7 @@ The `on_load` callback can be added to any trial. The callback will trigger once
 #### Sample use
 ```javascript
 var trial = {
-  type: 'image-keyboard-response',
+  type: imageKeyboardResponse,
   stimulus: 'imgA.png',
   on_load: function() {
     console.log('The trial just finished loading.');
@@ -94,7 +94,7 @@ The `on_start` callback can be added to any trial. The callback will trigger rig
 #### Sample use
 ```javascript
 var trial = {
-  type: 'image-keyboard-response',
+  type: imageKeyboardResponse,
   stimulus: 'imgA.png',
   on_start: function(trial) {
     console.log('The trial is about to start.');

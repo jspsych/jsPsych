@@ -12,7 +12,7 @@ A trial for the Flanker Task written with jsPsych might look like this:
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: htmlKeyboardResponse,
   stimulus: '<<<<<',
   choices: ['f','j'],
   data: {
@@ -32,7 +32,7 @@ The ITI can also be controlled at the trial level through the `post_trial_gap` p
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: htmlKeyboardResponse,
   stimulus: 'There will be a 1.5 second blank screen after this trial.',
   post_trial_gap: 1500
 }
@@ -44,7 +44,7 @@ Immediately before a trial runs, there is an opportunity to run an arbitrary fun
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: htmlKeyboardResponse,
   stimulus: '<<<<<',
   choices: ['f','j'],
   data: {
@@ -66,7 +66,7 @@ This can be useful to calculate new data properties that were unknowable at the 
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: htmlKeyboardResponse,
   stimulus: '<<<<<',
   choices: ['f','j'],
   data: {
@@ -90,7 +90,7 @@ The `on_load` callback can be added to any trial. The callback will trigger once
 #### Sample use
 ```javascript
 var trial = {
-  type: 'image-keyboard-response',
+  type: imageKeyboardResponse,
   stimulus: 'imgA.png',
   on_load: function() {
     console.log('The trial just finished loading.');
@@ -109,7 +109,7 @@ Here is a sketch of how this functionality could be used to display feedback to 
 var timeline = [];
 
 var trial = {
-  type: 'html-keyboard-response',
+  type: htmlKeyboardResponse,
   stimulus: '<<<<<',
   choices: ['f','j'],
   data: {
@@ -126,7 +126,7 @@ var trial = {
 }
 
 var feedback = {
-  type: 'html-keyboard-response',
+  type: htmlKeyboardResponse,
   stimulus: function(){
     var last_trial_correct = jsPsych.data.get().last(1).values()[0].correct;
     if(last_trial_correct){

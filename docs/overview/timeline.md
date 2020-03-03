@@ -8,7 +8,7 @@ To create a trial, you need to create an object that describes the trial. The mo
 
 ```javascript
 var trial = {
-	type: 'html-keyboard-response',
+	type: htmlKeyboardResponse,
 	stimulus: 'hello world!'
 }
 ```
@@ -37,19 +37,19 @@ Scaling up to multiple trials is straightforward. Just create an object for each
 var timeline = [];
 
 var trial_1 = {
-	type: 'html-keyboard-response',
+	type: htmlKeyboardResponse,
 	stimulus: 'This is trial 1.'
 }
 timeline.push(trial_1);
 
 var trial_2 = {
-	type: 'html-keyboard-response',
+	type: htmlKeyboardResponse,
 	stimulus: 'This is trial 2.'
 }
 timeline.push(trial_2);
 
 var trial_3 = {
-	type: 'html-keyboard-response',
+	type: htmlKeyboardResponse,
 	stimulus: 'This is trial 3.'
 }
 timeline.push(trial_3);
@@ -61,7 +61,7 @@ Each object on the timeline can also have it's own timeline. This is useful for 
 
 ```javascript
 var judgment_trials = {
-	type: 'image-keyboard-response',
+	type: imageKeyboardResponse,
 	prompt: '<p>Press a number 1-7 to indicate how unusual the image is.</p>',
 	choices: ['1','2','3','4','5','6','7'],
 	timeline: [
@@ -78,7 +78,7 @@ You can also override the values by declaring a new value in the `timeline` arra
 
 ```javascript
 var judgment_trials = {
-	type: 'image-keyboard-response',
+	type: imageKeyboardResponse,
 	prompt: '<p>Press a number 1-7 to indicate how unusual the image is.</p>',
 	choices: ['1','2','3','4','5','6','7'],
 	timeline: [
@@ -105,13 +105,13 @@ Here's a basic version of the task with timeline variables.
 var face_name_procedure = {
 	timeline: [
 		{
-			type: 'html-keyboard-response',
+			type: htmlKeyboardResponse,
 			stimulus: '+',
 			choices: jsPsych.NO_KEYS,
 			trial_duration: 500
 		},
 		{
-			type: 'image-keyboard-response',
+			type: imageKeyboardResponse,
 			stimulus: jsPsych.timelineVariable('face'),
 			choices: jsPsych.NO_KEYS,
 			trial_duration: 2500
@@ -137,19 +137,19 @@ To do this, we will need to use the `jsPsych.timelineVariable()` method in a sli
 var face_name_procedure = {
 	timeline: [
 		{
-			type: 'html-keyboard-response',
+			type: htmlKeyboardResponse,
 			stimulus: '+',
 			choices: jsPsych.NO_KEYS,
 			trial_duration: 500
 		},
 		{
-			type: 'html-keyboard-response',
+			type: htmlKeyboardResponse,
 			stimulus: jsPsych.timelineVariable('name'),
 			trial_duration: 1000,
 			choices: jsPsych.NO_KEYS
 		},
 		{
-			type: 'html-keyboard-response',
+			type: htmlKeyboardResponse,
 			stimulus: function(){
 				var html="<img src='"+jsPsych.timelineVariable('face', true)+"'>";
 				html += "<p>"+jsPsych.timelineVariable('name', true)+"</p>";
@@ -330,7 +330,7 @@ Any timeline can be looped using the `loop_function` option. The loop function s
 
 ```javascript
 var trial = {
-	type: 'html-keyboard-response',
+	type: htmlKeyboardResponse,
 	stimulus: 'This trial is in a loop. Press R to repeat this trial, or C to continue.'
 }
 
@@ -352,12 +352,12 @@ A timeline can be skipped based on the evaluation of a function using the `condi
 
 ```javascript
 var pre_if_trial = {
-	type: 'html-keyboard-response',
+	type: htmlKeyboardResponse,
 	stimulus: 'The next trial is in a conditional statement. Press S to skip it, or V to view it.'
 }
 
 var if_trial = {
-	type: 'html-keyboard-response',
+	type: htmlKeyboardResponse,
 	stimulus: 'You chose to view the trial. Press any key to continue.'
 }
 
@@ -376,7 +376,7 @@ var if_node = {
 }
 
 var after_if_trial = {
-	type: 'html-keyboard-response',
+	type: htmlKeyboardResponse,
 	stimulus: 'This is the trial after the conditional.'
 }
 

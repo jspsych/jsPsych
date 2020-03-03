@@ -21,7 +21,7 @@ The progress bar can also be manually controlled using the function `jsPsych.set
 
 ```js
 var trial = {
-	type: 'html-keyboard-response',
+	type: htmlKeyboardResponse,
 	stimulus: 'Almost done...',
 	on_finish: function(){
 		jsPsych.setProgressBar(0.85); // set progress bar to 85% full.
