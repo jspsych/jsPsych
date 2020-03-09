@@ -29,6 +29,8 @@ Once you've got a text editor that you like, create two new files in the experim
 
 ## Step 4: Add the bare-minimum HTML code
 
+Create a new file called `experiment.html`.
+
 There's some basic code that (nearly) all HTML documents have in common. Here's a typical bare-bones HTML document.
 
 ```html
@@ -41,11 +43,15 @@ There's some basic code that (nearly) all HTML documents have in common. Here's 
 </html>
 ```
 
-Add the above code to the `experiment.html` file and save it. If you then open the file in a web browser, you should see a blank page and the title of the page will be 'My experiment'.
+Add the above code to the `experiment.html` file and save it in the root folder of your project. If you then open the file in a web browser, you should see a blank page and the title of the page will be 'My experiment'.
 
 ## Step 5: Setup experiment:
 
-To use jsPsych, import the library at the top in `experiment.js`: `import jsPsych from './jspsych-7.0.0/jspsych.js'`;
+Create a new file called `experiment.js` in the root folder of your project. To use jsPsych, import the library at the top in `experiment.js`: 
+
+```javascript
+import jsPsych from './jspsych-7.0.0/jspsych.js'`;
+```
 
 For the demo, we want to show some text on the screen. This is exactly what the [jspsych-html-keyboard-response plugin](../plugins/jspsych-html-keyboard-response.md) is designed to do.
 
@@ -100,7 +106,7 @@ To include the experiment in the html file, add a `<script>` tag with attribute 
 
 ## Step 7: Local testing
 
-To get rid of the CORS block in some browsers, you have to setup a static server.
+For security reasons, many browsers won't just run a javascript module. In order to run a javascript module safely, you have to setup a static server.
 
 * Make sure [Node.js](https://nodejs.org/en/) is installed.
 
