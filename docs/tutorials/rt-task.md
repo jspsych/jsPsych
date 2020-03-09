@@ -1020,7 +1020,7 @@ Add a `<script>` tag with attribute `type="module"` to load the experiment modul
 
 ## Part 14: Local testing
 
-To get rid of the CORS block in some browsers, you have to setup a static server.
+For security reasons, many browsers won't just run a javascript module. In order to run a javascript module safely, you have to setup a static server.
 
 * Make sure [Node.js](https://nodejs.org/en/) is installed.
 
