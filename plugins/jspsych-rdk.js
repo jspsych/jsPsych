@@ -161,13 +161,17 @@ jsPsych.plugins["rdk"] = (function() {
 		    aperture_center_x: {
 		      type: jsPsych.plugins.parameterType.INT,
 		      pretty_name: "Aperture center X",
-		      default: window.innerWidth/2,
+		      default: function(){
+		      	return window.innerWidth/2;
+			  },
 		      description: "The x-coordinate of the center of the aperture"
 		    },
 		    aperture_center_y: {
 		      type: jsPsych.plugins.parameterType.INT,
 		      pretty_name: "Aperture center Y",
-		      default: window.innerHeight/2,
+		      default: function(){
+		      	return window.innerHeight/2;
+			  },
 		      description: "The y-coordinate of the center of the aperture"
 		    },
 		    fixation_cross: {
@@ -1351,6 +1355,7 @@ jsPsych.plugins["rdk"] = (function() {
 		
 		//Function to assign the default values for the staircase parameters
 		function assignParameterValue(argument, defaultValue){
+			if(typeof argument === 'function') argument = argument.call();
 			return typeof argument !== 'undefined' ? argument : defaultValue;
 		}
 		
