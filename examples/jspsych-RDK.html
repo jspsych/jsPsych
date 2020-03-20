@@ -39,8 +39,26 @@
 			timeline: RDK_trials, //The timeline of all the trials
 			background_color: "white",
 			dot_color: "black"
-			
-		}
+		};
+
+		var test_block_multiple_aperture = {
+			type: "rdk",
+			number_of_apertures: 3,
+			post_trial_gap: 500, //The Inter Trial Interval. You can either have no ITI, or have an ITI but change the display element to be the same color as the stimuli background to prevent flashing between trials
+			number_of_dots: [50, 100, 200], //Total number of dots in each aperture
+			RDK_type: 3, //The type of RDK used
+			choices: ['a', 'l'], //Choices available to be keyed in by participant
+			trial_duration: 1000, //Duration of each trial in ms
+			timeline: RDK_trials, //The timeline of all the trials
+			background_color: "white",
+			dot_color: "black",
+			fixation_cross: true,
+			aperture_center_x: function () { //aperture will always stay at the same location relative to the center of the screen by using dynamic parameters
+				return [window.innerWidth/2-300, window.innerWidth/2, window.innerWidth/2+300];
+			},
+			aperture_width: 200,
+			aperture_height: 100
+		};
 
 
 		
@@ -48,7 +66,7 @@
 		
 		//Initiate the experiment
 		jsPsych.init({
-			timeline: [test_block],
+			timeline: [test_block, test_block_multiple_aperture],
 			on_finish: function(){ //Execute this when the experiment finishes
 				jsPsych.data.displayData(); //Display the data onto the browser screen
 			}
