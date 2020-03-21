@@ -74,6 +74,7 @@ Plugin | Description
 [jspsych&#8209;categorize&#8209;animation](jspsych-categorize-animation) | The subject responds to an animation and can be given feedback about their response.
 [jspsych&#8209;categorize&#8209;html](jspsych-categorize-html) | The subject responds to an HTML-formatted stimulus using the keyboard and can be given feedback about the correctness of their response.
 [jspsych&#8209;categorize&#8209;image](jspsych-categorize-image) | The subject responds to an image using the keyboard and can be given feedback about the correctness of their response.
+[jspsych&#8209;cloze](jspsych-cloze) | Plugin for displaying a cloze test and checking participants answers against a correct solution.
 [jspsych&#8209;external&#8209;html](jspsych-external-html) | Displays an external HTML page (such as a consent form) and lets the subject respond by clicking a button or pressing a key. Plugin can validate their response, which is useful for making sure that a subject has granted consent before starting the experiment.
 [jspsych&#8209;free&#8209;sort](jspsych-free-sort) | Displays a set of images on the screen in random locations. Subjects can click and drag the images to move them around the screen. Records all the moves made by the subject, so the sequence of moves can be recovered from the data.
 [jspsych&#8209;fullscreen](jspsych-fullscreen) | Toggles the experiment in and out of fullscreen mode.
@@ -86,18 +87,21 @@ Plugin | Description
 [jspsych&#8209;image&#8209;keyboard&#8209;response](jspsych-image-keyboard-response) | Display an image and allow the subject to respond by pressing a key.
 [jspsych&#8209;image&#8209;slider&#8209;response](jspsych-image-slider-response) | Display an image and allow the subject to respond by moving a slider to indicate a value.
 [jspsych&#8209;instructions](jspsych-instructions) | For displaying instructions to the subject. Allows the subject to navigate between pages of instructions using keys or buttons.
-[jspsych&#8209;RDK](jspsych-RDK) | This plugin displays a Random Dot Kinematogram (RDK) and allows the subject to report the primary direction of motion by pressing a key on the keyboard.
+[jspsych&#8209;rdk](jspsych-rdk) | This plugin displays a Random Dot Kinematogram (RDK) and allows the subject to report the primary direction of motion by pressing a key on the keyboard.
 [jspsych&#8209;reconstruction](jspsych-reconstruction) | The subject interacts with a stimulus by modifying a parameter of the stimulus and observing the change in the stimulus in real-time.
 [jspsych&#8209;resize](jspsych-resize) | Calibrate the display so that materials display with a known physical size.
 [jspsych&#8209;same&#8209;different&#8209;html](jspsych-same-different-html) | A same-different judgment task. An HTML-formatted stimulus is shown, followed by a brief gap, and then another stimulus is shown. The subject indicates whether the stimuli are the same or different.
 [jspsych&#8209;same&#8209;different&#8209;image](jspsych-same-different-image) | A same-different judgment task. An image is shown, followed by a brief gap, and then another stimulus is shown. The subject indicates whether the stimuli are the same or different.
 [jspsych&#8209;serial&#8209;reaction&#8209;time](jspsych-serial-reaction-time) | A set of boxes are displayed on the screen and one of them changes color. The subject presses a key that corresponds to the different color box as fast as possible.
 [jspsych&#8209;serial&#8209;reaction&#8209;time&#8209;mouse](jspsych-serial-reaction-time-mouse) | A set of boxes are displayed on the screen and one of them changes color. The subjects clicks the box that changed color as fast as possible.
+[jspsych&#8209;survey&#8209;html&#8209;form](jspsych-survey-html-form) | Renders a custom HTML form. Allows for mixing multiple kinds of form input.
 [jspsych&#8209;survey&#8209;likert](jspsych-survey-likert) | Displays likert-style questions.
 [jspsych&#8209;survey&#8209;multi&#8209;choice](jspsych-survey-multi-choice) | Displays multiple choice questions with one answer allowed per question.
 [jspsych&#8209;survey&#8209;multi&#8209;select](jspsych-survey-multi-select) | Displays multiple choice questions with multiple answes allowed per question.
 [jspsych&#8209;survey&#8209;text](jspsych-survey-text) | Shows a prompt with a text box. The subject writes a response and then submits by clicking a button.
-[jspsych&#8209;video](jspsych-video) | Displays a video file and autoadvances to the next trial when the video is complete.
+[jspsych&#8209;video&#8209;button&#8209;response](jspsych-video-button-response) | Displays a video file with many options for customizing playback. Subject responds to the video by pressing a button.
+[jspsych&#8209;video&#8209;keyboard&#8209;response](jspsych-video-keyboard-response) | Displays a video file with many options for customizing playback. Subject responds to the video by pressing a key.
+[jspsych&#8209;video&#8209;slider&#8209;response](jspsych-video-slider-response) | Displays a video file with many options for customizing playback. Subject responds to the video by moving a slider.
 [jspsych&#8209;visual&#8209;search&#8209;circle](jspsych-visual-search-circle) | A customizable visual-search task modelled after [Wang, Cavanagh, & Green (1994)](http://dx.doi.org/10.3758/BF03206946). The subject indicates whether or not a target is present among a set of distractors. The stimuli are displayed in a circle, evenly-spaced, equidistant from a fixation point.
 [jspsych&#8209;vsl&#8209;animate&#8209;occlusion](jspsych-vsl-animate-occlusion) | A visual statistical learning paradigm based on [Fiser & Aslin (2002)](http://dx.doi.org/10.1037//0278-7393.28.3.458). A sequence of stimuli are shown in an oscillatory motion. An occluding rectangle is in the center of the display, and the stimuli change when they are behind the rectangle.
 [jspsych&#8209;vsl&#8209;grid&#8209;scene](jspsych-vsl-grid-scene) | A visual statistical learning paradigm based on [Fiser & Aslin (2001)](http://dx.doi.org/10.1111/1467-9280.00392). A scene made up of individual stimuli arranged in a grid is shown. This plugin can also generate the HTML code to render the stimuli for use in other plugins.

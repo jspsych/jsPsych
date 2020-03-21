@@ -88,7 +88,7 @@ jsPsych.plugins['same-different-image'] = (function() {
       jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: afterKeyboardResponse,
         valid_responses: trial.advance_key,
-        rt_method: 'date',
+        rt_method: 'performance',
         persist: false,
         allow_held_key: false
       });
@@ -156,7 +156,7 @@ jsPsych.plugins['same-different-image'] = (function() {
       jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: [trial.same_key, trial.different_key],
-        rt_method: 'date',
+        rt_method: 'performance',
         persist: false,
         allow_held_key: false
       });

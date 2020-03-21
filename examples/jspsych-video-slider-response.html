@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-video-slider-response.js"></script>
+    <script src="../plugins/jspsych-html-button-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body></body>
+  <script>
+
+  var pre_trial = {
+    type: 'html-button-response',
+    stimulus: '<div style="max-width:600px;"><p>Some browsers now require that a user interacts with a web page before video or audio content will autoplay. Clicking the button below satisfies that requirement.</p><p>Without this trial, the video will load but not play.</p></div>',
+    choices: ['continue']
+  }
+
+  var trial = {
+    type: 'video-slider-response',
+    sources: ['video/sample_video.mp4'],
+    labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+    min: 1,
+    max: 5,
+    step: 1,
+    slider_start: 1,
+    prompt: 'Rate this video clip',
+    require_movement: true,
+    width: 600,
+    //height: 600,
+    autoplay: true,
+    //controls: true,
+    //start: 8,
+    //stop: 9,
+    rate: 1.5,
+    //trial_duration: 2000,
+    //trial_ends_after_video: true,
+    response_ends_trial: true
+  }
+
+  jsPsych.init({
+
+    show_preload_progress_bar: true,
+    timeline: [pre_trial, trial],
+    on_finish: function() { jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>

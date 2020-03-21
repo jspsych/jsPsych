@@ -25,6 +25,24 @@ jsPsych.plugins['image-slider-response'] = (function() {
         default: undefined,
         description: 'The image to be displayed'
       },
+      stimulus_height: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Image height',
+        default: null,
+        description: 'Set the image height in pixels'
+      },
+      stimulus_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Image width',
+        default: null,
+        description: 'Set the image width in pixels'
+      },
+      maintain_aspect_ratio: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Maintain aspect ratio',
+        default: true,
+        description: 'Maintain the aspect ratio after setting width or height'
+      },
       min: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Min slider',
@@ -50,11 +68,17 @@ jsPsych.plugins['image-slider-response'] = (function() {
         description: 'Sets the step of the slider'
       },
       labels: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.HTML_STRING,
         pretty_name:'Labels',
         default: [],
         array: true,
         description: 'Labels of the slider.',
+      },
+      slider_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name:'Slider width',
+        default: null,
+        description: 'Width of the slider in pixels.'
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -62,6 +86,12 @@ jsPsych.plugins['image-slider-response'] = (function() {
         default:  'Continue',
         array: false,
         description: 'Label of the button to advance.'
+      },
+      require_movement: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Require movement',
+        default: false,
+        description: 'If true, the participant will have to move the slider before continuing.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -93,8 +123,27 @@ jsPsych.plugins['image-slider-response'] = (function() {
   plugin.trial = function(display_element, trial) {
 
     var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 100px 0px;">';
-    html += '<div id="jspsych-image-slider-response-stimulus"><img src="' + trial.stimulus + '"></div>';
-    html += '<div class="jspsych-image-slider-response-container" style="position:relative;">';
+    html += '<div id="jspsych-image-slider-response-stimulus">';
+    html += '<img src="'+trial.stimulus+'" style="';
+    if(trial.stimulus_height !== null){
+      html += 'height:'+trial.stimulus_height+'px; '
+      if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
+        html += 'width: auto; ';
+      }
+    }
+    if(trial.stimulus_width !== null){
+      html += 'width:'+trial.stimulus_width+'px; '
+      if(trial.stimulus_height == null && trial.maintain_aspect_ratio){
+        html += 'height: auto; ';
+      }
+    }
+    html += '"></img>';
+    html += '</div>';
+    html += '<div class="jspsych-image-slider-response-container" style="position:relative; margin: 0 auto 3em auto; ';
+    if(trial.slider_width !== null){
+      html += 'width:'+trial.slider_width+'px;';
+    }
+    html += '">';
     html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-image-slider-response-response"></input>';
     html += '<div>'
     for(var j=0; j < trial.labels.length; j++){
@@ -113,7 +162,7 @@ jsPsych.plugins['image-slider-response'] = (function() {
     }
 
     // add submit button
-    html += '<button id="jspsych-image-slider-response-next" class="jspsych-btn">'+trial.button_label+'</button>';
+    html += '<button id="jspsych-image-slider-response-next" class="jspsych-btn" '+ (trial.require_movement ? "disabled" : "") + '>'+trial.button_label+'</button>';
 
     display_element.innerHTML = html;
 
@@ -122,9 +171,15 @@ jsPsych.plugins['image-slider-response'] = (function() {
       response: null
     };
 
+    if(trial.require_movement){
+      display_element.querySelector('#jspsych-image-slider-response-response').addEventListener('change', function(){
+        display_element.querySelector('#jspsych-image-slider-response-next').disabled = false;
+      })
+    }
+
     display_element.querySelector('#jspsych-image-slider-response-next').addEventListener('click', function() {
       // measure response time
-      var endTime = (new Date()).getTime();
+      var endTime = performance.now();
       response.rt = endTime - startTime;
       response.response = display_element.querySelector('#jspsych-image-slider-response-response').value;
 
@@ -165,7 +220,7 @@ jsPsych.plugins['image-slider-response'] = (function() {
       }, trial.trial_duration);
     }
 
-    var startTime = (new Date()).getTime();
+    var startTime = performance.now();
   };
 
   return plugin;

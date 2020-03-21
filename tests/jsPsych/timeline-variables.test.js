@@ -23,6 +23,38 @@ describe('sampling', function(){
     expect(true).toBe(true);
   });
 
+  test('alternate-groups method produces alternating groups', function(){
+    var trial = {
+      timeline: [{
+        type: 'html-keyboard-response',
+        stimulus: jsPsych.timelineVariable('stimulus')
+      }],
+      timeline_variables: [
+        {stimulus: 'a'},
+        {stimulus: 'a'},
+        {stimulus: 'b'},
+        {stimulus: 'b'},
+        {stimulus: 'c'},
+        {stimulus: 'c'}
+      ],
+      sample: {
+        type: 'alternate-groups',
+        groups: [[0,0,0,0,1,1,1,1],[2,2,2,2,3,3,3,3],[4,4,4,4,5,5,5,5]],
+        randomize_group_order: true
+      }
+    }
+
+    jsPsych.init({timeline: [trial]});
+    var last = jsPsych.getDisplayElement().innerHTML;
+    for(var i=0;i<23;i++){
+      utils.pressKey(32);
+      var curr = jsPsych.getDisplayElement().innerHTML;
+      expect(last).not.toMatch(curr);
+      last = curr;
+    }
+    utils.pressKey(32);
+  })
+
   test('sampling functions run when timeline loops', function(){
 
     var count = 0;
@@ -127,5 +159,96 @@ describe('timeline variables are correctly evaluated', function(){
     });
 
 
-  })
+  });
+
+  test('custom sampling returns correct trials', function(){
+    
+    var tvs = [
+      {id: 0},
+      {id: 1},
+      {id: 2},
+      {id: 3}
+    ]
+
+    var timeline = [];
+
+    timeline.push({
+      timeline: [{
+        type: 'html-keyboard-response',
+        stimulus: 'foo',
+        data: {
+          id: jsPsych.timelineVariable('id')
+        }
+      }],
+      timeline_variables: tvs,
+      sample: {
+        type: 'custom',
+        fn: function(){
+          return [2,0];
+        }
+      }
+    });
+
+    jsPsych.init({
+      timeline: timeline
+    });
+
+    utils.pressKey(65);
+    utils.pressKey(65);
+    expect(jsPsych.data.get().select('id').values).toEqual([2,0]);
+
+  });
+
+  test('custom sampling works with a loop', function(){
+    
+    var tvs = [
+      {id: 0},
+      {id: 1},
+      {id: 2},
+      {id: 3}
+    ]
+
+    var timeline = [];
+    var reps = 0;
+    var sample = 3;
+
+    timeline.push({
+      timeline: [{
+        type: 'html-keyboard-response',
+        stimulus: 'foo',
+        data: {
+          id: jsPsych.timelineVariable('id')
+        }
+      }],
+      timeline_variables: tvs,
+      sample: {
+        type: 'custom',
+        fn: function(){
+          return [sample];
+        }
+      },
+      loop_function: function(){
+        reps++;
+        if(reps < 4){
+          sample = 3-reps;
+          return true;
+        } else {
+          return false;
+        }
+      }
+    });
+
+    jsPsych.init({
+      timeline: timeline
+    });
+
+    utils.pressKey(65);
+    utils.pressKey(65);
+    utils.pressKey(65);
+    utils.pressKey(65);
+    expect(jsPsych.data.get().select('id').values).toEqual([3,2,1,0]);
+
+  });
+
+
 })

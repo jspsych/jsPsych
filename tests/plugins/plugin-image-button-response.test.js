@@ -26,7 +26,7 @@ describe('image-button-response', function(){
 			auto_preload: false
 		});
 
-		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus">');
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png"');
 	});
 
 	test('display button labels', function(){
@@ -73,7 +73,7 @@ describe('image-button-response', function(){
 			auto_preload: false
 		});
 
-		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus">'));
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus"');
 
 		utils.clickTarget(document.querySelector('#jspsych-image-button-response-button-0'));
 
@@ -127,7 +127,7 @@ describe('image-button-response', function(){
 			auto_preload: false
 		});
 
-		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus">');
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus"');
 		jest.runTimersToTime(500);
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});
@@ -145,7 +145,7 @@ describe('image-button-response', function(){
 			auto_preload: false
 		});
 
-		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus">');
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus"');
 
 		utils.clickTarget(document.querySelector('#jspsych-image-button-response-button-0'));
 

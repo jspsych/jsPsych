@@ -11,6 +11,14 @@ describe('#shuffle', function(){
   });
 });
 
+describe('shuffleAlternateGroups', function(){
+  test('should shuffle in alternating groups', function(){
+    Math.random = jest.fn().mockImplementation(function(){ return 0.5; });
+    var toShuffle = [['a','b','c',], [1,2,3]];
+    expect(jsPsych.randomization.shuffleAlternateGroups(toShuffle)).toEqual(['a',1,'c',3,'b',2]);
+  });
+})
+
 describe('#randomID', function(){
   test('should produce ID based on mock RNG', function(){
     Math.random = jest.fn().mockReturnValueOnce(0.1).mockReturnValueOnce(0.2).mockReturnValueOnce(0.3);

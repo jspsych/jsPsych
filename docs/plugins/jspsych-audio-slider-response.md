@@ -1,8 +1,10 @@
 # jspsych-audio-slider-response
 
-This plugin plays audio files and records responses generated with a button click.
+This plugin plays an audio file and allows the subject to respond by dragging a slider.
 
-If the browser supports it, audio files are played using the WebAudio API.This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. Audio files are automatically preloaded by jsPsych.
+If the browser supports it, audio files are played using the WebAudio API.This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. 
+
+Audio files are automatically preloaded by jsPsych. However, if you are using timeline variables or another dynamic method to specify the audio stimulus you will need to [manually preload](/overview/media-preloading/#manual-preloading) the audio.
 
 The trial can end when the subject responds, or if the subject has failed to respond within a fixed length of time.
 
@@ -19,6 +21,8 @@ min | integer | 0 | Sets the minimum value of the slider
 max | integer | 100 | Sets the maximum value of the slider
 start | integer | 50 | Sets the starting value of the slider
 step | integer | 1 | Sets the step of the slider. This is the smallest amount by which the slider can change.
+slider_width | integer | null | Set the width of the slider in pixels. If left null, then the width will be equal to the widest element in the display.
+require_movement | boolean | false | If true, the subject must move the slider before clicking the continue button.
 prompt | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
 trial_duration | numeric | null | How long to wait for the subject to make a response before ending the trial in milliseconds. If the subject fails to make a response before this timer is reached, the subject's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely.
 response_ends_trial | boolean | true | If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the `timing_response` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can use this parameter to force the subject to listen to the stimulus for a fixed amount of time, even if they respond before the time is complete.

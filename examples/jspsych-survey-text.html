@@ -9,17 +9,24 @@
   <body></body>
   <script>
 
-  var survey_block = {
-      type: 'survey-text',
-      questions: [
-        {prompt: 'How old are you?', value: 'age', columns: 3},
-        {prompt: 'Where were you born?', value: 'location', columns: 50},
-        {prompt: 'Tell me about your day', value: 'How did it start?', rows:10, columns: 50}
-      ]
+  var survey_page1 = {
+    type: 'survey-text',
+    questions: [
+      {prompt: 'How old are you?', columns: 3, required: true, name: 'Age'},
+      {prompt: 'Where were you born?', placeholder: 'City, State/Province, Country', columns: 50, name: 'BirthLocation'}
+    ],
+    randomize_question_order: true
   };
 
+  var survey_page2 = {
+    type: 'survey-text',
+    questions: [
+      {prompt: 'Tell me about your day', placeholder: 'How did it start?', rows:10, columns: 50}
+    ]
+  }
+
   jsPsych.init({
-    timeline: [survey_block],
+    timeline: [survey_page1, survey_page2],
     on_finish: function() { jsPsych.data.displayData(); }
   });
 

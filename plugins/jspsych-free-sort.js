@@ -72,7 +72,7 @@ jsPsych.plugins['free-sort'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    var start_time = (new Date()).getTime();
+    var start_time = performance.now();
 
     var html = "";
     // check if there is a prompt and if it is shown above
@@ -150,7 +150,7 @@ jsPsych.plugins['free-sort'] = (function() {
 
     display_element.querySelector('#jspsych-free-sort-done-btn').addEventListener('click', function(){
 
-      var end_time = (new Date()).getTime();
+      var end_time = performance.now();
       var rt = end_time - start_time;
       // gather data
       // get final position of all objects
