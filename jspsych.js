@@ -309,7 +309,7 @@ window.jsPsych = (function() {
 
   core.addNodeToEndOfTimeline = function(new_timeline, preload_callback){
     timeline.insert(new_timeline);
-    if(typeof preload_callback !== 'undefinded'){
+    if(typeof preload_callback !== 'undefined'){
       if(opts.auto_preload){
         jsPsych.pluginAPI.autoPreload(timeline, preload_callback);
       } else {
