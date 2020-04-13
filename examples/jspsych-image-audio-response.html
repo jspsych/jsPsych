@@ -21,12 +21,15 @@
      * This particular function generates an object URL and returns that.
      *
      * @param data - audio data recorded from the user
-     * @returns {string} - JSON/csv-friendly data to be inserted into jspsych results report
+     * @returns {Promise<string>} - JSON/csv-friendly data to be inserted into jspsych results report
      */
     const saveFunction = function(data) {
-        const blob = new Blob(data, { type: 'audio/webm' });
-        let url = URL.createObjectURL(blob);
-        return url;
+        return new Promise(
+            function(resolve) {
+                const blob = new Blob(data, { type: 'audio/webm' });
+                let url = URL.createObjectURL(blob);
+                resolve(url);
+            });
     };
 
     timeline.push({
