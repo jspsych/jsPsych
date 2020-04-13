@@ -22,7 +22,7 @@ jsPsych.plugins["image-audio-response"] = (function() {
                 default: undefined,
                 description: 'The image to be displayed'
             },
-            bufferLength: {
+            buffer_length: {
                 type: jsPsych.plugins.parameterType.INT,
                 pretty_name: 'Buffer length',
                 default: 4000,
@@ -31,20 +31,22 @@ jsPsych.plugins["image-audio-response"] = (function() {
             postprocessing: {
                 type: jsPsych.plugins.parameterType.FUNCTION,
                 pretty_name: 'Postprocessing function',
-                default: undefined,
+                default: function(chunks) {return new Promise(
+                    function(resolve) {resolve(chunks)}
+                    )},
                 description: 'Function to execute on the audio data prior to saving. '+
                     'Passed the audio data and the return value is saved in the '+
                     'response object. This can be used for saving a file, and generating an id '+
                     'which relates the file to the trial data in the trial response.'
             },
-            allowPlayback: {
+            allow_playback: {
                 type: jsPsych.plugins.parameterType.BOOL,
                 pretty_name: 'Allow playback',
                 default: true,
                 description: 'Whether to allow the participant to play back their '+
                 'recording and re-record if unhappy.'
             },
-            recordingLight: {
+            recording_light: {
                 type: jsPsych.plugins.parameterType.HTML_STRING,
                 pretty_name: 'Recording light',
                 default: '<div id="jspsych-image-audio-response-light" '+
@@ -53,7 +55,7 @@ jsPsych.plugins["image-audio-response"] = (function() {
                     'display: block;"></div>',
                 description: 'HTML to display while recording is in progress.'
             },
-            recordingLightOff: {
+            recording_light_off: {
                 type: jsPsych.plugins.parameterType.HTML_STRING,
                 pretty_name: 'Recording light (off state)',
                 default: '<div id="jspsych-image-audio-response-light" '+
@@ -110,7 +112,7 @@ jsPsych.plugins["image-audio-response"] = (function() {
         let html = '<img src="'+trial.stimulus+'" id="jspsych-image-audio-response-stimulus"/>';
 
         // add audio element
-        html += '<div id="jspsych-image-audio-response-audio-container">'+trial.recordingLightOff+'</div>';
+        html += '<div id="jspsych-image-audio-response-audio-container">'+trial.recording_light_off+'</div>';
 
         //show prompt if there is one
         if (trial.prompt !== null) {
@@ -130,7 +132,7 @@ jsPsych.plugins["image-audio-response"] = (function() {
             });
             navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(process_audio);
             // Add visual indicators to let people know we're recording
-            document.querySelector('#jspsych-image-audio-response-audio-container').innerHTML = trial.recordingLight;
+            document.querySelector('#jspsych-image-audio-response-audio-container').innerHTML = trial.recording_light;
         }
 
         startRecording();
@@ -141,7 +143,7 @@ jsPsych.plugins["image-audio-response"] = (function() {
         // store response
         let response = {
             rt: null,
-            audioData: null
+            audio_data: null
         };
 
         let recorder = null;
@@ -156,17 +158,20 @@ jsPsych.plugins["image-audio-response"] = (function() {
             recorder = new MediaRecorder(stream);
             recorder.data = [];
             recorder.wrapUp = false;
-            recorder.ondataavailable = e => {
+            recorder.ondataavailable = function(e) {
                 // add stream data to chunks
                 chunks.push(e.data);
                 if (recorder.wrapUp) {
                     if (typeof trial.postprocessing !== 'undefined') {
-                        onRecordingFinish(trial.postprocessing(chunks));
+                        trial.postprocessing(chunks)
+                            .then(function(processedData) {
+                                onRecordingFinish(processedData);
+                            });
                     } else {
                         // should never fire - trial.postprocessing is mandatory
                         onRecordingFinish(chunks);
                     }
-                    if (trial.allowPlayback) {
+                    if (trial.allow_playback) {
                         showPlaybackTools(chunks);
                     }
                 }
@@ -175,11 +180,11 @@ jsPsych.plugins["image-audio-response"] = (function() {
             // start recording with 1 second time between receiving 'ondataavailable' events
             recorder.start(1000);
             // setTimeout to stop recording after 4 seconds
-            setTimeout(() => {
+            setTimeout(function() {
                 // this will trigger one final 'ondataavailable' event and set recorder state to 'inactive'
                 recorder.stop();
                 recorder.wrapUp = true;
-            }, trial.bufferLength);
+            }, trial.buffer_length);
         }
 
         function showPlaybackTools(data) {
@@ -211,11 +216,11 @@ jsPsych.plugins["image-audio-response"] = (function() {
             // visual indicator
             let light = document.querySelector('#jspsych-image-audio-response-audio-container');
             if (light !== null)
-                light.innerHTML = trial.recordingLightOff;
+                light.innerHTML = trial.recording_light_off;
             // measure rt
             let end_time = performance.now();
             let rt = end_time - start_time;
-            response.audioData = data;
+            response.audio_data = data;
             response.rt = rt;
 
             if (trial.response_ends_trial) {
@@ -232,7 +237,7 @@ jsPsych.plugins["image-audio-response"] = (function() {
             let trial_data = {
                 "rt": response.rt,
                 "stimulus": trial.stimulus,
-                "audioData": response.audioData
+                "audio_data": response.audio_data
             };
 
             // clear the display
