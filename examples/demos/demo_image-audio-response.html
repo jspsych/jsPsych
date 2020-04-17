@@ -14,30 +14,39 @@
 <body>
 </body>
 <script>
-    var trial_1 = {
+    const trial_1 = {
         type: "image-audio-response",
         stimulus: '../img/happy_face_1.jpg',
-        choices: [89, 78],
         prompt: '<p>How would you greet this face?</p>'
-    }
+    };
+    const trial_2 = {
+        type: "image-audio-response",
+        stimulus: '../img/happy_face_2.jpg',
+        prompt: '<p>How would you greet this face?</p>'
+    };
 
     jsPsych.init({
-        timeline: [trial_1],
+        timeline: [trial_1, trial_2],
         default_iti: 250,
         // When finished, create an audio player so the recorded content can be played back
         on_finish: function() {
             // fetch data from inside jsPsych
             const data = jsPsych.data.get().values();
-            // Map data to appropriately formatted blob
-            const blob = new Blob(data[0].audio_data, { type: 'audio/webm' });
-            // Encode blob as a URL for the player
-            let url = (URL.createObjectURL(blob));
-            // Create the player
-            let player = document.getElementById('jspsych-content')
-                .appendChild(document.createElement('audio'));
-            player.id = 'jspsych-image-audio-response-audio';
-            player.src = url;
-            player.controls = true;
+            data.forEach((d, i) => {
+                // Map data to appropriately formatted blob
+                const blob = new Blob(d.audio_data, { type: 'audio/webm' });
+                // Encode blob as a URL for the player
+                let url = (URL.createObjectURL(blob));
+                // Create the player
+                const div = document.getElementById('jspsych-content')
+                    .appendChild(document.createElement('div'));
+                div.appendChild(document.createElement('h3'))
+                    .innerText = 'Trial ' + (i + 1);
+                const player = div.appendChild(document.createElement('audio'));
+                player.id = 'jspsych-image-audio-response-audio';
+                player.src = url;
+                player.controls = true;
+            });
         }
     });
 </script>
