@@ -19,7 +19,7 @@ jsPsych.plugins["canvas-keyboard-response"] = (function () {
     parameters: {
       drawing: {
         type: jsPsych.plugins.parameterType.FUNCTION,
-        pretty_name: 'Drawing',
+        pretty_name: 'Stimulus',
         default: function (c) { let ctx = c.getContext("2d"); ctx.font = "30px Arial"; ctx.textAlign = "center"; ctx.fillText("Canvas Element", c.width / 2, c.height / 2) },
         description: 'the drawing function to apply to the canvas, should take the canvas object as argument'
       },
@@ -54,13 +54,19 @@ jsPsych.plugins["canvas-keyboard-response"] = (function () {
         default: true,
         description: 'If true, trial will end when subject makes a response.'
       },
+      canvas_size: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Canvas size',
+        default: [500, 500],
+        description: 'The height and width of the canvas element'
+      }
 
     }
   }
 
   plugin.trial = function (display_element, trial) {
 
-    var new_html = '<div id="jspsych-canvas-keyboard-response-stimulus">' + '<canvas id="myCanvas", height = 500, width = 500></canvas>' + '</div>';
+    var new_html = '<div id="jspsych-canvas-keyboard-response-stimulus">' + '<canvas id="myCanvas", height = ' + trial.canvas_size[0] + ', width = ' + trial.canvas_size[1] + '></canvas>' + '</div>';
     // add prompt
     if (trial.prompt !== null) {
       new_html += trial.prompt;
@@ -69,7 +75,7 @@ jsPsych.plugins["canvas-keyboard-response"] = (function () {
     // draw
     display_element.innerHTML = new_html;
     let c = document.getElementById("myCanvas")
-    trial.drawing(c)
+    trial.stimulus(c)
     // store response
     var response = {
       rt: null,
