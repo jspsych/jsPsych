@@ -43,7 +43,8 @@
         timeline.push(sliderTrial)
 
         jsPsych.init({
-            timeline: timeline
+            timeline: timeline,
+            on_trial_finish: function(data){console.log(data)}
         })
 
     </script>
