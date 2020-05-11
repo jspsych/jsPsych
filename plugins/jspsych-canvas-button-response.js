@@ -103,7 +103,7 @@ jsPsych.plugins["canvas-button-response"] = (function () {
         html += '<div id="jspsych-canvas-button-response-btngroup">';
         for (var i = 0; i < trial.choices.length; i++) {
             var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
-            html += '<div class="jspsych-canvas-button-response-button" style="display: inline-block; margin:' + trial.margin_vertical + ' ' + trial.margin_horizontal + '" id="jspsych-html-button-response-button-' + i + '" data-choice="' + i + '">' + str + '</div>';
+            html += '<div class="jspsych-canvas-button-response-button" style="display: inline-block; margin:' + trial.margin_vertical + ' ' + trial.margin_horizontal + '" id="jspsych-canvas-button-response-button-' + i + '" data-choice="' + i + '">' + str + '</div>';
         }
         html += '</div>';
 

@@ -1,0 +1,50 @@
+<head>
+    <script src="jspsych.js"></script>
+    <script src="plugins/jspsych-canvas-keyboard-response.js"></script>
+    <script src="plugins/jspsych-canvas-button-response.js"></script>
+    <script src="plugins/jspsych-canvas-slider-response.js"></script>
+    <link href="css/jspsych.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <script>
+        function draw_rect(c) {
+            let ctx = c.getContext("2d");
+            ctx.fillRect(25, 25, 100, 100);
+        }
+
+        let timeline = [];
+
+        let keyboardTrial = {
+            type: 'canvas-keyboard-response',
+            stimulus: draw_rect,
+            prompt: "<p>look it's a rectangle!</p>"
+        }
+
+        timeline.push(keyboardTrial)
+
+        let buttonTrial = {
+            type: 'canvas-button-response',
+            stimulus: draw_rect,
+            choices: ["yes","no"],
+            prompt: "<p>is this a rectangle?</p>"
+        }
+
+        timeline.push(buttonTrial)
+
+        let sliderTrial = {
+            type: 'canvas-slider-response',
+            stimulus: draw_rect,
+            prompt: "<p>very rectangle?</p>"
+
+        }
+
+
+        timeline.push(sliderTrial)
+
+        jsPsych.init({
+            timeline: timeline
+        })
+
+    </script>
+</body>

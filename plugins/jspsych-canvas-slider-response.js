@@ -18,7 +18,7 @@ jsPsych.plugins['canvas-slider-response'] = (function () {
         description: '',
         parameters: {
             stimulus: {
-                type: jsPsych.plugins.parameterType.HTML_STRING,
+                type: jsPsych.plugins.parameterType.FUNCTION,
                 pretty_name: 'Stimulus',
                 default: undefined,
                 description: 'the drawing function to apply to the canvas, should take the canvas object as argument'
