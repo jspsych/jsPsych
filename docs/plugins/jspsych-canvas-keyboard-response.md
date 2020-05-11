@@ -1,6 +1,6 @@
 # jspsych-canvas-keyboard-response
 
-This plugin can be used to draw an image on a JavaScript canvas element, which can be useful for displaying parametrically defined shapes, and records responses generated with the keyboard. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the subject has failed to respond within a fixed length of time.
+This plugin can be used to draw a stimulus on a JavaScript canvas element, which can be useful for displaying parametrically defined shapes, and records responses generated with the keyboard. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the subject has failed to respond within a fixed length of time.
 
 ## Parameters
 
