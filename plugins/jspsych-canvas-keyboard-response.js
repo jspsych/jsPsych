@@ -4,7 +4,7 @@
  *
  * plugin for displaying a canvas stimulus and getting a keyboard response
  *
- * documentation: TODO
+ * documentation: docs.jspsych.org
  *
  **/
 
