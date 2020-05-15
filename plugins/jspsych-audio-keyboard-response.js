@@ -145,7 +145,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
 
     // start audio
     if(context !== null){
-      context.resume(); // added per instructions for autoplay in Chrome
+      // context.resume(); // added per instructions for autoplay in Chrome
       startTime = context.currentTime;
       source.start(startTime);
     } else {
