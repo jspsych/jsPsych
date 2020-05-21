@@ -15,7 +15,7 @@ Documentation is available at [docs.jspsych.org](http://docs.jspsych.org).
 Need help?
 ----------
 
-For questions about using the library, please post to the [jsPsych e-mail list](https://groups.google.com/forum/#!forum/jspsych). This creates a public archive of questions and solutions.
+For questions about using the library, please use the [Discussions forum](https://github.com/jspsych/jsPsych/discussions).
 
 Contributing
 ------------
