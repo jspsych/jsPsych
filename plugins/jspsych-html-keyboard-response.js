@@ -72,14 +72,14 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
       }
     }
 
-    const keyboard_response_container = document.createElement('div')
+    var keyboard_response_container = document.createElement('div')
     keyboard_response_container.id = 'jspsych-html-keyboard-response-stimulus'
 
-    const stimulus_container = document.createElement('div')
+    var stimulus_container = document.createElement('div')
     stimulus_container.innerHTML = trial.stimulus
 
     // make prompt
-    const prompt_element = trial.prompt ? document.createElement("div") : null
+    var prompt_element = trial.prompt ? document.createElement("div") : null
     if (prompt_element) {
       prompt_element.innerHTML = trial.prompt
     }
