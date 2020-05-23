@@ -38,9 +38,15 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
       },
       max_stimulus_duration: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Stimulus duration',
+        pretty_name: 'Max stimulus duration',
         default: null,
-        description: 'How long to hide the stimulus.'
+        description: 'How long to hide the stimulus, after it is displayed.'
+      },
+      min_stimulus_duration: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Min stimulus duration',
+        default: null,
+        description: 'How long to prevent responses, after stimulus has been displayed.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
