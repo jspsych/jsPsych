@@ -132,7 +132,6 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
 
     // function to handle responses by the subject
     var after_response = function(info) {
-
       // only record the first response
       if (response.key == null) {
         response = info;
@@ -143,43 +142,55 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
       }
     };
 
-    // start audio
-    if(context !== null){
-      // context.resume(); // added per instructions for autoplay in Chrome
-      startTime = context.currentTime;
-      source.start(startTime);
+    // Embed the rest of the trial into a function so that we can attach to a button if desired
+    var start_audio = function(){
+      if(context !== null){
+        context.resume(); 
+        startTime = context.currentTime;
+        source.start(startTime);
+      } else {
+        audio.play();
+      }
+
+      // start the response listener
+      if(context !== null) {
+        var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+          callback_function: after_response,
+          valid_responses: trial.choices,
+          rt_method: 'audio',
+          persist: false,
+          allow_held_key: false,
+          audio_context: context,
+          audio_context_start_time: startTime
+        });
+      } else {
+        var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+          callback_function: after_response,
+          valid_responses: trial.choices,
+          rt_method: 'performance',
+          persist: false,
+          allow_held_key: false
+        });
+      }
+
+      // end trial if time limit is set
+      if (trial.trial_duration !== null) {
+        jsPsych.pluginAPI.setTimeout(function() {
+          end_trial();
+        }, trial.trial_duration);
+      }
+    }
+
+    // Either start the trial or wait for the user to click start
+    if(!trial.click_to_start || context==null){
+      start_audio();
     } else {
-      audio.play();
+      // Register callback for start sound button if we have one
+      $('#start_button').on('click', function(ev){
+        ev.preventDefault();
+        start_audio();
+      })
     }
-
-    // start the response listener
-    if(context !== null) {
-      var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-        callback_function: after_response,
-        valid_responses: trial.choices,
-        rt_method: 'audio',
-        persist: false,
-        allow_held_key: false,
-        audio_context: context,
-        audio_context_start_time: startTime
-      });
-    } else {
-      var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-        callback_function: after_response,
-        valid_responses: trial.choices,
-        rt_method: 'performance',
-        persist: false,
-        allow_held_key: false
-      });
-    }
-
-    // end trial if time limit is set
-    if (trial.trial_duration !== null) {
-      jsPsych.pluginAPI.setTimeout(function() {
-        end_trial();
-      }, trial.trial_duration);
-    }
-
   };
 
   return plugin;
