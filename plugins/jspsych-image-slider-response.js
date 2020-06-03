@@ -198,6 +198,8 @@ jsPsych.plugins['image-slider-response'] = (function() {
       // save data
       var trialdata = {
         "rt": response.rt,
+        "stimulus": trial.stimulus,
+        "start": trial.start,
         "response": response.response
       };
 
