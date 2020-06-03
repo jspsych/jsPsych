@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+</body>
+<script>
+  var trial_1 = {
+    type: 'html-keyboard-response',
+    stimulus: 'The experiment started because your viewing window is at least 1000x500 pixels and you running a browser that supports the WebAudio API. To see the exclusions in action, shrink this window and refresh the page.',
+  }
+
+
+  jsPsych.init({
+    timeline: [trial_1],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    exclusions: {
+      min_width: 1000,
+      min_height: 500,
+      audio: true
+    },
+    default_iti: 250
+  });
+</script>
+
+</html>

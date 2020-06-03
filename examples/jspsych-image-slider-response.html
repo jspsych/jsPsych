@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-image-slider-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+<body></body>
+<script>
+
+  var trial_1 = {
+    type: 'image-slider-response',
+    stimulus: 'img/happy_face_1.jpg',
+    labels: ['1 (least happy)', '100 (most happy)'],
+    slider_width: 500,
+    require_movement: true,
+    prompt: '<p>How happy is this person on a scale of 1-100?</p>'
+  }
+
+  var trial_2 = {
+    type: 'image-slider-response',
+    stimulus: 'img/happy_face_2.jpg',
+    labels: ['1 (least happy)', '100 (most happy)'],
+    start: 80,
+    slider_width: 500,
+    prompt: '<p>How happy is this person on a scale of 1-100? (5s time limit; set start value)</p>',
+    trial_duration: 5000
+  }
+
+  var trial_3 = {
+    type: 'image-slider-response',
+    stimulus: 'img/happy_face_2.jpg',
+    labels: ['1 (least happy)', '100 (most happy)'],
+    slider_width: 500,
+    prompt: '<p>How happy is this person on a scale of 1-100? (1s stimulus duration)</p>',
+    stimulus_duration: 1000
+  }
+
+  jsPsych.init({
+    timeline: [trial_1, trial_2, trial_3],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+</script>
+
+</html>

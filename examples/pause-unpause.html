@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body></body>
+  <script>
+
+  var first = {
+    type: 'html-keyboard-response',
+    stimulus: 'first trial! experiment will pause for 2s in between trials. press any key.',
+    post_trial_gap: 0,
+    on_finish: function(){
+      jsPsych.pauseExperiment();
+      setTimeout(jsPsych.resumeExperiment, 2000);
+    }
+  }
+
+  var second = {
+    type: 'html-keyboard-response',
+    stimulus: 'second trial!'
+  }
+
+  jsPsych.init({
+    timeline: [first, second],
+    on_finish: function(){jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>

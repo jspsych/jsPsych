@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-serial-reaction-time-mouse.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+</head>
+
+<body></body>
+
+<script>
+
+  var grid_rows = 8;
+  var grid_cols = 8;
+  var square_size = 50;
+
+  var grid = [];
+  var locations = [];
+
+  for(var i=0; i<grid_rows; i++){
+    grid.push([]);
+    for(var j=0; j<grid_cols; j++){
+      grid[i].push(1);
+      if(i>0 && i < grid_rows-1 && j > 0 && j < grid_cols - 1){
+        locations.push([i,j]);
+      }
+    }
+  }
+
+  var last_predictor = null;
+  var last_target = null;
+  var colors = ["#f3c300", "#875692", "#f38400", "#a1caf1", "#be0032", "#c2b280", "#848482", "#008856"];
+  var deltas = [[-1,-1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1,0], [1,1]];
+  var order = [0,1,2,3,4,5,6,7];
+  order = jsPsych.randomization.shuffle(order);
+  var current_idx = -1;
+
+  function getNextPredictor(){
+    current_idx++;
+    if(current_idx >= order.length){
+      order = jsPsych.randomization.shuffle(order);
+      current_idx = 0;
+    }
+    var predictor = jsPsych.randomization.sampleWithoutReplacement(locations, 1)[0];
+    if(last_target !== null){
+      while(predictor[0] == last_target[0] && predictor[1] == last_target[1]){
+        predictor = jsPsych.randomization.sampleWithoutReplacement(locations, 1)[0];
+      }
+    }
+    last_predictor = predictor;
+    return predictor;
+  }
+
+  function getNextTarget(){
+    var target = last_predictor.slice();
+    var d = deltas[order[current_idx]];
+    target[0] = target[0] + d[0];
+    target[1] = target[1] + d[1];
+    last_target = target;
+    return target;
+  }
+
+  function getColor(){
+    return colors[order[current_idx]];
+  }
+
+  var timeline_2 = {
+    timeline: [
+      {
+        type: 'serial-reaction-time-mouse',
+        grid: grid,
+        target: getNextPredictor,
+        target_color: getColor,
+        grid_square_size: square_size,
+        allow_nontarget_responses: true
+      },
+      {
+        type: 'serial-reaction-time-mouse',
+        grid: grid,
+        target: getNextTarget,
+        target_color: getColor,
+        grid_square_size: square_size
+      }
+    ],
+    repetitions: 6,
+  }
+
+  jsPsych.init({
+    timeline: [timeline_2],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 0
+  });
+</script>
+
+</html>

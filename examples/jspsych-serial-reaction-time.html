@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-serial-reaction-time.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+</head>
+
+<script>
+
+  var locations = [
+    [0,0],
+    [0,1],
+    [0,2],
+    [0,3]
+  ];
+
+  locations = jsPsych.randomization.shuffle(locations);
+
+  var timeline = {
+    timeline: [
+      {
+        type: 'serial-reaction-time',
+        target: jsPsych.timelineVariable('target1'),
+        grid_square_size: 80,
+        prompt: "<p>Press the key that corresponds to the dark box (use 3, 5, 7, 9)</p>"
+      },
+      {
+        type: 'serial-reaction-time',
+        target: jsPsych.timelineVariable('target2'),
+        grid_square_size: 80,
+        prompt: "<p>Press the key that corresponds to the dark box (use 3, 5, 7, 9)</p>"
+      }
+    ],
+    timeline_variables: [
+      {target1: locations[0], target2: locations[1]},
+      {target1: locations[2], target2: locations[3]}
+    ],
+    randomize_order: true,
+    repetitions: 10
+  }
+
+  jsPsych.init({
+    timeline: [timeline],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 0
+  });
+</script>
+
+</html>

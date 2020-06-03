@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-audio-button-response.js"></script>
+    <script src="../plugins/jspsych-html-button-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body></body>
+  <script>
+
+  var timeline = [];
+
+  timeline.push({
+    type: 'html-button-response',
+    stimulus: 'Recent versions of Chrome require the user to interact with a page before it can play audio. '+
+    'Clicking the button below counts as an interaction. Be aware of this when planning audio experiments if '+
+    'you want the first trial to include audio.',
+    choices: ['Continue']
+  });
+
+  timeline.push({
+    type: 'audio-button-response',
+    stimulus: 'sound/speech_green.mp3',
+    choices: ['Green', 'Blue', 'Red'],
+    prompt: "<p>What word was said?</p>"
+  });
+
+  timeline.push({
+    type: 'audio-button-response',
+    stimulus: 'sound/speech_red.mp3',
+    choices: ['Green', 'Blue', 'Red'],
+    trial_duration: 2000,
+    response_ends_trial: false,
+    prompt: "<p>What word was said? (trial ends after 2s)</p>"
+  });
+
+  jsPsych.init({
+    timeline: timeline,
+    use_webaudio: false,
+    on_finish: function(){jsPsych.data.displayData();}
+  });
+
+  </script>
+</html>

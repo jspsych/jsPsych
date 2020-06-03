@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+<body></body>
+<script>
+
+  var trial_1 = {
+    type: 'image-keyboard-response',
+    stimulus: 'img/happy_face_1.jpg',
+    choices: ['y','n'],
+    prompt: '<p>Have you seen this face before? Y or N.</p>'
+  }
+
+  var trial_2 = {
+    type: 'image-keyboard-response',
+    stimulus: 'img/happy_face_2.jpg',
+    choices: ['y','n'],
+    trial_duration: 5000,
+    prompt: '<p>Have you seen this face before? Y or N. (5s time limit).</p>'
+  }
+
+  var trial_3 = {
+    type: 'image-keyboard-response',
+    stimulus: 'img/happy_face_3.jpg',
+    choices: jsPsych.NO_KEYS,
+    trial_duration: 2000,
+    prompt: '<p>No response allowed. 2s wait.</p>'
+  }
+  
+  jsPsych.init({
+    timeline: [trial_1, trial_2, trial_3],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+</script>
+
+</html>

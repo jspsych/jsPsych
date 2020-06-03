@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../jspsych.js"></script>
+	<script src="../plugins/jspsych-resize.js"></script>
+	<script src="../plugins/jspsych-image-keyboard-response.js"></script>
+	<link rel="stylesheet" href="../css/jspsych.css"></link>
+</head>
+<body>
+</body>
+<script>
+
+	var inputs = {
+		type: 'resize',
+		item_width: 3 + 3/8,
+		item_height: 2 + 1/8,
+		prompt: "<p>Click and drag the lower right corner of the box until the box is the same size as a credit card held up to the screen.</p>",
+		pixels_per_unit: 642/4
+	};
+
+	var image_display = {
+		type: 'image-keyboard-response',
+		stimulus: 'img/happy_face_4.jpg',
+		prompt: '<p>If scaling worked, then the image above should be 4 inches wide.</p>',
+	}
+
+	jsPsych.init({
+		timeline: [inputs, image_display],
+		on_finish: function() {
+			jsPsych.data.displayData();
+		}
+	});
+	</script>
+</html>

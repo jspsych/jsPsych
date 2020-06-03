@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-same-different-html.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+</head>
+<body></body>
+<script>
+  var trial = {
+    type: 'same-different-html',
+    stimuli: ['<p>Talkative</p>', '<p>Loquacious</p>'],
+    prompt: "<p>Press S if the words mean the same thing. Press D if they mean different things.</p>",
+    same_key: 'S',
+    different_key: 'D',
+    answer: 'same'
+  }
+
+  jsPsych.init({
+    timeline: [trial],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+</script>
+
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+<body></body>
+<script>
+  var images = ["img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif", "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif", "img/9.gif", "img/10.gif"];
+
+  var trials = [];
+  for (var i = 0; i < images.length; i++) {
+    trials.push({
+      stimulus: images[i]
+    });
+  }
+
+  var block = {
+    type: 'image-keyboard-response',
+    choices: [89, 78], // Y or N
+    prompt: '<p>Press Y to Continue. Press N to end the experiment</p>',
+    on_finish: function(data) {
+      if (data.key_press == 78) {
+        jsPsych.endExperiment('The experiment was ended. This is the end message.');
+      }
+    },
+    timeline: trials
+  }
+
+
+  jsPsych.init({
+    timeline: [block]
+  });
+</script>
+
+</html>

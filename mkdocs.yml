@@ -1,0 +1,98 @@
+site_name: jsPsych
+theme:
+  name: 'material'
+  language: 'en'
+  palette:
+    primary: 'green'
+    accent: 'orange'
+  logo: 'img/jspsych-logo-no-text-mono.svg'
+  favicon: 'img/jspsych-favicon.png'
+extra:
+  social:
+    - type: 'github'
+      link: 'https://github.com/jspsych'
+    - type: 'twitter'
+      link: 'https://twitter.com/joshdeleeuw'
+copyright: 'Copyright &copy; 2012-2019 Josh de Leeuw'
+google_analytics:
+  - 'UA-50563838-1'
+  - 'auto'
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+repo_url: 'https://github.com/jspsych/jsPsych'
+repo_name: 'jspsych/jspsych'
+docs_dir: docs
+nav:
+- Introduction: 'index.md'
+- Tutorials:
+  - 'The Basics: Hello World': 'tutorials/hello-world.md'
+  - 'Demo Experiment: Simple Reaction Time Task': 'tutorials/rt-task.md'
+- Overview:
+  - 'Creating an Experiment: The Timeline': 'overview/timeline.md'
+  - 'Advanced Options for Trials': 'overview/trial.md'
+  - 'Data Storage, Aggregation, and Manipulation': 'overview/data.md'
+  - 'Experiment Settings': 'overview/experiment-options.md'
+  - 'Event-related Callback Functions': 'overview/callbacks.md'
+  - 'Record Browser Interactions': 'overview/record-browser-interactions.md'
+  - 'Media Preloading': 'overview/media-preloading.md'
+  - 'Fullscreen Experiments': 'overview/fullscreen.md'
+  - 'Exclude Participants Based on Browser Features': 'overview/exclude-browser.md'
+  - 'Automatic Progress Bar': 'overview/progress-bar.md'
+  - 'Integrating with Mechanical Turk': 'overview/mturk.md'
+- Core Library API:
+  - 'jsPsych': 'core_library/jspsych-core.md'
+  - 'jsPsych.data': 'core_library/jspsych-data.md'
+  - 'jsPsych.randomization': 'core_library/jspsych-randomization.md'
+  - 'jsPsych.turk': 'core_library/jspsych-turk.md'
+  - 'jsPsych.pluginAPI': 'core_library/jspsych-pluginAPI.md'
+- Plugins:
+  - 'Overview': 'plugins/overview.md'
+  - 'Creating a New Plugin': 'plugins/creating-a-plugin.md'
+  - 'jspsych-animation': 'plugins/jspsych-animation.md'
+  - 'jspsych-audio-button-response': 'plugins/jspsych-audio-button-response.md'
+  - 'jspsych-audio-keyboard-response': 'plugins/jspsych-audio-keyboard-response.md'
+  - 'jspsych-audio-slider-response': 'plugins/jspsych-audio-slider-response.md'
+  - 'jspsych-call-function': 'plugins/jspsych-call-function.md'
+  - 'jspsych-categorize-animation': 'plugins/jspsych-categorize-animation.md'
+  - 'jspsych-categorize-html': 'plugins/jspsych-categorize-html.md'
+  - 'jspsych-categorize-image': 'plugins/jspsych-categorize-image.md'
+  - 'jspsych-cloze' : 'plugins/jspsych-cloze.md'
+  - 'jspsych-external-html': 'plugins/jspsych-external-html.md'
+  - 'jspsych-free-sort': 'plugins/jspsych-free-sort.md'
+  - 'jspsych-fullscreen': 'plugins/jspsych-fullscreen.md'
+  - 'jspsych-html-button-response': 'plugins/jspsych-html-button-response.md'
+  - 'jspsych-html-keyboard-response': 'plugins/jspsych-html-keyboard-response.md'
+  - 'jspsych-html-slider-response': 'plugins/jspsych-html-slider-response.md'
+  - 'jspsych-iat-html': 'plugins/jspsych-iat-html.md'
+  - 'jspsych-iat-image': 'plugins/jspsych-iat-image.md'
+  - 'jspsych-image-button-response': 'plugins/jspsych-image-button-response.md'
+  - 'jspsych-image-keyboard-response': 'plugins/jspsych-image-keyboard-response.md'
+  - 'jspsych-image-slider-response': 'plugins/jspsych-image-slider-response.md'
+  - 'jspsych-instructions': 'plugins/jspsych-instructions.md'
+  - 'jspsych-rdk': 'plugins/jspsych-rdk.md'
+  - 'jspsych-reconstruction': 'plugins/jspsych-reconstruction.md'
+  - 'jspsych-resize': 'plugins/jspsych-resize.md'
+  - 'jspsych-same-different-html': 'plugins/jspsych-same-different-html.md'
+  - 'jspsych-same-different-image': 'plugins/jspsych-same-different-image.md'
+  - 'jspsych-serial-reaction-time': 'plugins/jspsych-serial-reaction-time.md'
+  - 'jspsych-serial-reaction-time-mouse': 'plugins/jspsych-serial-reaction-time-mouse.md'
+  - 'jspsych-survey-html-form' : 'plugins/jspsych-survey-html-form.md'
+  - 'jspsych-survey-likert': 'plugins/jspsych-survey-likert.md'
+  - 'jspsych-survey-multi-choice': 'plugins/jspsych-survey-multi-choice.md'
+  - 'jspsych-survey-multi-select': 'plugins/jspsych-survey-multi-select.md'
+  - 'jspsych-survey-text': 'plugins/jspsych-survey-text.md'
+  - 'jspsych-video-button-response': 'plugins/jspsych-video-button-response.md'
+  - 'jspsych-video-keyboard-response': 'plugins/jspsych-video-keyboard-response.md'
+  - 'jspsych-video-slider-response': 'plugins/jspsych-video-slider-response.md'
+  - 'jspsych-visual-search-circle': 'plugins/jspsych-visual-search-circle.md'
+  - 'jspsych-vsl-animate-occlusion': 'plugins/jspsych-vsl-animate-occlusion.md'
+  - 'jspsych-vsl-grid-scene': 'plugins/jspsych-vsl-grid-scene.md'
+- About:
+  - 'About jsPsych': 'about/about.md'
+  - 'Getting Help': 'about/support.md'
+  - 'Contributing to jsPsych': 'about/contributing.md'
+  - 'License': 'about/license.md'

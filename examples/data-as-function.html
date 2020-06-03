@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+<body></body>
+<script>
+  var block_1 = {
+    type: 'image-keyboard-response',
+    stimulus: 'img/happy_face_1.jpg',
+    choices: [89, 78], // Y or N
+    prompt: '<p>Data should have a random int 0-19 on next page. Y or N.</p>',
+    data: function() {
+      return {
+        random_number: Math.floor(Math.random() * 20)
+      }
+    }
+  }
+
+  jsPsych.init({
+    timeline: [block_1],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+</script>
+
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-audio-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-html-button-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+</head>
+<body></body>
+<script>
+
+  var pre_audio = {
+    type: 'html-button-response',
+    stimulus: 'Recent versions of Chrome require the user to interact with a page before it can play audio. '+
+    'Clicking the button below counts as an interaction. Be aware of this when planning audio experiments if '+
+    'you want the first trial to include audio.',
+    choices: ['Continue']
+  }
+
+  var trial_1 = {
+    type: 'audio-keyboard-response',
+    stimulus: 'sound/speech_blue.mp3',
+    choices: ['y', 'n'],
+    prompt: '<div style="width: 300px; height: 300px; background-color: #0000ff;"></div><p>Does the color match the word? (Y or N)</p>'
+  }
+
+  var trial_2 = {
+    type: 'audio-keyboard-response',
+    stimulus: 'sound/speech_green.mp3',
+    choices: ['y', 'n'],
+    trial_duration: 5000,
+    prompt: '<div style="width: 300px; height: 300px; background-color: #ff0000;"></div><p>Does the color match the word? (Y or N; 5s time limit)</p>'
+  }
+
+  var trial_3 = {
+    type: 'audio-keyboard-response',
+    stimulus: 'sound/speech_red.mp3',
+    choices: jsPsych.NO_KEYS,
+    trial_duration: 2000,
+    prompt: '<p>No response allowed. 2s wait.</p>'
+  }
+
+  jsPsych.init({
+    timeline: [pre_audio, trial_1, trial_2, trial_3],
+    use_webaudio: false,
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+</script>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-vsl-grid-scene.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+
+  <script>
+
+  var images = ["img/1.gif","img/2.gif","img/3.gif","img/4.gif","img/5.gif","img/6.gif","img/7.gif","img/8.gif","img/9.gif","img/10.gif"];
+
+  var scene =
+    [
+      [0,"img/8.gif","img/9.gif",0,0],
+      ["img/1.gif", "img/2.gif", 0, 0,0],
+      [ 0, "img/3.gif", 0, 0, 0],
+      ["img/5.gif", "img/4.gif", 0, 0, 0],
+      [0,0,0,0,0]
+    ]
+  ;
+
+  var trial = {
+    type: 'vsl-grid-scene',
+    stimuli: scene,
+    image_size: [50,50]
+  };
+
+  var trial_2 = {
+    type: 'html-keyboard-response',
+    stimulus: jsPsych.plugins['vsl-grid-scene'].generate_stimulus(scene, [100,100])
+  }
+
+    jsPsych.init({
+      timeline: [trial, trial_2],
+      on_finish: function() { jsPsych.data.displayData(); }
+    });
+
+  </script>
+</html>

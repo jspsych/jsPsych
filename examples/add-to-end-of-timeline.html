@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body></body>
+  <script>
+
+  var first = {
+    type: 'html-keyboard-response',
+    stimulus: 'first trial; new trial added when on_finish is called',
+    on_finish: function(){
+      jsPsych.pauseExperiment();
+      jsPsych.addNodeToEndOfTimeline({
+        timeline: [{
+          type: 'image-keyboard-response',
+          stimulus: 'img/happy_face_4.jpg'
+        }]
+      }, jsPsych.resumeExperiment)
+    }
+  }
+
+  jsPsych.init({
+    timeline: [first],
+    on_finish: function(){jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-call-function.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body></body>
+  <script>
+
+  var trial = {
+    type: 'call-function',
+    func: function(){ return Date.now(); }
+  };
+
+  // this is to check if the plugin specific default for post_trial_gap works.
+  // if it does, then the return values should be nearly identical.
+  var next_trial = {
+    type: 'call-function',
+    func: function(){ return Date.now(); }
+  };
+
+
+  jsPsych.init({
+    timeline: [trial, next_trial],
+    on_finish: function(){ jsPsych.data.displayData(); },
+    default_iti: 1000
+  });
+
+
+  </script>
+</html>

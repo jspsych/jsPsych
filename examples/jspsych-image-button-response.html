@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-image-button-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <style>
+      img { width: 300px; }
+    </style>
+  </head>
+  <body></body>
+  <script>
+
+  var timeline = [];
+
+  timeline.push({
+    type: 'image-button-response',
+    stimulus: 'img/happy_face_1.jpg',
+    choices: ['Happy', 'Sad'],
+    prompt: "<p>What emotion is this person showing?</p>"
+  });
+
+  timeline.push({
+    type: 'image-button-response',
+    stimulus: 'img/happy_face_2.jpg',
+    stimulus_height: 400,
+    choices: ['Happy', 'Sad'],
+    stimulus_duration: 1000,
+    prompt: "<p>What emotion is this person showing? (image disappears after 1s)</p>"
+  });
+
+  timeline.push({
+    type: 'image-button-response',
+    stimulus: 'img/happy_face_3.jpg',
+    stimulus_width: 600,
+    choices: ['Happy', 'Sad'],
+    trial_duration: 2000,
+    response_ends_trial: false,
+    prompt: "<p>What emotion is this person showing? (trial ends after 2s)</p>"
+  });
+
+  jsPsych.init({
+    timeline: timeline,
+    on_finish: function(){jsPsych.data.displayData();}
+  });
+
+  </script>
+</html>

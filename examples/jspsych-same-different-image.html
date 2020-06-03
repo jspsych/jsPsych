@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-same-different-image.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+<body></body>
+<script>
+  var trial = {
+    type: 'same-different-image',
+    stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
+    prompt: "<p>Press S if the faces had the same emotional expression. Press D if the faces had different emotional expressions.</p>",
+    same_key: 'S',
+    different_key: 'D',
+    answer: 'different'
+  }
+
+  jsPsych.init({
+    timeline: [trial],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+</script>
+
+</html>

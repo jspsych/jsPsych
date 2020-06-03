@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-fullscreen.js"></script>
+  <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+<body></body>
+<script>
+  var fullscreen_trial = {
+    type: 'fullscreen',
+    fullscreen_mode: true
+  }
+
+  var trial_1 = {
+    type: 'image-keyboard-response',
+    stimulus: 'img/happy_face_1.jpg',
+    choices: [89, 78], // Y or N
+    prompt: '<p>Have you seen this face before? Y or N.</p>'
+  }
+
+  var fullscreen_trial_exit = {
+    type: 'fullscreen',
+    fullscreen_mode: false
+  }
+
+
+  jsPsych.init({
+    timeline: [ fullscreen_trial, trial_1, fullscreen_trial_exit ],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+</script>
+
+</html>

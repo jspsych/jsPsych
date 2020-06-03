@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-free-sort.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body></body>
+  <script>
+
+  var trials = {
+    type: 'free-sort',
+    stimuli: ['img/happy_face_1.jpg','img/happy_face_2.jpg','img/happy_face_3.jpg','img/happy_face_4.jpg']
+  };
+
+
+  jsPsych.init({
+    timeline: [trials],
+    on_finish: function(){jsPsych.data.displayData();}
+  });
+
+
+  </script>
+</html>

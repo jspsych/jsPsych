@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-audio-slider-response.js"></script>
+  <script src="../plugins/jspsych-html-button-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+</head>
+<body></body>
+<script>
+
+  var pre_audio = {
+    type: 'html-button-response',
+    stimulus: 'Recent versions of Chrome require the user to interact with a page before it can play audio. '+
+    'Clicking the button below counts as an interaction. Be aware of this when planning audio experiments if '+
+    'you want the first trial to include audio.',
+    choices: ['Continue']
+  }
+
+  var trial_1 = {
+    type: 'audio-slider-response',
+    stimulus: 'sound/speech_joke.mp3',
+    labels: ['Not Funny', 'Funny'],
+    slider_width: 500,
+    prompt: '<p>How funny is the joke?</p>'
+  }
+
+  jsPsych.init({
+    timeline: [pre_audio, trial_1],
+    use_webaudio: false,
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+</script>
+
+</html>

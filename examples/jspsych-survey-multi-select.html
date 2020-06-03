@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <script src="../jspsych.js" ></script>
+  <script src="../plugins/jspsych-survey-multi-select.js" ></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+</head>
+
+<body>
+</body>
+  <script>   
+    var multi_select_block = {
+        type: 'survey-multi-select',
+        questions: [
+          {
+            prompt: "Which of these colors do you like?", 
+            options: ["Red", "Yellow", "Green", "Blue", "Black"], 
+            horizontal: true,
+            required: true,
+            name: 'Colors'
+          }, 
+          {
+            prompt: "Which of these foods do you like?", 
+            options: ["Apples", "Bananas", "Carrots", "Donuts", "Eggplant"], 
+            horizontal: true,
+            required: true,
+            name: 'Foods'
+          }
+        ], 
+        randomize_question_order: true
+    };
+    jsPsych.init({
+      timeline: [multi_select_block],
+      on_finish: function(data) {
+        jsPsych.data.displayData();
+      },
+    });
+  </script>
+</html>

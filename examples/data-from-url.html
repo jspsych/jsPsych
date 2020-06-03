@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body>
+    <p>The URL variable should be logged to the console</p>
+  </body>
+  <script>
+
+  if(typeof jsPsych.data.getURLVariable('v1') == 'undefined'){
+    window.location = window.location + '?v1=abc&v2=def';
+  }
+
+  console.log(JSON.stringify(jsPsych.data.urlVariables()));
+
+  console.log(jsPsych.data.getURLVariable('v1'));
+
+  </script>
+</html>

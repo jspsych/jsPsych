@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <script src="js/snap.svg-min.js"></script>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-visual-search-circle.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+</head>
+<body></body>
+<script>
+
+  var intro = {
+    type: 'html-keyboard-response',
+    stimulus: '<p>You will see a set of Ns on the following screens. Press J if there is a backwards N. If there is no backwards N press F.</p><p>Press any key to begin.</p>'
+  }
+
+  var trial_1 = {
+    target_present: true,
+    set_size: 4
+  }
+
+  var trial_2 = {
+    target_present: true,
+    set_size: 3
+  }
+
+  var trial_3 = {
+    target_present: false,
+    set_size: 6
+  }
+
+  var trial_4 = {
+    target_present: false,
+    foil: ['img/1.gif', 'img/2.gif', 'img/3.gif'], // example of using multiple foils.
+    set_size: 3
+  }
+
+
+  var trials = {
+    type: 'visual-search-circle',
+    target: 'img/backwardN.gif',
+    foil: 'img/normalN.gif',
+    fixation_image: 'img/fixation.gif',
+    timeline: [trial_1, trial_2, trial_3, trial_4]
+  };
+
+  jsPsych.init({
+    timeline: [intro, trials],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+</script>
+
+</html>

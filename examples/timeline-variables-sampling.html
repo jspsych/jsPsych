@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+  </style>
+</head>
+<body>
+</body>
+<script>
+
+  var timeline_variables = [
+    { v1: "<p>1</p>" },
+    { v1: "<p>2</p>" },
+    { v1: "<p>3</p>" },
+    { v1: "<p>4</p>" },
+    { v1: "<p>5</p>" },
+    { v1: "<p>6</p>" }
+  ];
+
+  var node = {
+    timeline_variables: timeline_variables,
+    timeline: [
+      {
+        type: 'html-keyboard-response',
+        choices: jsPsych.ALL_KEYS,
+        stimulus: jsPsych.timelineVariable('v1'),
+      }
+    ],
+    sample: {
+      type: 'custom',
+      fn: function(x){ return x.reverse(); }
+    },
+    repetitions: 2
+  }
+
+  jsPsych.init({
+    timeline: [node],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+
+</script>
+
+</html>

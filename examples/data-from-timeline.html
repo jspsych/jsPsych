@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+<body></body>
+<script>
+  var trial_1 = {
+    stimulus: 'img/happy_face_4.jpg',
+  }
+
+  var trial_2 = {
+    stimulus: 'img/sad_face_4.jpg',
+  }
+
+  var trial_3 = {
+    stimulus: 'img/sad_face_3.jpg',
+  }
+
+  var node = {
+    type: 'image-keyboard-response',
+    timeline: [trial_1, trial_2, trial_3],
+    choices: [89, 78], // Y or N
+    prompt: '<p>Have you seen this face before? Y or N.</p>',
+    data: {
+      node_data: true
+    },
+    on_finish: function(){
+      console.log(jsPsych.data.getLastTimelineData().json());
+    }
+  }
+
+
+  jsPsych.init({
+    timeline: [node],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+</script>
+
+</html>
