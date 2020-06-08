@@ -6,7 +6,7 @@ jsPsych.plugins["hold-keys"] = (function() {
     var plugin = {};
   
     plugin.info = {
-      name: 'hold-keys',
+      name: 'progressbar',
       description: '',
       parameters: {
         stimulus: {
@@ -46,14 +46,26 @@ jsPsych.plugins["hold-keys"] = (function() {
           default: true,
           description: 'If true, trial will end when subject makes a response.'
         },
+        step: {
+          type: jsPysch.plugins.parameterType.INT,
+          pretty_name: 'Timestep to update progress bar',
+          default: 5,
+          description: 'The frequency at which the progress bar is updated with a new value.'
+        }
   
       }
     }
   
     plugin.trial = function(display_element, trial) {
   
-      var new_html = '<div id="hold-keys-stimulus">'+trial.stimulus+'</div>';
-  
+      // TODO: make these ordered properly
+
+      var new_html = '<div id="progressbar-stimulus">'+trial.stimulus+'</div>';
+      var progressbar_html = '<progress id="file" value="0" max="100"></progress>'
+      var startTime = performance.now();
+      
+      new_html += progressbar_html;
+
       // add prompt
       if(trial.prompt !== null){
         new_html += trial.prompt;
@@ -151,11 +163,24 @@ jsPsych.plugins["hold-keys"] = (function() {
           record_up: true 
         });
       }
+
+      // set progressbar timeout
+      var updateProgress = function() {
+        var elapsed = performance.now() - startTime;
+        var val = (elapsed / trial.stimulus_duration) * 100;
+        display_element.querySelector('#progressbar').value = val;
+
+        jsPsych.pluginAPI.setTimeout(updateProgress, trial.step);
+      }
+
+      // set initial progress bar state and timeout
+      updateProgress();
   
       // hide stimulus if stimulus_duration is set
       if (trial.stimulus_duration !== null) {
         jsPsych.pluginAPI.setTimeout(function() {
-          display_element.querySelector('#hold-keys-stimulus').style.visibility = 'hidden';
+          display_element.querySelector('#progressbar-stimulus').style.visibility = 'hidden';
+          display_element.querySelector('#progressbar').style.visibility = 'hidden';
         }, trial.stimulus_duration);
       }
   
