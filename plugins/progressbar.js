@@ -1,3 +1,4 @@
+console.log("progressbar loaded");
 jsPsych.plugins["progressbar"] = (function() {
 
     // !!! NOTE !!! requires modified jsPsych client code bundled with this experiment,
@@ -47,7 +48,7 @@ jsPsych.plugins["progressbar"] = (function() {
           description: 'If true, trial will end when subject makes a response.'
         },
         step: {
-          type: jsPysch.plugins.parameterType.INT,
+          type: jsPsych.plugins.parameterType.INT,
           pretty_name: 'Timestep to update progress bar',
           default: 5,
           description: 'The frequency at which the progress bar is updated with a new value.'
