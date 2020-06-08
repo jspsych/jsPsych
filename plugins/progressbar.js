@@ -1,4 +1,4 @@
-jsPsych.plugins["hold-keys"] = (function() {
+jsPsych.plugins["progressbar"] = (function() {
 
     // !!! NOTE !!! requires modified jsPsych client code bundled with this experiment,
     // which adds recording of 'up' events
