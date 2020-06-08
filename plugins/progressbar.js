@@ -61,11 +61,8 @@ jsPsych.plugins["progressbar"] = (function() {
   
       // TODO: make these ordered properly
 
-      var new_html = '<div id="progressbar-stimulus">'+trial.stimulus+'</div>';
-      var progressbar_html = '<progress id="file" value="0" max="100"></progress>'
+      var new_html = '<div id="progressbar-stimulus"><progress id="progressbar" value="0" max="100"></progress>'+trial.stimulus+'</div>';
       var startTime = performance.now();
-      
-      new_html += progressbar_html;
 
       // add prompt
       if(trial.prompt !== null){
