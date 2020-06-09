@@ -166,7 +166,7 @@ jsPsych.plugins["progressbar"] = (function() {
       var updateProgress = function() {
         var elapsed = performance.now() - startTime;
         var val = (elapsed / trial.stimulus_duration) * 100;
-        display_element.querySelector('#progressbar').value = val;
+        display_element.querySelector('#progressbar').value = 100 - val;
 
         jsPsych.pluginAPI.setTimeout(updateProgress, trial.step);
       }
