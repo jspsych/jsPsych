@@ -11,8 +11,20 @@ jsPsych.plugins['math-distractor'] = (function() {
         pretty_name: 'Trial duration',
         default: null,
         description: 'The maximum duration to wait for a response.'
+      },
+      audio_correct: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Audio to play when a correct response is entered',
+        default: null,
+        description: 'Audio to play when a correct response is entered'
+      },
+      audio_incorrect: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Audio to play when an incorrect response is entered',
+        default: null,
+        description: 'Audio to play when an incorrect response is entered'
       }
-    }
+    },
   }
 
   plugin.trial = function(display_element, trial) {
@@ -32,12 +44,14 @@ jsPsych.plugins['math-distractor'] = (function() {
     var num_a = [];
     var num_b = [];
     var num_c = [];
-    var tbox = '<input id="math_box" type="number"></div>'
+    var tbox = '<input id="math_box"></div>'
     var timed_out = false;
+    var current_answer;
 
     var gen_trial = function() {
       // setup question and response box
       var nums = [randomInt(1,10), randomInt(1,10), randomInt(1,10)];
+      current_answer = nums.reduce(function(a, b){ return a + b; }, 0);
       var prob = '<div id="math"><label>' + nums[0].toString() + ' + ' + nums[1].toString() + ' + ' + nums[2].toString() + ' = </label>';
       display_element.innerHTML = prob + tbox;
 
@@ -52,27 +66,67 @@ jsPsych.plugins['math-distractor'] = (function() {
       });
     };
 
+    var isdigit = function(char){
+      return /^\d$/.test(char);
+    }
+
+
     var keyboard_listener = function(info) {
        // set up response collection
        console.log(info.key)
       if (info.key=== ' ' | info.key=== ';' | info.key === 'Enter' | info.key===',') {
 
-        // get response time (when participant presses enter)
-        rts.push(info.rt);
         // get recalled word
         word = display_element.querySelector('#math_box').value;
+
+        if(word.length == 0) {
+          return false;
+        }
+
+        // get response time (when participant presses enter)
+        rts.push(info.rt);
         recalled_words.push(word);
 
-        // generate new problem
-        if(timed_out) {
-          end_trial()
+        var callback = function() {
+          display_element.querySelector('#math').style.color = "#ffffff";
+          if(timed_out) {
+            end_trial();
+          } else {
+            gen_trial();
+          }
+        }
+
+
+        // TODO: play beep and change text color
+        if(word == current_answer) {
+          display_element.querySelector('#math').style.color = "#00ff00";
+
+          if(trial.audio_correct != null) {
+            var audio = new Audio(trial.audio_correct);
+            audio.onended = callback;
+            audio.play();
+          } else {
+            setTimeout(callback, 500);
+          }
         }
         else {
-          gen_trial()
+          display_element.querySelector('#math').style.color = "#ff0000";
+
+          if(trial.audio_incorrect != null) {
+            var audio = new Audio(trial.audio_incorrect);
+            audio.onended = callback;
+            audio.play();
+          } else {
+            setTimeout(callback, 500);
+          }
         }
+
         return false
       }
-      return true
+      else if (isdigit(info.key) || info.key == 'Backspace'){
+          return true;
+      }
+      return false;
     }
 
     var end_trial = function() {

@@ -17,6 +17,18 @@ jsPsych.plugins['free-recall'] = (function() {
         pretty_name: 'Trial duration',
         default: null,
         description: 'The maximum duration to wait for a response.'
+      },
+      max_length: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Minimum response length',
+        default: 12,
+        description: "The minimum number of letters that must be entered for a response to be logged."
+      },
+      min_length: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Minimum response length',
+        default: 1,
+        description: "The minimum number of letters that must be entered for a response to be logged."
       }
     }
   }
@@ -40,7 +52,7 @@ jsPsych.plugins['free-recall'] = (function() {
 
     // add question and textbox for answer
     display_element.innerHTML += '<div id="jspsych-free-recall" class="jspsych-free-recall-question" style="margin: 2em 0em;">'+
-      '<input name="jspsych-free-recall-response" id="recall_box" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">'+
+      '<input name="jspsych-free-recall-response" id="recall_box" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" pattern=".{' + trial.min_length + ',' + trial.max_length + '}" required autofocus>'+
       '</div>';
 
     // set up response collection
@@ -49,10 +61,9 @@ jsPsych.plugins['free-recall'] = (function() {
     var key_presses = [];
     var key_times = [];
 
-    // automatically place cursor in textarea when page loads
     $(function(){
       $('input').focus();
-    });
+    })
 
     var keyboard_listener = function(info) {
        // set up response collection
@@ -60,16 +71,19 @@ jsPsych.plugins['free-recall'] = (function() {
       key_times.push(info.rt)
 
       if (info.key=== ',' | info.key==='Enter' | info.key===';' | info.key===' ') {
-
-        // get response time (when participant presses enter)
-        rts.push(info.rt);
-        // get recalled word
-
         word = document.querySelector('#recall_box').value;
-        recalled_words.push(word);
 
-        // empty the contents of the textarea
-        document.querySelector('#recall_box').value = '';
+        if(word.length >= trial.min_length && word.length <= trial.max_length) {
+          // get response time (when participant presses enter)
+          rts.push(info.rt);
+          // get recalled word
+
+          word = document.querySelector('#recall_box').value;
+          recalled_words.push(word);
+
+          // empty the contents of the textarea
+          document.querySelector('#recall_box').value = '';
+        }
 
         return false;
       }
@@ -98,7 +112,6 @@ jsPsych.plugins['free-recall'] = (function() {
         "key_presses": key_presses,
         "key_times": key_times,
         "start_time": startTime,
-        "propagate": true
       };
 
       // clear the display
