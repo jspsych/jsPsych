@@ -98,6 +98,7 @@ jsPsych.plugins['audio-test'] = (function() {
 
         if (word == trial.word.toLowerCase()) {
           display_element.querySelector('#audio-test-preamble').style.color = "#00ff00";
+          display_element.querySelector('textarea').style.visibility = 'hidden';
           setTimeout(end_trial, 500);
         } else {
         	failed += 1;
