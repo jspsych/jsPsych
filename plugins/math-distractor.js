@@ -113,7 +113,7 @@ jsPsych.plugins['math-distractor'] = (function() {
         }
         else {
           display_element.querySelector('#math').style.color = "#ff0000";
-          display_element.querySelector('#mathbox').style.color = "#ff0000";
+          display_element.querySelector('#math_box').style.color = "#ff0000";
 
           if(trial.audio_incorrect != null) {
             var audio = new Audio(trial.audio_incorrect);
