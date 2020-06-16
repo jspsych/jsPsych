@@ -89,7 +89,7 @@ jsPsych.plugins['math-distractor'] = (function() {
 
         var callback = function() {
           display_element.querySelector('#math').style.color = "#ffffff";
-          display_element.querySelector('#mathbox').style.color = "#ffffff";
+          display_element.querySelector('#math_box').style.color = "#ffffff";
           if(timed_out) {
             end_trial();
           } else {
@@ -101,7 +101,7 @@ jsPsych.plugins['math-distractor'] = (function() {
         // TODO: play beep and change text color
         if(word == current_answer) {
           display_element.querySelector('#math').style.color = "#00ff00";
-          display_element.querySelector('#mathbox').style.color = "#00ff00";
+          display_element.querySelector('#math_box').style.color = "#00ff00";
 
           if(trial.audio_correct != null) {
             var audio = new Audio(trial.audio_correct);
