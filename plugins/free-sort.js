@@ -43,7 +43,7 @@ jsPsych.plugins['my-free-sort'] = (function() {
         button_label: {
           type: jsPsych.plugins.parameterType.STRING,
           pretty_name: 'Button label',
-          default:  'Continue',
+          default:  'Submit',
           description: 'The text that appears on the button to continue to the next trial.'
         }
       }
@@ -66,8 +66,8 @@ jsPsych.plugins['my-free-sort'] = (function() {
           trial.list_length = trial.stimuli.length;
       }
   
-      var sort_width = document.documentElement.clientWidth*.95;
-      var sort_height = document.documentElement.clientHeight*.95;
+      var sort_width = document.documentElement.clientWidth*.92;
+      var sort_height = document.documentElement.clientHeight*.92;
   
       var stim_width = .2*(sort_width);
       var stim_height = .8*(sort_height / trial.list_length);
@@ -131,7 +131,7 @@ jsPsych.plugins['my-free-sort'] = (function() {
           'width:' + stim_width + 'px; ' +
           'height:'  + stim_height + 'px; ' +
           'top: '+ top_coord +'px; ' +
-          'left: '+ 3*stim_width +'px;  ' +
+          'left: '+ offset*stim_width +'px;  ' +
           'border:2px solid red; margin:0px;"'+
           '></div>';
       }
@@ -279,7 +279,7 @@ jsPsych.plugins['my-free-sort'] = (function() {
   
         for(z=0;z<targets.length;z++){ 
           if(targets[z].style.borderColor != 'lightblue'){
-            alert("fill all the boxes before pressing continue!");
+            alert("fill all the boxes before pressing " + trial.button_label + "!");
             return;
           }
         };
