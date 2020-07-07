@@ -1,5 +1,6 @@
-console.log("progressbar loaded");
-jsPsych.plugins["progressbar"] = (function() {
+// TODO: add hold key logic
+console.log("auditory loaded");
+jsPsych.plugins["auditory-countdown"] = (function() {
 
     // !!! NOTE !!! requires modified jsPsych client code bundled with this experiment,
     // which adds recording of 'up' events
@@ -7,7 +8,7 @@ jsPsych.plugins["progressbar"] = (function() {
     var plugin = {};
   
     plugin.info = {
-      name: 'progressbar',
+      name: 'auditory-countdown',
       description: '',
       parameters: {
         stimulus: {
@@ -15,6 +16,13 @@ jsPsych.plugins["progressbar"] = (function() {
           pretty_name: 'Stimulus',
           default: undefined,
           description: 'The HTML string to be displayed'
+        },
+        audio: {
+          type: jsPsych.plugins.parameterType.AUDIO,
+          pretty_name: "array of audio files",
+          default: null,
+          array: true,
+          description: 'The audio files to play for countdown'
         },
         stimulus_duration: {
           type: jsPsych.plugins.parameterType.INT,
@@ -28,13 +36,6 @@ jsPsych.plugins["progressbar"] = (function() {
           default: null,
           description: 'How long to show trial before it ends.'
         },
-        step: {
-          type: jsPsych.plugins.parameterType.INT,
-          pretty_name: 'Timestep to update progress bar',
-          default: 5,
-          description: 'The frequency at which the progress bar is updated with a new value.'
-        }
-  
       }
     }
   
@@ -42,20 +43,11 @@ jsPsych.plugins["progressbar"] = (function() {
   
       // TODO: make these ordered properly
 
-      var new_html = '<div id="progressbar-stimulus"><progress id="progressbar" value="0" max="100"></progress>'+trial.stimulus+'</div>';
-      var startTime = jsPsych.totalTime(); 
+      var new_html = '<div id=auditory-countdown-container>'+trial.stimulus+'</div>';
 
-<<<<<<< HEAD
-      // add prompt
-      if(trial.prompt != null){
-        new_html += trial.prompt;
-      }
-  
-=======
->>>>>>> d700b584cd51af6d4dd5901d02cb46058a7d2107
       // draw
       display_element.innerHTML = new_html;
-
+      
       var held_over = [];
       for (let [key, value] of Object.entries(jsPsych.pluginAPI.getHeldKeys())) {
           if(value == true) {
@@ -99,13 +91,51 @@ jsPsych.plugins["progressbar"] = (function() {
           "rt_down": rt_down,
           "stimulus": trial.stimulus,
         };
-
+  
         // clear the display
         display_element.innerHTML = '';
   
         // move on to the next trial
         jsPsych.finishTrial(trial_data);
       };
+
+      var context = jsPsych.pluginAPI.audioContext();
+      var duration;
+
+      var audio_offset = trial.stimulus_duration / trial.audio.length;
+
+      for(var i=0; i< trial.audio.length; i++) {
+        if(context !== null){
+          var source = context.createBufferSource();
+          var audio = jsPsych.pluginAPI.getAudioBuffer(trial.audio[i]);
+          duration = audio.duration*1000;
+          source.buffer = audio;
+          source.connect(context.destination);
+
+          jsPsych.pluginAPI.setTimeout(function(source) {
+              var startTime = context.currentTime;
+              source.start(startTime);
+            }.bind(this, source), audio_offset + i*audio_offset - duration);
+
+        } else {
+          var audio = jsPsych.pluginAPI.getAudioBuffer(trial.audio[i]);
+          duration = audio.duration*1000;
+          audio.currentTime = 0;
+
+          jsPsych.pluginAPI.setTimeout(function(audio) {
+            audio.play();
+          }.bind(this, audio), audio_offset + i*audio_offset - duration);
+        }
+      }
+
+      // add end event to last audio
+      if(context !== null){
+        source.onended = function() {
+          end_trial();
+        }
+      } else {
+        audio.addEventListener('ended', end_trial);
+      }
 
       var response = [];
       var after_response = function(info) {
@@ -121,24 +151,11 @@ jsPsych.plugins["progressbar"] = (function() {
         allow_held_key: false, // don't record multiple 'down' events for the same key
         record_up: true 
       });
-
-      // set progressbar timeout
-      var updateProgress = function() {
-        var elapsed = jsPsych.totalTime() - startTime;
-        var val = (elapsed / trial.stimulus_duration) * 100;
-        display_element.querySelector('#progressbar').value = 100 - val;
-
-        jsPsych.pluginAPI.setTimeout(updateProgress, trial.step);
-      }
-
-      // set initial progress bar state and timeout
-      updateProgress();
   
       // hide stimulus if stimulus_duration is set
       if (trial.stimulus_duration !== null) {
         jsPsych.pluginAPI.setTimeout(function() {
-          display_element.querySelector('#progressbar-stimulus').style.visibility = 'hidden';
-          display_element.querySelector('#progressbar').style.visibility = 'hidden';
+          display_element.querySelector('#auditory-countdown-container').style.visibility = 'hidden';
         }, trial.stimulus_duration);
       }
   

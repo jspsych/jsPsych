@@ -1,3 +1,4 @@
+console.log("audio test loaded");
 jsPsych.plugins['audio-test'] = (function() {
 
   var plugin = {};
@@ -14,6 +15,12 @@ jsPsych.plugins['audio-test'] = (function() {
         description: ''
       },
       premable: {
+        type: [jsPsych.plugins.parameterType.STRING],
+        default: '',
+        no_function: false,
+        description: ''
+      },
+      audio_file: {
         type: [jsPsych.plugins.parameterType.STRING],
         default: '',
         no_function: false,
@@ -50,25 +57,35 @@ jsPsych.plugins['audio-test'] = (function() {
     var setTimeoutHandlers = [];
 
     // show preamble text
-    display_element.innerHTML += '<div id="jspsych-free-recall-preamble" class="jspsych-free-recall-preamble">'+trial.preamble+'</div>';
+    display_element.innerHTML += '<div id="audio-test-preamble" class="audio-test-preamble">' + trial.preamble + '</div>';
+
+    // add audio element
+    var str = '<audio id="audio-test-track" class="audio-test-track" controls> <source src="' + trial.audio_file + 
+                                  '" type="audio/wav">Your browser does not support the our audio. We ask that you switch browsers or return to MTurk at this time.</audio>';
+    console.log(str);
+    display_element.innerHTML += str
 
     // add question and textbox for answer
-    display_element.innerHTML += '<div id="jspsych-free-recall" class="jspsych-free-recall-question" style="margin: 2em 0em;">'+
-      '<p class="jspsych-free-recall">' + trial.questions + '</p>'+
+    display_element.innerHTML += '<div id="audio-test-question" class="audio-test-question" style="margin: 2em 0em;">'+
+      '<p class="audio-test-question">' + trial.questions + '</p>'+
       '<textarea name="#jspsych-free-recall-response" id="recall_box" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>'+
       '</div>';
 
     // set up response collection
-    var rts = [];
-    var responses = [];
     var failed = 0;
 
+    var rts = [];
+    var recalled_words = [];
+    var key_presses = [];
+    var key_times = [];
+
     var keyboard_listener = function(info) {
-       // set up response collection
+      // set up response collection
       key_presses.push(info.key)
       key_times.push(info.rt)
+      console.log(info.key);
 
-      if (info.key=== ',' | info.key==='Enter' | info.key===';' | info.key===' ') {
+      if (info.key === ',' | info.key === 'Enter' | info.key === ';' | info.key === ' ') {
 
         // get response time (when participant presses enter)
         rts.push(info.rt);
@@ -80,15 +97,20 @@ jsPsych.plugins['audio-test'] = (function() {
         display_element.querySelector('textarea').value = '';
 
         if (word == trial.word.toLowerCase()) {
-        	end_trial();
+          display_element.querySelector('#audio-test-preamble').style.color = "#00ff00";
+          display_element.querySelector('textarea').style.visibility = 'hidden';
+          setTimeout(end_trial, 500);
         } else {
         	failed += 1;
+          display_element.querySelector('#audio-test-preamble').style.color = "#ff0000";
+          setTimeout(() => {
+            display_element.querySelector('#audio-test-preamble').style.color = "";
+          }, 500)
+
         	// empty the contents of the textarea
           display_element.querySelector('textarea').value = '';
           if (failed >= 4) {
-            alert('The word you entered does not match the word presented. Please try again.\n\nIf you feel that you may be unable to complete the auditory portions of the task, we ask that you return to MTurk at this time.');
-          } else {
-            alert('The word you entered does not match the word presented. Please try again.');
+            display_element.innerHTML += '<p id="warning">If you feel that you may be unable to complete the auditory portions of the task, we ask that you return to MTurk at this time.</p>';
           }
         }
 
@@ -120,8 +142,12 @@ jsPsych.plugins['audio-test'] = (function() {
       // gather the data to store for the trial
       var trial_data = {
         "rt": rts,
-        "responses": responses
+        "recwords": recalled_words,
+        "key_presses": key_presses,
+        "key_times": key_times,
       };
+
+
 
       // clear the display
       display_element.innerHTML = '';
@@ -135,8 +161,7 @@ jsPsych.plugins['audio-test'] = (function() {
               rt_method: "performance",
               allow_held_key: false,
               persist: true,
-              propagate: true
-
+              propagate: true 
         })
 
     if (trial.duration > 0) {

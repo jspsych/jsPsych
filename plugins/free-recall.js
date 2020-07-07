@@ -38,11 +38,23 @@ jsPsych.plugins['free-recall'] = (function() {
         description: "The milliseconds before trial end at which to start countdown"
       },
       step: {
-          type: jsPysch.plugins.parameterType.INT,
-          pretty_name: 'Timestep to update progress bar',
-          default: 5,
-          description: 'The frequency at which the progress bar is updated with a new value.'
-        }
+        type: jsPysch.plugins.parameterType.INT,
+        pretty_name: 'Timestep to update progress bar',
+        default: 5,
+        description: 'The frequency at which the progress bar is updated with a new value.'
+      },
+      max_length: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Minimum response length',
+        default: 12,
+        description: "The minimum number of letters that must be entered for a response to be logged."
+      },
+      min_length: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Minimum response length',
+        default: 1,
+        description: "The minimum number of letters that must be entered for a response to be logged."
+      }
     }
   }
 
@@ -72,7 +84,7 @@ jsPsych.plugins['free-recall'] = (function() {
 
     // add question and textbox for answer
     display_element.innerHTML += '<div id="jspsych-free-recall" class="jspsych-free-recall-question" style="margin: 2em 0em;">'+
-      '<input name="jspsych-free-recall-response" id="recall_box" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">'+
+      '<input name="jspsych-free-recall-response" id="recall_box" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" pattern=".{' + trial.min_length + ',' + trial.max_length + '}" required autofocus>'+
       '</div>';
 
     // set up response collection
@@ -81,10 +93,9 @@ jsPsych.plugins['free-recall'] = (function() {
     var key_presses = [];
     var key_times = [];
 
-    // automatically place cursor in textarea when page loads
     $(function(){
       $('input').focus();
-    });
+    })
 
     var set_response_timeout= function() {
       if(trial.timeout != null) {
@@ -103,16 +114,19 @@ jsPsych.plugins['free-recall'] = (function() {
       set_response_timeout();
 
       if (info.key=== ',' | info.key==='Enter' | info.key===';' | info.key===' ') {
-
-        // get response time (when participant presses enter)
-        rts.push(info.rt);
-        // get recalled word
-
         word = document.querySelector('#recall_box').value;
-        recalled_words.push(word);
 
-        // empty the contents of the textarea
-        document.querySelector('#recall_box').value = '';
+        if(word.length >= trial.min_length && word.length <= trial.max_length) {
+          // get response time (when participant presses enter)
+          rts.push(info.rt);
+          // get recalled word
+
+          word = document.querySelector('#recall_box').value;
+          recalled_words.push(word);
+
+          // empty the contents of the textarea
+          document.querySelector('#recall_box').value = '';
+        }
 
         return false;
       }
@@ -139,7 +153,6 @@ jsPsych.plugins['free-recall'] = (function() {
         "key_presses": key_presses,
         "key_times": key_times,
         "start_time": startTime,
-        "propagate": true
       };
 
       // clear the display
@@ -162,7 +175,9 @@ jsPsych.plugins['free-recall'] = (function() {
     }
 
     // set initial progress bar state and timeout
-    updateProgress();
+    if(trial.show_countdown) {
+      updateProgress();
+    }
 
     var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
               callback_function: keyboard_listener,
