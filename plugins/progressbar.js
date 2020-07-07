@@ -61,10 +61,10 @@ jsPsych.plugins["progressbar"] = (function() {
       // TODO: make these ordered properly
 
       var new_html = '<div id="progressbar-stimulus"><progress id="progressbar" value="0" max="100"></progress>'+trial.stimulus+'</div>';
-      var startTime = performance.now();
+      var startTime = jsPsych.totalTime(); 
 
       // add prompt
-      if(trial.prompt !== null){
+      if(trial.prompt != null){
         new_html += trial.prompt;
       }
   
@@ -163,7 +163,7 @@ jsPsych.plugins["progressbar"] = (function() {
 
       // set progressbar timeout
       var updateProgress = function() {
-        var elapsed = performance.now() - startTime;
+        var elapsed = jsPsych.totalTime() - startTime;
         var val = (elapsed / trial.stimulus_duration) * 100;
         display_element.querySelector('#progressbar').value = val;
 
