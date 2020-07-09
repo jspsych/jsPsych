@@ -45,14 +45,6 @@ jsPsych.plugins["progressbar"] = (function() {
       var new_html = '<div id="progressbar-stimulus"><progress id="progressbar" value="0" max="100"></progress>'+trial.stimulus+'</div>';
       var startTime = jsPsych.totalTime(); 
 
-<<<<<<< HEAD
-      // add prompt
-      if(trial.prompt != null){
-        new_html += trial.prompt;
-      }
-  
-=======
->>>>>>> d700b584cd51af6d4dd5901d02cb46058a7d2107
       // draw
       display_element.innerHTML = new_html;
 
