@@ -2,7 +2,7 @@
 *  This file defines functions that are used as atomic, shared parts of experiments
 *  but are composed of multiple plugins arranged into a pre determined timeline.
 */
-var jsPyschUtils = {
+var jsPsychUtils = {
 
     get_attention_check: function() {
         let question_1 = {
