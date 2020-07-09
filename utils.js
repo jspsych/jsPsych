@@ -18,19 +18,18 @@ var jsPsychUtils = {
                     "as Declarative or Implicit, where Declarative memories " +
                     "include memories for people, places, and events in our lives. " +
                     "It is this type of memory that is most often intended when " +
-                    "speaking about memory.<p>",
-            prompt: "How old is your oldest memory?"
+                    "speaking about memory.<p><p id='inst'>How old is your oldest memory</p>",
         };
 
         let question_2 = {
             type: 'html-button-response',
             choices: ["Never", "Daily", "Weekly", "Monthly"],
-            prompt: "How often do you realize you've forgotten something?"
+            stimulus: "<p id='inst'>How often do you realize you've forgotten something?</p>"
         };
 
         // TODO: ask them to return the HIT due to failed attention check
         let check_failed = {
-            type: 'html-keyboard-reponse',
+            type: 'html-keyboard-response',
             response_ends_trial: false,
             stimulus: "<p id='inst'>The preceding questions were designed to screen participants who are not carefully following the instructions of our study.<p>" +
                     "<p id='inst'>Based on your responses to these questions, we ask that you return this HIT to MTurk at this time.</p>"
