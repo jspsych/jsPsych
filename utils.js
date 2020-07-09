@@ -18,7 +18,7 @@ var jsPsychUtils = {
                     "as Declarative or Implicit, where Declarative memories " +
                     "include memories for people, places, and events in our lives. " +
                     "It is this type of memory that is most often intended when " +
-                    "speaking about memory.<p><p id='inst'>How old is your oldest memory</p>",
+                    "speaking about memory.<p><p id='inst'>How old is your oldest memory?</p>",
         };
 
         let question_2 = {
