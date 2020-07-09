@@ -9,7 +9,7 @@ jsPsych.plugins['free-recall'] = (function() {
       preamble: {
         type: [jsPsych.plugins.parameterType.STRING],
         default: '',
-        no_function: false,
+ false       no_function: false,
         description: ''
       },
       trial_duration: {
@@ -38,7 +38,7 @@ jsPsych.plugins['free-recall'] = (function() {
         description: "The milliseconds before trial end at which to start countdown"
       },
       step: {
-        type: jsPysch.plugins.parameterType.INT,
+        type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Timestep to update progress bar',
         default: 5,
         description: 'The frequency at which the progress bar is updated with a new value.'
