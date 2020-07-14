@@ -22,7 +22,7 @@ jsPsych.plugins['audio-test'] = (function() {
         type: jsPsych.plugins.parameterType.BOOLEAN,
         default: false,
         description: ''
-      }
+      },
       audio_file: {
         type: [jsPsych.plugins.parameterType.STRING],
         default: '',
