@@ -9,7 +9,6 @@ jsPsych.plugins['free-recall'] = (function() {
       preamble: {
         type: [jsPsych.plugins.parameterType.STRING],
         default: '',
- false       no_function: false,
         description: ''
       },
       trial_duration: {
