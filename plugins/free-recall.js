@@ -62,8 +62,8 @@ jsPsych.plugins['free-recall'] = (function() {
     trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
 
     var startTime         = jsPsych.totalTime(); 
-    var absoluteTaskEnd   = jsPsych.totalTime() + trial.trial_duration;
-    var taskEnd           = (trial.timeout == null ? trial.trial_duration : trial.timeout);
+    var absoluteTaskEnd   = startTime + trial.trial_duration;
+    var taskEnd           = (trial.timeout == null ? absoluteTaskEnd : startTime + trial.timeout);
 
     // if any trial variables are functions
     // this evaluates the function and replaces
@@ -101,7 +101,7 @@ jsPsych.plugins['free-recall'] = (function() {
         clearTimeout(response_timeout);
         response_timeout = jsPsych.pluginAPI.setTimeout(end_trial, trial.timeout);
 
-        taskEnd = min(jsPsych.totalTime() + trial.timeout, absoluteTaskEnd);
+        taskEnd = Math.min(jsPsych.totalTime() + trial.timeout, absoluteTaskEnd);
       }
     }
 
@@ -165,9 +165,9 @@ jsPsych.plugins['free-recall'] = (function() {
     var updateProgress = function() {
       var remaining = taskEnd - jsPsych.totalTime();
       var length = trial.countdown_duration == null ? trial.trial_duration : trial.countdown_duration;
-      var val = (remaining / length) * 100;
+      var val = (1 - (remaining / length)) * 100;
 
-      display_element.querySelector('#progressbar').style.visibility = remaining <= length ? 'visible' : 'hidden';
+      display_element.querySelector('#progressbar').style.visibility = remaining < length ? 'visible' : 'hidden';
       display_element.querySelector('#progressbar').value = val;
 
       jsPsych.pluginAPI.setTimeout(updateProgress, trial.step);
@@ -177,6 +177,7 @@ jsPsych.plugins['free-recall'] = (function() {
     if(trial.show_countdown) {
       updateProgress();
     }
+
 
     var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
               callback_function: keyboard_listener,
@@ -191,9 +192,7 @@ jsPsych.plugins['free-recall'] = (function() {
     }
 
     if (trial.trial_duration > 0) {
-      jsPsych.pluginAPI.setTimeout(function() {
-        end_trial();
-      }, trial.trial_duration);
+      jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
     }
   };
 
