@@ -163,11 +163,11 @@ jsPsych.plugins['free-recall'] = (function() {
 
     // set progressbar timeout
     var updateProgress = function() {
-      var elapsed = jsPsych.totalTime() - (startTime + taskEnd);
+      var remaining = taskEnd - jsPsych.totalTime();
       var length = trial.countdown_duration == null ? trial.trial_duration : trial.countdown_duration;
-      var val = (elapsed / length) * 100;
+      var val = (remaining / length) * 100;
 
-      display_element.querySelector('#progressbar').style.visibility = val > 0 ? 'visible' : 'hidden';
+      display_element.querySelector('#progressbar').style.visibility = remaining <= length ? 'visible' : 'hidden';
       display_element.querySelector('#progressbar').value = val;
 
       jsPsych.pluginAPI.setTimeout(updateProgress, trial.step);
