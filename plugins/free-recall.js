@@ -99,7 +99,7 @@ jsPsych.plugins['free-recall'] = (function() {
     var set_response_timeout= function() {
       if(trial.timeout != null) {
         clearTimeout(response_timeout);
-        response_timeout = jsPsych.pluginAPI.setTimeout(end_trial);
+        response_timeout = jsPsych.pluginAPI.setTimeout(end_trial, trial.timeout);
 
         taskEnd = min(jsPsych.totalTime() + trial.timeout, absoluteTaskEnd);
       }
@@ -187,7 +187,7 @@ jsPsych.plugins['free-recall'] = (function() {
         })
 
     if(trial.timeout != null) {
-      var response_timeout = jsPsych.pluginAPI.setTimeout(end_trial);
+      var response_timeout = jsPsych.pluginAPI.setTimeout(end_trial, trial.timeout);
     }
 
     if (trial.trial_duration > 0) {
