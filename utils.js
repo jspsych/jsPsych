@@ -8,22 +8,22 @@ var jsPsychUtils = {
         let question_1 = {
             type: 'html-button-response',
             choices: ["<5 years", "5-15 years", "15-25 years", "25+ years"],
-            stimulus: "<p id='inst-justified'>According to Wikipedia, Memory is the faculty of the brain by which data or information is encoded, stored, and retrieved when needed. It is the retention of information over time for the purpose of influencing future action. If past events could not be remembered, it would be impossible for language, relationships, or personal identity to develop. Please answer the question below honestly, but for the next question, pick 'never.' Psychologists most generally classify memory as Declarative or Implicit, where Declarative memories include memories for people, places, and events in our lives. It is this type of memory that is most often intended when speaking about memory.<p>" +
-            "<p id='inst'>How old is your oldest memory?</p>",
+            stimulus: "<p class='inst-justified'>According to Wikipedia, Memory is the faculty of the brain by which data or information is encoded, stored, and retrieved when needed. It is the retention of information over time for the purpose of influencing future action. If past events could not be remembered, it would be impossible for language, relationships, or personal identity to develop. Please answer the question below honestly, but for the next question, pick 'never.' Psychologists most generally classify memory as Declarative or Implicit, where Declarative memories include memories for people, places, and events in our lives. It is this type of memory that is most often intended when speaking about memory.<p>" +
+            "<p class='inst'>How old is your oldest memory?</p>",
         };
 
         let question_2 = {
             type: 'html-button-response',
             choices: ["Never", "Daily", "Weekly", "Monthly"],
-            stimulus: "<p id='inst'>How often do you realize you've forgotten something?</p>"
+            stimulus: "<p class='inst'>How often do you realize you've forgotten something?</p>"
         };
 
         // TODO: ask them to return the HIT due to failed attention check
         let check_failed = {
             type: 'html-keyboard-response',
             response_ends_trial: false,
-            stimulus: "<p id='inst'>The preceding questions were designed to screen participants who are not carefully following the instructions of our study.<p>" +
-                    "<p id='inst'>Based on your responses to these questions, we ask that you return this HIT to MTurk at this time.</p>"
+            stimulus: "<p class='inst'>The preceding questions were designed to screen participants who are not carefully following the instructions of our study.<p>" +
+                    "<p class='inst'>Based on your responses to these questions, we ask that you return this HIT to MTurk at this time.</p>"
         }
 
         let check_failed_node = {
