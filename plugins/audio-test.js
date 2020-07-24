@@ -97,7 +97,7 @@ jsPsych.plugins['audio-test'] = (function() {
         // empty the contents of the textarea
         display_element.querySelector('textarea').value = '';
 
-        if (word == trial.word.toLowerCase()) {
+        if (word.toLowerCase() == trial.word.toLowerCase()) {
           display_element.querySelector('#audio-test-preamble').style.color = "#00ff00";
           display_element.querySelector('textarea').style.visibility = 'hidden';
           setTimeout(end_trial, 500);
