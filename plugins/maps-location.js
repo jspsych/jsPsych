@@ -9,7 +9,6 @@
  *
  */
 
-
 jsPsych.plugins['maps-location'] = (function() {
 
   var plugin = {};
@@ -84,9 +83,12 @@ jsPsych.plugins['maps-location'] = (function() {
         zoom: 8,
         // TODO: center somewhere random?
         center: new google.maps.LatLng(trial.starting_location[0], trial.starting_location[1]),
-        mapTypeControl: true,
-        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+        mapTypeControl: false,
         navigationControl: true,
+        zoomControl: true,
+        scaleControl: true,
+        streetViewControl: false,
+        fullscreenControl: false,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       }
       map = new google.maps.Map(display_element.querySelector("#map-canvas"),
