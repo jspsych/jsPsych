@@ -40,15 +40,14 @@
            user-select: none; /* Non-prefixed version, currently
                                  supported by Chrome, Edge, Opera and Firefox */
 }
- }
 
- .jspsych-top {
-   align-items: flex-start;
- }
+.jspsych-top {
+  align-items: flex-start;
+}
 
- .jspsych-middle {
-   align-items: center;
- }
+.jspsych-middle {
+  align-items: center;
+}
 
 /* fonts and type */
 

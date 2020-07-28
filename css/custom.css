@@ -1,0 +1,93 @@
+.inst-justified {
+  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-size: 25px;
+  line-height: 1.6em;
+  text-align: left;
+  margin-right: auto;
+  margin-left: auto;
+  width: 850px;
+}
+
+.inst {
+  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-size: 25px;
+  line-height: 1.6em;
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.stim {
+  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-size: 70px;
+  line-height: 1.6em;
+}
+
+#recall_box {
+  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-size: 30px;
+  resize: none;
+  width: 400px;
+  height: 40px;
+  background-color: black;
+  border-style: solid; 
+  color: white;
+  caret-color: white;
+  text-align: center;
+  overflow: hidden;
+}
+
+.math {
+  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-size: 70px;
+  line-height: 1.6em;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#math_box {
+  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-size: 50px;
+  resize: none;
+  width: 100px;
+  height: 70px;
+  color: white;
+  background-color: black;
+  caret-color: white;
+  overflow: hidden;
+}
+
+#arrow {
+  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-size: 100px;
+}
+
+input:invalid {
+  border-color: #ff4444;
+  border-width: 2px; 
+  border-style: solid;
+}
+
+input:valid {
+  border-width: 2px; 
+  border-style: solid;
+  border-color: #444;
+}
+
+progress {
+  border: none;
+  background: #000000;
+  color: #ffffff;
+}
+
+progress::-webkit-progress-bar {background-color: #000000; width: 100%;}
+progress::-webkit-progress-value {background-color: #aaaaaa !important;}
+progress {background-color: #000000;}
+progress::-moz-progress-bar {background-color: #ffffff !important;}
+
+body {
+  background-color: #000000;
+  color: #ffffff;
+}
