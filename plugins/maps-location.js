@@ -1,4 +1,4 @@
-/**
+/*
  * jspsych-reconstruction
  * a jspsych plugin for a reconstruction task where the subject recreates
  * a stimulus from memory
@@ -37,7 +37,8 @@ jsPsych.plugins['maps-location'] = (function() {
         default:  'Continue',
         description: 'The text that appears on the button to finish the trial.'
       },
-  }
+    }
+  };
 
   plugin.trial = function(display_element, trial) {
 
@@ -52,7 +53,8 @@ jsPsych.plugins['maps-location'] = (function() {
     var markers = [];
 
     // TODO: style map frame and button
-    html = '<div>'
+
+    let html = '<div>'
     html += '<div id="map-canvas">'
     html += '<button id=map-response-button type="button">' + trial.button_label + '</button>'
     html += '</div></div>'
@@ -125,7 +127,7 @@ jsPsych.plugins['maps-location'] = (function() {
       if (trial.response_ends_trial) {
         end_trial();
       }
-    };
+    }
     
     function endTrial() {
       // save data

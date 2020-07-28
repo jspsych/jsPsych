@@ -1,4 +1,4 @@
-/**
+/*
  * jspsych-image-audio-response
  * Matt Jaquiery, Feb 2018
  *
@@ -8,12 +8,12 @@
  *
  **/
 
-jsPsych.plugins["image-audio-response"] = (function() {
+jsPsych.plugins["html-audio-response"] = (function() {
 
     let plugin = {};
 
     plugin.info = {
-        name: 'audio-response',
+        name: 'html-audio-response',
         description: 'Present an image and retrieve an audio response',
         parameters: {
             stimulus: {
