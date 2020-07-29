@@ -5,6 +5,6 @@ Thumbs.db
 /.project
 /.tern-project
 site/
-.eslint.js
+.eslint*
 package-lock.json
 package.json
