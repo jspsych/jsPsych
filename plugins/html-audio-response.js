@@ -59,7 +59,7 @@ jsPsych.plugins["html-audio-response"] = (function() {
                 type: jsPsych.plugins.parameterType.INT,
                 pretty_name: 'Buffer length',
                 default: 4000,
-                description: 'Length of the audio buffer.'
+                description: 'Length of the audio buffer. If negative, record indefinitely.'
             },
             postprocessing: {
                 type: jsPsych.plugins.parameterType.FUNCTION,
@@ -90,18 +90,10 @@ jsPsych.plugins["html-audio-response"] = (function() {
                 default: null,
                 description: 'How long to show the stimulus.'
             },
-            response_ends_trial: {
-                type: jsPsych.plugins.parameterType.BOOL,
-                pretty_name: 'Response ends trial',
-                default: false,
-                description: 'If true, then trial will end when user responds.'
-            },
             manually_end_recording_key: {
                 type: jsPsych.plugins.parameterType.KEYCODE,
                 pretty_name: 'Key to manually end recording',
                 default: jsPsych.NO_KEYS,
-                description: 'The key to end recording on any given trial, default is no keys.'
-
             }
         }
     };
@@ -156,7 +148,7 @@ jsPsych.plugins["html-audio-response"] = (function() {
                 trial.postprocessing(chunks)
                      .then(function(processedData) {
                         onRecordingFinish(processedData);
-                     }
+                     })
             }
 
             recorder.start(1000);
@@ -215,23 +207,22 @@ jsPsych.plugins["html-audio-response"] = (function() {
         }
 
 
-        if(trial.manually_end_recording == false){
+        if(trial.buffer_length > 0){
             // setTimeout to stop recording after 4 seconds
             setTimeout(function() {
                 // this will trigger one final 'ondataavailable' event and set recorder state to 'inactive'
                 recorder.stop();
-                recorder.wrapUp = true;
                 }, trial.buffer_length);
-        }else{
-            //wait for response from keyboard to end recording
-            var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-                    callback_function: after_response,
-                    valid_responses: trial.manually_end_recording_key,
-                    rt_method: 'performance',
-                    persist: false,
-                    allow_held_key: false
-            });
         }
+
+        //wait for response from keyboard to end recording
+        var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+            callback_function: after_response,
+            valid_responses: trial.manually_end_recording_key,
+            rt_method: 'performance',
+            persist: false,
+            allow_held_key: false
+        });
 
         start_trial();
     };

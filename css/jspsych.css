@@ -97,6 +97,20 @@
   cursor: not-allowed;
 }
 
+#map-response-div {
+  width: 500px;
+  height: 500px;
+}
+
+#map-canvas {
+  width: 100%;
+  height: 90%;
+}
+
+#map-response-button {
+  height: 8%;
+}
+
 /* jsPsych progress bar */
 #jspsych-progressbar-container {
   color: #555;
