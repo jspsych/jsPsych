@@ -11,25 +11,26 @@ jsPsych.plugins['audio-test'] = (function() {
         type: [jsPsych.plugins.parameterType.STRING],
         array: true,
         default: undefined,
-        no_function: false,
         description: ''
       },
       premable: {
         type: [jsPsych.plugins.parameterType.STRING],
         default: '',
-        no_function: false,
+        description: ''
+      },
+      autoplay: {
+        type: jsPsych.plugins.parameterType.BOOLEAN,
+        default: false,
         description: ''
       },
       audio_file: {
         type: [jsPsych.plugins.parameterType.STRING],
         default: '',
-        no_function: false,
         description: ''
       },
       word: {
       	type: [jsPsych.plugins.parameterType.STRING],
       	default: '',
-      	no_function: false,
       	description: 'The word that needs to be entered to complete the audio test.'
       }
     }
@@ -60,7 +61,7 @@ jsPsych.plugins['audio-test'] = (function() {
     display_element.innerHTML += '<div id="audio-test-preamble" class="audio-test-preamble">' + trial.preamble + '</div>';
 
     // add audio element
-    var str = '<audio id="audio-test-track" class="audio-test-track" controls> <source src="' + trial.audio_file + 
+    var str = '<audio id="audio-test-track" class="audio-test-track" controls ' + (trial.autoplay ? "autoplay" : "") + '> <source src="' + trial.audio_file + 
                                   '" type="audio/wav">Your browser does not support the our audio. We ask that you switch browsers or return to MTurk at this time.</audio>';
     console.log(str);
     display_element.innerHTML += str
@@ -96,7 +97,7 @@ jsPsych.plugins['audio-test'] = (function() {
         // empty the contents of the textarea
         display_element.querySelector('textarea').value = '';
 
-        if (word == trial.word.toLowerCase()) {
+        if (word.toLowerCase() == trial.word.toLowerCase()) {
           display_element.querySelector('#audio-test-preamble').style.color = "#00ff00";
           display_element.querySelector('textarea').style.visibility = 'hidden';
           setTimeout(end_trial, 500);

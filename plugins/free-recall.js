@@ -9,7 +9,6 @@ jsPsych.plugins['free-recall'] = (function() {
       preamble: {
         type: [jsPsych.plugins.parameterType.STRING],
         default: '',
-        no_function: false,
         description: ''
       },
       trial_duration: {
@@ -38,7 +37,7 @@ jsPsych.plugins['free-recall'] = (function() {
         description: "The milliseconds before trial end at which to start countdown"
       },
       step: {
-        type: jsPysch.plugins.parameterType.INT,
+        type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Timestep to update progress bar',
         default: 5,
         description: 'The frequency at which the progress bar is updated with a new value.'
@@ -63,8 +62,8 @@ jsPsych.plugins['free-recall'] = (function() {
     trial.preamble = typeof trial.preamble == 'undefined' ? "" : trial.preamble;
 
     var startTime         = jsPsych.totalTime(); 
-    var absoluteTaskEnd   = jsPsych.totalTime() + trial.trial_duration;
-    var taskEnd           = (trial.timeout == null ? trial.trial_duration : trial.timeout);
+    var absoluteTaskEnd   = startTime + trial.trial_duration;
+    var taskEnd           = (trial.timeout == null ? absoluteTaskEnd : startTime + trial.timeout);
 
     // if any trial variables are functions
     // this evaluates the function and replaces
@@ -100,9 +99,9 @@ jsPsych.plugins['free-recall'] = (function() {
     var set_response_timeout= function() {
       if(trial.timeout != null) {
         clearTimeout(response_timeout);
-        response_timeout = jsPsych.pluginAPI.setTimeout(end_trial);
+        response_timeout = jsPsych.pluginAPI.setTimeout(end_trial, trial.timeout);
 
-        taskEnd = min(jsPsych.totalTime() + trial.timeout, absoluteTaskEnd);
+        taskEnd = Math.min(jsPsych.totalTime() + trial.timeout, absoluteTaskEnd);
       }
     }
 
@@ -164,11 +163,11 @@ jsPsych.plugins['free-recall'] = (function() {
 
     // set progressbar timeout
     var updateProgress = function() {
-      var elapsed = jsPsych.totalTime() - (startTime + taskEnd);
+      var remaining = taskEnd - jsPsych.totalTime();
       var length = trial.countdown_duration == null ? trial.trial_duration : trial.countdown_duration;
-      var val = (elapsed / length) * 100;
+      var val = (1 - (remaining / length)) * 100;
 
-      display_element.querySelector('#progressbar').style.visibility = val > 0 ? 'visible' : 'hidden';
+      display_element.querySelector('#progressbar').style.visibility = remaining < length ? 'visible' : 'hidden';
       display_element.querySelector('#progressbar').value = val;
 
       jsPsych.pluginAPI.setTimeout(updateProgress, trial.step);
@@ -179,6 +178,7 @@ jsPsych.plugins['free-recall'] = (function() {
       updateProgress();
     }
 
+
     var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
               callback_function: keyboard_listener,
               rt_method: "performance",
@@ -188,13 +188,11 @@ jsPsych.plugins['free-recall'] = (function() {
         })
 
     if(trial.timeout != null) {
-      var response_timeout = jsPsych.pluginAPI.setTimeout(end_trial);
+      var response_timeout = jsPsych.pluginAPI.setTimeout(end_trial, trial.timeout);
     }
 
     if (trial.trial_duration > 0) {
-      jsPsych.pluginAPI.setTimeout(function() {
-        end_trial();
-      }, trial.trial_duration);
+      jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
     }
   };
 
