@@ -1,4 +1,4 @@
-input, textarea {
+.task-input {
   resize: none;
   color: white;
   background-color: black;
@@ -9,17 +9,18 @@ input, textarea {
   text-align: center;
 }
 
-input:invalid {
+input.task-input:invalid, textarea.task-input:invalid {
   border-color: #ff4444;
   border-width: 2px; 
   border-style: solid;
 }
 
-input:valid {
+input.task-input:valid, textarea.task-input:valid {
   border-width: 2px; 
   border-style: solid;
   border-color: #444;
 }
+
 .inst-justified {
   font-family: 'Open Sans', 'Arial', sans-serif;
   font-size: 25px;

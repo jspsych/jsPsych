@@ -69,7 +69,7 @@ jsPsych.plugins['audio-test'] = (function() {
     // add question and textbox for answer
     display_element.innerHTML += '<div id="audio-test-question" class="audio-test-question" style="margin: 2em 0em;">'+
       '<p class="audio-test-question">' + trial.questions + '</p>'+
-      '<textarea name="#jspsych-free-recall-response" id="recall_box" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>'+
+      '<textarea name="#jspsych-free-recall-response" class="task_input" id="recall_box" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>'+
       '</div>';
 
     // set up response collection

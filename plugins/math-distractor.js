@@ -44,7 +44,7 @@ jsPsych.plugins['math-distractor'] = (function() {
     var num_a = [];
     var num_b = [];
     var num_c = [];
-    var tbox = '<input id="math_box"></div>'
+    var tbox = '<input class="task_input" id="math_box"></div>'
     var timed_out = false;
     var current_answer;
 
