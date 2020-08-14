@@ -1130,20 +1130,28 @@ jsPsych.data = (function() {
     }
 
     data_collection.first = function(n){
-      if(typeof n=='undefined'){ n = 1 }
-      var out = [];
-      for(var i=0; i<n; i++){
-        out.push(trials[i]);
+      if (trials.length == 0) throw `No data recorded yet.`
+      if (typeof n == 'undefined') { n = 1 }
+      if (n > trials.length) {
+        throw `Please use a value for n that is fewer than ${trials.length}.`;
+      } else if (n < 1) {
+        throw `You must query with a positive nonzero integer. Please use a 
+               different value for n.`;
       }
+      var out = trials.slice(0, n);
       return DataCollection(out);
     }
 
-    data_collection.last = function(n){
-      if(typeof n=='undefined'){ n = 1 }
-      var out = [];
-      for(var i=trials.length-n; i<trials.length; i++){
-        out.push(trials[i]);
+    data_collection.last = function(n) {
+      if (trials.length == 0) throw `No data recorded yet.`
+      if (typeof n == 'undefined') { n = 1 }
+      if (n > trials.length) {
+        throw `Please use a value for n that is fewer than ${trials.length}.`;
+      } else if (n < 1) {
+        throw `You must query with a positive nonzero integer. Please use a 
+               different value for n.`;
       }
+      var out = trials.slice(trials.length - n, trials.length);
       return DataCollection(out);
     }
 
