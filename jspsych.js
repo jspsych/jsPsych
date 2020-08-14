@@ -1129,30 +1129,48 @@ jsPsych.data = (function() {
       }
     }
 
+    /**
+     * Queries the first n elements in a collection of trials.
+     *
+     * @param {number} n A positive integer of elements to return. A value of
+     *                   n that is less than 1 will throw an error.
+     *
+     * @return {Array} First n objects of a collection of trials. If fewer than
+     *                 n trials are available, the trials.length elements will
+     *                 be returned.
+     *
+     */
     data_collection.first = function(n){
-      if (trials.length == 0) throw `No data recorded yet.`
       if (typeof n == 'undefined') { n = 1 }
-      if (n > trials.length) {
-        throw `Please use a value for n that is fewer than ${trials.length}.`;
-      } else if (n < 1) {
+      if (n < 1) {
         throw `You must query with a positive nonzero integer. Please use a 
                different value for n.`;
       }
-      var out = trials.slice(0, n);
-      return DataCollection(out);
+      if (trials.length == 0) return DataCollection([]);
+      if (n > trials.length) n = trials.length;
+      return DataCollection(trials.slice(0, n));
     }
 
+    /**
+     * Queries the last n elements in a collection of trials.
+     *
+     * @param {number} n A positive integer of elements to return. A value of
+     *                   n that is less than 1 will throw an error.
+     *
+     * @return {Array} Last n objects of a collection of trials. If fewer than
+     *                 n trials are available, the trials.length elements will
+     *                 be returned.
+     *
+     */
     data_collection.last = function(n) {
-      if (trials.length == 0) throw `No data recorded yet.`
       if (typeof n == 'undefined') { n = 1 }
-      if (n > trials.length) {
-        throw `Please use a value for n that is fewer than ${trials.length}.`;
-      } else if (n < 1) {
+      if (n < 1) {
         throw `You must query with a positive nonzero integer. Please use a 
                different value for n.`;
       }
-      var out = trials.slice(trials.length - n, trials.length);
-      return DataCollection(out);
+      if (trials.length == 0) return DataCollection([]);
+      if (n > trials.length) n = trials.length;
+      return DataCollection(trials.slice(trials.length - n, trials.length));
     }
 
     data_collection.values = function(){
