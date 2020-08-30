@@ -5,6 +5,7 @@ The following people have contributed to the development of jsPsych by writing c
 * Krisitn Diep - https://github.com/kristiyip
 * Becky Gilbert - https://github.com/becky-gilbert
 * Jana Klaus - https://github.com/janakl4us
+* Peter Jes Kohler - https://github.com/pjkohler 
 * Jonas Lambers
 * Shane Martin - https://github.com/shamrt
 * Adrian Oesch - https://github.com/adrianoesch
