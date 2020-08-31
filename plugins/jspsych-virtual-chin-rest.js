@@ -1,6 +1,9 @@
 /*
- *  plugin based in  Qisheng Li 11/2019. /// https://github.com/QishengLi/virtual_chinrest
-    Modified by Gustavo Juantorena 08/2020
+ *  plugin for jsPsych based in Qisheng Li 11/2019. /// https://github.com/QishengLi/virtual_chinrest
+    
+    Modified by Gustavo Juantorena 08/2020 // https://github.com/GEJ1
+
+    Work in progress in jsPsych discussion: https://github.com/jspsych/jsPsych/discussions/975
  */
 
 jsPsych.plugins['virtual-chin'] = (function() {
@@ -23,12 +26,7 @@ jsPsych.plugins['virtual-chin'] = (function() {
         pretty_name: 'Pixels per unit',
         default: 100,
         description: 'After the scaling factor is applied, this many pixels will equal one unit of measurement.'
-      },
-      prompt_instructions: {
-        type: jsPsych.plugins.parameterType.STRING,
-        default: null,
-        description: 'Any content here will be displayed above card image.'
-      },
+      }
       // prompt_card: {
       //   type: jsPsych.plugins.parameterType.STRING,
       //   default: null,
@@ -112,7 +110,6 @@ jsPsych.plugins['virtual-chin'] = (function() {
 
   });
 
-
   //=============================
   //Ball Animation
 
@@ -194,28 +191,9 @@ jsPsych.plugins['virtual-chin'] = (function() {
 
               // You can then DO SOMETHING HERE TO PROCEED TO YOUR NEXT STEPS OF THE EXPERIMENT. For example, add a button to go to the next page.
               // display_element.innerHTML = `<p>"Press space bar to start the experiment.</p>`
-              display_element.innerHTML = 
-                
-              `<p style='font-size:180%;'>  Este experimento consta de dos tipos de ensayos: <br></p>
-              <p style='font-size:130%;'>
-              Los ensayos del primer tipo consisten en una serie de números del 1 al 20 rodeados cada
-              uno por un círculo.<br> Su objetivo será unir con un trazo continuo los puntos en orden creciente,<br> tratando de
-              evitar que los trazos se toquen.<br> Tendrá un límite de tiempo fijo para resolver cada ensayo.<br>
-              AL COMENZAR CADA ENSAYO VERÁ UNA CRUZ EN EL CENTRO DE LA PANTALLA,<br> CUANDO ESTA DESAPAREZCA Y VEA LOS CIRCULOS
-              DEBERÁ PRESIONAR EL BOTON IZQUIERDO DEL MOUSE (O SU PAD DE NOTEBOOK) <br>Y
-              MANTENERLO PRESIONADO HASTA TERMINARLO.<br> No levante el dedo del botón al menos que
-              hayas terminado el ensayo, o que este haya terminado por superar el tiempo límite.<br>
-              El otro tipo de ensayo consiste en una serie de números del 1 al 10 y letras de la A
-              a la J.<br> Su objetivo será unir con un trazo continuo los puntos de manera alternada (ejemplo 1-A-2-B-3-C,
-              etc).<br><br><br>
-  
-              Su objetivo será realizar la tarea SIN PASAR POR ENCIMA DE SU PROPIO TRAZO y lo más rápido posible.<br>
-              Los ensayos van a aparecer siempre alternadamente.<br><br>
-              
-              ¡Suerte y muchas gracias por participar! </p><br>
-              
-              <p style='font-size:200%;'>  Para comenzar por favor presione la barra espaciadora </p>
-              `
+              display_element.innerHTML =
+                "<p style='font-size:160%;'> When you are ready, please press space bar to start the experiment.</p>" +
+                `<p style='font-size:160%;'>  Your viewing distance is about ${dist.toString()} cm </p>`
 
               return trial_data.viewing_distance_cm;
           }
@@ -234,35 +212,37 @@ jsPsych.plugins['virtual-chin'] = (function() {
 
       // You can write functions here that live only in the scope of plugin.trial
       function show_stimulus(){
-        display_element.innerHTML = `<p>Por favor repetí la medición de la tarjeta,pero esta vez utilizando la barra deslizante.</p>`    
+        display_element.innerHTML = `<p>Please use any credit card that you have available (it can also be a grocery store membership 
+          card, your drivers license, or anything that is of the same format), hold it onto the screen, and adjust the slider below to its size.</p>`    
 
 
-          var html = "<body><div id='content'><div id='page-size'><br><br><br><br><br><br>";
+          var html = "<body><div id='content'><div id='page-size'>";
           // html += "<h3> Let’s find out what your monitor size is (click to go into <div onclick='fullScreen(); registerClick();' style='display:inline; cursor:pointer; color: red'><em><u>full screen mode</u></em></div>).</h2>";
           
-          html += "<p>Por favor repita la medición de la misma tarjeta, pero esta vez utilizando la barra deslizante.</p>";   
-          
-          html += "<b style='font-style: italic'>Asegúrese de poner la tarjeta sobre la pantalla.</b>";
+          html += "<p>Please use any credit card that you have available (it can also be a grocery store membership card, your drivers license, or anything that is of the same format), hold it onto the screen, and adjust the slider below to its size.</p>";   
+          html += "<p>(If you don't have access to a real card, you can use a ruler to measure image width to 3.37inch or 85.6mm, or make your best guess!)</p>";
+          html += "<b style='font-style: italic'>Make sure you put the card onto your screen.</b>";
           html += '<br><div id="container">';
           html += "<div id='slider'></div>";
           html += '<br> <img id="card" src="card.png" style="width: 50%"><br><br>';
-          html +='<button id="btnBlindSpot" class="btn btn-primary">Presione aquí cuando termine!</button></div></div>';
+          html +='<button id="btnBlindSpot" class="btn btn-primary">Click here when you are done!</button></div></div>';
 
         
           html += '<div id="blind-spot" style="visibility: hidden">';
           html += '<!-- <h2 class="bolded-blue">Task 2: Where’s your blind spot?</h2> -->';
-          html += "<h3>Ahora vamos a estimar su distancia a la pantalla.</h3>";
+          html += "<h3>Now, let's quickly test how far away you are sitting.</h3>";
+          html += "<p>You might know that vision tests at a doctor's practice often involve chinrests; the doctor basically asks you to sit away from a screen in a specific distance. We do this here with a 'virtual chinrest'.</p>";
           
-          html += '<h3>Instrucciones</h3>';
-          html += '<p>1. Coloque su dedo índice en la <b>barra espaciadora</b> </p>';
-          html += '<p>2. Cierre su ojo derecho. <em> (Tip:Quizá le resulte más fácil tapándolo con su mano!)</em></p>';
-          html += '<p>3. Usando su ojo izquierdo, haga foco en el cuadrado negro.</p>';
-          html += '<p>4. Presione el botón de abajo para iniciar la animación de la pelotita roja. Esa <b style="color: red">pelotita roja</b> va a desaparecer de su vista en algún momento. Ni bien la deje de ver (siempre enfocando en el cuadrado negro) presione una vez la barra lo más rápidamente posible.</p><br>';
-          html += '<p>Por favor repita el proceso <b>cinco</b> veces. Mantenga su ojo derecho cerrado y presione la barra espaciadora lo más rápidamente posible!</p><br>';
-          html += '<button class="btn btn-primary" id="start" ">Empezar</button>';
+          html += '<h3>Instructions</h3>';
+          html += '<p>1. Put your finger on <b>space bar</b> on the keyboard.</p>';
+          html += '<p>2. Close your right eye. <em>(Tips: it might be easier to cover your right eye by hand!)</em></p>';
+          html += '<p>3. Using your left eye, focus on the black square.</p>';
+          html += '<p>4. Click the button below to start the animation of the red ball. The <b style="color: red">red ball</b> will disappear as it moves from right to left. Press the Space key as soon as the ball disappears from your eye sight.</p><br>';
+          html += '<p>Please do it <b>five</b> times. Keep your right eye closed and hit the Space key fast!</p><br>';
+          html += '<button class="btn btn-primary" id="start" ">Start</button>';
 
           html += '<div id="svgDiv" style="width:1000px;height:200px;"></div>';
-          html +=  "Presioná la barra <div id='click' style='display:inline; color: red; font-weight: bold'>5</div> veces más!</div>";
+          html +=  "Hit 'space' <div id='click' style='display:inline; color: red; font-weight: bold'>5</div> more times!</div>";
 
 
       display_element.innerHTML = html; //
@@ -316,7 +296,7 @@ jsPsych.plugins['virtual-chin'] = (function() {
       }
 
       function end_trial(){
-        document.getElementsByClassName("jspsych-content-wrapper")[0].style.backgroundColor = 'gray'; //Background color
+        // document.getElementsByClassName("jspsych-content-wrapper")[0].style.backgroundColor = 'gray'; //Background color
         // trial_data.viewingDistance=   JSON.stringify(viewingDistance); // best practice for saving in jsPsych. It is a JSON instead of array.
         jsPsych.finishTrial(trial_data); // ends trial and save the data
         display_element.innerHTML = ' '; // clear the display
