@@ -216,8 +216,9 @@ jsPsych.plugins["image-button-response"] = (function() {
       jsPsych.pluginAPI.setTimeout(function() {
         end_trial();
       }, trial.trial_duration);
+    } else if (response_ends_trial === false) {
+      console.warn("The experiment may be stuck in a loop. Try setting a trial duration or set response_ends_trial to true.");
     }
-
   };
 
   return plugin;
