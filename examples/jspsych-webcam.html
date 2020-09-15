@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-webcam.js"></script>
+    <script src="../plugins/jspsych-html-button-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body></body>
+  <script>
+
+  let stream = null;
+  // start to enable webcam access
+  async function getMedia(constraints) {
+    try {
+      stream = await navigator.mediaDevices.getUserMedia(constraints);
+    } catch(err) {
+      console.log("The following error occurred: " + err.name);
+    }
+  }
+
+  var pre_trial = {
+    type: 'html-button-response',
+    stimulus: '<div style="max-width:600px;"><p>Browsers require that a user approves access to the webcam before use. Please accept this and then press the continue button.</p></div>',
+    choices: ['continue'],
+    on_start: getMedia({ video : { width: window.innerWidth,
+                                   height: window.innerHeight }})
+  }
+
+  var trial = {
+    type: 'webcam',
+    trial_duration: 2000,
+    flip_lr: true
+  }
+
+  jsPsych.init({
+    timeline: [pre_trial, trial],
+    on_finish: function() { jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>
