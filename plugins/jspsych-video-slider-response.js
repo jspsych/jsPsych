@@ -171,7 +171,7 @@ jsPsych.plugins["video-slider-response"] = (function() {
         }
         var type = file_name.substr(file_name.lastIndexOf('.') + 1);
         type = type.toLowerCase();
-        video_html+='<source src="' + file_name + '" type="video/'+type+'">';   
+        video_html+='<source src="' + file_name + '" type="video/'+type+'">';
       }
     }
     video_html += "</video>";
@@ -269,6 +269,7 @@ jsPsych.plugins["video-slider-response"] = (function() {
       var trial_data = {
         "rt": response.rt,
         "stimulus": trial.stimulus,
+        "start": trial.start,
         "response": response.response
       };
 
