@@ -34,6 +34,12 @@ jsPsych.plugins['survey-html-form'] = (function() {
         default:  'Continue',
         description: 'The text that appears on the button to finish the trial.'
       },
+      autofocus: {
+	type: jsPsych.plugins.parameterType.STRING,
+	pretty_name: 'Element ID to focus',
+	default: '',
+	description: 'The HTML element ID of a form field to autofocus on.'
+      },
       dataAsArray: {
         type: jsPsych.plugins.parameterType.BOOLEAN,
         pretty_name: 'Data As Array',
@@ -59,8 +65,12 @@ jsPsych.plugins['survey-html-form'] = (function() {
     // add submit button
     html += '<input type="submit" id="jspsych-survey-html-form-next" class="jspsych-btn jspsych-survey-html-form" value="'+trial.button_label+'"></input>';
 
-    html += '</form>'
+    html += '</form>';
     display_element.innerHTML = html;
+
+    if ( trial.autofocus !== '' ) {
+      display_element.querySelector('#'+trial.autofocus).focus();
+    }
 
     display_element.querySelector('#jspsych-survey-html-form').addEventListener('submit', function(event) {
       // don't submit form
