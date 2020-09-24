@@ -39,6 +39,12 @@ jsPsych.plugins['survey-html-form'] = (function() {
         pretty_name: 'Data As Array',
         default:  false,
         description: 'Retrieve the data as an array e.g. [{name: "INPUT_NAME", value: "INPUT_VALUE"}, ...] instead of an object e.g. {INPUT_NAME: INPUT_VALUE, ...}.'
+      },
+      autocomplete: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Allow autocomplete',
+        default: false,
+        description: "Setting this to true will enable browser auto-complete or auto-fill for the form."
       }
     }
   }
@@ -51,7 +57,11 @@ jsPsych.plugins['survey-html-form'] = (function() {
       html += '<div id="jspsych-survey-html-form-preamble" class="jspsych-survey-html-form-preamble">'+trial.preamble+'</div>';
     }
     // start form
-    html += '<form id="jspsych-survey-html-form">'
+    if ( trial.autocomplete ) {
+      html += '<form id="jspsych-survey-html-form">'
+    } else {
+      html += '<form id="jspsych-survey-html-form" autocomplete="off">'
+    }
 
     // add form HTML / input elements
     html += trial.html;

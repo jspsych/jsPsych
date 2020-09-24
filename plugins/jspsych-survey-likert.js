@@ -71,6 +71,12 @@ jsPsych.plugins['survey-likert'] = (function() {
         pretty_name: 'Button label',
         default:  'Continue',
         description: 'Label of the button.'
+      },
+      autocomplete: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Allow autocomplete',
+        default: false,
+        description: "Setting this to true will enable browser auto-complete or auto-fill for the form."
       }
     }
   }
@@ -99,7 +105,12 @@ jsPsych.plugins['survey-likert'] = (function() {
     if(trial.preamble !== null){
       html += '<div id="jspsych-survey-likert-preamble" class="jspsych-survey-likert-preamble">'+trial.preamble+'</div>';
     }
-    html += '<form id="jspsych-survey-likert-form">';
+
+    if ( trial.autocomplete ) {
+      html += '<form id="jspsych-survey-likert-form">';
+    } else {
+      html += '<form id="jspsych-survey-likert-form" autocomplete="off">';
+    }
 
     // add likert scale questions ///
     // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
