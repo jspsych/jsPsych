@@ -2,10 +2,6 @@
 
 This plugin is for showing instructions to the subject. It allows subjects to navigate through multiple pages of instructions at their own pace, recording how long the subject spends on each page. Navigation can be done using the mouse or keyboard. Subjects can be allowed to navigate forwards and backwards through pages, if desired.
 
-## Parameters
-
-Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
-
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 pages | array | *undefined* | Each element of the array is the content for a single page. Each page should be an HTML-formatted string.
@@ -16,7 +12,8 @@ allow_keys | boolean | true | If true, the subject can use keyboard keys to navi
 show_clickable_nav | boolean | false | If true, then a `Previous` and `Next` button will be displayed beneath the instructions. Subjects can click the buttons to navigate.
 button_label_previous | string | 'Previous' | The text that appears on the button to go backwards.
 button_label_next | string | 'Next' | The text that appears on the button to go forwards.
-
+show_page_number | boolean | false | If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons.
+page_label | string | 'Page' | The text that appears before x/y pages displayed with show_page_number.
 
 ## Data Generated
 
