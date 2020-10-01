@@ -2,6 +2,10 @@
 
 This plugin is for showing instructions to the subject. It allows subjects to navigate through multiple pages of instructions at their own pace, recording how long the subject spends on each page. Navigation can be done using the mouse or keyboard. Subjects can be allowed to navigate forwards and backwards through pages, if desired.
 
+## Parameters	
+
+Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 pages | array | *undefined* | Each element of the array is the content for a single page. Each page should be an HTML-formatted string.
