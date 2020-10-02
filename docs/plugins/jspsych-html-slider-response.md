@@ -31,6 +31,7 @@ Name | Type | Value
 response | numeric | The numeric value of the slider.
 rt | numeric | The time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.
 stimulus | string | The HTML content that was displayed on the screen.
+start | numeric | The numeric starting value of the slider.
 
 ## Examples
 
