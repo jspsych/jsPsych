@@ -13,6 +13,7 @@ preamble | string | empty string | HTML formatted string to display at the top o
 button_label | string |  'Continue' | The text that appears on the button to finish the trial.
 dataAsArray | boolean |  false | Retrieve the data as an array e.g. [{name: "INPUT_NAME", value: "INPUT_VALUE"}, ...] instead of an object e.g. {INPUT_NAME: INPUT_VALUE, ...}. This might be useful if you omit naming your inputs.
 autofocus | string | empty string | The HTML element ID of a form field to autofocus on. The focused element is the element that will receive keyboard events. For elements like `<input type="text">` or `<textbox>`, autofocus means that the cursor will appear in the text input area when the trial loads.
+autocomplete | boolean | false | This determines whether or not all of the input elements on the page should allow autocomplete. Setting this to true will enable autocomplete or auto-fill for the form.
 
 ## Data Generated
 
