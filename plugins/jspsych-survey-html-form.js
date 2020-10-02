@@ -35,10 +35,10 @@ jsPsych.plugins['survey-html-form'] = (function() {
         description: 'The text that appears on the button to finish the trial.'
       },
       autofocus: {
-	type: jsPsych.plugins.parameterType.STRING,
-	pretty_name: 'Element ID to focus',
-	default: '',
-	description: 'The HTML element ID of a form field to autofocus on.'
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Element ID to focus',
+        default: '',
+        description: 'The HTML element ID of a form field to autofocus on.'
       },
       dataAsArray: {
         type: jsPsych.plugins.parameterType.BOOLEAN,
@@ -83,9 +83,9 @@ jsPsych.plugins['survey-html-form'] = (function() {
       if ( focus_elements.length === 0 ) {
 	      console.warn('No element found with id: '+trial.autofocus);
       } else if ( focus_elements.length > 1 ) {
-	      console.warn('The id "'+trial.autofocus+'" is not unique so autofocus will not work.')
+	      console.warn('The id "'+trial.autofocus+'" is not unique so autofocus will not work.');
       } else {
-	      focus_elements[0].focus()
+	      focus_elements[0].focus();
       }
     }
 
