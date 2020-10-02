@@ -71,6 +71,12 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         pretty_name: 'Button label',
         default:  'Continue',
         description: 'Label of the button.'
+      },
+      autocomplete: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Allow autocomplete',
+        default: false,
+        description: "Setting this to true will enable browser auto-complete or auto-fill for the form."
       }
     }
   }
@@ -95,8 +101,11 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     }
 
     // form element
-    html += '<form id="jspsych-survey-multi-choice-form">';
-    
+    if ( trial.autocomplete ) {
+    	html += '<form id="jspsych-survey-multi-choice-form">';
+    } else {
+    	html += '<form id="jspsych-survey-multi-choice-form" autofocus="off">';
+    }
     // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
     // so that the data are always associated with the same question regardless of order
     var question_order = [];
