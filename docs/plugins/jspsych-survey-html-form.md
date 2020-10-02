@@ -38,7 +38,7 @@ var form_trial = {
 
 ### Example using the autofocus parameter
 
-In this example, the browswer will focus on the element with the ID `test-resp-box` when the trial loads. For `<input type="text">` elements, this means that the cursor will appear inside the text box.
+In this example, the browser will focus on the element with the ID `test-resp-box` when the trial loads. For `<input type="text">` elements, this means that the cursor will appear inside the text box.
 
 ```javascript
 var autofocus_trial = {
