@@ -16,7 +16,8 @@ allow_keys | boolean | true | If true, the subject can use keyboard keys to navi
 show_clickable_nav | boolean | false | If true, then a `Previous` and `Next` button will be displayed beneath the instructions. Subjects can click the buttons to navigate.
 button_label_previous | string | 'Previous' | The text that appears on the button to go backwards.
 button_label_next | string | 'Next' | The text that appears on the button to go forwards.
-
+show_page_number | boolean | false | If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons.
+page_label | string | 'Page' | The text that appears before x/y pages displayed when show_page_number is true.
 
 ## Data Generated
 
