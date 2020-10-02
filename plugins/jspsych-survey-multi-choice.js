@@ -104,7 +104,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     if ( trial.autocomplete ) {
     	html += '<form id="jspsych-survey-multi-choice-form">';
     } else {
-    	html += '<form id="jspsych-survey-multi-choice-form" autofocus="off">';
+    	html += '<form id="jspsych-survey-multi-choice-form" autocomplete="off">';
     }
     // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
     // so that the data are always associated with the same question regardless of order
