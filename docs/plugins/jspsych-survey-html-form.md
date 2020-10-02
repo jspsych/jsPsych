@@ -12,6 +12,7 @@ html | string | *undefined* | HTML formatted string containing all the input ele
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions.
 button_label | string |  'Continue' | The text that appears on the button to finish the trial.
 dataAsArray | boolean |  false | Retrieve the data as an array e.g. [{name: "INPUT_NAME", value: "INPUT_VALUE"}, ...] instead of an object e.g. {INPUT_NAME: INPUT_VALUE, ...}. This might be useful if you omit naming your inputs.
+autofocus | string | empty string | The HTML element ID of a form field to autofocus on. The focused element is the element that will receive keyboard events. For elements like `<input type="text">` or `<textbox>`, autofocus means that the cursor will appear in the text input area when the trial loads.
 
 ## Data Generated
 
@@ -31,5 +32,18 @@ var form_trial = {
   type: 'survey-html-form',
   preamble: '<p> How are you feeling <b>right now?</b> </p>',
   html: '<p> I am feeling <input name="first" type="text" />, <input name="second" type="text" />, and <input name="third" type="text" />.</p>'
+};
+```
+
+### Example using the autofocus parameter
+
+In this example, the browswer will focus on the element with the ID `test-resp-box` when the trial loads. For `<input type="text">` elements, this means that the cursor will appear inside the text box.
+
+```javascript
+var autofocus_trial = {
+  type: 'survey-html-form',
+  preamble: '<p> What is your favorite bird?</p>',
+  html: '<p>My favorite bird is <input type="text" id="test-resp-box" name="response" size="10" /></p>',
+  autofocus: 'test-resp-box'
 };
 ```
