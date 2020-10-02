@@ -69,7 +69,14 @@ jsPsych.plugins['survey-html-form'] = (function() {
     display_element.innerHTML = html;
 
     if ( trial.autofocus !== '' ) {
-      display_element.querySelector('#'+trial.autofocus).focus();
+      var focus_elements = display_element.querySelectorAll('#'+trial.autofocus);
+      if ( focus_elements.length === 0 ) {
+	      console.warn('No element found with id: '+trial.autofocus);
+      } else if ( focus_elements.length > 1 ) {
+	      console.warn('The id "'+trial.autofocus+'" is not unique so autofocus will not work.')
+      } else {
+	      focus_elements[0].focus()
+      }
     }
 
     display_element.querySelector('#jspsych-survey-html-form').addEventListener('submit', function(event) {
