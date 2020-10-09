@@ -135,7 +135,7 @@ jsPsych.plugins['html-slider-response'] = (function() {
       rt: null,
       response: null
     };
-    
+
     if(trial.require_movement){
       display_element.querySelector('#jspsych-html-slider-response-response').addEventListener('change', function(){
         display_element.querySelector('#jspsych-html-slider-response-next').disabled = false;
@@ -163,8 +163,9 @@ jsPsych.plugins['html-slider-response'] = (function() {
       // save data
       var trialdata = {
         "rt": response.rt,
-        "response": response.response,
-        "stimulus": trial.stimulus
+        "stimulus": trial.stimulus,
+        "start": trial.start,
+        "response": response.response
       };
 
       display_element.innerHTML = '';

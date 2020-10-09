@@ -146,7 +146,7 @@ jsPsych.plugins["video-slider-response"] = (function() {
   plugin.trial = function(display_element, trial) {
 
     // setup stimulus
-    var video_html = '<video id="jspsych-video-slider-response-stimulus"';
+    var video_html = '<video id="jspsych-video-slider-response-stimulus-video"';
 
     if(trial.width) {
       video_html += ' width="'+trial.width+'"';
@@ -171,7 +171,7 @@ jsPsych.plugins["video-slider-response"] = (function() {
         }
         var type = file_name.substr(file_name.lastIndexOf('.') + 1);
         type = type.toLowerCase();
-        video_html+='<source src="' + file_name + '" type="video/'+type+'">';   
+        video_html+='<source src="' + file_name + '" type="video/'+type+'">';
       }
     }
     video_html += "</video>";
@@ -183,7 +183,7 @@ jsPsych.plugins["video-slider-response"] = (function() {
       html += 'width:'+trial.slider_width+'px;';
     }
     html += '">';
-    html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-video-slider-response-response"></input>';
+    html += '<input type="range" value="'+trial.slider_start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-video-slider-response-response"></input>';
     html += '<div>'
     for(var j=0; j < trial.labels.length; j++){
       var width = 100/(trial.labels.length-1);
@@ -206,30 +206,32 @@ jsPsych.plugins["video-slider-response"] = (function() {
 
     display_element.innerHTML = html;
 
+    var video_element = display_element.querySelector('#jspsych-video-slider-response-stimulus-video');
+
     if(video_preload_blob){
-      display_element.querySelector('#jspsych-video-slider-response-stimulus').src = video_preload_blob;
+      video_element.src = video_preload_blob;
     }
 
-    display_element.querySelector('#jspsych-video-slider-response-stimulus').onended = function(){
+    video_element.onended = function(){
       if(trial.trial_ends_after_video){
         end_trial();
       }
     }
 
     if(trial.start !== null){
-      display_element.querySelector('#jspsych-video-slider-response-stimulus').currentTime = trial.start;
+      video_element.currentTime = trial.start;
     }
 
     if(trial.stop !== null){
-      display_element.querySelector('#jspsych-video-slider-response-stimulus').addEventListener('timeupdate', function(e){
-        var currenttime = display_element.querySelector('#jspsych-video-slider-response-stimulus').currentTime;
+      video_element.addEventListener('timeupdate', function(e){
+        var currenttime = video_element.currentTime;
         if(currenttime >= trial.stop){
-          display_element.querySelector('#jspsych-video-slider-response-stimulus').pause();
+          video_element.pause();
         }
       })
     }
 
-    display_element.querySelector('#jspsych-video-slider-response-stimulus').playbackRate = trial.rate;
+    video_element.playbackRate = trial.rate;
 
     if(trial.require_movement){
       display_element.querySelector('#jspsych-video-slider-response-response').addEventListener('change', function(){
@@ -269,6 +271,7 @@ jsPsych.plugins["video-slider-response"] = (function() {
       var trial_data = {
         "rt": response.rt,
         "stimulus": trial.stimulus,
+        "start": trial.start,
         "response": response.response
       };
 
