@@ -146,7 +146,7 @@ jsPsych.plugins['html-slider-response'] = (function() {
       // measure response time
       var endTime = performance.now();
       response.rt = endTime - startTime;
-      response.response = display_element.querySelector('#jspsych-html-slider-response-response').value;
+      response.response = display_element.querySelector('#jspsych-html-slider-response-response').valueAsNumber;
 
       if(trial.response_ends_trial){
         end_trial();

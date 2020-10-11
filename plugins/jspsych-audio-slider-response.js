@@ -156,7 +156,7 @@ jsPsych.plugins['audio-slider-response'] = (function() {
 				rt = Math.round((endTime - startTime) * 1000);
 			}
       response.rt = rt;
-      response.response = display_element.querySelector('#jspsych-audio-slider-response-response').value;
+      response.response = display_element.querySelector('#jspsych-audio-slider-response-response').valueAsNumber;
 
       if(trial.response_ends_trial){
         end_trial();
