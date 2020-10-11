@@ -17,7 +17,7 @@ delay_after | numeric | 1000 | The length of time to delay after entering fullsc
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------

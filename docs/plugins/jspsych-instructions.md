@@ -20,7 +20,7 @@ show_page_number | boolean | false | If true, and clickable navigation is enable
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------

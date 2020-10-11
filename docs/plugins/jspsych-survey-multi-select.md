@@ -16,7 +16,7 @@ required_message | string | 'You must choose at least one response for this ques
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
