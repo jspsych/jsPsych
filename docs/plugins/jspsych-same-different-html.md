@@ -30,7 +30,7 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
 correct | boolean | `true` if the subject's response matched the `answer` for this trial.
 answer | string | The correct answer to the trial, either `'same'` or `'different'`.
 
-Additionally, if `timing_first_stim` is  null, then the following data is also collected:
+Additionally, if `first_stim_duration` is  null, then the following data is also collected:
 
 Name | Type | Value
 -----|------|------
