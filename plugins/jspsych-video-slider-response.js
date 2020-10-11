@@ -272,6 +272,7 @@ jsPsych.plugins["video-slider-response"] = (function() {
         "rt": response.rt,
         "stimulus": trial.stimulus,
         "start": trial.start,
+        "slider_start": trial.slider_start,
         "response": response.response
       };
 

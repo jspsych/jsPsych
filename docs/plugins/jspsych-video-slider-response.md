@@ -38,6 +38,8 @@ Name | Type | Value
 response | numeric | The numeric value of the slider.
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.
 stimulus | string | JSON encoding of the `sources` array.
+slider_start | numeric | The starting value of the slider.
+start | numeric | The start time of the video clip.
 
 ## Example
 
