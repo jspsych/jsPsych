@@ -2335,7 +2335,7 @@ jsPsych.pluginAPI = (function() {
         if(n_loaded == files.length){
           finishfn();
         }
-        this.removeEventListener('canplaythrough', handleCanPlayThrough);
+        audio.removeEventListener('canplaythrough', handleCanPlayThrough);
       });
       audio.addEventListener('onerror', function(){
         if(count < jsPsych.initSettings().max_preload_attempts){
