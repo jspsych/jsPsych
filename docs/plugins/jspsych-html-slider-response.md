@@ -13,7 +13,7 @@ labels | array of strings | [] | Labels displayed at equidistant locations on th
 button_label | string | 'Continue' | Label of the button to end the trial.
 min | integer | 0 | Sets the minimum value of the slider.
 max | integer | 100 | Sets the maximum value of the slider.
-start | integer | 50 | Sets the starting value of the slider
+slider_start | integer | 50 | Sets the starting value of the slider
 step | integer | 1 | Sets the step of the slider. This is the smallest amount by which the slider can change.
 slider_width | integer | null | Set the width of the slider in pixels. If left null, then the width will be equal to the widest element in the display.
 require_movement | boolean | false | If true, the subject must move the slider before clicking the continue button.
@@ -24,13 +24,14 @@ response_ends_trial | boolean | true | If true, then the trial will end whenever
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
 response | numeric | The numeric value of the slider.
 rt | numeric | The time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.
 stimulus | string | The HTML content that was displayed on the screen.
+slider_start | numeric | The starting value of the slider.
 
 ## Examples
 

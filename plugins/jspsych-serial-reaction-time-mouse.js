@@ -105,7 +105,7 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
 
 		//show prompt if there is one
     if (trial.prompt !== null) {
-      display_element.innerHTML += trial.prompt;
+      display_element.insertAdjacentHTML('beforeend', trial.prompt);
     }
 
 		function showTarget(){

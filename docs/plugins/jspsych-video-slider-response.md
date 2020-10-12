@@ -31,13 +31,15 @@ response_ends_trial | boolean | true | If true, then the trial will end whenever
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
 response | numeric | The numeric value of the slider.
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.
 stimulus | string | JSON encoding of the `sources` array.
+slider_start | numeric | The starting value of the slider.
+start | numeric | The start time of the video clip.
 
 ## Example
 

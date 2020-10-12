@@ -28,7 +28,7 @@ response_ends_trial | boolean | true | If true, then the trial will end whenever
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
@@ -40,7 +40,7 @@ stimulus | string | JSON encoding of the `sources` array.
 
 ```javascript
 var trial = {
-	type: 'video-keyboard-response',
+	type: 'video-button-response',
 	sources: [
 		'video/sample_video.mp4',
 		'video/sample_video.ogg'

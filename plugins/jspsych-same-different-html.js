@@ -27,7 +27,7 @@ jsPsych.plugins['same-different-html'] = (function() {
         type: jsPsych.plugins.parameterType.SELECT,
         pretty_name: 'Answer',
         options: ['same', 'different'],
-        default: 75,
+        default: undefined,
         description: 'Either "same" or "different".'
       },
       same_key: {
@@ -46,7 +46,7 @@ jsPsych.plugins['same-different-html'] = (function() {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'First stimulus duration',
         default: 1000,
-        description: 'How long to show the first stimulus for in milliseconds.'
+        description: 'How long to show the first stimulus for in milliseconds. If null, then the stimulus will remain on the screen until any keypress is made.'
       },
       gap_duration: {
         type: jsPsych.plugins.parameterType.INT,
@@ -58,7 +58,7 @@ jsPsych.plugins['same-different-html'] = (function() {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Second stimulus duration',
         default: 1000,
-        description: 'How long to show the second stimulus for in milliseconds.'
+        description: 'How long to show the second stimulus for in milliseconds. If null, then the stimulus will remain on the screen until any keypress is made.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,

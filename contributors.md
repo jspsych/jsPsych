@@ -1,9 +1,11 @@
 The following people have contributed to the development of jsPsych by writing code, documentation, and/or suggesting improvements (in alphabetical order):
 * Xiaolu Bai - https://github.com/lbai001
+* Christian Brickhouse - https://github.com/chrisbrickhouse
 * Jason Carpenter
 * Steve Chao - https://github.com/stchao
 * Krisitn Diep - https://github.com/kristiyip
 * Becky Gilbert - https://github.com/becky-gilbert
+* Gustavo Juantorena - https://github.com/GEJ1
 * Jana Klaus - https://github.com/janakl4us
 * Jonas Lambers
 * Shane Martin - https://github.com/shamrt
