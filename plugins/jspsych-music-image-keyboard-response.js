@@ -96,6 +96,7 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
 
 
     // set up the vtarg grid
+    var vtargtimeOuts = []; //hold timer ids
     var svgns = "http://www.w3.org/2000/svg";
     var svg = document.createElementNS(svgns, "svg");
     var width = 800;
@@ -128,6 +129,10 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
     function toggle_fill(){
       //(context.currentTime>startTime+context.duration)
       if(context.state !== "running"){
+        for (var i = 0; i < vtargtimeOuts.length; i++) {
+            clearTimeout(vtargtimeOuts[i]);
+            vtargtimeOuts = [];
+        }
         return;
       }
       var rect_id = 'rect-'+Math.floor(Math.random() * numLocations);
@@ -147,18 +152,28 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
           rect.setAttribute('fill',randomElement);
           rect.setAttribute('opacity',1);
         }
-        setTimeout(function(){
+        vtargtimeOuts.push(setTimeout(function(){
             rect.setAttribute('fill',fillval);
             rect.setAttribute('opacity',0);
-        },flash_duration)
+        },flash_duration))
       } 
-      setTimeout(toggle_fill,flash_duration+(500*Math.ceil(Math.random() * 10)));
+      vtargtimeOuts.push(setTimeout(toggle_fill,flash_duration+(500*Math.ceil(Math.random() * 10))));
+      
     }
 
     // function to end trial when it is time
     function end_trial() {
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
+
+      // kill the vtarg events
+      /* should happen after source.stop()
+      for (var i = 0; i < vtargtimeOuts.length; i++) {
+            clearTimeout(vtargtimeOuts[i]);
+            vtargtimeOuts = [];
+            rect.setAttribute('opacity',0);
+        }
+      */
 
       // stop the audio file if it is playing
       // remove end event listeners if they exist
@@ -169,9 +184,6 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
         audio.pause();
         audio.removeEventListener('ended', end_trial);
       }
-
-      // kill keyboard listeners
-      jsPsych.pluginAPI.cancelAllKeyboardResponses(keyboardListener); // BK added this too
 
       // gather the data to store for the trial
       if(context !== null && response.rt !== null){
@@ -208,8 +220,7 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
         context.resume(); 
         startTime = context.currentTime;
         source.start(startTime);
-        display_element.innerHTML = svg.outerHTML;
-        setTimeout(toggle_fill,3000);
+        
       } else {
         audio.play();
       }
@@ -242,6 +253,9 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
           end_trial();
         }, trial.trial_duration);
       }
+
+      display_element.innerHTML = svg.outerHTML;
+      vtargtimeOuts.push(setTimeout(toggle_fill,3000));
     }
 
     // Either start the trial or wait for the user to click start
