@@ -2337,7 +2337,7 @@ jsPsych.pluginAPI = (function() {
         }
         this.removeEventListener('canplaythrough', handleCanPlayThrough);
       });
-      audio.addEventListener('onerror', function(){
+      audio.addEventListener('error', function(){
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
             load_audio_file_html5audio(source, count+1)
@@ -2346,7 +2346,7 @@ jsPsych.pluginAPI = (function() {
           jsPsych.loadFail();
         }
       });
-      audio.addEventListener('onstalled', function(){
+      audio.addEventListener('stalled', function(){
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
             load_audio_file_html5audio(source, count+1)
@@ -2355,7 +2355,7 @@ jsPsych.pluginAPI = (function() {
           jsPsych.loadFail();
         }
       });
-      audio.addEventListener('onabort', function(){
+      audio.addEventListener('abort', function(){
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
             load_audio_file_html5audio(source, count+1)
