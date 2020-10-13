@@ -2328,14 +2328,13 @@ jsPsych.pluginAPI = (function() {
     function load_audio_file_html5audio(source, count){
       count = count || 1;
       var audio = new Audio();
-      audio.addEventListener('canplaythrough', function handleCanPlayThrough(){
+      audio.addEventListener('canplaythrough', function(){
         audio_buffers[source] = audio;
         n_loaded++;
         loadfn(n_loaded);
         if(n_loaded == files.length){
           finishfn();
         }
-        this.removeEventListener('canplaythrough', handleCanPlayThrough);
       });
       audio.addEventListener('error', function(){
         if(count < jsPsych.initSettings().max_preload_attempts){
