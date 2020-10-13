@@ -89,6 +89,14 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
     }
 
     // store response
+    //var vtargresponses = []
+    var trial_data = {
+        "rt": [],
+        "stimulus": [],
+        "key_press": [],
+        "tt": [],
+        "color": []
+      };
     var response = {
       rt: null,
       key: null
@@ -97,6 +105,8 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
 
     // set up the vtarg grid
     var vtargtimeOuts = []; //hold timer ids
+    var vtargonsetTimes = {"tt": [],
+                            "color": []}; //hold onsets of targets
     var svgns = "http://www.w3.org/2000/svg";
     var svg = document.createElementNS(svgns, "svg");
     var width = 800;
@@ -143,16 +153,20 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
 
       if(fillval == 'black'){
         if(trialChoice < targetProb*100){
+          var ctype = 'red';
           rect.setAttribute('fill','red');
           rect.setAttribute('opacity',1);
         }
         else {
           //rand choose another color
           randomElement = distractColors[Math.floor(Math.random() * distractColors.length)];
+          var ctype = randomElement;
           rect.setAttribute('fill',randomElement);
           rect.setAttribute('opacity',1);
         }
         vtargtimeOuts.push(setTimeout(function(){
+            vtargonsetTimes.tt.push(context.currentTime);
+            vtargonsetTimes.color.push(ctype);
             rect.setAttribute('fill',fillval);
             rect.setAttribute('opacity',0);
         },flash_duration))
@@ -185,6 +199,7 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
         audio.removeEventListener('ended', end_trial);
       }
 
+      /*
       // gather the data to store for the trial
       if(context !== null && response.rt !== null){
         response.rt = Math.round(response.rt * 1000);
@@ -194,6 +209,10 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
         "stimulus": trial.stimulus,
         "key_press": response.key
       };
+      */
+      //add info for vtargets
+      trial_data.tt = vtargonsetTimes.tt
+      trial_data.color = vtargonsetTimes.color
 
       // clear the display
       display_element.innerHTML = '';
@@ -204,10 +223,30 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
 
     // function to handle responses by the subject
     var after_response = function(info) {
+
+      response = info;
+      
+
+      trial_data.rt.push(Math.round(response.rt * 1000));
+      trial_data.stimulus.push(trial.stimulus);
+      trial_data.key_press.push(response.key);
+
+      /*
+      var trial_data = {
+        "rt": Math.round(response.rt * 1000);,
+        "stimulus": trial.stimulus,
+        "key_press": response.key
+      };
+      */
+
+      //vtargresponses.push(trial_data); this worked though
+
+      /*
       // only record the first response
       if (response.key == null) {
         response = info;
       }
+      */
 
       if (trial.response_ends_trial) {
         end_trial();
@@ -230,7 +269,7 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
         var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
           callback_function: after_response,
           valid_responses: trial.choices,
-          rt_method: 'audio',
+          rt_method: 'performance',
           // what's the right way to do this?
           persist: true,// BK changed to true. should have this grab a parameter though
           allow_held_key: false,
