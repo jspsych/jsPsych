@@ -330,7 +330,7 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       }
 
       display_element.innerHTML = svg.outerHTML;
-      jsPsych.pluginAPI.setTimeout(toggle_fill,3000);
+      jsPsych.pluginAPI.setTimeout(toggle_fill,300);
     }
 
     // Either start the trial or wait for the user to click start
