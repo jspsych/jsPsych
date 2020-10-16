@@ -134,6 +134,12 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
         default: 1000,
         description: 'Number to multiply time values by (1000 = ms).'
       },
+      first_trial: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'First trial in sequence',
+        default: false,
+        description: 'If True, calc runtime based on start of first audio stim.'
+      },
     }
   }
 
@@ -166,6 +172,8 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       }
     }
 
+    var keep_first_time = false; 
+    var end_time = 0;
     // store response
     var run_events = []
     var trial_data = {
@@ -223,34 +231,41 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       // pic rand num to detemrine the color
       var trialChoice = Math.floor(Math.random() * 100); //rand int from 0 to 99
 
-      if(fillval == 'black'){//
-        if(trialChoice < trial.targetProb*100){
-          var ctype = trial.targetColor;
-          rect.setAttribute('fill',trial.targetColor);
-          rect.setAttribute('opacity',1);
-          trial_data.type = 'target';
-        }
-        else {
-          //rand choose another color
-          randomElement = trial.distractColors[Math.floor(Math.random() * trial.distractColors.length)];
-          var ctype = randomElement;
-          rect.setAttribute('fill',randomElement);
-          rect.setAttribute('opacity',1);
-          trial_data.type = 'distractor';
-        }
-        trial_data.time = Math.round(context.currentTime * trial.timeConvert);
-        trial_data.color = ctype;
-         //push target event
-        run_events.push(trial_data);
-        jsPsych.pluginAPI.setTimeout(function(){
+      if(Math.round(context.currentTime*trial.timeConvert)+trial.flash_duration+nextISIS < Math.round(startTime*trial.timeConvert)+(trial.trial_duration)){
 
-          rect.setAttribute('fill',fillval);
-          rect.setAttribute('opacity',0);
+        if(fillval == 'black'){
 
-        },trial.flash_duration);
-        
-      } 
-      jsPsych.pluginAPI.setTimeout(toggle_fill,nextISIS)
+          if(trialChoice < trial.targetProb*100){
+            var ctype = trial.targetColor;
+            rect.setAttribute('fill',trial.targetColor);
+            rect.setAttribute('opacity',1);
+            trial_data.type = 'target';
+          }
+          else {
+            //rand choose another color
+            randomElement = trial.distractColors[Math.floor(Math.random() * trial.distractColors.length)];
+            var ctype = randomElement;
+            rect.setAttribute('fill',randomElement);
+            rect.setAttribute('opacity',1);
+            trial_data.type = 'distractor';
+          }
+
+          trial_data.time = Math.round(context.currentTime * trial.timeConvert);
+          trial_data.color = ctype;
+           //push target event
+          run_events.push(trial_data);
+          jsPsych.pluginAPI.setTimeout(function(){
+            rect.setAttribute('fill',fillval);
+            rect.setAttribute('opacity',0);
+          },trial.flash_duration);
+          
+        } 
+        jsPsych.pluginAPI.setTimeout(toggle_fill,nextISIS);
+
+      } else {
+        //bought to end, make sure square is turned off
+        rect.setAttribute('opacity',0);
+      }
     }
 
     // function to end trial when it is time
@@ -307,6 +322,14 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       if(context !== null){
         context.resume(); 
         startTime = context.currentTime;
+        if(trial.first_trial){
+          // log the start of the run
+          runStartTime = startTime
+          keep_first_time = true
+        } else if(!keep_first_time) {
+          //update it
+          runStartTime = startTime
+        }
         source.start(startTime);
         
       } else {
@@ -335,11 +358,13 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       }
 
       // end trial if time limit is set
-      if (trial.trial_duration !== null) {
+      if(trial.trial_duration !== null) {
         jsPsych.pluginAPI.setTimeout(function() {
           end_trial();
         }, trial.trial_duration);
       }
+
+
 
       display_element.innerHTML = svg.outerHTML;
       jsPsych.pluginAPI.setTimeout(toggle_fill,trial.vtarg_start_delay);
