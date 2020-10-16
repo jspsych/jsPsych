@@ -122,6 +122,18 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
         default: ['purple','yellow','blue','black'],
         description: 'Color of target squares (to respond to).'
       },
+      vtarg_start_delay: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Detection onset delay',
+        default: 300,
+        description: 'Amount of time between music onset and the start of vtarg presentations.'
+      },
+      timeConvert: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Event and Response time conversion',
+        default: 1000,
+        description: 'Number to multiply time values by (1000 = ms).'
+      },
     }
   }
 
@@ -226,7 +238,7 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
           rect.setAttribute('opacity',1);
           trial_data.type = 'distractor';
         }
-        trial_data.time = Math.round(context.currentTime * 1000);
+        trial_data.time = Math.round(context.currentTime * trial.timeConvert);
         trial_data.color = ctype;
          //push target event
         run_events.push(trial_data);
@@ -270,7 +282,7 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
 
       //append this info to current trial_data
       response_data.stimulus = trial.stimulus.replace(/^.*[\\\/]/, '');
-      response_data.time = Math.round(response.rt * 1000);
+      response_data.time = Math.round(response.rt * trial.timeConvert);
       response_data.key_press = response.key;
       response_data.type = 'response';
       response_data.color = null;
@@ -330,7 +342,7 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       }
 
       display_element.innerHTML = svg.outerHTML;
-      jsPsych.pluginAPI.setTimeout(toggle_fill,300);
+      jsPsych.pluginAPI.setTimeout(toggle_fill,trial.vtarg_start_delay);
     }
 
     // Either start the trial or wait for the user to click start
