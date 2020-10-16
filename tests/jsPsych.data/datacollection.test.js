@@ -70,7 +70,7 @@ describe('DataCollection', function(){
     expect(jsPsych.data.get().first().count()).toBe(1);
     expect(jsPsych.data.get().first(-1)).toThrow();
     expect(jsPsych.data.get().first(0)).toThrow();
-    expect(jsPsych.data.get().filter({foo: bar}).first(1).count()).toBe(0);
+    expect(jsPsych.data.get().filter({foo: "bar"}).first(1).count()).toBe(0);
     var n = jsPsych.data.get().count();
     var too_many = n+1;
     expect(jsPsych.data.get().first(too_many).count()).toBe(n);
@@ -81,7 +81,7 @@ describe('DataCollection', function(){
     expect(jsPsych.data.get().last().count()).toBe(1);
     expect(jsPsych.data.get().last(-1)).toThrow();
     expect(jsPsych.data.get().last(0)).toThrow();
-    expect(jsPsych.data.get().filter({foo: bar}).last(1).count()).toBe(0);
+    expect(jsPsych.data.get().filter({foo: "bar"}).last(1).count()).toBe(0);
     var n = jsPsych.data.get().count();
     var too_many = n+1;
     expect(jsPsych.data.get().last(too_many).count()).toBe(n);
