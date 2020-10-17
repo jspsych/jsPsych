@@ -153,6 +153,8 @@ describe('image-button-response', function(){
 	});
 
 	test('should show console warning when trial duration is null and response ends trial is false', function() {
+		const spy = jest.spyOn(console, 'warn').mockImplementation();
+		
 		var trial = {
 			type: 'image-button-response',
 			stimulus: '../media/blue.png',
@@ -166,8 +168,7 @@ describe('image-button-response', function(){
 			auto_preload: false
 		});
 
-		spy = jest.spyOn(console, 'warn').mockImplementation();
-		expect(console.warn).toHaveBeenCalledWith("The experiment may be stuck in a loop. Try setting a trial duration or set response_ends_trial to true.");
+		expect(spy).toHaveBeenCalled();
 		spy.mockRestore();
 	});
 });
