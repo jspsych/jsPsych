@@ -123,4 +123,24 @@ describe('image-keyboard-response', function(){
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});
+
+	
+	test('should show console warning when trial duration is null and response ends trial is false', function() {
+		var trial = {
+			type: 'image-keyboard-response',
+			stimulus: '../media/blue.png',
+			choices: ['f','j'],
+			response_ends_trial: false,
+			trial_duration: null
+		};
+
+		jsPsych.init({
+			timeline: [trial],
+			auto_preload: false
+		});
+
+		spy = jest.spyOn(console, 'warn').mockImplementation();
+		expect(console.warn).toHaveBeenCalledWith("The experiment may be stuck in a loop. Try setting a trial duration or set response_ends_trial to true.");
+		spy.mockRestore();
+	});
 });
