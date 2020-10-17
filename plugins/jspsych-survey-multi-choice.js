@@ -69,6 +69,12 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         pretty_name: 'Button label',
         default:  'Continue',
         description: 'Label of the button.'
+      },
+      autocomplete: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Allow autocomplete',
+        default: false,
+        description: "Setting this to true will enable browser auto-complete or auto-fill for the form."
       }
     }
   }
@@ -97,6 +103,13 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     var preamble_id_name = _join(plugin_id_name, 'preamble');
     if(trial.preamble !== null){
       trial_form.innerHTML += '<div id="'+preamble_id_name+'" class="'+preamble_id_name+'">'+trial.preamble+'</div>';
+    }
+
+    // form element
+    if ( trial.autocomplete ) {
+    	html += '<form id="jspsych-survey-multi-choice-form">';
+    } else {
+    	html += '<form id="jspsych-survey-multi-choice-form" autocomplete="off">';
     }
     // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
     // so that the data are always associated with the same question regardless of order
@@ -129,7 +142,12 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         var option_id_name = _join(plugin_id_name, "option", question_id, j);
 
         // add radio button container
-        display_element.querySelector(question_selector).innerHTML += '<div id="'+option_id_name+'" class="'+_join(plugin_id_name, 'option')+'"></div>';
+        html += '<div id="'+option_id_name+'" class="jspsych-survey-multi-choice-option">';
+        html += '<label class="jspsych-survey-multi-choice-text" for="'+input_id+'">';
+        html += '<input type="radio" name="'+input_name+'" id="'+input_id+'" value="'+question.options[j]+'" '+required_attr+'></input>';
+        html += question.options[j]+'</label>';
+        html += '</div>';
+      }
 
         // add label and question text
         var form = document.getElementById(option_id_name)

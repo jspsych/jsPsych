@@ -15,6 +15,15 @@ prompt | string | `''` | HTML content to display below the resizable box, and ab
 button_label | string | 'Continue' | Label to display on the button to complete calibration.
 starting_size | numeric | 100 | The initial size of the box, in pixels, along the largest dimension. The aspect ratio will be set automatically to match the item width and height.
 
+## Data Generated
+
+In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
+
+Name | Type | Value
+-----|------|------
+final_width_px | numeric | Final width of the resizable div container, in pixels.
+scale_factor | numeric | Scaling factor that will be applied to the div containing jsPsych content.
+
 ## Examples
 
 #### Measuring a credit card and resizing the display to have 150 pixels equal an inch.

@@ -21,7 +21,7 @@ prompt | string | null | This string can contain HTML markup. Any content here w
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
@@ -43,7 +43,7 @@ var trial = {
 #### 2x2 grid with extra space in the middle
 ```javascript
 var trial = {
-  type: 'serial-reaction-time',
+  type: 'serial-reaction-time-mouse',
   grid: [[1,0,1],[0,0,0],[1,0,1]],
   target: [0,2]
 }

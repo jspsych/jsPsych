@@ -35,7 +35,7 @@ jsPsych.plugins['html-slider-response'] = (function() {
         default: 100,
         description: 'Sets the maximum value of the slider',
       },
-      start: {
+      slider_start: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Slider starting value',
         default: 50,
@@ -109,7 +109,7 @@ jsPsych.plugins['html-slider-response'] = (function() {
       html += 'width:'+trial.slider_width+'px;';
     }
     html += '">';
-    html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-html-slider-response-response"></input>';
+    html += '<input type="range" value="'+trial.slider_start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-html-slider-response-response"></input>';
     html += '<div>'
     for(var j=0; j < trial.labels.length; j++){
       var width = 100/(trial.labels.length-1);
@@ -146,7 +146,7 @@ jsPsych.plugins['html-slider-response'] = (function() {
       // measure response time
       var endTime = performance.now();
       response.rt = endTime - startTime;
-      response.response = display_element.querySelector('#jspsych-html-slider-response-response').value;
+      response.response = display_element.querySelector('#jspsych-html-slider-response-response').valueAsNumber;
 
       if(trial.response_ends_trial){
         end_trial();
@@ -164,7 +164,7 @@ jsPsych.plugins['html-slider-response'] = (function() {
       var trialdata = {
         "rt": response.rt,
         "stimulus": trial.stimulus,
-        "start": trial.start,
+        "slider_start": trial.slider_start,
         "response": response.response
       };
 

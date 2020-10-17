@@ -48,7 +48,7 @@ jsPsych.plugins['cloze'] = (function () {
         var elements = trial.text.split('%');
         var solutions = [];
 
-        for (i=0; i<elements.length; i++)
+        for (var i=0; i<elements.length; i++)
         {
             if (i%2 === 0)
             {
@@ -69,7 +69,7 @@ jsPsych.plugins['cloze'] = (function () {
             var answers = [];
             var answers_correct = true;
 
-            for (i=0; i<solutions.length; i++)
+            for (var i=0; i<solutions.length; i++)
             {
                 var field = document.getElementById('input'+i);
                 answers.push(field.value.trim());

@@ -371,7 +371,11 @@ jsPsych.plugins["rdk"] = (function() {
 
 		//Remove the margins and padding of the canvas
 		canvas.style.margin = 0;
-		canvas.style.padding = 0;		
+		canvas.style.padding = 0;
+		// use absolute positioning in top left corner to get rid of scroll bars
+		canvas.style.position = 'absolute';
+		canvas.style.top = 0;
+		canvas.style.left = 0;		
 		
 		//Get the context of the canvas so that it can be painted on.
 		var ctx = canvas.getContext("2d");

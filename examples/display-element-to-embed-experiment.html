@@ -6,7 +6,7 @@
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-image-keyboard-response.js"></script>
   <script src="../plugins/jspsych-html-keyboard-response.js"></script>
-  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <link rel="stylesheet" href="../css/jspsych.css">
   <style>
     p { line-height: 1.5em; font-size: 18px; }
     img {
@@ -42,14 +42,14 @@
     type: 'image-keyboard-response',
     stimulus: 'img/happy_face_2.jpg',
     choices: [89, 78], // Y or N
-    timing_response: 5000,
+    trial_duration: 5000,
     prompt: '<p>Have you seen this face before? Y or N. (5s time limit).</p>'
   }
 
   var trial_3 = {
     type: 'html-keyboard-response',
     choices: jsPsych.NO_KEYS, // Y or N
-    timing_response: 5000,
+    trial_duration: 5000,
     prompt: '<p>No response allowed. 5s wait.</p>',
     stimulus: '<p>:)</p>',
     is_html: true

@@ -12,15 +12,15 @@ stimuli | array | *undefined* | A pair of stimuli, represented as an array with 
 answer | string | *undefined* | Either `'same'` or `'different'`.
 same_key | numeric or string | 'Q' | The key that subjects should press to indicate that the two stimuli are the same.
 different_key | numeric or string | 'P' | The key that subjects should press to indicate that the two stimuli are different.
-timing_first_stim | numeric | 1000 | How long to show the first stimulus for in milliseconds. If the value of this parameter is null then the stimulus will be shown until the subject presses any key.
-timing_gap | numeric | 500 | How long to show a blank screen in between the two stimuli.
-timing_second_stim | numeric | 1000 | How long to show the second stimulus for in milliseconds. If the value of this parameter is null then the stimulus will be shown until the subject responds.
+first_stim_duration | numeric | 1000 | How long to show the first stimulus for in milliseconds. If the value of this parameter is null then the stimulus will be shown until the subject presses any key.
+gap_duration | numeric | 500 | How long to show a blank screen in between the two stimuli.
+second_stim_duration | numeric | 1000 | How long to show the second stimulus for in milliseconds. If the value of this parameter is null then the stimulus will be shown until the subject responds.
 prompt | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
 
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
@@ -30,7 +30,7 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
 correct | boolean | `true` if the subject's response matched the `answer` for this trial.
 answer | string | The correct answer to the trial, either `'same'` or `'different'`.
 
-Additionally, if `timing_first_stim` is  null, then the following data is also collected:
+Additionally, if `first_stim_duration` is  null, then the following data is also collected:
 
 Name | Type | Value
 -----|------|------
