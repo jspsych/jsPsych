@@ -1,22 +1,22 @@
 /**
- * jspsych-music-flash-squares-keyboard-reponse
- * Benjamin Kubit 01Oct2020
+ * jspsych-music-bleep-tones-keyboard-reponse
+ * Benjamin Kubit 16Oct2020
  *
- * plugin for visual target detection task with flashing squares while auditory stim is playing in the background
+ * plugin for auditory target detection task with tone bleeps while auditory stim is playing in the background
  *
  * 
  *
  **/
 
 
-jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
+jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('music-flash-squares-keyboard-reponse', 'stimulus', 'audio');
+  jsPsych.pluginAPI.registerPreload('music-bleep-tones-keyboard-reponse', 'stimulus', 'audio');
 
   plugin.info = {
-    name: 'music-flash-squares-keyboard-reponse',
+    name: 'music-bleep-tones-keyboard-reponse',
     description: '',
     parameters: {
       stimulus: {
@@ -56,29 +56,17 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
         default: false,
         description: 'If true, then the trial will end as soon as the audio file finishes playing.'
       },
-      vtarg_grid_width: {
+      bleep_duration: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Vtarg grid width',
-        default: 800,
-        description: 'Total width of target grid.'
-      },
-      vtarg_grid_height: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Vtarg grid height',
-        default: 800,
-        description: 'Total height of target grid.'
-      },
-      vtarg_height: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Size of vtargs',
-        default: 40,
-        description: 'Height (and width) of square vtargs.'
-      },
-      flash_duration: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Flash duration',
+        pretty_name: 'Bleep duration',
         default: 1000,
         description: 'ms target appears for.'
+      },
+      bleep_frequency: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Bleep frequency',
+        default: 700,
+        description: 'Hz of beep.'
       },
       maxISI: {
         type: jsPsych.plugins.parameterType.INT,
@@ -92,37 +80,13 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
         default: 100,
         description: 'min ms between target presentations.'
       },
-      numColsLocations: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'N vtargs in a row',
-        default: 4,
-        description: 'Number of possible target locations in a row.'
-      },
-      numRowsLocations: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'N vtargs in a column',
-        default: 4,
-        description: 'Number of possible target locations in a column.'
-      },
       targetProb: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Vtarg probability',
+        pretty_name: 'Atarg probability',
         default: .1,
         description: 'Probability of square with target color appearing.'
       },
-      targetColor: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Vtarg color',
-        default: 'red',
-        description: 'Color of target squares (to respond to).'
-      },
-      distractColors: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Distractor color',
-        default: ['purple','yellow','blue','black'],
-        description: 'Color of target squares (to respond to).'
-      },
-      vtarg_start_delay: {
+      atarg_start_delay: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Detection onset delay',
         default: 300,
@@ -145,6 +109,7 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       var source = context.createBufferSource();
       source.buffer = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
       source.connect(context.destination);
+
     } else {
       var audio = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
       audio.currentTime = 0;
@@ -168,21 +133,21 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
 
     var end_time = 0;
     // store response
-    var run_events = []
+    var run_events = [];
     var trial_data = {
         time: null,
         type: null,
         stimulus: null,
         key_press: null,
-        color: null,
-      };
+        Hz: null
+    };
     var response_data = {
         time: null,
         type: null,
         stimulus: null,
         key_press: null,
-        color: null,
-      };
+        Hz: null
+    };
 
     var response = {
       rt: null,
@@ -190,74 +155,61 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
     };
 
     // set up the vtarg grid
+    // NOTE, seems to be required to feed into display_element.innerHTML
     var svgns = "http://www.w3.org/2000/svg";
     var svg = document.createElementNS(svgns, "svg");
-    $(svg).attr({"width": trial.vtarg_grid_width, "height": trial.vtarg_grid_height});
-    $("#svgdiv").append(svg);
-    var numLocations = trial.numColsLocations*trial.numRowsLocations;
-    var currLocation = 0;
 
-    for (l=0;l<trial.numRowsLocations;l++){
-      var xoffset= trial.vtarg_grid_width/trial.numRowsLocations*l+trial.vtarg_grid_width/trial.numRowsLocations*.5-trial.vtarg_height/2;
-      for (h=0;h<trial.numColsLocations;h++){
-        var square = document.createElementNS(svgns,'rect');
-        var yoffset= trial.vtarg_grid_height/trial.numColsLocations*h+trial.vtarg_grid_height/trial.numColsLocations*.5-trial.vtarg_height/2;
-        $(square).attr({'id':'rect-'+currLocation,'width':trial.vtarg_height,'height':trial.vtarg_height,'x':xoffset,'y':yoffset,'fill':'black','stroke-width':1,'opacity':0});
-        $(svg).append(square);
-        currLocation++;
-      }
-    }
+
+    // set up the vtarg grid
+    //maybe add fixation cross...
 
     // funciton that controls the presentation of visual stims
-    function toggle_fill(){
+    function play_targ(){
       trial_data = {
         time: null,
         type: null,
         stimulus: trial.stimulus.replace(/^.*[\\\/]/, ''),
         key_press: null,
-        color: null,
+        Hz: trial.bleep_frequency,
       };
-      var nextISIS = trial.flash_duration+(Math.floor(Math.random() * (Math.floor(trial.maxISI) - Math.ceil(trial.minISI) + 1)) + Math.ceil(trial.minISI))
-      var rect_id = 'rect-'+Math.floor(Math.random() * numLocations);
-      var rect = document.getElementById(rect_id);
-      var fillval = rect.getAttribute('fill');
-      // pic rand num to detemrine the color
+      var nextISIS = trial.bleep_duration+(Math.floor(Math.random() * (Math.floor(trial.maxISI) - Math.ceil(trial.minISI) + 1)) + Math.ceil(trial.minISI));
       var trialChoice = Math.floor(Math.random() * 100); //rand int from 0 to 99
 
-      if(Math.round(context.currentTime*trial.timeConvert)+trial.flash_duration+nextISIS < Math.round(startTime*trial.timeConvert)+(trial.trial_duration)){
+      if(Math.round(context.currentTime*trial.timeConvert)+trial.bleep_duration+nextISIS < Math.round(startTime*trial.timeConvert)+(trial.trial_duration)){
 
-        if(fillval == 'black'){
+        if(trialChoice < trial.targetProb*100){
+          // set up the distractor sound 
+          var osc = context.createOscillator(); // instantiate an oscillator
+          var vol = context.createGain();
+          osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
+          osc.frequency.value = trial.bleep_frequency; // Hz
+          
+          vol.gain.value = 0.1; // from 0 to 1, 1 full volume, 0 is muted
+          osc.connect(vol); // connect osc to vol
 
-          if(trialChoice < trial.targetProb*100){
-            var ctype = trial.targetColor;
-            rect.setAttribute('fill',trial.targetColor);
-            rect.setAttribute('opacity',1);
-            trial_data.type = 'target';
-          }
-          else {
-            //rand choose another color
-            randomElement = trial.distractColors[Math.floor(Math.random() * trial.distractColors.length)];
-            var ctype = randomElement;
-            rect.setAttribute('fill',randomElement);
-            rect.setAttribute('opacity',1);
-            trial_data.type = 'distractor';
-          }
+          vol.connect(context.destination);
+          osc.start();
 
+          trial_data.type = 'target';
           trial_data.time = Math.round(context.currentTime * trial.timeConvert);
-          trial_data.color = ctype;
            //push target event
           run_events.push(trial_data);
           jsPsych.pluginAPI.setTimeout(function(){
-            rect.setAttribute('fill',fillval);
-            rect.setAttribute('opacity',0);
-          },trial.flash_duration);
-          
-        } 
-        jsPsych.pluginAPI.setTimeout(toggle_fill,nextISIS);
+            osc.stop();
+          },trial.bleep_duration);
+        }
 
+        jsPsych.pluginAPI.setTimeout(play_targ,nextISIS);
+        
       } else {
         //bought to end, make sure square is turned off
-        rect.setAttribute('opacity',0);
+        trial_data = {
+          time: null,
+          type: null,
+          stimulus: trial.stimulus.replace(/^.*[\\\/]/, ''),
+          key_press: null,
+          Hz: trial.bleep_frequency,
+        };
       }
     }
 
@@ -293,7 +245,7 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       response_data.time = Math.round(response.rt * trial.timeConvert);
       response_data.key_press = response.key;
       response_data.type = 'response';
-      response_data.color = null;
+      response_data.Hz = null;
      
       run_events.push(response_data);
 
@@ -302,7 +254,7 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
         type: null,
         stimulus: null,
         key_press: null,
-        color: null,
+        Hz: null
       };
 
       if (trial.response_ends_trial) {
@@ -346,14 +298,12 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       if(trial.trial_duration !== null) {
         jsPsych.pluginAPI.setTimeout(function() {
           end_trial();
-        }, trial.trial_duration);
+        }, trial.trial_duration); 
       }
 
-
-
       display_element.innerHTML = svg.outerHTML;
-      jsPsych.pluginAPI.setTimeout(toggle_fill,trial.vtarg_start_delay);
-    }
+      jsPsych.pluginAPI.setTimeout(play_targ,trial.atarg_start_delay);
+    };
 
     // Either start the trial or wait for the user to click start
     if(!trial.click_to_start || context==null){
