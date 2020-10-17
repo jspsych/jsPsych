@@ -68,8 +68,12 @@ describe('DataCollection', function(){
     expect(jsPsych.data.get().first(3).count()).toBe(3);
     expect(jsPsych.data.get().first(2).values()[1].rt).toBe(200);
     expect(jsPsych.data.get().first().count()).toBe(1);
-    expect(jsPsych.data.get().first(-1)).toThrow();
-    expect(jsPsych.data.get().first(0)).toThrow();
+    expect(() => {
+      jsPsych.data.get().first(-1)
+    }).toThrow();
+    expect(() => {
+      jsPsych.data.get().first(0)
+    }).toThrow();
     expect(jsPsych.data.get().filter({foo: "bar"}).first(1).count()).toBe(0);
     var n = jsPsych.data.get().count();
     var too_many = n+1;
@@ -79,8 +83,12 @@ describe('DataCollection', function(){
     expect(jsPsych.data.get().last(2).count(2)).toBe(2);
     expect(jsPsych.data.get().last(2).values()[0].rt).toBe(400);
     expect(jsPsych.data.get().last().count()).toBe(1);
-    expect(jsPsych.data.get().last(-1)).toThrow();
-    expect(jsPsych.data.get().last(0)).toThrow();
+    expect(() => {
+      jsPsych.data.get().last(-1)
+    }).toThrow();
+    expect(() => {
+      jsPsych.data.get().last(0)
+    }).toThrow();
     expect(jsPsych.data.get().filter({foo: "bar"}).last(1).count()).toBe(0);
     var n = jsPsych.data.get().count();
     var too_many = n+1;
