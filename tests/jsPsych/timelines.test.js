@@ -365,7 +365,7 @@ describe('nested timelines', function() {
     };
 
     jsPsych.init({
-      timeline: trials
+      timeline: [trials]
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
