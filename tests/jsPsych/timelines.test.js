@@ -347,3 +347,34 @@ describe('endCurrentTimeline', function(){
     utils.pressKey(32);
   })
 });
+
+describe('nested timelines', function() {
+  test('works without other parameters', function() {
+    var t1 = {
+      type: 'html-keyboard-response',
+      stimulus: 'foo'
+    };
+
+    var t2 = {
+      type: 'html-keyboard-response',
+      stimulus: 'bar'
+    };
+
+    var trials = {
+      timeline: [t1, t2]
+    };
+
+    jsPsych.init({
+      timeline: trials
+    });
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+
+    utils.pressKey(32);
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
+
+    utils.pressKey(32);
+
+  })
+})
