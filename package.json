@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jodeleeuw/jsPsych.git"
+    "url": "git+https://github.com/jspsych/jsPsych.git"
   },
   "author": "Josh de Leeuw",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jodeleeuw/jsPsych/issues"
+    "url": "https://github.com/jspsych/jsPsych/issues"
   },
-  "homepage": "https://github.com/jodeleeuw/jsPsych#readme",
+  "homepage": "https://github.com/jspsych/jsPsych#readme",
   "devDependencies": {
     "jest": "^24.8"
   },
