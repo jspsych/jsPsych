@@ -309,7 +309,7 @@ window.jsPsych = (function() {
 
   core.addNodeToEndOfTimeline = function(new_timeline, preload_callback){
     timeline.insert(new_timeline);
-    if(typeof preload_callback !== 'undefined'){
+    if(typeof preload_callback !== 'undefinded'){
       if(opts.auto_preload){
         jsPsych.pluginAPI.autoPreload(timeline, preload_callback);
       } else {
@@ -1129,48 +1129,22 @@ jsPsych.data = (function() {
       }
     }
 
-    /**
-     * Queries the first n elements in a collection of trials.
-     *
-     * @param {number} n A positive integer of elements to return. A value of
-     *                   n that is less than 1 will throw an error.
-     *
-     * @return {Array} First n objects of a collection of trials. If fewer than
-     *                 n trials are available, the trials.length elements will
-     *                 be returned.
-     *
-     */
     data_collection.first = function(n){
-      if (typeof n == 'undefined') { n = 1 }
-      if (n < 1) {
-        throw `You must query with a positive nonzero integer. Please use a 
-               different value for n.`;
+      if(typeof n=='undefined'){ n = 1 }
+      var out = [];
+      for(var i=0; i<n; i++){
+        out.push(trials[i]);
       }
-      if (trials.length == 0) return DataCollection([]);
-      if (n > trials.length) n = trials.length;
-      return DataCollection(trials.slice(0, n));
+      return DataCollection(out);
     }
 
-    /**
-     * Queries the last n elements in a collection of trials.
-     *
-     * @param {number} n A positive integer of elements to return. A value of
-     *                   n that is less than 1 will throw an error.
-     *
-     * @return {Array} Last n objects of a collection of trials. If fewer than
-     *                 n trials are available, the trials.length elements will
-     *                 be returned.
-     *
-     */
-    data_collection.last = function(n) {
-      if (typeof n == 'undefined') { n = 1 }
-      if (n < 1) {
-        throw `You must query with a positive nonzero integer. Please use a 
-               different value for n.`;
+    data_collection.last = function(n){
+      if(typeof n=='undefined'){ n = 1 }
+      var out = [];
+      for(var i=trials.length-n; i<trials.length; i++){
+        out.push(trials[i]);
       }
-      if (trials.length == 0) return DataCollection([]);
-      if (n > trials.length) n = trials.length;
-      return DataCollection(trials.slice(trials.length - n, trials.length));
+      return DataCollection(out);
     }
 
     data_collection.values = function(){
@@ -2363,7 +2337,7 @@ jsPsych.pluginAPI = (function() {
         }
         audio.removeEventListener('canplaythrough', handleCanPlayThrough);
       });
-      audio.addEventListener('error', function handleError(){
+      audio.addEventListener('onerror', function(){
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
             load_audio_file_html5audio(source, count+1)
@@ -2371,9 +2345,8 @@ jsPsych.pluginAPI = (function() {
         } else {
           jsPsych.loadFail();
         }
-        audio.removeEventListener('error', handleError);
       });
-      audio.addEventListener('stalled', function handleStalled(){
+      audio.addEventListener('onstalled', function(){
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
             load_audio_file_html5audio(source, count+1)
@@ -2381,9 +2354,8 @@ jsPsych.pluginAPI = (function() {
         } else {
           jsPsych.loadFail();
         }
-        audio.removeEventListener('stalled', handleStalled);
       });
-      audio.addEventListener('abort', function handleAbort(){
+      audio.addEventListener('onabort', function(){
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
             load_audio_file_html5audio(source, count+1)
@@ -2391,7 +2363,6 @@ jsPsych.pluginAPI = (function() {
         } else {
           jsPsych.loadFail();
         }
-        audio.removeEventListener('abort', handleAbort);
       });
       audio.src = source;
     }

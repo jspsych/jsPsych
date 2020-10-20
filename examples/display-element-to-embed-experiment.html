@@ -42,14 +42,14 @@
     type: 'image-keyboard-response',
     stimulus: 'img/happy_face_2.jpg',
     choices: [89, 78], // Y or N
-    trial_duration: 5000,
+    timing_response: 5000,
     prompt: '<p>Have you seen this face before? Y or N. (5s time limit).</p>'
   }
 
   var trial_3 = {
     type: 'html-keyboard-response',
     choices: jsPsych.NO_KEYS, // Y or N
-    trial_duration: 5000,
+    timing_response: 5000,
     prompt: '<p>No response allowed. 5s wait.</p>',
     stimulus: '<p>:)</p>',
     is_html: true
