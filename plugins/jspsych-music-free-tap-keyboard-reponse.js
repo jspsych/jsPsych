@@ -56,6 +56,30 @@ jsPsych.plugins["music-free-tap-keyboard-reponse"] = (function() {
         default: false,
         description: 'If true, then the trial will end as soon as the audio file finishes playing.'
       },
+      add_fixation: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Add Fixation cross',
+        default: true,
+        description: 'If true, displays fixation cross'
+      },
+      fix_height: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Dimensions of fixation cross',
+        default: 40,
+        description: 'Hieght and width of fixation cross.'
+      },
+      vtarg_grid_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Vtarg grid width',
+        default: 800,
+        description: 'Total width of target grid.'
+      },
+      vtarg_grid_height: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Vtarg grid height',
+        default: 800,
+        description: 'Total height of target grid.'
+      },
       timeConvert: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Event and Response time conversion',
@@ -117,7 +141,17 @@ jsPsych.plugins["music-free-tap-keyboard-reponse"] = (function() {
     // NOTE, seems to be required to feed into display_element.innerHTML
     var svgns = "http://www.w3.org/2000/svg";
     var svg = document.createElementNS(svgns, "svg");
+    $(svg).attr({"width": trial.vtarg_grid_width, "height": trial.vtarg_grid_height});
+    $("#svgdiv").append(svg);
 
+
+    if(trial.add_fixation==true){
+      var dpathval = 'M'+(trial.vtarg_grid_width/2)+','+(trial.vtarg_grid_height/2-(trial.fix_height/2))+' V'+(trial.vtarg_grid_height/2+trial.fix_height/2)+' M'+(trial.vtarg_grid_height/2-(trial.fix_height/2))+','+(trial.vtarg_grid_height/2)+' H'+(trial.vtarg_grid_height/2+trial.fix_height/2);
+      //dpathval = 'M'+(400)+','+(400-20)+' V'+(400-20+40)+' M'+(400-20)+','+(400)+' H'+(400-20+40)
+      var fixp = document.createElementNS(svgns,'path');
+      $(fixp).attr({'id':'fixation','d':dpathval,'stroke':'gray','fill':'gray','stroke-width':3,'opacity':1});
+      $(svg).append(fixp);
+    }
 
     // function to end trial when it is time
     function end_trial() {

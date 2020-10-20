@@ -56,10 +56,34 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
         default: false,
         description: 'If true, then the trial will end as soon as the audio file finishes playing.'
       },
+      add_fixation: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Add Fixation cross',
+        default: true,
+        description: 'If true, displays fixation cross'
+      },
+      fix_height: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Dimensions of fixation cross',
+        default: 40,
+        description: 'Hieght and width of fixation cross.'
+      },
+      vtarg_grid_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Vtarg grid width',
+        default: 800,
+        description: 'Total width of target grid.'
+      },
+      vtarg_grid_height: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Vtarg grid height',
+        default: 800,
+        description: 'Total height of target grid.'
+      },
       bleep_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Bleep duration',
-        default: 1000,
+        default: 500,
         description: 'ms target appears for.'
       },
       bleep_frequency: {
@@ -68,22 +92,16 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
         default: 700,
         description: 'Hz of beep.'
       },
-      maxISI: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Longest possible ISI',
-        default: 2000,
-        description: 'Max ms between target presentations.'
-      },
       minISI: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Shortest possible ISI',
-        default: 100,
+        default: 5000,
         description: 'min ms between target presentations.'
       },
       targetProb: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Atarg probability',
-        default: .1,
+        default: .05,
         description: 'Probability of square with target color appearing.'
       },
       atarg_start_delay: {
@@ -158,10 +176,17 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
     // NOTE, seems to be required to feed into display_element.innerHTML
     var svgns = "http://www.w3.org/2000/svg";
     var svg = document.createElementNS(svgns, "svg");
+    $(svg).attr({"width": trial.vtarg_grid_width, "height": trial.vtarg_grid_height});
+    $("#svgdiv").append(svg);
 
 
-    // set up the vtarg grid
-    //maybe add fixation cross...
+    if(trial.add_fixation==true){
+      var dpathval = 'M'+(trial.vtarg_grid_width/2)+','+(trial.vtarg_grid_height/2-(trial.fix_height/2))+' V'+(trial.vtarg_grid_height/2+trial.fix_height/2)+' M'+(trial.vtarg_grid_height/2-(trial.fix_height/2))+','+(trial.vtarg_grid_height/2)+' H'+(trial.vtarg_grid_height/2+trial.fix_height/2);
+      //dpathval = 'M'+(400)+','+(400-20)+' V'+(400-20+40)+' M'+(400-20)+','+(400)+' H'+(400-20+40)
+      var fixp = document.createElementNS(svgns,'path');
+      $(fixp).attr({'id':'fixation','d':dpathval,'stroke':'gray','fill':'gray','stroke-width':3,'opacity':1});
+      $(svg).append(fixp);
+    }
 
     // funciton that controls the presentation of visual stims
     function play_targ(){
@@ -172,7 +197,8 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
         key_press: null,
         Hz: trial.bleep_frequency,
       };
-      var nextISIS = trial.bleep_duration+(Math.floor(Math.random() * (Math.floor(trial.maxISI) - Math.ceil(trial.minISI) + 1)) + Math.ceil(trial.minISI));
+      var nextISIS = trial.minISI
+      //var nextISIS = trial.bleep_duration+(Math.floor(Math.random() * (Math.floor(trial.maxISI) - Math.ceil(trial.minISI) + 1)) + Math.ceil(trial.minISI));
       var trialChoice = Math.floor(Math.random() * 100); //rand int from 0 to 99
 
       if(Math.round(context.currentTime*trial.timeConvert)+trial.bleep_duration+nextISIS < Math.round(startTime*trial.timeConvert)+(trial.trial_duration)){

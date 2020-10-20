@@ -56,6 +56,18 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
         default: false,
         description: 'If true, then the trial will end as soon as the audio file finishes playing.'
       },
+      add_fixation: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Add Fixation cross',
+        default: true,
+        description: 'If true, displays fixation cross'
+      },
+      fix_height: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Dimensions of fixation cross',
+        default: 40,
+        description: 'Hieght and width of fixation cross.'
+      },
       vtarg_grid_width: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Vtarg grid width',
@@ -77,19 +89,19 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       flash_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Flash duration',
-        default: 1000,
+        default: 500,
         description: 'ms target appears for.'
       },
       maxISI: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Longest possible ISI',
-        default: 2000,
+        default: 500,
         description: 'Max ms between target presentations.'
       },
       minISI: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Shortest possible ISI',
-        default: 100,
+        default: 250,
         description: 'min ms between target presentations.'
       },
       numColsLocations: {
@@ -107,7 +119,7 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       targetProb: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Vtarg probability',
-        default: .1,
+        default: .05,
         description: 'Probability of square with target color appearing.'
       },
       targetColor: {
@@ -196,6 +208,16 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
     $("#svgdiv").append(svg);
     var numLocations = trial.numColsLocations*trial.numRowsLocations;
     var currLocation = 0;
+
+
+    if(trial.add_fixation==true){
+      var dpathval = 'M'+(trial.vtarg_grid_width/2)+','+(trial.vtarg_grid_height/2-(trial.fix_height/2))+' V'+(trial.vtarg_grid_height/2+trial.fix_height/2)+' M'+(trial.vtarg_grid_height/2-(trial.fix_height/2))+','+(trial.vtarg_grid_height/2)+' H'+(trial.vtarg_grid_height/2+trial.fix_height/2);
+      //dpathval = 'M'+(400)+','+(400-20)+' V'+(400-20+40)+' M'+(400-20)+','+(400)+' H'+(400-20+40)
+      var fixp = document.createElementNS(svgns,'path');
+      $(fixp).attr({'id':'fixation','d':dpathval,'stroke':'gray','fill':'gray','stroke-width':3,'opacity':1});
+      $(svg).append(fixp);
+    }
+    
 
     for (l=0;l<trial.numRowsLocations;l++){
       var xoffset= trial.vtarg_grid_width/trial.numRowsLocations*l+trial.vtarg_grid_width/trial.numRowsLocations*.5-trial.vtarg_height/2;
