@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/jspsych/jsPsych#readme",
   "devDependencies": {
-    "jest": "^24.8"
+    "jest": "^26.6"
   },
   "jest": {
     "resetModules": true,
