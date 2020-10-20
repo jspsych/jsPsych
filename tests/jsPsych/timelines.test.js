@@ -347,3 +347,96 @@ describe('endCurrentTimeline', function(){
     utils.pressKey(32);
   })
 });
+
+
+describe('nested timelines', function() {
+  test('works without other parameters', function() {
+    var t1 = {
+      type: 'html-keyboard-response',
+      stimulus: 'foo'
+    };
+
+    var t2 = {
+      type: 'html-keyboard-response',
+      stimulus: 'bar'
+    };
+    
+    var trials = {
+      timeline: [t1, t2]
+    };
+
+    jsPsych.init({
+      timeline: [trials]
+    });
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+
+    utils.pressKey(32);
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
+
+    utils.pressKey(32);
+
+  })
+})
+
+describe('add node to end of timeline', function(){
+
+  test('adds node to end of timeline, without callback', function() {
+    var new_trial = {
+       type: 'html-keyboard-response',
+       stimulus: 'bar'
+    };
+
+    var new_timeline = {
+      timeline: [new_trial]
+    };
+
+    var timeline = [
+      {
+        type: 'html-keyboard-response',
+        stimulus: 'foo',
+        on_start: function() {
+          jsPsych.addNodeToEndOfTimeline(new_timeline);
+        }
+      }
+    ];
+
+    jsPsych.init({
+      timeline: timeline
+    });
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
+    utils.pressKey(32);
+  });
+
+  test('adds node to end of timeline, with callback', function() {
+    var t = {
+      type: 'html-keyboard-response',
+      stimulus: 'foo',
+      on_finish: function(){
+        jsPsych.pauseExperiment();
+        jsPsych.addNodeToEndOfTimeline({
+          timeline: [{
+            type: 'html-keyboard-response',
+            stimulus: 'bar'
+          }]
+        }, jsPsych.resumeExperiment)
+      }
+    };
+
+    jsPsych.init({
+      timeline: [t]
+    });
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
+    utils.pressKey(32);
+
+  });
+
+});
+
