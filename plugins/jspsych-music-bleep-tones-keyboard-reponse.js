@@ -101,8 +101,8 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
       targetProb: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Atarg probability',
-        default: .05,
-        description: 'Probability of square with target color appearing.'
+        default: .2,
+        description: 'Probability of tone playing.'
       },
       atarg_start_delay: {
         type: jsPsych.plugins.parameterType.INT,

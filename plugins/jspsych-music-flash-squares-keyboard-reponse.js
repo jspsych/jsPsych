@@ -119,7 +119,7 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       targetProb: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Vtarg probability',
-        default: .05,
+        default: .2,
         description: 'Probability of square with target color appearing.'
       },
       targetColor: {
