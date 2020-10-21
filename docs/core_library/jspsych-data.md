@@ -381,7 +381,7 @@ var too_long = jsPsych.data.get().filterCustom(function(trial){
 
 #### .first() / .last()
 
-Returns a DataCollection containing the first/last *n* trials.
+Returns a DataCollection containing the first/last *n* trials. If *n* is greater than the number of trials in the DataCollection, then these functions will return an array of length equal to the number of trials. If there are no trials in the DataCollection, then these functions will return an empty array. If the *n* argument is omitted, then the functions will use the default value of 1. If *n* is zero or a negative number, then these functions will throw an error.
 
 ```js
 var first_trial = jsPsych.data.get().first(1);

@@ -129,7 +129,7 @@ jsPsych.plugins["html-button-response"] = (function() {
       // measure rt
       var end_time = performance.now();
       var rt = end_time - start_time;
-      response.button = choice;
+      response.button = parseInt(choice);
       response.rt = rt;
 
       // after a valid response, the stimulus will have the CSS class 'responded'
