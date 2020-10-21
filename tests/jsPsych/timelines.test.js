@@ -110,6 +110,62 @@ describe('loop function', function(){
 
   });
 
+  test('timeline variables from nested timelines are available in loop function', function(){
+
+    var counter = 0;
+
+    var trial2 = {
+      type: 'html-keyboard-response',
+      stimulus: jsPsych.timelineVariable('word')
+    }
+
+    var innertimeline = {
+      timeline: [{
+        type: 'html-keyboard-response',
+        stimulus: 'foo'
+      }],
+      loop_function: function(){
+        if(jsPsych.timelineVariable('word', true) == 'b' && counter < 2){
+          counter++;
+          return true;
+        } else {
+          counter = 0;
+          return false;
+        }
+      }
+    }
+
+    var outertimeline = {
+      timeline: [trial2, innertimeline],
+      timeline_variables: [
+        {word: 'a'},
+        {word: 'b'},
+        {word: 'c'}
+      ]
+    }
+
+    jsPsych.init({
+      timeline: [outertimeline]
+    });
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('a');
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('b');
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('c');
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+    utils.pressKey(32);
+  });
+
 });
 
 describe('conditional function', function(){
