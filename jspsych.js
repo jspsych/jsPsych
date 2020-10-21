@@ -57,6 +57,10 @@ window.jsPsych = (function() {
       console.error('No timeline declared in jsPsych.init. Cannot start experiment.')
     }
 
+    if(options.timeline.length == 0){
+      console.error('No trials have been added to the timeline (the timeline is an empty array). Cannot start experiment.')
+    }
+
     // reset variables
     timeline = null;
     global_trial_index = 0;
