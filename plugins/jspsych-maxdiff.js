@@ -1,5 +1,7 @@
 /**
  * jspsych-maxdiff
+ * Angus Hughes
+ * 
  * a jspsych plugin for maxdiff/conjoint analysis designs
  *
  */
@@ -55,6 +57,7 @@ jsPsych.plugins['maxdiff'] = (function () {
 
     plugin.trial = function (display_element, trial) {
 
+        // Set some trial parameters
         const most_least = ["most", "least"]
         var enable_submit = trial.required == true ? 'disabled = "disabled"' : '';
 
@@ -74,8 +77,8 @@ jsPsych.plugins['maxdiff'] = (function () {
         html += '<form id="jspsych-maxdiff-form">';
 
         // add maxdiff options ///
-        // generate alternative order. this is randomized here as opposed to randomizing the order of alternatives
-        // so that the data are always associated with the same alternative regardless of order
+        // first generate alternative order, randomized here as opposed to randomizing the order of alternatives
+        // so that the data are always associated with the same alternative regardless of order.
         var alternative_order = [];
         for (var i = 0; i < trial.alternatives.length; i++) {
             alternative_order.push(i);
@@ -91,9 +94,9 @@ jsPsych.plugins['maxdiff'] = (function () {
         for (var i = 0; i < trial.alternatives.length; i++) {
             var alternative = trial.alternatives[alternative_order[i]];
             // add alternative
-            maxdiff_table += '<tr><td><input class= "jspsych-maxdiff-obj-' + i.toString() + '" type="radio" name="most" data-name = ' + alternative_order[i].toString() + ' /><br></td>';
+            maxdiff_table += '<tr><td><input class= "jspsych-maxdiff-alt-' + i.toString() + '" type="radio" name="most" data-name = ' + alternative_order[i].toString() + ' /><br></td>';
             maxdiff_table += '<td>' + alternative + '</td>';
-            maxdiff_table += '<td><input class= "jspsych-maxdiff-obj-' + i.toString() + '" type="radio" name="least" data-name = ' + alternative_order[i].toString() + ' /><br></td></tr>';
+            maxdiff_table += '<td><input class= "jspsych-maxdiff-alt-' + i.toString() + '" type="radio" name="least" data-name = ' + alternative_order[i].toString() + ' /><br></td></tr>';
         }
         maxdiff_table += '</table><br><br>';
         html += maxdiff_table;
@@ -105,16 +108,15 @@ jsPsych.plugins['maxdiff'] = (function () {
         display_element.innerHTML = html;
 
         // function to control responses
-        // first checks that the same alternative cannot be endorsed as 'most' and 'least' simultaneously
+        // first checks that the same alternative cannot be endorsed as 'most' and 'least' simultaneously.
         // then enables the submit button if the trial is required.
         most_least.forEach(function(p) {
             // Get all elements either 'most' or 'least'
-            document.getElementsByName(p).forEach(function(obj) {
-                obj.addEventListener('click', function() {
-                    // Find the opposite (if most, then least & vice versa)
-                    var op = obj.name == 'most' ? 'least' : 'most';
-                    // Get the opposite button identified by the class (one, two, etc)
-                    var n = document.getElementsByClassName(obj.className).namedItem(op);
+            document.getElementsByName(p).forEach(function(alt) {
+                alt.addEventListener('click', function() {
+                    // Find the opposite (if most, then least & vice versa) identified by the class (jspsych-maxdiff-alt-1, 2, etc)
+                    var op = alt.name == 'most' ? 'least' : 'most';
+                    var n = document.getElementsByClassName(alt.className).namedItem(op);
                     // If it's checked, uncheck it.
                     if (n.checked) {
                         n.checked = false;
@@ -122,11 +124,9 @@ jsPsych.plugins['maxdiff'] = (function () {
 
                     // check response
                     if (trial.required){
-                        // Now check if both most and least have been enabled
+                        // Now check if one of both most and least have been enabled to allow submission
                         var most_checked = [...document.getElementsByName('most')].some(c => c.checked);
                         var least_checked = [...document.getElementsByName('least')].some(c => c.checked);
-
-                        // If at least one of both have been clicked, allow submission
                         if (most_checked && least_checked) {
                             document.getElementById("jspsych-maxdiff-next").disabled = false;
                         } else {
@@ -145,10 +145,11 @@ jsPsych.plugins['maxdiff'] = (function () {
             var endTime = performance.now();
             var response_time = endTime - startTime;
 
+            // get the alternative number by the data-name attribute
             var most = parseInt(display_element.querySelectorAll('[name="most"]:checked')[0].getAttribute('data-name'));
             var least = parseInt(display_element.querySelectorAll('[name="least"]:checked')[0].getAttribute('data-name'));
 
-            // data saving
+        // data saving
         var trial_data = {
             "rt": response_time,
             "most": trial.alternatives[most],
