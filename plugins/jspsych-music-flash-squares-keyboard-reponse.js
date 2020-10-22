@@ -59,7 +59,7 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       add_fixation: {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Add Fixation cross',
-        default: true,
+        default: false,
         description: 'If true, displays fixation cross'
       },
       fix_height: {
@@ -116,11 +116,23 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
         default: 4,
         description: 'Number of possible target locations in a column.'
       },
-      targetProb: {
+      maxNtargsPerTrial: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Vtarg probability',
-        default: .2,
-        description: 'Probability of square with target color appearing.'
+        pretty_name: 'Max N vtargs',
+        default: 2,
+        description: 'Max number of target color squares per trial.'
+      },
+      minNtargsPerTrial: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Min N vtargs',
+        default: 1,
+        description: 'Min number of target color squares per trial.'
+      },
+      min_time_btw_targs: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Min ms between targets',
+        default: 4000,
+        description: 'Min ms between targets.'
       },
       targetColor: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -230,6 +242,37 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       }
     }
 
+    //pic the num and time of targets we'll be presenting
+    var ntargets = (Math.floor(Math.random() * (Math.floor(trial.maxNtargsPerTrial) - Math.ceil(trial.minNtargsPerTrial) + 1)) + Math.ceil(trial.minNtargsPerTrial));
+    var targtimes = [];
+    for(it=0;it<ntargets;it++){
+      var tooclose = true;
+      //set the time window when they will be presented
+      while(tooclose) {
+        var targstarttime = (Math.floor(Math.random() * (Math.floor(trial.trial_duration-trial.maxISI-trial.flash_duration) - Math.ceil(trial.vtarg_start_delay) + 1)) + Math.ceil(trial.vtarg_start_delay));
+        if(it>0){
+          //grab time diffs. 
+          var ntestclose = 0;
+          for(iot=0;iot<targtimes.length;iot++){
+            if(Math.abs(targstarttime-targtimes[iot])<trial.min_time_btw_targs){
+              ntestclose = ntestclose + 1;
+            }
+          }
+          if(ntestclose==0){
+            //done with this targ
+            tooclose = false;
+          }
+        } else {
+          //only 1 targ
+          tooclose = false
+        }
+      }
+      targtimes.push(targstarttime);
+    }
+    targtimes.sort(function(a, b){return a-b});
+    var curr_targ_num = 0
+
+
     // funciton that controls the presentation of visual stims
     function toggle_fill(){
       trial_data = {
@@ -239,7 +282,7 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
         key_press: null,
         color: null,
       };
-      var nextISIS = trial.flash_duration+(Math.floor(Math.random() * (Math.floor(trial.maxISI) - Math.ceil(trial.minISI) + 1)) + Math.ceil(trial.minISI))
+      var nextISIS = trial.flash_duration+(Math.floor(Math.random() * (Math.floor(trial.maxISI) - Math.ceil(trial.minISI) + 1)) + Math.ceil(trial.minISI));
       var rect_id = 'rect-'+Math.floor(Math.random() * numLocations);
       var rect = document.getElementById(rect_id);
       var fillval = rect.getAttribute('fill');
@@ -248,13 +291,18 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
 
       if(Math.round(context.currentTime*trial.timeConvert)+trial.flash_duration+nextISIS < Math.round(startTime*trial.timeConvert)+(trial.trial_duration)){
 
+
         if(fillval == 'black'){
 
-          if(trialChoice < trial.targetProb*100){
+            
+          if(curr_targ_num < ntargets && Math.abs(Math.round(context.currentTime*trial.timeConvert)-targtimes[curr_targ_num]) <= trial.flash_duration+nextISIS){
+            //present the target 
             var ctype = trial.targetColor;
             rect.setAttribute('fill',trial.targetColor);
             rect.setAttribute('opacity',1);
             trial_data.type = 'target';
+            curr_targ_num = curr_targ_num + 1
+
           }
           else {
             //rand choose another color
@@ -353,6 +401,7 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
           allow_held_key: false,
           audio_context: context,
           audio_context_start_time: startTime
+          
         });
       } else {
         var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
@@ -372,7 +421,10 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       }
 
 
-
+      //update the target times
+      for(it=0;it<ntargets;it++){
+        targtimes[it] = targtimes[it] + Math.round(startTime*trial.timeConvert);
+      }
       display_element.innerHTML = svg.outerHTML;
       jsPsych.pluginAPI.setTimeout(toggle_fill,trial.vtarg_start_delay);
     }

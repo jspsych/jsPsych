@@ -59,7 +59,7 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
       add_fixation: {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Add Fixation cross',
-        default: true,
+        default: false,
         description: 'If true, displays fixation cross'
       },
       fix_height: {
@@ -92,17 +92,23 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
         default: 700,
         description: 'Hz of beep.'
       },
-      minISI: {
+      maxNtargsPerTrial: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Shortest possible ISI',
-        default: 5000,
-        description: 'min ms between target presentations.'
+        pretty_name: 'Max N vtargs',
+        default: 2,
+        description: 'Max number of target color squares per trial.'
       },
-      targetProb: {
+      minNtargsPerTrial: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Atarg probability',
-        default: .2,
-        description: 'Probability of tone playing.'
+        pretty_name: 'Min N vtargs',
+        default: 1,
+        description: 'Min number of target color squares per trial.'
+      },
+      min_time_btw_targs: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Min ms between targets',
+        default: 4000,
+        description: 'Min ms between targets.'
       },
       atarg_start_delay: {
         type: jsPsych.plugins.parameterType.INT,
@@ -116,6 +122,15 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
         default: 1000,
         description: 'Number to multiply time values by (1000 = ms).'
       },
+      freqs: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'target chords each loop key',
+        default: {"C.mp3": [349.23, 493.88],"E.mp3": [543, 666],"Ab.mp3": [401, 555.88]},
+        description: 'tritones for each possible loop key (Hz).'
+      },
+
+
+
     }
   }
 
@@ -188,6 +203,46 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
       $(svg).append(fixp);
     }
 
+    //pic the num and time of targets we'll be presenting
+    var ntargets = (Math.floor(Math.random() * (Math.floor(trial.maxNtargsPerTrial) - Math.ceil(trial.minNtargsPerTrial) + 1)) + Math.ceil(trial.minNtargsPerTrial));
+    var targtimes = [];
+    for(it=0;it<ntargets;it++){
+      var tooclose = true;
+      //set the time window when they will be presented
+      while(tooclose) {
+        var targstarttime = (Math.floor(Math.random() * (Math.floor(trial.trial_duration-trial.min_time_btw_targs-trial.bleep_duration) - Math.ceil(trial.atarg_start_delay) + 1)) + Math.ceil(trial.atarg_start_delay));
+        if(it>0){
+          //grab time diffs. 
+          var ntestclose = 0;
+          for(iot=0;iot<targtimes.length;iot++){
+            if(Math.abs(targstarttime-targtimes[iot])<trial.min_time_btw_targs){
+              ntestclose = ntestclose + 1;
+            }
+          }
+          if(ntestclose==0){
+            //done with this targ
+            tooclose = false;
+          }
+        } else {
+          //only 1 targ
+          tooclose = false
+        }
+      }
+      targtimes.push(targstarttime);
+    }
+    targtimes.sort(function(a, b){return a-b});
+    var curr_targ_num = 0;
+
+    if(trial.freqs[trial.stimulus.replace(/^.*[_]/, '')] == undefined) {
+      var currfreqs = [349.23, 493.88]
+      
+    }
+    else {
+      var currfreqs = trial.freqs[trial.stimulus.replace(/^.*[_]/, '')];
+      
+    }
+    
+
     // funciton that controls the presentation of visual stims
     function play_targ(){
       trial_data = {
@@ -197,32 +252,47 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
         key_press: null,
         Hz: trial.bleep_frequency,
       };
-      var nextISIS = trial.minISI
-      //var nextISIS = trial.bleep_duration+(Math.floor(Math.random() * (Math.floor(trial.maxISI) - Math.ceil(trial.minISI) + 1)) + Math.ceil(trial.minISI));
+
+      var nextISIS = trial.min_time_btw_targs;
       var trialChoice = Math.floor(Math.random() * 100); //rand int from 0 to 99
 
       if(Math.round(context.currentTime*trial.timeConvert)+trial.bleep_duration+nextISIS < Math.round(startTime*trial.timeConvert)+(trial.trial_duration)){
 
-        if(trialChoice < trial.targetProb*100){
+        if(curr_targ_num < ntargets && Math.abs(Math.round(context.currentTime*trial.timeConvert)-targtimes[curr_targ_num]) <= trial.bleep_duration+nextISIS){
           // set up the distractor sound 
-          var osc = context.createOscillator(); // instantiate an oscillator
+
+
           var vol = context.createGain();
-          osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
-          osc.frequency.value = trial.bleep_frequency; // Hz
-          
+          var osc1 = context.createOscillator(); // instantiate an oscillator
+          osc1.type = 'sine'; // this is the default - also square, sawtooth, triangle
+          osc1.frequency.value = currfreqs[0];//trial.bleep_frequency; // Hz
           vol.gain.value = 0.1; // from 0 to 1, 1 full volume, 0 is muted
-          osc.connect(vol); // connect osc to vol
-
+          osc1.connect(vol); // connect osc to vol
           vol.connect(context.destination);
-          osc.start();
+          osc1.start();
+          jsPsych.pluginAPI.setTimeout(function(){
+            osc1.stop();
+          },trial.bleep_duration);
 
+          var osc2 = context.createOscillator(); // instantiate an oscillator
+          osc2.type = 'sine'; // this is the default - also square, sawtooth, triangle
+          osc2.frequency.value = currfreqs[1];//trial.bleep_frequency; // Hz
+          vol.gain.value = 0.1; // from 0 to 1, 1 full volume, 0 is muted
+          osc2.connect(vol); // connect osc to vol
+          vol.connect(context.destination);
+          osc2.start();
+          jsPsych.pluginAPI.setTimeout(function(){
+            osc2.stop();
+          },trial.bleep_duration);
+
+
+          
           trial_data.type = 'target';
           trial_data.time = Math.round(context.currentTime * trial.timeConvert);
+          curr_targ_num = curr_targ_num + 1
            //push target event
           run_events.push(trial_data);
-          jsPsych.pluginAPI.setTimeout(function(){
-            osc.stop();
-          },trial.bleep_duration);
+
         }
 
         jsPsych.pluginAPI.setTimeout(play_targ,nextISIS);
@@ -327,6 +397,10 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
         }, trial.trial_duration); 
       }
 
+      //update the target times
+      for(it=0;it<ntargets;it++){
+        targtimes[it] = targtimes[it] + Math.round(startTime*trial.timeConvert);
+      }
       display_element.innerHTML = svg.outerHTML;
       jsPsych.pluginAPI.setTimeout(play_targ,trial.atarg_start_delay);
     };

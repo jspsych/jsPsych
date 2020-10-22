@@ -59,7 +59,7 @@ jsPsych.plugins["music-free-tap-keyboard-reponse"] = (function() {
       add_fixation: {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Add Fixation cross',
-        default: true,
+        default: false,
         description: 'If true, displays fixation cross'
       },
       fix_height: {
