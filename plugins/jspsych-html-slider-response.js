@@ -137,9 +137,9 @@ jsPsych.plugins['html-slider-response'] = (function() {
     };
 
     if(trial.require_movement){
-      display_element.querySelector('#jspsych-html-slider-response-response').addEventListener('change', function(){
+      display_element.querySelector('#jspsych-html-slider-response-response').addEventListener('click', function(){
         display_element.querySelector('#jspsych-html-slider-response-next').disabled = false;
-      })
+      });
     }
 
     display_element.querySelector('#jspsych-html-slider-response-next').addEventListener('click', function() {

@@ -234,9 +234,9 @@ jsPsych.plugins["video-slider-response"] = (function() {
     video_element.playbackRate = trial.rate;
 
     if(trial.require_movement){
-      display_element.querySelector('#jspsych-video-slider-response-response').addEventListener('change', function(){
+      display_element.querySelector('#jspsych-video-slider-response-response').addEventListener('click', function(){
         display_element.querySelector('#jspsych-video-slider-response-next').disabled = false;
-      })
+      });
     }
 
     var startTime = performance.now();
