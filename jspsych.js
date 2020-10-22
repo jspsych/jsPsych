@@ -934,7 +934,7 @@ window.jsPsych = (function() {
       if(jsPsych.plugins[trial.type].info.parameters[param].type == jsPsych.plugins.parameterType.COMPLEX){
         if(jsPsych.plugins[trial.type].info.parameters[param].array == true){
           // iterate over each entry in the array
-          for(var i in trial[param]){
+          trial[param].forEach(function(ip, i){
             // check each parameter in the plugin description
             for(var p in jsPsych.plugins[trial.type].info.parameters[param].nested){
               if(typeof trial[param][i][p] == 'undefined' || trial[param][i][p] === null){
@@ -945,7 +945,7 @@ window.jsPsych = (function() {
                 }
               }
             }
-          }
+          });
         }
       }      
       // if it's not nested, checking is much easier and do that here:
