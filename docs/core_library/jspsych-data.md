@@ -381,7 +381,7 @@ var too_long = jsPsych.data.get().filterCustom(function(trial){
 
 #### .first() / .last()
 
-Returns a DataCollection containing the first/last *n* trials.
+Returns a DataCollection containing the first/last *n* trials. If *n* is greater than the number of trials in the DataCollection, then these functions will return an array of length equal to the number of trials. If there are no trials in the DataCollection, then these functions will return an empty array. If the *n* argument is omitted, then the functions will use the default value of 1. If *n* is zero or a negative number, then these functions will throw an error.
 
 ```js
 var first_trial = jsPsych.data.get().first(1);
@@ -422,7 +422,7 @@ console.log(jsPsych.data.get().json());
 
 Saves a CSV or JSON file on the computer running the experiment. If conducting an online experiment, this will download the file onto the subject's computer, and is therefore not a recommended data storage solution for online data collection.
 
-**Warning:** This function relies on features which are [currently not supported by all major web browsers](http://caniuse.com/#search=createObjectURL), though adoption rates are increasing rapidly. It will work on the most recent versions of Chrome, Firefox, and Internet Explorer. Safari has partial support. The file will render, but it will display in the browser window and will require using the Save As option manually.
+**Warning:** This function may not behave correctly in older browsers. Upgrading to the latest version of any major web browser should solve the problem.
 
 ```javascript
 // first argument is the format, second is the filename.

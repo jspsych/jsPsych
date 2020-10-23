@@ -145,9 +145,9 @@ jsPsych.plugins["audio-button-response"] = (function() {
     function after_response(choice) {
 
       // measure rt
-      var end_time = Date.now();
+      var end_time = performance.now();
       var rt = end_time - start_time;
-      response.button = choice;
+      response.button = parseInt(choice);
       response.rt = rt;
 
       // disable all the buttons after a response
@@ -193,7 +193,7 @@ jsPsych.plugins["audio-button-response"] = (function() {
     };
 
 		// start time
-    var start_time = Date.now();
+    var start_time = performance.now();
 
 		// start audio
     if(context !== null){

@@ -2,7 +2,9 @@
 
 This plugin plays audio files and records responses generated with a button click.
 
-If the browser supports it, audio files are played using the WebAudio API. This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. Audio files are automatically preloaded by jsPsych.
+If the browser supports it, audio files are played using the WebAudio API. This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. 
+
+Audio files are automatically preloaded by jsPsych. However, if you are using timeline variables or another dynamic method to specify the audio stimulus you will need to [manually preload](/overview/media-preloading/#manual-preloading) the audio.
 
 The trial can end when the subject responds, when the audio file has finished playing, or if the subject has failed to respond within a fixed length of time.
 
@@ -19,12 +21,12 @@ prompt | string | null | This string can contain HTML markup. Any content here w
 trial_duration | numeric | null | How long to wait for the subject to make a response before ending the trial in milliseconds. If the subject fails to make a response before this timer is reached, the subject's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, the trial will wait for a response indefinitely.
 margin_vertical | string | '0px' | Vertical margin of the button(s).
 margin_horizontal | string | '8px' | Horizontal margin of the button(s).
-response_ends_trial | boolean | true | If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `timing_response` is reached. You can use this parameter to force the subject to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
+response_ends_trial | boolean | true | If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the subject to listen to the stimulus for a fixed amount of time, even if they respond before the time is complete.
 trial_ends_after_audio | boolean | false | If true, then the trial will end as soon as the audio file finishes playing.
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------

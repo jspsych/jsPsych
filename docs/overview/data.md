@@ -54,6 +54,22 @@ var block = {
 }
 ```
 
+The data object for a trial can also be updated in the `on_finish` event handler. You can override properties or add new ones. This is particularly useful for cases where the value depends on something that happened during the trial.
+
+```js
+var trial = {
+  type: 'image-keyboard-response',
+  stimulus: 'imgA.jpg',
+  on_finish: function(data){
+    if(data.key_press == 65){
+      data.correct = true;
+    } else {
+      data.correct = false;
+    }
+  }
+}
+```
+
 ## Aggregating and manipulating jsPsych data
 
 When accessing the data with `jsPsych.data.get()` the returned object is a special data collection object that exposes a number of methods for aggregating and manipulating the data. The full list of methods is detailed in the [data module documentation](../core_library/jspsych-data.md).
@@ -129,16 +145,16 @@ This method uses a simple PHP script to write files to the server:
 
 ```php
 <?php
-// the $_POST[] array will contain the passed in filename and filedata
+$post_data = json_decode(file_get_contents('php://input'), true); 
 // the directory "data" must be writable by the server
-$filename = "data/".$_POST['filename'];
-$data = $_POST['filedata'];
+$name = "data/".$post_data['filename'].".csv"; 
+$data = $post_data['filedata'];
 // write the file to disk
-file_put_contents($filename, $data);
+file_put_contents($name, $data);
 ?>
 ```
 
-The `file_put_contents($filename, $data)` method requires permission to write new files. An easy way to solve this is to create a directory on the server that will store the data and use the chmod command to give all users write permission to that directory. In the above example, I prepend the directory `data/` to the filename, and that directory is writable.
+The `file_put_contents($filename, $data)` method requires permission to write new files. An easy way to solve this is to create a directory on the server that will store the data and use the chmod command to give all users write permission to that directory. In the above example, the directory `data/` is used to store files.
 
 To use the PHP script, the JavaScript that runs jsPsych needs to send the `filename` and `filedata` information. This is done through an [AJAX](http://www.w3schools.com/xml/ajax_intro.asp) call.
 
@@ -153,11 +169,13 @@ function saveData(name, data){
 // call the saveData function after the experiment is over
 jsPsych.init({
    // code to define the experiment structure would go here...
-   on_finish: function(){ saveData("experiment_data.csv", jsPsych.data.get().csv()); }
+   on_finish: function(){ saveData("experiment_data", jsPsych.data.get().csv()); }
 });
 ```
 
 To use this in an actual experiment, it would be important to tie the filename to some unique identifier like a subject number. Otherwise the file may be overwritten by collecting new data.
+
+Note that, depending on file permissions, storing the CSV files this way may make them publicly accessible. One fix is to store the CSV files outside the web directory on the server. This requires changing the path in the PHP script above from `/data` to a non-accessible folder. You should only use this solution if you have access to more than just the web directory on your server.
 
 ## Storing data permanently in a MySQL database
 

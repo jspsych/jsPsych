@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-survey-html-form.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></script>
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+
+	var form_trial = {
+		type: 'survey-html-form',
+		preamble: '<p> How are you feeling <b>right now?</b> </p>',
+		html: '<p> I am feeling <input name="first" type="text" />, <input name="second" type="text" />, and <input name="third" type="text" />.</p>'
+	}
+
+	var autofocus_trial = {
+		type: 'survey-html-form',
+		preamble: '<p> What is your favorite bird?</p>',
+		html: '<p>My favorite bird is <input type="text" id="test-resp-box" name="response" size="10" /></p>',
+		autofocus: 'test-resp-box'
+	}
+
+	jsPsych.init({
+		timeline: [form_trial,autofocus_trial],
+		on_finish: function(){ jsPsych.data.displayData(); }
+	});
+
+</script>
+
+</html>

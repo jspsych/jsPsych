@@ -4,7 +4,7 @@ jsPsych is licensed under the MIT license.
 
 >The MIT License (MIT)
 >
->Copyright (c) 2018 Joshua R. de Leeuw
+>Copyright (c) 2019 Joshua R. de Leeuw
 >
 >Permission is hereby granted, free of charge, to any person obtaining a copy
 >of this software and associated documentation files (the "Software"), to deal

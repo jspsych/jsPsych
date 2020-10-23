@@ -105,7 +105,7 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
 
 		//show prompt if there is one
     if (trial.prompt !== null) {
-      display_element.innerHTML += trial.prompt;
+      display_element.insertAdjacentHTML('beforeend', trial.prompt);
     }
 
 		function showTarget(){
@@ -123,13 +123,13 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
             var info = {}
             info.row = e.currentTarget.getAttribute('data-row');
             info.column = e.currentTarget.getAttribute('data-column');
-            info.rt = Date.now() - startTime;
+            info.rt = performance.now() - startTime;
             after_response(info);
           }
         });
       }
 
-      startTime = Date.now();
+      startTime = performance.now();
 
       if(trial.fade_duration == null){
         display_element.querySelector('#jspsych-serial-reaction-time-stimulus-cell-'+trial.target[0]+'-'+trial.target[1]).style.backgroundColor = trial.target_color;

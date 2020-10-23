@@ -185,7 +185,7 @@ describe('The data parameter', function(){
     expect(jsPsych.data.get().filter({added_copy: false}).count()).toBe(1);
   });
 
-  test.skip('should record data to all nested trials with timeline variables even when nested trials have own data', function(){
+  test('should record data to all nested trials with timeline variables even when nested trials have own data', function(){
 
     require(root + 'jspsych.js');
     require(root + 'plugins/jspsych-html-keyboard-response.js');
@@ -214,7 +214,7 @@ describe('The data parameter', function(){
       jsPsych.init({
         timeline: [trial],
         on_finish: function() {
-          var d = jsPsych.data.get().filter({added: true}).count();
+          var d = jsPsych.data.get().filter({added: true, foo: 1}).count();
           resolve(d);
         }
       });
@@ -226,4 +226,26 @@ describe('The data parameter', function(){
       //resolve();
     })).then(function(data) { expect(data).toBe(2) });
   });
+
+  test('should accept a function as a parameter', function(done){
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: 'foo',
+      data: {
+        a: function(){ return 1; }
+      }
+    }
+
+    var timeline = [trial];
+
+    jsPsych.init({
+      timeline: timeline,
+      on_finish: function(){
+        expect(jsPsych.data.get().values()[0].a).toBe(1);
+        done();
+      }
+    })
+
+    utils.pressKey(32);
+  })
 });

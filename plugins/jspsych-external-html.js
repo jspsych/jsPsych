@@ -43,6 +43,14 @@ jsPsych.plugins['external-html'] = (function() {
         pretty_name: 'Force refresh',
         default: false,
         description: 'Refresh page.'
+      },
+      // if execute_Script == true, then all javascript code on the external page
+      // will be executed in the plugin site within your jsPsych test
+      execute_script: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Execute scripts',
+        default: false,
+        description: 'If true, JS scripts on the external html file will be executed.'
       }
     }
   }
@@ -51,21 +59,32 @@ jsPsych.plugins['external-html'] = (function() {
 
     var url = trial.url;
     if (trial.force_refresh) {
-      url = trial.url + "?time=" + (new Date().getTime());
+      url = trial.url + "?t=" + performance.now();
     }
 
     load(display_element, url, function() {
-      var t0 = (new Date()).getTime();
+      var t0 = performance.now();
       var finish = function() {
         if (trial.check_fn && !trial.check_fn(display_element)) { return };
-        if (trial.cont_key) { document.removeEventListener('keydown', key_listener); }
+        if (trial.cont_key) { display_element.removeEventListener('keydown', key_listener); }
         var trial_data = {
-          rt: (new Date()).getTime() - t0,
+          rt: performance.now() - t0,
           url: trial.url
         };
         display_element.innerHTML = '';
         jsPsych.finishTrial(trial_data);
       };
+
+      // by default, scripts on the external page are not executed with XMLHttpRequest().
+      // To activate their content through DOM manipulation, we need to relocate all script tags
+      if (trial.execute_script) {
+        for (const scriptElement of display_element.getElementsByTagName("script")) {
+        const relocatedScript = document.createElement("script");
+        relocatedScript.text = scriptElement.text;
+        scriptElement.parentNode.replaceChild(relocatedScript, scriptElement);
+        };
+      }
+
       if (trial.cont_btn) { display_element.querySelector('#'+trial.cont_btn).addEventListener('click', finish); }
       if (trial.cont_key) {
         var key_listener = function(e) {
