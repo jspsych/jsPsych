@@ -105,6 +105,7 @@ window.jsPsych = (function() {
       'max_load_time': 60000,
       'max_preload_attempts': 10,
       'default_iti': 0,
+      'minimum_valid_rt': 0,
       'experiment_width': null
     };
 
@@ -2039,6 +2040,7 @@ jsPsych.pluginAPI = (function() {
   }
 
   module.getKeyboardResponse = function(parameters) {
+
     //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key?
 
     parameters.rt_method = (typeof parameters.rt_method === 'undefined') ? 'performance' : parameters.rt_method;
@@ -2050,19 +2052,29 @@ jsPsych.pluginAPI = (function() {
     var start_time;
     if (parameters.rt_method == 'performance') {
       start_time = performance.now();
-    } else if (parameters.rt_method == 'audio') {
+    } else if (parameters.rt_method === 'audio') {
       start_time = parameters.audio_context_start_time;
     }
 
     var listener_id;
 
     var listener_function = function(e) {
-
       var key_time;
       if (parameters.rt_method == 'performance') {
         key_time = performance.now();
-      } else if (parameters.rt_method == 'audio') {
+      } else if (parameters.rt_method === 'audio') {
         key_time = parameters.audio_context.currentTime
+      }
+      var rt = key_time - start_time;
+
+      // overiding via parameters for testing purposes.
+      var minimum_valid_rt = parameters.minimum_valid_rt;
+      if(!minimum_valid_rt){
+        minimum_valid_rt = jsPsych.initSettings().minimum_valid_rt || 0;
+      }
+
+      if(rt < minimum_valid_rt){
+        return;
       }
 
       var valid_response = false;
@@ -2088,7 +2100,7 @@ jsPsych.pluginAPI = (function() {
       }
       // check if key was already held down
 
-      if (((typeof parameters.allow_held_key == 'undefined') || !parameters.allow_held_key) && valid_response) {
+      if (((typeof parameters.allow_held_key === 'undefined') || !parameters.allow_held_key) && valid_response) {
         if (typeof held_keys[e.keyCode] !== 'undefined' && held_keys[e.keyCode] == true) {
           valid_response = false;
         }
@@ -2101,7 +2113,7 @@ jsPsych.pluginAPI = (function() {
 
         parameters.callback_function({
           key: e.keyCode,
-          rt: key_time - start_time
+          rt: rt,
         });
 
         if (keyboard_listeners.includes(listener_id)) {
