@@ -2073,26 +2073,26 @@ jsPsych.pluginAPI = (function() {
         minimum_valid_rt = jsPsych.initSettings().minimum_valid_rt || 0;
       }
 
-      if(rt <= minimum_valid_rt){
+      if(rt < minimum_valid_rt){
         return;
       }
 
       var valid_response = false;
-      if (typeof parameters.valid_responses === 'undefined' || parameters.valid_responses === jsPsych.ALL_KEYS) {
+      if (typeof parameters.valid_responses === 'undefined' || parameters.valid_responses == jsPsych.ALL_KEYS) {
         valid_response = true;
       } else {
-        if(parameters.valid_responses !== jsPsych.NO_KEYS){
+        if(parameters.valid_responses != jsPsych.NO_KEYS){
           for (var i = 0; i < parameters.valid_responses.length; i++) {
-            if (typeof parameters.valid_responses[i] === 'string') {
+            if (typeof parameters.valid_responses[i] == 'string') {
               var kc = jsPsych.pluginAPI.convertKeyCharacterToKeyCode(parameters.valid_responses[i]);
               if (typeof kc !== 'undefined') {
-                if (e.keyCode === kc) {
+                if (e.keyCode == kc) {
                   valid_response = true;
                 }
               } else {
                 throw new Error('Invalid key string specified for getKeyboardResponse');
               }
-            } else if (e.keyCode === parameters.valid_responses[i]) {
+            } else if (e.keyCode == parameters.valid_responses[i]) {
               valid_response = true;
             }
           }
@@ -2101,7 +2101,7 @@ jsPsych.pluginAPI = (function() {
       // check if key was already held down
 
       if (((typeof parameters.allow_held_key === 'undefined') || !parameters.allow_held_key) && valid_response) {
-        if (typeof held_keys[e.keyCode] !== 'undefined' && held_keys[e.keyCode] === true) {
+        if (typeof held_keys[e.keyCode] !== 'undefined' && held_keys[e.keyCode] == true) {
           valid_response = false;
         }
       }
