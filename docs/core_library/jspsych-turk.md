@@ -13,7 +13,7 @@ jsPsych.turk.submitToTurk(data)
 
 Parameter | Type | Description
 ----------|------|------------
-data | object | The `data` parameter is an object of `key: value` pairs. Any pairs in the `data` parameter will be saved by Mechanical Turk, and can be downloaded in a CSV file through the Mechanical Turk interface.
+data | object | The `data` parameter is an object of `key: value` pairs. Any pairs in the `data` parameter will be saved by Mechanical Turk, and can be downloaded in a CSV file through the Mechanical Turk interface. **Important**: the `data` parameter must contain at least one `key: value` pair, even just a dummy value, or the HIT will not be submitted correctly.
 
 ### Return value
 

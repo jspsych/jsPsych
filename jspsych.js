@@ -57,6 +57,10 @@ window.jsPsych = (function() {
       console.error('No timeline declared in jsPsych.init. Cannot start experiment.')
     }
 
+    if(options.timeline.length == 0){
+      console.error('No trials have been added to the timeline (the timeline is an empty array). Cannot start experiment.')
+    }
+
     // reset variables
     timeline = null;
     global_trial_index = 0;
@@ -101,6 +105,7 @@ window.jsPsych = (function() {
       'max_load_time': 60000,
       'max_preload_attempts': 10,
       'default_iti': 0,
+      'minimum_valid_rt': 0,
       'experiment_width': null
     };
 
@@ -577,8 +582,16 @@ window.jsPsych = (function() {
         // if progress.current_location is -1, then the timeline variable is being evaluated
         // in a function that runs prior to the trial starting, so we should treat that trial
         // as being the active trial for purposes of finding the value of the timeline variable
-        var loc = Math.max(0, progress.current_location); 
-        return timeline_parameters.timeline[loc].timelineVariable(variable_name);
+        var loc = Math.max(0, progress.current_location);
+        // if loc is greater than the number of elements on this timeline, then the timeline
+        // variable is being evaluated in a function that runs after the trial on the timeline
+        // are complete but before advancing to the next (like a loop_function).
+        // treat the last active trial as the active trial for this purpose.
+        if(loc == timeline_parameters.timeline.length){
+          loc = loc - 1;
+        }
+        // now find the variable
+        return timeline_parameters.timeline[loc].timelineVariable(variable_name); 
       }
     }
 
@@ -922,7 +935,7 @@ window.jsPsych = (function() {
       if(jsPsych.plugins[trial.type].info.parameters[param].type == jsPsych.plugins.parameterType.COMPLEX){
         if(jsPsych.plugins[trial.type].info.parameters[param].array == true){
           // iterate over each entry in the array
-          for(var i in trial[param]){
+          trial[param].forEach(function(ip, i){
             // check each parameter in the plugin description
             for(var p in jsPsych.plugins[trial.type].info.parameters[param].nested){
               if(typeof trial[param][i][p] == 'undefined' || trial[param][i][p] === null){
@@ -933,7 +946,7 @@ window.jsPsych = (function() {
                 }
               }
             }
-          }
+          });
         }
       }      
       // if it's not nested, checking is much easier and do that here:
@@ -1129,22 +1142,48 @@ jsPsych.data = (function() {
       }
     }
 
+    /**
+     * Queries the first n elements in a collection of trials.
+     *
+     * @param {number} n A positive integer of elements to return. A value of
+     *                   n that is less than 1 will throw an error.
+     *
+     * @return {Array} First n objects of a collection of trials. If fewer than
+     *                 n trials are available, the trials.length elements will
+     *                 be returned.
+     *
+     */
     data_collection.first = function(n){
-      if(typeof n=='undefined'){ n = 1 }
-      var out = [];
-      for(var i=0; i<n; i++){
-        out.push(trials[i]);
+      if (typeof n == 'undefined') { n = 1 }
+      if (n < 1) {
+        throw `You must query with a positive nonzero integer. Please use a 
+               different value for n.`;
       }
-      return DataCollection(out);
+      if (trials.length == 0) return DataCollection([]);
+      if (n > trials.length) n = trials.length;
+      return DataCollection(trials.slice(0, n));
     }
 
-    data_collection.last = function(n){
-      if(typeof n=='undefined'){ n = 1 }
-      var out = [];
-      for(var i=trials.length-n; i<trials.length; i++){
-        out.push(trials[i]);
+    /**
+     * Queries the last n elements in a collection of trials.
+     *
+     * @param {number} n A positive integer of elements to return. A value of
+     *                   n that is less than 1 will throw an error.
+     *
+     * @return {Array} Last n objects of a collection of trials. If fewer than
+     *                 n trials are available, the trials.length elements will
+     *                 be returned.
+     *
+     */
+    data_collection.last = function(n) {
+      if (typeof n == 'undefined') { n = 1 }
+      if (n < 1) {
+        throw `You must query with a positive nonzero integer. Please use a 
+               different value for n.`;
       }
-      return DataCollection(out);
+      if (trials.length == 0) return DataCollection([]);
+      if (n > trials.length) n = trials.length;
+      return DataCollection(trials.slice(trials.length - n, trials.length));
     }
 
     data_collection.values = function(){
@@ -2001,6 +2040,7 @@ jsPsych.pluginAPI = (function() {
   }
 
   module.getKeyboardResponse = function(parameters) {
+
     //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key?
 
     parameters.rt_method = (typeof parameters.rt_method === 'undefined') ? 'performance' : parameters.rt_method;
@@ -2012,19 +2052,29 @@ jsPsych.pluginAPI = (function() {
     var start_time;
     if (parameters.rt_method == 'performance') {
       start_time = performance.now();
-    } else if (parameters.rt_method == 'audio') {
+    } else if (parameters.rt_method === 'audio') {
       start_time = parameters.audio_context_start_time;
     }
 
     var listener_id;
 
     var listener_function = function(e) {
-
       var key_time;
       if (parameters.rt_method == 'performance') {
         key_time = performance.now();
-      } else if (parameters.rt_method == 'audio') {
+      } else if (parameters.rt_method === 'audio') {
         key_time = parameters.audio_context.currentTime
+      }
+      var rt = key_time - start_time;
+
+      // overiding via parameters for testing purposes.
+      var minimum_valid_rt = parameters.minimum_valid_rt;
+      if(!minimum_valid_rt){
+        minimum_valid_rt = jsPsych.initSettings().minimum_valid_rt || 0;
+      }
+
+      if(rt < minimum_valid_rt){
+        return;
       }
 
       var valid_response = false;
@@ -2050,7 +2100,7 @@ jsPsych.pluginAPI = (function() {
       }
       // check if key was already held down
 
-      if (((typeof parameters.allow_held_key == 'undefined') || !parameters.allow_held_key) && valid_response) {
+      if (((typeof parameters.allow_held_key === 'undefined') || !parameters.allow_held_key) && valid_response) {
         if (typeof held_keys[e.keyCode] !== 'undefined' && held_keys[e.keyCode] == true) {
           valid_response = false;
         }
@@ -2063,7 +2113,7 @@ jsPsych.pluginAPI = (function() {
 
         parameters.callback_function({
           key: e.keyCode,
-          rt: key_time - start_time
+          rt: rt,
         });
 
         if (keyboard_listeners.includes(listener_id)) {
@@ -2328,15 +2378,16 @@ jsPsych.pluginAPI = (function() {
     function load_audio_file_html5audio(source, count){
       count = count || 1;
       var audio = new Audio();
-      audio.addEventListener('canplaythrough', function(){
+      audio.addEventListener('canplaythrough', function handleCanPlayThrough(){
         audio_buffers[source] = audio;
         n_loaded++;
         loadfn(n_loaded);
         if(n_loaded == files.length){
           finishfn();
         }
+        audio.removeEventListener('canplaythrough', handleCanPlayThrough);
       });
-      audio.addEventListener('onerror', function(){
+      audio.addEventListener('error', function handleError(){
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
             load_audio_file_html5audio(source, count+1)
@@ -2344,8 +2395,9 @@ jsPsych.pluginAPI = (function() {
         } else {
           jsPsych.loadFail();
         }
+        audio.removeEventListener('error', handleError);
       });
-      audio.addEventListener('onstalled', function(){
+      audio.addEventListener('stalled', function handleStalled(){
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
             load_audio_file_html5audio(source, count+1)
@@ -2353,8 +2405,9 @@ jsPsych.pluginAPI = (function() {
         } else {
           jsPsych.loadFail();
         }
+        audio.removeEventListener('stalled', handleStalled);
       });
-      audio.addEventListener('onabort', function(){
+      audio.addEventListener('abort', function handleAbort(){
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
             load_audio_file_html5audio(source, count+1)
@@ -2362,6 +2415,7 @@ jsPsych.pluginAPI = (function() {
         } else {
           jsPsych.loadFail();
         }
+        audio.removeEventListener('abort', handleAbort);
       });
       audio.src = source;
     }

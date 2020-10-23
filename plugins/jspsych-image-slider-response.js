@@ -172,9 +172,9 @@ jsPsych.plugins['image-slider-response'] = (function() {
     };
 
     if(trial.require_movement){
-      display_element.querySelector('#jspsych-image-slider-response-response').addEventListener('change', function(){
+      display_element.querySelector('#jspsych-image-slider-response-response').addEventListener('click', function(){
         display_element.querySelector('#jspsych-image-slider-response-next').disabled = false;
-      })
+      });
     }
 
     display_element.querySelector('#jspsych-image-slider-response-next').addEventListener('click', function() {

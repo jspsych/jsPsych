@@ -151,4 +151,24 @@ describe('image-button-response', function(){
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});
+
+	test('should show console warning when trial duration is null and response ends trial is false', function() {
+		const spy = jest.spyOn(console, 'warn').mockImplementation();
+		
+		var trial = {
+			type: 'image-button-response',
+			stimulus: '../media/blue.png',
+			choices: ['button-choice'],
+			response_ends_trial: false,
+			trial_duration: null
+		};
+
+		jsPsych.init({
+			timeline: [trial],
+			auto_preload: false
+		});
+
+		expect(spy).toHaveBeenCalled();
+		spy.mockRestore();
+	});
 });
