@@ -26,14 +26,14 @@ describe('maxdiff plugin', function(){
 			timeline: [trial]
 		});
 
-		document.querySelector('input[data-name="0"][name="most"]').checked = true;
-		document.querySelector('input[data-name="1"][name="least"]').checked = true;
+		document.querySelector('input[data-name="0"][name="left"]').checked = true;
+		document.querySelector('input[data-name="1"][name="right"]').checked = true;
 
 		utils.clickTarget(document.querySelector('#jspsych-maxdiff-next'));
 
 		var maxdiff_data = jsPsych.data.get().values()[0];
-		expect(maxdiff_data.most).toBe("a");
-		expect(maxdiff_data.least).toBe("b");
+		expect(maxdiff_data.left).toBe("a");
+		expect(maxdiff_data.right).toBe("b");
 	});
 
 });

@@ -19,18 +19,18 @@ jsPsych.plugins['maxdiff'] = (function () {
                 pretty_name: 'Alternatives',
                 array: true,
                 default: undefined,
-                description: 'Alternatives presented in the Maxdiff table.'
+                description: 'Alternatives presented in the maxdiff table.'
             },
             labels: {
                 type: jsPsych.plugins.parameterType.STRING,
                 array: true,
                 pretty_name: 'Labels',
                 default: undefined,
-                description: 'Labels to display for most or least preferred.'
+                description: 'Labels to display for left and right response columns.'
             },
             randomize_alternative_order: {
                 type: jsPsych.plugins.parameterType.BOOL,
-                pretty_name: 'Randomize alternative Order',
+                pretty_name: 'Randomize Alternative Order',
                 default: false,
                 description: 'If true, the order of the alternatives will be randomized'
             },
@@ -42,7 +42,7 @@ jsPsych.plugins['maxdiff'] = (function () {
             },
             button_label: {
                 type: jsPsych.plugins.parameterType.STRING,
-                pretty_name: 'Button label',
+                pretty_name: 'Button Label',
                 default: 'Continue',
                 description: 'Label of the button.'
             },
@@ -56,10 +56,6 @@ jsPsych.plugins['maxdiff'] = (function () {
     }
 
     plugin.trial = function (display_element, trial) {
-
-        // Set some trial parameters
-        const most_least = ["most", "least"]
-        var enable_submit = trial.required == true ? 'disabled = "disabled"' : '';
 
         var html = "";
         // inject CSS for trial
@@ -94,28 +90,30 @@ jsPsych.plugins['maxdiff'] = (function () {
         for (var i = 0; i < trial.alternatives.length; i++) {
             var alternative = trial.alternatives[alternative_order[i]];
             // add alternative
-            maxdiff_table += '<tr><td><input class= "jspsych-maxdiff-alt-' + i.toString() + '" type="radio" name="most" data-name = ' + alternative_order[i].toString() + ' /><br></td>';
+            maxdiff_table += '<tr><td><input class= "jspsych-maxdiff-alt-' + i.toString() + '" type="radio" name="left" data-name = ' + alternative_order[i].toString() + ' /><br></td>';
             maxdiff_table += '<td>' + alternative + '</td>';
-            maxdiff_table += '<td><input class= "jspsych-maxdiff-alt-' + i.toString() + '" type="radio" name="least" data-name = ' + alternative_order[i].toString() + ' /><br></td></tr>';
+            maxdiff_table += '<td><input class= "jspsych-maxdiff-alt-' + i.toString() + '" type="radio" name="right" data-name = ' + alternative_order[i].toString() + ' /><br></td></tr>';
         }
         maxdiff_table += '</table><br><br>';
         html += maxdiff_table;
 
         // add submit button
+        var enable_submit = trial.required == true ? 'disabled = "disabled"' : '';
         html += '<input type="submit" id="jspsych-maxdiff-next" class="jspsych-maxdiff jspsych-btn" ' + enable_submit + ' value="' + trial.button_label + '"></input>';
         html += '</form>';
 
         display_element.innerHTML = html;
 
         // function to control responses
-        // first checks that the same alternative cannot be endorsed as 'most' and 'least' simultaneously.
+        // first checks that the same alternative cannot be endorsed in the left and right columns simultaneously.
         // then enables the submit button if the trial is required.
-        most_least.forEach(function(p) {
-            // Get all elements either 'most' or 'least'
+        const left_right = ["left", "right"]
+        left_right.forEach(function(p) {
+            // Get all elements either 'left' or 'right'
             document.getElementsByName(p).forEach(function(alt) {
                 alt.addEventListener('click', function() {
-                    // Find the opposite (if most, then least & vice versa) identified by the class (jspsych-maxdiff-alt-1, 2, etc)
-                    var op = alt.name == 'most' ? 'least' : 'most';
+                    // Find the opposite (if left, then right & vice versa) identified by the class (jspsych-maxdiff-alt-1, 2, etc)
+                    var op = alt.name == 'left' ? 'right' : 'left';
                     var n = document.getElementsByClassName(alt.className).namedItem(op);
                     // If it's checked, uncheck it.
                     if (n.checked) {
@@ -124,10 +122,10 @@ jsPsych.plugins['maxdiff'] = (function () {
 
                     // check response
                     if (trial.required){
-                        // Now check if one of both most and least have been enabled to allow submission
-                        var most_checked = [...document.getElementsByName('most')].some(c => c.checked);
-                        var least_checked = [...document.getElementsByName('least')].some(c => c.checked);
-                        if (most_checked && least_checked) {
+                        // Now check if one of both left and right have been enabled to allow submission
+                        var left_checked = [...document.getElementsByName('left')].some(c => c.checked);
+                        var right_checked = [...document.getElementsByName('right')].some(c => c.checked);
+                        if (left_checked && right_checked) {
                             document.getElementById("jspsych-maxdiff-next").disabled = false;
                         } else {
                             document.getElementById("jspsych-maxdiff-next").disabled = true;
@@ -146,14 +144,15 @@ jsPsych.plugins['maxdiff'] = (function () {
             var response_time = endTime - startTime;
 
             // get the alternative number by the data-name attribute
-            var most = parseInt(display_element.querySelectorAll('[name="most"]:checked')[0].getAttribute('data-name'));
-            var least = parseInt(display_element.querySelectorAll('[name="least"]:checked')[0].getAttribute('data-name'));
+            var left = parseInt(display_element.querySelectorAll('[name="left"]:checked')[0].getAttribute('data-name'));
+            var right = parseInt(display_element.querySelectorAll('[name="right"]:checked')[0].getAttribute('data-name'));
 
         // data saving
         var trial_data = {
             "rt": response_time,
-            "most": trial.alternatives[most],
-            "least": trial.alternatives[least]
+            "labels": JSON.stringify({"left": trial.labels[0], "right": trial.labels[1]}),
+            "left": trial.alternatives[left],
+            "right": trial.alternatives[right]
         };
 
         // next trial
