@@ -125,8 +125,14 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
       freqs: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'target chords each loop key',
-        default: {"C.mp3": [698.46],"E.mp3": [466.16],"Ab.mp3": [587.33]},
+        default: {"C.mp3": [466.16,587.33,698.46],"E.mp3": [466.16,587.33,698.46],"Ab.mp3": [466.16,587.33,698.46]},
         description: 'tritones for each possible loop key (Hz).'
+      },
+      atarg_gain: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Target volume',
+        default: .05,
+        description: '0-1 volume node gain.'
       },
 
 
@@ -233,7 +239,7 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
     var curr_targ_num = 0;
 
     if(trial.freqs[trial.stimulus.replace(/^.*[_]/, '')] == undefined) {
-      var currfreqs = [698.46]
+      var currfreqs = [466.16,587.33,698.46]
       
     }
     else {
@@ -265,12 +271,34 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
           var osc1 = context.createOscillator(); // instantiate an oscillator
           osc1.type = 'sine'; // this is the default - also square, sawtooth, triangle
           osc1.frequency.value = currfreqs[0];//trial.bleep_frequency; // Hz
-          vol.gain.value = 0.1; // from 0 to 1, 1 full volume, 0 is muted
+          vol.gain.value = trial.atarg_gain; // from 0 to 1, 1 full volume, 0 is muted
           osc1.connect(vol); // connect osc to vol
           vol.connect(context.destination);
           osc1.start();
           jsPsych.pluginAPI.setTimeout(function(){
             osc1.stop();
+          },trial.bleep_duration);
+
+          var osc2 = context.createOscillator(); // instantiate an oscillator
+          osc2.type = 'sine'; // this is the default - also square, sawtooth, triangle
+          osc2.frequency.value = currfreqs[1];//trial.bleep_frequency; // Hz
+          vol.gain.value = trial.atarg_gain; // from 0 to 1, 1 full volume, 0 is muted
+          osc2.connect(vol); // connect osc to vol
+          vol.connect(context.destination);
+          osc2.start();
+          jsPsych.pluginAPI.setTimeout(function(){
+            osc2.stop();
+          },trial.bleep_duration);
+
+          var osc3 = context.createOscillator(); // instantiate an oscillator
+          osc3.type = 'sine'; // this is the default - also square, sawtooth, triangle
+          osc3.frequency.value = currfreqs[2];//trial.bleep_frequency; // Hz
+          vol.gain.value = trial.atarg_gain; // from 0 to 1, 1 full volume, 0 is muted
+          osc3.connect(vol); // connect osc to vol
+          vol.connect(context.destination);
+          osc3.start();
+          jsPsych.pluginAPI.setTimeout(function(){
+            osc3.stop();
           },trial.bleep_duration);
 
 
