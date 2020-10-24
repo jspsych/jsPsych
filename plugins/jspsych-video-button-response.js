@@ -115,6 +115,13 @@ jsPsych.plugins["video-button-response"] = (function() {
         pretty_name: 'Response ends trial',
         default: true,
         description: 'If true, the trial will end when subject makes a response.'
+      },
+      response_allowed_while_playing: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Response allowed while playing',
+        default: true,
+        description: 'If true, then responses are allowed while the video is playing. '+
+          'If false, then the video must finish playing before a response is accepted.'
       }
     }
   }
@@ -190,6 +197,11 @@ jsPsych.plugins["video-button-response"] = (function() {
     display_element.querySelector('#jspsych-video-button-response-stimulus').onended = function(){
       if(trial.trial_ends_after_video){
         end_trial();
+      } else if (!trial.response_allowed_while_playing) {
+        // enable response buttons
+        for (var i=0; i<trial.choices.length; i++) {
+          display_element.querySelector('#jspsych-video-button-response-button-' + i).querySelector('button').disabled = false;
+        }
       }
     }
 
@@ -214,6 +226,9 @@ jsPsych.plugins["video-button-response"] = (function() {
         var choice = e.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
         after_response(choice);
       });
+      if (!trial.response_allowed_while_playing) {
+        display_element.querySelector('#jspsych-video-button-response-button-' + i).querySelector('button').disabled = true;
+      }
     }
 
     // store response
@@ -228,6 +243,11 @@ jsPsych.plugins["video-button-response"] = (function() {
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
 
+      // stop the video file if it is playing
+      // remove any remaining end event handlers
+      display_element.querySelector('#jspsych-video-button-response-stimulus').pause();
+      display_element.querySelector('#jspsych-video-button-response-stimulus').onended = function() {};
+
       // gather the data to store for the trial
       var trial_data = {
         "rt": response.rt,
@@ -240,7 +260,7 @@ jsPsych.plugins["video-button-response"] = (function() {
 
       // move on to the next trial
       jsPsych.finishTrial(trial_data);
-    };
+    }
 
     // function to handle responses by the subject
     function after_response(choice) {
@@ -265,7 +285,7 @@ jsPsych.plugins["video-button-response"] = (function() {
       if (trial.response_ends_trial) {
         end_trial();
       }
-    };
+    }
 
     // end trial if time limit is set
     if (trial.trial_duration !== null) {

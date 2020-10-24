@@ -139,6 +139,13 @@ jsPsych.plugins["video-slider-response"] = (function() {
         pretty_name: 'Response ends trial',
         default: true,
         description: 'If true, the trial will end when subject makes a response.'
+      },
+      response_allowed_while_playing: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Response allowed while playing',
+        default: true,
+        description: 'If true, then responses are allowed while the video is playing. '+
+          'If false, then the video must finish playing before a response is accepted.'
       }
     }
   }
@@ -183,8 +190,11 @@ jsPsych.plugins["video-slider-response"] = (function() {
       html += 'width:'+trial.slider_width+'px;';
     }
     html += '">';
-    html += '<input type="range" value="'+trial.slider_start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-video-slider-response-response"></input>';
-    html += '<div>'
+    html += '<input type="range" value="'+trial.slider_start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-video-slider-response-response"';
+    if (!trial.response_allowed_while_playing) {
+      html += ' disabled';
+    }
+    html += '></input><div>'
     for(var j=0; j < trial.labels.length; j++){
       var width = 100/(trial.labels.length-1);
       var left_offset = (j * (100 /(trial.labels.length - 1))) - (width/2);
@@ -202,7 +212,11 @@ jsPsych.plugins["video-slider-response"] = (function() {
     }
 
     // add submit button
-    html += '<button id="jspsych-video-slider-response-next" class="jspsych-btn" '+ (trial.require_movement ? "disabled" : "") + '>'+trial.button_label+'</button>';
+    var next_disabled_attribute = "";
+    if (trial.require_movement | !trial.response_allowed_while_playing) {
+      next_disabled_attribute = "disabled";
+    }
+    html += '<button id="jspsych-video-slider-response-next" class="jspsych-btn" '+ next_disabled_attribute + '>'+trial.button_label+'</button>';
 
     display_element.innerHTML = html;
 
@@ -215,6 +229,8 @@ jsPsych.plugins["video-slider-response"] = (function() {
     video_element.onended = function(){
       if(trial.trial_ends_after_video){
         end_trial();
+      } else if (!trial.response_allowed_while_playing) {
+        enable_slider();
       }
     }
 
@@ -267,6 +283,11 @@ jsPsych.plugins["video-slider-response"] = (function() {
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
 
+      // stop the video file if it is playing
+      // remove any remaining end event handlers
+      display_element.querySelector('#jspsych-video-slider-response-stimulus-video').pause();
+      display_element.querySelector('#jspsych-video-slider-response-stimulus-video').onended = function() {};
+
       // gather the data to store for the trial
       var trial_data = {
         "rt": response.rt,
@@ -282,6 +303,14 @@ jsPsych.plugins["video-slider-response"] = (function() {
       // move on to the next trial
       jsPsych.finishTrial(trial_data);
     };
+
+    // function to enable slider after video ends
+    function enable_slider() {
+      document.querySelector('#jspsych-video-slider-response-response').disabled = false;
+      if (!trial.require_movement) {
+        document.querySelector('#jspsych-video-slider-response-next').disabled = false;
+      }
+    }
 
     // end trial if time limit is set
     if (trial.trial_duration !== null) {

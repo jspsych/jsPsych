@@ -73,6 +73,13 @@ jsPsych.plugins["audio-button-response"] = (function() {
         default: false,
         description: 'If true, then the trial will end as soon as the audio file finishes playing.'
       },
+      response_allowed_while_playing: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Response allowed while playing',
+        default: true,
+        description: 'If true, then responses are allowed while the audio is playing. '+
+          'If false, then the audio must finish playing before a response is accepted.'
+      }
     }
   }
 
@@ -92,11 +99,18 @@ jsPsych.plugins["audio-button-response"] = (function() {
     // set up end event if trial needs it
     if(trial.trial_ends_after_audio){
       if(context !== null){
-        source.onended = function() {
-          end_trial();
-        }
+        source.addEventListener('ended', end_trial);
       } else {
         audio.addEventListener('ended', end_trial);
+      }
+    }
+
+    // enable buttons after audio ends if necessary
+    if ((!trial.response_allowed_while_playing) & (!trial.trial_ends_after_audio)) {
+      if (context !== null) {
+        source.addEventListener('ended', enable_buttons);
+      } else {
+        audio.addEventListener('ended', enable_buttons);
       }
     }
 
@@ -133,6 +147,9 @@ jsPsych.plugins["audio-button-response"] = (function() {
         var choice = e.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
         after_response(choice);
       });
+      if (!trial.response_allowed_while_playing) {
+        display_element.querySelector('#jspsych-audio-button-response-button-' + i).querySelector('button').disabled = true;
+      }
     }
 
     // store response
@@ -160,23 +177,25 @@ jsPsych.plugins["audio-button-response"] = (function() {
       if (trial.response_ends_trial) {
         end_trial();
       }
-    };
+    }
 
     // function to end trial when it is time
     function end_trial() {
+
+      // kill any remaining setTimeout handlers
+      jsPsych.pluginAPI.clearAllTimeouts();
 
 			// stop the audio file if it is playing
 			// remove end event listeners if they exist
 			if(context !== null){
 				source.stop();
-				source.onended = function() { }
+        source.removeEventListener('ended', end_trial);
+        source.removeEventListener('ended', enable_buttons);
 			} else {
 				audio.pause();
-				audio.removeEventListener('ended', end_trial);
+        audio.removeEventListener('ended', end_trial);
+        audio.removeEventListener('ended', enable_buttons);
 			}
-
-      // kill any remaining setTimeout handlers
-      jsPsych.pluginAPI.clearAllTimeouts();
 
       // gather the data to store for the trial
       var trial_data = {
@@ -190,7 +209,15 @@ jsPsych.plugins["audio-button-response"] = (function() {
 
       // move on to the next trial
       jsPsych.finishTrial(trial_data);
-    };
+    }
+
+    // function to enable buttons after audio ends
+    function enable_buttons() {
+      var btns = document.querySelectorAll('.jspsych-audio-button-response-button button');
+      for (var i=0; i<btns.length; i++) {
+        btns[i].disabled = false;
+      }
+    }
 
 		// start time
     var start_time = performance.now();
