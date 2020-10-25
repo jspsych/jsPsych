@@ -113,7 +113,7 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
       atarg_start_delay: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Detection onset delay',
-        default: 300,
+        default: 2000,
         description: 'Amount of time between music onset and the start of vtarg presentations.'
       },
       timeConvert: {

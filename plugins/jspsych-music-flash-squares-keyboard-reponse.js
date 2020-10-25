@@ -149,7 +149,7 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       vtarg_start_delay: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Detection onset delay',
-        default: 300,
+        default: 2000,
         description: 'Amount of time between music onset and the start of vtarg presentations.'
       },
       timeConvert: {
