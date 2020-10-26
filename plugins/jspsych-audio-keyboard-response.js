@@ -172,22 +172,23 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
       }
     }
 
-    if (trial.response_allowed_while_playing == true) {
-      setup_keyboard_listener();
-    } else if ((!trial.response_allowed_while_playing) & (!trial.trial_ends_after_audio)) {
-      if(context !== null){
-        source.addEventListener('ended', setup_keyboard_listener);
-      } else {
-        audio.addEventListener('ended', setup_keyboard_listener);
-      }
-    }
-
     // start audio
     if(context !== null){
       startTime = context.currentTime;
       source.start(startTime);
     } else {
       audio.play();
+    }
+
+    // start keyboard listener when trial starts or sound ends
+    if (trial.response_allowed_while_playing) {
+      setup_keyboard_listener();
+    } else if (!trial.trial_ends_after_audio) {
+      if(context !== null){
+        source.addEventListener('ended', setup_keyboard_listener);
+      } else {
+        audio.addEventListener('ended', setup_keyboard_listener);
+      }
     }
 
     // end trial if time limit is set
