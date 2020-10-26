@@ -1,5 +1,4 @@
 const root = '../../';
-const utils = require('../testing-utils.js');
 
 jest.useFakeTimers();
 
@@ -13,5 +12,4 @@ describe('audio-keyboard-response', function(){
 	test('loads correctly', function(){
 		expect(typeof window.jsPsych.plugins['audio-keyboard-response']).not.toBe('undefined');
 	});
-
 });
