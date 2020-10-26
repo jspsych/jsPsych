@@ -148,6 +148,9 @@ jsPsych.plugins["video-button-response"] = (function() {
         }
         var type = file_name.substr(file_name.lastIndexOf('.') + 1);
         type = type.toLowerCase();
+        if (type == "mov") {
+          console.warn('Warning: video-button-response plugin does not reliably support .mov files.')
+        }
         video_html+='<source src="' + file_name + '" type="video/'+type+'">';   
       }
     }
