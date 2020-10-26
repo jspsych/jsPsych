@@ -332,13 +332,16 @@ jsPsych.plugins["music-bleep-tones-keyboard-reponse"] = (function() {
 
       // stop the audio file if it is playing
       // remove end event listeners if they exist
-      if(context !== null){
-        source.stop();
-        source.onended = function() { }
-      } else {
-        audio.pause();
-        audio.removeEventListener('ended', end_trial);
-      }
+      if(trial.stimulus!=='') {
+        //skip these if there is no audio being played
+        if(context !== null){
+          source.stop();
+          source.onended = function() { }
+        } else {
+          audio.pause();
+          audio.removeEventListener('ended', end_trial);
+        }
+      } 
 
       // clear the display
       display_element.innerHTML = '';
