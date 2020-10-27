@@ -171,6 +171,9 @@ jsPsych.plugins["video-slider-response"] = (function() {
         }
         var type = file_name.substr(file_name.lastIndexOf('.') + 1);
         type = type.toLowerCase();
+        if (type == "mov") {
+          console.warn('Warning: video-slider-response plugin does not reliably support .mov files.')
+        }
         video_html+='<source src="' + file_name + '" type="video/'+type+'">';
       }
     }
