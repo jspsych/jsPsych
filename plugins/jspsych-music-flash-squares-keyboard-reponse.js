@@ -207,6 +207,13 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
         key_press: null,
         color: null,
       };
+    var music_data = {
+        time: null,
+        type: null,
+        stimulus: null,
+        key_press: null,
+        color: null
+    };
 
     var response = {
       rt: null,
@@ -390,6 +397,14 @@ jsPsych.plugins["music-flash-squares-keyboard-reponse"] = (function() {
       } else {
         audio.play();
       }
+
+      music_data.stimulus = trial.stimulus.replace(/^.*[\\\/]/, '');
+      music_data.time = Math.round(context.currentTime * trial.timeConvert);
+      music_data.key_press = null;
+      music_data.type = 'music_onset';
+      music_data.color = null;//inter-tap-interval
+     
+      run_events.push(music_data);
 
       // start the response listener
       if(context !== null) {

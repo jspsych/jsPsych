@@ -130,6 +130,14 @@ jsPsych.plugins["music-free-tap-keyboard-reponse"] = (function() {
         ITI: null
     };
 
+    var music_data = {
+        time: null,
+        type: null,
+        stimulus: null,
+        key_press: null,
+        ITI: null
+    };
+
     var response = {
       rt: null,
       key: null
@@ -214,6 +222,14 @@ jsPsych.plugins["music-free-tap-keyboard-reponse"] = (function() {
       } else {
         audio.play();
       }
+
+      music_data.stimulus = trial.stimulus.replace(/^.*[\\\/]/, '');
+      music_data.time = Math.round(context.currentTime * trial.timeConvert);
+      music_data.key_press = null;
+      music_data.type = 'music_onset';
+      music_data.ITI = null;//inter-tap-interval
+     
+      run_events.push(music_data);
 
       // start the response listener
       if(context !== null) {
