@@ -112,11 +112,18 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
     if(trial.height) {
       video_html += ' height="'+trial.height+'"';
     }
-    if(trial.autoplay){
+    if(trial.autoplay & (trial.start == null)){
+      // if autoplay is true and the start time is specified, then the video will start automatically
+      // via the play() method, rather than the autoplay attribute, to prevent showing the first frame
       video_html += " autoplay ";
     }
     if(trial.controls){
       video_html +=" controls ";
+    }
+    if (trial.start !== null) {
+      // hide video element when page loads if the start time is specified, 
+      // to prevent the video element from showing the first frame
+      video_html += ' style="visibility: hidden;"'; 
     }
     video_html +=">";
 
@@ -145,30 +152,41 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
 
     display_element.innerHTML = video_html;
 
+    var video_element = display_element.querySelector('#jspsych-video-keyboard-response-stimulus');
+
     if(video_preload_blob){
-      display_element.querySelector('#jspsych-video-keyboard-response-stimulus').src = video_preload_blob;
+      video_element.src = video_preload_blob;
     }
 
-    display_element.querySelector('#jspsych-video-keyboard-response-stimulus').onended = function(){
-      if(trial.trial_ends_after_video){
-        end_trial();
+    video_element.playbackRate = trial.rate;
+
+    // if video start time is specified, hide the video and set the starting time
+    // before showing and playing, so that the video doesn't automatically show the first frame
+    if(trial.start !== null){
+      video_element.pause();
+      video_element.currentTime = trial.start;
+      video_element.onseeked = function() {
+        video_element.style.visibility = "visible";
+        if (trial.autoplay) {
+          video_element.play();
+        }
       }
     }
 
-    if(trial.start !== null){
-      display_element.querySelector('#jspsych-video-keyboard-response-stimulus').currentTime = trial.start;
-    }
-
     if(trial.stop !== null){
-      display_element.querySelector('#jspsych-video-keyboard-response-stimulus').addEventListener('timeupdate', function(e){
-        var currenttime = display_element.querySelector('#jspsych-video-keyboard-response-stimulus').currentTime;
+      video_element.addEventListener('timeupdate', function(e){
+        var currenttime = video_element.currentTime;
         if(currenttime >= trial.stop){
-          display_element.querySelector('#jspsych-video-keyboard-response-stimulus').pause();
+          video_element.pause();
         }
       })
     }
 
-    display_element.querySelector('#jspsych-video-keyboard-response-stimulus').playbackRate = trial.rate;
+    video_element.onended = function(){
+      if(trial.trial_ends_after_video){
+        end_trial();
+      }
+    }
 
     // store response
     var response = {
