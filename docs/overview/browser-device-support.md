@@ -23,7 +23,6 @@ In general, jsPsych experiments can be run on mobile devices (smartphones and ta
 If you plan to run an experiment that allows people to use mobile devices, we recommend doing some extra testing to make sure that everything works as expected. In particular, you may want to check that:
 * Font sizes are readable on smaller screens
 * Stimuli sizes are large enough and appropriate for the task
-expected
 * Page is laid out as intended (e.g. elements are centered and do not overlap)
 * Response options are touchscreen-friendly (e.g. buttons rather than key presses)
 * Response options (e.g. buttons, text boxes, radio buttons) are large enough and far enough apart to be easily selected with a finger tap
