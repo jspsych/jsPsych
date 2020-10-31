@@ -76,9 +76,17 @@
   border-color: #ccc;
 }
 
-.jspsych-btn:hover {
+/* only apply the hover style on devices with a mouse/pointer that can hover - issue #977 */
+@media (hover: hover) {
+  .jspsych-btn:hover {
+    background-color: #ddd;
+    border-color: #aaa;
+  }
+}
+
+.jspsych-btn:active {
   background-color: #ddd;
-  border-color: #aaa;
+  border-color:#000000;
 }
 
 .jspsych-btn:disabled {
