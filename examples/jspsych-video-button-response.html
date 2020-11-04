@@ -12,10 +12,10 @@
   var pre_trial = {
     type: 'html-button-response',
     stimulus: '<div style="max-width:600px;"><p>Some browsers now require that a user interacts with a web page before video or audio content will autoplay. Clicking the button below satisfies that requirement.</p><p>Without this trial, the video will load but not play.</p></div>',
-    choices: ['continue']
+    choices: ['Continue']
   }
 
-  var trial = {
+  var trial_1 = {
     type: 'video-button-response',
     sources: ['video/sample_video.mp4'],
     choices: ['y','n'],
@@ -34,10 +34,23 @@
     response_ends_trial: true
   }
 
+    var trial_2 = {
+    type: 'video-button-response',
+    sources: ['video/sample_video.mp4'],
+    choices: ['Great','Not great'],
+    margin_vertical: '10px',
+    margin_horizontal: '8px',
+    prompt: '<p>How great was the video?</p><p>When the video stops, click a button to end the trial.</p><p>Response buttons are disabled while the video is playing.</p>',
+    width: 600,
+    autoplay: true,
+    response_ends_trial: true,
+    response_allowed_while_playing: false
+  }
+
   jsPsych.init({
 
     show_preload_progress_bar: true,
-    timeline: [pre_trial, trial],
+    timeline: [pre_trial, trial_1, trial_2],
     on_finish: function() { jsPsych.data.displayData(); }
   });
 
