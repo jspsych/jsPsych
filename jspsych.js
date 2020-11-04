@@ -52,158 +52,166 @@ window.jsPsych = (function() {
   //
 
   core.init = function(options) {
-
-    if(typeof options.timeline === 'undefined'){
-      console.error('No timeline declared in jsPsych.init. Cannot start experiment.')
-    }
-
-    if(options.timeline.length == 0){
-      console.error('No trials have been added to the timeline (the timeline is an empty array). Cannot start experiment.')
-    }
-
-    // reset variables
-    timeline = null;
-    global_trial_index = 0;
-    current_trial = {};
-    current_trial_finished = false;
-    paused = false;
-    waiting = false;
-    loaded = false;
-    loadfail = false;
-    jsPsych.data.reset();
-
-    var defaults = {
-      'display_element': undefined,
-      'on_finish': function(data) {
-        return undefined;
-      },
-      'on_trial_start': function(trial) {
-        return undefined;
-      },
-      'on_trial_finish': function() {
-        return undefined;
-      },
-      'on_data_update': function(data) {
-        return undefined;
-      },
-      'on_interaction_data_update': function(data){
-        return undefined;
-      },
-      'on_close': function(){
-        return undefined;
-      },
-      'preload_images': [],
-      'preload_audio': [],
-      'preload_video': [],
-      'use_webaudio': true,
-      'exclusions': {},
-      'show_progress_bar': false,
-      'message_progress_bar': 'Completion Progress',
-      'auto_update_progress_bar': true,
-      'auto_preload': true,
-      'show_preload_progress_bar': true,
-      'max_load_time': 60000,
-      'max_preload_attempts': 10,
-      'default_iti': 0,
-      'minimum_valid_rt': 0,
-      'experiment_width': null
-    };
-
-    // override default options if user specifies an option
-    opts = Object.assign({}, defaults, options);
-
-    // set DOM element where jsPsych will render content
-    // if undefined, then jsPsych will use the <body> tag and the entire page
-    if(typeof opts.display_element == 'undefined'){
-      // check if there is a body element on the page
-      var body = document.querySelector('body');
-      if (body === null) {
-        document.documentElement.appendChild(document.createElement('body'));
+    function init() {
+      if(typeof options.timeline === 'undefined'){
+        console.error('No timeline declared in jsPsych.init. Cannot start experiment.')
       }
-      // using the full page, so we need the HTML element to
-      // have 100% height, and body to be full width and height with
-      // no margin
-      document.querySelector('html').style.height = '100%';
-      document.querySelector('body').style.margin = '0px';
-      document.querySelector('body').style.height = '100%';
-      document.querySelector('body').style.width = '100%';
-      opts.display_element = document.querySelector('body');
-    } else {
-      // make sure that the display element exists on the page
-      var display;
-      if (opts.display_element instanceof Element) {
-        var display = opts.display_element;
+  
+      if(options.timeline.length == 0){
+        console.error('No trials have been added to the timeline (the timeline is an empty array). Cannot start experiment.')
+      }
+  
+      // reset variables
+      timeline = null;
+      global_trial_index = 0;
+      current_trial = {};
+      current_trial_finished = false;
+      paused = false;
+      waiting = false;
+      loaded = false;
+      loadfail = false;
+      jsPsych.data.reset();
+  
+      var defaults = {
+        'display_element': undefined,
+        'on_finish': function(data) {
+          return undefined;
+        },
+        'on_trial_start': function(trial) {
+          return undefined;
+        },
+        'on_trial_finish': function() {
+          return undefined;
+        },
+        'on_data_update': function(data) {
+          return undefined;
+        },
+        'on_interaction_data_update': function(data){
+          return undefined;
+        },
+        'on_close': function(){
+          return undefined;
+        },
+        'preload_images': [],
+        'preload_audio': [],
+        'preload_video': [],
+        'use_webaudio': true,
+        'exclusions': {},
+        'show_progress_bar': false,
+        'message_progress_bar': 'Completion Progress',
+        'auto_update_progress_bar': true,
+        'auto_preload': true,
+        'show_preload_progress_bar': true,
+        'max_load_time': 60000,
+        'max_preload_attempts': 10,
+        'default_iti': 0,
+        'minimum_valid_rt': 0,
+        'experiment_width': null
+      };
+
+      // override default options if user specifies an option
+      opts = Object.assign({}, defaults, options);
+
+      // set DOM element where jsPsych will render content
+      // if undefined, then jsPsych will use the <body> tag and the entire page
+      if(typeof opts.display_element == 'undefined'){
+        // check if there is a body element on the page
+        var body = document.querySelector('body');
+        if (body === null) {
+          document.documentElement.appendChild(document.createElement('body'));
+        }
+        // using the full page, so we need the HTML element to
+        // have 100% height, and body to be full width and height with
+        // no margin
+        document.querySelector('html').style.height = '100%';
+        document.querySelector('body').style.margin = '0px';
+        document.querySelector('body').style.height = '100%';
+        document.querySelector('body').style.width = '100%';
+        opts.display_element = document.querySelector('body');
       } else {
-        var display = document.querySelector('#' + opts.display_element);
+        // make sure that the display element exists on the page
+        var display;
+        if (opts.display_element instanceof Element) {
+          var display = opts.display_element;
+        } else {
+          var display = document.querySelector('#' + opts.display_element);
+        }
+        if(display === null) {
+          console.error('The display_element specified in jsPsych.init() does not exist in the DOM.');
+        } else {
+          opts.display_element = display;
+        }
       }
-      if(display === null) {
-        console.error('The display_element specified in jsPsych.init() does not exist in the DOM.');
-      } else {
-        opts.display_element = display;
-      }
-    }
-    opts.display_element.innerHTML = '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
-    DOM_container = opts.display_element;
-    DOM_target = document.querySelector('#jspsych-content');
+      opts.display_element.innerHTML = '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
+      DOM_container = opts.display_element;
+      DOM_target = document.querySelector('#jspsych-content');
     
 
-    // add tabIndex attribute to scope event listeners
-    opts.display_element.tabIndex = 0;
+      // add tabIndex attribute to scope event listeners
+      opts.display_element.tabIndex = 0;
 
-    // add CSS class to DOM_target
-    if(opts.display_element.className.indexOf('jspsych-display-element') == -1){
-      opts.display_element.className += ' jspsych-display-element';
-    }
-    DOM_target.className += 'jspsych-content';
-
-    // set experiment_width if not null
-    if(opts.experiment_width !== null){
-      DOM_target.style.width = opts.experiment_width + "px";
-    }
-
-    // create experiment timeline
-    timeline = new TimelineNode({
-      timeline: opts.timeline
-    });
-
-    // initialize audio context based on options and browser capabilities
-    jsPsych.pluginAPI.initAudio();
-
-    // below code resets event listeners that may have lingered from
-    // a previous incomplete experiment loaded in same DOM.
-    jsPsych.pluginAPI.reset(opts.display_element);
-    // create keyboard event listeners
-    jsPsych.pluginAPI.createKeyboardEventListeners(opts.display_element);
-    // create listeners for user browser interaction
-    jsPsych.data.createInteractionListeners();
-
-    // add event for closing window
-    window.addEventListener('beforeunload', opts.on_close);
-
-    // check exclusions before continuing
-    checkExclusions(opts.exclusions,
-      function(){
-        // success! user can continue...
-        // start experiment, with or without preloading
-        if(opts.auto_preload){
-          jsPsych.pluginAPI.autoPreload(timeline, startExperiment, opts.preload_images, opts.preload_audio, opts.preload_video, opts.show_preload_progress_bar);
-          if(opts.max_load_time > 0){
-            setTimeout(function(){
-              if(!loaded && !loadfail){
-                core.loadFail();
-              }
-            }, opts.max_load_time);
-          }
-        } else {
-          startExperiment();
-        }
-      },
-      function(){
-        // fail. incompatible user.
-
+      // add CSS class to DOM_target
+      if(opts.display_element.className.indexOf('jspsych-display-element') == -1){
+        opts.display_element.className += ' jspsych-display-element';
       }
-    );
-  };
+      DOM_target.className += 'jspsych-content';
+
+      // set experiment_width if not null
+      if(opts.experiment_width !== null){
+        DOM_target.style.width = opts.experiment_width + "px";
+      }
+
+      // create experiment timeline
+      timeline = new TimelineNode({
+        timeline: opts.timeline
+      });
+
+      // initialize audio context based on options and browser capabilities
+      jsPsych.pluginAPI.initAudio();
+
+      // below code resets event listeners that may have lingered from
+      // a previous incomplete experiment loaded in same DOM.
+      jsPsych.pluginAPI.reset(opts.display_element);
+      // create keyboard event listeners
+      jsPsych.pluginAPI.createKeyboardEventListeners(opts.display_element);
+      // create listeners for user browser interaction
+      jsPsych.data.createInteractionListeners();
+
+      // add event for closing window
+      window.addEventListener('beforeunload', opts.on_close);
+
+      // check exclusions before continuing
+      checkExclusions(opts.exclusions,
+        function(){
+          // success! user can continue...
+          // start experiment, with or without preloading
+          if(opts.auto_preload){
+            jsPsych.pluginAPI.autoPreload(timeline, startExperiment, opts.preload_images, opts.preload_audio, opts.preload_video, opts.show_preload_progress_bar);
+            if(opts.max_load_time > 0){
+              setTimeout(function(){
+                if(!loaded && !loadfail){
+                  core.loadFail();
+                }
+              }, opts.max_load_time);
+            }
+          } else {
+            startExperiment();
+          }
+        },
+        function(){
+          // fail. incompatible user.
+
+        }
+      );
+    };
+    
+    // execute init() when the document is ready
+    if (document.readyState === "complete") {
+      init();
+    } else {
+      window.addEventListener("load", init);
+    }
+  }
 
   core.progress = function() {
 
@@ -2600,7 +2608,7 @@ jsPsych.pluginAPI = (function() {
     var loaded = 0;
 
     if(progress_bar){
-      var pb_html = "<div id='jspsych-loading-progress-bar-container' style='height: 10px; width: 300px; background-color: #ddd;'>";
+      var pb_html = "<div id='jspsych-loading-progress-bar-container' style='height: 10px; width: 300px; background-color: #ddd; margin: auto;'>";
       pb_html += "<div id='jspsych-loading-progress-bar' style='height: 10px; width: 0%; background-color: #777;'></div>";
       pb_html += "</div>";
       jsPsych.getDisplayElement().innerHTML = pb_html;

@@ -138,11 +138,18 @@ jsPsych.plugins["video-button-response"] = (function() {
     if(trial.height) {
       video_html += ' height="'+trial.height+'"';
     }
-    if(trial.autoplay){
+    if(trial.autoplay & (trial.start == null)){
+      // if autoplay is true and the start time is specified, then the video will start automatically
+      // via the play() method, rather than the autoplay attribute, to prevent showing the first frame
       video_html += " autoplay ";
     }
     if(trial.controls){
       video_html +=" controls ";
+    }
+    if (trial.start !== null) {
+      // hide video element when page loads if the start time is specified, 
+      // to prevent the video element from showing the first frame
+      video_html += ' style="visibility: hidden;"'; 
     }
     video_html +=">";
 
@@ -155,6 +162,9 @@ jsPsych.plugins["video-button-response"] = (function() {
         }
         var type = file_name.substr(file_name.lastIndexOf('.') + 1);
         type = type.toLowerCase();
+        if (type == "mov") {
+          console.warn('Warning: video-button-response plugin does not reliably support .mov files.')
+        }
         video_html+='<source src="' + file_name + '" type="video/'+type+'">';   
       }
     }
@@ -190,11 +200,13 @@ jsPsych.plugins["video-button-response"] = (function() {
     
     var start_time = performance.now();
 
+    var video_element = display_element.querySelector('#jspsych-video-button-response-stimulus');
+
     if(video_preload_blob){
-      display_element.querySelector('#jspsych-video-button-response-stimulus').src = video_preload_blob;
+      video_element.src = video_preload_blob;
     }
 
-    display_element.querySelector('#jspsych-video-button-response-stimulus').onended = function(){
+    video_element.onended = function(){
       if(trial.trial_ends_after_video){
         end_trial();
       } else if (!trial.response_allowed_while_playing) {
@@ -205,20 +217,29 @@ jsPsych.plugins["video-button-response"] = (function() {
       }
     }
 
+    video_element.playbackRate = trial.rate;
+
+    // if video start time is specified, hide the video and set the starting time
+    // before showing and playing, so that the video doesn't automatically show the first frame
     if(trial.start !== null){
-      display_element.querySelector('#jspsych-video-button-response-stimulus').currentTime = trial.start;
+      video_element.pause();
+      video_element.currentTime = trial.start;
+      video_element.onseeked = function() {
+        video_element.style.visibility = "visible";
+        if (trial.autoplay) {
+          video_element.play();
+        }
+      }
     }
 
     if(trial.stop !== null){
-      display_element.querySelector('#jspsych-video-button-response-stimulus').addEventListener('timeupdate', function(e){
-        var currenttime = display_element.querySelector('#jspsych-video-button-response-stimulus').currentTime;
+      video_element.addEventListener('timeupdate', function(e){
+        var currenttime = video_element.currentTime;
         if(currenttime >= trial.stop){
-          display_element.querySelector('#jspsych-video-button-response-stimulus').pause();
+          video_element.pause();
         }
       })
     }
-
-    display_element.querySelector('#jspsych-video-button-response-stimulus').playbackRate = trial.rate;
 
     // add event listeners to buttons
     for (var i = 0; i < trial.choices.length; i++) {
@@ -273,7 +294,7 @@ jsPsych.plugins["video-button-response"] = (function() {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      display_element.querySelector('#jspsych-video-button-response-stimulus').className += ' responded';
+      video_element.className += ' responded';
 
       // disable all the buttons after a response
       var btns = document.querySelectorAll('.jspsych-video-button-response-button button');

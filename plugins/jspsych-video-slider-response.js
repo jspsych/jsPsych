@@ -161,11 +161,18 @@ jsPsych.plugins["video-slider-response"] = (function() {
     if(trial.height) {
       video_html += ' height="'+trial.height+'"';
     }
-    if(trial.autoplay){
+    if(trial.autoplay & (trial.start == null)){
+      // if autoplay is true and the start time is specified, then the video will start automatically
+      // via the play() method, rather than the autoplay attribute, to prevent showing the first frame
       video_html += " autoplay ";
     }
     if(trial.controls){
       video_html +=" controls ";
+    }
+    if (trial.start !== null) {
+      // hide video element when page loads if the start time is specified, 
+      // to prevent the video element from showing the first frame
+      video_html += ' style="visibility: hidden;"'; 
     }
     video_html +=">";
 
@@ -178,6 +185,9 @@ jsPsych.plugins["video-slider-response"] = (function() {
         }
         var type = file_name.substr(file_name.lastIndexOf('.') + 1);
         type = type.toLowerCase();
+        if (type == "mov") {
+          console.warn('Warning: video-slider-response plugin does not reliably support .mov files.')
+        }
         video_html+='<source src="' + file_name + '" type="video/'+type+'">';
       }
     }
@@ -234,8 +244,19 @@ jsPsych.plugins["video-slider-response"] = (function() {
       }
     }
 
+    video_element.playbackRate = trial.rate;
+
+    // if video start time is specified, hide the video and set the starting time
+    // before showing and playing, so that the video doesn't automatically show the first frame
     if(trial.start !== null){
+      video_element.pause();
       video_element.currentTime = trial.start;
+      video_element.onseeked = function() {
+        video_element.style.visibility = "visible";
+        if (trial.autoplay) {
+          video_element.play();
+        }
+      }
     }
 
     if(trial.stop !== null){
@@ -246,8 +267,6 @@ jsPsych.plugins["video-slider-response"] = (function() {
         }
       })
     }
-
-    video_element.playbackRate = trial.rate;
 
     if(trial.require_movement){
       display_element.querySelector('#jspsych-video-slider-response-response').addEventListener('click', function(){
