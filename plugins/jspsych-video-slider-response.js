@@ -12,7 +12,7 @@ jsPsych.plugins["video-slider-response"] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('video-slider-response', 'stimulus', 'video');
+  jsPsych.pluginAPI.registerPreload('video-slider-response', 'sources', 'video');
 
   plugin.info = {
     name: 'video-slider-response',

@@ -12,7 +12,7 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('video-keyboard-response', 'stimulus', 'video');
+  jsPsych.pluginAPI.registerPreload('video-keyboard-response', 'sources', 'video');
 
   plugin.info = {
     name: 'video-keyboard-response',

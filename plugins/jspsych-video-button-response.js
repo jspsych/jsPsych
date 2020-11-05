@@ -12,7 +12,7 @@ jsPsych.plugins["video-button-response"] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('video-button-response', 'stimulus', 'video');
+  jsPsych.pluginAPI.registerPreload('video-button-response', 'sources', 'video');
 
   plugin.info = {
     name: 'video-button-response',
