@@ -272,7 +272,7 @@ jsPsych.plugins["video-button-response"] = (function() {
       // gather the data to store for the trial
       var trial_data = {
         "rt": response.rt,
-        "stimulus": trial.stimulus,
+        "sources": trial.sources,
         "button_pressed": response.button
       };
 
