@@ -52,6 +52,13 @@ jsPsych.plugins.animation = (function() {
         pretty_name: 'Prompt',
         default: null,
         description: 'Any content here will be displayed below stimulus.'
+      },
+      render_on_canvas: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Render on canvas',
+        default: true,
+        description: 'If true, the images will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).'+
+          'If false, the image will be shown via an img element.'
       }
     }
   }
@@ -66,9 +73,34 @@ jsPsych.plugins.animation = (function() {
     var responses = [];
     var current_stim = "";
 
+    if (trial.render_on_canvas) {
+      // first clear the display element (because the render_on_canvas method appends to display_element instead of overwriting it with .innerHTML)
+      if (display_element.hasChildNodes()) {
+        // can't loop through child list because the list will be modified by .removeChild()
+        while (display_element.firstChild) {
+          display_element.removeChild(display_element.firstChild);
+        }
+      }
+      var canvas = document.createElement("canvas");
+      canvas.id = "jspsych-animation-image";
+      canvas.style.margin = 0;
+      canvas.style.padding = 0;
+      display_element.insertBefore(canvas, null);
+      var ctx = canvas.getContext("2d");
+      if (trial.prompt !== null) {
+        var prompt_div = document.createElement("div");
+        prompt_div.id = "jspsych-animation-prompt";
+        prompt_div.style.visibility = "hidden";
+        prompt_div.innerHTML = trial.prompt;
+        display_element.insertBefore(prompt_div, canvas.nextElementSibling);
+      }
+    }
+
     var animate_interval = setInterval(function() {
       var showImage = true;
-      display_element.innerHTML = ''; // clear everything
+      if (!trial.render_on_canvas) {
+        display_element.innerHTML = ''; // clear everything
+      } 
       animate_frame++;
       if (animate_frame == trial.stimuli.length) {
         animate_frame = 0;
@@ -85,9 +117,23 @@ jsPsych.plugins.animation = (function() {
     }, interval_time);
 
     function show_next_frame() {
-      // show image
-      display_element.innerHTML = '<img src="'+trial.stimuli[animate_frame]+'" id="jspsych-animation-image"></img>';
-
+      if (trial.render_on_canvas) {
+        display_element.querySelector('#jspsych-animation-image').style.visibility = 'visible';
+        var img = new Image();   
+        img.src = trial.stimuli[animate_frame];
+        canvas.height = img.naturalHeight;
+        canvas.width = img.naturalWidth;
+        ctx.drawImage(img,0,0);
+        if (trial.prompt !== null) {
+          prompt_div.style.visibility = "visible";
+        }
+      } else {
+        // show image
+        display_element.innerHTML = '<img src="'+trial.stimuli[animate_frame]+'" id="jspsych-animation-image"></img>';
+        if (trial.prompt !== null) {
+          display_element.innerHTML += trial.prompt;
+        }
+      }
       current_stim = trial.stimuli[animate_frame];
 
       // record when image was shown
@@ -95,10 +141,6 @@ jsPsych.plugins.animation = (function() {
         "stimulus": trial.stimuli[animate_frame],
         "time": performance.now() - startTime
       });
-
-      if (trial.prompt !== null) {
-        display_element.innerHTML += trial.prompt;
-      }
 
       if (trial.frame_isi > 0) {
         jsPsych.pluginAPI.setTimeout(function() {
