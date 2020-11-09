@@ -18,7 +18,8 @@ describe('image-button-response', function(){
 		var trial = {
 			type: 'image-button-response',
 			stimulus: '../media/blue.png',
-			choices: ['button-choice']
+			choices: ['button-choice'],
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -33,7 +34,8 @@ describe('image-button-response', function(){
 		var trial = {
 			type: 'image-button-response',
 			stimulus: '../media/blue.png',
-			choices: ['button-choice1', 'button-choice2']
+			choices: ['button-choice1', 'button-choice2'],
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -51,6 +53,7 @@ describe('image-button-response', function(){
 			stimulus: '../media/blue.png',
 			choices: ['buttonChoice'],
 			button_html: '<button class="jspsych-custom-button">%choice%</button>',
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -65,7 +68,8 @@ describe('image-button-response', function(){
 		var trial = {
 			type: 'image-button-response',
 			stimulus: '../media/blue.png',
-		    choices: ['button-choice'],
+			choices: ['button-choice'],
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -85,7 +89,8 @@ describe('image-button-response', function(){
 			type: 'image-button-response',
 			stimulus: '../media/blue.png',
 			choices: ['button-choice'],
-			prompt: '<p>This is a prompt</p>'
+			prompt: '<p>This is a prompt</p>',
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -101,7 +106,8 @@ describe('image-button-response', function(){
 			type: 'image-button-response',
 			stimulus: '../media/blue.png',
 			choices: ['button-choice'],
-			stimulus_duration: 500
+			stimulus_duration: 500,
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -119,7 +125,8 @@ describe('image-button-response', function(){
 			type: 'image-button-response',
 			stimulus: '../media/blue.png',
 			choices: ['f','j'],
-			trial_duration: 500
+			trial_duration: 500,
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -138,6 +145,7 @@ describe('image-button-response', function(){
 			stimulus: '../media/blue.png',
 			choices: ['button-choice'],
 			response_ends_trial: true,
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -160,7 +168,8 @@ describe('image-button-response', function(){
 			stimulus: '../media/blue.png',
 			choices: ['button-choice'],
 			response_ends_trial: false,
-			trial_duration: null
+			trial_duration: null,
+			render_on_canvas: false
 		};
 
 		jsPsych.init({

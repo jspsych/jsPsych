@@ -18,7 +18,8 @@ describe('categorize-animation plugin', function(){
 		var trial = {
 			type: 'categorize-animation',
 			stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
-			key_answer: 68
+			key_answer: 68,
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -37,7 +38,8 @@ describe('categorize-animation plugin', function(){
 			type: 'categorize-animation',
 			stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
 			key_answer: 68,
-			prompt: "<p>Press d if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>"
+			prompt: "<p>Press d if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -55,7 +57,8 @@ describe('categorize-animation plugin', function(){
 			stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
 			key_answer: 68,
 			choices: [68, 83],
-			prompt: "<p>Press d if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>"
+			prompt: "<p>Press d if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -75,7 +78,8 @@ describe('categorize-animation plugin', function(){
 			stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
 			key_answer: 68,
 			choices: [68, 83],
-			prompt: "<p>Press d if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>"
+			prompt: "<p>Press d if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -98,7 +102,8 @@ describe('categorize-animation plugin', function(){
     		text_answer: 'different',
     		correct_text: "<p>Correct. The faces had %ANS% expressions.</p>",
     		incorrect_text: "<p>Incorrect. The faces had %ANS% expressions.</p>",
-    		prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
   		};
 
   		jsPsych.init({
@@ -120,7 +125,8 @@ describe('categorize-animation plugin', function(){
     		choices: [68, 83],
     		correct_text: "<p>You pressed the correct key</p>",
     		incorrect_text: "<p>Incorrect.</p>",
-    		prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
   		};
 
   		jsPsych.init({
@@ -142,7 +148,8 @@ describe('categorize-animation plugin', function(){
     		choices: [68, 83],
     		correct_text: "<p>You pressed the correct key</p>",
     		incorrect_text: "<p>Incorrect. You pressed the wrong key.</p>",
-    		prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
   		};
 
   		jsPsych.init({
@@ -165,7 +172,8 @@ describe('categorize-animation plugin', function(){
     		frame_time: 1000,
     		correct_text: "<p>You pressed the correct key</p>",
     		incorrect_text: "<p>Incorrect. You pressed the wrong key.</p>",
-    		prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
   		};
 
   		jsPsych.init({
@@ -191,7 +199,8 @@ describe('categorize-animation plugin', function(){
     		sequence_reps: 2,
     		correct_text: "<p>You pressed the correct key</p>",
     		incorrect_text: "<p>Incorrect. You pressed the wrong key.</p>",
-    		prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
   		};
 
   		jsPsych.init({
@@ -220,7 +229,8 @@ describe('categorize-animation plugin', function(){
     		correct_text: "<p>You pressed the correct key</p>",
     		incorrect_text: "<p>Incorrect. You pressed the wrong key.</p>",
     		prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
-    		allow_response_before_complete: true,
+			allow_response_before_complete: true,
+			render_on_canvas: false
   		};
 
   		jsPsych.init({
@@ -244,7 +254,8 @@ describe('categorize-animation plugin', function(){
     		feeback_duration: 500,
     		correct_text: "<p>You pressed the correct key</p>",
     		incorrect_text: "<p>Incorrect. You pressed the wrong key.</p>",
-    		prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
   		};
 
   		jsPsych.init({
