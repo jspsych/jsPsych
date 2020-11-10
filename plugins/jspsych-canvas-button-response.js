@@ -2,7 +2,7 @@
  * jspsych-canvas-button-response
  * Chris Jungerius (modified from Josh de Leeuw)
  *
- * plugin for displaying a stimulus and getting a keyboard response
+ * a jsPsych plugin for displaying a canvas stimulus and getting a button response
  *
  * documentation: docs.jspsych.org
  *
@@ -20,7 +20,7 @@ jsPsych.plugins["canvas-button-response"] = (function () {
                 type: jsPsych.plugins.parameterType.FUNCTION,
                 pretty_name: 'Stimulus',
                 default: undefined,
-                description: 'the drawing function to apply to the canvas, should take the canvas object as argument'
+                description: 'The drawing function to apply to the canvas. Should take the canvas object as argument.'
             },
             choices: {
                 type: jsPsych.plugins.parameterType.STRING,
@@ -74,9 +74,10 @@ jsPsych.plugins["canvas-button-response"] = (function () {
             },
             canvas_size: {
                 type: jsPsych.plugins.parameterType.INT,
+                array: true,
                 pretty_name: 'Canvas size',
                 default: [500, 500],
-                description: 'The height and width of the canvas element'
+                description: 'Array containing the height (first value) and width (second value) of the canvas element.'
             }
 
         }
@@ -85,7 +86,7 @@ jsPsych.plugins["canvas-button-response"] = (function () {
     plugin.trial = function (display_element, trial) {
 
         // create canvas
-        var html = '<div id="jspsych-canvas-button-response-stimulus">' + '<canvas id="stimulus-canvas", height = ' + trial.canvas_size[0] + ', width = ' + trial.canvas_size[1] + '></canvas>' + '</div>';
+        var html = '<div id="jspsych-canvas-button-response-stimulus">' + '<canvas id="jspsych-canvas-stimulus" height="' + trial.canvas_size[0] + '" width="' + trial.canvas_size[1] + '"></canvas>' + '</div>';
 
         //display buttons
         var buttons = [];
@@ -114,7 +115,7 @@ jsPsych.plugins["canvas-button-response"] = (function () {
         display_element.innerHTML = html;
 
         //draw
-        let c = document.getElementById("stimulus-canvas")
+        let c = document.getElementById("jspsych-canvas-stimulus")
         trial.stimulus(c)
 
         // start time
@@ -140,7 +141,7 @@ jsPsych.plugins["canvas-button-response"] = (function () {
             // measure rt
             var end_time = performance.now();
             var rt = end_time - start_time;
-            response.button = choice;
+            response.button = parseInt(choice);
             response.rt = rt;
 
             // after a valid response, the stimulus will have the CSS class 'responded'
@@ -168,7 +169,6 @@ jsPsych.plugins["canvas-button-response"] = (function () {
             // gather the data to store for the trial
             var trial_data = {
                 "rt": response.rt,
-                "stimulus": trial.stimulus,
                 "button_pressed": response.button
             };
 

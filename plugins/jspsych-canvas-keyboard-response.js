@@ -2,7 +2,7 @@
  * jspsych-canvas-keyboard-response
  * Chris Jungerius (modified from Josh de Leeuw)
  *
- * plugin for displaying a canvas stimulus and getting a keyboard response
+ * a jsPsych plugin for displaying a canvas stimulus and getting a keyboard response
  *
  * documentation: docs.jspsych.org
  *
@@ -21,7 +21,7 @@ jsPsych.plugins["canvas-keyboard-response"] = (function () {
         type: jsPsych.plugins.parameterType.FUNCTION,
         pretty_name: 'Stimulus',
         default: undefined,
-        description: 'the drawing function to apply to the canvas, should take the canvas object as argument'
+        description: 'The drawing function to apply to the canvas. Should take the canvas object as argument.'
       },
       choices: {
         type: jsPsych.plugins.parameterType.KEYCODE,
@@ -56,9 +56,10 @@ jsPsych.plugins["canvas-keyboard-response"] = (function () {
       },
       canvas_size: {
         type: jsPsych.plugins.parameterType.INT,
+        array: true,
         pretty_name: 'Canvas size',
         default: [500, 500],
-        description: 'The height and width of the canvas element'
+        description: 'Array containing the height (first value) and width (second value) of the canvas element.'
       }
 
     }
@@ -66,7 +67,7 @@ jsPsych.plugins["canvas-keyboard-response"] = (function () {
 
   plugin.trial = function (display_element, trial) {
 
-    var new_html = '<div id="jspsych-canvas-keyboard-response-stimulus">' + '<canvas id="stimulus-canvas", height = ' + trial.canvas_size[0] + ', width = ' + trial.canvas_size[1] + '></canvas>' + '</div>';
+    var new_html = '<div id="jspsych-canvas-keyboard-response-stimulus">' + '<canvas id="jspsych-canvas-stimulus" height="' + trial.canvas_size[0] + '" width="' + trial.canvas_size[1] + '"></canvas>' + '</div>';
     // add prompt
     if (trial.prompt !== null) {
       new_html += trial.prompt;
@@ -74,7 +75,7 @@ jsPsych.plugins["canvas-keyboard-response"] = (function () {
 
     // draw
     display_element.innerHTML = new_html;
-    let c = document.getElementById("stimulus-canvas")
+    let c = document.getElementById("jspsych-canvas-stimulus")
     trial.stimulus(c)
     // store response
     var response = {
@@ -96,7 +97,6 @@ jsPsych.plugins["canvas-keyboard-response"] = (function () {
       // gather the data to store for the trial
       var trial_data = {
         "rt": response.rt,
-        "stimulus": trial.drawing,
         "key_press": response.key
       };
 
