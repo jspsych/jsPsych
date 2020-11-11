@@ -171,9 +171,7 @@ jsPsych.plugins["image-button-response"] = (function() {
       display_element.insertBefore(btngroup_div, canvas.nextElementSibling);
       // add prompt if there is one
       if (trial.prompt !== null) {
-        var prompt_div = document.createElement("div");
-        prompt_div.innerHTML = trial.prompt;
-        display_element.insertBefore(prompt_div, btngroup_div.nextElementSibling);
+        display_element.insertAdjacentHTML('beforeend', trial.prompt);
       }
 
     } else {
@@ -202,7 +200,7 @@ jsPsych.plugins["image-button-response"] = (function() {
       html += '</div>';
       // add prompt
       if (trial.prompt !== null){
-        html += '<div>'+trial.prompt+'</div>';
+        html += trial.prompt;
       }
       // update the page content
       display_element.innerHTML = html;

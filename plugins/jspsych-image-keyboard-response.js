@@ -129,9 +129,7 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
       ctx.drawImage(img,0,0,width,height);
       // add prompt if there is one
       if (trial.prompt !== null) {
-        var prompt_div = document.createElement("div");
-        prompt_div.innerHTML = trial.prompt;
-        display_element.insertBefore(prompt_div, canvas.nextElementSibling);
+        display_element.insertAdjacentHTML('beforeend', trial.prompt);
       }
 
     } else {
@@ -140,7 +138,7 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
       var html = '<img src="'+trial.stimulus+'" id="jspsych-image-keyboard-response-stimulus">';
       // add prompt
       if (trial.prompt !== null){
-        html += '<div>'+trial.prompt+'</div>';
+        html += trial.prompt;
       }
       // update the page content
       display_element.innerHTML = html;

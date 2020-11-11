@@ -199,9 +199,7 @@ jsPsych.plugins['image-slider-response'] = (function() {
       ctx.drawImage(img,0,0,width,height);
       // add prompt if there is one
       if (trial.prompt !== null) {
-        var prompt_div = document.createElement("div");
-        prompt_div.innerHTML = trial.prompt;
-        display_element.insertBefore(prompt_div, slider_container.nextElementSibling);
+        display_element.insertAdjacentHTML('beforeend', trial.prompt);
       }
       // add submit button
       var submit_btn = document.createElement('button');
@@ -236,7 +234,7 @@ jsPsych.plugins['image-slider-response'] = (function() {
       html += '</div>';
 
       if (trial.prompt !== null){
-        html += '<div>'+trial.prompt+'</div>';
+        html += trial.prompt;
       }
 
       // add submit button
