@@ -87,13 +87,6 @@ jsPsych.plugins.animation = (function() {
       canvas.style.padding = 0;
       display_element.insertBefore(canvas, null);
       var ctx = canvas.getContext("2d");
-      if (trial.prompt !== null) {
-        var prompt_div = document.createElement("div");
-        prompt_div.id = "jspsych-animation-prompt";
-        prompt_div.style.visibility = "hidden";
-        prompt_div.innerHTML = trial.prompt;
-        display_element.insertBefore(prompt_div, canvas.nextElementSibling);
-      }
     }
 
     var animate_interval = setInterval(function() {
@@ -124,8 +117,8 @@ jsPsych.plugins.animation = (function() {
         canvas.height = img.naturalHeight;
         canvas.width = img.naturalWidth;
         ctx.drawImage(img,0,0);
-        if (trial.prompt !== null) {
-          prompt_div.style.visibility = "visible";
+        if (trial.prompt !== null & animate_frame == 0 & reps == 0) {
+          display_element.insertAdjacentHTML('beforeend', trial.prompt);
         }
       } else {
         // show image
