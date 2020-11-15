@@ -224,8 +224,7 @@ jsPsych.plugins["audio-button-response"] = (function() {
 
 		// start audio
     if(context !== null){
-      startTime = context.currentTime;
-      source.start(startTime);
+      source.start(context.currentTime);
     } else {
       audio.play();
     }
