@@ -2,10 +2,6 @@
 
 The free-sort plugin displays one or more images on the screen that the participant can interact with by clicking and dragging. All images must be moved into the sorting area before the participant can click a button to end the trial. All of the moves that the participant performs are recorded, as well as the final positions of all images. This plugin could be useful when asking participants to position images based on similarity to one another, or to recall image spatial locations.
 
-## Dependency
-
-This plugin requires the jQuery UI library, available at [https://jqueryui.com/](https://jqueryui.com/). You must include the library in the `<head>` section of your experiment page. You can use the [Google-hosted version of the library](https://developers.google.com/speed/libraries/#jquery-ui).
-
 ## Parameters
 
 Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
