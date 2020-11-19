@@ -59,7 +59,7 @@ describe('free-sort plugin', function(){
 			auto_preload: false
 		});
 
-		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"img/happy_face_1.jpg\" data-src=\"img/happy_face_1.jpg\" class=\"jspsych-free-sort-draggable\" draggable=\"false\" style=\"position: absolute; cursor: move; width:200px; height:200px'));
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"img/happy_face_1.jpg\".+width:200px; height:200px'));
 	});
 
 	test('should display prompt', function(){
@@ -90,7 +90,7 @@ describe('free-sort plugin', function(){
 			auto_preload: false
 		});
 
-		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p>This is a prompt</p><button id=\"jspsych-free-sort-done-btn\"'));
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p>This is a prompt</p>.+<button id=\"jspsych-free-sort-done-btn\"'));
 	});
 
 	test('should be able to change label of button', function(){
@@ -106,7 +106,7 @@ describe('free-sort plugin', function(){
 			auto_preload: false
 		});
 
-		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<button id=\"jspsych-free-sort-done-btn\" class=\"jspsych-btn\">Finito</button>'));
+		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<button id=\"jspsych-free-sort-done-btn\" class=\"jspsych-btn\".+>Finito</button>'));
 	});
 
 });
