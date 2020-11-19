@@ -1,6 +1,6 @@
 # jspsych-free-sort plugin
 
-The free-sort plugin displays a collection of images on the screen that the subject can interact with by clicking and dragging. All of the moves that the subject performs are recorded.
+The free-sort plugin displays one or more images on the screen that the participant can interact with by clicking and dragging. All images must be moved into the sorting area before the participant can click a button to end the trial. All of the moves that the participant performs are recorded, as well as the final positions of all images. This plugin could be useful when asking participants to position images based on similarity to one another, or to recall image spatial locations.
 
 ## Dependency
 
@@ -16,10 +16,10 @@ stimuli | array | *undefined* | Each element of this array is an image path.
 stim_height | numeric | 100 | The height of the images in pixels.
 stim_width | numeric | 100 | The width of the images in pixels.
 scale_factor | numeric | 1.5 | How much larger to make the stimulus while moving (1 = no scaling).
-sort_area_height | numeric | 800 | The height of the container that subjects can move the stimuli in. Stimuli will be constrained to this area.
-sort_area_width | numeric | 800 | The width of the container that subjects can move the stimuli in. Stimuli will be constrained to this area.
+sort_area_height | numeric | 800 | The height of the container that participants can move the stimuli in. Stimuli will be constrained to this area.
+sort_area_width | numeric | 800 | The width of the container that participants can move the stimuli in. Stimuli will be constrained to this area.
 sort_area_shape | string | "ellipse" | The shape of the sorting area, can be "ellipse" or "square".
-prompt | string | null | This string can contain HTML markup. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
+prompt | string | null | This string can contain HTML markup. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).
 prompt_location | string | "above" | Indicates whether to show the prompt `"above"` or `"below"` the sorting area.
 button_label | string |  'Continue' | The text that appears on the button to continue to the next trial.
 
@@ -32,7 +32,7 @@ Name | Type | Value
 init_locations | JSON string | A JSON-encoded object representing the initial locations of all the stimuli in the sorting area. The object is an array with one element per stimulus. Each element in the array has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location.
 moves | JSON string |  A JSON-encoded object representing all of the moves the participant made when sorting. The object is an array with each element representing a move. Each element in the array has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location after the move.
 final_locations | JSON string | A JSON-encoded object representing the final locations of all the stimuli in the sorting area. The object is an array with one element per stimulus. Each element in the array has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location.
-rt | numeric | The response time in milliseconds for the subject to finish all sorting.
+rt | numeric | The response time in milliseconds for the participant to finish all sorting.
 
 ## Examples
 
