@@ -64,7 +64,7 @@ jsPsych.plugins['free-sort'] = (function() {
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
-        default: null,
+        default: '',
         description: 'It can be used to provide a reminder about the action the subject is supposed to take.'
       },
       prompt_location: {
@@ -87,15 +87,34 @@ jsPsych.plugins['free-sort'] = (function() {
 
     var start_time = performance.now();
 
-    var html = 
+    let html = 
       '<div '+
       'id="jspsych-free-sort-arena" '+
       'class="jspsych-free-sort-arena" '+
       'style="position: relative; width:'+trial.sort_area_width+'px; height:'+trial.sort_area_height+'px; margin: auto; line-height: 0em"</div>';
 
+    // another div for border
+    html += '<div '+
+      'id="jspsych-free-sort-border" '+
+      'class="jspsych-free-sort-border" '+
+      'style="position: relative; width:'+trial.sort_area_width*.94+'px; height:'+trial.sort_area_height*.94+'px; border:'+trial.sort_area_height*.03+'px solid #fc9272; margin: auto; line-height: 0em; ';
+    
+    if ( trial.sort_area_shape == "ellipse") {
+      html += 'webkit-border-radius: 50%; moz-border-radius: 50%; border-radius: 50%"></div>'
+    } else {
+      html += 'webkit-border-radius: 0%; moz-border-radius: 0%; border-radius: 0%"></div>'
+    }
+
+    if ( trial.prompt ) {
+      trial.prompt = '<br>'
+    }
+    else {
+      trial.prompt = ''
+    }
+
     // variable that has the prompt text, counter and button
     const html_text = '<div style="line-height: 0em">' + trial.prompt + 
-      '<p id="jspsych-free-sort-counter" style="display: inline-block; line-height: 1em">You still need to place ' + trial.stimuli.length + ' items inside the arena.</p>' +
+      '<p id="jspsych-free-sort-counter" style="display: inline-block; line-height: 1em">You still need to place ' + trial.stimuli.length + ' items inside the arena.</p>'+
       '<button id="jspsych-free-sort-done-btn" class="jspsych-btn" '+ 
       'style="display: none; margin: 5px; padding: 5px; text-align: center; font-weight: bold; font-size: 18px; vertical-align:baseline; line-height: 1em">' + trial.button_label+'</button></div>'
     
@@ -106,22 +125,8 @@ jsPsych.plugins['free-sort'] = (function() {
         html = html_text + html
     }
 
+    console.log(html)
     display_element.innerHTML = html;
-
-    // another div for border
-    let border_div = '<div '+
-      'id="jspsych-free-sort-border" '+
-      'class="jspsych-free-sort-border" '+
-      'style="position: relative; width:'+trial.sort_area_width*.94+'px; height:'+trial.sort_area_height*.94+'px; border:'+trial.sort_area_height*.03+'px solid #fc9272; margin: auto; line-height: 0em; ';
-    
-    if ( trial.sort_area_shape == "ellipse") {
-      border_div += 'webkit-border-radius: 50%; moz-border-radius: 50%; border-radius: 50%"></div>'
-    } else {
-      border_div += 'webkit-border-radius: 0%; moz-border-radius: 0%; border-radius: 0%"></div>'
-    }
-
-    // add border div code
-    display_element.querySelector("#jspsych-free-sort-arena").innerHTML += border_div
 
     // store initial location data
     let init_locations = [];
