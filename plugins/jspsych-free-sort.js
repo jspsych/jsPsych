@@ -45,13 +45,13 @@ jsPsych.plugins['free-sort'] = (function() {
       sort_area_height: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Sort area height',
-        default: 800,
+        default: 700,
         description: 'The height in pixels of the container that subjects can move the stimuli in.'
       },
       sort_area_width: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Sort area width',
-        default: 800,
+        default: 700,
         description: 'The width in pixels of the container that subjects can move the stimuli in.'
       },
       sort_area_shape: {
@@ -109,6 +109,27 @@ jsPsych.plugins['free-sort'] = (function() {
         default: null,
         description: 'The width in pixels of the border around the sort area. If null, the border width '+
         'defaults to 3% of the sort area height.'
+      },
+      counter_text_unfinished: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Counter text unfinished',
+        default:  'You still need to place %n% item%s% inside the sort area.',
+        description: 'Text to display when there are one or more items that still need to be placed in the sort area. '+
+          'If "%n%" is included in the string, it will be replaced with the number of items that still need to be moved inside. '+
+          'If "%s%" is included in the string, a "s" will be included when the number of items remaining is greater than one.'
+      }, 
+      counter_text_finished: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Counter text finished',
+        default:  'All items placed. Feel free to reposition items if necessary.',
+        description: 'Text that will take the place of the counter_text_unfinished text when all items have been moved inside the sort area.'
+      },
+      stim_starts_inside: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Stim starts inside',
+        default: false,
+        description: 'If false, the images will be positioned to the left and right of the sort area when the trial loads. '+
+        'If true, the images will be positioned at random locations inside the sort area when the trial loads.'
       }
     }
   }
@@ -129,7 +150,7 @@ jsPsych.plugins['free-sort'] = (function() {
       '<div '+
       'id="jspsych-free-sort-arena" '+
       'class="jspsych-free-sort-arena" '+
-      'style="position: relative; width:'+trial.sort_area_width+'px; height:'+trial.sort_area_height+'px; margin: auto; line-height: 0em"</div>';
+      'style="position: relative; width:'+trial.sort_area_width+'px; height:'+trial.sort_area_height+'px; margin: auto;"</div>';
 
     // another div for border
     html += '<div '+
@@ -144,19 +165,9 @@ jsPsych.plugins['free-sort'] = (function() {
       html += 'webkit-border-radius: 0%; moz-border-radius: 0%; border-radius: 0%"></div>'
     }
 
-    if ( trial.prompt ) {
-      trial.prompt += '<br>'
-    }
-    else {
-      trial.prompt = ''
-    }
-
-    // variable that has the prompt text, counter and button
-    const html_text = '<div style="line-height: 0em">' + trial.prompt + 
-      '<p id="jspsych-free-sort-counter" style="display: inline-block; line-height: 1em">You still need to place ' + trial.stimuli.length + ' items inside the arena.</p>'+
-      '<button id="jspsych-free-sort-done-btn" class="jspsych-btn" '+ 
-      'style="display: none; margin: 5px; padding: 5px; text-align: center; font-weight: bold; font-size: 18px; vertical-align:baseline; line-height: 1em">' + 
-      trial.button_label+'</button></div>'
+    // variable that has the prompt text and counter
+    const html_text = '<div style="line-height: 1.0em;">' + trial.prompt + 
+      '<p id="jspsych-free-sort-counter" style="display: inline-block;">'+get_counter_text(trial.stimuli.length)+'</p></div>';
     
     // position prompt above or below
     if (trial.prompt_location == "below") {
@@ -164,52 +175,63 @@ jsPsych.plugins['free-sort'] = (function() {
     } else {
         html = html_text + html
     }
+    // add button
+    html += '<div><button id="jspsych-free-sort-done-btn" class="jspsych-btn" '+ 
+      'style="visibility: hidden; margin: 5px; padding: 5px; text-align: center; font-weight: bold; font-size: 18px; border: 2px solid;">' + 
+      trial.button_label+'</button></div>';
 
     display_element.innerHTML = html;
 
     // store initial location data
     let init_locations = [];
 
-    // determine number of rows and colums, must be a even number
-    let num_rows = Math.ceil(Math.sqrt(trial.stimuli.length))
-    if ( num_rows % 2 != 0) {
-      num_rows = num_rows + 1
-    }
+    if (!trial.stim_starts_inside) {
+      // determine number of rows and colums, must be a even number
+      let num_rows = Math.ceil(Math.sqrt(trial.stimuli.length))
+      if ( num_rows % 2 != 0) {
+        num_rows = num_rows + 1
+      }
 
-    // compute coords for left and right side of arena
-    let r_coords = [];
-    let l_coords = [];
-    for (const x of make_arr(0, trial.sort_area_width - trial.stim_width, num_rows) ) {
-      for (const y of make_arr(0, trial.sort_area_height - trial.stim_height, num_rows) ) {
-        if ( x > ( (trial.sort_area_width - trial.stim_width)  * .5 ) ) {
-          //r_coords.push({ x:x, y:y } )
-          r_coords.push({ x:x + (trial.sort_area_width)  * .5 , y:y });
-        } else {
-          l_coords.push({ x:x - (trial.sort_area_width)  * .5 , y:y });
-          //l_coords.push({ x:x, y:y } )
+      // compute coords for left and right side of arena
+      var r_coords = [];
+      var l_coords = [];
+      for (const x of make_arr(0, trial.sort_area_width - trial.stim_width, num_rows) ) {
+        for (const y of make_arr(0, trial.sort_area_height - trial.stim_height, num_rows) ) {
+          if ( x > ( (trial.sort_area_width - trial.stim_width)  * .5 ) ) {
+            //r_coords.push({ x:x, y:y } )
+            r_coords.push({ x:x + (trial.sort_area_width)  * .5 , y:y });
+          } else {
+            l_coords.push({ x:x - (trial.sort_area_width)  * .5 , y:y });
+            //l_coords.push({ x:x, y:y } )
+          }
         }
       }
-    }
 
-    // repeat coordinates until you have enough coords (may be obsolete)
-    while ( ( r_coords.length + l_coords.length ) < trial.stimuli.length ) {
-      r_coords = r_coords.concat(r_coords)
-      l_coords = l_coords.concat(l_coords)
-    }
-    // reverse left coords, so that coords closest to arena is used first
-    l_coords = l_coords.reverse()
+      // repeat coordinates until you have enough coords (may be obsolete)
+      while ( ( r_coords.length + l_coords.length ) < trial.stimuli.length ) {
+        r_coords = r_coords.concat(r_coords)
+        l_coords = l_coords.concat(l_coords)
+      }
+      // reverse left coords, so that coords closest to arena is used first
+      l_coords = l_coords.reverse()
 
-    // shuffle stimuli, so that starting positions are random
-    trial.stimuli = shuffle(trial.stimuli);
+      // shuffle stimuli, so that starting positions are random
+      trial.stimuli = shuffle(trial.stimuli);
+    }
 
     let inside = []
     for (let i = 0; i < trial.stimuli.length; i++) {
-      let coords = []
-      if ( (i % 2) == 0 ) {
-        coords = r_coords[Math.floor(i * .5)];
+      var coords;
+      if (trial.stim_starts_inside) {
+        coords = random_coordinate(trial.sort_area_width - trial.stim_width, trial.sort_area_height - trial.stim_height);
       } else {
-        coords = l_coords[Math.floor(i * .5)];
+        if ( (i % 2) == 0 ) {
+          coords = r_coords[Math.floor(i * .5)];
+        } else {
+          coords = l_coords[Math.floor(i * .5)];
+        }
       }
+      
       display_element.querySelector("#jspsych-free-sort-arena").innerHTML += '<img '+
         'src="'+trial.stimuli[i]+'" '+
         'data-src="'+trial.stimuli[i]+'" '+
@@ -224,8 +246,13 @@ jsPsych.plugins['free-sort'] = (function() {
         "x": coords.x,
         "y": coords.y
       });
-      inside.push(false);
+      if (trial.stim_starts_inside) {
+        inside.push(true);
+      } else {
+        inside.push(false);
+      }
     }
+
     // moves within a trial
     let moves = [];
 
@@ -238,6 +265,18 @@ jsPsych.plugins['free-sort'] = (function() {
     // button (will show when all items are inside) and border (will change color)
     const border = display_element.querySelector("#jspsych-free-sort-border")
     const button = display_element.querySelector('#jspsych-free-sort-done-btn')
+
+    // when trial starts, modify text and border/background if all items are inside (stim_starts_inside: true)
+    if (inside.some(Boolean) && trial.change_border_background_color) {
+      border.style.borderColor = trial.border_color_in;
+    }
+    if (inside.every(Boolean)) {
+      if (trial.change_border_background_color) {
+        border.style.background = trial.border_color_in;
+      }
+      button.style.visibility = "visible";
+      display_element.querySelector("#jspsych-free-sort-counter").innerHTML = trial.counter_text_finished;
+    } 
 
     for(let i=0; i<draggables.length; i++){
       draggables[i].addEventListener('mousedown', function(event){
@@ -273,16 +312,12 @@ jsPsych.plugins['free-sort'] = (function() {
             if (trial.change_border_background_color) {
               border.style.background = trial.border_color_in;
             }
-            button.style.display = "inline-block";
-            display_element.querySelector("#jspsych-free-sort-counter").innerHTML = "All items placed. Feel free to reposition any item if necessary. Otherwise, click here to "
+            button.style.visibility = "visible";
+            display_element.querySelector("#jspsych-free-sort-counter").innerHTML = trial.counter_text_finished;
           } else {
             border.style.background = "none";
-            button.style.display = "none";
-            if ( (inside.length - inside.filter(Boolean).length) > 1 ) {
-              display_element.querySelector("#jspsych-free-sort-counter").innerHTML = "You still need to place " + (inside.length - inside.filter(Boolean).length) + " items inside the arena."
-            } else {
-              display_element.querySelector("#jspsych-free-sort-counter").innerHTML = "You still need to place " + (inside.length - inside.filter(Boolean).length) + " item inside the arena."
-            }
+            button.style.visibility = "hidden";
+            display_element.querySelector("#jspsych-free-sort-counter").innerHTML = get_counter_text(inside.length - inside.filter(Boolean).length);
           }
         }
         document.addEventListener('mousemove', mousemoveevent);
@@ -292,11 +327,11 @@ jsPsych.plugins['free-sort'] = (function() {
           elem.style.transform = "scale(1, 1)";
           if (trial.change_border_background_color) {
             if (inside.every(Boolean)) {
-              border.style.background = "#a1d99b";
-              border.style.borderColor = "#a1d99b";
+              border.style.background = trial.border_color_in;
+              border.style.borderColor = trial.border_color_in;
             } else {
               border.style.background = "none";
-              border.style.borderColor = "#fc9272";
+              border.style.borderColor = trial.border_color_out;
             }
           }
           moves.push({
@@ -338,6 +373,23 @@ jsPsych.plugins['free-sort'] = (function() {
         jsPsych.finishTrial(trial_data);
       }
     });
+
+    function get_counter_text(n) {
+      var text_out = '';
+      var text_bits = trial.counter_text_unfinished.split("%");
+      for (var i=0; i<text_bits.length; i++) {
+        if (i%2 === 0) {
+          text_out += text_bits[i];
+        } else {
+          if (text_bits[i] == "n") {
+            text_out += n.toString();
+          } else if (text_bits[i] == "s" && n > 1) {
+            text_out += "s";
+          }
+        }
+      }
+      return text_out;
+    }
   };
 
   // helper functions
@@ -379,9 +431,6 @@ jsPsych.plugins['free-sort'] = (function() {
     return result 
   }
 
-  /* 
-  un-used functions (that might be useful for something else)
-
   function random_coordinate(max_width, max_height) {
     const rnd_x = Math.floor(Math.random() * (max_width - 1));
     const rnd_y = Math.floor(Math.random() * (max_height - 1));
@@ -390,6 +439,6 @@ jsPsych.plugins['free-sort'] = (function() {
       y: rnd_y
     };
   }
-  */
+
   return plugin;
 })();
