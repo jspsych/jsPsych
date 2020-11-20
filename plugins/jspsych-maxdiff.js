@@ -84,14 +84,14 @@ jsPsych.plugins['maxdiff'] = (function () {
         }
 
         // Start with column headings
-        var maxdiff_table = '<table class="jspsych-maxdiff-table"><tr><th>' + trial.labels[0] + '</th><th></th><th>' + trial.labels[1] + '</th></tr>';
+        var maxdiff_table = '<table class="jspsych-maxdiff-table"><tr><th id="jspsych-maxdiff-left-label">' + trial.labels[0] + '</th><th></th><th id="jspsych-maxdiff-right-label">' + trial.labels[1] + '</th></tr>';
 
         // construct each row of the maxdiff table
         for (var i = 0; i < trial.alternatives.length; i++) {
             var alternative = trial.alternatives[alternative_order[i]];
             // add alternative
             maxdiff_table += '<tr><td><input class= "jspsych-maxdiff-alt-' + i.toString() + '" type="radio" name="left" data-name = ' + alternative_order[i].toString() + ' /><br></td>';
-            maxdiff_table += '<td>' + alternative + '</td>';
+            maxdiff_table += '<td id="jspsych-maxdiff-alternative-' + i.toString() + '">' + alternative + '</td>';
             maxdiff_table += '<td><input class= "jspsych-maxdiff-alt-' + i.toString() + '" type="radio" name="right" data-name = ' + alternative_order[i].toString() + ' /><br></td></tr>';
         }
         maxdiff_table += '</table><br><br>';
