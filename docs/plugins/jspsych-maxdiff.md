@@ -1,6 +1,6 @@
 # jspsych-maxdiff plugin
 
-The maxdiff plugin displays a table with rows of alternatives to be endorsed, typically as 'most' or 'least' on a particular criteria (e.g. importance, preference, similarity). The subject responds by selecting one radio button corresponding to an alternative in both the left and right response columns. The same alternative cannot be endorsed on both the left and right response columns (e.g. 'most' and 'least') simultaneously.
+The maxdiff plugin displays a table with rows of alternatives to be endorsed, typically as 'most' or 'least' on a particular criteria (e.g. importance, preference, similarity). The participant responds by selecting one radio button corresponding to an alternative in both the left and right response columns. The same alternative cannot be endorsed on both the left and right response columns (e.g. 'most' and 'least') simultaneously.
 
 ## Parameters
 
@@ -8,7 +8,7 @@ Parameters with a default value of *undefined* must be specified. Other paramete
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-alternatives | array | *undefined* | An array of alternatives of string type to fill the rows of the maxdiff table.
+alternatives | array | *undefined* | An array of one or more alternatives of string type to fill the rows of the maxdiff table. If `required` is true, then the array must contain two or more alternatives, so that at least one can be selected for both the left and right columns.
 labels | array | *undefined* | An array with exactly two labels of string type to display as column headings (to the left and right of the alternatives) for responses on the criteria of interest.
 randomize_alternative_order | boolean | `false` | If true, the display order of `alternatives` is randomly determined at the start of the trial.
 preamble | string | empty string | HTML formatted string to display at the top of the page above the maxdiff table.
