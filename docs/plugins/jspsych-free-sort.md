@@ -1,6 +1,6 @@
 # jspsych-free-sort plugin
 
-The free-sort plugin displays one or more images on the screen that the participant can interact with by clicking and dragging. All images must be moved into the sorting area before the participant can click a button to end the trial. All of the moves that the participant performs are recorded, as well as the final positions of all images. This plugin could be useful when asking participants to position images based on similarity to one another, or to recall image spatial locations.
+The free-sort plugin displays one or more images on the screen that the participant can interact with by clicking and dragging. When the trial starts, the images can be positioned outside or inside the sort area. All images must be moved into the sorting area before the participant can click a button to end the trial. All of the moves that the participant performs are recorded, as well as the final positions of all images. This plugin could be useful when asking participants to position images based on similarity to one another, or to recall image spatial locations.
 
 ## Parameters
 
@@ -22,6 +22,9 @@ change_border_background_color | boolean | true | If `true`, the sort area borde
 border_color_in | string | '#a1d99b' | If `change_border_background_color` is `true`, the sort area border will change to this color when an item is being moved into the sort area, and the background will change to this color when all of the items have been moved into the sort area.
 border_color_out | string | '#fc9272' | If `change_border_background_color` is `true`, this will be the color of the sort area border when there are one or more items that still need to be moved into the sort area.
 border_width | numeric | null | The width in pixels of the border around the sort area. If `null`, the border width will be 3% of the `sort_area_height`.
+counter_text_unfinished | string | You still need to place %n% item%s% inside the sort area. | Text to display when there are one or more items that still need to be placed in the sort area. If "%n%" is included in the string, it will be replaced with the number of items that still need to be moved inside. If "%s%" is included in the string, a "s" will be included when the number of items remaining is greater than one.
+counter_text_finished | string | All items placed. Feel free to reposition items if necessary. | Text that will take the place of the counter_text_unfinished text when all items have been moved inside the sort area.
+stim_starts_inside | boolean | false | If `false`, the images will be positioned to the left and right of the sort area when the trial loads. If `true`, the images will be positioned at random locations inside the sort area when the trial loads.
 
 ## Data Generated
 
