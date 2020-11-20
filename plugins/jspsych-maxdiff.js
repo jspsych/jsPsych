@@ -136,6 +136,7 @@ jsPsych.plugins['maxdiff'] = (function () {
         });
 
         // Get the data once the submit button is clicked
+        // Get the data once the submit button is clicked
         display_element.querySelector('#jspsych-maxdiff-form').addEventListener('submit', function(e){
             e.preventDefault();
             
@@ -143,16 +144,23 @@ jsPsych.plugins['maxdiff'] = (function () {
             var endTime = performance.now();
             var response_time = endTime - startTime;
 
-            // get the alternative number by the data-name attribute
-            var left = parseInt(display_element.querySelectorAll('[name="left"]:checked')[0].getAttribute('data-name'));
-            var right = parseInt(display_element.querySelectorAll('[name="right"]:checked')[0].getAttribute('data-name'));
+            // get the alternative by the data-name attribute, allowing a null response if unchecked
+            get_response = function(side){
+                var col = display_element.querySelectorAll('[name=\"' + side + '\"]:checked')[0];
+                if (col === undefined){
+                    return null;
+                } else {
+                    var i = parseInt(col.getAttribute('data-name'));
+                    return trial.alternatives[i];
+                }
+            }
 
         // data saving
         var trial_data = {
             "rt": response_time,
             "labels": JSON.stringify({"left": trial.labels[0], "right": trial.labels[1]}),
-            "left": trial.alternatives[left],
-            "right": trial.alternatives[right]
+            "left": get_response('left'),
+            "right": get_response('right')
         };
 
         // next trial
