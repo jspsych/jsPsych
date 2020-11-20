@@ -17,7 +17,11 @@ sort_area_width | numeric | 800 | The width of the container that participants c
 sort_area_shape | string | "ellipse" | The shape of the sorting area, can be "ellipse" or "square".
 prompt | string | null | This string can contain HTML markup. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).
 prompt_location | string | "above" | Indicates whether to show the prompt `"above"` or `"below"` the sorting area.
-button_label | string |  'Continue' | The text that appears on the button to continue to the next trial.
+button_label | string | 'Continue' | The text that appears on the button to continue to the next trial.
+change_border_background_color | boolean | true | If `true`, the sort area border color will change while items are being moved in and out of the sort area, and the background color will change once all items have been moved into the sort area. If `false`, the border will remain black and the background will remain white throughout the trial.
+border_color_in | string | '#a1d99b' | If `change_border_background_color` is `true`, the sort area border will change to this color when an item is being moved into the sort area, and the background will change to this color when all of the items have been moved into the sort area.
+border_color_out | string | '#fc9272' | If `change_border_background_color` is `true`, this will be the color of the sort area border when there are one or more items that still need to be moved into the sort area.
+border_width | numeric | null | The width in pixels of the border around the sort area. If `null`, the border width will be 3% of the `sort_area_height`.
 
 ## Data Generated
 

@@ -46,13 +46,13 @@ jsPsych.plugins['free-sort'] = (function() {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Sort area height',
         default: 800,
-        description: 'The height of the container that subjects can move the stimuli in.'
+        description: 'The height in pixels of the container that subjects can move the stimuli in.'
       },
       sort_area_width: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Sort area width',
         default: 800,
-        description: 'The width of the container that subjects can move the stimuli in.'
+        description: 'The width in pixels of the container that subjects can move the stimuli in.'
       },
       sort_area_shape: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -77,8 +77,38 @@ jsPsych.plugins['free-sort'] = (function() {
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
-        default:  'continue',
+        default:  'Continue',
         description: 'The text that appears on the button to continue to the next trial.'
+      }, 
+      change_border_background_color: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Change border background color',
+        default: true,
+        description: 'If true, the sort area border color will change while items are being moved in and out of '+
+        'the sort area, and the background color will change once all items have been moved into the '+
+        'sort area. If false, the border will remain black and the background will remain white throughout the trial.'
+      },
+      border_color_in: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Border color - in',
+        default:  '#a1d99b',
+        description: 'If change_border_background_color is true, the sort area border will change to this color '+
+        'when an item is being moved into the sort area, and the background will change to this color '+
+        'when all of the items have been moved into the sort area.'
+      },
+      border_color_out: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Border color - out',
+        default:  '#fc9272',
+        description: 'If change_border_background_color is true, this will be the color of the sort area border '+
+        'when there are one or more items that still need to be moved into the sort area.'
+      },
+      border_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Border width',
+        default: null,
+        description: 'The width in pixels of the border around the sort area. If null, the border width '+
+        'defaults to 3% of the sort area height.'
       }
     }
   }
@@ -86,6 +116,14 @@ jsPsych.plugins['free-sort'] = (function() {
   plugin.trial = function(display_element, trial) {
 
     var start_time = performance.now();
+
+    if (trial.change_border_background_color == false) {
+      trial.border_color_out = "#000000";
+    }
+
+    if (trial.border_width == null) {
+      trial.border_width = trial.sort_area_height*.03;
+    }
 
     let html = 
       '<div '+
@@ -97,7 +135,8 @@ jsPsych.plugins['free-sort'] = (function() {
     html += '<div '+
       'id="jspsych-free-sort-border" '+
       'class="jspsych-free-sort-border" '+
-      'style="position: relative; width:'+trial.sort_area_width*.94+'px; height:'+trial.sort_area_height*.94+'px; border:'+trial.sort_area_height*.03+'px solid #fc9272; margin: auto; line-height: 0em; ';
+      'style="position: relative; width:'+trial.sort_area_width*.94+'px; height:'+trial.sort_area_height*.94+'px; '+
+      'border:'+trial.border_width+'px solid '+trial.border_color_out+'; margin: auto; line-height: 0em; ';
     
     if ( trial.sort_area_shape == "ellipse") {
       html += 'webkit-border-radius: 50%; moz-border-radius: 50%; border-radius: 50%"></div>'
@@ -106,7 +145,7 @@ jsPsych.plugins['free-sort'] = (function() {
     }
 
     if ( trial.prompt ) {
-      trial.prompt = '<br>'
+      trial.prompt += '<br>'
     }
     else {
       trial.prompt = ''
@@ -116,7 +155,8 @@ jsPsych.plugins['free-sort'] = (function() {
     const html_text = '<div style="line-height: 0em">' + trial.prompt + 
       '<p id="jspsych-free-sort-counter" style="display: inline-block; line-height: 1em">You still need to place ' + trial.stimuli.length + ' items inside the arena.</p>'+
       '<button id="jspsych-free-sort-done-btn" class="jspsych-btn" '+ 
-      'style="display: none; margin: 5px; padding: 5px; text-align: center; font-weight: bold; font-size: 18px; vertical-align:baseline; line-height: 1em">' + trial.button_label+'</button></div>'
+      'style="display: none; margin: 5px; padding: 5px; text-align: center; font-weight: bold; font-size: 18px; vertical-align:baseline; line-height: 1em">' + 
+      trial.button_label+'</button></div>'
     
     // position prompt above or below
     if (trial.prompt_location == "below") {
@@ -125,7 +165,6 @@ jsPsych.plugins['free-sort'] = (function() {
         html = html_text + html
     }
 
-    console.log(html)
     display_element.innerHTML = html;
 
     // store initial location data
@@ -176,7 +215,7 @@ jsPsych.plugins['free-sort'] = (function() {
         'data-src="'+trial.stimuli[i]+'" '+
         'class="jspsych-free-sort-draggable" '+
         'draggable="false" '+
-        'id="'+i+'" '+
+        'id="jspsych-free-sort-draggable-'+i+'" '+
         'style="position: absolute; cursor: move; width:'+trial.stim_width+'px; height:'+trial.stim_height+'px; top:'+coords.y+'px; left:'+coords.x+'px;">'+
         '</img>';
 
@@ -215,20 +254,25 @@ jsPsych.plugins['free-sort'] = (function() {
           elem.style.left = Math.min(trial.sort_area_width*1.5  - trial.stim_width,  Math.max(-trial.sort_area_width*.5, (e.clientX - x)))+ 'px';
           
           // modify border while items is being moved
-          if (cur_in) {
-            border.style.borderColor = "#a1d99b";
-            border.style.background = "None";
-          } else {
-            border.style.borderColor = "#fc9272";
-            border.style.background = "None";
+          if (trial.change_border_background_color) {
+            if (cur_in) {
+              border.style.borderColor = trial.border_color_in;
+              border.style.background = "None";
+            } else {
+              border.style.borderColor = trial.border_color_out;
+              border.style.background = "None";
+            }
           }
           
-          // replace in overall array, grab idx from item id
-          inside.splice(elem.id, true, cur_in)
+          // replace in overall array, grab index from item id
+          var elem_number = elem.id.split("jspsych-free-sort-draggable-")[1];
+          inside.splice(elem_number, true, cur_in)
 
           // modify text and background if all items are inside
           if (inside.every(Boolean)) {
-            border.style.background = "#a1d99b";
+            if (trial.change_border_background_color) {
+              border.style.background = trial.border_color_in;
+            }
             button.style.display = "inline-block";
             display_element.querySelector("#jspsych-free-sort-counter").innerHTML = "All items placed. Feel free to reposition any item if necessary. Otherwise, click here to "
           } else {
@@ -246,12 +290,14 @@ jsPsych.plugins['free-sort'] = (function() {
         var mouseupevent = function(e){
           document.removeEventListener('mousemove', mousemoveevent);
           elem.style.transform = "scale(1, 1)";
-          if (inside.every(Boolean)) {
-            border.style.background = "#a1d99b";
-            border.style.borderColor = "#a1d99b";
-          } else {
-            border.style.background = "none";
-            border.style.borderColor = "#fc9272";
+          if (trial.change_border_background_color) {
+            if (inside.every(Boolean)) {
+              border.style.background = "#a1d99b";
+              border.style.borderColor = "#a1d99b";
+            } else {
+              border.style.background = "none";
+              border.style.borderColor = "#fc9272";
+            }
           }
           moves.push({
             "src": elem.dataset.src,
