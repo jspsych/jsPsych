@@ -278,19 +278,57 @@ jsPsych.plugins['free-sort'] = (function() {
       display_element.querySelector("#jspsych-free-sort-counter").innerHTML = trial.counter_text_finished;
     } 
 
+    let start_event_name
+    let move_event_name
+    let end_event_name
+
+    if (typeof document.ontouchend === 'undefined'){ // for PC
+      start_event_name = 'mousedown'
+      move_event_name = 'mousemove'
+      end_event_name = 'mouseup'
+    } else { // for touch devices
+      start_event_name = 'touchstart'
+      move_event_name = 'touchmove'
+      end_event_name = 'touchend'
+    }
+
     for(let i=0; i<draggables.length; i++){
-      draggables[i].addEventListener('mousedown', function(event){
-        let x = event.pageX - event.currentTarget.offsetLeft;
-        let y = event.pageY - event.currentTarget.offsetTop - window.scrollY;
+      draggables[i].addEventListener(start_event_name, function(event){
+        let pageX
+        let pageY
+
+        if (typeof document.ontouchend === 'undefined'){ // for PC
+          pageX = event.pageX
+          pageY = event.pageY
+        } else { // for touch devices
+          event.preventDefault();
+          const touchObject = event.changedTouches[0]
+          pageX = touchObject.pageX
+          pageY = touchObject.pageY
+        }
+
+        let x = pageX - event.currentTarget.offsetLeft;
+        let y = pageY - event.currentTarget.offsetTop - window.scrollY;
         let elem = event.currentTarget;
         elem.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
         let mousemoveevent = function(e){
-          cur_in = inside_ellipse(e.clientX - x, e.clientY - y, 
+          let clientX
+          let clientY
+          if (typeof document.ontouchend === 'undefined'){ // for PC
+            clientX = e.clientX
+            clientY = e.clientY
+          } else { // for touch devices
+            const touchObject = e.changedTouches[0]
+            clientX = touchObject.clientX
+            clientY = touchObject.clientY
+          }
+
+          cur_in = inside_ellipse(clientX - x, clientY - y, 
               trial.sort_area_width*.5 - trial.stim_width*.5, trial.sort_area_height*.5 - trial.stim_height*.5, 
               trial.sort_area_width*.5, trial.sort_area_height*.5,
               trial.sort_area_shape == "square");
-          elem.style.top =  Math.min(trial.sort_area_height - trial.stim_height*.5, Math.max(- trial.stim_height*.5, (e.clientY - y))) + 'px';
-          elem.style.left = Math.min(trial.sort_area_width*1.5  - trial.stim_width,  Math.max(-trial.sort_area_width*.5, (e.clientX - x)))+ 'px';
+          elem.style.top =  Math.min(trial.sort_area_height - trial.stim_height*.5, Math.max(- trial.stim_height*.5, (clientY - y))) + 'px';
+          elem.style.left = Math.min(trial.sort_area_width*1.5  - trial.stim_width,  Math.max(-trial.sort_area_width*.5, (clientX - x)))+ 'px';
           
           // modify border while items is being moved
           if (trial.change_border_background_color) {
@@ -320,10 +358,10 @@ jsPsych.plugins['free-sort'] = (function() {
             display_element.querySelector("#jspsych-free-sort-counter").innerHTML = get_counter_text(inside.length - inside.filter(Boolean).length);
           }
         }
-        document.addEventListener('mousemove', mousemoveevent);
+        document.addEventListener(move_event_name, mousemoveevent);
 
         var mouseupevent = function(e){
-          document.removeEventListener('mousemove', mousemoveevent);
+          document.removeEventListener(move_event_name, mousemoveevent);
           elem.style.transform = "scale(1, 1)";
           if (trial.change_border_background_color) {
             if (inside.every(Boolean)) {
@@ -339,9 +377,9 @@ jsPsych.plugins['free-sort'] = (function() {
             "x": elem.offsetLeft,
             "y": elem.offsetTop
           });
-          document.removeEventListener('mouseup', mouseupevent);
+          document.removeEventListener(end_event_name, mouseupevent);
         }
-        document.addEventListener('mouseup', mouseupevent);
+        document.addEventListener(end_event_name, mouseupevent);
       });
     }
 
