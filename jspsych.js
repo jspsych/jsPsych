@@ -56,11 +56,11 @@ window.jsPsych = (function() {
       if(typeof options.timeline === 'undefined'){
         console.error('No timeline declared in jsPsych.init. Cannot start experiment.')
       }
-  
+
       if(options.timeline.length == 0){
         console.error('No trials have been added to the timeline (the timeline is an empty array). Cannot start experiment.')
       }
-  
+
       // reset variables
       timeline = null;
       global_trial_index = 0;
@@ -71,7 +71,7 @@ window.jsPsych = (function() {
       loaded = false;
       loadfail = false;
       jsPsych.data.reset();
-  
+
       var defaults = {
         'display_element': undefined,
         'on_finish': function(data) {
@@ -145,7 +145,7 @@ window.jsPsych = (function() {
       opts.display_element.innerHTML = '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
       DOM_container = opts.display_element;
       DOM_target = document.querySelector('#jspsych-content');
-    
+
 
       // add tabIndex attribute to scope event listeners
       opts.display_element.tabIndex = 0;
@@ -190,7 +190,10 @@ window.jsPsych = (function() {
             if(opts.max_load_time > 0){
               setTimeout(function(){
                 if(!loaded && !loadfail){
-                  core.loadFail();
+                  var error_message = jsPsych.getFriendlyError('The experiment failed to load.',
+                      'Stimuli preloading took longer than the experiment was prepared to wait.',
+                      'Consider compressing your stimuli or incrementing <i>max_load_time</i> jsPsych init parameter (<a href="https://www.jspsych.org/core_library/jspsych-core/#jspsychinit">https://www.jspsych.org/core_library/jspsych-core/#jspsychinit</a>).');
+                  core.loadFail(error_message);
                 }
               }, opts.max_load_time);
             }
@@ -204,7 +207,7 @@ window.jsPsych = (function() {
         }
       );
     };
-    
+
     // execute init() when the document is ready
     if (document.readyState === "complete") {
       init();
@@ -341,6 +344,11 @@ window.jsPsych = (function() {
       waiting = false;
       nextTrial();
     }
+  }
+
+  core.getFriendlyError = function(what, why, how_to_solve) {
+    return '<h1>Error!</h1><p>' + what + '</p><br><p><small>Error description: ' +
+        why + '</small></p><p><small>How to solve: ' + how_to_solve + '</small></p>';
   }
 
   core.loadFail = function(message){
@@ -599,7 +607,7 @@ window.jsPsych = (function() {
           loc = loc - 1;
         }
         // now find the variable
-        return timeline_parameters.timeline[loc].timelineVariable(variable_name); 
+        return timeline_parameters.timeline[loc].timelineVariable(variable_name);
       }
     }
 
@@ -956,7 +964,7 @@ window.jsPsych = (function() {
             }
           });
         }
-      }      
+      }
       // if it's not nested, checking is much easier and do that here:
       else if(typeof trial[param] == 'undefined' || trial[param] === null){
         if(typeof jsPsych.plugins[trial.type].info.parameters[param].default == 'undefined'){
@@ -1022,7 +1030,7 @@ window.jsPsych = (function() {
     document.querySelector('.jspsych-display-element').insertAdjacentHTML('afterbegin',
       '<div id="jspsych-progressbar-container">'+
       '<span>'+
-      msg+ 
+      msg+
       '</span>'+
       '<div id="jspsych-progressbar-outer">'+
         '<div id="jspsych-progressbar-inner"></div>'+
@@ -1886,7 +1894,7 @@ jsPsych.randomization = (function() {
     if(!Array.isArray(arr)){
       console.error("First argument to jsPsych.randomization.sampleWithoutReplacement() must be an array")
     }
-    
+
     if (size > arr.length) {
       console.error("Cannot take a sample " +
         "larger than the size of the set of items to sample.");
@@ -2377,7 +2385,9 @@ jsPsych.pluginAPI = (function() {
             load_audio_file_webaudio(source, count+1)
           }, 200);
         } else {
-          jsPsych.loadFail();
+          var error_message = jsPsych.getFriendlyError('The experiment failed to load.',
+              'Error loading webaudio file ' + source, 'Check if ' + source + ' is reachable by the browser');
+          jsPsych.loadFail(error_message);
         }
       }
       request.send();
@@ -2401,7 +2411,10 @@ jsPsych.pluginAPI = (function() {
             load_audio_file_html5audio(source, count+1)
           }, 200);
         } else {
-          jsPsych.loadFail();
+          var error_message = jsPsych.getFriendlyError('The experiment failed to load.',
+              'Error loading audio file ' + source + '. Error ' + audio.error.code + '; details: ' +
+              audio.error.message, 'Check <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaError">https://developer.mozilla.org/en-US/docs/Web/API/MediaError</a> for more information.');
+          jsPsych.loadFail(error_message);
         }
         audio.removeEventListener('error', handleError);
       });
@@ -2411,7 +2424,11 @@ jsPsych.pluginAPI = (function() {
             load_audio_file_html5audio(source, count+1)
           }, 200);
         } else {
-          jsPsych.loadFail();
+          var error_message = jsPsych.getFriendlyError('The experiment failed to load.',
+              'Error loading audio file ' + source + '. The browser is trying to fetch media data of ' + source +
+              ', but data is unexpectedly not forthcoming.',
+              'Check <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/stalled_event">https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/stalled_event</a> for more information.');
+          jsPsych.loadFail(error_message);
         }
         audio.removeEventListener('stalled', handleStalled);
       });
@@ -2421,7 +2438,10 @@ jsPsych.pluginAPI = (function() {
             load_audio_file_html5audio(source, count+1)
           }, 200);
         } else {
-          jsPsych.loadFail();
+          var error_message = jsPsych.getFriendlyError('The experiment failed to load.',
+              'Error loading audio file ' + source + '. Playback is aborted.',
+              'This error is sent when playback is aborted; for example, if the media is playing and is restarted from the beginning, this event is sent.');
+          jsPsych.loadFail(error_message);
         }
         audio.removeEventListener('abort', handleAbort);
       });
@@ -2482,7 +2502,9 @@ jsPsych.pluginAPI = (function() {
             preload_image(source, count+1);
           }, 200);
         } else {
-          jsPsych.loadFail();
+          var error_message = jsPsych.getFriendlyError('The experiment failed to load.',
+              'Error loading image file ' + source + '.', 'Check if ' + source +' is reachable by the browser.');
+          jsPsych.loadFail(error_message);
         }
       }
 
@@ -2536,7 +2558,9 @@ jsPsych.pluginAPI = (function() {
                         preload_video(source, count+1)
                     }, 200);
                 } else {
-                    jsPsych.loadFail();
+                    var error_message = jsPsych.getFriendlyError('The experiment failed to load.',
+                        'Error loading video file ' + source + '.', 'Check if ' + source +' is reachable by the browser.');
+                    jsPsych.loadFail(error_message);
                 }
             }
             request.send();
@@ -2602,7 +2626,7 @@ jsPsych.pluginAPI = (function() {
     images = images.filter(function(x) { return x != false && x != null})
     audio = audio.filter(function(x) { return x != false && x != null})
     video = video.filter(function(x) { return x != false && x != null})
-    
+
     var total_n = images.length + audio.length + video.length;
 
     var loaded = 0;
