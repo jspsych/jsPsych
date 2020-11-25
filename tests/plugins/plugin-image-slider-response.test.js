@@ -20,6 +20,7 @@ describe('image-slider-response', function(){
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
 			button_label: 'button',
+			render_on_canvas: false,
 			on_load: function(){
 				expect(jsPsych.getDisplayElement().innerHTML).toMatch('<div id="jspsych-image-slider-response-stimulus"><img src="../media/blue.png"');
 				utils.clickTarget(document.querySelector('#jspsych-image-slider-response-next'));
@@ -38,7 +39,8 @@ describe('image-slider-response', function(){
 			type: 'image-slider-response',
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
-			button_label: 'button'
+			button_label: 'button',
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -57,7 +59,8 @@ describe('image-slider-response', function(){
 			type: 'image-slider-response',
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
-			button_label: 'button'
+			button_label: 'button',
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -79,6 +82,7 @@ describe('image-slider-response', function(){
 			min: 2,
 			max: 10,
 			step: 2,
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -99,7 +103,8 @@ describe('image-slider-response', function(){
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
 			button_label: 'button',
-			prompt: '<p>This is a prompt</p>'
+			prompt: '<p>This is a prompt</p>',
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -118,7 +123,8 @@ describe('image-slider-response', function(){
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
 			button_label: 'button',
-			stimulus_duration: 500
+			stimulus_duration: 500,
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -138,7 +144,8 @@ describe('image-slider-response', function(){
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
 			button_label: 'button',
-			trial_duration: 500
+			trial_duration: 500,
+			render_on_canvas: false
 
 		}
 
@@ -158,7 +165,8 @@ describe('image-slider-response', function(){
 			stimulus: '../media/blue.png',
 			labels: ['left', 'right'],
 			button_label: 'button',
-			response_ends_trial: true
+			response_ends_trial: true,
+			render_on_canvas: false
 		}
 
 		jsPsych.init({

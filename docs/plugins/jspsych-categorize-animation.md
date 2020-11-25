@@ -19,6 +19,7 @@ sequence_reps | numeric | 1 | How many times to show the entire sequence.
 allow_response_before_complete | boolean | false | If true, the subject can respond before the animation sequence finishes.
 prompt | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
 feedback_duration | numeric | 2000 | How long to show the feedback (milliseconds).
+render_on_canvas | boolean | true | If true, the images will be drawn onto a canvas element. This prevents a blank screen (white flash) between consecutive images in some browsers, like Firefox and Edge. If false, the image will be shown via an img element, as in previous versions of jsPsych.
 
 ## Data Generated
 
