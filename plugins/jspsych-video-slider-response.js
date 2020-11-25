@@ -139,6 +139,13 @@ jsPsych.plugins["video-slider-response"] = (function() {
         pretty_name: 'Response ends trial',
         default: true,
         description: 'If true, the trial will end when subject makes a response.'
+      },
+      response_allowed_while_playing: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Response allowed while playing',
+        default: true,
+        description: 'If true, then responses are allowed while the video is playing. '+
+          'If false, then the video must finish playing before a response is accepted.'
       }
     }
   }
@@ -157,11 +164,18 @@ jsPsych.plugins["video-slider-response"] = (function() {
     if(trial.height) {
       video_html += ' height="'+trial.height+'"';
     }
-    if(trial.autoplay){
+    if(trial.autoplay & (trial.start == null)){
+      // if autoplay is true and the start time is specified, then the video will start automatically
+      // via the play() method, rather than the autoplay attribute, to prevent showing the first frame
       video_html += " autoplay ";
     }
     if(trial.controls){
       video_html +=" controls ";
+    }
+    if (trial.start !== null) {
+      // hide video element when page loads if the start time is specified, 
+      // to prevent the video element from showing the first frame
+      video_html += ' style="visibility: hidden;"'; 
     }
     video_html +=">";
 
@@ -191,8 +205,11 @@ jsPsych.plugins["video-slider-response"] = (function() {
       html += 'auto;'
     }
     html += '">';
-    html += '<input type="range" class="jspsych-slider" value="'+trial.slider_start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" id="jspsych-video-slider-response-response"></input>';
-    html += '<div>'
+    html += '<input type="range" class="jspsych-slider" value="'+trial.slider_start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" id="jspsych-video-slider-response-response"';
+    if (!trial.response_allowed_while_playing) {
+      html += ' disabled';
+    }
+    html += '></input><div>'
     for(var j=0; j < trial.labels.length; j++){
       var label_width_perc = 100/(trial.labels.length-1);
       var percent_of_range = j * (100/(trial.labels.length - 1));
@@ -213,7 +230,11 @@ jsPsych.plugins["video-slider-response"] = (function() {
     }
 
     // add submit button
-    html += '<button id="jspsych-video-slider-response-next" class="jspsych-btn" '+ (trial.require_movement ? "disabled" : "") + '>'+trial.button_label+'</button>';
+    var next_disabled_attribute = "";
+    if (trial.require_movement | !trial.response_allowed_while_playing) {
+      next_disabled_attribute = "disabled";
+    }
+    html += '<button id="jspsych-video-slider-response-next" class="jspsych-btn" '+ next_disabled_attribute + '>'+trial.button_label+'</button>';
 
     display_element.innerHTML = html;
 
@@ -226,11 +247,24 @@ jsPsych.plugins["video-slider-response"] = (function() {
     video_element.onended = function(){
       if(trial.trial_ends_after_video){
         end_trial();
+      } else if (!trial.response_allowed_while_playing) {
+        enable_slider();
       }
     }
 
+    video_element.playbackRate = trial.rate;
+
+    // if video start time is specified, hide the video and set the starting time
+    // before showing and playing, so that the video doesn't automatically show the first frame
     if(trial.start !== null){
+      video_element.pause();
       video_element.currentTime = trial.start;
+      video_element.onseeked = function() {
+        video_element.style.visibility = "visible";
+        if (trial.autoplay) {
+          video_element.play();
+        }
+      }
     }
 
     if(trial.stop !== null){
@@ -241,8 +275,6 @@ jsPsych.plugins["video-slider-response"] = (function() {
         }
       })
     }
-
-    video_element.playbackRate = trial.rate;
 
     if(trial.require_movement){
       display_element.querySelector('#jspsych-video-slider-response-response').addEventListener('click', function(){
@@ -278,6 +310,11 @@ jsPsych.plugins["video-slider-response"] = (function() {
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
 
+      // stop the video file if it is playing
+      // remove any remaining end event handlers
+      display_element.querySelector('#jspsych-video-slider-response-stimulus-video').pause();
+      display_element.querySelector('#jspsych-video-slider-response-stimulus-video').onended = function() {};
+
       // gather the data to store for the trial
       var trial_data = {
         "rt": response.rt,
@@ -293,6 +330,14 @@ jsPsych.plugins["video-slider-response"] = (function() {
       // move on to the next trial
       jsPsych.finishTrial(trial_data);
     };
+
+    // function to enable slider after video ends
+    function enable_slider() {
+      document.querySelector('#jspsych-video-slider-response-response').disabled = false;
+      if (!trial.require_movement) {
+        document.querySelector('#jspsych-video-slider-response-next').disabled = false;
+      }
+    }
 
     // end trial if time limit is set
     if (trial.trial_duration !== null) {

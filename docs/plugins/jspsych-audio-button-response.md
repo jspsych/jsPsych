@@ -23,6 +23,7 @@ margin_vertical | string | '0px' | Vertical margin of the button(s).
 margin_horizontal | string | '8px' | Horizontal margin of the button(s).
 response_ends_trial | boolean | true | If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the subject to listen to the stimulus for a fixed amount of time, even if they respond before the time is complete.
 trial_ends_after_audio | boolean | false | If true, then the trial will end as soon as the audio file finishes playing.
+response_allowed_while_playing | boolean | true | If true, then responses are allowed while the audio is playing. If false, then the audio must finish playing before the button choices are enabled and a response is accepted. Once the audio has played all the way through, the buttons are enabled and a response is allowed (including while the audio is being re-played via on-screen playback controls). 
 
 ## Data Generated
 

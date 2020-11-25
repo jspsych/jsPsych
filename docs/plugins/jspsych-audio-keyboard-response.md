@@ -20,6 +20,7 @@ prompt | string | null | This string can contain HTML markup. Any content here w
 trial_duration | numeric | null | How long to wait for the subject to make a response before ending the trial in milliseconds. If the subject fails to make a response before this timer is reached, the subject's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely.
 response_ends_trial | boolean | true | If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can use set this parameter to `false` to force the subject to listen to the stimulus for a fixed amount of time, even if they respond before the time is complete.
 trial_ends_after_audio | boolean | false | If true, then the trial will end as soon as the audio file finishes playing.
+response_allowed_while_playing | boolean | true | If true, then responses are allowed while the audio is playing. If false, then the audio must finish playing before a keyboard response is accepted. Once the audio has played all the way through, a valid keyboard response is allowed (including while the audio is being re-played via on-screen playback controls). 
 
 ## Data Generated
 

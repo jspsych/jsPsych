@@ -5,7 +5,9 @@ The following people have contributed to the development of jsPsych by writing c
 * Steve Chao - https://github.com/stchao
 * Krisitn Diep - https://github.com/kristiyip
 * Becky Gilbert - https://github.com/becky-gilbert
+* Angus Hughes - https://github.com/awhug
 * Gustavo Juantorena - https://github.com/GEJ1
+* Chris Jungerius - https://github.com/cjungerius
 * Jana Klaus - https://github.com/janakl4us
 * Jonas Lambers
 * Shane Martin - https://github.com/shamrt

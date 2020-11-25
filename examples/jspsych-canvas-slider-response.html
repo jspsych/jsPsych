@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-canvas-slider-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+    var colors;
+
+    // stimulus function that takes the canvas as its only argument
+    // this function name can be used as the value for the stimulus parameter
+    function twoSquares(c) {    
+        var ctx = c.getContext('2d');
+        ctx.fillStyle = '#FF3333';
+        ctx.fillRect(200, 70, 40, 40);
+        ctx.fillStyle = '#FF6A33';
+        ctx.fillRect(260, 70, 40, 40);
+    }
+
+    var trial_1 = {
+        type: 'canvas-slider-response',
+        stimulus: twoSquares,
+        labels: ['0','10'],
+        canvas_size: [200, 500],
+        prompt: '<p>How different would you say the colors of these two squares are on a scale from 0 (the same) to 10 (completely different)?</p>',
+        data: {color1: '#FF3333', color2: '#FF6A33'}
+    }
+
+    // stimulus function that takes the canvas and additional parameters
+    // this can be called inside of an anonymous stimulus function, which takes the canvas as its only argument
+    function twoSquaresColors(c, colors) {
+        var ctx = c.getContext('2d');
+        ctx.fillStyle = colors[0];
+        ctx.fillRect(200, 70, 40, 40);
+        ctx.fillStyle = colors[1];
+        ctx.fillRect(260, 70, 40, 40);
+    }
+
+    var trial_2 = {
+        type: 'canvas-slider-response',
+        stimulus: function(c) {
+            colors = ['darkred', 'cyan'];
+            twoSquaresColors(c, colors);
+        },
+        labels: ['Exactly<br>the same','Totally<br>different'],
+        canvas_size: [200, 500],
+        require_movement: true,
+        stimulus_duration: 1000,
+        prompt: '<p>How different would you say the colors of these two squares are on a scale from 0 (the same) to 10 (completely different)?</p>'+
+          '<p>Interaction with the slider is required to continue. Stimulus will be hidden after 1 second.</p>',
+        on_finish: function(data) {
+            data.color1 = colors[0];
+            data.color2 = colors[1];
+        }
+    };
+
+    jsPsych.init({
+        timeline: [trial_1, trial_2],
+        on_finish: function () { 
+            jsPsych.data.displayData(); 
+        }
+    });
+</script>
+</html>
