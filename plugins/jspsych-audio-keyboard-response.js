@@ -55,6 +55,13 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         default: false,
         description: 'If true, then the trial will end as soon as the audio file finishes playing.'
       },
+      response_allowed_while_playing: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Response allowed while playing',
+        default: true,
+        description: 'If true, then responses are allowed while the audio is playing. '+
+          'If false, then the audio must finish playing before a response is accepted.'
+      }
     }
   }
 
@@ -72,12 +79,9 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
     }
 
     // set up end event if trial needs it
-
     if(trial.trial_ends_after_audio){
       if(context !== null){
-        source.onended = function() {
-          end_trial();
-        }
+        source.addEventListener('ended', end_trial);
       } else {
         audio.addEventListener('ended', end_trial);
       }
@@ -104,10 +108,12 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
       // remove end event listeners if they exist
       if(context !== null){
         source.stop();
-        source.onended = function() { }
+        source.removeEventListener('ended', end_trial);
+        source.removeEventListener('ended', setup_keyboard_listener);
       } else {
         audio.pause();
         audio.removeEventListener('ended', end_trial);
+        audio.removeEventListener('ended', setup_keyboard_listener);
       }
 
       // kill keyboard listeners
@@ -128,7 +134,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
 
       // move on to the next trial
       jsPsych.finishTrial(trial_data);
-    };
+    }
 
     // function to handle responses by the subject
     var after_response = function(info) {
@@ -143,6 +149,29 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
       }
     };
 
+    function setup_keyboard_listener() {
+      // start the response listener
+      if(context !== null) {
+        var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+          callback_function: after_response,
+          valid_responses: trial.choices,
+          rt_method: 'audio',
+          persist: false,
+          allow_held_key: false,
+          audio_context: context,
+          audio_context_start_time: startTime
+        });
+      } else {
+        var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+          callback_function: after_response,
+          valid_responses: trial.choices,
+          rt_method: 'performance',
+          persist: false,
+          allow_held_key: false
+        });
+      }
+    }
+
     // start audio
     if(context !== null){
       startTime = context.currentTime;
@@ -151,25 +180,15 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
       audio.play();
     }
 
-    // start the response listener
-    if(context !== null) {
-      var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-        callback_function: after_response,
-        valid_responses: trial.choices,
-        rt_method: 'audio',
-        persist: false,
-        allow_held_key: false,
-        audio_context: context,
-        audio_context_start_time: startTime
-      });
-    } else {
-      var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-        callback_function: after_response,
-        valid_responses: trial.choices,
-        rt_method: 'performance',
-        persist: false,
-        allow_held_key: false
-      });
+    // start keyboard listener when trial starts or sound ends
+    if (trial.response_allowed_while_playing) {
+      setup_keyboard_listener();
+    } else if (!trial.trial_ends_after_audio) {
+      if(context !== null){
+        source.addEventListener('ended', setup_keyboard_listener);
+      } else {
+        audio.addEventListener('ended', setup_keyboard_listener);
+      }
     }
 
     // end trial if time limit is set

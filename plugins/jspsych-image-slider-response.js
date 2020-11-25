@@ -131,6 +131,9 @@ jsPsych.plugins['image-slider-response'] = (function() {
 
     var height, width;
     var html;
+    // half of the thumb width value from jspsych.css, used to adjust the label positions
+    var half_thumb_width = 7.5; 
+    
     if (trial.render_on_canvas) {
       // first clear the display element (because the render_on_canvas method appends to display_element instead of overwriting it with .innerHTML)
       if (display_element.hasChildNodes()) {
@@ -179,12 +182,15 @@ jsPsych.plugins['image-slider-response'] = (function() {
         slider_container.style.width = trial.slider_width.toString()+'px';
       }
       // create html string with slider and labels, and add to slider container
-      html ='<input type="range" value="'+trial.slider_start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-image-slider-response-response"></input>';
+      html ='<input type="range" class="jspsych-slider" value="'+trial.slider_start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" id="jspsych-image-slider-response-response"></input>';
       html += '<div>'
       for(var j=0; j < trial.labels.length; j++){
-        var label_width = 100/(trial.labels.length-1);
-        var left_offset = (j * (100 /(trial.labels.length - 1))) - (label_width/2);
-        html += '<div style="display: inline-block; position: absolute; left:'+left_offset+'%; text-align: center; width: '+label_width+'%;">';
+        var label_width_perc = 100/(trial.labels.length-1);
+        var percent_of_range = j * (100/(trial.labels.length - 1));
+        var percent_dist_from_center = ((percent_of_range-50)/50)*100;
+        var offset = (percent_dist_from_center * half_thumb_width)/100;
+        html += '<div style="border: 1px solid transparent; display: inline-block; position: absolute; '+
+        'left:calc('+percent_of_range+'% - ('+label_width_perc+'% / 2) - '+offset+'px); text-align: center; width: '+label_width_perc+'%;">';
         html += '<span style="text-align: center; font-size: 80%;">'+trial.labels[j]+'</span>';
         html += '</div>'
       }
@@ -213,19 +219,37 @@ jsPsych.plugins['image-slider-response'] = (function() {
 
       html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 100px 0px;">';
       html += '<div id="jspsych-image-slider-response-stimulus">';
-      html += '<img src="'+trial.stimulus+'">';
+      html += '<img src="'+trial.stimulus+'" style="';
+      if(trial.stimulus_height !== null){
+        html += 'height:'+trial.stimulus_height+'px; '
+        if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
+          html += 'width: auto; ';
+         }
+      }
+      if(trial.stimulus_width !== null){
+        html += 'width:'+trial.stimulus_width+'px; '
+        if(trial.stimulus_height == null && trial.maintain_aspect_ratio){
+          html += 'height: auto; ';
+        }
+      }
+      html += '"></img>';
       html += '</div>';
-      html += '<div class="jspsych-image-slider-response-container" style="position:relative; margin: 0 auto 3em auto; ';
-      if(trial.slider_width !== null){
-        html += 'width:'+trial.slider_width+'px;';
+      html += '<div class="jspsych-image-slider-response-container" style="position:relative; margin: 0 auto 3em auto; width:';
+      if (trial.slider_width !== null) {
+        html += trial.slider_width+'px;';
+      } else {
+        html += 'auto;';
       }
       html += '">';
-      html += '<input type="range" value="'+trial.slider_start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-image-slider-response-response"></input>';
+      html += '<input type="range" class="jspsych-slider" value="'+trial.slider_start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" id="jspsych-image-slider-response-response"></input>';
       html += '<div>'
       for(var j=0; j < trial.labels.length; j++){
-        var label_width = 100/(trial.labels.length-1);
-        var left_offset = (j * (100 /(trial.labels.length - 1))) - (label_width/2);
-        html += '<div style="display: inline-block; position: absolute; left:'+left_offset+'%; text-align: center; width: '+label_width+'%;">';
+        var label_width_perc = 100/(trial.labels.length-1);
+        var percent_of_range = j * (100/(trial.labels.length - 1));
+        var percent_dist_from_center = ((percent_of_range-50)/50)*100;
+        var offset = (percent_dist_from_center * half_thumb_width)/100;
+        html += '<div style="border: 1px solid transparent; display: inline-block; position: absolute; '+
+        'left:calc('+percent_of_range+'% - ('+label_width_perc+'% / 2) - '+offset+'px); text-align: center; width: '+label_width_perc+'%;">';
         html += '<span style="text-align: center; font-size: 80%;">'+trial.labels[j]+'</span>';
         html += '</div>'
       }
