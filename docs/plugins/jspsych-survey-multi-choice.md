@@ -12,6 +12,7 @@ questions | array | *undefined* | An array of objects, each object represents a 
 randomize_question_order | boolean | `false` | If true, the display order of `questions` is randomly determined at the start of the trial. In the data object, `Q0` will still refer to the first question in the array, regardless of where it was presented visually.
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions.
 button_label | string |  'Continue' | Label of the button.
+autocomplete | boolean | false | This determines whether or not all of the input elements on the page should allow autocomplete. Setting this to true will enable autocomplete or auto-fill for the form.
 
 ## Data Generated
 

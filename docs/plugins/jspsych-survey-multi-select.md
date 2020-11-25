@@ -13,6 +13,7 @@ randomize_question_order | boolean | `false` | If true, the display order of `qu
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions.
 button_label | string |  'Continue' | Label of the button.
 required_message | string | 'You must choose at least one response for this question' | Message to display if required response is not given.
+autocomplete | boolean | false | This determines whether or not all of the input elements on the page should allow autocomplete. Setting this to true will enable autocomplete or auto-fill for the form.
 
 ## Data Generated
 

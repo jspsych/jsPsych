@@ -13,6 +13,7 @@ randomize_question_order | boolean | `false` | If true, the display order of `qu
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions.
 scale_width | numeric | null | The width of the likert scale in pixels. If left `null`, then the width of the scale will be equal to the width of the widest content on the page.
 button_label | string |  'Continue' | Label of the button.
+autocomplete | boolean | false | This determines whether or not all of the input elements on the page should allow autocomplete. Setting this to true will enable autocomplete or auto-fill for the form.
 
 ## Data Generated
 
