@@ -8,7 +8,7 @@ Parameters with a default value of *undefined* must be specified. Other paramete
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-sources | array | *undefined* | An array of file paths to the video. You can specify multiple formats of the same video (e.g., .mp4, .ogg, .webm) to maximize the [cross-browser compatibility](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats). Usually .mp4 is a safe cross-browser option. The player will use the first source file in the array that is compatible with the browser, so specify the files in order of preference.
+sources | array | *undefined* | An array of file paths to the video. You can specify multiple formats of the same video (e.g., .mp4, .ogg, .webm) to maximize the [cross-browser compatibility](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats). Usually .mp4 is a safe cross-browser option. The plugin does not reliably support .mov files. The player will use the first source file in the array that is compatible with the browser, so specify the files in order of preference.
 choices | array of strings | [] | Labels for the buttons. Each different string in the array will generate a different button.
 button_html | HTML string | `'<button class="jspsych-btn">%choice%</button>'` | A template of HTML for generating the button elements. You can override this to create customized buttons of various kinds. The string `%choice%` will be changed to the corresponding element of the `choices` array. You may also specify an array of strings, if you need different HTML to render for each button. If you do specify an array, the `choices` array and this array must have the same length. The HTML from position 0 in the `button_html` array will be used to create the button for element 0 in the `choices` array, and so on.
 margin_vertical | string | '0px' | Vertical margin of the button(s).
@@ -23,12 +23,13 @@ stop| numeric | null | If given a value, the video will stop at this time point 
 rate | numeric | null | The playback rate of the video. 1 is normal, <1 is slower, >1 is faster.
 trial_ends_after_video | bool | false | If true, then the trial will end as soon as the video file finishes playing.
 trial_duration | numeric | null | How long to wait for the subject to make a response before ending the trial in milliseconds. If the subject fails to make a response before this timer is reached, the subject's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely.
-response_ends_trial | boolean | true | If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the `timing_response` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can use this parameter to force the subject to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
+response_ends_trial | boolean | true | If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the subject to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
+response_allowed_while_playing | boolean | true | If true, then responses are allowed while the video is playing. If false, then the video must finish playing before the button choices are enabled and a response is accepted. Once the video has played all the way through, the buttons are enabled and a response is allowed (including while the video is being re-played via on-screen playback controls). 
 
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
@@ -40,7 +41,7 @@ stimulus | string | JSON encoding of the `sources` array.
 
 ```javascript
 var trial = {
-	type: 'video-keyboard-response',
+	type: 'video-button-response',
 	sources: [
 		'video/sample_video.mp4',
 		'video/sample_video.ogg'

@@ -458,7 +458,7 @@ Parameter | Type | Description
 ----------|------|------------
 plugin_name | string | The name of the plugin. e.g., 'image-keyboard-response'.
 parameter | string | The name of the parameter that is a media file. e.g., 'stimulus'
-media_type | string | The type of media, either 'image' or 'audio'.
+media_type | string | The type of media, either 'image', 'audio' or 'video'.
 conditional_function | function | Only run the preload for a trial if this function returns true, or if this function does not exist.
 
 ### Return value

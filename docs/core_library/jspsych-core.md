@@ -362,6 +362,7 @@ max_preload_attempts | numeric | The maximum number of attempts to preload each 
 use_webaudio | boolean | If false, then jsPsych will not attempt to use the WebAudio API for audio playback. Instead, HTML5 Audio objects will be used. The WebAudio API offers more precise control over the timing of audio events, and should be used when possible. The default value is true.
 default_iti | numeric | The default inter-trial interval in ms. The default value if none is specified is 0ms.
 experiment_width | numeric | The desired width of the jsPsych container in pixels. If left undefined, the width will be 100% of the display element. Usually this is the `<body>` element, and the width will be 100% of the screen size.
+minimum_valid_rt | numeric | The minimum valid response time for key presses during the experiment. Any key press response time that is less than this value will be treated as invalid and ignored. Note that this parameter only applies to _keyboard responses_, and not to other response types such as buttons and sliders. The default value is 0.
 
 Possible values for the exclusions parameter above.
 

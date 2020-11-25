@@ -20,7 +20,8 @@ describe('animation plugin', function(){
 
 		var trial = {
 			type: 'animation',
-			stimuli: animation_sequence
+			stimuli: animation_sequence,
+			render_on_canvas: false
 		}
 
 		jsPsych.init({

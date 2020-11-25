@@ -2,7 +2,7 @@
 
 This plugin is for showing instructions to the subject. It allows subjects to navigate through multiple pages of instructions at their own pace, recording how long the subject spends on each page. Navigation can be done using the mouse or keyboard. Subjects can be allowed to navigate forwards and backwards through pages, if desired.
 
-## Parameters
+## Parameters	
 
 Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
 
@@ -21,7 +21,7 @@ page_label | string | 'Page' | The text that appears before x/y pages displayed 
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------

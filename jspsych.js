@@ -52,153 +52,166 @@ window.jsPsych = (function() {
   //
 
   core.init = function(options) {
-
-    if(typeof options.timeline === 'undefined'){
-      console.error('No timeline declared in jsPsych.init. Cannot start experiment.')
-    }
-
-    // reset variables
-    timeline = null;
-    global_trial_index = 0;
-    current_trial = {};
-    current_trial_finished = false;
-    paused = false;
-    waiting = false;
-    loaded = false;
-    loadfail = false;
-    jsPsych.data.reset();
-
-    var defaults = {
-      'display_element': undefined,
-      'on_finish': function(data) {
-        return undefined;
-      },
-      'on_trial_start': function(trial) {
-        return undefined;
-      },
-      'on_trial_finish': function() {
-        return undefined;
-      },
-      'on_data_update': function(data) {
-        return undefined;
-      },
-      'on_interaction_data_update': function(data){
-        return undefined;
-      },
-      'on_close': function(){
-        return undefined;
-      },
-      'preload_images': [],
-      'preload_audio': [],
-      'preload_video': [],
-      'use_webaudio': true,
-      'exclusions': {},
-      'show_progress_bar': false,
-      'message_progress_bar': 'Completion Progress',
-      'auto_update_progress_bar': true,
-      'auto_preload': true,
-      'show_preload_progress_bar': true,
-      'max_load_time': 60000,
-      'max_preload_attempts': 10,
-      'default_iti': 0,
-      'experiment_width': null
-    };
-
-    // override default options if user specifies an option
-    opts = Object.assign({}, defaults, options);
-
-    // set DOM element where jsPsych will render content
-    // if undefined, then jsPsych will use the <body> tag and the entire page
-    if(typeof opts.display_element == 'undefined'){
-      // check if there is a body element on the page
-      var body = document.querySelector('body');
-      if (body === null) {
-        document.documentElement.appendChild(document.createElement('body'));
+    function init() {
+      if(typeof options.timeline === 'undefined'){
+        console.error('No timeline declared in jsPsych.init. Cannot start experiment.')
       }
-      // using the full page, so we need the HTML element to
-      // have 100% height, and body to be full width and height with
-      // no margin
-      document.querySelector('html').style.height = '100%';
-      document.querySelector('body').style.margin = '0px';
-      document.querySelector('body').style.height = '100%';
-      document.querySelector('body').style.width = '100%';
-      opts.display_element = document.querySelector('body');
-    } else {
-      // make sure that the display element exists on the page
-      var display;
-      if (opts.display_element instanceof Element) {
-        var display = opts.display_element;
+  
+      if(options.timeline.length == 0){
+        console.error('No trials have been added to the timeline (the timeline is an empty array). Cannot start experiment.')
+      }
+  
+      // reset variables
+      timeline = null;
+      global_trial_index = 0;
+      current_trial = {};
+      current_trial_finished = false;
+      paused = false;
+      waiting = false;
+      loaded = false;
+      loadfail = false;
+      jsPsych.data.reset();
+  
+      var defaults = {
+        'display_element': undefined,
+        'on_finish': function(data) {
+          return undefined;
+        },
+        'on_trial_start': function(trial) {
+          return undefined;
+        },
+        'on_trial_finish': function() {
+          return undefined;
+        },
+        'on_data_update': function(data) {
+          return undefined;
+        },
+        'on_interaction_data_update': function(data){
+          return undefined;
+        },
+        'on_close': function(){
+          return undefined;
+        },
+        'preload_images': [],
+        'preload_audio': [],
+        'preload_video': [],
+        'use_webaudio': true,
+        'exclusions': {},
+        'show_progress_bar': false,
+        'message_progress_bar': 'Completion Progress',
+        'auto_update_progress_bar': true,
+        'auto_preload': true,
+        'show_preload_progress_bar': true,
+        'max_load_time': 60000,
+        'max_preload_attempts': 10,
+        'default_iti': 0,
+        'minimum_valid_rt': 0,
+        'experiment_width': null
+      };
+
+      // override default options if user specifies an option
+      opts = Object.assign({}, defaults, options);
+
+      // set DOM element where jsPsych will render content
+      // if undefined, then jsPsych will use the <body> tag and the entire page
+      if(typeof opts.display_element == 'undefined'){
+        // check if there is a body element on the page
+        var body = document.querySelector('body');
+        if (body === null) {
+          document.documentElement.appendChild(document.createElement('body'));
+        }
+        // using the full page, so we need the HTML element to
+        // have 100% height, and body to be full width and height with
+        // no margin
+        document.querySelector('html').style.height = '100%';
+        document.querySelector('body').style.margin = '0px';
+        document.querySelector('body').style.height = '100%';
+        document.querySelector('body').style.width = '100%';
+        opts.display_element = document.querySelector('body');
       } else {
-        var display = document.querySelector('#' + opts.display_element);
+        // make sure that the display element exists on the page
+        var display;
+        if (opts.display_element instanceof Element) {
+          var display = opts.display_element;
+        } else {
+          var display = document.querySelector('#' + opts.display_element);
+        }
+        if(display === null) {
+          console.error('The display_element specified in jsPsych.init() does not exist in the DOM.');
+        } else {
+          opts.display_element = display;
+        }
       }
-      if(display === null) {
-        console.error('The display_element specified in jsPsych.init() does not exist in the DOM.');
-      } else {
-        opts.display_element = display;
-      }
-    }
-    opts.display_element.innerHTML = '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
-    DOM_container = opts.display_element;
-    DOM_target = document.querySelector('#jspsych-content');
+      opts.display_element.innerHTML = '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
+      DOM_container = opts.display_element;
+      DOM_target = document.querySelector('#jspsych-content');
     
 
-    // add tabIndex attribute to scope event listeners
-    opts.display_element.tabIndex = 0;
+      // add tabIndex attribute to scope event listeners
+      opts.display_element.tabIndex = 0;
 
-    // add CSS class to DOM_target
-    if(opts.display_element.className.indexOf('jspsych-display-element') == -1){
-      opts.display_element.className += ' jspsych-display-element';
-    }
-    DOM_target.className += 'jspsych-content';
-
-    // set experiment_width if not null
-    if(opts.experiment_width !== null){
-      DOM_target.style.width = opts.experiment_width + "px";
-    }
-
-    // create experiment timeline
-    timeline = new TimelineNode({
-      timeline: opts.timeline
-    });
-
-    // initialize audio context based on options and browser capabilities
-    jsPsych.pluginAPI.initAudio();
-
-    // below code resets event listeners that may have lingered from
-    // a previous incomplete experiment loaded in same DOM.
-    jsPsych.pluginAPI.reset(opts.display_element);
-    // create keyboard event listeners
-    jsPsych.pluginAPI.createKeyboardEventListeners(opts.display_element);
-    // create listeners for user browser interaction
-    jsPsych.data.createInteractionListeners();
-
-    // add event for closing window
-    window.addEventListener('beforeunload', opts.on_close);
-
-    // check exclusions before continuing
-    checkExclusions(opts.exclusions,
-      function(){
-        // success! user can continue...
-        // start experiment, with or without preloading
-        if(opts.auto_preload){
-          jsPsych.pluginAPI.autoPreload(timeline, startExperiment, opts.preload_images, opts.preload_audio, opts.preload_video, opts.show_preload_progress_bar);
-          if(opts.max_load_time > 0){
-            setTimeout(function(){
-              if(!loaded && !loadfail){
-                core.loadFail();
-              }
-            }, opts.max_load_time);
-          }
-        } else {
-          startExperiment();
-        }
-      },
-      function(){
-        // fail. incompatible user.
-
+      // add CSS class to DOM_target
+      if(opts.display_element.className.indexOf('jspsych-display-element') == -1){
+        opts.display_element.className += ' jspsych-display-element';
       }
-    );
-  };
+      DOM_target.className += 'jspsych-content';
+
+      // set experiment_width if not null
+      if(opts.experiment_width !== null){
+        DOM_target.style.width = opts.experiment_width + "px";
+      }
+
+      // create experiment timeline
+      timeline = new TimelineNode({
+        timeline: opts.timeline
+      });
+
+      // initialize audio context based on options and browser capabilities
+      jsPsych.pluginAPI.initAudio();
+
+      // below code resets event listeners that may have lingered from
+      // a previous incomplete experiment loaded in same DOM.
+      jsPsych.pluginAPI.reset(opts.display_element);
+      // create keyboard event listeners
+      jsPsych.pluginAPI.createKeyboardEventListeners(opts.display_element);
+      // create listeners for user browser interaction
+      jsPsych.data.createInteractionListeners();
+
+      // add event for closing window
+      window.addEventListener('beforeunload', opts.on_close);
+
+      // check exclusions before continuing
+      checkExclusions(opts.exclusions,
+        function(){
+          // success! user can continue...
+          // start experiment, with or without preloading
+          if(opts.auto_preload){
+            jsPsych.pluginAPI.autoPreload(timeline, startExperiment, opts.preload_images, opts.preload_audio, opts.preload_video, opts.show_preload_progress_bar);
+            if(opts.max_load_time > 0){
+              setTimeout(function(){
+                if(!loaded && !loadfail){
+                  core.loadFail();
+                }
+              }, opts.max_load_time);
+            }
+          } else {
+            startExperiment();
+          }
+        },
+        function(){
+          // fail. incompatible user.
+
+        }
+      );
+    };
+    
+    // execute init() when the document is ready
+    if (document.readyState === "complete") {
+      init();
+    } else {
+      window.addEventListener("load", init);
+    }
+  }
 
   core.progress = function() {
 
@@ -309,7 +322,7 @@ window.jsPsych = (function() {
 
   core.addNodeToEndOfTimeline = function(new_timeline, preload_callback){
     timeline.insert(new_timeline);
-    if(typeof preload_callback !== 'undefinded'){
+    if(typeof preload_callback !== 'undefined'){
       if(opts.auto_preload){
         jsPsych.pluginAPI.autoPreload(timeline, preload_callback);
       } else {
@@ -577,8 +590,16 @@ window.jsPsych = (function() {
         // if progress.current_location is -1, then the timeline variable is being evaluated
         // in a function that runs prior to the trial starting, so we should treat that trial
         // as being the active trial for purposes of finding the value of the timeline variable
-        var loc = Math.max(0, progress.current_location); 
-        return timeline_parameters.timeline[loc].timelineVariable(variable_name);
+        var loc = Math.max(0, progress.current_location);
+        // if loc is greater than the number of elements on this timeline, then the timeline
+        // variable is being evaluated in a function that runs after the trial on the timeline
+        // are complete but before advancing to the next (like a loop_function).
+        // treat the last active trial as the active trial for this purpose.
+        if(loc == timeline_parameters.timeline.length){
+          loc = loc - 1;
+        }
+        // now find the variable
+        return timeline_parameters.timeline[loc].timelineVariable(variable_name); 
       }
     }
 
@@ -922,7 +943,7 @@ window.jsPsych = (function() {
       if(jsPsych.plugins[trial.type].info.parameters[param].type == jsPsych.plugins.parameterType.COMPLEX){
         if(jsPsych.plugins[trial.type].info.parameters[param].array == true){
           // iterate over each entry in the array
-          for(var i in trial[param]){
+          trial[param].forEach(function(ip, i){
             // check each parameter in the plugin description
             for(var p in jsPsych.plugins[trial.type].info.parameters[param].nested){
               if(typeof trial[param][i][p] == 'undefined' || trial[param][i][p] === null){
@@ -933,7 +954,7 @@ window.jsPsych = (function() {
                 }
               }
             }
-          }
+          });
         }
       }      
       // if it's not nested, checking is much easier and do that here:
@@ -1129,22 +1150,48 @@ jsPsych.data = (function() {
       }
     }
 
+    /**
+     * Queries the first n elements in a collection of trials.
+     *
+     * @param {number} n A positive integer of elements to return. A value of
+     *                   n that is less than 1 will throw an error.
+     *
+     * @return {Array} First n objects of a collection of trials. If fewer than
+     *                 n trials are available, the trials.length elements will
+     *                 be returned.
+     *
+     */
     data_collection.first = function(n){
-      if(typeof n=='undefined'){ n = 1 }
-      var out = [];
-      for(var i=0; i<n; i++){
-        out.push(trials[i]);
+      if (typeof n == 'undefined') { n = 1 }
+      if (n < 1) {
+        throw `You must query with a positive nonzero integer. Please use a 
+               different value for n.`;
       }
-      return DataCollection(out);
+      if (trials.length == 0) return DataCollection([]);
+      if (n > trials.length) n = trials.length;
+      return DataCollection(trials.slice(0, n));
     }
 
-    data_collection.last = function(n){
-      if(typeof n=='undefined'){ n = 1 }
-      var out = [];
-      for(var i=trials.length-n; i<trials.length; i++){
-        out.push(trials[i]);
+    /**
+     * Queries the last n elements in a collection of trials.
+     *
+     * @param {number} n A positive integer of elements to return. A value of
+     *                   n that is less than 1 will throw an error.
+     *
+     * @return {Array} Last n objects of a collection of trials. If fewer than
+     *                 n trials are available, the trials.length elements will
+     *                 be returned.
+     *
+     */
+    data_collection.last = function(n) {
+      if (typeof n == 'undefined') { n = 1 }
+      if (n < 1) {
+        throw `You must query with a positive nonzero integer. Please use a 
+               different value for n.`;
       }
-      return DataCollection(out);
+      if (trials.length == 0) return DataCollection([]);
+      if (n > trials.length) n = trials.length;
+      return DataCollection(trials.slice(trials.length - n, trials.length));
     }
 
     data_collection.values = function(){
@@ -2001,6 +2048,7 @@ jsPsych.pluginAPI = (function() {
   }
 
   module.getKeyboardResponse = function(parameters) {
+
     //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key?
 
     parameters.rt_method = (typeof parameters.rt_method === 'undefined') ? 'performance' : parameters.rt_method;
@@ -2012,19 +2060,29 @@ jsPsych.pluginAPI = (function() {
     var start_time;
     if (parameters.rt_method == 'performance') {
       start_time = performance.now();
-    } else if (parameters.rt_method == 'audio') {
+    } else if (parameters.rt_method === 'audio') {
       start_time = parameters.audio_context_start_time;
     }
 
     var listener_id;
 
     var listener_function = function(e) {
-
       var key_time;
       if (parameters.rt_method == 'performance') {
         key_time = performance.now();
-      } else if (parameters.rt_method == 'audio') {
+      } else if (parameters.rt_method === 'audio') {
         key_time = parameters.audio_context.currentTime
+      }
+      var rt = key_time - start_time;
+
+      // overiding via parameters for testing purposes.
+      var minimum_valid_rt = parameters.minimum_valid_rt;
+      if(!minimum_valid_rt){
+        minimum_valid_rt = jsPsych.initSettings().minimum_valid_rt || 0;
+      }
+
+      if(rt < minimum_valid_rt){
+        return;
       }
 
       var valid_response = false;
@@ -2050,7 +2108,7 @@ jsPsych.pluginAPI = (function() {
       }
       // check if key was already held down
 
-      if (((typeof parameters.allow_held_key == 'undefined') || !parameters.allow_held_key) && valid_response) {
+      if (((typeof parameters.allow_held_key === 'undefined') || !parameters.allow_held_key) && valid_response) {
         if (typeof held_keys[e.keyCode] !== 'undefined' && held_keys[e.keyCode] == true) {
           valid_response = false;
         }
@@ -2063,7 +2121,7 @@ jsPsych.pluginAPI = (function() {
 
         parameters.callback_function({
           key: e.keyCode,
-          rt: key_time - start_time
+          rt: rt,
         });
 
         if (keyboard_listeners.includes(listener_id)) {
@@ -2328,15 +2386,16 @@ jsPsych.pluginAPI = (function() {
     function load_audio_file_html5audio(source, count){
       count = count || 1;
       var audio = new Audio();
-      audio.addEventListener('canplaythrough', function(){
+      audio.addEventListener('canplaythrough', function handleCanPlayThrough(){
         audio_buffers[source] = audio;
         n_loaded++;
         loadfn(n_loaded);
         if(n_loaded == files.length){
           finishfn();
         }
+        audio.removeEventListener('canplaythrough', handleCanPlayThrough);
       });
-      audio.addEventListener('onerror', function(){
+      audio.addEventListener('error', function handleError(){
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
             load_audio_file_html5audio(source, count+1)
@@ -2344,8 +2403,9 @@ jsPsych.pluginAPI = (function() {
         } else {
           jsPsych.loadFail();
         }
+        audio.removeEventListener('error', handleError);
       });
-      audio.addEventListener('onstalled', function(){
+      audio.addEventListener('stalled', function handleStalled(){
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
             load_audio_file_html5audio(source, count+1)
@@ -2353,8 +2413,9 @@ jsPsych.pluginAPI = (function() {
         } else {
           jsPsych.loadFail();
         }
+        audio.removeEventListener('stalled', handleStalled);
       });
-      audio.addEventListener('onabort', function(){
+      audio.addEventListener('abort', function handleAbort(){
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
             load_audio_file_html5audio(source, count+1)
@@ -2362,6 +2423,7 @@ jsPsych.pluginAPI = (function() {
         } else {
           jsPsych.loadFail();
         }
+        audio.removeEventListener('abort', handleAbort);
       });
       audio.src = source;
     }
@@ -2546,7 +2608,7 @@ jsPsych.pluginAPI = (function() {
     var loaded = 0;
 
     if(progress_bar){
-      var pb_html = "<div id='jspsych-loading-progress-bar-container' style='height: 10px; width: 300px; background-color: #ddd;'>";
+      var pb_html = "<div id='jspsych-loading-progress-bar-container' style='height: 10px; width: 300px; background-color: #ddd; margin: auto;'>";
       pb_html += "<div id='jspsych-loading-progress-bar' style='height: 10px; width: 0%; background-color: #777;'></div>";
       pb_html += "</div>";
       jsPsych.getDisplayElement().innerHTML = pb_html;

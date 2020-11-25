@@ -17,7 +17,8 @@ describe('image-keyboard-response', function(){
 	test('displays image stimulus', function(){
 		var trial = {
 			type: 'image-keyboard-response',
-			stimulus: '../media/blue.png'
+			stimulus: '../media/blue.png',
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -35,6 +36,7 @@ describe('image-keyboard-response', function(){
 			type: 'image-keyboard-response',
 			stimulus: '../media/blue.png',
 			choices: ['f','j'],
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -54,7 +56,8 @@ describe('image-keyboard-response', function(){
 			type: 'image-keyboard-response',
 			stimulus: '../media/blue.png',
 			choices: ['f','j'],
-			prompt: '<div id="foo">this is a prompt</div>'
+			prompt: '<div id="foo">this is a prompt</div>',
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -72,6 +75,7 @@ describe('image-keyboard-response', function(){
 			stimulus: '../media/blue.png',
 			choices:['f','j'],
 			stimulus_duration: 500,
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -91,7 +95,8 @@ describe('image-keyboard-response', function(){
 			type: 'image-keyboard-response',
 			stimulus: '../media/blue.png',
 			choices: ['f','j'],
-			trial_duration: 500
+			trial_duration: 500,
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -110,6 +115,7 @@ describe('image-keyboard-response', function(){
 			stimulus: '../media/blue.png',
 			choices: ['f','j'],
 			response_ends_trial: true,
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
@@ -122,5 +128,27 @@ describe('image-keyboard-response', function(){
 		utils.pressKey(70);
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
+	});
+
+	
+	test('should show console warning when trial duration is null and response ends trial is false', function() {
+		const spy = jest.spyOn(console, 'warn').mockImplementation();
+
+		var trial = {
+			type: 'image-keyboard-response',
+			stimulus: '../media/blue.png',
+			choices: ['f','j'],
+			response_ends_trial: false,
+			trial_duration: null,
+			render_on_canvas: false
+		};
+
+		jsPsych.init({
+			timeline: [trial],
+			auto_preload: false
+		});
+
+		expect(spy).toHaveBeenCalled();
+		spy.mockRestore();
 	});
 });
