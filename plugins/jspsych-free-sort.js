@@ -177,7 +177,7 @@ jsPsych.plugins['free-sort'] = (function() {
     }
     // add button
     html += '<div><button id="jspsych-free-sort-done-btn" class="jspsych-btn" '+ 
-      'style="visibility: hidden; margin: 5px; padding: 5px; text-align: center; font-weight: bold; font-size: 18px; border: 2px solid;">' + 
+      'style="margin-top: 5px; visibility: hidden;">' + 
       trial.button_label+'</button></div>';
 
     display_element.innerHTML = html;
