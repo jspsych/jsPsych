@@ -2386,7 +2386,7 @@ jsPsych.pluginAPI = (function() {
     function load_audio_file_html5audio(source, count){
       count = count || 1;
       var audio = new Audio();
-      audio.addEventListener('canplaythrough', function handleCanPlayThrough(){
+      function handleCanPlayThrough(){
         audio_buffers[source] = audio;
         n_loaded++;
         loadfn(n_loaded);
@@ -2394,8 +2394,11 @@ jsPsych.pluginAPI = (function() {
           finishfn();
         }
         audio.removeEventListener('canplaythrough', handleCanPlayThrough);
-      });
+      }
+
+      audio.addEventListener('canplaythrough', handleCanPlayThrough);
       audio.addEventListener('error', function handleError(){
+        audio.removeEventListener('canplaythrough', handleCanPlayThrough);
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
             load_audio_file_html5audio(source, count+1)
@@ -2406,6 +2409,7 @@ jsPsych.pluginAPI = (function() {
         audio.removeEventListener('error', handleError);
       });
       audio.addEventListener('stalled', function handleStalled(){
+        audio.removeEventListener('canplaythrough', handleCanPlayThrough);
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
             load_audio_file_html5audio(source, count+1)
@@ -2416,6 +2420,7 @@ jsPsych.pluginAPI = (function() {
         audio.removeEventListener('stalled', handleStalled);
       });
       audio.addEventListener('abort', function handleAbort(){
+        audio.removeEventListener('canplaythrough', handleCanPlayThrough);
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
             load_audio_file_html5audio(source, count+1)
