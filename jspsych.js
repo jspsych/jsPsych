@@ -2578,15 +2578,15 @@ jsPsych.pluginAPI = (function() {
       var trials = timeline.trialsOfType(type);
       for (var j = 0; j < trials.length; j++) {
 
-        if (trials[j][param] && typeof trials[j][param] !== 'function') {
-
+        if (typeof trials[j][param] == 'undefined') {
+          console.warn("jsPsych failed to auto preload one or more files: no parameter called "+param+" in plugin "+type);
+        } else if (typeof trials[j][param] !== 'function') {
           if ( !func  || func(trials[j]) ){
             if (media === 'image') {
               images = images.concat(jsPsych.utils.flatten([trials[j][param]]));
             } else if (media === 'audio') {
               audio = audio.concat(jsPsych.utils.flatten([trials[j][param]]));
-            }
-            else if (media === 'video') {
+            } else if (media === 'video') {
               video = video.concat(jsPsych.utils.flatten([trials[j][param]]));
             }
           }
