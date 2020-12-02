@@ -8,7 +8,7 @@ Parameters with a default value of *undefined* must be specified. Other paramete
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-sources | array | *undefined* | An array of file paths to the video. You can specify multiple formats of the same video (e.g., .mp4, .ogg, .webm) to maximize the [cross-browser compatibility](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats). Usually .mp4 is a safe cross-browser option. The plugin does not reliably support .mov files. The player will use the first source file in the array that is compatible with the browser, so specify the files in order of preference.
+stimulus | array | *undefined* | An array of file paths to the video. You can specify multiple formats of the same video (e.g., .mp4, .ogg, .webm) to maximize the [cross-browser compatibility](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats). Usually .mp4 is a safe cross-browser option. The plugin does not reliably support .mov files. The player will use the first source file in the array that is compatible with the browser, so specify the files in order of preference.
 choices | array of strings | [] | Labels for the buttons. Each different string in the array will generate a different button.
 button_html | HTML string | `'<button class="jspsych-btn">%choice%</button>'` | A template of HTML for generating the button elements. You can override this to create customized buttons of various kinds. The string `%choice%` will be changed to the corresponding element of the `choices` array. You may also specify an array of strings, if you need different HTML to render for each button. If you do specify an array, the `choices` array and this array must have the same length. The HTML from position 0 in the `button_html` array will be used to create the button for element 0 in the `choices` array, and so on.
 margin_vertical | string | '0px' | Vertical margin of the button(s).
@@ -35,14 +35,14 @@ Name | Type | Value
 -----|------|------
 button_pressed | numeric | Indicates which button the subject pressed. The first button in the `choices` array is 0, the second is 1, and so on.
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.
-stimulus | string | JSON encoding of the `sources` array.
+stimulus | string | JSON encoding of the `stimulus` array.
 
 ## Example
 
 ```javascript
 var trial = {
 	type: 'video-button-response',
-	sources: [
+	stimulus: [
 		'video/sample_video.mp4',
 		'video/sample_video.ogg'
 	],

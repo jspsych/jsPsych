@@ -17,7 +17,7 @@
 
   var trial_1 = {
     type: 'video-slider-response',
-    sources: ['video/sample_video.mp4'],
+    stimulus: ['video/sample_video.mp4'],
     labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
     min: 1,
     max: 5,
@@ -33,7 +33,7 @@
 
   var trial_2 = {
     type: 'video-slider-response',
-    sources: ['video/sample_video.mp4'],
+    stimulus: ['video/sample_video.mp4'],
     labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
     min: 1,
     max: 5,
@@ -46,7 +46,6 @@
   }
 
   jsPsych.init({
-
     show_preload_progress_bar: true,
     timeline: [pre_trial, trial_1, trial_2],
     on_finish: function() { jsPsych.data.displayData(); }
