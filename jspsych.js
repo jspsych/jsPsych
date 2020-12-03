@@ -2419,16 +2419,6 @@ jsPsych.pluginAPI = (function() {
         }
         audio.removeEventListener('error', handleError);
       });
-      audio.addEventListener('stalled', function handleStalled(){
-        if(count < jsPsych.initSettings().max_preload_attempts){
-          setTimeout(function(){
-            load_audio_file_html5audio(source, count+1)
-          }, 200);
-        } else {
-          jsPsych.loadFail();
-        }
-        audio.removeEventListener('stalled', handleStalled);
-      });
       audio.addEventListener('abort', function handleAbort(){
         if(count < jsPsych.initSettings().max_preload_attempts){
           setTimeout(function(){
@@ -2637,7 +2627,10 @@ jsPsych.pluginAPI = (function() {
       loaded++;
       if(progress_bar){
         var percent_loaded = (loaded/total_n)*100;
-        jsPsych.getDisplayElement().querySelector('#jspsych-loading-progress-bar').style.width = percent_loaded+"%";
+        var preload_progress_bar = jsPsych.getDisplayElement().querySelector('#jspsych-loading-progress-bar');
+        if (preload_progress_bar !== null) {
+          preload_progress_bar.style.width = percent_loaded+"%";
+        }
       }
     }
 

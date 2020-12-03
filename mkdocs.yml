@@ -9,11 +9,11 @@ theme:
   favicon: 'img/jspsych-favicon.png'
 extra:
   social:
-    - type: 'github'
+    - icon: 'fontawesome/brands/github'
       link: 'https://github.com/jspsych'
-    - type: 'twitter'
+    - icon: 'fontawesome/brands/twitter'
       link: 'https://twitter.com/joshdeleeuw'
-copyright: 'Copyright &copy; 2012-2019 Josh de Leeuw'
+copyright: 'Copyright &copy; 2012-2020 Josh de Leeuw'
 google_analytics:
   - 'UA-50563838-1'
   - 'auto'
@@ -35,6 +35,7 @@ nav:
   - 'Creating an Experiment: The Timeline': 'overview/timeline.md'
   - 'Advanced Options for Trials': 'overview/trial.md'
   - 'Data Storage, Aggregation, and Manipulation': 'overview/data.md'
+  - 'Collecting Data from Online Participants': 'overview/collecting-data.md'
   - 'Experiment Settings': 'overview/experiment-options.md'
   - 'Event-related Callback Functions': 'overview/callbacks.md'
   - 'Record Browser Interactions': 'overview/record-browser-interactions.md'
@@ -43,7 +44,8 @@ nav:
   - 'Exclude Participants Based on Browser Features': 'overview/exclude-browser.md'
   - 'Automatic Progress Bar': 'overview/progress-bar.md'
   - 'Integrating with Mechanical Turk': 'overview/mturk.md'
-- Core Library API:
+  - 'Browser and Device Support': 'overview/browser-device-support.md'
+- Reference:
   - 'jsPsych': 'core_library/jspsych-core.md'
   - 'jsPsych.data': 'core_library/jspsych-data.md'
   - 'jsPsych.randomization': 'core_library/jspsych-randomization.md'
@@ -56,6 +58,9 @@ nav:
   - 'jspsych-audio-button-response': 'plugins/jspsych-audio-button-response.md'
   - 'jspsych-audio-keyboard-response': 'plugins/jspsych-audio-keyboard-response.md'
   - 'jspsych-audio-slider-response': 'plugins/jspsych-audio-slider-response.md'
+  - 'jspsych-canvas-button-response': 'plugins/jspsych-canvas-button-response.md'
+  - 'jspsych-canvas-keyboard-response': 'plugins/jspsych-canvas-keyboard-response.md'
+  - 'jspsych-canvas-slider-response': 'plugins/jspsych-canvas-slider-response.md'
   - 'jspsych-call-function': 'plugins/jspsych-call-function.md'
   - 'jspsych-categorize-animation': 'plugins/jspsych-categorize-animation.md'
   - 'jspsych-categorize-html': 'plugins/jspsych-categorize-html.md'
@@ -73,6 +78,7 @@ nav:
   - 'jspsych-image-keyboard-response': 'plugins/jspsych-image-keyboard-response.md'
   - 'jspsych-image-slider-response': 'plugins/jspsych-image-slider-response.md'
   - 'jspsych-instructions': 'plugins/jspsych-instructions.md'
+  - 'jspsych-maxdiff': 'plugins/jspsych-maxdiff.md'
   - 'jspsych-rdk': 'plugins/jspsych-rdk.md'
   - 'jspsych-reconstruction': 'plugins/jspsych-reconstruction.md'
   - 'jspsych-resize': 'plugins/jspsych-resize.md'
