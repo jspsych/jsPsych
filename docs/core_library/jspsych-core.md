@@ -363,6 +363,7 @@ use_webaudio | boolean | If false, then jsPsych will not attempt to use the WebA
 default_iti | numeric | The default inter-trial interval in ms. The default value if none is specified is 0ms.
 experiment_width | numeric | The desired width of the jsPsych container in pixels. If left undefined, the width will be 100% of the display element. Usually this is the `<body>` element, and the width will be 100% of the screen size.
 minimum_valid_rt | numeric | The minimum valid response time for key presses during the experiment. Any key press response time that is less than this value will be treated as invalid and ignored. Note that this parameter only applies to _keyboard responses_, and not to other response types such as buttons and sliders. The default value is 0.
+override_safe_mode | boolean | If jsPsych detects that the HTML file has been opened directly in the browser, rather than running via a server, then it will disable Web Audio and video preloading in order to prevent cross-origin request (CORS) errors. Default is `true`. If `false`, jsPsych will ignore the file's protocol and use the normal settings for Web Audio (`use_webaudio`) and video preloading (automatic preloading via video plugins and/or manual preloading via `preload_videos`).
 
 Possible values for the exclusions parameter above.
 
