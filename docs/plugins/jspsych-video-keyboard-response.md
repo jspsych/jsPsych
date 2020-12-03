@@ -8,7 +8,7 @@ Parameters with a default value of *undefined* must be specified. Other paramete
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-sources | array | *undefined* | An array of file paths to the video. You can specify multiple formats of the same video (e.g., .mp4, .ogg, .webm) to maximize the [cross-browser compatibility](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats). Usually .mp4 is a safe cross-browser option. The plugin does not reliably support .mov files. The player will use the first source file in the array that is compatible with the browser, so specify the files in order of preference.
+stimulus | array | *undefined* | An array of file paths to the video. You can specify multiple formats of the same video (e.g., .mp4, .ogg, .webm) to maximize the [cross-browser compatibility](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats). Usually .mp4 is a safe cross-browser option. The plugin does not reliably support .mov files. The player will use the first source file in the array that is compatible with the browser, so specify the files in order of preference.
 prompt | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
 width | numeric | width of the video file | The width of the video display in pixels.
 height | numeric | heigh of the video file | The height of the video display in pixels.
@@ -31,14 +31,14 @@ Name | Type | Value
 -----|------|------
 key_press | numeric | Indicates which key the subject pressed. The value is the [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) corresponding to the subject's response.
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.
-stimulus | string | JSON encoding of the `sources` array.
+stimulus | string | JSON encoding of the `stimulus` array.
 
 ## Example
 
 ```javascript
 var trial = {
 	type: 'video-keyboard-response',
-	sources: [
+	stimulus: [
 		'video/sample_video.mp4',
 		'video/sample_video.ogg'
 	],
