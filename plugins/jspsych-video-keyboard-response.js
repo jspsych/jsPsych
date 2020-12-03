@@ -18,7 +18,7 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
     name: 'video-keyboard-response',
     description: '',
     parameters: {
-      sources: {
+      stimulus: {
         type: jsPsych.plugins.parameterType.VIDEO,
         pretty_name: 'Video',
         default: undefined,
@@ -134,10 +134,10 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
     }
     video_html +=">";
 
-    var video_preload_blob = jsPsych.pluginAPI.getVideoBuffer(trial.sources[0]);
+    var video_preload_blob = jsPsych.pluginAPI.getVideoBuffer(trial.stimulus[0]);
     if(!video_preload_blob) {
-      for(var i=0; i<trial.sources.length; i++){
-        var file_name = trial.sources[i];
+      for(var i=0; i<trial.stimulus.length; i++){
+        var file_name = trial.stimulus[i];
         if(file_name.indexOf('?') > -1){
           file_name = file_name.substring(0, file_name.indexOf('?'));
         }
