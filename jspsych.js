@@ -120,7 +120,7 @@ window.jsPsych = (function() {
         console.warn("jsPsych detected that it is running via the file:// protocol and not on a web server. "+
           "To prevent issues with cross-origin requests, Web Audio and video preloading have been disabled. "+
           "If you would like to override this setting, you can set 'override_safe_mode' to 'true' in jsPsych.init. "+
-          "For more information, see: ");
+          "For more information, see: https://www.jspsych.org/core_library/jspsych-core/#jspsychinit");
       }
 
       // override default options if user specifies an option
