@@ -58,9 +58,9 @@ Images, audio files, and movies can be preloaded to reduce latency during the ex
 
 ## Choose the method for playing audio files
 
-By default, jsPsych uses the WebAudio API to play audio files. Among other features, the WebAudio API allows for more precise measurement of response times relative to the onset of the audio. 
+Specifying the `use_webaudio` parameter in `jsPsych.init()` allows you to choose whether to use the WebAudio API or HTML5 audio for playing audio files during your experiment. By default, jsPsych uses the WebAudio API to play audio files. Among other features, the WebAudio API allows for more precise measurement of response times relative to the onset of the audio. 
 
-However, loading files through the WebAudio API may not work when running an experiment locally (i.e., not on a live web server). This is due to the [cross-origin security policy](https://security.stackexchange.com/a/190321) implemented by web browsers. One option is to [temporarily disable the security](https://stackoverflow.com/q/4819060/3726673) for testing purposes. Another is to use HTML5 Audio instead of the WebAudio API. This can be done by specifying the `use_webaudio` parameter in `jsPsych.init()`.
+However, loading files through the WebAudio API causes errors when running an experiment offline (i.e., by double-clicking on the HTML file, rather than hosting it on a web server). This is due to the [cross-origin security policy](https://security.stackexchange.com/a/190321) implemented by web browsers. For this reason, jsPsych switches to a 'safe mode' when it detects that the webpage is running offline, and automatically uses HTML5 audio to prevent errors, even when `use_webaudio` has been explicitly set to `true`. For more information, see the [Running Experiments](running-experiments.md) page.
 
 ```js
 jsPsych.init({
@@ -95,3 +95,27 @@ jsPsych.init({
 });
 ```
 
+## Specify a minimum valid response time
+
+By default, jsPsych will treat any keyboard response time as valid. However, it's possible to specify a minimum valid response time (in ms) for key presses. Any key press that is less than this value will be treated as invalid and ignored. Note that this parameter only applies to _keyboard responses_, and not to other response types such as buttons and sliders. The default value is 0.
+
+```js
+// ignore any keyboard responses that are less than 100 ms
+jsPsych.init({
+    timeline: [...],
+    minimum_valid_rt: 100
+});
+```
+
+## Override 'safe mode' when running experiments offline
+
+By default, jsPsych switches to a 'safe mode' when it detects that the webpage is running offline (via the `file://` protocol) in order to prevent certain errors. Specifically, in safe mode, HTML5 audio is used to play audio files (even when `use_webaudio` has been explicitly set to `true`) and video preloading is disabled (both automatic and manual preloading). For more information, see the [Running Experiments](running-experiments.md) page.
+
+It's possible to override this safe mode feature by setting the `override_safe_mode` parameter to `true` in `jsPsych.init`. This is something you might do if you've disabled certain security settings in your browser for testing purposes. This parameter has no effect when your experiment is running online (on a server), because it will be using the `http://` or `https://` protocol, which does not trigger safe mode. 
+
+```js
+jsPsych.init({
+    timeline: [...],
+    override_safe_mode: true
+});
+```

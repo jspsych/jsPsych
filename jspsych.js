@@ -32,6 +32,8 @@ window.jsPsych = (function() {
   // done loading?
   var loaded = false;
   var loadfail = false;
+  // is the page retrieved directly via file:// protocol (true) or hosted on a server (false)?
+  var file_protocol = false;
 
   // storing a single webaudio context to prevent problems with multiple inits
   // of jsPsych
@@ -70,6 +72,7 @@ window.jsPsych = (function() {
       waiting = false;
       loaded = false;
       loadfail = false;
+      file_protocol = false;
       jsPsych.data.reset();
   
       var defaults = {
@@ -106,8 +109,19 @@ window.jsPsych = (function() {
         'max_preload_attempts': 10,
         'default_iti': 0,
         'minimum_valid_rt': 0,
-        'experiment_width': null
+        'experiment_width': null,
+        'override_safe_mode': false
       };
+
+      // detect whether page is running in browser as a local file, and if so, disable web audio and video preloading to prevent CORS issues
+      if (window.location.protocol == 'file:' && (options.override_safe_mode === false || typeof options.override_safe_mode == 'undefined')) {
+        options.use_webaudio = false;
+        file_protocol = true;
+        console.warn("jsPsych detected that it is running via the file:// protocol and not on a web server. "+
+          "To prevent issues with cross-origin requests, Web Audio and video preloading have been disabled. "+
+          "If you would like to override this setting, you can set 'override_safe_mode' to 'true' in jsPsych.init. "+
+          "For more information, see: https://www.jspsych.org/overview/running-experiments");
+      }
 
       // override default options if user specifies an option
       opts = Object.assign({}, defaults, options);
@@ -186,7 +200,7 @@ window.jsPsych = (function() {
           // success! user can continue...
           // start experiment, with or without preloading
           if(opts.auto_preload){
-            jsPsych.pluginAPI.autoPreload(timeline, startExperiment, opts.preload_images, opts.preload_audio, opts.preload_video, opts.show_preload_progress_bar);
+            jsPsych.pluginAPI.autoPreload(timeline, startExperiment, file_protocol, opts.preload_images, opts.preload_audio, opts.preload_video, opts.show_preload_progress_bar);
             if(opts.max_load_time > 0){
               setTimeout(function(){
                 if(!loaded && !loadfail){
@@ -324,7 +338,7 @@ window.jsPsych = (function() {
     timeline.insert(new_timeline);
     if(typeof preload_callback !== 'undefined'){
       if(opts.auto_preload){
-        jsPsych.pluginAPI.autoPreload(timeline, preload_callback);
+        jsPsych.pluginAPI.autoPreload(timeline, preload_callback, file_protocol);
       } else {
         preload_callback();
       }
@@ -2553,7 +2567,7 @@ jsPsych.pluginAPI = (function() {
     preloads.push(preload);
   }
 
-  module.autoPreload = function(timeline, callback, images, audio, video, progress_bar) {
+  module.autoPreload = function(timeline, callback, file_protocol, images, audio, video, progress_bar) {
     // list of items to preload
     images = images || [];
     audio = audio || [];
@@ -2591,7 +2605,12 @@ jsPsych.pluginAPI = (function() {
     // remove any nulls false values
     images = images.filter(function(x) { return x != false && x != null})
     audio = audio.filter(function(x) { return x != false && x != null})
-    video = video.filter(function(x) { return x != false && x != null})
+    // prevent all video preloading (auto and manual) when file is opened directly in browser
+    if (file_protocol === true) {
+      video = [];
+    } else {
+      video = video.filter(function(x) { return x != false && x != null})
+    }
     
     var total_n = images.length + audio.length + video.length;
 
