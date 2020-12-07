@@ -2,6 +2,8 @@
 
 If an experiment uses image, audio, or video files as stimuli, it is a good idea to preload the files before running the experiment. Preloading files means that the subject's browser will download all of the files and store them in local memory on the subject's computer. This is important because loading a file is much faster if it is already in memory on the subject's computer. Without preloading, there will be noticeable delays in the display of media, which will affect any timing measurements (such as how long an image is displayed, or a subject's response time since first viewing an image). For particularly large files, like video, preloading content avoids lengthy pauses in the middle of the experiment that can be disruptive to the flow of the experiment.
 
+Note that video preloading will not work when you run your experiment offline (e.g., by double-clicking on the HTML file), but it will work once your experiment is running online (hosted on a server). The [Running Experiments](running-experiments.md) page contains more information about this.
+
 ## Automatic Preloading
 
 jsPsych will automatically preload audio, video, and image files that are used as parameters for the standard set of plugins.
@@ -20,10 +22,10 @@ var sound_trial = {
 	stimulus: 'audio/hello.mp3'
 }
 
-// the video file is preloaded automatically
+// the video file is preloaded automatically (as long as the experiment is running on a server)
 var video_trial = {
 	type: 'video',
-	sources: ['video/sample_video.mp4']
+	stimulus: ['video/sample_video.mp4']
 }
 
 jsPsych.init({
@@ -54,7 +56,7 @@ var video_timline = {
 	timeline: [
 		{
 			type: 'video',
-			sources: jsPsych.timelineVariable('video')
+			stimulus: jsPsych.timelineVariable('video')
 		}
 	],
 	timeline_variables: [
