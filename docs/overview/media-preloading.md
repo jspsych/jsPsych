@@ -2,7 +2,7 @@
 
 If an experiment uses image, audio, or video files as stimuli, it is a good idea to preload the files before running the experiment. Preloading files means that the subject's browser will download all of the files and store them in local memory on the subject's computer. This is important because loading a file is much faster if it is already in memory on the subject's computer. Without preloading, there will be noticeable delays in the display of media, which will affect any timing measurements (such as how long an image is displayed, or a subject's response time since first viewing an image). For particularly large files, like video, preloading content avoids lengthy pauses in the middle of the experiment that can be disruptive to the flow of the experiment.
 
-Note that video preloading will not work when you run your experiment offline (e.g., by double-clicking on the HTML file), but it will work once your experiment is running online (hosted on a server). The [Running Experiments](running-experiments.md) page contains more information about this.
+Note that video preloading will not work when you run your experiment offline (e.g., by double-clicking on the HTML file), but it will work once your experiment is running online (hosted on a server). The [Cross-origin requests (CORS) and safe mode](running-experiments.md#cross-origin-requests-cors-and-safe-mode) section on the Running Experiments page contains more information about this.
 
 ## Automatic Preloading
 
