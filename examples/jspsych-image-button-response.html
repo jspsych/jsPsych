@@ -18,7 +18,7 @@
     stimulus: jsPsych.timelineVariable('stim'),
     trial_duration: 1000,
     choices: ['Happy', 'Sad'],
-    prompt: '<p>What emotion is this person showing?</p><p>(Consecutive images with no post_trial_gap)</p>',
+    prompt: '<p>What emotion is this person showing?</p><p>(1s duration, consecutive images with no post_trial_gap)</p>',
     stimulus_width: 400, 
     maintain_aspect_ratio: true,
     post_trial_gap: 0,
@@ -39,7 +39,8 @@
     type: 'image-button-response',
     stimulus: 'img/happy_face_1.jpg',
     choices: ['Happy', 'Sad'],
-    prompt: "<p>What emotion is this person showing?</p>"
+    prompt: "<p>What emotion is this person showing?</p><p>(Wait for response)</p>",
+    post_trial_gap: 500
   });
 
   timeline.push({
@@ -48,7 +49,8 @@
     stimulus_height: 400,
     choices: ['Happy', 'Sad'],
     stimulus_duration: 1000,
-    prompt: "<p>What emotion is this person showing? (image disappears after 1s)</p>"
+    prompt: "<p>What emotion is this person showing? (image disappears after 1s)</p>",
+    post_trial_gap: 500
   });
 
   timeline.push({
@@ -58,7 +60,8 @@
     choices: ['Happy', 'Sad'],
     trial_duration: 2000,
     response_ends_trial: false,
-    prompt: "<p>What emotion is this person showing? (trial ends after 2s)</p>"
+    prompt: "<p>What emotion is this person showing? (trial ends after 2s)</p>",
+    post_trial_gap: 500
   });
 
   timeline.push({
@@ -67,7 +70,8 @@
     choices: ['Happy', 'Sad'],
     stimulus_width: 400,
     maintain_aspect_ratio: false,
-    prompt: '<p>What emotion is this person showing?</p><p>(Stimulus_width set to a smaller value and maintain_aspect_ratio set to false.)</p>'
+    prompt: '<p>What emotion is this person showing?</p><p>(Stimulus_width set to a smaller value and maintain_aspect_ratio set to false.)</p>',
+    post_trial_gap: 500
   });
 
   jsPsych.init({
