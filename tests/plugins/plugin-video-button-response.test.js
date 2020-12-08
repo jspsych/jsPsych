@@ -27,7 +27,7 @@ describe('video-button-response plugin', function(){
 			timeline: [trial]
 		});
 		expect(preload_spy).toHaveBeenCalled(); 
-		expect(console_spy).not.toHaveBeenCalled();
+		expect(console_spy).not.toHaveBeenCalledWith('jsPsych failed to auto preload one or more files:');
 		preload_spy.mockRestore();
 		console_spy.mockRestore();
 	});

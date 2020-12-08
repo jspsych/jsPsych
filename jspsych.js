@@ -2583,7 +2583,8 @@ jsPsych.pluginAPI = (function() {
       for (var j = 0; j < trials.length; j++) {
 
         if (typeof trials[j][param] == 'undefined') {
-          console.warn("jsPsych failed to auto preload one or more files: no parameter called "+param+" in plugin "+type);
+          console.warn("jsPsych failed to auto preload one or more files:");
+          console.warn("no parameter called "+param+" in plugin "+type);
         } else if (typeof trials[j][param] !== 'function') {
           if ( !func  || func(trials[j]) ){
             if (media === 'image') {
