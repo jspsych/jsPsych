@@ -2,11 +2,11 @@
 
 This plugin plays an audio file and allows the subject to respond by dragging a slider.
 
-If the browser supports it, audio files are played using the WebAudio API.This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. 
+If the browser supports it, audio files are played using the WebAudio API. This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. 
 
 Audio files are automatically preloaded by jsPsych. However, if you are using timeline variables or another dynamic method to specify the audio stimulus you will need to [manually preload](/overview/media-preloading/#manual-preloading) the audio.
 
-The trial can end when the subject responds, or if the subject has failed to respond within a fixed length of time.
+The trial can end when the subject responds, or if the subject has failed to respond within a fixed length of time. You can also prevent the slider response from being made before the audio has finished playing.
 
 ## Parameters
 
@@ -15,7 +15,7 @@ In addition to the [parameters available in all plugins](overview.md#parameters-
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 stimulus | audio file | *undefined* | Audio file to be played
-labels | array of strings | Labels displayed at equidistant locations on the slider. For example, two labels will be placed at the ends of the slider. Three labels would place two at the ends and one in the middle. Four will place two at the ends, and the other two will be at 33% and 67% of the slider width.
+labels | array of strings | [] | Labels displayed at equidistant locations on the slider. For example, two labels will be placed at the ends of the slider. Three labels would place two at the ends and one in the middle. Four will place two at the ends, and the other two will be at 33% and 67% of the slider width.
 button_label | string | 'Continue' | Label of the button to end the trial.
 min | integer | 0 | Sets the minimum value of the slider
 max | integer | 100 | Sets the maximum value of the slider
