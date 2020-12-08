@@ -162,8 +162,12 @@ jsPsych.plugins["audio-button-response"] = (function() {
     function after_response(choice) {
 
       // measure rt
-      var end_time = performance.now();
-      var rt = end_time - start_time;
+      var endTime = performance.now();
+      var rt = endTime - startTime;
+      if(context !== null){
+				endTime = context.currentTime;
+				rt = Math.round((endTime - startTime) * 1000);
+			}
       response.button = parseInt(choice);
       response.rt = rt;
 
@@ -220,7 +224,7 @@ jsPsych.plugins["audio-button-response"] = (function() {
     }
 
 		// start time
-    var start_time = performance.now();
+    var startTime = performance.now();
 
 		// start audio
     if(context !== null){
