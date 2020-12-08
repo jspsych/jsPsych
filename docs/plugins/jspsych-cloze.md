@@ -4,6 +4,8 @@ This plugin displays a text with certain words removed. Participants are asked t
 
 ## Parameters
 
+In addition to the [parameters available in all plugins](overview.md#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 text | string | undefined | The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. % correct solution %).
@@ -13,7 +15,7 @@ mistake_fn | function | ```function(){}``` | Function called if ```check_answers
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview.md#data-collected-by-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
