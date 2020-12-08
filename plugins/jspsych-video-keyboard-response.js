@@ -228,7 +228,7 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
       // gather the data to store for the trial
       var trial_data = {
         "rt": response.rt,
-        "stimulus": trial.stimulus,
+        "stimulus": JSON.stringify(trial.stimulus),
         "key_press": response.key
       };
 
