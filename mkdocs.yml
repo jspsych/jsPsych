@@ -35,7 +35,7 @@ nav:
   - 'Creating an Experiment: The Timeline': 'overview/timeline.md'
   - 'Advanced Options for Trials': 'overview/trial.md'
   - 'Data Storage, Aggregation, and Manipulation': 'overview/data.md'
-  - 'Collecting Data from Online Participants': 'overview/collecting-data.md'
+  - 'Running Experiments': 'overview/running-experiments.md'
   - 'Experiment Settings': 'overview/experiment-options.md'
   - 'Event-related Callback Functions': 'overview/callbacks.md'
   - 'Record Browser Interactions': 'overview/record-browser-interactions.md'
