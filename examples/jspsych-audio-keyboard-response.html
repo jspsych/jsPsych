@@ -21,7 +21,8 @@
     type: 'audio-keyboard-response',
     stimulus: 'sound/speech_blue.mp3',
     choices: ['y', 'n'],
-    prompt: '<div style="width: 300px; height: 300px; background-color: #0000ff;"></div><p>Does the color match the word? (Y or N)</p>'
+    prompt: '<div style="width: 300px; height: 300px; background-color: #0000ff; display: inline-block;"></div>'+
+    '<p>Does the color match the word? (Y or N)</p>'
   }
 
   var trial_2 = {
@@ -29,7 +30,8 @@
     stimulus: 'sound/speech_green.mp3',
     choices: ['y', 'n'],
     trial_duration: 5000,
-    prompt: '<div style="width: 300px; height: 300px; background-color: #ff0000;"></div><p>Does the color match the word? (Y or N; 5s time limit)</p>'
+    prompt: '<div style="width: 300px; height: 300px; background-color: #ff0000; display: inline-block;"></div>'+
+    '<p>Does the color match the word? (Y or N; 5s time limit)</p>'
   }
 
   var trial_3 = {
