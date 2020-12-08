@@ -32,7 +32,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
 
 ## Examples
 
-### Displaying question until subject gives a response
+### Drawing circles based on parameters
 
 ```javascript
 function filledCirc(canvas, radius, color){

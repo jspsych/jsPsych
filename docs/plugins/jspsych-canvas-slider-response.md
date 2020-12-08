@@ -36,7 +36,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
 
 ## Examples
 
-### stimulus function that only takes canvas argument
+### Draw two squares
 
 ```javascript
 var colors = [#'FF3333', '#FF6A33'];
@@ -59,7 +59,7 @@ var trial = {
 }
 ```
 
-### stimulus function that takes additional parameters
+### Draw two squares with additional parameters
 
 ```javascript
 var colors;

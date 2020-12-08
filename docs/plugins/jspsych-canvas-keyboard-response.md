@@ -29,7 +29,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
 
 ## Examples
 
-### Displaying a shape until subject gives a response
+### Draw rectangle and wait for response
 
 ```javascript
 function drawRect(c){
@@ -48,7 +48,7 @@ var trial = {
 }
 ```
 
-### Displaying a circle for 1 second, no response allowed
+### Draw circle, no response allowed
 
 ```javascript
 function drawCirc(c){
