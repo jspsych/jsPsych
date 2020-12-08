@@ -50,7 +50,7 @@ Exclusion criteria can be specified based on features of the user's web browser,
 
 ## Display a progress bar
 
-An automatic or manually updated progress bar can be displayed at the top of the screen. See the [progress bar page](progress-bar.md) for more details.
+An automatic or manually updated progress bar can be displayed at the top of the screen. By default, the text next to the progress bar is "Completion Progress", but this text can be changed with the `message_progress_bar` parameter in `jsPsych.init`. See the [progress bar page](progress-bar.md) for more details.
 
 ## Preload media elements
 
@@ -60,7 +60,7 @@ Images, audio files, and movies can be preloaded to reduce latency during the ex
 
 Specifying the `use_webaudio` parameter in `jsPsych.init()` allows you to choose whether to use the WebAudio API or HTML5 audio for playing audio files during your experiment. By default, jsPsych uses the WebAudio API to play audio files. Among other features, the WebAudio API allows for more precise measurement of response times relative to the onset of the audio. 
 
-However, loading files through the WebAudio API causes errors when running an experiment offline (i.e., by double-clicking on the HTML file, rather than hosting it on a web server). This is due to the [cross-origin security policy](https://security.stackexchange.com/a/190321) implemented by web browsers. For this reason, jsPsych switches to a 'safe mode' when it detects that the webpage is running offline, and automatically uses HTML5 audio to prevent errors, even when `use_webaudio` has been explicitly set to `true`. For more information, see the [Running Experiments](running-experiments.md) page.
+However, loading files through the WebAudio API causes errors when running an experiment offline (i.e., by double-clicking on the HTML file, rather than hosting it on a web server). This is due to the [cross-origin security policy](https://security.stackexchange.com/a/190321) implemented by web browsers. For this reason, jsPsych switches to a 'safe mode' when it detects that the webpage is running offline, and automatically uses HTML5 audio to prevent errors, even when `use_webaudio` has been explicitly set to `true`. For more information, see the section [Cross-origin requests (CORS) and safe mode](running-experiments.md#cross-origin-requests-cors-and-safe-mode) on the Running Experiments page.
 
 ```js
 jsPsych.init({
@@ -109,7 +109,7 @@ jsPsych.init({
 
 ## Override 'safe mode' when running experiments offline
 
-By default, jsPsych switches to a 'safe mode' when it detects that the webpage is running offline (via the `file://` protocol) in order to prevent certain errors. Specifically, in safe mode, HTML5 audio is used to play audio files (even when `use_webaudio` has been explicitly set to `true`) and video preloading is disabled (both automatic and manual preloading). For more information, see the [Running Experiments](running-experiments.md) page.
+By default, jsPsych switches to a 'safe mode' when it detects that the webpage is running offline (via the `file://` protocol) in order to prevent certain errors. Specifically, in safe mode, HTML5 audio is used to play audio files (even when `use_webaudio` has been explicitly set to `true`) and video preloading is disabled (both automatic and manual preloading). For more information, see the [Cross-origin requests (CORS) and safe mode](running-experiments.md#cross-origin-requests-cors-and-safe-mode) section on the Running Experiments page.
 
 It's possible to override this safe mode feature by setting the `override_safe_mode` parameter to `true` in `jsPsych.init`. This is something you might do if you've disabled certain security settings in your browser for testing purposes. This parameter has no effect when your experiment is running online (on a server), because it will be using the `http://` or `https://` protocol, which does not trigger safe mode. 
 
