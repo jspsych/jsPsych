@@ -1,6 +1,6 @@
 # jspsych-video-slider-response plugin
 
-This plugin plays a video and allows the subject to respond by dragging a slider.
+This plugin plays a video and allows the subject to respond by dragging a slider. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically when the subject responds, when the video file has finished playing, or if the subject has failed to respond within a fixed length of time. You can also prevent the slider response from being made before the video has finished playing.
 
 ## Parameters
 
@@ -21,6 +21,7 @@ min | integer | 0 | Sets the minimum value of the slider.
 max | integer | 100 | Sets the maximum value of the slider.
 slider_start | integer | 50 | Sets the starting value of the slider
 step | integer | 1 | Sets the step of the slider. This is the smallest amount by which the slider can change.
+labels | array of strings | [] | Labels displayed at equidistant locations on the slider. For example, two labels will be placed at the ends of the slider. Three labels would place two at the ends and one in the middle. Four will place two at the ends, and the other two will be at 33% and 67% of the slider width.
 slider_width | integer | null | Set the width of the slider in pixels. If left null, then the width will be equal to the widest element in the display.
 require_movement | boolean | false | If true, the subject must move the slider before clicking the continue button.
 button_label | string | 'Continue' | Label of the button to end the trial.

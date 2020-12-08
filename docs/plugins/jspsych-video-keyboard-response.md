@@ -1,6 +1,6 @@
 # jspsych-video-keyboard-response plugin
 
-This plugin plays a video file and records a keyboard response. Various aspects of the timing, video playback, and keyboard options can be controlled through parameters.
+This plugin plays a video file and records a keyboard response. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically when the subject responds, when the video file has finished playing, or if the subject has failed to respond within a fixed length of time. You can also prevent a keyboard response from being recorded before the video has finished playing.
 
 ## Parameters
 
