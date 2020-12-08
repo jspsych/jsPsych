@@ -1,7 +1,9 @@
 # Running Experiments
 
 You can run your jsPsych experiment:
+
 * **offline**, by opening the HTML file directly in the browser using the `file://` protocol
+
 * **online**, by hosting the files on a web server using the `http://` or `https://` protocol
 
 The way that you run your experiment will have consequences for certain aspects about how the experiment works, and what your experiment will be able to do. This page explains what you need to know about both of these options.
@@ -33,7 +35,7 @@ The `override_safe_mode` parameter also has no effect when your experiment is ru
 
 ### Media loading
 
-While running your experiment offline, any media files are likely to load very quickly because they are stored on your own computer's disk. Therefore you may not notice problems with file loading delays while running your experiment locally (either offline or on a local server) because the files will load fast enough that they never cause disruption. However, when your experiment is hosted on a _remote_ server, the files will need to be transferred over the internet, which means they will take longer to load - in some cases much longer. Loading delays are most noticeable with media files: images, audio, and video. As explained on the [Media Preloading](media-preloading.md) page, loading delays during your experiment can cause problems for stimulus display and response times. 
+While running your experiment offline, any media files are likely to load very quickly because they are stored on your own computer's disk. Therefore you may not notice problems with file loading delays while running your experiment locally (either offline or on a _local_ server) because the files will load fast enough that they never cause disruption. However, when your experiment is hosted on a _remote_ server, the files will need to be transferred over the internet, which means they will take longer to load - in some cases much longer. Loading delays are most noticeable with media files: images, audio, and video. As explained on the [Media Preloading](media-preloading.md) page, loading delays during your experiment can cause problems for stimulus display and response times. 
 
 It is important to test your experiment to ensure that any media files are preloading successfully and not being requested again during the experiment. You can use the Network tab in your browser's developer tools to see when files are loaded and to simulate a slow internet connection (see [here](https://developers.google.com/web/tools/chrome-devtools/network) for Chrome Network tab documentation). If you are preloading many and/or large files, such as videos, you may want to increase the `max_load_time` parameter in [`jsPsych.init`](../core_library/jspsych-core.md#jspsychinit) so that participants with slow/unreliable internet connections will be able to take part in your experiment.
 
@@ -50,7 +52,7 @@ var versions = [1,2];
 var random_version = jsPsych.randomization.sampleWithoutReplacement(versions,1)[0];
 ```
 
-And use [URL query parameters](../core_library/data.md#jspsychdatageturlvariable) to pass in variables like session number and difficulty level:
+And use [URL query parameters](../core_library/jspsych-data.md#jspsychdatageturlvariable) to pass in variables like session number and difficulty level:
 
 ```js
 // add the variables onto the end of the URL that appears in the browser when you open the file 
