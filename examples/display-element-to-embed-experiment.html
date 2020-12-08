@@ -9,9 +9,6 @@
   <link rel="stylesheet" href="../css/jspsych.css">
   <style>
     p { line-height: 1.5em; font-size: 18px; }
-    img {
-      width: 300px;
-    }
     #jspsych-experiment { width: 600px; height: 400px; float: right; overflow: hidden; margin: 25px; border: 1px solid #999;}
   </style>
 </head>
@@ -35,7 +32,8 @@
     type: 'image-keyboard-response',
     stimulus: 'img/happy_face_1.jpg',
     choices: [89, 78], // Y or N
-    prompt: '<p>Have you seen this face before? Y or N.</p>'
+    prompt: '<p>Have you seen this face before? Y or N.</p>',
+    stimulus_width: 300
   }
 
   var trial_2 = {
@@ -43,7 +41,8 @@
     stimulus: 'img/happy_face_2.jpg',
     choices: [89, 78], // Y or N
     trial_duration: 5000,
-    prompt: '<p>Have you seen this face before? Y or N. (5s time limit).</p>'
+    prompt: '<p>Have you seen this face before? Y or N. (5s time limit).</p>',
+    stimulus_width: 300
   }
 
   var trial_3 = {
