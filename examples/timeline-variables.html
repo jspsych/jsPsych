@@ -8,11 +8,6 @@
   <script src="../plugins/jspsych-audio-keyboard-response.js"></script>
   <script src="../plugins/jspsych-html-keyboard-response.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css">
-  <style>
-    img {
-      width: 300px;
-    }
-  </style>
 </head>
 
 <body>
@@ -32,13 +27,14 @@
         type: 'html-keyboard-response',
         choices: ['none'], // Y or N
         stimulus: "<p style='text-align:center; font-size:80px;'>+</p>",
-        trial_duration: 500,
+        trial_duration: 500
       },
       {
         type: 'image-keyboard-response',
         choices: [89, 78], // Y or N
         stimulus: jsPsych.timelineVariable('v1'),
-        prompt: function() { return '<p>Have you seen '+jsPsych.timelineVariable('v2', true)+ ' before? Y or N.</p>' }
+        prompt: function() { return '<p>Have you seen '+jsPsych.timelineVariable('v2', true)+ ' before? Y or N.</p>' },
+        stimulus_width: 300
       }
     ],
     randomize_order: true,
