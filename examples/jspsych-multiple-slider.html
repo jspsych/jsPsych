@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-multiple-slider.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
+
+// define the labels
+  var scale_1 = [
+    "Strongly Disagree",
+    "Strongly Agree"
+  ];
+
+// create the slider page
+  var slider_page = {
+    type: 'multiple-slider',
+    questions: [
+      {prompt: "I like vegetables.", labels: scale_1}
+    ]
+  };
+
+  // define the labels for the advanced page
+  var scale_2 = [
+    "Strongly Disagree",
+    "Neutral",
+    "Strongly Agree"
+  ];
+
+  // define the sliders parameters
+  var start = 50;
+  var min = 0;
+  var max = 100;
+  var step = 1;
+
+  // create the advanced slider page
+  var slider_advanced_page = {
+    type: 'multiple-slider',
+    questions: [
+      {prompt: "I like vegetables.", name: 'Vegetables', labels: scale_2,
+      slider_start: start, min: min, max: max, step: step},
+      {prompt: "I like fruit.", name: 'Fruit', labels: scale_2,
+      slider_start: start, min: min, max: max, step: step},
+      {prompt: "I like meat.", name: 'Meat', labels: scale_2,
+      slider_start: start, min: min, max: max, step: step},
+      {prompt: "I like dairy.", name: 'Dairy', labels: scale_2,
+      slider_start: start, min: min, max: max, step: step},
+      {prompt: "I like legumes.", name: 'Legumes', labels: scale_2,
+      slider_start: start, min: min, max: max, step: step}
+    ],
+    randomize_question_order: true,
+    require_movement: true,
+    slider_width: 600
+  };
+
+  jsPsych.init({
+    timeline: [slider_page, slider_advanced_page],
+    on_finish: function() { jsPsych.data.displayData(); }
+  });
+
+
+  </script>
+</html>
