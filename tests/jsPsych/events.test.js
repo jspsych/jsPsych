@@ -367,3 +367,71 @@ describe('on_trial_start', function(){
     utils.pressKey(32);
   });
 });
+
+describe('on_timeline_finish', function(){
+  test('should fire once when timeline is complete', function(){
+
+    var on_finish_fn = jest.fn();
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        },
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        },
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_finish: on_finish_fn
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    utils.pressKey(32);
+    expect(on_finish_fn).not.toHaveBeenCalled();
+    utils.pressKey(32);
+    expect(on_finish_fn).not.toHaveBeenCalled();
+    utils.pressKey(32);
+    expect(on_finish_fn).toHaveBeenCalled();
+  })
+})
+
+describe('on_timeline_start', function(){
+  test('should fire once when timeline starts', function(){
+
+    var on_start_fn = jest.fn();
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        },
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        },
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_start: on_start_fn
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    expect(on_start_fn).toHaveBeenCalled();
+    utils.pressKey(32);
+    utils.pressKey(32);
+    utils.pressKey(32);
+    expect(on_start_fn.mock.calls.length).toBe(1);
+    
+  })
+})
