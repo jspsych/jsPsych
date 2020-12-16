@@ -250,5 +250,31 @@ describe('timeline variables are correctly evaluated', function(){
 
   });
 
+  test('when used inside a function', function(){
+    var tvs = [
+      {x: 'foo'},
+      {x: 'bar'}
+    ]
+
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: function(){
+        return jsPsych.timelineVariable('x');
+      }
+    }
+
+    var p = {
+      timeline: [trial],
+      timeline_variables: tvs
+    }
+
+    jsPsych.init({
+      timeline: [p]
+    })
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
+  });
 
 })
