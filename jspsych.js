@@ -933,22 +933,28 @@ window.jsPsych = (function() {
           (typeof jsPsych.plugins.universalPluginParameters[keys[i]] !== 'undefined' && jsPsych.plugins.universalPluginParameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION ) ||
           (typeof jsPsych.plugins[trial.type].info.parameters[keys[i]] !== 'undefined' && jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION)
         ) {
-          if (typeof trial[keys[i]] == "function") {
-            trial[keys[i]] = trial[keys[i]].call();
-          }
-        }
-      }
-      // add a special exception for the data parameter so we can evaluate functions. eventually this could be generalized so that any COMPLEX object type could
-      // be evaluated at the individual parameter level.
-      if(keys[i] == 'data'){
-        var data_params = Object.keys(trial[keys[i]]);
-        for(var j=0; j<data_params.length; j++){
-          if(typeof trial[keys[i]][data_params[j]] == "function") {
-            trial[keys[i]][data_params[j]] = trial[keys[i]][data_params[j]].call();
-          }
+          trial[keys[i]] = replaceFunctionsWithValues(trial[keys[i]]);
         }
       }
     }
+  }
+
+  function replaceFunctionsWithValues(obj){
+    // null typeof is 'object', so need to run this first!
+    if(obj === null){
+      return obj;
+    }
+    // arrays and objects typeof as 'object', and this method works for both
+    if(typeof obj === 'object'){
+      var keys = Object.keys(obj);
+      for(var i=0; i<keys.length; i++){
+        obj[keys[i]] = replaceFunctionsWithValues(obj[keys[i]])
+      }
+    }
+    if(typeof obj === 'function'){
+      return obj();
+    }
+    return obj;
   }
 
   function setDefaultValues(trial){
