@@ -91,6 +91,7 @@ Plugin | Description
 [jspsych&#8209;image&#8209;slider&#8209;response](/plugins/jspsych-image-slider-response) | Display an image and allow the subject to respond by moving a slider to indicate a value.
 [jspsych&#8209;instructions](/plugins/jspsych-instructions) | For displaying instructions to the subject. Allows the subject to navigate between pages of instructions using keys or buttons.
 [jspsych&#8209;maxdiff](/plugins/jspsych-maxdiff) | Displays rows of alternatives to be selected for two mutually-exclusive categories, typically as 'most' or 'least' on a particular criteria (e.g. importance, preference, similarity). The participant responds by selecting one radio button corresponding to an alternative in both the left and right response columns.
+[jspsych&#8209;psychophysics](/plugins/jspsych-psychophysics) | For displaying multiple stimuli asynchronously in a trial. The stimuli are synchronized with the refresh of the display using the requestAnimationFrame method. 
 [jspsych&#8209;rdk](/plugins/jspsych-rdk) | This plugin displays a Random Dot Kinematogram (RDK) and allows the subject to report the primary direction of motion by pressing a key on the keyboard.
 [jspsych&#8209;reconstruction](/plugins/jspsych-reconstruction) | The subject interacts with a stimulus by modifying a parameter of the stimulus and observing the change in the stimulus in real-time.
 [jspsych&#8209;resize](/plugins/jspsych-resize) | Calibrate the display so that materials display with a known physical size.
