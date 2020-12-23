@@ -262,6 +262,11 @@ window.jsPsych = (function() {
     if(current_trial_finished){ return; }
     current_trial_finished = true;
 
+    // remove any CSS classes that were added to the DOM via css_classes parameter
+    if(typeof current_trial.css_classes !== 'undefined' && Array.isArray(current_trial.css_classes)){
+      DOM_target.classList.remove(...current_trial.css_classes);
+    }
+
     // write the data from the trial
     data = typeof data == 'undefined' ? {} : data;
     jsPsych.data.write(data);
@@ -884,6 +889,11 @@ window.jsPsych = (function() {
 
     // reset the scroll on the DOM target
     DOM_target.scrollTop = 0;
+
+    // add CSS classes to the DOM_target if they exist in trial.css_classes
+    if(typeof trial.css_classes !== 'undefined' && Array.isArray(trial.css_classes)){
+      DOM_target.classList.add(...trial.css_classes)
+    }
 
     // execute trial method
     jsPsych.plugins[trial.type].trial(DOM_target, trial);
