@@ -35,4 +35,38 @@ describe('The css_classes parameter for trials', function(){
     expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(false);
 
   })
+
+  test('Class inherits in nested timelines', function(){
+    var tm = {
+      timeline: [{
+        type: 'html-keyboard-response',
+        stimulus: '<p>foo</p>',
+      }],
+      css_classes: ['foo']
+    }
+
+    jsPsych.init({timeline:[tm]});
+    
+    expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(true);
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(false);
+
+  })
+
+  test('Parameter works when defined as a function', function(){
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: '<p>foo</p>',
+      css_classes: function(){ 
+        return ['foo']
+      }
+    }
+
+    jsPsych.init({timeline:[trial]});
+    
+    expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(true);
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(false);
+
+  })
 })

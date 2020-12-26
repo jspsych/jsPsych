@@ -1127,6 +1127,12 @@ jsPsych.plugins = (function() {
       pretty_name: 'Post trial gap',
       default: null,
       description: 'Length of gap between the end of this trial and the start of the next trial'
+    },
+    css_classes: {
+      type: module.parameterType.STRING,
+      pretty_name: 'Custom CSS classes',
+      default: null,
+      description: 'A list of CSS classes to add to the jsPsych display element for the duration of this trial'
     }
   }
 
