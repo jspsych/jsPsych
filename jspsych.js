@@ -334,6 +334,10 @@ window.jsPsych = (function() {
     }
   }
 
+  core.allTimelineVariables = function(){
+    return timeline.allTimelineVariables();
+  }
+
   core.addNodeToEndOfTimeline = function(new_timeline, preload_callback){
     timeline.insert(new_timeline);
     if(typeof preload_callback !== 'undefined'){
@@ -614,6 +618,42 @@ window.jsPsych = (function() {
         }
         // now find the variable
         return timeline_parameters.timeline[loc].timelineVariable(variable_name); 
+      }
+    }
+
+    // recursively get all the timeline variables for this trial
+    this.allTimelineVariables = function(){
+      var all_tvs = this.allTimelineVariablesNames();
+      var all_tvs_vals = {};
+      for(var i=0; i<all_tvs.length; i++){
+        all_tvs_vals[all_tvs[i]] = this.timelineVariable(all_tvs[i])
+      }
+      return all_tvs_vals;
+    }
+
+    // helper to get all the names at this stage.
+    this.allTimelineVariablesNames = function(so_far){
+      if(typeof so_far == 'undefined'){
+        so_far = [];
+      }
+      if(typeof timeline_parameters !== 'undefined'){
+        so_far = so_far.concat(Object.keys(timeline_parameters.timeline_variables[progress.order[progress.current_variable_set]]));
+        // if progress.current_location is -1, then the timeline variable is being evaluated
+        // in a function that runs prior to the trial starting, so we should treat that trial
+        // as being the active trial for purposes of finding the value of the timeline variable
+        var loc = Math.max(0, progress.current_location);
+        // if loc is greater than the number of elements on this timeline, then the timeline
+        // variable is being evaluated in a function that runs after the trial on the timeline
+        // are complete but before advancing to the next (like a loop_function).
+        // treat the last active trial as the active trial for this purpose.
+        if(loc == timeline_parameters.timeline.length){
+          loc = loc - 1;
+        }
+        // now find the variable
+        return timeline_parameters.timeline[loc].allTimelineVariablesNames(so_far);
+      }
+      if(typeof timeline_parameters == 'undefined'){
+        return so_far;
       }
     }
 
