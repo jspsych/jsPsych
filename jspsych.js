@@ -891,8 +891,13 @@ window.jsPsych = (function() {
     DOM_target.scrollTop = 0;
 
     // add CSS classes to the DOM_target if they exist in trial.css_classes
-    if(typeof trial.css_classes !== 'undefined' && Array.isArray(trial.css_classes)){
-      DOM_target.classList.add(...trial.css_classes)
+    if(typeof trial.css_classes !== 'undefined'){
+      if(!Array.isArray(trial.css_classes) && typeof trial.css_classes == 'string'){
+        trial.css_classes = [trial.css_classes];
+      }
+      if(Array.isArray(trial.css_classes)){
+        DOM_target.classList.add(...trial.css_classes)
+      }
     }
 
     // execute trial method

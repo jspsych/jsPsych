@@ -21,6 +21,19 @@ describe('The css_classes parameter for trials', function(){
     utils.pressKey(32);
   })
 
+  test('Gracefully handles single class when not in array', function(){
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: '<p>foo</p>',
+      css_classes: 'foo'
+    }
+
+    jsPsych.init({timeline:[trial]});
+
+    expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(true);
+    utils.pressKey(32);
+  })
+
   test('Removes the added classes at the end of the trial', function(){
     var trial = {
       type: 'html-keyboard-response',
@@ -63,6 +76,28 @@ describe('The css_classes parameter for trials', function(){
     }
 
     jsPsych.init({timeline:[trial]});
+    
+    expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(true);
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(false);
+
+  })
+
+  test('Parameter works when defined as a timeline variable', function(){
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: '<p>foo</p>',
+      css_classes: jsPsych.timelineVariable('css')
+    }
+
+    var t = {
+      timeline: [trial],
+      timeline_variables: [
+        {css: ['foo']}
+      ]
+    }
+
+    jsPsych.init({timeline:[t]});
     
     expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(true);
     utils.pressKey(32);
