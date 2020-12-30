@@ -283,6 +283,8 @@ window.jsPsych = (function() {
             console.warn(`Invalid parameter specified in save_trial_parameters. Trial has no property called "${keys[i]}".`)
           } else if(typeof current_trial[keys[i]] == 'object'){
             trial_data_values[keys[i]] = JSON.stringify(current_trial[keys[i]]);
+          } else if(typeof current_trial[keys[i]] == 'function'){
+            trial_data_values[keys[i]] = current_trial[keys[i]].toString();
           } else {
             trial_data_values[keys[i]] = current_trial[keys[i]];
           }
