@@ -290,7 +290,7 @@ window.jsPsych = (function() {
     // handle extension callbacks
     if(Array.isArray(trial.extensions)){
       for(var i=0; i<trial.extensions.length; i++){
-        var ext_data_values = trial.extensions[i].on_finish();
+        var ext_data_values = jsPsych.extensions[trial.extensions[i]].on_finish();
         Object.assign(trial_data_values, ext_data_values);
       }
     }
@@ -904,7 +904,7 @@ window.jsPsych = (function() {
     // call any on_start functions for extensions
     if(Array.isArray(trial.extensions)){
       for(var i=0; i<trial.extensions.length; i++){
-        trial.extensions[i].on_start();
+        jsPsych.extensions[trial.extensions[i]].on_start();
       }
     }
 
@@ -925,7 +925,7 @@ window.jsPsych = (function() {
     // call any on_load functions for extensions
     if(Array.isArray(trial.extensions)){
       for(var i=0; i<trial.extensions.length; i++){
-        trial.extensions[i].on_load();
+        jsPsych.extensions[trial.extensions[i]].on_load();
       }
     }
   }

@@ -23,17 +23,17 @@ jsPsych.extensions['webgazer'] = (function () {
     // sets up event handler for webgazer data
     state.webgazer.setGazeListener(handleGazeDataUpdate);
 
-    // hide video by default
-    state.webgazer.showVideo(false);
-
-    // hide predictions by default
-    state.webgazer.showPredictionPoints(false);
-
     // starts webgazer
     state.webgazer.begin();
 
+    // hide video by default
+    //state.webgazer.showVideo(false);
+
+    // hide predictions by default
+    //state.webgazer.showPredictionPoints(false);
+
     // immediately pauses data gathering
-    state.webgazer.pause();
+    //state.webgazer.pause();
   }
 
   // required, will be called when the trial starts (before trial loads)
@@ -55,15 +55,33 @@ jsPsych.extensions['webgazer'] = (function () {
   // required, will be called when jsPsych.finishTrial() is called
   // must return data object to be merged into data.
   extension.on_finish = function () {
+    // pause the eye tracker
+    state.webgazer.pause();
+
+    // send back the gazeData
     return {
-      gazeData: JSON.stringify(state.currentTrialData);
+      gazeData: JSON.stringify(state.currentTrialData)
     }
   }
 
-  function handleGazeDataUpdate(gazeData, elapsedTime){
-    gazeData.t = performance.now() - state.currentTrialStart; // add a timestamp to the x,y coords
+  extension.faceDetected = function(){
+    return state.webgazer.getTracker().predictionReady;
+  }
+  
+  extension.showPredictionPoints = function(b){
+    state.webgazer.showPredictionPoints(b);
+  }
 
-    state.currentTrialData.push(gazeData); // add data to current trial's data
+  function handleGazeDataUpdate(gazeData, elapsedTime){
+    if(gazeData !== null){
+      var d = {
+        x: gazeData.x, 
+        y: gazeData.y, 
+        t: performance.now() - state.currentTrialStart
+      }
+      state.currentTrialData.push(d); // add data to current trial's data
+    }
+    
   }
 
   return extension;

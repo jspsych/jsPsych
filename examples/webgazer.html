@@ -4,6 +4,7 @@
 <head>
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-webgazer-calibrate.js"></script>
   <script src="js/webgazer.js"></script>
   <script src="../extensions/jspsych-ext-webgazer.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css">
@@ -21,8 +22,7 @@
     type: 'html-keyboard-response',
     stimulus: '+',
     choices: jsPsych.NO_KEYS,
-    trial_duration: 500,
-    extensions: ['webgazer']
+    trial_duration: 500    
   }
 
   var trial = {
@@ -37,7 +37,8 @@
       )
     },
     choices: ['a', 'l'],
-    post_trial_gap: 250
+    post_trial_gap: 250,
+    extensions: ['webgazer']
   }
 
   var params = [
@@ -58,6 +59,7 @@
   }
 
   var timeline = [];
+  timeline.push(calibration);
   timeline.push(trial_proc);
 
   jsPsych.init({
