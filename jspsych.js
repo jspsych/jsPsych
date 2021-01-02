@@ -54,7 +54,11 @@ window.jsPsych = (function() {
   //
 
   core.init = function(options) {
+    
+    // this is wrapped in a function to delay execution until the document is fully loaded
     function init() {
+
+      // detect some common errors and log to console //// 
       if(typeof options.timeline === 'undefined'){
         console.error('No timeline declared in jsPsych.init. Cannot start experiment.')
       }
@@ -110,7 +114,8 @@ window.jsPsych = (function() {
         'default_iti': 0,
         'minimum_valid_rt': 0,
         'experiment_width': null,
-        'override_safe_mode': false
+        'override_safe_mode': false,
+        'extensions': []
       };
 
       // detect whether page is running in browser as a local file, and if so, disable web audio and video preloading to prevent CORS issues
@@ -193,6 +198,15 @@ window.jsPsych = (function() {
 
       // add event for closing window
       window.addEventListener('beforeunload', opts.on_close);
+
+      // run the .initialize method of any extensions that are in use
+      for(var i=0; i<opts.extensions.length; i++){
+        var ext_params = opts.extensions[i].params;
+        if(!ext_params){
+          ext_params = {}
+        }
+        jsPsych.extensions[opts.extensions[i].type].initialize(ext_params);
+      }
 
       // check exclusions before continuing
       checkExclusions(opts.exclusions,
@@ -1121,6 +1135,10 @@ jsPsych.plugins = (function() {
   }
 
   return module;
+})();
+
+jsPsych.extensions = (function(){
+  return {};
 })();
 
 jsPsych.data = (function() {

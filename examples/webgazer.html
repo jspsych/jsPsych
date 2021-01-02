@@ -56,7 +56,10 @@
   timeline.push(trial_proc);
 
   jsPsych.init({
-    timeline: timeline
+    timeline: timeline,
+    extensions: [
+      {type: 'webgazer'}
+    ]
   })
 </script>
 
