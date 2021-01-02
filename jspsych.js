@@ -287,6 +287,14 @@ window.jsPsych = (function() {
     // of the DataCollection, for easy access and editing.
     var trial_data_values = trial_data.values()[0];
 
+    // handle extension callbacks
+    if(Array.isArray(trial.extensions)){
+      for(var i=0; i<trial.extensions.length; i++){
+        var ext_data_values = trial.extensions[i].on_finish();
+        Object.assign(trial_data_values, ext_data_values);
+      }
+    }
+
     // handle callback at plugin level
     if (typeof current_trial.on_finish === 'function') {
       current_trial.on_finish(trial_data_values);
@@ -893,6 +901,13 @@ window.jsPsych = (function() {
       trial.on_start(trial);
     }
 
+    // call any on_start functions for extensions
+    if(Array.isArray(trial.extensions)){
+      for(var i=0; i<trial.extensions.length; i++){
+        trial.extensions[i].on_start();
+      }
+    }
+
     // apply the focus to the element containing the experiment.
     DOM_container.focus();
 
@@ -905,6 +920,13 @@ window.jsPsych = (function() {
     // call trial specific loaded callback if it exists
     if(typeof trial.on_load == 'function'){
       trial.on_load();
+    }
+
+    // call any on_load functions for extensions
+    if(Array.isArray(trial.extensions)){
+      for(var i=0; i<trial.extensions.length; i++){
+        trial.extensions[i].on_load();
+      }
     }
   }
 

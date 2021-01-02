@@ -13,11 +13,16 @@
 
 <script>
 
+  var calibration = {
+    type: 'webgazer-calibrate'
+  }
+
   var fixation = {
     type: 'html-keyboard-response',
     stimulus: '+',
     choices: jsPsych.NO_KEYS,
-    trial_duration: 500
+    trial_duration: 500,
+    extensions: ['webgazer']
   }
 
   var trial = {
