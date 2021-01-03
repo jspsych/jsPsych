@@ -80,7 +80,7 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
         default: true,
         description: 'If true, the image will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).'+
           'If false, the image will be shown via an img element.'
-      }
+      },
       stimulus_pos: {
         type: jsPsych.plugins.parameterType.INT,
         array: true,
@@ -164,7 +164,7 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
       
       // add canvas and draw image
       display_element.insertBefore(canvas, null);
-      ctx.drawImage(img,0,0,width,height);
+      ctx.drawImage(img,img_x,img_y,width,height);
         
       // add prompt if there is one
       if (trial.prompt !== null) {
