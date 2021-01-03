@@ -81,6 +81,29 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
         description: 'If true, the image will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).'+
           'If false, the image will be shown via an img element.'
       }
+      stimulus_pos: {
+        type: jsPsych.plugins.parameterType.INT,
+        array: true,
+        pretty_name: "Stimulus Position",
+        default: [0, 0],
+        description: "The position of the image if drawn onto a canvas element",
+      },
+      canvas_size: {
+        type: jsPsych.plugins.parameterType.INT,
+        array: true,
+        pretty_name: "Canvas size",
+        default: null,
+        description:
+          "Array containing the height (first value) and width (second value) of the canvas element.",
+      },
+      canvas_border: {
+        type: jsPsych.plugins.parameterType.STRING,
+        array: false,
+        pretty_name: "Canvas border",
+        default: "0px solid black",
+        description: "Canvas border.",
+      },
+
     }
   }
 
@@ -100,6 +123,7 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
       canvas.id = "jspsych-image-keyboard-response-stimulus";
       canvas.style.margin = 0;
       canvas.style.padding = 0;
+      canvas.style.border = trial.canvas_border;
       var img = new Image();   
       img.src = trial.stimulus;
       // determine image height and width
@@ -121,12 +145,27 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
         // in the if statement above, based on a specified height and maintain_aspect_ratio = true
         width = img.naturalWidth;
       }
-      canvas.height = height;
-      canvas.width = width;
+      
+      var ctx = canvas.getContext("2d");
+      var img_x, img_y;
+      
+      if (trial.canvas_size === null) {
+        canvas.height = height;
+        canvas.width = width;
+        img_x = 0;
+        img_y = 0;
+      } else {
+        canvas.height = trial.canvas_size[0];
+        canvas.width = trial.canvas_size[1];
+        img_x = trial.stimulus_pos[0] - width / 2; // adjust for image size
+        img_y = trial.stimulus_pos[1] - height / 2;
+        ctx.translate(canvas.width / 2, canvas.height / 2); // make center (0, 0)
+      }
+      
       // add canvas and draw image
       display_element.insertBefore(canvas, null);
-      var ctx = canvas.getContext("2d");
       ctx.drawImage(img,0,0,width,height);
+        
       // add prompt if there is one
       if (trial.prompt !== null) {
         display_element.insertAdjacentHTML('beforeend', trial.prompt);
