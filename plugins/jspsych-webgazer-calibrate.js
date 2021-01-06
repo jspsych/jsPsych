@@ -11,12 +11,6 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
       name: 'webgazer-calibrate',
       description: '',
       parameters: {
-        face_detect_threshold: {
-          type: jsPsych.plugins.parameterType.IMAGE,
-          pretty_name: 'Face Detection Threshold',
-          default: 0.75,
-          description: 'A value between 0-1 representing the quality of the face detection that must be achieved before moving to calibration.'
-        },
         calibration_points: {
           type: jsPsych.plugins.parameterType.INT,
           default: [[10,50], [10,90], [30,10], [50,10], [50,50], [50,90], [90,10], [90,50], [90,90]]
@@ -36,8 +30,9 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
   
     plugin.trial = function(display_element, trial) {
   
-      var html = "<div id='webgazer-calibrate-container' style='position: relative; width:100vw; height:100vh'>"
-      html+="</div>"
+      var html = `
+        <div id='webgazer-calibrate-container' style='position: relative; width:100vw; height:100vh'>
+        </div>`
   
       display_element.innerHTML = html;
   
@@ -52,7 +47,7 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
           var score = check_face_score();
           //wg_container.querySelector('#video-detect-quality-inner').style.width = (score*100) + "%"
           if(score){
-            state = "begin-calibrate";
+            document.querySelector('#jspsych-wg-cont').disabled = false;
           }
           requestAnimationFrame(loop);
         } else if(state == 'begin-calibrate'){
@@ -61,8 +56,8 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
           calibrate();
         } else if(state == 'calibration-done'){
           wg_container.innerHTML = "";
-          jsPsych.extensions['webgazer'].showPredictionPoints(true);
-          setTimeout(end_trial, 2000);
+          jsPsych.extensions['webgazer'].showPredictions();
+          setTimeout(end_trial, 4000);
         }
       }
   
@@ -72,12 +67,18 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
         wg_container.innerHTML = "<div style='position: absolute; top: 50%; left: calc(50% - 350px); transform: translateY(-50%); width:700px;'>"+
           "<p>To start, you need to position your head so that the webcam has a good view of your eyes.</p>"+
           "<p>Use the video in the upper-left corner as a guide. Center your face in the box.</p>"+
+          "<p>When your face is centered in the box and the box turns green, you can click to continue.</p>"+
+          "<button id='jspsych-wg-cont' class='jspsych-btn' disabled>Continue</button>"
           // "<p>Quality of detection:</p>"+
           // "<div id='video-detect-quality-container' style='width:700px; height: 20px; background-color:#ccc; position: relative;'>"+
           // "<div id='video-detect-quality-inner' style='width:0%; height:20px; background-color: #5c5;'></div>"+
           // "<div id='video-detect-threshold' style='width: 1px; height: 20px; background-color: #f00; position: absolute; top:0; left:"+(trial.face_detect_threshold*100)+"%;'></div>"+
           "</div>"+
           "</div>"
+        
+          document.querySelector('#jspsych-wg-cont').addEventListener('click', function(){
+            state = "begin-calibrate";
+          })
       }
   
       function check_face_score(){
@@ -86,7 +87,6 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
           return document.querySelector('#webgazerFaceFeedbackBox').style.borderColor == 'green';
         }
         return false;
-        
       }
   
       function show_begin_calibrate_message(){
@@ -131,13 +131,9 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
       }
   
   
-      //requestAnimationFrame(update_gp);
-  
-  
       // function to end trial when it is time
       var end_trial = function() {
-        //webgazer.pause();
-        //webgazer.showPredictionPoints(false);
+        jsPsych.extensions['webgazer'].hidePredictions();
   
         // kill any remaining setTimeout handlers
         jsPsych.pluginAPI.clearAllTimeouts();

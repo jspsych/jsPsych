@@ -68,8 +68,12 @@ jsPsych.extensions['webgazer'] = (function () {
     return state.webgazer.getTracker().predictionReady;
   }
   
-  extension.showPredictionPoints = function(b){
-    state.webgazer.showPredictionPoints(b);
+  extension.showPredictions = function(){
+    state.webgazer.showPredictionPoints(true);
+  }
+
+  extension.hidePredictions = function(){
+    state.webgazer.showPredictionPoints(false);
   }
 
   function handleGazeDataUpdate(gazeData, elapsedTime){
