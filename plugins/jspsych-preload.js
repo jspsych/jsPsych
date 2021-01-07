@@ -40,6 +40,10 @@ jsPsych.plugins['preload'] = (function() {
     }
   
     plugin.trial = function(display_element, trial) {
+
+      if(trial.auto_preload){
+        var {images, audio, video} = jsPsych.getAutoPreloadList() //timeline arg?
+      }
       
       
       function end_trial(){

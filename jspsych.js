@@ -2501,56 +2501,56 @@ jsPsych.pluginAPI = (function() {
 
   };
 
-    module.preloadVideo = function(video, callback_complete, callback_load) {
+  module.preloadVideo = function(video, callback_complete, callback_load) {
 
-        // flatten the images array
-        video = jsPsych.utils.flatten(video);
-        video = jsPsych.utils.unique(video);
+      // flatten the images array
+      video = jsPsych.utils.flatten(video);
+      video = jsPsych.utils.unique(video);
 
-        var n_loaded = 0;
-        var loadfn = !callback_load ? function() {} : callback_load;
-        var finishfn = !callback_complete ? function() {} : callback_complete;
+      var n_loaded = 0;
+      var loadfn = !callback_load ? function() {} : callback_load;
+      var finishfn = !callback_complete ? function() {} : callback_complete;
 
-        if(video.length===0){
-            finishfn();
-            return;
-        }
+      if(video.length===0){
+          finishfn();
+          return;
+      }
 
-        function preload_video(source, count){
-            count = count || 1;
-            //based on option 4 here: http://dinbror.dk/blog/how-to-preload-entire-html5-video-before-play-solved/
-            var request = new XMLHttpRequest();
-            request.open('GET', source, true);
-            request.responseType = 'blob';
-            request.onload = function() {
-                if (this.status === 200 || this.status === 0) {
-                    var videoBlob = this.response;
-                    video_buffers[source] = URL.createObjectURL(videoBlob); // IE10+
-                    n_loaded++;
-                    loadfn(n_loaded);
-                    if (n_loaded === video.length) {
-                        finishfn();
-                    }
-                }
-            };
+      function preload_video(source, count){
+          count = count || 1;
+          //based on option 4 here: http://dinbror.dk/blog/how-to-preload-entire-html5-video-before-play-solved/
+          var request = new XMLHttpRequest();
+          request.open('GET', source, true);
+          request.responseType = 'blob';
+          request.onload = function() {
+              if (this.status === 200 || this.status === 0) {
+                  var videoBlob = this.response;
+                  video_buffers[source] = URL.createObjectURL(videoBlob); // IE10+
+                  n_loaded++;
+                  loadfn(n_loaded);
+                  if (n_loaded === video.length) {
+                      finishfn();
+                  }
+              }
+          };
 
-            request.onerror = function(){
-                if(count < jsPsych.initSettings().max_preload_attempts){
-                    setTimeout(function(){
-                        preload_video(source, count+1)
-                    }, 200);
-                } else {
-                    jsPsych.loadFail();
-                }
-            }
-            request.send();
-        }
+          request.onerror = function(){
+              if(count < jsPsych.initSettings().max_preload_attempts){
+                  setTimeout(function(){
+                      preload_video(source, count+1)
+                  }, 200);
+              } else {
+                  jsPsych.loadFail();
+              }
+          }
+          request.send();
+      }
 
-        for (var i = 0; i < video.length; i++) {
-            preload_video(video[i]);
-        }
+      for (var i = 0; i < video.length; i++) {
+          preload_video(video[i]);
+      }
 
-    };
+  };
 
   module.registerPreload = function(plugin_name, parameter, media_type, conditional_function) {
     if (['audio', 'image', 'video'].indexOf(media_type)===-1) {
@@ -2567,7 +2567,7 @@ jsPsych.pluginAPI = (function() {
     preloads.push(preload);
   }
 
-  module.autoPreload = function(timeline, callback, file_protocol, images, audio, video, progress_bar) {
+  module.getAutoPreloadList = function(timeline){
     // list of items to preload
     images = images || [];
     audio = audio || [];
@@ -2606,11 +2606,20 @@ jsPsych.pluginAPI = (function() {
     // remove any nulls false values
     images = images.filter(function(x) { return x != false && x != null})
     audio = audio.filter(function(x) { return x != false && x != null})
+    video = video.filter(function(x) { return x != false && x != null})
+
+    return {
+      images, audio, video
+    }
+  }
+
+  module.autoPreload = function(timeline, callback, file_protocol, images, audio, video, progress_bar) {
+    
+    var {images, audio, video} = module.getAutoPreloadList(timeline);
+
     // prevent all video preloading (auto and manual) when file is opened directly in browser
     if (file_protocol === true) {
       video = [];
-    } else {
-      video = video.filter(function(x) { return x != false && x != null})
     }
     
     var total_n = images.length + audio.length + video.length;
