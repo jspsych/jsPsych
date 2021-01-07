@@ -468,31 +468,5 @@ describe('add node to end of timeline', function(){
     utils.pressKey(32);
   });
 
-  test('adds node to end of timeline, with callback', function() {
-    var t = {
-      type: 'html-keyboard-response',
-      stimulus: 'foo',
-      on_finish: function(){
-        jsPsych.pauseExperiment();
-        jsPsych.addNodeToEndOfTimeline({
-          timeline: [{
-            type: 'html-keyboard-response',
-            stimulus: 'bar'
-          }]
-        }, jsPsych.resumeExperiment)
-      }
-    };
-
-    jsPsych.init({
-      timeline: [t]
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.pressKey(32);
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
-    utils.pressKey(32);
-
-  });
-
 });
 
