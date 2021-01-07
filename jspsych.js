@@ -2498,7 +2498,7 @@ jsPsych.pluginAPI = (function() {
 
   };
 
-  module.registerPreload = function(plugin_name, parameter, media_type, conditional_function) {
+  module.registerPreload = function(plugin_name, parameter, media_type) {
     if (['audio', 'image', 'video'].indexOf(media_type)===-1) {
       console.error('Invalid media_type parameter for jsPsych.pluginAPI.registerPreload. Please check the plugin file.');
     }
@@ -2506,26 +2506,24 @@ jsPsych.pluginAPI = (function() {
     var preload = {
       plugin: plugin_name,
       parameter: parameter,
-      media_type: media_type,
-      conditional_function: conditional_function
+      media_type: media_type
     }
 
     preloads.push(preload);
   }
 
-  module.getAutoPreloadList = function(timeline){
+  module.getAutoPreloadList = function(timeline_description){
 
     // list of items to preload
-    images = images || [];
-    audio = audio || [];
-    video = video || [];
+    var images = [];
+    var audio = [];
+    var video = [];
 
     // construct list
     for (var i = 0; i < preloads.length; i++) {
       var type = preloads[i].plugin;
       var param = preloads[i].parameter;
       var media = preloads[i].media_type;
-      var func = preloads[i].conditional_function;
       var trials = timeline.trialsOfType(type);
       for (var j = 0; j < trials.length; j++) {
 
