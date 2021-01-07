@@ -2514,6 +2514,22 @@ jsPsych.pluginAPI = (function() {
 
   module.getAutoPreloadList = function(timeline_description){
 
+    function getTrialsOfTypeFromTimelineDescription(td, type){
+      var trials = [];
+
+      for(var i=0; i<td.length; i++){
+        var node = td[i];
+        if(node.type !== 'undefined' && node.type == type){
+          trials.push(node);
+        }
+        if(Array.isArray(node.timeline)){
+          trials = trials.concat(getTrialsOfTypeFromTimelineDescription(node.timeline, type));
+        }
+      }
+
+      return trials;
+    }
+
     // list of items to preload
     var images = [];
     var audio = [];
@@ -2524,21 +2540,21 @@ jsPsych.pluginAPI = (function() {
       var type = preloads[i].plugin;
       var param = preloads[i].parameter;
       var media = preloads[i].media_type;
-      var trials = timeline.trialsOfType(type);
+
+
+      var trials = getTrialsOfTypeFromTimelineDescription(timeline_description, type);
       for (var j = 0; j < trials.length; j++) {
 
         if (typeof trials[j][param] == 'undefined') {
           console.warn("jsPsych failed to auto preload one or more files:");
           console.warn("no parameter called "+param+" in plugin "+type);
         } else if (typeof trials[j][param] !== 'function') {
-          if ( !func  || func(trials[j]) ){
-            if (media === 'image') {
-              images = images.concat(jsPsych.utils.flatten([trials[j][param]]));
-            } else if (media === 'audio') {
-              audio = audio.concat(jsPsych.utils.flatten([trials[j][param]]));
-            } else if (media === 'video') {
-              video = video.concat(jsPsych.utils.flatten([trials[j][param]]));
-            }
+          if (media === 'image') {
+            images = images.concat(jsPsych.utils.flatten([trials[j][param]]));
+          } else if (media === 'audio') {
+            audio = audio.concat(jsPsych.utils.flatten([trials[j][param]]));
+          } else if (media === 'video') {
+            video = video.concat(jsPsych.utils.flatten([trials[j][param]]));
           }
         }
       }
