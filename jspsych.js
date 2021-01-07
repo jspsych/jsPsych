@@ -1084,7 +1084,8 @@ jsPsych.plugins = (function() {
     AUDIO: 9,
     VIDEO: 10,
     OBJECT: 11,
-    COMPLEX: 12
+    COMPLEX: 12,
+    TIMELINE: 13
   }
 
   module.universalPluginParameters = {
@@ -2354,7 +2355,7 @@ jsPsych.pluginAPI = (function() {
 
   var img_cache = {};
 
-  module.preloadAudioFiles = function(files, callback_complete, callback_load) {
+  module.preloadAudioFiles = function(files, callback_complete, callback_load, callback_error) {
 
     files = jsPsych.utils.flatten(files);
     files = jsPsych.utils.unique(files);
@@ -2362,6 +2363,7 @@ jsPsych.pluginAPI = (function() {
     var n_loaded = 0;
     var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
     var finishfn = (typeof callback_complete === 'undefined') ? function() {} : callback_complete;
+    var errorfn = (typeof callback_error === 'undefined') ? function() {} : callback_error;
 
     if(files.length==0){
       finishfn();
@@ -2381,18 +2383,12 @@ jsPsych.pluginAPI = (function() {
           if(n_loaded == files.length) {
             finishfn();
           }
-        }, function() {
-          console.error('Error loading audio file: ' + bufferID);
+        }, function(e) {
+          errorfn(e);
         });
       }
-      request.onerror = function(){
-        if(count < jsPsych.initSettings().max_preload_attempts){
-          setTimeout(function(){
-            load_audio_file_webaudio(source, count+1)
-          }, 200);
-        } else {
-          jsPsych.loadFail();
-        }
+      request.onerror = function(e){
+        errorfn(e);
       }
       request.send();
     }
@@ -2409,24 +2405,12 @@ jsPsych.pluginAPI = (function() {
         }
         audio.removeEventListener('canplaythrough', handleCanPlayThrough);
       });
-      audio.addEventListener('error', function handleError(){
-        if(count < jsPsych.initSettings().max_preload_attempts){
-          setTimeout(function(){
-            load_audio_file_html5audio(source, count+1)
-          }, 200);
-        } else {
-          jsPsych.loadFail();
-        }
+      audio.addEventListener('error', function handleError(e){
+        errorfn(e);
         audio.removeEventListener('error', handleError);
       });
-      audio.addEventListener('abort', function handleAbort(){
-        if(count < jsPsych.initSettings().max_preload_attempts){
-          setTimeout(function(){
-            load_audio_file_html5audio(source, count+1)
-          }, 200);
-        } else {
-          jsPsych.loadFail();
-        }
+      audio.addEventListener('abort', function handleAbort(e){
+        errorfn(e);
         audio.removeEventListener('abort', handleAbort);
       });
       audio.src = source;
@@ -2452,7 +2436,7 @@ jsPsych.pluginAPI = (function() {
 
   }
 
-  module.preloadImages = function(images, callback_complete, callback_load) {
+  module.preloadImages = function(images, callback_complete, callback_load, callback_error) {
 
     // flatten the images array
     images = jsPsych.utils.flatten(images);
@@ -2461,15 +2445,14 @@ jsPsych.pluginAPI = (function() {
     var n_loaded = 0;
     var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
     var finishfn = (typeof callback_complete === 'undefined') ? function() {} : callback_complete;
+    var errorfn = (typeof callback_error === 'undefined') ? function() {} : callback_error;
 
     if(images.length === 0){
       finishfn();
       return;
     }
 
-    function preload_image(source, count){
-      count = count || 1;
-
+    function preload_image(source){
       var img = new Image();
 
       img.onload = function() {
@@ -2480,14 +2463,8 @@ jsPsych.pluginAPI = (function() {
         }
       };
 
-      img.onerror = function() {
-        if(count < jsPsych.initSettings().max_preload_attempts){
-          setTimeout(function(){
-            preload_image(source, count+1);
-          }, 200);
-        } else {
-          jsPsych.loadFail();
-        }
+      img.onerror = function(e) {
+        errorfn(e);
       }
 
       img.src = source;
@@ -2501,7 +2478,7 @@ jsPsych.pluginAPI = (function() {
 
   };
 
-  module.preloadVideo = function(video, callback_complete, callback_load) {
+  module.preloadVideo = function(video, callback_complete, callback_load, callback_error) {
 
       // flatten the images array
       video = jsPsych.utils.flatten(video);
@@ -2510,6 +2487,7 @@ jsPsych.pluginAPI = (function() {
       var n_loaded = 0;
       var loadfn = !callback_load ? function() {} : callback_load;
       var finishfn = !callback_complete ? function() {} : callback_complete;
+      var errorfn = (typeof callback_error === 'undefined') ? function() {} : callback_error;
 
       if(video.length===0){
           finishfn();
@@ -2517,37 +2495,31 @@ jsPsych.pluginAPI = (function() {
       }
 
       function preload_video(source, count){
-          count = count || 1;
-          //based on option 4 here: http://dinbror.dk/blog/how-to-preload-entire-html5-video-before-play-solved/
-          var request = new XMLHttpRequest();
-          request.open('GET', source, true);
-          request.responseType = 'blob';
-          request.onload = function() {
-              if (this.status === 200 || this.status === 0) {
-                  var videoBlob = this.response;
-                  video_buffers[source] = URL.createObjectURL(videoBlob); // IE10+
-                  n_loaded++;
-                  loadfn(n_loaded);
-                  if (n_loaded === video.length) {
-                      finishfn();
-                  }
-              }
-          };
-
-          request.onerror = function(){
-              if(count < jsPsych.initSettings().max_preload_attempts){
-                  setTimeout(function(){
-                      preload_video(source, count+1)
-                  }, 200);
-              } else {
-                  jsPsych.loadFail();
-              }
+        count = count || 1;
+        //based on option 4 here: http://dinbror.dk/blog/how-to-preload-entire-html5-video-before-play-solved/
+        var request = new XMLHttpRequest();
+        request.open('GET', source, true);
+        request.responseType = 'blob';
+        request.onload = function() {
+          if (this.status === 200 || this.status === 0) {
+            var videoBlob = this.response;
+            video_buffers[source] = URL.createObjectURL(videoBlob); // IE10+
+            n_loaded++;
+            loadfn(n_loaded);
+            if (n_loaded === video.length) {
+              finishfn();
+            }
           }
-          request.send();
+        };
+
+        request.onerror = function(e){
+          errorfn();
+        }
+        request.send();
       }
 
       for (var i = 0; i < video.length; i++) {
-          preload_video(video[i]);
+        preload_video(video[i]);
       }
 
   };
@@ -2568,6 +2540,7 @@ jsPsych.pluginAPI = (function() {
   }
 
   module.getAutoPreloadList = function(timeline){
+
     // list of items to preload
     images = images || [];
     audio = audio || [];
