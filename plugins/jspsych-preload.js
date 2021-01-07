@@ -55,7 +55,7 @@ jsPsych.plugins['preload'] = (function() {
       var video = [];
 
       if(trial.auto_preload.length > 0){
-        var auto_preloads = jsPsych.getAutoPreloadList(trial.auto_preload);
+        var auto_preloads = jsPsych.pluginAPI.getAutoPreloadList(trial.auto_preload);
         images = images.concat(auto_preloads.images);
         audio = audio.concat(auto_preloads.audio);
         video = video.concat(auto_preloads.video);
@@ -107,15 +107,15 @@ jsPsych.plugins['preload'] = (function() {
       }
 
       function load_video(cb){
-        jsPsych.preloadVideo(video, cb(), update_loading_progress_bar, loading_error);
+        jsPsych.pluginAPI.preloadVideo(video, cb(), update_loading_progress_bar, loading_error);
       }
 
       function load_audio(cb){
-        jsPsych.preloadAudio(video, cb(), update_loading_progress_bar, loading_error);
+        jsPsych.pluginAPI.preloadAudio(video, cb(), update_loading_progress_bar, loading_error);
       }
 
       function load_images(cb){
-        jsPsych.preloadImages(video, cb(), update_loading_progress_bar, loading_error);
+        jsPsych.pluginAPI.preloadImages(video, cb(), update_loading_progress_bar, loading_error);
       }
 
       load_video(

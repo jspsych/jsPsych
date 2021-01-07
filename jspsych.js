@@ -95,18 +95,11 @@ window.jsPsych = (function() {
         'on_close': function(){
           return undefined;
         },
-        'preload_images': [],
-        'preload_audio': [],
-        'preload_video': [],
         'use_webaudio': true,
         'exclusions': {},
         'show_progress_bar': false,
         'message_progress_bar': 'Completion Progress',
-        'auto_update_progress_bar': true,
-        'auto_preload': true,
-        'show_preload_progress_bar': true,
-        'max_load_time': 60000,
-        'max_preload_attempts': 10,
+        'auto_update_progress_bar': true,        
         'default_iti': 0,
         'minimum_valid_rt': 0,
         'experiment_width': null,
@@ -198,23 +191,11 @@ window.jsPsych = (function() {
       checkExclusions(opts.exclusions,
         function(){
           // success! user can continue...
-          // start experiment, with or without preloading
-          if(opts.auto_preload){
-            jsPsych.pluginAPI.autoPreload(timeline, startExperiment, file_protocol, opts.preload_images, opts.preload_audio, opts.preload_video, opts.show_preload_progress_bar);
-            if(opts.max_load_time > 0){
-              setTimeout(function(){
-                if(!loaded && !loadfail){
-                  core.loadFail();
-                }
-              }, opts.max_load_time);
-            }
-          } else {
-            startExperiment();
-          }
+          // start experiment
+          startExperiment();
         },
         function(){
           // fail. incompatible user.
-
         }
       );
     };
@@ -334,15 +315,8 @@ window.jsPsych = (function() {
     }
   }
 
-  core.addNodeToEndOfTimeline = function(new_timeline, preload_callback){
+  core.addNodeToEndOfTimeline = function(new_timeline){
     timeline.insert(new_timeline);
-    if(typeof preload_callback !== 'undefined'){
-      if(opts.auto_preload){
-        jsPsych.pluginAPI.autoPreload(timeline, preload_callback, file_protocol);
-      } else {
-        preload_callback();
-      }
-    }
   }
 
   core.pauseExperiment = function(){
@@ -2584,49 +2558,6 @@ jsPsych.pluginAPI = (function() {
     return {
       images, audio, video
     }
-  }
-
-  module.autoPreload = function(timeline, callback, file_protocol, images, audio, video, progress_bar) {
-    
-    var {images, audio, video} = module.getAutoPreloadList(timeline);
-
-    // prevent all video preloading (auto and manual) when file is opened directly in browser
-    if (file_protocol === true) {
-      video = [];
-    }
-    
-    var total_n = images.length + audio.length + video.length;
-
-    var loaded = 0;
-
-    if(progress_bar){
-      var pb_html = "<div id='jspsych-loading-progress-bar-container' style='height: 10px; width: 300px; background-color: #ddd; margin: auto;'>";
-      pb_html += "<div id='jspsych-loading-progress-bar' style='height: 10px; width: 0%; background-color: #777;'></div>";
-      pb_html += "</div>";
-      jsPsych.getDisplayElement().innerHTML = pb_html;
-    }
-
-    function update_loading_progress_bar(){
-      loaded++;
-      if(progress_bar){
-        var percent_loaded = (loaded/total_n)*100;
-        var preload_progress_bar = jsPsych.getDisplayElement().querySelector('#jspsych-loading-progress-bar');
-        if (preload_progress_bar !== null) {
-          preload_progress_bar.style.width = percent_loaded+"%";
-        }
-      }
-    }
-
-    // do the preloading
-    // first the images, then when the images are complete
-    // wait for the audio files to finish
-    module.preloadImages(images, function() {
-      module.preloadAudioFiles(audio, function() {
-          module.preloadVideo(video, function() {
-              callback();
-          }, update_loading_progress_bar);
-      }, update_loading_progress_bar);
-    }, update_loading_progress_bar);
   }
 
   /**
