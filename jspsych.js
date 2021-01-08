@@ -288,9 +288,9 @@ window.jsPsych = (function() {
     var trial_data_values = trial_data.values()[0];
 
     // handle extension callbacks
-    if(Array.isArray(trial.extensions)){
-      for(var i=0; i<trial.extensions.length; i++){
-        var ext_data_values = jsPsych.extensions[trial.extensions[i]].on_finish();
+    if(Array.isArray(current_trial.extensions)){
+      for(var i=0; i<current_trial.extensions.length; i++){
+        var ext_data_values = jsPsych.extensions[current_trial.extensions[i]].on_finish();
         Object.assign(trial_data_values, ext_data_values);
       }
     }
