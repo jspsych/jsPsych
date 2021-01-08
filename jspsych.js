@@ -2530,6 +2530,10 @@ jsPsych.pluginAPI = (function() {
       return trials;
     }
 
+    if(typeof timeline_description == 'undefined'){
+      timeline_description = jsPsych.initSettings().timeline;
+    }
+
     // list of items to preload
     var images = [];
     var audio = [];
@@ -2540,7 +2544,6 @@ jsPsych.pluginAPI = (function() {
       var type = preloads[i].plugin;
       var param = preloads[i].parameter;
       var media = preloads[i].media_type;
-
 
       var trials = getTrialsOfTypeFromTimelineDescription(timeline_description, type);
       for (var j = 0; j < trials.length; j++) {

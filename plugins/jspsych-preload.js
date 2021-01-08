@@ -12,6 +12,10 @@ jsPsych.plugins['preload'] = (function() {
       description: '',
       parameters: {
         auto_preload: {
+          type: jsPsych.plugins.parameterType.BOOL,
+          default: false
+        },
+        trials: {
           type: jsPsych.plugins.parameterType.TIMELINE,
           default: []
         },
@@ -54,16 +58,27 @@ jsPsych.plugins['preload'] = (function() {
       var audio = [];
       var video = [];
 
-      if(trial.auto_preload.length > 0){
-        var auto_preloads = jsPsych.pluginAPI.getAutoPreloadList(trial.auto_preload);
-        images = images.concat(auto_preloads.images);
-        audio = audio.concat(auto_preloads.audio);
-        video = video.concat(auto_preloads.video);
+      if(trial.auto_preload){
+        var auto_preload = jsPsych.pluginAPI.getAutoPreloadList();
+        images = images.concat(auto_preload.images);
+        audio = audio.concat(auto_preload.audio);
+        video = video.concat(auto_preload.video);
+      }
+
+      if(trial.trials.length > 0){
+        var trial_preloads = jsPsych.pluginAPI.getAutoPreloadList(trial.trials);
+        images = images.concat(trial_preloads.images);
+        audio = audio.concat(trial_preloads.audio);
+        video = video.concat(trial_preloads.video);
       }
 
       images = images.concat(trial.images);
       audio = audio.concat(trial.audio);
       video = video.concat(trial.video);
+
+      images = jsPsych.utils.unique(jsPsych.utils.flatten(images))
+      audio = jsPsych.utils.unique(jsPsych.utils.flatten(audio))
+      video = jsPsych.utils.unique(jsPsych.utils.flatten(video))
 
       // render display of message and progress bar
 
@@ -107,24 +122,22 @@ jsPsych.plugins['preload'] = (function() {
       }
 
       function load_video(cb){
-        jsPsych.pluginAPI.preloadVideo(video, cb(), update_loading_progress_bar, loading_error);
+        jsPsych.pluginAPI.preloadVideo(video, cb, update_loading_progress_bar, loading_error);
       }
 
       function load_audio(cb){
-        jsPsych.pluginAPI.preloadAudio(video, cb(), update_loading_progress_bar, loading_error);
+        jsPsych.pluginAPI.preloadAudio(audio, cb, update_loading_progress_bar, loading_error);
       }
 
       function load_images(cb){
-        jsPsych.pluginAPI.preloadImages(video, cb(), update_loading_progress_bar, loading_error);
+        jsPsych.pluginAPI.preloadImages(images, cb, update_loading_progress_bar, loading_error);
       }
 
-      load_video(
-        load_audio(
-          load_images(
-            end_trial
-          )
-        )
-      )
+      load_video(function(){
+        load_audio(function(){
+          load_images(end_trial)
+        })
+      });
 
       function end_trial(){
         jsPsych.pluginAPI.clearAllTimeouts();
