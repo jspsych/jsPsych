@@ -13,11 +13,15 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
       parameters: {
         calibration_points: {
           type: jsPsych.plugins.parameterType.INT,
-          default: [[10,50], [10,90], [30,10], [50,10], [50,50], [50,90], [90,10], [90,50], [90,90]]
+          default: [[10,10], [10,50], [10,90], [50,10], [50,50], [50,90], [90,10], [90,50], [90,90]]
         },
         clicks_per_point: {
           type: jsPsych.plugins.parameterType.INT,
-          default: 5
+          default: 1
+        },
+        randomize_calibration_order: {
+          type: jsPsych.plugins.parameterType.BOOL,
+          default: false
         }
       }
     }
@@ -35,34 +39,14 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
         </div>`
   
       display_element.innerHTML = html;
+
+      jsPsych.extensions['webgazer'].showVideo();
   
       var wg_container = display_element.querySelector('#webgazer-calibrate-container');
   
-      var state = "video-detect";
-  
-      // run the main loop through calibration routine /////////
-      function loop(){
-        if(state == 'video-detect'){
-          show_video_detect_message();
-          var score = check_face_score();
-          //wg_container.querySelector('#video-detect-quality-inner').style.width = (score*100) + "%"
-          if(score){
-            document.querySelector('#jspsych-wg-cont').disabled = false;
-          }
-          requestAnimationFrame(loop);
-        } else if(state == 'begin-calibrate'){
-          show_begin_calibrate_message();
-        } else if(state == 'calibrate'){
-          calibrate();
-        } else if(state == 'calibration-done'){
-          wg_container.innerHTML = "";
-          jsPsych.extensions['webgazer'].showPredictions();
-          setTimeout(end_trial, 4000);
-        }
-      }
-  
-      requestAnimationFrame(loop);
-  
+      show_video_detect_message();
+          
+      
       function show_video_detect_message(){
         wg_container.innerHTML = "<div style='position: absolute; top: 50%; left: calc(50% - 350px); transform: translateY(-50%); width:700px;'>"+
           "<p>To start, you need to position your head so that the webcam has a good view of your eyes.</p>"+
@@ -75,21 +59,46 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
           // "<div id='video-detect-threshold' style='width: 1px; height: 20px; background-color: #f00; position: absolute; top:0; left:"+(trial.face_detect_threshold*100)+"%;'></div>"+
           "</div>"+
           "</div>"
+
+          var observer = new MutationObserver(face_detect_event_observer);
+          observer.observe(document, {
+            attributes: true,
+            attributeFilter: ['style'],
+            subtree: true
+          });
         
           document.querySelector('#jspsych-wg-cont').addEventListener('click', function(){
-            state = "begin-calibrate";
+            observer.disconnect();
+            show_begin_calibrate_message();
           })
+
+          // function waitForFace(){
+          //   var score = check_face_score();
+          //   //wg_container.querySelector('#video-detect-quality-inner').style.width = (score*100) + "%"
+          //   if(score){
+          //     document.querySelector('#jspsych-wg-cont').disabled = false;
+          //   } else {
+          //     requestAnimationFrame(waitForFace);
+          //   }
+          // }
+          // requestAnimationFrame(waitForFace);
+
+          
       }
-  
-      function check_face_score(){
-        // this is really not ideal, but webgazer doesn't expose face/eye location easily...
-        if(document.querySelector('#webgazerFaceFeedbackBox')){
-          return document.querySelector('#webgazerFaceFeedbackBox').style.borderColor == 'green';
+
+      function face_detect_event_observer(mutationsList, observer){
+        if(mutationsList[0].target == document.querySelector('#webgazerFaceFeedbackBox')){
+          if(mutationsList[0].type == 'attributes' && mutationsList[0].target.style.borderColor == "green"){
+            document.querySelector('#jspsych-wg-cont').disabled = false;
+          }
+          if(mutationsList[0].type == 'attributes' && mutationsList[0].target.style.borderColor == "red"){
+            document.querySelector('#jspsych-wg-cont').disabled = true;
+          }
         }
-        return false;
       }
   
       function show_begin_calibrate_message(){
+        jsPsych.extensions['webgazer'].hideVideo();
         wg_container.innerHTML = "<div style='position: absolute; top: 50%; left: calc(50% - 350px); transform: translateY(-50%); width:700px;'>"+
           "<p>Great! Now the eye tracker will be calibrated to translate the image of your eyes from the webcam to a location on your screen.</p>"+
           "<p>To do this, you need to look at a series of dots and click on them with your mouse. Make sure to look where you are clicking. Each click teaches the eye tracker how to map the image of your eyes onto a location on the page.</p>"+
@@ -97,14 +106,14 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
           "<button id='begin-calibrate-btn' class='jspsych-btn'>Click to begin.</button>"+
           "</div>"
         document.querySelector('#begin-calibrate-btn').addEventListener('click', function(){
-          state = 'calibrate';
-          requestAnimationFrame(loop);
+          calibrate();
         });
       }
   
       var points_completed = 0;
       function calibrate(){
         points_completed = 0;
+        jsPsych.extensions['webgazer'].resume();
         next_calibration_point();
       }
   
@@ -122,18 +131,25 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
             if(points_completed < trial.calibration_points.length){
               next_calibration_point();
             } else {
-              state = 'calibration-done'
-              requestAnimationFrame(loop);
+              calibration_done();
             }
           }
         });
   
       }
+
+      function calibration_done(){
+        wg_container.innerHTML = "";
+        jsPsych.extensions['webgazer'].showPredictions();
+        setTimeout(end_trial, 4000);
+      }
   
   
       // function to end trial when it is time
-      var end_trial = function() {
+      function end_trial() {
+        jsPsych.extensions['webgazer'].pause();
         jsPsych.extensions['webgazer'].hidePredictions();
+        jsPsych.extensions['webgazer'].hideVideo();
   
         // kill any remaining setTimeout handlers
         jsPsych.pluginAPI.clearAllTimeouts();

@@ -27,7 +27,10 @@ jsPsych.extensions['webgazer'] = (function () {
     state.webgazer.begin();
 
     // hide video by default
-    //state.webgazer.showVideo(false);
+    extension.hideVideo();
+
+    // hide predictions by default
+    extension.hidePredictions();
 
     // hide predictions by default
     //state.webgazer.showPredictionPoints(false);
@@ -50,6 +53,8 @@ jsPsych.extensions['webgazer'] = (function () {
     // resume data collection
     state.webgazer.resume();
 
+    // set internal flag
+    state.activeTrial = true;
   }
 
   // required, will be called when jsPsych.finishTrial() is called
@@ -57,6 +62,9 @@ jsPsych.extensions['webgazer'] = (function () {
   extension.on_finish = function () {
     // pause the eye tracker
     state.webgazer.pause();
+
+    // set internal flag
+    state.activeTrial = false;
 
     // send back the gazeData
     return {
@@ -76,8 +84,37 @@ jsPsych.extensions['webgazer'] = (function () {
     state.webgazer.showPredictionPoints(false);
   }
 
+  extension.showVideo = function(){
+    state.webgazer.showVideo(true);
+    state.webgazer.showFaceOverlay(true);
+    state.webgazer.showFaceFeedbackBox(true);
+  }
+
+  extension.hideVideo = function(){
+    state.webgazer.showVideo(false);
+    state.webgazer.showFaceOverlay(false);
+    state.webgazer.showFaceFeedbackBox(false);
+  }
+
+  extension.resume = function(){
+    state.webgazer.resume();
+  }
+
+  extension.pause = function(){
+    state.webgazer.pause();
+  }
+
+  extension.setRegressionType = function(regression_type){
+    var valid_regression_models = ['ridge', 'weigthedRidge', 'threadedRidge'];
+    if(valid_regression_models.includes(regression_type)){
+      state.webgazer.setRegression(regression_type)
+    } else {
+      console.warn('Invalid regression_type parameter for webgazer.setRegressionType. Valid options are ridge, weightedRidge, and threadedRidge.')
+    }
+  }
+
   function handleGazeDataUpdate(gazeData, elapsedTime){
-    if(gazeData !== null){
+    if(gazeData !== null && state.activeTrial){
       var d = {
         x: gazeData.x, 
         y: gazeData.y, 
