@@ -22,6 +22,10 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
         randomize_calibration_order: {
           type: jsPsych.plugins.parameterType.BOOL,
           default: false
+        },
+        color_click_mode: {
+          type: jsPsych.plugins.parameterType.BOOL,
+          default: false
         }
       }
     }
@@ -46,7 +50,6 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
   
       show_video_detect_message();
           
-      
       function show_video_detect_message(){
         wg_container.innerHTML = "<div style='position: absolute; top: 50%; left: calc(50% - 350px); transform: translateY(-50%); width:700px;'>"+
           "<p>To start, you need to position your head so that the webcam has a good view of your eyes.</p>"+
@@ -111,18 +114,30 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
       }
   
       var points_completed = 0;
+      var cal_points = null;
+      var clicks = 0;
+
       function calibrate(){
+        if(trial.randomize_calibration_order){
+          cal_points = jsPsych.randomization.shuffle(trial.calibration_points);
+        } else {
+          cal_points = trial.calibration_points;
+        }
         points_completed = 0;
         jsPsych.extensions['webgazer'].resume();
         next_calibration_point();
       }
   
-      var clicks = 0;
       function next_calibration_point(){
         clicks = 0;
-        var pt = trial.calibration_points[points_completed];
+        var pt = cal_points[points_completed];
         var pt_html = '<div id="calibration-point" style="width:20px; height:20px; border-radius:10px; border: 2px solid #f00; background-color: #333; position: absolute; left:'+pt[0]+'%; top:'+pt[1]+'%;"></div>'
         wg_container.innerHTML = pt_html;
+
+        jsPsych.pluginAPI.setTimeout(function(){
+          //wg_container.querySelector('#calibration-point').style.
+        })
+
         wg_container.querySelector('#calibration-point').addEventListener('click', function(){
           clicks++;
           wg_container.querySelector('#calibration-point').style.opacity = `${100 - clicks*(80/trial.clicks_per_point)}%`
