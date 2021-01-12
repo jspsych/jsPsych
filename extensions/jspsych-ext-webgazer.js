@@ -23,8 +23,10 @@ jsPsych.extensions['webgazer'] = (function () {
     // sets up event handler for webgazer data
     state.webgazer.setGazeListener(handleGazeDataUpdate);
 
-    // starts webgazer
-    state.webgazer.begin();
+    // starts webgazer, and once it initializes we stop mouseEvents by default
+    state.webgazer.begin().then(function(){
+      extension.stopMouseCalibration();
+    })
 
     // hide video by default
     extension.hideVideo();
@@ -104,6 +106,18 @@ jsPsych.extensions['webgazer'] = (function () {
     state.webgazer.pause();
   }
 
+  extension.stopMouseCalibration = function(){
+    state.webgazer.removeMouseEventListeners()
+  }
+
+  extension.startMouseCalibration = function(){
+    state.webgazer.addMouseEventListeners()
+  }
+
+  extension.calibratePoint = function(x,y){
+    state.webgazer.recordScreenPosition(x,y,'click');
+  }
+
   extension.setRegressionType = function(regression_type){
     var valid_regression_models = ['ridge', 'weigthedRidge', 'threadedRidge'];
     if(valid_regression_models.includes(regression_type)){
@@ -112,6 +126,14 @@ jsPsych.extensions['webgazer'] = (function () {
       console.warn('Invalid regression_type parameter for webgazer.setRegressionType. Valid options are ridge, weightedRidge, and threadedRidge.')
     }
   }
+
+  extension.getCurrentPrediction = function(){
+    return state.webgazer.getCurrentPrediction();
+  }
+
+  // extension.addGazeDataUpdateListener(listener){
+  //   state.webgazer.setGazeListener(listener);
+  // }
 
   function handleGazeDataUpdate(gazeData, elapsedTime){
     if(gazeData !== null && state.activeTrial){

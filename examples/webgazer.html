@@ -5,9 +5,13 @@
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-html-keyboard-response.js"></script>
   <script src="../plugins/jspsych-webgazer-calibrate.js"></script>
+  <script src="../plugins/jspsych-webgazer-validate.js"></script>
   <script src="js/webgazer.js"></script>
   <script src="../extensions/jspsych-ext-webgazer.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css">
+  <style>
+    .jspsych-content { max-width: 100%;}
+  </style>
 </head>
 
 <body></body>
@@ -15,7 +19,16 @@
 <script>
 
   var calibration = {
-    type: 'webgazer-calibrate'
+    type: 'webgazer-calibrate',
+    //calibration_points: [[10,10], [10,90], [90,10], [90,90]],
+    randomize_calibration_order: true,
+    time_per_point: 1000,
+    time_to_saccade: 1000
+  }
+
+  var validation = {
+    type: 'webgazer-validate',
+    validation_points: [[25,25], [25,75], [75,25], [75,75]]
   }
 
   var fixation = {
@@ -60,6 +73,7 @@
 
   var timeline = [];
   timeline.push(calibration);
+  timeline.push(validation);
   timeline.push(trial_proc);
 
   jsPsych.init({

@@ -23,9 +23,13 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
           type: jsPsych.plugins.parameterType.BOOL,
           default: false
         },
-        color_click_mode: {
-          type: jsPsych.plugins.parameterType.BOOL,
-          default: false
+        time_to_saccade: {
+          type: jsPsych.plugins.parameterType.INT,
+          default: 1000
+        },
+        time_per_point: {
+          type: jsPsych.plugins.parameterType.STRING,
+          default: 2000
         }
       }
     }
@@ -104,8 +108,8 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
         jsPsych.extensions['webgazer'].hideVideo();
         wg_container.innerHTML = "<div style='position: absolute; top: 50%; left: calc(50% - 350px); transform: translateY(-50%); width:700px;'>"+
           "<p>Great! Now the eye tracker will be calibrated to translate the image of your eyes from the webcam to a location on your screen.</p>"+
-          "<p>To do this, you need to look at a series of dots and click on them with your mouse. Make sure to look where you are clicking. Each click teaches the eye tracker how to map the image of your eyes onto a location on the page.</p>"+
-          "<p>Please click each point 5 times.</p>"+
+          "<p>To do this, you need to look at a series of dots.</p>"+
+          "<p>Keep your head still, and focus on each dot as quickly as possible. Keep your gaze fixed on the dot for as long as it is on the screen.</p>"+
           "<button id='begin-calibrate-btn' class='jspsych-btn'>Click to begin.</button>"+
           "</div>"
         document.querySelector('#begin-calibrate-btn').addEventListener('click', function(){
@@ -113,9 +117,8 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
         });
       }
   
-      var points_completed = 0;
+      var points_completed = -1;
       var cal_points = null;
-      var clicks = 0;
 
       function calibrate(){
         if(trial.randomize_calibration_order){
@@ -123,33 +126,52 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
         } else {
           cal_points = trial.calibration_points;
         }
-        points_completed = 0;
+        points_completed = -1;
         jsPsych.extensions['webgazer'].resume();
         next_calibration_point();
       }
   
       function next_calibration_point(){
-        clicks = 0;
-        var pt = cal_points[points_completed];
-        var pt_html = '<div id="calibration-point" style="width:20px; height:20px; border-radius:10px; border: 2px solid #f00; background-color: #333; position: absolute; left:'+pt[0]+'%; top:'+pt[1]+'%;"></div>'
+        points_completed++;
+        if(points_completed == cal_points.length){
+          calibration_done();
+        } else {
+          var pt = cal_points[points_completed];
+          calibration_display_color_change(pt);
+        }
+      }
+
+      function calibration_display_color_change(pt){
+        var pt_html = '<div id="calibration-point" style="width:10px; height:10px; border-radius:10px; border: 1px solid #000; background-color: #333; position: absolute; left:'+pt[0]+'%; top:'+pt[1]+'%;"></div>'
         wg_container.innerHTML = pt_html;
 
-        jsPsych.pluginAPI.setTimeout(function(){
-          //wg_container.querySelector('#calibration-point').style.
+        var pt_dom = wg_container.querySelector('#calibration-point');
+
+        var br = pt_dom.getBoundingClientRect();
+        var x = br.left + br.width / 2;
+        var y = br.top + br.height / 2;
+
+        var pt_start_cal = performance.now() + trial.time_to_saccade;
+        var pt_finish = performance.now() + trial.time_to_saccade + trial.time_per_point;
+        
+        requestAnimationFrame(function watch_dot(){
+          
+          if(performance.now() > pt_start_cal){
+            jsPsych.extensions['webgazer'].calibratePoint(x,y,'click');
+          }
+          if(performance.now() < pt_finish){
+            requestAnimationFrame(watch_dot);
+          } else {
+            next_calibration_point();
+          }
         })
 
-        wg_container.querySelector('#calibration-point').addEventListener('click', function(){
-          clicks++;
-          wg_container.querySelector('#calibration-point').style.opacity = `${100 - clicks*(80/trial.clicks_per_point)}%`
-          if(clicks >= trial.clicks_per_point){
-            points_completed++;
-            if(points_completed < trial.calibration_points.length){
-              next_calibration_point();
-            } else {
-              calibration_done();
-            }
-          }
-        });
+        // jsPsych.pluginAPI.setTimeout(function(){
+        //   pt_dom.style.backgroundColor = "#fff";
+        //   pt_dom.addEventListener('click', function(){
+        //     next_calibration_point();
+        //   });
+        // }, Math.random()*(trial.maximum_dot_change_delay-trial.minimum_dot_change_delay)+trial.minimum_dot_change_delay);
   
       }
 
@@ -158,8 +180,7 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
         jsPsych.extensions['webgazer'].showPredictions();
         setTimeout(end_trial, 4000);
       }
-  
-  
+
       // function to end trial when it is time
       function end_trial() {
         jsPsych.extensions['webgazer'].pause();
