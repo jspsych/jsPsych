@@ -46,7 +46,7 @@ on_finish | function | `function(){ return; }` | A callback function to execute 
 on_start | function | `function(){ return; }` | A callback function to execute when the trial begins, before any loading has occurred. See [this page](../overview/callbacks.md) for more details.
 on_load | function | `function(){ return; }` | A callback function to execute when the trial has loaded, which typically happens after the initial display of the plugin has loaded. See [this page](../overview/callbacks.md) for more details.
 data | object | *undefined* | An object containing additional data to store for the trial. See [this page](../overview/data.md) for more details.
-css_classes | string | null | A list of CSS classes to add to the jsPsych display element for the duration of this trial. This allows you to create custom formatting rules that are only applied to specific trials. See jsPsych/examples/css-classes-parameter.html for examples.
+css_classes | string | null | A list of CSS classes to add to the jsPsych display element for the duration of this trial. This allows you to create custom formatting rules (CSS classes) that are only applied to specific trials. See jsPsych/examples/css-classes-parameter.html for examples.
 
 ## Data collected by plugins
 

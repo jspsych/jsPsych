@@ -7,6 +7,16 @@
   <script src="../plugins/jspsych-html-keyboard-response.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css">
   <style>
+    /* 
+      Note that these CSS classes will only be added to the jspsych-content div.
+      In order for the CSS rules to be applied to the elements inside this div (stimulus, prompt, etc.),
+      the CSS properties will need to be inherited. Not all CSS properties are inherited from 
+      parent elements, so this will limit what CSS properties you can change using the css_class parameter.
+      To learn more about CSS inheritance, see:
+      https://developer.mozilla.org/en-US/docs/Web/CSS/inheritance
+      https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Cascade_and_inheritance#inheritance
+      https://stackoverflow.com/questions/5612302/which-css-properties-are-inherited
+    */
     .condition1 {
       color: red;
       font: small-caps bold 30px/30px Arial, sans-serif;
@@ -17,6 +27,7 @@
       font-size: 40px;
       text-decoration: underline wavy blue;
       line-height: 200%;
+      background-color: aqua;
     }
   </style>
 </head>
