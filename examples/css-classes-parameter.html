@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css">
+  <style>
+    .condition1 {
+      color: red;
+      font: small-caps bold 30px/30px Arial, sans-serif;
+      line-height: 150%;
+    }
+    .condition2 {
+      color: green;
+      font-size: 40px;
+      text-decoration: underline wavy blue;
+      line-height: 200%;
+    }
+  </style>
+</head>
+<body></body>
+<script>
+
+  var trial_procedure = {
+    timeline: [{
+      type: 'html-keyboard-response',
+      stimulus: jsPsych.timelineVariable('stim'),
+      css_classes: jsPsych.timelineVariable('css_class')
+    }],
+    timeline_variables: [
+      {css_class: ['condition1'], stim: 'This is the style for Condition 1.<br>Press any key to continue.'},
+      {css_class: ['condition2'], stim: 'This is the style for Condition 2.'},
+      {css_class: ['condition1'], stim: 'Here&#39;s Condition 1 again.'},
+      {css_class: ['condition2'], stim: 'Here&#39;s Condition 2 again.'},
+    ]
+  }
+
+  jsPsych.init({
+    timeline: [trial_procedure]
+  });
+
+</script>
+
+</html>
