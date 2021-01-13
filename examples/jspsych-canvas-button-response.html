@@ -67,12 +67,12 @@
     };
 
     // to use the canvas stimulus function with timeline variables,
-    // use the jsPsych.timelineVariable() function inside your stimulus function with the second 'true' argument
+    // the jsPsych.timelineVariable() function can be used inside your stimulus function
     var circle_procedure = {
         timeline: [{
             type: 'canvas-button-response',
             stimulus: function(c) {
-                filledCirc(c, jsPsych.timelineVariable('radius', true), jsPsych.timelineVariable('color', true));
+                filledCirc(c, jsPsych.timelineVariable('radius'), jsPsych.timelineVariable('color'));
             },
             choices: ['Red', 'Green', 'Blue'],
             prompt: '<p>What color is the circle?</p>',
