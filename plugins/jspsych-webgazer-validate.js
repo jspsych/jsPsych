@@ -127,7 +127,7 @@ jsPsych.plugins["webgazer-validate"] = (function() {
 
       function drawCircle(target_x, target_y, dx, dy,r){
         var html = `
-          <div class="validation-centroid" style="width:${r*2}px; height:${r*2}px; border: 2px solid red; border-radius: ${r}px; background-color: transparent; position: absolute; left:calc(${target_x}% + ${dx}px); top:calc(${target_y}% + ${dy}px);"></div>
+          <div class="validation-centroid" style="width:${r*2}px; height:${r*2}px; border: 2px solid red; border-radius: ${r}px; background-color: transparent; position: absolute; left:calc(${target_x}% + ${dx-r}px); top:calc(${target_y}% + ${dy-r}px);"></div>
         `
         return html;
       }
