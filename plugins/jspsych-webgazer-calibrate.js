@@ -15,7 +15,7 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
           type: jsPsych.plugins.parameterType.INT,
           default: [[10,10], [10,50], [10,90], [50,10], [50,50], [50,90], [90,10], [90,50], [90,90]]
         },
-        clicks_per_point: {
+        repetitions_per_point: {
           type: jsPsych.plugins.parameterType.INT,
           default: 1
         },
@@ -117,31 +117,41 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
         });
       }
   
+      var reps_completed = 0;
       var points_completed = -1;
       var cal_points = null;
 
       function calibrate(){
+        jsPsych.extensions['webgazer'].resume();
+        next_calibration_round();
+      }
+
+      function next_calibration_round(){
         if(trial.randomize_calibration_order){
           cal_points = jsPsych.randomization.shuffle(trial.calibration_points);
         } else {
           cal_points = trial.calibration_points;
         }
         points_completed = -1;
-        jsPsych.extensions['webgazer'].resume();
         next_calibration_point();
       }
   
       function next_calibration_point(){
         points_completed++;
         if(points_completed == cal_points.length){
-          calibration_done();
+          reps_completed++;
+          if(reps_completed == trial.repetitions_per_point){
+            calibration_done();
+          } else {
+            next_calibration_round();
+          }
         } else {
           var pt = cal_points[points_completed];
-          calibration_display_color_change(pt);
+          calibration_display_gaze_only(pt);
         }
       }
 
-      function calibration_display_color_change(pt){
+      function calibration_display_gaze_only(pt){
         var pt_html = '<div id="calibration-point" style="width:10px; height:10px; border-radius:10px; border: 1px solid #000; background-color: #333; position: absolute; left:'+pt[0]+'%; top:'+pt[1]+'%;"></div>'
         wg_container.innerHTML = pt_html;
 
@@ -177,8 +187,7 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
 
       function calibration_done(){
         wg_container.innerHTML = "";
-        jsPsych.extensions['webgazer'].showPredictions();
-        setTimeout(end_trial, 4000);
+        end_trial();
       }
 
       // function to end trial when it is time

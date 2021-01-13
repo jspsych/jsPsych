@@ -62,6 +62,7 @@ jsPsych.plugins["webgazer-validate"] = (function() {
       var val_points = null;
 
       function validate(){
+        
         if(trial.randomize_validation_order){
           val_points = jsPsych.randomization.shuffle(trial.validation_points);
         } else {
@@ -185,7 +186,9 @@ jsPsych.plugins["webgazer-validate"] = (function() {
             html += drawRawDataPoint(trial.validation_points[i][0], trial.validation_points[i][1], trial_data.rawGaze[i][j].dx, trial_data.rawGaze[i][j].dy)
           }
         }
-        wg_container.innerHTML = html;        
+        wg_container.innerHTML = html;
+        // debugging
+        jsPsych.extensions.webgazer.showPredictions();        
       }
 
       // function to end trial when it is time
