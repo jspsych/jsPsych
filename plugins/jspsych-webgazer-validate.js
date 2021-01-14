@@ -15,6 +15,10 @@ jsPsych.plugins["webgazer-validate"] = (function() {
           type: jsPsych.plugins.parameterType.INT,
           default: [[10,10], [10,50], [10,90], [50,10], [50,50], [50,90], [90,10], [90,50], [90,90]]
         },
+        roi_radius: {
+          type: jsPsych.plugins.parameterType.INT,
+          default: 200
+        },
         randomize_validation_order: {
           type: jsPsych.plugins.parameterType.BOOL,
           default: false
@@ -22,7 +26,8 @@ jsPsych.plugins["webgazer-validate"] = (function() {
         validation_duration: {
           type: jsPsych.plugins.parameterType.INT,
           default: 2000
-        }
+        },
+        
       }
     }
   
@@ -35,7 +40,8 @@ jsPsych.plugins["webgazer-validate"] = (function() {
     plugin.trial = function(display_element, trial) {
 
       var trial_data = {}
-      trial_data.rawGaze = [];
+      trial_data.raw_gaze = [];
+      trial_data.percent_in_roi = [];
   
       var html = `
         <div id='webgazer-validate-container' style='position: relative; width:100vw; height:100vh; overflow: hidden;'>
@@ -108,7 +114,7 @@ jsPsych.plugins["webgazer-validate"] = (function() {
           if(performance.now() < pt_finish){
             requestAnimationFrame(watch_dot);
           } else {
-            trial_data.rawGaze.push(pt_data);
+            trial_data.raw_gaze.push(pt_data);
             next_validation_point();
           }
         })
@@ -176,19 +182,38 @@ jsPsych.plugins["webgazer-validate"] = (function() {
         }
       }
 
+      function calculatePercentInROI(gazeData){
+        var distances = gazeData.map(function(p){ 
+          return(Math.sqrt(Math.pow(p.dx,2) + Math.pow(p.dy,2)))
+        });
+        var sum_in_roi = distances.reduce(function(accumulator, currentValue){
+          if(currentValue <= trial.roi_radius){
+            accumulator++;
+          }
+          return accumulator;
+        }, 0);
+        var percent = sum_in_roi / gazeData.length * 100;
+        return percent;
+      }
+
       function validation_done(){
         var html = '';
         for(var i=0; i<trial.validation_points.length; i++){
           html += drawValidationPoint(trial.validation_points[i][0], trial.validation_points[i][1]);
-          var gc = calculateGazeCentroid(trial_data.rawGaze[i]);
+          var percent_in_roi = calculatePercentInROI(trial_data.raw_gaze[i]);
+          trial_data.percent_in_roi[i] = percent_in_roi;
+          var gc = calculateGazeCentroid(trial_data.raw_gaze[i]);
           html += drawCircle(trial.validation_points[i][0], trial.validation_points[i][1], gc.x, gc.y, gc.r);
-          for(var j=0; j<trial_data.rawGaze[i].length; j++){
-            html += drawRawDataPoint(trial.validation_points[i][0], trial.validation_points[i][1], trial_data.rawGaze[i][j].dx, trial_data.rawGaze[i][j].dy)
+          for(var j=0; j<trial_data.raw_gaze[i].length; j++){
+            html += drawRawDataPoint(trial.validation_points[i][0], trial.validation_points[i][1], trial_data.raw_gaze[i][j].dx, trial_data.raw_gaze[i][j].dy)
           }
         }
-        wg_container.innerHTML = html;
         // debugging
+        html += '<button id="cont" class="jspsych-btn">Continue</btn>';
+        wg_container.innerHTML = html;
+        wg_container.querySelector('#cont').addEventListener('click', end_trial);
         jsPsych.extensions.webgazer.showPredictions();        
+        console.log(trial_data.percent_in_roi);
       }
 
       // function to end trial when it is time
@@ -198,12 +223,7 @@ jsPsych.plugins["webgazer-validate"] = (function() {
         jsPsych.extensions['webgazer'].hideVideo();
   
         // kill any remaining setTimeout handlers
-        jsPsych.pluginAPI.clearAllTimeouts();
-  
-        // gather the data to store for the trial
-        var trial_data = {
-  
-        };
+        jsPsych.pluginAPI.clearAllTimeouts();    
   
         // clear the display
         display_element.innerHTML = '';
