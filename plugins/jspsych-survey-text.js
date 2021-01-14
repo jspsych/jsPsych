@@ -168,8 +168,8 @@ jsPsych.plugins['survey-text'] = (function() {
       }
       // save data
       var trialdata = {
-        "rt": response_time,
-        "responses": JSON.stringify(question_data)
+        rt: response_time,
+        responses: question_data
       };
 
       display_element.innerHTML = '';

@@ -137,11 +137,11 @@ jsPsych.plugins['same-different-image'] = (function() {
         }
 
         var trial_data = {
-          "rt": info.rt,
-          "answer": trial.answer,
-          "correct": correct,
-          "stimulus": JSON.stringify([trial.stimuli[0], trial.stimuli[1]]),
-          "key_press": info.key
+          rt: info.rt,
+          answer: trial.answer,
+          correct: correct,
+          stimulus: [trial.stimuli[0], trial.stimuli[1]],
+          key_press: info.key
         };
         if (first_stim_info) {
           trial_data["rt_stim1"] = first_stim_info.rt;

@@ -184,8 +184,8 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
       jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
 
       var trial_data = {
-        "stimuli": JSON.stringify(trial.stimuli),
-        "responses": JSON.stringify(responses)
+        stimuli: trial.stimuli,
+        responses: responses
       };
 
       jsPsych.finishTrial(trial_data);

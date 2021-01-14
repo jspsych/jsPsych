@@ -191,8 +191,8 @@ jsPsych.plugins.instructions = (function() {
       display_element.innerHTML = '';
 
       var trial_data = {
-        "view_history": JSON.stringify(view_history),
-        "rt": performance.now() - start_time
+        view_history: view_history,
+        rt: performance.now() - start_time
       };
 
       jsPsych.finishTrial(trial_data);

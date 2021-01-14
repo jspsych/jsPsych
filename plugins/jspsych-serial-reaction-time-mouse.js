@@ -151,12 +151,12 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
 
       // gather the data to store for the trial
       var trial_data = {
-        "rt": response.rt,
-				"grid": JSON.stringify(trial.grid),
-				"target": JSON.stringify(trial.target),
-        "response_row": response.row,
-        "response_column": response.column,
-        "correct": response.row == trial.target[0] && response.column == trial.target[1]
+        rt: response.rt,
+				grid: trial.grid,
+				target: trial.target,
+        response_row: response.row,
+        response_column: response.column,
+        correct: response.row == trial.target[0] && response.column == trial.target[1]
       };
 
       // clear the display

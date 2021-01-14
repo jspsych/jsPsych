@@ -104,7 +104,7 @@ describe('survey-text plugin', function(){
 
 		utils.clickTarget(document.querySelector('#jspsych-survey-text-next'));
 
-		var survey_data = JSON.parse(jsPsych.data.get().values()[0].responses);
+		var survey_data = jsPsych.data.get().values()[0].responses;
 		expect(survey_data.Q0).toBe('a0');
 		expect(survey_data.Q1).toBe('a1');
 		expect(survey_data.Q2).toBe('a2');
