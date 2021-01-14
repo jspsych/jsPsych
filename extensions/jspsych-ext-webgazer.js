@@ -23,9 +23,11 @@ jsPsych.extensions['webgazer'] = (function () {
     // sets up event handler for webgazer data
     state.webgazer.setGazeListener(handleGazeDataUpdate);
 
-    // starts webgazer, and once it initializes we stop mouseEvents by default
+    // starts webgazer, and once it initializes we stop mouseCalibration and
+    // pause webgazer data.
     state.webgazer.begin().then(function () {
       extension.stopMouseCalibration();
+      extension.pause();
     })
 
     // hide video by default
@@ -33,12 +35,6 @@ jsPsych.extensions['webgazer'] = (function () {
 
     // hide predictions by default
     extension.hidePredictions();
-
-    // hide predictions by default
-    //state.webgazer.showPredictionPoints(false);
-
-    // immediately pauses data gathering
-    //state.webgazer.pause();
   }
 
   // required, will be called when the trial starts (before trial loads)
