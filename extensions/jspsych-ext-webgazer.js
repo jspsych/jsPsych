@@ -10,8 +10,8 @@ jsPsych.extensions['webgazer'] = (function () {
 
   // required, will be called at jsPsych.init
   extension.initialize = function (params) {
-    if(typeof params.webgazer === 'undefined'){
-      if(window.webgazer){
+    if (typeof params.webgazer === 'undefined') {
+      if (window.webgazer) {
         state.webgazer = window.webgazer;
       } else {
         console.error('WebGazer library not detected. Load webgazer.js before initializing experiment.');
@@ -24,7 +24,7 @@ jsPsych.extensions['webgazer'] = (function () {
     state.webgazer.setGazeListener(handleGazeDataUpdate);
 
     // starts webgazer, and once it initializes we stop mouseEvents by default
-    state.webgazer.begin().then(function(){
+    state.webgazer.begin().then(function () {
       extension.stopMouseCalibration();
     })
 
@@ -47,7 +47,7 @@ jsPsych.extensions['webgazer'] = (function () {
   }
 
   // required will be called when the trial loads
-  extension.on_load = function() {
+  extension.on_load = function () {
 
     // set current trial start time
     state.currentTrialStart = performance.now();
@@ -74,60 +74,60 @@ jsPsych.extensions['webgazer'] = (function () {
     }
   }
 
-  extension.faceDetected = function(){
+  extension.faceDetected = function () {
     return state.webgazer.getTracker().predictionReady;
   }
-  
-  extension.showPredictions = function(){
+
+  extension.showPredictions = function () {
     state.webgazer.showPredictionPoints(true);
   }
 
-  extension.hidePredictions = function(){
+  extension.hidePredictions = function () {
     state.webgazer.showPredictionPoints(false);
   }
 
-  extension.showVideo = function(){
+  extension.showVideo = function () {
     state.webgazer.showVideo(true);
     state.webgazer.showFaceOverlay(true);
     state.webgazer.showFaceFeedbackBox(true);
   }
 
-  extension.hideVideo = function(){
+  extension.hideVideo = function () {
     state.webgazer.showVideo(false);
     state.webgazer.showFaceOverlay(false);
     state.webgazer.showFaceFeedbackBox(false);
   }
 
-  extension.resume = function(){
+  extension.resume = function () {
     state.webgazer.resume();
   }
 
-  extension.pause = function(){
+  extension.pause = function () {
     state.webgazer.pause();
   }
 
-  extension.stopMouseCalibration = function(){
+  extension.stopMouseCalibration = function () {
     state.webgazer.removeMouseEventListeners()
   }
 
-  extension.startMouseCalibration = function(){
+  extension.startMouseCalibration = function () {
     state.webgazer.addMouseEventListeners()
   }
 
-  extension.calibratePoint = function(x,y){
-    state.webgazer.recordScreenPosition(x,y,'click');
+  extension.calibratePoint = function (x, y) {
+    state.webgazer.recordScreenPosition(x, y, 'click');
   }
 
-  extension.setRegressionType = function(regression_type){
+  extension.setRegressionType = function (regression_type) {
     var valid_regression_models = ['ridge', 'weigthedRidge', 'threadedRidge'];
-    if(valid_regression_models.includes(regression_type)){
+    if (valid_regression_models.includes(regression_type)) {
       state.webgazer.setRegression(regression_type)
     } else {
       console.warn('Invalid regression_type parameter for webgazer.setRegressionType. Valid options are ridge, weightedRidge, and threadedRidge.')
     }
   }
 
-  extension.getCurrentPrediction = function(){
+  extension.getCurrentPrediction = function () {
     return state.webgazer.getCurrentPrediction();
   }
 
@@ -135,16 +135,16 @@ jsPsych.extensions['webgazer'] = (function () {
   //   state.webgazer.setGazeListener(listener);
   // }
 
-  function handleGazeDataUpdate(gazeData, elapsedTime){
-    if(gazeData !== null && state.activeTrial){
+  function handleGazeDataUpdate(gazeData, elapsedTime) {
+    if (gazeData !== null && state.activeTrial) {
       var d = {
-        x: gazeData.x, 
-        y: gazeData.y, 
+        x: gazeData.x,
+        y: gazeData.y,
         t: performance.now() - state.currentTrialStart
       }
       state.currentTrialData.push(d); // add data to current trial's data
     }
-    
+
   }
 
   return extension;
