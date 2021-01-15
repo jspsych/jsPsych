@@ -196,7 +196,7 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 			var responseLoc = [];
 			for(var i=0; i<trial.choices.length; i++){
 				for(var j=0; j<trial.choices[i].length; j++){
-					var t = typeof trial.choices[i][j] == 'string' ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.choices[i][j]) : trial.choices[i][j];
+					var t = trial.choices[i][j];
 					if(info.key == t){
 						responseLoc = [i,j];
 						break;

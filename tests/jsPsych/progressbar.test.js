@@ -20,7 +20,7 @@ describe('automatic progress bar', function(){
 
     expect(document.querySelector('#jspsych-progressbar-container')).toBe(null);
 
-    utils.pressKey(32);
+    utils.pressKey('a');
   });
 
   test('progress bar displays when show_progress_bar is true', function(){
@@ -36,7 +36,7 @@ describe('automatic progress bar', function(){
 
     expect(document.querySelector('#jspsych-progressbar-container').innerHTML).toMatch('<span>Completion Progress</span><div id="jspsych-progressbar-outer"><div id="jspsych-progressbar-inner"></div></div>');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
   });
 
   test('progress bar automatically updates by default', function(){
@@ -52,19 +52,19 @@ describe('automatic progress bar', function(){
 
     expect(document.querySelector('#jspsych-progressbar-inner').style.width).toBe('');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(document.querySelector('#jspsych-progressbar-inner').style.width).toBe('25%');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(document.querySelector('#jspsych-progressbar-inner').style.width).toBe('50%');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(document.querySelector('#jspsych-progressbar-inner').style.width).toBe('75%');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(document.querySelector('#jspsych-progressbar-inner').style.width).toBe('100%');
 
@@ -84,19 +84,19 @@ describe('automatic progress bar', function(){
 
     expect(document.querySelector('#jspsych-progressbar-inner').style.width).toBe('');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(document.querySelector('#jspsych-progressbar-inner').style.width).toBe('');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(document.querySelector('#jspsych-progressbar-inner').style.width).toBe('');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(document.querySelector('#jspsych-progressbar-inner').style.width).toBe('');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(document.querySelector('#jspsych-progressbar-inner').style.width).toBe('');
 
@@ -127,11 +127,11 @@ describe('automatic progress bar', function(){
 
     expect(document.querySelector('#jspsych-progressbar-inner').style.width).toBe('');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(document.querySelector('#jspsych-progressbar-inner').style.width).toBe('20%');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(document.querySelector('#jspsych-progressbar-inner').style.width).toBe('80%');
 
@@ -160,11 +160,11 @@ describe('automatic progress bar', function(){
       auto_update_progress_bar: false
     });
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(jsPsych.getProgressBarCompleted()).toBe(0.2);
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(jsPsych.getProgressBarCompleted()).toBe(0.8);
 
@@ -181,19 +181,19 @@ describe('automatic progress bar', function(){
       show_progress_bar: true
     });
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(jsPsych.getProgressBarCompleted()).toBe(0.25);
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(jsPsych.getProgressBarCompleted()).toBe(0.50);
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(jsPsych.getProgressBarCompleted()).toBe(0.75);
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(jsPsych.getProgressBarCompleted()).toBe(1);
 

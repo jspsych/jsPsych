@@ -8,7 +8,7 @@ describe('#getKeyboardResponse', function(){
     var t = {
       type: 'html-keyboard-response',
       stimulus: 'foo',
-      choices: ['Q']
+      choices: ['q']
     }
 
     jsPsych.init({
@@ -19,20 +19,20 @@ describe('#getKeyboardResponse', function(){
     var callback = jest.fn();
     jsPsych.pluginAPI.getKeyboardResponse({callback_function: callback});
     expect(callback.mock.calls.length).toBe(0);
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}));
     expect(callback.mock.calls.length).toBe(1);
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: 'a'}));
     expect(callback.mock.calls.length).toBe(1);
   });
   test('should execute only valid keys', function(){
     var callback = jest.fn();
-    jsPsych.pluginAPI.getKeyboardResponse({callback_function: callback, valid_responses: [13]});
+    jsPsych.pluginAPI.getKeyboardResponse({callback_function: callback, valid_responses: ['a']});
     expect(callback.mock.calls.length).toBe(0);
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 54}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 54}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: 'b'}));
     expect(callback.mock.calls.length).toBe(0);
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 13}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 13}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: 'a'}));
     expect(callback.mock.calls.length).toBe(1);
   });
   test('should not respond when jsPsych.NO_KEYS is used', function(){
@@ -42,28 +42,28 @@ describe('#getKeyboardResponse', function(){
     document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 54}));
     document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 54}));
     expect(callback.mock.calls.length).toBe(0);
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 'a'}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 'a'}));
     expect(callback.mock.calls.length).toBe(0);
   });
   test('should not respond to held keys when allow_held_key is false', function(){
     var callback = jest.fn();
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 'a'}));
     jsPsych.pluginAPI.getKeyboardResponse({callback_function: callback, valid_responses: jsPsych.ALL_KEYS, allow_held_key: false});
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 'a'}));
     expect(callback.mock.calls.length).toBe(0);
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 'a'}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 'a'}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 'a'}));
     expect(callback.mock.calls.length).toBe(1);
   });
   test('should respond to held keys when allow_held_key is true', function(){
     var callback = jest.fn();
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 'a'}));
     jsPsych.pluginAPI.getKeyboardResponse({callback_function: callback, valid_responses: jsPsych.ALL_KEYS, allow_held_key: true});
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 'a'}));
     expect(callback.mock.calls.length).toBe(1);
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: 'a'}));
   });
 })
 

@@ -180,8 +180,8 @@
       jsPsych.finishTrial(trial_data);
     };
 
-    var leftKeyCode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.left_category_key);
-    var rightKeyCode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.right_category_key);
+    var leftKeyCode = trial.left_category_key;
+    var rightKeyCode = trial.right_category_key;
 
     // function to handle responses by the subject
     var after_response = function(info) {

@@ -35,7 +35,7 @@ describe('iat-image plugin', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(/blue.png/);
 
-    utils.pressKey(70);
+    utils.pressKey('f');
 
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
@@ -55,10 +55,10 @@ describe('iat-image plugin', function(){
 			auto_preload: false
     });
 
-    utils.pressKey(74);
+    utils.pressKey('j');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-iat-stim">');
 
-    utils.pressKey(70);
+    utils.pressKey('f');
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
 
@@ -77,10 +77,10 @@ describe('iat-image plugin', function(){
 			auto_preload: false
     });
 
-    utils.pressKey(70);
+    utils.pressKey('f');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/blue.png\" id=\"jspsych-iat-stim\">'));
 
-    utils.pressKey(74);
+    utils.pressKey('j');
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
 
   });
@@ -102,10 +102,10 @@ describe('iat-image plugin', function(){
 			auto_preload: false
     });
 
-    utils.pressKey(70);
+    utils.pressKey('f');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/blue.png\" id=\"jspsych-iat-stim\" class=\" responded\">'));
 
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
 
   });
@@ -127,10 +127,10 @@ describe('iat-image plugin', function(){
 			auto_preload: false
     });
 
-    utils.pressKey(74);
+    utils.pressKey('j');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/blue.png\" id=\"jspsych-iat-stim\" class=\" responded\">'));
 
-    utils.pressKey(70);
+    utils.pressKey('f');
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
 
   });
@@ -155,7 +155,7 @@ describe('iat-image plugin', function(){
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p>Press j for:<br> <b>UNFRIENDLY</b>'));
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p>Press f for:<br> <b>FRIENDLY</b>'));
 
-    utils.pressKey(70);
+    utils.pressKey('f');
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
 
   });
@@ -181,10 +181,10 @@ describe('iat-image plugin', function(){
     });
 
     expect(jsPsych.getDisplayElement().querySelector('#wrongImgContainer').style.visibility).toBe('hidden');
-    utils.pressKey(74);
+    utils.pressKey('j');
     expect(jsPsych.getDisplayElement().querySelector('#wrongImgContainer').style.visibility).toBe('visible');
 
-    utils.pressKey(70);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
 
@@ -230,7 +230,7 @@ describe('iat-image plugin', function(){
       auto_preload: false
     });
 
-    utils.pressKey(70);
+    utils.pressKey('f');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/blue.png\" id=\"jspsych-iat-stim\" class=\" responded\">'));
 
     jest.runAllTimers();
@@ -261,7 +261,7 @@ describe('iat-image plugin', function(){
 
     jest.runTimersToTime(500);
 
-    utils.pressKey(73);
+    utils.pressKey('i');
     expect(jsPsych.getDisplayElement().querySelector('#wrongImgContainer').style.visibility).toBe('visible');
 
     jest.runTimersToTime(1100);
@@ -293,7 +293,7 @@ describe('iat-image plugin', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src="../media/blue.png" id=\"jspsych-iat-stim\">'));
 
-    utils.pressKey(73);
+    utils.pressKey('i');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/blue.png\" id=\"jspsych-iat-stim\" class=\" responded\">'));
 
     jest.runTimersToTime(1000);
@@ -302,7 +302,7 @@ describe('iat-image plugin', function(){
 
     jest.runTimersToTime(1500);
 
-    utils.pressKey(69);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toBe("");
   });
 });
