@@ -337,7 +337,7 @@ var trial = {
 var loop_node = {
 	timeline: [trial],
 	loop_function: function(data){
-		if(jsPsych.pluginAPI.convertKeyCharacterToKeyCode('r') == data.values()[0].key_press){
+		if(data.values()[0].key_press == 'r'){
 			return true;
 		} else {
 			return false;
@@ -367,7 +367,7 @@ var if_node = {
 		// get the data from the previous trial,
 		// and check which key was pressed
 		var data = jsPsych.data.get().last(1).values()[0];
-		if(data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('s')){
+		if(data.key_press == 's'){
 			return false;
 		} else {
 			return true;

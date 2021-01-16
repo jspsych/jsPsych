@@ -67,8 +67,8 @@ jsPsych.plugins['reconstruction'] = (function() {
 
       //console.log('fire');
 
-      var key_i = (typeof trial.key_increase == 'string') ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.key_increase) : trial.key_increase;
-      var key_d = (typeof trial.key_decrease == 'string') ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.key_decrease) : trial.key_decrease;
+      var key_i = trial.key_increase;
+      var key_d = trial.key_decrease;
 
       // get new param value
       if (info.key == key_i) {

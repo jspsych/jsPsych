@@ -125,8 +125,8 @@ jsPsych.plugins['same-different-image'] = (function() {
 
         var correct = false;
 
-        var skey = typeof trial.same_key == 'string' ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.same_key) : trial.same_key;
-        var dkey = typeof trial.different_key == 'string' ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.different_key) : trial.different_key;
+        var skey = trial.same_key;
+        var dkey = trial.different_key;
 
         if (info.key == skey && trial.answer == 'same') {
           correct = true;
