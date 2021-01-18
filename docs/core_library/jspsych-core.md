@@ -581,11 +581,11 @@ jsPsych.timelineVariable(variable, call_immediate)
 Parameter | Type | Description
 ----------|------|------------
 variable | string | Name of the timeline variable
-call_immediate | bool | Typically this parameter is `false`, or simply ommitted. When `false`, the return value is a function that returns the timeline variable. This makes `jsPsych.timelineVariable` suitable for dynamic parameters by default. If `true` the function returns the value of the timeline variable immediately.
+call_immediate | bool | This parameter is optional and can usually be omitted. It determines the return value of `jsPsych.timelineVariable`. If `true`, the function returns the _value_ of the current timeline variable. If `false`, the function returns _a function that returns the value_ of the current timeline variable. When `call_immediate` is omitted, the appropriate option is determined automatically based on the context in which this function is called. When `jsPsych.timelineVariable` is used as a parameter value, `call_immediate` will be `false`. This allows it to be used as a [dynamic trial parameter](/overview/trial/#dynamic-parameters). When `jsPsych.timelineVariable` is used inside of a function, `call_immediate` will be `true`. It is possible to explicitly set this option to `true` to force the function to immediately return the current value of the timeline variable. 
 
 ### Return value
 
-Depends on the value of `call_immediate` parameter. See description above.
+Either a function that returns the value of the timeline variable, or the value of the timeline variable, depending on the context in which it is used. See `call_immediate` description above.
 
 ### Description
 
@@ -616,6 +616,25 @@ var procedure = {
 var trial = {
   type: 'html-keyboard-response',
   stimulus: function(){
+    return "<img style='width:100px; height:100px;' src='"+jsPsych.timelineVariable('image')+"'></img>";
+  }
+}
+
+var procedure = {
+  timeline: [trial],
+  timeline_variables: [
+    {image: 'face1.png'},
+    {image: 'face2.png'},
+    {image: 'face3.png'},
+    {image: 'face4.png'}
+  ]
+}
+```
+Prior to jsPsych v6.3.0, the `call_immediate` parameter must be set to `true` when `jsPsych.timelineVariable` is called from within a function, such as a [dynamic parameter](/overview/trial/#dynamic-parameters):
+```javascript
+var trial = {
+  type: 'html-keyboard-response',
+  stimulus: function(){
     return "<img style='width:100px; height:100px;' src='"+jsPsych.timelineVariable('image', true)+"'></img>";
   }
 }
@@ -630,7 +649,6 @@ var procedure = {
   ]
 }
 ```
-
 
 ---
 ## jsPsych.totalTime
