@@ -72,16 +72,18 @@
     timeline: [
       {
         type: 'html-keyboard-response',
-        stimulus: '<p class="stimulus">+</p>',
+        stimulus: '+',
         choices: jsPsych.NO_KEYS,
         trial_duration: 500,
-        post_trial_gap: 0
+        post_trial_gap: 0,
+        css_classes: ['stimulus']
       },
       {
         type: 'html-keyboard-response',
-        stimulus: function(){ return "<p class='stimulus'>"+jsPsych.timelineVariable('word')+"</p>"; },
+        stimulus: jsPsych.timelineVariable('word'),
         choices: ['y','n'],
         post_trial_gap: 0,
+        css_classes: ['stimulus'],
         data: {
           word_validity: jsPsych.timelineVariable('word_validity'),
           word_frequency: jsPsych.timelineVariable('word_frequency')
