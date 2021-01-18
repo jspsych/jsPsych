@@ -89,6 +89,11 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     html += '<style id="jspsych-survey-multi-choice-css">';
     html += ".jspsych-survey-multi-choice-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }"+
       ".jspsych-survey-multi-choice-text span.required {color: darkred;}"+
+      ".jspsych-survey-multi-choice-table span.required {color: darkred;}"+
+      ".jspsych-survey-multi-choice-table {border-collapse: collapse; width: 100%;}"+
+      ".jspsych-survey-multi-choice-table th:empty {visibility: hidden;}"+
+      ".jspsych-survey-multi-choice-table td, .jspsych-survey-multi-choice-table th {border: 1px solid lightgray; padding: 5px;}"+
+      ".jspsych-survey-multi-choice-table .center {text-align: center;}"+
       ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {  text-align: center;}"+
       ".jspsych-survey-multi-choice-option { line-height: 2; }"+
       ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}"+
@@ -132,27 +137,53 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       html += '<div id="jspsych-survey-multi-choice-'+question_id+'" class="'+question_classes.join(' ')+'"  data-name="'+question.name+'">';
 
       // add question text
-      html += '<p class="jspsych-survey-multi-choice-text survey-multi-choice">' + question.prompt 
-      if(question.required){
-        html += "<span class='required'>*</span>";
-      }
-      html += '</p>';
+      if (Array.isArray(question.prompt)) {
+        html += '<table class="jspsych-survey-multi-choice-table">'
+        html += '<thead><tr><th></th>'
+        for (var j = 0; j < question.options.length; j++) {
+          html += '<th class="center">' + question.options[j] + '</th>'
+        }
+        html += '</tr></thead>'
 
-      // create option radio buttons
-      for (var j = 0; j < question.options.length; j++) {
-        // add label and question text
-        var option_id_name = "jspsych-survey-multi-choice-option-"+question_id+"-"+j;
-        var input_name = 'jspsych-survey-multi-choice-response-'+question_id;
-        var input_id = 'jspsych-survey-multi-choice-response-'+question_id+'-'+j;
+        html += '<tbody>'
+        for (var k = 0; k < question.prompt.length; k++) {
+          html += '<tr><td>' + question.prompt[k] + (question.required ? "<span class='required'>*</span>" : '') + '</td>'
+          for (var l = 0; l < question.options.length; l++) {
+            var option_id_name = "jspsych-survey-multi-choice-option-" + question_id + "-" + k + '-' + l;
+            var input_name = 'jspsych-survey-multi-choice-response-' + question_id + '-' + k;
+            var input_id = 'jspsych-survey-multi-choice-response-' + question_id + '-' + k + '-' + l;
 
-        var required_attr = question.required ? 'required' : '';
+            var required_attr = question.required ? 'required' : '';
+            html += '<td class="center" id=' + option_id_name + '><label><input type="radio" name="' + input_name + '" id="' + input_id + '" value="' + question.options[l] + '" ' + required_attr + ' /></label></td>'
+          }
+          html += '</tr>'
+        }
+        html += '</tbody>'
 
-        // add radio button container
-        html += '<div id="'+option_id_name+'" class="jspsych-survey-multi-choice-option">';
-        html += '<label class="jspsych-survey-multi-choice-text" for="'+input_id+'">';
-        html += '<input type="radio" name="'+input_name+'" id="'+input_id+'" value="'+question.options[j]+'" '+required_attr+'></input>';
-        html += question.options[j]+'</label>';
-        html += '</div>';
+        html += '</table>'
+      } else {
+        html += '<p class="jspsych-survey-multi-choice-text survey-multi-choice">' + question.prompt
+        if(question.required){
+          html += "<span class='required'>*</span>";
+        }
+        html += '</p>';
+
+        // create option radio buttons
+        for (var j = 0; j < question.options.length; j++) {
+          // add label and question text
+          var option_id_name = "jspsych-survey-multi-choice-option-"+question_id+"-"+j;
+          var input_name = 'jspsych-survey-multi-choice-response-'+question_id;
+          var input_id = 'jspsych-survey-multi-choice-response-'+question_id+'-'+j;
+
+          var required_attr = question.required ? 'required' : '';
+
+          // add radio button container
+          html += '<div id="'+option_id_name+'" class="jspsych-survey-multi-choice-option">';
+          html += '<label class="jspsych-survey-multi-choice-text" for="'+input_id+'">';
+          html += '<input type="radio" name="'+input_name+'" id="'+input_id+'" value="'+question.options[j]+'" '+required_attr+'></input>';
+          html += question.options[j]+'</label>';
+          html += '</div>';
+        }
       }
 
       html += '</div>';
@@ -176,10 +207,22 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       for(var i=0; i<trial.questions.length; i++){
         var match = display_element.querySelector('#jspsych-survey-multi-choice-'+i);
         var id = "Q" + i;
-        if(match.querySelector("input[type=radio]:checked") !== null){
-          var val = match.querySelector("input[type=radio]:checked").value;
+        var val;
+        if (Array.isArray(trial.questions[question_order[i]].prompt)) {
+          val = [];
+          for (var m = 0; m < trial.questions[question_order[i]].prompt.length; m++) {
+            if (match.querySelector("input[type=radio][name=jspsych-survey-multi-choice-response-" + i + "-" + m + "]:checked") !== null) {
+              val.push(match.querySelector("input[type=radio][name=jspsych-survey-multi-choice-response-" + i + "-" + m + "]:checked").value);
+            } else {
+              val.push("");
+            }
+          }
         } else {
-          var val = "";
+          if (match.querySelector("input[type=radio]:checked") !== null) {
+            val = match.querySelector("input[type=radio]:checked").value;
+          } else {
+            val = "";
+          }
         }
         var obje = {};
         var name = id;
