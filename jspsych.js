@@ -278,6 +278,9 @@ window.jsPsych = (function() {
     // of the DataCollection, for easy access and editing.
     var trial_data_values = trial_data.values()[0];
 
+    // about to execute lots of callbacks, so switch context.
+    jsPsych.internal.call_immediate = true;
+
     // handle callback at plugin level
     if (typeof current_trial.on_finish === 'function') {
       current_trial.on_finish(trial_data_values);
@@ -290,6 +293,9 @@ window.jsPsych = (function() {
     // for this trial. call the on_data_update handler, passing in the same
     // data object that just went through the trial's finish handlers.
     opts.on_data_update(trial_data_values);
+
+    // done with callbacks
+    jsPsych.internal.call_immediate = false;
 
     // wait for iti
     if (typeof current_trial.post_trial_gap === null || typeof current_trial.post_trial_gap === 'undefined') {
@@ -331,8 +337,9 @@ window.jsPsych = (function() {
     return timeline.activeID();
   };
 
-  core.timelineVariable = function(varname, execute){
-    if(execute){
+  core.timelineVariable = function(varname, immediate){
+    if(typeof immediate == 'undefined'){ immediate = false; }
+    if(jsPsych.internal.call_immediate || immediate === true){
       return timeline.timelineVariable(varname);
     } else {
       return function() { return timeline.timelineVariable(varname); }
@@ -494,7 +501,9 @@ window.jsPsych = (function() {
         // check for conditonal function on nodes with timelines
         if (typeof timeline_parameters != 'undefined') {
           if (typeof timeline_parameters.conditional_function !== 'undefined') {
+            jsPsych.internal.call_immediate = true;
             var conditional_result = timeline_parameters.conditional_function();
+            jsPsych.internal.call_immediate = false;
             // if the conditional_function() returns false, then the timeline
             // doesn't run and is marked as complete.
             if (conditional_result == false) {
@@ -555,11 +564,14 @@ window.jsPsych = (function() {
 
         // if we're all done with the repetitions, check if there is a loop function.
         else if (typeof timeline_parameters.loop_function !== 'undefined') {
+          jsPsych.internal.call_immediate = true;
           if (timeline_parameters.loop_function(this.generatedData())) {
             this.reset();
+            jsPsych.internal.call_immediate = false;
             return parent_node.advance();
           } else {
             progress.done = true;
+            jsPsych.internal.call_immediate = false;
             return true;
           }
         }
@@ -876,6 +888,9 @@ window.jsPsych = (function() {
     // get default values for parameters
     setDefaultValues(trial);
 
+    // about to execute callbacks
+    jsPsych.internal.call_immediate = true;
+
     // call experiment wide callback
     opts.on_trial_start(trial);
 
@@ -907,6 +922,9 @@ window.jsPsych = (function() {
     if(typeof trial.on_load == 'function'){
       trial.on_load();
     }
+    
+    // done with callbacks
+    jsPsych.internal.call_immediate = false;
   }
 
   function evaluateTimelineVariables(trial){
@@ -925,6 +943,9 @@ window.jsPsych = (function() {
   }
 
   function evaluateFunctionParameters(trial){
+
+    // set a flag so that jsPsych.timelineVariable() is immediately executed in this context
+    jsPsych.internal.call_immediate = true;
 
     // first, eval the trial type if it is a function
     // this lets users set the plugin type with a function
@@ -964,6 +985,9 @@ window.jsPsych = (function() {
         }
       }
     }
+
+    // reset so jsPsych.timelineVariable() is no longer immediately executed
+    jsPsych.internal.call_immediate = false;
   }
 
   function setDefaultValues(trial){
@@ -1079,6 +1103,17 @@ window.jsPsych = (function() {
   document.documentElement.setAttribute('jspsych', 'present');
 
   return core;
+})();
+
+jsPsych.internal = (function() {
+  var module = {};
+
+  // this flag is used to determine whether we are in a scope where
+  // jsPsych.timelineVariable() should be executed immediately or
+  // whether it should return a function to access the variable later.
+  module.call_immediate = false;
+
+  return module;
 })();
 
 jsPsych.plugins = (function() {
