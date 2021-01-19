@@ -27,7 +27,7 @@ jsPsych.extensions['webgazer'] = (function () {
     // pause webgazer data.
     state.webgazer.begin().then(function () {
       extension.stopMouseCalibration();
-      extension.pause();
+      //extension.pause();
     })
 
     // hide video by default

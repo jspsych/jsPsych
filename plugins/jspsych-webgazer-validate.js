@@ -15,6 +15,10 @@ jsPsych.plugins["webgazer-validate"] = (function() {
           type: jsPsych.plugins.parameterType.INT,
           default: [[10,10], [10,50], [10,90], [50,10], [50,50], [50,90], [90,10], [90,50], [90,90]]
         },
+        validation_point_mode: {
+          type: jsPsych.plugins.parameterType.STRING,
+          default: 'percent' // options: 'percent', 'center-offset-pixels'
+        },
         roi_radius: {
           type: jsPsych.plugins.parameterType.INT,
           default: 200
@@ -27,7 +31,10 @@ jsPsych.plugins["webgazer-validate"] = (function() {
           type: jsPsych.plugins.parameterType.INT,
           default: 2000
         },
-        
+        point_size:{
+          type: jsPsych.plugins.parameterType.INT,
+          default: 10
+        }
       }
     }
   
@@ -76,6 +83,7 @@ jsPsych.plugins["webgazer-validate"] = (function() {
         }
         points_completed = -1;
         jsPsych.extensions['webgazer'].resume();
+        jsPsych.extensions.webgazer.showPredictions();  
         next_validation_point();
       }
   
@@ -90,10 +98,10 @@ jsPsych.plugins["webgazer-validate"] = (function() {
       }
 
       function validation_display(pt){
-        var pt_html = '<div id="validation-point" style="width:10px; height:10px; border-radius:10px; border: 1px solid #000; background-color: #333; position: absolute; left:'+pt[0]+'%; top:'+pt[1]+'%;"></div>'
+        var pt_html = drawValidationPoint(pt[0], pt[1]);
         wg_container.innerHTML = pt_html;
 
-        var pt_dom = wg_container.querySelector('#validation-point');
+        var pt_dom = wg_container.querySelector('.validation-point');
 
         var br = pt_dom.getBoundingClientRect();
         var x = br.left + br.width / 2;
@@ -129,18 +137,60 @@ jsPsych.plugins["webgazer-validate"] = (function() {
       }
 
       function drawValidationPoint(x,y){
-        return '<div class="validation-point" style="width:10px; height:10px; border-radius:10px; border: 1px solid #000; background-color: #333; position: absolute; left:'+x+'%; top:'+y+'%;"></div>'
+        if(trial.validation_point_mode == 'percent'){
+          return drawValidationPoint_PercentMode(x,y);
+        } 
+        if(trial.validation_point_mode == 'center-offset-pixels'){
+          return drawValidationPoint_CenterOffsetMode(x,y);
+        }
       }
 
-      function drawCircle(target_x, target_y, dx, dy,r){
+      function drawValidationPoint_PercentMode(x,y){
+        return `<div class="validation-point" style="width:${trial.point_size}px; height:${trial.point_size}px; border-radius:${trial.point_size}px; border: 1px solid #000; background-color: #333; position: absolute; left:${x}%; top:${y}%;"></div>`
+      }
+
+      function drawValidationPoint_CenterOffsetMode(x,y){
+        return `<div class="validation-point" style="width:${trial.point_size}px; height:${trial.point_size}px; border-radius:${trial.point_size}px; border: 1px solid #000; background-color: #333; position: absolute; left:calc(50% - ${trial.point_size/2}px + ${x}px); top:calc(50% - ${trial.point_size/2}px + ${y}px);"></div>`
+      }
+
+      function drawCircle(target_x, target_y, dx, dy, r){
+        if(trial.validation_point_mode == 'percent'){
+          return drawCircle_PercentMode(target_x, target_y, dx, dy, r);
+        } 
+        if(trial.validation_point_mode == 'center-offset-pixels'){
+          return drawCircle_CenterOffsetMode(target_x, target_y, dx, dy, r);
+        }
+      }
+
+      function drawCircle_PercentMode(target_x, target_y, dx, dy, r){
         var html = `
           <div class="validation-centroid" style="width:${r*2}px; height:${r*2}px; border: 2px solid red; border-radius: ${r}px; background-color: transparent; position: absolute; left:calc(${target_x}% + ${dx-r}px); top:calc(${target_y}% + ${dy-r}px);"></div>
         `
         return html;
       }
 
-      function drawRawDataPoint(target_x, target_y, dx, dy){
-        return `<div class="raw-data-point" style="width:5px; height:5px; border-radius:5px; border: 1px solid #f00; background-color: #faa; opacity:0.2; position: absolute; left:calc(${target_x}% + ${dx}px); top:calc(${target_y}% + ${dy}px);"></div>`
+      function drawCircle_CenterOffsetMode(target_x, target_y, dx, dy, r){
+        var html = `
+          <div class="validation-centroid" style="width:${r*2}px; height:${r*2}px; border: 2px solid red; border-radius: ${r}px; background-color: transparent; position: absolute; left:calc(50% + ${target_x}px + ${dx-r}px); top:calc(50% + ${target_y}px + ${dy-r}px);"></div>
+        `
+        return html;
+      }
+
+      function drawRawDataPoint(target_x, target_y, dx, dy, ){
+        if(trial.validation_point_mode == 'percent'){
+          return drawRawDataPoint_PercentMode(target_x, target_y, dx, dy);
+        } 
+        if(trial.validation_point_mode == 'center-offset-pixels'){
+          return drawRawDataPoint_CenterOffsetMode(target_x, target_y, dx, dy);
+        }
+      }
+
+      function drawRawDataPoint_PercentMode(target_x, target_y, dx, dy){
+        return `<div class="raw-data-point" style="width:5px; height:5px; border-radius:5px; border: 1px solid #f00; background-color: #faa; opacity:0.2; position: absolute; left:calc(${target_x}% + ${dx-2}px); top:calc(${target_y}% + ${dy-2}px);"></div>`
+      }
+
+      function drawRawDataPoint_CenterOffsetMode(target_x, target_y, dx, dy){
+        return `<div class="raw-data-point" style="width:5px; height:5px; border-radius:5px; border: 1px solid #f00; background-color: #faa; opacity:0.2; position: absolute; left:calc(50% + ${target_x}px + ${dx-2}px); top:calc(50% + ${target_y}px + ${dy-2}px);"></div>`
       }
 
       function median(arr){
