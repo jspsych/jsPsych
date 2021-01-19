@@ -29,17 +29,17 @@
   timeline.push({
     type: 'audio-button-response',
     stimulus: 'sound/speech_red.mp3',
-    choices: ['Green', 'Blue', 'Red'],
-    trial_duration: 2000,
-    response_ends_trial: false,
-    prompt: "<p>What word was said? (trial ends after 2s)</p>"
+    choices: ['#00ff00', '#0000ff', '#ff0000'],
+    response_allowed_while_playing: false,
+    button_html: '<div style="background-color: %choice%; width:100px; height:100px;"></div>',
+    prompt: "<p>Which color was said?</p>"
   });
 
   timeline.push({
     type: 'audio-button-response',
     stimulus: 'sound/speech_joke.mp3',
     choices: ['Not funny', 'Funny'],
-    prompt: '<p>How funny was the joke?</p><p>When the audio stops, click a button to end the trial.</p><p>Response buttons are disabled while the audio is playing.</p>',
+    prompt: '<p>Is the joke funny?</p><p>When the audio stops, click a button to end the trial.</p><p>Response buttons are disabled while the audio is playing.</p>',
     response_allowed_while_playing: false
   })
 
