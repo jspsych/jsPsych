@@ -52,7 +52,13 @@ jsPsych.plugins['preload'] = (function() {
   
     plugin.trial = function(display_element, trial) {
 
-      // create list of media to preload ////
+      var success = false;
+      var timeout = false;
+      var failed_images = [];
+      var failed_audio = [];
+      var failed_video = [];
+
+      // create list of media to preload //
 
       var images = [];
       var audio = [];
@@ -100,7 +106,7 @@ jsPsych.plugins['preload'] = (function() {
       // do preloading
 
       if(trial.max_load_time !== null){
-        jsPsych.pluginAPI.setTimeout(end_trial, trial.max_load_time);
+        jsPsych.pluginAPI.setTimeout(on_timeout, trial.max_load_time);
       } 
 
       var total_n = images.length + audio.length + video.length;
@@ -118,7 +124,13 @@ jsPsych.plugins['preload'] = (function() {
       }
 
       function loading_error(e){
-        console.log(e);
+        if (e.path[0].localName == "img") {
+          failed_images.push(e.path[0].currentSrc);
+        } else if (e.path[0].localName == "audio") {
+          failed_audio.push(e.path[0].currentSrc);
+        } else if (e.path[0].localName == "video") {
+          failed_video.push(e.path[0].currentSrc);
+        }
       }
 
       function load_video(cb){
@@ -135,16 +147,36 @@ jsPsych.plugins['preload'] = (function() {
 
       load_video(function(){
         load_audio(function(){
-          load_images(end_trial)
+          load_images(on_success)
         })
       });
 
-      function end_trial(){
+      function on_success() {
+        // clear timeout immediately after finishing, to handle race condition with max_load_time
         jsPsych.pluginAPI.clearAllTimeouts();
+        success = true;
+        end_trial();
+      }
 
+      function on_timeout() {
+        if (typeof success !== 'undefined' && success === false) {
+          timeout = true;
+          end_trial();
+        }
+      }
+
+      function end_trial(){
+        // clear timeout again when end_trial is called, to handle race condition with max_load_time
+        jsPsych.pluginAPI.clearAllTimeouts();
         var trial_data = {
+          success: success,
+          timeout: timeout,
+          failed_images: failed_images,
+          failed_audio: failed_audio,
+          failed_video: failed_video
         };
-    
+        // clear the display
+        display_element.innerHTML = '';
         jsPsych.finishTrial(trial_data);
       }
     };
