@@ -2329,7 +2329,7 @@ jsPsych.pluginAPI = (function() {
 
   var img_cache = {};
 
-  module.preloadAudioFiles = function(files, callback_complete, callback_load, callback_error) {
+  module.preloadAudio = function(files, callback_complete, callback_load, callback_error) {
 
     files = jsPsych.utils.flatten(files);
     files = jsPsych.utils.unique(files);
