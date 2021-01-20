@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-preload.js"></script>
+    <script src="../plugins/jspsych-html-button-response.js"></script>
+    <script src="../plugins/jspsych-image-button-response.js"></script>
+    <script src="../plugins/jspsych-audio-button-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
+
+  // automatically preload all stimuli files based on the timeline 
+  var auto_preload_trial = {
+    type: 'preload',
+    auto_preload: true
+  };
+
+  var start = {
+    type: 'html-button-response',
+    stimulus: '<p>The previous trial was an automatic preload trial.</p>'+
+      '<p>This trial loaded all stimuli files that can be automatically preloaded<br>based on the main jsPsych experiment timeline.</p>'+
+      '<p>In this example experiment, there are two trials in which the stimuli can be automatically preloaded.</p>'+
+      '<p>The stimuli for these trials have finished loading.</p>',
+    choices: ['Next']
+  };
+
+  var image_trial = {
+    type: 'image-button-response',
+    stimulus: 'img/happy_face_1.jpg',
+    choices: ['Happy', 'Sad'],
+    stimulus_width: 400
+  };
+
+  var audio_trial = {
+    type: 'audio-button-response',
+    stimulus: ['sound/speech_green.mp3'],
+    choices: ['Continue']
+  };
+
+  var start_fail_example = {
+    type: 'html-button-response',
+    stimulus: '<p>The next trial is a manual preload trial.</p>'+
+      '<p>Manual preloading allows you to load specific files, for instance if you want to load files in batches,<br>'+
+      'or if the stimuli cannot be automatically preloaded (because you are using timeline variables or dynamic parameters).</p>'+
+      '<p>In the next preload example, the files in the "images" array do not exist, so the preload will fail.</p>',
+    choices: ['Next']
+  };
+
+  // manually preload specific files
+  var preload_fail_example = {
+    type: 'preload',
+    images: ['bad_file_path_1','bad_file_path_2','bad_file_path_3'],
+    audio: ['sound/speech_green.mp3','sound/speech_red.mp3'],
+    message: '<p>Please wait while the files load...</p><p>(This preload trial will fail after ~10 seconds.)</p>',
+    show_detailed_errors: true,
+    max_load_time: 10000
+  };
+
+  var after_fail_example = {
+    type: 'html-button-response',
+    stimulus: function() {
+      var message;
+      var preload_trial_data = jsPsych.data.getLastTrialData().values()[0];
+      if (preload_trial_data.success) {
+        message = '<p>All files loaded successfully!</p>';
+      } else {
+        message = '<p>There was a problem loading one or more files.</p>'+
+          '<p>The files that failed to load are listed in the data for the previous trial.</p>';
+      }
+      return message;
+    },
+    choices: ['Next']
+  };
+
+  var start_timeout_example = {
+    type: 'html-button-response',
+    stimulus: '<p>The next trial is another manual preload trial.</p>'+
+      '<p>It has been set up with a very short max_load_time, so it is likely to timeout before the files finish loading.</p>',
+    choices: ['Next']
+  };
+
+  // manually preload specific files
+  var preload_timeout_example = {
+    type: 'preload',
+    images: ['img/happy_face_2.jpg','img/happy_face_3.jpg','img/sad_face_1.jpg','img/sad_face_2.jpg','img/sad_face_3.jpg','img/sad_face_4.jpg',
+    'img/1.gif','img/2.gif','img/3.gif','img/4.gif','img/5.gif','img/6.gif','img/7.gif','img/8.gif','img/9.gif','img/10.gif','img/11.gif','img/12.gif'],
+    message: '<p>Please wait...</p><p>(This preload trial will likely timeout.)</p>',
+    show_detailed_errors: true,
+    max_load_time: 100,
+    post_trial_gap: 1000
+  };
+
+  var after_timeout_example = {
+    type: 'html-button-response',
+    stimulus: function() {
+      var message;
+      var preload_trial_data = jsPsych.data.getLastTrialData().values()[0];
+      if (preload_trial_data.success) {
+        message = '<p>All files loaded successfully!</p>';
+      } else {
+        message = '<p>The files did not finish loading in time.</p>'+
+        '<p>Click the Next button to see the data.</p>';
+      }
+      return message;
+    },
+    choices: ['Next']
+  };
+
+  jsPsych.init({
+    timeline: [auto_preload_trial, start, image_trial, audio_trial, 
+      start_fail_example, preload_fail_example, after_fail_example, 
+      start_timeout_example, preload_timeout_example, after_timeout_example], 
+    on_finish: function(){jsPsych.data.displayData();}
+  });
+
+  </script>
+</html>
