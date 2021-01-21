@@ -199,38 +199,39 @@ window.jsPsych = (function() {
       // add event for closing window
       window.addEventListener('beforeunload', opts.on_close);
 
-      // run the .initialize method of any extensions that are in use
-      for(var i=0; i<opts.extensions.length; i++){
-        var ext_params = opts.extensions[i].params;
-        if(!ext_params){
-          ext_params = {}
-        }
-        jsPsych.extensions[opts.extensions[i].type].initialize(ext_params);
-      }
-
       // check exclusions before continuing
       checkExclusions(opts.exclusions,
         function(){
           // success! user can continue...
-          // start experiment, with or without preloading
-          if(opts.auto_preload){
-            jsPsych.pluginAPI.autoPreload(timeline, startExperiment, file_protocol, opts.preload_images, opts.preload_audio, opts.preload_video, opts.show_preload_progress_bar);
-            if(opts.max_load_time > 0){
-              setTimeout(function(){
-                if(!loaded && !loadfail){
-                  core.loadFail();
-                }
-              }, opts.max_load_time);
-            }
-          } else {
-            startExperiment();
-          }
+          // start experiment
+          loadExtensions();
         },
         function(){
           // fail. incompatible user.
-
         }
       );
+
+      function loadExtensions() {
+        // run the .initialize method of any extensions that are in use
+        // these should return a Promise to indicate when loading is complete
+        var loaded_extensions = 0;
+        for (var i = 0; i < opts.extensions.length; i++) {
+          var ext_params = opts.extensions[i].params;
+          if (!ext_params) {
+            ext_params = {}
+          }
+          jsPsych.extensions[opts.extensions[i].type].initialize(ext_params)
+            .then(() => {
+              loaded_extensions++;
+              if (loaded_extensions == opts.extensions.length) {
+                startExperiment();
+              }
+            })
+            .fail((error_message) => {
+              console.error(error_message);
+            })
+        }
+      }
     };
     
     // execute init() when the document is ready

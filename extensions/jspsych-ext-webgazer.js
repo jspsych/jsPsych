@@ -9,32 +9,36 @@ jsPsych.extensions['webgazer'] = (function () {
   var state = {};
 
   // required, will be called at jsPsych.init
+  // should return a Promise
   extension.initialize = function (params) {
-    if (typeof params.webgazer === 'undefined') {
-      if (window.webgazer) {
-        state.webgazer = window.webgazer;
+    return new Promise(function(resolve, reject){
+      if (typeof params.webgazer === 'undefined') {
+        if (window.webgazer) {
+          state.webgazer = window.webgazer;
+        } else {
+          reject(new Error('webgazer extension failed to initialize. webgazer.js not loaded. Load webgazer.js before calling jsPsych.init()'));
+        }
       } else {
-        console.error('WebGazer library not detected. Load webgazer.js before initializing experiment.');
+        state.webgazer = params.webgazer;
       }
-    } else {
-      state.webgazer = params.webgazer;
-    }
-
-    // sets up event handler for webgazer data
-    state.webgazer.setGazeListener(handleGazeDataUpdate);
-
-    // starts webgazer, and once it initializes we stop mouseCalibration and
-    // pause webgazer data.
-    state.webgazer.begin().then(function () {
-      extension.stopMouseCalibration();
-      //extension.pause();
+  
+      // sets up event handler for webgazer data
+      state.webgazer.setGazeListener(handleGazeDataUpdate);
+  
+      // starts webgazer, and once it initializes we stop mouseCalibration and
+      // pause webgazer data.
+      state.webgazer.begin().then(function () {
+        extension.stopMouseCalibration();
+        extension.pause();
+        resolve();
+      })
+  
+      // hide video by default
+      extension.hideVideo();
+  
+      // hide predictions by default
+      extension.hidePredictions();
     })
-
-    // hide video by default
-    extension.hideVideo();
-
-    // hide predictions by default
-    extension.hidePredictions();
   }
 
   // required, will be called when the trial starts (before trial loads)
