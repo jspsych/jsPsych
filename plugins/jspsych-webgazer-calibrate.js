@@ -15,6 +15,10 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
           type: jsPsych.plugins.parameterType.INT,
           default: [[10,10], [10,50], [10,90], [50,10], [50,50], [50,90], [90,10], [90,50], [90,90]]
         },
+        calibration_mode: {
+          type: jsPsych.plugins.parameterType.STRING,
+          default: 'click', // options: 'click', 'view'
+        },
         repetitions_per_point: {
           type: jsPsych.plugins.parameterType.INT,
           default: 1
@@ -64,10 +68,6 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
           "<p>Use the video in the upper-left corner as a guide. Center your face in the box.</p>"+
           "<p>When your face is centered in the box and the box turns green, you can click to continue.</p>"+
           "<button id='jspsych-wg-cont' class='jspsych-btn' disabled>Continue</button>"
-          // "<p>Quality of detection:</p>"+
-          // "<div id='video-detect-quality-container' style='width:700px; height: 20px; background-color:#ccc; position: relative;'>"+
-          // "<div id='video-detect-quality-inner' style='width:0%; height:20px; background-color: #5c5;'></div>"+
-          // "<div id='video-detect-threshold' style='width: 1px; height: 20px; background-color: #f00; position: absolute; top:0; left:"+(trial.face_detect_threshold*100)+"%;'></div>"+
           "</div>"+
           "</div>"
 
@@ -81,20 +81,7 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
           document.querySelector('#jspsych-wg-cont').addEventListener('click', function(){
             observer.disconnect();
             show_begin_calibrate_message();
-          })
-
-          // function waitForFace(){
-          //   var score = check_face_score();
-          //   //wg_container.querySelector('#video-detect-quality-inner').style.width = (score*100) + "%"
-          //   if(score){
-          //     document.querySelector('#jspsych-wg-cont').disabled = false;
-          //   } else {
-          //     requestAnimationFrame(waitForFace);
-          //   }
-          // }
-          // requestAnimationFrame(waitForFace);
-
-          
+          })          
       }
 
       function face_detect_event_observer(mutationsList, observer){
@@ -110,12 +97,22 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
   
       function show_begin_calibrate_message(){
         jsPsych.extensions['webgazer'].hideVideo();
-        wg_container.innerHTML = "<div style='position: absolute; top: 50%; left: calc(50% - 350px); transform: translateY(-50%); width:700px;'>"+
+        if(trial.calibration_mode == 'view'){
+          wg_container.innerHTML = "<div style='position: absolute; top: 50%; left: calc(50% - 350px); transform: translateY(-50%); width:700px;'>"+
+            "<p>Great! Now the eye tracker will be calibrated to translate the image of your eyes from the webcam to a location on your screen.</p>"+
+            "<p>To do this, you need to look at a series of dots.</p>"+
+            "<p>Keep your head still, and focus on each dot as quickly as possible. Keep your gaze fixed on the dot for as long as it is on the screen.</p>"+
+            "<button id='begin-calibrate-btn' class='jspsych-btn'>Click to begin.</button>"+
+            "</div>"
+        }
+        if(trial.calibration_mode == 'click'){
+          wg_container.innerHTML = "<div style='position: absolute; top: 50%; left: calc(50% - 350px); transform: translateY(-50%); width:700px;'>"+
           "<p>Great! Now the eye tracker will be calibrated to translate the image of your eyes from the webcam to a location on your screen.</p>"+
-          "<p>To do this, you need to look at a series of dots.</p>"+
-          "<p>Keep your head still, and focus on each dot as quickly as possible. Keep your gaze fixed on the dot for as long as it is on the screen.</p>"+
+          "<p>To do this, you need to click a series of dots.</p>"+
+          "<p>Keep your head still, and click on each dot as it appears. Look at the dot as you click it.</p>"+
           "<button id='begin-calibrate-btn' class='jspsych-btn'>Click to begin.</button>"+
           "</div>"
+        }
         document.querySelector('#begin-calibrate-btn').addEventListener('click', function(){
           calibrate();
         });
@@ -127,6 +124,9 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
 
       function calibrate(){
         jsPsych.extensions['webgazer'].resume();
+        if(trial.calibration_mode == 'click'){
+          jsPsych.extensions['webgazer'].startMouseCalibration();
+        }
         next_calibration_round();
       }
 
@@ -160,36 +160,40 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
         wg_container.innerHTML = pt_html;
 
         var pt_dom = wg_container.querySelector('#calibration-point');
-
-        var br = pt_dom.getBoundingClientRect();
-        var x = br.left + br.width / 2;
-        var y = br.top + br.height / 2;
-
-        var pt_start_cal = performance.now() + trial.time_to_saccade;
-        var pt_finish = performance.now() + trial.time_to_saccade + trial.time_per_point;
         
-        requestAnimationFrame(function watch_dot(){
-          
-          if(performance.now() > pt_start_cal){
-            jsPsych.extensions['webgazer'].calibratePoint(x,y,'click');
-          }
-          if(performance.now() < pt_finish){
-            requestAnimationFrame(watch_dot);
-          } else {
+        if(trial.calibration_mode == 'click'){
+          pt_dom.style.cursor = 'pointer';
+          pt_dom.addEventListener('click', function(){
             next_calibration_point();
-          }
-        })
-
-        // jsPsych.pluginAPI.setTimeout(function(){
-        //   pt_dom.style.backgroundColor = "#fff";
-        //   pt_dom.addEventListener('click', function(){
-        //     next_calibration_point();
-        //   });
-        // }, Math.random()*(trial.maximum_dot_change_delay-trial.minimum_dot_change_delay)+trial.minimum_dot_change_delay);
+          })
+        }
+        
+        if(trial.calibration_mode == 'view'){
+          var br = pt_dom.getBoundingClientRect();
+          var x = br.left + br.width / 2;
+          var y = br.top + br.height / 2;
   
+          var pt_start_cal = performance.now() + trial.time_to_saccade;
+          var pt_finish = performance.now() + trial.time_to_saccade + trial.time_per_point;
+          
+          requestAnimationFrame(function watch_dot(){
+            
+            if(performance.now() > pt_start_cal){
+              jsPsych.extensions['webgazer'].calibratePoint(x,y,'click');
+            }
+            if(performance.now() < pt_finish){
+              requestAnimationFrame(watch_dot);
+            } else {
+              next_calibration_point();
+            }
+          })
+        }  
       }
 
       function calibration_done(){
+        if(trial.calibration_mode == 'click'){
+          jsPsych.extensions['webgazer'].stopMouseCalibration();
+        }
         wg_container.innerHTML = "";
         end_trial();
       }

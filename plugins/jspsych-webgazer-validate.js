@@ -15,7 +15,7 @@ jsPsych.plugins["webgazer-validate"] = (function() {
           type: jsPsych.plugins.parameterType.INT,
           default: [[10,10], [10,50], [10,90], [50,10], [50,50], [50,90], [90,10], [90,50], [90,90]]
         },
-        validation_point_mode: {
+        validation_point_coordinates: {
           type: jsPsych.plugins.parameterType.STRING,
           default: 'percent' // options: 'percent', 'center-offset-pixels'
         },
@@ -34,21 +34,20 @@ jsPsych.plugins["webgazer-validate"] = (function() {
         point_size:{
           type: jsPsych.plugins.parameterType.INT,
           default: 10
+        },
+        show_validation_data: {
+          type: jsPsych.plugins.parameterType.BOOL,
+          default: false
         }
       }
     }
-  
-    // provide options for calibration routines?
-    // dot clicks?
-    // track a dot with mouse?
-    
-    // then a validation phase of staring at the dot in different locations?
   
     plugin.trial = function(display_element, trial) {
 
       var trial_data = {}
       trial_data.raw_gaze = [];
       trial_data.percent_in_roi = [];
+      trial_data.average_offset = [];
   
       var html = `
         <div id='webgazer-validate-container' style='position: relative; width:100vw; height:100vh; overflow: hidden;'>
@@ -125,22 +124,15 @@ jsPsych.plugins["webgazer-validate"] = (function() {
             trial_data.raw_gaze.push(pt_data);
             next_validation_point();
           }
-        })
-
-        // jsPsych.pluginAPI.setTimeout(function(){
-        //   pt_dom.style.backgroundColor = "#fff";
-        //   pt_dom.addEventListener('click', function(){
-        //     next_calibration_point();
-        //   });
-        // }, Math.random()*(trial.maximum_dot_change_delay-trial.minimum_dot_change_delay)+trial.minimum_dot_change_delay);
+        });
   
       }
 
       function drawValidationPoint(x,y){
-        if(trial.validation_point_mode == 'percent'){
+        if(trial.validation_point_coordinates == 'percent'){
           return drawValidationPoint_PercentMode(x,y);
         } 
-        if(trial.validation_point_mode == 'center-offset-pixels'){
+        if(trial.validation_point_coordinates == 'center-offset-pixels'){
           return drawValidationPoint_CenterOffsetMode(x,y);
         }
       }
@@ -154,43 +146,45 @@ jsPsych.plugins["webgazer-validate"] = (function() {
       }
 
       function drawCircle(target_x, target_y, dx, dy, r){
-        if(trial.validation_point_mode == 'percent'){
+        if(trial.validation_point_coordinates == 'percent'){
           return drawCircle_PercentMode(target_x, target_y, dx, dy, r);
         } 
-        if(trial.validation_point_mode == 'center-offset-pixels'){
+        if(trial.validation_point_coordinates == 'center-offset-pixels'){
           return drawCircle_CenterOffsetMode(target_x, target_y, dx, dy, r);
         }
       }
 
       function drawCircle_PercentMode(target_x, target_y, dx, dy, r){
         var html = `
-          <div class="validation-centroid" style="width:${r*2}px; height:${r*2}px; border: 2px solid red; border-radius: ${r}px; background-color: transparent; position: absolute; left:calc(${target_x}% + ${dx-r}px); top:calc(${target_y}% + ${dy-r}px);"></div>
+          <div class="validation-centroid" style="width:${r*2}px; height:${r*2}px; border: 2px dotted #ccc; border-radius: ${r}px; background-color: transparent; position: absolute; left:calc(${target_x}% + ${dx-r}px); top:calc(${target_y}% + ${dy-r}px);"></div>
         `
         return html;
       }
 
       function drawCircle_CenterOffsetMode(target_x, target_y, dx, dy, r){
         var html = `
-          <div class="validation-centroid" style="width:${r*2}px; height:${r*2}px; border: 2px solid red; border-radius: ${r}px; background-color: transparent; position: absolute; left:calc(50% + ${target_x}px + ${dx-r}px); top:calc(50% + ${target_y}px + ${dy-r}px);"></div>
+          <div class="validation-centroid" style="width:${r*2}px; height:${r*2}px; border: 2px dotted #ccc; border-radius: ${r}px; background-color: transparent; position: absolute; left:calc(50% + ${target_x}px + ${dx-r}px); top:calc(50% + ${target_y}px + ${dy-r}px);"></div>
         `
         return html;
       }
 
       function drawRawDataPoint(target_x, target_y, dx, dy, ){
-        if(trial.validation_point_mode == 'percent'){
+        if(trial.validation_point_coordinates == 'percent'){
           return drawRawDataPoint_PercentMode(target_x, target_y, dx, dy);
         } 
-        if(trial.validation_point_mode == 'center-offset-pixels'){
+        if(trial.validation_point_coordinates == 'center-offset-pixels'){
           return drawRawDataPoint_CenterOffsetMode(target_x, target_y, dx, dy);
         }
       }
 
       function drawRawDataPoint_PercentMode(target_x, target_y, dx, dy){
-        return `<div class="raw-data-point" style="width:5px; height:5px; border-radius:5px; border: 1px solid #f00; background-color: #faa; opacity:0.2; position: absolute; left:calc(${target_x}% + ${dx-2}px); top:calc(${target_y}% + ${dy-2}px);"></div>`
+        var color = Math.sqrt(dx*dx + dy*dy) <= trial.roi_radius ? '#afa' : '#faa';
+        return `<div class="raw-data-point" style="width:5px; height:5px; border-radius:5px; background-color: ${color}; opacity:0.8; position: absolute; left:calc(${target_x}% + ${dx-2}px); top:calc(${target_y}% + ${dy-2}px);"></div>`
       }
 
       function drawRawDataPoint_CenterOffsetMode(target_x, target_y, dx, dy){
-        return `<div class="raw-data-point" style="width:5px; height:5px; border-radius:5px; border: 1px solid #f00; background-color: #faa; opacity:0.2; position: absolute; left:calc(50% + ${target_x}px + ${dx-2}px); top:calc(50% + ${target_y}px + ${dy-2}px);"></div>`
+        var color = Math.sqrt(dx*dx + dy*dy) <= trial.roi_radius ? '#afa' : '#faa';
+        return `<div class="raw-data-point" style="width:5px; height:5px; border-radius:5px; background-color: ${color}; opacity:0.8; position: absolute; left:calc(50% + ${target_x}px + ${dx-2}px); top:calc(50% + ${target_y}px + ${dy-2}px);"></div>`
       }
 
       function median(arr){
@@ -247,23 +241,31 @@ jsPsych.plugins["webgazer-validate"] = (function() {
       }
 
       function validation_done(){
+        for(var i=0; i<trial.validation_points.length; i++){
+          trial_data.percent_in_roi[i] = calculatePercentInROI(trial_data.raw_gaze[i]);
+          trial_data.average_offset[i] = calculateGazeCentroid(trial_data.raw_gaze[i]);
+        }
+        if(trial.show_validation_data){
+          show_validation_data();
+        } else {
+          end_trial();
+        }
+      }
+
+      function show_validation_data(){
         var html = '';
         for(var i=0; i<trial.validation_points.length; i++){
-          html += drawValidationPoint(trial.validation_points[i][0], trial.validation_points[i][1]);
-          var percent_in_roi = calculatePercentInROI(trial_data.raw_gaze[i]);
-          trial_data.percent_in_roi[i] = percent_in_roi;
-          var gc = calculateGazeCentroid(trial_data.raw_gaze[i]);
-          html += drawCircle(trial.validation_points[i][0], trial.validation_points[i][1], gc.x, gc.y, gc.r);
+          drawValidationPoint(trial.validation_points[i][0], trial.validation_points[i][1]);
+          html += drawCircle(trial.validation_points[i][0], trial.validation_points[i][1], 0, 0, trial.roi_radius);
           for(var j=0; j<trial_data.raw_gaze[i].length; j++){
             html += drawRawDataPoint(trial.validation_points[i][0], trial.validation_points[i][1], trial_data.raw_gaze[i][j].dx, trial_data.raw_gaze[i][j].dy)
           }
         }
         // debugging
-        html += '<button id="cont" class="jspsych-btn">Continue</btn>';
+        html += '<button id="cont" style="position:absolute; top: 50%; left:calc(50% - 50px); width: 100px;" class="jspsych-btn">Continue</btn>';
         wg_container.innerHTML = html;
         wg_container.querySelector('#cont').addEventListener('click', end_trial);
         jsPsych.extensions.webgazer.showPredictions();        
-        console.log(trial_data.percent_in_roi);
       }
 
       // function to end trial when it is time
