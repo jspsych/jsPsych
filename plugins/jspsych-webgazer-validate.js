@@ -27,6 +27,10 @@ jsPsych.plugins["webgazer-validate"] = (function() {
           type: jsPsych.plugins.parameterType.BOOL,
           default: false
         },
+        time_to_saccade: {
+          type: jsPsych.plugins.parameterType.INT,
+          default: 1000
+        },
         validation_duration: {
           type: jsPsych.plugins.parameterType.INT,
           default: 2000
@@ -82,7 +86,7 @@ jsPsych.plugins["webgazer-validate"] = (function() {
         }
         points_completed = -1;
         jsPsych.extensions['webgazer'].resume();
-        jsPsych.extensions.webgazer.showPredictions();  
+        //jsPsych.extensions.webgazer.showPredictions();  
         next_validation_point();
       }
   
@@ -106,8 +110,8 @@ jsPsych.plugins["webgazer-validate"] = (function() {
         var x = br.left + br.width / 2;
         var y = br.top + br.height / 2;
 
-        var pt_start_val = performance.now() + 1000;
-        var pt_finish = performance.now() + 3000;
+        var pt_start_val = performance.now() + trial.time_to_saccade;
+        var pt_finish = pt_start_val + trial.validation_duration;
 
         var pt_data = [];
         
