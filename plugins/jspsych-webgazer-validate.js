@@ -255,7 +255,7 @@ jsPsych.plugins["webgazer-validate"] = (function() {
       function show_validation_data(){
         var html = '';
         for(var i=0; i<trial.validation_points.length; i++){
-          drawValidationPoint(trial.validation_points[i][0], trial.validation_points[i][1]);
+          html += drawValidationPoint(trial.validation_points[i][0], trial.validation_points[i][1]);
           html += drawCircle(trial.validation_points[i][0], trial.validation_points[i][1], 0, 0, trial.roi_radius);
           for(var j=0; j<trial_data.raw_gaze[i].length; j++){
             html += drawRawDataPoint(trial.validation_points[i][0], trial.validation_points[i][1], trial_data.raw_gaze[i][j].dx, trial_data.raw_gaze[i][j].dy)
