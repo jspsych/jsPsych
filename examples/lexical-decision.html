@@ -2,68 +2,74 @@
 <html>
 
 <head>
-  
+  <!-- jsPsych plugins -->
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-html-keyboard-response.js"></script>
   <script src="../plugins/jspsych-html-button-response.js"></script>
+  <!-- CSS -->
   <link rel="stylesheet" href="../css/jspsych.css">
   <style>
-  .stimulus { font-size: 32px; }
+    .stimulus {
+      font-size: 32px;
+    }
   </style>
 </head>
 
+<!-- Begin long script with the core of the experiment -->
 <script>
+  /* Create empty timeline object, which will be sequentially added filled in below using timeline.push() */
   var timeline = [];
 
   var instructions = {
     type: 'html-button-response',
-    stimulus: '<p>Each screen will show either an English word or letters that do not form a word.</p>'+
-      '<p>Press Y if the letters form a valid word.</p><p>Press N if the letters do not form a valid word.</p>',
+    stimulus: '<p>Each screen will show either an English word or letters that do not form a word.</p>' +
+      '<p>Press Y if the letters form a valid word.</p><p>Press N if the letters do not form a valid word.</p>' +
+      '<p>Each word is presented for up to five seconds.</p>',
     choices: ['Ready to start']
   }
   timeline.push(instructions);
 
   var stimuli = [
-    {word: 'woman', word_validity: 'valid', word_frequency: 'high'},
-    {word: 'title', word_validity: 'valid', word_frequency: 'high'},
-    {word: 'speed', word_validity: 'valid', word_frequency: 'high'},
-    {word: 'movie', word_validity: 'valid', word_frequency: 'high'},
-    {word: 'night', word_validity: 'valid', word_frequency: 'high'},
-    {word: 'house', word_validity: 'valid', word_frequency: 'high'},
-    {word: 'child', word_validity: 'valid', word_frequency: 'high'},
-    {word: 'apple', word_validity: 'valid', word_frequency: 'high'},
-    {word: 'books', word_validity: 'valid', word_frequency: 'high'},
-    {word: 'color', word_validity: 'valid', word_frequency: 'high'},
-    {word: 'whigs', word_validity: 'valid', word_frequency: 'low'},
-    {word: 'pecan', word_validity: 'valid', word_frequency: 'low'},
-    {word: 'hanky', word_validity: 'valid', word_frequency: 'low'},
-    {word: 'femur', word_validity: 'valid', word_frequency: 'low'},
-    {word: 'tusks', word_validity: 'valid', word_frequency: 'low'},
-    {word: 'tongs', word_validity: 'valid', word_frequency: 'low'},
-    {word: 'petal', word_validity: 'valid', word_frequency: 'low'},
-    {word: 'dunce', word_validity: 'valid', word_frequency: 'low'},
-    {word: 'friar', word_validity: 'valid', word_frequency: 'low'},
-    {word: 'gable', word_validity: 'valid', word_frequency: 'low'},
-    {word: 'womfn', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'tgtle', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'speqd', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'movje', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'npght', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'hoxse', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'chrld', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'wpple', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'boxks', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'colwr', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'whzgs', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'pecjn', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'hankk', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'fembr', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'tmsks', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'tvngs', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'pettl', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'duncr', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'friwr', word_validity: 'invalid', word_frequency: undefined},
-    {word: 'gabls', word_validity: 'invalid', word_frequency: undefined}
+    { word: 'woman', word_validity: 'valid', word_frequency: 'high' },
+    { word: 'title', word_validity: 'valid', word_frequency: 'high' },
+    { word: 'speed', word_validity: 'valid', word_frequency: 'high' },
+    { word: 'movie', word_validity: 'valid', word_frequency: 'high' },
+    { word: 'night', word_validity: 'valid', word_frequency: 'high' },
+    { word: 'house', word_validity: 'valid', word_frequency: 'high' },
+    { word: 'child', word_validity: 'valid', word_frequency: 'high' },
+    { word: 'apple', word_validity: 'valid', word_frequency: 'high' },
+    { word: 'books', word_validity: 'valid', word_frequency: 'high' },
+    { word: 'color', word_validity: 'valid', word_frequency: 'high' },
+    { word: 'whigs', word_validity: 'valid', word_frequency: 'low' },
+    { word: 'pecan', word_validity: 'valid', word_frequency: 'low' },
+    { word: 'hanky', word_validity: 'valid', word_frequency: 'low' },
+    { word: 'femur', word_validity: 'valid', word_frequency: 'low' },
+    { word: 'tusks', word_validity: 'valid', word_frequency: 'low' },
+    { word: 'tongs', word_validity: 'valid', word_frequency: 'low' },
+    { word: 'petal', word_validity: 'valid', word_frequency: 'low' },
+    { word: 'dunce', word_validity: 'valid', word_frequency: 'low' },
+    { word: 'friar', word_validity: 'valid', word_frequency: 'low' },
+    { word: 'gable', word_validity: 'valid', word_frequency: 'low' },
+    { word: 'womfn', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'tgtle', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'speqd', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'movje', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'npght', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'hoxse', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'chrld', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'wpple', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'boxks', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'colwr', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'whzgs', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'pecjn', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'hankk', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'fembr', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'tmsks', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'tvngs', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'pettl', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'duncr', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'friwr', word_validity: 'invalid', word_frequency: undefined },
+    { word: 'gabls', word_validity: 'invalid', word_frequency: undefined }
   ];
 
   var trials = {
@@ -71,66 +77,83 @@
     randomize_order: true,
     timeline: [
       {
+        /* Fixation crosses */
         type: 'html-keyboard-response',
         stimulus: '+',
         choices: jsPsych.NO_KEYS,
-        trial_duration: 500,
+        trial_duration: function () {
+          /* Set fixations with a varying duration to boost participants' attention */
+          return jsPsych.randomization.sampleWithoutReplacement([300, 400, 450, 500, 550, 600, 700], 1)[0];
+        },
         post_trial_gap: 0,
         css_classes: ['stimulus']
       },
       {
+        /* Stimulus words */
         type: 'html-keyboard-response',
         stimulus: jsPsych.timelineVariable('word'),
-        choices: ['y','n'],
+        choices: ['y', 'n'],
+        trial_duration: 5000,
         post_trial_gap: 0,
         css_classes: ['stimulus'],
         data: {
           word_validity: jsPsych.timelineVariable('word_validity'),
           word_frequency: jsPsych.timelineVariable('word_frequency')
         },
-        on_finish: function(data){
-          if(data.word_validity == 'valid'){
-            var correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('y');
+        /* Computation at the end of the trials */
+        on_finish: function (data) {
+          if (data.key_press !== null) {
+            /* Label correct responses */
+            if (data.word_validity == 'valid' && data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('y') ||
+              data.word_validity == 'invalid' && data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('n')) {
+              var accuracy = 'correct';
+              /* Label incorrect responses */
+            } else if (data.word_validity == 'valid' && data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('n') ||
+              data.word_validity == 'invalid' && data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('y')) {
+              var accuracy = 'incorrect';
+            }
+            /* Label unanswered trials */
           } else {
-            var correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('n');
+            var accuracy = 'unanswered';
           }
-          data.correct = correct;
+          data.accuracy = accuracy;
         }
       }
     ]
   }
+  /* Add trials to the timeline */
   timeline.push(trials);
 
   var debrief = {
     type: 'html-keyboard-response',
     choices: ['c'],
-    stimulus: function(){
-      var high_rt = jsPsych.data.get().filter({word_frequency: 'high', correct: true}).select('rt').mean();
-      var low_rt = jsPsych.data.get().filter({word_frequency: 'low', correct: true}).select('rt').mean();
-      var total_correct = jsPsych.data.get().filter({ correct: true }).count();
-      var total_incorrect = jsPsych.data.get().filter({ correct: false }).count();
+    stimulus: function () {
+      var high_rt = jsPsych.data.get().filter({ word_frequency: 'high', accuracy: 'correct' }).select('rt').mean();
+      var low_rt = jsPsych.data.get().filter({ word_frequency: 'low', accuracy: 'correct' }).select('rt').mean();
+      var total_correct = jsPsych.data.get().filter({ accuracy: 'correct' }).count();
+      var total_incorrect = jsPsych.data.get().filter({ accuracy: 'incorrect' }).count();
       var accuracy_rate = Math.round(total_correct / (total_correct + total_incorrect) * 100) + "%";
-      var total_unanswered = jsPsych.data.get().filter({ correct: !false }).filter({ correct: !true }).count();
+      var total_unanswered = jsPsych.data.get().filter({ accuracy: 'unanswered' }).count();
 
-      var message = "<p>All done!</p>"+
-        "<p>Your average correct response time for high frequency English words was "+Math.round(high_rt)+"ms.</p>"+
-        "<p>Your average correct response time for low frequency English words was "+Math.round(low_rt)+"ms.</p>"+
-        "<p>The typical pattern of results is that people are faster to respond to high frequency (common) "+
-        "word than low frequency (uncommon) words.</p>"+
-        "<p>Your accuracy rate was "+accuracy_rate+" ("+total_correct+" correct trials, "+total_incorrect+
-        " incorrect, and "+total_unanswered+" unanswered).</p>"+
+      var message = "<p>All done!</p>" +
+        "<p>Your average correct response time for high frequency English words was " + Math.round(high_rt) + "ms.</p>" +
+        "<p>Your average correct response time for low frequency English words was " + Math.round(low_rt) + "ms.</p>" +
+        "<p>The typical pattern of results is that people are faster to respond to high frequency (common) " +
+        "words than low frequency (uncommon) words.</p>" +
+        "<p>Your accuracy rate was " + accuracy_rate + " (" + total_correct + " correct trials " + total_incorrect +
+        ", incorrect and " + total_unanswered + " unanswered).</p>" +
         "<p>Press C to see the entire set of data generated by this experiment.</p>";
 
       return message;
-
     }
   }
+  /* Add debrief to the timeline */
   timeline.push(debrief);
 
-
+  /* Initialize experiment by incorporating the timeline and setting the data to be displayed at the end. */
   jsPsych.init({
     timeline: timeline,
-    on_finish: function() {
+    on_finish: function () {
       jsPsych.data.displayData();
     },
     default_iti: 250
