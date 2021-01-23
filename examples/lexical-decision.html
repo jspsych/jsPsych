@@ -17,7 +17,7 @@
 
 <!-- Begin long script with the core of the experiment -->
 <script>
-  /* Create empty timeline object, which will be sequentially added filled in below using timeline.push() */
+  /* Create empty timeline object, which will be sequentially filled in using timeline.push() */
   var timeline = [];
 
   var instructions = {
@@ -27,6 +27,7 @@
       '<p>Each word is presented for up to five seconds.</p>',
     choices: ['Ready to start']
   }
+  # Add instructions to the timeline
   timeline.push(instructions);
 
   var stimuli = [
