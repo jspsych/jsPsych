@@ -8,6 +8,8 @@
  *
  **/
 
+ // BMK 23Jan2021 added sound_text param 
+
 jsPsych.plugins["audio-keyboard-response"] = (function() {
 
   var plugin = {};
@@ -54,6 +56,12 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         pretty_name: 'Trial ends after audio',
         default: false,
         description: 'If true, then the trial will end as soon as the audio file finishes playing.'
+      },
+      sound_text: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt during audio presentation',
+        default: 'playing sound...',
+        description: 'Test to display while audio is presented'
       },
     }
   }
@@ -151,6 +159,9 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
       } else {
         audio.play();
       }
+
+      // clear the display
+      display_element.innerHTML = trial.sound_text;
 
       // start the response listener
       if(context !== null) {

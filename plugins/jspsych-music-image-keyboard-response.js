@@ -1,22 +1,22 @@
 /**
- * jspsych-music-image-keyboard-response
+ * jspsych-music-image
  * Benjamin Kubit 01Oct2020
  *
- * plugin for displaying multiple visual stims while auditory stim is playing in the background
+ * plugin for displaying single image (+text) while auditory stim plays in the background
  *
  * 
  *
  **/
 
 
-jsPsych.plugins["music-image-keyboard-response"] = (function() {
+jsPsych.plugins["music-image"] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('music-image-keyboard-response', 'stimulus', 'audio');
+  jsPsych.pluginAPI.registerPreload('music-image', 'stimulus', 'audio');//,'image','image'
 
   plugin.info = {
-    name: 'music-image-keyboard-response',
+    name: 'music-image',
     description: '',
     parameters: {
       stimulus: {
@@ -24,6 +24,12 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
         pretty_name: 'Stimulus',
         default: undefined,
         description: 'The audio to be played.'
+      },
+      image: {
+        type: jsPsych.plugins.parameterType.IMAGE,
+        pretty_name: 'Image',
+        default: undefined,
+        description: 'The image to display.'
       },
       choices: {
         type: jsPsych.plugins.parameterType.KEYCODE,
@@ -91,11 +97,8 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
     // store response
     //var vtargresponses = []
     var trial_data = {
-        "rt": [],
-        "stimulus": [],
-        "key_press": [],
-        "tt": [],
-        "color": []
+        "sound": [],
+        "picture": [],
       };
     var response = {
       rt: null,
@@ -104,91 +107,19 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
 
 
     // set up the vtarg grid
-    var vtargtimeOuts = []; //hold timer ids
-    var vtargonsetTimes = {"tt": [],
-                            "color": []}; //hold onsets of targets
-    var svgns = "http://www.w3.org/2000/svg";
-    var svg = document.createElementNS(svgns, "svg");
-    var width = 800;
-    var height = 800;
-    var rect_width = rect_height = 40;
-    $(svg).attr({"width": width, "height": height});
-    $("#svgdiv").append(svg);
-    var flash_duration = 1000;
-    var numColsLocations = 4;
-    var numRowsLocations = 4;
-    var numLocations = numColsLocations*numRowsLocations;
-    var currLocation = 0;
-    var targetProb = .1;
-    var distractColors = ['purple','yellow','blue','black']
-
-    for (l=0;l<numRowsLocations;l++){
-      var xoffset= width/numRowsLocations*l+width/numRowsLocations*.5-rect_width/2;
-      for (h=0;h<numColsLocations;h++){
-        var square = document.createElementNS(svgns,'rect');
-        var yoffset= height/numColsLocations*h+height/numColsLocations*.5-rect_height/2;
-        $(square).attr({'id':'rect-'+currLocation,'width':rect_width,'height':rect_height,'x':xoffset,'y':yoffset,'fill':'black','stroke-width':1,'opacity':0});
-        $(svg).append(square);
-        currLocation++;
-      }
-    }
+   
 
 
     // funciton that controls the presentation of visual stims
     //NOTE this also needs to log the onset time of targets (red squeares)
-    function toggle_fill(){
-      //(context.currentTime>startTime+context.duration)
-      if(context.state !== "running"){
-        for (var i = 0; i < vtargtimeOuts.length; i++) {
-            clearTimeout(vtargtimeOuts[i]);
-            vtargtimeOuts = [];
-        }
-        return;
-      }
-      var rect_id = 'rect-'+Math.floor(Math.random() * numLocations);
-      var rect = document.getElementById(rect_id);
-      var fillval = rect.getAttribute('fill');
-      // pic rand num to detemrine the color
-      var trialChoice = Math.floor(Math.random() * 100); //rand int from 0 to 99
-
-      if(fillval == 'black'){
-        if(trialChoice < targetProb*100){
-          var ctype = 'red';
-          rect.setAttribute('fill','red');
-          rect.setAttribute('opacity',1);
-        }
-        else {
-          //rand choose another color
-          randomElement = distractColors[Math.floor(Math.random() * distractColors.length)];
-          var ctype = randomElement;
-          rect.setAttribute('fill',randomElement);
-          rect.setAttribute('opacity',1);
-        }
-        vtargtimeOuts.push(setTimeout(function(){
-            vtargonsetTimes.tt.push(context.currentTime);
-            vtargonsetTimes.color.push(ctype);
-            rect.setAttribute('fill',fillval);
-            rect.setAttribute('opacity',0);
-        },flash_duration))
-      } 
-      vtargtimeOuts.push(setTimeout(toggle_fill,flash_duration+(500*Math.ceil(Math.random() * 10))));
-      
-    }
+    
 
     // function to end trial when it is time
     function end_trial() {
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
 
-      // kill the vtarg events
-      /* should happen after source.stop()
-      for (var i = 0; i < vtargtimeOuts.length; i++) {
-            clearTimeout(vtargtimeOuts[i]);
-            vtargtimeOuts = [];
-            rect.setAttribute('opacity',0);
-        }
-      */
-
+      
       // stop the audio file if it is playing
       // remove end event listeners if they exist
       if(context !== null){
@@ -211,8 +142,7 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
       };
       */
       //add info for vtargets
-      trial_data.tt = vtargonsetTimes.tt
-      trial_data.color = vtargonsetTimes.color
+
 
       // clear the display
       display_element.innerHTML = '';
@@ -222,36 +152,7 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
     };
 
     // function to handle responses by the subject
-    var after_response = function(info) {
 
-      response = info;
-      
-
-      trial_data.rt.push(Math.round(response.rt * 1000));
-      trial_data.stimulus.push(trial.stimulus);
-      trial_data.key_press.push(response.key);
-
-      /*
-      var trial_data = {
-        "rt": Math.round(response.rt * 1000);,
-        "stimulus": trial.stimulus,
-        "key_press": response.key
-      };
-      */
-
-      //vtargresponses.push(trial_data); this worked though
-
-      /*
-      // only record the first response
-      if (response.key == null) {
-        response = info;
-      }
-      */
-
-      if (trial.response_ends_trial) {
-        end_trial();
-      }
-    };
 
     // Embed the rest of the trial into a function so that we can attach to a button if desired
     var start_audio = function(){
@@ -293,8 +194,28 @@ jsPsych.plugins["music-image-keyboard-response"] = (function() {
         }, trial.trial_duration);
       }
 
-      display_element.innerHTML = svg.outerHTML;
-      vtargtimeOuts.push(setTimeout(toggle_fill,3000));
+      // display stimulus
+      var html = '<img src="'+trial.image+'" id="jspsych-music-image" style="';
+      if(trial.stimulus_height !== null){
+        html += 'height:'+trial.stimulus_height+'px; '
+        if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
+          html += 'width: auto; ';
+        }
+      }
+      if(trial.stimulus_width !== null){
+        html += 'width:'+trial.stimulus_width+'px; '
+        if(trial.stimulus_height == null && trial.maintain_aspect_ratio){
+          html += 'height: auto; ';
+        }
+      }
+      html +='"></img>';
+
+        //show prompt if there is one
+      if (trial.prompt !== null) {
+        html += trial.prompt;
+    }
+
+    display_element.innerHTML = html;
     }
 
     // Either start the trial or wait for the user to click start
