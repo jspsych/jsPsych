@@ -552,6 +552,10 @@ window.jsPsych = (function() {
         // if we're all done with the timeline_variables, then check to see if there are more repetitions
         else if (progress.current_repetition < timeline_parameters.repetitions - 1) {
           this.nextRepetiton();
+          // check to see if there is an on_timeline_finish function
+          if (typeof timeline_parameters.on_timeline_finish !== 'undefined'){
+            timeline_parameters.on_timeline_finish();
+          }
           return this.advance();
         }
 
