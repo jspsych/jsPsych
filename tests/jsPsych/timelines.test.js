@@ -269,6 +269,38 @@ describe('conditional function', function(){
     expect(conditional_count).toBe(2);
   });
 
+  test('executes only once even when repetitions is > 1', function(){
+    var conditional_count = 0;
+
+    var trial = {
+      timeline: [{
+        type: 'html-keyboard-response',
+        stimulus: 'foo'
+      }],
+      repetitions: 2,
+      conditional_function: function(){
+        conditional_count++;
+        return true;
+      }
+    }
+
+    jsPsych.init({
+      timeline: [trial]
+    });
+
+    expect(conditional_count).toBe(1);
+
+    // first trial
+    utils.pressKey(32);
+
+    expect(conditional_count).toBe(1);
+
+    // second trial
+    utils.pressKey(32);
+
+    expect(conditional_count).toBe(1);
+  })
+
   test('timeline variables from nested timelines are available', function(){
     var trial = {
       type: 'html-keyboard-response',
