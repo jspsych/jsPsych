@@ -429,7 +429,7 @@ describe('on_timeline_finish', function(){
     
   })
 
-  test('should fire once even with repetitions', function(){
+  test('should fire on every repetition', function(){
 
     var on_finish_fn = jest.fn();
 
@@ -448,7 +448,7 @@ describe('on_timeline_finish', function(){
 
     utils.pressKey(32);
     utils.pressKey(32);
-    expect(on_finish_fn.mock.calls.length).toBe(1);
+    expect(on_finish_fn.mock.calls.length).toBe(2);
     
   })
 })
@@ -515,7 +515,7 @@ describe('on_timeline_start', function(){
     
   })
 
-  test('should fire once even with repetitions', function(){
+  test('should fire on every repetition', function(){
 
     var on_start_fn = jest.fn();
 
@@ -535,7 +535,7 @@ describe('on_timeline_start', function(){
     expect(on_start_fn).toHaveBeenCalled();
     utils.pressKey(32);
     utils.pressKey(32);
-    expect(on_start_fn.mock.calls.length).toBe(1);
+    expect(on_start_fn.mock.calls.length).toBe(2);
     
   })
 })
