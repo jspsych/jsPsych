@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+
+    <!-- css -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="css/jquery-ui.css" rel="stylesheet" type="text/css">
+
+     <!-- SVG.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.3/svg.min.js"></script>
+
+    <!-- JsPsych -->
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-virtual-chin-rest.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+
+  </head>
+
+  <script>
+
+  let trial = {
+    type: 'virtual-chin',
+    blindspot_reps: 3
+  };
+
+  jsPsych.init({
+    timeline: [trial],
+    on_finish: function() { jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>
