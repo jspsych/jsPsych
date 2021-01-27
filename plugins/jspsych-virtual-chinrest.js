@@ -3,15 +3,15 @@
     
     Modified by Gustavo Juantorena 08/2020 // https://github.com/GEJ1
 
-    Work in progress in jsPsych discussion: https://github.com/jspsych/jsPsych/discussions/975
+    Contributions from Peter J. Kohler: https://github.com/pjkohler
  */
 
-jsPsych.plugins['virtual-chin'] = (function() {
+jsPsych.plugins['virtual-chinrest'] = (function() {
 
   var plugin = {};
 
   plugin.info = {
-    name: "virtual-chin", 
+    name: "virtual-chinrest", 
     parameters: {
       viewing_distance_cm: {
         type: jsPsych.plugins.parameterType.INT,
