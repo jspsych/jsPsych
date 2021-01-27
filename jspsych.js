@@ -929,26 +929,41 @@ window.jsPsych = (function() {
         // this if statement is checking to see if the parameter type is expected to be a function, in which case we should NOT evaluate it.
         // the first line checks if the parameter is defined in the universalPluginParameters set
         // the second line checks the plugin-specific parameters
-        if(
-          (typeof jsPsych.plugins.universalPluginParameters[keys[i]] !== 'undefined' && jsPsych.plugins.universalPluginParameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION ) ||
-          (typeof jsPsych.plugins[trial.type].info.parameters[keys[i]] !== 'undefined' && jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION)
-        ) {
-          trial[keys[i]] = replaceFunctionsWithValues(trial[keys[i]]);
+        if(typeof jsPsych.plugins.universalPluginParameters[keys[i]] !== 'undefined' && 
+          jsPsych.plugins.universalPluginParameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION ){
+          trial[keys[i]] = replaceFunctionsWithValues(trial[keys[i]], null);
+        }
+        if(typeof jsPsych.plugins[trial.type].info.parameters[keys[i]] !== 'undefined' && 
+          jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION){
+          trial[keys[i]] = replaceFunctionsWithValues(trial[keys[i]], jsPsych.plugins[trial.type].info.parameters[keys[i]]);
         }
       }
     }
   }
 
-  function replaceFunctionsWithValues(obj){
-    // null typeof is 'object', so need to run this first!
+  function replaceFunctionsWithValues(obj, info){
+    // null typeof is 'object' (?!?!), so need to run this first!
     if(obj === null){
       return obj;
     }
     // arrays and objects typeof as 'object', and this method works for both
     if(typeof obj === 'object'){
+      var nested_info = null;
+      if(info !== null && info.type == jsPsych.plugins.parameterType.COMPLEX){
+        nested_info = Object.keys(info.nested);
+      }
       var keys = Object.keys(obj);
-      for(var i=0; i<keys.length; i++){
-        obj[keys[i]] = replaceFunctionsWithValues(obj[keys[i]])
+      if(nested_info == null){
+        for(var i=0; i<keys.length; i++){
+          obj[keys[i]] = replaceFunctionsWithValues(obj[keys[i]], null)
+        }
+      } else {
+        for(var i=0; i<keys.length; i++){
+          console.log(nested_info[keys[i]])
+          if(typeof nested_info[keys[i]] == 'object' && nested_info[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION){
+            obj[keys[i]] = replaceFunctionsWithValues(obj[keys[i]], nested_info[keys[i]])
+          }
+        }
       }
     }
     if(typeof obj === 'function'){
