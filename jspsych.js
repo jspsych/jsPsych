@@ -946,10 +946,16 @@ window.jsPsych = (function() {
     if(obj === null){
       return obj;
     }
-    // arrays and objects typeof as 'object', and this method works for both
-    if(typeof obj === 'object'){
+    // arrays 
+    else if(Array.isArray(obj)){
+      for(var i=0; i<obj.length; i++){
+        obj[i] = replaceFunctionsWithValues(obj[i], info);
+      }
+    }
+    // objects
+    else if(typeof obj === 'object'){
       var nested_info = null;
-      if(info !== null && info.type == jsPsych.plugins.parameterType.COMPLEX){
+      if(info !== null && info.nested){
         nested_info = Object.keys(info.nested);
       }
       var keys = Object.keys(obj);
@@ -966,7 +972,7 @@ window.jsPsych = (function() {
         }
       }
     }
-    if(typeof obj === 'function'){
+    else if(typeof obj === 'function'){
       return obj();
     }
     return obj;
