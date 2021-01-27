@@ -954,20 +954,15 @@ window.jsPsych = (function() {
     }
     // objects
     else if(typeof obj === 'object'){
-      var nested_info = null;
-      if(info !== null && info.nested){
-        nested_info = Object.keys(info.nested);
-      }
       var keys = Object.keys(obj);
-      if(nested_info == null){
+      if(info == null || !info.nested){
         for(var i=0; i<keys.length; i++){
           obj[keys[i]] = replaceFunctionsWithValues(obj[keys[i]], null)
         }
       } else {
         for(var i=0; i<keys.length; i++){
-          console.log(nested_info[keys[i]])
-          if(typeof nested_info[keys[i]] == 'object' && nested_info[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION){
-            obj[keys[i]] = replaceFunctionsWithValues(obj[keys[i]], nested_info[keys[i]])
+          if(typeof info.nested[keys[i]] == 'object' && info.nested[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION){
+            obj[keys[i]] = replaceFunctionsWithValues(obj[keys[i]], info.nested[keys[i]])
           }
         }
       }

@@ -123,4 +123,48 @@ describe('nested parameters as functions', function(){
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
   })
+
+  test('nested parameters can be protected from early evaluation using jsPsych.plugins.parameterType.FUNCTION', function(){
+    // currently no plugins that use this feature (Jan. 2021), so here's a simple placeholder plugin.
+    jsPsych.plugins['fn-test'] = {};
+    jsPsych.plugins['fn-test'].info = {
+      parameters: {
+        foo: {
+          type: jsPsych.plugins.parameterType.COMPLEX,
+          default: null,
+          nested: {
+            not_protected: {
+              type: jsPsych.plugins.parameterType.STRING,
+              default: null
+            },
+            protected: {
+              type: jsPsych.plugins.parameterType.FUNCTION,
+              default: null
+            }
+          }
+        }
+      }
+    }
+    jsPsych.plugins['fn-test'].trial = function(display_element, trial){
+      jsPsych.finishTrial({
+        not_protected: trial.foo[0].not_protected,
+        protected: trial.foo[0].protected
+      })
+    }
+
+    var trial = {
+      type: 'fn-test',
+      foo: [{
+        not_protected: function(){ return 'x';},
+        protected: function() { return 'y';}
+      }]
+    }
+
+    jsPsych.init({timeline: [trial]});
+
+    var data = jsPsych.data.get().values()[0];
+    expect(data.not_protected).toBe('x');
+    expect(data.protected).not.toBe('y');
+    expect(data.protected()).toBe('y');
+  })
 })
