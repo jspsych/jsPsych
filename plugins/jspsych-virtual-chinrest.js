@@ -13,13 +13,19 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
   plugin.info = {
     name: "virtual-chinrest", 
     parameters: {
-      viewing_distance_cm: {
+      // not sure what these two parameters are supposed to do. 
+      /*viewing_distance_cm: {
         type: jsPsych.plugins.parameterType.INT,
         default: 0
       },
       cardWidth_px: {
         type: jsPsych.plugins.parameterType.INT,
         default: 0
+      },*/
+      resize_units: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: "none",
+        description: 'What units to resize to? ["none"/"cm"/"inch"/"deg"]. If "none", no resize will be done.'
       },
       pixels_per_unit: {
         type: jsPsych.plugins.parameterType.INT,
@@ -164,15 +170,41 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
         animateBall()
       })
 
-      display_element.querySelector('#proceed').addEventListener('click', function(){    
+      display_element.querySelector('#proceed').addEventListener('click', function(){
         // finish trial
         display_element.innerHTML = '';
         trial_data.card_width_deg = 2*(Math.atan((trial_data["card_width_mm"]/2)/trial_data["view_dist_mm"])) * 180/Math.PI
         trial_data.px2deg = trial_data["card_width_px"] / trial_data.card_width_deg  // size of card in pixels divided by size of card in degrees of visual angle
         trial_data.rt = performance.now() - start_time;
 
-        trial_data.scr_width_deg = window.innerWidth/trial_data.px2deg
-        trial_data.scr_height_deg = window.innerHeight/trial_data.px2deg
+        let px2unit_scr = 0
+        switch (trial.resize_units) {
+          case "cm":
+          case "centimeters": 
+            px2unit_scr = trial_data["px2mm"]*10 // pixels per centimeter
+            break;
+          case "inch":
+          case "inches":
+            px2unit_scr = trial_data["px2mm"]*25.4 // pixels per inch
+            break;
+          case "deg":
+          case "degrees":
+            px2unit_scr = trial_data["px2deg"] // pixels per degree of visual angle
+            break;
+        }
+        if (px2unit_scr > 0) {
+          // scale the window
+          scale_factor = px2unit_scr / trial.pixels_per_unit;
+          console.log(scale_factor, trial_data)
+          document.getElementById("jspsych-content").style.transform = "scale(" + scale_factor + ")";
+          // pixels have been scaled, so pixels per degree, pixels per mm and pixels per card_width needs to be updated
+          trial_data.px2deg = trial_data.px2deg / scale_factor
+          trial_data.px2mm = trial_data.px2mm / scale_factor
+          trial_data.card_width_px = trial_data.card_width_px / scale_factor
+        }
+
+        trial_data.win_width_deg = window.innerWidth/trial_data.px2deg
+        trial_data.win_height_deg = window.innerHeight/trial_data.px2deg
         jsPsych.finishTrial(trial_data);
       })
 
