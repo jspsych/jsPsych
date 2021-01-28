@@ -337,6 +337,10 @@ window.jsPsych = (function() {
     DOM_target.innerHTML = message;
   }
 
+  core.getSafeModeStatus = function() {
+    return file_protocol;
+  }
+
   function TimelineNode(parameters, parent, relativeID) {
 
     // a unique ID for this node, relative to the parent
@@ -2353,17 +2357,24 @@ jsPsych.pluginAPI = (function() {
         context.decodeAudioData(request.response, function(buffer) {
           audio_buffers[source] = buffer;
           n_loaded++;
-          loadfn(n_loaded);
+          loadfn(source);
           if(n_loaded == files.length) {
             finishfn();
           }
         }, function(e) {
-          errorfn(e);
+          errorfn({source: source, error: e});
         });
       }
       request.onerror = function(e){
-        errorfn(e);
+        errorfn({source: source, error: e});
       }
+      // don't think this works - need to fix or remove
+      // request.onloadend = function(e) {
+      //   if(request.status == 404) {
+      //     console.log('jspsych.js audio 404 ',e);
+      //     errorfn({source: source, error: '404'});
+      //   }
+      // }
       request.send();
     }
 
@@ -2373,18 +2384,18 @@ jsPsych.pluginAPI = (function() {
       audio.addEventListener('canplaythrough', function handleCanPlayThrough(){
         audio_buffers[source] = audio;
         n_loaded++;
-        loadfn(n_loaded);
+        loadfn(source);
         if(n_loaded == files.length){
           finishfn();
         }
         audio.removeEventListener('canplaythrough', handleCanPlayThrough);
       });
       audio.addEventListener('error', function handleError(e){
-        errorfn(e);
+        errorfn({source: audio.src, error: e});
         audio.removeEventListener('error', handleError);
       });
       audio.addEventListener('abort', function handleAbort(e){
-        errorfn(e);
+        errorfn({source: audio.src, error: e});
         audio.removeEventListener('abort', handleAbort);
       });
       audio.src = source;
@@ -2394,7 +2405,7 @@ jsPsych.pluginAPI = (function() {
       var bufferID = files[i];
       if (typeof audio_buffers[bufferID] !== 'undefined') {
         n_loaded++;
-        loadfn(n_loaded);
+        loadfn(bufferID);
         if(n_loaded == files.length) {
           finishfn();
         }
@@ -2417,8 +2428,8 @@ jsPsych.pluginAPI = (function() {
     images = jsPsych.utils.unique(images);
 
     var n_loaded = 0;
-    var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
     var finishfn = (typeof callback_complete === 'undefined') ? function() {} : callback_complete;
+    var loadfn = (typeof callback_load === 'undefined') ? function() {} : callback_load;
     var errorfn = (typeof callback_error === 'undefined') ? function() {} : callback_error;
 
     if(images.length === 0){
@@ -2431,14 +2442,14 @@ jsPsych.pluginAPI = (function() {
 
       img.onload = function() {
         n_loaded++;
-        loadfn(n_loaded);
+        loadfn(img.src);
         if (n_loaded === images.length) {
           finishfn();
         }
       };
 
       img.onerror = function(e) {
-        errorfn(e);
+        errorfn({source: img.src, error: e});
       }
 
       img.src = source;
@@ -2459,8 +2470,8 @@ jsPsych.pluginAPI = (function() {
       video = jsPsych.utils.unique(video);
 
       var n_loaded = 0;
-      var loadfn = !callback_load ? function() {} : callback_load;
       var finishfn = !callback_complete ? function() {} : callback_complete;
+      var loadfn = !callback_load ? function() {} : callback_load;
       var errorfn = (typeof callback_error === 'undefined') ? function() {} : callback_error;
 
       if(video.length===0){
@@ -2479,16 +2490,21 @@ jsPsych.pluginAPI = (function() {
             var videoBlob = this.response;
             video_buffers[source] = URL.createObjectURL(videoBlob); // IE10+
             n_loaded++;
-            loadfn(n_loaded);
+            loadfn(source);
             if (n_loaded === video.length) {
               finishfn();
             }
           }
         };
-
         request.onerror = function(e){
-          errorfn();
+          errorfn({source: source, error: e});
         }
+        // don't think this works - need to fix or remove
+        // request.onloadend = function() {
+        //   if(request.status == 404) {
+        //     errorfn({source: source, error: '404'});
+        //   }
+        // }
         request.send();
       }
 
