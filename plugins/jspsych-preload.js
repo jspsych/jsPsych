@@ -13,50 +13,93 @@ jsPsych.plugins['preload'] = (function() {
       parameters: {
         auto_preload: {
           type: jsPsych.plugins.parameterType.BOOL,
-          default: false
+          default: false,
+          description: 'Whether or not to automatically preload any media files based on the timeline passed to jsPsych.init.'
         },
         trials: {
           type: jsPsych.plugins.parameterType.TIMELINE,
-          default: []
+          default: [],
+          description: 'Array with a timeline of trials to automatically preload. If one or more trial objects is provided, '+
+          'then the plugin will attempt to preload the media files used in the trial(s).'
         },
         images: {
           type: jsPsych.plugins.parameterType.STRING,
-          default: []
+          default: [],
+          description: 'Array with one or more image files to load. This parameter is often used in cases where media files cannot '+
+          'be automatically preloaded based on the timeline, e.g. because the media files are passed into an image plugin/parameter with '+
+          'timeline variables or dynamic parameters, or because the image is embedded in an HTML string.'
         },
         audio: {
           type: jsPsych.plugins.parameterType.STRING,
-          default: []
+          default: [],
+          description: 'Array with one or more audio files to load. This parameter is often used in cases where media files cannot '+
+          'be automatically preloaded based on the timeline, e.g. because the media files are passed into an audio plugin/parameter with '+
+          'timeline variables or dynamic parameters, or because the audio is embedded in an HTML string.'
         },
         video: {
           type: jsPsych.plugins.parameterType.STRING,
-          default: []
+          default: [],
+          description: 'Array with one or more video files to load. This parameter is often used in cases where media files cannot '+
+          'be automatically preloaded based on the timeline, e.g. because the media files are passed into a video plugin/parameter with '+
+          'timeline variables or dynamic parameters, or because the video is embedded in an HTML string.'
         },
         message: {
           type: jsPsych.plugins.parameterType.HTML_STRING,
-          default: null
+          default: null,
+          description: 'HTML-formatted message to be shown above the progress bar while the files are loading.'
         },
         show_progress_bar: {
           type: jsPsych.plugins.parameterType.BOOL,
           default: true,
+          description: 'Whether or not to show the loading progress bar.'
+        },
+        continue_after_error: {
+          type: jsPsych.plugins.parameterType.BOOL,
+          default: false,
+          description: 'Whether or not to continue with the experiment if a loading error occurs. If false, then if a loading error occurs, '+
+          'the error_message will be shown on the page and the trial will not end. If true, then if if a loading error occurs, the trial will end '+
+          'and preloading failure will be logged in the trial data.'
+        },
+        error_message: {
+          type: jsPsych.plugins.parameterType.HTML_STRING,
+          default: 'The experiment failed to load.',
+          description: 'Error message to show on the page in case of any loading errors. This parameter is only relevant when continue_after_error is false.'
         },
         show_detailed_errors: {
           type: jsPsych.plugins.parameterType.BOOL,
-          default: false
+          default: false,
+          description: 'Whether or not to show a detailed error message on the page. If true, then detailed error messages will be shown on the '+
+          'page for all files that failed to load, along with the general error_message. This parameter is only relevant when continue_after_error is false.'
         },
         max_load_time: {
           type: jsPsych.plugins.parameterType.INT,
-          default: null
+          default: null,
+          description: 'The maximum amount of time that the plugin should wait before stopping the preload and either ending the trial '+
+          '(if continue_after_error is true) or stopping the experiment with an error message (if continue_after_error is false). '+
+          'If null, the plugin will wait indefintely for the files to load.'
+        },
+        on_error: {
+          type: jsPsych.plugins.parameterType.FUNCTION,
+          default: null,
+          description: 'Function to be called after a file fails to load. The function takes the file name as its only argument.'
+        },
+        on_success: {
+          type: jsPsych.plugins.parameterType.FUNCTION,
+          default: null,
+          description: 'Function to be called after a file loads successfully. The function takes the file name as its only argument.'
         }
       }
     }
   
     plugin.trial = function(display_element, trial) {
 
-      var success = false;
+      var success = null;
       var timeout = false;
       var failed_images = [];
       var failed_audio = [];
       var failed_video = [];
+      var detailed_errors = [];
+      var in_safe_mode = jsPsych.getSafeModeStatus();
 
       // create list of media to preload //
 
@@ -82,9 +125,14 @@ jsPsych.plugins['preload'] = (function() {
       audio = audio.concat(trial.audio);
       video = video.concat(trial.video);
 
-      images = jsPsych.utils.unique(jsPsych.utils.flatten(images))
-      audio = jsPsych.utils.unique(jsPsych.utils.flatten(audio))
-      video = jsPsych.utils.unique(jsPsych.utils.flatten(video))
+      images = jsPsych.utils.unique(jsPsych.utils.flatten(images));
+      audio = jsPsych.utils.unique(jsPsych.utils.flatten(audio));
+      video = jsPsych.utils.unique(jsPsych.utils.flatten(video));
+
+      if (in_safe_mode) {
+        // don't preload video if in safe mode (experiment is running via file protocol)
+        video = [];
+      }
 
       // render display of message and progress bar
 
@@ -111,6 +159,7 @@ jsPsych.plugins['preload'] = (function() {
 
       var total_n = images.length + audio.length + video.length;
       var loaded = 0;
+      var loaded_success = 0;
 
       function update_loading_progress_bar(){
         loaded++;
@@ -123,45 +172,135 @@ jsPsych.plugins['preload'] = (function() {
         }
       }
 
-      function loading_error(e){
-        if (e.path[0].localName == "img") {
-          failed_images.push(e.path[0].currentSrc);
-        } else if (e.path[0].localName == "audio") {
-          failed_audio.push(e.path[0].currentSrc);
-        } else if (e.path[0].localName == "video") {
-          failed_video.push(e.path[0].currentSrc);
+      function file_loading_error(e) {
+        // update progress bar even if there's an error
+        update_loading_progress_bar();
+        // change success flag after first file loading error
+        if (success == null) {
+          success = false;
+        }
+        var source = "unknown file";
+        if (e.source) {
+          source = e.source;
+        }
+        // add file to failed media list
+        if (e.error && e.error.path && e.error.path.length > 0) {
+          if (e.error.path[0].localName == "img") {
+            failed_images.push(source);
+          } else if (e.error.path[0].localName == "audio") {
+            failed_audio.push(source);
+          } else if (e.error.path[0].localName == "video") {
+            failed_video.push(source);
+          }
+        }
+        // construct detailed error message
+        var err_msg = '<p><strong>Error loading file: '+source+'</strong><br>';
+        if (e.error.statusText) {
+          err_msg += 'File request response status: '+e.error.statusText+'<br>';
+        }
+        if (typeof e.error.loaded !== 'undefined' && e.error.loaded !== null && e.error.loaded !== 0) {
+          err_msg += e.error.loaded+' bytes transferred.';
+        } else {
+          err_msg += 'File did not begin loading. Check that file path is correct and reachable by the browser,<br>'+
+          'and that loading is not blocked by cross-origin resource sharing (CORS) errors.';
+        }
+        err_msg += '</p>';
+        detailed_errors.push(err_msg);
+        // call trial's on_error function
+        after_error(source);
+        // if this is the last file, and if continue_after_error is false, then stop with an error
+        if (loaded == total_n) {
+          console.log('last file - error');
+          if (trial.continue_after_error) {
+            end_trial();
+          } else {
+            stop_with_error_message();
+          }
         }
       }
 
+      function file_loading_success(source) {
+        update_loading_progress_bar();
+        // call trial's on_error function
+        after_success(source);
+        loaded_success++;
+        // if this is the last file, then end with success, or stop with an error (if continue_after_error is false)
+        if (loaded_success == total_n) {
+          console.log('last file - all successful');
+          on_success();
+        } else if ((loaded == total_n) && !trial.continue_after_error) {
+          console.log('last file - success, but at least one error');
+          stop_with_error_message();
+        }
+      }
+
+      // media array, callback all complete, file load callback, file error callback
       function load_video(cb){
-        jsPsych.pluginAPI.preloadVideo(video, cb, update_loading_progress_bar, loading_error);
+        jsPsych.pluginAPI.preloadVideo(video, cb, file_loading_success, file_loading_error);
       }
 
       function load_audio(cb){
-        jsPsych.pluginAPI.preloadAudio(audio, cb, update_loading_progress_bar, loading_error);
+        jsPsych.pluginAPI.preloadAudio(audio, cb, file_loading_success, file_loading_error);
       }
 
       function load_images(cb){
-        jsPsych.pluginAPI.preloadImages(images, cb, update_loading_progress_bar, loading_error);
+        jsPsych.pluginAPI.preloadImages(images, cb, file_loading_success, file_loading_error);
       }
 
       load_video(function(){
         load_audio(function(){
-          load_images(on_success)
+          load_images()
         })
       });
 
       function on_success() {
-        // clear timeout immediately after finishing, to handle race condition with max_load_time
-        jsPsych.pluginAPI.clearAllTimeouts();
-        success = true;
-        end_trial();
+        if (typeof timeout !== 'undefined' && timeout === false) {
+          // clear timeout immediately after finishing, to handle race condition with max_load_time
+          jsPsych.pluginAPI.clearAllTimeouts();
+          success = true;
+          end_trial();
+        }
       }
 
       function on_timeout() {
-        if (typeof success !== 'undefined' && success === false) {
+        console.log('timeout fired');
+        if (typeof success !== 'undefined' && (success === false || success === null)) {
           timeout = true;
-          end_trial();
+          after_error('timeout'); // call trial's on_error event handler here, in case loading timed out with no file errors
+          detailed_errors.push('<p><strong>Loading timed out.</strong><br>'+
+              'Consider compressing your stimuli files, loading your files in smaller batches,<br>'+
+              'and/or increasing the <i>max_load_time</i> parameter.</p>');
+          if (trial.continue_after_error) {
+            end_trial();
+          } else {
+            stop_with_error_message();
+          }
+        }
+      }
+
+      function stop_with_error_message() {
+        jsPsych.pluginAPI.clearAllTimeouts();
+        // show error message
+        display_element.innerHTML = trial.error_message;
+        // show detailed errors, if necessary
+        if (trial.show_detailed_errors) {
+          display_element.innerHTML += '<p><strong>Error details:</strong></p>';
+          detailed_errors.forEach(function(e) {
+            display_element.innerHTML += e;
+          });
+        }
+      }
+
+      function after_error(source) {
+        // call on_error function and pass file name
+        if (trial.on_error !== null) {
+          trial.on_error(source);
+        }
+      }
+      function after_success(source) {
+        // call on_success function and pass file name
+        if (trial.on_success !== null) {
+          trial.on_success(source);
         }
       }
 
