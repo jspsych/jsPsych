@@ -11,6 +11,9 @@
   <body></body>
   <script>
 
+  // all preload files will print information to the console about file loading success/failure
+  // through the on_error and on_success trial parameters
+
   // automatically preload all stimuli files based on the timeline 
   var auto_preload_trial = {
     type: 'preload',
@@ -59,11 +62,11 @@
   // continue with the experiment even if one or more files fails to load
   var preload_fail_example_1 = {
     type: 'preload',
-    images: ['bad_file_path_1','bad_file_path_2','bad_file_path_3'],
-    audio: ['sound/speech_green.mp3','sound/speech_red.mp3'],
+    images: ['BAD_IMAGE_NAME_1','BAD_IMAGE_NAME_2','BAD_IMAGE_NAME_3'],
+    audio: ['sound/speech_green.mp3','sound/speech_red.mp3'],  
     message: '<p>Please wait while the files load.</p>',
     continue_after_error: true,
-    max_load_time: 3000,
+    max_load_time: 4000,
     on_error: function(file) {
       console.log('Error: ',file);
     },
@@ -93,10 +96,9 @@
   var start_fail_example_2 = {
     type: 'html-button-response',
     stimulus: '<p>The next trial is another manual preload trial.</p>'+
-      '<p>It has been set up with a bad file name, so it will also fail.</p>'+
+      '<p>It has been set up with bad file names, so it will also fail.</p>'+
       '<p>This time the <i>continue_after_error</i> parameter is set to <i>false</i>, so the experiment will stop with an error message.</p>'+
-      '<p>The next trial will also show details about the errors (<i>show_detailed_errors: true</i>),<br>'+
-        'and print the error to the console (using the <i>on_error</i> function).</p>',
+      '<p>The next trial will also show details about the errors (<i>show_detailed_errors: true</i>).</p>',
     choices: ['Next']
   };
 
@@ -106,11 +108,12 @@
     type: 'preload',
     images: ['img/happy_face_2.jpg','img/happy_face_3.jpg','img/sad_face_1.jpg','img/sad_face_2.jpg','img/sad_face_3.jpg','img/sad_face_4.jpg',
     'img/1.gif','img/2.gif','img/3.gif','img/4.gif','img/5.gif','img/6.gif','img/7.gif','img/8.gif','img/9.gif','img/10.gif','img/11.gif','img/12.gif',
-    'bad_file_name'],
-    video: ['video/sample_video.mp4'], 
+    'BAD_IMAGE_NAME'],
+    audio: ['BAD_AUDIO_NAME'],
+    video: ['video/sample_video.mp4', 'BAD_VIDEO_NAME'], // videos will not be preloaded if HTML file is running locally (i.e. safe mode)
     message: '<p>Please wait...</p>',
     show_detailed_errors: true,
-    max_load_time: 1000,
+    max_load_time: null,
     post_trial_gap: 1000,
     on_error: function(file) {
       console.log('Error: ',file);
