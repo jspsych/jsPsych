@@ -14,6 +14,7 @@ jsPsych.plugins["music-image"] = (function() {
   var plugin = {};
 
   jsPsych.pluginAPI.registerPreload('music-image', 'stimulus', 'audio');
+  jsPsych.pluginAPI.registerPreload('music-image', 'image', 'image');
 
   plugin.info = {
     name: 'music-image',
@@ -67,6 +68,12 @@ jsPsych.plugins["music-image"] = (function() {
         pretty_name: 'Bio text',
         default: false,
         description: 'person bio for current trial.'
+      },
+      displayQuestionsAtStart: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'questions at start',
+        default: false,
+        description: 'If true, display pyensemble questions at start of trial.'
       },
     }
   }
@@ -171,6 +178,7 @@ jsPsych.plugins["music-image"] = (function() {
         audio.play();
       }
 
+
       // display stimulus
       var html = '<img src="'+trial.image+'" id="jspsych-music-image" style="';
       if(trial.stimulus_height !== null){
@@ -199,6 +207,11 @@ jsPsych.plugins["music-image"] = (function() {
           end_trial();
         }, trial.trial_duration);
       }
+
+      if(trial.displayQuestionsAtStart) {
+        $("#questions").removeClass("d-none");
+      }
+      
       
 
 
