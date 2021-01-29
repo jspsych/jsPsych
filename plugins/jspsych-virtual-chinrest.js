@@ -33,16 +33,11 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
         default: 100,
         description: 'After the scaling factor is applied, this many pixels will equal one unit of measurement.'
       },
-      resize_allowed: {
-        type: jsPsych.plugins.parameterType.BOOL,
-        default: false,
-        description: 'If true, the resize of the screen will be done.'
-      },
       blindspot_reps: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Blindspot measurement repetitions',
         default: 5,
-        description: 'How many times to measure the blindspot location'
+        description: 'How many times to measure the blindspot location? If 0, blindspot will not detected and viewing distance not computed.'
       },
       prompt_card: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -68,7 +63,6 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
                   '<li>Click the button below to start the animation of the red ball. The <b style="color: red">red ball </b>'+
                   'will disappear as it moves from right to left. Press the “Space” key as soon as the ball disappears from your eye sight.</li>'+
                   '</div><br>'
-
       },
       card_path: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -76,8 +70,6 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
       }
     }
   }
-
-  
   
   // Get screen size
   var w = window.innerWidth;
@@ -90,7 +82,6 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
 
   let trial_data = {
     "card_width_mm":  85.60, //card dimension: 85.60 × 53.98 mm (3.370 × 2.125 in)
-
   };
 
   let config_data = {
@@ -100,91 +91,101 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    const start_time = performance.now();
+   try {
+      if ( !( trial.blindspot_reps > 0 ) && ( (trial.resize_units == "deg" ) || (trial.resize_units == "degrees" ) ) ) {
+        throw Error("Blindspot repetitions set to 0, so resizing to degrees of visual angle is not possible!")
+      } else {
+        const start_time = performance.now();
 
-    console.log(trial)
+        if ( trial.blindspot_reps > 0 ) {
+          button_str = '<button id=blind_spot class="btn btn-primary">'
+        } else {
+          button_str = '<button id=proceed class="btn btn-primary">'
+        }
 
-    pagesize_content = 
-      '<div id="page-size"><br><br>'+
-        trial.prompt_card +
-        '<div id="container">'+
-          '<div id="slider"></div><br>'+
-          '<img id="card" src="' + trial.card_path + '" style="width: 50%">'+
-          '<br><br><button id=blind_spot class="btn btn-primary">Click here when you are done!</button>'+
-        '</div>'+
-      '</div>'
+        pagesize_content = 
+          '<div id="page-size"><br><br>'+
+            trial.prompt_card +
+            '<div id="container">'+
+              '<div id="slider"></div><br>'+
+              '<img id="card" src="' + trial.card_path + '" style="width: 50%">'+
+              '<br><br>' + button_str + 'Click here when you are done!</button>'+
+            '</div>'+
+          '</div>'
 
-    blindspot_content = 
-      '<div id="blind-spot" style="visibility: hidden">' +
-        trial.prompt_blindspot +
-        '<p>Please do it <b>' + trial.blindspot_reps + '</b> times. Keep your right eye closed and hit the “Space” key fast!</p><br>' +
-        '<div id="svgDiv" style="width:1000px;height:200px;"></div>'+
-        '<button class="btn btn-primary" id="start_ball">Start</button>'+
-        '<button class="btn btn-primary" id="proceed" style="display:none">Proceed</button><br>'+
-        '<b>Hit space <div id="click" style="display:inline; color: red">' + trial.blindspot_reps + '</div> more times!<b><br>'+
-        '<div id="info" style="visibility:hidden">'+
-          '<b id="info-h">Estimated viewing distance (cm): </b>'+
-        '</div>'+
-      '</div>'
-    
-    display_element.innerHTML = 
-      '<div id="content" style="width: 900px; margin: 0 auto;">'+
-        pagesize_content + 
-        blindspot_content +
-      '</div>'
+        blindspot_content = 
+          '<div id="blind-spot" style="visibility: hidden">' +
+            trial.prompt_blindspot +
+            '<p>Please do it <b>' + trial.blindspot_reps + '</b> times. Keep your right eye closed and hit the “Space” key fast!</p><br>' +
+            '<div id="svgDiv" style="width:1000px;height:200px;"></div>'+
+            '<button class="btn btn-primary" id="start_ball">Start</button>'+
+            '<button class="btn btn-primary" id="proceed" style="display:none">Proceed</button><br>'+
+            '<b>Hit space <div id="click" style="display:inline; color: red">' + trial.blindspot_reps + '</div> more times!<b><br>'+
+            '<div id="info" style="visibility:hidden">'+
+              '<b id="info-h">Estimated viewing distance (cm): </b>'+
+            '</div>'+
+          '</div>'
+        
+        display_element.innerHTML = 
+          '<div id="content" style="width: 900px; margin: 0 auto;">'+
+            pagesize_content + 
+            blindspot_content +
+          '</div>'
 
+        /*// create html for display
+        var html = "<body><div id='content'><div id='page-size'><br><br><br><br><br><br>";
+        // html += "<h3> Let’s find out what your monitor size is (click to go into <div onclick='fullScreen(); registerClick();' style='display:inline; cursor:pointer; color: red'><em><u>full screen mode</u></em></div>).</h2>";
+        
+        html += "<p>Please use any credit card that you have available (it can also be a grocery store membership card, your drivers license, or anything that is of the same format), hold it onto the screen, and adjust the slider below to its size.</p>";   
+        html += "<p>(If you don't have access to a real card, you can use a ruler to measure image width to 3.37inch or 85.6mm, or make your best guess!)</p>";
+        html += "<b style='font-style: italic'>Make sure you put the card onto your screen.</b>";
+        html += '<br><div id="container">';
+        html += "<div id='slider'></div>";
+        html += '<br> <img id="card" src="img/card.png" style="width: 50%"><br><br>';
+        html +='<button id="btnBlindSpot" class="btn btn-primary">Click here when you are done!</button></div></div>';
 
-
-      /*// create html for display
-      var html = "<body><div id='content'><div id='page-size'><br><br><br><br><br><br>";
-      // html += "<h3> Let’s find out what your monitor size is (click to go into <div onclick='fullScreen(); registerClick();' style='display:inline; cursor:pointer; color: red'><em><u>full screen mode</u></em></div>).</h2>";
       
-      html += "<p>Please use any credit card that you have available (it can also be a grocery store membership card, your drivers license, or anything that is of the same format), hold it onto the screen, and adjust the slider below to its size.</p>";   
-      html += "<p>(If you don't have access to a real card, you can use a ruler to measure image width to 3.37inch or 85.6mm, or make your best guess!)</p>";
-      html += "<b style='font-style: italic'>Make sure you put the card onto your screen.</b>";
-      html += '<br><div id="container">';
-      html += "<div id='slider'></div>";
-      html += '<br> <img id="card" src="img/card.png" style="width: 50%"><br><br>';
-      html +='<button id="btnBlindSpot" class="btn btn-primary">Click here when you are done!</button></div></div>';
+        html += '<div id="blind-spot" style="visibility: hidden">';
+        html += '<!-- <h2 class="bolded-blue">Task 2: Where’s your blind spot?</h2> -->';
+        html += "<h3>Now, let's quickly test how far away you are sitting.</h3>";
+        html += "<p>You might know that vision tests at a doctor's practice often involve chinrests; the doctor basically asks you to sit away from a screen in a specific distance. We do this here with a 'virtual chinrest'.</p>";
+        
+        html += '<h3>Instructions</h3>';
+        html += '<p>1. Put your finger on <b>space bar</b> on the keyboard.</p>';
+        html += '<p>2. Close your right eye. <em>(Tips: it might be easier to cover your right eye by hand!)</em></p>';
+        html += '<p>3. Using your left eye, focus on the black square.</p>';
+        html += '<p>4. Click the button below to start the animation of the red ball. The <b style="color: red">red ball</b> will disappear as it moves from right to left. Press the Space key as soon as the ball disappears from your eye sight.</p><br>';
+        html += '<p>Please do it <b>five</b> times. Keep your right eye closed and hit the Space key fast!</p><br>';
+        html += '<button class="btn btn-primary" id="start" ">Start</button>';
 
-    
-      html += '<div id="blind-spot" style="visibility: hidden">';
-      html += '<!-- <h2 class="bolded-blue">Task 2: Where’s your blind spot?</h2> -->';
-      html += "<h3>Now, let's quickly test how far away you are sitting.</h3>";
-      html += "<p>You might know that vision tests at a doctor's practice often involve chinrests; the doctor basically asks you to sit away from a screen in a specific distance. We do this here with a 'virtual chinrest'.</p>";
-      
-      html += '<h3>Instructions</h3>';
-      html += '<p>1. Put your finger on <b>space bar</b> on the keyboard.</p>';
-      html += '<p>2. Close your right eye. <em>(Tips: it might be easier to cover your right eye by hand!)</em></p>';
-      html += '<p>3. Using your left eye, focus on the black square.</p>';
-      html += '<p>4. Click the button below to start the animation of the red ball. The <b style="color: red">red ball</b> will disappear as it moves from right to left. Press the Space key as soon as the ball disappears from your eye sight.</p><br>';
-      html += '<p>Please do it <b>five</b> times. Keep your right eye closed and hit the Space key fast!</p><br>';
-      html += '<button class="btn btn-primary" id="start" ">Start</button>';
+        html += '<div id="svgDiv" style="width:1000px;height:200px;"></div>';
+        html +=  "Hit 'space' <div id='click' style='display:inline; color: red; font-weight: bold'>5</div> more times!</div>";
 
-      html += '<div id="svgDiv" style="width:1000px;height:200px;"></div>';
-      html +=  "Hit 'space' <div id='click' style='display:inline; color: red; font-weight: bold'>5</div> more times!</div>";
+        // render
+        display_element.innerHTML = html; */
 
+        //Event listeners for buttons
 
-      // render
-      display_element.innerHTML = html; */
-  
-      //Event listeners for buttons
+        if ( trial.blindspot_reps > 0 ) {
+          display_element.querySelector('#blind_spot').addEventListener('click', function(){    
+            configureBlindSpot()
+          })
+          display_element.querySelector('#start_ball').addEventListener('click', function(){    
+            animateBall()
+          })
+        } else {
+          // run the two relevant functions to get card_width_mm and px2mm
+          distanceSetup.px2mm(getCardWidth())
+        }
 
-      display_element.querySelector('#blind_spot').addEventListener('click', function(){    
-        configureBlindSpot()
-      })
-      display_element.querySelector('#start_ball').addEventListener('click', function(){    
-        animateBall()
-      })
-
-      if (trial.resize_allowed === true){             
         display_element.querySelector('#proceed').addEventListener('click', function(){
           // finish trial
+          trial_data.rt = performance.now() - start_time;
           display_element.innerHTML = '';
+
           trial_data.card_width_deg = 2*(Math.atan((trial_data["card_width_mm"]/2)/trial_data["view_dist_mm"])) * 180/Math.PI
           trial_data.px2deg = trial_data["card_width_px"] / trial_data.card_width_deg  // size of card in pixels divided by size of card in degrees of visual angle
-          trial_data.rt = performance.now() - start_time;
-  
+
           let px2unit_scr = 0
           switch (trial.resize_units) {
             case "cm":
@@ -203,35 +204,41 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
           if (px2unit_scr > 0) {
             // scale the window
             scale_factor = px2unit_scr / trial.pixels_per_unit;
-            console.log(scale_factor, trial_data)
             document.getElementById("jspsych-content").style.transform = "scale(" + scale_factor + ")";
             // pixels have been scaled, so pixels per degree, pixels per mm and pixels per card_width needs to be updated
             trial_data.px2deg = trial_data.px2deg / scale_factor
             trial_data.px2mm = trial_data.px2mm / scale_factor
             trial_data.card_width_px = trial_data.card_width_px / scale_factor
+            trial_data.scale_factor = scale_factor
           }
-  
-          trial_data.win_width_deg = window.innerWidth/trial_data.px2deg
-          trial_data.win_height_deg = window.innerHeight/trial_data.px2deg
+
+          if ( trial.blindspot_reps > 0 ) {
+            trial_data.win_width_deg = window.innerWidth/trial_data.px2deg
+            trial_data.win_height_deg = window.innerHeight/trial_data.px2deg
+          } else {
+            // delete degree related properties
+             delete trial_data.px2deg
+             delete trial_data.card_width_deg
+          }
           jsPsych.finishTrial(trial_data);
+          jsPsych.pluginAPI.cancelAllKeyboardResponses();
         })
-      } else{
-        display_element.querySelector('#proceed').addEventListener('click', function(){
-          end_trial()
-        })
+
+          /*
+
+          jsPsych.pluginAPI.getKeyboardResponse({ 
+            callback_function: after_response,                           // we need to create after_response
+            valid_responses: [trial.key],                             // valid_responses expects an array
+            rt_method: 'performance',                                   // This is only relevant for RT in audio stimuli
+            persist: false,                                             // true if you want to listen to more than one key
+            allow_held_key: true                                       // false for a new key pressing in order to get a new response  
+          });
+          */
       }
+    } catch (e) {
+      console.error(e)
+    }
 
-
-      /*
-
-      jsPsych.pluginAPI.getKeyboardResponse({ 
-        callback_function: after_response,                           // we need to create after_response
-        valid_responses: [trial.key],                             // valid_responses expects an array
-        rt_method: 'performance',                                   // This is only relevant for RT in audio stimuli
-        persist: false,                                             // true if you want to listen to more than one key
-        allow_held_key: true                                       // false for a new key pressing in order to get a new response  
-      });
-      */ 
   }
 
   function after_response(response_info){
