@@ -2540,16 +2540,23 @@ jsPsych.pluginAPI = (function() {
 
   module.getAutoPreloadList = function(timeline_description){
 
-    function getTrialsOfTypeFromTimelineDescription(td, type){
+    function getTrialsOfTypeFromTimelineDescription(td, target_type, inherited_type){
       var trials = [];
 
       for(var i=0; i<td.length; i++){
         var node = td[i];
-        if(node.type !== 'undefined' && node.type == type){
-          trials.push(node);
-        }
         if(Array.isArray(node.timeline)){
-          trials = trials.concat(getTrialsOfTypeFromTimelineDescription(node.timeline, type));
+          if(typeof node.type !== 'undefined'){
+            inherited_type = node.type;
+          }
+          trials = trials.concat(getTrialsOfTypeFromTimelineDescription(node.timeline, target_type, inherited_type));
+        } else {
+          if(typeof node.type !== 'undefined' && node.type == target_type){
+            trials.push(node);
+          }
+          if(typeof node.type == 'undefined' && inherited_type == target_type){
+            trials.push(Object.assign({}, {type: target_type}, node));
+          }
         }
       }
 
