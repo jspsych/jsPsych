@@ -158,8 +158,26 @@ jsPsych.plugins['preload'] = (function() {
       } 
 
       var total_n = images.length + audio.length + video.length;
-      var loaded = 0;
-      var loaded_success = 0;
+      var loaded = 0;  // success or error count
+      var loaded_success = 0; // success count
+
+      function load_video(cb){
+        jsPsych.pluginAPI.preloadVideo(video, cb, file_loading_success, file_loading_error);
+      }
+
+      function load_audio(cb){
+        jsPsych.pluginAPI.preloadAudio(audio, cb, file_loading_success, file_loading_error);
+      }
+
+      function load_images(cb){
+        jsPsych.pluginAPI.preloadImages(images, cb, file_loading_success, file_loading_error);
+      }
+
+      load_video(function() {})
+      load_audio(function() {})
+      load_images(function() {})
+
+      // helper functions and callbacks
 
       function update_loading_progress_bar(){
         loaded++;
@@ -172,6 +190,7 @@ jsPsych.plugins['preload'] = (function() {
         }
       }
 
+      // called when a single file loading fails
       function file_loading_error(e) {
         // update progress bar even if there's an error
         update_loading_progress_bar();
@@ -179,11 +198,11 @@ jsPsych.plugins['preload'] = (function() {
         if (success == null) {
           success = false;
         }
+        // add file to failed media list
         var source = "unknown file";
         if (e.source) {
           source = e.source;
         }
-        // add file to failed media list
         if (e.error && e.error.path && e.error.path.length > 0) {
           if (e.error.path[0].localName == "img") {
             failed_images.push(source);
@@ -198,6 +217,9 @@ jsPsych.plugins['preload'] = (function() {
         if (e.error.statusText) {
           err_msg += 'File request response status: '+e.error.statusText+'<br>';
         }
+        if (e.error == "404") {
+          err_msg += '404 - file not found.<br>';
+        }
         if (typeof e.error.loaded !== 'undefined' && e.error.loaded !== null && e.error.loaded !== 0) {
           err_msg += e.error.loaded+' bytes transferred.';
         } else {
@@ -208,64 +230,60 @@ jsPsych.plugins['preload'] = (function() {
         detailed_errors.push(err_msg);
         // call trial's on_error function
         after_error(source);
-        // if this is the last file, and if continue_after_error is false, then stop with an error
+        // if this is the last file
         if (loaded == total_n) {
-          console.log('last file - error');
           if (trial.continue_after_error) {
+            // if continue_after_error is false, then stop with an error
             end_trial();
           } else {
+            // otherwise end the trial and continue
             stop_with_error_message();
           }
         }
       }
 
+      // called when a single file loads successfully
       function file_loading_success(source) {
         update_loading_progress_bar();
-        // call trial's on_error function
+        // call trial's on_success function
         after_success(source);
         loaded_success++;
-        // if this is the last file, then end with success, or stop with an error (if continue_after_error is false)
         if (loaded_success == total_n) {
-          console.log('last file - all successful');
+          // if this is the last file and all loaded successfully, call success function
           on_success();
-        } else if ((loaded == total_n) && !trial.continue_after_error) {
-          console.log('last file - success, but at least one error');
-          stop_with_error_message();
+        } else if (loaded == total_n) {
+          // if this is the last file and there was at least one error
+          if (trial.continue_after_error) {
+            // end the trial and continue with experiment
+            end_trial();
+          } else {
+            // if continue_after_error is false, then stop with an error
+            stop_with_error_message();
+          }
         }
       }
 
-      // media array, callback all complete, file load callback, file error callback
-      function load_video(cb){
-        jsPsych.pluginAPI.preloadVideo(video, cb, file_loading_success, file_loading_error);
-      }
-
-      function load_audio(cb){
-        jsPsych.pluginAPI.preloadAudio(audio, cb, file_loading_success, file_loading_error);
-      }
-
-      function load_images(cb){
-        jsPsych.pluginAPI.preloadImages(images, cb, file_loading_success, file_loading_error);
-      }
-
-      load_video(function(){
-        load_audio(function(){
-          load_images()
-        })
-      });
-
+      // called if all files load successfully
       function on_success() {
         if (typeof timeout !== 'undefined' && timeout === false) {
           // clear timeout immediately after finishing, to handle race condition with max_load_time
           jsPsych.pluginAPI.clearAllTimeouts();
+          // need to call cancel preload function to clear global jsPsych preload_request list, even when they've all succeeded
+          jsPsych.pluginAPI.cancelPreloads();
           success = true;
           end_trial();
         }
       }
 
+      // called if all_files haven't finished loading when max_load_time is reached
       function on_timeout() {
         console.log('timeout fired');
+        jsPsych.pluginAPI.cancelPreloads();
         if (typeof success !== 'undefined' && (success === false || success === null)) {
           timeout = true;
+          if (loaded_success < total_n) {
+            success = false;
+          }
           after_error('timeout'); // call trial's on_error event handler here, in case loading timed out with no file errors
           detailed_errors.push('<p><strong>Loading timed out.</strong><br>'+
               'Consider compressing your stimuli files, loading your files in smaller batches,<br>'+
@@ -280,6 +298,7 @@ jsPsych.plugins['preload'] = (function() {
 
       function stop_with_error_message() {
         jsPsych.pluginAPI.clearAllTimeouts();
+        jsPsych.pluginAPI.cancelPreloads();
         // show error message
         display_element.innerHTML = trial.error_message;
         // show detailed errors, if necessary
