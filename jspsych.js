@@ -2330,6 +2330,7 @@ jsPsych.pluginAPI = (function() {
   // preloading stimuli //
 
   var preloads = [];
+  var preload_requests = [];
 
   var img_cache = {};
 
@@ -2366,16 +2367,19 @@ jsPsych.pluginAPI = (function() {
         });
       }
       request.onerror = function(e){
-        errorfn({source: source, error: e});
+        var err = e;
+        if(this.status == 404) {
+          err = "404";
+        }
+        errorfn({source: source, error: err});
       }
-      // don't think this works - need to fix or remove
-      // request.onloadend = function(e) {
-      //   if(request.status == 404) {
-      //     console.log('jspsych.js audio 404 ',e);
-      //     errorfn({source: source, error: '404'});
-      //   }
-      // }
+      request.onloadend = function(e){
+        if(this.status == 404) {
+          errorfn({source: source, error: "404"});
+        }
+      }
       request.send();
+      preload_requests.push(request);
     }
 
     function load_audio_file_html5audio(source, count){
@@ -2399,6 +2403,7 @@ jsPsych.pluginAPI = (function() {
         audio.removeEventListener('abort', handleAbort);
       });
       audio.src = source;
+      preload_requests.push(audio);
     }
 
     for (var i = 0; i < files.length; i++) {
@@ -2455,6 +2460,7 @@ jsPsych.pluginAPI = (function() {
       img.src = source;
 
       img_cache[source] = img;
+      preload_requests.push(img);
     }
 
     for (var i = 0; i < images.length; i++) {
@@ -2465,7 +2471,7 @@ jsPsych.pluginAPI = (function() {
 
   module.preloadVideo = function(video, callback_complete, callback_load, callback_error) {
 
-      // flatten the images array
+      // flatten the video array
       video = jsPsych.utils.flatten(video);
       video = jsPsych.utils.unique(video);
 
@@ -2497,15 +2503,19 @@ jsPsych.pluginAPI = (function() {
           }
         };
         request.onerror = function(e){
-          errorfn({source: source, error: e});
+          var err = e;
+          if(this.status == 404) {
+            err = "404";
+          }
+          errorfn({source: source, error: err});
         }
-        // don't think this works - need to fix or remove
-        // request.onloadend = function() {
-        //   if(request.status == 404) {
-        //     errorfn({source: source, error: '404'});
-        //   }
-        // }
+        request.onloadend = function(e){
+          if(this.status == 404) {
+            errorfn({source: source, error: "404"});
+          }
+        }
         request.send();
+        preload_requests.push(request);
       }
 
       for (var i = 0; i < video.length; i++) {
@@ -2591,6 +2601,16 @@ jsPsych.pluginAPI = (function() {
     return {
       images, audio, video
     }
+  }
+
+  module.cancelPreloads = function() {
+    for(var i=0;i<preload_requests.length; i++){
+      preload_requests[i].onload = function() {};
+      preload_requests[i].onerror = function() {};
+      preload_requests[i].oncanplaythrough = function() {};
+      preload_requests[i].onabort = function() {};
+    }
+    preload_requests = [];
   }
 
   /**
