@@ -13,15 +13,6 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
   plugin.info = {
     name: "virtual-chinrest", 
     parameters: {
-      // not sure what these two parameters are supposed to do. 
-      /*viewing_distance_cm: {
-        type: jsPsych.plugins.parameterType.INT,
-        default: 0
-      },
-      cardWidth_px: {
-        type: jsPsych.plugins.parameterType.INT,
-        default: 0
-      },*/
       resize_units: {
         type: jsPsych.plugins.parameterType.STRING,
         default: "none",
@@ -132,38 +123,6 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
             blindspot_content +
           '</div>'
 
-        /*// create html for display
-        var html = "<body><div id='content'><div id='page-size'><br><br><br><br><br><br>";
-        // html += "<h3> Let’s find out what your monitor size is (click to go into <div onclick='fullScreen(); registerClick();' style='display:inline; cursor:pointer; color: red'><em><u>full screen mode</u></em></div>).</h2>";
-        
-        html += "<p>Please use any credit card that you have available (it can also be a grocery store membership card, your drivers license, or anything that is of the same format), hold it onto the screen, and adjust the slider below to its size.</p>";   
-        html += "<p>(If you don't have access to a real card, you can use a ruler to measure image width to 3.37inch or 85.6mm, or make your best guess!)</p>";
-        html += "<b style='font-style: italic'>Make sure you put the card onto your screen.</b>";
-        html += '<br><div id="container">';
-        html += "<div id='slider'></div>";
-        html += '<br> <img id="card" src="img/card.png" style="width: 50%"><br><br>';
-        html +='<button id="btnBlindSpot" class="btn btn-primary">Click here when you are done!</button></div></div>';
-
-      
-        html += '<div id="blind-spot" style="visibility: hidden">';
-        html += '<!-- <h2 class="bolded-blue">Task 2: Where’s your blind spot?</h2> -->';
-        html += "<h3>Now, let's quickly test how far away you are sitting.</h3>";
-        html += "<p>You might know that vision tests at a doctor's practice often involve chinrests; the doctor basically asks you to sit away from a screen in a specific distance. We do this here with a 'virtual chinrest'.</p>";
-        
-        html += '<h3>Instructions</h3>';
-        html += '<p>1. Put your finger on <b>space bar</b> on the keyboard.</p>';
-        html += '<p>2. Close your right eye. <em>(Tips: it might be easier to cover your right eye by hand!)</em></p>';
-        html += '<p>3. Using your left eye, focus on the black square.</p>';
-        html += '<p>4. Click the button below to start the animation of the red ball. The <b style="color: red">red ball</b> will disappear as it moves from right to left. Press the Space key as soon as the ball disappears from your eye sight.</p><br>';
-        html += '<p>Please do it <b>five</b> times. Keep your right eye closed and hit the Space key fast!</p><br>';
-        html += '<button class="btn btn-primary" id="start" ">Start</button>';
-
-        html += '<div id="svgDiv" style="width:1000px;height:200px;"></div>';
-        html +=  "Hit 'space' <div id='click' style='display:inline; color: red; font-weight: bold'>5</div> more times!</div>";
-
-        // render
-        display_element.innerHTML = html; */
-
         //Event listeners for buttons
 
         if ( trial.blindspot_reps > 0 ) {
@@ -223,17 +182,6 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
           jsPsych.finishTrial(trial_data);
           jsPsych.pluginAPI.cancelAllKeyboardResponses();
         })
-
-          /*
-
-          jsPsych.pluginAPI.getKeyboardResponse({ 
-            callback_function: after_response,                           // we need to create after_response
-            valid_responses: [trial.key],                             // valid_responses expects an array
-            rt_method: 'performance',                                   // This is only relevant for RT in audio stimuli
-            persist: false,                                             // true if you want to listen to more than one key
-            allow_held_key: true                                       // false for a new key pressing in order to get a new response  
-          });
-          */
       }
     } catch (e) {
       console.error(e)
@@ -268,7 +216,6 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
 
   }( window.distanceSetup = window.distanceSetup || {}, jQuery))
 
-  
   function getCardWidth() {
       var card_width_px = $('#card').width();
       trial_data["card_width_px"] = distanceSetup.round(card_width_px,2);
@@ -276,13 +223,11 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
   }
 
   function configureBlindSpot() {
-
       drawBall();
       $('#page-size').remove();
       $('#blind-spot').css({'visibility':'visible'});
       // $(document).on('keydown', recordPosition);
       $(document).on('keydown', recordPosition);
-
   }
 
   $( function() {
@@ -300,7 +245,6 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
       });
 
   });
-
 
   //=============================
   //Ball Animation
@@ -343,8 +287,7 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
   function recordPosition(event, angle=13.5) {
       // angle: define horizontal blind spot entry point position in degrees.
       if (event.keyCode == '32') { //Press "Space"
-          
-
+        
           config_data["ball_pos"].push(distanceSetup.round((ball.cx() + moveX),2));
           var sum = config_data["ball_pos"].reduce((a, b) => a + b, 0);
           var ballPosLen = config_data["ball_pos"].length;
