@@ -189,16 +189,7 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
 
   }
 
-  function after_response(response_info){
-    // rt.push(response_info.rt); // response time of the key
-    end_trial();
-  }
-
   function end_trial(){
-    jsPsych.finishTrial(trial_data); // ends trial and save the data
-    // display_element.innerHTML = ' '; // clear the display
-
-    jsPsych.pluginAPI.cancelAllKeyboardResponses();
   }
 
   (function ( distanceSetup, $ ) {  // jQuery short-hand for $(document).ready(function() { ... });
@@ -287,7 +278,7 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
   function recordPosition(event, angle=13.5) {
       // angle: define horizontal blind spot entry point position in degrees.
       if (event.keyCode == '32') { //Press "Space"
-        
+
           config_data["ball_pos"].push(distanceSetup.round((ball.cx() + moveX),2));
           var sum = config_data["ball_pos"].reduce((a, b) => a + b, 0);
           var ballPosLen = config_data["ball_pos"].length;
