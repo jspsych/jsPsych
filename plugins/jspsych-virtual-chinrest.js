@@ -30,7 +30,7 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
         default: 5,
         description: 'How many times to measure the blindspot location? If 0, blindspot will not detected and viewing distance not computed.'
       },
-      prompt_card: {
+      card_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         default: '<b> Let’s find out how big your monitor is! </b>'+
                   '<p>Please use any credit card that you have available.<br>' +
@@ -40,7 +40,15 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
                   '<p>If you do not have access to a real card <br>'+
                   'you can use a ruler to measure the image width to 3.37 inches or 85.6 mm.<br>'
       },
-      prompt_blindspot: {
+      card_button_prompt: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: 'Click here when the card has the right size!'
+      },
+      card_path: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: "img/card.png"
+      },
+      blindspot_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         default: '<b>Now, let’s quickly test how far away you are sitting.</b>'+
                   '<p>You might know that vision tests at a doctor’s practice often involve chinrests.<br>'+
@@ -55,9 +63,18 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
                   'will disappear as it moves from right to left. Press the “Space” key as soon as the ball disappears from your eye sight.</li>'+
                   '</div><br>'
       },
-      card_path: {
+      blindspot_start_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
-        default: "img/card.png"
+        default: 'Start'
+      },
+      blindspot_done_prompt: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: 'Done'
+      },
+      viewing_distance_report: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: 'Estimated viewing distance (cm):',
+        description: 'If "none" is given, viewing distance will not be reported to the participant'
       }
     }
   }
@@ -81,39 +98,43 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-    try {
+    //try {
       if ( !( trial.blindspot_reps > 0 ) && ( (trial.resize_units == "deg" ) || (trial.resize_units == "degrees" ) ) ) {
         throw Error("Blindspot repetitions set to 0, so resizing to degrees of visual angle is not possible!")
       } else {
         const start_time = performance.now();
 
-        if ( trial.blindspot_reps > 0 ) {
-          button_str = '<button id=blind_spot class="btn btn-primary">'
-        } else {
+        let button_str = '<button id=blind_spot class="btn btn-primary">'
+        if (!( trial.blindspot_reps > 0 )) {
           button_str = '<button id=proceed class="btn btn-primary">'
         }
 
-        pagesize_content = 
+        let report_str = ''
+        if ( !(trial.viewing_distance_report == "none" ) ) {
+          report_str = '<div id="info" style="visibility:hidden">'+
+                        '<b id="info-h">' + trial.viewing_distance_report + ' </b>'+
+                        '</div>'
+        }
+
+        const pagesize_content = 
           '<div id="page-size"><br><br>'+
-            trial.prompt_card +
+            trial.card_prompt +
             '<div id="container">'+
               '<div id="slider"></div><br>'+
               '<img id="card" src="' + trial.card_path + '" style="width: 50%">'+
-              '<br><br>' + button_str + 'Click here when you are done!</button>'+
+              '<br><br>' + button_str + trial.card_button_prompt + '</button>'+
             '</div>'+
           '</div>'
 
-        blindspot_content = 
+        const blindspot_content = 
           '<div id="blind-spot" style="visibility: hidden">' +
-            trial.prompt_blindspot +
+            trial.blindspot_prompt +
             '<p>Please do it <b>' + trial.blindspot_reps + '</b> times. Keep your right eye closed and hit the “Space” key fast!</p><br>' +
             '<div id="svgDiv" style="width:1000px;height:200px;"></div>'+
-            '<button class="btn btn-primary" id="start_ball">Start</button>'+
-            '<button class="btn btn-primary" id="proceed" style="display:none">Proceed</button><br>'+
+            '<button class="btn btn-primary" id="start_ball">' + trial.blindspot_start_prompt + '</button>'+
+            '<button class="btn btn-primary" id="proceed" style="display:none">' + trial.blindspot_done_prompt + '</button><br>'+
             '<b>Hit space <div id="click" style="display:inline; color: red">' + trial.blindspot_reps + '</div> more times!<b><br>'+
-            '<div id="info" style="visibility:hidden">'+
-              '<b id="info-h">Estimated viewing distance (cm): </b>'+
-            '</div>'+
+            report_str+
           '</div>'
         
         display_element.innerHTML = 
@@ -182,9 +203,9 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
           jsPsych.pluginAPI.cancelAllKeyboardResponses();
         })
       }
-    } catch (e) {
+    /*} catch (e) {
       console.error(e)
-    }
+    }*/
   };
 
   (function ( distanceSetup, $ ) {  // jQuery short-hand for $(document).ready(function() { ... });
