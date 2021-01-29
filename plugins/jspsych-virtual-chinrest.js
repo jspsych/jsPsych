@@ -81,8 +81,7 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-
-   try {
+    try {
       if ( !( trial.blindspot_reps > 0 ) && ( (trial.resize_units == "deg" ) || (trial.resize_units == "degrees" ) ) ) {
         throw Error("Blindspot repetitions set to 0, so resizing to degrees of visual angle is not possible!")
       } else {
@@ -186,11 +185,7 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
     } catch (e) {
       console.error(e)
     }
-
-  }
-
-  function end_trial(){
-  }
+  };
 
   (function ( distanceSetup, $ ) {  // jQuery short-hand for $(document).ready(function() { ... });
 
@@ -312,7 +307,7 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
           ball.stop();
           animateBall();
       }
-  }
+  };
 
   //helper function for radians
   // Converts from degrees to radians.
