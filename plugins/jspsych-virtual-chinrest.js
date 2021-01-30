@@ -61,7 +61,7 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
                   '<li>Using your left eye, focus on the black square.</li>'+
                   '<li>Click the button below to start the animation of the red ball. The <b style="color: red">red ball </b>'+
                   'will disappear as it moves from right to left. Press the “Space” key as soon as the ball disappears from your eye sight.</li>'+
-                  '</div><br>'
+                  '</div><br> Keep your right eye closed and hit the “Space” key fast!</p><br>'
       },
       blindspot_start_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -70,6 +70,10 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
       blindspot_done_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         default: 'Done'
+      },
+      blindspot_measurements_prompt: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: 'Remaining measurements: '
       },
       viewing_distance_report: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -129,11 +133,10 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
         const blindspot_content = 
           '<div id="blind-spot" style="visibility: hidden">' +
             trial.blindspot_prompt +
-            '<p>Please do it <b>' + trial.blindspot_reps + '</b> times. Keep your right eye closed and hit the “Space” key fast!</p><br>' +
             '<div id="svgDiv" style="width:1000px;height:200px;"></div>'+
             '<button class="btn btn-primary" id="start_ball">' + trial.blindspot_start_prompt + '</button>'+
             '<button class="btn btn-primary" id="proceed" style="display:none">' + trial.blindspot_done_prompt + '</button><br>'+
-            '<b>Hit space <div id="click" style="display:inline; color: red">' + trial.blindspot_reps + '</div> more times!<b><br>'+
+            `<b> ${trial.blindspot_measurements_prompt} <div id="click" style="display:inline; color: red"> ${trial.blindspot_reps} </div> <b><br>` +
             report_str+
           '</div>'
         
