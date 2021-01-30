@@ -54,11 +54,7 @@ window.jsPsych = (function() {
   //
 
   core.init = function(options) {
-    
-    // this is wrapped in a function to delay execution until the document is fully loaded
     function init() {
-
-      // detect some common errors and log to console //// 
       if(typeof options.timeline === 'undefined'){
         console.error('No timeline declared in jsPsych.init. Cannot start experiment.')
       }
@@ -114,8 +110,7 @@ window.jsPsych = (function() {
         'default_iti': 0,
         'minimum_valid_rt': 0,
         'experiment_width': null,
-        'override_safe_mode': false,
-        'extensions': []
+        'override_safe_mode': false
       };
 
       // detect whether page is running in browser as a local file, and if so, disable web audio and video preloading to prevent CORS issues
@@ -199,15 +194,6 @@ window.jsPsych = (function() {
       // add event for closing window
       window.addEventListener('beforeunload', opts.on_close);
 
-      // run the .initialize method of any extensions that are in use
-      for(var i=0; i<opts.extensions.length; i++){
-        var ext_params = opts.extensions[i].params;
-        if(!ext_params){
-          ext_params = {}
-        }
-        jsPsych.extensions[opts.extensions[i].type].initialize(ext_params);
-      }
-
       // check exclusions before continuing
       checkExclusions(opts.exclusions,
         function(){
@@ -286,14 +272,6 @@ window.jsPsych = (function() {
     // for trial-level callbacks, we just want to pass in a reference to the values
     // of the DataCollection, for easy access and editing.
     var trial_data_values = trial_data.values()[0];
-
-    // handle extension callbacks
-    if(Array.isArray(current_trial.extensions)){
-      for(var i=0; i<current_trial.extensions.length; i++){
-        var ext_data_values = jsPsych.extensions[current_trial.extensions[i]].on_finish();
-        Object.assign(trial_data_values, ext_data_values);
-      }
-    }
 
     // handle callback at plugin level
     if (typeof current_trial.on_finish === 'function') {
@@ -901,13 +879,6 @@ window.jsPsych = (function() {
       trial.on_start(trial);
     }
 
-    // call any on_start functions for extensions
-    if(Array.isArray(trial.extensions)){
-      for(var i=0; i<trial.extensions.length; i++){
-        jsPsych.extensions[trial.extensions[i]].on_start();
-      }
-    }
-
     // apply the focus to the element containing the experiment.
     DOM_container.focus();
 
@@ -920,13 +891,6 @@ window.jsPsych = (function() {
     // call trial specific loaded callback if it exists
     if(typeof trial.on_load == 'function'){
       trial.on_load();
-    }
-
-    // call any on_load functions for extensions
-    if(Array.isArray(trial.extensions)){
-      for(var i=0; i<trial.extensions.length; i++){
-        jsPsych.extensions[trial.extensions[i]].on_load();
-      }
     }
   }
 
@@ -1157,10 +1121,6 @@ jsPsych.plugins = (function() {
   }
 
   return module;
-})();
-
-jsPsych.extensions = (function(){
-  return {};
 })();
 
 jsPsych.data = (function() {
