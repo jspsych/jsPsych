@@ -7,367 +7,817 @@ describe('preload plugin', function () {
     require(root + 'plugins/jspsych-preload.js');
   });
 
+  afterEach(function() {
+    jest.clearAllMocks();
+  })
+
   test('loads correctly', function () {
     expect(typeof window.jsPsych.plugins['preload']).not.toBe('undefined');
   });
 
-  test('auto_preload method works with simple timeline', function () {
+  describe('auto_preload', function() {
 
-    require(root + 'plugins/jspsych-image-keyboard-response.js');
+    test('auto_preload method works with simple timeline and image stimulus', function () {
 
-    jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb) => { cb(); });
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
 
-    var preload = {
-      type: 'preload',
-      auto_preload: true
-    }
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
 
-    var trial = {
-      type: 'image-keyboard-response',
-      stimulus: 'img/foo.png',
-      render_on_canvas: false
-    }
+      var preload = {
+        type: 'preload',
+        auto_preload: true
+      }
 
-    jsPsych.init({
-      timeline: [preload, trial]
+      var trial = {
+        type: 'image-keyboard-response',
+        stimulus: 'img/foo.png',
+        render_on_canvas: false
+      }
+
+      jsPsych.init({
+        timeline: [preload, trial]
+      });
+      
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
+      
     });
-    
-    expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
-  });
 
-  test('auto_preload method works with nested timeline', function () {
+    test('auto_preload method works with simple timeline and audio stimulus', function () {
 
-    require(root + 'plugins/jspsych-image-keyboard-response.js');
+      require(root + 'plugins/jspsych-audio-keyboard-response.js');
 
-    jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb) => { cb(); });
+      jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb) => { cb(); });
 
-    var preload = {
-      type: 'preload',
-      auto_preload: true
-    }
+      var preload = {
+        type: 'preload',
+        auto_preload: true
+      }
 
-    var trial = {
-      type: 'image-keyboard-response',
-      render_on_canvas: false,
-      timeline: [
-        {stimulus: 'img/foo.png'}
-      ]
-    }
+      var trial = {
+        type: 'audio-keyboard-response',
+        stimulus: 'sound/foo.mp3',
+      }
 
-    jsPsych.init({
-      timeline: [preload, trial]
+      jsPsych.init({
+        timeline: [preload, trial]
+      });
+      
+      expect(jsPsych.pluginAPI.preloadAudio.mock.calls[0][0]).toStrictEqual(['sound/foo.mp3']);
+      
     });
-    
-    expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
-  });
 
-  test('auto_preload method works with looping timeline', function () {
+    test('auto_preload method works with simple timeline and video stimulus', function () {
 
-    require(root + 'plugins/jspsych-image-keyboard-response.js');
+      require(root + 'plugins/jspsych-video-keyboard-response.js');
 
-    jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb) => { cb(); });
+      jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb) => { cb(); });
 
-    var preload = {
-      type: 'preload',
-      auto_preload: true
-    }
+      var preload = {
+        type: 'preload',
+        auto_preload: true
+      }
 
-    var trial = {
-      type: 'image-keyboard-response',
-      stimulus: 'img/foo.png',
-      render_on_canvas: false
-    }
+      var trial = {
+        type: 'video-keyboard-response',
+        stimulus: 'video/foo.mp4'
+      }
 
-    var count = 0;
-    var loop = {
-      timeline: [trial],
-      loop_function: function() {
-        if (count == 0) {
-          return true;
-        } else {
-          return false;
+      jsPsych.init({
+        timeline: [preload, trial]
+      });
+      
+      expect(jsPsych.pluginAPI.preloadVideo.mock.calls[0][0]).toStrictEqual(['video/foo.mp4']);
+      
+    });
+
+    test('auto_preload method works with nested timeline', function () {
+
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
+
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
+
+      var preload = {
+        type: 'preload',
+        auto_preload: true
+      }
+
+      var trial = {
+        type: 'image-keyboard-response',
+        render_on_canvas: false,
+        timeline: [
+          {stimulus: 'img/foo.png'}
+        ]
+      }
+
+      jsPsych.init({
+        timeline: [preload, trial]
+      });
+      
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
+      
+    });
+
+    test('auto_preload method works with looping timeline', function () {
+
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
+
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
+
+      var preload = {
+        type: 'preload',
+        auto_preload: true
+      }
+
+      var trial = {
+        type: 'image-keyboard-response',
+        stimulus: 'img/foo.png',
+        render_on_canvas: false
+      }
+
+      var count = 0;
+      var loop = {
+        timeline: [trial],
+        loop_function: function() {
+          if (count == 0) {
+            return true;
+          } else {
+            return false;
+          }
         }
       }
-    }
 
-    jsPsych.init({
-      timeline: [preload, loop]
+      jsPsych.init({
+        timeline: [preload, loop]
+      });
+      
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
+      
     });
-    
-    expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
-  });
 
-  test('auto_preload method works with conditional timeline', function () {
+    test('auto_preload method works with conditional timeline', function () {
 
-    require(root + 'plugins/jspsych-image-keyboard-response.js');
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
 
-    jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb) => { cb(); });
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
 
-    var preload = {
-      type: 'preload',
-      auto_preload: true
-    }
+      var preload = {
+        type: 'preload',
+        auto_preload: true
+      }
 
-    var trial = {
-      type: 'image-keyboard-response',
-      stimulus: 'img/foo.png',
-      render_on_canvas: false
-    }
+      var trial = {
+        type: 'image-keyboard-response',
+        stimulus: 'img/foo.png',
+        render_on_canvas: false
+      }
 
-    var count = 0;
-    var conditional = {
-      timeline: [trial],
-      conditional_function: function() {
-        if (count == 0) {
-          return true;
-        } else {
-          return false;
+      var count = 0;
+      var conditional = {
+        timeline: [trial],
+        conditional_function: function() {
+          if (count == 0) {
+            return true;
+          } else {
+            return false;
+          }
         }
       }
-    }
 
-    jsPsych.init({
-      timeline: [preload, conditional]
+      jsPsych.init({
+        timeline: [preload, conditional]
+      });
+      
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
+      
     });
-    
-    expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
+
+    test('auto_preload method works with timeline variables when stim is statically defined in trial object', function () {
+
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
+
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
+
+      var preload = {
+        type: 'preload',
+        auto_preload: true
+      }
+
+      var trial = {
+        type: 'image-keyboard-response',
+        stimulus: 'img/foo.png',
+        render_on_canvas: false,
+        data: jsPsych.timelineVariable('data')
+      }
+
+      var trial_procedure = {
+        timeline: [trial],
+        timeline_variables: [
+          {data: {trial: 1}},
+          {data: {trial: 2}},
+          {data: {trial: 3}}
+        ]
+      }
+
+      jsPsych.init({
+        timeline: [preload, trial_procedure]
+      });
+      
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
+      
+    });
+
   });
 
-  test('auto_preload method works with timeline variables when stim is statically defined in trial object', function () {
+  describe('trials parameter', function() {
 
-    require(root + 'plugins/jspsych-image-keyboard-response.js');
+    test('trials parameter works with simple timeline', function () {
 
-    jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb) => { cb(); });
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
 
-    var preload = {
-      type: 'preload',
-      auto_preload: true
-    }
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
 
-    var trial = {
-      type: 'image-keyboard-response',
-      stimulus: 'img/foo.png',
-      render_on_canvas: false,
-      data: jsPsych.timelineVariable('data')
-    }
+      var trial = {
+        type: 'image-keyboard-response',
+        stimulus: 'img/foo.png',
+        render_on_canvas: false
+      }
 
-    var trial_procedure = {
-      timeline: [trial],
-      timeline_variables: [
-        {data: {trial: 1}},
-        {data: {trial: 2}},
-        {data: {trial: 3}}
-      ]
-    }
+      var preload = {
+        type: 'preload',
+        trials: [trial]
+      }
 
-    jsPsych.init({
-      timeline: [preload, trial_procedure]
+      jsPsych.init({
+        timeline: [preload]
+      });
+      
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
+      
     });
-    
-    expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
-  });
 
-  test('trials parameter works with simple timeline', function () {
+    test('trials parameter works with looping timeline', function () {
 
-    require(root + 'plugins/jspsych-image-keyboard-response.js');
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
 
-    jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb) => { cb(); });
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
 
-    var trial = {
-      type: 'image-keyboard-response',
-      stimulus: 'img/foo.png',
-      render_on_canvas: false
-    }
+      var trial = {
+        type: 'image-keyboard-response',
+        stimulus: 'img/foo.png',
+        render_on_canvas: false
+      }
 
-    var preload = {
-      type: 'preload',
-      trials: [trial]
-    }
-
-    jsPsych.init({
-      timeline: [preload]
-    });
-    
-    expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
-  });
-
-  test('trials parameter works with looping timeline', function () {
-
-    require(root + 'plugins/jspsych-image-keyboard-response.js');
-
-    jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb) => { cb(); });
-
-    var trial = {
-      type: 'image-keyboard-response',
-      stimulus: 'img/foo.png',
-      render_on_canvas: false
-    }
-
-    var count = 0;
-    var loop = {
-      timeline: [trial],
-      loop_function: function() {
-        if (count == 0) {
-          return true;
-        } else {
-          return false;
+      var count = 0;
+      var loop = {
+        timeline: [trial],
+        loop_function: function() {
+          if (count == 0) {
+            return true;
+          } else {
+            return false;
+          }
         }
       }
-    }
 
-    var preload = {
-      type: 'preload',
-      trials: [loop]
-    }
+      var preload = {
+        type: 'preload',
+        trials: [loop]
+      }
 
-    jsPsych.init({
-      timeline: [preload]
+      jsPsych.init({
+        timeline: [preload]
+      });
+      
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
+      
     });
-    
-    expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
-  });
 
-  test('trials parameter works with conditional timeline', function () {
+    test('trials parameter works with conditional timeline', function () {
 
-    require(root + 'plugins/jspsych-image-keyboard-response.js');
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
 
-    jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb) => { cb(); });
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
 
-    var trial = {
-      type: 'image-keyboard-response',
-      stimulus: 'img/foo.png',
-      render_on_canvas: false
-    }
+      var trial = {
+        type: 'image-keyboard-response',
+        stimulus: 'img/foo.png',
+        render_on_canvas: false
+      }
 
-    var count = 0;
-    var conditional = {
-      timeline: [trial],
-      conditional_function: function() {
-        if (count == 0) {
-          return true;
-        } else {
-          return false;
+      var count = 0;
+      var conditional = {
+        timeline: [trial],
+        conditional_function: function() {
+          if (count == 0) {
+            return true;
+          } else {
+            return false;
+          }
         }
       }
-    }
 
-    var preload = {
-      type: 'preload',
-      trials: [conditional]
-    }
+      var preload = {
+        type: 'preload',
+        trials: [conditional]
+      }
 
-    jsPsych.init({
-      timeline: [preload]
+      jsPsych.init({
+        timeline: [preload]
+      });
+      
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
+      
     });
-    
-    expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
-  });
 
-  test('trials parameter works with timeline variables when stim is statically defined in trial object', function () {
+    test('trials parameter works with timeline variables when stim is statically defined in trial object', function () {
 
-    require(root + 'plugins/jspsych-image-keyboard-response.js');
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
 
-    jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb) => { cb(); });
-    jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb) => { cb(); });
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
 
-    var trial = {
-      type: 'image-keyboard-response',
-      stimulus: 'img/foo.png',
-      render_on_canvas: false,
-      data: jsPsych.timelineVariable('data')
-    }
+      var trial = {
+        type: 'image-keyboard-response',
+        stimulus: 'img/foo.png',
+        render_on_canvas: false,
+        data: jsPsych.timelineVariable('data')
+      }
 
-    var trial_procedure = {
-      timeline: [trial],
-      timeline_variables: [
-        {data: {trial: 1}},
-        {data: {trial: 2}},
-        {data: {trial: 3}}
-      ]
-    }
+      var trial_procedure = {
+        timeline: [trial],
+        timeline_variables: [
+          {data: {trial: 1}},
+          {data: {trial: 2}},
+          {data: {trial: 3}}
+        ]
+      }
 
-    var preload = {
-      type: 'preload',
-      trials: [trial_procedure]
-    }
+      var preload = {
+        type: 'preload',
+        trials: [trial_procedure]
+      }
 
-    jsPsych.init({
-      timeline: [preload]
+      jsPsych.init({
+        timeline: [preload]
+      });
+      
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
+      
     });
+
+  });
+
+  describe('calls to pluginAPI preload functions', function() {
+
+    test('auto_preload, trials, and manual preload array parameters can be used together', function () {
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
+
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
+
+      var trial_1 = {
+        type: 'image-keyboard-response',
+        stimulus: 'img/foo.png',
+        render_on_canvas: false
+      }
+
+      var trial_2 = {
+        type: 'image-keyboard-response',
+        stimulus: 'img/bar.png',
+        render_on_canvas: false
+      }
+
+      var preload = {
+        type: 'preload',
+        auto_preload: true,
+        trials: [trial_2],
+        images: ['img/fizz.png']
+      }
+
+      jsPsych.init({
+        timeline: [preload, trial_1]
+      });
+      
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls.length).toBe(1);
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0].length).toBe(3); 
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toContain('img/foo.png');
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toContain('img/bar.png');
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toContain('img/fizz.png');
+      
+    });
+
+    test('plugin only attempts to load duplicate files once', function () {
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
+
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => { cb(); });
+
+      var trial_1 = {
+        type: 'image-keyboard-response',
+        stimulus: 'img/foo.png',
+        render_on_canvas: false
+      }
+
+      var trial_2 = {
+        type: 'image-keyboard-response',
+        stimulus: 'img/foo.png',
+        render_on_canvas: false
+      }
+
+      var preload = {
+        type: 'preload',
+        trials: [trial_2],
+        images: ['img/foo.png']
+      }
+
+      jsPsych.init({
+        timeline: [preload, trial_1]
+      });
+      
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls.length).toBe(1);
+      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
+      
+    });
+
+  });
+
+  describe('continue_after_error and error messages', function() {
+
+    test('experiment continues when image loads successfully', function() {
+
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
+
+      var preload = {
+        type: 'preload',
+        auto_preload: true,
+        error_message: 'foo',
+        max_load_time: 100
+      }
+
+      var trial = {
+        type: 'image-keyboard-response',
+        stimulus: '../media/blue.png',
+        render_on_canvas: false
+      }
+
+      jsPsych.init({
+        timeline: [preload, trial]
+      });
+
+      setTimeout(function() {
+        expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src=\"../media/blue.png\" id=\"jspsych-image-keyboard-response-stimulus\"');
+      }, 200);
+
+    });
+
+    test('error_message is shown when continue_after_error is false and files fail', function() {
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
+
+      var preload = {
+        type: 'preload',
+        auto_preload: true,
+        error_message: 'foo',
+        max_load_time: 100,
+        on_error: function(e) {
+          expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+        }
+      }
+
+      var trial = {
+        type: 'image-keyboard-response',
+        stimulus: 'img/bar.png',
+        render_on_canvas: false
+      }
+
+      jsPsych.init({
+        timeline: [preload, trial]
+      });
+
+    });
+
+    test('error_message is shown when continue_after_error is false and loading times out', function() {
+
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
+
+      var mock_fn = jest.fn(function(x) {return x;});
+
+      var preload = {
+        type: 'preload',
+        auto_preload: true,
+        error_message: 'foo',
+        max_load_time: 0,
+        on_error: function(e) {
+          mock_fun(e);
+        }
+      }
+
+      var trial = {
+        type: 'image-keyboard-response',
+        stimulus: '../media/blue.png',
+        render_on_canvas: false
+      }
+
+      jsPsych.init({
+        timeline: [preload, trial]
+      });
+      
+      setTimeout(function() {
+        expect(mock_fn).toHaveBeenCalledWith('timeout');
+        expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+      }, 200);
+
+    });
+
+    test('experiment continues when continue_after_error is true and files fail', function() {
+
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
+
+      var mock_fn = jest.fn(function(x) {return x;});
+
+      var preload = {
+        type: 'preload',
+        images: ['img/foo.png'],
+        error_message: 'bar',
+        max_load_time: null,
+        continue_after_error: true,
+        on_error: function(e) {
+          mock_fn('loading failed');
+        }
+      }
+
+      var trial = {
+        type: 'image-keyboard-response',
+        stimulus: '../media/blue.png',
+        render_on_canvas: false
+      }
+
+      jsPsych.init({
+        timeline: [preload, trial]
+      });
+
+      setTimeout(function() {    
+        expect(mock_fn).toHaveBeenCalledWith('loading failed');
+        expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src=\"../media/blue.png\" id=\"jspsych-image-keyboard-response-stimulus\"');
+      }, 200);
+
+    });
+
+    test('experiment continues when continue_after_error is true and loading times out', function() {
+
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
+
+      var mock_fn = jest.fn(function(x) {return x;});
+
+      var preload = {
+        type: 'preload',
+        auto_preload: true,
+        error_message: 'bar',
+        max_load_time: 0,
+        continue_after_error: true,
+        on_error: function(e) {
+          mock_fn(e);
+        }
+      }
+
+      var trial = {
+        type: 'image-keyboard-response',
+        stimulus: '../media/blue.png',
+        render_on_canvas: false
+      }
+
+      jsPsych.init({
+        timeline: [preload, trial]
+      });
+
+      setTimeout(function() {
+        expect(mock_fn).toHaveBeenCalledWith('timeout');
+        expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src=\"../media/blue.png\" id=\"jspsych-image-keyboard-response-stimulus\"');
+      }, 200);
+
+    });
+
+    test('detailed error message is shown when continue_after_error is false and show_detailed_errors is true', function() {
+
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
+
+      var mock_fn = jest.fn(function(x) {return x;});
+
+      var preload = {
+        type: 'preload',
+        images: ['img/foo.png'],
+        error_message: 'bar',
+        show_detailed_errors: true,
+        on_error: function(e) {
+          mock_fn('loading failed');
+        }
+      }
+
+      jsPsych.init({
+        timeline: [preload]
+      });
+
+      setTimeout(function() {
+        expect(mock_fn).toHaveBeenCalledWith('loading failed');
+        expect(jsPsych.getDisplayElement().innerHTML).toMatch('Error details');
+      }, 200);
+
+    });
+
+  });
+
+  describe('display while loading', function() {
+
+    test('custom loading message is shown above progress bar if specified', function() {
+
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
+
+      var preload = {
+        type: 'preload',
+        images: ['img/foo.png'],
+        message: 'bar',
+        max_load_time: 100
+      }
+
+      jsPsych.init({
+        timeline: [preload]
+      });
+
+      expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
+      expect(jsPsych.getDisplayElement().innerHTML).toMatch('<div id=\"jspsych-loading-progress-bar-container');
+
+    });
+
+    test('progress bar is shown without message by default', function() {
+
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
+
+      var preload = {
+        type: 'preload',
+        images: ['img/foo.png'],
+        max_load_time: 100
+      }
+
+      jsPsych.init({
+        timeline: [preload]
+      });
+
+      expect(jsPsych.getDisplayElement().innerHTML).toMatch('<div id=\"jspsych-loading-progress-bar-container');
     
-    expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(['img/foo.png']);
-  });
+    });
 
-  test('auto_preload, trials, and manual preload array parameters can be used together', function () {
+    test('progress bar is not shown if show_progress_bar is false', function() {
 
-  });
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
 
-  test('plugin only attempts to load duplicate files once', function () {
+      var preload = {
+        type: 'preload',
+        images: ['img/foo.png'],
+        show_progress_bar: false,
+        max_load_time: 100
+      }
 
-  });
+      jsPsych.init({
+        timeline: [preload]
+      });
 
-  test('error_message is shown when continue_after_error is false and files fail', function() {
+      expect(jsPsych.getDisplayElement().innerHTML).not.toMatch('<div id=\"jspsych-loading-progress-bar-container');
+      expect(jsPsych.getDisplayElement().innerHTML).toMatch('');
 
-  });
-
-  test('error_message is shown when continue_after_error is false and loading times out', function() {
-
-  });
-
-  test('experiment continues when continue_after_error is true and files fail', function() {
-
-  });
-
-  test('experiment continues when continue_after_error is true and loading times out', function() {
+    });
 
   });
 
-  test('detailed error message is shown when continue_after_error is false and show_detailed_errors is true', function() {
+  describe('on_success and on_error parameters', function() {
 
-  });
+    test('on_error/on_success callbacks are called during preload trial after each loading success/error', function() {
 
-  test('custom loading message is shown if specified', function() {
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
 
-  });
+      var mock_fn = jest.fn(function(x) {return x;});
 
-  test('progress bar is shown without message by default', function() {
+      var preload_1 = {
+        type: 'preload',
+        images: ['img/foo.png'],
+        audio: ['audio/bar.mp3'],
+        video: ['video/buzz.mp4'],
+        continue_after_error: true,
+        on_error: function(e) {
+          mock_fn('loading failed');
+        },
+        on_success: function(e) {
+          mock_fn('loading succeeded');
+        }
+      }
 
-  });
+      var preload_2 = {
+        type: 'preload',
+        images: ['../media/blue.png'],
+        max_load_time: 100,
+        on_error: function(e) {
+          mock_fn('loading failed');
+        },
+        on_success: function(e) {
+          mock_fn('loading succeeded');
+        }
+      }
 
-  test('progress bar is not shown if show_progress_bar is false', function() {
+      jsPsych.init({
+        timeline: [preload_1, preload_2]
+      });
 
-  });
+      setTimeout(function() {
+        expect(mock_fn.mock.calls[0][0]).toBe('loading failed');
+        expect(mock_fn.mock.calls[1][0]).toBe('loading failed');
+        expect(mock_fn.mock.calls[2][0]).toBe('loading failed');
+        expect(mock_fn.mock.calls[3][0]).toBe('loading succeeded');
+      }, 200);
 
-  test('on_error callback parameter is called after loading error', function() {
+    });
 
-  });
+    test('on_error/on_success callbacks are not called after loading times out', function() {
 
-  test('on_success callback parameter is called after loading success', function() {
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
 
-  });
+      var mock_fn = jest.fn(function(x) {return x;});
+      var cancel_preload_spy = jest.spyOn(jsPsych.pluginAPI, 'cancelPreloads');
 
-  test('on_error callback parameter is not called after loading times out', function() {
+      var preload = {
+        type: 'preload',
+        images: ['img/foo.png', '../media/blue.png'],
+        audio: ['audio/bar.mp3'],
+        video: ['video/buzz.mp4'],
+        continue_after_error: true,
+        max_load_time: 0,
+        on_error: function(e) {
+          if (e == "timeout") {
+            mock_fn(e);
+          } else {
+            mock_fn('loading failed');
+          }      
+        },
+        on_success: function(e) {
+          mock_fn('loading succeeded');
+        }
+      }
 
-  });
+      jsPsych.init({
+        timeline: [preload]
+      });
 
-  test('on_success callback parameter is not called after loading times out', function() {
+      setTimeout(function() {
+        expect(mock_fn).toHaveBeenCalledWith('timeout');
+        expect(mock_fn).toHaveBeenLastCalledWith('timeout');
+        expect(cancel_preload_spy).toHaveBeenCalled();
+      }, 200);
+
+    });
+
+    test('experiment stops with default error_message and on_error/on_success callbacks are not called after preload trial ends with error', function() {
+
+      require(root + 'plugins/jspsych-image-keyboard-response.js');
+
+      var mock_fn = jest.fn(function(x) {return x;});
+      var cancel_preload_spy = jest.spyOn(jsPsych.pluginAPI,'cancelPreloads');
+
+      var preload_1 = {
+        type: 'preload',
+        images: ['img/foo.png'],
+        audio: ['audio/bar.mp3'],
+        video: ['video/buzz.mp4'],
+        max_load_time: 0,
+        on_error: function(e) {
+          if (e == 'timeout') {
+            mock_fn(e);
+          } else {
+            mock_fn('loading failed');
+          }
+        },
+        on_success: function(e) {
+          mock_fn('loading succeeded');
+        }
+      }
+
+      var preload_2 = {
+        type: 'preload',
+        images: ['../media/blue.png'],
+        max_load_time: 100,
+        on_error: function(e) {
+          mock_fn('loading failed');
+        },
+        on_success: function(e) {
+          mock_fn('loading succeeded');
+        }
+      }
+
+      jsPsych.init({
+        timeline: [preload_1, preload_2]
+      });
+
+      setTimeout(function() {
+        expect(mock_fn).toHaveBeenCalledWith('timeout');
+        expect(mock_fn).toHaveBeenLastCalledWith('timeout');
+        expect(jsPsych.getDisplayElement().innerHTML).toMatch('The experiment failed to load.');
+        expect(cancel_preload_spy).toHaveBeenCalled();
+      }, 200);
+
+    });
 
   });
 
