@@ -123,7 +123,7 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-    /*try {*/
+    try {
       if ( !( trial.blindspot_reps > 0 ) && ( (trial.resize_units == "deg" ) || (trial.resize_units == "degrees" ) ) ) {
         throw Error("Blindspot repetitions set to 0, so resizing to degrees of visual angle is not possible!")
       } else {
@@ -296,9 +296,9 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
           jsPsych.pluginAPI.cancelAllKeyboardResponses();
         })
       }
-    /*} catch (e) {
+    } catch (e) {
       console.error(e)
-    }*/
+    }
   };
 
   (function ( distanceSetup, $ ) {  // jQuery short-hand for $(document).ready(function() { ... });
