@@ -24,13 +24,12 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
         default: 100,
         description: 'After the scaling factor is applied, this many pixels will equal one unit of measurement.'
       },
-      blindspot_reps: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Blindspot measurement repetitions',
-        default: 5,
-        description: 'How many times to measure the blindspot location? If 0, blindspot will not detected and viewing distance not computed.'
+      mouse_adjustment: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Adjust Using Mouse?',
+        default: true
       },
-      card_prompt: {
+      adjustment_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         default: '<b> Let’s find out how big your monitor is! </b>'+
                   '<p>Please use any credit card that you have available.<br>' +
@@ -40,13 +39,37 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
                   '<p>If you do not have access to a real card <br>'+
                   'you can use a ruler to measure the image width to 3.37 inches or 85.6 mm.<br>'
       },
-      card_button_prompt: {
+      adjustment_button_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         default: 'Click here when the card has the right size!'
       },
-      card_path: {
+      item_path: {
         type: jsPsych.plugins.parameterType.STRING,
         default: "img/card.png"
+      },
+      item_height_mm: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Item height',
+        default: 53.98,
+        description: 'The height of the item to be measured.'
+      },
+      item_width_mm: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Item width',
+        default: 85.60,
+        description: 'The width of the item to be measured.'
+      },
+      item_init_size: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Initial Size',
+        default: 250,
+        description: 'The initial size of the card, in pixels, along the largest dimension.'
+      },
+      blindspot_reps: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Blindspot measurement repetitions',
+        default: 5,
+        description: 'How many times to measure the blindspot location? If 0, blindspot will not detected and viewing distance not computed.'
       },
       blindspot_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -92,9 +115,7 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
   screen_size_px.push('x')
   screen_size_px.push(h)
 
-  let trial_data = {
-    "card_width_mm":  85.60, //card dimension: 85.60 × 53.98 mm (3.370 × 2.125 in)
-  };
+  let trial_data = {} // declare trial data as empty so we have access to it across functions
 
   let config_data = {
     "ball_pos": [],
@@ -102,11 +123,16 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-    //try {
+    /*try {*/
       if ( !( trial.blindspot_reps > 0 ) && ( (trial.resize_units == "deg" ) || (trial.resize_units == "degrees" ) ) ) {
         throw Error("Blindspot repetitions set to 0, so resizing to degrees of visual angle is not possible!")
       } else {
         const start_time = performance.now();
+
+        trial_data = {
+          "item_width_mm": trial.item_width_mm,
+          "item_height_mm": trial.item_height_mm //card dimension: 85.60 × 53.98 mm (3.370 × 2.125 in)
+        };
 
         let button_str = '<button id=blind_spot class="btn btn-primary">'
         if (!( trial.blindspot_reps > 0 )) {
@@ -120,15 +146,38 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
                         '</div>'
         }
 
-        const pagesize_content = 
-          '<div id="page-size"><br><br>'+
-            trial.card_prompt +
+        let pagesize_content = '<div id="page-size"><br><br>' + trial.adjustment_prompt
+
+        // variables to determine div size
+        let aspect_ratio = 1
+        
+        if ( trial.mouse_adjustment ) {
+          aspect_ratio = trial.item_width_mm / trial.item_height_mm
+          const start_div_height = ((aspect_ratio < 1 ) ? trial.item_init_size : Math.round(trial.item_init_size / aspect_ratio));
+          const start_div_width = ((aspect_ratio < 1 ) ? Math.round(trial.item_init_size * aspect_ratio) : trial.item_init_size ); 
+          const adjust_size = Math.round(start_div_width*.1)
+          pagesize_content +=
+              '<br>' + button_str + trial.adjustment_button_prompt + '</button><br>' +
+              '<div id="item" style="border: none; '+
+                'height: '+ start_div_height+'px; width:'+start_div_width+'px; '+
+                'margin: 5px auto; background-color: none; position: relative; '+
+                'background-image: url(' + trial.item_path + '); '+
+                'background-size: 100% auto; background-repeat: no-repeat">'+
+                '<div id="jspsych-resize-handle" style="cursor: nwse-resize; '+
+                  'background-color: none; width: ' + adjust_size + 'px; height: ' + adjust_size + 'px; '+
+                  'border: 5px solid red; border-left: 0; border-top: 0; position: absolute; bottom: 0; right: 0;">'+
+                '</div>'+
+              '</div>'+
+            '</div>'
+        } else {
+          pagesize_content += 
             '<div id="container">'+
-              '<div id="slider"></div><br>'+
-              '<img id="card" src="' + trial.card_path + '" style="width: 50%">'+
-              '<br><br>' + button_str + trial.card_button_prompt + '</button>'+
-            '</div>'+
-          '</div>'
+                '<div id="slider"></div><br>'+
+                button_str + trial.adjustment_button_prompt + '</button><br><br>'+
+                '<img id="item" src="' + trial.item_path + '" style="width: 50%">'+
+              '</div>'+
+            '</div>'
+        }
 
         const blindspot_content = 
           '<div id="blind-spot" style="visibility: hidden">' +
@@ -146,8 +195,48 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
             blindspot_content +
           '</div>'
 
-        //Event listeners for buttons
+        // Event listeners for mouse-based resize
+        if ( trial.mouse_adjustment ) {
+          let dragging = false;
+          let origin_x, origin_y;
+          let cx, cy;
+          
+          const mouseupevent = function(e){
+            dragging = false;
+          }
+          display_element.addEventListener('mouseup', mouseupevent);
 
+          const mousedownevent = function(e){
+            e.preventDefault();
+            dragging = true;
+            origin_x = e.pageX;
+            origin_y = e.pageY;
+            cx = parseInt(scale_div.style.width);
+            cy = parseInt(scale_div.style.height);
+          }
+          display_element.querySelector('#jspsych-resize-handle').addEventListener('mousedown', mousedownevent);
+
+          const scale_div = display_element.querySelector('#item');
+
+          function resizeevent(e){
+            if(dragging){
+              let dx = (e.pageX - origin_x);
+              let dy = (e.pageY - origin_y);
+
+              if(Math.abs(dx) >= Math.abs(dy)){
+                scale_div.style.width = Math.round(Math.max(20, cx+dx*2)) + "px";
+                scale_div.style.height = Math.round(Math.max(20, cx+dx*2) / aspect_ratio ) + "px";
+              } else {
+                scale_div.style.height = Math.round(Math.max(20, cy+dy*2)) + "px";
+                scale_div.style.width = Math.round(aspect_ratio * Math.max(20, cy+dy*2)) + "px";
+              }
+            }
+          }
+
+          display_element.addEventListener('mousemove', resizeevent)
+        }
+
+        //Event listeners for buttons
         if ( trial.blindspot_reps > 0 ) {
           display_element.querySelector('#blind_spot').addEventListener('click', function(){    
             configureBlindSpot()
@@ -156,17 +245,18 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
             animateBall()
           })
         } else {
-          // run the two relevant functions to get card_width_mm and px2mm
-          distanceSetup.px2mm(getCardWidth())
+          // run the two relevant functions to get item_width_mm and px2mm
+          distanceSetup.px2mm(get_item_width())
         }
 
         display_element.querySelector('#proceed').addEventListener('click', function(){
+
           // finish trial
           trial_data.rt = performance.now() - start_time;
           display_element.innerHTML = '';
 
-          trial_data.card_width_deg = 2*(Math.atan((trial_data["card_width_mm"]/2)/trial_data["view_dist_mm"])) * 180/Math.PI
-          trial_data.px2deg = trial_data["card_width_px"] / trial_data.card_width_deg  // size of card in pixels divided by size of card in degrees of visual angle
+          trial_data.item_width_deg = 2*(Math.atan((trial_data["item_width_mm"]/2)/trial_data["view_dist_mm"])) * 180/Math.PI
+          trial_data.px2deg = trial_data["item_width_px"] / trial_data.item_width_deg  // size of item in pixels divided by size of item in degrees of visual angle
 
           let px2unit_scr = 0
           switch (trial.resize_units) {
@@ -187,10 +277,10 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
             // scale the window
             scale_factor = px2unit_scr / trial.pixels_per_unit;
             document.getElementById("jspsych-content").style.transform = "scale(" + scale_factor + ")";
-            // pixels have been scaled, so pixels per degree, pixels per mm and pixels per card_width needs to be updated
+            // pixels have been scaled, so pixels per degree, pixels per mm and pixels per item_width needs to be updated
             trial_data.px2deg = trial_data.px2deg / scale_factor
             trial_data.px2mm = trial_data.px2mm / scale_factor
-            trial_data.card_width_px = trial_data.card_width_px / scale_factor
+            trial_data.item_width_px = trial_data.item_width_px / scale_factor
             trial_data.scale_factor = scale_factor
           }
 
@@ -200,7 +290,7 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
           } else {
             // delete degree related properties
              delete trial_data.px2deg
-             delete trial_data.card_width_deg
+             delete trial_data.item_width_deg
           }
           jsPsych.finishTrial(trial_data);
           jsPsych.pluginAPI.cancelAllKeyboardResponses();
@@ -217,19 +307,18 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
           return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
       };
 
-      distanceSetup.px2mm = function(cardImageWidth) {
-          const cardWidth = 85.6; //card dimension: 85.60 × 53.98 mm (3.370 × 2.125 in)
-          var px2mm = cardImageWidth/cardWidth;
+      distanceSetup.px2mm = function(item_width_px) {
+          const px2mm = item_width_px/trial_data["item_width_mm"];
           trial_data["px2mm"] = distanceSetup.round(px2mm, 2);
           return px2mm; 
       };
 
   }( window.distanceSetup = window.distanceSetup || {}, jQuery))
 
-  function getCardWidth() {
-      var card_width_px = $('#card').width();
-      trial_data["card_width_px"] = distanceSetup.round(card_width_px,2);
-      return card_width_px
+  function get_item_width() {
+      const item_width_px = $('#item').width();
+      trial_data["item_width_px"] = distanceSetup.round(item_width_px,2);
+      return item_width_px
   }
 
   function configureBlindSpot() {
@@ -246,8 +335,8 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
 
   $(document).ready(function() {
       $( "#slider" ).on("slide", function (event, ui) {
-          var cardWidth = ui.value + "%";
-          $("#card").css({"width":cardWidth});
+          const item_width = ui.value + "%";
+          $("#item").css({"width":item_width});
       });
 
       $('#slider').on('slidechange', function(event, ui){
@@ -262,9 +351,8 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
   function drawBall(pos=180){
       // pos: define where the fixation square should be.
       var mySVG = SVG("svgDiv");
-      const cardWidthPx = getCardWidth()
-      const rectX = distanceSetup.px2mm(cardWidthPx)*pos;
-      
+      const item_width_px = get_item_width()
+      const rectX = distanceSetup.px2mm(item_width_px)*pos;
       const ballX = rectX*0.6 // define where the ball is
       var ball = mySVG.circle(30).move(ballX, 50).fill("#f00"); 
       window.ball = ball;
