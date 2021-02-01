@@ -145,7 +145,7 @@ Compares two keys to see if they are the same, ignoring differences in represent
 jsPsych.pluginAPI.compareKeys('a', 65);
 // returns true
 
-jsPsych.pluginAPI.convertKeyCharacterToKeyCode('space', 31)
+jsPsych.pluginAPI.compareKeys('space', 31)
 // returns false
 ```
 
