@@ -2,9 +2,11 @@
 
 This plugin consists in two parts:
 
-To first calculate a participant’s display, participants are asked to place a credit card-sized card on the screen and adjust the slider on the screen to fit the card. This allows the researchers to calculate the pixel density on the monitor.
+To first calculate a participant’s display, participants are asked to place a credit card-sized card on the screen and adjust the slider on the screen to fit the card. This allows the researchers to calculate the pixel density on the monitor. 
 
 To measure the user’s distance from their monitor, there is also a blind spot task. Participants are asked to focus on a black square on the screen with their right eye closed, while a red dot repeatedly sweeps from right to left. They must hit the spacebar on their keyboards whenever it appears that the red dot has disappeared. This part allows researchers to determine the distance between the center of the black square and the center of the red dot when it disappears from eyesight and estimate how far the participant is from the monitor.
+
+Also, this plugin merge the functionalities of former `jspsych-resize`. The screen resize it's optional, based on `resize_units` parameter. If `"none"`, no resize will be done.
 
 
 We would appreciate it if you cited this paper when you use the virtual-chinrest plugin: 
@@ -39,6 +41,8 @@ viewing_distance_report | string  |'Estimated viewing distance (cm):' |  Estimat
 ## Data Generated
 
 In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
+
+*Note: The deg data are **only** returned if viewing distance is estimated with the blindspot method (px2deg, win_height_deg, win_width_deg, item_width_deg).*
 
 |Name|Type|Value|
 |----|----|-----|
