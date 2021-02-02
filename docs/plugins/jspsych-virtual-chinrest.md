@@ -6,7 +6,7 @@ To first calculate a participant’s display, participants are asked to place a 
 
 To measure the user’s distance from their monitor, there is also a blind spot task. Participants are asked to focus on a black square on the screen with their right eye closed, while a red dot repeatedly sweeps from right to left. They must hit the spacebar on their keyboards whenever it appears that the red dot has disappeared. This part allows researchers to determine the distance between the center of the black square and the center of the red dot when it disappears from eyesight and estimate how far the participant is from the monitor.
 
-Also, this plugin merge the functionalities of former `jspsych-resize`. The screen resize it's optional, based on `resize_units` parameter. If `"none"`, no resize will be done.
+Also, this plugin merge the functionalities of former `jspsych-resize`. The screen resize or user’s distance measurement are optional, based on `resize_units` and `blindspot_reps` parameters, respectively.
 
 
 We would appreciate it if you cited this paper when you use the virtual-chinrest plugin: 
