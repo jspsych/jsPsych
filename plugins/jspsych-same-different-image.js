@@ -35,13 +35,13 @@ jsPsych.plugins['same-different-image'] = (function() {
       same_key: {
         type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Same key',
-        default: 'Q',
+        default: 'q',
         description: ''
       },
       different_key: {
         type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Different key',
-        default: 'P',
+        default: 'p',
         description: 'The key that subjects should press to indicate that the two stimuli are the same.'
       },
       first_stim_duration: {
