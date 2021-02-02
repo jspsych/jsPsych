@@ -37,11 +37,13 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
                   'your drivers license or anything else of the same format.<br>'+
                   '<b>Place your card flat onto the screen, and adjust the slider below to match its size.</b></p>'+
                   '<p>If you do not have access to a real card <br>'+
-                  'you can use a ruler to measure the image width to 3.37 inches or 85.6 mm.<br>'
+                  'you can use a ruler to measure the image width to 3.37 inches or 85.6 mm.<br>',
+      description: ' Any content here will be displayed above the card stimulus.'
       },
       adjustment_button_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
-        default: 'Click here when the card has the right size!'
+        default: 'Click here when the card has the right size!',
+        description: ' Content of the button displayed below the card stimulus.'
       },
       item_path: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -88,15 +90,19 @@ jsPsych.plugins['virtual-chinrest'] = (function() {
       },
       blindspot_start_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
-        default: 'Start'
+        default: 'Start',
+        description: 'Content of the start button for the blindspot tasks.'
       },
       blindspot_done_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
-        default: 'Done'
+        default: 'Done',
+        description: 'Content of the done button for the blindspot tasks.'
       },
       blindspot_measurements_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
-        default: 'Remaining measurements: '
+        default: 'Remaining measurements: ',
+        description: 'Text accompanying the remaining measures counter'
+        
       },
       viewing_distance_report: {
         type: jsPsych.plugins.parameterType.STRING,
