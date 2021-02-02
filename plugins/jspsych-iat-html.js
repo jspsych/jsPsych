@@ -24,15 +24,15 @@
         description: 'The HTML string to be displayed.'
       },
       left_category_key: {
-        type: jsPsych.plugins.parameterType.HTML_STRING, 
+        type: jsPsych.plugins.parameterType.KEYCODE, 
         pretty_name: 'Left category key',
-        default: 'E',
+        default: 'e',
         description: 'Key press that is associated with the left category label.'
       },
       right_category_key: {
-        type: jsPsych.plugins.parameterType.STRING,
+        type: jsPsych.plugins.parameterType.KEYCODE,
         pretty_name: 'Right category key',
-        default: 'I',
+        default: 'i',
         description: 'Key press that is associated with the right category label.'
       },
       left_category_label: {
@@ -66,7 +66,7 @@
         type: jsPsych.plugins.parameterType.HTML_STRING,
         pretty_name: 'HTML when wrong',
         default: '<span style="color: red; font-size: 80px">X</span>',
-        description: 'The image to display when a user presses the wrong key.'
+        description: 'The HTML to display when a user presses the wrong key.'
       }, 
       bottom_instructions: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
@@ -84,8 +84,8 @@
         type: jsPsych.plugins.parameterType.HTML_STRING,
         pretty_name: 'Stimulus key association',
         options: ['left', 'right'],
-        default: 'undefined',
-        description: 'Stimulus will be associated with eight "left" or "right".'
+        default: undefined,
+        description: 'Stimulus will be associated with either "left" or "right".'
       },
       response_ends_trial: {
         type: jsPsych.plugins.parameterType.BOOL,
