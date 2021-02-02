@@ -2,7 +2,7 @@
  * jspsych-iat
  * Kristin Diep
  *
- * plugin for displaying a stimulus and getting a keyboard response
+ * plugin for running an IAT (Implicit Association Test) with an image stimulus
  *
  * documentation: docs.jspsych.org
  *

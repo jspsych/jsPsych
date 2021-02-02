@@ -2,7 +2,7 @@
  * jspsych-html-button-response
  * Josh de Leeuw
  *
- * plugin for displaying a stimulus and getting a keyboard response
+ * plugin for displaying a stimulus and getting a button response
  *
  * documentation: docs.jspsych.org
  *

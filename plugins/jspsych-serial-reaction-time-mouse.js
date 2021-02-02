@@ -46,7 +46,7 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Response ends trial',
         default: true,
-        description: 'If true, the trial ends after a key press.'
+        description: 'If true, the trial ends after a mouse click.'
       },
       pre_target_duration: {
         type: jsPsych.plugins.parameterType.INT,
