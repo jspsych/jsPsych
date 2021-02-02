@@ -44,7 +44,7 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
         description: 'Maintain the aspect ratio after setting width or height'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         array: true,
         pretty_name: 'Choices',
         default: jsPsych.ALL_KEYS,

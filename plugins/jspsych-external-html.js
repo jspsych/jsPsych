@@ -21,7 +21,7 @@ jsPsych.plugins['external-html'] = (function() {
         description: 'The url of the external html page'
       },
       cont_key: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Continue key',
         default: null,
         description: 'The key to continue to the next page.'

@@ -24,13 +24,13 @@
         description: 'The HTML string to be displayed.'
       },
       left_category_key: {
-        type: jsPsych.plugins.parameterType.KEYCODE, 
+        type: jsPsych.plugins.parameterType.KEY, 
         pretty_name: 'Left category key',
         default: 'e',
         description: 'Key press that is associated with the left category label.'
       },
       right_category_key: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Right category key',
         default: 'i',
         description: 'Key press that is associated with the right category label.'
@@ -50,7 +50,7 @@
         description: 'The label that is associated with the stimulus. Aligned to the right side of the page.'
       },
       key_to_move_forward: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key to move forward',
         array: true,
         default: jsPsych.ALL_KEYS,

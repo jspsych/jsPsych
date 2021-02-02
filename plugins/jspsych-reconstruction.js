@@ -37,13 +37,13 @@ jsPsych.plugins['reconstruction'] = (function() {
         description: 'The change in the stimulus parameter caused by pressing one of the modification keys.'
       },
       key_increase: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key increase',
         default: 'h',
         description: 'The key to press for increasing the parameter value.'
       },
       key_decrease: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key decrease',
         default: 'g',
         description: 'The key to press for decreasing the parameter value.'

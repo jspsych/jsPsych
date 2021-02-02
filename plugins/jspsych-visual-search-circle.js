@@ -75,13 +75,13 @@ jsPsych.plugins["visual-search-circle"] = (function() {
         description: 'The diameter of the search array circle in pixels.'
       },
       target_present_key: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Target present key',
         default: 'j',
         description: 'The key to press if the target is present in the search array.'
       },
       target_absent_key: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Target absent key',
         default: 'f',
         description: 'The key to press if the target is not present in the search array.'

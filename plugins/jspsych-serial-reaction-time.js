@@ -31,7 +31,7 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
         description: 'The location of the target. The array should be the [row, column] of the target.'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Choices',
         array: true,
         default: [['3','5','7','9']],

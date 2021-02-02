@@ -31,13 +31,13 @@ jsPsych.plugins['same-different-html'] = (function() {
         description: 'Either "same" or "different".'
       },
       same_key: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Same key',
         default: 'Q',
         description: ''
       },
       different_key: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Different key',
         default: 'P',
         description: 'The key that subjects should press to indicate that the two stimuli are the same.'

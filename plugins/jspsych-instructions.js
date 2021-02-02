@@ -28,13 +28,13 @@ jsPsych.plugins.instructions = (function() {
         description: 'Each element of the array is the content for a single page.'
       },
       key_forward: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key forward',
         default: 'rightarrow',
         description: 'The key the subject can press in order to advance to the next page.'
       },
       key_backward: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key backward',
         default: 'leftarrow',
         description: 'The key that the subject can press to return to the previous page.'

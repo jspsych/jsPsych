@@ -1077,7 +1077,7 @@ jsPsych.plugins = (function() {
     INT: 2,
     FLOAT: 3,
     FUNCTION: 4,
-    KEYCODE: 5,
+    KEY: 5,
     SELECT: 6,
     HTML_STRING: 7,
     IMAGE: 8,
