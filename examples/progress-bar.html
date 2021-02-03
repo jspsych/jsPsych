@@ -16,31 +16,34 @@
   var trial_1 = {
     type: 'image-keyboard-response',
     stimulus: 'img/happy_face_1.jpg',
-    choices: [89, 78], // Y or N
-    prompt: '<p>Have you seen this face before? Y or N.</p>'
+    choices: ['y','n'],
+    render_on_canvas: false,
+    prompt: '<p>Have you seen this face before? Press "y" or "n".</p>'
   }
 
   var trial_2 = {
     type: 'image-keyboard-response',
     stimulus: 'img/happy_face_2.jpg',
-    choices: [89, 78], // Y or N
-    prompt: '<p>Have you seen this face before? Y or N.</p>'
+    choices: ['y','n'],
+    render_on_canvas: false,
+    prompt: '<p>Have you seen this face before? Press "y" or "n".</p>'
   }
 
   var trial_3 = {
     type: 'image-keyboard-response',
     stimulus: 'img/happy_face_3.jpg',
-    choices: [89, 78], // Y or N
-    prompt: '<p>Have you seen this face before? Y or N.</p>'
+    choices: ['y','n'],
+    render_on_canvas: false,
+    prompt: '<p>Have you seen this face before? Press "y" or "n".</p>'
   }
 
-  var cnt = 0;
+  var count = 0;
 
   var block_set = {
     timeline: [trial_1, trial_2, trial_3],
     loop_function: function() {
-      cnt++;
-      return cnt < 2;
+      count++;
+      return count < 2;
     }
   }
 
@@ -48,7 +51,6 @@
     type: 'html-keyboard-response',
     stimulus: 'The experiment is over.'
   }
-
 
   jsPsych.init({
     timeline: [trial_1, trial_2, trial_3], //block_set, end_screen],

@@ -25,15 +25,17 @@
     timeline: [
       {
         type: 'html-keyboard-response',
-        choices: ['none'], // Y or N
+        choices: jsPsych.NO_KEYS,
         stimulus: "<p style='text-align:center; font-size:80px;'>+</p>",
         trial_duration: 500
       },
       {
         type: 'image-keyboard-response',
-        choices: [89, 78], // Y or N
+        choices: ['y','n'], 
         stimulus: jsPsych.timelineVariable('v1'),
-        prompt: function() { return '<p>Have you seen '+jsPsych.timelineVariable('v2', true)+ ' before? Y or N.</p>' },
+        prompt: function() { 
+          return '<p>Have you seen '+jsPsych.timelineVariable('v2', true)+ ' before? Press "y" or "n".</p>' 
+        },
         stimulus_width: 300
       }
     ],
