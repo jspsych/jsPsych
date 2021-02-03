@@ -4,11 +4,6 @@
 	<script src="../../jspsych.js"></script>
 	<script src="../../plugins/jspsych-image-keyboard-response.js"></script>
 	<link rel="stylesheet" href="../../css/jspsych.css">
-	<style>
-		img {
-			width: 300px;
-		}
-	</style>
 </head>
 <body>
 </body>
@@ -18,6 +13,7 @@
 		stimulus: '../img/happy_face_1.jpg',
     choices: ['y','n'],
     render_on_canvas: false,
+    stimulus_width: 300,
 		prompt: '<p>Is this face happy? Press "y" or "n".</p>'
   }
 
@@ -26,6 +22,7 @@
     stimulus: '../img/sad_face_2.jpg',
     choices: ['y','n'], 
     render_on_canvas: false,
+    stimulus_width: 300,
     prompt: '<p>Is this face happy? Press "y" or "n".</p>'
   }
 
@@ -34,6 +31,7 @@
     stimulus: '../img/happy_face_2.jpg',
     choices: ['y','n'], 
     render_on_canvas: false,
+    stimulus_width: 300,
     prompt: '<p>Is this face happy? Press "y" or "n".</p>',
   }
 

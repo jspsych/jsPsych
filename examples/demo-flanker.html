@@ -100,6 +100,7 @@
         /*start experiment*/
         jsPsych.init({
             timeline: timeline,
+            preload_images: ["img/con1.png","img/con2.png","img/inc1.png","img/inc2.png"],
             on_finish: function() {
                 jsPsych.data.displayData();
             }
