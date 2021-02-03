@@ -2164,7 +2164,7 @@ jsPsych.pluginAPI = (function() {
   };
 
   module.convertKeyCharacterToKeyCode = function(character) {
-    console.warn('Warning: The jsPsych.pluginAPI.convertKeyCharacterToKeyCode function will be removed in future jsPsych releases.'+
+    console.warn('Warning: The jsPsych.pluginAPI.convertKeyCharacterToKeyCode function will be removed in future jsPsych releases. '+
     'We recommend removing this function and using strings to identify/compare keys.');
     var code;
     character = character.toLowerCase();
@@ -2175,7 +2175,7 @@ jsPsych.pluginAPI = (function() {
   }
 
   module.convertKeyCodeToKeyCharacter = function(code){
-    console.warn('Warning: The jsPsych.pluginAPI.convertKeyCodeToKeyCharacter function will be removed in future jsPsych releases.'+
+    console.warn('Warning: The jsPsych.pluginAPI.convertKeyCodeToKeyCharacter function will be removed in future jsPsych releases. '+
     'We recommend removing this function and using strings to identify/compare keys.');
     for(var i in Object.keys(keylookup)){
       if(keylookup[Object.keys(keylookup)[i]] == code){
@@ -2186,7 +2186,7 @@ jsPsych.pluginAPI = (function() {
   }
 
   module.compareKeys = function(key1, key2){
-    console.warn('Warning: The jsPsych.pluginAPI.compareKeys function will be removed in future jsPsych releases.'+
+    console.warn('Warning: The jsPsych.pluginAPI.compareKeys function will be removed in future jsPsych releases. '+
     'We recommend removing this function and using strings to identify/compare keys.');
     // convert to numeric values no matter what
     if(typeof key1 == 'string') {
