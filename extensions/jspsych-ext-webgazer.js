@@ -70,7 +70,7 @@ jsPsych.extensions['webgazer'] = (function () {
 
     // send back the gazeData
     return {
-      webgazer_gaze_data: state.currentTrialData
+      webgazer_data: state.currentTrialData
     }
   }
 
