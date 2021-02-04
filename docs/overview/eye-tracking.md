@@ -14,6 +14,9 @@ First, [download WebGazer.js ](https://webgazer.cs.brown.edu/#download) and incl
 </head>
 ```
 
+!!! tip 
+    An example experiment using WebGazer is available in the **/examples** folder of the jsPsych release. See `webgazer.html`.
+
 To use the WebGazer extension in an experiment, include it in the list of extensions passed to `jsPsych.init()`
 
 ```js
@@ -25,7 +28,17 @@ jsPsych.init({
 })
 ```
 
+To help the participant position their face correctly for eye tracking you can use the [jspsych-webgazer-init-camera plugin](/plugins/jspsych-webgazer-init-camera.ms). This will show the participant what the camera sees, including facial feature landmarks, and prevent the participant from continuing until their face is in good position for eye tracking.
+
+```js
+var init_camera_trial = {
+  type: 'webgazer-init-camera'
+}
+```
+
 To calibrate WebGazer, you can use the [jspsych-webgazer-calibrate plugin](/plugins/jspsych-webgazer-calibrate.md). This plugin allows you to specify a set of points on the screen for calibration and to choose the method for calibrating -- either clicking on each point or simply fixating on each point. The location of calibration points is specified in percentages, e.g., `[25,50]` will result in a point that is 25% of the width of the screen from the left edge and 50% of the height of the screen from the top edge. Options for controlling other details of the calibration are explained in the [documentation for the plugin](/plugins/jspsych-webgazer-calibrate.md).
+
+Note that instructions are not included in the calibration plugin, so you'll likely want to use a different plugin (e.g., `html-button-response`) to display instructions prior to running the calibration. 
 
 ```js
 var calibration_trial = {

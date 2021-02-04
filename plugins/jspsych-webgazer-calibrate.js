@@ -52,75 +52,16 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
   
       display_element.innerHTML = html;
 
-      jsPsych.extensions['webgazer'].showVideo();
       jsPsych.extensions['webgazer'].resume();
-
-
-      //jsPsych.extensions['webgazer'].resume();
   
       var wg_container = display_element.querySelector('#webgazer-calibrate-container');
-  
-      show_video_detect_message();
-          
-      function show_video_detect_message(){
-        wg_container.innerHTML = "<div style='position: absolute; top: 50%; left: calc(50% - 350px); transform: translateY(-50%); width:700px;'>"+
-          "<p>To start, you need to position your head so that the webcam has a good view of your eyes.</p>"+
-          "<p>Use the video in the upper-left corner as a guide. Center your face in the box.</p>"+
-          "<p>When your face is centered in the box and the box turns green, you can click to continue.</p>"+
-          "<button id='jspsych-wg-cont' class='jspsych-btn' disabled>Continue</button>"
-          "</div>"+
-          "</div>"
-
-          var observer = new MutationObserver(face_detect_event_observer);
-          observer.observe(document, {
-            attributes: true,
-            attributeFilter: ['style'],
-            subtree: true
-          });
         
-          document.querySelector('#jspsych-wg-cont').addEventListener('click', function(){
-            observer.disconnect();
-            show_begin_calibrate_message();
-          })          
-      }
-
-      function face_detect_event_observer(mutationsList, observer){
-        if(mutationsList[0].target == document.querySelector('#webgazerFaceFeedbackBox')){
-          if(mutationsList[0].type == 'attributes' && mutationsList[0].target.style.borderColor == "green"){
-            document.querySelector('#jspsych-wg-cont').disabled = false;
-          }
-          if(mutationsList[0].type == 'attributes' && mutationsList[0].target.style.borderColor == "red"){
-            document.querySelector('#jspsych-wg-cont').disabled = true;
-          }
-        }
-      }
-  
-      function show_begin_calibrate_message(){
-        jsPsych.extensions['webgazer'].hideVideo();
-        if(trial.calibration_mode == 'view'){
-          wg_container.innerHTML = "<div style='position: absolute; top: 50%; left: calc(50% - 350px); transform: translateY(-50%); width:700px;'>"+
-            "<p>Great! Now the eye tracker will be calibrated to translate the image of your eyes from the webcam to a location on your screen.</p>"+
-            "<p>To do this, you need to look at a series of dots.</p>"+
-            "<p>Keep your head still, and focus on each dot as quickly as possible. Keep your gaze fixed on the dot for as long as it is on the screen.</p>"+
-            "<button id='begin-calibrate-btn' class='jspsych-btn'>Click to begin.</button>"+
-            "</div>"
-        }
-        if(trial.calibration_mode == 'click'){
-          wg_container.innerHTML = "<div style='position: absolute; top: 50%; left: calc(50% - 350px); transform: translateY(-50%); width:700px;'>"+
-          "<p>Great! Now the eye tracker will be calibrated to translate the image of your eyes from the webcam to a location on your screen.</p>"+
-          "<p>To do this, you need to click a series of dots.</p>"+
-          "<p>Keep your head still, and click on each dot as it appears. Look at the dot as you click it.</p>"+
-          "<button id='begin-calibrate-btn' class='jspsych-btn'>Click to begin.</button>"+
-          "</div>"
-        }
-        document.querySelector('#begin-calibrate-btn').addEventListener('click', function(){
-          calibrate();
-        });
-      }
-  
       var reps_completed = 0;
       var points_completed = -1;
       var cal_points = null;
+
+      calibrate();
+      
 
       function calibrate(){
         jsPsych.extensions['webgazer'].resume();
