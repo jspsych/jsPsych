@@ -33,7 +33,7 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
         },
         time_per_point: {
           type: jsPsych.plugins.parameterType.STRING,
-          default: 2000
+          default: 1000
         }
       }
     }
