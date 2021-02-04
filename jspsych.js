@@ -214,24 +214,29 @@ window.jsPsych = (function() {
       function loadExtensions() {
         // run the .initialize method of any extensions that are in use
         // these should return a Promise to indicate when loading is complete
-        var loaded_extensions = 0;
-        for (var i = 0; i < opts.extensions.length; i++) {
-          var ext_params = opts.extensions[i].params;
-          if (!ext_params) {
-            ext_params = {}
+        if (opts.extensions.length == 0) {
+          startExperiment();
+        } else {
+          var loaded_extensions = 0;
+          for (var i = 0; i < opts.extensions.length; i++) {
+            var ext_params = opts.extensions[i].params;
+            if (!ext_params) {
+              ext_params = {}
+            }
+            jsPsych.extensions[opts.extensions[i].type].initialize(ext_params)
+              .then(() => {
+                loaded_extensions++;
+                if (loaded_extensions == opts.extensions.length) {
+                  startExperiment();
+                }
+              })
+              .fail((error_message) => {
+                console.error(error_message);
+              })
           }
-          jsPsych.extensions[opts.extensions[i].type].initialize(ext_params)
-            .then(() => {
-              loaded_extensions++;
-              if (loaded_extensions == opts.extensions.length) {
-                startExperiment();
-              }
-            })
-            .fail((error_message) => {
-              console.error(error_message);
-            })
         }
       }
+
     };
     
     // execute init() when the document is ready
