@@ -677,3 +677,29 @@ var time = jsPsych.totalTime();
 console.log(time);
 
 ```
+
+---
+## jsPsych.version
+
+```
+jsPsych.version
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+Returns the version number as a string.
+
+### Description
+
+Gets the version of jsPsych.
+
+### Example
+
+```javascript
+var version = jsPsych.version();
+console.log(version);
+```

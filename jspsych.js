@@ -9,6 +9,8 @@ window.jsPsych = (function() {
 
   var core = {};
 
+  core.version = function() { return "6.3.0" };
+
   //
   // private variables
   //
