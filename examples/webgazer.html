@@ -4,6 +4,8 @@
 <head>
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-html-button-response.js"></script>
+  <script src="../plugins/jspsych-webgazer-init-camera.js"></script>
   <script src="../plugins/jspsych-webgazer-calibrate.js"></script>
   <script src="../plugins/jspsych-webgazer-validate.js"></script>
   <script src="js/webgazer.js"></script>
@@ -18,23 +20,43 @@
 
 <script>
 
+  var init_camera = {
+    type: 'webgazer-init-camera'
+  }
+
+  var calibration_instructions = {
+    type: 'html-button-response',
+    stimulus: `
+      <p>Great! Now the eye tracker will be calibrated to translate the image of your eyes from the webcam to a location on your screen.</p>
+      <p>To do this, you need to click a series of dots.</p>
+      <p>Keep your head still, and click on each dot as it appears. Look at the dot as you click it.</p>
+    `,
+    choices: ['Click to begin']
+  }
+
   var calibration = {
     type: 'webgazer-calibrate',
-    //calibration_points: [[50,50], [25,25], [25,75], [75,25], [75,75]],
+    calibration_points: [[50,50], [25,25], [25,75], [75,25], [75,75]],
     //calibration_points: [[10,10],[10,30],[10,50],[10,70],[10,90],[30,10],[30,30],[30,50],[30,70],[30,90],[50,10],[50,30],[50,50],[50,70],[50,90],[70,10],[70,30],[70,50],[70,70],[70,90],[90,10],[90,30],[90,50],[90,70],[90,90]],
-    calibration_points: [
-      [10,10],[10,50],[10,90],
-      [30,10],[30,50],[30,90],
-      [40,10],[40,30],[40,40],[40,45],[40,50],[40,55],[40,60],[40,70],[40,90],
-      [50,10],[50,30],[50,40],[50,45],[50,50],[50,55],[50,60],[50,70],[50,90],
-      [60,10],[60,30],[60,40],[60,45],[60,50],[60,55],[60,60],[60,70],[60,90],
-      [70,10],[70,50],[70,90],
-      [90,10],[90,50],[90,90]],
+    // calibration_points: [
+    //   [10,10],[10,50],[10,90],
+    //   [30,10],[30,50],[30,90],
+    //   [40,10],[40,30],[40,40],[40,45],[40,50],[40,55],[40,60],[40,70],[40,90],
+    //   [50,10],[50,30],[50,40],[50,45],[50,50],[50,55],[50,60],[50,70],[50,90],
+    //   [60,10],[60,30],[60,40],[60,45],[60,50],[60,55],[60,60],[60,70],[60,90],
+    //   [70,10],[70,50],[70,90],
+    //   [90,10],[90,50],[90,90]],
     repetitions_per_point: 1,
     randomize_calibration_order: true,
-    //calibration_mode: 'view',
-    time_per_point: 500,
-    time_to_saccade: 1000
+  }
+
+  var validation_instructions = {
+    type: 'html-button-response',
+    stimulus: `
+      <p>Let's see how accurate the eye tracking is. </p>
+      <p>Keep your head still, and move your eyes to focus on each dot as it appears.</p>
+    `,
+    choices: ['Click to begin']
   }
 
   var validation = {
@@ -85,6 +107,8 @@
   }
 
   var timeline = [];
+  timeline.push(init_camera);
+  timeline.push(calibration_instructions);
   timeline.push(calibration);
   timeline.push(validation);
   timeline.push(trial_proc);

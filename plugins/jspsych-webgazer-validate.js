@@ -61,18 +61,7 @@ jsPsych.plugins["webgazer-validate"] = (function() {
 
       var wg_container = display_element.querySelector('#webgazer-validate-container');
   
-      show_begin_validate_message();
-  
-      function show_begin_validate_message(){
-        wg_container.innerHTML = `<div style='position: absolute; top: 50%; left: calc(50% - 350px); transform: translateY(-50%); width:700px;'>
-          <p>Let's see how accurate the eye tracking is. </p>
-          <p>Keep your head still, and move your eyes to focus on each dot as it appears.</p>
-          <button id='begin-validate-btn' class='jspsych-btn'>Click to begin.</button>
-          </div>`
-        document.querySelector('#begin-validate-btn').addEventListener('click', function(){
-          validate();
-        });
-      }
+      validate();
   
       var points_completed = -1;
       var val_points = null;
