@@ -41,6 +41,7 @@ nav:
   - 'Record Browser Interactions': 'overview/record-browser-interactions.md'
   - 'Media Preloading': 'overview/media-preloading.md'
   - 'Fullscreen Experiments': 'overview/fullscreen.md'
+  - 'Eye Tracking': 'overview/eye-tracking.md'
   - 'Exclude Participants Based on Browser Features': 'overview/exclude-browser.md'
   - 'Automatic Progress Bar': 'overview/progress-bar.md'
   - 'Integrating with Mechanical Turk': 'overview/mturk.md'
@@ -97,6 +98,9 @@ nav:
   - 'jspsych-visual-search-circle': 'plugins/jspsych-visual-search-circle.md'
   - 'jspsych-vsl-animate-occlusion': 'plugins/jspsych-vsl-animate-occlusion.md'
   - 'jspsych-vsl-grid-scene': 'plugins/jspsych-vsl-grid-scene.md'
+- Extensions:
+  - 'Extensions': 'extensions/extensions.md'
+  - 'jspsych-ext-webgazer.js': 'extensions/jspsych-ext-webgazer.md'
 - About:
   - 'About jsPsych': 'about/about.md'
   - 'Getting Help': 'about/support.md'
