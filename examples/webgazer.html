@@ -31,7 +31,8 @@
       <p>To do this, you need to click a series of dots.</p>
       <p>Keep your head still, and click on each dot as it appears. Look at the dot as you click it.</p>
     `,
-    choices: ['Click to begin']
+    choices: ['Click to begin'],
+    post_trial_gap: 1000
   }
 
   var calibration = {
@@ -56,7 +57,8 @@
       <p>Let's see how accurate the eye tracking is. </p>
       <p>Keep your head still, and move your eyes to focus on each dot as it appears.</p>
     `,
-    choices: ['Click to begin']
+    choices: ['Click to begin'],
+    post_trial_gap: 1000
   }
 
   var validation = {
@@ -110,6 +112,7 @@
   timeline.push(init_camera);
   timeline.push(calibration_instructions);
   timeline.push(calibration);
+  timeline.push(validation_instructions);
   timeline.push(validation);
   timeline.push(trial_proc);
 

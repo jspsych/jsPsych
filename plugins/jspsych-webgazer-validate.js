@@ -61,11 +61,11 @@ jsPsych.plugins["webgazer-validate"] = (function() {
 
       var wg_container = display_element.querySelector('#webgazer-validate-container');
   
-      validate();
-  
       var points_completed = -1;
       var val_points = null;
 
+      validate();
+  
       function validate(){
         
         if(trial.randomize_validation_order){
