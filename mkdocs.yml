@@ -98,6 +98,9 @@ nav:
   - 'jspsych-visual-search-circle': 'plugins/jspsych-visual-search-circle.md'
   - 'jspsych-vsl-animate-occlusion': 'plugins/jspsych-vsl-animate-occlusion.md'
   - 'jspsych-vsl-grid-scene': 'plugins/jspsych-vsl-grid-scene.md'
+  - 'jspsych-webgazer-calibrate': 'plugins/jspsych-webgazer-calibrate.md'
+  - 'jspsych-webgazer-init-camera': 'plugins/jspsych-webgazer-init-camera.md'
+  - 'jspsych-webgazer-validate': 'plugins/jspsych-webgazer-validate.md'
 - Extensions:
   - 'Extensions': 'extensions/extensions.md'
   - 'jspsych-ext-webgazer.js': 'extensions/jspsych-ext-webgazer.md'
