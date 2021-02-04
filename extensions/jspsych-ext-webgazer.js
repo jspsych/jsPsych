@@ -127,8 +127,9 @@ jsPsych.extensions['webgazer'] = (function () {
     }
   }
 
-  extension.getCurrentPrediction = function () {
-    return state.webgazer.getCurrentPrediction();
+  extension.getCurrentPrediction = async function () {
+    var prediction = await state.webgazer.getCurrentPrediction();
+    return prediction;
   }
 
   // extension.addGazeDataUpdateListener(listener){

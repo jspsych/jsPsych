@@ -19,7 +19,9 @@ To use the WebGazer extension in an experiment, include it in the list of extens
 ```js
 jsPsych.init({
   timeline: [...],
-  extensions: ['webgazer']
+  extensions: [
+    {type: 'webgazer'}
+  ]
 })
 ```
 
