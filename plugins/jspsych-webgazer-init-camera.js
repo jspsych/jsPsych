@@ -15,7 +15,8 @@ jsPsych.plugins["webgazer-init-camera"] = (function() {
           type: jsPsych.plugins.parameterType.HTML_STRING,
           default: `
             <p>Position your head so that the webcam has a good view of your eyes.</p>
-            <p>Use the video in the upper-left corner as a guide. Center your face in the box.</p>
+            <p>Use the video in the upper-left corner as a guide. Center your face in the box and look directly towards the camera.</p>
+            <p>It is important that you try and keep your head reasonably still throughout the experiment, so please take a moment to adjust your setup as needed.</p>
             <p>When your face is centered in the box and the box turns green, you can click to continue.</p>`
         },
         button_text: {
