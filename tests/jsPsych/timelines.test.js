@@ -166,6 +166,36 @@ describe('loop function', function(){
     utils.pressKey(32);
   });
 
+  test('only runs once when timeline variables are used', function(){
+    var count = 0;
+
+    var trial = {
+      timeline: [{
+        type: 'html-keyboard-response',
+        stimulus: 'foo'
+      }],
+      timeline_variables:[{a:1},{a:2}],
+      loop_function: function(){
+        count++;
+        return false
+      }
+    }
+
+    jsPsych.init({
+      timeline: [trial]
+    });
+
+    // first trial
+    utils.pressKey(32);
+
+    expect(count).toBe(0);
+
+    // second trial
+    utils.pressKey(32);
+
+    expect(count).toBe(1);
+  })
+
 });
 
 describe('conditional function', function(){
