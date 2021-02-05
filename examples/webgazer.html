@@ -68,9 +68,21 @@
     show_validation_data: true
   }
 
+  var task_instructions = {
+    type: 'html-button-response',
+    stimulus: `
+      <p>We're ready for the task now.</p>
+      <p>You'll see an arrow symbol (⬅ or ➡) appear on the screen.</p>
+      <p>Your job is to press A if ⬅ appears, and L if ➡ appears.</p>
+      <p>This will repeat 8 times.</p>
+    `,
+    choices: ['I am ready!'],
+    post_trial_gap: 1000
+  }
+
   var fixation = {
     type: 'html-keyboard-response',
-    stimulus: '+',
+    stimulus: '<p style="font-size:40px;">+</p>',
     choices: jsPsych.NO_KEYS,
     trial_duration: 500    
   }
@@ -79,15 +91,19 @@
     type: 'html-keyboard-response',
     stimulus: function () {
       return(
-      `<div style="position: relative; width: 50vh; height: 50vh;">
+      `<div style="position: relative; width: 400px; height: 400px;">
         <div style="position: absolute; top:${jsPsych.timelineVariable('top', true)}%; left: ${jsPsych.timelineVariable('left', true)}%">
-          <span style="font-family: monospace; font-size: 40px;">${jsPsych.timelineVariable('direction', true) == 'left' ? '<' : '>'}</span>
+          <span style="font-size: 40px; transform: translate(-50%, -50%);">${jsPsych.timelineVariable('direction', true) == 'left' ? '⬅' : '➡'}</span>
         </div>
       </div>`
       )
     },
     choices: ['a', 'l'],
-    post_trial_gap: 250,
+    post_trial_gap: 750,
+    data: {
+      top: jsPsych.timelineVariable('top'),
+      left: jsPsych.timelineVariable('left')
+    },
     extensions: ['webgazer']
   }
 
@@ -108,13 +124,29 @@
     randomize_order: true
   }
 
+  var done = {
+    type: 'html-button-response',
+    choices: ['CSV', 'JSON'],
+    stimulus: `<p>Done!</p><p>If you'd like to download a copy of the data to explore, click the format you'd like below</p>`,
+    on_finish: function(data){
+      if(data.button_pressed == 0){
+        jsPsych.data.get().localSave('csv','webgazer-sample-data.csv');
+      }
+      if(data.button_pressed == 1){
+        jsPsych.data.get().localSave('json', 'webgazer-sample-data.json');
+      }
+    }
+  }
+
   var timeline = [];
   timeline.push(init_camera);
   timeline.push(calibration_instructions);
   timeline.push(calibration);
   timeline.push(validation_instructions);
   timeline.push(validation);
+  timeline.push(task_instructions);
   timeline.push(trial_proc);
+  timeline.push(done);
 
   jsPsych.init({
     timeline: timeline,
