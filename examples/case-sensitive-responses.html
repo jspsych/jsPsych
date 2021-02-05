@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="../plugins/jspsych-html-button-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
+
+  var trial = {
+    type: 'html-keyboard-response',
+    stimulus: '<p>By default, jsPsych does not treat letter responses as case sensitive. So "A" (uppercase) is treated as "a" (lowercase).</p>'+
+    '<p>This is an example of an experiment where "case_sensitive_responses" is set to "true" in jsPsych.init.</p>'+
+    '<p>To continue, you must press the letter "a" (lowercase).</p>'+
+    '<p>The trial will not end if you respond with "A" (uppercase), either by holding down the Shift key or turning CapsLock on.</p>',
+    choices: ['a']
+  }
+
+  jsPsych.init({
+    timeline: [trial],
+    case_sensitive_responses: true, // to ignore the letter case of a keyboard response, set this parameter to false or remove it
+    on_finish: function(){jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>

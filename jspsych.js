@@ -110,7 +110,8 @@ window.jsPsych = (function() {
         'default_iti': 0,
         'minimum_valid_rt': 0,
         'experiment_width': null,
-        'override_safe_mode': false
+        'override_safe_mode': false,
+        'case_sensitive_responses': false
       };
 
       // detect whether page is running in browser as a local file, and if so, disable web audio and video preloading to prevent CORS issues
@@ -2063,7 +2064,7 @@ jsPsych.pluginAPI = (function() {
 
   module.getKeyboardResponse = function(parameters) {
 
-    //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key?
+    //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key
 
     parameters.rt_method = (typeof parameters.rt_method === 'undefined') ? 'performance' : parameters.rt_method;
     if (parameters.rt_method != 'performance' && parameters.rt_method != 'audio') {
@@ -2077,6 +2078,8 @@ jsPsych.pluginAPI = (function() {
     } else if (parameters.rt_method === 'audio') {
       start_time = parameters.audio_context_start_time;
     }
+
+    var case_sensitive = jsPsych.initSettings().case_sensitive_responses;
 
     var listener_id;
 
@@ -2110,11 +2113,21 @@ jsPsych.pluginAPI = (function() {
         if(parameters.valid_responses.includes(e.key)){
           valid_response = true;
         }
+        if(!case_sensitive) {
+          var valid_lower = parameters.valid_responses.map(function(v) {return v.toLowerCase();});
+          var key_lower = e.key.toLowerCase();
+          if (valid_lower.includes(key_lower)) {
+            valid_response = true;
+          }
+        }
       }
       
       // check if key was already held down
       if (((typeof parameters.allow_held_key === 'undefined') || !parameters.allow_held_key) && valid_response) {
         if (typeof held_keys[e.key] !== 'undefined' && held_keys[e.key] == true) {
+          valid_response = false;
+        }
+        if (!case_sensitive && typeof held_keys[e.key.toLowerCase()] !== 'undefined' && held_keys[e.key.toLowerCase()] == true) {
           valid_response = false;
         }
       }
