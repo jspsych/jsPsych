@@ -443,6 +443,8 @@ describe('preload plugin', function () {
     test('experiment continues when image loads successfully', function() {
 
       require(root + 'plugins/jspsych-image-keyboard-response.js');
+      
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => { cb_load(); cb_complete(); });
 
       var preload = {
         type: 'preload',
@@ -453,7 +455,7 @@ describe('preload plugin', function () {
 
       var trial = {
         type: 'image-keyboard-response',
-        stimulus: '../media/blue.png',
+        stimulus: 'image.png',
         render_on_canvas: false
       }
 
@@ -461,14 +463,22 @@ describe('preload plugin', function () {
         timeline: [preload, trial]
       });
 
-      setTimeout(function() {
-        expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src=\"../media/blue.png\" id=\"jspsych-image-keyboard-response-stimulus\"');
-      }, 200);
+     
+      expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src=\"image.png\" id=\"jspsych-image-keyboard-response-stimulus\"');
+      
 
     });
 
     test('error_message is shown when continue_after_error is false and files fail', function() {
       require(root + 'plugins/jspsych-image-keyboard-response.js');
+
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => { 
+        cb_error({
+          source: x,
+          error: {
+          }
+        }); 
+      });
 
       var preload = {
         type: 'preload',
@@ -476,7 +486,7 @@ describe('preload plugin', function () {
         error_message: 'foo',
         max_load_time: 100,
         on_error: function(e) {
-          expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+          expect(e).toContain('img/bar.png');
         }
       }
 
@@ -490,27 +500,35 @@ describe('preload plugin', function () {
         timeline: [preload, trial]
       });
 
+      expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+
     });
 
     test('error_message is shown when continue_after_error is false and loading times out', function() {
 
       require(root + 'plugins/jspsych-image-keyboard-response.js');
+      
+      jest.useFakeTimers();
 
       var mock_fn = jest.fn(function(x) {return x;});
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => { 
+        // don't return anything here to simulate waiting forever for image to load
+      });
+      
 
       var preload = {
         type: 'preload',
         auto_preload: true,
         error_message: 'foo',
-        max_load_time: 0,
+        max_load_time: 100,
         on_error: function(e) {
-          mock_fun(e);
+          mock_fn(e);
         }
       }
 
       var trial = {
         type: 'image-keyboard-response',
-        stimulus: '../media/blue.png',
+        stimulus: 'blue.png',
         render_on_canvas: false
       }
 
@@ -518,10 +536,11 @@ describe('preload plugin', function () {
         timeline: [preload, trial]
       });
       
-      setTimeout(function() {
-        expect(mock_fn).toHaveBeenCalledWith('timeout');
-        expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-      }, 200);
+      jest.advanceTimersByTime(101);
+      
+      expect(mock_fn).toHaveBeenCalledWith('timeout');
+      expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+      
 
     });
 
@@ -530,6 +549,13 @@ describe('preload plugin', function () {
       require(root + 'plugins/jspsych-image-keyboard-response.js');
 
       var mock_fn = jest.fn(function(x) {return x;});
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => { 
+        cb_error({
+          source: x,
+          error: {
+          }
+        }); 
+      });
 
       var preload = {
         type: 'preload',
@@ -544,7 +570,7 @@ describe('preload plugin', function () {
 
       var trial = {
         type: 'image-keyboard-response',
-        stimulus: '../media/blue.png',
+        stimulus: 'blue.png',
         render_on_canvas: false
       }
 
@@ -552,10 +578,10 @@ describe('preload plugin', function () {
         timeline: [preload, trial]
       });
 
-      setTimeout(function() {    
-        expect(mock_fn).toHaveBeenCalledWith('loading failed');
-        expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src=\"../media/blue.png\" id=\"jspsych-image-keyboard-response-stimulus\"');
-      }, 200);
+       
+      expect(mock_fn).toHaveBeenCalledWith('loading failed');
+      expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src=\"blue.png\" id=\"jspsych-image-keyboard-response-stimulus\"');
+      
 
     });
 
@@ -563,13 +589,18 @@ describe('preload plugin', function () {
 
       require(root + 'plugins/jspsych-image-keyboard-response.js');
 
+      jest.useFakeTimers();
+
       var mock_fn = jest.fn(function(x) {return x;});
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => { 
+        // don't return anything here to simulate waiting forever for image to load
+      });
 
       var preload = {
         type: 'preload',
         auto_preload: true,
         error_message: 'bar',
-        max_load_time: 0,
+        max_load_time: 100,
         continue_after_error: true,
         on_error: function(e) {
           mock_fn(e);
@@ -586,10 +617,11 @@ describe('preload plugin', function () {
         timeline: [preload, trial]
       });
 
-      setTimeout(function() {
-        expect(mock_fn).toHaveBeenCalledWith('timeout');
-        expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src=\"../media/blue.png\" id=\"jspsych-image-keyboard-response-stimulus\"');
-      }, 200);
+      jest.advanceTimersByTime(101);
+
+      expect(mock_fn).toHaveBeenCalledWith('timeout');
+      expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src=\"../media/blue.png\" id=\"jspsych-image-keyboard-response-stimulus\"');
+      
 
     });
 
@@ -598,6 +630,13 @@ describe('preload plugin', function () {
       require(root + 'plugins/jspsych-image-keyboard-response.js');
 
       var mock_fn = jest.fn(function(x) {return x;});
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => { 
+        cb_error({
+          source: x,
+          error: {
+          }
+        }); 
+      });
 
       var preload = {
         type: 'preload',
@@ -613,10 +652,10 @@ describe('preload plugin', function () {
         timeline: [preload]
       });
 
-      setTimeout(function() {
-        expect(mock_fn).toHaveBeenCalledWith('loading failed');
-        expect(jsPsych.getDisplayElement().innerHTML).toMatch('Error details');
-      }, 200);
+      
+      expect(mock_fn).toHaveBeenCalledWith('loading failed');
+      expect(jsPsych.getDisplayElement().innerHTML).toMatch('Error details');
+      
 
     });
 
@@ -691,12 +730,38 @@ describe('preload plugin', function () {
       require(root + 'plugins/jspsych-image-keyboard-response.js');
 
       var mock_fn = jest.fn(function(x) {return x;});
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
+        if(x.includes('blue.png')){
+          cb_load();
+          cb_complete();
+        } else { 
+          cb_error({
+            source: x,
+            error: {
+            }
+          });
+        }
+      });
+      jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb_complete, cb_load, cb_error) => { 
+        cb_error({
+          source: x,
+          error: {
+          }
+        }); 
+      });
+      jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb_complete, cb_load, cb_error) => { 
+        cb_error({
+          source: x,
+          error: {
+          }
+        }); 
+      });
 
       var preload_1 = {
         type: 'preload',
-        images: ['img/foo.png'],
-        audio: ['audio/bar.mp3'],
-        video: ['video/buzz.mp4'],
+        images: ['foo.png'],
+        audio: ['bar.mp3'],
+        video: ['buzz.mp4'],
         continue_after_error: true,
         on_error: function(e) {
           mock_fn('loading failed');
@@ -708,7 +773,7 @@ describe('preload plugin', function () {
 
       var preload_2 = {
         type: 'preload',
-        images: ['../media/blue.png'],
+        images: ['blue.png'],
         max_load_time: 100,
         on_error: function(e) {
           mock_fn('loading failed');
@@ -722,12 +787,12 @@ describe('preload plugin', function () {
         timeline: [preload_1, preload_2]
       });
 
-      setTimeout(function() {
-        expect(mock_fn.mock.calls[0][0]).toBe('loading failed');
-        expect(mock_fn.mock.calls[1][0]).toBe('loading failed');
-        expect(mock_fn.mock.calls[2][0]).toBe('loading failed');
-        expect(mock_fn.mock.calls[3][0]).toBe('loading succeeded');
-      }, 200);
+      
+      expect(mock_fn.mock.calls[0][0]).toBe('loading failed');
+      expect(mock_fn.mock.calls[1][0]).toBe('loading failed');
+      expect(mock_fn.mock.calls[2][0]).toBe('loading failed');
+      expect(mock_fn.mock.calls[3][0]).toBe('loading succeeded');
+      
 
     });
 
@@ -737,14 +802,24 @@ describe('preload plugin', function () {
 
       var mock_fn = jest.fn(function(x) {return x;});
       var cancel_preload_spy = jest.spyOn(jsPsych.pluginAPI, 'cancelPreloads');
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
+        // empty to simulate timeout
+      });
+      jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb_complete, cb_load, cb_error) => {
+        // empty to simulate timeout
+      });
+      jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb_complete, cb_load, cb_error) => { 
+        // empty to simulate timeout
+      });
+      jest.useFakeTimers();
 
       var preload = {
         type: 'preload',
-        images: ['img/foo.png', '../media/blue.png'],
+        images: ['img/foo.png', 'blue.png'],
         audio: ['audio/bar.mp3'],
         video: ['video/buzz.mp4'],
         continue_after_error: true,
-        max_load_time: 0,
+        max_load_time: 100,
         on_error: function(e) {
           if (e == "timeout") {
             mock_fn(e);
@@ -761,11 +836,12 @@ describe('preload plugin', function () {
         timeline: [preload]
       });
 
-      setTimeout(function() {
-        expect(mock_fn).toHaveBeenCalledWith('timeout');
-        expect(mock_fn).toHaveBeenLastCalledWith('timeout');
-        expect(cancel_preload_spy).toHaveBeenCalled();
-      }, 200);
+      jest.advanceTimersByTime(101);
+      
+      expect(mock_fn).toHaveBeenCalledWith('timeout');
+      expect(mock_fn).toHaveBeenLastCalledWith('timeout');
+      expect(cancel_preload_spy).toHaveBeenCalled();
+      
 
     });
 
@@ -775,13 +851,28 @@ describe('preload plugin', function () {
 
       var mock_fn = jest.fn(function(x) {return x;});
       var cancel_preload_spy = jest.spyOn(jsPsych.pluginAPI,'cancelPreloads');
+      jest.useFakeTimers();
+      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
+        if(x.includes('blue.png')){
+          cb_load();
+          cb_complete();
+        } else { 
+          
+        }
+      });
+      jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb_complete, cb_load, cb_error) => { 
+        
+      });
+      jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb_complete, cb_load, cb_error) => { 
+        
+      });
 
       var preload_1 = {
         type: 'preload',
         images: ['img/foo.png'],
         audio: ['audio/bar.mp3'],
         video: ['video/buzz.mp4'],
-        max_load_time: 0,
+        max_load_time: 100,
         on_error: function(e) {
           if (e == 'timeout') {
             mock_fn(e);
@@ -810,12 +901,13 @@ describe('preload plugin', function () {
         timeline: [preload_1, preload_2]
       });
 
-      setTimeout(function() {
-        expect(mock_fn).toHaveBeenCalledWith('timeout');
-        expect(mock_fn).toHaveBeenLastCalledWith('timeout');
-        expect(jsPsych.getDisplayElement().innerHTML).toMatch('The experiment failed to load.');
-        expect(cancel_preload_spy).toHaveBeenCalled();
-      }, 200);
+      jest.advanceTimersByTime(101);
+      
+      expect(mock_fn).toHaveBeenCalledWith('timeout');
+      expect(mock_fn).toHaveBeenLastCalledWith('timeout');
+      expect(jsPsych.getDisplayElement().innerHTML).toMatch('The experiment failed to load.');
+      expect(cancel_preload_spy).toHaveBeenCalled();
+      
 
     });
 
