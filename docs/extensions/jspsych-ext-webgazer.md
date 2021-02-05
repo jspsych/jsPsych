@@ -16,7 +16,8 @@ jsPsych.init({
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-webgazer  | object | `undefined` | You can explicitly pass a reference to a loaded instance of the webgazer.js library. If no explicit reference is passed then the extension will look for a global `webgazer` object.
+webgazer  | object | `undefined` | You can explicitly pass a reference to a loaded instance of the webgazer.js library. If no explicit reference is passed then the extension will look for a global `webgazer` object. If you are loading webgazer.js via a `<script>` tag you do not need to set this parameter in most circumstances.
+round_predictions | bool | true | Whether to round the `x`,`y` coordinates predicted by WebGazer to the nearest whole number. This *greatly* reduces the size of the data, as WebGazer records data to 15 decimal places by default. Given the noise of the system, there's really no need to record data to this level of precision.
 
 ## Data Generated
 

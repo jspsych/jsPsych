@@ -21,6 +21,12 @@ jsPsych.extensions['webgazer'] = (function () {
       } else {
         state.webgazer = params.webgazer;
       }
+
+      if (typeof params.round_predictions === 'undefined'){
+        state.round_predictions = true;
+      } else {
+        state.round_predictions = params.round_predictions;
+      }
   
       // sets up event handler for webgazer data
       state.webgazer.setGazeListener(handleGazeDataUpdate);
@@ -129,6 +135,10 @@ jsPsych.extensions['webgazer'] = (function () {
 
   extension.getCurrentPrediction = async function () {
     var prediction = await state.webgazer.getCurrentPrediction();
+    if(state.round_predictions){
+      prediction.x = Math.round(prediction.x);
+      prediction.y = Math.round(prediction.y);
+    }
     return prediction;
   }
 
@@ -139,9 +149,9 @@ jsPsych.extensions['webgazer'] = (function () {
   function handleGazeDataUpdate(gazeData, elapsedTime) {
     if (gazeData !== null && state.activeTrial) {
       var d = {
-        x: gazeData.x,
-        y: gazeData.y,
-        t: performance.now() - state.currentTrialStart
+        x: state.round_predictions ? Math.round(gazeData.x) : gazeData.x,
+        y: state.round_predictions ? Math.round(gazeData.y) : gazeData.y,
+        t: Math.round(performance.now() - state.currentTrialStart)
       }
       state.currentTrialData.push(d); // add data to current trial's data
     }
