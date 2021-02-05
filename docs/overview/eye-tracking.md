@@ -75,13 +75,31 @@ To enable eye tracking for a trial in your experiment, you can simply add the We
 
 ```js
 var trial = {
-  type: 'image-keyboard-response',
-  stimulus: 'my-scene.png',
-  extensions: ['webgazer']
+  type: 'html-keyboard-response',
+  stimulus: '<img id="scene" src="my-scene.png"></img>',
+  extensions: [
+    {
+      type: 'webgazer', 
+      params: { 
+        targets: ['#scene']
+      }
+    }
+  ]
 }
 ```
 
-This will turn on WebGazer at the start of the trial. Gaze data will be added to the trial's data under the property `webgazer_data`. The gaze data is an array of objects. Each object has an `x`, a `y`, and a `t` property. The `x` and `y` properties specify the gaze location in pixels and `t` specifies the time in milliseconds since the start of the trial. Note that establishing the precision and accuracy of these measurements across the variety of web browsers and systems that your experiment participants might be using is quite difficult. For example, different browsers may cause small systematic shifts in the accuracy of `t` values. 
+This will turn on WebGazer at the start of the trial. 
+
+The `params` property in the `extensions` declaration allows you to pass in a list of [CSS selector strings](https://www.w3schools.com/cssref/css_selectors.asp). The [bounding rectangle](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) of the DOM element that matches each selector will be recorded in the data for that trial. This allows for easy alignment of the gaze data and objects on the screen.
+
+```js
+webgazer_targets : [
+  {selector: ..., top: ..., left: ..., right: ..., bottom:...},
+  {selector: ..., top: ..., left: ..., right: ..., bottom:...},
+]
+```
+
+Gaze data will be added to the trial's data under the property `webgazer_data`. The gaze data is an array of objects. Each object has an `x`, a `y`, and a `t` property. The `x` and `y` properties specify the gaze location in pixels and `t` specifies the time in milliseconds since the start of the trial. Note that establishing the precision and accuracy of these measurements across the variety of web browsers and systems that your experiment participants might be using is quite difficult. For example, different browsers may cause small systematic shifts in the accuracy of `t` values. 
 
 ```js
 webgazer_data: [

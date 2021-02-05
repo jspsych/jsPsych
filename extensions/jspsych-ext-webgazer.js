@@ -48,12 +48,13 @@ jsPsych.extensions['webgazer'] = (function () {
   }
 
   // required, will be called when the trial starts (before trial loads)
-  extension.on_start = function () {
+  extension.on_start = function (params) {
     state.currentTrialData = [];
+    state.currentTrialTargets = [];
   }
 
   // required will be called when the trial loads
-  extension.on_load = function () {
+  extension.on_load = function (params) {
 
     // set current trial start time
     state.currentTrialStart = performance.now();
@@ -63,11 +64,30 @@ jsPsych.extensions['webgazer'] = (function () {
 
     // set internal flag
     state.activeTrial = true;
+
+    // record bounding box of any elements in params.targets
+    if(typeof params !== 'undefined'){
+      if(typeof params.targets !== 'undefined'){
+        for(var i=0; i<params.targets.length; i++){
+          var target = document.querySelector(params.targets[i]);
+          if(target !== null){
+            var bounding_rect = target.getBoundingClientRect();
+            state.currentTrialTargets.push({
+              selector: params.targets[i],
+              top: bounding_rect.top,
+              bottom: bounding_rect.bottom,
+              left: bounding_rect.left,
+              right: bounding_rect.right
+            })
+          }
+        }
+      }
+    }
   }
 
   // required, will be called when jsPsych.finishTrial() is called
   // must return data object to be merged into data.
-  extension.on_finish = function () {
+  extension.on_finish = function (params) {
     // pause the eye tracker
     state.webgazer.pause();
 
@@ -76,7 +96,8 @@ jsPsych.extensions['webgazer'] = (function () {
 
     // send back the gazeData
     return {
-      webgazer_data: state.currentTrialData
+      webgazer_data: state.currentTrialData,
+      webgazer_targets: state.currentTrialTargets
     }
   }
 

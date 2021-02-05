@@ -93,7 +93,7 @@
       return(
       `<div style="position: relative; width: 400px; height: 400px;">
         <div style="position: absolute; top:${jsPsych.timelineVariable('top', true)}%; left: ${jsPsych.timelineVariable('left', true)}%">
-          <span style="font-size: 40px; transform: translate(-50%, -50%);">${jsPsych.timelineVariable('direction', true) == 'left' ? '⬅' : '➡'}</span>
+          <span id="arrow-target" style="font-size: 40px; transform: translate(-50%, -50%);">${jsPsych.timelineVariable('direction', true) == 'left' ? '⬅' : '➡'}</span>
         </div>
       </div>`
       )
@@ -104,7 +104,9 @@
       top: jsPsych.timelineVariable('top'),
       left: jsPsych.timelineVariable('left')
     },
-    extensions: ['webgazer']
+    extensions: [
+      {type: 'webgazer', params: {targets: ['#arrow-target']}}
+    ]
   }
 
   var params = [
