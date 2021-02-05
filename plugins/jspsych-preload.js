@@ -277,7 +277,7 @@ jsPsych.plugins['preload'] = (function() {
 
       // called if all_files haven't finished loading when max_load_time is reached
       function on_timeout() {
-        console.log('timeout fired');
+        //console.log('timeout fired');
         jsPsych.pluginAPI.cancelPreloads();
         if (typeof success !== 'undefined' && (success === false || success === null)) {
           timeout = true;
