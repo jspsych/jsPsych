@@ -173,9 +173,9 @@ jsPsych.plugins['preload'] = (function() {
         jsPsych.pluginAPI.preloadImages(images, cb, file_loading_success, file_loading_error);
       }
 
-      load_video(function() {})
-      load_audio(function() {})
-      load_images(function() {})
+      if (video.length > 0) { load_video(function () { }) }
+      if (audio.length > 0) { load_audio(function () { }) }
+      if (images.length > 0) { load_images(function () { }) }
 
       // helper functions and callbacks
 
