@@ -489,8 +489,8 @@ window.jsPsych = (function() {
         // check for on_timeline_start and conditonal function on nodes with timelines
         if (typeof timeline_parameters != 'undefined') {
           // only run the conditional function if this is the first repetition of the timeline when
-          // repetitions > 1
-          if (typeof timeline_parameters.conditional_function !== 'undefined' && progress.current_repetition==0) {
+          // repetitions > 1, and only when on the first variable set
+          if (typeof timeline_parameters.conditional_function !== 'undefined' && progress.current_repetition==0 && progress.current_variable_set == 0) {
             var conditional_result = timeline_parameters.conditional_function();
             // if the conditional_function() returns false, then the timeline
             // doesn't run and is marked as complete.
