@@ -48,20 +48,21 @@ jsPsych.extensions['new-extension'] = (function () {
   var extension = {};
 
   extension.initialize = function(params){
-
+    // params are passed from the extensions parameter in jsPsych.init
   }
   
   extension.on_start = function(params){
-
+    // params are passed from the extensions parameter in the trial object
   }
 
   extension.on_load = function(params){
-
+    // params are passed from the extensions parameter in the trial object
   }
 
   extension.on_finish = function(params){
+    // params are passed from the extensions parameter in the trial object
     return {
-      // any data that the extension will add to a trial
+      // any data that the extension returns here will be added to the trial data
     }
   }
   
