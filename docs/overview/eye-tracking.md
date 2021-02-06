@@ -119,3 +119,93 @@ These are some anecdotal observations about factors that improve data quality.
 3. WebGazer's click-based calibration can be used throughout the experiment. You can turn this on by calling `jsPsych.extensions.webgazer.startMouseCalibration()` at any point in the experiment. If you use a continue button to advance through the experiment and move the location of the continue button around you can be making small adjustments to the calibration throughout. 
 
 If you have tips based on your own experience please consider sharing them on our [discussion forum](https://github.com/jspsych/jsPsych/discussions) and we'll add to this list!
+
+## Example
+
+The code below shows a basic example of what it looks like when you put all of these things together in your experiment's HTML file.
+
+```html
+<html>
+<head>
+    <script src="jspsych/jspsych.js"></script>
+    <script src="jspsych/plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych/plugins/jspsych-webgazer-init-camera.js"></script>
+    <script src="jspsych/plugins/jspsych-webgazer-calibrate.js"></script>
+    <script src="jspsych/plugins/jspsych-webgazer-validation.js"></script>
+    <script src="js/webgazer.js"></script>
+    <script src="jspsych/extensions/jspsych-ext-webgazer.js"></script>
+    <link rel="stylesheet" href="jspsych/css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+var init_camera = {
+  type: 'webgazer-init-camera'
+}
+
+var calibration = {
+  type: 'webgazer-calibrate'
+}
+
+var validation = {
+  type: 'webgazer-validate'
+}
+
+var start = {
+  type: 'html-keyboard-response',
+  stimulus: 'Press any key to start.'
+}
+
+var trial = {
+  type: 'image-keyboard-response',
+  stimulus: 'img/blue.png',
+  choices: jsPsych.NO_KEYS,
+  trial_duration: 1000,
+  extensions: [
+    {
+      type: 'webgazer', 
+      params: {targets: ['#jspsych-image-keyboard-response-stimulus']}
+    }
+  ]
+}
+
+jsPsych.init({
+  timeline: [init_camera, calibration, validation, start, trial],
+  preload_images: ['img/blue.png'],
+  extensions: [
+    {type: 'webgazer'}
+  ]
+})
+
+</script>
+</html>
+```
+
+Below is example data from the image-keyboard-response trial taken from the experiment above. In addition to the standard data that is collected for this plugin, you can see the additional `webgazer_data` and `webgazer_targets` arrays. The `webgazer_data` shows three gaze location estimates during the 1-second image presentation, which were recorded at 335 ms, 706 ms, and 1007 ms from the start of the trial. The `webgazer_targets` array shows that there was one target, the image-keyboard-response stimulus, and tells you the x- and y-coordinate boundaries for the target (image) rectangle. By comparing each of the x/y locations from the `webgazer_data` locations array with the target boundaries in `webgazer_targets`, you can determine if/when the estimated gaze location was inside the target area.
+
+```js
+{
+  "rt": null,
+  "stimulus": "img/blue.png",
+  "key_press": null,
+  "trial_type": "image-keyboard-response",
+  "trial_index": 3,
+  "time_elapsed": 29875,
+  "internal_node_id": "0.0-3.0",
+  "webgazer_data": [
+    {"x": 588, "y": 548, "t": 335},
+    {"x": 562, "y": 522, "t": 706},
+    {"x": 479, "y": 455, "t": 1007}
+  ],
+  "webgazer_targets": [
+    {
+      "selector": "#jspsych-image-keyboard-response-stimulus",
+      "top": 387.6000061035156,  // THESE VALUES ARE WRONG BECAUSE IMAGE DIDN'T LOAD - NEED TO FIX
+      "bottom": 387.6000061035156,
+      "left": 466.8000183105469,
+      "right": 466.8000183105469
+    }
+  ]
+}
+```
