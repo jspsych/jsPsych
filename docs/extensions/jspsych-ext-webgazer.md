@@ -36,7 +36,7 @@ var trial = {
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-targets | array | [] | A list of elements on the page that you would like to record the coordinates of for comparison with the webgazer data. Each entry in the array should be a valid [CSS selector string](https://www.w3schools.com/cssref/css_selectors.asp) that identifies the element. The selector string should be valid for exactly one element on the page. If the selector is valid for more than one element then only the first matching element will be recorded.
+targets | array | [] | A list of elements on the page that you would like to record the coordinates of for comparison with the WebGazer data. Each entry in the array should be a valid [CSS selector string](https://www.w3schools.com/cssref/css_selectors.asp) that identifies the element. The selector string should be valid for exactly one element on the page. If the selector is valid for more than one element then only the first matching element will be recorded.
 
 ## Data Generated
 
@@ -46,6 +46,8 @@ webgazer_data | array | An array of objects containing gaze data for the trial. 
 webgazer_targets | array | An array of objects contain the pixel coordinates of elements on the screen specified by the `.targets` parameter. Each object contains a `selector` property, containing the CSS selector string used to find the element, plus `top`, `bottom`, `left`, and `right` parameters which specify the [bounding rectangle](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) of the element. 
 
 ## Functions
+
+In addition to the jsPsych webgazer-* plugins, the jsPsych webgazer extension provides a set of functions that allow the researcher to interact more directly with WebGazer. These functions can be called at any point during an experiment, and are crucial for building trial plugins that interact with WebGazer. All of the functions below must be prefixed with `jsPsych.extensions.webgazer` (e.g. `jsPsych.extensions.webgazer.faceDetected()`).
 
 ### faceDetected()
 
@@ -69,19 +71,19 @@ Turns off the camera display.
 
 ### resume()
 
-Turns on gaze prediction. The extension will automatically handle this for you in most cases. You probably only need to use this if you are writing your own plugin that interfaces directly with webgazer.
+Turns on gaze prediction. The extension will automatically handle this for you in most cases. You probably only need to use this if you are writing your own plugin that interfaces directly with WebGazer.
 
 ### pause()
 
-Turns off gaze prediction. The extension will automatically handle this for you in most cases. You probably only need to use this if you are writing your own plugin that interfaces directly with webgazer.
+Turns off gaze prediction. The extension will automatically handle this for you in most cases. You probably only need to use this if you are writing your own plugin that interfaces directly with WebGazer.
+
+### startMouseCalibration()
+
+Turns on mouse movement and mouse clicks as calibration events. While the `webgazer-calibration` plugin can also be used to run a parmeterized calibration routine, this calibration function call allows you to continuously calibrate WebGazer to any mouse movements or clicks throughout the experiment. For example, any *-button-response trial would also function as a WebGazer calibration event. 
 
 ### stopMouseCalibration()
 
 Stops WebGazer from using mouse movements and mouse clicks as calibration events.
-
-### startMouseCalibration()
-
-Turns on mouse movement and mouse clicks as calibration events.
 
 ### calibratePoint(x, y)
 
