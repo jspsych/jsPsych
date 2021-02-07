@@ -230,7 +230,7 @@ window.jsPsych = (function() {
                   startExperiment();
                 }
               })
-              .fail((error_message) => {
+              .catch((error_message) => {
                 console.error(error_message);
               })
           }
