@@ -24,7 +24,7 @@ jsPsych.plugins["canvas-keyboard-response"] = (function () {
         description: 'The drawing function to apply to the canvas. Should take the canvas object as argument.'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         array: true,
         pretty_name: 'Choices',
         default: jsPsych.ALL_KEYS,

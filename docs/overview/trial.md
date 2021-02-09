@@ -74,7 +74,7 @@ var trial = {
     target_direction: 'left'
   },
   on_finish: function(data){
-    if(data.key_press == 70){// 70 is the numeric code for f
+    if(data.key_press == "f"){
       data.correct = true; // can add property correct by modify data object directly
     } else {
       data.correct = false;
@@ -117,7 +117,7 @@ var trial = {
     target_direction: 'left'
   },
   on_finish: function(data){
-    if(data.key_press == 70){// 70 is the numeric code for f
+    if(data.key_press == "f"){
       data.correct = true; // can add property correct by modify data object directly
     } else {
       data.correct = false;

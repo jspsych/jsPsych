@@ -8,10 +8,10 @@ jsPsych.addNodeToEndOfTimeline(node_parameters, callback)
 
 ### Parameters
 
-Parameter | Type | Description
---------- | ---- | -----------
-node_parameters | object | An object defining a timeline. It must have, at a minimum, a `timeline` parameter with a valid timeline array as the value for that parameter.
-callback | function | An optional callback function. If adding the node to the timeline requires any preloading of media assets, this callback will be triggered after preloading is compelte.
+| Parameter       | Type     | Description                              |
+| --------------- | -------- | ---------------------------------------- |
+| node_parameters | object   | An object defining a timeline. It must have, at a minimum, a `timeline` parameter with a valid timeline array as the value for that parameter. |
+| callback        | function | An optional callback function. If adding the node to the timeline requires any preloading of media assets, this callback will be triggered after preloading is compelte. |
 
 ### Return value
 
@@ -52,6 +52,39 @@ var first = {
         stimulus: 'img/happy_face_4.jpg'
       }]
     }, jsPsych.resumeExperiment)
+  }
+}
+```
+
+---
+## jsPsych.allTimelineVariables
+
+```
+jsPsych.allTimelineVariables()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+Returns an object with all available timeline variables at this moment in the experiment, represented as `key: value` pairs.
+
+### Description
+
+This function can be used to get all the timeline variables at a particular moment in the experiment. Can be useful for annotating
+data, such as in the example below.
+
+### Example
+
+```javascript
+var trial = {
+  type: 'html-keyboard-response',
+  stimulus: 'Just a demo',
+  on_finish: function(data){
+    // merge all timeline variables available at this trial into the data for this trial
+    Object.assign(data, jsPsych.allTimelineVariables())
   }
 }
 ```
@@ -151,7 +184,7 @@ Ends the current timeline. If timelines are nested, then only the timeline that 
 
 ### Example
 
-#### Loop indefinitely until a particular key is pressed
+#### End timeline if a particular key is pressed
 
 ```javascript
 
@@ -170,10 +203,10 @@ for (var i = 0; i < images.length; i++) {
 
 var block = {
   type: 'image-keyboard-response',
-  choices: [89, 78], // Y or N
-  prompt: '<p>Press Y to Continue. Press N to end this node of the experiment.</p>',
+  choices: ['y', 'n'], 
+  prompt: '<p>Press "y" to Continue. Press "n" to end this node of the experiment.</p>',
   on_finish: function(data) {
-    if (data.key_press == 78) {
+    if (data.key_press == 'n') {
       jsPsych.endCurrentTimeline();
     }
   },
@@ -182,8 +215,7 @@ var block = {
 
 var after_block = {
   type: 'html-keyboard-response',
-  stimulus: '<p>The next node</p>',
-  is_html: true
+  stimulus: '<p>The next node</p>'
 }
 
 jsPsych.init({
@@ -204,9 +236,9 @@ jsPsych.endExperiment(end_message)
 
 ### Parameters
 
-Parameter | Type | Description
---------- | ---- | -----------
-end_message | string | A message to display on the screen after the experiment is over.
+| Parameter   | Type   | Description                              |
+| ----------- | ------ | ---------------------------------------- |
+| end_message | string | A message to display on the screen after the experiment is over. |
 
 ### Return value
 
@@ -224,11 +256,11 @@ Ends the experiment, skipping all remaining trials.
 var trial = {
   type: 'image-keyboard-response',
   stimulus: 'image1.jpg',
-  choices: [89,78], // Y or N
-  prompt: '<p>Press Y to Continue. Press N to end the experiment</p>',
+  choices: ['y', 'n']
+  prompt: '<p>Press "y" to Continue. Press "n" to end the experiment</p>',
   on_finish: function(data){
-    if(data.key_press == 78){
-      jsPsych.endExperiment('The experiment was ended by pressing N.');
+    if(data.key_press == "n"){
+      jsPsych.endExperiment('The experiment was ended by pressing "n".');
     }
   }
 }
@@ -243,9 +275,9 @@ jsPsych.finishTrial(data)
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
-data | object | The data to store for the trial.
+| Parameter | Type   | Description                      |
+| --------- | ------ | -------------------------------- |
+| data      | object | The data to store for the trial. |
 
 
 ### Return value
@@ -333,45 +365,46 @@ jsPsych.init(settings)
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
-settings | object | The settings object for initializing jsPsych. See table below.
+| Parameter | Type   | Description                              |
+| --------- | ------ | ---------------------------------------- |
+| settings  | object | The settings object for initializing jsPsych. See table below. |
 
 The settings object can contain several parameters. The only *required* parameter is `timeline`.
 
-Parameter | Type | Description
---------- | ---- | -----------
-timeline | array | An array containing the objects that describe the experiment timeline. See [Creating an Experiment: The Timeline](../overview/timeline.md).
-display_element | string | The ID of an HTML element to display the experiment in. If left blank, jsPsych will use the `<body>` element to display content. All keyboard event listeners are bound to this element. In order for a keyboard event to be detected, this element must have focus (be the last thing that the subject clicked on).
-on_finish | function | Function to execute when the experiment ends.
-on_trial_start | function | Function to execute when a new trial begins.
-on_trial_finish | function | Function to execute when a trial ends.
-on_data_update | function | Function to execute every time data is stored using the `jsPsych.data.write` method. All plugins use this method to save data (via a call to `jsPsych.finishTrial`, so this function runs every time a plugin stores new data.
-on_interaction_data_update | function | Function to execute every time a new interaction event occurs. Interaction events include clicking on a different window (blur), returning to the experiment window (focus), entering full screen mode (fullscreenenter), and exiting full screen mode (fullscreenexit).
-on_close | function | Function to execute when the user leaves the page. Can be used, for example, to save data before the page is closed.
-exclusions | object | Specifies restrictions on the browser the subject can use to complete the experiment. See list of options below.
-show_progress_bar | boolean | If true, then [a progress bar](../overview/progress-bar.md) is shown at the top of the page.
-message_progress_bar | string | Message to display next to the progress bar. The default is 'Completion Progress'. 
-auto_update_progress_bar | boolean | If true, then the progress bar at the top of the page will automatically update as every top-level timeline or trial is completed.
-show_preload_progress_bar | boolean | If true, then a progress bar is displayed while media files are automatically preloaded.
-preload_audio | array | An array of audio files to preload before starting the experiment.
-preload_images | array | An array of image files to preload before starting the experiment.
-preload_video | array | An array of video files to preload before starting the experiment.
-max_load_time | numeric | The maximum number of milliseconds to wait for content to preload. If the wait time is exceeded an error message is displayed and the experiment stops. The default value is 60 seconds.
-max_preload_attempts | numeric | The maximum number of attempts to preload each file in case of an error. The default value is 10. There is a small delay of 200ms between each attempt.
-use_webaudio | boolean | If false, then jsPsych will not attempt to use the WebAudio API for audio playback. Instead, HTML5 Audio objects will be used. The WebAudio API offers more precise control over the timing of audio events, and should be used when possible. The default value is true.
-default_iti | numeric | The default inter-trial interval in ms. The default value if none is specified is 0ms.
-experiment_width | numeric | The desired width of the jsPsych container in pixels. If left undefined, the width will be 100% of the display element. Usually this is the `<body>` element, and the width will be 100% of the screen size.
-minimum_valid_rt | numeric | The minimum valid response time for key presses during the experiment. Any key press response time that is less than this value will be treated as invalid and ignored. Note that this parameter only applies to _keyboard responses_, and not to other response types such as buttons and sliders. The default value is 0.
-override_safe_mode | boolean | Running a jsPsych experiment directly in a web browser (e.g., by double clicking on a local HTML file) will load the page using the `file://` protocol. Some features of jsPsych don't work with this protocol. By default, when jsPsych detects that it's running on a page loaded via the `file://` protocol, it runs in _safe mode_, which automatically disables features that don't work in this context. Specifically, the use of Web Audio is disabled (audio will be played using HTML5 audio instead, even if `use_webaudio` is `true`) and video preloading is disabled (both automatic preloading and manual preloading via `preload_video`). The `override_safe_mode` parameter defaults to `false`, but you can set it to `true` to force these features to operate under the `file://` protocol. In order for this to work, you will need to disable web security (CORS) features in your browser - this is safe to do if you know what you are doing. Note that this parameter has no effect when you are running the experiment on a web server, because the page will be loaded via the `http://` or `https://` protocol.
+| Parameter                  | Type     | Description                              |
+| -------------------------- | -------- | ---------------------------------------- |
+| timeline                   | array    | An array containing the objects that describe the experiment timeline. See [Creating an Experiment: The Timeline](../overview/timeline.md). |
+| display_element            | string   | The ID of an HTML element to display the experiment in. If left blank, jsPsych will use the `<body>` element to display content. All keyboard event listeners are bound to this element. In order for a keyboard event to be detected, this element must have focus (be the last thing that the subject clicked on). |
+| on_finish                  | function | Function to execute when the experiment ends. |
+| on_trial_start             | function | Function to execute when a new trial begins. |
+| on_trial_finish            | function | Function to execute when a trial ends.   |
+| on_data_update             | function | Function to execute every time data is stored using the `jsPsych.data.write` method. All plugins use this method to save data (via a call to `jsPsych.finishTrial`, so this function runs every time a plugin stores new data. |
+| on_interaction_data_update | function | Function to execute every time a new interaction event occurs. Interaction events include clicking on a different window (blur), returning to the experiment window (focus), entering full screen mode (fullscreenenter), and exiting full screen mode (fullscreenexit). |
+| on_close                   | function | Function to execute when the user leaves the page. Can be used, for example, to save data before the page is closed. |
+| exclusions                 | object   | Specifies restrictions on the browser the subject can use to complete the experiment. See list of options below. |
+| show_progress_bar          | boolean  | If true, then [a progress bar](../overview/progress-bar.md) is shown at the top of the page. |
+| message_progress_bar       | string   | Message to display next to the progress bar. The default is 'Completion Progress'. |
+| auto_update_progress_bar   | boolean  | If true, then the progress bar at the top of the page will automatically update as every top-level timeline or trial is completed. |
+| show_preload_progress_bar  | boolean  | If true, then a progress bar is displayed while media files are automatically preloaded. |
+| preload_audio              | array    | An array of audio files to preload before starting the experiment. |
+| preload_images             | array    | An array of image files to preload before starting the experiment. |
+| preload_video              | array    | An array of video files to preload before starting the experiment. |
+| max_load_time              | numeric  | The maximum number of milliseconds to wait for content to preload. If the wait time is exceeded an error message is displayed and the experiment stops. The default value is 60 seconds. |
+| max_preload_attempts       | numeric  | The maximum number of attempts to preload each file in case of an error. The default value is 10. There is a small delay of 200ms between each attempt. |
+| use_webaudio               | boolean  | If false, then jsPsych will not attempt to use the WebAudio API for audio playback. Instead, HTML5 Audio objects will be used. The WebAudio API offers more precise control over the timing of audio events, and should be used when possible. The default value is true. |
+| default_iti                | numeric  | The default inter-trial interval in ms. The default value if none is specified is 0ms. |
+| experiment_width           | numeric  | The desired width of the jsPsych container in pixels. If left undefined, the width will be 100% of the display element. Usually this is the `<body>` element, and the width will be 100% of the screen size. |
+| minimum_valid_rt           | numeric  | The minimum valid response time for key presses during the experiment. Any key press response time that is less than this value will be treated as invalid and ignored. Note that this parameter only applies to _keyboard responses_, and not to other response types such as buttons and sliders. The default value is 0. |
+| override_safe_mode         | boolean  | Running a jsPsych experiment directly in a web browser (e.g., by double clicking on a local HTML file) will load the page using the `file://` protocol. Some features of jsPsych don't work with this protocol. By default, when jsPsych detects that it's running on a page loaded via the `file://` protocol, it runs in _safe mode_, which automatically disables features that don't work in this context. Specifically, the use of Web Audio is disabled (audio will be played using HTML5 audio instead, even if `use_webaudio` is `true`) and video preloading is disabled (both automatic preloading and manual preloading via `preload_video`). The `override_safe_mode` parameter defaults to `false`, but you can set it to `true` to force these features to operate under the `file://` protocol. In order for this to work, you will need to disable web security (CORS) features in your browser - this is safe to do if you know what you are doing. Note that this parameter has no effect when you are running the experiment on a web server, because the page will be loaded via the `http://` or `https://` protocol. |
+| case_sensitive_responses   | boolean  | If true, then jsPsych will make a distinction between uppercase and lowercase keys when evaluating keyboard responses, e.g. "A" (uppercase) will not be recognized as a valid response if the trial only accepts "a" (lowercase). If false, then jsPsych will not make a distinction between uppercase and lowercase keyboard responses, e.g. both "a" and "A" responses will be valid when the trial's key choice parameter is "a". Setting this parameter to false is useful if you want key responses to be treated the same way when CapsLock is turned on or the Shift key is held down. The default value is false. |
 
 Possible values for the exclusions parameter above.
 
-Parameter | Type | Description
---------- | ---- | -----------
-min_width | numeric | The minimum width of the browser window. If the width is below this value, a message will be displayed to the subject asking them to maximize their browser window. The experiment will sit on this page until the browser window is large enough.
-min_height | numeric | Same as above, but with height.
-audio | boolean | Set to true to require support for the WebAudio API (used by plugins that play audio files).
+| Parameter  | Type    | Description                              |
+| ---------- | ------- | ---------------------------------------- |
+| min_width  | numeric | The minimum width of the browser window. If the width is below this value, a message will be displayed to the subject asking them to maximize their browser window. The experiment will sit on this page until the browser window is large enough. |
+| min_height | numeric | Same as above, but with height.          |
+| audio      | boolean | Set to true to require support for the WebAudio API (used by plugins that play audio files). |
 
 ### Return value
 
@@ -439,7 +472,7 @@ var trial = {
   stimulus: 'Press p to take a 30 second break. Otherwise, press c to continue immediately.',
   choices: ['p','c'],
   on_finish: function(data){
-    if(data.key_press == 80) { // 80 = p
+    if(data.key_press == "p") { 
       jsPsych.pauseExperiment();
       setTimeout(jsPsych.resumeExperiment, 30000);
     }
@@ -462,11 +495,11 @@ None.
 
 Returns an object with the following properties:
 
-Property  | Type | Description
-----------|------|------------
-total_trials | numeric | Indicates the number of trials in the experiment. Note that this does not count possible loops or skipped trials due to conditional statements.
-current_trial_global | numeric | Returns the trial index of the current trial in a global scope. Every trial will increase this count by 1.
-percent_complete | numeric | Estimates the percent of the experiment that is complete. Works as expected for experiments without conditional or looping timelines. For complex timelines, the percent is an approximation.
+| Property             | Type    | Description                              |
+| -------------------- | ------- | ---------------------------------------- |
+| total_trials         | numeric | Indicates the number of trials in the experiment. Note that this does not count possible loops or skipped trials due to conditional statements. |
+| current_trial_global | numeric | Returns the trial index of the current trial in a global scope. Every trial will increase this count by 1. |
+| percent_complete     | numeric | Estimates the percent of the experiment that is complete. Works as expected for experiments without conditional or looping timelines. For complex timelines, the percent is an approximation. |
 
 
 ### Description
@@ -508,7 +541,7 @@ var trial = {
   stimulus: 'Press p to take a 30 second break. Otherwise, press c to continue immediately.',
   choices: ['p','c'],
   on_finish: function(data){
-    if(data.key_press == 80) { // 80 = p
+    if(data.key_press == "p") { 
       jsPsych.pauseExperiment();
       setTimeout(jsPsych.resumeExperiment, 30000);
     }
@@ -525,9 +558,9 @@ jsPsych.setProgressBar(value)
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
-value | numeric | Proprotion (between 0 and 1) to fill the progress bar.
+| Parameter | Type    | Description                              |
+| --------- | ------- | ---------------------------------------- |
+| value     | numeric | Proprotion (between 0 and 1) to fill the progress bar. |
 
 
 ### Return value
@@ -578,14 +611,16 @@ jsPsych.timelineVariable(variable, call_immediate)
 
 ### Parameters
 
+
 Parameter | Type | Description
 ----------|------|------------
 variable | string | Name of the timeline variable
-call_immediate | bool | Typically this parameter is `false`, or simply ommitted. When `false`, the return value is a function that returns the timeline variable. This makes `jsPsych.timelineVariable` suitable for dynamic parameters by default. If `true` the function returns the value of the timeline variable immediately.
+call_immediate | bool | This parameter is optional and can usually be omitted. It determines the return value of `jsPsych.timelineVariable`. If `true`, the function returns the _value_ of the current timeline variable. If `false`, the function returns _a function that returns the value_ of the current timeline variable. When `call_immediate` is omitted, the appropriate option is determined automatically based on the context in which this function is called. When `jsPsych.timelineVariable` is used as a parameter value, `call_immediate` will be `false`. This allows it to be used as a [dynamic trial parameter](/overview/trial/#dynamic-parameters). When `jsPsych.timelineVariable` is used inside of a function, `call_immediate` will be `true`. It is possible to explicitly set this option to `true` to force the function to immediately return the current value of the timeline variable. 
+
 
 ### Return value
 
-Depends on the value of `call_immediate` parameter. See description above.
+Either a function that returns the value of the timeline variable, or the value of the timeline variable, depending on the context in which it is used. See `call_immediate` description above.
 
 ### Description
 
@@ -616,6 +651,25 @@ var procedure = {
 var trial = {
   type: 'html-keyboard-response',
   stimulus: function(){
+    return "<img style='width:100px; height:100px;' src='"+jsPsych.timelineVariable('image')+"'></img>";
+  }
+}
+
+var procedure = {
+  timeline: [trial],
+  timeline_variables: [
+    {image: 'face1.png'},
+    {image: 'face2.png'},
+    {image: 'face3.png'},
+    {image: 'face4.png'}
+  ]
+}
+```
+Prior to jsPsych v6.3.0, the `call_immediate` parameter must be set to `true` when `jsPsych.timelineVariable` is called from within a function, such as a [dynamic parameter](/overview/trial/#dynamic-parameters):
+```javascript
+var trial = {
+  type: 'html-keyboard-response',
+  stimulus: function(){
     return "<img style='width:100px; height:100px;' src='"+jsPsych.timelineVariable('image', true)+"'></img>";
   }
 }
@@ -630,7 +684,6 @@ var procedure = {
   ]
 }
 ```
-
 
 ---
 ## jsPsych.totalTime
@@ -658,4 +711,30 @@ Gets the total time the subject has been in the experiment.
 var time = jsPsych.totalTime();
 console.log(time);
 
+```
+
+---
+## jsPsych.version
+
+```
+jsPsych.version
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+Returns the version number as a string.
+
+### Description
+
+Gets the version of jsPsych.
+
+### Example
+
+```javascript
+var version = jsPsych.version();
+console.log(version);
 ```
