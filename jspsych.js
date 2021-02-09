@@ -9,6 +9,8 @@ window.jsPsych = (function() {
 
   var core = {};
 
+  core.version = function() { return "6.3.0" };
+
   //
   // private variables
   //
@@ -263,6 +265,11 @@ window.jsPsych = (function() {
     if(current_trial_finished){ return; }
     current_trial_finished = true;
 
+    // remove any CSS classes that were added to the DOM via css_classes parameter
+    if(typeof current_trial.css_classes !== 'undefined' && Array.isArray(current_trial.css_classes)){
+      DOM_target.classList.remove(...current_trial.css_classes);
+    }
+
     // write the data from the trial
     data = typeof data == 'undefined' ? {} : data;
     jsPsych.data.write(data);
@@ -273,6 +280,9 @@ window.jsPsych = (function() {
     // for trial-level callbacks, we just want to pass in a reference to the values
     // of the DataCollection, for easy access and editing.
     var trial_data_values = trial_data.values()[0];
+
+    // about to execute lots of callbacks, so switch context.
+    jsPsych.internal.call_immediate = true;
 
     // handle callback at plugin level
     if (typeof current_trial.on_finish === 'function') {
@@ -286,6 +296,9 @@ window.jsPsych = (function() {
     // for this trial. call the on_data_update handler, passing in the same
     // data object that just went through the trial's finish handlers.
     opts.on_data_update(trial_data_values);
+
+    // done with callbacks
+    jsPsych.internal.call_immediate = false;
 
     // wait for iti
     if (typeof current_trial.post_trial_gap === null || typeof current_trial.post_trial_gap === 'undefined') {
@@ -327,8 +340,9 @@ window.jsPsych = (function() {
     return timeline.activeID();
   };
 
-  core.timelineVariable = function(varname, execute){
-    if(execute){
+  core.timelineVariable = function(varname, immediate){
+    if(typeof immediate == 'undefined'){ immediate = false; }
+    if(jsPsych.internal.call_immediate || immediate === true){
       return timeline.timelineVariable(varname);
     } else {
       return function() { return timeline.timelineVariable(varname); }
@@ -490,7 +504,9 @@ window.jsPsych = (function() {
         // check for conditonal function on nodes with timelines
         if (typeof timeline_parameters != 'undefined') {
           if (typeof timeline_parameters.conditional_function !== 'undefined') {
+            jsPsych.internal.call_immediate = true;
             var conditional_result = timeline_parameters.conditional_function();
+            jsPsych.internal.call_immediate = false;
             // if the conditional_function() returns false, then the timeline
             // doesn't run and is marked as complete.
             if (conditional_result == false) {
@@ -551,11 +567,14 @@ window.jsPsych = (function() {
 
         // if we're all done with the repetitions, check if there is a loop function.
         else if (typeof timeline_parameters.loop_function !== 'undefined') {
+          jsPsych.internal.call_immediate = true;
           if (timeline_parameters.loop_function(this.generatedData())) {
             this.reset();
+            jsPsych.internal.call_immediate = false;
             return parent_node.advance();
           } else {
             progress.done = true;
+            jsPsych.internal.call_immediate = false;
             return true;
           }
         }
@@ -872,6 +891,9 @@ window.jsPsych = (function() {
     // get default values for parameters
     setDefaultValues(trial);
 
+    // about to execute callbacks
+    jsPsych.internal.call_immediate = true;
+
     // call experiment wide callback
     opts.on_trial_start(trial);
 
@@ -886,6 +908,16 @@ window.jsPsych = (function() {
     // reset the scroll on the DOM target
     DOM_target.scrollTop = 0;
 
+    // add CSS classes to the DOM_target if they exist in trial.css_classes
+    if(typeof trial.css_classes !== 'undefined'){
+      if(!Array.isArray(trial.css_classes) && typeof trial.css_classes == 'string'){
+        trial.css_classes = [trial.css_classes];
+      }
+      if(Array.isArray(trial.css_classes)){
+        DOM_target.classList.add(...trial.css_classes)
+      }
+    }
+
     // execute trial method
     jsPsych.plugins[trial.type].trial(DOM_target, trial);
 
@@ -893,6 +925,9 @@ window.jsPsych = (function() {
     if(typeof trial.on_load == 'function'){
       trial.on_load();
     }
+    
+    // done with callbacks
+    jsPsych.internal.call_immediate = false;
   }
 
   function evaluateTimelineVariables(trial){
@@ -911,6 +946,9 @@ window.jsPsych = (function() {
   }
 
   function evaluateFunctionParameters(trial){
+
+    // set a flag so that jsPsych.timelineVariable() is immediately executed in this context
+    jsPsych.internal.call_immediate = true;
 
     // first, eval the trial type if it is a function
     // this lets users set the plugin type with a function
@@ -950,6 +988,9 @@ window.jsPsych = (function() {
         }
       }
     }
+
+    // reset so jsPsych.timelineVariable() is no longer immediately executed
+    jsPsych.internal.call_immediate = false;
   }
 
   function setDefaultValues(trial){
@@ -1067,6 +1108,17 @@ window.jsPsych = (function() {
   return core;
 })();
 
+jsPsych.internal = (function() {
+  var module = {};
+
+  // this flag is used to determine whether we are in a scope where
+  // jsPsych.timelineVariable() should be executed immediately or
+  // whether it should return a function to access the variable later.
+  module.call_immediate = false;
+
+  return module;
+})();
+
 jsPsych.plugins = (function() {
 
   var module = {};
@@ -1118,6 +1170,12 @@ jsPsych.plugins = (function() {
       pretty_name: 'Post trial gap',
       default: null,
       description: 'Length of gap between the end of this trial and the start of the next trial'
+    },
+    css_classes: {
+      type: module.parameterType.STRING,
+      pretty_name: 'Custom CSS classes',
+      default: null,
+      description: 'A list of CSS classes to add to the jsPsych display element for the duration of this trial'
     }
   }
 

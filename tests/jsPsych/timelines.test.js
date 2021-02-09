@@ -125,7 +125,7 @@ describe('loop function', function(){
         stimulus: 'foo'
       }],
       loop_function: function(){
-        if(jsPsych.timelineVariable('word', true) == 'b' && counter < 2){
+        if(jsPsych.timelineVariable('word') == 'b' && counter < 2){
           counter++;
           return true;
         } else {
@@ -283,7 +283,7 @@ describe('conditional function', function(){
     var innertimeline = {
       timeline: [trial],
       conditional_function: function(){
-        if(jsPsych.timelineVariable('word', true) == 'b'){
+        if(jsPsych.timelineVariable('word') == 'b'){
           return false;
         } else {
           return true;
