@@ -2136,9 +2136,12 @@ jsPsych.pluginAPI = (function() {
         // if this is a valid response, then we don't want the key event to trigger other actions
         // like scrolling via the spacebar.
         e.preventDefault();
-
+        var key = e.key;
+        if (!case_sensitive) {
+          key = key.toLowerCase();
+        }
         parameters.callback_function({
-          key: e.key,
+          key: key,
           rt: rt,
         });
 
