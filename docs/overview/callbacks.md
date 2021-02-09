@@ -128,7 +128,7 @@ var procedure = {
 
 ## on_timeline_start
 
-The `on_timeline_start` callback can be declared in a timeline node. The callback will be triggered when the timeline starts during the experiment. If the `repetitions` option is used, this function will be triggered at the start of every repetition.
+The `on_timeline_start` callback can be declared in a timeline node. The callback will be triggered when the timeline starts during the experiment. If the `repetitions` option is used, this function will be triggered at the start of every repetition. This function will be triggered after the timeline node's `conditional_function`, if there is one.
 
 #### Sample use
 ```javascript
