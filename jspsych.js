@@ -330,7 +330,11 @@ window.jsPsych = (function() {
     }
   }
 
-  core.addNodeToEndOfTimeline = function(new_timeline){
+  core.allTimelineVariables = function(){
+    return timeline.allTimelineVariables();
+  }
+
+  core.addNodeToEndOfTimeline = function(new_timeline, preload_callback){
     timeline.insert(new_timeline);
   }
 
@@ -479,9 +483,11 @@ window.jsPsych = (function() {
       // if node has not started yet (progress.current_location == -1),
       // then try to start the node.
       if (progress.current_location == -1) {
-        // check for conditonal function on nodes with timelines
+        // check for on_timeline_start and conditonal function on nodes with timelines
         if (typeof timeline_parameters != 'undefined') {
-          if (typeof timeline_parameters.conditional_function !== 'undefined') {
+          // only run the conditional function if this is the first repetition of the timeline when
+          // repetitions > 1, and only when on the first variable set
+          if (typeof timeline_parameters.conditional_function !== 'undefined' && progress.current_repetition==0 && progress.current_variable_set == 0) {
             jsPsych.internal.call_immediate = true;
             var conditional_result = timeline_parameters.conditional_function();
             jsPsych.internal.call_immediate = false;
@@ -491,17 +497,23 @@ window.jsPsych = (function() {
               progress.done = true;
               return true;
             }
-            // if the conditonal_function() returns true, then the node can start
-            else {
-              progress.current_location = 0;
-            }
+            // // if the conditonal_function() returns true, then the node can start
+            // else {
+            //   progress.current_location = 0;
+            // }
           }
-          // if there is no conditional_function, then the node can start
-          else {
-            progress.current_location = 0;
+          // if we reach this point then the node has its own timeline and will start
+          // so we need to check if there is an on_timeline_start function
+          if (typeof timeline_parameters.on_timeline_start !== 'undefined'){
+            timeline_parameters.on_timeline_start();
           }
+          // // if there is no conditional_function, then the node can start
+          // else {
+          //   progress.current_location = 0;
+          // }
         }
-        // if the node does not have a timeline, then it can start
+        // if we reach this point, then either the node doesn't have a timeline of the 
+        // conditional function returned true and it can start
         progress.current_location = 0;
         // call advance again on this node now that it is pointing to a new location
         return this.advance();
@@ -526,6 +538,7 @@ window.jsPsych = (function() {
         }
 
         // if we've reached the end of the timeline (which, if the code is here, we have)
+            
         // there are a few steps to see what to do next...
 
         // first, check the timeline_variables to see if we need to loop through again
@@ -540,29 +553,41 @@ window.jsPsych = (function() {
         // if we're all done with the timeline_variables, then check to see if there are more repetitions
         else if (progress.current_repetition < timeline_parameters.repetitions - 1) {
           this.nextRepetiton();
+          // check to see if there is an on_timeline_finish function
+          if (typeof timeline_parameters.on_timeline_finish !== 'undefined'){
+            timeline_parameters.on_timeline_finish();
+          }
           return this.advance();
         }
 
-        // if we're all done with the repetitions, check if there is a loop function.
-        else if (typeof timeline_parameters.loop_function !== 'undefined') {
-          jsPsych.internal.call_immediate = true;
-          if (timeline_parameters.loop_function(this.generatedData())) {
-            this.reset();
-            jsPsych.internal.call_immediate = false;
-            return parent_node.advance();
-          } else {
-            progress.done = true;
-            jsPsych.internal.call_immediate = false;
-            return true;
+
+        // if we're all done with the repetitions...
+        else {
+          // check to see if there is an on_timeline_finish function
+          if (typeof timeline_parameters.on_timeline_finish !== 'undefined'){
+            timeline_parameters.on_timeline_finish();
           }
+
+          // if we're all done with the repetitions, check if there is a loop function.
+          if (typeof timeline_parameters.loop_function !== 'undefined') {
+            jsPsych.internal.call_immediate = true;
+            if (timeline_parameters.loop_function(this.generatedData())) {
+              this.reset();
+              jsPsych.internal.call_immediate = false;
+              return parent_node.advance();
+            } else {
+              progress.done = true;
+              jsPsych.internal.call_immediate = false;
+              return true;
+            }
+          }
+
+       
         }
 
         // no more loops on this timeline, we're done!
-        else {
-          progress.done = true;
-          return true;
-        }
-
+        progress.done = true;
+        return true;
       }
     }
 
@@ -612,6 +637,42 @@ window.jsPsych = (function() {
         }
         // now find the variable
         return timeline_parameters.timeline[loc].timelineVariable(variable_name); 
+      }
+    }
+
+    // recursively get all the timeline variables for this trial
+    this.allTimelineVariables = function(){
+      var all_tvs = this.allTimelineVariablesNames();
+      var all_tvs_vals = {};
+      for(var i=0; i<all_tvs.length; i++){
+        all_tvs_vals[all_tvs[i]] = this.timelineVariable(all_tvs[i])
+      }
+      return all_tvs_vals;
+    }
+
+    // helper to get all the names at this stage.
+    this.allTimelineVariablesNames = function(so_far){
+      if(typeof so_far == 'undefined'){
+        so_far = [];
+      }
+      if(typeof timeline_parameters !== 'undefined'){
+        so_far = so_far.concat(Object.keys(timeline_parameters.timeline_variables[progress.order[progress.current_variable_set]]));
+        // if progress.current_location is -1, then the timeline variable is being evaluated
+        // in a function that runs prior to the trial starting, so we should treat that trial
+        // as being the active trial for purposes of finding the value of the timeline variable
+        var loc = Math.max(0, progress.current_location);
+        // if loc is greater than the number of elements on this timeline, then the timeline
+        // variable is being evaluated in a function that runs after the trial on the timeline
+        // are complete but before advancing to the next (like a loop_function).
+        // treat the last active trial as the active trial for this purpose.
+        if(loc == timeline_parameters.timeline.length){
+          loc = loc - 1;
+        }
+        // now find the variable
+        return timeline_parameters.timeline[loc].allTimelineVariablesNames(so_far);
+      }
+      if(typeof timeline_parameters == 'undefined'){
+        return so_far;
       }
     }
 
@@ -756,12 +817,16 @@ window.jsPsych = (function() {
           sample: parameters.sample,
           randomize_order: typeof parameters.randomize_order == 'undefined' ? false : parameters.randomize_order,
           repetitions: typeof parameters.repetitions == 'undefined' ? 1 : parameters.repetitions,
-          timeline_variables: typeof parameters.timeline_variables == 'undefined' ? [{}] : parameters.timeline_variables
+          timeline_variables: typeof parameters.timeline_variables == 'undefined' ? [{}] : parameters.timeline_variables,
+          on_timeline_finish: parameters.on_timeline_finish,
+          on_timeline_start: parameters.on_timeline_start,
         };
 
         self.setTimelineVariablesOrder();
 
         // extract all of the node level data and parameters
+        // but remove all of the timeline-level specific information
+        // since this will be used to copy things down hierarchically
         var node_data = Object.assign({}, parameters);
         delete node_data.timeline;
         delete node_data.conditional_function;
@@ -770,6 +835,8 @@ window.jsPsych = (function() {
         delete node_data.repetitions;
         delete node_data.timeline_variables;
         delete node_data.sample;
+        delete node_data.on_timeline_start;
+        delete node_data.on_timeline_finish;
         node_trial_data = node_data; // store for later...
 
         // create a TimelineNode for each element in the timeline

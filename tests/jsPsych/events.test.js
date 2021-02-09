@@ -367,3 +367,175 @@ describe('on_trial_start', function(){
     utils.pressKey('a');
   });
 });
+
+describe('on_timeline_finish', function(){
+  test('should fire once when timeline is complete', function(){
+
+    var on_finish_fn = jest.fn();
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        },
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        },
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_finish: on_finish_fn
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    utils.pressKey(32);
+    expect(on_finish_fn).not.toHaveBeenCalled();
+    utils.pressKey(32);
+    expect(on_finish_fn).not.toHaveBeenCalled();
+    utils.pressKey(32);
+    expect(on_finish_fn).toHaveBeenCalled();
+  });
+
+  test('should fire once even with timeline variables', function(){
+
+    var on_finish_fn = jest.fn();
+
+    var tvs = [{
+      x: 1,
+      x: 2,
+    }]
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_finish: on_finish_fn,
+      timeline_variables: tvs
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    utils.pressKey(32);
+    utils.pressKey(32);
+    expect(on_finish_fn.mock.calls.length).toBe(1);
+    
+  })
+
+  test('should fire on every repetition', function(){
+
+    var on_finish_fn = jest.fn();
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_finish: on_finish_fn,
+      repetitions: 2
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    utils.pressKey(32);
+    utils.pressKey(32);
+    expect(on_finish_fn.mock.calls.length).toBe(2);
+    
+  })
+})
+
+describe('on_timeline_start', function(){
+  test('should fire once when timeline starts', function(){
+
+    var on_start_fn = jest.fn();
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        },
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        },
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_start: on_start_fn
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    expect(on_start_fn).toHaveBeenCalled();
+    utils.pressKey(32);
+    utils.pressKey(32);
+    utils.pressKey(32);
+    expect(on_start_fn.mock.calls.length).toBe(1);
+    
+  })
+
+  test('should fire once even with timeline variables', function(){
+
+    var on_start_fn = jest.fn();
+
+    var tvs = [{
+      x: 1,
+      x: 2,
+    }]
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_start: on_start_fn,
+      timeline_variables: tvs
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    expect(on_start_fn).toHaveBeenCalled();
+    utils.pressKey(32);
+    utils.pressKey(32);
+    expect(on_start_fn.mock.calls.length).toBe(1);
+    
+  })
+
+  test('should fire on every repetition', function(){
+
+    var on_start_fn = jest.fn();
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_start: on_start_fn,
+      repetitions: 2
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    expect(on_start_fn).toHaveBeenCalled();
+    utils.pressKey(32);
+    utils.pressKey(32);
+    expect(on_start_fn.mock.calls.length).toBe(2);
+    
+  })
+})
