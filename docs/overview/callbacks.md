@@ -105,6 +105,48 @@ var trial = {
 
 ---
 
+## on_timeline_finish
+
+The `on_timeline_finish` callback can be declared in a timeline node. The callback will be triggered when the timeline ends during the experiment. If `timeline_variables`, `conditional_function`, `loop_function`, or `sample` options are used, this function will execute when all trials have finished. If the `repetitions` option is used, this function will be triggered at the end of every repetition.
+
+#### Sample use
+```javascript
+var procedure = {
+	timeline: [trial1, trial2],
+	timeline_variables: [
+		{ stimulus: 'person-1.jpg' },
+		{ stimulus: 'person-2.jpg' },
+		{ stimulus: 'person-3.jpg' },
+		{ stimulus: 'person-4.jpg' }
+	],
+  on_timeline_finish: function() {
+    console.log('This timeline has finished');
+  }
+}
+```
+---
+
+## on_timeline_start
+
+The `on_timeline_start` callback can be declared in a timeline node. The callback will be triggered when the timeline starts during the experiment. If the `repetitions` option is used, this function will be triggered at the start of every repetition.
+
+#### Sample use
+```javascript
+var procedure = {
+	timeline: [trial1, trial2],
+	timeline_variables: [
+		{ stimulus: 'person-1.jpg' },
+		{ stimulus: 'person-2.jpg' },
+		{ stimulus: 'person-3.jpg' },
+		{ stimulus: 'person-4.jpg' }
+	],
+  on_timeline_start: function() {
+    console.log('This timeline has started');
+  }
+}
+```
+---
+
 ## on_trial_finish
 
 The `on_trial_finish` callback can be declared in the `jsPsych.init` method. The callback will trigger at the end of every trial in the experiment. If you want a callback to trigger only for the end of certain trials, use the [`on_finish`](#onfinishtrial) callback on the trial object. The callback function will be passed a single argument, containing the data object from the trial.
