@@ -47,12 +47,12 @@ describe('sampling', function(){
     jsPsych.init({timeline: [trial]});
     var last = jsPsych.getDisplayElement().innerHTML;
     for(var i=0;i<23;i++){
-      utils.pressKey(32);
+      utils.pressKey('a');
       var curr = jsPsych.getDisplayElement().innerHTML;
       expect(last).not.toMatch(curr);
       last = curr;
     }
-    utils.pressKey(32);
+    utils.pressKey('a');
   })
 
   test('sampling functions run when timeline loops', function(){
@@ -89,10 +89,10 @@ describe('sampling', function(){
     for(var i=0; i<reps/2; i++){
       var html = jsPsych.getDisplayElement().innerHTML;
       result_1.push(html);
-      utils.pressKey(32);
+      utils.pressKey('a');
       var html = jsPsych.getDisplayElement().innerHTML;
       result_2.push(html);
-      utils.pressKey(32);
+      utils.pressKey('a');
     }
 
     expect(result_1).not.toEqual(result_2);
@@ -125,7 +125,7 @@ describe('timeline variables are correctly evaluated', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).not.toMatch('button');
 
-    utils.pressKey(65); // 'a'
+    utils.pressKey('a'); // 'a'
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('button');
   });
@@ -193,8 +193,8 @@ describe('timeline variables are correctly evaluated', function(){
       timeline: timeline
     });
 
-    utils.pressKey(65);
-    utils.pressKey(65);
+    utils.pressKey('a');
+    utils.pressKey('a');
     expect(jsPsych.data.get().select('id').values).toEqual([2,0]);
 
   });
@@ -242,14 +242,185 @@ describe('timeline variables are correctly evaluated', function(){
       timeline: timeline
     });
 
-    utils.pressKey(65);
-    utils.pressKey(65);
-    utils.pressKey(65);
-    utils.pressKey(65);
+    utils.pressKey('a');
+    utils.pressKey('a');
+    utils.pressKey('a');
+    utils.pressKey('a');
     expect(jsPsych.data.get().select('id').values).toEqual([3,2,1,0]);
 
   });
 
+  test('when used inside a function', function(){
+    var tvs = [
+      {x: 'foo'},
+      {x: 'bar'}
+    ]
+
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: function(){
+        return jsPsych.timelineVariable('x');
+      }
+    }
+
+    var p = {
+      timeline: [trial],
+      timeline_variables: tvs
+    }
+
+    jsPsych.init({
+      timeline: [p]
+    })
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+    utils.pressKey(32);
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
+  });
+
+  test('when used in a conditional_function', function(){
+    var tvs = [
+      {x: 'foo'}
+    ]
+
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: 'hello world'
+    }
+
+    var x = null;
+
+    var p = {
+      timeline: [trial],
+      timeline_variables: tvs,
+      conditional_function: function(){
+        x = jsPsych.timelineVariable('x');
+        return true;
+      }
+    }
+
+    jsPsych.init({
+      timeline: [p]
+    })
+
+   
+    utils.pressKey(32);
+    expect(x).toBe('foo');
+  })
+
+  test('when used in a loop_function', function(){
+    var tvs = [
+      {x: 'foo'}
+    ]
+
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: 'hello world'
+    }
+
+    var x = null;
+
+    var p = {
+      timeline: [trial],
+      timeline_variables: tvs,
+      loop_function: function(){
+        x = jsPsych.timelineVariable('x');
+        return false;
+      }
+    }
+
+    jsPsych.init({
+      timeline: [p]
+    })
+
+   
+    utils.pressKey(32);
+    expect(x).toBe('foo');
+  })
+
+  test('when used in on_finish', function(){
+    var tvs = [
+      {x: 'foo'}
+    ]
+
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: 'hello world',
+      on_finish: function(data){
+        data.x = jsPsych.timelineVariable('x');
+      }
+    }
+
+    var t = {
+      timeline: [trial],
+      timeline_variables: tvs
+    }
+
+    jsPsych.init({
+      timeline: [t]
+    })
+
+   
+    utils.pressKey(32);
+    expect(jsPsych.data.get().values()[0].x).toBe('foo');
+  })
+
+  test('when used in on_start', function(){
+    var tvs = [
+      {x: 'foo'}
+    ]
+
+    var x = null;
+
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: 'hello world',
+      on_start: function(){
+        x = jsPsych.timelineVariable('x');
+      }
+    }
+
+    var t = {
+      timeline: [trial],
+      timeline_variables: tvs
+    }
+
+    jsPsych.init({
+      timeline: [t]
+    })
+
+   
+    utils.pressKey(32);
+    expect(x).toBe('foo');
+  })
+
+  test('when used in on_load', function(){
+    var tvs = [
+      {x: 'foo'}
+    ]
+
+    var x = null;
+
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: 'hello world',
+      on_load: function(){
+        x = jsPsych.timelineVariable('x');
+      }
+    }
+
+    var t = {
+      timeline: [trial],
+      timeline_variables: tvs
+    }
+
+    jsPsych.init({
+      timeline: [t]
+    })
+
+   
+    utils.pressKey(32);
+    expect(x).toBe('foo');
+  })
 
 })
 

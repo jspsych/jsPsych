@@ -6,27 +6,27 @@ This plugin is for showing instructions to the subject. It allows subjects to na
 
 In addition to the [parameters available in all plugins](overview.md#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
 
-Parameter | Type | Default Value | Description
-----------|------|---------------|------------
-pages | array | *undefined* | Each element of the array is the content for a single page. Each page should be an HTML-formatted string.
-key_forward | key code | 'rightarrow' | This is the key that the subject can press in order to advance to the next page. Keys can be specified as their [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) or as characters (e.g., `'a'`, `'q'`).
-key_backward | key code | 'leftarrow' | This is the key that the subject can press to return to the previous page.
-allow_backward | boolean | true | If true, the subject can return to previous pages of the instructions. If false, they may only advace to the next page.
-allow_keys | boolean | true | If true, the subject can use keyboard keys to navigate the pages. If false, they may not.
-show_clickable_nav | boolean | false | If true, then a `Previous` and `Next` button will be displayed beneath the instructions. Subjects can click the buttons to navigate.
-button_label_previous | string | 'Previous' | The text that appears on the button to go backwards.
-button_label_next | string | 'Next' | The text that appears on the button to go forwards.
-show_page_number | boolean | false | If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons.
-page_label | string | 'Page' | The text that appears before x/y pages displayed when show_page_number is true.
+| Parameter             | Type    | Default Value | Description                              |
+| --------------------- | ------- | ------------- | ---------------------------------------- |
+| pages                 | array   | *undefined*   | Each element of the array is the content for a single page. Each page should be an HTML-formatted string. |
+| key_forward           | string  | 'ArrowRight'  | This is the key that the subject can press in order to advance to the next page. This key should be specified as a string (e.g., `'a'`, `'ArrowLeft'`, `' '`, `'Enter'`). |
+| key_backward          | string  | 'ArrowLeft'   | This is the key that the subject can press to return to the previous page. This key should be specified as a string (e.g., `'a'`, `'ArrowLeft'`, `' '`, `'Enter'`). |
+| allow_backward        | boolean | true          | If true, the subject can return to previous pages of the instructions. If false, they may only advace to the next page. |
+| allow_keys            | boolean | true          | If `true`, the subject can use keyboard keys to navigate the pages. If `false`, they may not. |
+| show_clickable_nav    | boolean | false         | If true, then a `Previous` and `Next` button will be displayed beneath the instructions. Subjects can click the buttons to navigate. |
+| button_label_previous | string  | 'Previous'    | The text that appears on the button to go backwards. |
+| button_label_next     | string  | 'Next'        | The text that appears on the button to go forwards. |
+| show_page_number      | boolean | false         | If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons. |
+| page_label            | string  | 'Page'        | The text that appears before x/y pages displayed when show_page_number is true. |
 
 ## Data Generated
 
 In addition to the [default data collected by all plugins](overview.md#data-collected-by-plugins), this plugin collects the following data for each trial.
 
-Name | Type | Value
------|------|------
-view_history | JSON string | A JSON string containing the order of pages the subject viewed (including when the subject returned to previous pages) and the time spent viewing each page.
-rt | numeric | The response time in milliseconds for the subject to view all of the pages.
+| Name         | Type        | Value                                    |
+| ------------ | ----------- | ---------------------------------------- |
+| view_history | JSON string | A JSON string containing the order of pages the subject viewed (including when the subject returned to previous pages) and the time spent viewing each page. |
+| rt           | numeric     | The response time in milliseconds for the subject to view all of the pages. |
 
 ## Example
 

@@ -52,7 +52,7 @@ var audio_trial = {
 	stimulus: function() { return 'audio/foo.mp3' }
 }
 
-var video_timline = {
+var video_timeline = {
 	timeline: [
 		{
 			type: 'video',

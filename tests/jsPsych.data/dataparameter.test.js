@@ -25,7 +25,7 @@ describe('The data parameter', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(data) { expect(data).toBe(true) });
@@ -57,9 +57,9 @@ describe('The data parameter', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(data) { expect(data).toBe(2) });
@@ -96,9 +96,9 @@ describe('The data parameter', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(data) { expect(data).toBe(2) });
@@ -122,8 +122,8 @@ describe('The data parameter', function(){
       timeline: [trial]
     });
 
-    utils.pressKey(32); // trial 1
-    utils.pressKey(32); // trial 2
+    utils.pressKey('a'); // trial 1
+    utils.pressKey('a'); // trial 2
 
     expect(jsPsych.data.get().filter({added: true}).count()).toBe(1);
     expect(jsPsych.data.get().filter({added: false}).count()).toBe(1);
@@ -147,8 +147,8 @@ describe('The data parameter', function(){
       timeline: [trial]
     });
 
-    utils.pressKey(32); // trial 1
-    utils.pressKey(32); // trial 2
+    utils.pressKey('a'); // trial 1
+    utils.pressKey('a'); // trial 2
 
     expect(jsPsych.data.get().filter({added: true}).count()).toBe(1);
     expect(jsPsych.data.get().filter({added: false}).count()).toBe(1);
@@ -178,8 +178,8 @@ describe('The data parameter', function(){
       timeline: [trial]
     });
 
-    utils.pressKey(32); // trial 1
-    utils.pressKey(32); // trial 2
+    utils.pressKey('a'); // trial 1
+    utils.pressKey('a'); // trial 2
 
     expect(jsPsych.data.get().filter({added_copy: true}).count()).toBe(1);
     expect(jsPsych.data.get().filter({added_copy: false}).count()).toBe(1);
@@ -219,9 +219,9 @@ describe('The data parameter', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(data) { expect(data).toBe(2) });
@@ -246,6 +246,6 @@ describe('The data parameter', function(){
       }
     })
 
-    utils.pressKey(32);
+    utils.pressKey('a');
   })
 });

@@ -1,6 +1,6 @@
 exports.pressKey = function(key){
-  document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {keyCode: key}));
-  document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {keyCode: key}));
+  document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {key: key}));
+  document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: key}));
 }
 
 exports.mouseDownMouseUpTarget = function(target){
