@@ -423,3 +423,110 @@ describe('timeline variables are correctly evaluated', function(){
   })
 
 })
+
+describe('jsPsych.allTimelineVariables()', function(){
+  test('gets all timeline variables for a simple timeline', function(){
+    var t = {
+      timeline: [{
+        type: 'html-keyboard-response',
+        stimulus: 'foo',
+        on_finish: function(data){
+          var all_tvs = jsPsych.allTimelineVariables();
+          Object.assign(data, all_tvs);
+        }
+      }],
+      timeline_variables: [
+        {a: 1, b: 2},
+        {a: 2, b: 3}
+      ]
+    }
+
+    jsPsych.init({timeline: [t]});
+
+    utils.pressKey(32);
+    utils.pressKey(32);
+
+    var data = jsPsych.data.get().values();
+    expect(data[0].a).toBe(1);
+    expect(data[0].b).toBe(2);
+    expect(data[1].a).toBe(2);
+    expect(data[1].b).toBe(3);
+  });
+
+  test('gets all timeline variables for a nested timeline', function(){
+    var t = {
+      timeline: [{
+        type: 'html-keyboard-response',
+        stimulus: 'foo',
+        on_finish: function(data){
+          var all_tvs = jsPsych.allTimelineVariables();
+          Object.assign(data, all_tvs);
+        }
+      }],
+      timeline_variables: [
+        {a: 1, b: 2},
+        {a: 2, b: 3}
+      ]
+    }
+
+    var t2 = {
+      timeline:[t],
+      timeline_variables: [
+        {c: 1},
+        {c: 2}
+      ]
+    }
+
+    jsPsych.init({timeline: [t2]});
+
+    utils.pressKey(32);
+    utils.pressKey(32);
+    utils.pressKey(32);
+    utils.pressKey(32);
+
+
+    var data = jsPsych.data.get().values();
+    expect(data[0].a).toBe(1);
+    expect(data[0].b).toBe(2);
+    expect(data[0].c).toBe(1);
+    expect(data[1].a).toBe(2);
+    expect(data[1].b).toBe(3);
+    expect(data[1].c).toBe(1);
+    expect(data[2].a).toBe(1);
+    expect(data[2].b).toBe(2);
+    expect(data[2].c).toBe(2);
+    expect(data[3].a).toBe(2);
+    expect(data[3].b).toBe(3);
+    expect(data[3].c).toBe(2);
+  });
+
+  test('gets the right values in a conditional_function', function(){
+
+    var a, b;
+    var t = {
+      timeline: [{
+        type: 'html-keyboard-response',
+        stimulus: 'foo'
+      }],
+      timeline_variables: [
+        {a: 1, b: 2},
+        {a: 2, b: 3}
+      ],
+      conditional_function: function(){
+        var all_tvs = jsPsych.allTimelineVariables();
+        console.log(all_tvs);
+        a = all_tvs.a;
+        b = all_tvs.b;
+        return true;
+      }
+    }
+
+    jsPsych.init({timeline: [t]});
+
+    utils.pressKey(32);
+    utils.pressKey(32);
+
+    expect(a).toBe(1);
+    expect(b).toBe(2);
+  });
+})
