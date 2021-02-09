@@ -63,6 +63,7 @@ jsPsych.plugins["webgazer-validate"] = (function() {
   
       var points_completed = -1;
       var val_points = null;
+      var start = performance.now();
 
       validate();
   
@@ -108,7 +109,7 @@ jsPsych.plugins["webgazer-validate"] = (function() {
           
           if(performance.now() > pt_start_val){
             jsPsych.extensions['webgazer'].getCurrentPrediction().then(function(prediction){
-              pt_data.push({dx: prediction.x - x, dy: prediction.y - y});
+              pt_data.push({dx: prediction.x - x, dy: prediction.y - y, t: Math.round(performance.now()-start)});
             });
           }
           if(performance.now() < pt_finish){
@@ -233,7 +234,27 @@ jsPsych.plugins["webgazer-validate"] = (function() {
         return percent;
       }
 
+      function calculateSampleRate(gazeData){
+        var mean_diff = [];
+        for(var i=0; i<gazeData.length; i++){
+          if(gazeData[i].length > 1){
+            var t_diff = [];
+            for(var j=1; j<gazeData[i].length; j++){
+              t_diff.push(gazeData[i][j].t - gazeData[i][j-1].t)
+            }
+            mean_diff.push(t_diff.reduce(function(a,b) { return(a+b) },0) / t_diff.length);
+          }
+        }
+        if(mean_diff.length > 0){
+          return 1000 / (mean_diff.reduce(function(a,b) { return(a+b) }, 0) / mean_diff.length);
+        } else {
+          return null;
+        }
+        
+      }
+
       function validation_done(){
+        trial_data.samples_per_sec = calculateSampleRate(trial_data.raw_gaze).toFixed(2);
         for(var i=0; i<trial.validation_points.length; i++){
           trial_data.percent_in_roi[i] = calculatePercentInROI(trial_data.raw_gaze[i]);
           trial_data.average_offset[i] = calculateGazeCentroid(trial_data.raw_gaze[i]);

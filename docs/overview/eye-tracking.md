@@ -59,13 +59,14 @@ var validation_trial = {
 }
 ```
 
-The validation procedure stores the raw gaze data for each validation point, the computed average offset from each validation point, and the percentage of samples within the `roi_radius` for each validation point.
+The validation procedure stores the raw gaze data for each validation point, the computed average offset from each validation point, the percentage of samples within the `roi_radius` for each validation point, and the number of samples collected per second.
 
 ```js
 {
   raw_gaze: [...],
   percent_in_roi: [...],
-  average_offset: [...]
+  average_offset: [...],
+  samples_per_sec: ...
 }
 ```
 

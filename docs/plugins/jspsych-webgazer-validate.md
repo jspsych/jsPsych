@@ -27,6 +27,7 @@ Name | Type | Value
 raw_gaze | array | Raw gaze data for the trial. The array will contain a nested array for each validation point. Within each nested array will be a list of `{dx,dy}` values specifying the distance from the target for that gaze point.
 percent_in_roi | array | The percentage of samples within the `roi_radius` for each validation point.
 average_offset | array | The average `x` and `y` distance from each validation point, plus the median distance `r` of the points from this average offset.
+samples_per_sec | numeric | The average number of samples per second. Calculated by finding samples per second for each point and then averaging these estimates together.
 
 ## Example
 
