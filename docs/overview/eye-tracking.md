@@ -117,6 +117,7 @@ These are some anecdotal observations about factors that improve data quality.
 1. The quality of the camera feed is essential. Good lighting makes a big difference. You may want to encourage participants to perform any eye tracking experiments in a well-lit room.
 2. Participants need to keep their head relatively still during and after calibration. The calibration is not robust to head movements.
 3. WebGazer's click-based calibration can be used throughout the experiment. You can turn this on by calling `jsPsych.extensions.webgazer.startMouseCalibration()` at any point in the experiment. If you use a continue button to advance through the experiment and move the location of the continue button around you can be making small adjustments to the calibration throughout. 
+4. Computing the gaze predictions consumes more computational resources than most other things that jsPsych is typically used for. The sampling rate that WebGazer is able to achieve will depend on the computing power of the participant's device. You may want to ask the participant to close any non-essential software and browser windows prior to completing the experiment. You may also want to check the sampling rate as part of validation.
 
 If you have tips based on your own experience please consider sharing them on our [discussion forum](https://github.com/jspsych/jsPsych/discussions) and we'll add to this list!
 
