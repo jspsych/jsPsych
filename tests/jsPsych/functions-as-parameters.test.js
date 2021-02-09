@@ -21,7 +21,7 @@ describe('standard use of function as parameter', function(){
     })
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.pressKey(32);
+    utils.pressKey('a');
   });
 
   test('function evaluates at runtime', function(){
@@ -41,7 +41,7 @@ describe('standard use of function as parameter', function(){
     })
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
-    utils.pressKey(32);
+    utils.pressKey('a');
   })
 })
 
@@ -60,7 +60,7 @@ describe('data as function', function(){
       timeline: [trial]
     })
 
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.data.get().values()[0].x).toBe(1)    
   })
 
@@ -78,7 +78,7 @@ describe('data as function', function(){
       timeline: [trial]
     })
 
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.data.get().values()[0].x).toBe(1)    
   })
 })

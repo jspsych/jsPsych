@@ -273,7 +273,7 @@ describe('timeline variables are correctly evaluated', function(){
     })
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
   });
 
@@ -303,7 +303,7 @@ describe('timeline variables are correctly evaluated', function(){
     })
 
    
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(x).toBe('foo');
   })
 
@@ -333,7 +333,7 @@ describe('timeline variables are correctly evaluated', function(){
     })
 
    
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(x).toBe('foo');
   })
 
@@ -360,7 +360,7 @@ describe('timeline variables are correctly evaluated', function(){
     })
 
    
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.data.get().values()[0].x).toBe('foo');
   })
 
@@ -389,7 +389,7 @@ describe('timeline variables are correctly evaluated', function(){
     })
 
    
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(x).toBe('foo');
   })
 
@@ -418,7 +418,7 @@ describe('timeline variables are correctly evaluated', function(){
     })
 
    
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(x).toBe('foo');
   })
 
@@ -443,8 +443,8 @@ describe('jsPsych.allTimelineVariables()', function(){
 
     jsPsych.init({timeline: [t]});
 
-    utils.pressKey(32);
-    utils.pressKey(32);
+    utils.pressKey('a');
+    utils.pressKey('a');
 
     var data = jsPsych.data.get().values();
     expect(data[0].a).toBe(1);
@@ -479,10 +479,10 @@ describe('jsPsych.allTimelineVariables()', function(){
 
     jsPsych.init({timeline: [t2]});
 
-    utils.pressKey(32);
-    utils.pressKey(32);
-    utils.pressKey(32);
-    utils.pressKey(32);
+    utils.pressKey('a');
+    utils.pressKey('a');
+    utils.pressKey('a');
+    utils.pressKey('a');
 
 
     var data = jsPsych.data.get().values();
@@ -523,8 +523,8 @@ describe('jsPsych.allTimelineVariables()', function(){
 
     jsPsych.init({timeline: [t]});
 
-    utils.pressKey(32);
-    utils.pressKey(32);
+    utils.pressKey('a');
+    utils.pressKey('a');
 
     expect(a).toBe(1);
     expect(b).toBe(2);

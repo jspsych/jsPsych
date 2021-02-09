@@ -186,12 +186,12 @@ describe('loop function', function(){
     });
 
     // first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(count).toBe(0);
 
     // second trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(count).toBe(1);
   })
@@ -321,12 +321,12 @@ describe('conditional function', function(){
     expect(conditional_count).toBe(1);
 
     // first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(conditional_count).toBe(1);
 
     // second trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(conditional_count).toBe(1);
   })
@@ -356,12 +356,12 @@ describe('conditional function', function(){
     expect(conditional_count).toBe(1);
 
     // first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(conditional_count).toBe(1);
 
     // second trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(conditional_count).toBe(1);
   })
