@@ -14,11 +14,11 @@ describe('instructions plugin', function(){
 		expect(typeof window.jsPsych.plugins['instructions']).not.toBe('undefined');
 	});
 
-	test('keys can be specified as numeric codes', function(){
+	test('keys can be specified as strings', function(){
 		var trial = {
 			type: 'instructions',
 			pages: ['page 1', 'page 2'],
-			key_forward: 32
+			key_forward: 'a'
 		}
 
 		jsPsych.init({
@@ -27,11 +27,11 @@ describe('instructions plugin', function(){
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('page 1');
 
-		utils.pressKey(32);
+		utils.pressKey('a');
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('page 2');
 
-		utils.pressKey(32);
+		utils.pressKey('a');
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});
@@ -40,7 +40,7 @@ describe('instructions plugin', function(){
 		var trial = {
 			type: 'instructions',
 			pages: ['page 1', 'page 2'],
-			key_forward: 32,
+			key_forward: 'a',
 			allow_backward: false
 		}
 
@@ -50,15 +50,15 @@ describe('instructions plugin', function(){
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('page 1');
 
-		utils.pressKey(32);
+		utils.pressKey('a');
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('page 2');
 
-		utils.pressKey(37); // left arrow
+		utils.pressKey('ArrowLeft');
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('page 2');
 
-		utils.pressKey(32);
+		utils.pressKey('a');
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	})

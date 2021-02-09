@@ -32,11 +32,11 @@ describe('loop function', function(){
     });
 
     // first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.data.get().count()).toBe(1);
 
     // second trial
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.data.get().count()).toBe(2);
 
   });
@@ -60,12 +60,12 @@ describe('loop function', function(){
     });
 
     // first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(jsPsych.data.get().count()).toBe(1);
 
     // second trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(jsPsych.data.get().count()).toBe(1);
 
@@ -97,13 +97,13 @@ describe('loop function', function(){
     });
 
     // first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     // second trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     // third trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(data_count).toEqual([1,1,1]);
     expect(jsPsych.data.get().count()).toBe(3);
@@ -149,21 +149,21 @@ describe('loop function', function(){
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('a');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('b');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('c');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.pressKey(32);
+    utils.pressKey('a');
   });
 
 });
@@ -194,7 +194,7 @@ describe('conditional function', function(){
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
 
     // clear
-    utils.pressKey(32);
+    utils.pressKey('a');
   });
 
   test('completes the timeline when returns true', function(){
@@ -220,12 +220,12 @@ describe('conditional function', function(){
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
 
     // next
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
 
     // clear
-    utils.pressKey(32);
+    utils.pressKey('a');
   });
 
   test('executes on every loop of the timeline', function(){
@@ -259,12 +259,12 @@ describe('conditional function', function(){
     expect(conditional_count).toBe(1);
 
     // first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(conditional_count).toBe(2);
 
     // second trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(conditional_count).toBe(2);
   });
@@ -305,15 +305,15 @@ describe('conditional function', function(){
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('a');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('b');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('c');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.pressKey(32);
+    utils.pressKey('a');
   });
 
 });
@@ -348,11 +348,11 @@ describe('endCurrentTimeline', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('woo');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
   });
 
@@ -392,15 +392,15 @@ describe('endCurrentTimeline', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('woo');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
   })
 });
 
@@ -427,11 +427,11 @@ describe('nested timelines', function() {
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
   })
 })
@@ -463,9 +463,9 @@ describe('add node to end of timeline', function(){
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
-    utils.pressKey(32);
+    utils.pressKey('a');
   });
 
   test('adds node to end of timeline, with callback', function() {
@@ -488,9 +488,9 @@ describe('add node to end of timeline', function(){
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
-    utils.pressKey(32);
+    utils.pressKey('a');
 
   });
 

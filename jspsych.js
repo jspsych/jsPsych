@@ -112,7 +112,8 @@ window.jsPsych = (function() {
         'default_iti': 0,
         'minimum_valid_rt': 0,
         'experiment_width': null,
-        'override_safe_mode': false
+        'override_safe_mode': false,
+        'case_sensitive_responses': false
       };
 
       // detect whether page is running in browser as a local file, and if so, disable web audio and video preloading to prevent CORS issues
@@ -1129,7 +1130,7 @@ jsPsych.plugins = (function() {
     INT: 2,
     FLOAT: 3,
     FUNCTION: 4,
-    KEYCODE: 5,
+    KEY: 5,
     SELECT: 6,
     HTML_STRING: 7,
     IMAGE: 8,
@@ -2101,10 +2102,10 @@ jsPsych.pluginAPI = (function() {
     for(var i=0; i<keyboard_listeners.length; i++){
       keyboard_listeners[i].fn(e);
     }
-    held_keys[e.keyCode] = true;
+    held_keys[e.key] = true;
   }
   var root_keyup_listener = function(e){
-    held_keys[e.keyCode] = false;
+    held_keys[e.key] = false;
   }
 
   module.reset = function(root_element){
@@ -2121,7 +2122,7 @@ jsPsych.pluginAPI = (function() {
 
   module.getKeyboardResponse = function(parameters) {
 
-    //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key?
+    //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key
 
     parameters.rt_method = (typeof parameters.rt_method === 'undefined') ? 'performance' : parameters.rt_method;
     if (parameters.rt_method != 'performance' && parameters.rt_method != 'audio') {
@@ -2135,6 +2136,8 @@ jsPsych.pluginAPI = (function() {
     } else if (parameters.rt_method === 'audio') {
       start_time = parameters.audio_context_start_time;
     }
+
+    var case_sensitive = jsPsych.initSettings().case_sensitive_responses;
 
     var listener_id;
 
@@ -2158,30 +2161,31 @@ jsPsych.pluginAPI = (function() {
       }
 
       var valid_response = false;
-      if (typeof parameters.valid_responses === 'undefined' || parameters.valid_responses == jsPsych.ALL_KEYS) {
+      if (typeof parameters.valid_responses === 'undefined'){
         valid_response = true;
-      } else {
-        if(parameters.valid_responses != jsPsych.NO_KEYS){
-          for (var i = 0; i < parameters.valid_responses.length; i++) {
-            if (typeof parameters.valid_responses[i] == 'string') {
-              var kc = jsPsych.pluginAPI.convertKeyCharacterToKeyCode(parameters.valid_responses[i]);
-              if (typeof kc !== 'undefined') {
-                if (e.keyCode == kc) {
-                  valid_response = true;
-                }
-              } else {
-                throw new Error('Invalid key string specified for getKeyboardResponse');
-              }
-            } else if (e.keyCode == parameters.valid_responses[i]) {
-              valid_response = true;
-            }
+      }
+      else if(parameters.valid_responses == jsPsych.ALL_KEYS) {
+        valid_response = true;
+      } 
+      else if(parameters.valid_responses != jsPsych.NO_KEYS){
+        if(parameters.valid_responses.includes(e.key)){
+          valid_response = true;
+        }
+        if(!case_sensitive) {
+          var valid_lower = parameters.valid_responses.map(function(v) {return v.toLowerCase();});
+          var key_lower = e.key.toLowerCase();
+          if (valid_lower.includes(key_lower)) {
+            valid_response = true;
           }
         }
       }
+      
       // check if key was already held down
-
       if (((typeof parameters.allow_held_key === 'undefined') || !parameters.allow_held_key) && valid_response) {
-        if (typeof held_keys[e.keyCode] !== 'undefined' && held_keys[e.keyCode] == true) {
+        if (typeof held_keys[e.key] !== 'undefined' && held_keys[e.key] == true) {
+          valid_response = false;
+        }
+        if (!case_sensitive && typeof held_keys[e.key.toLowerCase()] !== 'undefined' && held_keys[e.key.toLowerCase()] == true) {
           valid_response = false;
         }
       }
@@ -2190,9 +2194,12 @@ jsPsych.pluginAPI = (function() {
         // if this is a valid response, then we don't want the key event to trigger other actions
         // like scrolling via the spacebar.
         e.preventDefault();
-
+        var key = e.key;
+        if (!case_sensitive) {
+          key = key.toLowerCase();
+        }
         parameters.callback_function({
-          key: e.keyCode,
+          key: key,
           rt: rt,
         });
 
@@ -2231,6 +2238,8 @@ jsPsych.pluginAPI = (function() {
   };
 
   module.convertKeyCharacterToKeyCode = function(character) {
+    console.warn('Warning: The jsPsych.pluginAPI.convertKeyCharacterToKeyCode function will be removed in future jsPsych releases. '+
+    'We recommend removing this function and using strings to identify/compare keys.');
     var code;
     character = character.toLowerCase();
     if (typeof keylookup[character] !== 'undefined') {
@@ -2240,6 +2249,8 @@ jsPsych.pluginAPI = (function() {
   }
 
   module.convertKeyCodeToKeyCharacter = function(code){
+    console.warn('Warning: The jsPsych.pluginAPI.convertKeyCodeToKeyCharacter function will be removed in future jsPsych releases. '+
+    'We recommend removing this function and using strings to identify/compare keys.');
     for(var i in Object.keys(keylookup)){
       if(keylookup[Object.keys(keylookup)[i]] == code){
         return Object.keys(keylookup)[i];
@@ -2249,6 +2260,8 @@ jsPsych.pluginAPI = (function() {
   }
 
   module.compareKeys = function(key1, key2){
+    console.warn('Warning: The jsPsych.pluginAPI.compareKeys function will be removed in future jsPsych releases. '+
+    'We recommend removing this function and using strings to identify/compare keys.');
     // convert to numeric values no matter what
     if(typeof key1 == 'string') {
       key1 = module.convertKeyCharacterToKeyCode(key1);

@@ -41,7 +41,7 @@ jsPsych.plugins.animation = (function() {
         description: 'Number of times to show entire sequence.'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Choices',
         default: jsPsych.ALL_KEYS,
         array: true,

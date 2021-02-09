@@ -26,9 +26,9 @@ describe('minimum_valid_rt parameter', function(){
     jsPsych.init({timeline: [t,t2]});
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
-    utils.pressKey(32);
+    utils.pressKey('a');
   });
 
   test('correctly prevents fast responses when set', function(done){
@@ -45,12 +45,12 @@ describe('minimum_valid_rt parameter', function(){
     jsPsych.init({timeline: [t,t2], minimum_valid_rt: 100});
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
     setTimeout(function(){
-      utils.pressKey(32);
+      utils.pressKey('a');
       expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
-      utils.pressKey(32);
+      utils.pressKey('a');
       done();
     }, 100)
     

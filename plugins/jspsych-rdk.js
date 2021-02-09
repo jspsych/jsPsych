@@ -37,14 +37,14 @@ jsPsych.plugins["rdk"] = (function() {
 	    name: "rdk",
 	    parameters: {
 		    choices: {
-		      type: jsPsych.plugins.parameterType.INT,
+		      type: jsPsych.plugins.parameterType.KEY,
 		      pretty_name: "Choices",
-		      default: [],
+		      default: jsPsych.ALL_KEYS,
 		      array: true,
 		      description: "The valid keys that the subject can press to indicate a response"
 		    },
 		    correct_choice: {
-		      type: jsPsych.plugins.parameterType.STRING,
+		      type: jsPsych.plugins.parameterType.KEY,
 		      pretty_name: "Correct choice",
 		      default: undefined,
 		      array: true,
@@ -601,12 +601,11 @@ jsPsych.plugins["rdk"] = (function() {
 				if(trial.correct_choice.constructor === Array){ //If it is an array
 					//If the elements are characters
 					if(typeof trial.correct_choice[0] === 'string' || trial.correct_choice[0] instanceof String){
-						trial.correct_choice = trial.correct_choice.map(function(x){return x.toUpperCase();}); //Convert all the values to upper case
-						return trial.correct_choice.includes(String.fromCharCode(response.key)); //If the response is included in the correct_choice array, return true. Else, return false.
+						return trial.correct_choice.includes(response.key); //If the response is included in the correct_choice array, return true. Else, return false.
 					}
 					//Else if the elements are numbers (javascript character codes)
 					else if (typeof trial.correct_choice[0] === 'number'){
-						return trial.correct_choice.includes(response.key); //If the response is included in the correct_choice array, return true. Else, return false.
+						console.error('Error in RDK plugin: correct_choice value must be a string.');
 					}
 				}
 				//Else compare the char with the response key
@@ -614,12 +613,11 @@ jsPsych.plugins["rdk"] = (function() {
 					//If the element is a character
 					if(typeof trial.correct_choice === 'string' || trial.correct_choice instanceof String){
 						//Return true if the user's response matches the correct answer. Return false otherwise.
-						return response.key == trial.correct_choice.toUpperCase().charCodeAt(0);
+						return response.key == trial.correct_choice;
 					}
 					//Else if the element is a number (javascript character codes)
 					else if (typeof trial.correct_choice === 'number'){
-						console.log(response.key == trial.correct_choice);
-						return response.key == trial.correct_choice;
+						console.error('Error in RDK plugin: correct_choice value must be a string.');
 					}
 				}
 			}
