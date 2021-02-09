@@ -9,6 +9,8 @@ window.jsPsych = (function() {
 
   var core = {};
 
+  core.version = function() { return "6.3.0" };
+
   //
   // private variables
   //
@@ -110,7 +112,8 @@ window.jsPsych = (function() {
         'default_iti': 0,
         'minimum_valid_rt': 0,
         'experiment_width': null,
-        'override_safe_mode': false
+        'override_safe_mode': false,
+        'case_sensitive_responses': false
       };
 
       // detect whether page is running in browser as a local file, and if so, disable web audio and video preloading to prevent CORS issues
@@ -262,6 +265,11 @@ window.jsPsych = (function() {
     if(current_trial_finished){ return; }
     current_trial_finished = true;
 
+    // remove any CSS classes that were added to the DOM via css_classes parameter
+    if(typeof current_trial.css_classes !== 'undefined' && Array.isArray(current_trial.css_classes)){
+      DOM_target.classList.remove(...current_trial.css_classes);
+    }
+
     // write the data from the trial
     data = typeof data == 'undefined' ? {} : data;
     jsPsych.data.write(data);
@@ -272,6 +280,9 @@ window.jsPsych = (function() {
     // for trial-level callbacks, we just want to pass in a reference to the values
     // of the DataCollection, for easy access and editing.
     var trial_data_values = trial_data.values()[0];
+
+    // about to execute lots of callbacks, so switch context.
+    jsPsych.internal.call_immediate = true;
 
     // handle callback at plugin level
     if (typeof current_trial.on_finish === 'function') {
@@ -285,6 +296,9 @@ window.jsPsych = (function() {
     // for this trial. call the on_data_update handler, passing in the same
     // data object that just went through the trial's finish handlers.
     opts.on_data_update(trial_data_values);
+
+    // done with callbacks
+    jsPsych.internal.call_immediate = false;
 
     // wait for iti
     if (typeof current_trial.post_trial_gap === null || typeof current_trial.post_trial_gap === 'undefined') {
@@ -326,12 +340,17 @@ window.jsPsych = (function() {
     return timeline.activeID();
   };
 
-  core.timelineVariable = function(varname, execute){
-    if(execute){
+  core.timelineVariable = function(varname, immediate){
+    if(typeof immediate == 'undefined'){ immediate = false; }
+    if(jsPsych.internal.call_immediate || immediate === true){
       return timeline.timelineVariable(varname);
     } else {
       return function() { return timeline.timelineVariable(varname); }
     }
+  }
+
+  core.allTimelineVariables = function(){
+    return timeline.allTimelineVariables();
   }
 
   core.addNodeToEndOfTimeline = function(new_timeline, preload_callback){
@@ -492,6 +511,7 @@ window.jsPsych = (function() {
           // repetitions > 1, and only when on the first variable set
           if (typeof timeline_parameters.conditional_function !== 'undefined' && progress.current_repetition==0 && progress.current_variable_set == 0) {
             var conditional_result = timeline_parameters.conditional_function();
+            jsPsych.internal.call_immediate = false;
             // if the conditional_function() returns false, then the timeline
             // doesn't run and is marked as complete.
             if (conditional_result == false) {
@@ -561,6 +581,7 @@ window.jsPsych = (function() {
           return this.advance();
         }
 
+
         // if we're all done with the repetitions...
         else {
           // check to see if there is an on_timeline_finish function
@@ -568,16 +589,21 @@ window.jsPsych = (function() {
             timeline_parameters.on_timeline_finish();
           }
 
-          // check to see if there is a loop_function
+          // if we're all done with the repetitions, check if there is a loop function.
           if (typeof timeline_parameters.loop_function !== 'undefined') {
+            jsPsych.internal.call_immediate = true;
             if (timeline_parameters.loop_function(this.generatedData())) {
               this.reset();
+              jsPsych.internal.call_immediate = false;
               return parent_node.advance();
             } else {
               progress.done = true;
+              jsPsych.internal.call_immediate = false;
               return true;
             }
           }
+
+       
         }
 
         // no more loops on this timeline, we're done!
@@ -632,6 +658,42 @@ window.jsPsych = (function() {
         }
         // now find the variable
         return timeline_parameters.timeline[loc].timelineVariable(variable_name); 
+      }
+    }
+
+    // recursively get all the timeline variables for this trial
+    this.allTimelineVariables = function(){
+      var all_tvs = this.allTimelineVariablesNames();
+      var all_tvs_vals = {};
+      for(var i=0; i<all_tvs.length; i++){
+        all_tvs_vals[all_tvs[i]] = this.timelineVariable(all_tvs[i])
+      }
+      return all_tvs_vals;
+    }
+
+    // helper to get all the names at this stage.
+    this.allTimelineVariablesNames = function(so_far){
+      if(typeof so_far == 'undefined'){
+        so_far = [];
+      }
+      if(typeof timeline_parameters !== 'undefined'){
+        so_far = so_far.concat(Object.keys(timeline_parameters.timeline_variables[progress.order[progress.current_variable_set]]));
+        // if progress.current_location is -1, then the timeline variable is being evaluated
+        // in a function that runs prior to the trial starting, so we should treat that trial
+        // as being the active trial for purposes of finding the value of the timeline variable
+        var loc = Math.max(0, progress.current_location);
+        // if loc is greater than the number of elements on this timeline, then the timeline
+        // variable is being evaluated in a function that runs after the trial on the timeline
+        // are complete but before advancing to the next (like a loop_function).
+        // treat the last active trial as the active trial for this purpose.
+        if(loc == timeline_parameters.timeline.length){
+          loc = loc - 1;
+        }
+        // now find the variable
+        return timeline_parameters.timeline[loc].allTimelineVariablesNames(so_far);
+      }
+      if(typeof timeline_parameters == 'undefined'){
+        return so_far;
       }
     }
 
@@ -895,6 +957,9 @@ window.jsPsych = (function() {
     // get default values for parameters
     setDefaultValues(trial);
 
+    // about to execute callbacks
+    jsPsych.internal.call_immediate = true;
+
     // call experiment wide callback
     opts.on_trial_start(trial);
 
@@ -909,6 +974,16 @@ window.jsPsych = (function() {
     // reset the scroll on the DOM target
     DOM_target.scrollTop = 0;
 
+    // add CSS classes to the DOM_target if they exist in trial.css_classes
+    if(typeof trial.css_classes !== 'undefined'){
+      if(!Array.isArray(trial.css_classes) && typeof trial.css_classes == 'string'){
+        trial.css_classes = [trial.css_classes];
+      }
+      if(Array.isArray(trial.css_classes)){
+        DOM_target.classList.add(...trial.css_classes)
+      }
+    }
+
     // execute trial method
     jsPsych.plugins[trial.type].trial(DOM_target, trial);
 
@@ -916,6 +991,9 @@ window.jsPsych = (function() {
     if(typeof trial.on_load == 'function'){
       trial.on_load();
     }
+    
+    // done with callbacks
+    jsPsych.internal.call_immediate = false;
   }
 
   function evaluateTimelineVariables(trial){
@@ -934,6 +1012,9 @@ window.jsPsych = (function() {
   }
 
   function evaluateFunctionParameters(trial){
+
+    // set a flag so that jsPsych.timelineVariable() is immediately executed in this context
+    jsPsych.internal.call_immediate = true;
 
     // first, eval the trial type if it is a function
     // this lets users set the plugin type with a function
@@ -973,6 +1054,9 @@ window.jsPsych = (function() {
         }
       }
     }
+
+    // reset so jsPsych.timelineVariable() is no longer immediately executed
+    jsPsych.internal.call_immediate = false;
   }
 
   function setDefaultValues(trial){
@@ -1090,6 +1174,17 @@ window.jsPsych = (function() {
   return core;
 })();
 
+jsPsych.internal = (function() {
+  var module = {};
+
+  // this flag is used to determine whether we are in a scope where
+  // jsPsych.timelineVariable() should be executed immediately or
+  // whether it should return a function to access the variable later.
+  module.call_immediate = false;
+
+  return module;
+})();
+
 jsPsych.plugins = (function() {
 
   var module = {};
@@ -1101,7 +1196,7 @@ jsPsych.plugins = (function() {
     INT: 2,
     FLOAT: 3,
     FUNCTION: 4,
-    KEYCODE: 5,
+    KEY: 5,
     SELECT: 6,
     HTML_STRING: 7,
     IMAGE: 8,
@@ -1141,6 +1236,12 @@ jsPsych.plugins = (function() {
       pretty_name: 'Post trial gap',
       default: null,
       description: 'Length of gap between the end of this trial and the start of the next trial'
+    },
+    css_classes: {
+      type: module.parameterType.STRING,
+      pretty_name: 'Custom CSS classes',
+      default: null,
+      description: 'A list of CSS classes to add to the jsPsych display element for the duration of this trial'
     }
   }
 
@@ -2067,10 +2168,10 @@ jsPsych.pluginAPI = (function() {
     for(var i=0; i<keyboard_listeners.length; i++){
       keyboard_listeners[i].fn(e);
     }
-    held_keys[e.keyCode] = true;
+    held_keys[e.key] = true;
   }
   var root_keyup_listener = function(e){
-    held_keys[e.keyCode] = false;
+    held_keys[e.key] = false;
   }
 
   module.reset = function(root_element){
@@ -2087,7 +2188,7 @@ jsPsych.pluginAPI = (function() {
 
   module.getKeyboardResponse = function(parameters) {
 
-    //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key?
+    //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key
 
     parameters.rt_method = (typeof parameters.rt_method === 'undefined') ? 'performance' : parameters.rt_method;
     if (parameters.rt_method != 'performance' && parameters.rt_method != 'audio') {
@@ -2101,6 +2202,8 @@ jsPsych.pluginAPI = (function() {
     } else if (parameters.rt_method === 'audio') {
       start_time = parameters.audio_context_start_time;
     }
+
+    var case_sensitive = jsPsych.initSettings().case_sensitive_responses;
 
     var listener_id;
 
@@ -2124,30 +2227,31 @@ jsPsych.pluginAPI = (function() {
       }
 
       var valid_response = false;
-      if (typeof parameters.valid_responses === 'undefined' || parameters.valid_responses == jsPsych.ALL_KEYS) {
+      if (typeof parameters.valid_responses === 'undefined'){
         valid_response = true;
-      } else {
-        if(parameters.valid_responses != jsPsych.NO_KEYS){
-          for (var i = 0; i < parameters.valid_responses.length; i++) {
-            if (typeof parameters.valid_responses[i] == 'string') {
-              var kc = jsPsych.pluginAPI.convertKeyCharacterToKeyCode(parameters.valid_responses[i]);
-              if (typeof kc !== 'undefined') {
-                if (e.keyCode == kc) {
-                  valid_response = true;
-                }
-              } else {
-                throw new Error('Invalid key string specified for getKeyboardResponse');
-              }
-            } else if (e.keyCode == parameters.valid_responses[i]) {
-              valid_response = true;
-            }
+      }
+      else if(parameters.valid_responses == jsPsych.ALL_KEYS) {
+        valid_response = true;
+      } 
+      else if(parameters.valid_responses != jsPsych.NO_KEYS){
+        if(parameters.valid_responses.includes(e.key)){
+          valid_response = true;
+        }
+        if(!case_sensitive) {
+          var valid_lower = parameters.valid_responses.map(function(v) {return v.toLowerCase();});
+          var key_lower = e.key.toLowerCase();
+          if (valid_lower.includes(key_lower)) {
+            valid_response = true;
           }
         }
       }
+      
       // check if key was already held down
-
       if (((typeof parameters.allow_held_key === 'undefined') || !parameters.allow_held_key) && valid_response) {
-        if (typeof held_keys[e.keyCode] !== 'undefined' && held_keys[e.keyCode] == true) {
+        if (typeof held_keys[e.key] !== 'undefined' && held_keys[e.key] == true) {
+          valid_response = false;
+        }
+        if (!case_sensitive && typeof held_keys[e.key.toLowerCase()] !== 'undefined' && held_keys[e.key.toLowerCase()] == true) {
           valid_response = false;
         }
       }
@@ -2156,9 +2260,12 @@ jsPsych.pluginAPI = (function() {
         // if this is a valid response, then we don't want the key event to trigger other actions
         // like scrolling via the spacebar.
         e.preventDefault();
-
+        var key = e.key;
+        if (!case_sensitive) {
+          key = key.toLowerCase();
+        }
         parameters.callback_function({
-          key: e.keyCode,
+          key: key,
           rt: rt,
         });
 
@@ -2197,6 +2304,8 @@ jsPsych.pluginAPI = (function() {
   };
 
   module.convertKeyCharacterToKeyCode = function(character) {
+    console.warn('Warning: The jsPsych.pluginAPI.convertKeyCharacterToKeyCode function will be removed in future jsPsych releases. '+
+    'We recommend removing this function and using strings to identify/compare keys.');
     var code;
     character = character.toLowerCase();
     if (typeof keylookup[character] !== 'undefined') {
@@ -2206,6 +2315,8 @@ jsPsych.pluginAPI = (function() {
   }
 
   module.convertKeyCodeToKeyCharacter = function(code){
+    console.warn('Warning: The jsPsych.pluginAPI.convertKeyCodeToKeyCharacter function will be removed in future jsPsych releases. '+
+    'We recommend removing this function and using strings to identify/compare keys.');
     for(var i in Object.keys(keylookup)){
       if(keylookup[Object.keys(keylookup)[i]] == code){
         return Object.keys(keylookup)[i];
@@ -2215,6 +2326,8 @@ jsPsych.pluginAPI = (function() {
   }
 
   module.compareKeys = function(key1, key2){
+    console.warn('Warning: The jsPsych.pluginAPI.compareKeys function will be removed in future jsPsych releases. '+
+    'We recommend removing this function and using strings to identify/compare keys.');
     // convert to numeric values no matter what
     if(typeof key1 == 'string') {
       key1 = module.convertKeyCharacterToKeyCode(key1);

@@ -13,8 +13,8 @@ Parameter | Type | Default Value | Description
 stim_function | function | *undefined* | A function with a single parameter that returns an HTML-formatted string representing the stimulus.
 starting_value | numeric | 0.5 | The starting value of the stimulus parameter.
 step_size | numeric | 0.05 | The change in the stimulus parameter caused by pressing one of the modification keys.
-key_increase | key code | 'h' | The key to press for increasing the parameter value.
-key_decrease | key code | 'g' | The key to press for decreasing the parameter value.
+key_increase | string | 'h' | The key to press for increasing the parameter value.
+key_decrease | string | 'g' | The key to press for decreasing the parameter value.
 button_label | string | 'Continue' | The text that appears on the button to finish the trial.
 
 ## Data Generated

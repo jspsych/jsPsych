@@ -15,7 +15,7 @@ describe('Data recording', function(){
     jsPsych.init({timeline:timeline});
     window.dispatchEvent(new Event('focus'));
     // click through first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
     // check data
     expect(jsPsych.data.getInteractionData().filter({event: 'focus'}).count()).toBe(1);
   })
@@ -27,7 +27,7 @@ describe('Data recording', function(){
     jsPsych.init({timeline:timeline});
     window.dispatchEvent(new Event('blur'));
     // click through first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
     // check data
     expect(jsPsych.data.getInteractionData().filter({event: 'blur'}).count()).toBe(1);
   })
@@ -40,7 +40,7 @@ describe('Data recording', function(){
     ];
     jsPsych.init({timeline:timeline});
     // click through first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
     // check if data contains rt
   });
 
@@ -50,7 +50,7 @@ describe('Data recording', function(){
     ];
     jsPsych.init({timeline:timeline});
     // click through first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
     // check if data contains rt
   });
 
@@ -78,7 +78,7 @@ describe('on_interaction_data_update', function(){
     expect(updatefn.mock.calls.length).toBeGreaterThanOrEqual(1); // >= because of jsdom window not isolated to this test.
 
     // click through first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
   });
 
   test('fires for focus', function(){
@@ -94,7 +94,7 @@ describe('on_interaction_data_update', function(){
     window.dispatchEvent(new Event('focus'));
     expect(updatefn.mock.calls.length).toBeGreaterThanOrEqual(1); // >= because of jsdom window not isolated to this test.
     // click through first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
   })
 
   /* not sure yet how to test fullscreen events with jsdom engine */

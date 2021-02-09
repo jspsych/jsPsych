@@ -18,8 +18,7 @@
   var trial_1 = {
     type: 'video-button-response',
     stimulus: ['video/sample_video.mp4'],
-    choices: ['y','n'],
-    button_html: '<button class="jspsych-btn">%choice%!</button>',
+    choices: ['Y','N'],
     margin_vertical: '10px',
     margin_horizontal: '8px',
     prompt: 'Press Y or N',
@@ -37,10 +36,11 @@
   var trial_2 = {
     type: 'video-button-response',
     stimulus: ['video/sample_video.mp4'],
-    choices: ['Great','Not great'],
+    choices: ['😄','😁','🥱','😣','🤯'],
+    button_html: '<div style="font-size:40px;">%choice%</div>',
     margin_vertical: '10px',
     margin_horizontal: '8px',
-    prompt: '<p>How great was the video?</p><p>When the video stops, click a button to end the trial.</p><p>Response buttons are disabled while the video is playing.</p>',
+    prompt: '<p>Click the emoji that best represents your reaction to the video</p><p>When the video stops, click a button to end the trial.</p><p>Response buttons are disabled while the video is playing.</p>',
     width: 600,
     autoplay: true,
     response_ends_trial: true,

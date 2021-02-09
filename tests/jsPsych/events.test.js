@@ -27,9 +27,9 @@ describe('on_finish (trial)', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
-    })).then(function(data) { expect(data.key_data).toBe(32) });
+    })).then(function(data) { expect(data.key_data).toBe('a') });
   });
 
   test('should be able to write to the data', function(){
@@ -54,7 +54,7 @@ describe('on_finish (trial)', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(pd) {
@@ -86,7 +86,7 @@ describe('on_start (trial)', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
     })).then(function(data) { expect(data).toBe('hello') });
   });
@@ -115,7 +115,7 @@ describe('on_start (trial)', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
     })).then(function(data) { expect(data).toBe('hello') });
   });
@@ -143,11 +143,11 @@ describe('on_trial_finish (experiment level)', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(pd) {
-      expect(pd.key).toBe(32);
+      expect(pd.key).toBe('a');
     });
   });
 
@@ -173,7 +173,7 @@ describe('on_trial_finish (experiment level)', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(pd) {
@@ -204,11 +204,11 @@ describe('on_data_update', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(pd) {
-      expect(pd.key).toBe(32);
+      expect(pd.key).toBe('a');
     });
   });
 
@@ -275,7 +275,7 @@ describe('on_data_update', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(pd) {
@@ -307,7 +307,7 @@ describe('on_data_update', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(pd) {
@@ -339,7 +339,7 @@ describe('on_trial_start', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(pd) {
@@ -364,7 +364,7 @@ describe('on_trial_start', function(){
     var display_element = jsPsych.getDisplayElement();
     expect(display_element.innerHTML).toMatch('goodbye');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
   });
 });
 

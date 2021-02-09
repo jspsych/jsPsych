@@ -23,13 +23,13 @@ jsPsych.plugins["categorize-animation"] = (function() {
         description: 'Array of paths to image files.'
       },
       key_answer: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key answer',
         default: undefined,
         description: 'The key to indicate correct response'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Choices',
         default: jsPsych.ALL_KEYS,
         array: true,
