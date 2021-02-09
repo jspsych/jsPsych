@@ -863,12 +863,12 @@ var test = {
   choices: ['f', 'j'],
   data: jsPsych.timelineVariable('data'),
   on_finish: function(data){
-    data.correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.correct_response);
+    data.correct = data.key_press == data.correct_response;
   }
 }
 ```
 
-The `data.key_press` value is a numeric key code indicating which key the subject pressed. The function `jsPsych.pluginAPI.convertKeyCharacterToKeyCode` converts the character representation of a key into the numeric representation (e.g., calling the function on the value `'f'` generates the value `70`). If this numeric value matches `data.key_press` then `data.correct` will be `true`. Otherwise, it will be `false`.
+The `data.key_press` value is a string representation of the key the subject pressed. We can compare this with the `data.correct_response` value, and assign this computer value to a new property `data.correct`.
 
 ### The complete code so far
 
@@ -936,7 +936,7 @@ The `data.key_press` value is a numeric key code indicating which key the subjec
       choices: ['f', 'j'],
       data: jsPsych.timelineVariable('data'),
       on_finish: function(data){
-        data.correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.correct_response);
+        data.correct = data.key_press == data.correct_response;
       }
     }
 
@@ -1064,7 +1064,7 @@ This code is available in the examples folder in the jsPsych download. It is cal
       choices: ['f', 'j'],
       data: jsPsych.timelineVariable('data'),
       on_finish: function(data){
-        data.correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.correct_response);
+        data.correct = data.key_press == data.correct_response;
       },
     }
 

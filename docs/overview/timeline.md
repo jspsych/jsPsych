@@ -130,7 +130,8 @@ In the above version, there are four separate trials defined in the `timeline_va
 
 What if we wanted the stimuli to be a little more complex, with a name displayed below each face? And let's add an additional step where the name is displayed prior to the face appearing. (Maybe this is one condition of an experiment investigating whether the order of name-face or face-name affects retention.)
 
-To do this, we will need to use the `jsPsych.timelineVariable()` method in a slightly different way. Instead of using it as the parameter, we are going to create a dynamic parameter using a function and place the call to `jsPsych.timelineVariable()` inside this function. This will allow us to create an HTML string that has both the image and the name. Note that there is a subtle syntax difference: there is an extra parameter when `jsPsych.timelineVariable()` is called within a function. This `true` value causes the `jsPsych.timelineVariable()` to immediately return the value of the timeline variable. In a normal context, the function `jsPsych.timelineVariable()` returns a function. This is why `jsPsych.timelineVariable()` can be used directly as a parameter even though the parameter is dynamic.
+This time, instead of using `jsPsych.timelineVariable()` as the stimulus parameter value, we are going to create a dynamic parameter (function), and place the call to `jsPsych.timelineVariable()` inside this function. This will allow us to create a parameter value that combines multiple bits of information, such as one or more of the values that change across trials (which come from the `timeline_variables` array), and/or anything that doesn't change across trials. In this example, we'll need to switch to using the "html-keyboard-response" plugin so that we can define the stimulus as a custom HTML string that contains an image and text (instead of just an image file). The value of the stimulus parameter will be a function that returns an HTML string that contains both the image and the name. 
+(Note: in previous versions of jsPsych, there's an extra `true` parameter that you must add when calling `jsPsych.timelineVariable()` from inside a function. As of jsPsych v6.3, `jsPsych.timelineVariable()` automatically detects the context in which it's called, so this additional `true` parameter is not required.)
 
 
 ```javascript
@@ -151,8 +152,8 @@ var face_name_procedure = {
 		{
 			type: 'html-keyboard-response',
 			stimulus: function(){
-				var html="<img src='"+jsPsych.timelineVariable('face', true)+"'>";
-				html += "<p>"+jsPsych.timelineVariable('name', true)+"</p>";
+				var html="<img src='"+jsPsych.timelineVariable('face')+"'>";
+				html += "<p>"+jsPsych.timelineVariable('name')+"</p>";
 				return html;
 			},			
 			choices: jsPsych.NO_KEYS,
@@ -337,7 +338,7 @@ var trial = {
 var loop_node = {
 	timeline: [trial],
 	loop_function: function(data){
-		if(jsPsych.pluginAPI.convertKeyCharacterToKeyCode('r') == data.values()[0].key_press){
+		if(data.values()[0].key_press == 'r'){
 			return true;
 		} else {
 			return false;
@@ -367,7 +368,7 @@ var if_node = {
 		// get the data from the previous trial,
 		// and check which key was pressed
 		var data = jsPsych.data.get().last(1).values()[0];
-		if(data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('s')){
+		if(data.key_press == 's'){
 			return false;
 		} else {
 			return true;

@@ -61,7 +61,7 @@ var trial = {
   type: 'image-keyboard-response',
   stimulus: 'imgA.jpg',
   on_finish: function(data){
-    if(data.key_press == 65){
+    if(data.key_press == 'j'){
       data.correct = true;
     } else {
       data.correct = false;

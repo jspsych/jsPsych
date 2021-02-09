@@ -12,11 +12,11 @@ jsPsych.randomization.factorial(factors, repetitions, unpack)
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
-factors | object | The `factors` object should contain a property for each different factor. Each property-factor should have a value of an array, with each element of the array corresponding to a level of the factor.
-repetitions | integer | The number of times to repeat each unique combination of the factors in the output sample.
-unpack | boolean | If `true` then the output will be an object with a property for each factor in the original `factors` object. The value of each property-factor will be an array containing the levels of the factor in a random order. The order will be consistent across each property-factor (e.g., the first element of each property-factor will specify one unique combination of the factors). If `false`, then the return value will be an array of objects where each property-factor contains only a single value.
+| Parameter   | Type    | Description                              |
+| ----------- | ------- | ---------------------------------------- |
+| factors     | object  | The `factors` object should contain a property for each different factor. Each property-factor should have a value of an array, with each element of the array corresponding to a level of the factor. |
+| repetitions | integer | The number of times to repeat each unique combination of the factors in the output sample. |
+| unpack      | boolean | If `true` then the output will be an object with a property for each factor in the original `factors` object. The value of each property-factor will be an array containing the levels of the factor in a random order. The order will be consistent across each property-factor (e.g., the first element of each property-factor will specify one unique combination of the factors). If `false`, then the return value will be an array of objects where each property-factor contains only a single value. |
 
 ### Return value
 
@@ -99,9 +99,9 @@ jsPsych.randomization.randomID(length)
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
-length | integer | The length of the randomly generated ID
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| length    | integer | The length of the randomly generated ID |
 
 ### Return value
 
@@ -132,11 +132,11 @@ jsPsych.randomization.repeat(array, repetitions, unpack)
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
-array | array | The array of values to randomize & repeat.
-repetitions | integer or array | The number of times to repeat each element of the `array` in the final sample. If this parameter is defined as an integer, then each element of `array` is repeated the same number of times. This parameter can also be an array of the same length as `array`, in which case each element of `array` will be repeated the number of times defined in the corresponding position of the `repetitions` array.
-unpack | boolean | If each element of `array` is an object with an equivalent set of properties, then setting `unpack` to `true` will make the return value an object with a property for each of the unique properties among the elements of the `array`. Each property in the output object will be an array containing the values for that property in the randomized order. The order will be consistent across properties. If this is `false` then the output is just an array containing a randomized order of the original `array` elements.
+| Parameter   | Type             | Description                              |
+| ----------- | ---------------- | ---------------------------------------- |
+| array       | array            | The array of values to randomize & repeat. |
+| repetitions | integer or array | The number of times to repeat each element of the `array` in the final sample. If this parameter is defined as an integer, then each element of `array` is repeated the same number of times. This parameter can also be an array of the same length as `array`, in which case each element of `array` will be repeated the number of times defined in the corresponding position of the `repetitions` array. |
+| unpack      | boolean          | If each element of `array` is an object with an equivalent set of properties, then setting `unpack` to `true` will make the return value an object with a property for each of the unique properties among the elements of the `array`. Each property in the output object will be an array containing the values for that property in the randomized order. The order will be consistent across properties. If this is `false` then the output is just an array containing a randomized order of the original `array` elements. |
 
 ### Return value
 
@@ -176,19 +176,19 @@ var shuffledArray = jsPsych.randomization.repeat(myArray, 2);
 
 var trial1 = {
 	stimulus: 'img/faceA.jpg',
-	correct_key: 80,
+	correct_key: 'p',
 	person_name: 'Joe'
 }
 
 var trial2 = {
 	stimulus: 'img/faceB.jpg',
-	correct_key: 80,
+	correct_key: 'p',
 	person_name: 'Fred'
 }
 
 var trial3 = {
 	stimulus: 'img/faceC.jpg',
-	correct_key: 81,
+	correct_key: 'q',
 	person_name: 'Mary'
 }
 
@@ -204,19 +204,19 @@ var shuffledArray = jsPsych.randomization.repeat(myArray, 2);
 
 var trial1 = {
 	stimulus: 'img/faceA.jpg',
-	correct_key: 80,
+	correct_key: 'p',
 	person_name: 'Joe'
 }
 
 var trial2 = {
 	stimulus: 'img/faceB.jpg',
-	correct_key: 80,
+	correct_key: 'p',
 	person_name: 'Fred'
 }
 
 var trial3 = {
 	stimulus: 'img/faceC.jpg',
-	correct_key: 81,
+	correct_key: 'q',
 	person_name: 'Mary'
 }
 
@@ -226,8 +226,8 @@ var shuffledArray = jsPsych.randomization.repeat(myArray, 2, true);
 /*
 output: shuffledArray = {
 	stimulus: ['img/faceB.jpg','img/faceA.jpg','img/faceC.jpg','img/faceA.jpg','img/faceC.jpg','img/faceB.jpg'],
-	correct_key: [80, 80, 81, 80, 81, 80],
-	person_name: ['Fred','Joe', 'Mary', 'Joe', 'Mary', 'Fred']
+	correct_key: ['p', 'p', 'q', 'p', 'q', 'p'],
+	person_name: ['Fred', 'Joe', 'Mary', 'Joe', 'Mary', 'Fred']
 }
 */
 ```
@@ -240,11 +240,11 @@ jsPsych.randomization.sampleWithReplacement(array, sampleSize, weights)
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
-array | array | The array of values to sample from
-sampleSize | numeric | The number of samples to draw
-weights | array | The relative weight of each element in `array`. This array is normalized, so the values do not need to sum to 1. The length must match the length of `array`.
+| Parameter  | Type    | Description                              |
+| ---------- | ------- | ---------------------------------------- |
+| array      | array   | The array of values to sample from       |
+| sampleSize | numeric | The number of samples to draw            |
+| weights    | array   | The relative weight of each element in `array`. This array is normalized, so the values do not need to sum to 1. The length must match the length of `array`. |
 
 ### Return value
 
@@ -285,10 +285,10 @@ jsPsych.randomization.sampleWithoutReplacement(array, sampleSize)
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
-array | array | The array of values to sample from
-sampleSize | numeric | The number of samples to draw
+| Parameter  | Type    | Description                        |
+| ---------- | ------- | ---------------------------------- |
+| array      | array   | The array of values to sample from |
+| sampleSize | numeric | The number of samples to draw      |
 
 ### Return value
 
@@ -319,9 +319,9 @@ jsPsych.randomization.shuffle(array)
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
-array | array | The array of values to shuffle
+| Parameter | Type  | Description                    |
+| --------- | ----- | ------------------------------ |
+| array     | array | The array of values to shuffle |
 
 ### Return value
 
@@ -352,10 +352,10 @@ jsPsych.randomization.shuffleNoRepeats(array, equalityTest)
 
 ### Parameters
 
-Parameter | Type | Description
-----------|------|------------
-array | array | The array of values to shuffle
-equalityTest | function | A function to use to evaluate the equality of neighbors in the array. The function should accept two parameters, which are the two elements to be tested. It should return `true` if they are equal and `false` if not. The default function, if none is specified, is to use the `===` operator. This will work for primitive values, but fail for Objects and Arrays. An example function is given below in the examples.
+| Parameter    | Type     | Description                              |
+| ------------ | -------- | ---------------------------------------- |
+| array        | array    | The array of values to shuffle           |
+| equalityTest | function | A function to use to evaluate the equality of neighbors in the array. The function should accept two parameters, which are the two elements to be tested. It should return `true` if they are equal and `false` if not. The default function, if none is specified, is to use the `===` operator. This will work for primitive values, but fail for Objects and Arrays. An example function is given below in the examples. |
 
 ### Return value
 

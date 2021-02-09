@@ -54,15 +54,15 @@
         var test = {
           timeline: [{
             type: 'image-keyboard-response',
-            choices: [37, 39],
+            choices: ['ArrowLeft', 'ArrowRight'],
             trial_duration: 1500,
             stimulus: jsPsych.timelineVariable('stimulus'),
             data: jsPsych.timelineVariable('data'),
             on_finish: function(data){
               var correct = false;
-              if(data.direction == 'left' &&  data.key_press == 37 && data.rt > -1){
+              if(data.direction == 'left' &&  data.key_press == 'ArrowLeft' && data.rt > -1){
                 correct = true;
-              } else if(data.direction == 'right' && data.key_press == 39 && data.rt > -1){
+              } else if(data.direction == 'right' && data.key_press == 'ArrowRight' && data.rt > -1){
                 correct = true;
               }
               data.correct = correct;
@@ -100,6 +100,7 @@
         /*start experiment*/
         jsPsych.init({
             timeline: timeline,
+            preload_images: ["img/con1.png","img/con2.png","img/inc1.png","img/inc2.png"],
             on_finish: function() {
                 jsPsych.data.displayData();
             }
