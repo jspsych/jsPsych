@@ -510,6 +510,7 @@ window.jsPsych = (function() {
           // only run the conditional function if this is the first repetition of the timeline when
           // repetitions > 1, and only when on the first variable set
           if (typeof timeline_parameters.conditional_function !== 'undefined' && progress.current_repetition==0 && progress.current_variable_set == 0) {
+            jsPsych.internal.call_immediate = true;
             var conditional_result = timeline_parameters.conditional_function();
             jsPsych.internal.call_immediate = false;
             // if the conditional_function() returns false, then the timeline
