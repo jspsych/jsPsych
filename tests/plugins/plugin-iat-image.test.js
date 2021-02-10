@@ -195,6 +195,7 @@ describe('iat-image plugin', function(){
       stimulus: '../media/blue.png',
       display_feedback: false,
       response_ends_trial: false,
+      stim_key_association: 'left',
       trial_duration: 500
     }
 

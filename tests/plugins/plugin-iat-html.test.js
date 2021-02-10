@@ -189,7 +189,8 @@ describe('iat-html plugin', function(){
       stimulus: '<p>hello</p>',
       display_feedback: false,
       response_ends_trial: false,
-      trial_duration: 500
+      trial_duration: 500,
+      stim_key_association: 'left'
     }
 
     jsPsych.init({
