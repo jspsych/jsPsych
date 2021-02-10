@@ -1,6 +1,6 @@
-# Style and Formatting
+# Controlling Visual Appearance
 
-Your experiment's style and formatting comes the CSS (cascading style sheet) rules that are stored in the jspsych.css file, and the browser's defaults. There are a few ways to change the style and formatting in your experiment. The method that you choose is partly a matter of personal preference. It might also depend on whether you want the style/formatting change(s) to apply to _specific trials_, to _the whole experiment_ (HTML page), or across _different experiments_. This section discusses the different ways of incorporating CSS into your jsPsych experiment. You can also see [this page about adding CSS to web pages](https://www.w3schools.com/html/html_css.asp) to learn more.
+Your experiment's style and formatting comes from the CSS (cascading style sheet) rules that are stored in the jspsych.css file, and the browser's defaults. There are a few ways to change the style and formatting in your experiment. The method that you choose is partly a matter of personal preference. It might also depend on whether you want the style/formatting change(s) to apply to _specific trials_, to _the whole experiment_ (HTML page), or across _different experiments_. This section discusses the different ways of incorporating CSS into your jsPsych experiment. You can also see [this page about adding CSS to web pages](https://www.w3schools.com/html/html_css.asp) to learn more.
 
 
 

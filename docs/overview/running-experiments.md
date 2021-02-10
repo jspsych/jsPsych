@@ -2,9 +2,9 @@
 
 You can run your jsPsych experiment:
 
-* **offline**, by opening the HTML file directly in the browser using the `file://` protocol
+**Offline**, by opening the HTML file directly in the browser using the `file://` protocol.
 
-* **online**, by hosting the files on a web server using the `http://` or `https://` protocol
+**Online**, by hosting the files on a web server using the `http://` or `https://` protocol.
 
 The way that you run your experiment will have consequences for certain aspects about how the experiment works, and what your experiment will be able to do. This page explains what you need to know about both of these options.
 

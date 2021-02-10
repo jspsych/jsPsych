@@ -35,6 +35,7 @@ nav:
 - Overview:
   - 'Creating an Experiment: The Timeline': 'overview/timeline.md'
   - 'Advanced Options for Trials': 'overview/trial.md'
+  - 'Controlling Visual Appearance': 'overview/style.md'
   - 'Data Storage, Aggregation, and Manipulation': 'overview/data.md'
   - 'Running Experiments': 'overview/running-experiments.md'
   - 'Experiment Settings': 'overview/experiment-options.md'
@@ -44,6 +45,7 @@ nav:
   - 'Fullscreen Experiments': 'overview/fullscreen.md'
   - 'Exclude Participants Based on Browser Features': 'overview/exclude-browser.md'
   - 'Automatic Progress Bar': 'overview/progress-bar.md'
+  - 'Integrating with Prolific': 'overview/prolific.md'
   - 'Integrating with Mechanical Turk': 'overview/mturk.md'
   - 'Browser and Device Support': 'overview/browser-device-support.md'
 - Reference:
