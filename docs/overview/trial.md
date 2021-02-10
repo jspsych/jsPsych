@@ -100,7 +100,7 @@ var trial = {
 
 ## Dynamic parameters
 
-Most plugins allow parameters to be functions. In a typical declaration of a jsPsych trial, parameters have to be known at the start of the experiment. This makes it impossible to alter the content of the trial based on the outcome of previous trials. When functions are used as parameters for a block of trials, the function is evaluated at the start of each trial, and the return value of the function is used as the parameter. This enables dynamic updating of the parameter based on data that a subject has generated.
+Most trial parameters can be functions. In a typical declaration of a jsPsych trial, parameters have to be known at the start of the experiment. This makes it impossible to alter the content of the trial based on the outcome of previous trials. When functions are used as the parameter value, the function is evaluated at the start of the trial, and the return value of the function is used as the parameter for that trial. This enables dynamic updating of the parameter based on data that a subject has generated or any other information that you may not know in advance.
 
 Here is a sketch of how this functionality could be used to display feedback to a subject in the Flanker Task.
 
@@ -118,7 +118,7 @@ var trial = {
   },
   on_finish: function(data){
     if(data.key_press == "f"){
-      data.correct = true; // can add property correct by modify data object directly
+      data.correct = true; // can add the property "correct" to the trial data by modifying the data object directly
     } else {
       data.correct = false;
     }
@@ -128,6 +128,7 @@ var trial = {
 var feedback = {
   type: 'html-keyboard-response',
   stimulus: function(){
+    // determine what the stimulus should be for this trial based on the accuracy of the last response
     var last_trial_correct = jsPsych.data.get().last(1).values()[0].correct;
     if(last_trial_correct){
       return "<p>Correct!</p>";
@@ -139,4 +140,72 @@ var feedback = {
 
 timeline.push(trial, feedback);
 
+```
+
+The trial's `data` parameter can be also function, which is useful for when you want to save information to the data that can change during the experiment. For example, if you have a global variable called `current_difficulty` that tracks the difficulty level in an adaptive task, you can save the current value of this variable to the trial data like this:
+
+```js
+var current_difficulty; // value changes during the experiment
+
+var trial = {
+  type: 'survey-text',
+  questions: [{prompt: "Please enter your response."}]
+  data: function() { 
+    return {difficulty: current_difficulty}; 
+  }
+}
+```
+
+It's also possible to use a function for just a single parameter in the trial's `data` object, for instance if you want to combine static and dynamic information in the data:
+
+```js
+var trial = {
+  type: 'survey-text',
+  questions: [{prompt: "Please enter your response."}]
+  data: {
+    difficulty: function() { 
+      return current_difficulty; // this value changes during the experiment
+    },
+    task_part: 'recall', // this part of the trial data is always the same
+    block_number: 1
+  }
+}
+```
+
+Dyanmic parameters work the same way with nested parameters, which are parameters that contain one or more sets of other parameters. For instance, many survey-* plugins have a `questions` parameter that is a nested parameter: it is an array that contains the parameters for one or more questions on the page. To make the `questions` parameter dynamic, you can use a function that returns the array with all of the parameters for each question:
+
+```js
+var subject_id;
+
+var trial = {
+  type: 'survey-text',
+  questions: function(){
+    return [ {prompt: "Hi "+subject_id+"! What's your favorite city?", required: true, name: 'fav_city'} ];
+  }
+}
+```
+
+You can also use a function for any of the individual parameters inside of a nested parameter.
+
+```js
+var trial = {
+  type: 'survey-text',
+  questions: [
+    { 
+      prompt: function() {  
+        // this question prompt is dynamic - 
+        // the text that is shown will change based on the participant's earlier response
+        var favorite_city = JSON.parse(jsPsych.data.getLastTrialData().values()[0].responses).fav_city;
+        var text = "Earlier you said your favorite city is "+favorite_city+". What do you like most about "+favorite_city+"?"
+        return text;
+      }, 
+      required: true,
+      rows: 40,
+      columns: 10
+    },
+    {
+      prompt: 'This is the second question the page. This one is not dynamic.' 
+    }
+  ]
+}
 ```
