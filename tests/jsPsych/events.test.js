@@ -393,11 +393,11 @@ describe('on_timeline_finish', function(){
 
     jsPsych.init({timeline: [mini_timeline]});
 
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(on_finish_fn).not.toHaveBeenCalled();
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(on_finish_fn).not.toHaveBeenCalled();
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(on_finish_fn).toHaveBeenCalled();
   });
 
@@ -423,8 +423,8 @@ describe('on_timeline_finish', function(){
 
     jsPsych.init({timeline: [mini_timeline]});
 
-    utils.pressKey(32);
-    utils.pressKey(32);
+    utils.pressKey('a');
+    utils.pressKey('a');
     expect(on_finish_fn.mock.calls.length).toBe(1);
     
   })
@@ -446,8 +446,8 @@ describe('on_timeline_finish', function(){
 
     jsPsych.init({timeline: [mini_timeline]});
 
-    utils.pressKey(32);
-    utils.pressKey(32);
+    utils.pressKey('a');
+    utils.pressKey('a');
     expect(on_finish_fn.mock.calls.length).toBe(2);
     
   })
@@ -479,9 +479,9 @@ describe('on_timeline_start', function(){
     jsPsych.init({timeline: [mini_timeline]});
 
     expect(on_start_fn).toHaveBeenCalled();
-    utils.pressKey(32);
-    utils.pressKey(32);
-    utils.pressKey(32);
+    utils.pressKey('a');
+    utils.pressKey('a');
+    utils.pressKey('a');
     expect(on_start_fn.mock.calls.length).toBe(1);
     
   })
@@ -509,8 +509,8 @@ describe('on_timeline_start', function(){
     jsPsych.init({timeline: [mini_timeline]});
 
     expect(on_start_fn).toHaveBeenCalled();
-    utils.pressKey(32);
-    utils.pressKey(32);
+    utils.pressKey('a');
+    utils.pressKey('a');
     expect(on_start_fn.mock.calls.length).toBe(1);
     
   })
@@ -533,8 +533,8 @@ describe('on_timeline_start', function(){
     jsPsych.init({timeline: [mini_timeline]});
 
     expect(on_start_fn).toHaveBeenCalled();
-    utils.pressKey(32);
-    utils.pressKey(32);
+    utils.pressKey('a');
+    utils.pressKey('a');
     expect(on_start_fn.mock.calls.length).toBe(2);
     
   })

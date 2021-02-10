@@ -18,7 +18,7 @@ describe('The css_classes parameter for trials', function(){
     jsPsych.init({timeline:[trial]});
 
     expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(true);
-    utils.pressKey(32);
+    utils.pressKey('a');
   })
 
   test('Gracefully handles single class when not in array', function(){
@@ -31,7 +31,7 @@ describe('The css_classes parameter for trials', function(){
     jsPsych.init({timeline:[trial]});
 
     expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(true);
-    utils.pressKey(32);
+    utils.pressKey('a');
   })
 
   test('Removes the added classes at the end of the trial', function(){
@@ -44,7 +44,7 @@ describe('The css_classes parameter for trials', function(){
     jsPsych.init({timeline:[trial]});
     
     expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(true);
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(false);
 
   })
@@ -61,7 +61,7 @@ describe('The css_classes parameter for trials', function(){
     jsPsych.init({timeline:[tm]});
     
     expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(true);
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(false);
 
   })
@@ -78,7 +78,7 @@ describe('The css_classes parameter for trials', function(){
     jsPsych.init({timeline:[trial]});
     
     expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(true);
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(false);
 
   })
@@ -100,7 +100,7 @@ describe('The css_classes parameter for trials', function(){
     jsPsych.init({timeline:[t]});
     
     expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(true);
-    utils.pressKey(32);
+    utils.pressKey('a');
     expect(jsPsych.getDisplayElement().classList.contains('foo')).toBe(false);
 
   })

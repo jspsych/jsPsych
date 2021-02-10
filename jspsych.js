@@ -1013,29 +1013,50 @@ window.jsPsych = (function() {
         // this if statement is checking to see if the parameter type is expected to be a function, in which case we should NOT evaluate it.
         // the first line checks if the parameter is defined in the universalPluginParameters set
         // the second line checks the plugin-specific parameters
-        if(
-          (typeof jsPsych.plugins.universalPluginParameters[keys[i]] !== 'undefined' && jsPsych.plugins.universalPluginParameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION ) ||
-          (typeof jsPsych.plugins[trial.type].info.parameters[keys[i]] !== 'undefined' && jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION)
-        ) {
-          if (typeof trial[keys[i]] == "function") {
-            trial[keys[i]] = trial[keys[i]].call();
-          }
+        if(typeof jsPsych.plugins.universalPluginParameters[keys[i]] !== 'undefined' && 
+          jsPsych.plugins.universalPluginParameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION ){
+          trial[keys[i]] = replaceFunctionsWithValues(trial[keys[i]], null);
+        }
+        if(typeof jsPsych.plugins[trial.type].info.parameters[keys[i]] !== 'undefined' && 
+          jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION){
+          trial[keys[i]] = replaceFunctionsWithValues(trial[keys[i]], jsPsych.plugins[trial.type].info.parameters[keys[i]]);
         }
       }
-      // add a special exception for the data parameter so we can evaluate functions. eventually this could be generalized so that any COMPLEX object type could
-      // be evaluated at the individual parameter level.
-      if(keys[i] == 'data'){
-        var data_params = Object.keys(trial[keys[i]]);
-        for(var j=0; j<data_params.length; j++){
-          if(typeof trial[keys[i]][data_params[j]] == "function") {
-            trial[keys[i]][data_params[j]] = trial[keys[i]][data_params[j]].call();
+    }
+    // reset so jsPsych.timelineVariable() is no longer immediately executed
+    jsPsych.internal.call_immediate = false;
+  }
+
+  function replaceFunctionsWithValues(obj, info){
+    // null typeof is 'object' (?!?!), so need to run this first!
+    if(obj === null){
+      return obj;
+    }
+    // arrays 
+    else if(Array.isArray(obj)){
+      for(var i=0; i<obj.length; i++){
+        obj[i] = replaceFunctionsWithValues(obj[i], info);
+      }
+    }
+    // objects
+    else if(typeof obj === 'object'){
+      var keys = Object.keys(obj);
+      if(info == null || !info.nested){
+        for(var i=0; i<keys.length; i++){
+          obj[keys[i]] = replaceFunctionsWithValues(obj[keys[i]], null)
+        }
+      } else {
+        for(var i=0; i<keys.length; i++){
+          if(typeof info.nested[keys[i]] == 'object' && info.nested[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION){
+            obj[keys[i]] = replaceFunctionsWithValues(obj[keys[i]], info.nested[keys[i]])
           }
         }
       }
     }
-
-    // reset so jsPsych.timelineVariable() is no longer immediately executed
-    jsPsych.internal.call_immediate = false;
+    else if(typeof obj === 'function'){
+      return obj();
+    }
+    return obj;
   }
 
   function setDefaultValues(trial){
