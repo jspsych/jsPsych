@@ -31,6 +31,7 @@ nav:
 - Tutorials:
   - 'The Basics: Hello World': 'tutorials/hello-world.md'
   - 'Demo Experiment: Simple Reaction Time Task': 'tutorials/rt-task.md'
+  - 'Video Tutorials': 'tutorials/video-tutorials.md'
 - Overview:
   - 'Creating an Experiment: The Timeline': 'overview/timeline.md'
   - 'Advanced Options for Trials': 'overview/trial.md'
