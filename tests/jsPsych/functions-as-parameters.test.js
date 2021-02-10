@@ -43,6 +43,25 @@ describe('standard use of function as parameter', function(){
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
     utils.pressKey('a');
   })
+
+  test('parameters can be protected from early evaluation using jsPsych.plugins.parameterType.FUNCTION', function(){
+    require(root + 'plugins/jspsych-cloze.js');
+
+    var mock = jest.fn();
+
+    var trial = {
+      type: 'cloze',
+      text: '%foo%',
+      check_answers: true,
+      mistake_fn: mock
+    }
+
+    jsPsych.init({timeline: [trial]});
+
+    expect(mock).not.toHaveBeenCalled();
+    utils.clickTarget(document.querySelector('#finish_cloze_button'));
+    expect(mock).toHaveBeenCalledTimes(1);
+  })
 })
 
 describe('data as function', function(){
@@ -84,7 +103,6 @@ describe('data as function', function(){
 })
 
 describe('nested parameters as functions', function(){
-  
 
   test('entire parameter can be a function', function(){
    
@@ -118,9 +136,31 @@ describe('nested parameters as functions', function(){
 		});
 
 		expect(document.querySelector('#jspsych-survey-text-0 p.jspsych-survey-text').innerHTML).toBe('foo');
-		
+		expect(document.querySelector('#jspsych-survey-text-1 p.jspsych-survey-text').innerHTML).toBe('bar');
 		utils.clickTarget(document.querySelector('#jspsych-survey-text-next'));
+		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
+  })
 
+  test('multiple nested parameters can be functions', function(){
+    require(root + 'plugins/jspsych-survey-multi-choice.js');
+
+    var trial = {
+			type: 'survey-multi-choice',
+			questions: [
+        {prompt: function(){ return "foo"; }, options: function() { return ['buzz','fizz']; }}, 
+        {prompt: "bar", options: function() { return ['one','two']; }}
+      ]
+		}
+
+		jsPsych.init({
+			timeline: [trial]
+		});
+
+		expect(document.querySelector('#jspsych-survey-multi-choice-0').innerHTML).toMatch('foo');
+    expect(document.querySelector('#jspsych-survey-multi-choice-0').innerHTML).toMatch('buzz');
+		expect(document.querySelector('#jspsych-survey-multi-choice-1').innerHTML).toMatch('bar');
+    expect(document.querySelector('#jspsych-survey-multi-choice-1').innerHTML).toMatch('one');
+		utils.clickTarget(document.querySelector('#jspsych-survey-multi-choice-next'));
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
   })
 
