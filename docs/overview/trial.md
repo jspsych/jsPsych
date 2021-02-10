@@ -175,7 +175,7 @@ var trial = {
 Dyanmic parameters work the same way with nested parameters, which are parameters that contain one or more sets of other parameters. For instance, many survey-* plugins have a `questions` parameter that is a nested parameter: it is an array that contains the parameters for one or more questions on the page. To make the `questions` parameter dynamic, you can use a function that returns the array with all of the parameters for each question:
 
 ```js
-var subject_id;
+var subject_id; // value is set during the experiment
 
 var trial = {
   type: 'survey-text',
