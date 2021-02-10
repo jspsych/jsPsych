@@ -186,12 +186,12 @@ describe('loop function', function(){
     });
 
     // first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(count).toBe(0);
 
     // second trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(count).toBe(1);
   })
@@ -321,12 +321,12 @@ describe('conditional function', function(){
     expect(conditional_count).toBe(1);
 
     // first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(conditional_count).toBe(1);
 
     // second trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(conditional_count).toBe(1);
   })
@@ -356,12 +356,12 @@ describe('conditional function', function(){
     expect(conditional_count).toBe(1);
 
     // first trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(conditional_count).toBe(1);
 
     // second trial
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(conditional_count).toBe(1);
   })
@@ -535,7 +535,7 @@ describe('nested timelines', function() {
 
 describe('add node to end of timeline', function(){
 
-  test('adds node to end of timeline, without callback', function() {
+  test('adds node to end of timeline', function() {
     var new_trial = {
        type: 'html-keyboard-response',
        stimulus: 'bar'
@@ -563,32 +563,6 @@ describe('add node to end of timeline', function(){
     utils.pressKey('a');
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
     utils.pressKey('a');
-  });
-
-  test('adds node to end of timeline, with callback', function() {
-    var t = {
-      type: 'html-keyboard-response',
-      stimulus: 'foo',
-      on_finish: function(){
-        jsPsych.pauseExperiment();
-        jsPsych.addNodeToEndOfTimeline({
-          timeline: [{
-            type: 'html-keyboard-response',
-            stimulus: 'bar'
-          }]
-        }, jsPsych.resumeExperiment)
-      }
-    };
-
-    jsPsych.init({
-      timeline: [t]
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.pressKey('a');
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch('bar');
-    utils.pressKey('a');
-
   });
 
 });
