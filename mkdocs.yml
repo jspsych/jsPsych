@@ -82,6 +82,7 @@ nav:
   - 'jspsych-image-slider-response': 'plugins/jspsych-image-slider-response.md'
   - 'jspsych-instructions': 'plugins/jspsych-instructions.md'
   - 'jspsych-maxdiff': 'plugins/jspsych-maxdiff.md'
+  - 'jspsych-preload': 'plugins/jspsych-preload.md'
   - 'jspsych-rdk': 'plugins/jspsych-rdk.md'
   - 'jspsych-reconstruction': 'plugins/jspsych-reconstruction.md'
   - 'jspsych-resize': 'plugins/jspsych-resize.md'
