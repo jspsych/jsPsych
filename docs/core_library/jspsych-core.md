@@ -3,7 +3,7 @@
 ---
 ## jsPsych.addNodeToEndOfTimeline
 ```
-jsPsych.addNodeToEndOfTimeline(node_parameters, callback)
+jsPsych.addNodeToEndOfTimeline(node_parameters)
 ```
 
 ### Parameters
@@ -11,7 +11,6 @@ jsPsych.addNodeToEndOfTimeline(node_parameters, callback)
 | Parameter       | Type     | Description                              |
 | --------------- | -------- | ---------------------------------------- |
 | node_parameters | object   | An object defining a timeline. It must have, at a minimum, a `timeline` parameter with a valid timeline array as the value for that parameter. |
-| callback        | function | An optional callback function. If adding the node to the timeline requires any preloading of media assets, this callback will be triggered after preloading is compelte. |
 
 ### Return value
 
@@ -385,17 +384,11 @@ The settings object can contain several parameters. The only *required* paramete
 | show_progress_bar          | boolean  | If true, then [a progress bar](../overview/progress-bar.md) is shown at the top of the page. |
 | message_progress_bar       | string   | Message to display next to the progress bar. The default is 'Completion Progress'. |
 | auto_update_progress_bar   | boolean  | If true, then the progress bar at the top of the page will automatically update as every top-level timeline or trial is completed. |
-| show_preload_progress_bar  | boolean  | If true, then a progress bar is displayed while media files are automatically preloaded. |
-| preload_audio              | array    | An array of audio files to preload before starting the experiment. |
-| preload_images             | array    | An array of image files to preload before starting the experiment. |
-| preload_video              | array    | An array of video files to preload before starting the experiment. |
-| max_load_time              | numeric  | The maximum number of milliseconds to wait for content to preload. If the wait time is exceeded an error message is displayed and the experiment stops. The default value is 60 seconds. |
-| max_preload_attempts       | numeric  | The maximum number of attempts to preload each file in case of an error. The default value is 10. There is a small delay of 200ms between each attempt. |
 | use_webaudio               | boolean  | If false, then jsPsych will not attempt to use the WebAudio API for audio playback. Instead, HTML5 Audio objects will be used. The WebAudio API offers more precise control over the timing of audio events, and should be used when possible. The default value is true. |
 | default_iti                | numeric  | The default inter-trial interval in ms. The default value if none is specified is 0ms. |
 | experiment_width           | numeric  | The desired width of the jsPsych container in pixels. If left undefined, the width will be 100% of the display element. Usually this is the `<body>` element, and the width will be 100% of the screen size. |
 | minimum_valid_rt           | numeric  | The minimum valid response time for key presses during the experiment. Any key press response time that is less than this value will be treated as invalid and ignored. Note that this parameter only applies to _keyboard responses_, and not to other response types such as buttons and sliders. The default value is 0. |
-| override_safe_mode         | boolean  | Running a jsPsych experiment directly in a web browser (e.g., by double clicking on a local HTML file) will load the page using the `file://` protocol. Some features of jsPsych don't work with this protocol. By default, when jsPsych detects that it's running on a page loaded via the `file://` protocol, it runs in _safe mode_, which automatically disables features that don't work in this context. Specifically, the use of Web Audio is disabled (audio will be played using HTML5 audio instead, even if `use_webaudio` is `true`) and video preloading is disabled (both automatic preloading and manual preloading via `preload_video`). The `override_safe_mode` parameter defaults to `false`, but you can set it to `true` to force these features to operate under the `file://` protocol. In order for this to work, you will need to disable web security (CORS) features in your browser - this is safe to do if you know what you are doing. Note that this parameter has no effect when you are running the experiment on a web server, because the page will be loaded via the `http://` or `https://` protocol. |
+| override_safe_mode         | boolean  | Running a jsPsych experiment directly in a web browser (e.g., by double clicking on a local HTML file) will load the page using the `file://` protocol. Some features of jsPsych don't work with this protocol. By default, when jsPsych detects that it's running on a page loaded via the `file://` protocol, it runs in _safe mode_, which automatically disables features that don't work in this context. Specifically, the use of Web Audio is disabled (audio will be played using HTML5 audio instead, even if `use_webaudio` is `true`) and video preloading is disabled. The `override_safe_mode` parameter defaults to `false`, but you can set it to `true` to force these features to operate under the `file://` protocol. In order for this to work, you will need to disable web security (CORS) features in your browser - this is safe to do if you know what you are doing. Note that this parameter has no effect when you are running the experiment on a web server, because the page will be loaded via the `http://` or `https://` protocol. |
 | case_sensitive_responses   | boolean  | If true, then jsPsych will make a distinction between uppercase and lowercase keys when evaluating keyboard responses, e.g. "A" (uppercase) will not be recognized as a valid response if the trial only accepts "a" (lowercase). If false, then jsPsych will not make a distinction between uppercase and lowercase keyboard responses, e.g. both "a" and "A" responses will be valid when the trial's key choice parameter is "a". Setting this parameter to false is useful if you want key responses to be treated the same way when CapsLock is turned on or the Shift key is held down. The default value is false. |
 
 Possible values for the exclusions parameter above.
