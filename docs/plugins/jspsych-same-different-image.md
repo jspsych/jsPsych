@@ -45,9 +45,9 @@ Additionally, if `first_stim_duration` is  null, then the following data is also
 var block = {
   type: 'same-different-image',
   stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
-  prompt: "<p>Press S if the faces had the same emotional expression. Press D if the faces had different emotional expressions.</p>",
-  same_key: 'S',
-  different_key: 'D',
+  prompt: "<p>Press s if the faces had the same emotional expression. Press d if the faces had different emotional expressions.</p>",
+  same_key: 's',
+  different_key: 'd',
   answer: 'different'
 }
 ```
@@ -58,9 +58,9 @@ var block = {
 var block = {
   type: 'same-different-image',
   stimuli: ['img/happy_face_1.jpg', 'img/happy_face_3.jpg'],
-  prompt: "<p>Press S if the faces had the same emotional expression. Press D if the faces had different emotional expressions.</p>",
-  same_key: 'S',
-  different_key: 'D',
+  prompt: "<p>Press s if the faces had the same emotional expression. Press d if the faces had different emotional expressions.</p>",
+  same_key: 's',
+  different_key: 'd',
   answer: 'same'
 }
 ```

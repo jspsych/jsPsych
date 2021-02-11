@@ -52,8 +52,8 @@ describe('#getKeyboardResponse', function(){
     })
     jsPsych.pluginAPI.getKeyboardResponse({callback_function: callback, valid_responses: jsPsych.NO_KEYS});
     expect(callback.mock.calls.length).toBe(0);
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {key: 54}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: 54}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: 'a'}));
     expect(callback.mock.calls.length).toBe(0);
     document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}));
     document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: 'a'}));
@@ -215,8 +215,8 @@ describe('#cancelKeyboardResponse', function(){
     var listener = jsPsych.pluginAPI.getKeyboardResponse({callback_function: callback});
     expect(callback.mock.calls.length).toBe(0);
     jsPsych.pluginAPI.cancelKeyboardResponse(listener);
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {key: 32}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {key: 'q'}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: 'q'}));
     expect(callback.mock.calls.length).toBe(0);
   });
 });
@@ -235,8 +235,8 @@ describe('#cancelAllKeyboardResponses', function(){
     jsPsych.pluginAPI.getKeyboardResponse({callback_function: callback});
     expect(callback.mock.calls.length).toBe(0);
     jsPsych.pluginAPI.cancelAllKeyboardResponses();
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {key: 32}));
-    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: 32}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {key: 'q'}));
+    document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: 'q'}));
     expect(callback.mock.calls.length).toBe(0);
   });
 });

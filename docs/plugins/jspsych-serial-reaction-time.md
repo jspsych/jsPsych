@@ -29,7 +29,7 @@ In addition to the [default data collected by all plugins](overview.md#data-coll
 | --------- | ------- | ---------------------------------------- |
 | grid      | JSON    | A JSON-encoded representation of the grid. |
 | target    | JSON    | A JSON-encoded representation of the target on the grid. |
-| key_press | numeric | Indicates which key the subject pressed. |
+| key_press | string | Indicates which key the subject pressed. |
 | rt        | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the second stimulus first appears on the screen until the subject's response. |
 | correct   | boolean | `true` if the subject's response matched the target. |
 

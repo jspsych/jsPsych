@@ -13,8 +13,8 @@ In addition to the [parameters available in all plugins](overview.md#parameters-
 | bottom_instructions     | string              | `<p>If you press the wrong key, a red X will appear. Press any key to continue.</p>` | Instructions about making a wrong key press and whether another key press is needed to continue. |
 | force_correct_key_press | boolean             | false                                    | If this is `true` and the user presses the wrong key then they have to press the other key to continue. An example would be two keys 'e' and 'i'. If the key associated with the stimulus is 'e' and key 'i' was pressed, then pressing 'e' is needed to continue the trial. When this is `true`, then parameter `key_to_move_forward` is not used. |
 | display_feedback        | boolean             | false                                    | If `true`, then `image_when_wrong` and `wrong_image_name` are required. If `false`, `trial_duration` is needed and trial will continue automatically. |
-| left_category_key       | string              | 'E'                                      | Key press that is associated with the `left_category_label`. |
-| right_category_key      | string              | 'I'                                      | Key press that is associated with the `right_category_label`. |
+| left_category_key       | string              | 'e'                                      | Key press that is associated with the `left_category_label`. |
+| right_category_key      | string              | 'i'                                      | Key press that is associated with the `right_category_label`. |
 | left_category_label     | string              | ['left']                                 | An array that contains the words/labels associated with a certain stimulus. The labels are aligned to the left side of the page. |
 | right_category_label    | string              | ['right']                                | An array that contains the words/labels associated with a certain stimulus. The labels are aligned to the right side of the page. |
 | stim_key_association    | string              | 'undefined'                              | Either 'left' or 'right'. This indicates whether the stimulus is associated with the key press and category on the left or right side of the page (`left_category_key` or `right_category_key`). |
@@ -29,7 +29,7 @@ In addition to the [default data collected by all plugins](overview.md#data-coll
 | Name      | Type    | Value                                    |
 | --------- | ------- | ---------------------------------------- |
 | stimulus  | string  | Either the path to the image file or the string containing the HTML-formatted content that the subject saw on this trial. |
-| key_press | numeric | Indicates which key the subject pressed. |
+| key_press | string  | Indicates which key the subject pressed. |
 | rt        | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response. |
 | correct   | boolean | Boolean indicating whether the user's key press was correct or incorrect for the given image. |
 
