@@ -185,24 +185,6 @@ var face_name_procedure = {
 }
 ```
 
-### Repeating trials
-
-If we want to repeat the set of trials multiple times, then we can set `repetitions` to an integer. If `randomize_order` is also `true`, the order will re-randomize before every repetition.
-
-```javascript
-var face_name_procedure = {
-	// timeline parameter hidden to save space ...
-	timeline_variables: [
-		{ face: 'person-1.jpg', name: 'Alex' },
-		{ face: 'person-2.jpg', name: 'Beth' },
-		{ face: 'person-3.jpg', name: 'Chad' },
-		{ face: 'person-4.jpg', name: 'Dave' }
-	],
-	randomize_order: true,
-	repetitions: 3
-}
-```
-
 ### Sampling methods
 
 There are also a set of sampling methods that can be used to select a set of trials from the timeline_variables. Sampling is declared by creating a `sample` parameter. The `sample` parameter is given an object of arguments. The `type` parameter in this object controls the type of sampling that is done. Valid values for `type` are 
@@ -322,6 +304,38 @@ var face_name_procedure = {
 			return t.reverse(); // show the trials in the reverse order
 		}
 	}
+}
+```
+
+## Repeating a set of trials
+
+To repeat a timeline multiple times, you can create an object (node) that contains a `timeline`, which is the timeline array to repeat, and `repetitions`, which is the number of times to repeat that timeline. 
+
+```javascript
+var trial = {
+	type: 'html-keyboard-response',
+	stimulus: 'This trial will be repeated twice.'
+}
+
+var node = {
+	timeline: [trial],
+	repetitions: 2
+}
+```
+
+The `repetitions` parameter can be used alongside other node parameters, such as timeline variables, loop functions, and/or conditional functions. If you are using `timeline_variables` and `randomize_order` is `true`, then the order of the timeline variables will re-randomize before every repetition.
+
+```javascript
+var face_name_procedure = {
+	// timeline parameter hidden to save space ...
+	timeline_variables: [
+		{ face: 'person-1.jpg', name: 'Alex' },
+		{ face: 'person-2.jpg', name: 'Beth' },
+		{ face: 'person-3.jpg', name: 'Chad' },
+		{ face: 'person-4.jpg', name: 'Dave' }
+	],
+	randomize_order: true,
+	repetitions: 3 
 }
 ```
 
