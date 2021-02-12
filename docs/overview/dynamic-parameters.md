@@ -1,6 +1,10 @@
 # Dynamic parameters
 
-Most trial parameters can be functions. In a typical declaration of a jsPsych trial, parameters are known at the start of the experiment. This makes it impossible to alter the content of the trial based on the outcome of previous trials. However, when functions are used as the parameter value, the function is evaluated right before the trial starts, and the return value of the function is used as the parameter value for that trial. This enables dynamic updating of the parameter based on data that a subject has generated or any other information that you do not know in advance.
+Most trial parameters can also be specified as functions. In a typical declaration of a jsPsych trial, parameters are known at the start of the experiment. This makes it impossible to alter the content of the trial based on the outcome of previous trials. However, **when functions are used as the parameter value, the function is evaluated right before the trial starts, and the return value of the function is used as the parameter value for that trial**. This enables dynamic updating of the parameter based on data that a subject has generated or any other information that you do not know in advance.
+
+## Examples
+
+### Providing Feedback
 
 Here is a sketch of how this functionality could be used to display feedback to a subject in the Flanker Task.
 
@@ -46,6 +50,8 @@ timeline.push(trial, feedback);
 
 ```
 
+### Randomizing a parameter value
+
 Here's an example of using a dynamic parameter to randomize the inter-trial interval (ITI) duration. This time, the dynamic parameter is created using a named function instead of an anonymous function.
 
 ```js
@@ -60,6 +66,8 @@ var trial = {
     post_trial_gap: random_duration  // if you use a named function for a dynamic parameter, then just use the function name (without parentheses after it)
 }
 ```
+
+### Storing changing variables in the data
 
 The trial's `data` parameter can be also function, which is useful for when you want to save information to the data that can change during the experiment. For example, if you have a global variable called `current_difficulty` that tracks the difficulty level in an adaptive task, you can save the current value of this variable to the trial data like this:
 
@@ -90,6 +98,8 @@ var trial = {
   }
 }
 ```
+
+## Nested Parameters
 
 Dyanmic parameters work the same way with nested parameters, which are parameters that contain one or more sets of other parameters. For instance, many survey-* plugins have a `questions` parameter that is a nested parameter: it is an array that contains the parameters for one or more questions on the page. To make the `questions` parameter dynamic, you can use a function that returns the array with all of the parameters for each question:
 
@@ -130,5 +140,8 @@ var trial = {
   ]
 }
 ```
+## When functions can't be used
 
 Note that if the plugin *expects* the value of a given parameter to be a function, then this function *will not* be evaluated at the start of the trial. This is because some plugins allow the researcher to specify functions that should be called at some point during the trial. Some examples of this include the `stimulus` parameter in the canvas-* plugins, the `mistake_fn` parameter in the cloze plugin, and the `stim_function` parameter in the reconstruction plugin. If you want to check whether this is the case for a particular plugin and parameter, then the parameter's `type` in the `plugin.info` section of the plugin file. If the parameter type is `jsPsych.plugins.parameterType.FUNCTION`, then this parameter must be a function and it will not be executed before the trial starts. 
+
+Even though function evaluation doesn't work the same way with these parameters, the fact that the parameters are functions means that you can get the same dynamic functionality. These functions are typically evaluated at some point during the trial, so you still get updates to values within the function during the trial.

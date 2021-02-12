@@ -30,10 +30,10 @@ You can override any default parameter values by adding them into your trial obj
 
 ```javascript
 var image_trial = {
-	type: 'image-keyboard-response',
-	stimulus: 'images/happy_face.jpg',
+  type: 'image-keyboard-response',
+  stimulus: 'images/happy_face.jpg',
   trial_duration: 3000,
-	post_trial_gap: 2000
+  post_trial_gap: 2000
 }
 ```
 
@@ -41,7 +41,7 @@ var image_trial = {
 
 Each plugin specifies its own set of parameters. Check the documentation for a plugin to see what parameters are available and what they do.
 
-In addition, there is a set of parameters that can be specified for any plugin:
+There is also a set of parameters that can be specified for any plugin:
 
 | Parameter      | Type     | Default Value           | Description                              |
 | -------------- | -------- | ----------------------- | ---------------------------------------- |
@@ -74,7 +74,7 @@ var trial = {
 
 Note the use of the data parameter to add a property `stimulus_type` with the value `congruent` and a property `target_direction` with the value `left`. Having these properties recorded directly in the data simplifies data analysis, making it easy to aggregate data by `stimulus_type` and/or `target_direction`.
 
-### The ITI (post_trial_gap) parameter
+### The post_trial_gap (ITI) parameter
 
 The default inter-trial interval (ITI) in jsPsych is 0 ms. This can be adjusted at the experiment-wide level by changing the `default_iti` parameter in `jsPsych.init()`.
 
@@ -119,7 +119,8 @@ The `on_finish` function can be useful to calculate new data properties that wer
 
 ```javascript
 // in addition to all of the standard data collected for this trial, 
-// the on_finish function adds a property called 'correct' which is either 'true' or 'false',
+// this on_finish function adds a property called 'correct' 
+// which is either 'true' or 'false'
 // depending on the response that was made
 var trial = {
   type: 'html-keyboard-response',
@@ -144,13 +145,15 @@ var trial = {
 
 The `on_load` callback function will trigger once the trial has completed loading. For most plugins, this will occur once the display has been initially updated but before any user interactions or timed events (e.g., animations) have occurred. This can be useful for changing various aspects of the page elements and their properties that would otherwise require modifying the plugin file.
 
-#### Sample use
 ```javascript
 var trial = {
   type: 'image-keyboard-response',
   stimulus: 'imgA.png',
   on_load: function() {
-    console.log('The trial just finished loading.');
+    // this will change the src attribute of the image after 500ms
+    setTimeout(function(){
+      document.querySelector('img').src = 'imgB.png'
+    }, 500);
   }
 };
 ```
@@ -204,13 +207,13 @@ The overall structure of the plugin is defined using a module JavaScript design 
 
 The module, created by the `(function(){`  `})();` expressions, contains an object called `plugin`. The `plugin` object has two properties: `info` and `trial`. The `plugin` object is returned at the end of the module, which is what assigns the defined properties of `plugin` to `jsPsych['plugin-name']`.
 
-**plugin.info** 
+### plugin.info
 
 The plugin's `info` property is an object that contains all of the available parameters for the plugin. Each parameter name is a property, and the value is an object that includes a description of the parameter, the value's type (string, integer, etc.), and the default value. See some of the plugin files in the jsPsych plugins folder for examples.
 
-jsPsych allows most [plugin parameters to be dynamic](dynamic-parameters.md), which means that the parameter value can be a function that will be evaluated right before the trial starts. However, if you want your plugin to have a parameter that is a function that _shouldn't_ be evaluated before the trial starts, then you should make sure that the parameter type is 'FUNCTION'. This tells jsPsych not to evaluate the function as it normally does for dynamic parameters. See the canvas-* plugins for examples.
+jsPsych allows most [plugin parameters to be dynamic](dynamic-parameters.md), which means that the parameter value can be a function that will be evaluated right before the trial starts. However, if you want your plugin to have a parameter that is a function that _shouldn't_ be evaluated before the trial starts, then you should make sure that the parameter type is `'FUNCTION'`. This tells jsPsych not to evaluate the function as it normally does for dynamic parameters. See the `canvas-*` plugins for examples.
 
-**plugin.trial**
+### plugin.trial
 
 The plugin's `trial` property is a function that runs a single trial. There are two parameters that are passed into the trial method. The first, `display_element`, is the DOM element where jsPsych content is being rendered. This parameter will be an `HTMLElement`. Generally, you don't need to worry about this parameter being in the correct format, and can assume that it is an `HMTLElement` and use methods of that class. The second, `trial`, is an object containing all of the parameters specified in the corresponding TimelineNode. If you have specified all of your parameters in `plugin.info`, along with default values for each one, then the `trial` object will contain the default values for any parameters that were not specified in the trial's definition.
 
@@ -218,7 +221,7 @@ The only requirement for the `trial` method is that it calls `jsPsych.finishTria
 
 Of course, there are other things that you will probably want the plugin to do inside the `plugin.trial` function, besides just end. Here are some examples:
 
-**Changing the content of the display**
+### Changing the content of the display
 
 There are a few ways to change the content of the display. The `display_element` parameter of the trial method contains the DOM element for displaying content, so you can use various JavaScript methods for interaction with the display element. A common one is to change the `innerHTML`.
 
@@ -236,7 +239,7 @@ jsPsych doesn't clear the display before or after each trial, so it is often app
 display_element.innerHTML = '';
 ```
 
-**Writing data**
+### Writing data
 
 Plugins exist to collect data, so saving data is obviously a crucial thing to do. You can pass an object of data as the parameter to `jsPsych.finishTrial()`:
 
@@ -251,6 +254,6 @@ jsPsych.finishTrial(data);
 
 The data recorded will be that `correct` is `true` and that `rt` is `350`. Additional data for the trial will also be collected automatically by the jsPsych library.
 
-## The plugin template
+### The plugin template
 
 An empty plugin template is included in the `plugins/template` folder.
