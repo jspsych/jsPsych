@@ -4,13 +4,13 @@ This plugin plays audio files and records responses generated with a button clic
 
 If the browser supports it, audio files are played using the WebAudio API. This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. 
 
-Audio files are automatically preloaded by jsPsych. However, if you are using timeline variables or another dynamic method to specify the audio stimulus you will need to [manually preload](/overview/media-preloading/#manual-preloading) the audio.
+Audio files can be automatically preloaded by jsPsych using the [`preload` plugin](jspsych-preload.md). However, if you are using timeline variables or another dynamic method to specify the audio stimulus, you will need to [manually preload](/overview/media-preloading/#manual-preloading) the audio.
 
 The trial can end when the subject responds, when the audio file has finished playing, or if the subject has failed to respond within a fixed length of time. You can also prevent a button response from being made before the audio has finished playing.
 
 ## Parameters
 
-In addition to the [parameters available in all plugins](overview.md#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+In addition to the [parameters available in all plugins](/overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
 
 | Parameter                      | Type             | Default Value                            | Description                              |
 | ------------------------------ | ---------------- | ---------------------------------------- | ---------------------------------------- |
@@ -27,7 +27,7 @@ In addition to the [parameters available in all plugins](overview.md#parameters-
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview.md#data-collected-by-plugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](/overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
 | Name           | Type    | Value                                    |
 | -------------- | ------- | ---------------------------------------- |

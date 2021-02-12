@@ -25,8 +25,7 @@ describe('animation plugin', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="img/face_1.jpg" id="jspsych-animation-image"></img>');

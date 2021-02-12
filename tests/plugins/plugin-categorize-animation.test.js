@@ -23,8 +23,7 @@ describe('categorize-animation plugin', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		jest.runTimersToTime(500);
@@ -43,8 +42,7 @@ describe('categorize-animation plugin', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		jest.runTimersToTime(1500);
@@ -62,8 +60,7 @@ describe('categorize-animation plugin', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		jest.runTimersToTime(1500);
@@ -83,8 +80,7 @@ describe('categorize-animation plugin', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		jest.runTimersToTime(1500);
@@ -107,8 +103,7 @@ describe('categorize-animation plugin', function(){
   		};
 
   		jsPsych.init({
-    			timeline: [trials],
-					auto_preload: false
+    		timeline: [trials]
   		});
 
 		jest.runTimersToTime(1500);
@@ -130,8 +125,7 @@ describe('categorize-animation plugin', function(){
   		};
 
   		jsPsych.init({
-    			timeline: [trials],
-					auto_preload: false
+    		timeline: [trials]
   		});
 
 		jest.runTimersToTime(1500);
@@ -153,8 +147,7 @@ describe('categorize-animation plugin', function(){
   		};
 
   		jsPsych.init({
-    			timeline: [trials],
-					auto_preload: false
+    		timeline: [trials]
   		});
 
 		jest.runTimersToTime(1500);
@@ -177,8 +170,7 @@ describe('categorize-animation plugin', function(){
   		};
 
   		jsPsych.init({
-    		timeline: [trials],
-				auto_preload: false
+    		timeline: [trials]
   		});
 
 		jest.runTimersToTime(1000);
@@ -204,8 +196,7 @@ describe('categorize-animation plugin', function(){
   		};
 
   		jsPsych.init({
-    		timeline: [trials],
-				auto_preload: false
+    		timeline: [trials]
   		});
 
 		jest.runTimersToTime(1000);
@@ -234,8 +225,7 @@ describe('categorize-animation plugin', function(){
   		};
 
   		jsPsych.init({
-    		timeline: [trials],
-				auto_preload: false
+    		timeline: [trials]
   		});
 
 		jest.runTimersToTime(1500);
@@ -259,8 +249,7 @@ describe('categorize-animation plugin', function(){
   		};
 
   		jsPsych.init({
-    		timeline: [trials],
-				auto_preload: false
+    		timeline: [trials]
   		});
 
 		jest.runTimersToTime(1500);

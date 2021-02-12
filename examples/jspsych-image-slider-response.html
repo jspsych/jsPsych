@@ -3,10 +3,20 @@
 <head>
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-image-slider-response.js"></script>
+  <script src="../plugins/jspsych-preload.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css">
 </head>
 <body></body>
 <script>
+
+  // three images are used in a standard way in image-* plugins and can therefore be automatically preloaded.
+  // there's one additional image ('img/happy_face_4.jpg') that is only used in timeline variables 
+  // and will not be automatically preloaded, so this file must be preloaded manually.
+  var preload = {
+    type: 'preload',
+    auto_preload: true, 
+    images: ['img/happy_face_4.jpg']
+  }
 
   // If render_on_canvas is false, the images will be shown via an <img> rather than <canvas> element.
   // In some browsers, the first time the images are shown, the <img> method (render_on_canvas: false) will produce a brief 
@@ -64,8 +74,7 @@
   }
 
   jsPsych.init({
-    timeline: [trial_proc, trial_1, trial_2, trial_3],
-    preload_images: ['img/happy_face_1.jpg','img/happy_face_2.jpg','img/happy_face_3.jpg','img/happy_face_4.jpg'],
+    timeline: [preload, trial_proc, trial_1, trial_2, trial_3],
     on_finish: function() {
       jsPsych.data.displayData();
     },

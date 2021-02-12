@@ -514,7 +514,6 @@ describe('jsPsych.allTimelineVariables()', function(){
       ],
       conditional_function: function(){
         var all_tvs = jsPsych.allTimelineVariables();
-        console.log(all_tvs);
         a = all_tvs.a;
         b = all_tvs.b;
         return true;

@@ -5,6 +5,7 @@
         <script src="../jspsych.js"></script>
         <script src="../plugins/jspsych-html-keyboard-response.js"></script>
         <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+        <script src="../plugins/jspsych-preload.js"></script>
         <link rel="stylesheet" href="../css/jspsych.css">
     </head>
     <body>
@@ -90,8 +91,16 @@
           }
         };
 
+        // manually preload images due to presenting them with timeline variables
+        var images = ["img/con1.png","img/con2.png","img/inc1.png","img/inc2.png"];
+        var preload = {
+          type: 'preload',
+          images: images
+        }
+
         /*set up experiment structure*/
         var timeline = [];
+        timeline.push(preload);
         timeline.push(welcome);
         timeline.push(instructions);
         timeline.push(test);
@@ -100,7 +109,6 @@
         /*start experiment*/
         jsPsych.init({
             timeline: timeline,
-            preload_images: ["img/con1.png","img/con2.png","img/inc1.png","img/inc2.png"],
             on_finish: function() {
                 jsPsych.data.displayData();
             }
