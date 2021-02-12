@@ -140,7 +140,7 @@ var trial = {
   ]
 }
 ```
-## When functions can't be used
+## When dynamic parameters can't be used
 
 Note that if the plugin *expects* the value of a given parameter to be a function, then this function *will not* be evaluated at the start of the trial. This is because some plugins allow the researcher to specify functions that should be called at some point during the trial. Some examples of this include the `stimulus` parameter in the canvas-* plugins, the `mistake_fn` parameter in the cloze plugin, and the `stim_function` parameter in the reconstruction plugin. If you want to check whether this is the case for a particular plugin and parameter, then the parameter's `type` in the `plugin.info` section of the plugin file. If the parameter type is `jsPsych.plugins.parameterType.FUNCTION`, then this parameter must be a function and it will not be executed before the trial starts. 
 
