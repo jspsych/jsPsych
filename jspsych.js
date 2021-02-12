@@ -473,7 +473,7 @@ window.jsPsych = (function() {
     // update the current trial node to be completed
     // returns true if the node is complete after advance (all subnodes are also complete)
     // returns false otherwise
-    this.advance = function() {
+    this.advance = function () {
 
       // first check to see if done
       if (progress.done) {
@@ -484,10 +484,10 @@ window.jsPsych = (function() {
       // then try to start the node.
       if (progress.current_location == -1) {
         // check for on_timeline_start and conditonal function on nodes with timelines
-        if (typeof timeline_parameters != 'undefined') {
+        if (typeof timeline_parameters !== 'undefined') {
           // only run the conditional function if this is the first repetition of the timeline when
           // repetitions > 1, and only when on the first variable set
-          if (typeof timeline_parameters.conditional_function !== 'undefined' && progress.current_repetition==0 && progress.current_variable_set == 0) {
+          if (typeof timeline_parameters.conditional_function !== 'undefined' && progress.current_repetition == 0 && progress.current_variable_set == 0) {
             jsPsych.internal.call_immediate = true;
             var conditional_result = timeline_parameters.conditional_function();
             jsPsych.internal.call_immediate = false;
@@ -497,20 +497,15 @@ window.jsPsych = (function() {
               progress.done = true;
               return true;
             }
-            // // if the conditonal_function() returns true, then the node can start
-            // else {
-            //   progress.current_location = 0;
-            // }
           }
+
           // if we reach this point then the node has its own timeline and will start
-          // so we need to check if there is an on_timeline_start function
-          if (typeof timeline_parameters.on_timeline_start !== 'undefined'){
+          // so we need to check if there is an on_timeline_start function if we are on the first variable set
+          if (typeof timeline_parameters.on_timeline_start !== 'undefined' && progress.current_variable_set == 0) {
             timeline_parameters.on_timeline_start();
           }
-          // // if there is no conditional_function, then the node can start
-          // else {
-          //   progress.current_location = 0;
-          // }
+          
+
         }
         // if we reach this point, then either the node doesn't have a timeline of the 
         // conditional function returned true and it can start
@@ -538,7 +533,7 @@ window.jsPsych = (function() {
         }
 
         // if we've reached the end of the timeline (which, if the code is here, we have)
-            
+
         // there are a few steps to see what to do next...
 
         // first, check the timeline_variables to see if we need to loop through again
@@ -554,7 +549,7 @@ window.jsPsych = (function() {
         else if (progress.current_repetition < timeline_parameters.repetitions - 1) {
           this.nextRepetiton();
           // check to see if there is an on_timeline_finish function
-          if (typeof timeline_parameters.on_timeline_finish !== 'undefined'){
+          if (typeof timeline_parameters.on_timeline_finish !== 'undefined') {
             timeline_parameters.on_timeline_finish();
           }
           return this.advance();
@@ -564,7 +559,7 @@ window.jsPsych = (function() {
         // if we're all done with the repetitions...
         else {
           // check to see if there is an on_timeline_finish function
-          if (typeof timeline_parameters.on_timeline_finish !== 'undefined'){
+          if (typeof timeline_parameters.on_timeline_finish !== 'undefined') {
             timeline_parameters.on_timeline_finish();
           }
 
@@ -582,7 +577,7 @@ window.jsPsych = (function() {
             }
           }
 
-       
+
         }
 
         // no more loops on this timeline, we're done!

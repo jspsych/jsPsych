@@ -400,3 +400,58 @@ jsPsych.init({
 	on_finish: function(){jsPsych.data.displayData(); }
 });
 ```
+
+## Timeline start and finish functions
+
+You can run a custom function at the start and end of a timeline node using the `on_timeline_start` and `on_timeline_finish` callback function parameters. These are functions that will run when the timeline starts and ends, respectively. 
+
+```javascript
+var procedure = {
+	timeline: [trial_1, trial_2],
+	on_timeline_start: function() {
+		console.log('The trial procedure just started.')
+	},
+	on_timeline_finish: function() {
+		console.log('The trial procedure just finished.')
+	}
+}
+```
+
+This works the same way with timeline variables. The `on_timeline_start` and `on_timeline_finish` functions will run when timeline variables trials start and end, respectively.
+
+```javascript
+var face_name_procedure = {
+	// timeline parameter hidden to save space ...
+	timeline_variables: [
+		{ face: 'person-1.jpg', name: 'Alex' },
+		{ face: 'person-2.jpg', name: 'Beth' },
+		{ face: 'person-3.jpg', name: 'Chad' },
+		{ face: 'person-4.jpg', name: 'Dave' }
+	],
+	randomize_order: true,
+	on_timeline_start: function() {
+		console.log('First trial is starting.')
+	},
+	on_timeline_finish: function() {
+		console.log('Last trial just finished.')
+	}
+}
+```
+
+When the `repetititons` option is used (and is greater than 1), these functions will run once per repetition of the timeline.
+
+```javascript
+var repetition_count = 0;
+
+var procedure = {
+	timeline: [trial_1, trial_2],
+	repetitions: 3,
+	on_timeline_start: function() {
+		repetition_count++;
+		console.log('Repetition number ',repetition_count,' has just started.');
+	},
+	on_timeline_finish: function() {
+		console.log('Repetition number ',repetition_count,' has just finished.')
+	}
+}
+```

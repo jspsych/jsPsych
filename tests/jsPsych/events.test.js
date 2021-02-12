@@ -405,10 +405,10 @@ describe('on_timeline_finish', function(){
 
     var on_finish_fn = jest.fn();
 
-    var tvs = [{
-      x: 1,
-      x: 2,
-    }]
+    var tvs = [
+      {x: 1},
+      {x: 2},
+    ]
 
     var mini_timeline = {
       timeline: [
@@ -451,6 +451,43 @@ describe('on_timeline_finish', function(){
     expect(on_finish_fn.mock.calls.length).toBe(2);
     
   })
+
+  test('should fire before a loop function', function(){
+
+    var callback = jest.fn().mockImplementation(function(str) {return str;});
+    var count = 0;
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_finish: function() {callback('finish');},
+      loop_function: function() {
+        callback('loop');
+        count++;
+        if (count==2) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    utils.pressKey('a');
+    utils.pressKey('a');
+    expect(callback.mock.calls.length).toBe(4);
+    expect(callback.mock.calls[0][0]).toBe('finish');
+    expect(callback.mock.calls[1][0]).toBe('loop');
+    expect(callback.mock.calls[2][0]).toBe('finish');
+    expect(callback.mock.calls[3][0]).toBe('loop');
+    
+  })
+
 })
 
 describe('on_timeline_start', function(){
@@ -490,10 +527,10 @@ describe('on_timeline_start', function(){
 
     var on_start_fn = jest.fn();
 
-    var tvs = [{
-      x: 1,
-      x: 2,
-    }]
+    var tvs = [
+      {x: 1},
+      {x: 2},
+    ]
 
     var mini_timeline = {
       timeline: [
@@ -538,4 +575,32 @@ describe('on_timeline_start', function(){
     expect(on_start_fn.mock.calls.length).toBe(2);
     
   })
+
+  test('should fire after a conditional function', function(){
+
+    var callback = jest.fn().mockImplementation(function(str) {return str;});
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_start: function() {callback('start');},
+      conditional_function: function() {
+        callback('conditional');
+        return true;
+      }
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    expect(callback.mock.calls.length).toBe(2);
+    expect(callback.mock.calls[0][0]).toBe("conditional");
+    expect(callback.mock.calls[1][0]).toBe("start");
+    utils.pressKey('a');
+    
+  })
+
 })
