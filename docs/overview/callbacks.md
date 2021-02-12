@@ -128,18 +128,16 @@ var procedure = {
 
 ## on_timeline_start
 
-The `on_timeline_start` callback can be declared in a timeline node. The callback will be triggered when the timeline starts during the experiment. If the `repetitions` option is used, this function will be triggered at the start of every repetition. This function will be triggered after the timeline node's `conditional_function`, if there is one.
+The `on_timeline_start` callback can be declared in a timeline node. The callback will be triggered when the timeline starts during the experiment, including when `timeline_variables`, `loop_function`, or `sample` options are used. If a `conditional_function` is used, then the conditional function will execute first, and the `on_timeline_start` function will only execute if the conditional function returns `true`. If the `repetitions` option is used, this function will be triggered at the start of every repetition. 
 
 #### Sample use
 ```javascript
 var procedure = {
 	timeline: [trial1, trial2],
-	timeline_variables: [
-		{ stimulus: 'person-1.jpg' },
-		{ stimulus: 'person-2.jpg' },
-		{ stimulus: 'person-3.jpg' },
-		{ stimulus: 'person-4.jpg' }
-	],
+  conditional_function: function() {
+    console.log('This conditional function will execute first.')
+    return true;
+  },
   on_timeline_start: function() {
     console.log('This timeline has started');
   }
