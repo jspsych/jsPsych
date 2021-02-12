@@ -34,7 +34,8 @@ nav:
   - 'Video Tutorials': 'tutorials/video-tutorials.md'
 - Overview:
   - 'Creating an Experiment: The Timeline': 'overview/timeline.md'
-  - 'Advanced Options for Trials': 'overview/trial.md'
+  - 'Plugins': 'overview/plugins.md'
+  - 'Dynamic Parameters': 'overview/dynamic-parameters.md'
   - 'Controlling Visual Appearance': 'overview/style.md'
   - 'Data Storage, Aggregation, and Manipulation': 'overview/data.md'
   - 'Running Experiments': 'overview/running-experiments.md'
@@ -55,8 +56,6 @@ nav:
   - 'jsPsych.turk': 'core_library/jspsych-turk.md'
   - 'jsPsych.pluginAPI': 'core_library/jspsych-pluginAPI.md'
 - Plugins:
-  - 'Overview': 'plugins/overview.md'
-  - 'Creating a New Plugin': 'plugins/creating-a-plugin.md'
   - 'jspsych-animation': 'plugins/jspsych-animation.md'
   - 'jspsych-audio-button-response': 'plugins/jspsych-audio-button-response.md'
   - 'jspsych-audio-keyboard-response': 'plugins/jspsych-audio-keyboard-response.md'

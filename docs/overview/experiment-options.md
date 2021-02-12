@@ -54,7 +54,7 @@ An automatic or manually updated progress bar can be displayed at the top of the
 
 ## Preload media elements
 
-Images, audio files, and movies can be preloaded to reduce latency during the experiment. In many cases, this preloading is automatic. In certain situations, such as using a custom plugin, using [timeline variables](timeline.md#timeline-variables), or using [functions to determine which stimulus to show](trial.md#dynamic-parameters), it is necessary to provide jsPsych with a list of media elements to preload. The [media preloading](media-preloading.md) page describes this process in detail.
+Images, audio files, and movies can be preloaded to reduce latency during the experiment. In many cases, this preloading is automatic. In certain situations, such as using a custom plugin, using [timeline variables](timeline.md#timeline-variables), or using [functions to determine which stimulus to show](dynamic-parameters.md), it is necessary to provide jsPsych with a list of media elements to preload. The [media preloading](media-preloading.md) page describes this process in detail.
 
 ## Choose the method for playing audio files
 
