@@ -1,6 +1,8 @@
 const root = '../../';
 const utils = require('../testing-utils.js');
 
+jest.useFakeTimers();
+
 describe('data conversion to csv', function(){
 
 	beforeEach(function(){
@@ -8,7 +10,7 @@ describe('data conversion to csv', function(){
 		require(root + 'plugins/jspsych-survey-text.js');
   });
   
-  test('survey-text data is correctly converted', function(){
+  test('survey-text data response object is correctly converted', function(){
     var trial = {
       type: 'survey-text',
       questions: [
@@ -28,6 +30,77 @@ describe('data conversion to csv', function(){
 
     var csv_data = jsPsych.data.get().ignore(['rt','internal_node_id', 'time_elapsed', 'trial_type']).csv();
     expect(csv_data).toBe('"responses","trial_index"\r\n"{""Q0"":""Response 1"",""Q1"":""Response 2""}","0"\r\n');
+  })
+
+  test('same-different-html stimulus array is correctly converted', function(){
+    require(root + 'plugins/jspsych-same-different-html.js');
+
+    var trial = {
+      type: 'same-different-html',
+      stimuli: ['<p>Climbing</p>', '<p>Walking</p>'],
+      answer: 'different',
+      gap_duration: 0,
+      first_stim_duration: null
+    }
+
+    var timeline = [trial];
+
+    jsPsych.init({timeline: timeline});
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('<p>Climbing</p>');
+    utils.pressKey('q');
+    jest.runAllTimers();
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('<p>Walking</p>');
+    utils.pressKey('q');
+    expect(jsPsych.getDisplayElement().innerHTML).toBe('');
+
+    var csv_data = jsPsych.data.get().ignore(['rt','internal_node_id','time_elapsed','trial_type','rt_stim1','key_press_stim1']).csv(); 
+    expect(csv_data).toBe('"answer","correct","stimulus","key_press","trial_index"\r\n"different","false","[""<p>Climbing</p>"",""<p>Walking</p>""]","q","0"\r\n')
+  })
+
+  test('video-button-response stimulus array is correctly converted', function(){
+    require(root + 'plugins/jspsych-video-button-response.js');
+
+    var trial = {
+      type: 'video-button-response',
+      stimulus: ['vid/video.mp4'],
+      choices: ['button']
+    }
+
+    var timeline = [trial];
+
+    jsPsych.init({timeline: timeline});
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('video.mp4');
+    utils.clickTarget(document.querySelector('#jspsych-video-button-response-button-0'));
+    expect(jsPsych.getDisplayElement().innerHTML).toBe('');
+
+    var csv_data = jsPsych.data.get().ignore(['rt','internal_node_id','time_elapsed','trial_type']).csv(); 
+    expect(csv_data).toBe('"stimulus","button_pressed","trial_index"\r\n"[""vid/video.mp4""]","0","0"\r\n');
+  })
+
+  test('survey-multi-select response array is correctly converted', function(){
+    require(root + 'plugins/jspsych-survey-multi-select.js');
+
+    var trial = {
+      type: 'survey-multi-select',
+      questions: [
+        {prompt: "foo", options: ["fuzz", "bizz", "bar"], name: 'q'}
+      ]
+    };
+
+    var timeline = [trial];
+
+    jsPsych.init({timeline: timeline});
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
+    utils.clickTarget(document.querySelector('#jspsych-survey-multi-select-response-0-0'));
+    utils.clickTarget(document.querySelector('#jspsych-survey-multi-select-response-0-1'));
+    utils.clickTarget(document.querySelector('#jspsych-survey-multi-select-next'));
+    expect(jsPsych.getDisplayElement().innerHTML).toBe('');
+
+    var csv_data = jsPsych.data.get().ignore(['rt','internal_node_id','time_elapsed','trial_type','question_order']).csv(); 
+    expect(csv_data).toBe('"responses","trial_index"\r\n"{""q"":[""fuzz"",""bizz""]}","0"\r\n')
   })
 
 });
