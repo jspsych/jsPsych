@@ -107,7 +107,7 @@ var trial = {
 
 ## on_timeline_finish
 
-The `on_timeline_finish` callback can be declared in a timeline node. The callback will be triggered when the timeline ends during the experiment. If `timeline_variables`, `conditional_function`, `loop_function`, or `sample` options are used, this function will execute when all trials have finished. If the `repetitions` option is used, this function will be triggered at the end of every repetition.
+The `on_timeline_finish` callback can be declared in a timeline node. The callback will be triggered when the timeline ends during the experiment. If `timeline_variables`, `conditional_function`, `loop_function`, or `sample` options are used, this function will execute when all trials have finished. If a `loop_function` is used, then this `on_timeline_finish` function will be triggered before the loop function. If the `repetitions` option is used, this function will be triggered at the end of every repetition.
 
 #### Sample use
 ```javascript
@@ -120,7 +120,11 @@ var procedure = {
 		{ stimulus: 'person-4.jpg' }
 	],
   on_timeline_finish: function() {
-    console.log('This timeline has finished');
+    console.log('This timeline has finished.');
+  },
+  loop_function: function() {
+    console.log('This loop function will execute after on_timeline_finish.');
+    return false;
   }
 }
 ```

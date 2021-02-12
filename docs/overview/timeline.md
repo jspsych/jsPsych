@@ -412,7 +412,7 @@ var procedure = {
 		console.log('The trial procedure just started.')
 	},
 	on_timeline_finish: function() {
-		console.log('The face name procedure just finished.')
+		console.log('The trial procedure just finished.')
 	}
 }
 ```
