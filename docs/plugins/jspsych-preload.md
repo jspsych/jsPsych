@@ -125,4 +125,4 @@ var preload = {
 };
 ```
 
-For more examples, see the "jspsych-preload.html" file in the jsPsych examples folder and the [Media Preloading](/overview/media-preloading.md) documentation page.
+For more examples, see the `jspsych-preload.html` file in the jsPsych examples folder and the [Media Preloading](/overview/media-preloading.md) documentation page.

@@ -1,8 +1,9 @@
 # Media Preloading
 
-If an experiment uses image, audio, or video files as stimuli, it is a good idea to preload the files before running the experiment. You can preload files at any point in your experiment using the [jsPsych `preload` plugin](../plugins/jspsych-preload.md). Preloading files means that the subject's browser will download the files and store them in local memory on the subject's computer. This is important because loading a file is much faster if it is already in memory on the subject's computer. Without preloading, there will be noticeable delays in the display of media, which will affect any timing measurements (such as how long an image is displayed, or a subject's response time since first viewing an image). For particularly large files, like video, preloading content avoids lengthy pauses in the middle of the experiment that can be disruptive to the flow of the experiment.
+If an experiment uses image, audio, or video files as stimuli, it is a good idea to preload the files before running the experiment. You can preload files at any point in your experiment using the [jsPsych `preload` plugin](../plugins/jspsych-preload.md). Preloading files means that the subject's browser will download the files and store them in local memory on the subject's computer. This is important because displaying or playing a media file is much faster if it is already in memory on the subject's computer. Without preloading, there will be noticeable delays in the display of media, which will affect any timing measurements (such as how long an image is displayed, or a subject's response time since first viewing an image). For particularly large files, like video, preloading content avoids lengthy pauses in the middle of the experiment that can be disruptive to the flow of the experiment.
 
-Note that video preloading will not work when you run your experiment offline (e.g., by double-clicking on the HTML file), but it will work once your experiment is running online (hosted on a server). The [Cross-origin requests (CORS) and safe mode](running-experiments.md#cross-origin-requests-cors-and-safe-mode) section on the Running Experiments page contains more information about this.
+!!! warning
+		Note that video preloading will not work when you run your experiment offline (e.g., by double-clicking on the HTML file), but it will work once your experiment is running online (hosted on a server). The [Cross-origin requests (CORS) and safe mode](running-experiments.md#cross-origin-requests-cors-and-safe-mode) section on the Running Experiments page contains more information about this.
 
 ## Automatic Preloading
 
@@ -22,7 +23,7 @@ var image_trial = {
 	stimulus: 'img/file1.png'
 }
 
-// the sound file is can be automatically preloaded 
+// the sound file can be automatically preloaded 
 var sound_trial = {
 	type: 'audio-keyboard-response',
 	stimulus: 'audio/hello.mp3'
@@ -137,7 +138,7 @@ jsPsych.init({
 
 ## Preloading in batches
 
-Some experiments use many and/or large media files. This can cause problems when participants have slow and/or unreliable internet connections, because it increases the chances of loading errors during preloading. This can also cause problems with file caching, i.e. ensuring that the preloaded files remain in the browser's memory, because loading all stimuli at once may exceed the browser's cache limits. One option for mitigating these problems is to load the media files in smaller batches throughout the experiment. Files should be preloaded as close as possible to when they will be needed. For instance, if you have several blocks of trials, then right before each block, you can preload the stimuli that's needed for that block.
+Some experiments use many and/or large media files. This can cause problems when participants have slow and/or unreliable internet connections, because it increases the chances of loading errors during preloading. This can also cause problems with file caching, i.e. ensuring that the preloaded files remain in the browser's memory, because loading all stimuli at once may exceed the browser's cache limits. One option for mitigating these problems is to load the media files in smaller batches throughout the experiment. Files should be preloaded as close as possible to when they will be needed. For instance, if you have several blocks of trials, then right before each block, you can preload the stimuli that are needed for that block.
 
 Here is an example with trials where the stimuli files can be preloaded automatically. In this case, the `trials` parameter is used to tell the `preload` plugin to preload the stimuli from a specific part of the timeline. 
 
