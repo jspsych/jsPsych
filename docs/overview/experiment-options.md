@@ -108,6 +108,24 @@ jsPsych.init({
 });
 ```
 
+## Choose whether you want keyboard choices/responses to be case-sensitive
+
+JavaScript keyboard events make a distinction between uppercase and lowercase key responses (e.g. 'a' and 'A'). Often the researcher just cares about which physical key was pressed, and not whether the key press would result in an uppercase letter (for instance, if CapsLock is on or if the Shift key is held down). For this reason, jsPsych converts all key choice parameters and key responses as lowercase by default. This makes it easier to specify key choices (e.g. `choices: ['a']`, instead of `choices: ['a','A']`), and it makes it easier to check and score a participant's response. 
+
+There may be situations when you want key choices and responses to be case-sensitive. You can change this by setting the `case_sensitive` parameter to `true` in `jsPsych.init`.
+
+```js
+// use case-sensitive key choices and responses, 
+// i.e. uppercase and lower case letters ('a' and 'A') will be treated as different key choices, 
+// and will be recorded this way in the data
+jsPsych.init({
+    timeline: [...],
+    case_sensitive: true
+});
+```
+
+Note that this setting only applies to key choices and responses that use jsPsych's keyboard response listener, such as in the *`-keyboard-response` plugins. This does NOT apply to responses that are made by typing into a text box, such as in the `survey-text` and `cloze` plugins.
+
 ## Override 'safe mode' when running experiments offline
 
 By default, jsPsych switches to a 'safe mode' when it detects that the webpage is running offline (via the `file://` protocol) in order to prevent certain errors. Specifically, in safe mode, HTML5 audio is used to play audio files (even when `use_webaudio` has been explicitly set to `true`) and video preloading is disabled (both automatic and manual preloading). For more information, see the [Cross-origin requests (CORS) and safe mode](running-experiments.md#cross-origin-requests-cors-and-safe-mode) section on the Running Experiments page.
