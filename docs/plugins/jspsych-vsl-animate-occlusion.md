@@ -10,27 +10,27 @@ This plugin requires the Snap.svg library, available at [http://www.snapsvg.io](
 
 ## Parameters
 
-In addition to the [parameters available in all plugins](overview.md#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+In addition to the [parameters available in all plugins](/overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
 
-Parameter | Type | Default Value | Description
-----------|------|---------------|------------
-stimuli | array | *undefined* | Each element of the array is a stimulus. A stimulus is a path to an image file. The order of stimuli in the array determines the order of the animation sequence.
-canvas_size | array | `[400, 400]` | Array specifying the width and height of the area that the animation will display in. Stimuli will move to the edges of this area, so increasing the width without increasing the `timing_cycle` parameter will speed up the images.
-image_size | array | `[100, 100]` | Array specifying the width and height of the images to show. The occluding rectangle will have a width equal to the width of image_size.
-initial_direction | string | "left" | Which direction the stimulus should move first (subsequent directions will alternate). Choices are "left" or "right".
-occlude_center | boolean | true | If true, display a rectangle in the center of the screen that is just wide enough to occlude the image completely as it passes behind.
-choices | array of keycodes | `jsPsych.ALL_KEYS` | This array contains the keys that the subject is allowed to press in order to respond to the stimulus. Keys can be specified as their [numeric key code](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes) or as characters (e.g., `'a'`, `'q'`). The default value of `jsPsych.ALL_KEYS` means that all keys will be accepted as valid responses. Specifying `jsPsych.NO_KEYS` will mean that no responses are allowed.
-cycle_duration | numeric | 1000 | How long it takes for a stimulus in the sequence to make a complete cycle (move to the edge and back to the center) in milliseconds.
-pre_movement_duration | numeric | 500 | How long to wait before the stimuli starts moving from behind the center rectangle.
+| Parameter             | Type             | Default Value      | Description                              |
+| --------------------- | ---------------- | ------------------ | ---------------------------------------- |
+| stimuli               | array            | *undefined*        | Each element of the array is a stimulus. A stimulus is a path to an image file. The order of stimuli in the array determines the order of the animation sequence. |
+| canvas_size           | array            | `[400, 400]`       | Array specifying the width and height of the area that the animation will display in. Stimuli will move to the edges of this area, so increasing the width without increasing the `timing_cycle` parameter will speed up the images. |
+| image_size            | array            | `[100, 100]`       | Array specifying the width and height of the images to show. The occluding rectangle will have a width equal to the width of image_size. |
+| initial_direction     | string           | "left"             | Which direction the stimulus should move first (subsequent directions will alternate). Choices are "left" or "right". |
+| occlude_center        | boolean          | true               | If true, display a rectangle in the center of the screen that is just wide enough to occlude the image completely as it passes behind. |
+| choices               | array of strings | `jsPsych.ALL_KEYS` | This array contains the key(s) that the subject is allowed to press in order to respond to the stimulus. Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) - see [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) and [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/) for more examples. Any key presses that are not listed in the array will be ignored. The default value of `jsPsych.ALL_KEYS` means that all keys will be accepted as valid responses. Specifying `jsPsych.NO_KEYS` will mean that no responses are allowed. |
+| cycle_duration        | numeric          | 1000               | How long it takes for a stimulus in the sequence to make a complete cycle (move to the edge and back to the center) in milliseconds. |
+| pre_movement_duration | numeric          | 500                | How long to wait before the stimuli starts moving from behind the center rectangle. |
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview.md#data-collected-by-plugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](/overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
-Name | Type | Value
------|------|------
-stimulus | JSON string | A JSON encoded array where each element of the array is a stimulus from the sequence, in the order that they were shown.
-responses | JSON string | A JSON encoded array containing all response information. The encoded object is an array containing one element for each valid response. Each response item has three properties: `key` the key code of the response key, `stimulus` the index of the stimulus that was displayed when the response was made, and `rt` the response time measured since the start of the sequence.
+| Name      | Type        | Value                                    |
+| --------- | ----------- | ---------------------------------------- |
+| stimulus  | JSON string | A JSON encoded array where each element of the array is a stimulus from the sequence, in the order that they were shown. |
+| responses | JSON string | A JSON encoded array containing all response information. The encoded object is an array containing one element for each valid response. Each response item has three properties: `key` the key that was pressed, `stimulus` the index of the stimulus that was displayed when the response was made, and `rt` the response time measured since the start of the sequence. |
 
 ## Examples
 

@@ -27,9 +27,9 @@ describe('on_finish (trial)', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
-    })).then(function(data) { expect(data.key_data).toBe(32) });
+    })).then(function(data) { expect(data.key_data).toBe('a') });
   });
 
   test('should be able to write to the data', function(){
@@ -54,7 +54,7 @@ describe('on_finish (trial)', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(pd) {
@@ -86,7 +86,7 @@ describe('on_start (trial)', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
     })).then(function(data) { expect(data).toBe('hello') });
   });
@@ -115,7 +115,7 @@ describe('on_start (trial)', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
     })).then(function(data) { expect(data).toBe('hello') });
   });
@@ -143,11 +143,11 @@ describe('on_trial_finish (experiment level)', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(pd) {
-      expect(pd.key).toBe(32);
+      expect(pd.key).toBe('a');
     });
   });
 
@@ -173,7 +173,7 @@ describe('on_trial_finish (experiment level)', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(pd) {
@@ -204,11 +204,11 @@ describe('on_data_update', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(pd) {
-      expect(pd.key).toBe(32);
+      expect(pd.key).toBe('a');
     });
   });
 
@@ -275,7 +275,7 @@ describe('on_data_update', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(pd) {
@@ -307,7 +307,7 @@ describe('on_data_update', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(pd) {
@@ -339,7 +339,7 @@ describe('on_trial_start', function(){
         }
       });
 
-      utils.pressKey(32);
+      utils.pressKey('a');
 
       //resolve();
     })).then(function(pd) {
@@ -364,6 +364,243 @@ describe('on_trial_start', function(){
     var display_element = jsPsych.getDisplayElement();
     expect(display_element.innerHTML).toMatch('goodbye');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
   });
 });
+
+describe('on_timeline_finish', function(){
+  test('should fire once when timeline is complete', function(){
+
+    var on_finish_fn = jest.fn();
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        },
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        },
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_finish: on_finish_fn
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    utils.pressKey('a');
+    expect(on_finish_fn).not.toHaveBeenCalled();
+    utils.pressKey('a');
+    expect(on_finish_fn).not.toHaveBeenCalled();
+    utils.pressKey('a');
+    expect(on_finish_fn).toHaveBeenCalled();
+  });
+
+  test('should fire once even with timeline variables', function(){
+
+    var on_finish_fn = jest.fn();
+
+    var tvs = [
+      {x: 1},
+      {x: 2},
+    ]
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_finish: on_finish_fn,
+      timeline_variables: tvs
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    utils.pressKey('a');
+    utils.pressKey('a');
+    expect(on_finish_fn.mock.calls.length).toBe(1);
+    
+  })
+
+  test('should fire on every repetition', function(){
+
+    var on_finish_fn = jest.fn();
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_finish: on_finish_fn,
+      repetitions: 2
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    utils.pressKey('a');
+    utils.pressKey('a');
+    expect(on_finish_fn.mock.calls.length).toBe(2);
+    
+  })
+
+  test('should fire before a loop function', function(){
+
+    var callback = jest.fn().mockImplementation(function(str) {return str;});
+    var count = 0;
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_finish: function() {callback('finish');},
+      loop_function: function() {
+        callback('loop');
+        count++;
+        if (count==2) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    utils.pressKey('a');
+    utils.pressKey('a');
+    expect(callback.mock.calls.length).toBe(4);
+    expect(callback.mock.calls[0][0]).toBe('finish');
+    expect(callback.mock.calls[1][0]).toBe('loop');
+    expect(callback.mock.calls[2][0]).toBe('finish');
+    expect(callback.mock.calls[3][0]).toBe('loop');
+    
+  })
+
+})
+
+describe('on_timeline_start', function(){
+  test('should fire once when timeline starts', function(){
+
+    var on_start_fn = jest.fn();
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        },
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        },
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_start: on_start_fn
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    expect(on_start_fn).toHaveBeenCalled();
+    utils.pressKey('a');
+    utils.pressKey('a');
+    utils.pressKey('a');
+    expect(on_start_fn.mock.calls.length).toBe(1);
+    
+  })
+
+  test('should fire once even with timeline variables', function(){
+
+    var on_start_fn = jest.fn();
+
+    var tvs = [
+      {x: 1},
+      {x: 2},
+    ]
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_start: on_start_fn,
+      timeline_variables: tvs
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    expect(on_start_fn).toHaveBeenCalled();
+    utils.pressKey('a');
+    utils.pressKey('a');
+    expect(on_start_fn.mock.calls.length).toBe(1);
+    
+  })
+
+  test('should fire on every repetition', function(){
+
+    var on_start_fn = jest.fn();
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_start: on_start_fn,
+      repetitions: 2
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    expect(on_start_fn).toHaveBeenCalled();
+    utils.pressKey('a');
+    utils.pressKey('a');
+    expect(on_start_fn.mock.calls.length).toBe(2);
+    
+  })
+
+  test('should fire after a conditional function', function(){
+
+    var callback = jest.fn().mockImplementation(function(str) {return str;});
+
+    var mini_timeline = {
+      timeline: [
+        {
+          type: 'html-keyboard-response',
+          stimulus: 'foo'
+        }
+      ],
+      on_timeline_start: function() {callback('start');},
+      conditional_function: function() {
+        callback('conditional');
+        return true;
+      }
+    }
+
+    jsPsych.init({timeline: [mini_timeline]});
+
+    expect(callback.mock.calls.length).toBe(2);
+    expect(callback.mock.calls[0][0]).toBe("conditional");
+    expect(callback.mock.calls[1][0]).toBe("start");
+    utils.pressKey('a');
+    
+  })
+
+})

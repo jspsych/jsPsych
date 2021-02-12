@@ -31,9 +31,12 @@ nav:
 - Tutorials:
   - 'The Basics: Hello World': 'tutorials/hello-world.md'
   - 'Demo Experiment: Simple Reaction Time Task': 'tutorials/rt-task.md'
+  - 'Video Tutorials': 'tutorials/video-tutorials.md'
 - Overview:
   - 'Creating an Experiment: The Timeline': 'overview/timeline.md'
-  - 'Advanced Options for Trials': 'overview/trial.md'
+  - 'Plugins': 'overview/plugins.md'
+  - 'Dynamic Parameters': 'overview/dynamic-parameters.md'
+  - 'Controlling Visual Appearance': 'overview/style.md'
   - 'Data Storage, Aggregation, and Manipulation': 'overview/data.md'
   - 'Running Experiments': 'overview/running-experiments.md'
   - 'Experiment Settings': 'overview/experiment-options.md'
@@ -43,6 +46,7 @@ nav:
   - 'Fullscreen Experiments': 'overview/fullscreen.md'
   - 'Exclude Participants Based on Browser Features': 'overview/exclude-browser.md'
   - 'Automatic Progress Bar': 'overview/progress-bar.md'
+  - 'Integrating with Prolific': 'overview/prolific.md'
   - 'Integrating with Mechanical Turk': 'overview/mturk.md'
   - 'Browser and Device Support': 'overview/browser-device-support.md'
 - Reference:
@@ -52,8 +56,7 @@ nav:
   - 'jsPsych.turk': 'core_library/jspsych-turk.md'
   - 'jsPsych.pluginAPI': 'core_library/jspsych-pluginAPI.md'
 - Plugins:
-  - 'Overview': 'plugins/overview.md'
-  - 'Creating a New Plugin': 'plugins/creating-a-plugin.md'
+  - 'List of Plugins': 'plugins/list-of-plugins.md'
   - 'jspsych-animation': 'plugins/jspsych-animation.md'
   - 'jspsych-audio-button-response': 'plugins/jspsych-audio-button-response.md'
   - 'jspsych-audio-keyboard-response': 'plugins/jspsych-audio-keyboard-response.md'
@@ -79,6 +82,7 @@ nav:
   - 'jspsych-image-slider-response': 'plugins/jspsych-image-slider-response.md'
   - 'jspsych-instructions': 'plugins/jspsych-instructions.md'
   - 'jspsych-maxdiff': 'plugins/jspsych-maxdiff.md'
+  - 'jspsych-preload': 'plugins/jspsych-preload.md'
   - 'jspsych-rdk': 'plugins/jspsych-rdk.md'
   - 'jspsych-reconstruction': 'plugins/jspsych-reconstruction.md'
   - 'jspsych-resize': 'plugins/jspsych-resize.md'

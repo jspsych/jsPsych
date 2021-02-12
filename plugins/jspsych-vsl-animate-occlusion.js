@@ -29,7 +29,7 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
         description: 'A stimulus is a path to an image file.'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Choices',
         array: true,
         default: jsPsych.ALL_KEYS,

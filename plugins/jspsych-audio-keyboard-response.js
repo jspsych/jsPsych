@@ -25,7 +25,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         description: 'The audio to be played.'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Choices',
         array: true,
         default: jsPsych.ALL_KEYS,

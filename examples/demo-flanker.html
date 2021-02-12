@@ -5,6 +5,7 @@
         <script src="../jspsych.js"></script>
         <script src="../plugins/jspsych-html-keyboard-response.js"></script>
         <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+        <script src="../plugins/jspsych-preload.js"></script>
         <link rel="stylesheet" href="../css/jspsych.css">
     </head>
     <body>
@@ -54,15 +55,15 @@
         var test = {
           timeline: [{
             type: 'image-keyboard-response',
-            choices: [37, 39],
+            choices: ['ArrowLeft', 'ArrowRight'],
             trial_duration: 1500,
             stimulus: jsPsych.timelineVariable('stimulus'),
             data: jsPsych.timelineVariable('data'),
             on_finish: function(data){
               var correct = false;
-              if(data.direction == 'left' &&  data.key_press == 37 && data.rt > -1){
+              if(data.direction == 'left' &&  data.key_press == 'ArrowLeft' && data.rt > -1){
                 correct = true;
-              } else if(data.direction == 'right' && data.key_press == 39 && data.rt > -1){
+              } else if(data.direction == 'right' && data.key_press == 'ArrowRight' && data.rt > -1){
                 correct = true;
               }
               data.correct = correct;
@@ -90,8 +91,16 @@
           }
         };
 
+        // manually preload images due to presenting them with timeline variables
+        var images = ["img/con1.png","img/con2.png","img/inc1.png","img/inc2.png"];
+        var preload = {
+          type: 'preload',
+          images: images
+        }
+
         /*set up experiment structure*/
         var timeline = [];
+        timeline.push(preload);
         timeline.push(welcome);
         timeline.push(instructions);
         timeline.push(test);

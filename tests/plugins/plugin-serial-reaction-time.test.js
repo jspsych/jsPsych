@@ -30,7 +30,7 @@ describe('serial-reaction-time plugin', function(){
 		expect(document.querySelector('#jspsych-serial-reaction-time-stimulus-cell-0-2').style.backgroundColor).toBe('');
 		expect(document.querySelector('#jspsych-serial-reaction-time-stimulus-cell-0-3').style.backgroundColor).toBe('');
 
-		utils.pressKey(51);
+		utils.pressKey('3');
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 		expect(jsPsych.data.get().last(1).values()[0].correct).toBe(true);
@@ -55,7 +55,7 @@ describe('serial-reaction-time plugin', function(){
 		expect(document.querySelector('#jspsych-serial-reaction-time-stimulus-cell-0-2').style.backgroundColor).toBe('');
 		expect(document.querySelector('#jspsych-serial-reaction-time-stimulus-cell-0-3').style.backgroundColor).toBe('');
 
-		utils.pressKey(51);
+		utils.pressKey('3');
 
 		expect(jsPsych.getDisplayElement().innerHTML).not.toBe('');
 

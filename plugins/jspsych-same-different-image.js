@@ -33,15 +33,15 @@ jsPsych.plugins['same-different-image'] = (function() {
         description: 'Either "same" or "different".'
       },
       same_key: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Same key',
-        default: 'Q',
+        default: 'q',
         description: ''
       },
       different_key: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Different key',
-        default: 'P',
+        default: 'p',
         description: 'The key that subjects should press to indicate that the two stimuli are the same.'
       },
       first_stim_duration: {
@@ -125,8 +125,8 @@ jsPsych.plugins['same-different-image'] = (function() {
 
         var correct = false;
 
-        var skey = typeof trial.same_key == 'string' ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.same_key) : trial.same_key;
-        var dkey = typeof trial.different_key == 'string' ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.different_key) : trial.different_key;
+        var skey = trial.same_key;
+        var dkey = trial.different_key;
 
         if (info.key == skey && trial.answer == 'same') {
           correct = true;
