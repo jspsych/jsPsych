@@ -29,8 +29,7 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial],
-			auto_preload: false
+      timeline: [trial]
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(/blue.png/);
@@ -51,8 +50,7 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial],
-			auto_preload: false
+      timeline: [trial]
     });
 
     utils.pressKey('j');
@@ -73,8 +71,7 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial],
-			auto_preload: false
+      timeline: [trial]
     });
 
     utils.pressKey('f');
@@ -98,8 +95,7 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial],
-			auto_preload: false
+      timeline: [trial]
     });
 
     utils.pressKey('f');
@@ -123,8 +119,7 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial],
-			auto_preload: false
+      timeline: [trial]
     });
 
     utils.pressKey('j');
@@ -148,8 +143,7 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial],
-			auto_preload: false
+      timeline: [trial]
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p>Press j for:<br> <b>UNFRIENDLY</b>'));
@@ -176,8 +170,7 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial],
-			auto_preload: false
+      timeline: [trial]
     });
 
     expect(jsPsych.getDisplayElement().querySelector('#wrongImgContainer').style.visibility).toBe('hidden');
@@ -200,8 +193,7 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial],
-			auto_preload: false
+      timeline: [trial]
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"../media/blue.png\" id=\"jspsych-iat-stim\">'));
@@ -227,8 +219,7 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial],
-      auto_preload: false
+      timeline: [trial]
     });
 
     utils.pressKey('f');
@@ -254,8 +245,7 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial],
-      auto_preload: false
+      timeline: [trial]
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src="../media/blue.png" id=\"jspsych-iat-stim\">'));
@@ -288,8 +278,7 @@ describe('iat-image plugin', function(){
     }
 
     jsPsych.init({
-      timeline: [trial],
-      auto_preload: false
+      timeline: [trial]
     });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src="../media/blue.png" id=\"jspsych-iat-stim\">'));

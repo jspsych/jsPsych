@@ -4,10 +4,19 @@
     <script src="../jspsych.js"></script>
     <script src="../plugins/jspsych-video-keyboard-response.js"></script>
     <script src="../plugins/jspsych-html-button-response.js"></script>
+    <script src="../plugins/jspsych-preload.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css">
   </head>
   <body></body>
   <script>
+  
+  // preloading videos only works when the file is running on a server
+  // if you run this experiment by opening the file directly in the browser, 
+  // then video preloading will be disabled to prevent CORS errors
+  var preload = {
+    type: 'preload',
+    auto_preload: true
+  }
 
   var pre_trial = {
     type: 'html-button-response',
@@ -44,8 +53,7 @@
   }
 
   jsPsych.init({
-    show_preload_progress_bar: true,
-    timeline: [pre_trial, trial_1, trial_2],
+    timeline: [preload, pre_trial, trial_1, trial_2],
     on_finish: function() { jsPsych.data.displayData(); }
   });
 

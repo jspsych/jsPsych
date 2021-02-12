@@ -20,8 +20,7 @@ describe('free-sort plugin', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('src=\"img/happy_face_1.jpg\" data-src=\"img/happy_face_1.jpg\"'));
@@ -39,8 +38,7 @@ describe('free-sort plugin', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('class=\"jspsych-free-sort-arena\" style=\"position: relative; width:700px; height:500px;'));
@@ -55,8 +53,7 @@ describe('free-sort plugin', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<img src=\"img/happy_face_1.jpg\".+width:200px; height:200px'));
@@ -70,8 +67,7 @@ describe('free-sort plugin', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p>This is a prompt</p>'));
@@ -86,8 +82,7 @@ describe('free-sort plugin', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<p>This is a prompt</p>.+<button id=\"jspsych-free-sort-done-btn\"'));
@@ -102,8 +97,7 @@ describe('free-sort plugin', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<button id=\"jspsych-free-sort-done-btn\" class=\"jspsych-btn\".+>Finito</button>'));

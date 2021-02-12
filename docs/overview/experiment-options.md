@@ -2,13 +2,14 @@
 
 There are several options that can be set when calling `jsPsych.init()` to launch the experiment.
 
-Options are specified in the object passed to `jsPsych.init`. For example, to specify a set of images to preload and the default inter-trial interval the object would contain:
+Options are specified in the object passed to `jsPsych.init`. For example, to specify a default inter-trial interval, a minimum valid response time duration, and a maximum width for all of the experiment's page content, the object would contain:
 
 ```js
 jsPsych.init({
     timeline: [...],
-    preload_images: ['img1.png', 'img2.png'],
-    default_iti: 500
+    default_iti: 250, 
+    minimum_valid_rt: 100, 
+    experiment_width: 800 
 });
 ```
 

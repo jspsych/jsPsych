@@ -56,6 +56,7 @@ nav:
   - 'jsPsych.turk': 'core_library/jspsych-turk.md'
   - 'jsPsych.pluginAPI': 'core_library/jspsych-pluginAPI.md'
 - Plugins:
+  - 'List of Plugins': 'plugins/list-of-plugins.md'
   - 'jspsych-animation': 'plugins/jspsych-animation.md'
   - 'jspsych-audio-button-response': 'plugins/jspsych-audio-button-response.md'
   - 'jspsych-audio-keyboard-response': 'plugins/jspsych-audio-keyboard-response.md'
@@ -81,6 +82,7 @@ nav:
   - 'jspsych-image-slider-response': 'plugins/jspsych-image-slider-response.md'
   - 'jspsych-instructions': 'plugins/jspsych-instructions.md'
   - 'jspsych-maxdiff': 'plugins/jspsych-maxdiff.md'
+  - 'jspsych-preload': 'plugins/jspsych-preload.md'
   - 'jspsych-rdk': 'plugins/jspsych-rdk.md'
   - 'jspsych-reconstruction': 'plugins/jspsych-reconstruction.md'
   - 'jspsych-resize': 'plugins/jspsych-resize.md'

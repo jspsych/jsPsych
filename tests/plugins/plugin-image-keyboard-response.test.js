@@ -22,8 +22,7 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src=\"../media/blue.png\" id=\"jspsych-image-keyboard-response-stimulus\"');
@@ -40,8 +39,7 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus"');
@@ -61,8 +59,7 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<div id="foo">this is a prompt</div>');
@@ -79,8 +76,7 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().querySelector('#jspsych-image-keyboard-response-stimulus').style.visibility).toMatch("");
@@ -100,8 +96,7 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus"');
@@ -119,8 +114,7 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus"');
@@ -144,8 +138,7 @@ describe('image-keyboard-response', function(){
 		};
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(spy).toHaveBeenCalled();

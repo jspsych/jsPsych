@@ -2,6 +2,7 @@
 
 This plugin displays and image and records responses generated with the keyboard. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the subject has failed to respond within a fixed length of time.
 
+Image files can be automatically preloaded by jsPsych using the [`preload` plugin](jspsych-preload.md). However, if you are using timeline variables or another dynamic method to specify the image stimulus, you will need to [manually preload](/overview/media-preloading/#manual-preloading) the images.
 
 ## Parameters
 
