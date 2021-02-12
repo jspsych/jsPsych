@@ -608,7 +608,7 @@ jsPsych.timelineVariable(variable, call_immediate)
 Parameter | Type | Description
 ----------|------|------------
 variable | string | Name of the timeline variable
-call_immediate | bool | This parameter is optional and can usually be omitted. It determines the return value of `jsPsych.timelineVariable`. If `true`, the function returns the _value_ of the current timeline variable. If `false`, the function returns _a function that returns the value_ of the current timeline variable. When `call_immediate` is omitted, the appropriate option is determined automatically based on the context in which this function is called. When `jsPsych.timelineVariable` is used as a parameter value, `call_immediate` will be `false`. This allows it to be used as a [dynamic trial parameter](/overview/trial/#dynamic-parameters). When `jsPsych.timelineVariable` is used inside of a function, `call_immediate` will be `true`. It is possible to explicitly set this option to `true` to force the function to immediately return the current value of the timeline variable. 
+call_immediate | bool | This parameter is optional and can usually be omitted. It determines the return value of `jsPsych.timelineVariable`. If `true`, the function returns the _value_ of the current timeline variable. If `false`, the function returns _a function that returns the value_ of the current timeline variable. When `call_immediate` is omitted, the appropriate option is determined automatically based on the context in which this function is called. When `jsPsych.timelineVariable` is used as a parameter value, `call_immediate` will be `false`. This allows it to be used as a [dynamic trial parameter](/overview/dynamic-parameters). When `jsPsych.timelineVariable` is used inside of a function, `call_immediate` will be `true`. It is possible to explicitly set this option to `true` to force the function to immediately return the current value of the timeline variable. 
 
 
 ### Return value
@@ -658,7 +658,7 @@ var procedure = {
   ]
 }
 ```
-Prior to jsPsych v6.3.0, the `call_immediate` parameter must be set to `true` when `jsPsych.timelineVariable` is called from within a function, such as a [dynamic parameter](/overview/trial/#dynamic-parameters):
+Prior to jsPsych v6.3.0, the `call_immediate` parameter must be set to `true` when `jsPsych.timelineVariable` is called from within a function, such as a [dynamic parameter](/overview/dynamic-parameters):
 ```javascript
 var trial = {
   type: 'html-keyboard-response',

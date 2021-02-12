@@ -212,13 +212,13 @@ jsPsych.pluginAPI.getKeyboardResponse({
 });
 ```
 
-#### Get a responses from a key until the letter Q is pressed
+#### Get a responses from a key until the letter q is pressed
 ```javascript
 
 var after_response = function(info){
 	alert('You pressed key '+info.key+' after '+info.rt+'ms');
 
-	if(info.key == 81){ // the key code for 'Q' is 81.
+	if(info.key == 'q'){ /
 		jsPsych.pluginAPI.cancelKeyboardResponse(listener);
 	}
 }
