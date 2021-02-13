@@ -59,27 +59,6 @@ describe('data conversion to json', function(){
     expect(json_data).toBe(JSON.stringify([{answer: 'different', correct: false, stimulus: ['<p>Climbing</p>','<p>Walking</p>'], key_press: 'q',  trial_index: 0}]));
   })
 
-  test('video-button-response stimulus array is correctly converted', function(){
-    require(root + 'plugins/jspsych-video-button-response.js');
-
-    var trial = {
-      type: 'video-button-response',
-      stimulus: ['vid/video.mp4'],
-      choices: ['button']
-    }
-
-    var timeline = [trial];
-
-    jsPsych.init({timeline: timeline});
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch('video.mp4');
-    utils.clickTarget(document.querySelector('#jspsych-video-button-response-button-0'));
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('');
-
-    var json_data = jsPsych.data.get().ignore(['rt','internal_node_id','time_elapsed','trial_type']).json(); 
-    expect(json_data).toBe(JSON.stringify([{stimulus: ['vid/video.mp4'], button_pressed: 0, trial_index: 0}]));
-  })
-
   test('survey-multi-select response array is correctly converted', function(){
     require(root + 'plugins/jspsych-survey-multi-select.js');
 
