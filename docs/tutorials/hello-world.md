@@ -10,11 +10,28 @@ Start by downloading the jsPsych library. The most recent version can always be 
 
 ![releasespage](/img/githubreleases.jpg)
 
+!!! warning
+		We strongly recommend downloading the latest release of the code rather than downloading the zip file of the code via the *Big Green Button* on the GitHub site. Downloading the code via the *Big Green Button* may give you a copy of the library that is in development and contains bugs.
+
 ## Step 2: Create a folder to store your experiment files
 
-Create a folder on your computer to put the experiment files in. Once you've created the folder, open the downloaded archive from step 1, and move the extracted folder (called `jspsych-6.3.0` if using v6.3.0 of jsPsych) into the experiment folder. Here's what it looks like on a Windows machine:
+Create a folder on your computer to put the experiment files in. Once you've created the folder, open the downloaded archive from step 1, and move the extracted folder (called `jspsych-6.3.0` if using v6.3.0 of jsPsych) into the experiment folder.
 
-![folder setup](/img/folder-setup.png)
+```
+📂 My Experiment
+--  📂 jspsych-6.3.0
+```
+
+If you open up the `jspsych-6.3.0` folder you should see this structure.
+
+```
+📂 My Experiment
+--  📂 jspsych-6.3.0
+----  📂 css
+----  📂 examples
+----  📂 plugins
+----  📄 jspsych.js
+```
 
 ## Step 3: Create a new HTML file
 
@@ -22,7 +39,11 @@ To edit jsPsych code you'll need a programming-friendly text editor. A great fre
 
 Once you've got a text editor that you like, create a new file in the experiment folder called `experiment.html`
 
-![folder setup](/img/folder-with-html.png)
+```
+📂 My Experiment
+--  📂 jspsych-6.3.0
+--  📄 experiment.html
+```
 
 ## Step 4: Add the bare-minimum HTML code
 
