@@ -112,36 +112,4 @@ describe('data conversion to json', function(){
     expect(json_data).toBe(JSON.stringify(data_js));
   })
 
-  test('jsPsych json function is the same as JSON.stringify', function(){
-    require(root + 'plugins/jspsych-survey-multi-select.js');
-
-    var trial = {
-      type: 'survey-multi-select',
-      questions: [
-        {prompt: "foo", options: ["fuzz", "bizz", "bar"], name: 'q'}
-      ]
-    };
-
-    var timeline = [trial];
-
-    jsPsych.init({timeline: timeline});
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch('foo');
-    utils.clickTarget(document.querySelector('#jspsych-survey-multi-select-response-0-0'));
-    utils.clickTarget(document.querySelector('#jspsych-survey-multi-select-response-0-1'));
-    utils.clickTarget(document.querySelector('#jspsych-survey-multi-select-next'));
-    expect(jsPsych.getDisplayElement().innerHTML).toBe('');
-
-    var json_data = jsPsych.data.get().ignore(['rt','internal_node_id','time_elapsed','trial_type','question_order']).json(); 
-    var data_js = [
-      {
-        responses: {
-          q: ["fuzz","bizz"], 
-        },
-        trial_index: 0
-      }
-    ];
-    expect(json_data).toBe(JSON.stringify(data_js));
-  })
-
 });
