@@ -23,6 +23,8 @@ markdown_extensions:
       guess_lang: false
   - toc:
       permalink: true
+  - pymdownx.superfences
+  - pymdownx.details
 repo_url: 'https://github.com/jspsych/jsPsych'
 repo_name: 'jspsych/jspsych'
 docs_dir: docs
