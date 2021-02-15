@@ -25,11 +25,11 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
         description:
           "After the scaling factor is applied, this many pixels will equal one unit of measurement.",
       },
-      mouse_adjustment: {
-        type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: "Adjust Using Mouse?",
-        default: true,
-      },
+      // mouse_adjustment: {
+      //   type: jsPsych.plugins.parameterType.BOOL,
+      //   pretty_name: "Adjust Using Mouse?",
+      //   default: true,
+      // },
       adjustment_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         default:
@@ -37,7 +37,7 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
           "<p>Please use any credit card that you have available.<br>" +
           "It can also be a grocery store membership card,<br>" +
           "your drivers license or anything else of the same format.<br>" +
-          "<b>Place your card flat onto the screen, and adjust the slider below to match its size.</b></p>" +
+          "<b>Place your card flat onto the screen, and adjust the image below to match its size.</b></p>" +
           "<p>If you do not have access to a real card <br>" +
           "you can use a ruler to measure the image width to 3.37 inches or 85.6 mm.<br>",
         description:
@@ -173,56 +173,56 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
         // variables to determine div size
         let aspect_ratio = 1;
 
-        if (trial.mouse_adjustment) {
-          aspect_ratio = trial.item_width_mm / trial.item_height_mm;
-          const start_div_height =
-            aspect_ratio < 1
-              ? trial.item_init_size
-              : Math.round(trial.item_init_size / aspect_ratio);
-          const start_div_width =
-            aspect_ratio < 1
-              ? Math.round(trial.item_init_size * aspect_ratio)
-              : trial.item_init_size;
-          const adjust_size = Math.round(start_div_width * 0.1);
-          pagesize_content +=
-            "<br>" +
-            button_str +
-            trial.adjustment_button_prompt +
-            "</button><br>" +
-            '<div id="item" style="border: none; ' +
-            "height: " +
-            start_div_height +
-            "px; width:" +
-            start_div_width +
-            "px; " +
-            "margin: 5px auto; background-color: none; position: relative; " +
-            "background-image: url(" +
-            trial.item_path +
-            "); " +
-            'background-size: 100% auto; background-repeat: no-repeat">' +
-            '<div id="jspsych-resize-handle" style="cursor: nwse-resize; ' +
-            "background-color: none; width: " +
-            adjust_size +
-            "px; height: " +
-            adjust_size +
-            "px; " +
-            'border: 5px solid red; border-left: 0; border-top: 0; position: absolute; bottom: 0; right: 0;">' +
-            "</div>" +
-            "</div>" +
-            "</div>";
-        } else {
-          pagesize_content +=
-            '<div id="container">' +
-            '<div id="slider"></div><br>' +
-            button_str +
-            trial.adjustment_button_prompt +
-            "</button><br><br>" +
-            '<img id="item" src="' +
-            trial.item_path +
-            '" style="width: 50%">' +
-            "</div>" +
-            "</div>";
-        }
+        // if (trial.mouse_adjustment) {
+        aspect_ratio = trial.item_width_mm / trial.item_height_mm;
+        const start_div_height =
+          aspect_ratio < 1
+            ? trial.item_init_size
+            : Math.round(trial.item_init_size / aspect_ratio);
+        const start_div_width =
+          aspect_ratio < 1
+            ? Math.round(trial.item_init_size * aspect_ratio)
+            : trial.item_init_size;
+        const adjust_size = Math.round(start_div_width * 0.1);
+        pagesize_content +=
+          "<br>" +
+          button_str +
+          trial.adjustment_button_prompt +
+          "</button><br>" +
+          '<div id="item" style="border: none; ' +
+          "height: " +
+          start_div_height +
+          "px; width:" +
+          start_div_width +
+          "px; " +
+          "margin: 5px auto; background-color: none; position: relative; " +
+          "background-image: url(" +
+          trial.item_path +
+          "); " +
+          'background-size: 100% auto; background-repeat: no-repeat">' +
+          '<div id="jspsych-resize-handle" style="cursor: nwse-resize; ' +
+          "background-color: none; width: " +
+          adjust_size +
+          "px; height: " +
+          adjust_size +
+          "px; " +
+          'border: 5px solid red; border-left: 0; border-top: 0; position: absolute; bottom: 0; right: 0;">' +
+          "</div>" +
+          "</div>" +
+          "</div>";
+        // } else {
+        //   pagesize_content +=
+        //     '<div id="container">' +
+        //     '<div id="slider"></div><br>' +
+        //     button_str +
+        //     trial.adjustment_button_prompt +
+        //     "</button><br><br>" +
+        //     '<img id="item" src="' +
+        //     trial.item_path +
+        //     '" style="width: 50%">' +
+        //     "</div>" +
+        //     "</div>";
+        // }
 
         const blindspot_content =
           '<div id="blind-spot" style="visibility: hidden">' +
@@ -245,51 +245,51 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
           "</div>";
 
         // Event listeners for mouse-based resize
-        if (trial.mouse_adjustment) {
-          let dragging = false;
-          let origin_x, origin_y;
-          let cx, cy;
+        // if (trial.mouse_adjustment) {
+        let dragging = false;
+        let origin_x, origin_y;
+        let cx, cy;
 
-          const mouseupevent = function (e) {
-            dragging = false;
-          };
-          display_element.addEventListener("mouseup", mouseupevent);
+        const mouseupevent = function (e) {
+          dragging = false;
+        };
+        display_element.addEventListener("mouseup", mouseupevent);
 
-          const mousedownevent = function (e) {
-            e.preventDefault();
-            dragging = true;
-            origin_x = e.pageX;
-            origin_y = e.pageY;
-            cx = parseInt(scale_div.style.width);
-            cy = parseInt(scale_div.style.height);
-          };
-          display_element
-            .querySelector("#jspsych-resize-handle")
-            .addEventListener("mousedown", mousedownevent);
+        const mousedownevent = function (e) {
+          e.preventDefault();
+          dragging = true;
+          origin_x = e.pageX;
+          origin_y = e.pageY;
+          cx = parseInt(scale_div.style.width);
+          cy = parseInt(scale_div.style.height);
+        };
+        display_element
+          .querySelector("#jspsych-resize-handle")
+          .addEventListener("mousedown", mousedownevent);
 
-          const scale_div = display_element.querySelector("#item");
+        const scale_div = display_element.querySelector("#item");
 
-          function resizeevent(e) {
-            if (dragging) {
-              let dx = e.pageX - origin_x;
-              let dy = e.pageY - origin_y;
+        function resizeevent(e) {
+          if (dragging) {
+            let dx = e.pageX - origin_x;
+            let dy = e.pageY - origin_y;
 
-              if (Math.abs(dx) >= Math.abs(dy)) {
-                scale_div.style.width =
-                  Math.round(Math.max(20, cx + dx * 2)) + "px";
-                scale_div.style.height =
-                  Math.round(Math.max(20, cx + dx * 2) / aspect_ratio) + "px";
-              } else {
-                scale_div.style.height =
-                  Math.round(Math.max(20, cy + dy * 2)) + "px";
-                scale_div.style.width =
-                  Math.round(aspect_ratio * Math.max(20, cy + dy * 2)) + "px";
-              }
+            if (Math.abs(dx) >= Math.abs(dy)) {
+              scale_div.style.width =
+                Math.round(Math.max(20, cx + dx * 2)) + "px";
+              scale_div.style.height =
+                Math.round(Math.max(20, cx + dx * 2) / aspect_ratio) + "px";
+            } else {
+              scale_div.style.height =
+                Math.round(Math.max(20, cy + dy * 2)) + "px";
+              scale_div.style.width =
+                Math.round(aspect_ratio * Math.max(20, cy + dy * 2)) + "px";
             }
           }
-
-          display_element.addEventListener("mousemove", resizeevent);
         }
+
+        display_element.addEventListener("mousemove", resizeevent);
+        // }
 
         //Event listeners for buttons
         if (trial.blindspot_reps > 0) {
@@ -371,52 +371,41 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
     }
   };
 
-  (function (distanceSetup, $) {
-    // jQuery short-hand for $(document).ready(function() { ... });
+  var distanceSetup = (function () {
+    //The Module Pattern: http://benalman.com/news/2010/11/immediately-invoked-function-expression/
+    var i = 0;
 
-    distanceSetup.round = function (value, decimals) {
-      return Number(Math.round(value + "e" + decimals) + "e-" + decimals);
+    return {
+      round: function (value, decimals) {
+        return Number(Math.round(value + "e" + decimals) + "e-" + decimals);
+      },
+      px2mm: function (item_width_px) {
+        const px2mm = item_width_px / trial_data["item_width_mm"];
+        trial_data["px2mm"] = distanceSetup.round(px2mm, 2);
+        return px2mm;
+      },
     };
-
-    distanceSetup.px2mm = function (item_width_px) {
-      const px2mm = item_width_px / trial_data["item_width_mm"];
-      trial_data["px2mm"] = distanceSetup.round(px2mm, 2);
-      return px2mm;
-    };
-  })((window.distanceSetup = window.distanceSetup || {}), jQuery);
+  })((window.distanceSetup = window.distanceSetup || {}));
 
   function get_item_width() {
-    const item_width_px = $("#item").width();
+    const item_width_px = parseFloat(
+      getComputedStyle(document.querySelector("#item"), null).width.replace(
+        "px",
+        ""
+      )
+    );
+
     trial_data["item_width_px"] = distanceSetup.round(item_width_px, 2);
     return item_width_px;
   }
 
   function configureBlindSpot() {
     drawBall();
-    $("#page-size").remove(); // jqueryToVanilla: el.parentNode.removeChild(el);
-    $("#blind-spot").css({ visibility: "visible" }); // jqueryToVanilla: document.getElementById("myP").style.visibility = "hidden";
-    // $(document).on('keydown', recordPosition);
-    $(document).on("keydown", recordPosition); // jqueryToVanilla: document.addEventListener("keydown", (e) => { /* ... */ });
+    document.querySelector("#page-size").remove();
+    document.getElementById("blind-spot").style.visibility = "visible";
+    document.addEventListener("keydown", recordPosition);
   }
 
-  $(function () {
-    $("#slider").slider({ value: "50" }); // jqueryToVanilla:
-  });
-
-  $(document).ready(function () {
-    //  jqueryToVanilla: https://stackoverflow.com/questions/799981/document-ready-equivalent-without-jquery
-    $("#slider").on("slide", function (event, ui) {
-      const item_width = ui.value + "%";
-      $("#item").css({ width: item_width });
-    });
-
-    $("#slider").on("slidechange", function (event, ui) {
-      // jqueryToVanilla: document.addEventListener("keydown", (e) => { /* ... */ });
-      config_data["slider_clck"] = true;
-    });
-  });
-
-  //=============================
   //Ball Animation
 
   function drawBall(pos = 180) {
@@ -448,8 +437,9 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
       });
 
     //disable the button after clicked once.
-    $("#start_ball").attr("disabled", true); // el.getAttribute('');
-    $("#start_ball").css("display", "none"); // document.querySelector('#start_ball').style.display = 'none';
+    var start_ball_handle = document.querySelector("#start_ball");
+    start_ball_handle.setAttribute("disabled", true);
+    document.querySelector("#start_ball").style.display = "none";
   }
 
   function recordPosition(event, angle = 13.5) {
@@ -468,26 +458,26 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
       trial_data["view_dist_mm"] = distanceSetup.round(viewDistance, 2);
 
       //counter and stop
-      var counter = Number($("#click").text());
+      var counter = Number(document.querySelector("#click").textContent);
       counter = counter - 1;
-      $("#click").text(Math.max(counter, 0)); // jqueryToVanilla: document.querySelector("#click").textContent = Math.max(counter, 0);
+      document.querySelector("#click").textContent = Math.max(counter, 0);
       if (counter <= 0) {
         ball.stop();
 
         // Disable space key
-        $("html").bind("keydown", function (e) {
-          // jqueryToVanilla
-          if (e.keyCode == 32) {
+        document.addEventListener("keydown", function (e) {
+          if (e.key == 32) {
             return false;
           }
         });
 
         // Display data
-        $("#info").css("visibility", "visible"); // jqueryToVanilla: document.querySelector('#info').style.visibility = 'visible';
-        $("#info-h").append(trial_data["view_dist_mm"] / 10); // jqueryToVanilla(2 lines of code): var element = document.createElement("div");
-        // document.querySelector(".container").appendChild(element);
-
-        $("#proceed").css("display", "inline"); // jqueryToVanilla: document.querySelector('#info').style.display = 'inline';
+        info = document.querySelector("#info");
+        document.querySelector("#info").style.visibility = "visible";
+        var info_h = document.createElement("div");
+        info_h.innerHTML = trial_data["view_dist_mm"] / 10;
+        info.appendChild(info_h);
+        document.querySelector("#proceed").style.display = "inline";
 
         return;
       }
