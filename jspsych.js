@@ -1293,6 +1293,10 @@ jsPsych.plugins = (function() {
   return module;
 })();
 
+jsPsych.extensions = (function(){
+  return {};
+})();
+
 jsPsych.data = (function() {
 
   var module = {};
