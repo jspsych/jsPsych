@@ -106,7 +106,8 @@ window.jsPsych = (function() {
         'minimum_valid_rt': 0,
         'experiment_width': null,
         'override_safe_mode': false,
-        'case_sensitive_responses': false
+        'case_sensitive_responses': false,
+        'extensions': []
       };
 
       // detect whether page is running in browser as a local file, and if so, disable web audio and video preloading to prevent CORS issues
