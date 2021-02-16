@@ -118,7 +118,7 @@ These are some anecdotal observations about factors that improve data quality.
 1. The quality of the camera feed is essential. Good lighting makes a big difference. You may want to encourage participants to perform any eye tracking experiments in a well-lit room.
 2. Participants need to keep their head relatively still during and after calibration. The calibration is not robust to head movements.
 3. WebGazer's click-based calibration can be used throughout the experiment. You can turn this on by calling `jsPsych.extensions.webgazer.startMouseCalibration()` at any point in the experiment. If you use a continue button to advance through the experiment and move the location of the continue button around you can be making small adjustments to the calibration throughout. 
-4. Computing the gaze predictions consumes more computational resources than most other things that jsPsych is typically used for. The sampling rate that WebGazer is able to achieve will depend on the computing power of the participant's device. You may want to ask the participant to close any non-essential software and browser windows prior to completing the experiment. You may also want to check the sampling rate as part of validation.
+4. Computing the gaze predictions consumes more computational resources than most other things that jsPsych is typically used for. The sampling rate that WebGazer is able to achieve will depend on the computing power of the participant's device. You may want to ask the participant to close any non-essential software and browser windows prior to completing the experiment. You may also want to check that the sampling rate is sufficiently high as part of validation.
 
 If you have tips based on your own experience please consider sharing them on our [discussion forum](https://github.com/jspsych/jsPsych/discussions) and we'll add to this list!
 
@@ -130,6 +130,7 @@ The code below shows a basic example of what it looks like when you put all of t
 <html>
 <head>
     <script src="jspsych/jspsych.js"></script>
+    <script src="jspsych/plugins/jspsych-preload.js"></script>
     <script src="jspsych/plugins/jspsych-image-keyboard-response.js"></script>
     <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych/plugins/jspsych-webgazer-init-camera.js"></script>
@@ -141,6 +142,11 @@ The code below shows a basic example of what it looks like when you put all of t
 </head>
 <body></body>
 <script>
+
+var preload = {
+  type: 'preload',
+  images: ['img/blue.png']
+}
 
 var init_camera = {
   type: 'webgazer-init-camera'
@@ -184,7 +190,7 @@ jsPsych.init({
 </html>
 ```
 
-Below is example data from the image-keyboard-response trial taken from the experiment above. In addition to the standard data that is collected for this plugin, you can see the additional `webgazer_data` and `webgazer_targets` arrays. The `webgazer_data` shows three gaze location estimates during the 1-second image presentation, which were recorded at 335 ms, 706 ms, and 1007 ms from the start of the trial. The `webgazer_targets` array shows that there was one target, the image-keyboard-response stimulus, and tells you the x- and y-coordinate boundaries for the target (image) rectangle. By comparing each of the x/y locations from the `webgazer_data` locations array with the target boundaries in `webgazer_targets`, you can determine if/when the estimated gaze location was inside the target area.
+Below is example data from the image-keyboard-response trial taken from the experiment above. In addition to the standard data that is collected for this plugin, you can see the additional `webgazer_data` and `webgazer_targets` arrays. The `webgazer_data` shows 21 gaze location estimates during the 1-second image presentation. The `webgazer_targets` array shows that there was one target, the image-keyboard-response stimulus, and tells you the x- and y-coordinate boundaries for the target (image) rectangle. By comparing each of the x/y locations from the `webgazer_data` locations array with the target boundaries in `webgazer_targets`, you can determine if/when the estimated gaze location was inside the target area.
 
 ```js
 {
@@ -192,21 +198,39 @@ Below is example data from the image-keyboard-response trial taken from the expe
   "stimulus": "img/blue.png",
   "key_press": null,
   "trial_type": "image-keyboard-response",
-  "trial_index": 3,
-  "time_elapsed": 29875,
-  "internal_node_id": "0.0-3.0",
+  "trial_index": 4,
+  "time_elapsed": 30701,
+  "internal_node_id": "0.0-4.0",
   "webgazer_data": [
-    {"x": 588, "y": 548, "t": 335},
-    {"x": 562, "y": 522, "t": 706},
-    {"x": 479, "y": 455, "t": 1007}
+    { "x": 1065, "y": 437, "t": 39},
+    { "x": 943, "y": 377, "t": 79},
+    { "x": 835, "y": 332, "t": 110},
+    { "x": 731, "y": 299, "t": 146},
+    { "x": 660, "y": 271, "t": 189},
+    { "x": 606, "y": 251, "t": 238},
+    { "x": 582, "y": 213, "t": 288},
+    { "x": 551, "y": 200, "t": 335},
+    { "x": 538, "y": 183, "t": 394},
+    { "x": 514, "y": 177, "t": 436},
+    { "x": 500, "y": 171, "t": 493},
+    { "x": 525, "y": 178, "t": 542},
+    { "x": 537, "y": 182, "t": 592},
+    { "x": 543, "y": 178, "t": 633},
+    { "x": 547, "y": 177, "t": 691},
+    { "x": 558, "y": 174, "t": 739},
+    { "x": 574, "y": 183, "t": 789},
+    { "x": 577, "y": 197, "t": 838},
+    { "x": 584, "y": 214, "t": 889},
+    { "x": 603, "y": 218, "t": 937},
+    { "x": 606, "y": 221, "t": 987}
   ],
   "webgazer_targets": [
     {
       "selector": "#jspsych-image-keyboard-response-stimulus",
-      "top": 387.6000061035156,  // THESE VALUES ARE WRONG BECAUSE IMAGE DIDN'T LOAD - NEED TO FIX
-      "bottom": 387.6000061035156,
-      "left": 466.8000183105469,
-      "right": 466.8000183105469
+      "top": 135.33334350585938,
+      "bottom": 435.3333435058594,
+      "left": 490,
+      "right": 790
     }
   ]
 }

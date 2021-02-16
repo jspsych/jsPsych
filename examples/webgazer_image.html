@@ -2,6 +2,7 @@
 <html>
 <head>
     <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-preload.js"></script>
     <script src="../plugins/jspsych-image-keyboard-response.js"></script>
     <script src="../plugins/jspsych-html-keyboard-response.js"></script>
     <script src="../plugins/jspsych-webgazer-init-camera.js"></script>
@@ -12,6 +13,11 @@
 </head>
 <body></body>
 <script>
+
+var preload = {
+  type: 'preload',
+  images: ['img/blue.png']
+}
 
 var init_camera = {
   type: 'webgazer-init-camera'
@@ -32,20 +38,19 @@ var trial = {
   render_on_canvas: false,
   choices: jsPsych.NO_KEYS,
   trial_duration: 1000,
-//   extensions: [
-//     {
-//       type: 'webgazer', 
-//       params: {targets: ['#jspsych-image-keyboard-response-stimulus']}
-//     }
-//   ]
+  extensions: [
+    {
+      type: 'webgazer', 
+      params: {targets: ['#jspsych-image-keyboard-response-stimulus']}
+    }
+  ]
 }
 
 jsPsych.init({
-  timeline: [start, trial], //[init_camera, validation, start, trial],
-  preload_images: ['img/blue.png'],
-//   extensions: [
-//     {type: 'webgazer'}
-//   ],
+  timeline: [preload, init_camera, validation, start, trial],
+  extensions: [
+    {type: 'webgazer'}
+  ],
   on_finish: function() {
       jsPsych.data.displayData();
   }
