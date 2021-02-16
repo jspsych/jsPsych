@@ -1,10 +1,3 @@
-/**
- * jspsych.js
- * Josh de Leeuw
- *
- * documentation: docs.jspsych.org
- *
- **/
 window.jsPsych = (function() {
 
   var core = {};
