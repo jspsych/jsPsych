@@ -138,3 +138,16 @@ jsPsych.init({
     override_safe_mode: true
 });
 ```
+
+## Add extensions
+
+Extensions are jsPsych modules that can run throughout the experiment and interface with any plugin to extend the functionality of the plugin. One example of an extension is eye tracking, which allows you to gather gaze data during any trial and add it to that trial's data object. If you want to use extensions in your experiment, you must specify this when you initialize the experiment with `jsPsych.init`. The `extensions` parameter in `jsPsych.init` is an array of objects, where each object specifies the extension that you'd like to use in the experiment. Below is an example of adding the webgazer extension.
+
+```js
+jsPsych.init({
+    timeline: [...],
+    extensions: [
+        {type: 'webgazer'}
+    ]
+});
+```
