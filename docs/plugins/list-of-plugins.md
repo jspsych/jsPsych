@@ -1,68 +1,6 @@
-# Plugins
+# List of Plugins
 
-In jsPsych, plugins define the kinds of tasks that subjects perform in experiments. Some plugins define very general tasks, like displaying instructions or displaying a visual stimulus and getting a keyboard response. Other plugins are more specific, displaying particular kinds of interactive stimuli, or running a specific version of particular kind of task. Creating an experiment with jsPsych involves figuring out which plugins are needed for the kinds of tasks you want to have your subjects perform.
-
-Plugins provide a structure for a particular task, but often allow for significant customization and flexibility. For example, the `jspsych-image-keyboard-response` plugin defines a simple structure for showing an image and collecting a keyboard response. You can specify the what the stimulus is, what keys the subject is allowed to press, and how long the stimulus should be on the screen, how long the subject has to respond, and so on. Many of these content options have reasonable default values; even though the `jspsych-image-keyboard-response` plugin has many different options, you only *need* to specify the stimulus in order to use it. Each plugin has its own documentation page, which describes what the plugin does and what options are available.
-
-## Using a plugin
-
-To use a plugin, you'll need to load the plugin's JavaScript file on your experiment page:
-
-```html
-<head>
-<script src="jspsych/plugins/jspsych-image-keyboard-response.js" type="text/javascript"></script>
-</head>
-```
-
-Once a plugin is loaded, you can define a trial that uses that plugin. The following JavaScript code defines a trial using the `jspsych-image-keyboard-response` plugin to display an image file ('images/happy_face.jpg'). This trial uses the default values for valid keys, length of display, and other parameters. You could override these values by adding them to the object.
-
-```javascript
-var single_stim_trial = {
-	type: 'image-keyboard-response',
-	stimulus: 'images/happy_face.jpg'
-}
-```
-
-Here's an exampe of overriding the default value for `post_trial_gap`:
-
-```javascript
-var single_stim_trial = {
-	type: 'image-keyboard-response',
-	stimulus: 'images/happy_face.jpg',
-	post_trial_gap: 2000
-}
-```
-
-## Parameters available in all plugins
-
-Each plugin specifies its own set of parameters. Check the documentation for a plugin to see what parameters are available and what they do.
-
-In addition, there is a set of parameters that can be specified for any plugin.
-
-Parameter | Type | Default Value | Description
-----------|------|---------------|------------
-post_trial_gap | numeric | null | Sets the time, in milliseconds, between the current trial and the next trial. If null, there will be no gap.
-on_finish | function | `function(){ return; }` | A callback function to execute when the trial finishes. See [this page](../overview/callbacks.md) for more details.
-on_start | function | `function(){ return; }` | A callback function to execute when the trial begins, before any loading has occurred. See [this page](../overview/callbacks.md) for more details.
-on_load | function | `function(){ return; }` | A callback function to execute when the trial has loaded, which typically happens after the initial display of the plugin has loaded. See [this page](../overview/callbacks.md) for more details.
-data | object | *undefined* | An object containing additional data to store for the trial. See [this page](../overview/data.md) for more details.
-
-## Data collected by plugins
-
-Each plugin defines what data is collected on the trial. The documentation for each plugin specifies what data is collected by that plugin.
-
-In addition to the data collected by a plugin, there is a default set of data that is collected on every trial. The collected data are:
-
-Name | Type | Value
------|------|------
-trial_type | string | The name of the plugin used to run the trial.
-trial_index | numeric | The index of the current trial across the whole experiment.
-time_elapsed | numeric | The number of milliseconds since the start of the experiment when the trial ended.
-internal_node_id | string | A string identifier for the current TimelineNode.
-
-## List of available plugins
-
-This table is a description of all plugins that are distributed with jsPsych. Click on the name of a plugin to view its documentation page.
+These are the plugins that are included in the jsPsych release. If you don't see a plugin that will work for your needs, you can post on [GitHub Discussions](https://github.com/jspsych/jsPsych/discussions) to see if anyone else in the community has an unofficial plugin to share or to get help creating a new plugin. You can also view the [documentation on creating a new plugin](/overview/plugins/#creating-a-new-plugin) or [watch a video tutorial on creating a new plugin](https://www.youtube.com/watch?v=XQcsFwAmbiw&list=PLnfo1lBY1P2Mf_o6rV5wiqqn92Mw3UTGh&index=4).
 
 Plugin | Description
 ------ | -----------
@@ -91,6 +29,7 @@ Plugin | Description
 [jspsych&#8209;image&#8209;slider&#8209;response](/plugins/jspsych-image-slider-response) | Display an image and allow the subject to respond by moving a slider to indicate a value.
 [jspsych&#8209;instructions](/plugins/jspsych-instructions) | For displaying instructions to the subject. Allows the subject to navigate between pages of instructions using keys or buttons.
 [jspsych&#8209;maxdiff](/plugins/jspsych-maxdiff) | Displays rows of alternatives to be selected for two mutually-exclusive categories, typically as 'most' or 'least' on a particular criteria (e.g. importance, preference, similarity). The participant responds by selecting one radio button corresponding to an alternative in both the left and right response columns.
+[jspsych&#8209;preload](/plugins/jspsych-preload) | This plugin loads images, audio, and video files into the browser's memory before they are needed in the experiment, in order to improve stimulus and response timing, and to avoid disrupting the flow of the experiment.
 [jspsych&#8209;rdk](/plugins/jspsych-rdk) | This plugin displays a Random Dot Kinematogram (RDK) and allows the subject to report the primary direction of motion by pressing a key on the keyboard.
 [jspsych&#8209;reconstruction](/plugins/jspsych-reconstruction) | The subject interacts with a stimulus by modifying a parameter of the stimulus and observing the change in the stimulus in real-time.
 [jspsych&#8209;resize](/plugins/jspsych-resize) | Calibrate the display so that materials display with a known physical size.

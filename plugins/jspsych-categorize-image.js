@@ -23,13 +23,13 @@ jsPsych.plugins['categorize-image'] = (function() {
         description: 'The image content to be displayed.'
       },
       key_answer: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key answer',
         default: undefined,
         description: 'The key to indicate the correct response.'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Choices',
         default: jsPsych.ALL_KEYS,
         array: true,

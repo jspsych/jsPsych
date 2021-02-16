@@ -4,7 +4,7 @@ In the long tradition of **"Hello world!"** examples, this tutorial creates an e
 
 ## Step 1: Download the jsPsych library
 
-Start by downloading the jsPsych library. The most recent version can always be found on the [GitHub releases page](https://github.com/jodeleeuw/jsPsych/releases).
+Start by downloading the jsPsych library. The most recent version can always be found on the [GitHub releases page](https://github.com/jspsych/jsPsych/releases).
 
 *Note: the image below shows version 4.2, but the process is the same for the most recent version.*
 
@@ -12,16 +12,13 @@ Start by downloading the jsPsych library. The most recent version can always be 
 
 ## Step 2: Create a folder to store your experiment files
 
-Create a folder on your computer to put the experiment files in. Once you've created the folder, open the downloaded archive from step 1, and move the extracted folder (called `jspsych-6.0.5` if using v6.0.5 of jsPsych) into the experiment folder. Here's what it looks like on a Windows machine:
+Create a folder on your computer to put the experiment files in. Once you've created the folder, open the downloaded archive from step 1, and move the extracted folder (called `jspsych-6.3.0` if using v6.3.0 of jsPsych) into the experiment folder. Here's what it looks like on a Windows machine:
 
 ![folder setup](/img/folder-setup.png)
 
 ## Step 3: Create a new HTML file
 
-To edit jsPsych code you'll need a programming-friendly text editor. Some free options are:
-
-* [Atom](https://atom.io) (Windows, OSX, Linux)
-* [VSCode](https://code.visualstudio.com/) (Windows, OSX, Linux)
+To edit jsPsych code you'll need a programming-friendly text editor. A great free option is [Visual Studio Code](https://code.visualstudio.com/) (Windows, OSX, Linux).
 
 Once you've got a text editor that you like, create a new file in the experiment folder called `experiment.html`
 
@@ -52,7 +49,7 @@ To use jsPsych, add a `<script>` tag to import the library.
 <html>
 	<head>
 		<title>My experiment</title>
-		<script src="jspsych-6.0.5/jspsych.js"></script>
+		<script src="jspsych-6.3.0/jspsych.js"></script>
 	</head>
 	<body></body>
 </html>
@@ -65,8 +62,8 @@ You may also want to import the jsPsych stylesheet, which applies a basic set of
 <html>
 	<head>
 		<title>My experiment</title>
-		<script src="jspsych-6.0.5/jspsych.js"></script>
-		<link href="jspsych-6.0.5/css/jspsych.css" rel="stylesheet" type="text/css">
+		<script src="jspsych-6.3.0/jspsych.js"></script>
+		<link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
 	</head>
 	<body></body>
 </html>
@@ -81,9 +78,9 @@ For the demo, we want to show some text on the screen. This is exactly what the 
 <html>
 	<head>
 		<title>My experiment</title>
-		<script src="jspsych-6.0.5/jspsych.js"></script>
-		<script src="jspsych-6.0.5/plugins/jspsych-html-keyboard-response.js"></script>
-		<link href="jspsych-6.0.5/css/jspsych.css" rel="stylesheet" type="text/css">
+		<script src="jspsych-6.3.0/jspsych.js"></script>
+		<script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
+		<link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
 	</head>
 	<body></body>
 </html>
@@ -98,9 +95,9 @@ To add JavaScript code directly to the webpage we need to add a set of `<script>
 <html>
 	<head>
 		<title>My experiment</title>
-		<script src="jspsych-6.0.5/jspsych.js"></script>
-		<script src="jspsych-6.0.5/plugins/jspsych-html-keyboard-response.js"></script>
-		<link href="jspsych-6.0.5/css/jspsych.css" rel="stylesheet" type="text/css">
+		<script src="jspsych-6.3.0/jspsych.js"></script>
+		<script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
+		<link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
 	</head>
 	<body></body>
 	<script>
@@ -121,9 +118,9 @@ Now that we have the trial defined we just need to tell jsPsych to run an experi
 <html>
 	<head>
 		<title>My experiment</title>
-		<script src="jspsych-6.0.5/jspsych.js"></script>
-		<script src="jspsych-6.0.5/plugins/jspsych-html-keyboard-response.js"></script>
-		<link href="jspsych-6.0.5/css/jspsych.css" rel="stylesheet" type="text/css">
+		<script src="jspsych-6.3.0/jspsych.js"></script>
+		<script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
+		<link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
 	</head>
 	<body></body>
 	<script>
