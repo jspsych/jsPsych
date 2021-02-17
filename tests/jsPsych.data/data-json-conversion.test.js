@@ -91,4 +91,30 @@ describe('data conversion to json', function(){
     expect(json_data).toBe(JSON.stringify(data_js));
   })
 
+  test('instructions view_history is correctly converted - issue #670', function(){
+    require(root + 'plugins/jspsych-instructions.js');
+
+    var trial = {
+      type: 'instructions',
+      pages: ['page 1','page 2'],
+      key_forward: 'a',
+      allow_keys: true
+    };
+
+    jsPsych.init({timeline: [trial]});
+
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('page 1');
+    utils.pressKey('a');
+    expect(jsPsych.getDisplayElement().innerHTML).toMatch('page 2');
+    utils.pressKey('a');
+    expect(jsPsych.getDisplayElement().innerHTML).toBe('');
+
+    var json_data = jsPsych.data.get().ignore(['rt','internal_node_id','time_elapsed']).json(); 
+    var js_data = JSON.parse(json_data);
+    expect(Array.isArray(js_data[0].view_history)).toBe(true);
+    expect(js_data[0].view_history.length).toBe(2);
+    expect(js_data[0].view_history[0].page_index).toBe(0);
+    expect(js_data[0].view_history[1].page_index).toBe(1);
+  })
+
 });
