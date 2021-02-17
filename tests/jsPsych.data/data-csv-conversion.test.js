@@ -54,8 +54,8 @@ describe('data conversion to csv', function(){
     utils.pressKey('q');
     expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 
-    var csv_data = jsPsych.data.get().ignore(['rt','internal_node_id','time_elapsed','trial_type','rt_stim1','key_press_stim1']).csv(); 
-    expect(csv_data).toBe('"answer","correct","stimulus","key_press","trial_index"\r\n"different","false","[""<p>Climbing</p>"",""<p>Walking</p>""]","q","0"\r\n')
+    var csv_data = jsPsych.data.get().ignore(['rt','internal_node_id','time_elapsed','trial_type','rt_stim1','response_stim1']).csv(); 
+    expect(csv_data).toBe('"answer","correct","stimulus","response","trial_index"\r\n"different","false","[""<p>Climbing</p>"",""<p>Walking</p>""]","q","0"\r\n')
   })
 
   test('survey-multi-select response array is correctly converted', function(){
