@@ -149,7 +149,7 @@ describe('cloze', function(){
 		document.getElementById('input0').value = 'cloze1';
 		document.getElementById('input1').value = 'cloze2';
 		utils.clickTarget(document.querySelector('#finish_cloze_button'));
-		var data = jsPsych.data.get().values()[0].answers;
+		var data = jsPsych.data.get().values()[0].response;
 		expect(data.length).toBe(2);
 		expect(data[0]).toBe('cloze1');
 		expect(data[1]).toBe('cloze2');
