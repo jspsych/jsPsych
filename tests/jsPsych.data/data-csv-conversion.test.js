@@ -29,7 +29,7 @@ describe('data conversion to csv', function(){
     utils.clickTarget(document.querySelector('#jspsych-survey-text-next'));
 
     var csv_data = jsPsych.data.get().ignore(['rt','internal_node_id', 'time_elapsed', 'trial_type']).csv();
-    expect(csv_data).toBe('"responses","trial_index"\r\n"{""Q0"":""Response 1"",""Q1"":""Response 2""}","0"\r\n');
+    expect(csv_data).toBe('"response","trial_index"\r\n"{""Q0"":""Response 1"",""Q1"":""Response 2""}","0"\r\n');
   })
 
   test('same-different-html stimulus array is correctly converted', function(){
