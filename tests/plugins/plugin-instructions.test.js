@@ -63,4 +63,23 @@ describe('instructions plugin', function(){
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	})
 
+	test('view history data is stored as array of objects', function(){
+		var trial = {
+			type: 'instructions',
+			pages: ['page 1', 'page 2'],
+			key_forward: 'a'
+		}
+
+		jsPsych.init({
+			timeline: [trial]
+		});
+
+		utils.pressKey('a');
+		utils.pressKey('a');
+		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
+		var data = jsPsych.data.get().values()[0].view_history;
+		expect(data[0].page_index).toBe(0);
+		expect(data[1].page_index).toBe(1);
+	})
+
 });

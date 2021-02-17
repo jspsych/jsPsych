@@ -34,7 +34,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 | rt             | numeric     | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response. |
 | set_size       | numeric     | The number of items in the search array  |
 | target_present | boolean     | True if the target is present in the search array |
-| locations      | JSON string | JSON-encoded array where each element of the array is the pixel value of the center of an image in the search array. If the target is present, then the first element will represent the location of the target. |
+| locations      | array       | Array where each element is the pixel value of the center of an image in the search array. If the target is present, then the first element will represent the location of the target. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 
 ## Example
 

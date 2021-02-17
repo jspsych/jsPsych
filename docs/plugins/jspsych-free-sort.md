@@ -32,9 +32,9 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 Name | Type | Value
 -----|------|------
-init_locations | JSON string | A JSON-encoded object representing the initial locations of all the stimuli in the sorting area. The object is an array with one element per stimulus. Each element in the array has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location.
-moves | JSON string |  A JSON-encoded object representing all of the moves the participant made when sorting. The object is an array with each element representing a move. Each element in the array has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location after the move.
-final_locations | JSON string | A JSON-encoded object representing the final locations of all the stimuli in the sorting area. The object is an array with one element per stimulus. Each element in the array has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location.
+init_locations | array | An array containing objects representing the initial locations of all the stimuli in the sorting area. Each element in the array represents a stimulus, and has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. 
+moves | array | An array containing objects representing all of the moves the participant made when sorting. Each object represents a move. Each element in the array has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location after the move. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. 
+final_locations | array | An array containing objects representing the final locations of all the stimuli in the sorting area. Each element in the array represents a stimulus, and has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. 
 rt | numeric | The response time in milliseconds for the participant to finish all sorting.
 
 ## Examples

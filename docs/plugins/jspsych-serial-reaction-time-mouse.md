@@ -25,8 +25,8 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 | Name   | Type    | Value                                    |
 | ------ | ------- | ---------------------------------------- |
-| grid   | JSON    | A JSON-encoded representation of the grid. |
-| target | JSON    | A JSON-encoded representation of the target on the grid. |
+| grid   | array   | The grid representation. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
+| target | array   | The representation of the target location on the grid. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 | rt     | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the second stimulus first appears on the screen until the subject's response. |
 
 ## Examples

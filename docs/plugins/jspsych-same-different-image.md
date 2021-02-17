@@ -24,7 +24,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 | Name      | Type    | Value                                    |
 | --------- | ------- | ---------------------------------------- |
-| stimulus  | string  | An JSON-encoded array of length 2 containing the paths to the image files that the subject saw for each trial. |
+| stimulus  | array   | An array of length 2 containing the paths to the image files that the subject saw for each trial. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 | key_press | string  | Indicates which key the subject pressed. |
 | rt        | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the second stimulus first appears on the screen until the subject's response. |
 | correct   | boolean | `true` if the subject's response matched the `answer` for this trial. |

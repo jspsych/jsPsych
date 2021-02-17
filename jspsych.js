@@ -1816,6 +1816,9 @@ jsPsych.data = (function() {
       var line = '';
       for (var j = 0; j < columns.length; j++) {
         var value = (typeof array[i][columns[j]] === 'undefined') ? '' : array[i][columns[j]];
+        if(typeof value == 'object') {
+          value = JSON.stringify(value);
+        }
         var valueString = value + "";
         line += '"' + valueString.replace(/"/g, '""') + '",';
       }

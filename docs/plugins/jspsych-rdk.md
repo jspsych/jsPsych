@@ -68,7 +68,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 | correct          | boolean     | Whether or not the subject's key press corresponded to those provided in correct_choice. |
 | frame_rate       | numeric     | The average frame rate for the trial. 0 denotes that the subject responded before the appearance of the second frame. |
 | number_of_frames | numeric     | The number of frames that was shown in this trial. |
-| frame_rate_array | JSON string | The array that holds the number of miliseconds for each frame in this trial. |
+| frame_rate_array | array       | The array that holds the number of miliseconds for each frame in this trial. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 | canvas_width     | numeric     | The width of the canvas in pixels.       |
 | canvas_height    | numeric     | The height of the canvas in pixels.      |
 

@@ -23,9 +23,9 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 Name | Type | Value
 -----|------|------
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the maxdiff table first appears on the screen until the subject's response.
-labels | JSON string | A string in JSON format containing the labels corresponding to the left and right response columns. 
-left | string | The alternative endorsed on the left column.
-right | string | The alternative endorsed on the right column.
+labels | object | An object with two keys, `left` and `right`, containing the labels (strings) corresponding to the left and right response columns. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. 
+left | string | The alternative selected on the left column.
+right | string | The alternative selected on the right column.
 
 
 ## Examples
