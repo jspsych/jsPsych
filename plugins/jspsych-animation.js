@@ -178,7 +178,7 @@ jsPsych.plugins.animation = (function() {
 
       var trial_data = {
         animation_sequence: animation_sequence,
-        responses: responses
+        response: responses
       };
 
       jsPsych.finishTrial(trial_data);
