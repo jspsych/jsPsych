@@ -546,7 +546,7 @@ jsPsych.plugins["rdk"] = (function() {
 				aperture_type: trial.aperture_type,
 				reinsert_type: trial.reinsert_type,
 				frame_rate: frameRate, //The average frame rate for the trial
-				frame_rate_array: frameRateArray, //The array of ms per frame in this trial, in the form of a JSON string
+				frame_rate_array: frameRateArray, //The array of ms per frame in this trial
 				number_of_frames: numberOfFrames, //The number of frames in this trial
 				aperture_center_x: trial.aperture_center_x,
 				aperture_center_y: trial.aperture_center_y,
