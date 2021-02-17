@@ -32,20 +32,18 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
       // },
       adjustment_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
-        default:
-          "<b> Let’s find out how big your monitor is! </b>" +
-          "<p>Please use any credit card that you have available.<br>" +
-          "It can also be a grocery store membership card,<br>" +
-          "your drivers license or anything else of the same format.<br>" +
-          "<b>Place your card flat onto the screen, and adjust the image below to match its size.</b></p>" +
-          "<p>If you do not have access to a real card <br>" +
-          "you can use a ruler to measure the image width to 3.37 inches or 85.6 mm.<br>",
+        default: `
+          <div style="text-align: left;">
+          <p>Click and drag the lower right corner of the image until it is the same size as a credit card held up to the screen.</p>
+          <p>You can use any card that is the same size as a credit card, like a membership card or driver's license.</p>
+          <p>If you do not have access to a real card you can use a ruler to measure the image width to 3.37 inches or 85.6 mm.</p>
+          </div>`,
         description:
-          " Any content here will be displayed above the card stimulus.",
+          "Any content here will be displayed above the card stimulus.",
       },
       adjustment_button_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
-        default: "Click here when the card has the right size!",
+        default: "Click here when the image is the correct size",
         description:
           " Content of the button displayed below the card stimulus.",
       },
@@ -54,13 +52,13 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
         default: "img/card.png",
       },
       item_height_mm: {
-        type: jsPsych.plugins.parameterType.INT,
+        type: jsPsych.plugins.parameterType.FLOAT,
         pretty_name: "Item height",
         default: 53.98,
         description: "The height of the item to be measured.",
       },
       item_width_mm: {
-        type: jsPsych.plugins.parameterType.INT,
+        type: jsPsych.plugins.parameterType.FLOAT,
         pretty_name: "Item width",
         default: 85.6,
         description: "The width of the item to be measured.",
@@ -81,30 +79,25 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
       },
       blindspot_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
-        default:
-          "<b>Now, let’s quickly test how far away you are sitting.</b>" +
-          "<p>You might know that vision tests at a doctor’s practice often involve chinrests.<br>" +
-          "The doctor basically asks you to sit away from a screen in a specific distance.<br>" +
-          "We do this here with a “virtual chinrest”.</p><br>" +
-          "<b>Instructions</b>" +
-          '<div style="text-align: left">' +
-          "<ol><li>Put your finger on <b>space bar</b> on the keyboard.</li>" +
-          "<li>Close your right eye. <em>(Tips: it might be easier to cover your right eye by hand!)</em></li>" +
-          "<li>Using your left eye, focus on the black square.</li>" +
-          '<li>Click the button below to start the animation of the red ball. The <b style="color: red">red ball </b>' +
-          "will disappear as it moves from right to left. Press the “Space” key as soon as the ball disappears from your eye sight.</li>" +
-          "</div><br> Keep your right eye closed and hit the “Space” key fast!</p><br>",
+        default: `
+          <p>Now we will quickly measure how far away you are sitting.</p>
+          <div style="text-align: left">
+            <ol>
+              <li>Put your left hand on the <b>space bar</b>.</li>
+              <li>Cover your right eye with your right hand.</li>
+              <li>Using your left eye, focus on the black square. Keep your focus on the black square.</li>
+              <li>The <span style="color: red; font-weight: bold;">red ball</span> will disappear as it moves from right to left. Press the space bar as soon as the ball disappears.</li>
+            </ol>
+          </div>
+          <p>Press the space bar when you are ready to begin.</p>
+          `
       },
       blindspot_start_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         default: "Start",
         description: "Content of the start button for the blindspot tasks.",
       },
-      blindspot_done_prompt: {
-        type: jsPsych.plugins.parameterType.STRING,
-        default: "Done",
-        description: "Content of the done button for the blindspot tasks.",
-      },
+      
       blindspot_measurements_prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         default: "Remaining measurements: ",
@@ -112,341 +105,309 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
       },
       viewing_distance_report: {
         type: jsPsych.plugins.parameterType.STRING,
-        default: "Estimated viewing distance (cm):",
+        default: "<p>Based on your responses, you are sitting about <span id='distance-estimate' style='font-weight: bold;'></span> from the screen</p><p>Does that seem about right?</p>",
         description:
           'If "none" is given, viewing distance will not be reported to the participant',
+      },
+      redo_measurement_button_label: { 
+        type: jsPsych.plugins.parameterType.STRING,
+        default: 'No, that is not close. Try again.'
+      },
+      blindspot_done_prompt: {
+        type: jsPsych.plugins.parameterType.STRING,
+        default: "Yes",
+        description: "Text for final prompt",
       },
     },
   };
 
-  // Get screen size
-  var w = window.innerWidth;
-  var h = window.innerHeight;
-
-  const screen_size_px = [];
-  screen_size_px.push(w);
-  screen_size_px.push("x");
-  screen_size_px.push(h);
-
-  let trial_data = {}; // declare trial data as empty so we have access to it across functions
-
-  let config_data = {
-    ball_pos: [],
-    slider_clck: false,
-  };
-
   plugin.trial = function (display_element, trial) {
-    try {
-      if (
-        !(trial.blindspot_reps > 0) &&
-        (trial.resize_units == "deg" || trial.resize_units == "degrees")
-      ) {
-        throw Error(
-          "Blindspot repetitions set to 0, so resizing to degrees of visual angle is not possible!"
-        );
-      } else {
-        const start_time = performance.now();
-
-        trial_data = {
-          item_width_mm: trial.item_width_mm,
-          item_height_mm: trial.item_height_mm, //card dimension: 85.60 × 53.98 mm (3.370 × 2.125 in)
-        };
-
-        let button_str = '<button id=blind_spot class="btn btn-primary">';
-        if (!(trial.blindspot_reps > 0)) {
-          button_str = '<button id=proceed class="btn btn-primary">';
-        }
-
-        let report_str = "";
-        if (!(trial.viewing_distance_report == "none")) {
-          report_str =
-            '<div id="info" style="visibility:hidden">' +
-            '<b id="info-h">' +
-            trial.viewing_distance_report +
-            " </b>" +
-            "</div>";
-        }
-
-        let pagesize_content =
-          '<div id="page-size"><br><br>' + trial.adjustment_prompt;
-
-        // variables to determine div size
-        let aspect_ratio = 1;
-
-        // if (trial.mouse_adjustment) {
-        aspect_ratio = trial.item_width_mm / trial.item_height_mm;
-        const start_div_height =
-          aspect_ratio < 1
-            ? trial.item_init_size
-            : Math.round(trial.item_init_size / aspect_ratio);
-        const start_div_width =
-          aspect_ratio < 1
-            ? Math.round(trial.item_init_size * aspect_ratio)
-            : trial.item_init_size;
-        const adjust_size = Math.round(start_div_width * 0.1);
-        pagesize_content +=
-          "<br>" +
-          button_str +
-          trial.adjustment_button_prompt +
-          "</button><br>" +
-          '<div id="item" style="border: none; ' +
-          "height: " +
-          start_div_height +
-          "px; width:" +
-          start_div_width +
-          "px; " +
-          "margin: 5px auto; background-color: none; position: relative; " +
-          "background-image: url(" +
-          trial.item_path +
-          "); " +
-          'background-size: 100% auto; background-repeat: no-repeat">' +
-          '<div id="jspsych-resize-handle" style="cursor: nwse-resize; ' +
-          "background-color: none; width: " +
-          adjust_size +
-          "px; height: " +
-          adjust_size +
-          "px; " +
-          'border: 5px solid red; border-left: 0; border-top: 0; position: absolute; bottom: 0; right: 0;">' +
-          "</div>" +
-          "</div>" +
-          "</div>";
-        // } else {
-        //   pagesize_content +=
-        //     '<div id="container">' +
-        //     '<div id="slider"></div><br>' +
-        //     button_str +
-        //     trial.adjustment_button_prompt +
-        //     "</button><br><br>" +
-        //     '<img id="item" src="' +
-        //     trial.item_path +
-        //     '" style="width: 50%">' +
-        //     "</div>" +
-        //     "</div>";
-        // }
-
-        const blindspot_content =
-          '<div id="blind-spot" style="visibility: hidden">' +
-          trial.blindspot_prompt +
-          '<div id="svgDiv" style="width:1000px;height:200px;"></div>' +
-          '<button class="btn btn-primary" id="start_ball">' +
-          trial.blindspot_start_prompt +
-          "</button>" +
-          '<button class="btn btn-primary" id="proceed" style="display:none">' +
-          trial.blindspot_done_prompt +
-          "</button><br>" +
-          `<b> ${trial.blindspot_measurements_prompt} <div id="click" style="display:inline; color: red"> ${trial.blindspot_reps} </div> <b><br>` +
-          report_str +
-          "</div>";
-
-        display_element.innerHTML =
-          '<div id="content" style="width: 900px; margin: 0 auto;">' +
-          pagesize_content +
-          blindspot_content +
-          "</div>";
-
-        // Event listeners for mouse-based resize
-        // if (trial.mouse_adjustment) {
-        let dragging = false;
-        let origin_x, origin_y;
-        let cx, cy;
-
-        const mouseupevent = function (e) {
-          dragging = false;
-        };
-        display_element.addEventListener("mouseup", mouseupevent);
-
-        const mousedownevent = function (e) {
-          e.preventDefault();
-          dragging = true;
-          origin_x = e.pageX;
-          origin_y = e.pageY;
-          cx = parseInt(scale_div.style.width);
-          cy = parseInt(scale_div.style.height);
-        };
-        display_element
-          .querySelector("#jspsych-resize-handle")
-          .addEventListener("mousedown", mousedownevent);
-
-        const scale_div = display_element.querySelector("#item");
-
-        function resizeevent(e) {
-          if (dragging) {
-            let dx = e.pageX - origin_x;
-            let dy = e.pageY - origin_y;
-
-            if (Math.abs(dx) >= Math.abs(dy)) {
-              scale_div.style.width =
-                Math.round(Math.max(20, cx + dx * 2)) + "px";
-              scale_div.style.height =
-                Math.round(Math.max(20, cx + dx * 2) / aspect_ratio) + "px";
-            } else {
-              scale_div.style.height =
-                Math.round(Math.max(20, cy + dy * 2)) + "px";
-              scale_div.style.width =
-                Math.round(aspect_ratio * Math.max(20, cy + dy * 2)) + "px";
-            }
-          }
-        }
-
-        display_element.addEventListener("mousemove", resizeevent);
-        // }
-
-        //Event listeners for buttons
-        if (trial.blindspot_reps > 0) {
-          display_element
-            .querySelector("#blind_spot")
-            .addEventListener("click", function () {
-              configureBlindSpot();
-            });
-          display_element
-            .querySelector("#start_ball")
-            .addEventListener("click", function () {
-              animateBall();
-            });
-        } else {
-          // run the two relevant functions to get item_width_mm and px2mm
-          distanceSetup.px2mm(get_item_width());
-        }
-
-        display_element
-          .querySelector("#proceed")
-          .addEventListener("click", function () {
-            // finish trial
-            trial_data.rt = performance.now() - start_time;
-            display_element.innerHTML = "";
-
-            trial_data.item_width_deg =
-              (2 *
-                Math.atan(
-                  trial_data["item_width_mm"] / 2 / trial_data["view_dist_mm"]
-                ) *
-                180) /
-              Math.PI;
-            trial_data.px2deg =
-              trial_data["item_width_px"] / trial_data.item_width_deg; // size of item in pixels divided by size of item in degrees of visual angle
-
-            let px2unit_scr = 0;
-            switch (trial.resize_units) {
-              case "cm":
-              case "centimeters":
-                px2unit_scr = trial_data["px2mm"] * 10; // pixels per centimeter
-                break;
-              case "inch":
-              case "inches":
-                px2unit_scr = trial_data["px2mm"] * 25.4; // pixels per inch
-                break;
-              case "deg":
-              case "degrees":
-                px2unit_scr = trial_data["px2deg"]; // pixels per degree of visual angle
-                break;
-            }
-            if (px2unit_scr > 0) {
-              // scale the window
-              scale_factor = px2unit_scr / trial.pixels_per_unit;
-              document.getElementById("jspsych-content").style.transform =
-                "scale(" + scale_factor + ")";
-              // pixels have been scaled, so pixels per degree, pixels per mm and pixels per item_width needs to be updated
-              trial_data.px2deg = trial_data.px2deg / scale_factor;
-              trial_data.px2mm = trial_data.px2mm / scale_factor;
-              trial_data.item_width_px =
-                trial_data.item_width_px / scale_factor;
-              trial_data.scale_factor = scale_factor;
-            }
-
-            if (trial.blindspot_reps > 0) {
-              trial_data.win_width_deg = window.innerWidth / trial_data.px2deg;
-              trial_data.win_height_deg =
-                window.innerHeight / trial_data.px2deg;
-            } else {
-              // delete degree related properties
-              delete trial_data.px2deg;
-              delete trial_data.item_width_deg;
-            }
-            jsPsych.finishTrial(trial_data);
-            jsPsych.pluginAPI.cancelAllKeyboardResponses();
-          });
-      }
-    } catch (e) {
-      console.error(e);
+    /* check parameter compatibility */
+    if (!(trial.blindspot_reps > 0) && (trial.resize_units == "deg" || trial.resize_units == "degrees")) {
+      console.error("Blindspot repetitions set to 0, so resizing to degrees of visual angle is not possible!");
     }
-  };
 
-  var distanceSetup = (function () {
-    //The Module Pattern: http://benalman.com/news/2010/11/immediately-invoked-function-expression/
-    var i = 0;
+    /* some additional parameter configuration */ 
+    var w = window.innerWidth;
+    var h = window.innerHeight;
 
-    return {
-      round: function (value, decimals) {
-        return Number(Math.round(value + "e" + decimals) + "e-" + decimals);
-      },
-      px2mm: function (item_width_px) {
-        const px2mm = item_width_px / trial_data["item_width_mm"];
-        trial_data["px2mm"] = distanceSetup.round(px2mm, 2);
-        return px2mm;
-      },
+    const screen_size_px = [w, "x", h]; 
+
+    let trial_data = {
+      item_width_mm: trial.item_width_mm,
+      item_height_mm: trial.item_height_mm, //card dimension: 85.60 × 53.98 mm (3.370 × 2.125 in)
     };
-  })((window.distanceSetup = window.distanceSetup || {}));
 
-  function get_item_width() {
-    const item_width_px = parseFloat(
-      getComputedStyle(document.querySelector("#item"), null).width.replace(
-        "px",
-        ""
-      )
-    );
+    let config_data = {
+      ball_pos: [],
+      slider_clck: false,
+    };
 
-    trial_data["item_width_px"] = distanceSetup.round(item_width_px, 2);
-    return item_width_px;
-  }
+    let aspect_ratio = 1;
 
-  function configureBlindSpot() {
-    drawBall();
-    document.querySelector("#page-size").remove();
-    document.getElementById("blind-spot").style.visibility = "visible";
-    document.addEventListener("keydown", recordPosition);
-  }
+    aspect_ratio = trial.item_width_mm / trial.item_height_mm;
+    const start_div_height =
+      aspect_ratio < 1
+        ? trial.item_init_size
+        : Math.round(trial.item_init_size / aspect_ratio);
+    const start_div_width =
+      aspect_ratio < 1
+        ? Math.round(trial.item_init_size * aspect_ratio)
+        : trial.item_init_size;
+    const adjust_size = Math.round(start_div_width * 0.1);
 
-  //Ball Animation
+    /* create content for first screen, resizing card */
+    let pagesize_content = `
+      <div id="page-size">
+        <div id="item" style="border: none; height: ${start_div_height}px; width: ${start_div_width}px; margin: 5px auto; background-color: none; position: relative; background-image: url(${trial.item_path}); background-size: 100% auto; background-repeat: no-repeat;">
+          <div id="jspsych-resize-handle" style="cursor: nwse-resize; background-color: none; width: ${adjust_size}px; height: ${adjust_size}px; border: 5px solid red; border-left: 0; border-top: 0; position: absolute; bottom: 0; right: 0;">' +
+          </div>
+        </div>
+        ${trial.adjustment_prompt}
+        <button id="end_resize_phase" class="jspsych-btn">
+          ${trial.adjustment_button_prompt}
+        </button>
+      </div>
+    `
 
-  function drawBall(pos = 180) {
-    // pos: define where the fixation square should be.
-    var mySVG = SVG("svgDiv");
-    const item_width_px = get_item_width();
-    const rectX = distanceSetup.px2mm(item_width_px) * pos;
-    const ballX = rectX * 0.6; // define where the ball is
-    var ball = mySVG.circle(30).move(ballX, 50).fill("#f00");
-    window.ball = ball;
-    var square = mySVG.rect(30, 30).move(Math.min(rectX - 50, 950), 50); //square position
-    config_data["square_pos"] = distanceSetup.round(square.cx(), 2);
-    config_data["rectX"] = rectX;
-    config_data["ballX"] = ballX;
-  }
+    /* create content for second screen, blind spot */
+    let blindspot_content = `
+      <div id="blind-spot">
+        ${trial.blindspot_prompt}
+        <div id="svgDiv" style="width:1000px;height:200px;"></div>
+        <button class="btn btn-primary" id="proceed" style="display:none;"> +
+          ${trial.blindspot_done_prompt} +
+        </button>
+        ${trial.blindspot_measurements_prompt} 
+        <div id="click" style="display:inline; color: red"> ${trial.blindspot_reps} </div>
+        ${trial.viewing_distance_report !== "none" ?
+        `<div id="info" style="visibility:hidden">
+          <b id="info-h">
+            ${trial.viewing_distance_report}
+          </b>
+        </div>` : ''
+        }
+      </div>`
 
-  function animateBall() {
-    ball
-      .animate(7000)
-      .during(function (pos) {
-        moveX = -pos * config_data["ballX"];
-        window.moveX = moveX;
-        moveY = 0;
-        ball.attr({ transform: "translate(" + moveX + "," + moveY + ")" }); //jqueryToVanilla: el.getAttribute('');
+    /* create content for final report screen */
+    let report_content = `
+      <div id="distance-report">
+        <div id="info-h">
+          ${trial.viewing_distance_report}
+        </div>
+        <button id="redo_blindspot" class="jspsych-btn">${trial.redo_measurement_button_label}</button>
+        <button id="proceed" class="jspsych-btn">${trial.blindspot_done_prompt}</button>
+      </div>
+    `
+
+
+    /* show first screen */
+    display_element.innerHTML = `
+      <div id="content" style="width: 900px; margin: 0 auto;">
+        ${pagesize_content}
+      </div>
+    `
+
+    const start_time = performance.now();
+
+    // Event listeners for mouse-based resize
+    let dragging = false;
+    let origin_x, origin_y;
+    let cx, cy;
+    const scale_div = display_element.querySelector("#item");
+
+    function mouseupevent() {
+      dragging = false;
+    };
+    document.addEventListener("mouseup", mouseupevent);
+
+    function mousedownevent(e) {
+      e.preventDefault();
+      dragging = true;
+      origin_x = e.pageX;
+      origin_y = e.pageY;
+      cx = parseInt(scale_div.style.width);
+      cy = parseInt(scale_div.style.height);
+    };
+    display_element.querySelector("#jspsych-resize-handle").addEventListener("mousedown", mousedownevent);
+
+    function resizeevent(e) {
+      if (dragging) {
+        let dx = e.pageX - origin_x;
+        let dy = e.pageY - origin_y;
+
+        if (Math.abs(dx) >= Math.abs(dy)) {
+          scale_div.style.width =
+            Math.round(Math.max(20, cx + dx * 2)) + "px";
+          scale_div.style.height =
+            Math.round(Math.max(20, cx + dx * 2) / aspect_ratio) + "px";
+        } else {
+          scale_div.style.height =
+            Math.round(Math.max(20, cy + dy * 2)) + "px";
+          scale_div.style.width =
+            Math.round(aspect_ratio * Math.max(20, cy + dy * 2)) + "px";
+        }
+      }
+    }
+    display_element.addEventListener("mousemove", resizeevent);
+
+    display_element.querySelector("#end_resize_phase").addEventListener("click", finishResizePhase);
+
+    function finishResizePhase(){
+      // check what to do next
+      if (trial.blindspot_reps > 0) {
+        get_item_width(); // modifies trial data
+        configureBlindSpot();
+      } else {
+        distanceSetup.px2mm(get_item_width());
+        endTrial();
+      }
+    }
+
+    function configureBlindSpot() {
+      document.querySelector("#content").innerHTML = blindspot_content;
+      drawBall();
+      jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: startBall,
+        valid_responses: ['space'],
+        rt_method: 'performance',
+        allow_held_keys: false,
+        persist: false
       })
-      .loop(true, false)
-      .after(function () {
-        animateBall();
+    }
+
+    var ball_position_listener = null;
+    function startBall(){
+      ball_position_listener = jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: recordPosition,
+        valid_responses: ['space'],
+        rt_method: 'performance',
+        allow_held_keys: false,
+        persist: true
       });
+      animateBall();
+    }
 
-    //disable the button after clicked once.
-    var start_ball_handle = document.querySelector("#start_ball");
-    start_ball_handle.setAttribute("disabled", true);
-    document.querySelector("#start_ball").style.display = "none";
-  }
+    function finishBlindSpotPhase(){
+      ball.stop();
 
-  function recordPosition(event, angle = 13.5) {
-    // angle: define horizontal blind spot entry point position in degrees.
-    if (event.keyCode == "32") {
-      //Press "Space"
+      jsPsych.pluginAPI.cancelAllKeyboardResponses();
 
+      showReport();
+    }
+
+    function showReport(){
+      // Display data
+      display_element.querySelector("#content").innerHTML = report_content;
+      display_element.querySelector('#distance-estimate').innerHTML = `${Math.round(trial_data["view_dist_mm"] / 10)} cm`
+
+      display_element.querySelector("#redo_blindspot").addEventListener('click', configureBlindSpot)
+      display_element.querySelector("#proceed").addEventListener('click', endTrial);
+    }
+
+    function endTrial() {
+      // finish trial
+      trial_data.rt = performance.now() - start_time;
+      display_element.innerHTML = "";
+
+      trial_data.item_width_deg =
+        (2 *
+          Math.atan(
+            trial_data["item_width_mm"] / 2 / trial_data["view_dist_mm"]
+          ) *
+          180) /
+        Math.PI;
+      trial_data.px2deg =
+        trial_data["item_width_px"] / trial_data.item_width_deg; // size of item in pixels divided by size of item in degrees of visual angle
+
+      let px2unit_scr = 0;
+      switch (trial.resize_units) {
+        case "cm":
+        case "centimeters":
+          px2unit_scr = trial_data["px2mm"] * 10; // pixels per centimeter
+          break;
+        case "inch":
+        case "inches":
+          px2unit_scr = trial_data["px2mm"] * 25.4; // pixels per inch
+          break;
+        case "deg":
+        case "degrees":
+          px2unit_scr = trial_data["px2deg"]; // pixels per degree of visual angle
+          break;
+      }
+      if (px2unit_scr > 0) {
+        // scale the window
+        scale_factor = px2unit_scr / trial.pixels_per_unit;
+        document.getElementById("jspsych-content").style.transform =
+          "scale(" + scale_factor + ")";
+        // pixels have been scaled, so pixels per degree, pixels per mm and pixels per item_width needs to be updated
+        trial_data.px2deg = trial_data.px2deg / scale_factor;
+        trial_data.px2mm = trial_data.px2mm / scale_factor;
+        trial_data.item_width_px =
+          trial_data.item_width_px / scale_factor;
+        trial_data.scale_factor = scale_factor;
+      }
+
+      if (trial.blindspot_reps > 0) {
+        trial_data.win_width_deg = window.innerWidth / trial_data.px2deg;
+        trial_data.win_height_deg =
+          window.innerHeight / trial_data.px2deg;
+      } else {
+        // delete degree related properties
+        delete trial_data.px2deg;
+        delete trial_data.item_width_deg;
+      }
+      // NEED TO REMOVE EVENT LISTENERS
+
+      jsPsych.finishTrial(trial_data);
+      jsPsych.pluginAPI.cancelAllKeyboardResponses();
+    }
+
+    function get_item_width() {
+      const item_width_px = parseFloat(
+        getComputedStyle(document.querySelector("#item"), null).width.replace(
+          "px",
+          ""
+        )
+      );
+  
+      trial_data["item_width_px"] = distanceSetup.round(item_width_px, 2);
+      return item_width_px;
+    }
+
+    function drawBall(pos = 180) {
+      // pos: define where the fixation square should be.
+      var mySVG = SVG("svgDiv");
+      const item_width_px = trial_data["item_width_px"];
+      const rectX = distanceSetup.px2mm(item_width_px) * pos;
+      const ballX = rectX * 0.6; // define where the ball is
+      var ball = mySVG.circle(30).move(ballX, 50).fill("#f00");
+      window.ball = ball;
+      var square = mySVG.rect(30, 30).move(Math.min(rectX - 50, 950), 50); //square position
+      config_data["square_pos"] = distanceSetup.round(square.cx(), 2);
+      config_data["rectX"] = rectX;
+      config_data["ballX"] = ballX;
+    }
+
+    function animateBall() {
+      ball
+        .animate(7000)
+        .during(function (pos) {
+          moveX = -pos * config_data["ballX"];
+          window.moveX = moveX;
+          moveY = 0;
+          ball.attr({ transform: "translate(" + moveX + "," + moveY + ")" }); //jqueryToVanilla: el.getAttribute('');
+        })
+        .loop(true, false)
+        .after(function () {
+          animateBall();
+        });    
+    }
+  
+    function recordPosition(info) {
+      // angle: define horizontal blind spot entry point position in degrees.
+      const angle = 13.5;
+      
       config_data["ball_pos"].push(distanceSetup.round(ball.cx() + moveX, 2));
       var sum = config_data["ball_pos"].reduce((a, b) => a + b, 0);
       var ballPosLen = config_data["ball_pos"].length;
@@ -462,30 +423,28 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
       counter = counter - 1;
       document.querySelector("#click").textContent = Math.max(counter, 0);
       if (counter <= 0) {
-        ball.stop();
-
-        // Disable space key
-        document.addEventListener("keydown", function (e) {
-          if (e.key == 32) {
-            return false;
-          }
-        });
-
-        // Display data
-        info = document.querySelector("#info");
-        document.querySelector("#info").style.visibility = "visible";
-        var info_h = document.createElement("div");
-        info_h.innerHTML = trial_data["view_dist_mm"] / 10;
-        info.appendChild(info_h);
-        document.querySelector("#proceed").style.display = "inline";
-
+        finishBlindSpotPhase();
         return;
+      } else {
+        ball.stop();
+        animateBall();
       }
-
-      ball.stop();
-      animateBall();
+      
     }
-  }
+
+    var distanceSetup = {
+      round: function (value, decimals) {
+        return Number(Math.round(value + "e" + decimals) + "e-" + decimals);
+      },
+      px2mm: function (item_width_px) {
+        const px2mm = item_width_px / trial_data["item_width_mm"];
+        trial_data["px2mm"] = distanceSetup.round(px2mm, 2);
+        return px2mm;
+      }
+    }
+
+
+  };
 
   //helper function for radians
   // Converts from degrees to radians.
