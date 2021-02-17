@@ -82,7 +82,7 @@ describe('data conversion to json', function(){
     var json_data = jsPsych.data.get().ignore(['rt','internal_node_id','time_elapsed','trial_type','question_order']).json(); 
     var data_js = [
       {
-        responses: {
+        response: {
           q: ["fuzz","bizz"], 
         },
         trial_index: 0
