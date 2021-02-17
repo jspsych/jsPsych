@@ -96,8 +96,8 @@ jsPsych.plugins["canvas-keyboard-response"] = (function () {
 
       // gather the data to store for the trial
       var trial_data = {
-        "rt": response.rt,
-        "key_press": response.key
+        rt: response.rt,
+        response: response.key
       };
 
       // clear the display
