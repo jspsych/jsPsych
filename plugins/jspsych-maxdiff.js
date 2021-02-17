@@ -158,9 +158,8 @@ jsPsych.plugins['maxdiff'] = (function () {
         // data saving
         var trial_data = {
             rt: response_time,
-            labels: {"left": trial.labels[0], "right": trial.labels[1]},
-            left: get_response('left'),
-            right: get_response('right')
+            labels: {left: trial.labels[0], right: trial.labels[1]},
+            response: {left: get_response('left'), right: get_response('right')}
         };
 
         // next trial
