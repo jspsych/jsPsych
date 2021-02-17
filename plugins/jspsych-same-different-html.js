@@ -140,11 +140,11 @@ jsPsych.plugins['same-different-html'] = (function() {
           answer: trial.answer,
           correct: correct,
           stimulus: [trial.stimuli[0], trial.stimuli[1]],
-          key_press: info.key
+          response: info.key
         };
         if (first_stim_info) {
           trial_data["rt_stim1"] = first_stim_info.rt;
-          trial_data["key_press_stim1"] = first_stim_info.key;
+          trial_data["response_stim1"] = first_stim_info.key;
         }
 
         display_element.innerHTML = '';
