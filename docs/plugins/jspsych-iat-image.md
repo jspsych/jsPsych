@@ -29,7 +29,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 | Name      | Type    | Value                                    |
 | --------- | ------- | ---------------------------------------- |
 | stimulus  | string  | Either the path to the image file or the string containing the HTML-formatted content that the subject saw on this trial. |
-| key_press | string  | Indicates which key the subject pressed. |
+| response  | string  | Indicates which key the subject pressed. |
 | rt        | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response. |
 | correct   | boolean | Boolean indicating whether the user's key press was correct or incorrect for the given image. |
 

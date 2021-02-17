@@ -167,10 +167,10 @@
 
       // gather the data to store for the trial
       var trial_data = {
-        "rt": response.rt,
-        "stimulus": trial.stimulus,
-        "key_press": response.key,
-        "correct": response.correct
+        rt: response.rt,
+        stimulus: trial.stimulus,
+        response: response.key,
+        correct: response.correct
       };
 
       // clears the display
