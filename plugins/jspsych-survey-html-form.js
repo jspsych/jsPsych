@@ -106,7 +106,7 @@ jsPsych.plugins['survey-html-form'] = (function() {
       // save data
       var trialdata = {
         rt: response_time,
-        responses: question_data
+        response: question_data
       };
 
       display_element.innerHTML = '';
