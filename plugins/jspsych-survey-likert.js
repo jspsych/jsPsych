@@ -178,7 +178,7 @@ jsPsych.plugins['survey-likert'] = (function() {
       // save data
       var trial_data = {
         rt: response_time,
-        responses: question_data,
+        response: question_data,
         question_order: question_order
       };
 
