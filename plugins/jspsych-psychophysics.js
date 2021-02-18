@@ -11,10 +11,10 @@
  *
  **/
 
- /* global jsPsych */
+ /* global jsPsych, math, numeric */
 
 jsPsych.plugins["psychophysics"] = (function() {
-  console.log('jspsych-psychophysics Version 2.0')
+  console.log('jspsych-psychophysics Version 2.2')
 
   let plugin = {};
 
@@ -129,6 +129,54 @@ jsPsych.plugins["psychophysics"] = (function() {
             pretty_name: 'Trial ends after audio',
             default: false,
             description: 'If true, then the trial will end as soon as the audio file finishes playing.'
+          },
+          tilt: {
+            type: jsPsych.plugins.parameterType.FLOAT,
+            pretty_name: 'tilt',
+            default: 0,
+            description: 'The tilt of the gabor patch.'
+          },
+          sf: {
+            type: jsPsych.plugins.parameterType.FLOAT,
+            pretty_name: 'spatial frequency',
+            default: 0.05,
+            description: 'The spatial frequency of the gabor patch.'
+          },
+          phase: {
+            type: jsPsych.plugins.parameterType.FLOAT,
+            pretty_name: 'phase',
+            default: 0,
+            description: 'The phase (degrees) of the gabor patch.'
+          },
+          sc: {
+            type: jsPsych.plugins.parameterType.FLOAT,
+            pretty_name: 'standard deviation',
+            default: 20,
+            description: 'The standard deviation of the distribution.'
+          },
+          contrast: {
+            type: jsPsych.plugins.parameterType.FLOAT,
+            pretty_name: 'contrast',
+            default: 20,
+            description: 'The contrast of the gabor patch.'
+          },
+          drift: {
+            type: jsPsych.plugins.parameterType.FLOAT,
+            pretty_name: 'drift',
+            default: 0,
+            description: 'The velocity of the drifting gabor patch.'
+          },
+          method: {
+            type: jsPsych.plugins.parameterType.STRING,
+            pretty_name: 'gabor_drawing_method',
+            default: 'numeric',
+            description: 'The method of drawing the gabor patch.'
+          },
+          disableNorm: {
+            type: jsPsych.plugins.parameterType.BOOL,
+            pretty_name: 'disableNorm',
+            default: false,
+            description: 'Disable normalization of the gaussian function.'
           },
         }
       },
@@ -261,10 +309,24 @@ jsPsych.plugins["psychophysics"] = (function() {
     
   plugin.trial = function(display_element, trial) {
 
+    // returns an array starting with 'start_num' of which length is 'count'.
+    function getNumbering(start_num, count) {
+      return [...Array(count)].map((_, i) => i + start_num) 
+    }
+
     // Class for visual and audio stimuli
     class psychophysics_stimulus {
       constructor(stim) {
         Object.assign(this, stim)
+        const keys = Object.keys(this)
+        for (var i = 0; i < keys.length; i++) {
+            if (typeof this[keys[i]] === "function") {
+              if (keys[i] === "drawFunc") continue
+              if (keys[i] === "change_attr") continue
+
+              this[keys[i]] = this[keys[i]].call()
+            }
+        }
       }
     }
 
@@ -434,6 +496,112 @@ jsPsych.plugins["psychophysics"] = (function() {
         const tmpW = this.img.width * scale;
         const tmpH = this.img.height * scale;              
         ctx.drawImage(this.img, 0, 0, this.img.width, this.img.height, this.currentX - tmpW / 2, this.currentY - tmpH / 2, tmpW, tmpH);   
+      }
+    }
+
+    class gabor_stimulus extends visual_stimulus {
+      constructor(stim){
+        super(stim);
+        this.update_count = 0;
+      }
+
+      show(){
+        ctx.putImageData(this.img_data, this.currentX - this.img_data.width/2, this.currentY - this.img_data.height/2)
+      }
+
+      update_position(elapsed){
+        
+        this.currentX = this.calc_current_position ('horiz', elapsed)
+        this.currentY = this.calc_current_position ('vert', elapsed)
+
+        if (typeof this.img_data !== 'undefined' && this.drift === 0) return
+
+        let gabor_data;
+        // console.log(this.method)
+
+        // The following calculation method is based on Psychtoolbox (MATLAB), 
+        // although it doesn't use procedural texture mapping.
+        // I also have referenced the gaborgen-js code: https://github.com/jtth/gaborgen-js 
+
+        // You can choose either the numeric.js or the math.js as the method for drawing gabor patches.
+        // The numeric.js is considerably faster than the math.js, but the latter is being developed more aggressively than the former.
+        // Note that "Math" and "math" are not the same.
+
+        let coord_array = getNumbering(Math.round(0 - this.width/2), this.width)
+        let coord_matrix_x = []
+        for (let i = 0; i< this.width; i++){
+          coord_matrix_x.push(coord_array)
+        }
+
+        coord_array = getNumbering(Math.round(0 - this.width/2), this.width)
+        let coord_matrix_y = []
+        for (let i = 0; i< this.width; i++){
+          coord_matrix_y.push(coord_array)
+        }
+
+        const tilt_rad = deg2rad(90 - this.tilt)
+
+        // These values are scalars.
+        const a = Math.cos(tilt_rad) * this.sf * (2 * Math.PI) // radians
+        const b = Math.sin(tilt_rad) * this.sf * (2 * Math.PI)
+        let multConst = 1 / (Math.sqrt(2*Math.PI) * this.sc) 
+        if (this.disableNorm) multConst = 1
+
+        
+        // const phase_rad = deg2rad(this.phase)
+        const phase_rad = deg2rad(this.phase + this.drift * this.update_count)
+        this.update_count += 1
+
+        if (this.method === 'math') {
+          const matrix_x = math.matrix(coord_matrix_x) // Convert to Matrix data
+          const matrix_y = math.transpose(math.matrix(coord_matrix_y))
+          const x_factor = math.multiply(-1, math.square(matrix_x))
+          const y_factor = math.multiply(-1, math.square(matrix_y))
+          const tmp1 = math.add(math.multiply(a, matrix_x), math.multiply(b, matrix_y), phase_rad) // radians
+          const sinWave = math.sin(tmp1)
+          const varScale = 2 * math.square(this.sc)
+          const tmp2 = math.add(math.divide(x_factor, varScale), math.divide(y_factor, varScale));
+          const exp_value = math.exp(tmp2)
+          const tmp3 = math.dotMultiply(exp_value, sinWave)
+          const tmp4 = math.multiply(multConst, tmp3)
+          const tmp5 = math.multiply(this.contrast, tmp4)
+          const m = math.multiply(256, math.add(0.5, tmp5))
+          gabor_data = m._data
+        } else { // numeric
+          const matrix_x = coord_matrix_x
+          const matrix_y = numeric.transpose(coord_matrix_y)
+          const x_factor = numeric.mul(-1, numeric.pow(matrix_x, 2))
+          const y_factor = numeric.mul(-1, numeric.pow(matrix_y, 2))
+          const tmp1 = numeric.add(numeric.mul(a, matrix_x), numeric.mul(b, matrix_y), phase_rad) // radians
+          const sinWave = numeric.sin(tmp1)
+          const varScale = 2 * numeric.pow([this.sc], 2)
+          const tmp2 = numeric.add(numeric.div(x_factor, varScale), numeric.div(y_factor, varScale));
+          const exp_value = numeric.exp(tmp2)
+          const tmp3 = numeric.mul(exp_value, sinWave)
+          const tmp4 = numeric.mul(multConst, tmp3)
+          const tmp5 = numeric.mul(this.contrast, tmp4)
+          const m = numeric.mul(256, numeric.add(0.5, tmp5))
+          gabor_data = m
+        }
+        // console.log(gabor_data)
+        const imageData = ctx.createImageData(this.width, this.width);
+        let cnt = 0;
+        // Iterate through every pixel
+        for (let i = 0; i < this.width; i++) {
+          for (let j = 0; j < this.width; j++) {
+            // Modify pixel data
+            imageData.data[cnt] = Math.round(gabor_data[i][j]);  // R value
+            cnt++;
+            imageData.data[cnt] = Math.round(gabor_data[i][j]);  // G
+            cnt++;
+            imageData.data[cnt] = Math.round(gabor_data[i][j]);  // B
+            cnt++;
+            imageData.data[cnt] = 255;  // alpha
+            cnt++;
+          }
+        }
+
+        this.img_data = imageData
       }
     }
 
@@ -825,7 +993,8 @@ jsPsych.plugins["psychophysics"] = (function() {
       circle: circle_stimulus,
       text: text_stimulus,
       cross: cross_stimulus,
-      manual: manual_stimulus
+      manual: manual_stimulus,
+      gabor: gabor_stimulus
     }
     if (typeof trial.stimuli !== 'undefined') { // The stimuli could be 'undefined' if the raf_func is specified.
       for (let i = 0; i < trial.stimuli.length; i++){
