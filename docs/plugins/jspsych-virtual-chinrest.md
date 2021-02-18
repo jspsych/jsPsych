@@ -1,4 +1,4 @@
-## jspsych-virtual-chin-rest plugin
+## jspsych-virtual-chinrest plugin
 
 This plugin merge the functionalities of former `jspsych-resize` and add new ones.
 
