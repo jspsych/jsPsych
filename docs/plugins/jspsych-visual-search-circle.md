@@ -30,7 +30,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 | Name           | Type        | Value                                    |
 | -------------- | ----------- | ---------------------------------------- |
 | correct        | boolean     | True if the subject gave the correct response. |
-| key_press      | string      | Indicates which key the subject pressed. |
+| response       | string      | Indicates which key the subject pressed. |
 | rt             | numeric     | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response. |
 | set_size       | numeric     | The number of items in the search array  |
 | target_present | boolean     | True if the target is present in the search array |
