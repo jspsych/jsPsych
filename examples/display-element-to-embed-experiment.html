@@ -6,12 +6,9 @@
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-image-keyboard-response.js"></script>
   <script src="../plugins/jspsych-html-keyboard-response.js"></script>
-  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <link rel="stylesheet" href="../css/jspsych.css">
   <style>
     p { line-height: 1.5em; font-size: 18px; }
-    img {
-      width: 300px;
-    }
     #jspsych-experiment { width: 600px; height: 400px; float: right; overflow: hidden; margin: 25px; border: 1px solid #999;}
   </style>
 </head>
@@ -34,32 +31,33 @@
   var trial_1 = {
     type: 'image-keyboard-response',
     stimulus: 'img/happy_face_1.jpg',
-    choices: [89, 78], // Y or N
-    prompt: '<p>Have you seen this face before? Y or N.</p>'
+    choices: ['y','n'], 
+    prompt: '<p>Have you seen this face before? Press "y" or "n".</p>',
+    stimulus_width: 300,
+    render_on_canvas: false
   }
 
   var trial_2 = {
     type: 'image-keyboard-response',
     stimulus: 'img/happy_face_2.jpg',
-    choices: [89, 78], // Y or N
-    timing_response: 5000,
-    prompt: '<p>Have you seen this face before? Y or N. (5s time limit).</p>'
+    choices: ['y','n'],
+    trial_duration: 5000,
+    prompt: '<p>Have you seen this face before? Press "y" or "n". (5s time limit).</p>',
+    stimulus_width: 300,
+    render_on_canvas: false
   }
 
   var trial_3 = {
     type: 'html-keyboard-response',
-    choices: jsPsych.NO_KEYS, // Y or N
-    timing_response: 5000,
+    choices: jsPsych.NO_KEYS, 
+    trial_duration: 5000,
     prompt: '<p>No response allowed. 5s wait.</p>',
-    stimulus: '<p>:)</p>',
-    is_html: true
+    stimulus: '<p>:)</p>'
   }
 
   var node = {
-    type: 'html-keyboard-response',
     timeline: [trial_1, trial_2, trial_3],
   }
-
 
   jsPsych.init({
     timeline: [node],

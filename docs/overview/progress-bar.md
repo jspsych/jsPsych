@@ -29,7 +29,7 @@ var trial = {
 }
 ```
 
-You can also get the current value of the progress bar with `jsPsych.getProgressBarCompleted()`
+You can also get the current value of the progress bar with `jsPsych.getProgressBarCompleted()`.
 
 ```js
 var proportion_complete = jsPsych.getProgressBarCompleted();
@@ -42,5 +42,69 @@ jsPsych.init({
 	timeline: exp,
 	show_progress_bar: true,
 	auto_update_progress_bar: false
+});
+```
+
+Here's a complete example showing how to use these functions and `jsPsych.init()` settings to manually update the progress bar:
+
+```js
+var n_trials = 5;
+
+var start = {
+    type: 'html-keyboard-response',
+    stimulus: 'Press any key to start!',
+    on_start: function() {
+        // set progress bar to 0 at the start of experiment
+        jsPsych.setProgressBar(0);
+    }
+};
+
+var trial = {
+    type: 'html-keyboard-response',
+    stimulus: 'This is a trial!',
+    on_finish: function() {
+        // at the end of each trial, update the progress bar
+        // based on the current value and the proportion to update for each trial
+        var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+        jsPsych.setProgressBar(curr_progress_bar_value + (1/n_trials));
+    }
+};
+
+var trials = {
+    timeline: [trial],
+    repetitions: n_trials
+};
+
+var done = {
+    type: 'html-keyboard-response',
+    stimulus: 'Done!'
+};
+
+jsPsych.init({
+    timeline: [start, trials, done],
+    show_progress_bar: true,
+    auto_update_progress_bar: false
+});
+```
+
+## Custom Text
+
+By default, jsPsych adds the text "Completion Progress" to the left of the progress bar. You can specify custom text using the `message_progress_bar` parameter in `jsPsych.init`.
+
+```js
+// support for different spoken languages
+jsPsych.init({
+    timeline: [...],
+    show_progress_bar: true,
+    message_progress_bar: 'Porcentaje completo'
+});
+```
+
+```js
+// no message
+jsPsych.init({
+    timeline: [...],
+    show_progress_bar: true,
+    message_progress_bar: ''
 });
 ```

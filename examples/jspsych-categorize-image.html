@@ -4,7 +4,7 @@
 <head>
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-categorize-image.js"></script>
-  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <link rel="stylesheet" href="../css/jspsych.css">
   <style>
     img {
       width: 300px;
@@ -16,12 +16,12 @@
   var trials = {
     type: 'categorize-image',
     stimulus: 'img/happy_face_1.jpg',
-    key_answer: 72,
-    choices: [72, 83],
+    key_answer: 'h',
+    choices: ['h', 's'],
     text_answer: 'happy',
     correct_text: "<p>Correct. This face is %ANS%.</p>",
     incorrect_text: "<p>Incorrect. This face is %ANS%. Please press the correct key to continue.</p>",
-    prompt: "<p>Press H if the face is happy. Press S if the face is sad.</p>",
+    prompt: "<p>Press 'h' if the face is happy. Press 's' if the face is sad.</p>",
     trial_duration: 1500,
     show_feedback_on_timeout: false,
     force_correct_button_press: true

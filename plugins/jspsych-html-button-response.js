@@ -2,7 +2,7 @@
  * jspsych-html-button-response
  * Josh de Leeuw
  *
- * plugin for displaying a stimulus and getting a keyboard response
+ * plugin for displaying a stimulus and getting a button response
  *
  * documentation: docs.jspsych.org
  *
@@ -129,7 +129,7 @@ jsPsych.plugins["html-button-response"] = (function() {
       // measure rt
       var end_time = performance.now();
       var rt = end_time - start_time;
-      response.button = choice;
+      response.button = parseInt(choice);
       response.rt = rt;
 
       // after a valid response, the stimulus will have the CSS class 'responded'
@@ -156,9 +156,9 @@ jsPsych.plugins["html-button-response"] = (function() {
 
       // gather the data to store for the trial
       var trial_data = {
-        "rt": response.rt,
-        "stimulus": trial.stimulus,
-        "button_pressed": response.button
+        rt: response.rt,
+        stimulus: trial.stimulus,
+        response: response.button
       };
 
       // clear the display

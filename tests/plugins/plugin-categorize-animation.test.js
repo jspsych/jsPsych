@@ -18,12 +18,12 @@ describe('categorize-animation plugin', function(){
 		var trial = {
 			type: 'categorize-animation',
 			stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
-			key_answer: 68
+			key_answer: 'd',
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		jest.runTimersToTime(500);
@@ -36,13 +36,13 @@ describe('categorize-animation plugin', function(){
 		var trial = {
 			type: 'categorize-animation',
 			stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
-			key_answer: 68,
-			prompt: "<p>Press d if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>"
+			key_answer: 'd',
+			prompt: "<p>Press d if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		jest.runTimersToTime(1500);
@@ -53,18 +53,18 @@ describe('categorize-animation plugin', function(){
 		var trial = {
 			type: 'categorize-animation',
 			stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
-			key_answer: 68,
-			choices: [68, 83],
-			prompt: "<p>Press d if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>"
+			key_answer: 'd',
+			choices: ['d', 's'],
+			prompt: "<p>Press d if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		jest.runTimersToTime(1500);
-		utils.pressKey(68);
+		utils.pressKey('d');
 		jest.runTimersToTime(1000);
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('Correct.');
 	});
@@ -73,18 +73,18 @@ describe('categorize-animation plugin', function(){
 		var trial = {
 			type: 'categorize-animation',
 			stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
-			key_answer: 68,
-			choices: [68, 83],
-			prompt: "<p>Press d if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>"
+			key_answer: 'd',
+			choices: ['d', 's'],
+			prompt: "<p>Press d if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		jest.runTimersToTime(1500);
-		utils.pressKey(83);
+		utils.pressKey('s');
 		jest.runTimersToTime(1000);
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('Wrong.');
 	});
@@ -93,21 +93,21 @@ describe('categorize-animation plugin', function(){
 		var trials = {
     		type: 'categorize-animation',
     		stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
-    		key_answer: 68,
-    		choices: [68, 83],
+    		key_answer: 'd',
+    		choices: ['d', 's'],
     		text_answer: 'different',
     		correct_text: "<p>Correct. The faces had %ANS% expressions.</p>",
     		incorrect_text: "<p>Incorrect. The faces had %ANS% expressions.</p>",
-    		prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
   		};
 
   		jsPsych.init({
-    			timeline: [trials],
-					auto_preload: false
+    		timeline: [trials]
   		});
 
 		jest.runTimersToTime(1500);
-		utils.pressKey(68);
+		utils.pressKey('d');
 		jest.runTimersToTime(1000);
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('<p>Correct. The faces had different expressions.</p>');
 	});
@@ -116,42 +116,42 @@ describe('categorize-animation plugin', function(){
 		var trials = {
     		type: 'categorize-animation',
     		stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
-    		key_answer: 68,
-    		choices: [68, 83],
+    		key_answer: 'd',
+    		choices: ['d', 's'],
     		correct_text: "<p>You pressed the correct key</p>",
     		incorrect_text: "<p>Incorrect.</p>",
-    		prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
   		};
 
   		jsPsych.init({
-    			timeline: [trials],
-					auto_preload: false
+    		timeline: [trials]
   		});
 
 		jest.runTimersToTime(1500);
-		utils.pressKey(68);
+		utils.pressKey('d');
 		jest.runTimersToTime(1000);
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('<p>You pressed the correct key</p>');
 	});
 
-	test('correct text displays when when key_answer is pressed', function(){
+	test('incorrect text displays when not key_answer is pressed', function(){
 		var trials = {
     		type: 'categorize-animation',
     		stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
-    		key_answer: 68,
-    		choices: [68, 83],
+    		key_answer: 'd',
+    		choices: ['d', 's'],
     		correct_text: "<p>You pressed the correct key</p>",
     		incorrect_text: "<p>Incorrect. You pressed the wrong key.</p>",
-    		prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
   		};
 
   		jsPsych.init({
-    			timeline: [trials],
-					auto_preload: false
+    		timeline: [trials]
   		});
 
 		jest.runTimersToTime(1500);
-		utils.pressKey(83);
+		utils.pressKey('s');
 		jest.runTimersToTime(1000);
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('<p>Incorrect. You pressed the wrong key.</p>');
 	});
@@ -160,17 +160,17 @@ describe('categorize-animation plugin', function(){
 		var trials = {
     		type: 'categorize-animation',
     		stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
-    		key_answer: 68,
-    		choices: [68, 83],
+    		key_answer: 'd',
+    		choices: ['d', 's'],
     		frame_time: 1000,
     		correct_text: "<p>You pressed the correct key</p>",
     		incorrect_text: "<p>Incorrect. You pressed the wrong key.</p>",
-    		prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
   		};
 
   		jsPsych.init({
-    		timeline: [trials],
-				auto_preload: false
+    		timeline: [trials]
   		});
 
 		jest.runTimersToTime(1000);
@@ -185,18 +185,18 @@ describe('categorize-animation plugin', function(){
 		var trials = {
     		type: 'categorize-animation',
     		stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
-    		key_answer: 68,
-    		choices: [68, 83],
+    		key_answer: 'd',
+    		choices: ['d', 's'],
     		frame_time: 1000,
     		sequence_reps: 2,
     		correct_text: "<p>You pressed the correct key</p>",
     		incorrect_text: "<p>Incorrect. You pressed the wrong key.</p>",
-    		prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
   		};
 
   		jsPsych.init({
-    		timeline: [trials],
-				auto_preload: false
+    		timeline: [trials]
   		});
 
 		jest.runTimersToTime(1000);
@@ -213,23 +213,23 @@ describe('categorize-animation plugin', function(){
 		var trials = {
     		type: 'categorize-animation',
     		stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
-    		key_answer: 68,
-    		choices: [68, 83],
+    		key_answer: 'd',
+    		choices: ['d', 's'],
     		frame_time: 1000,
     		sequence_reps: 2,
     		correct_text: "<p>You pressed the correct key</p>",
     		incorrect_text: "<p>Incorrect. You pressed the wrong key.</p>",
     		prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
-    		allow_response_before_complete: true,
+			allow_response_before_complete: true,
+			render_on_canvas: false
   		};
 
   		jsPsych.init({
-    		timeline: [trials],
-				auto_preload: false
+    		timeline: [trials]
   		});
 
 		jest.runTimersToTime(1500);
-		utils.pressKey(68);
+		utils.pressKey('d');
 		jest.runTimersToTime(500);
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('<img src=\"img/sad_face_1.jpg\" class=\"jspsych-categorize-animation-stimulus\"><p>You pressed the correct key</p>');
 	});
@@ -238,22 +238,22 @@ describe('categorize-animation plugin', function(){
 		var trials = {
     		type: 'categorize-animation',
     		stimuli: ['img/happy_face_1.jpg', 'img/sad_face_1.jpg'],
-    		key_answer: 68,
-    		choices: [68, 83],
+    		key_answer: 'd',
+    		choices: ['d', 's'],
     		frame_time: 500,
     		feeback_duration: 500,
     		correct_text: "<p>You pressed the correct key</p>",
     		incorrect_text: "<p>Incorrect. You pressed the wrong key.</p>",
-    		prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			prompt: "<p>Press D if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>",
+			render_on_canvas: false
   		};
 
   		jsPsych.init({
-    		timeline: [trials],
-				auto_preload: false
+    		timeline: [trials]
   		});
 
 		jest.runTimersToTime(1500);
-		utils.pressKey(68);
+		utils.pressKey('d');
 		jest.runTimersToTime(500);
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('<p>You pressed the correct key</p>');
 		jest.runTimersToTime(2000);

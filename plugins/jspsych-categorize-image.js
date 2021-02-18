@@ -23,13 +23,13 @@ jsPsych.plugins['categorize-image'] = (function() {
         description: 'The image content to be displayed.'
       },
       key_answer: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key answer',
         default: undefined,
         description: 'The key to indicate the correct response.'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Choices',
         default: jsPsych.ALL_KEYS,
         array: true,
@@ -138,10 +138,10 @@ jsPsych.plugins['categorize-image'] = (function() {
 
       // save data
       trial_data = {
-        "rt": info.rt,
-        "correct": correct,
-        "stimulus": trial.stimulus,
-        "key_press": info.key
+        rt: info.rt,
+        correct: correct,
+        stimulus: trial.stimulus,
+        response: info.key
       };
 
       display_element.innerHTML = '';

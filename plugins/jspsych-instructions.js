@@ -28,15 +28,15 @@ jsPsych.plugins.instructions = (function() {
         description: 'Each element of the array is the content for a single page.'
       },
       key_forward: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key forward',
-        default: 'rightarrow',
+        default: 'ArrowRight',
         description: 'The key the subject can press in order to advance to the next page.'
       },
       key_backward: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key backward',
-        default: 'leftarrow',
+        default: 'ArrowLeft',
         description: 'The key that the subject can press to return to the previous page.'
       },
       allow_backward: {
@@ -63,6 +63,12 @@ jsPsych.plugins.instructions = (function() {
           default: false,
           description: 'If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons.'
       },
+      page_label: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Page label',
+        default: 'Page',
+        description: 'The text that appears before x/y (current/total) pages displayed with show_page_number'
+      },      
       button_label_previous: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label previous',
@@ -104,7 +110,7 @@ jsPsych.plugins.instructions = (function() {
       var pagenum_display = "";
       if(trial.show_page_number) {
           pagenum_display = "<span style='margin: 0 1em;' class='"+
-          "jspsych-instructions-pagenum'>Page "+(current_page+1)+"/"+trial.pages.length+"</span>";
+          "jspsych-instructions-pagenum'>"+ trial.page_label + ' ' +(current_page+1)+"/"+trial.pages.length+"</span>";
       }
      
       if (trial.show_clickable_nav) {
@@ -185,8 +191,8 @@ jsPsych.plugins.instructions = (function() {
       display_element.innerHTML = '';
 
       var trial_data = {
-        "view_history": JSON.stringify(view_history),
-        "rt": performance.now() - start_time
+        view_history: view_history,
+        rt: performance.now() - start_time
       };
 
       jsPsych.finishTrial(trial_data);
@@ -203,13 +209,13 @@ jsPsych.plugins.instructions = (function() {
         allow_held_key: false
       });
       // check if key is forwards or backwards and update page
-      if (jsPsych.pluginAPI.compareKeys(info.key, trial.key_backward)) {
+      if (info.key == trial.key_backward) {
         if (current_page !== 0 && trial.allow_backward) {
           back();
         }
       }
 
-      if (jsPsych.pluginAPI.compareKeys(info.key, trial.key_forward)) {
+      if (info.key == trial.key_forward) {
         next();
       }
 

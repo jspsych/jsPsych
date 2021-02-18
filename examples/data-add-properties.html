@@ -4,20 +4,17 @@
 <head>
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-image-keyboard-response.js"></script>
-  <link rel="stylesheet" href="../css/jspsych.css"></link>
-  <style>
-    img {
-      width: 300px;
-    }
-  </style>
+  <link rel="stylesheet" href="../css/jspsych.css">
 </head>
 <body></body>
 <script>
   var block_1 = {
     type: 'image-keyboard-response',
     stimulus: 'img/happy_face_1.jpg',
-    choices: [89, 78], // Y or N
-    prompt: '<p>The data displayed on the next page should have a subject and completed property. Press Y or N.</p>'
+    choices: ['y','n'],
+    render_on_canvas: false,
+    stimulus_width: 300,
+    prompt: '<p>The data displayed on the next page should have a subject and completed property. Press "y" or "n".</p>'
   }
 
   jsPsych.data.addProperties({

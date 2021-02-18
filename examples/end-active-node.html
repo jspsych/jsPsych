@@ -1,17 +1,10 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-html-keyboard-response.js"></script>
   <script src="../plugins/jspsych-image-keyboard-response.js"></script>
-  <link rel="stylesheet" href="../css/jspsych.css"></link>
-  <style>
-    img {
-      width: 300px;
-    }
-  </style>
+  <link rel="stylesheet" href="../css/jspsych.css">
 </head>
 <body></body>
 <script>
@@ -26,10 +19,12 @@
 
   var block = {
     type: 'image-keyboard-response',
-    choices: [89, 78], // Y or N
-    prompt: '<p>Press Y to Continue. Press N to end this node of the experiment.</p>',
+    choices: ['y','n'],
+    stimulus_width: 300,
+    render_on_canvas: false,
+    prompt: '<p>Press "y" to continue. Press "n" to end this node of the experiment.</p>',
     on_finish: function(data) {
-      if (data.key_press == 78) {
+      if (data.response == "n") {
         jsPsych.endCurrentTimeline();
       }
     },
@@ -38,7 +33,7 @@
 
   var after_block = {
     type: 'html-keyboard-response',
-    stimulus: '<p>The next node</p>',
+    stimulus: '<p>The next node.</p>',
   }
 
   jsPsych.init({

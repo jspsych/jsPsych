@@ -29,26 +29,26 @@ jsPsych.plugins['same-different-image'] = (function() {
         type: jsPsych.plugins.parameterType.SELECT,
         pretty_name: 'Answer',
         options: ['same', 'different'],
-        default: 75,
+        default: undefined,
         description: 'Either "same" or "different".'
       },
       same_key: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Same key',
-        default: 'Q',
+        default: 'q',
         description: ''
       },
       different_key: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Different key',
-        default: 'P',
+        default: 'p',
         description: 'The key that subjects should press to indicate that the two stimuli are the same.'
       },
       first_stim_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'First stimulus duration',
-        default: 1000,
-        description: 'How long to show the first stimulus for in milliseconds.'
+        default: null,
+        description: 'How long to show the first stimulus for in milliseconds. If null, then the stimulus will remain on the screen until any keypress is made.'
       },
       gap_duration: {
         type: jsPsych.plugins.parameterType.INT,
@@ -59,8 +59,8 @@ jsPsych.plugins['same-different-image'] = (function() {
       second_stim_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Second stimulus duration',
-        default: 1000,
-        description: 'How long to show the second stimulus for in milliseconds.'
+        default: null,
+        description: 'How long to show the second stimulus for in milliseconds. If null, then the stimulus will remain on the screen until a valid response is made.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -125,8 +125,8 @@ jsPsych.plugins['same-different-image'] = (function() {
 
         var correct = false;
 
-        var skey = typeof trial.same_key == 'string' ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.same_key) : trial.same_key;
-        var dkey = typeof trial.different_key == 'string' ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.different_key) : trial.different_key;
+        var skey = trial.same_key;
+        var dkey = trial.different_key;
 
         if (info.key == skey && trial.answer == 'same') {
           correct = true;
@@ -137,15 +137,15 @@ jsPsych.plugins['same-different-image'] = (function() {
         }
 
         var trial_data = {
-          "rt": info.rt,
-          "answer": trial.answer,
-          "correct": correct,
-          "stimulus": JSON.stringify([trial.stimuli[0], trial.stimuli[1]]),
-          "key_press": info.key
+          rt: info.rt,
+          answer: trial.answer,
+          correct: correct,
+          stimulus: [trial.stimuli[0], trial.stimuli[1]],
+          response: info.key
         };
         if (first_stim_info) {
           trial_data["rt_stim1"] = first_stim_info.rt;
-          trial_data["key_press_stim1"] = first_stim_info.key;
+          trial_data["response_stim1"] = first_stim_info.key;
         }
 
         display_element.innerHTML = '';

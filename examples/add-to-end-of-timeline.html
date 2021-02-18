@@ -4,7 +4,7 @@
     <script src="../jspsych.js"></script>
     <script src="../plugins/jspsych-html-keyboard-response.js"></script>
     <script src="../plugins/jspsych-image-keyboard-response.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css"></link>
+    <link rel="stylesheet" href="../css/jspsych.css">
   </head>
   <body></body>
   <script>
@@ -17,7 +17,8 @@
       jsPsych.addNodeToEndOfTimeline({
         timeline: [{
           type: 'image-keyboard-response',
-          stimulus: 'img/happy_face_4.jpg'
+          stimulus: 'img/happy_face_4.jpg',
+          stimulus_width: 300
         }]
       }, jsPsych.resumeExperiment)
     }

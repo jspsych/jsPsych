@@ -72,6 +72,12 @@ jsPsych.plugins['survey-text'] = (function() {
         pretty_name: 'Button label',
         default:  'Continue',
         description: 'The text that appears on the button to finish the trial.'
+      },
+      autocomplete: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Allow autocomplete',
+        default: false,
+        description: "Setting this to true will enable browser auto-complete or auto-fill for the form."
       }
     }
   }
@@ -100,8 +106,11 @@ jsPsych.plugins['survey-text'] = (function() {
       html += '<div id="jspsych-survey-text-preamble" class="jspsych-survey-text-preamble">'+trial.preamble+'</div>';
     }
     // start form
-    html += '<form id="jspsych-survey-text-form">'
-
+    if (trial.autocomplete) {
+      html += '<form id="jspsych-survey-text-form">';
+    } else {
+      html += '<form id="jspsych-survey-text-form" autocomplete="off">';
+    }
     // generate question order
     var question_order = [];
     for(var i=0; i<trial.questions.length; i++){
@@ -159,8 +168,8 @@ jsPsych.plugins['survey-text'] = (function() {
       }
       // save data
       var trialdata = {
-        "rt": response_time,
-        "responses": JSON.stringify(question_data)
+        rt: response_time,
+        response: question_data
       };
 
       display_element.innerHTML = '';

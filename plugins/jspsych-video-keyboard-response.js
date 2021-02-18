@@ -18,14 +18,14 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
     name: 'video-keyboard-response',
     description: '',
     parameters: {
-      sources: {
+      stimulus: {
         type: jsPsych.plugins.parameterType.VIDEO,
         pretty_name: 'Video',
         default: undefined,
         description: 'The video file to play.'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Choices',
         array: true,
         default: jsPsych.ALL_KEYS,
@@ -96,6 +96,13 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
         pretty_name: 'Response ends trial',
         default: true,
         description: 'If true, the trial will end when subject makes a response.'
+      }, 
+      response_allowed_while_playing: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Response allowed while playing',
+        default: true,
+        description: 'If true, then responses are allowed while the video is playing. '+
+          'If false, then the video must finish playing before a response is accepted.'
       }
     }
   }
@@ -112,23 +119,33 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
     if(trial.height) {
       video_html += ' height="'+trial.height+'"';
     }
-    if(trial.autoplay){
+    if(trial.autoplay & (trial.start == null)){
+      // if autoplay is true and the start time is specified, then the video will start automatically
+      // via the play() method, rather than the autoplay attribute, to prevent showing the first frame
       video_html += " autoplay ";
     }
     if(trial.controls){
       video_html +=" controls ";
     }
+    if (trial.start !== null) {
+      // hide video element when page loads if the start time is specified, 
+      // to prevent the video element from showing the first frame
+      video_html += ' style="visibility: hidden;"'; 
+    }
     video_html +=">";
 
-    var video_preload_blob = jsPsych.pluginAPI.getVideoBuffer(trial.sources[0]);
+    var video_preload_blob = jsPsych.pluginAPI.getVideoBuffer(trial.stimulus[0]);
     if(!video_preload_blob) {
-      for(var i=0; i<trial.sources.length; i++){
-        var file_name = trial.sources[i];
+      for(var i=0; i<trial.stimulus.length; i++){
+        var file_name = trial.stimulus[i];
         if(file_name.indexOf('?') > -1){
           file_name = file_name.substring(0, file_name.indexOf('?'));
         }
         var type = file_name.substr(file_name.lastIndexOf('.') + 1);
         type = type.toLowerCase();
+        if (type == "mov") {
+          console.warn('Warning: video-keyboard-response plugin does not reliably support .mov files.')
+        }
         video_html+='<source src="' + file_name + '" type="video/'+type+'">';   
       }
     }
@@ -142,30 +159,51 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
 
     display_element.innerHTML = video_html;
 
+    var video_element = display_element.querySelector('#jspsych-video-keyboard-response-stimulus');
+
     if(video_preload_blob){
-      display_element.querySelector('#jspsych-video-keyboard-response-stimulus').src = video_preload_blob;
+      video_element.src = video_preload_blob;
     }
 
-    display_element.querySelector('#jspsych-video-keyboard-response-stimulus').onended = function(){
+    video_element.onended = function(){
       if(trial.trial_ends_after_video){
         end_trial();
       }
+      if ((trial.response_allowed_while_playing == false) & (!trial.trial_ends_after_video)) {
+        // start keyboard listener
+        var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+          callback_function: after_response,
+          valid_responses: trial.choices,
+          rt_method: 'performance',
+          persist: false,
+          allow_held_key: false,
+        });
+      }
     }
+    
+    video_element.playbackRate = trial.rate;
 
+    // if video start time is specified, hide the video and set the starting time
+    // before showing and playing, so that the video doesn't automatically show the first frame
     if(trial.start !== null){
-      display_element.querySelector('#jspsych-video-keyboard-response-stimulus').currentTime = trial.start;
+      video_element.pause();
+      video_element.currentTime = trial.start;
+      video_element.onseeked = function() {
+        video_element.style.visibility = "visible";
+        if (trial.autoplay) {
+          video_element.play();
+        }
+      }
     }
 
     if(trial.stop !== null){
-      display_element.querySelector('#jspsych-video-keyboard-response-stimulus').addEventListener('timeupdate', function(e){
-        var currenttime = display_element.querySelector('#jspsych-video-keyboard-response-stimulus').currentTime;
+      video_element.addEventListener('timeupdate', function(e){
+        var currenttime = video_element.currentTime;
         if(currenttime >= trial.stop){
-          display_element.querySelector('#jspsych-video-keyboard-response-stimulus').pause();
+          video_element.pause();
         }
       })
     }
-
-    display_element.querySelector('#jspsych-video-keyboard-response-stimulus').playbackRate = trial.rate;
 
     // store response
     var response = {
@@ -181,12 +219,17 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
 
       // kill keyboard listeners
       jsPsych.pluginAPI.cancelAllKeyboardResponses();
+      
+      // stop the video file if it is playing
+      // remove end event listeners if they exist
+      display_element.querySelector('#jspsych-video-keyboard-response-stimulus').pause();
+      display_element.querySelector('#jspsych-video-keyboard-response-stimulus').onended = function(){ };
 
       // gather the data to store for the trial
       var trial_data = {
-        "rt": response.rt,
-        "stimulus": trial.stimulus,
-        "key_press": response.key
+        rt: response.rt,
+        stimulus: trial.stimulus,
+        response: response.key
       };
 
       // clear the display
@@ -194,7 +237,7 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
 
       // move on to the next trial
       jsPsych.finishTrial(trial_data);
-    };
+    }
 
     // function to handle responses by the subject
     var after_response = function(info) {
@@ -214,7 +257,7 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
     };
 
     // start the response listener
-    if (trial.choices != jsPsych.NO_KEYS) {
+    if ((trial.choices != jsPsych.NO_KEYS) & (trial.response_allowed_while_playing)) {
       var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,

@@ -46,7 +46,7 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Response ends trial',
         default: true,
-        description: 'If true, the trial ends after a key press.'
+        description: 'If true, the trial ends after a mouse click.'
       },
       pre_target_duration: {
         type: jsPsych.plugins.parameterType.INT,
@@ -105,7 +105,7 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
 
 		//show prompt if there is one
     if (trial.prompt !== null) {
-      display_element.innerHTML += trial.prompt;
+      display_element.insertAdjacentHTML('beforeend', trial.prompt);
     }
 
 		function showTarget(){
@@ -151,12 +151,11 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
 
       // gather the data to store for the trial
       var trial_data = {
-        "rt": response.rt,
-				"grid": JSON.stringify(trial.grid),
-				"target": JSON.stringify(trial.target),
-        "response_row": response.row,
-        "response_column": response.column,
-        "correct": response.row == trial.target[0] && response.column == trial.target[1]
+        rt: response.rt,
+				grid: trial.grid,
+				target: trial.target,
+        response: [parseInt(response.row,10), parseInt(response.column,10)],
+        correct: response.row == trial.target[0] && response.column == trial.target[1]
       };
 
       // clear the display

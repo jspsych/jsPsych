@@ -75,6 +75,12 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         pretty_name: 'Required message',
         default: 'You must choose at least one response for this question',
         description: 'Message that will be displayed if required question is not answered.'
+      },
+      autocomplete: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Allow autocomplete',
+        default: false,
+        description: "Setting this to true will enable browser auto-complete or auto-fill for the form."
       }
     }
   }
@@ -99,6 +105,9 @@ jsPsych.plugins['survey-multi-select'] = (function() {
     var trial_form_id = _join(plugin_id_name, "form");
     display_element.innerHTML += '<form id="'+trial_form_id+'"></form>';
     var trial_form = display_element.querySelector("#" + trial_form_id);
+    if ( !trial.autocomplete ) {
+        trial_form.setAttribute('autocomplete',"off");
+    }
     // show preamble text
     var preamble_id_name = _join(plugin_id_name, 'preamble');
     if(trial.preamble !== null){
@@ -146,14 +155,14 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         label.innerHTML = question.options[j];
         label.setAttribute('for', input_id)
 
-        // create  checkboxes
+        // create checkboxes
         var input = document.createElement('input');
         input.setAttribute('type', "checkbox");
         input.setAttribute('name', input_name);
         input.setAttribute('id', input_id);
         input.setAttribute('value', question.options[j])
         form.appendChild(label)
-        form.insertBefore(input, label)
+        label.insertBefore(input, label.firstChild)
       }
     }
     // add submit button
@@ -205,9 +214,9 @@ jsPsych.plugins['survey-multi-select'] = (function() {
 
       // save data
       var trial_data = {
-        "rt": response_time,
-        "responses": JSON.stringify(question_data),
-        "question_order": JSON.stringify(question_order)
+        rt: response_time,
+        response: question_data,
+        question_order: question_order
       };
       display_element.innerHTML = '';
 
