@@ -132,10 +132,10 @@
     choices: ['CSV', 'JSON'],
     stimulus: `<p>Done!</p><p>If you'd like to download a copy of the data to explore, click the format you'd like below</p>`,
     on_finish: function(data){
-      if(data.button_pressed == 0){
+      if(data.response == 0){
         jsPsych.data.get().localSave('csv','webgazer-sample-data.csv');
       }
-      if(data.button_pressed == 1){
+      if(data.response == 1){
         jsPsych.data.get().localSave('json', 'webgazer-sample-data.json');
       }
     }
