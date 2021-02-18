@@ -1,18 +1,15 @@
 ## jspsych-virtual-chinrest plugin
 
-This plugin merge the functionalities of former `jspsych-resize` and add new ones.
+This plugin provides a "virtual chinrest" that can measure the distance between the participant and the screen. It can also standardize the screen size to a known physical dimension (i.e., ensuring that a 200px wide stimulus is 2.2cm wide on the participant's monitor). This is based on the work of [Li, Joo, Yeatman, and Reinecke (2020)](https://doi.org/10.1038/s41598-019-57204-1). We recommend citing their work in any paper that makes use of this plugin.
 
-The plugin consists in two parts:
+!!! note Citation
+    Li, Q., Joo, S. J., Yeatman, J. D., & Reinecke, K. (2020). Controlling for Participants’ Viewing Distance in Large-Scale, Psychophysical Online Experiments Using a Virtual Chinrest. _Scientific Reports, 10_(1), 1-11. doi: [10.1038/s41598-019-57204-1](https://doi.org/10.1038/s41598-019-57204-1)**
 
-To first calculate a participant’s display, participants are asked to place an item on the screen (e.g. a credit card or another same size card) and use a resizable div container that allows the user to drag until the container is the same size as the item being measured. This allows the researchers to calculate the pixel density on the monitor.
+The plugin works in two phases.
 
-To measure the user’s distance from their monitor, there is also a blind spot task. Participants are asked to focus on a black square on the screen with their right eye closed, while a red dot repeatedly sweeps from right to left. They must hit the spacebar on their keyboards whenever it appears that the red dot has disappeared. This part allows researchers to determine the distance between the center of the black square and the center of the red dot when it disappears from eyesight and estimate how far the participant is from the monitor.
+**Phase 1**. To calculate the pixel-to-cm conversion rate for a participant’s display, participants are asked to place a credit card or other item of the same size on the screen and resize an image until it is the same size as the credit card. Since we know the physical dimensions of the card, we can find the conversion rate for the participant's display.
 
-The screen resize and user’s distance measurement are optional, based on `resize_units` and `blindspot_reps` parameters, respectively.
-
-We would appreciate it if you cited this paper when you use the virtual-chinrest plugin:
-
-**Li, Q., Joo, S. J., Yeatman, J. D., & Reinecke, K. (2020). Controlling for Participants’ Viewing Distance in Large-Scale, Psychophysical Online Experiments Using a Virtual Chinrest. Scientific Reports, 10(1), 1-11. DOI: [10.1038/s41598-019-57204-1]**
+**Phase 2**. To measure the participant's viewing distance from their screen we use a [blind spot](https://en.wikipedia.org/wiki/Blind_spot_(vision)) task. Participants are asked to focus on a black square on the screen with their right eye closed, while a red dot repeatedly sweeps from right to left. They press the spacebar on their keyboard whenever it appears that the red dot has disappeared. This part allows researchers to determine the distance between the black square and the red dot when it disappears from eyesight and estimate how far the participant is from the monitor. This estimation assumes that the blind spot is located 13.5° temporally.
 
 ## Parameters
 
