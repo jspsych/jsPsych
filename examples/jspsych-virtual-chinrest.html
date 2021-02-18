@@ -5,11 +5,11 @@
     <meta content="utf-8" http-equiv="encoding">
 
     <!-- css -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link href="css/jquery-ui.css" rel="stylesheet" type="text/css">
+    <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="css/jquery-ui.css" rel="stylesheet" type="text/css">-->
 
      <!-- SVG.js -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.3/svg.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.3/svg.min.js"></script>
 
     <!-- JsPsych -->
     <script src="../jspsych.js"></script>
@@ -25,7 +25,7 @@
   // note: pixels_per_unit will be ignored
   let no_resize = {
     type: 'virtual-chinrest',
-    blindspot_reps: 3,
+    blindspot_reps: 1,
     resize_units: "none",
     pixels_per_unit: 50 
   };
@@ -45,7 +45,7 @@
   // don't report viewing distance to subject
   let deg_resize = {
     type: 'virtual-chinrest',
-    blindspot_reps: 3,
+    blindspot_reps: 1,
     resize_units: "deg",
     pixels_per_unit: 50,
     // viewing_distance_report: 'none'
