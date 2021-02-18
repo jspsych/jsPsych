@@ -131,8 +131,6 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
     var w = window.innerWidth;
     var h = window.innerHeight;
 
-    const screen_size_px = [w, "x", h]; 
-
     let trial_data = {
       item_width_mm: trial.item_width_mm,
       item_height_mm: trial.item_height_mm, //card dimension: 85.60 × 53.98 mm (3.370 × 2.125 in)
