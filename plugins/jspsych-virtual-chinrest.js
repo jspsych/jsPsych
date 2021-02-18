@@ -257,14 +257,14 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
       // check what to do next
       if (trial.blindspot_reps > 0) {
         get_item_width(); // modifies trial data
-        configureBlindSpot();
+        startBlindSpotPhase();
       } else {
         distanceSetup.px2mm(get_item_width());
         endTrial();
       }
     }
 
-    function configureBlindSpot() {
+    function startBlindSpotPhase() {
       document.querySelector("#content").innerHTML = blindspot_content;
       drawBall();
       jsPsych.pluginAPI.getKeyboardResponse({
@@ -275,8 +275,7 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
         persist: false
       })
     }
-
-    var ball_position_listener = null;
+    
     function startBall(){
       ball_position_listener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: recordPosition,
@@ -301,7 +300,7 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
       display_element.querySelector("#content").innerHTML = report_content;
       display_element.querySelector('#distance-estimate').innerHTML = `${Math.round(trial_data["view_dist_mm"] / 10)} cm`
 
-      display_element.querySelector("#redo_blindspot").addEventListener('click', configureBlindSpot)
+      display_element.querySelector("#redo_blindspot").addEventListener('click', startBlindSpotPhase)
       display_element.querySelector("#proceed").addEventListener('click', endTrial);
     }
 
