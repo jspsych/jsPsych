@@ -13,14 +13,13 @@
     type: 'html-keyboard-response',
     stimulus: 'first trial; new trial added when on_finish is called',
     on_finish: function(){
-      jsPsych.pauseExperiment();
       jsPsych.addNodeToEndOfTimeline({
         timeline: [{
           type: 'image-keyboard-response',
           stimulus: 'img/happy_face_4.jpg',
           stimulus_width: 300
         }]
-      }, jsPsych.resumeExperiment)
+      })
     }
   }
 

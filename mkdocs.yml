@@ -13,7 +13,7 @@ extra:
       link: 'https://github.com/jspsych'
     - icon: 'fontawesome/brands/twitter'
       link: 'https://twitter.com/joshdeleeuw'
-copyright: 'Copyright &copy; 2012-2020 Josh de Leeuw'
+copyright: 'Copyright &copy; 2012-2021 Josh de Leeuw'
 google_analytics:
   - 'UA-50563838-1'
   - 'auto'
