@@ -218,7 +218,7 @@ jsPsych.pluginAPI.getKeyboardResponse({
 var after_response = function(info){
 	alert('You pressed key '+info.key+' after '+info.rt+'ms');
 
-	if(info.key == 'q'){ /
+	if(jsPsych.pluginAPI.compareKeys(info.key,'q')){ /
 		jsPsych.pluginAPI.cancelKeyboardResponse(listener);
 	}
 }

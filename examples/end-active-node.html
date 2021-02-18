@@ -24,7 +24,7 @@
     render_on_canvas: false,
     prompt: '<p>Press "y" to continue. Press "n" to end this node of the experiment.</p>',
     on_finish: function(data) {
-      if (data.response == "n") {
+      if (jsPsych.pluginAPI.compareKeys(data.response, "n")) {
         jsPsych.endCurrentTimeline();
       }
     },

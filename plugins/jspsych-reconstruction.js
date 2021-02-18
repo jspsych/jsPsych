@@ -71,9 +71,9 @@ jsPsych.plugins['reconstruction'] = (function() {
       var key_d = trial.key_decrease;
 
       // get new param value
-      if (info.key == key_i) {
+      if (jsPsych.pluginAPI.compareKeys(info.key, key_i)) {
         param = param + trial.step_size;
-      } else if (info.key == key_d) {
+      } else if (jsPsych.pluginAPI.compareKeys(info.key, key_d)) {
         param = param - trial.step_size;
       }
       param = Math.max(Math.min(1, param), 0);

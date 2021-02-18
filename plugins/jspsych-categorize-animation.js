@@ -230,7 +230,7 @@ jsPsych.plugins["categorize-animation"] = (function() {
       }
 
       correct = false;
-      if (trial.key_answer == info.key) {
+      if (jsPsych.pluginAPI.compareKeys(trial.key_answer, info.key)) {
         correct = true;
       }
 

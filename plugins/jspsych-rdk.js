@@ -600,7 +600,10 @@ jsPsych.plugins["rdk"] = (function() {
 				if(trial.correct_choice.constructor === Array){ //If it is an array
 					//If the elements are characters
 					if(typeof trial.correct_choice[0] === 'string' || trial.correct_choice[0] instanceof String){
-						return trial.correct_choice.includes(response.key); //If the response is included in the correct_choice array, return true. Else, return false.
+						var key_in_choices = trial.correct_choice.every(function(x) {
+							return jsPsych.pluginAPI.compareKeys(x,response.key); 
+						});
+						return key_in_choices; //If the response is included in the correct_choice array, return true. Else, return false.
 					}
 					//Else if the elements are numbers (javascript character codes)
 					else if (typeof trial.correct_choice[0] === 'number'){
@@ -612,7 +615,7 @@ jsPsych.plugins["rdk"] = (function() {
 					//If the element is a character
 					if(typeof trial.correct_choice === 'string' || trial.correct_choice instanceof String){
 						//Return true if the user's response matches the correct answer. Return false otherwise.
-						return response.key == trial.correct_choice;
+						return jsPsych.pluginAPI.compareKeys(response.key, trial.correct_choice);
 					}
 					//Else if the element is a number (javascript character codes)
 					else if (typeof trial.correct_choice === 'number'){
