@@ -64,7 +64,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 | Name             | Type        | Value                                    |
 | ---------------- | ----------- | ---------------------------------------- |
 | rt               | numeric     | The response time in ms for the subject to make a response. |
-| key_press        | string      | The key that the subject pressed.        |
+| response         | string      | The key that the subject pressed.        |
 | correct          | boolean     | Whether or not the subject's key press corresponded to those provided in correct_choice. |
 | frame_rate       | numeric     | The average frame rate for the trial. 0 denotes that the subject responded before the appearance of the second frame. |
 | number_of_frames | numeric     | The number of frames that was shown in this trial. |

@@ -176,9 +176,9 @@ jsPsych.plugins['canvas-slider-response'] = (function () {
 
             // save data
             var trialdata = {
-                "rt": response.rt,
-                "response": response.response,
-                "slider_start": trial.slider_start
+                rt: response.rt,
+                response: response.response,
+                slider_start: trial.slider_start
             };
 
             display_element.innerHTML = '';

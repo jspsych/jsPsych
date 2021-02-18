@@ -115,9 +115,9 @@ jsPsych.plugins['reconstruction'] = (function() {
 
       // save data
       var trial_data = {
-        "rt": response_time,
-        "final_value": param,
-        "start_value": trial.starting_value
+        rt: response_time,
+        final_value: param,
+        start_value: trial.starting_value
       };
 
       display_element.innerHTML = '';

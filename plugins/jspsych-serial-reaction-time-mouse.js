@@ -154,8 +154,7 @@ jsPsych.plugins["serial-reaction-time-mouse"] = (function() {
         rt: response.rt,
 				grid: trial.grid,
 				target: trial.target,
-        response_row: response.row,
-        response_column: response.column,
+        response: [parseInt(response.row,10), parseInt(response.column,10)],
         correct: response.row == trial.target[0] && response.column == trial.target[1]
       };
 

@@ -24,8 +24,7 @@ Name | Type | Value
 -----|------|------
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the maxdiff table first appears on the screen until the subject's response.
 labels | object | An object with two keys, `left` and `right`, containing the labels (strings) corresponding to the left and right response columns. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. 
-left | string | The alternative selected on the left column.
-right | string | The alternative selected on the right column.
+response | object | An object with two keys, `left` and `right`, containing the alternatives selected on the left and right columns. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. 
 
 
 ## Examples

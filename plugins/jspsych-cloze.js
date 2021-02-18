@@ -91,7 +91,7 @@ jsPsych.plugins['cloze'] = (function () {
             if (!trial.check_answers || (trial.check_answers && answers_correct))
             {
                 var trial_data = {
-                    'answers' : answers
+                    response: answers
                 };
 
                 display_element.innerHTML = '';

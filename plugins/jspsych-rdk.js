@@ -523,7 +523,7 @@ jsPsych.plugins["rdk"] = (function() {
 			//Place all the data to be saved from this trial in one data object
 			var trial_data = { 
 				rt: response.rt, //The response time
-				key_press: response.key, //The key that the subject pressed
+				response: response.key, //The key that the subject pressed
 				correct: correctOrNot(), //If the subject response was correct
 				choices: trial.choices, //The set of valid keys
 				correct_choice: trial.correct_choice, //The correct choice
@@ -559,8 +559,7 @@ jsPsych.plugins["rdk"] = (function() {
 				border_thickness: trial.border_thickness,
 				border_color: trial.border_color,
 				canvas_width: canvasWidth,
-				canvas_height: canvasHeight
-				
+				canvas_height: canvasHeight	
 			}
 			
 			//Remove the canvas as the child of the display_element element

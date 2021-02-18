@@ -229,7 +229,7 @@ jsPsych.plugins["video-keyboard-response"] = (function() {
       var trial_data = {
         rt: response.rt,
         stimulus: trial.stimulus,
-        key_press: response.key
+        response: response.key
       };
 
       // clear the display

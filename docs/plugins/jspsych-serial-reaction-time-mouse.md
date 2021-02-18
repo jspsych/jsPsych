@@ -25,9 +25,11 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 | Name   | Type    | Value                                    |
 | ------ | ------- | ---------------------------------------- |
-| grid   | array   | The grid representation. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
-| target | array   | The representation of the target location on the grid. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
+| grid   | array   | The grid representation. Each inner array represents a single row. The entries in the inner arrays represent the columns. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
+| target | array   | The `[row, column]` target location on the grid. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 | rt     | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the second stimulus first appears on the screen until the subject's response. |
+| response | array | The `[row, column]` response location on the grid. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
+| correct | boolean | Whether the response location matches the target location (`true`) or not (`false`)l
 
 ## Examples
 

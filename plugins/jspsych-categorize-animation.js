@@ -240,7 +240,7 @@ jsPsych.plugins["categorize-animation"] = (function() {
         stimulus: trial.stimuli,
         rt: info.rt,
         correct: correct,
-        key_press: info.key
+        response: info.key
       };
 
       jsPsych.pluginAPI.cancelKeyboardResponse(keyboard_listener);

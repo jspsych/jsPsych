@@ -28,7 +28,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 | Name      | Type    | Value                                    |
 | --------- | ------- | ---------------------------------------- |
-| key_press | string  | Indicates which key the subject pressed. If no key was pressed before the trial ended, then the value will be `null`. |
+| response  | string  | Indicates which key the subject pressed. If no key was pressed before the trial ended, then the value will be `null`. |
 | rt        | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first began playing until the subject made a key response. If no key was pressed before the trial ended, then the value will be `null`. |
 | stimulus  | string  | Path to the audio file that played during the trial. |
 

@@ -90,9 +90,9 @@
         },
         on_finish: function(data){
           if(data.word_validity == 'valid'){
-            var correct = data.key_press == 'y';
+            var correct = data.response == 'y';
           } else {
-            var correct = data.key_press == 'n';
+            var correct = data.response == 'n';
           }
           data.correct = correct;
         }

@@ -28,7 +28,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 | Name      | Type    | Value                                    |
 | --------- | ------- | ---------------------------------------- |
 | stimulus  | array   | Array of stimuli displayed in the trial. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
-| key_press | string  | Indicates which key the subject pressed. |
+| response  | string  | Indicates which key the subject pressed. |
 | rt        | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response. |
 | correct   | boolean | `true` if the subject got the correct answer, `false` otherwise. |
 

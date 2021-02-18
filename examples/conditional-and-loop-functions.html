@@ -17,7 +17,7 @@
   var loop_node = {
     timeline: [trial],
     loop_function: function(data){
-      if(data.values()[0].key_press == 'r'){
+      if(data.values()[0].response == 'r'){
         return true;
       } else {
         return false;
@@ -40,7 +40,7 @@
     timeline: [if_trial],
     conditional_function: function(){
       var data = jsPsych.data.get().last(1).values()[0];
-      if(data.key_press == 's'){
+      if(data.response == 's'){
         return false;
       } else {
         return true;

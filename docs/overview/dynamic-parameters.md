@@ -22,7 +22,7 @@ var trial = {
   },
   on_finish: function(data){
     // Score the response as correct or incorrect.
-    if(data.key_press == "f"){
+    if(data.response == "f"){
       data.correct = true;
     } else {
       data.correct = false; 
@@ -128,7 +128,7 @@ var trial = {
       prompt: function() {  
         // this question prompt is dynamic - the text that is shown 
         // will change based on the participant's earlier response
-        var favorite_city = jsPsych.data.getLastTrialData().values()[0].responses.fav_city;
+        var favorite_city = jsPsych.data.getLastTrialData().values()[0].response.fav_city;
         var text = "Earlier you said your favorite city is "+favorite_city+". What do you like most about "+favorite_city+"?"
         return text;
       }, 

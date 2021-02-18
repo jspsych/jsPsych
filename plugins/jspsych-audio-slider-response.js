@@ -219,10 +219,10 @@ jsPsych.plugins['audio-slider-response'] = (function() {
 
       // save data
       var trialdata = {
-        "rt": response.rt,
-        "stimulus": trial.stimulus,
-        "slider_start": trial.slider_start,
-        "response": response.response
+        rt: response.rt,
+        stimulus: trial.stimulus,
+        slider_start: trial.slider_start,
+        response: response.response
       };
 
       display_element.innerHTML = '';

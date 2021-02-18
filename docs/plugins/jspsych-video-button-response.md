@@ -35,7 +35,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 Name | Type | Value
 -----|------|------
-button_pressed | numeric | Indicates which button the subject pressed. The first button in the `choices` array is 0, the second is 1, and so on. 
+response | numeric | Indicates which button the subject pressed. The first button in the `choices` array is 0, the second is 1, and so on. 
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response. 
 stimulus | array | The `stimulus` array. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. 
 

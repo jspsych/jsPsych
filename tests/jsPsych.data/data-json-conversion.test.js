@@ -30,7 +30,7 @@ describe('data conversion to json', function(){
     utils.clickTarget(document.querySelector('#jspsych-survey-text-next'));
 
     var json_data = jsPsych.data.get().ignore(['rt','internal_node_id', 'time_elapsed', 'trial_type']).json();
-    expect(json_data).toBe(JSON.stringify([{responses: {Q0: "Response 1", Q1: "Response 2"}, trial_index: 0}]));
+    expect(json_data).toBe(JSON.stringify([{response: {Q0: "Response 1", Q1: "Response 2"}, trial_index: 0}]));
   })
 
   test('same-different-html stimulus array is correctly converted', function(){
@@ -55,8 +55,8 @@ describe('data conversion to json', function(){
     utils.pressKey('q');
     expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 
-    var json_data = jsPsych.data.get().ignore(['rt','internal_node_id','time_elapsed','trial_type','rt_stim1','key_press_stim1']).json(); 
-    expect(json_data).toBe(JSON.stringify([{answer: 'different', correct: false, stimulus: ['<p>Climbing</p>','<p>Walking</p>'], key_press: 'q',  trial_index: 0}]));
+    var json_data = jsPsych.data.get().ignore(['rt','internal_node_id','time_elapsed','trial_type','rt_stim1','response_stim1']).json(); 
+    expect(json_data).toBe(JSON.stringify([{answer: 'different', correct: false, stimulus: ['<p>Climbing</p>','<p>Walking</p>'], response: 'q',  trial_index: 0}]));
   })
 
   test('survey-multi-select response array is correctly converted', function(){
@@ -82,7 +82,7 @@ describe('data conversion to json', function(){
     var json_data = jsPsych.data.get().ignore(['rt','internal_node_id','time_elapsed','trial_type','question_order']).json(); 
     var data_js = [
       {
-        responses: {
+        response: {
           q: ["fuzz","bizz"], 
         },
         trial_index: 0

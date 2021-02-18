@@ -32,8 +32,8 @@ describe('maxdiff plugin', function(){
 		utils.clickTarget(document.querySelector('#jspsych-maxdiff-next'));
 
 		var maxdiff_data = jsPsych.data.get().values()[0];
-		expect(maxdiff_data.left).toBe("a");
-		expect(maxdiff_data.right).toBe("b");
+		expect(maxdiff_data.response.left).toBe("a");
+		expect(maxdiff_data.response.right).toBe("b");
 	});
 
 });

@@ -25,7 +25,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 Name | Type | Value
 -----|------|------
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.
-button_pressed | numeric | Indicates which button the subject pressed. The first button in the `choices` array is 0, the second is 1, and so on.
+response | numeric | Indicates which button the subject pressed. The first button in the `choices` array is 0, the second is 1, and so on.
 stimulus | string | The HTML content that was displayed on the screen.
 
 ## Examples

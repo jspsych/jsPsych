@@ -52,9 +52,9 @@ describe('rdk plugin', function(){
 		utils.pressKey('a');
 
 		var data = jsPsych.data.get().values();
-		expect(data[0].key_press).toBe('l');
+		expect(data[0].response).toBe('l');
 		expect(data[0].correct).toBe(true);
-		expect(data[1].key_press).toBe('a');
+		expect(data[1].response).toBe('a');
 		expect(data[1].correct).toBe(false);
 	});
 

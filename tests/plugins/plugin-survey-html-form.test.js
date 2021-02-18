@@ -37,7 +37,7 @@ describe('survey-html-form plugin', function(){
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 
 		// Check whether data is parsed properly
-		var data = jsPsych.data.get().values()[0].responses;
+		var data = jsPsych.data.get().values()[0].response;
 		expect(data.second).toBe(TEST_VALUE)
 	});
 
