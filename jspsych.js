@@ -2371,16 +2371,26 @@ jsPsych.pluginAPI = (function() {
   }
 
   module.compareKeys = function(key1, key2){
-    console.warn('Warning: The jsPsych.pluginAPI.compareKeys function will be removed in future jsPsych releases. '+
-    'We recommend removing this function and using strings to identify/compare keys.');
-    // convert to numeric values no matter what
-    if(typeof key1 == 'string') {
-      key1 = module.convertKeyCharacterToKeyCode(key1);
+    if (Number.isFinite(key1) || Number.isFinite(key2)) {
+      // if either value is a numeric keyCode, then convert both to numeric keyCode values and compare (maintained for backwards compatibility)
+      if(typeof key1 == 'string') {
+        key1 = module.convertKeyCharacterToKeyCode(key1);
+      }
+      if(typeof key2 == 'string') {
+        key2 = module.convertKeyCharacterToKeyCode(key2);
+      }
+      return key1 == key2;
+    } else if (typeof key1 === 'string' && typeof key2 === 'string') {
+      // if both values are strings, then check whether or not letter case should be converted before comparing (case_sensitive_responses in jsPsych.init)
+      if (jsPsych.initSettings().case_sensitive_responses) {
+        return key1 == key2;
+      } else {
+        return key1.toLowerCase() == key2.toLowerCase();
+      }
+    } else {
+      console.error('Error in jsPsych.pluginAPI.compareKeys: arguments must be either numeric key codes or key strings.');
+      return undefined;
     }
-    if(typeof key2 == 'string') {
-      key2 = module.convertKeyCharacterToKeyCode(key2);
-    }
-    return key1 == key2;
   }
 
   var keylookup = {
