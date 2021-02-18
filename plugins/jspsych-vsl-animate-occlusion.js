@@ -185,7 +185,7 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
 
       var trial_data = {
         stimuli: trial.stimuli,
-        responses: responses
+        response: responses
       };
 
       jsPsych.finishTrial(trial_data);
