@@ -25,7 +25,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         description: 'The audio to be played.'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Choices',
         array: true,
         default: jsPsych.ALL_KEYS,
@@ -124,9 +124,9 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         response.rt = Math.round(response.rt * 1000);
       }
       var trial_data = {
-        "rt": response.rt,
-        "stimulus": trial.stimulus,
-        "key_press": response.key
+        rt: response.rt,
+        stimulus: trial.stimulus,
+        response: response.key
       };
 
       // clear the display

@@ -3,10 +3,18 @@
 <head>
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-preload.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css">
 </head>
 <body></body>
 <script>
+
+  // all images are used in standard trials that can be automatically preloaded (as well as being used in trials 
+  // that use timeline variables), so we can preload all image files with the auto_preload option
+  timeline.push({
+    type: 'preload',
+    auto_preload: true
+  });
 
   // If render_on_canvas is false, the images will be shown via an <img> rather than <canvas> element.
   // In some browsers, the first time the images are shown, the <img> method (render_on_canvas: false) will produce a brief 
@@ -38,7 +46,7 @@
     type: 'image-keyboard-response',
     stimulus: 'img/happy_face_1.jpg',
     choices: ['y','n'],
-    prompt: '<p>Have you seen this face before? Y or N.</p>'
+    prompt: '<p>Have you seen this face before? Press y or n.</p>'
   }
 
   var trial_2 = {
@@ -46,7 +54,7 @@
     stimulus: 'img/happy_face_2.jpg',
     choices: ['y','n'],
     trial_duration: 5000,
-    prompt: '<p>Have you seen this face before? Y or N. (5s time limit).</p>'
+    prompt: '<p>Have you seen this face before? Press y or n. (5s time limit).</p>'
   }
 
   var trial_3 = {
@@ -63,12 +71,11 @@
     choices: ['y','n'],
     stimulus_width: 400,
     maintain_aspect_ratio: false,
-    prompt: '<p>Have you seen this face before? Y or N.</p><p>(Stimulus_width set to a smaller value and maintain_aspect_ratio set to false.)</p>'
+    prompt: '<p>Have you seen this face before? Press y or n.</p><p>(Stimulus_width set to a smaller value and maintain_aspect_ratio set to false.)</p>'
   }
 
   jsPsych.init({
     timeline: [trial_proc, trial_1, trial_2, trial_3, trial_4],
-    preload_images: ['img/happy_face_1.jpg','img/happy_face_2.jpg','img/happy_face_3.jpg','img/happy_face_4.jpg'],
     on_finish: function() {
       jsPsych.data.displayData();
     }

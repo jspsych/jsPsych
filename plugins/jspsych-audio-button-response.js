@@ -140,16 +140,12 @@ jsPsych.plugins["audio-button-response"] = (function() {
 			html += trial.prompt;
 		}
 
-		display_element.innerHTML = html;
-
-		for (var i = 0; i < trial.choices.length; i++) {
-      display_element.querySelector('#jspsych-audio-button-response-button-' + i).addEventListener('click', function(e){
-        var choice = e.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
-        after_response(choice);
-      });
-      if (!trial.response_allowed_while_playing) {
-        display_element.querySelector('#jspsych-audio-button-response-button-' + i).querySelector('button').disabled = true;
-      }
+    display_element.innerHTML = html;
+    
+    if(trial.response_allowed_while_playing){
+      enable_buttons();
+    } else {
+      disable_buttons();
     }
 
     // store response
@@ -172,11 +168,7 @@ jsPsych.plugins["audio-button-response"] = (function() {
       response.rt = rt;
 
       // disable all the buttons after a response
-      var btns = document.querySelectorAll('.jspsych-audio-button-response-button button');
-      for(var i=0; i<btns.length; i++){
-        //btns[i].removeEventListener('click');
-        btns[i].setAttribute('disabled', 'disabled');
-      }
+      disable_buttons();
 
       if (trial.response_ends_trial) {
         end_trial();
@@ -203,9 +195,9 @@ jsPsych.plugins["audio-button-response"] = (function() {
 
       // gather the data to store for the trial
       var trial_data = {
-        "rt": response.rt,
-        "stimulus": trial.stimulus,
-        "button_pressed": response.button
+        rt: response.rt,
+        stimulus: trial.stimulus,
+        response: response.button
       };
 
       // clear the display
@@ -215,11 +207,30 @@ jsPsych.plugins["audio-button-response"] = (function() {
       jsPsych.finishTrial(trial_data);
     }
 
-    // function to enable buttons after audio ends
-    function enable_buttons() {
-      var btns = document.querySelectorAll('.jspsych-audio-button-response-button button');
+    function button_response(e){
+      var choice = e.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
+      after_response(choice);
+    }
+
+    function disable_buttons() {
+      var btns = document.querySelectorAll('.jspsych-audio-button-response-button');
       for (var i=0; i<btns.length; i++) {
-        btns[i].disabled = false;
+        var btn_el = btns[i].querySelector('button');
+        if(btn_el){
+          btn_el.disabled = true;
+        }
+        btns[i].removeEventListener('click', button_response);
+      }
+    }
+
+    function enable_buttons() {
+      var btns = document.querySelectorAll('.jspsych-audio-button-response-button');
+      for (var i=0; i<btns.length; i++) {
+        var btn_el = btns[i].querySelector('button');
+        if(btn_el){
+          btn_el.disabled = false;
+        }
+        btns[i].addEventListener('click', button_response);
       }
     }
 

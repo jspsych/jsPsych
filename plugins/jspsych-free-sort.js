@@ -362,10 +362,10 @@ jsPsych.plugins['free-sort'] = (function() {
         }
 
         const trial_data = {
-          "init_locations": JSON.stringify(init_locations),
-          "moves": JSON.stringify(moves),
-          "final_locations": JSON.stringify(final_locations),
-          "rt": rt
+          init_locations: init_locations,
+          moves: moves,
+          final_locations: final_locations,
+          rt: rt
         };
         
         // advance to next part
