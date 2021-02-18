@@ -196,7 +196,7 @@ Below is example data from the image-keyboard-response trial taken from the expe
 {
   "rt": null,
   "stimulus": "img/blue.png",
-  "key_press": null,
+  "response": null,
   "trial_type": "image-keyboard-response",
   "trial_index": 4,
   "time_elapsed": 30701,

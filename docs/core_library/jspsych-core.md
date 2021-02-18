@@ -205,7 +205,7 @@ var block = {
   choices: ['y', 'n'], 
   prompt: '<p>Press "y" to Continue. Press "n" to end this node of the experiment.</p>',
   on_finish: function(data) {
-    if (data.key_press == 'n') {
+    if (data.response == 'n') {
       jsPsych.endCurrentTimeline();
     }
   },
@@ -258,7 +258,7 @@ var trial = {
   choices: ['y', 'n']
   prompt: '<p>Press "y" to Continue. Press "n" to end the experiment</p>',
   on_finish: function(data){
-    if(data.key_press == "n"){
+    if(data.response == "n"){
       jsPsych.endExperiment('The experiment was ended by pressing "n".');
     }
   }
@@ -466,7 +466,7 @@ var trial = {
   stimulus: 'Press p to take a 30 second break. Otherwise, press c to continue immediately.',
   choices: ['p','c'],
   on_finish: function(data){
-    if(data.key_press == "p") { 
+    if(data.response == "p") { 
       jsPsych.pauseExperiment();
       setTimeout(jsPsych.resumeExperiment, 30000);
     }
@@ -535,7 +535,7 @@ var trial = {
   stimulus: 'Press p to take a 30 second break. Otherwise, press c to continue immediately.',
   choices: ['p','c'],
   on_finish: function(data){
-    if(data.key_press == "p") { 
+    if(data.response == "p") { 
       jsPsych.pauseExperiment();
       setTimeout(jsPsych.resumeExperiment, 30000);
     }
