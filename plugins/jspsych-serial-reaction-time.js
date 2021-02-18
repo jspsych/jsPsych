@@ -171,11 +171,11 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 
       // gather the data to store for the trial
       var trial_data = {
-        "rt": response.rt,
-        "key_press": response.key,
-				"correct": response.correct,
-				"grid": JSON.stringify(trial.grid),
-				"target": JSON.stringify(trial.target)
+        rt: response.rt,
+        response: response.key,
+				correct: response.correct,
+				grid: trial.grid,
+				target: trial.target
       };
 
       // clear the display

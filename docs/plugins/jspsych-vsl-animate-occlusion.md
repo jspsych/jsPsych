@@ -29,8 +29,8 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 | Name      | Type        | Value                                    |
 | --------- | ----------- | ---------------------------------------- |
-| stimulus  | JSON string | A JSON encoded array where each element of the array is a stimulus from the sequence, in the order that they were shown. |
-| responses | JSON string | A JSON encoded array containing all response information. The encoded object is an array containing one element for each valid response. Each response item has three properties: `key` the key that was pressed, `stimulus` the index of the stimulus that was displayed when the response was made, and `rt` the response time measured since the start of the sequence. |
+| stimulus  | array | Array where each element is a stimulus from the sequence, in the order that they were shown. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
+| response | array | Array containing all response information. Each element in the array is an object representing each valid response. Each response item has three properties: `key` the key that was pressed, `stimulus` the index of the stimulus that was displayed when the response was made, and `rt` the response time measured since the start of the sequence. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 
 ## Examples
 

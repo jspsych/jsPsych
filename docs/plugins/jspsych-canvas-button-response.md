@@ -26,7 +26,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 Name | Type | Value
 -----|------|------
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.
-button_pressed | numeric | Indicates which button the subject pressed. The first button in the `choices` array is 0, the second is 1, and so on.
+response | numeric | Indicates which button the subject pressed. The first button in the `choices` array is 0, the second is 1, and so on.
 
 Note: the canvas stimulus is *not* included in the trial data because it is a function. Any stimulus information that should be saved in the trial data can be added via the `data` parameter.
 

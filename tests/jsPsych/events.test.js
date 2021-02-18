@@ -16,7 +16,7 @@ describe('on_finish (trial)', function(){
         type: 'html-keyboard-response',
         stimulus: 'hello',
         on_finish: function(data){
-          key_data = data.key_press;
+          key_data = data.response;
         }
       }
 
@@ -42,14 +42,14 @@ describe('on_finish (trial)', function(){
         type: 'html-keyboard-response',
         stimulus: 'hello',
         on_finish: function(data){
-          data.key_press = 1;
+          data.response = 1;
         }
       }
 
       jsPsych.init({
         timeline: [trial],
         on_finish: function() {
-          promise_data.final_key_press = jsPsych.data.get().values()[0].key_press;
+          promise_data.final_key_press = jsPsych.data.get().values()[0].response;
           resolve(promise_data);
         }
       });
@@ -136,7 +136,7 @@ describe('on_trial_finish (experiment level)', function(){
       jsPsych.init({
         timeline: [trial],
         on_trial_finish: function(data){
-          promise_data.key = data.key_press;
+          promise_data.key = data.response;
         },
         on_finish: function(){
           resolve(promise_data);
@@ -197,7 +197,7 @@ describe('on_data_update', function(){
       jsPsych.init({
         timeline: [trial],
         on_data_update: function(data){
-          promise_data.key = data.key_press;
+          promise_data.key = data.response;
         },
         on_finish: function(){
           resolve(promise_data);
@@ -244,8 +244,8 @@ describe('on_data_update', function(){
 
       //resolve();
     })).then(function(pd) {
-      expect(pd[0].key_press).not.toBeUndefined();
-      expect(pd[0].key_press).toBeNull();
+      expect(pd[0].response).not.toBeUndefined();
+      expect(pd[0].response).toBeNull();
       expect(pd[1].response).toBeNull();
       expect(pd[1].rt).toBeNull();
     });

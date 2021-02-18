@@ -1,10 +1,3 @@
-/**
- * jspsych.js
- * Josh de Leeuw
- *
- * documentation: docs.jspsych.org
- *
- **/
 window.jsPsych = (function() {
 
   var core = {};
@@ -106,7 +99,8 @@ window.jsPsych = (function() {
         'minimum_valid_rt': 0,
         'experiment_width': null,
         'override_safe_mode': false,
-        'case_sensitive_responses': false
+        'case_sensitive_responses': false,
+        'extensions': []
       };
 
       // detect whether page is running in browser as a local file, and if so, disable web audio and video preloading to prevent CORS issues
@@ -195,12 +189,39 @@ window.jsPsych = (function() {
         function(){
           // success! user can continue...
           // start experiment
-          startExperiment();
+          loadExtensions();
         },
         function(){
           // fail. incompatible user.
         }
       );
+
+      function loadExtensions() {
+        // run the .initialize method of any extensions that are in use
+        // these should return a Promise to indicate when loading is complete
+        if (opts.extensions.length == 0) {
+          startExperiment();
+        } else {
+          var loaded_extensions = 0;
+          for (var i = 0; i < opts.extensions.length; i++) {
+            var ext_params = opts.extensions[i].params;
+            if (!ext_params) {
+              ext_params = {}
+            }
+            jsPsych.extensions[opts.extensions[i].type].initialize(ext_params)
+              .then(() => {
+                loaded_extensions++;
+                if (loaded_extensions == opts.extensions.length) {
+                  startExperiment();
+                }
+              })
+              .catch((error_message) => {
+                console.error(error_message);
+              })
+          }
+        }
+      }
+
     };
     
     // execute init() when the document is ready
@@ -262,6 +283,13 @@ window.jsPsych = (function() {
     // of the DataCollection, for easy access and editing.
     var trial_data_values = trial_data.values()[0];
 
+    // handle extension callbacks
+    if(Array.isArray(current_trial.extensions)){
+      for(var i=0; i<current_trial.extensions.length; i++){
+        var ext_data_values = jsPsych.extensions[current_trial.extensions[i].type].on_finish(current_trial.extensions[i].params);
+        Object.assign(trial_data_values, ext_data_values);
+      }
+    }
     // about to execute lots of callbacks, so switch context.
     jsPsych.internal.call_immediate = true;
 
@@ -942,6 +970,13 @@ window.jsPsych = (function() {
       trial.on_start(trial);
     }
 
+    // call any on_start functions for extensions
+    if(Array.isArray(trial.extensions)){
+      for(var i=0; i<trial.extensions.length; i++){
+        jsPsych.extensions[trial.extensions[i].type].on_start(current_trial.extensions[i].params);
+      }
+    }
+
     // apply the focus to the element containing the experiment.
     DOM_container.focus();
 
@@ -964,6 +999,13 @@ window.jsPsych = (function() {
     // call trial specific loaded callback if it exists
     if(typeof trial.on_load == 'function'){
       trial.on_load();
+    }
+
+    // call any on_load functions for extensions
+    if(Array.isArray(trial.extensions)){
+      for(var i=0; i<trial.extensions.length; i++){
+        jsPsych.extensions[trial.extensions[i].type].on_load(current_trial.extensions[i].params);
+      }
     }
     
     // done with callbacks
@@ -1242,6 +1284,10 @@ jsPsych.plugins = (function() {
   }
 
   return module;
+})();
+
+jsPsych.extensions = (function(){
+  return {};
 })();
 
 jsPsych.data = (function() {
@@ -1770,6 +1816,9 @@ jsPsych.data = (function() {
       var line = '';
       for (var j = 0; j < columns.length; j++) {
         var value = (typeof array[i][columns[j]] === 'undefined') ? '' : array[i][columns[j]];
+        if(typeof value == 'object') {
+          value = JSON.stringify(value);
+        }
         var valueString = value + "";
         line += '"' + valueString.replace(/"/g, '""') + '",';
       }

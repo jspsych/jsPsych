@@ -168,8 +168,8 @@ jsPsych.plugins["canvas-button-response"] = (function () {
 
             // gather the data to store for the trial
             var trial_data = {
-                "rt": response.rt,
-                "button_pressed": response.button
+                rt: response.rt,
+                response: response.button
             };
 
             // clear the display

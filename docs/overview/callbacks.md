@@ -46,7 +46,7 @@ var trial = {
   type: 'image-keyboard-response',
   stimulus: 'imgA.png',
   on_finish: function(data) {
-    if(data.key_press == 'j'){
+    if(data.response == 'j'){
       data.correct = true;
     } else {
       data.correct = false;

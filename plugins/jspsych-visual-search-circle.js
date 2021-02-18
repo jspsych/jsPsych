@@ -234,8 +234,8 @@ jsPsych.plugins["visual-search-circle"] = (function() {
       var trial_data = {
         correct: correct,
         rt: rt,
-        key_press: key_press,
-        locations: JSON.stringify(display_locs),
+        response: key_press,
+        locations: display_locs,
         target_present: trial.target_present,
         set_size: trial.set_size
       };

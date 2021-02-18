@@ -205,7 +205,7 @@ var block = {
   choices: ['y', 'n'], 
   prompt: '<p>Press "y" to Continue. Press "n" to end this node of the experiment.</p>',
   on_finish: function(data) {
-    if (data.key_press == 'n') {
+    if (data.response == 'n') {
       jsPsych.endCurrentTimeline();
     }
   },
@@ -258,7 +258,7 @@ var trial = {
   choices: ['y', 'n']
   prompt: '<p>Press "y" to Continue. Press "n" to end the experiment</p>',
   on_finish: function(data){
-    if(data.key_press == "n"){
+    if(data.response == "n"){
       jsPsych.endExperiment('The experiment was ended by pressing "n".');
     }
   }
@@ -390,6 +390,7 @@ The settings object can contain several parameters. The only *required* paramete
 | minimum_valid_rt           | numeric  | The minimum valid response time for key presses during the experiment. Any key press response time that is less than this value will be treated as invalid and ignored. Note that this parameter only applies to _keyboard responses_, and not to other response types such as buttons and sliders. The default value is 0. |
 | override_safe_mode         | boolean  | Running a jsPsych experiment directly in a web browser (e.g., by double clicking on a local HTML file) will load the page using the `file://` protocol. Some features of jsPsych don't work with this protocol. By default, when jsPsych detects that it's running on a page loaded via the `file://` protocol, it runs in _safe mode_, which automatically disables features that don't work in this context. Specifically, the use of Web Audio is disabled (audio will be played using HTML5 audio instead, even if `use_webaudio` is `true`) and video preloading is disabled. The `override_safe_mode` parameter defaults to `false`, but you can set it to `true` to force these features to operate under the `file://` protocol. In order for this to work, you will need to disable web security (CORS) features in your browser - this is safe to do if you know what you are doing. Note that this parameter has no effect when you are running the experiment on a web server, because the page will be loaded via the `http://` or `https://` protocol. |
 | case_sensitive_responses   | boolean  | If true, then jsPsych will make a distinction between uppercase and lowercase keys when evaluating keyboard responses, e.g. "A" (uppercase) will not be recognized as a valid response if the trial only accepts "a" (lowercase). If false, then jsPsych will not make a distinction between uppercase and lowercase keyboard responses, e.g. both "a" and "A" responses will be valid when the trial's key choice parameter is "a". Setting this parameter to false is useful if you want key responses to be treated the same way when CapsLock is turned on or the Shift key is held down. The default value is false. |
+extensions | array | Array containing information about one or more jsPsych extensions that are used during the experiment. Each extension should be specified as an object with `type` (required), which is the name of the extension, and `params` (optional), which is an object containing any parameter-value pairs to be passed to the extension's `initialize` function. Default value is an empty array. |
 
 Possible values for the exclusions parameter above.
 
@@ -465,7 +466,7 @@ var trial = {
   stimulus: 'Press p to take a 30 second break. Otherwise, press c to continue immediately.',
   choices: ['p','c'],
   on_finish: function(data){
-    if(data.key_press == "p") { 
+    if(data.response == "p") { 
       jsPsych.pauseExperiment();
       setTimeout(jsPsych.resumeExperiment, 30000);
     }
@@ -534,7 +535,7 @@ var trial = {
   stimulus: 'Press p to take a 30 second break. Otherwise, press c to continue immediately.',
   choices: ['p','c'],
   on_finish: function(data){
-    if(data.key_press == "p") { 
+    if(data.response == "p") { 
       jsPsych.pauseExperiment();
       setTimeout(jsPsych.resumeExperiment, 30000);
     }

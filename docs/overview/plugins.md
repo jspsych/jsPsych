@@ -132,7 +132,7 @@ var trial = {
     correct_response: 'f'
   },
   on_finish: function(data){
-    if(data.key_press == data.correct_response){
+    if(data.response == data.correct_response){
       data.correct = true;
     } else {
       data.correct = false;

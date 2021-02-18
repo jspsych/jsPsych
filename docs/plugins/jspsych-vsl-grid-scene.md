@@ -20,7 +20,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 | Name     | Type        | Value                                    |
 | -------- | ----------- | ---------------------------------------- |
-| stimulus | JSON string | JSON encoded array of the stimulus shown on the trial. |
+| stimulus | array       | Two dimensional array representing the stimulus shown on the trial. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 
 ### Stimulus Creation Method
 

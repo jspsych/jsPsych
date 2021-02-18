@@ -21,8 +21,8 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 Name | Type | Value
 -----|------|------
-responses | string | A JS object encoded in JSON format containing the response for each input. The encoded object will have a separate variable for the response to each input, with each variable being named after its corresponding input element. Each response is a string containing whatever the subject answered for this particular input.
-rt | numeric | The response time in milliseconds for the subject to make a response.
+response | object | An object containing the response for each input. The object will have a separate key (variable) for the response to each input, with each variable being named after its corresponding input element. Each response is a string containing whatever the subject answered for this particular input. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
+rt | numeric | The response time in milliseconds for the subject to make a response. |
 
 ## Examples
 

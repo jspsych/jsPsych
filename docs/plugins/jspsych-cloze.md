@@ -17,9 +17,9 @@ In addition to the [parameters available in all plugins](/overview/plugins#param
 
 In addition to the [default data collected by all plugins](/overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
-| Name    | Type             | Value                       |
-| ------- | ---------------- | --------------------------- |
-| answers | array of strings | Answers the partcipant gave |
+| Name     | Type             | Value                       |
+| -------- | ---------------- | --------------------------- |
+| response | array of strings | Answers the partcipant gave |
 
 ## Examples
 

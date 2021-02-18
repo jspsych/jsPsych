@@ -153,9 +153,9 @@ jsPsych.plugins["resize"] = (function() {
       // finishes trial
 
       var trial_data = {
-        'final_height_px': final_height_px,
-        'final_width_px': final_width_px,
-        'scale_factor': scale_factor
+        final_height_px: final_height_px,
+        final_width_px: final_width_px,
+        scale_factor: scale_factor
       }
 
       jsPsych.finishTrial(trial_data);

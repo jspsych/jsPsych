@@ -136,10 +136,10 @@ jsPsych.plugins['categorize-html'] = (function() {
 
       // save data
       trial_data = {
-        "rt": info.rt,
-        "correct": correct,
-        "stimulus": trial.stimulus,
-        "key_press": info.key
+        rt: info.rt,
+        correct: correct,
+        stimulus: trial.stimulus,
+        response: info.key
       };
 
       display_element.innerHTML = '';
