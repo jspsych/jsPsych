@@ -242,13 +242,37 @@ describe('#cancelAllKeyboardResponses', function(){
 });
 
 describe('#compareKeys', function(){
-  test('should compare keys regardless of type', function(){
+  test('should compare keys regardless of type (old key-keyCode functionality)', function(){
     expect(jsPsych.pluginAPI.compareKeys('q', 81)).toBe(true);
     expect(jsPsych.pluginAPI.compareKeys(81, 81)).toBe(true);
     expect(jsPsych.pluginAPI.compareKeys('q', 'Q')).toBe(true);
     expect(jsPsych.pluginAPI.compareKeys(80, 81)).toBe(false);
     expect(jsPsych.pluginAPI.compareKeys('q','1')).toBe(false);
     expect(jsPsych.pluginAPI.compareKeys('q',80)).toBe(false);
+  });
+  test('should be case sensitive when case_sensitive_responses is true', function(){
+    var t = {
+      type: 'html-keyboard-response',
+      stimulus: 'foo'
+    };
+    jsPsych.init({
+      timeline: [t],
+      case_sensitive_responses: true
+    })
+    expect(jsPsych.pluginAPI.compareKeys('q', 'Q')).toBe(false);
+    expect(jsPsych.pluginAPI.compareKeys('q', 'q')).toBe(true);
+  });
+  test('should not be case sensitive when case_sensitive_responses is false', function(){
+    var t = {
+      type: 'html-keyboard-response',
+      stimulus: 'foo'
+    };
+    jsPsych.init({
+      timeline: [t],
+      case_sensitive_responses: false
+    })
+    expect(jsPsych.pluginAPI.compareKeys('q', 'Q')).toBe(true);
+    expect(jsPsych.pluginAPI.compareKeys('q', 'q')).toBe(true);
   });
 });
 
