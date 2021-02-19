@@ -130,7 +130,14 @@ jsPsych.plugins['free-sort'] = (function() {
         default: false,
         description: 'If false, the images will be positioned to the left and right of the sort area when the trial loads. '+
         'If true, the images will be positioned at random locations inside the sort area when the trial loads.'
-      }
+      },
+      column_spread_factor: {
+        type: jsPsych.plugins.parameterType.FLOAT,
+        pretty_name: 'column spread factor',
+        default: 1,
+        description: 'When the images appear outside the sort area, this determines the x-axis spread of the image columns. '+
+        'Default value is 1. Values less than 1 will compress the image columns along the x-axis, and values greater than 1 will spread them farther apart.'
+      },
     }
   }
 
@@ -177,7 +184,7 @@ jsPsych.plugins['free-sort'] = (function() {
     }
     // add button
     html += '<div><button id="jspsych-free-sort-done-btn" class="jspsych-btn" '+ 
-      'style="margin-top: 5px; visibility: hidden;">' + 
+      'style="margin-top: 5px; margin-bottom: 15px; visibility: hidden;">' + 
       trial.button_label+'</button></div>';
 
     display_element.innerHTML = html;
@@ -197,11 +204,11 @@ jsPsych.plugins['free-sort'] = (function() {
       var l_coords = [];
       for (const x of make_arr(0, trial.sort_area_width - trial.stim_width, num_rows) ) {
         for (const y of make_arr(0, trial.sort_area_height - trial.stim_height, num_rows) ) {
-          if ( x > ( (trial.sort_area_width - trial.stim_width)  * .5 ) ) {
+          if ( x > ( (trial.sort_area_width - trial.stim_width)  * (.5) ) ) {
             //r_coords.push({ x:x, y:y } )
-            r_coords.push({ x:x + (trial.sort_area_width)  * .5 , y:y });
+            r_coords.push({ x:x + (trial.sort_area_width)  * (.5*trial.column_spread_factor) , y:y });
           } else {
-            l_coords.push({ x:x - (trial.sort_area_width)  * .5 , y:y });
+            l_coords.push({ x:x - (trial.sort_area_width)  * (.5*trial.column_spread_factor) , y:y });
             //l_coords.push({ x:x, y:y } )
           }
         }
