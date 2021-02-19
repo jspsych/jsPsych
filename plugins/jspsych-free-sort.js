@@ -278,15 +278,10 @@ jsPsych.plugins['free-sort'] = (function() {
       display_element.querySelector("#jspsych-free-sort-counter").innerHTML = trial.counter_text_finished;
     } 
 
-    let start_event_name
-    let move_event_name
-    let end_event_name
-
-    if (typeof document.ontouchend === 'undefined'){ // for PC
-      start_event_name = 'mousedown'
-      move_event_name = 'mousemove'
-      end_event_name = 'mouseup'
-    } else { // for touch devices
+    let start_event_name = 'mousedown';
+    let move_event_name = 'mousemove';
+    let end_event_name = 'mouseup';
+    if (typeof document.ontouchend !== 'undefined'){ // for touch devices
       start_event_name = 'touchstart'
       move_event_name = 'touchmove'
       end_event_name = 'touchend'
@@ -294,13 +289,9 @@ jsPsych.plugins['free-sort'] = (function() {
 
     for(let i=0; i<draggables.length; i++){
       draggables[i].addEventListener(start_event_name, function(event){
-        let pageX
-        let pageY
-
-        if (typeof document.ontouchend === 'undefined'){ // for PC
-          pageX = event.pageX
-          pageY = event.pageY
-        } else { // for touch devices
+        let pageX = event.pageX; 
+        let pageY = event.pageY;
+        if (typeof document.ontouchend !== 'undefined'){  // for touch devices
           event.preventDefault();
           const touchObject = event.changedTouches[0]
           pageX = touchObject.pageX
@@ -311,13 +302,11 @@ jsPsych.plugins['free-sort'] = (function() {
         let y = pageY - event.currentTarget.offsetTop - window.scrollY;
         let elem = event.currentTarget;
         elem.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
-        let mousemoveevent = function(e){
-          let clientX
-          let clientY
-          if (typeof document.ontouchend === 'undefined'){ // for PC
-            clientX = e.clientX
-            clientY = e.clientY
-          } else { // for touch devices
+
+        let move_event = function(e){
+          let clientX = e.clientX;
+          let clientY = e.clientY;
+          if (typeof document.ontouchend !== 'undefined'){  // for touch devices
             const touchObject = e.changedTouches[0]
             clientX = touchObject.clientX
             clientY = touchObject.clientY
@@ -358,10 +347,10 @@ jsPsych.plugins['free-sort'] = (function() {
             display_element.querySelector("#jspsych-free-sort-counter").innerHTML = get_counter_text(inside.length - inside.filter(Boolean).length);
           }
         }
-        document.addEventListener(move_event_name, mousemoveevent);
+        document.addEventListener(move_event_name, move_event);
 
-        var mouseupevent = function(e){
-          document.removeEventListener(move_event_name, mousemoveevent);
+        var end_event = function(e){
+          document.removeEventListener(move_event_name, move_event);
           elem.style.transform = "scale(1, 1)";
           if (trial.change_border_background_color) {
             if (inside.every(Boolean)) {
@@ -377,9 +366,9 @@ jsPsych.plugins['free-sort'] = (function() {
             "x": elem.offsetLeft,
             "y": elem.offsetTop
           });
-          document.removeEventListener(end_event_name, mouseupevent);
+          document.removeEventListener(end_event_name, end_event);
         }
-        document.addEventListener(end_event_name, mouseupevent);
+        document.addEventListener(end_event_name, end_event);
       });
     }
 
