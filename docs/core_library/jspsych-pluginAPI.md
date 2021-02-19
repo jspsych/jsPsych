@@ -85,7 +85,79 @@ Returns nothing.
 Clears any pending timeouts that were set using jsPsych.pluginAPI.setTimeout()
 
 ---
+## jsPsych.pluginAPI.compareKeys
 
+```
+jsPsych.pluginAPI.compareKeys(key1, key2)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+key1 | string or numeric | The representation of a key, either string or keycode
+key2 | string or numeric | The representation of a key, either string or keycode
+
+### Return value
+
+Returns true if keycodes or strings refer to the same key, regardless of type. Returns false if the keycodes or strings do not match.
+
+### Description
+
+Compares two keys to see if they are the same, ignoring differences in representational type, and using the appropriate case sensitivity based on the experiment's settings. 
+
+If `case_sensitive_responses` is set to `false` in `jsPsych.init` (the default), then the string key comparison will not be case-sensitive, e.g., "a" and "A" will match, and this function will return `true`. If `case_sensitive_responses` is set to `true` in `jsPsych.init`, then the string key comparison will not be case-sensitive, e.g., "a" and "A" will not match, and this function will return `false`. 
+
+We recommend using this function to compare keys in all plugin and experiment code, rather than using something like `if (response == 'j')...`. This is because the response key returned by the `jsPsych.pluginAPI.getKeyboardResponse` function will be converted to lowercase when `case_sensitive_responses` is `false`, and it will match the exact key press representation when `case_sensitive_responses` is `true`. Using this `compareKeys` function will ensure that your key comparisons work appropriately based on the experiment's `case_sensitive_responses` setting, and that you do not need to remember to check key responses against different case versions of the comparison key (e.g. `if (response == 'ArrowLeft' || response == 'arrowleft')...`). 
+
+### Examples
+
+#### Basic examples
+```javascript
+jsPsych.pluginAPI.compareKeys('a', 'A');
+// returns true when case_sensitive_responses is false in jsPsych.init
+
+jsPsych.pluginAPI.compareKeys('a', 'A');
+// returns false when case_sensitive_responses is true in jsPsych.init
+
+// also works with numeric key codes (but note that numeric keyCode values are now deprecated)
+jsPsych.pluginAPI.compareKeys('a', 65);
+// returns true
+
+jsPsych.pluginAPI.compareKeys('space', 31);
+// returns false
+```
+
+#### Comparing a key response and key parameter value in plugins
+```javascript
+// this is the callback_function passed to jsPsych.pluginAPI.getKeyboardResponse
+var after_response = function(info) {
+  // score the response by comparing the key that was pressed against the trial's key_answer parameter
+  var correct = jsPsych.pluginAPI.compareKeys(trial.key_answer, info.key);
+  //...
+}
+```
+
+#### Scoring a key response in experiment code
+```javascript
+var trial = {
+  type: 'html-keyboard-response',
+  stimulus: '<<<<<',
+  choices: ['f','j'],
+  prompt: 'Press f for left. Press j for right.',
+  on_finish: function(data){
+    // score the response by comparing the key that was pressed (data.response) against the 
+    // correct response for this trial ('f'), and store reponse accuracy in the trial data
+    if(jsPsych.pluginAPI.compareKeys(data.response, 'f')){
+      data.correct = true;
+    } else {
+      data.correct = false; 
+    }
+  }
+}
+```
+
+---
 ## jsPsych.pluginAPI.getAudioBuffer
 
 ```
@@ -139,6 +211,7 @@ jsPsych.pluginAPI.getAudioBuffer('my-sound.mp3')
 
 See the `audio-keyboard-response` plugin for an example in a fuller context.
 
+---
 ## jsPsych.pluginAPI.getAutoPreloadList
 
 ```
@@ -215,7 +288,9 @@ Gets a keyboard response from the subject, recording the response time from when
 
 The keyboard event listener will be bound to the `display_element` declared in `jsPsych.init()` (or the `<body>` element if no `display_element` is specified). This allows jsPsych experiments to be embedded in websites with other content without disrupting the functionality of other UI elements.
 
-A valid response triggers the `callback_function` specified in the parameters. A single argument is passed to the callback function. The argument contains an object with the properties `key` and `rt`. `key` contains the numeric key code of the response, and `rt` contains the response time.
+A valid response triggers the `callback_function` specified in the parameters. A single argument is passed to the callback function. The argument contains an object with the properties `key` and `rt`. `key` contains the string representation of the response key, and `rt` contains the response time. 
+
+This function uses the `.key` value of the keyboard event, which is _case sensitive_. When `case_sensitive_responses` is `false` in `jsPsych.init` (the default), this function will convert both the `valid_responses` strings and the response key to lowercase before comparing them, and it will pass the lowercase version of the response key to the `callback_function`. For example, if `valid_responses` is `['a']`, then both 'A' and 'a' will be considered valid key presses, and 'a' will be returned as the response key. When `case_sensitive_responses` is `true` in `jsPsych.init`, this function will not convert the case when comparing the `valid_responses` and response key, and it will not convert the case of the response key that is passed to the `callback_function`. For example, if `valid_responses` is `['a']`, then 'a' will be the only valid key press, and 'A' (i.e. 'a' with CapsLock on or Shift held down) will not be accepted. Also, if `valid_responses` includes multiple letter case options (e.g. `jsPsych.ALL_KEYS`), then you may need to check the response key against both letter cases when scoring etc., e.g. `if (response == 'ArrowLeft' || response =='arrowleft') ...`.
 
 ### Examples
 
@@ -240,7 +315,7 @@ jsPsych.pluginAPI.getKeyboardResponse({
 var after_response = function(info){
 	alert('You pressed key '+info.key+' after '+info.rt+'ms');
 
-	if(info.key == 'q'){ /
+	if(jsPsych.pluginAPI.compareKeys(info.key,'q')){ /
 		jsPsych.pluginAPI.cancelKeyboardResponse(listener);
 	}
 }

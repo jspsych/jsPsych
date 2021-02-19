@@ -132,7 +132,7 @@ var trial = {
     correct_response: 'f'
   },
   on_finish: function(data){
-    if(data.response == data.correct_response){
+    if(jsPsych.pluginAPI.compareKeys(data.response, data.correct_response)){
       data.correct = true;
     } else {
       data.correct = false;

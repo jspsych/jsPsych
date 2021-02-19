@@ -1060,7 +1060,7 @@ var test = {
     correct_response: jsPsych.timelineVariable('correct_response')
   },
   on_finish: function(data){
-    data.correct = data.response == data.correct_response;
+    data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
   }
 }
 ```
@@ -1148,7 +1148,7 @@ The `data.response` value is a string representation of the key the subject pres
             correct_response: jsPsych.timelineVariable('correct_response')
           },
           on_finish: function(data){
-            data.correct = data.response == data.correct_response;
+            data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
           }
         }
 
@@ -1292,7 +1292,7 @@ This code is available in the `/examples` folder in the jsPsych release download
         correct_response: jsPsych.timelineVariable('correct_response')
       },
       on_finish: function(data){
-        data.correct = data.response == data.correct_response;
+        data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
       }
     }
 

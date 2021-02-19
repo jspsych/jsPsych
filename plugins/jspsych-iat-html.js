@@ -194,7 +194,7 @@
       }
 
       if(trial.stim_key_association == "right") {
-        if(response.rt !== null && response.key == rightKeyCode) {
+        if(response.rt !== null && jsPsych.pluginAPI.compareKeys(response.key, rightKeyCode)) {
           response.correct = true;
           if (trial.response_ends_trial) {
             end_trial();
@@ -226,7 +226,7 @@
           }
         }
       } else if(trial.stim_key_association == "left") {
-        if(response.rt !== null && response.key == leftKeyCode) {
+        if(response.rt !== null && jsPsych.pluginAPI.compareKeys(response.key, leftKeyCode)) {
           response.correct = true;
           if (trial.response_ends_trial) {
             end_trial();

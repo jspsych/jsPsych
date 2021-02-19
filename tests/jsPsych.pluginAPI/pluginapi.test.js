@@ -1,7 +1,9 @@
 const root = '../../';
 
-require(root + 'jspsych.js');
-require(root + 'plugins/jspsych-html-keyboard-response.js');
+beforeEach(function(){
+  require(root + 'jspsych.js');
+  require(root + 'plugins/jspsych-html-keyboard-response.js');
+});
 
 describe('#getKeyboardResponse', function(){
   test('should execute a function after successful keypress', function(){
@@ -199,6 +201,22 @@ describe('#getKeyboardResponse', function(){
     expect(callback.mock.calls.length).toBe(0);
     document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: 'A'}));
   });
+  test('should default to case insensitive when used before jsPsych.init is called', function(){
+    expect(typeof jsPsych.initSettings().case_sensitive_responses).toBe("undefined");
+    var callback = jest.fn();
+    jsPsych.pluginAPI.getKeyboardResponse({callback_function: callback, valid_responses: ['a']});
+    jsPsych.pluginAPI.createKeyboardEventListeners(document.body);
+    expect(callback.mock.calls.length).toBe(0);
+    document.body.dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}));
+    document.body.dispatchEvent(new KeyboardEvent('keyup', {key: 'a'}));
+    expect(callback.mock.calls.length).toBe(1);
+    jsPsych.pluginAPI.getKeyboardResponse({callback_function: callback, valid_responses: ['a']});
+    jsPsych.pluginAPI.createKeyboardEventListeners(document.body);
+    document.body.dispatchEvent(new KeyboardEvent('keydown', {key: 'A'}));
+    document.body.dispatchEvent(new KeyboardEvent('keyup', {key: 'A'}));
+    expect(callback.mock.calls.length).toBe(2);
+    jsPsych.pluginAPI.reset(document.body);
+  });
 })
 
 describe('#cancelKeyboardResponse', function(){
@@ -242,13 +260,42 @@ describe('#cancelAllKeyboardResponses', function(){
 });
 
 describe('#compareKeys', function(){
-  test('should compare keys regardless of type', function(){
+  test('should compare keys regardless of type (old key-keyCode functionality)', function(){
     expect(jsPsych.pluginAPI.compareKeys('q', 81)).toBe(true);
     expect(jsPsych.pluginAPI.compareKeys(81, 81)).toBe(true);
     expect(jsPsych.pluginAPI.compareKeys('q', 'Q')).toBe(true);
     expect(jsPsych.pluginAPI.compareKeys(80, 81)).toBe(false);
     expect(jsPsych.pluginAPI.compareKeys('q','1')).toBe(false);
     expect(jsPsych.pluginAPI.compareKeys('q',80)).toBe(false);
+  });
+  test('should be case sensitive when case_sensitive_responses is true', function(){
+    var t = {
+      type: 'html-keyboard-response',
+      stimulus: 'foo'
+    };
+    jsPsych.init({
+      timeline: [t],
+      case_sensitive_responses: true
+    })
+    expect(jsPsych.pluginAPI.compareKeys('q', 'Q')).toBe(false);
+    expect(jsPsych.pluginAPI.compareKeys('q', 'q')).toBe(true);
+  });
+  test('should not be case sensitive when case_sensitive_responses is false', function(){
+    var t = {
+      type: 'html-keyboard-response',
+      stimulus: 'foo'
+    };
+    jsPsych.init({
+      timeline: [t],
+      case_sensitive_responses: false
+    })
+    expect(jsPsych.pluginAPI.compareKeys('q', 'Q')).toBe(true);
+    expect(jsPsych.pluginAPI.compareKeys('q', 'q')).toBe(true);
+  });
+  test('should default to case insensitive for strings when used before jsPsych.init is called', function(){
+    expect(typeof jsPsych.initSettings().case_sensitive_responses).toBe("undefined");
+    expect(jsPsych.pluginAPI.compareKeys('q', 'Q')).toBe(true);
+    expect(jsPsych.pluginAPI.compareKeys('q', 'q')).toBe(true);
   });
 });
 

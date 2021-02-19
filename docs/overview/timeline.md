@@ -352,7 +352,7 @@ var trial = {
 var loop_node = {
 	timeline: [trial],
 	loop_function: function(data){
-		if(data.values()[0].response == 'r'){
+		if(jsPsych.pluginAPI.compareKeys(data.values()[0].response, 'r')){
 			return true;
 		} else {
 			return false;
@@ -382,7 +382,7 @@ var if_node = {
 		// get the data from the previous trial,
 		// and check which key was pressed
 		var data = jsPsych.data.get().last(1).values()[0];
-		if(data.response == 's'){
+		if(jsPsych.pluginAPI.compareKeys(data.response, 's')){
 			return false;
 		} else {
 			return true;

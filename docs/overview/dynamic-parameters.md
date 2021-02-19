@@ -22,7 +22,7 @@ var trial = {
   },
   on_finish: function(data){
     // Score the response as correct or incorrect.
-    if(data.response == "f"){
+    if(jsPsych.pluginAPI.compareKeys(data.response, "f")){
       data.correct = true;
     } else {
       data.correct = false; 

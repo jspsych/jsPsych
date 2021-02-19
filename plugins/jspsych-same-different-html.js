@@ -127,11 +127,11 @@ jsPsych.plugins['same-different-html'] = (function() {
         var skey = trial.same_key;
         var dkey = trial.different_key;
 
-        if (info.key == skey && trial.answer == 'same') {
+        if (jsPsych.pluginAPI.compareKeys(info.key, skey) && trial.answer == 'same') {
           correct = true;
         }
 
-        if (info.key == dkey && trial.answer == 'different') {
+        if (jsPsych.pluginAPI.compareKeys(info.key, dkey) && trial.answer == 'different') {
           correct = true;
         }
 
