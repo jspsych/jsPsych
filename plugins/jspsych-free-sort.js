@@ -204,7 +204,7 @@ jsPsych.plugins['free-sort'] = (function() {
       var l_coords = [];
       for (const x of make_arr(0, trial.sort_area_width - trial.stim_width, num_rows) ) {
         for (const y of make_arr(0, trial.sort_area_height - trial.stim_height, num_rows) ) {
-          if ( x > ( (trial.sort_area_width - trial.stim_width)  * (.5) ) ) {
+          if ( x > ( (trial.sort_area_width - trial.stim_width)  * .5 ) ) {
             //r_coords.push({ x:x, y:y } )
             r_coords.push({ x:x + (trial.sort_area_width)  * (.5*trial.column_spread_factor) , y:y });
           } else {
