@@ -12,9 +12,12 @@
   var trial_1 = {
     type: 'free-sort',
     stimuli: ['img/happy_face_1.jpg','img/happy_face_3.jpg','img/sad_face_2.jpg','img/sad_face_4.jpg'],
-    stim_height: 150,
-    stim_width: 200,
-    prompt: 'Please group similar expressions together. '
+    stim_height: 120,
+    stim_width: 160,
+    sort_area_height: 500,
+    sort_area_width: 500,
+    prompt: 'Please group similar expressions together. ',
+    column_spread_factor: .5
   };
 
   var trial_2 = {
@@ -24,8 +27,8 @@
     stim_width: 160,
     prompt: '<p>Arrange the faces.</p>',
     prompt_location: "below",
-    sort_area_height: 500,
-    sort_area_width: 600,
+    sort_area_height: 400,
+    sort_area_width: 500,
     sort_area_shape: "square",
     scale_factor: 1.2,
     border_color_in: '#DCDCDC',
@@ -48,13 +51,13 @@
         ctx.drawImage(img1, 0, 0, 90, 90);
       }, false);
       img2.addEventListener('load', function() {
-        ctx.drawImage(img2, 500, 600,  90, 90);
+        ctx.drawImage(img2, 400, 400,  90, 90);
       }, false);
       img3.addEventListener('load', function() {
         ctx.drawImage(img3, 300, 100,  90, 90);
       }, false);
     },
-    canvas_size: [700,700],
+    canvas_size: [500,500],
     prompt: "Memorize the image locations (5s).",
     choices: jsPsych.NO_KEYS,
     trial_duration: 5000
@@ -69,10 +72,13 @@
     prompt: '<p>Where were the images?</p>',
     prompt_location: 'below',
     sort_area_shape: "square",
+    sort_area_height: 500,
+    sort_area_width: 500,
     change_border_background_color: false,
     border_width: 5,
     counter_text_unfinished: "Not done yet...",
-    counter_text_finished: "Done!"
+    counter_text_finished: "Done!",
+    column_spread_factor: .5
   };
 
   var trial_5 = {
