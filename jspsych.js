@@ -2248,7 +2248,7 @@ jsPsych.pluginAPI = (function() {
       start_time = parameters.audio_context_start_time;
     }
 
-    var case_sensitive = jsPsych.initSettings().case_sensitive_responses;
+    var case_sensitive = (typeof jsPsych.initSettings().case_sensitive_responses === 'undefined') ? false : jsPsych.initSettings().case_sensitive_responses;
 
     var listener_id;
 
@@ -2382,7 +2382,8 @@ jsPsych.pluginAPI = (function() {
       return key1 == key2;
     } else if (typeof key1 === 'string' && typeof key2 === 'string') {
       // if both values are strings, then check whether or not letter case should be converted before comparing (case_sensitive_responses in jsPsych.init)
-      if (jsPsych.initSettings().case_sensitive_responses) {
+      var case_sensitive = (typeof jsPsych.initSettings().case_sensitive_responses === 'undefined') ? false : jsPsych.initSettings().case_sensitive_responses;
+      if (case_sensitive) {
         return key1 == key2;
       } else {
         return key1.toLowerCase() == key2.toLowerCase();
