@@ -1,6 +1,6 @@
 ![logo](http://www.jspsych.org/img/jspsych-logo.jpg)
 
-jsPsych is a JavaScript library for creating behavioral experiments that run in a web browser. jsPsych provides a framework for defining experiments using a set of flexible plugins that create different kinds of events and tasks and collect different kinds of data. By assembling these different plugins together, it is possible to create a wide range of online experiments.
+jsPsych is a JavaScript library for creating behavioral experiments that run in a web browser. It provides a framework for defining experiments using a set of flexible plugins that create different kinds of events, and collect different kinds of data. By assembling these plugins together, it is possible to create a wide range of online experiments.
 
 jsPsych experiments are created using the languages of the Web: HTML, CSS, and JavaScript. JavaScript is the programming language used by web browsers. It provides the most control and flexibility for creating web-based experiments, and allows for easy integration with other JavaScript libraries and server-side tools. Don't have JavaScript experience? Don't worry! jsPsych was designed to make creating online experiments as easy as possible for people without web development experience.
 
@@ -10,7 +10,8 @@ jsPsych comes with a number of plugins that you can use to do specific things an
 
 Often people can create their experiment by combining these plugins together. But if that's not possible for your experiment, you can also modify a plugin file or [create your own plugin](https://www.jspsych.org/overview/plugins/#creating-a-new-plugin). This gives you the flexibility to do exactly what you want, while still taking advantage of jsPsych's general experiment-building framework.
 
-##Getting started
+Getting started
+---------------
 
 New to jsPsych? A good place to start is the basic [Hello World tutorial](https://www.jspsych.org/tutorials/hello-world/) on the jsPsych website. The [Reaction Time Task tutorial](https://www.jspsych.org/tutorials/rt-task/) is a great next step, since it covers many core topics and features. 
 
@@ -19,7 +20,7 @@ There are also a number of [video tutorials](https://www.jspsych.org/tutorials/v
 Examples
 ----------
 
-Several example experiments and plugin demonstrations are available in the `/examples` folder. After you've downloaded the [latest release](https://github.com/jspsych/jsPsych/releases), double-click on an example HTML file to run it in your web browser.
+Several example experiments and plugin demonstrations are available in the `/examples` folder. After you've downloaded the [latest release](https://github.com/jspsych/jsPsych/releases), double-click on an example HTML file to run it in your web browser, and open it with a programming-friendly text editor to see how it works.
 
 Documentation
 -------------
