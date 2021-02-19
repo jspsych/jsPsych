@@ -9,6 +9,7 @@ The following people have contributed to the development of jsPsych by writing c
 * Gustavo Juantorena - https://github.com/GEJ1
 * Chris Jungerius - https://github.com/cjungerius
 * Jana Klaus - https://github.com/janakl4us
+* Peter Jes Kohler - https://github.com/pjkohler 
 * Jonas Lambers
 * Shane Martin - https://github.com/shamrt
 * Adrian Oesch - https://github.com/adrianoesch
