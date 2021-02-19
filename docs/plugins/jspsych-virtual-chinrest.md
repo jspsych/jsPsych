@@ -1,7 +1,7 @@
 This plugin provides a "virtual chinrest" that can measure the distance between the participant and the screen. It can also standardize the screen size to a known physical dimension (i.e., ensuring that a 200px wide stimulus is 2.2cm wide on the participant's monitor). This is based on the work of [Li, Joo, Yeatman, and Reinecke (2020)](https://doi.org/10.1038/s41598-019-57204-1), and the plugin code is a modified version of [their implementation](https://github.com/QishengLi/virtual_chinrest). We recommend citing their work in any paper that makes use of this plugin.
 
 !!! note "Citation"
-Li, Q., Joo, S. J., Yeatman, J. D., & Reinecke, K. (2020). Controlling for Participants’ Viewing Distance in Large-Scale, Psychophysical Online Experiments Using a Virtual Chinrest. _Scientific Reports, 10_(1), 1-11. doi: [10.1038/s41598-019-57204-1](https://doi.org/10.1038/s41598-019-57204-1)
+    Li, Q., Joo, S. J., Yeatman, J. D., & Reinecke, K. (2020). Controlling for Participants’ Viewing Distance in Large-Scale, Psychophysical Online Experiments Using a Virtual Chinrest. _Scientific Reports, 10_(1), 1-11. doi: [10.1038/s41598-019-57204-1](https://doi.org/10.1038/s41598-019-57204-1)
 
 The plugin works in two phases.
 
