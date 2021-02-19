@@ -1,6 +1,6 @@
 # jspsych-free-sort plugin
 
-The free-sort plugin displays one or more images on the screen that the participant can interact with by clicking and dragging. When the trial starts, the images can be positioned outside or inside the sort area. All images must be moved into the sorting area before the participant can click a button to end the trial. All of the moves that the participant performs are recorded, as well as the final positions of all images. This plugin could be useful when asking participants to position images based on similarity to one another, or to recall image spatial locations.
+The free-sort plugin displays one or more images on the screen that the participant can interact with by clicking and dragging with a mouse, or touching and dragging with a touchscreen device. When the trial starts, the images can be positioned outside or inside the sort area. All images must be moved into the sorting area before the participant can click a button to end the trial. All of the moves that the participant performs are recorded, as well as the final positions of all images. This plugin could be useful when asking participants to position images based on similarity to one another, or to recall image spatial locations.
 
 ## Parameters
 
@@ -25,6 +25,7 @@ border_width | numeric | null | The width in pixels of the border around the sor
 counter_text_unfinished | string | You still need to place %n% item%s% inside the sort area. | Text to display when there are one or more items that still need to be placed in the sort area. If "%n%" is included in the string, it will be replaced with the number of items that still need to be moved inside. If "%s%" is included in the string, a "s" will be included when the number of items remaining is greater than one.
 counter_text_finished | string | All items placed. Feel free to reposition items if necessary. | Text that will take the place of the counter_text_unfinished text when all items have been moved inside the sort area.
 stim_starts_inside | boolean | false | If `false`, the images will be positioned to the left and right of the sort area when the trial loads. If `true`, the images will be positioned at random locations inside the sort area when the trial loads.
+column_spread_factor | numeric | 1 | When the images appear outside the sort area, this determines the x-axis spread of the image columns. Default value is 1. Values less than 1 will compress the image columns along the x-axis, and values greater than 1 will spread them farther apart.
 
 ## Data Generated
 
