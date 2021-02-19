@@ -2522,16 +2522,18 @@ jsPsych.pluginAPI = (function() {
   module.getAudioBuffer = function(audioID) {
 
     return new Promise(function(resolve, reject){
-      // if audio is not already loaded, try to load it
+      // check whether audio file already preloaded
       if(typeof audio_buffers[audioID] == 'undefined' || audio_buffers[audioID] == 'tmp'){
+         // if audio is not already loaded, try to load it
         function complete(){
           resolve(audio_buffers[audioID])
         }
         function error(e){
           reject(e.error);
         }
-        module.preloadAudio(audioID, complete, function(){}, error)
+        module.preloadAudio([audioID], complete, function(){}, error)
       } else {
+        // audio is already loaded
         resolve(audio_buffers[audioID]);
       }
     });
