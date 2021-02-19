@@ -2521,12 +2521,20 @@ jsPsych.pluginAPI = (function() {
 
   module.getAudioBuffer = function(audioID) {
 
-    if (audio_buffers[audioID] === 'tmp') {
-      console.error('Audio file failed to load in the time allotted.')
-      return;
-    }
-
-    return audio_buffers[audioID];
+    return new Promise(function(resolve, reject){
+      // if audio is not already loaded, try to load it
+      if(typeof audio_buffers[audioID] == 'undefined' || audio_buffers[audioID] == 'tmp'){
+        function complete(){
+          resolve(audio_buffers[audioID])
+        }
+        function error(e){
+          reject(e.error);
+        }
+        module.preloadAudio(audioID, complete, function(){}, error)
+      } else {
+        resolve(audio_buffers[audioID]);
+      }
+    });
 
   }
 
