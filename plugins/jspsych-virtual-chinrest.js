@@ -423,7 +423,7 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
       var ball_sqr_distance =
         (blindspot_config_data["square_pos"] - blindspot_config_data["avg_ball_pos"]) /
         trial_data["px2mm"];
-      var viewDistance = ball_sqr_distance / Math.radians(angle);
+      var viewDistance = ball_sqr_distance / Math.tan(Math.radians(angle));
       trial_data["view_dist_mm"] = accurateRound(viewDistance, 2);
 
       //counter and stop
