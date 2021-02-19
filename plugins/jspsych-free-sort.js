@@ -242,9 +242,9 @@ jsPsych.plugins['free-sort'] = (function() {
         '</img>';
 
       init_locations.push({
-        "src": trial.stimuli[i],
-        "x": coords.x,
-        "y": coords.y
+        src: trial.stimuli[i],
+        x: coords.x,
+        y: coords.y
       });
       if (trial.stim_starts_inside) {
         inside.push(true);
@@ -362,9 +362,9 @@ jsPsych.plugins['free-sort'] = (function() {
             }
           }
           moves.push({
-            "src": elem.dataset.src,
-            "x": elem.offsetLeft,
-            "y": elem.offsetTop
+            src: elem.dataset.src,
+            x: elem.offsetLeft,
+            y: elem.offsetTop
           });
           document.removeEventListener(end_event_name, end_event);
         }
@@ -382,9 +382,9 @@ jsPsych.plugins['free-sort'] = (function() {
         let final_locations = [];
         for(let i=0; i<items.length; i++){
           final_locations.push({
-            "src": items[i].dataset.src,
-            "x": parseInt(items[i].style.left),
-            "y": parseInt(items[i].style.top)
+            src: items[i].dataset.src,
+            x: parseInt(items[i].style.left),
+            y: parseInt(items[i].style.top)
           });
         }
 
