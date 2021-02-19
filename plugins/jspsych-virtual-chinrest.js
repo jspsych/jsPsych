@@ -274,7 +274,7 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
       // wait for a spacebar to begin the animations
       jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: startBall,
-        valid_responses: ['space'],
+        valid_responses: [' '],
         rt_method: 'performance',
         allow_held_keys: false,
         persist: false
@@ -284,7 +284,7 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
     function startBall() {
       ball_position_listener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: recordPosition,
-        valid_responses: ['space'],
+        valid_responses: [' '],
         rt_method: 'performance',
         allow_held_keys: false,
         persist: true
