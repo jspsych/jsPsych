@@ -4,25 +4,25 @@ The HTML plugin displays an external HTML document (often a consent form). Eithe
 
 ## Parameters
 
-Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+In addition to the [parameters available in all plugins](/overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
 
-Parameter | Type | Default Value | Description
-----------|------|---------------|------------
-url | string | *undefined* | The URL of the page to display.
-cont_key | numeric | null | The key code a key to advance to the next trial. If left as null, then the subject will not be able to advance trials using the keyboard.
-cont_btn | string | null | The ID of a clickable element on the page. When the element is clicked, the trial will advance.
-check_fn | function | `function(){ return true; }` | This function is called with the jsPsych `display_element` as the only argument when the subject attempts to advance the trial. The trial will only advance if the function return `true`. This can be used to verify that the subject has correctly filled out a form before continuing, for example.
-force_refresh | boolean | false | If `true`, then the plugin will avoid using the cached version of the HTML page to load if one exists.
-execute_script | boolean | false | If `true`, then scripts on the remote page will be executed.
+| Parameter      | Type     | Default Value                | Description                              |
+| -------------- | -------- | ---------------------------- | ---------------------------------------- |
+| url            | string   | *undefined*                  | The URL of the page to display.          |
+| cont_key       | string   | null                         | The key character the subject can use to advance to the next trial. If left as null, then the subject will not be able to advance trials using the keyboard. |
+| cont_btn       | string   | null                         | The ID of a clickable element on the page. When the element is clicked, the trial will advance. |
+| check_fn       | function | `function(){ return true; }` | This function is called with the jsPsych `display_element` as the only argument when the subject attempts to advance the trial. The trial will only advance if the function return `true`. This can be used to verify that the subject has correctly filled out a form before continuing, for example. |
+| force_refresh  | boolean  | false                        | If `true`, then the plugin will avoid using the cached version of the HTML page to load if one exists. |
+| execute_script | boolean  | false                        | If `true`, then scripts on the remote page will be executed. |
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](/overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
-Name | Type | Value
------|------|------
-url | string | The URL of the page.
-rt | numeric | The response time in milliseconds for the subject to finish the trial.
+| Name | Type    | Value                                    |
+| ---- | ------- | ---------------------------------------- |
+| url  | string  | The URL of the page.                     |
+| rt   | numeric | The response time in milliseconds for the subject to finish the trial. |
 
 ## Examples
 

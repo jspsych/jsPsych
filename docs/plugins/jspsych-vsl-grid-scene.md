@@ -6,21 +6,21 @@ Fiser, J., & Aslin, R. N. (2001). Unsupervised statistical learning of higher-or
 
 ## Parameters
 
-Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+In addition to the [parameters available in all plugins](/overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
 
-Parameter | Type | Default Value | Description
-----------|------|---------------|------------
-stimuli | array | *undefined* | An array that defines a grid. Grids should be declared as two dimensional arrays in `[row][col]` order, with paths to image files in the locations where images are displayed, and 0 in blank spaces. See example below.
-image_size | array | `[100, 100]` | Array specifying the width and height of the images to show. Grid cells will also be this size, with 10% padding.
-timing_duration | numeric | 2000 | How long to show the stimulus for in milliseconds.
+| Parameter      | Type    | Default Value | Description                              |
+| -------------- | ------- | ------------- | ---------------------------------------- |
+| stimuli        | array   | *undefined*   | An array that defines a grid. Grids should be declared as two dimensional arrays in `[row][col]` order, with paths to image files in the locations where images are displayed, and 0 in blank spaces. See example below. |
+| image_size     | array   | `[100, 100]`  | Array specifying the width and height of the images to show. Grid cells will also be this size, with 10% padding. |
+| trial_duration | numeric | 2000          | How long to show the stimulus for in milliseconds. |
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](/overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
-Name | Type | Value
------|------|------
-stimulus | JSON string | JSON encoded array of the stimulus shown on the trial.
+| Name     | Type        | Value                                    |
+| -------- | ----------- | ---------------------------------------- |
+| stimulus | array       | Two dimensional array representing the stimulus shown on the trial. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 
 ### Stimulus Creation Method
 

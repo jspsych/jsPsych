@@ -20,12 +20,12 @@ describe('animation plugin', function(){
 
 		var trial = {
 			type: 'animation',
-			stimuli: animation_sequence
+			stimuli: animation_sequence,
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="img/face_1.jpg" id="jspsych-animation-image"></img>');

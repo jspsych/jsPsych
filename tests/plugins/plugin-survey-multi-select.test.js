@@ -60,8 +60,7 @@ describe('survey-multi-select plugin', function(){
 
 		utils.clickTarget(document.querySelector('#jspsych-survey-multi-select-next'));
 
-		var survey_data = JSON.parse(jsPsych.data.get().values()[0].responses);
-		console.log(jsPsych.data.get().json())
+		var survey_data = jsPsych.data.get().values()[0].response;
 		expect(survey_data.Q0[0]).toBe('a');
 		expect(survey_data.Q1[0]).toBe('b');
 		expect(survey_data.Q2[0]).toBe('c');

@@ -18,7 +18,7 @@ jsPsych.plugins["video-button-response"] = (function() {
     name: 'video-button-response',
     description: '',
     parameters: {
-      sources: {
+      stimulus: {
         type: jsPsych.plugins.parameterType.VIDEO,
         pretty_name: 'Video',
         default: undefined,
@@ -153,10 +153,10 @@ jsPsych.plugins["video-button-response"] = (function() {
     }
     video_html +=">";
 
-    var video_preload_blob = jsPsych.pluginAPI.getVideoBuffer(trial.sources[0]);
+    var video_preload_blob = jsPsych.pluginAPI.getVideoBuffer(trial.stimulus[0]);
     if(!video_preload_blob) {
-      for(var i=0; i<trial.sources.length; i++){
-        var file_name = trial.sources[i];
+      for(var i=0; i<trial.stimulus.length; i++){
+        var file_name = trial.stimulus[i];
         if(file_name.indexOf('?') > -1){
           file_name = file_name.substring(0, file_name.indexOf('?'));
         }
@@ -187,7 +187,7 @@ jsPsych.plugins["video-button-response"] = (function() {
     video_html += '<div id="jspsych-video-button-response-btngroup">';
     for (var i = 0; i < trial.choices.length; i++) {
       var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
-      video_html += '<div class="jspsych-video-button-response-button" style="display: inline-block; margin:'+trial.margin_vertical+' '+trial.margin_horizontal+'" id="jspsych-video-button-response-button-' + i +'" data-choice="'+i+'">'+str+'</div>';
+      video_html += '<div class="jspsych-video-button-response-button" style="cursor: pointer; display: inline-block; margin:'+trial.margin_vertical+' '+trial.margin_horizontal+'" id="jspsych-video-button-response-button-' + i +'" data-choice="'+i+'">'+str+'</div>';
     }
     video_html += '</div>';
 
@@ -210,10 +210,7 @@ jsPsych.plugins["video-button-response"] = (function() {
       if(trial.trial_ends_after_video){
         end_trial();
       } else if (!trial.response_allowed_while_playing) {
-        // enable response buttons
-        for (var i=0; i<trial.choices.length; i++) {
-          display_element.querySelector('#jspsych-video-button-response-button-' + i).querySelector('button').disabled = false;
-        }
+        enable_buttons();
       }
     }
 
@@ -241,15 +238,10 @@ jsPsych.plugins["video-button-response"] = (function() {
       })
     }
 
-    // add event listeners to buttons
-    for (var i = 0; i < trial.choices.length; i++) {
-      display_element.querySelector('#jspsych-video-button-response-button-' + i).addEventListener('click', function(e){
-        var choice = e.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
-        after_response(choice);
-      });
-      if (!trial.response_allowed_while_playing) {
-        display_element.querySelector('#jspsych-video-button-response-button-' + i).querySelector('button').disabled = true;
-      }
+    if(trial.response_allowed_while_playing){
+      enable_buttons();
+    } else {
+      disable_buttons();
     }
 
     // store response
@@ -271,9 +263,9 @@ jsPsych.plugins["video-button-response"] = (function() {
 
       // gather the data to store for the trial
       var trial_data = {
-        "rt": response.rt,
-        "stimulus": trial.stimulus,
-        "button_pressed": response.button
+        rt: response.rt,
+        stimulus: trial.stimulus,
+        response: response.button
       };
 
       // clear the display
@@ -297,14 +289,37 @@ jsPsych.plugins["video-button-response"] = (function() {
       video_element.className += ' responded';
 
       // disable all the buttons after a response
-      var btns = document.querySelectorAll('.jspsych-video-button-response-button button');
-      for(var i=0; i<btns.length; i++){
-        //btns[i].removeEventListener('click');
-        btns[i].setAttribute('disabled', 'disabled');
-      }
+      disable_buttons();
 
       if (trial.response_ends_trial) {
         end_trial();
+      }
+    }
+
+    function button_response(e){
+      var choice = e.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
+      after_response(choice);
+    }
+
+    function disable_buttons() {
+      var btns = document.querySelectorAll('.jspsych-video-button-response-button');
+      for (var i=0; i<btns.length; i++) {
+        var btn_el = btns[i].querySelector('button');
+        if(btn_el){
+          btn_el.disabled = true;
+        }
+        btns[i].removeEventListener('click', button_response);
+      }
+    }
+
+    function enable_buttons() {
+      var btns = document.querySelectorAll('.jspsych-video-button-response-button');
+      for (var i=0; i<btns.length; i++) {
+        var btn_el = btns[i].querySelector('button');
+        if(btn_el){
+          btn_el.disabled = false;
+        }
+        btns[i].addEventListener('click', button_response);
       }
     }
 

@@ -37,13 +37,13 @@ jsPsych.plugins['reconstruction'] = (function() {
         description: 'The change in the stimulus parameter caused by pressing one of the modification keys.'
       },
       key_increase: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key increase',
         default: 'h',
         description: 'The key to press for increasing the parameter value.'
       },
       key_decrease: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key decrease',
         default: 'g',
         description: 'The key to press for decreasing the parameter value.'
@@ -67,13 +67,13 @@ jsPsych.plugins['reconstruction'] = (function() {
 
       //console.log('fire');
 
-      var key_i = (typeof trial.key_increase == 'string') ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.key_increase) : trial.key_increase;
-      var key_d = (typeof trial.key_decrease == 'string') ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.key_decrease) : trial.key_decrease;
+      var key_i = trial.key_increase;
+      var key_d = trial.key_decrease;
 
       // get new param value
-      if (info.key == key_i) {
+      if (jsPsych.pluginAPI.compareKeys(info.key, key_i)) {
         param = param + trial.step_size;
-      } else if (info.key == key_d) {
+      } else if (jsPsych.pluginAPI.compareKeys(info.key, key_d)) {
         param = param - trial.step_size;
       }
       param = Math.max(Math.min(1, param), 0);
@@ -115,9 +115,9 @@ jsPsych.plugins['reconstruction'] = (function() {
 
       // save data
       var trial_data = {
-        "rt": response_time,
-        "final_value": param,
-        "start_value": trial.starting_value
+        rt: response_time,
+        final_value: param,
+        start_value: trial.starting_value
       };
 
       display_element.innerHTML = '';

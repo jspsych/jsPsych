@@ -1,10 +1,10 @@
 # jspsych-maxdiff plugin
 
-The maxdiff plugin displays a table with rows of alternatives to be endorsed, typically as 'most' or 'least' on a particular criteria (e.g. importance, preference, similarity). The participant responds by selecting one radio button corresponding to an alternative in both the left and right response columns. The same alternative cannot be endorsed on both the left and right response columns (e.g. 'most' and 'least') simultaneously.
+The maxdiff plugin displays a table with rows of alternatives to be selected for two mutually-exclusive categories, typically as 'most' or 'least' on a particular criteria (e.g. importance, preference, similarity). The participant responds by selecting one radio button corresponding to an alternative in both the left and right response columns. The same alternative cannot be endorsed on both the left and right response columns (e.g. 'most' and 'least') simultaneously.
 
 ## Parameters
 
-Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+In addition to the [parameters available in all plugins](/overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
@@ -18,14 +18,13 @@ button_label | string |  'Continue' | Label of the button.
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](/overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the maxdiff table first appears on the screen until the subject's response.
-labels | JSON string | A string in JSON format containing the labels corresponding to the left and right response columns. 
-left | string | The alternative endorsed on the left column.
-right | string | The alternative endorsed on the right column.
+labels | object | An object with two keys, `left` and `right`, containing the labels (strings) corresponding to the left and right response columns. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. 
+response | object | An object with two keys, `left` and `right`, containing the alternatives selected on the left and right columns. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. 
 
 
 ## Examples

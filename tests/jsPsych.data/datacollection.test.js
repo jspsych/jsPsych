@@ -63,6 +63,7 @@ describe('DataCollection', function(){
   });
   test('#values', function(){
     expect(JSON.stringify(jsPsych.data.get().values())).toBe(JSON.stringify(data));
+    expect(jsPsych.data.get().values()).toBe(data);
   });
   test('#first', function(){
     expect(jsPsych.data.get().first(3).count()).toBe(3);

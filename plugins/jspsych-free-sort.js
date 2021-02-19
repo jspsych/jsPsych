@@ -177,7 +177,7 @@ jsPsych.plugins['free-sort'] = (function() {
     }
     // add button
     html += '<div><button id="jspsych-free-sort-done-btn" class="jspsych-btn" '+ 
-      'style="visibility: hidden; margin: 5px; padding: 5px; text-align: center; font-weight: bold; font-size: 18px; border: 2px solid;">' + 
+      'style="margin-top: 5px; visibility: hidden;">' + 
       trial.button_label+'</button></div>';
 
     display_element.innerHTML = html;
@@ -389,10 +389,10 @@ jsPsych.plugins['free-sort'] = (function() {
         }
 
         const trial_data = {
-          "init_locations": JSON.stringify(init_locations),
-          "moves": JSON.stringify(moves),
-          "final_locations": JSON.stringify(final_locations),
-          "rt": rt
+          init_locations: init_locations,
+          moves: moves,
+          final_locations: final_locations,
+          rt: rt
         };
         
         // advance to next part

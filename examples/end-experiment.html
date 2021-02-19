@@ -24,10 +24,11 @@
 
   var block = {
     type: 'image-keyboard-response',
-    choices: [89, 78], // Y or N
-    prompt: '<p>Press Y to Continue. Press N to end the experiment</p>',
+    choices: ['y','n'], 
+    prompt: '<p>Press "y" to continue. Press "n" to end the experiment.</p>',
+    render_on_canvas: false,
     on_finish: function(data) {
-      if (data.key_press == 78) {
+      if (jsPsych.pluginAPI.compareKeys(data.response, 'n')) {
         jsPsych.endExperiment('The experiment was ended. This is the end message.');
       }
     },

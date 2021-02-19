@@ -4,7 +4,7 @@ This plugin can be used to draw a stimulus on a [HTML canvas element](https://ww
 
 ## Parameters
 
-Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+In addition to the [parameters available in all plugins](/overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
@@ -25,7 +25,7 @@ response_ends_trial | boolean | true | If true, then the trial will end whenever
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#data-collected-by-plugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](/overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
@@ -36,7 +36,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
 
 ## Examples
 
-### stimulus function that only takes canvas argument
+### Draw two squares
 
 ```javascript
 var colors = [#'FF3333', '#FF6A33'];
@@ -59,7 +59,7 @@ var trial = {
 }
 ```
 
-### stimulus function that takes additional parameters
+### Draw two squares with additional parameters
 
 ```javascript
 var colors;

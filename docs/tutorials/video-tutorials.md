@@ -1,0 +1,11 @@
+# Video tutorials
+
+## YouTube Channel
+
+A variety of video tutorials are available on [Josh de Leeuw's YouTube channel](https://www.youtube.com/playlist?list=PLnfo1lBY1P2Mf_o6rV5wiqqn92Mw3UTGh). Some tutorials walk through creating a basic version of an entire experiment, like the tutorial on creating a [dichotic listening experiment](https://www.youtube.com/playlist?list=PLnfo1lBY1P2Mf_o6rV5wiqqn92Mw3UTGh) aimed at new users. Others focus on specific features of jsPsych, like how to use [functions as parameters](https://www.youtube.com/watch?v=8-j2aAZ_iOk&list=PLnfo1lBY1P2Mf_o6rV5wiqqn92Mw3UTGh&index=5) to create experiments that change in response to participant input or how to [create a new plugin](https://www.youtube.com/watch?v=XQcsFwAmbiw&list=PLnfo1lBY1P2Mf_o6rV5wiqqn92Mw3UTGh&index=4).
+
+## Workshops
+
+**Moving Research Online (2020)**. Recordings from a [Summer 2020 workshop](https://www.movingresearchonline.info) on conducting online research are available on the [workshop's YouTube channel](https://www.youtube.com/channel/UCBZ5F1UysHWlplUNDRwbsWA). [Session 1](https://www.youtube.com/watch?v=BuhfsIFRFe8) provides an overview of jsPsych suitable for brand new users. [Session 3](https://www.youtube.com/watch?v=LP7o0iAALik) covers some more advanced features of jsPsych. This workshop was funded by the National Science Foundation.
+
+**babySTEP (2021)**. The Centre for Comparative Psycholinguistics (CCP, University of Alberta Department of Linguistics) hosted a two-part jsPsych workshop in 2021 as part of their annual [STEP program](https://ccp.artsrn.ualberta.ca/portfolio/step/). [Day 1](https://drive.google.com/file/d/1_bd_Tz1IoyGaZzuPoR_Qb6Rtd5wg4t4D/view?usp=drive_web) covered the basics of creating a jsPsych experiment, with an emphasis on audio stimuli. [Day 2](https://drive.google.com/file/d/1dIw1xIVY1lCHwFKGRaUnWMguwHfdkbGK/view?usp=drive_web) was organized around pre-submitted questions. The video demonstrates how to create a more complex experiment involving reading a sentence and hearing different audio options for completing the sentences, and answers several questions about timing accuracy, recording participant generated audio, embedding jsPsych into course (or other) websites, and some (non-empirical) advice about attention checks.

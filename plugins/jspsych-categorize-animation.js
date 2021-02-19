@@ -23,13 +23,13 @@ jsPsych.plugins["categorize-animation"] = (function() {
         description: 'Array of paths to image files.'
       },
       key_answer: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key answer',
         default: undefined,
         description: 'The key to indicate correct response'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Choices',
         default: jsPsych.ALL_KEYS,
         array: true,
@@ -83,6 +83,13 @@ jsPsych.plugins["categorize-animation"] = (function() {
         default: null,
         description: 'Any content here will be displayed below the stimulus.'
       },
+      render_on_canvas: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Render on canvas',
+        default: true,
+        description: 'If true, the images will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).'+
+          'If false, the image will be shown via an img element.'
+      }
     }
   }
 
@@ -97,9 +104,36 @@ jsPsych.plugins["categorize-animation"] = (function() {
     var timeoutSet = false;
     var correct;
 
+    if (trial.render_on_canvas) {
+      // first clear the display element (because the render_on_canvas method appends to display_element instead of overwriting it with .innerHTML)
+      if (display_element.hasChildNodes()) {
+        // can't loop through child list because the list will be modified by .removeChild()
+        while (display_element.firstChild) {
+          display_element.removeChild(display_element.firstChild);
+        }
+      }
+      var canvas = document.createElement("canvas");
+      canvas.id = "jspsych-categorize-animation-stimulus";
+      canvas.style.margin = 0;
+      canvas.style.padding = 0;
+      display_element.insertBefore(canvas, null);
+      var ctx = canvas.getContext("2d");
+      if (trial.prompt !== null) {
+        var prompt_div = document.createElement("div");
+        prompt_div.id = "jspsych-categorize-animation-prompt";
+        prompt_div.style.visibility = "hidden";
+        prompt_div.innerHTML = trial.prompt;
+        display_element.insertBefore(prompt_div, canvas.nextElementSibling);
+      }
+      var feedback_div = document.createElement("div");
+      display_element.insertBefore(feedback_div, display_element.nextElementSibling);
+    }
+
     // show animation
     var animate_interval = setInterval(function() {
-      display_element.innerHTML = ''; // clear everything
+      if (!trial.render_on_canvas) {
+        display_element.innerHTML = ''; // clear everything
+      }
       animate_frame++;
       if (animate_frame == trial.stimuli.length) {
         animate_frame = 0;
@@ -112,20 +146,45 @@ jsPsych.plugins["categorize-animation"] = (function() {
       }
 
       if (showAnimation) {
-        display_element.innerHTML += '<img src="'+trial.stimuli[animate_frame]+'" class="jspsych-categorize-animation-stimulus"></img>';
+        if (trial.render_on_canvas) {
+          display_element.querySelector('#jspsych-categorize-animation-stimulus').style.visibility = 'visible';
+          var img = new Image();   
+          img.src = trial.stimuli[animate_frame];
+          canvas.height = img.naturalHeight;
+          canvas.width = img.naturalWidth;
+          ctx.drawImage(img,0,0);
+        } else {
+          display_element.innerHTML += '<img src="'+trial.stimuli[animate_frame]+'" class="jspsych-categorize-animation-stimulus"></img>';
+        }
       }
 
       if (!responded && trial.allow_response_before_complete) {
         // in here if the user can respond before the animation is done
         if (trial.prompt !== null) {
-          display_element.innerHTML += trial.prompt;
+          if (trial.render_on_canvas) {
+            prompt_div.style.visibility = "visible";
+          } else {
+            display_element.innerHTML += trial.prompt;
+          }
+        }
+        if (trial.render_on_canvas) {
+          if (!showAnimation) {
+            canvas.remove();
+          }
         }
       } else if (!responded) {
         // in here if the user has to wait to respond until animation is done.
         // if this is the case, don't show the prompt until the animation is over.
         if (!showAnimation) {
           if (trial.prompt !== null) {
-            display_element.innerHTML += trial.prompt;
+            if (trial.render_on_canvas) {
+              prompt_div.style.visibility = "visible";
+            } else {
+              display_element.innerHTML += trial.prompt;
+            }
+          }
+          if (trial.render_on_canvas) {
+            canvas.remove();
           }
         }
       } else {
@@ -138,7 +197,14 @@ jsPsych.plugins["categorize-animation"] = (function() {
         } else {
           feedback_text = trial.incorrect_text.replace("%ANS%", trial.text_answer);
         }
-        display_element.innerHTML += feedback_text;
+        if (trial.render_on_canvas) {
+          if (trial.prompt !== null) {
+            prompt_div.remove();
+          }
+          feedback_div.innerHTML = feedback_text;
+        } else {
+          display_element.innerHTML += feedback_text;
+        }
 
         // set timeout to clear feedback
         if (!timeoutSet) {
@@ -164,17 +230,17 @@ jsPsych.plugins["categorize-animation"] = (function() {
       }
 
       correct = false;
-      if (trial.key_answer == info.key) {
+      if (jsPsych.pluginAPI.compareKeys(trial.key_answer, info.key)) {
         correct = true;
       }
 
       responded = true;
 
       trial_data = {
-        "stimulus": JSON.stringify(trial.stimuli),
-        "rt": info.rt,
-        "correct": correct,
-        "key_press": info.key
+        stimulus: trial.stimuli,
+        rt: info.rt,
+        correct: correct,
+        response: info.key
       };
 
       jsPsych.pluginAPI.cancelKeyboardResponse(keyboard_listener);

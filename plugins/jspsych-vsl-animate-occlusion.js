@@ -29,7 +29,7 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
         description: 'A stimulus is a path to an image file.'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Choices',
         array: true,
         default: jsPsych.ALL_KEYS,
@@ -184,8 +184,8 @@ jsPsych.plugins['vsl-animate-occlusion'] = (function() {
       jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
 
       var trial_data = {
-        "stimuli": JSON.stringify(trial.stimuli),
-        "responses": JSON.stringify(responses)
+        stimuli: trial.stimuli,
+        response: responses
       };
 
       jsPsych.finishTrial(trial_data);

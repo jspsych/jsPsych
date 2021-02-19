@@ -18,12 +18,12 @@ describe('image-button-response', function(){
 		var trial = {
 			type: 'image-button-response',
 			stimulus: '../media/blue.png',
-			choices: ['button-choice']
+			choices: ['button-choice'],
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png"');
@@ -33,12 +33,12 @@ describe('image-button-response', function(){
 		var trial = {
 			type: 'image-button-response',
 			stimulus: '../media/blue.png',
-			choices: ['button-choice1', 'button-choice2']
+			choices: ['button-choice1', 'button-choice2'],
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<button class=\"jspsych-btn\">button-choice1</button>'));
@@ -51,11 +51,11 @@ describe('image-button-response', function(){
 			stimulus: '../media/blue.png',
 			choices: ['buttonChoice'],
 			button_html: '<button class="jspsych-custom-button">%choice%</button>',
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<button class="jspsych-custom-button">buttonChoice</button>'));
@@ -65,12 +65,12 @@ describe('image-button-response', function(){
 		var trial = {
 			type: 'image-button-response',
 			stimulus: '../media/blue.png',
-		    choices: ['button-choice'],
+			choices: ['button-choice'],
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus"');
@@ -85,12 +85,12 @@ describe('image-button-response', function(){
 			type: 'image-button-response',
 			stimulus: '../media/blue.png',
 			choices: ['button-choice'],
-			prompt: '<p>This is a prompt</p>'
+			prompt: '<p>This is a prompt</p>',
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<button class=\"jspsych-btn\">button-choice</button></div></div><p>This is a prompt</p>');
@@ -101,12 +101,12 @@ describe('image-button-response', function(){
 			type: 'image-button-response',
 			stimulus: '../media/blue.png',
 			choices: ['button-choice'],
-			stimulus_duration: 500
+			stimulus_duration: 500,
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().querySelector('#jspsych-image-button-response-stimulus').style.visibility).toMatch("");
@@ -119,12 +119,12 @@ describe('image-button-response', function(){
 			type: 'image-button-response',
 			stimulus: '../media/blue.png',
 			choices: ['f','j'],
-			trial_duration: 500
+			trial_duration: 500,
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus"');
@@ -138,11 +138,11 @@ describe('image-button-response', function(){
 			stimulus: '../media/blue.png',
 			choices: ['button-choice'],
 			response_ends_trial: true,
+			render_on_canvas: false
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus"');
@@ -160,12 +160,12 @@ describe('image-button-response', function(){
 			stimulus: '../media/blue.png',
 			choices: ['button-choice'],
 			response_ends_trial: false,
-			trial_duration: null
+			trial_duration: null,
+			render_on_canvas: false
 		};
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(spy).toHaveBeenCalled();

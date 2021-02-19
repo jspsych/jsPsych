@@ -4,10 +4,16 @@
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-audio-slider-response.js"></script>
   <script src="../plugins/jspsych-html-button-response.js"></script>
+  <script src="../plugins/jspsych-preload.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css">
 </head>
 <body></body>
 <script>
+
+  var preload = {
+    type: 'preload',
+    auto_preload: true
+  }
 
   var pre_audio = {
     type: 'html-button-response',
@@ -44,8 +50,7 @@
   }
 
   jsPsych.init({
-    timeline: [pre_audio, trial_1, trial_2, trial_3],
-    use_webaudio: false,
+    timeline: [preload, pre_audio, trial_1, trial_2, trial_3],
     on_finish: function() {
       jsPsych.data.displayData();
     },
