@@ -125,6 +125,7 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
     /* check parameter compatibility */
     if (!(trial.blindspot_reps > 0) && (trial.resize_units == "deg" || trial.resize_units == "degrees")) {
       console.error("Blindspot repetitions set to 0, so resizing to degrees of visual angle is not possible!");
+      return;
     }
 
     /* some additional parameter configuration */

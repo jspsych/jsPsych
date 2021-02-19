@@ -59,7 +59,7 @@
   }
 
   jsPsych.init({
-    timeline: [ cm_resize, validation_trial ],
+    timeline: [ error_trial, cm_resize, validation_trial ],
     on_finish: function() { jsPsych.data.displayData(); }
   });
 
