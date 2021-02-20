@@ -1,26 +1,41 @@
 ![logo](http://www.jspsych.org/img/jspsych-logo.jpg)
 
-jsPsych is a JavaScript library for creating behavioral experiments that run in a web browser. jsPsych provides a framework for defining experiments using a set of flexible plugins that create different kinds of tasks a subject could complete during an experiment. By assembling these different plugins together it is possible to create many different types of experiments.
+jsPsych is a JavaScript library for creating behavioral experiments that run in a web browser. It provides a framework for defining experiments using a set of flexible plugins that create different kinds of events, and collect different kinds of data. By assembling these plugins together, it is possible to create a wide range of online experiments.
+
+jsPsych experiments are created using the languages of the Web: HTML, CSS, and JavaScript. JavaScript is the programming language used by web browsers. It provides the most control and flexibility for creating web-based experiments, and allows for easy integration with other JavaScript libraries and server-side tools. Don't have JavaScript experience? Don't worry! jsPsych was designed to make creating online experiments as easy as possible for people without web development experience.
+
+## What can I do with jsPsych?
+
+jsPsych comes with a number of plugins that you can use to do specific things and collect relevant data. Some plugins do general things, like present a stimulus (text, image, audio, video) and record a key press or button response. Other plugins do more specific things, like show a set of instructions pages, run a drag-and-drop image sorting task, present a Random-Dot Kinematogram, or calibrate the WebGazer eye-tracking extension. See the documentation website for a [list of all plugins](https://www.jspsych.org/plugins/list-of-plugins/), and to see what each plugin can do.
+
+Often people can create their experiment by combining these plugins together. But if that's not possible for your experiment, you can also modify a plugin file or [create your own plugin](https://www.jspsych.org/overview/plugins/#creating-a-new-plugin). This gives you the flexibility to do exactly what you want, while still taking advantage of jsPsych's general experiment-building framework.
+
+Getting started
+---------------
+
+New to jsPsych? A good place to start is the basic [Hello World tutorial](https://www.jspsych.org/tutorials/hello-world/) on the jsPsych website. The [Reaction Time Task tutorial](https://www.jspsych.org/tutorials/rt-task/) is a great next step, since it covers many core topics and features. 
+
+There are also a number of [video tutorials](https://www.jspsych.org/tutorials/video-tutorials), including [Session 1 of the Moving Online Workshop](https://www.youtube.com/watch?v=BuhfsIFRFe8), which provides an overview of jsPsych suitable for brand new users. 
 
 Examples
 ----------
 
-Several example experiments and plugin demonstrations are available in the `/examples` folder.
+Several example experiments and plugin demonstrations are available in the `/examples` folder. After you've downloaded the [latest release](https://github.com/jspsych/jsPsych/releases), double-click on an example HTML file to run it in your web browser, and open it with a programming-friendly text editor to see how it works.
 
 Documentation
 -------------
 
-Documentation is available at [docs.jspsych.org](http://docs.jspsych.org).
+Documentation is available at [jspsych.org](https://www.jspsych.org/).
 
 Need help?
 ----------
 
-For questions about using the library, please use the [Discussions forum](https://github.com/jspsych/jsPsych/discussions).
+For questions about using the library, please use the GitHub [Discussions forum](https://github.com/jspsych/jsPsych/discussions).
 
 Contributing
 ------------
 
-Contributions to the code are welcome. Please use the [Issue tracker system](https://github.com/jodeleeuw/jsPsych/issues) to report bugs or discuss suggestions for new features and improvements. If you would like to contribute code, [submit a Pull request](https://help.github.com/articles/using-pull-requests).
+Contributions to the code are welcome. Please use the [Issue tracker system](https://github.com/jspsych/jsPsych/issues) to report bugs or discuss suggestions for new features and improvements. If you would like to contribute code, [submit a Pull request](https://help.github.com/articles/using-pull-requests). See the [Contributing to jsPsych](https://www.jspsych.org/about/contributing/) documentation page for more information.
 
 Citation
 --------
@@ -45,4 +60,4 @@ Credits
 
 jsPsych was created by Josh de Leeuw ([@jodeleeuw](https://github.com/jodeleeuw)).
 
-There have been many [contributors](https://github.com/jodeleeuw/jsPsych/blob/master/contributors.md) to the library. Thank you!
+There have been many [contributors](https://github.com/jspsych/jsPsych/blob/master/contributors.md) to the library. Thank you!
