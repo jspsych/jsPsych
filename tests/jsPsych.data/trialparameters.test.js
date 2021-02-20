@@ -22,7 +22,7 @@ describe('Trial parameters in the data', function(){
       timeline: [trial]
     });
 
-    utils.pressKey(32);
+    utils.pressKey(' ');
 
     var data = jsPsych.data.get().values()[0];
     expect(data.choices).not.toBeUndefined();
@@ -43,7 +43,7 @@ describe('Trial parameters in the data', function(){
       timeline: [trial]
     });
 
-    utils.pressKey(32);
+    utils.pressKey(' ');
 
     var data = jsPsych.data.get().values()[0];
     expect(data.stimulus).toBeUndefined();
@@ -64,7 +64,7 @@ describe('Trial parameters in the data', function(){
       timeline: [trial]
     });
 
-    utils.pressKey(32);
+    utils.pressKey(' ');
 
     var data = jsPsych.data.get().values()[0];
     expect(data.internal_node_id).not.toBeUndefined();
@@ -167,7 +167,7 @@ describe('Trial parameters in the data', function(){
       timeline: [trial]
     });
 
-    utils.pressKey(32);
+    utils.pressKey(' ');
 
     var data = jsPsych.data.get().values()[0];
     expect(data.trial_duration).toBe(1000);
