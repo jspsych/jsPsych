@@ -283,6 +283,27 @@ window.jsPsych = (function() {
     // of the DataCollection, for easy access and editing.
     var trial_data_values = trial_data.values()[0];
 
+    if(typeof current_trial.save_trial_parameters == 'object'){
+      var keys = Object.keys(current_trial.save_trial_parameters);
+      for(var i=0; i<keys.length; i++){
+        var key_val = current_trial.save_trial_parameters[keys[i]];
+        if(key_val === true){
+          if(typeof current_trial[keys[i]] == 'undefined'){
+            console.warn(`Invalid parameter specified in save_trial_parameters. Trial has no property called "${keys[i]}".`)
+          } else if(typeof current_trial[keys[i]] == 'function'){
+            trial_data_values[keys[i]] = current_trial[keys[i]].toString();
+          } else {
+            trial_data_values[keys[i]] = current_trial[keys[i]];
+          }
+        }
+        if(key_val === false){
+          // we don't allow internal_node_id or trial_index to be deleted because it would break other things
+          if(keys[i] !== 'internal_node_id' && keys[i] !== 'trial_index'){
+            delete trial_data_values[keys[i]];
+          }
+        }
+      }
+    }
     // handle extension callbacks
     if(Array.isArray(current_trial.extensions)){
       for(var i=0; i<current_trial.extensions.length; i++){
@@ -290,6 +311,7 @@ window.jsPsych = (function() {
         Object.assign(trial_data_values, ext_data_values);
       }
     }
+    
     // about to execute lots of callbacks, so switch context.
     jsPsych.internal.call_immediate = true;
 

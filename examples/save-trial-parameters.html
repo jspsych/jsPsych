@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="../plugins/jspsych-html-button-response.js"></script>
+    <script src="../plugins/jspsych-canvas-keyboard-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+    // If you want to save parameters to the trial data that aren't normally saved, you can do so with the save_trial_parameters option. 
+    // For example, the html-keyboard-response plugin doesn't save the prompt string or choices array by default,
+    // but this information will be saved in the example trial below.
+    var trial_1 = {
+        type: 'html-keyboard-response',
+        stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
+        choices: ['y', 'n'],
+        prompt: '<p>Does the color match the word? (y or n)</p><p>The prompt and choices parameters will be saved to the data in this trial.</p>',
+        save_trial_parameters: {
+            choices: true,
+            prompt: true
+        }
+    }
+
+    // You can also use 'false' in the save_trial_parameters option to prevent a parameter from being saved 
+    // that is normally saved by default.
+    var trial_2 = {
+        type: 'html-keyboard-response',
+        stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">RED</p>',
+        choices: ['y', 'n'],
+        prompt: '<p>Does the color match the word? (y or n)</p><p>The stimulus will not be saved to the data in this trial.</p>',
+        save_trial_parameters: {
+            stimulus: false,
+            prompt: true
+        }
+    }
+
+    // If the parameter is dynamic or a timeline variable, 
+    // then the value that is returned from the function or timeline variables will be saved to the data.
+    var trial_3 = {
+        type: 'html-button-response',
+        stimulus: '<p style="color: orange; font-size: 48px; font-weight: bold;">BLUE</p>',
+        choices: function() {
+            // randomly shuffle the yes/no button order on each trial
+            var button_choices = ['Yes','No'];
+            return jsPsych.randomization.shuffle(button_choices);
+        },
+        post_trial_gap: function() {
+            // randomly select an ITI duration
+            return jsPsych.randomization.sampleWithoutReplacement([200,300,400,500],1)[0];
+        },
+        prompt: '<p>Does the color match the word?</p><p>Randomized button choice order and post trial gap duration.<br>'+
+            'These values will be saved to the data.</p>',
+        save_trial_parameters: {
+            // save the randomly-selected button order and ITI value to the trial data
+            choices: true,
+            post_trial_gap: true
+        },
+        on_finish: function(data) {
+            // determine which button was pressed, based on the response (button index: 0 or 1) and choices array (randomized order of button labels)
+            data.response_button_label = data.choices[data.response];
+        }
+    }
+
+    // If the parameter is always expected to be a function, then the function itself will be saved to the data as a string.
+    // This includes parameters like the 'stimulus' function in canvas-* plugins,
+    // and event-related callback functions, like 'on_start' and 'on_finish'.
+    var trial_4 = {
+        type: 'canvas-keyboard-response',
+        stimulus: function (c) {
+            var ctx = c.getContext('2d');
+            ctx.beginPath();
+            ctx.arc(250, 250, 200, 0, 2 * Math.PI);
+            ctx.stroke();
+        },
+        on_finish: function() {
+            console.log('finished!')
+        },
+        choices: ['e', 'i'],
+        prompt: '<p>Is this a circle or a rectangle? Press "e" for circle and "i" for rectangle.</p>' +
+            '<p>The stimulus and on_finish functions will be saved to the data as strings.</p>',
+        save_trial_parameters: {
+            stimulus: true,
+            on_finish: true
+        }
+    }
+
+    jsPsych.init({
+        timeline: [trial_1, trial_2, trial_3, trial_4],
+        on_finish: function () {
+            jsPsych.data.displayData();
+        }
+    });
+
+</script>
+</html>
