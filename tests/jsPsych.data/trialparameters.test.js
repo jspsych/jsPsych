@@ -117,8 +117,8 @@ describe('Trial parameters in the data', function(){
     utils.clickTarget(document.querySelector('#jspsych-survey-text-next'));
 
     var data = jsPsych.data.get().values()[0];
-    expect(JSON.parse(data.questions)[0].prompt).toBe(q[0].prompt);
-    expect(JSON.parse(data.questions)[1].prompt).toBe(q[1].prompt);
+    expect(data.questions[0].prompt).toBe(q[0].prompt);
+    expect(data.questions[1].prompt).toBe(q[1].prompt);
   });
 
   test('Function-based parameters are stored as string representations ', function(){
