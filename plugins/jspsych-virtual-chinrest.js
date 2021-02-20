@@ -17,7 +17,7 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
         pretty_name: "Resize units",
         default: "none",
         description:
-          'What units to resize to? ["none"/"cm"/"inch"/"deg"]. If "none", no resizing will be done.',
+          'What units to resize to? ["none"/"cm"/"inch"/"deg"]. If "none", no resizing will be done to the jsPsych content after this trial.',
       },
       pixels_per_unit: {
         type: jsPsych.plugins.parameterType.INT,
