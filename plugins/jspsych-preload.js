@@ -161,21 +161,22 @@ jsPsych.plugins['preload'] = (function() {
       var loaded = 0;  // success or error count
       var loaded_success = 0; // success count
 
-      function load_video(cb){
-        jsPsych.pluginAPI.preloadVideo(video, cb, file_loading_success, file_loading_error);
+      if (total_n == 0) {
+        on_success();
+      } else {
+        function load_video(cb){
+          jsPsych.pluginAPI.preloadVideo(video, cb, file_loading_success, file_loading_error);
+        }
+        function load_audio(cb){
+          jsPsych.pluginAPI.preloadAudio(audio, cb, file_loading_success, file_loading_error);
+        }
+        function load_images(cb){
+          jsPsych.pluginAPI.preloadImages(images, cb, file_loading_success, file_loading_error);
+        }
+        if (video.length > 0) { load_video(function () { }) }
+        if (audio.length > 0) { load_audio(function () { }) }
+        if (images.length > 0) { load_images(function () { }) }
       }
-
-      function load_audio(cb){
-        jsPsych.pluginAPI.preloadAudio(audio, cb, file_loading_success, file_loading_error);
-      }
-
-      function load_images(cb){
-        jsPsych.pluginAPI.preloadImages(images, cb, file_loading_success, file_loading_error);
-      }
-
-      if (video.length > 0) { load_video(function () { }) }
-      if (audio.length > 0) { load_audio(function () { }) }
-      if (images.length > 0) { load_images(function () { }) }
 
       // helper functions and callbacks
 
