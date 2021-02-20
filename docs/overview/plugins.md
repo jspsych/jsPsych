@@ -51,6 +51,7 @@ There is also a set of parameters that can be specified for any plugin:
 | on_finish      | function | `function(){ return; }` | A callback function to execute when the trial finishes, and before the next trial begins. See [the Event-Related Callbacks page](../overview/callbacks.md) for more details. |
 | on_load        | function | `function(){ return; }` | A callback function to execute when the trial has loaded, which typically happens after the initial display of the plugin has loaded. See [the Event-Related Callbacks page](../overview/callbacks.md) for more details. |
 | css_classes    | string   | null                    | A list of CSS classes to add to the jsPsych display element for the duration of this trial. This allows you to create custom formatting rules (CSS classes) that are only applied to specific trials. For more information and examples, see the [Controlling Visual Appearance page](../overview/style.md) and the "css-classes-parameter.html" file in the jsPsych examples folder. |
+| save_trial_parameters | object | `{}` | An object containing any trial parameters that should or should not be saved to the trial data. Each key in the object is the name of a trial parameter, and its value should be `true` or `false`, depending on whether or not its value should be saved to the data. This can be used to override the plugin's default trial data, by saving additional parameter values that are not normally saved (e.g. `choices: true`), or not saving parameter values that normally are saved (e.g. `stimulus: false`). If the parameter is "dynamic" (i.e. a function that returns a parameter value) or uses `jsPsych.timelineVariable()`, then the value that is returned from the function and used during the trial will be saved to the data. If the parameter is always expected to be a function (e.g. an event-related callback function, like `on_finish`), then the function itself will be saved as a string. For more examples, see the "save-trial-parameters.html" file in the jsPsych examples folder. |
 
 ### The data parameter
 
@@ -157,6 +158,66 @@ var trial = {
   }
 };
 ```
+
+### The css_classes parameter
+
+The `css_classes` parameter allows you to add an array of CSS class names to the jsPsych display element on that specific trial. This allows you to create custom style and formatting rules that are only applied to specific trials. If you want CSS rules that only apply to specific elements during a trial, you can use additional CSS selectors.
+
+```html
+<style>
+  .flanker-stimulus {
+    font-size: 500%;
+  }
+  .flanker-stimulus #prompt {
+    font-size: 18px;
+  }
+  .fixation {
+    font-size: 80px;
+  }
+</style>
+<script>
+  var fixation_trial = {
+    type: 'html-keyboard-response',
+    choices: jsPsych.NO_KEYS,
+    stimulus: '+',
+    css_classes: ['fixation']
+  };
+  var flanker_trial = {
+    type: 'html-keyboard-response',
+    choices: ["ArrowLeft", "ArrowRight"],
+    stimulus: '>>>>>',
+    prompt: '<span id="prompt">Press the left or right arrow key.</span>',
+    css_classes: ['flanker-stimulus']
+  };
+</script>
+```
+
+### The save_trial_parameters parameter
+
+The `save_trial_parameters` parameter allows you to tell jsPsych what parameters you want to be saved to the data. This can be used to override the parameter values that the plugin saves by default. You can add more parameter values to the data that are not normally saved, or remove parameter values that normally are saved. This can be especially useful when the parameter value is dynamic (i.e. a function) and you want to record the value that was used during the trial.
+
+```javascript
+var trial = {
+  type: 'html-button-response',
+  stimulus: '<p style="color: orange; font-size: 48px; font-weight: bold;">BLUE</p>',
+  choices: function() {
+    return jsPsych.randomization.shuffle(['Yes','No']);
+  },
+  post_trial_gap: function() {
+    return jsPsych.randomization.sampleWithoutReplacement([200,300,400,500],1)[0];
+  },
+  save_trial_parameters: {
+    // save the randomly-selected button order and post trial gap duration to the trial data
+    choices: true,
+    post_trial_gap: true,
+    // don't save the stimulus
+    stimulus: false
+  }
+}
+```
+
+???+ note 
+  You cannot remove the `internal_node_id` and `trial_index` values from the trial data, because these are used internally by jsPsych.
 
 ## Data collected by all plugins
 
