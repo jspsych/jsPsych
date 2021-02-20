@@ -88,7 +88,7 @@ describe('Trial parameters in the data', function(){
       timeline: [trial]
     });
 
-    utils.pressKey(32);
+    utils.pressKey(' ');
 
     expect(spy).toHaveBeenCalled();
 		spy.mockRestore();
