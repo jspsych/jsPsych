@@ -1,5 +1,5 @@
 /*
- *  plugin for jsPsych based in Qisheng Li 11/2019. /// https://github.com/QishengLi/virtual_chinrest
+ *  virtual chinrest plugin for jsPsych, based on Qisheng Li 11/2019. /// https://github.com/QishengLi/virtual_chinrest
     
     Modified by Gustavo Juantorena 08/2020 // https://github.com/GEJ1
 
@@ -14,9 +14,10 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
     parameters: {
       resize_units: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: "Resize units",
         default: "none",
         description:
-          'What units to resize to? ["none"/"cm"/"inch"/"deg"]. If "none", no resize will be done.',
+          'What units to resize to? ["none"/"cm"/"inch"/"deg"]. If "none", no resizing will be done.',
       },
       pixels_per_unit: {
         type: jsPsych.plugins.parameterType.INT,
@@ -31,7 +32,8 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
       //   default: true,
       // },
       adjustment_prompt: {
-        type: jsPsych.plugins.parameterType.STRING,
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: "Adjustment prompt",
         default: `
           <div style="text-align: left;">
           <p>Click and drag the lower right corner of the image until it is the same size as a credit card held up to the screen.</p>
@@ -42,26 +44,29 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
           "Any content here will be displayed above the card stimulus.",
       },
       adjustment_button_prompt: {
-        type: jsPsych.plugins.parameterType.STRING,
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: "Adjustment button prompt",
         default: "Click here when the image is the correct size",
         description:
           " Content of the button displayed below the card stimulus.",
       },
       item_path: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: "Item path",
         default: "img/card.png",
+        description: "Path to an image to be shown in the resizable item div."
       },
       item_height_mm: {
         type: jsPsych.plugins.parameterType.FLOAT,
-        pretty_name: "Item height",
+        pretty_name: "Item height (mm)",
         default: 53.98,
-        description: "The height of the item to be measured.",
+        description: "The height of the item to be measured, in mm.",
       },
       item_width_mm: {
         type: jsPsych.plugins.parameterType.FLOAT,
-        pretty_name: "Item width",
+        pretty_name: "Item width (mm)",
         default: 85.6,
-        description: "The width of the item to be measured.",
+        description: "The width of the item to be measured, in mm.",
       },
       item_init_size: {
         type: jsPsych.plugins.parameterType.INT,
@@ -75,10 +80,11 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
         pretty_name: "Blindspot measurement repetitions",
         default: 5,
         description:
-          "How many times to measure the blindspot location? If 0, blindspot will not detected and viewing distance not computed.",
+          "How many times to measure the blindspot location? If 0, blindspot will not be detected, and viewing distance and degree data not computed.",
       },
       blindspot_prompt: {
-        type: jsPsych.plugins.parameterType.STRING,
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: "Blindspot prompt",
         default: `
           <p>Now we will quickly measure how far away you are sitting.</p>
           <div style="text-align: left">
@@ -90,33 +96,39 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
             </ol>
           </div>
           <p>Press the space bar when you are ready to begin.</p>
-          `
+          `,
+        description: "HTML-formatted prompt to be shown on the screen during blindspot estimates."
       },
-      blindspot_start_prompt: {
-        type: jsPsych.plugins.parameterType.STRING,
-        default: "Start",
-        description: "Content of the start button for the blindspot tasks.",
-      },
-
+      // blindspot_start_prompt: {
+      //   type: jsPsych.plugins.parameterType.HTML_STRING,
+      //   pretty_name: "Blindspot start prompt",
+      //   default: "Start",
+      //   description: "Content of the start button for the blindspot tasks.",
+      // },
       blindspot_measurements_prompt: {
-        type: jsPsych.plugins.parameterType.STRING,
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: "Blindspot measurements prompt",
         default: "Remaining measurements: ",
         description: "Text accompanying the remaining measures counter",
       },
       viewing_distance_report: {
-        type: jsPsych.plugins.parameterType.STRING,
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: "Viewing distance report",
         default: "<p>Based on your responses, you are sitting about <span id='distance-estimate' style='font-weight: bold;'></span> from the screen.</p><p>Does that seem about right?</p>",
         description:
           'If "none" is given, viewing distance will not be reported to the participant',
       },
       redo_measurement_button_label: {
-        type: jsPsych.plugins.parameterType.STRING,
-        default: 'No, that is not close. Try again.'
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: "Re-do measurement button label",
+        default: 'No, that is not close. Try again.',
+        description: "Label for the button that can be clicked on the viewing distance report screen to re-do the blindspot estimate(s)."
       },
       blindspot_done_prompt: {
-        type: jsPsych.plugins.parameterType.STRING,
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: "Blindspot done prompt",
         default: "Yes",
-        description: "Text for final prompt",
+        description: "Label for the button that can be clicked on the viewing distance report screen to accept the viewing distance estimate.",
       },
     },
   };
