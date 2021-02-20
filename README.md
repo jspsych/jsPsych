@@ -6,7 +6,7 @@ jsPsych experiments are created using the languages of the Web: HTML, CSS, and J
 
 ## What can I do with jsPsych?
 
-jsPsych comes with a number of plugins that you can use to do specific things and collect relevant data. Some plugins do general things, like present a stimulus (text, image, audio, video) and record a key press or button response. Other plugins do more specific things, like show a set of instructions pages, run a drag-and-drop image sorting task, present a Random-Dot Kinematogram, or calibrate the WebGazer eye-tracking extension. See the documentation website for a [list of all plugins](https://www.jspsych.org/plugins/list-of-plugins/), and to see what each plugin can do.
+jsPsych comes with a number of plugins that you can use create tasks and collect data. Some plugins do general things, like present a stimulus (text, image, audio, video) and record a key press or button response along with a response time. Other plugins do more specific things, like show a set of instructions pages, run a drag-and-drop image sorting task, present a Random-Dot Kinematogram, or calibrate the WebGazer eye-tracking extension. See the documentation website for a [list of all plugins](https://www.jspsych.org/plugins/list-of-plugins/), and to see what each plugin can do.
 
 Often people can create their experiment by combining these plugins together. But if that's not possible for your experiment, you can also modify a plugin file or [create your own plugin](https://www.jspsych.org/overview/plugins/#creating-a-new-plugin). This gives you the flexibility to do exactly what you want, while still taking advantage of jsPsych's general experiment-building framework.
 
@@ -60,4 +60,4 @@ Credits
 
 jsPsych was created by Josh de Leeuw ([@jodeleeuw](https://github.com/jodeleeuw)).
 
-There have been many [contributors](https://github.com/jspsych/jsPsych/blob/master/contributors.md) to the library. Thank you!
+We're grateful for the many [contributors](https://github.com/jspsych/jsPsych/blob/master/contributors.md) to the library, and for the generous support from a [Mozilla Open Source Support (MOSS)](https://www.mozilla.org/en-US/moss/) award. Thank you!
