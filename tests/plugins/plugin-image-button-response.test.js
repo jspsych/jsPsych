@@ -23,8 +23,7 @@ describe('image-button-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png"');
@@ -39,8 +38,7 @@ describe('image-button-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<button class=\"jspsych-btn\">button-choice1</button>'));
@@ -57,8 +55,7 @@ describe('image-button-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch(new RegExp('<button class="jspsych-custom-button">buttonChoice</button>'));
@@ -73,8 +70,7 @@ describe('image-button-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus"');
@@ -94,8 +90,7 @@ describe('image-button-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<button class=\"jspsych-btn\">button-choice</button></div></div><p>This is a prompt</p>');
@@ -111,8 +106,7 @@ describe('image-button-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().querySelector('#jspsych-image-button-response-stimulus').style.visibility).toMatch("");
@@ -130,8 +124,7 @@ describe('image-button-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus"');
@@ -149,8 +142,7 @@ describe('image-button-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-button-response-stimulus"');
@@ -173,8 +165,7 @@ describe('image-button-response', function(){
 		};
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(spy).toHaveBeenCalled();

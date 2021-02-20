@@ -7,14 +7,20 @@
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-html-keyboard-response.js"></script>
   <script src="../plugins/jspsych-visual-search-circle.js"></script>
+  <script src="../plugins/jspsych-preload.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css">
 </head>
 <body></body>
 <script>
 
+  var preload_images = {
+    type: 'preload',
+    images: ['img/1.gif', 'img/2.gif', 'img/3.gif', 'img/backwardN.gif', 'img/normalN.gif', 'img/fixation.gif']
+  }
+
   var intro = {
     type: 'html-keyboard-response',
-    stimulus: '<p>You will see a set of Ns on the following screens. Press J if there is a backwards N. If there is no backwards N press F.</p><p>Press any key to begin.</p>'
+    stimulus: '<p>You will see a set of Ns on the following screens. Press j if there is a backwards N. If there is no backwards N press f.</p><p>Press any key to begin.</p>'
   }
 
   var trial_1 = {
@@ -48,7 +54,7 @@
   };
 
   jsPsych.init({
-    timeline: [intro, trials],
+    timeline: [preload_images, intro, trials],
     on_finish: function() {
       jsPsych.data.displayData();
     }

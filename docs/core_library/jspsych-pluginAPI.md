@@ -3,39 +3,6 @@
 The pluginAPI module contains functions that are useful when developing new plugins.
 
 ---
-## jsPsych.pluginAPI.autoPreload
-
-```
-jsPsych.pluginAPI.autoPreload(timeline, callback)
-```
-
-### Parameters
-
-Parameter | Type | Description
-----------|------|------------
-timeline | TimelineNode object | A TimelineNode object that contains an arbitrary set of trials.
-callback | function | A function to execute when loading is complete
-
-### Return value
-
-Returns nothing.
-
-### Description
-
-Attempts to preload all image files and audio files that will be used to run the trials on the timeline. Content will only preload from plugins that have used the `registerPreload` method to define the media types of their parameters.
-
-The callback function executes once all of the files are preloaded.
-
-This method is used internally by the core jsPsych code. It is not recommended that you call it manually.
-
-### Examples
-
-```javascript
-// you probably shouldn't use this method
-```
-
-
----
 ## jsPsych.pluginAPI.cancelAllKeyboardResponses
 
 ```
@@ -133,82 +100,61 @@ key2 | string or numeric | The representation of a key, either string or keycode
 
 ### Return value
 
-Returns true if keycodes or strings refer to the same key, regardless of type.
+Returns true if keycodes or strings refer to the same key, regardless of type. Returns false if the keycodes or strings do not match.
 
 ### Description
 
-Compares two keys to see if they are the same, ignoring differences in representational type.
+Compares two keys to see if they are the same, ignoring differences in representational type, and using the appropriate case sensitivity based on the experiment's settings. 
+
+If `case_sensitive_responses` is set to `false` in `jsPsych.init` (the default), then the string key comparison will not be case-sensitive, e.g., "a" and "A" will match, and this function will return `true`. If `case_sensitive_responses` is set to `true` in `jsPsych.init`, then the string key comparison will not be case-sensitive, e.g., "a" and "A" will not match, and this function will return `false`. 
+
+We recommend using this function to compare keys in all plugin and experiment code, rather than using something like `if (response == 'j')...`. This is because the response key returned by the `jsPsych.pluginAPI.getKeyboardResponse` function will be converted to lowercase when `case_sensitive_responses` is `false`, and it will match the exact key press representation when `case_sensitive_responses` is `true`. Using this `compareKeys` function will ensure that your key comparisons work appropriately based on the experiment's `case_sensitive_responses` setting, and that you do not need to remember to check key responses against different case versions of the comparison key (e.g. `if (response == 'ArrowLeft' || response == 'arrowleft')...`). 
 
 ### Examples
 
+#### Basic examples
 ```javascript
+jsPsych.pluginAPI.compareKeys('a', 'A');
+// returns true when case_sensitive_responses is false in jsPsych.init
+
+jsPsych.pluginAPI.compareKeys('a', 'A');
+// returns false when case_sensitive_responses is true in jsPsych.init
+
+// also works with numeric key codes (but note that numeric keyCode values are now deprecated)
 jsPsych.pluginAPI.compareKeys('a', 65);
 // returns true
 
-jsPsych.pluginAPI.convertKeyCharacterToKeyCode('space', 31)
+jsPsych.pluginAPI.compareKeys('space', 31);
 // returns false
 ```
 
----
-## jsPsych.pluginAPI.convertKeyCharacterToKeyCode
-
-```
-jsPsych.pluginAPI.convertKeyCharacterToKeyCode(character)
-```
-
-### Parameters
-
-Parameter | Type | Description
-----------|------|------------
-character | string | The string representation of keyboard key.
-
-### Return value
-
-Returns the numeric keycode associated with the `character` parameter.
-
-### Description
-
-Converts between the string representation of a key and the numeric key code associated with that key.
-
-### Examples
-
+#### Comparing a key response and key parameter value in plugins
 ```javascript
-var keycode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode('a')
-// keycode is 65
-
-keycode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode('space')
-// keycode is 32
+// this is the callback_function passed to jsPsych.pluginAPI.getKeyboardResponse
+var after_response = function(info) {
+  // score the response by comparing the key that was pressed against the trial's key_answer parameter
+  var correct = jsPsych.pluginAPI.compareKeys(trial.key_answer, info.key);
+  //...
+}
 ```
 
----
-## jsPsych.pluginAPI.convertKeyCodeToKeyCharacter
-
-```
-jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(character)
-```
-
-### Parameters
-
-Parameter | Type | Description
-----------|------|------------
-code | numeric | The numeric representation of keyboard key.
-
-### Return value
-
-Returns the string representation of the key associated with the `code` parameter.
-
-### Description
-
-Converts between the numeric key code of a key and the string representation associated with that key.
-
-### Examples
-
+#### Scoring a key response in experiment code
 ```javascript
-var keycode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode(65)
-// key is 'a'
-
-keycode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode(32)
-// keycode is 'space'
+var trial = {
+  type: 'html-keyboard-response',
+  stimulus: '<<<<<',
+  choices: ['f','j'],
+  prompt: 'Press f for left. Press j for right.',
+  on_finish: function(data){
+    // score the response by comparing the key that was pressed (data.response) against the 
+    // correct response for this trial ('f'), and store reponse accuracy in the trial data
+    if(jsPsych.pluginAPI.compareKeys(data.response, 'f')){
+      data.correct = true;
+    } else {
+      data.correct = false; 
+    }
+  }
+}
 ```
 
 ---
@@ -226,21 +172,89 @@ filepath | string | The path to the audio file that was preloaded.
 
 ### Return value
 
-Returns buffered audio file for playback. If the browser supports it the buffer will be playable with the WebAudio API. Otherwise, the returned buffer will be an HTML5 Audio object.
+Returns a Promise that resolves when the audio file loads. Success handler's parameter will be the audio buffer. If the experiment is running using the WebAudio API it will be an AudioBuffer object. Otherwise, it will be an HTML5 Audio object. The failure handler's parameter is the error generated by `preloadAudio`.
 
 ### Description
 
-Gets an AudioBuffer that can be played with the WebAudio API or an Audio object that can be played with HTML5 Audio. The file must be preloaded with `preloadAudioFiles` or the automatic preload (`autoPreload`).
+Gets an AudioBuffer that can be played with the WebAudio API or an Audio object that can be played with HTML5 Audio. 
+
+It is strongly recommended that you preload audio files before calling this method. This method will load the files if they are not preloaded, but this may result in delays during the experiment as audio is downloaded.
 
 ### Examples
 
+#### HTML 5 Audio
 ```javascript
-// the code below is used to play audio in the audio-keyboard-response plugin
-var source = context.createBufferSource();
-source.buffer = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
-source.connect(context.destination);
-startTime = context.currentTime;
-source.start(startTime);
+jsPsych.pluginAPI.getAudioBuffer('my-sound.mp3')
+  .then(function(audio){
+    audio.play();
+  })
+  .catch(function(err){
+    console.error('Audio file failed to load')
+  })
+```
+
+#### WebAudio API
+```javascript
+var context = jsPsych.pluginAPI.audioContext();
+
+jsPsych.pluginAPI.getAudioBuffer('my-sound.mp3')
+  .then(function(buffer){
+    audio = context.createBufferSource();
+    audio.buffer = buffer;
+    audio.connect(context.destination);
+    audio.start(context.currentTime);
+  })
+  .catch(function(err){
+    console.error('Audio file failed to load')
+  })
+```
+
+See the `audio-keyboard-response` plugin for an example in a fuller context.
+
+---
+## jsPsych.pluginAPI.getAutoPreloadList
+
+```
+jsPsych.pluginAPI.getAutoPreloadList(timeline)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+timeline | array | An array containing the trial object(s) from which a list of media files should be automatically generated. This array can contain the entire experiment timeline, or any individual parts of a larger timeline, such as specific timeline nodes and trial objects.
+
+### Return value
+
+An object with properties for each media type: `images`, `audio`, and `video`. Each property contains an array of the unique files of that media type that were automatically extracted from the timeline. If no files are found in the timeline for a particular media type, then the array will be empty for that type.
+
+### Description
+
+This method is used to automatically generate lists of unique image, audio, and video files from a timeline. It is used by the `preload` plugin to generate a list of to-be-preloaded files based on the trials passed to the `trials` parameter and/or the experiment timeline passed to `jsPsych.init` (when `auto_preload` is true). It can be used in custom plugins and experiment code to generate a list of audio/image/video files, based on a timeline. 
+
+This function will only return files from plugins that have used the `registerPreload` method to define the media types of their parameters, and only when the trial's parameter value is not a function. When a file path is returned to the trial parameter from a function (including by  `jsPsych.timelineVariable` function), or when the file path is embedded in an HTML string, that file will not be detected by the `getAutoPreloadList` method. In these cases, the file should be preloaded manually. See [Media Preloading](../overview/media-preloading.md) for more information.
+
+### Example
+
+```javascript
+var audio_trial = {
+    type: 'audio-keyboard-response'
+    stimulus: 'file.mp3'
+}
+
+var image_trial = {
+    type: 'image-keyboard-response'
+    stimulus: 'file.png'
+}
+
+var video_trial = {
+    type: 'video-keyboard-response'
+    stimulus: 'file.mp4'
+}
+
+var timeline = [audio_trial, image_trial, video_trial];
+
+jsPsych.pluginAPI.getAutoPreloadList(timeline);
 ```
 
 ---
@@ -274,7 +288,9 @@ Gets a keyboard response from the subject, recording the response time from when
 
 The keyboard event listener will be bound to the `display_element` declared in `jsPsych.init()` (or the `<body>` element if no `display_element` is specified). This allows jsPsych experiments to be embedded in websites with other content without disrupting the functionality of other UI elements.
 
-A valid response triggers the `callback_function` specified in the parameters. A single argument is passed to the callback function. The argument contains an object with the properties `key` and `rt`. `key` contains the numeric key code of the response, and `rt` contains the response time.
+A valid response triggers the `callback_function` specified in the parameters. A single argument is passed to the callback function. The argument contains an object with the properties `key` and `rt`. `key` contains the string representation of the response key, and `rt` contains the response time. 
+
+This function uses the `.key` value of the keyboard event, which is _case sensitive_. When `case_sensitive_responses` is `false` in `jsPsych.init` (the default), this function will convert both the `valid_responses` strings and the response key to lowercase before comparing them, and it will pass the lowercase version of the response key to the `callback_function`. For example, if `valid_responses` is `['a']`, then both 'A' and 'a' will be considered valid key presses, and 'a' will be returned as the response key. When `case_sensitive_responses` is `true` in `jsPsych.init`, this function will not convert the case when comparing the `valid_responses` and response key, and it will not convert the case of the response key that is passed to the `callback_function`. For example, if `valid_responses` is `['a']`, then 'a' will be the only valid key press, and 'A' (i.e. 'a' with CapsLock on or Shift held down) will not be accepted. Also, if `valid_responses` includes multiple letter case options (e.g. `jsPsych.ALL_KEYS`), then you may need to check the response key against both letter cases when scoring etc., e.g. `if (response == 'ArrowLeft' || response =='arrowleft') ...`.
 
 ### Examples
 
@@ -293,13 +309,13 @@ jsPsych.pluginAPI.getKeyboardResponse({
 });
 ```
 
-#### Get a responses from a key until the letter Q is pressed
+#### Get a responses from a key until the letter q is pressed
 ```javascript
 
 var after_response = function(info){
 	alert('You pressed key '+info.key+' after '+info.rt+'ms');
 
-	if(info.key == 81){ // the key code for 'Q' is 81.
+	if(jsPsych.pluginAPI.compareKeys(info.key,'q')){ /
 		jsPsych.pluginAPI.cancelKeyboardResponse(listener);
 	}
 }
@@ -313,10 +329,10 @@ var listener = jsPsych.pluginAPI.getKeyboardResponse({
 ```
 
 ---
-## jsPsych.pluginAPI.preloadAudioFiles
+## jsPsych.pluginAPI.preloadAudio
 
 ```
-jsPsych.pluginAPI.preloadAudioFiles(files, callback_complete, callback_load)
+jsPsych.pluginAPI.preloadAudio(files, callback_complete, callback_load, callback_error)
 ```
 
 ### Parameters
@@ -325,7 +341,8 @@ Parameter | Type | Description
 ----------|------|------------
 files | array | An array of audio file paths to load. The array can be nested (e.g., if images are in multiple arrays to help sort by condition or task).
 callback_complete | function | A function to execute when all the files have been loaded.
-callback_load | function | A function to execute after each file has been loaded. A single parameter is passed to this function which contains the number of files that have been loaded so far.
+callback_load | function | A function to execute after a single file has been loaded. A single parameter is passed to this function which is the file source (string) that has loaded.
+callback_error | function | A function to execute after a single file has produced an error. A single parameter is passed to this function which is the file source (string) that produced the error.
 
 ### Return value
 
@@ -333,11 +350,11 @@ Returns nothing.
 
 ### Description
 
-Use this function to preload audio files that are not part of a plugin with automatic preloading. Audio files in official plugins will automatically preload. See [Media Preloading](../overview/media-preloading.md) for more information.
+This function is used to preload audio files. It is used by the `preload` plugin, and could be called directly to preload audio files in custom plugins or experiment. See [Media Preloading](../overview/media-preloading.md) for more information.
 
 It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the files are loaded. Thus, it is possible that an audio file would be required for playing before it is done preloading. The `callback_complete` function will only execute after all the audio files are loaded, and can be used to control the flow of the experiment (e.g., by starting the experiment in the `callback_complete` function).
 
-The `callback_load` function can be used to indicate progress. See example below.
+The `callback_load` and `callback_error` functions are called after each file has either loaded or produced an error, so these functions can also be used to monitor loading progress. See example below.
 
 ### Examples
 
@@ -346,7 +363,11 @@ The `callback_load` function can be used to indicate progress. See example below
 
 var sounds = ['file1.mp3', 'file2.mp3', 'file3.mp3'];
 
-jsPsych.pluginAPI.preloadAudioFiles(sounds, function(){ startExperiment(); });
+jsPsych.pluginAPI.preloadAudio(sounds, 
+    function(){ startExperiment(); },
+    function(file){ console.log('file loaded: ', file); }
+    function(file){ console.log('error loading file: ', file); }
+);
 
 function startExperiment(){
     jsPsych.init({
@@ -360,11 +381,13 @@ function startExperiment(){
 
 ```javascript
 var sounds = ['file1.mp3', 'file2.mp3', 'file3.mp3'];
+var n_loaded = 0;
 
-jsPsych.pluginAPI.preloadAudioFiles(sounds, function(){ startExperiment(); }, function(nLoaded) { updateLoadedCount(nLoaded); });
+jsPsych.pluginAPI.preloadAudio(sounds, function(){ startExperiment(); }, function(file) { updateLoadedCount(file); });
 
-function updateLoadedCount(nLoaded){
-	var percentcomplete = nLoaded / sounds.length * 100;
+function updateLoadedCount(file){
+    n_loaded++;
+	var percentcomplete = n_loaded / sounds.length * 100;
 
 	// could put something fancier here, like a progress bar
 	// or updating text in the DOM.
@@ -378,12 +401,11 @@ function startExperiment(){
 }
 ```
 
-
 ---
 ## jsPsych.pluginAPI.preloadImages
 
 ```
-jsPsych.pluginAPI.preloadImages(images, callback_complete, callback_load)
+jsPsych.pluginAPI.preloadImages(images, callback_complete, callback_load, callback_error)
 ```
 
 ### Parameters
@@ -392,7 +414,8 @@ Parameter | Type | Description
 ----------|------|------------
 images | array | An array of image paths to load. The array can be nested (e.g., if images are in multiple arrays to help sort by condition or task).
 callback_complete | function | A function to execute when all the images have been loaded.
-callback_load | function | A function to execute after each image has been loaded. A single parameter is passed to this function which contains the number of images that have been loaded so far.
+callback_load | function | A function to execute after a single file has been loaded. A single parameter is passed to this function which is the file source (string) that has loaded.
+callback_error | function | A function to execute after a single file has produced an error. A single parameter is passed to this function which is the file source (string) that produced the error.
 
 ### Return value
 
@@ -400,11 +423,11 @@ Returns nothing.
 
 ### Description
 
-Use this function to preload image files that are not part of a plugin with automatic preloading. Image files in official plugins will automatically preload. See [Media Preloading](../overview/media-preloading.md) for more information.
+This function is used to preload image files. It is used by the `preload` plugin, and could be called directly to preload image files in custom plugins or experiment code. See [Media Preloading](../overview/media-preloading.md) for more information.
 
 It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the images are loaded. Thus, it is possible that an image would be required for display before it is done preloading. The `callback_complete` function will only execute after all the images are loaded, and can be used to control the flow of the experiment (e.g., by starting the experiment in the `callback_complete` function).
 
-The `callback_load` function can be used to indicate progress, if the number of images to be loaded is known ahead of time. See example below.
+The `callback_load` and `callback_error` functions are called after each file has either loaded or produced an error, so these functions can also be used to monitor loading progress. See example below.
 
 ### Examples
 
@@ -413,7 +436,11 @@ The `callback_load` function can be used to indicate progress, if the number of 
 
 var images = ['img/file1.png', 'img/file2.png', 'img/file3.png'];
 
-jsPsych.pluginAPI.preloadImages(images, function(){ startExperiment(); });
+jsPsych.pluginAPI.preloadImages(images, 
+    function(){ startExperiment(); },
+    function(file){ console.log('file loaded: ', file); }
+    function(file){ console.log('error loading file: ', file); }
+);
 
 function startExperiment(){
     jsPsych.init({
@@ -427,11 +454,13 @@ function startExperiment(){
 
 ```javascript
 var images = ['img/file1.png', 'img/file2.png', 'img/file3.png'];
+var n_loaded = 0;
 
-jsPsych.pluginAPI.preloadImages(images, function(){ startExperiment(); }, function(nLoaded) { updateLoadedCount(nLoaded); });
+jsPsych.pluginAPI.preloadImages(images, function(){ startExperiment(); }, function(file) { updateLoadedCount(file); });
 
-function updateLoadedCount(nLoaded){
-	var percentcomplete = nLoaded / images.length * 100;
+function updateLoadedCount(file){
+    n_loaded++;
+	var percentcomplete = n_loaded / images.length * 100;
 
 	// could put something fancier here, like a progress bar
 	// or updating text in the DOM.
@@ -446,10 +475,83 @@ function startExperiment(){
 ```
 
 ---
+## jsPsych.pluginAPI.preloadVideo
+
+```
+jsPsych.pluginAPI.preloadVideo(video, callback_complete, callback_load, callback_error)
+```
+
+### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+video | array | An array of video paths to load. The array can be nested (e.g., if videos are in multiple arrays to help sort by condition or task).
+callback_complete | function | A function to execute when all the videos have been loaded.
+callback_load | function | A function to execute after a single file has been loaded. A single parameter is passed to this function which is the file source (string) that has loaded.
+callback_error | function | A function to execute after a single file has produced an error. A single parameter is passed to this function which is the file source (string) that produced the error.
+
+### Return value
+
+Returns nothing.
+
+### Description
+
+This function is used to preload video files. It is used by the `preload` plugin, and could be called directly to preload video files in custom plugins or experiment code. See [Media Preloading](../overview/media-preloading.md) for more information.
+
+It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the videos are loaded. Thus, it is possible that a video would be requested before it is done preloading. The `callback_complete` function will only execute after all the videos are loaded, and can be used to control the flow of the experiment (e.g., by starting the experiment in the `callback_complete` function).
+
+The `callback_load` and `callback_error` functions are called after each file has either loaded or produced an error, so these functions can also be used to monitor loading progress. See example below.
+
+### Examples
+
+#### Basic use
+```javascript
+
+var videos = ['vid/file1.mp4', 'vid/file2.mp4', 'vid/file3.mp4'];
+
+jsPsych.pluginAPI.preloadVideo(videos, 
+    function(){ startExperiment(); },
+    function(file){ console.log('file loaded: ', file); }
+    function(file){ console.log('error loading file: ', file); }
+);
+
+function startExperiment(){
+    jsPsych.init({
+        timeline: exp
+    });
+}
+
+```
+
+#### Show progress of loading
+
+```javascript
+var videos = ['vid/file1.mp4', 'vid/file2.mp4', 'vid/file3.mp4'];
+var n_loaded = 0;
+
+jsPsych.pluginAPI.preloadVideo(videos, function(){ startExperiment(); }, function(file) { updateLoadedCount(file); });
+
+function updateLoadedCount(file){
+    n_loaded++;
+	var percentcomplete = n_loaded / videos.length * 100;
+
+	// could put something fancier here, like a progress bar
+	// or updating text in the DOM.
+	console.log('Loaded '+percentcomplete+'% of videos');
+}
+
+function startExperiment(){
+    jsPsych.init({
+        timeline: exp
+    });
+}
+```
+
+---
 ## jsPsych.pluginAPI.registerPreload
 
 ```
-jsPsych.pluginAPI.registerPreload(plugin_name, parameter, media_type, conditional_function)
+jsPsych.pluginAPI.registerPreload(plugin_name, parameter, media_type)
 ```
 
 ### Parameters
@@ -459,7 +561,6 @@ Parameter | Type | Description
 plugin_name | string | The name of the plugin. e.g., 'image-keyboard-response'.
 parameter | string | The name of the parameter that is a media file. e.g., 'stimulus'
 media_type | string | The type of media, either 'image', 'audio' or 'video'.
-conditional_function | function | Only run the preload for a trial if this function returns true, or if this function does not exist.
 
 ### Return value
 
@@ -469,13 +570,12 @@ Nothing.
 
 Use this method in a plugin file to mark a parameter as containing an element that should be preloaded. The method should be called in the plugin file such that it gets called when the file is loaded.
 
-The `conditional_function` function is passed a single argument containing the trial object.
-
 ### Example
 
-For an example, see the [image-keyboard-response](https://github.com/jodeleeuw/jsPsych/blob/master/plugins/jspsych-image-keyboard-response.js) and [audio-keyboard-response](https://github.com/jodeleeuw/jsPsych/blob/master/plugins/jspsych-audio-keyboard-response.js) plugins.
+For an example, see the [image-keyboard-response](https://github.com/jspsych/jsPsych/blob/master/plugins/jspsych-image-keyboard-response.js) and [audio-keyboard-response](https://github.com/jspsych/jsPsych/blob/master/plugins/jspsych-audio-keyboard-response.js) plugins.
 
 ---
+
 ## jsPsych.pluginAPI.setTimeout
 
 ```

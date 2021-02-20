@@ -31,7 +31,7 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
         description: 'The location of the target. The array should be the [row, column] of the target.'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Choices',
         array: true,
         default: [['3','5','7','9']],
@@ -171,11 +171,11 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 
       // gather the data to store for the trial
       var trial_data = {
-        "rt": response.rt,
-        "key_press": response.key,
-				"correct": response.correct,
-				"grid": JSON.stringify(trial.grid),
-				"target": JSON.stringify(trial.target)
+        rt: response.rt,
+        response: response.key,
+				correct: response.correct,
+				grid: trial.grid,
+				target: trial.target
       };
 
       // clear the display
@@ -196,8 +196,8 @@ jsPsych.plugins["serial-reaction-time"] = (function() {
 			var responseLoc = [];
 			for(var i=0; i<trial.choices.length; i++){
 				for(var j=0; j<trial.choices[i].length; j++){
-					var t = typeof trial.choices[i][j] == 'string' ? jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.choices[i][j]) : trial.choices[i][j];
-					if(info.key == t){
+					var t = trial.choices[i][j];
+					if(jsPsych.pluginAPI.compareKeys(info.key, t)){
 						responseLoc = [i,j];
 						break;
 					}

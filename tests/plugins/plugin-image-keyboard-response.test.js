@@ -22,13 +22,12 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src=\"../media/blue.png\" id=\"jspsych-image-keyboard-response-stimulus\"');
 
-		utils.pressKey(70);
+		utils.pressKey('a');
 	});
 
 	test('display clears after key press', function(){
@@ -40,13 +39,12 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus"');
 
-		utils.pressKey(70);
+		utils.pressKey('f');
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});
@@ -61,12 +59,11 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<div id="foo">this is a prompt</div>');
-		utils.pressKey(70);
+		utils.pressKey('f');
 	});
 
 	test('should hide stimulus if stimulus-duration is set', function(){
@@ -79,14 +76,13 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().querySelector('#jspsych-image-keyboard-response-stimulus').style.visibility).toMatch("");
 		jest.runTimersToTime(500);
 		expect(jsPsych.getDisplayElement().querySelector('#jspsych-image-keyboard-response-stimulus').style.visibility).toMatch("hidden");
-		utils.pressKey(70);
+		utils.pressKey('f');
 
 	});
 
@@ -100,8 +96,7 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus"');
@@ -119,13 +114,12 @@ describe('image-keyboard-response', function(){
 		}
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(jsPsych.getDisplayElement().innerHTML).toMatch('<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus"');
 
-		utils.pressKey(70);
+		utils.pressKey('f');
 
 		expect(jsPsych.getDisplayElement().innerHTML).toBe('');
 	});
@@ -144,8 +138,7 @@ describe('image-keyboard-response', function(){
 		};
 
 		jsPsych.init({
-			timeline: [trial],
-			auto_preload: false
+			timeline: [trial]
 		});
 
 		expect(spy).toHaveBeenCalled();

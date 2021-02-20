@@ -41,7 +41,7 @@ jsPsych.plugins.animation = (function() {
         description: 'Number of times to show entire sequence.'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Choices',
         default: jsPsych.ALL_KEYS,
         array: true,
@@ -177,8 +177,8 @@ jsPsych.plugins.animation = (function() {
       jsPsych.pluginAPI.cancelKeyboardResponse(response_listener);
 
       var trial_data = {
-        "animation_sequence": JSON.stringify(animation_sequence),
-        "responses": JSON.stringify(responses)
+        animation_sequence: animation_sequence,
+        response: responses
       };
 
       jsPsych.finishTrial(trial_data);

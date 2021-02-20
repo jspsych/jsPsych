@@ -57,7 +57,7 @@ jsPsych.plugins['vsl-grid-scene'] = (function() {
       display_element.innerHTML = '';
 
       var trial_data = {
-        "stimulus": JSON.stringify(trial.stimuli)
+        stimulus: trial.stimuli
       };
 
       jsPsych.finishTrial(trial_data);

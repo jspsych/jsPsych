@@ -28,15 +28,15 @@ jsPsych.plugins.instructions = (function() {
         description: 'Each element of the array is the content for a single page.'
       },
       key_forward: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key forward',
-        default: 'rightarrow',
+        default: 'ArrowRight',
         description: 'The key the subject can press in order to advance to the next page.'
       },
       key_backward: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key backward',
-        default: 'leftarrow',
+        default: 'ArrowLeft',
         description: 'The key that the subject can press to return to the previous page.'
       },
       allow_backward: {
@@ -191,8 +191,8 @@ jsPsych.plugins.instructions = (function() {
       display_element.innerHTML = '';
 
       var trial_data = {
-        "view_history": JSON.stringify(view_history),
-        "rt": performance.now() - start_time
+        view_history: view_history,
+        rt: performance.now() - start_time
       };
 
       jsPsych.finishTrial(trial_data);

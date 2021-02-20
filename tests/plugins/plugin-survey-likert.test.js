@@ -37,7 +37,7 @@ describe('survey-likert plugin', function(){
 
 		utils.clickTarget(document.querySelector('#jspsych-survey-likert-next'));
 
-		var survey_data = JSON.parse(jsPsych.data.get().values()[0].responses);
+		var survey_data = jsPsych.data.get().values()[0].response;
 		expect(survey_data.Q0).toBe(0);
 		expect(survey_data.Q1).toBe(1);
 		expect(survey_data.Q2).toBe(2);

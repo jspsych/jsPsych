@@ -2,7 +2,7 @@
  * jspsych-iat
  * Kristin Diep
  *
- * plugin for displaying a stimulus and getting a keyboard response
+ * plugin for running an IAT (Implicit Association Test) with an image stimulus
  *
  * documentation: docs.jspsych.org
  *
@@ -26,15 +26,15 @@
         description: 'The image to be displayed'
       },
       left_category_key: {
-        type: jsPsych.plugins.parameterType.HTML_STRING, 
+        type: jsPsych.plugins.parameterType.KEY, 
         pretty_name: 'Left category key',
-        default: 'E',
+        default: 'e',
         description: 'Key press that is associated with the left category label.'
       },
       right_category_key: {
-        type: jsPsych.plugins.parameterType.STRING,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Right category key',
-        default: 'I',
+        default: 'i',
         description: 'Key press that is associated with the right category label.'
       },
       left_category_label: {
@@ -52,7 +52,7 @@
         description: 'The label that is associated with the stimulus. Aligned to the right side of the page.'
       },
       key_to_move_forward: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key to move forward',
         array: true,
         default: jsPsych.ALL_KEYS,
@@ -68,7 +68,7 @@
         type: jsPsych.plugins.parameterType.HTML_STRING,
         pretty_name: 'HTML when wrong',
         default: '<span style="color: red; font-size: 80px">X</span>',
-        description: 'The image to display when a user presses the wrong key.'
+        description: 'The HTML to display when a user presses the wrong key.'
       }, 
       bottom_instructions: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
@@ -86,8 +86,8 @@
         type: jsPsych.plugins.parameterType.HTML_STRING,
         pretty_name: 'Stimulus key association',
         options: ['left', 'right'],
-        default: 'undefined',
-        description: 'Stimulus will be associated with eight "left" or "right".'
+        default: undefined,
+        description: 'Stimulus will be associated with either "left" or "right".'
       },
       response_ends_trial: {
         type: jsPsych.plugins.parameterType.BOOL,
@@ -167,10 +167,10 @@
 
       // gather the data to store for the trial
       var trial_data = {
-        "rt": response.rt,
-        "stimulus": trial.stimulus,
-        "key_press": response.key,
-        "correct": response.correct
+        rt: response.rt,
+        stimulus: trial.stimulus,
+        response: response.key,
+        correct: response.correct
       };
 
       // clears the display
@@ -180,8 +180,8 @@
       jsPsych.finishTrial(trial_data);
     };
 
-    var leftKeyCode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.left_category_key);
-    var rightKeyCode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode(trial.right_category_key);
+    var leftKeyCode = trial.left_category_key;
+    var rightKeyCode = trial.right_category_key;
 
     // function to handle responses by the subject
     var after_response = function(info) {
@@ -196,7 +196,7 @@
       }
 
       if(trial.stim_key_association == "right") {
-        if(response.rt !== null && response.key == rightKeyCode) {
+        if(response.rt !== null && jsPsych.pluginAPI.compareKeys(response.key, rightKeyCode)) {
           response.correct = true;
           if (trial.response_ends_trial) {
             end_trial();
@@ -228,7 +228,7 @@
           }
         }
       } else if(trial.stim_key_association == "left") {
-        if(response.rt !== null && response.key == leftKeyCode) {
+        if(response.rt !== null && jsPsych.pluginAPI.compareKeys(response.key, leftKeyCode)) {
           response.correct = true;
           if (trial.response_ends_trial) {
             end_trial();

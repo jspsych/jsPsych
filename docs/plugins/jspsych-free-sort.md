@@ -1,10 +1,10 @@
 # jspsych-free-sort plugin
 
-The free-sort plugin displays one or more images on the screen that the participant can interact with by clicking and dragging. When the trial starts, the images can be positioned outside or inside the sort area. All images must be moved into the sorting area before the participant can click a button to end the trial. All of the moves that the participant performs are recorded, as well as the final positions of all images. This plugin could be useful when asking participants to position images based on similarity to one another, or to recall image spatial locations.
+The free-sort plugin displays one or more images on the screen that the participant can interact with by clicking and dragging with a mouse, or touching and dragging with a touchscreen device. When the trial starts, the images can be positioned outside or inside the sort area. All images must be moved into the sorting area before the participant can click a button to end the trial. All of the moves that the participant performs are recorded, as well as the final positions of all images. This plugin could be useful when asking participants to position images based on similarity to one another, or to recall image spatial locations.
 
 ## Parameters
 
-In addition to the [parameters available in all plugins](overview.md#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+In addition to the [parameters available in all plugins](/overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
@@ -25,16 +25,17 @@ border_width | numeric | null | The width in pixels of the border around the sor
 counter_text_unfinished | string | You still need to place %n% item%s% inside the sort area. | Text to display when there are one or more items that still need to be placed in the sort area. If "%n%" is included in the string, it will be replaced with the number of items that still need to be moved inside. If "%s%" is included in the string, a "s" will be included when the number of items remaining is greater than one.
 counter_text_finished | string | All items placed. Feel free to reposition items if necessary. | Text that will take the place of the counter_text_unfinished text when all items have been moved inside the sort area.
 stim_starts_inside | boolean | false | If `false`, the images will be positioned to the left and right of the sort area when the trial loads. If `true`, the images will be positioned at random locations inside the sort area when the trial loads.
+column_spread_factor | numeric | 1 | When the images appear outside the sort area, this determines the x-axis spread of the image columns. Default value is 1. Values less than 1 will compress the image columns along the x-axis, and values greater than 1 will spread them farther apart.
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview.md#data-collected-by-plugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](/overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
-init_locations | JSON string | A JSON-encoded object representing the initial locations of all the stimuli in the sorting area. The object is an array with one element per stimulus. Each element in the array has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location.
-moves | JSON string |  A JSON-encoded object representing all of the moves the participant made when sorting. The object is an array with each element representing a move. Each element in the array has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location after the move.
-final_locations | JSON string | A JSON-encoded object representing the final locations of all the stimuli in the sorting area. The object is an array with one element per stimulus. Each element in the array has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location.
+init_locations | array | An array containing objects representing the initial locations of all the stimuli in the sorting area. Each element in the array represents a stimulus, and has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. 
+moves | array | An array containing objects representing all of the moves the participant made when sorting. Each object represents a move. Each element in the array has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location after the move. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. 
+final_locations | array | An array containing objects representing the final locations of all the stimuli in the sorting area. Each element in the array represents a stimulus, and has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. 
 rt | numeric | The response time in milliseconds for the participant to finish all sorting.
 
 ## Examples

@@ -6,11 +6,17 @@
   <script src="js/snap.svg-min.js"></script>
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-vsl-animate-occlusion.js"></script>
+  <script src="../plugins/jspsych-preload.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css">
 </head>
 <body></body>
 <script>
   var images = ["img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif", "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif", "img/9.gif", "img/10.gif"];
+
+  var preload = {
+    type: 'preload',
+    auto_preload: true
+  }
 
   // create vsl block for jspsych
   var block = {
@@ -19,7 +25,7 @@
   };
 
   jsPsych.init({
-    timeline: [block],
+    timeline: [preload, block],
     on_finish: function() {
       jsPsych.data.displayData();
     }

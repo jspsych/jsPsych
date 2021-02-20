@@ -24,7 +24,7 @@ test('works on basic timeline', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('trial 1');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('the end');
 });
@@ -43,7 +43,7 @@ test('works with looping timeline (#541)', function(){
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('trial 1');
 
-    utils.pressKey(32);
+    utils.pressKey('a');
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch('the end');
 });

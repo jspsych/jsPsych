@@ -24,7 +24,7 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
         description: 'The HTML string to be displayed'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         array: true,
         pretty_name: 'Choices',
         default: jsPsych.ALL_KEYS,
@@ -89,9 +89,9 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
 
       // gather the data to store for the trial
       var trial_data = {
-        "rt": response.rt,
-        "stimulus": trial.stimulus,
-        "key_press": response.key
+        rt: response.rt,
+        stimulus: trial.stimulus,
+        response: response.key
       };
 
       // clear the display

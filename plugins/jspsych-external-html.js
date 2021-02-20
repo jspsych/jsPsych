@@ -21,7 +21,7 @@ jsPsych.plugins['external-html'] = (function() {
         description: 'The url of the external html page'
       },
       cont_key: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Continue key',
         default: null,
         description: 'The key to continue to the next page.'
@@ -88,7 +88,7 @@ jsPsych.plugins['external-html'] = (function() {
       if (trial.cont_btn) { display_element.querySelector('#'+trial.cont_btn).addEventListener('click', finish); }
       if (trial.cont_key) {
         var key_listener = function(e) {
-          if (e.which == trial.cont_key) finish();
+          if (jsPsych.pluginAPI.compareKeys(e.key,trial.cont_key)) finish();
         };
         display_element.addEventListener('keydown', key_listener);
       }

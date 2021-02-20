@@ -130,7 +130,14 @@ jsPsych.plugins['free-sort'] = (function() {
         default: false,
         description: 'If false, the images will be positioned to the left and right of the sort area when the trial loads. '+
         'If true, the images will be positioned at random locations inside the sort area when the trial loads.'
-      }
+      },
+      column_spread_factor: {
+        type: jsPsych.plugins.parameterType.FLOAT,
+        pretty_name: 'column spread factor',
+        default: 1,
+        description: 'When the images appear outside the sort area, this determines the x-axis spread of the image columns. '+
+        'Default value is 1. Values less than 1 will compress the image columns along the x-axis, and values greater than 1 will spread them farther apart.'
+      },
     }
   }
 
@@ -177,7 +184,7 @@ jsPsych.plugins['free-sort'] = (function() {
     }
     // add button
     html += '<div><button id="jspsych-free-sort-done-btn" class="jspsych-btn" '+ 
-      'style="margin-top: 5px; visibility: hidden;">' + 
+      'style="margin-top: 5px; margin-bottom: 15px; visibility: hidden;">' + 
       trial.button_label+'</button></div>';
 
     display_element.innerHTML = html;
@@ -199,9 +206,9 @@ jsPsych.plugins['free-sort'] = (function() {
         for (const y of make_arr(0, trial.sort_area_height - trial.stim_height, num_rows) ) {
           if ( x > ( (trial.sort_area_width - trial.stim_width)  * .5 ) ) {
             //r_coords.push({ x:x, y:y } )
-            r_coords.push({ x:x + (trial.sort_area_width)  * .5 , y:y });
+            r_coords.push({ x:x + (trial.sort_area_width)  * (.5*trial.column_spread_factor) , y:y });
           } else {
-            l_coords.push({ x:x - (trial.sort_area_width)  * .5 , y:y });
+            l_coords.push({ x:x - (trial.sort_area_width)  * (.5*trial.column_spread_factor) , y:y });
             //l_coords.push({ x:x, y:y } )
           }
         }
@@ -242,9 +249,9 @@ jsPsych.plugins['free-sort'] = (function() {
         '</img>';
 
       init_locations.push({
-        "src": trial.stimuli[i],
-        "x": coords.x,
-        "y": coords.y
+        src: trial.stimuli[i],
+        x: coords.x,
+        y: coords.y
       });
       if (trial.stim_starts_inside) {
         inside.push(true);
@@ -278,19 +285,46 @@ jsPsych.plugins['free-sort'] = (function() {
       display_element.querySelector("#jspsych-free-sort-counter").innerHTML = trial.counter_text_finished;
     } 
 
+    let start_event_name = 'mousedown';
+    let move_event_name = 'mousemove';
+    let end_event_name = 'mouseup';
+    if (typeof document.ontouchend !== 'undefined'){ // for touch devices
+      start_event_name = 'touchstart'
+      move_event_name = 'touchmove'
+      end_event_name = 'touchend'
+    }
+
     for(let i=0; i<draggables.length; i++){
-      draggables[i].addEventListener('mousedown', function(event){
-        let x = event.pageX - event.currentTarget.offsetLeft;
-        let y = event.pageY - event.currentTarget.offsetTop - window.scrollY;
+      draggables[i].addEventListener(start_event_name, function(event){
+        let pageX = event.pageX; 
+        let pageY = event.pageY;
+        if (typeof document.ontouchend !== 'undefined'){  // for touch devices
+          event.preventDefault();
+          const touchObject = event.changedTouches[0]
+          pageX = touchObject.pageX
+          pageY = touchObject.pageY
+        }
+
+        let x = pageX - event.currentTarget.offsetLeft;
+        let y = pageY - event.currentTarget.offsetTop - window.scrollY;
         let elem = event.currentTarget;
         elem.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
-        let mousemoveevent = function(e){
-          cur_in = inside_ellipse(e.clientX - x, e.clientY - y, 
+
+        let move_event = function(e){
+          let clientX = e.clientX;
+          let clientY = e.clientY;
+          if (typeof document.ontouchend !== 'undefined'){  // for touch devices
+            const touchObject = e.changedTouches[0]
+            clientX = touchObject.clientX
+            clientY = touchObject.clientY
+          }
+
+          cur_in = inside_ellipse(clientX - x, clientY - y, 
               trial.sort_area_width*.5 - trial.stim_width*.5, trial.sort_area_height*.5 - trial.stim_height*.5, 
               trial.sort_area_width*.5, trial.sort_area_height*.5,
               trial.sort_area_shape == "square");
-          elem.style.top =  Math.min(trial.sort_area_height - trial.stim_height*.5, Math.max(- trial.stim_height*.5, (e.clientY - y))) + 'px';
-          elem.style.left = Math.min(trial.sort_area_width*1.5  - trial.stim_width,  Math.max(-trial.sort_area_width*.5, (e.clientX - x)))+ 'px';
+          elem.style.top =  Math.min(trial.sort_area_height - trial.stim_height*.5, Math.max(- trial.stim_height*.5, (clientY - y))) + 'px';
+          elem.style.left = Math.min(trial.sort_area_width*1.5  - trial.stim_width,  Math.max(-trial.sort_area_width*.5, (clientX - x)))+ 'px';
           
           // modify border while items is being moved
           if (trial.change_border_background_color) {
@@ -320,10 +354,10 @@ jsPsych.plugins['free-sort'] = (function() {
             display_element.querySelector("#jspsych-free-sort-counter").innerHTML = get_counter_text(inside.length - inside.filter(Boolean).length);
           }
         }
-        document.addEventListener('mousemove', mousemoveevent);
+        document.addEventListener(move_event_name, move_event);
 
-        var mouseupevent = function(e){
-          document.removeEventListener('mousemove', mousemoveevent);
+        var end_event = function(e){
+          document.removeEventListener(move_event_name, move_event);
           elem.style.transform = "scale(1, 1)";
           if (trial.change_border_background_color) {
             if (inside.every(Boolean)) {
@@ -335,13 +369,13 @@ jsPsych.plugins['free-sort'] = (function() {
             }
           }
           moves.push({
-            "src": elem.dataset.src,
-            "x": elem.offsetLeft,
-            "y": elem.offsetTop
+            src: elem.dataset.src,
+            x: elem.offsetLeft,
+            y: elem.offsetTop
           });
-          document.removeEventListener('mouseup', mouseupevent);
+          document.removeEventListener(end_event_name, end_event);
         }
-        document.addEventListener('mouseup', mouseupevent);
+        document.addEventListener(end_event_name, end_event);
       });
     }
 
@@ -355,17 +389,17 @@ jsPsych.plugins['free-sort'] = (function() {
         let final_locations = [];
         for(let i=0; i<items.length; i++){
           final_locations.push({
-            "src": items[i].dataset.src,
-            "x": parseInt(items[i].style.left),
-            "y": parseInt(items[i].style.top)
+            src: items[i].dataset.src,
+            x: parseInt(items[i].style.left),
+            y: parseInt(items[i].style.top)
           });
         }
 
         const trial_data = {
-          "init_locations": JSON.stringify(init_locations),
-          "moves": JSON.stringify(moves),
-          "final_locations": JSON.stringify(final_locations),
-          "rt": rt
+          init_locations: init_locations,
+          moves: moves,
+          final_locations: final_locations,
+          rt: rt
         };
         
         // advance to next part

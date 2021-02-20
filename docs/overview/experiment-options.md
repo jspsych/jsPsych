@@ -2,13 +2,14 @@
 
 There are several options that can be set when calling `jsPsych.init()` to launch the experiment.
 
-Options are specified in the object passed to `jsPsych.init`. For example, to specify a set of images to preload and the default inter-trial interval the object would contain:
+Options are specified in the object passed to `jsPsych.init`. For example, to specify a default inter-trial interval, a minimum valid response time duration, and a maximum width for all of the experiment's page content, the object would contain:
 
 ```js
 jsPsych.init({
     timeline: [...],
-    preload_images: ['img1.png', 'img2.png'],
-    default_iti: 500
+    default_iti: 250, 
+    minimum_valid_rt: 100, 
+    experiment_width: 800 
 });
 ```
 
@@ -54,7 +55,7 @@ An automatic or manually updated progress bar can be displayed at the top of the
 
 ## Preload media elements
 
-Images, audio files, and movies can be preloaded to reduce latency during the experiment. In many cases, this preloading is automatic. In certain situations, such as using a custom plugin, using [timeline variables](timeline.md#timeline-variables), or using [functions to determine which stimulus to show](trial.md#dynamic-parameters), it is necessary to provide jsPsych with a list of media elements to preload. The [media preloading](media-preloading.md) page describes this process in detail.
+Images, audio files, and movies can be preloaded to reduce latency during the experiment. In many cases, this preloading is automatic. In certain situations, such as using a custom plugin, using [timeline variables](timeline.md#timeline-variables), or using [functions to determine which stimulus to show](dynamic-parameters.md), it is necessary to provide jsPsych with a list of media elements to preload. The [media preloading](media-preloading.md) page describes this process in detail.
 
 ## Choose the method for playing audio files
 
@@ -107,6 +108,24 @@ jsPsych.init({
 });
 ```
 
+## Choose whether you want keyboard choices/responses to be case-sensitive
+
+JavaScript keyboard events make a distinction between uppercase and lowercase key responses (e.g. 'a' and 'A'). Often the researcher just cares about which physical key was pressed, and not whether the key press would result in an uppercase letter (for instance, if CapsLock is on or if the Shift key is held down). For this reason, jsPsych converts all key choice parameters and key responses as lowercase by default. This makes it easier to specify key choices (e.g. `choices: ['a']`, instead of `choices: ['a','A']`), and it makes it easier to check and score a participant's response. 
+
+There may be situations when you want key choices and responses to be case-sensitive. You can change this by setting the `case_sensitive` parameter to `true` in `jsPsych.init`.
+
+```js
+// use case-sensitive key choices and responses, 
+// i.e. uppercase and lower case letters ('a' and 'A') will be treated as different key choices, 
+// and will be recorded this way in the data
+jsPsych.init({
+    timeline: [...],
+    case_sensitive: true
+});
+```
+
+Note that this setting only applies to key choices and responses that use jsPsych's keyboard response listener, such as in the *`-keyboard-response` plugins. This does NOT apply to responses that are made by typing into a text box, such as in the `survey-text` and `cloze` plugins.
+
 ## Override 'safe mode' when running experiments offline
 
 By default, jsPsych switches to a 'safe mode' when it detects that the webpage is running offline (via the `file://` protocol) in order to prevent certain errors. Specifically, in safe mode, HTML5 audio is used to play audio files (even when `use_webaudio` has been explicitly set to `true`) and video preloading is disabled (both automatic and manual preloading). For more information, see the [Cross-origin requests (CORS) and safe mode](running-experiments.md#cross-origin-requests-cors-and-safe-mode) section on the Running Experiments page.
@@ -117,5 +136,18 @@ It's possible to override this safe mode feature by setting the `override_safe_m
 jsPsych.init({
     timeline: [...],
     override_safe_mode: true
+});
+```
+
+## Add extensions
+
+Extensions are jsPsych modules that can run throughout the experiment and interface with any plugin to extend the functionality of the plugin. One example of an extension is eye tracking, which allows you to gather gaze data during any trial and add it to that trial's data object. If you want to use extensions in your experiment, you must specify this when you initialize the experiment with `jsPsych.init`. The `extensions` parameter in `jsPsych.init` is an array of objects, where each object specifies the extension that you'd like to use in the experiment. Below is an example of adding the webgazer extension.
+
+```js
+jsPsych.init({
+    timeline: [...],
+    extensions: [
+        {type: 'webgazer'}
+    ]
 });
 ```

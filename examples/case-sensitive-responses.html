@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
+
+  var trial_1 = {
+    type: 'html-keyboard-response',
+    stimulus: '<p>By default, jsPsych does not treat letter responses as case sensitive. So "A" (uppercase) is treated as "a" (lowercase).</p>'+
+    '<p>This is an example of an experiment where "case_sensitive_responses" is set to "true" in jsPsych.init.</p>'+
+    '<p>To continue, you must press the letter "a" (lowercase).</p>'+
+    '<p>The trial will not end if you respond with "A" (uppercase), either by holding down the Shift key or turning CapsLock on.</p>',
+    choices: ['a']
+  }
+
+  var trial_2 = {
+    type: 'html-keyboard-response',
+    stimulus: '<p>This is another example trial.</p>'+
+    '<p>To continue, now you must press the letter "A" (uppercase).</p>'+
+    '<p>The trial will not end if you respond with "a" (lowercase).</p>',
+    choices: ['A']
+  }
+
+  var trial_3 = {
+    type: 'html-keyboard-response',
+    choices: jsPsych.ALL_KEYS,
+    stimulus: '<p>When "case_sensitive_responses" is "true", your keyboard responses are case-sensitive in the data.</p>'+
+    '<p>The next page shows the data, with your response recorded as "a" for the first trial and "A" for the second trial.</p>'+
+    '<p>If you change "case_sensitive_responses" to "false" in jsPsych.init and reload this expeirment<br>'+
+    'you will find that both "a" or "A" responses are valid responses for the first two trials,<br>'+
+    'and your response will always be recorded as "a" (lowercase) in the data.</p>'
+  }
+
+  jsPsych.init({
+    timeline: [trial_1, trial_2, trial_3],
+    case_sensitive_responses: true, // to ignore the letter case of a keyboard response, set this parameter to false or remove it
+    on_finish: function(){jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>

@@ -4,12 +4,18 @@
     <script src="../jspsych.js"></script>
     <script src="../plugins/jspsych-vsl-grid-scene.js"></script>
     <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="../plugins/jspsych-preload.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css">
   </head>
 
   <script>
 
   var images = ["img/1.gif","img/2.gif","img/3.gif","img/4.gif","img/5.gif","img/6.gif","img/7.gif","img/8.gif","img/9.gif","img/10.gif"];
+
+  var preload = {
+    type: 'preload',
+    auto_preload: true
+  }
 
   var scene =
     [
@@ -33,7 +39,7 @@
   }
 
     jsPsych.init({
-      timeline: [trial, trial_2],
+      timeline: [preload, trial, trial_2],
       on_finish: function() { jsPsych.data.displayData(); }
     });
 

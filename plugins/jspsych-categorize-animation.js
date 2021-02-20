@@ -23,13 +23,13 @@ jsPsych.plugins["categorize-animation"] = (function() {
         description: 'Array of paths to image files.'
       },
       key_answer: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Key answer',
         default: undefined,
         description: 'The key to indicate correct response'
       },
       choices: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
+        type: jsPsych.plugins.parameterType.KEY,
         pretty_name: 'Choices',
         default: jsPsych.ALL_KEYS,
         array: true,
@@ -230,17 +230,17 @@ jsPsych.plugins["categorize-animation"] = (function() {
       }
 
       correct = false;
-      if (trial.key_answer == info.key) {
+      if (jsPsych.pluginAPI.compareKeys(trial.key_answer, info.key)) {
         correct = true;
       }
 
       responded = true;
 
       trial_data = {
-        "stimulus": JSON.stringify(trial.stimuli),
-        "rt": info.rt,
-        "correct": correct,
-        "key_press": info.key
+        stimulus: trial.stimuli,
+        rt: info.rt,
+        correct: correct,
+        response: info.key
       };
 
       jsPsych.pluginAPI.cancelKeyboardResponse(keyboard_listener);
