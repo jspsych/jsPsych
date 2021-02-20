@@ -10,8 +10,7 @@
 <body></body>
 <script>
 
-    // Plugins save some trial parameters by default.
-    // If you want to save parameters to the trial data that aren't normally saved, you can do so with the save_trial_parameters. 
+    // If you want to save parameters to the trial data that aren't normally saved, you can do so with the save_trial_parameters option. 
     // For example, the html-keyboard-response plugin doesn't save the prompt string or choices array by default,
     // but this information will be saved in the example trial below.
     var trial_1 = {
@@ -25,7 +24,7 @@
         }
     }
 
-    // You can also uses 'false' in the save_trial_parameters option to prevent a parameter from being saved 
+    // You can also use 'false' in the save_trial_parameters option to prevent a parameter from being saved 
     // that is normally saved by default.
     var trial_2 = {
         type: 'html-keyboard-response',
@@ -38,8 +37,8 @@
         }
     }
 
-    // If you use dynamic parameters and/or timeline variables, 
-    // then the value that is returned from the function will be saved to the data.
+    // If the parameter is dynamic or a timeline variable, 
+    // then the value that is returned from the function or timeline variables will be saved to the data.
     var trial_3 = {
         type: 'html-button-response',
         stimulus: '<p style="color: orange; font-size: 48px; font-weight: bold;">BLUE</p>',
@@ -65,9 +64,9 @@
         }
     }
 
-    // If the parameter is a function and is NOT a dynamic parameter,
-    // (i.e. it is a parameter that is always expected to be a function, like the stimulus function in canvas-* plugins),
-    // then the function will be saved to the data as a string.
+    // If the parameter is always expected to be a function, then the function itself will be saved to the data as a string.
+    // This includes parameters like the 'stimulus' function in canvas-* plugins,
+    // and event-related callback functions, like 'on_start' and 'on_finish'.
     var trial_4 = {
         type: 'canvas-keyboard-response',
         stimulus: function (c) {
@@ -76,11 +75,15 @@
             ctx.arc(250, 250, 200, 0, 2 * Math.PI);
             ctx.stroke();
         },
+        on_finish: function() {
+            console.log('finished!')
+        },
         choices: ['e', 'i'],
         prompt: '<p>Is this a circle or a rectangle? Press "e" for circle and "i" for rectangle.</p>' +
-            '<p>The stimulus function will be saved to the data as a string.</p>',
+            '<p>The stimulus and on_finish functions will be saved to the data as strings.</p>',
         save_trial_parameters: {
-            stimulus: true
+            stimulus: true,
+            on_finish: true
         }
     }
 
