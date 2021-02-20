@@ -187,13 +187,6 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
         </button>
         ${trial.blindspot_measurements_prompt} 
         <div id="click" style="display:inline; color: red"> ${trial.blindspot_reps} </div>
-        ${trial.viewing_distance_report !== "none" ?
-        `<div id="info" style="visibility:hidden">
-          <b id="info-h">
-            ${trial.viewing_distance_report}
-          </b>
-        </div>` : ''
-      }
       </div>`
 
     /* create content for final report screen */
@@ -310,7 +303,11 @@ jsPsych.plugins["virtual-chinrest"] = (function () {
 
       jsPsych.pluginAPI.cancelAllKeyboardResponses();
 
-      showReport();
+      if(trial.viewing_distance_report == 'none'){
+        endTrial();
+      } else {
+        showReport();
+      }
     }
 
     function showReport() {
