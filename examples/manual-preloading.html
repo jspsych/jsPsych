@@ -49,7 +49,7 @@
   }
   
   jsPsych.init({
-    timeline: [preload, pre_trial, trial],
+    timeline: [preload_trial, pre_trial, trial],
     on_finish: function() {
       jsPsych.data.displayData();
     }

@@ -7,10 +7,16 @@
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-html-keyboard-response.js"></script>
   <script src="../plugins/jspsych-visual-search-circle.js"></script>
+  <script src="../plugins/jspsych-preload.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css">
 </head>
 <body></body>
 <script>
+
+  var preload_images = {
+    type: 'preload',
+    images: ['img/1.gif', 'img/2.gif', 'img/3.gif', 'img/backwardN.gif', 'img/normalN.gif', 'img/fixation.gif']
+  }
 
   var intro = {
     type: 'html-keyboard-response',
@@ -48,7 +54,7 @@
   };
 
   jsPsych.init({
-    timeline: [intro, trials],
+    timeline: [preload_images, intro, trials],
     on_finish: function() {
       jsPsych.data.displayData();
     }

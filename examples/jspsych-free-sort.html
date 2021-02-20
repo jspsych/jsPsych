@@ -4,10 +4,16 @@
     <script src="../jspsych.js"></script>
     <script src="../plugins/jspsych-free-sort.js"></script>
     <script src="../plugins/jspsych-canvas-keyboard-response.js"></script>
+    <script src="../plugins/jspsych-preload.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css">
   </head>
   <body></body>
   <script>
+
+  var preload = {
+    type: 'preload',
+    auto_preload: true
+  };
 
   var trial_1 = {
     type: 'free-sort',
@@ -94,7 +100,7 @@
   };
 
   jsPsych.init({
-    timeline: [trial_1, trial_2, trial_3, trial_4, trial_5],
+    timeline: [preload, trial_1, trial_2, trial_3, trial_4, trial_5],
     on_finish: function(){jsPsych.data.displayData();}
   });
 

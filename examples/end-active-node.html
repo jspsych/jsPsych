@@ -4,6 +4,7 @@
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-html-keyboard-response.js"></script>
   <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-preload.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css">
 </head>
 <body></body>
@@ -17,11 +18,15 @@
     });
   }
 
+  var preload = {
+    type: 'preload',
+    auto_preload: true
+  }
+
   var block = {
     type: 'image-keyboard-response',
     choices: ['y','n'],
     stimulus_width: 300,
-    render_on_canvas: false,
     prompt: '<p>Press "y" to continue. Press "n" to end this node of the experiment.</p>',
     on_finish: function(data) {
       if (jsPsych.pluginAPI.compareKeys(data.response, "n")) {
@@ -37,7 +42,7 @@
   }
 
   jsPsych.init({
-    timeline: [block, after_block],
+    timeline: [preload, block, after_block],
     on_finish: function() {
       jsPsych.data.displayData();
     }

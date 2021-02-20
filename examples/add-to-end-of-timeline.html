@@ -4,10 +4,16 @@
     <script src="../jspsych.js"></script>
     <script src="../plugins/jspsych-html-keyboard-response.js"></script>
     <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="../plugins/jspsych-preload.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css">
   </head>
   <body></body>
   <script>
+
+  var preload = {
+    type: 'preload',
+    images: ['img/happy_face_4.jpg']
+  }
 
   var first = {
     type: 'html-keyboard-response',
@@ -24,7 +30,7 @@
   }
 
   jsPsych.init({
-    timeline: [first],
+    timeline: [preload, first],
     on_finish: function(){jsPsych.data.displayData(); }
   });
 

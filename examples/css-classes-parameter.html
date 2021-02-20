@@ -5,6 +5,7 @@
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-image-keyboard-response.js"></script>
   <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-preload.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css">
   <style>
     /* 
@@ -71,6 +72,11 @@
 <body></body>
 <script>
 
+  var preload = {
+    type: 'preload',
+    auto_preload: true
+  }
+
   var trial_procedure_1 = {
     timeline: [{
       type: 'html-keyboard-response',
@@ -128,7 +134,7 @@
   }
 
   jsPsych.init({
-    timeline: [trial_procedure_1, trial_procedure_2, trial_procedure_3],
+    timeline: [preload, trial_procedure_1, trial_procedure_2, trial_procedure_3],
     on_finish: function() {
       jsPsych.data.displayData();
     }
