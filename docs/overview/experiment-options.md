@@ -53,10 +53,6 @@ Exclusion criteria can be specified based on features of the user's web browser,
 
 An automatic or manually updated progress bar can be displayed at the top of the screen. By default, the text next to the progress bar is "Completion Progress", but this text can be changed with the `message_progress_bar` parameter in `jsPsych.init`. See the [progress bar page](progress-bar.md) for more details.
 
-## Preload media elements
-
-Images, audio files, and movies can be preloaded to reduce latency during the experiment. In many cases, this preloading is automatic. In certain situations, such as using a custom plugin, using [timeline variables](timeline.md#timeline-variables), or using [functions to determine which stimulus to show](dynamic-parameters.md), it is necessary to provide jsPsych with a list of media elements to preload. The [media preloading](media-preloading.md) page describes this process in detail.
-
 ## Choose the method for playing audio files
 
 Specifying the `use_webaudio` parameter in `jsPsych.init()` allows you to choose whether to use the WebAudio API or HTML5 audio for playing audio files during your experiment. By default, jsPsych uses the WebAudio API to play audio files. Among other features, the WebAudio API allows for more precise measurement of response times relative to the onset of the audio. 
