@@ -169,7 +169,7 @@ There are two reasons why a CSS rule like the one above for `fixation` may not w
 
 In these cases, you can change your CSS selector to make it more specific: add a space after class name, then add _more CSS selectors_ to select the specific element(s) that you want to change. 
 
-!!! note "Tip"
+!!! tip
     To find out this more specific CSS selector, you can right-click on the element and select *Inspect*. In the inspector window, right-click on the property corresponding to the element and copy the selector. You might need to increase the trial's `trial_duration` to give yourself enough time to inspect the elements on the page. See more [tips for working with CSS](#tips-for-working-with-css) below.
 
 In the example below, the CSS selector `.left-align #stimulus` selects the element with the ID "stimulus" that is _inside_ of an element with the class "left-align".
