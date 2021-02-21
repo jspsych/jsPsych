@@ -17,7 +17,7 @@ time_per_point | numeric | 1000 | If `calibration_mode` is set to `view`, then t
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](/overview/plugins#data-collected-by-plugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](/overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------

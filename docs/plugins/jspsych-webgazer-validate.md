@@ -20,7 +20,7 @@ show_validation_data | bool | false | If `true` then a visualization of the vali
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](/overview/plugins#data-collected-by-plugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](/overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
