@@ -307,7 +307,6 @@ First we need to add the preload plugin to our `<head>` section.
   <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
   <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
   <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
-  <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
   <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
 </head>
 ```
