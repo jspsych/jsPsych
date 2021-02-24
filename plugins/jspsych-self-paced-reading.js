@@ -1,97 +1,98 @@
-// Initial text-moving-window-keyboard-response
-jsPsych.plugins['text-moving-window-keyboard-response'] = (function () {
+// Initial self-paced-reading plugin
+jsPsych.plugins["self-paced-reading"] = (function () {
   let plugin = {};
 
   plugin.info = {
-    name: 'text-moving-window-keyboard-response',
-    description: '',
+    name: "self-paced-reading",
+    description: "",
     parameters: {
       sentence: {
         type: jsPsych.plugins.parameterType.STRING,
         array: false,
-        pretty_name: 'Sentence',
+        pretty_name: "Sentence",
         default: {},
-        description: 'Sentence to be presented word-by-word.',
+        description: "Sentence to be presented word-by-word.",
       },
       mask_type: {
         type: jsPsych.plugins.parameterType.INT,
         array: false,
-        pretty_name: 'Mask type',
+        pretty_name: "Mask type",
         default: 1,
-        description: 'The type of mask for the sentence.',
+        description: "The type of mask for the sentence.",
       },
       font: {
         type: jsPsych.plugins.parameterType.STRING,
         array: false,
-        pretty_name: 'Font',
-        default: '40px monospace',
-        description: 'Font (should be monospaced font)',
+        pretty_name: "Font",
+        default: "40px monospace",
+        description: "Font (should be monospaced font)",
       },
       font_colour: {
         type: jsPsych.plugins.parameterType.STRING,
         array: false,
-        pretty_name: 'Font',
-        default: 'black',
-        description: 'Font colour',
+        pretty_name: "Font",
+        default: "black",
+        description: "Font colour",
       },
       canvas_colour: {
         type: jsPsych.plugins.parameterType.STRING,
         array: false,
-        pretty_name: 'Colour',
-        default: 'white',
-        description: 'Canvas colour.',
+        pretty_name: "Colour",
+        default: "white",
+        description: "Canvas colour.",
       },
       canvas_size: {
         type: jsPsych.plugins.parameterType.INT,
         array: true,
-        pretty_name: 'Size',
+        pretty_name: "Size",
         default: [1280, 960],
-        description: 'Canvas size.',
+        description: "Canvas size.",
       },
       canvas_border: {
         type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Border',
-        default: '0px solid black',
-        description: 'Border style',
+        pretty_name: "Border",
+        default: "0px solid black",
+        description: "Border style",
       },
       translate_origin: {
         type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: 'Translate',
+        pretty_name: "Translate",
         default: false,
-        description: 'Translate origin to center',
+        description: "Translate origin to center",
       },
       choices: {
         type: jsPsych.plugins.parameterType.KEYCODE,
         array: true,
-        pretty_name: 'Choices',
+        pretty_name: "Choices",
         default: jsPsych.ALL_KEYS,
-        description: 'The keys the subject is allowed to press to respond to the stimulus.',
+        description:
+          "The keys the subject is allowed to press to respond to the stimulus.",
       },
       xy_position: {
         type: jsPsych.plugins.parameterType.STRING,
         array: false,
-        pretty_name: 'align',
-        default: 'left',
-        description: 'Text Alignment',
+        pretty_name: "align",
+        default: "left",
+        description: "Text Alignment",
       },
       x_align: {
         type: jsPsych.plugins.parameterType.STRING,
         array: false,
-        pretty_name: 'align',
-        default: 'left',
-        description: 'Text Alignment',
+        pretty_name: "align",
+        default: "left",
+        description: "Text Alignment",
       },
     },
   };
 
   function textMask(txt) {
-    return txt.replace(/[a-z.!?ßäÄüÜöÖ’-]/gi, '_');
+    return txt.replace(/[a-z.!?ßäÄüÜöÖ’-]/gi, "_");
   }
 
   plugin.trial = function (display_element, trial) {
     // setup canvas
     var new_html =
-      '<div>' +
+      "<div>" +
       '<canvas id="canvas" width="' +
       trial.canvas_size[0] +
       '" height="' +
@@ -99,49 +100,75 @@ jsPsych.plugins['text-moving-window-keyboard-response'] = (function () {
       '" style="border: ' +
       trial.canvas_border +
       ';"></canvas>' +
-      '</div>';
+      "</div>";
 
     display_element.innerHTML = new_html;
-    let canvas = document.getElementById('canvas');
-    let ctx = document.getElementById('canvas').getContext('2d');
+    let canvas = document.getElementById("canvas");
+    let ctx = document.getElementById("canvas").getContext("2d");
 
     ctx.fillStyle = trial.canvas_colour;
     let canvas_rect;
     if (trial.translate_origin) {
       ctx.translate(canvas.width / 2, canvas.height / 2); // make center (0, 0)
-      canvas_rect = [-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height];
+      canvas_rect = [
+        -canvas.width / 2,
+        -canvas.height / 2,
+        canvas.width,
+        canvas.height,
+      ];
     } else {
       canvas_rect = [0, 0, canvas.width, canvas.height];
     }
-    ctx.fillRect(canvas_rect[0], canvas_rect[1], canvas_rect[2], canvas_rect[3]);
+    ctx.fillRect(
+      canvas_rect[0],
+      canvas_rect[1],
+      canvas_rect[2],
+      canvas_rect[3]
+    );
 
     // basic font style
     ctx.font = trial.font;
     ctx.textAlign = trial.x_align;
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = 'black';
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "black";
 
     // text properties
-    const words = trial.sentence.split(' ');
-    let word_number = -1;
+    const words = trial.sentence.split(" ");
+    let word_number = trial.mask_type === 3 ? 0 : -1;
 
     function draw() {
       ctx.fillStyle = trial.canvas_colour;
-      ctx.fillRect(canvas_rect[0], canvas_rect[1], canvas_rect[2], canvas_rect[3]);
+      ctx.fillRect(
+        canvas_rect[0],
+        canvas_rect[1],
+        canvas_rect[2],
+        canvas_rect[3]
+      );
       ctx.fillStyle = trial.font_colour;
 
-      let w = [];
-      if (trial.mask_type === 1) {
-        w = words.map(function (word, idx) {
-          return idx !== word_number ? textMask(word) : word;
-        });
-      } else if (trial.mask_type === 2) {
-        w = words.map(function (word, idx) {
-          return idx > word_number ? textMask(word) : word;
-        });
+      if (trial.mask_type !== 3) {
+        if (trial.mask_type === 1) {
+          w = words.map(function (word, idx) {
+            return idx !== word_number ? textMask(word) : word;
+          });
+        } else if (trial.mask_type === 2) {
+          w = words.map(function (word, idx) {
+            return idx > word_number ? textMask(word) : word;
+          });
+        }
+        ctx.fillText(
+          textMask(w.join(" ")),
+          trial.xy_position[0],
+          trial.xy_position[1]
+        );
+        ctx.fillText(w.join(" "), trial.xy_position[0], trial.xy_position[1]);
+      } else {
+        ctx.fillText(
+          words[word_number],
+          trial.xy_position[0],
+          trial.xy_position[1]
+        );
       }
-      ctx.fillText(textMask(w.join(' ')), trial.xy_position[0], trial.xy_position[1]);
-      ctx.fillText(w.join(' '), trial.xy_position[0], trial.xy_position[1]);
     }
 
     // store response
@@ -171,7 +198,7 @@ jsPsych.plugins['text-moving-window-keyboard-response'] = (function () {
       };
 
       // clear the display and move to next trial
-      display_element.innerHTML = '';
+      display_element.innerHTML = "";
       jsPsych.finishTrial(trial_data);
     };
 
@@ -206,7 +233,7 @@ jsPsych.plugins['text-moving-window-keyboard-response'] = (function () {
       var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,
-        rt_method: 'performance',
+        rt_method: "performance",
         persist: false,
         allow_held_key: false,
       });
