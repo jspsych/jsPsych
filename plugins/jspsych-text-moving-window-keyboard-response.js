@@ -1,3 +1,4 @@
+// Initial text-moving-window-keyboard-response
 jsPsych.plugins['text-moving-window-keyboard-response'] = (function () {
   let plugin = {};
 
@@ -11,13 +12,6 @@ jsPsych.plugins['text-moving-window-keyboard-response'] = (function () {
         pretty_name: 'Sentence',
         default: {},
         description: 'Sentence to be presented word-by-word.',
-      },
-      max_width: {
-        type: jsPsych.plugins.parameterType.INT,
-        array: false,
-        pretty_name: 'SentenceWidth',
-        default: 1000,
-        description: 'Maximum width of the sentence before line-break.',
       },
       mask_type: {
         type: jsPsych.plugins.parameterType.INT,
@@ -33,19 +27,12 @@ jsPsych.plugins['text-moving-window-keyboard-response'] = (function () {
         default: '40px monospace',
         description: 'Font (should be monospaced font)',
       },
-      text_align: {
+      font_colour: {
         type: jsPsych.plugins.parameterType.STRING,
         array: false,
-        pretty_name: 'align',
-        default: 'left',
-        description: 'Text Alignment',
-      },
-      line_height: {
-        type: jsPsych.plugins.parameterType.INT,
-        array: false,
-        pretty_name: 'LineHeight',
-        default: 30,
-        description: 'Spacing between lines if sentence split across lines.',
+        pretty_name: 'Font',
+        default: 'black',
+        description: 'Font colour',
       },
       canvas_colour: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -67,12 +54,32 @@ jsPsych.plugins['text-moving-window-keyboard-response'] = (function () {
         default: '0px solid black',
         description: 'Border style',
       },
+      translate_origin: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Translate',
+        default: false,
+        description: 'Translate origin to center',
+      },
       choices: {
         type: jsPsych.plugins.parameterType.KEYCODE,
         array: true,
         pretty_name: 'Choices',
         default: jsPsych.ALL_KEYS,
         description: 'The keys the subject is allowed to press to respond to the stimulus.',
+      },
+      xy_position: {
+        type: jsPsych.plugins.parameterType.STRING,
+        array: false,
+        pretty_name: 'align',
+        default: 'left',
+        description: 'Text Alignment',
+      },
+      x_align: {
+        type: jsPsych.plugins.parameterType.STRING,
+        array: false,
+        pretty_name: 'align',
+        default: 'left',
+        description: 'Text Alignment',
       },
     },
   };
@@ -99,49 +106,53 @@ jsPsych.plugins['text-moving-window-keyboard-response'] = (function () {
     let ctx = document.getElementById('canvas').getContext('2d');
 
     ctx.fillStyle = trial.canvas_colour;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.translate(canvas.width / 2, canvas.height / 2); // make center (0, 0)
+    let canvas_rect;
+    if (trial.translate_origin) {
+      ctx.translate(canvas.width / 2, canvas.height / 2); // make center (0, 0)
+      canvas_rect = [-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height];
+    } else {
+      canvas_rect = [0, 0, canvas.width, canvas.height];
+    }
+    ctx.fillRect(canvas_rect[0], canvas_rect[1], canvas_rect[2], canvas_rect[3]);
 
     // basic font style
     ctx.font = trial.font;
-    ctx.textAlign = trial.text_align;
+    ctx.textAlign = trial.x_align;
     ctx.textBaseline = 'middle';
     ctx.fillStyle = 'black';
 
     // text properties
-    const numLines = Math.ceil(ctx.measureText(trial.sentence).width / trial.max_width);
     const words = trial.sentence.split(' ');
-    const xpos = trial.text_align === 'left' ? -(trial.max_width / 2) : 0;
-    let ypos = -(trial.line_height * numLines) / 2 + trial.line_height / 2;
+    let word_number = -1;
 
-    // keep adding word until it is too long
-    // NB most self-paced reading paradigms present sentences on a single line!
-    let line = '';
-    for (let n = 0; n < words.length; n++) {
-      let word;
+    function draw() {
+      ctx.fillStyle = trial.canvas_colour;
+      ctx.fillRect(canvas_rect[0], canvas_rect[1], canvas_rect[2], canvas_rect[3]);
+      ctx.fillStyle = trial.font_colour;
+
+      let w = [];
       if (trial.mask_type === 1) {
-        word = n === trial.word_number ? words[n] : textMask(words[n]);
+        w = words.map(function (word, idx) {
+          return idx !== word_number ? textMask(word) : word;
+        });
       } else if (trial.mask_type === 2) {
-        word = n <= trial.word_number ? words[n] : textMask(words[n]);
+        w = words.map(function (word, idx) {
+          return idx > word_number ? textMask(word) : word;
+        });
       }
-      let tmp = line + word + ' ';
-      if (ctx.measureText(tmp).width > trial.max_width && n > 0) {
-        ctx.fillText(line, xpos, ypos);
-        ctx.fillText(textMask(line), xpos, ypos);
-        line = word + ' ';
-        ypos += trial.line_height;
-      } else {
-        line = tmp;
-      }
+      ctx.fillText(textMask(w.join(' ')), trial.xy_position[0], trial.xy_position[1]);
+      ctx.fillText(w.join(' '), trial.xy_position[0], trial.xy_position[1]);
     }
-    ctx.fillText(line, xpos, ypos);
-    ctx.fillText(textMask(line), xpos, ypos);
 
     // store response
     let response = {
       rt: null,
-      key: null,
+      word: null,
+      word_number: null,
+      sentence: null,
     };
+
+    draw(); // draw initial sentence outline
 
     // function to end trial when it is time
     const end_trial = function () {
@@ -149,35 +160,49 @@ jsPsych.plugins['text-moving-window-keyboard-response'] = (function () {
       jsPsych.pluginAPI.clearAllTimeouts();
 
       // kill keyboard listeners
-      if (typeof keyboardListener !== 'undefined') {
-        jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
-      }
+      jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
 
       // gather the data to store for the trial
       const trial_data = {
         rt: response.rt,
+        word: words[word_number - 1],
+        word_number: word_number,
         sentence: trial.sentence,
-        word: words[trial.word_number],
-        key_press: response.key,
       };
 
-      // clear the display
+      // clear the display and move to next trial
       display_element.innerHTML = '';
-
-      // move on to the next trial
       jsPsych.finishTrial(trial_data);
     };
 
     // function to handle responses by the subject
     const after_response = function (info) {
-      if (response.key == null) {
-        response = info;
+      response.rt = info.rt;
+      response.word = words[word_number];
+      response.word_number = word_number + 1;
+      response.sentence = trial.sentence;
+
+      // store data
+      if (word_number < words.length - 1) {
+        jsPsych.data.write(response);
       }
-      end_trial();
+
+      // next word
+      word_number++;
+
+      jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+      keyboardListener = key();
+
+      if (word_number < words.length) {
+        draw();
+      } else {
+        end_trial();
+      }
     };
 
     // start the response listener
-    if (trial.choices !== jsPsych.NO_KEYS) {
+    keyboardListener = key();
+    function key() {
       var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,
@@ -185,6 +210,7 @@ jsPsych.plugins['text-moving-window-keyboard-response'] = (function () {
         persist: false,
         allow_held_key: false,
       });
+      return keyboardListener;
     }
   };
 
