@@ -1921,20 +1921,24 @@ jsPsych.turk = (function() {
 
     if (!assignmentId || !turkSubmitTo) return;
 
-    var dataString = [];
+    const form = document.createElement('form');
+		form.method = 'POST';
+		form.action = turkSubmitTo + "/mturk/externalSubmit?assignmentId=" + assignmentId;
 
-    for (var key in data) {
+		for (const key in data) {
+			if (data.hasOwnProperty(key)) {
+				const hiddenField = document.createElement('input');
+				hiddenField.type = 'hidden';
+				hiddenField.name = key;
+				hiddenField.id = key;
+				hiddenField.value = data[key];
 
-      if (data.hasOwnProperty(key)) {
-        dataString.push(key + "=" + escape(data[key]));
-      }
-    }
+				form.appendChild(hiddenField);
+			}
+		}
 
-    dataString.push("assignmentId=" + assignmentId);
-
-    var url = turkSubmitTo + "/mturk/externalSubmit?" + dataString.join("&");
-
-    window.location.href = url;
+		document.body.appendChild(form);
+		form.submit();
   };
 
   return module;
