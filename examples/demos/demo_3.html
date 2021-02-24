@@ -5,8 +5,11 @@
         <script src="../../plugins/jspsych-html-keyboard-response.js"></script>
         <link rel="stylesheet" href="../../css/jspsych.css">
         <style>
-        #jspsych-html-keyboard-response-stimulus {
+        .flanker-stimulus {
             font-size: 500%;
+        }
+        .debrief-text {
+            font-size: 25px;
         }
         </style>
     </head>
@@ -27,7 +30,8 @@
             stimulus: jsPsych.timelineVariable('stimulus'),
             data: jsPsych.timelineVariable('data'),
             post_trial_gap: 1500,
-            response_ends_trial: true
+            response_ends_trial: true,
+            css_classes: ['flanker-stimulus']
           }],
           timeline_variables: test_stimuli,
           sample: {type: 'fixed-repetitions', size: 2}
@@ -39,9 +43,10 @@
             var congruent_rt = Math.round(jsPsych.data.get()
               .filter({stim_type: 'congruent'}).select('rt').mean());
             var incongruent_rt = Math.round(jsPsych.data.get().filter({stim_type: 'incongruent'}).select('rt').mean());
-            return "<p style='font-size:25px'>Your average response time for congruent trials was <strong>" + congruent_rt + "ms</strong>.</p>"+
-            "<p style='font-size:25px'>Your average response time for incongruent trials was <strong>" + incongruent_rt + "ms</strong>.</p>";
-          }
+            return "<p>Your average response time for congruent trials was <strong>" + congruent_rt + "ms</strong>.</p>"+
+            "<p>Your average response time for incongruent trials was <strong>" + incongruent_rt + "ms</strong>.</p>";
+          },
+          css_classes: ['debrief-text']
         };
 
         var timeline = [];

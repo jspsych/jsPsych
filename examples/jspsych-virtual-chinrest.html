@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.3/svg.min.js"></script>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-virtual-chinrest.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+
+  <script>
+
+  // two blindspot estimates
+  // measure px2mm, px2deg, viewing distance 
+  // resize to cm (50 pixels per unit)
+  // note: you may still choose to estimate viewing distance even if resizing to cm or inches
+  let cm_resize = {
+    type: 'virtual-chinrest',
+    blindspot_reps: 2, 
+    resize_units: "cm",
+    pixels_per_unit: 50
+  };
+
+  // one blindspot estimate
+  // measure px2mm, viewing distance and px2deg
+  // resize to degrees of visual angle (50 pixels per unit)
+  // don't report viewing distance to subject
+  let deg_resize = {
+    type: 'virtual-chinrest',
+    blindspot_reps: 1,
+    resize_units: "deg",
+    pixels_per_unit: 50,
+    viewing_distance_report: 'none'
+  };
+
+  // one blindspot estimate
+  // estimate viewing distance but do not resize
+  // note: pixels_per_unit will be ignored
+  let no_resize = {
+    type: 'virtual-chinrest',
+    blindspot_reps: 1,
+    resize_units: "none",
+    pixels_per_unit: 50 
+  };
+
+  // resizing to degrees with no blindspot measurment (blindspot_reps: 0) is not possible
+  // this trial will throw an error
+  let error_trial = {
+    type: 'virtual-chinrest',
+    blindspot_reps: 0, 
+    resize_units: "deg",
+    pixels_per_unit: 50
+  }
+
+  let validation_trial = {
+    type: 'html-keyboard-response',
+    stimulus: '<div style="margin: auto; width: 200px; height: 200px; background-color: black;"></div>',
+    prompt: '<p>The stimulus above should be 4cm x 4cm if resizing worked properly.</p>'
+  }
+
+  jsPsych.init({
+    timeline: [ cm_resize, validation_trial ], // no_resize, deg_resize, error_trial
+    on_finish: function() { jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>

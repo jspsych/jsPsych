@@ -283,6 +283,27 @@ window.jsPsych = (function() {
     // of the DataCollection, for easy access and editing.
     var trial_data_values = trial_data.values()[0];
 
+    if(typeof current_trial.save_trial_parameters == 'object'){
+      var keys = Object.keys(current_trial.save_trial_parameters);
+      for(var i=0; i<keys.length; i++){
+        var key_val = current_trial.save_trial_parameters[keys[i]];
+        if(key_val === true){
+          if(typeof current_trial[keys[i]] == 'undefined'){
+            console.warn(`Invalid parameter specified in save_trial_parameters. Trial has no property called "${keys[i]}".`)
+          } else if(typeof current_trial[keys[i]] == 'function'){
+            trial_data_values[keys[i]] = current_trial[keys[i]].toString();
+          } else {
+            trial_data_values[keys[i]] = current_trial[keys[i]];
+          }
+        }
+        if(key_val === false){
+          // we don't allow internal_node_id or trial_index to be deleted because it would break other things
+          if(keys[i] !== 'internal_node_id' && keys[i] !== 'trial_index'){
+            delete trial_data_values[keys[i]];
+          }
+        }
+      }
+    }
     // handle extension callbacks
     if(Array.isArray(current_trial.extensions)){
       for(var i=0; i<current_trial.extensions.length; i++){
@@ -290,6 +311,7 @@ window.jsPsych = (function() {
         Object.assign(trial_data_values, ext_data_values);
       }
     }
+    
     // about to execute lots of callbacks, so switch context.
     jsPsych.internal.call_immediate = true;
 
@@ -2248,7 +2270,7 @@ jsPsych.pluginAPI = (function() {
       start_time = parameters.audio_context_start_time;
     }
 
-    var case_sensitive = jsPsych.initSettings().case_sensitive_responses;
+    var case_sensitive = (typeof jsPsych.initSettings().case_sensitive_responses === 'undefined') ? false : jsPsych.initSettings().case_sensitive_responses;
 
     var listener_id;
 
@@ -2371,16 +2393,27 @@ jsPsych.pluginAPI = (function() {
   }
 
   module.compareKeys = function(key1, key2){
-    console.warn('Warning: The jsPsych.pluginAPI.compareKeys function will be removed in future jsPsych releases. '+
-    'We recommend removing this function and using strings to identify/compare keys.');
-    // convert to numeric values no matter what
-    if(typeof key1 == 'string') {
-      key1 = module.convertKeyCharacterToKeyCode(key1);
+    if (Number.isFinite(key1) || Number.isFinite(key2)) {
+      // if either value is a numeric keyCode, then convert both to numeric keyCode values and compare (maintained for backwards compatibility)
+      if(typeof key1 == 'string') {
+        key1 = module.convertKeyCharacterToKeyCode(key1);
+      }
+      if(typeof key2 == 'string') {
+        key2 = module.convertKeyCharacterToKeyCode(key2);
+      }
+      return key1 == key2;
+    } else if (typeof key1 === 'string' && typeof key2 === 'string') {
+      // if both values are strings, then check whether or not letter case should be converted before comparing (case_sensitive_responses in jsPsych.init)
+      var case_sensitive = (typeof jsPsych.initSettings().case_sensitive_responses === 'undefined') ? false : jsPsych.initSettings().case_sensitive_responses;
+      if (case_sensitive) {
+        return key1 == key2;
+      } else {
+        return key1.toLowerCase() == key2.toLowerCase();
+      }
+    } else {
+      console.error('Error in jsPsych.pluginAPI.compareKeys: arguments must be either numeric key codes or key strings.');
+      return undefined;
     }
-    if(typeof key2 == 'string') {
-      key2 = module.convertKeyCharacterToKeyCode(key2);
-    }
-    return key1 == key2;
   }
 
   var keylookup = {
@@ -2521,12 +2554,22 @@ jsPsych.pluginAPI = (function() {
 
   module.getAudioBuffer = function(audioID) {
 
-    if (audio_buffers[audioID] === 'tmp') {
-      console.error('Audio file failed to load in the time allotted.')
-      return;
-    }
-
-    return audio_buffers[audioID];
+    return new Promise(function(resolve, reject){
+      // check whether audio file already preloaded
+      if(typeof audio_buffers[audioID] == 'undefined' || audio_buffers[audioID] == 'tmp'){
+         // if audio is not already loaded, try to load it
+        function complete(){
+          resolve(audio_buffers[audioID])
+        }
+        function error(e){
+          reject(e.error);
+        }
+        module.preloadAudio([audioID], complete, function(){}, error)
+      } else {
+        // audio is already loaded
+        resolve(audio_buffers[audioID]);
+      }
+    });
 
   }
 

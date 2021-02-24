@@ -132,7 +132,7 @@ jsPsych.plugins['categorize-image'] = (function() {
       jsPsych.pluginAPI.cancelAllKeyboardResponses();
 
       var correct = false;
-      if (trial.key_answer == info.key) {
+      if (jsPsych.pluginAPI.compareKeys(trial.key_answer, info.key)) {
         correct = true;
       }
 

@@ -4,12 +4,8 @@
 <head>
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-preload.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css">
-  <style>
-    img {
-      width: 300px;
-    }
-  </style>
 </head>
 <body></body>
 <script>
@@ -22,13 +18,18 @@
     });
   }
 
+  var preload = {
+    type: 'preload',
+    auto_preload: true
+  }
+
   var block = {
     type: 'image-keyboard-response',
     choices: ['y','n'], 
     prompt: '<p>Press "y" to continue. Press "n" to end the experiment.</p>',
-    render_on_canvas: false,
+    stimulus_width: 300,
     on_finish: function(data) {
-      if (data.response == 'n') {
+      if (jsPsych.pluginAPI.compareKeys(data.response, 'n')) {
         jsPsych.endExperiment('The experiment was ended. This is the end message.');
       }
     },
@@ -37,7 +38,7 @@
 
 
   jsPsych.init({
-    timeline: [block]
+    timeline: [preload, block]
   });
 </script>
 

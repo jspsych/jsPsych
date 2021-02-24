@@ -179,8 +179,8 @@ jsPsych.plugins["visual-search-circle"] = (function() {
 
         var correct = false;
 
-        if ((info.key == trial.target_present_key) && trial.target_present ||
-            (info.key == trial.target_absent_key) && !trial.target_present) {
+        if ((jsPsych.pluginAPI.compareKeys(info.key, trial.target_present_key)) && trial.target_present ||
+            (jsPsych.pluginAPI.compareKeys(info.key, trial.target_absent_key)) && !trial.target_present) {
           correct = true;
         }
 

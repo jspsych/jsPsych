@@ -46,7 +46,7 @@ var trial = {
   type: 'image-keyboard-response',
   stimulus: 'imgA.png',
   on_finish: function(data) {
-    if(data.response == 'j'){
+    if(jsPsych.pluginAPI.compareKeys(data.response, 'j')){
       data.correct = true;
     } else {
       data.correct = false;

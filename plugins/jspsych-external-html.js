@@ -88,7 +88,7 @@ jsPsych.plugins['external-html'] = (function() {
       if (trial.cont_btn) { display_element.querySelector('#'+trial.cont_btn).addEventListener('click', finish); }
       if (trial.cont_key) {
         var key_listener = function(e) {
-          if (e.key == trial.cont_key) finish();
+          if (jsPsych.pluginAPI.compareKeys(e.key,trial.cont_key)) finish();
         };
         display_element.addEventListener('keydown', key_listener);
       }

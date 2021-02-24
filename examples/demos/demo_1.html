@@ -3,11 +3,17 @@
     <head>
         <script src="../../jspsych.js"></script>
         <script src="../../plugins/jspsych-instructions.js"></script>
+        <script src="../../plugins/jspsych-preload.js"></script>
         <link rel="stylesheet" href="../../css/jspsych.css">
     </head>
     <body>
     </body>
     <script>
+    var preload = {
+        type: 'preload',
+        images: ["../img/age/of2.jpg"]
+    }
+
     var trial = {       
         type: 'instructions',     
         pages: [      
@@ -23,7 +29,7 @@
     }       
 
     jsPsych.init({      
-        timeline: [trial],        
+        timeline: [preload, trial],        
     });
     </script>
 </html>

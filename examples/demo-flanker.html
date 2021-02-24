@@ -61,9 +61,9 @@
             data: jsPsych.timelineVariable('data'),
             on_finish: function(data){
               var correct = false;
-              if(data.direction == 'left' &&  data.response == 'ArrowLeft' && data.rt > -1){
+              if(data.direction == 'left' && jsPsych.pluginAPI.compareKeys(data.response, 'ArrowLeft') && data.rt > -1){
                 correct = true;
-              } else if(data.direction == 'right' && data.response == 'ArrowRight' && data.rt > -1){
+              } else if(data.direction == 'right' && jsPsych.pluginAPI.compareKeys(data.response, 'ArrowRight') && data.rt > -1){
                 correct = true;
               }
               data.correct = correct;

@@ -61,6 +61,7 @@ jsPsych.init({
   timeline: timeline
 });
 ```
+After each step in the tutorial you can view the complete code up to that point by clicking on the expandable box below.
 
 ??? example "The complete code so far"
     ``` html
@@ -305,7 +306,6 @@ First we need to add the preload plugin to our `<head>` section.
   <script src="jspsych-6.3.0/jspsych.js"></script>
   <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
   <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
-  <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
   <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
   <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
 </head>
@@ -1059,7 +1059,7 @@ var test = {
     correct_response: jsPsych.timelineVariable('correct_response')
   },
   on_finish: function(data){
-    data.correct = data.response == data.correct_response;
+    data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
   }
 }
 ```
@@ -1147,7 +1147,7 @@ The `data.response` value is a string representation of the key the subject pres
             correct_response: jsPsych.timelineVariable('correct_response')
           },
           on_finish: function(data){
-            data.correct = data.response == data.correct_response;
+            data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
           }
         }
 
@@ -1291,7 +1291,7 @@ This code is available in the `/examples` folder in the jsPsych release download
         correct_response: jsPsych.timelineVariable('correct_response')
       },
       on_finish: function(data){
-        data.correct = data.response == data.correct_response;
+        data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
       }
     }
 

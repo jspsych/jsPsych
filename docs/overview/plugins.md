@@ -51,6 +51,7 @@ There is also a set of parameters that can be specified for any plugin:
 | on_finish      | function | `function(){ return; }` | A callback function to execute when the trial finishes, and before the next trial begins. See [the Event-Related Callbacks page](../overview/callbacks.md) for more details. |
 | on_load        | function | `function(){ return; }` | A callback function to execute when the trial has loaded, which typically happens after the initial display of the plugin has loaded. See [the Event-Related Callbacks page](../overview/callbacks.md) for more details. |
 | css_classes    | string   | null                    | A list of CSS classes to add to the jsPsych display element for the duration of this trial. This allows you to create custom formatting rules (CSS classes) that are only applied to specific trials. For more information and examples, see the [Controlling Visual Appearance page](../overview/style.md) and the "css-classes-parameter.html" file in the jsPsych examples folder. |
+| save_trial_parameters | object | `{}` | An object containing any trial parameters that should or should not be saved to the trial data. Each key is the name of a trial parameter, and its value should be `true` or `false`, depending on whether or not its value should be saved to the data. If the parameter is a function that returns the parameter value, then the value that is returned will be saved to the data. If the parameter is always expected to be a function (e.g. an event-related callback function), then the function itself will be saved as a string. For more examples, see the "save-trial-parameters.html" file in the jsPsych examples folder. |
 
 ### The data parameter
 
@@ -132,7 +133,7 @@ var trial = {
     correct_response: 'f'
   },
   on_finish: function(data){
-    if(data.response == data.correct_response){
+    if(jsPsych.pluginAPI.compareKeys(data.response, data.correct_response)){
       data.correct = true;
     } else {
       data.correct = false;
@@ -157,6 +158,66 @@ var trial = {
   }
 };
 ```
+
+### The css_classes parameter
+
+The `css_classes` parameter allows you to add an array of CSS class names to the jsPsych display element on that specific trial. This allows you to create custom style and formatting rules that are only applied to specific trials. If you want CSS rules that only apply to specific elements during a trial, you can use additional CSS selectors.
+
+```html
+<style>
+  .flanker-stimulus {
+    font-size: 500%;
+  }
+  .flanker-stimulus #prompt {
+    font-size: 18px;
+  }
+  .fixation {
+    font-size: 80px;
+  }
+</style>
+<script>
+  var fixation_trial = {
+    type: 'html-keyboard-response',
+    choices: jsPsych.NO_KEYS,
+    stimulus: '+',
+    css_classes: ['fixation']
+  };
+  var flanker_trial = {
+    type: 'html-keyboard-response',
+    choices: ["ArrowLeft", "ArrowRight"],
+    stimulus: '>>>>>',
+    prompt: '<span id="prompt">Press the left or right arrow key.</span>',
+    css_classes: ['flanker-stimulus']
+  };
+</script>
+```
+
+### The save_trial_parameters parameter
+
+The `save_trial_parameters` parameter allows you to tell jsPsych what parameters you want to be saved to the data. This can be used to override the parameter values that the plugin saves by default. You can add more parameter values to the data that are not normally saved, or remove parameter values that normally are saved. This can be especially useful when the parameter value is dynamic (i.e. a function) and you want to record the value that was used during the trial.
+
+```javascript
+var trial = {
+  type: 'html-button-response',
+  stimulus: '<p style="color: orange; font-size: 48px; font-weight: bold;">BLUE</p>',
+  choices: function() {
+    return jsPsych.randomization.shuffle(['Yes','No']);
+  },
+  post_trial_gap: function() {
+    return jsPsych.randomization.sampleWithoutReplacement([200,300,400,500],1)[0];
+  },
+  save_trial_parameters: {
+    // save the randomly-selected button order and post trial gap duration to the trial data
+    choices: true,
+    post_trial_gap: true,
+    // don't save the stimulus
+    stimulus: false
+  }
+}
+```
+
+!!! note 
+    You cannot remove the `internal_node_id` and `trial_index` values from the trial data, because these are used internally by jsPsych.
 
 ## Data collected by all plugins
 
@@ -207,13 +268,13 @@ The overall structure of the plugin is defined using a module JavaScript design 
 
 The module, created by the `(function(){`  `})();` expressions, contains an object called `plugin`. The `plugin` object has two properties: `info` and `trial`. The `plugin` object is returned at the end of the module, which is what assigns the defined properties of `plugin` to `jsPsych['plugin-name']`.
 
-### plugin.info
+#### plugin.info
 
 The plugin's `info` property is an object that contains all of the available parameters for the plugin. Each parameter name is a property, and the value is an object that includes a description of the parameter, the value's type (string, integer, etc.), and the default value. See some of the plugin files in the jsPsych plugins folder for examples.
 
 jsPsych allows most [plugin parameters to be dynamic](dynamic-parameters.md), which means that the parameter value can be a function that will be evaluated right before the trial starts. However, if you want your plugin to have a parameter that is a function that _shouldn't_ be evaluated before the trial starts, then you should make sure that the parameter type is `'FUNCTION'`. This tells jsPsych not to evaluate the function as it normally does for dynamic parameters. See the `canvas-*` plugins for examples.
 
-### plugin.trial
+#### plugin.trial
 
 The plugin's `trial` property is a function that runs a single trial. There are two parameters that are passed into the trial method. The first, `display_element`, is the DOM element where jsPsych content is being rendered. This parameter will be an `HTMLElement`. Generally, you don't need to worry about this parameter being in the correct format, and can assume that it is an `HMTLElement` and use methods of that class. The second, `trial`, is an object containing all of the parameters specified in the corresponding TimelineNode. If you have specified all of your parameters in `plugin.info`, along with default values for each one, then the `trial` object will contain the default values for any parameters that were not specified in the trial's definition.
 

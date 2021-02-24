@@ -31,7 +31,7 @@ jsPsych.plugins['survey-text'] = (function() {
           },
           placeholder: {
             type: jsPsych.plugins.parameterType.STRING,
-            pretty_name: 'Value',
+            pretty_name: 'Placeholder',
             default: "",
             description: 'Placeholder text in the textfield.'
           },
