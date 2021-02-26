@@ -2515,18 +2515,45 @@ jsPsych.pluginAPI = (function() {
   // timeout registration
 
   var timeout_handlers = [];
+  // for browser compatibility
+  var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                            window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
+  var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 
   module.setTimeout = function(callback, delay){
-    var handle = setTimeout(callback, delay);
+    var handle = requestAnimationFrame(function(timestamp) {
+      // record the start time 
+      var start_time = timestamp;
+      // setup the next rAF call to check for timeouts and update handle value
+      handle = requestAnimationFrame(function(timestamp) {
+        checkForTimeout(timestamp, start_time, callback, delay, handle);
+      });
+    });
     timeout_handlers.push(handle);
     return handle;
   }
 
   module.clearAllTimeouts = function(){
     for(var i=0;i<timeout_handlers.length; i++){
-      clearTimeout(timeout_handlers[i]);
+      cancelAnimationFrame(timeout_handlers[i]);
     }
     timeout_handlers = [];
+  }
+
+  var checkForTimeouts = function(timestamp, start_time, callback, delay, handle) {
+    var curr_duration = timestamp - start_time;
+    // check if the current duration is at least as long as the intended duration
+    // minus half the typical frame duration (~16 ms). this helps avoid displaying the stimulus
+    // for one too many frames.
+    if (curr_duration >= delay - 8) {
+      callback();
+    } else {
+      // setup the next rAF call and update handle value
+      handle = window.requestAnimationFrame(function(timestamp) {
+        checkForTimeout(timestamp, start_time, callback, delay, handle);
+      });
+    }
   }
 
   // video //
