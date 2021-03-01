@@ -20,6 +20,18 @@
 
 <script>
 
+  var camera_instructions = {
+    type: 'html-button-response',
+    stimulus: `
+      <p>This experiment uses your camera for eye tracking.</p>
+      <p>In order to participate you must allow the experiment to use your camera.</p>
+      <p>You will be prompted to do this on the next screen.</p>
+      <p>If you do not want to permit the experiment to use your camera, please close the page.</p>
+    `,
+    choices: ['Click to begin'],
+    post_trial_gap: 1000
+  }
+
   var init_camera = {
     type: 'webgazer-init-camera'
   }
@@ -142,6 +154,7 @@
   }
 
   var timeline = [];
+  timeline.push(camera_instructions);
   timeline.push(init_camera);
   timeline.push(calibration_instructions);
   timeline.push(calibration);

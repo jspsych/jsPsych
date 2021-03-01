@@ -37,7 +37,7 @@ jsPsych.plugins["webgazer-validate"] = (function() {
         },
         point_size:{
           type: jsPsych.plugins.parameterType.INT,
-          default: 10
+          default: 20
         },
         show_validation_data: {
           type: jsPsych.plugins.parameterType.BOOL,

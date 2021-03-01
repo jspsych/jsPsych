@@ -11,7 +11,11 @@ jsPsych.extensions['webgazer'] = (function () {
   // required, will be called at jsPsych.init
   // should return a Promise
   extension.initialize = function (params) {
-    return new Promise(function(resolve, reject){
+    // setting default values for params if not defined
+    params.round_predictions = typeof params.round_predictions === 'undefined' ? true : params.round_predictions;
+    params.auto_initialize = typeof params.auto_initialize === 'undefined' ? false : params.auto_initialize;
+
+    return new Promise(function (resolve, reject) {
       if (typeof params.webgazer === 'undefined') {
         if (window.webgazer) {
           state.webgazer = window.webgazer;
@@ -22,28 +26,34 @@ jsPsych.extensions['webgazer'] = (function () {
         state.webgazer = params.webgazer;
       }
 
-      if (typeof params.round_predictions === 'undefined'){
-        state.round_predictions = true;
-      } else {
-        state.round_predictions = params.round_predictions;
-      }
-  
       // sets up event handler for webgazer data
       state.webgazer.setGazeListener(handleGazeDataUpdate);
-  
-      // starts webgazer, and once it initializes we stop mouseCalibration and
-      // pause webgazer data.
-      state.webgazer.begin().then(function () {
-        extension.stopMouseCalibration();
-        extension.pause();
-        resolve();
-      })
-  
+
+      // sets state for initialization
+      state.initialized = false;
+      state.activeTrial = false;
+
       // hide video by default
       extension.hideVideo();
-  
+
       // hide predictions by default
       extension.hidePredictions();
+
+      if (params.auto_initialize) {
+        // starts webgazer, and once it initializes we stop mouseCalibration and
+        // pause webgazer data.
+        state.webgazer.begin().then(function () {
+          state.initialized = true;
+          extension.stopMouseCalibration();
+          extension.pause();
+          resolve();
+        }).catch(function (error) {
+          console.error(error);
+          reject(error);
+        });
+      } else {
+        resolve();
+      }
     })
   }
 
@@ -66,11 +76,11 @@ jsPsych.extensions['webgazer'] = (function () {
     state.activeTrial = true;
 
     // record bounding box of any elements in params.targets
-    if(typeof params !== 'undefined'){
-      if(typeof params.targets !== 'undefined'){
-        for(var i=0; i<params.targets.length; i++){
+    if (typeof params !== 'undefined') {
+      if (typeof params.targets !== 'undefined') {
+        for (var i = 0; i < params.targets.length; i++) {
           var target = document.querySelector(params.targets[i]);
-          if(target !== null){
+          if (target !== null) {
             var bounding_rect = target.getBoundingClientRect();
             state.currentTrialTargets.push({
               selector: params.targets[i],
@@ -99,6 +109,24 @@ jsPsych.extensions['webgazer'] = (function () {
       webgazer_data: state.currentTrialData,
       webgazer_targets: state.currentTrialTargets
     }
+  }
+
+  extension.start = function () {
+    return new Promise(function (resolve, reject) {
+      state.webgazer.begin().then(function () {
+        state.initialized = true;
+        extension.stopMouseCalibration();
+        extension.pause();
+        resolve();
+      }).catch(function (error) {
+        console.error(error);
+        reject(error);
+      });
+    });
+  }
+
+  extension.isInitialized = function(){
+    return state.initialized;
   }
 
   extension.faceDetected = function () {
@@ -156,7 +184,7 @@ jsPsych.extensions['webgazer'] = (function () {
 
   extension.getCurrentPrediction = async function () {
     var prediction = await state.webgazer.getCurrentPrediction();
-    if(state.round_predictions){
+    if (state.round_predictions) {
       prediction.x = Math.round(prediction.x);
       prediction.y = Math.round(prediction.y);
     }

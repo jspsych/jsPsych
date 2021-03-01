@@ -15,7 +15,7 @@ repetitions_per_point | numeric | 1 | The number of times to repeat the sequence
 randomize_validation_order | bool | `false` | Whether to randomize the order of the validation points.
 time_to_saccade | numeric | 1000 | The delay before validating after showing a point. Gives the participant time to fixate on the new target before assuming that the participant is looking at the target.
 validation_duration | numeric | 2000 | If `calibration_mode` is set to `view`, then this is the length of time to show a point while calibrating. Note that if `click` calibration is used then the point will remain on the screen until clicked.
-point_size | numeric | 10 | Diameter of the validation points in pixels.
+point_size | numeric | 20 | Diameter of the validation points in pixels.
 show_validation_data | bool | false | If `true` then a visualization of the validation data will be shown on the screen after the validation is complete. This will show each measured gaze location color coded by whether it is within the `roi_radius` of the target point. This is mainly intended for testing and debugging.
 
 ## Data Generated

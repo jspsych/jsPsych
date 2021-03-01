@@ -19,6 +19,7 @@ jsPsych.init({
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 webgazer  | object | `undefined` | You can explicitly pass a reference to a loaded instance of the webgazer.js library. If no explicit reference is passed then the extension will look for a global `webgazer` object. If you are loading webgazer.js via a `<script>` tag you do not need to set this parameter in most circumstances.
+auto_initialize | bool | false | Whether to automatically initialize webgazer when the experiment begins. If set to `true` then the experiment will attempt to access the user's webcam immediately upon page load. The default value is `false` because it is probably a good idea to explain to the user why camera permission will be needed before asking for it. The `webgazer-init-camera` plugin can be used to initialize the camera during the experiment.
 round_predictions | bool | true | Whether to round the `x`,`y` coordinates predicted by WebGazer to the nearest whole number. This *greatly* reduces the size of the data, as WebGazer records data to 15 decimal places by default. Given the noise of the system, there's really no need to record data to this level of precision.
 
 ### Trial Parameters
@@ -48,6 +49,14 @@ webgazer_targets | array | An array of objects contain the pixel coordinates of 
 ## Functions
 
 In addition to the jsPsych webgazer-* plugins, the jsPsych webgazer extension provides a set of functions that allow the researcher to interact more directly with WebGazer. These functions can be called at any point during an experiment, and are crucial for building trial plugins that interact with WebGazer. All of the functions below must be prefixed with `jsPsych.extensions.webgazer` (e.g. `jsPsych.extensions.webgazer.faceDetected()`).
+
+### start()
+
+Performs initialization of webgazer, including requesting permissions from the user to access the camera. Returns a `Promise` that resolves when the camera is initialized and fails if the camera cannot be accessed, e.g., because the user denies permission. This is handled automatically if using the `webgazer-init-camera` plugin or setting `auto_initialize` to `true` in the extension parameters.
+
+### isInitialized()
+
+Returns `true` if `start()` has been successfully called at some point, and `false` otherwise.
 
 ### faceDetected()
 
