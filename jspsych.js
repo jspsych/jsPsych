@@ -53,11 +53,11 @@ window.jsPsych = (function() {
       if(typeof options.timeline === 'undefined'){
         console.error('No timeline declared in jsPsych.init. Cannot start experiment.')
       }
-  
+
       if(options.timeline.length == 0){
         console.error('No trials have been added to the timeline (the timeline is an empty array). Cannot start experiment.')
       }
-  
+
       // reset variables
       timeline = null;
       global_trial_index = 0;
@@ -69,7 +69,7 @@ window.jsPsych = (function() {
       loadfail = false;
       file_protocol = false;
       jsPsych.data.reset();
-  
+
       var defaults = {
         'display_element': undefined,
         'on_finish': function(data) {
@@ -94,7 +94,7 @@ window.jsPsych = (function() {
         'exclusions': {},
         'show_progress_bar': false,
         'message_progress_bar': 'Completion Progress',
-        'auto_update_progress_bar': true,        
+        'auto_update_progress_bar': true,
         'default_iti': 0,
         'minimum_valid_rt': 0,
         'experiment_width': null,
@@ -149,7 +149,7 @@ window.jsPsych = (function() {
       opts.display_element.innerHTML = '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
       DOM_container = opts.display_element;
       DOM_target = document.querySelector('#jspsych-content');
-    
+
 
       // add tabIndex attribute to scope event listeners
       opts.display_element.tabIndex = 0;
@@ -223,7 +223,7 @@ window.jsPsych = (function() {
       }
 
     };
-    
+
     // execute init() when the document is ready
     if (document.readyState === "complete") {
       init();
@@ -311,7 +311,7 @@ window.jsPsych = (function() {
         Object.assign(trial_data_values, ext_data_values);
       }
     }
-    
+
     // about to execute lots of callbacks, so switch context.
     jsPsych.internal.call_immediate = true;
 
@@ -554,10 +554,10 @@ window.jsPsych = (function() {
           if (typeof timeline_parameters.on_timeline_start !== 'undefined' && progress.current_variable_set == 0) {
             timeline_parameters.on_timeline_start();
           }
-          
+
 
         }
-        // if we reach this point, then either the node doesn't have a timeline of the 
+        // if we reach this point, then either the node doesn't have a timeline of the
         // conditional function returned true and it can start
         progress.current_location = 0;
         // call advance again on this node now that it is pointing to a new location
@@ -681,7 +681,7 @@ window.jsPsych = (function() {
           loc = loc - 1;
         }
         // now find the variable
-        return timeline_parameters.timeline[loc].timelineVariable(variable_name); 
+        return timeline_parameters.timeline[loc].timelineVariable(variable_name);
       }
     }
 
@@ -1029,7 +1029,7 @@ window.jsPsych = (function() {
         jsPsych.extensions[trial.extensions[i].type].on_load(current_trial.extensions[i].params);
       }
     }
-    
+
     // done with callbacks
     jsPsych.internal.call_immediate = false;
   }
@@ -1072,11 +1072,11 @@ window.jsPsych = (function() {
         // this if statement is checking to see if the parameter type is expected to be a function, in which case we should NOT evaluate it.
         // the first line checks if the parameter is defined in the universalPluginParameters set
         // the second line checks the plugin-specific parameters
-        if(typeof jsPsych.plugins.universalPluginParameters[keys[i]] !== 'undefined' && 
+        if(typeof jsPsych.plugins.universalPluginParameters[keys[i]] !== 'undefined' &&
           jsPsych.plugins.universalPluginParameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION ){
           trial[keys[i]] = replaceFunctionsWithValues(trial[keys[i]], null);
         }
-        if(typeof jsPsych.plugins[trial.type].info.parameters[keys[i]] !== 'undefined' && 
+        if(typeof jsPsych.plugins[trial.type].info.parameters[keys[i]] !== 'undefined' &&
           jsPsych.plugins[trial.type].info.parameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION){
           trial[keys[i]] = replaceFunctionsWithValues(trial[keys[i]], jsPsych.plugins[trial.type].info.parameters[keys[i]]);
         }
@@ -1091,7 +1091,7 @@ window.jsPsych = (function() {
     if(obj === null){
       return obj;
     }
-    // arrays 
+    // arrays
     else if(Array.isArray(obj)){
       for(var i=0; i<obj.length; i++){
         obj[i] = replaceFunctionsWithValues(obj[i], info);
@@ -1137,7 +1137,7 @@ window.jsPsych = (function() {
             }
           });
         }
-      }      
+      }
       // if it's not nested, checking is much easier and do that here:
       else if(typeof trial[param] == 'undefined' || trial[param] === null){
         if(typeof jsPsych.plugins[trial.type].info.parameters[param].default == 'undefined'){
@@ -1203,7 +1203,7 @@ window.jsPsych = (function() {
     document.querySelector('.jspsych-display-element').insertAdjacentHTML('afterbegin',
       '<div id="jspsych-progressbar-container">'+
       '<span>'+
-      msg+ 
+      msg+
       '</span>'+
       '<div id="jspsych-progressbar-outer">'+
         '<div id="jspsych-progressbar-inner"></div>'+
@@ -1367,7 +1367,7 @@ jsPsych.data = (function() {
     data_collection.first = function(n){
       if (typeof n == 'undefined') { n = 1 }
       if (n < 1) {
-        throw `You must query with a positive nonzero integer. Please use a 
+        throw `You must query with a positive nonzero integer. Please use a
                different value for n.`;
       }
       if (trials.length == 0) return DataCollection([]);
@@ -1389,7 +1389,7 @@ jsPsych.data = (function() {
     data_collection.last = function(n) {
       if (typeof n == 'undefined') { n = 1 }
       if (n < 1) {
-        throw `You must query with a positive nonzero integer. Please use a 
+        throw `You must query with a positive nonzero integer. Please use a
                different value for n.`;
       }
       if (trials.length == 0) return DataCollection([]);
@@ -2092,7 +2092,7 @@ jsPsych.randomization = (function() {
     if(!Array.isArray(arr)){
       console.error("First argument to jsPsych.randomization.sampleWithoutReplacement() must be an array")
     }
-    
+
     if (size > arr.length) {
       console.error("Cannot take a sample " +
         "larger than the size of the set of items to sample.");
@@ -2145,23 +2145,40 @@ jsPsych.randomization = (function() {
 
     var factor_combinations = [];
 
-    for (var i = 0; i < factors[factorNames[0]].length; i++) {
-      factor_combinations.push({});
-      factor_combinations[i][factorNames[0]] = factors[factorNames[0]][i];
-    }
-
-    for (var i = 1; i < factorNames.length; i++) {
-      var toAdd = factors[factorNames[i]];
-      var n = factor_combinations.length;
-      for (var j = 0; j < n; j++) {
-        var base = factor_combinations[j];
-        for (var k = 0; k < toAdd.length; k++) {
-          var newpiece = {};
-          newpiece[factorNames[i]] = toAdd[k];
-          factor_combinations.push(Object.assign({}, base, newpiece));
-        }
+    if (without_replacement) {
+      var first = true;
+      factorNames.forEach(function(key) {
+        if (without_replacement == "disordered")
+          temp_array = module.repeat(factors[key],1);
+        else
+          temp_array = factors[key];
+        temp_array.forEach( function(value, index, array) {
+          if (first || index == factor_combinations.length) {
+            factor_combinations.push({});
+          }
+          factor_combinations[index][key] = value;
+        });
+        first = false;
+      });
+    } else {
+      for (var i = 0; i < factors[factorNames[0]].length; i++) {
+        factor_combinations.push({});
+        factor_combinations[i][factorNames[0]] = factors[factorNames[0]][i];
       }
-      factor_combinations.splice(0, n);
+
+      for (var i = 1; i < factorNames.length; i++) {
+        var toAdd = factors[factorNames[i]];
+        var n = factor_combinations.length;
+        for (var j = 0; j < n; j++) {
+          var base = factor_combinations[j];
+          for (var k = 0; k < toAdd.length; k++) {
+            var newpiece = {};
+            newpiece[factorNames[i]] = toAdd[k];
+            factor_combinations.push(Object.assign({}, base, newpiece));
+          }
+        }
+        factor_combinations.splice(0, n);
+      }
     }
 
     repetitions = (typeof repetitions === 'undefined') ? 1 : repetitions;
@@ -2299,7 +2316,7 @@ jsPsych.pluginAPI = (function() {
       }
       else if(parameters.valid_responses == jsPsych.ALL_KEYS) {
         valid_response = true;
-      } 
+      }
       else if(parameters.valid_responses != jsPsych.NO_KEYS){
         if(parameters.valid_responses.includes(e.key)){
           valid_response = true;
@@ -2312,7 +2329,7 @@ jsPsych.pluginAPI = (function() {
           }
         }
       }
-      
+
       // check if key was already held down
       if (((typeof parameters.allow_held_key === 'undefined') || !parameters.allow_held_key) && valid_response) {
         if (typeof held_keys[e.key] !== 'undefined' && held_keys[e.key] == true) {
