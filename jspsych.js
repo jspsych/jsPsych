@@ -2139,7 +2139,7 @@ jsPsych.randomization = (function() {
     return samp;
   }
 
-  module.factorial = function(factors, repetitions, unpack) {
+  module.factorial = function(factors, repetitions, unpack, without_replacement) {
 
     var factorNames = Object.keys(factors);
 
