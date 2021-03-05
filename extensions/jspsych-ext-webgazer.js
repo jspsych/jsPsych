@@ -161,7 +161,7 @@ jsPsych.extensions['webgazer'] = (function () {
     state.webgazer.pause();
   }
 
-  extension.resetCalibration() = function(){
+  extension.resetCalibration = function(){
     state.webgazer.clearData();
   }
 
