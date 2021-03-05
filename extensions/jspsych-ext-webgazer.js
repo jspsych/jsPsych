@@ -161,6 +161,10 @@ jsPsych.extensions['webgazer'] = (function () {
     state.webgazer.pause();
   }
 
+  extension.resetCalibration() = function(){
+    state.webgazer.clearData();
+  }
+
   extension.stopMouseCalibration = function () {
     state.webgazer.removeMouseEventListeners()
   }

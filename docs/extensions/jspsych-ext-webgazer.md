@@ -86,6 +86,10 @@ Turns on gaze prediction. The extension will automatically handle this for you i
 
 Turns off gaze prediction. The extension will automatically handle this for you in most cases. You probably only need to use this if you are writing your own plugin that interfaces directly with WebGazer.
 
+### resetCalibration()
+
+Clears all calibration data.
+
 ### startMouseCalibration()
 
 Turns on mouse movement and mouse clicks as calibration events. While the `webgazer-calibration` plugin can also be used to run a parmeterized calibration routine, this calibration function call allows you to continuously calibrate WebGazer to any mouse movements or clicks throughout the experiment. For example, any *-button-response trial would also function as a WebGazer calibration event. 
