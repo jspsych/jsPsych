@@ -32,6 +32,7 @@ jsPsych.extensions['webgazer'] = (function () {
       // sets state for initialization
       state.initialized = false;
       state.activeTrial = false;
+      state.round_predictions = params.round_predictions;
 
       // hide video by default
       extension.hideVideo();
