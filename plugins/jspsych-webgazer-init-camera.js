@@ -35,6 +35,8 @@ jsPsych.plugins["webgazer-init-camera"] = (function () {
         display_element.innerHTML = `<p>The experiment cannot continue because the eye tracker failed to start.</p>
             <p>This may be because of a technical problem or because you did not grant permission for the page to use your camera.</p>`
       });
+    } else {
+      showTrial();
     }
 
     function showTrial() {
@@ -56,17 +58,31 @@ jsPsych.plugins["webgazer-init-camera"] = (function () {
         <button id='jspsych-wg-cont' class='jspsych-btn' disabled>${trial.button_text}</button>
         </div>`
 
-      var observer = new MutationObserver(face_detect_event_observer);
-      observer.observe(document, {
-        attributes: true,
-        attributeFilter: ['style'],
-        subtree: true
-      });
+      if(is_face_detect_green()){
+        document.querySelector('#jspsych-wg-cont').disabled = false;
+      } else {
+        var observer = new MutationObserver(face_detect_event_observer);
+        observer.observe(document, {
+          attributes: true,
+          attributeFilter: ['style'],
+          subtree: true
+        });
+      }
 
       document.querySelector('#jspsych-wg-cont').addEventListener('click', function () {
-        observer.disconnect();
+        if(observer){
+          observer.disconnect();
+        }
         end_trial();
       });
+    }
+
+    function is_face_detect_green(){
+      if(document.querySelector("#webgazerFaceFeedbackBox")){
+        return document.querySelector('#webgazerFaceFeedbackBox').style.borderColor == "green"
+      } else {
+        return false;
+      }
     }
 
     function face_detect_event_observer(mutationsList, observer) {
