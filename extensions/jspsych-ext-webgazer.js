@@ -189,7 +189,7 @@ jsPsych.extensions['webgazer'] = (function () {
 
   extension.getCurrentPrediction = async function () {
     var prediction = await state.webgazer.getCurrentPrediction();
-    if (state.round_predictions) {
+    if (state.round_predictions && prediction !== null) {
       prediction.x = Math.round(prediction.x);
       prediction.y = Math.round(prediction.y);
     }
