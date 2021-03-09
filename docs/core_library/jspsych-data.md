@@ -465,6 +465,13 @@ Returns a DataColumn object (see documentation below) of a single property from 
 var rt_data = jsPsych.data.get().select('rt');
 rt_data.mean()
 ```
+#### .filterColumns()
+
+Filter the saved columns and arrange them in order，it will return a DataCollection object.
+
+```js
+console.log(jsPsych.data.get().filterColumns(jsPsych.data.get().uniqueNames().sort()))
+```
 
 #### .uniqueNames()
 

@@ -1483,6 +1483,24 @@ jsPsych.data = (function() {
       return out;
     }
 
+    data_collection.filterColumns = function(columns){ 
+      let keys = typeof columns !== "undefined" ? columns : [];
+      if (keys.length < 1) {
+        return DataCollection(trials);
+      } else { 
+        var new_trials = [];
+        for(var i in trials) { 
+          var new_trial = {};
+          keys.forEach(function(key){
+            new_trial[key] = trials[i][key];
+          })
+          new_trials.push(new_trial);
+        }
+        return DataCollection(new_trials);
+      }
+
+    }
+
     data_collection.ignore = function(columns){
       if(!Array.isArray(columns)){
         columns = [columns];
