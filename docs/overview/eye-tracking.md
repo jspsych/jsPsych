@@ -4,7 +4,7 @@ jsPsych supports eye tracking through the [WebGazer](https://webgazer.cs.brown.e
 
 ## Getting Started
 
-First, [download WebGazer.js ](https://webgazer.cs.brown.edu/#download) and include it in your experiment file via a `<script>` tag. You'll also need to include jsPsych's [webgazer extension](/extensions/jspsych-ext-webgazer.md).
+First, [download WebGazer.js ](https://webgazer.cs.brown.edu/#download) and include it in your experiment file via a `<script>` tag. You'll also need to include jsPsych's [webgazer extension](../extensions/jspsych-ext-webgazer.md).
 
 ```html
 <head>
@@ -28,7 +28,7 @@ jsPsych.init({
 })
 ```
 
-To help the participant position their face correctly for eye tracking you can use the [jspsych-webgazer-init-camera plugin](/plugins/jspsych-webgazer-init-camera.ms). This will show the participant what the camera sees, including facial feature landmarks, and prevent the participant from continuing until their face is in good position for eye tracking.
+To help the participant position their face correctly for eye tracking you can use the [jspsych-webgazer-init-camera plugin](../plugins/jspsych-webgazer-init-camera.md). This will show the participant what the camera sees, including facial feature landmarks, and prevent the participant from continuing until their face is in good position for eye tracking.
 
 ```js
 var init_camera_trial = {
@@ -36,7 +36,7 @@ var init_camera_trial = {
 }
 ```
 
-To calibrate WebGazer, you can use the [jspsych-webgazer-calibrate plugin](/plugins/jspsych-webgazer-calibrate.md). This plugin allows you to specify a set of points on the screen for calibration and to choose the method for calibrating -- either clicking on each point or simply fixating on each point. The location of calibration points is specified in percentages, e.g., `[25,50]` will result in a point that is 25% of the width of the screen from the left edge and 50% of the height of the screen from the top edge. Options for controlling other details of the calibration are explained in the [documentation for the plugin](/plugins/jspsych-webgazer-calibrate.md).
+To calibrate WebGazer, you can use the [jspsych-webgazer-calibrate plugin](../plugins/jspsych-webgazer-calibrate.md). This plugin allows you to specify a set of points on the screen for calibration and to choose the method for calibrating -- either clicking on each point or simply fixating on each point. The location of calibration points is specified in percentages, e.g., `[25,50]` will result in a point that is 25% of the width of the screen from the left edge and 50% of the height of the screen from the top edge. Options for controlling other details of the calibration are explained in the [documentation for the plugin](../plugins/jspsych-webgazer-calibrate.md).
 
 Note that instructions are not included in the calibration plugin, so you'll likely want to use a different plugin (e.g., `html-button-response`) to display instructions prior to running the calibration. 
 
@@ -48,7 +48,7 @@ var calibration_trial = {
 }
 ```
 
-To measure the accuracy and precision of the calibration, you can use the [jspsych-webgazer-vaidate plugin](/plugins/jspsych-webgazer-validate.md). Like the calibration plugin, you can specify a list of points to perform validation on. Here you can specify the points as either percentages or in terms of the distance from the center of the screen in pixels. Which mode you use will probably depend on how you are defining your stimuli throughout the experiment. You can also specify the radius of tolerance around each point, and the plugin will calculate the percentage of measured gaze samples within that radius. This is a potentially useful heuristic for deciding whether or not to calibrate again. Options for controlling other details of the validation are explained in the [documentation for the plugin](/plugins/jspsych-webgazer-validate.md).
+To measure the accuracy and precision of the calibration, you can use the [jspsych-webgazer-vaidate plugin](../plugins/jspsych-webgazer-validate.md). Like the calibration plugin, you can specify a list of points to perform validation on. Here you can specify the points as either percentages or in terms of the distance from the center of the screen in pixels. Which mode you use will probably depend on how you are defining your stimuli throughout the experiment. You can also specify the radius of tolerance around each point, and the plugin will calculate the percentage of measured gaze samples within that radius. This is a potentially useful heuristic for deciding whether or not to calibrate again. Options for controlling other details of the validation are explained in the [documentation for the plugin](../plugins/jspsych-webgazer-validate.md).
 
 ```js
 var validation_trial = {

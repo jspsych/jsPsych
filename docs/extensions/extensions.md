@@ -36,7 +36,7 @@ var trial = {
 
 Extension | Description
 ------ | -----------
-[jspsych&#8209;ext&#8209;webgazer.js](/extensions/jspsych-ext-webgazer.md) | Enables eye tracking using the [WebGazer](https://webgazer.cs.brown.edu/) library.
+[jspsych&#8209;ext&#8209;webgazer.js](../extensions/jspsych-ext-webgazer.md) | Enables eye tracking using the [WebGazer](https://webgazer.cs.brown.edu/) library.
 
 ## Writing an Extension
 
@@ -80,4 +80,4 @@ The four events that an extension must support are shown in the sample code.
 
 `extension.on_finish` is called after the plugin completes. This can be used for any teardown at the end of the trial. This method should return an object of data to append to the plugin's data. Note that this event fires *before* the `on_finish` event for the plugin, so data added by the extension is accessible in any trial `on_finish` event handlers. The `params` object is passed from the declaration of the extension in the trial object. You can use `params` to customize the behavior of the extension for each trial.
 
-The extension can also include any additional methods that are necessary for interacting with it. See the [webgazer extension](/extensions/jspsych-ext-webgazer.md) for an example.
+The extension can also include any additional methods that are necessary for interacting with it. See the [webgazer extension](../extensions/jspsych-ext-webgazer.md) for an example.
