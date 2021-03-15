@@ -14,7 +14,8 @@
  /* global jsPsych, math, numeric */
 
 jsPsych.plugins["psychophysics"] = (function() {
-  console.log('jspsych-psychophysics Version 2.2')
+  console.log(`jsPsych Version ${jsPsych.version()}`)
+  console.log('jspsych-psychophysics Version 2.3.1')
 
   let plugin = {};
 
@@ -178,6 +179,13 @@ jsPsych.plugins["psychophysics"] = (function() {
             default: false,
             description: 'Disable normalization of the gaussian function.'
           },
+          mask_func: {
+            type: jsPsych.plugins.parameterType.FUNCTION,
+            pretty_name: 'Masking function',
+            default: null,
+            description: 'Masking the image manually.'
+          },
+
         }
       },
       choices: {
@@ -321,8 +329,10 @@ jsPsych.plugins["psychophysics"] = (function() {
         const keys = Object.keys(this)
         for (var i = 0; i < keys.length; i++) {
             if (typeof this[keys[i]] === "function") {
+              // オブジェクト内のfunctionはここで指定する必要がある。そうしないとここで即時に実行されて、その結果が関数名に代入される
               if (keys[i] === "drawFunc") continue
               if (keys[i] === "change_attr") continue
+              if (keys[i] === "mask_func") continue
 
               this[keys[i]] = this[keys[i]].call()
             }
@@ -488,14 +498,161 @@ jsPsych.plugins["psychophysics"] = (function() {
         }
         this.img = new Image();
         this.img.src = this.file;
+
+        if (typeof this.mask !== 'undefined' || typeof this.filter !== 'undefined') {
+          // For masking and filtering, draw the image on another canvas and get its pixel data using the getImageData function.
+          // In addition, masking does work only online, that is, the javascript and image files must be uploaded on the web server.
+
+          if (document.getElementById('invisible_canvas') === null) {
+            const canvas_element = document.createElement('canvas');
+            canvas_element.id = 'invisible_canvas';
+            display_element.appendChild(canvas_element)
+            canvas_element.style.display = 'none'
+          } 
+
+          const invisible_canvas = document.getElementById('invisible_canvas');
+          invisible_canvas.width = this.img.width // The width/height of the canvas is not automatically adjusted.
+          invisible_canvas.height = this.img.height
+          const invisible_ctx = invisible_canvas.getContext('2d');
+          invisible_ctx.clearRect(0, 0, invisible_canvas.width, invisible_canvas.height);
+
+          if (typeof this.filter === 'undefined') {
+            invisible_ctx.filter = 'none'
+          } else {
+            invisible_ctx.filter = this.filter
+          }
   
+          invisible_ctx.drawImage(this.img, 0, 0, this.img.width, this.img.height);
+
+          if (typeof this.mask === 'undefined'){ // Filtering only
+            const invisible_img = invisible_ctx.getImageData(0, 0, this.img.width, this.img.height);
+            this.masking_img = invisible_img;
+            return
+          }
+
+          if (this.mask === 'manual'){
+            if (this.mask_func === null) {
+              alert('You have to specify the mask_func when applying masking manually.');
+              return;
+            }
+            this.masking_img = this.mask_func(invisible_canvas);
+            return
+          }
+    
+          if (this.mask === 'gauss'){
+            if (typeof this.width === 'undefined') {
+              alert('You have to specify the width property for the gaussian mask. For example, 200.');
+              return;
+            }
+            const gauss_width = this.width
+            
+            // 画像の全体ではなく、フィルタリングを行う部分だけを取り出す
+            // Getting only the areas to be filtered, not the whole image.
+            const invisible_img = invisible_ctx.getImageData(this.img.width/2 - gauss_width/2, this.img.height/2 - gauss_width/2, gauss_width, gauss_width);
+
+            let coord_array = getNumbering(Math.round(0 - gauss_width/2), gauss_width)
+            let coord_matrix_x = []
+            for (let i = 0; i< gauss_width; i++){
+              coord_matrix_x.push(coord_array)
+            }
+    
+            coord_array = getNumbering(Math.round(0 - gauss_width/2), gauss_width)
+            let coord_matrix_y = []
+            for (let i = 0; i< gauss_width; i++){
+              coord_matrix_y.push(coord_array)
+            }
+    
+            let exp_value;
+            if (this.method === 'math') {
+              const matrix_x = math.matrix(coord_matrix_x) // Convert to Matrix data
+              const matrix_y = math.transpose(math.matrix(coord_matrix_y))
+              const x_factor = math.multiply(-1, math.square(matrix_x))
+              const y_factor = math.multiply(-1, math.square(matrix_y))
+              const varScale = 2 * math.square(this.sc)
+              const tmp = math.add(math.divide(x_factor, varScale), math.divide(y_factor, varScale));
+              exp_value = math.exp(tmp)
+            } else { // numeric
+              const matrix_x = coord_matrix_x
+              const matrix_y = numeric.transpose(coord_matrix_y)
+              const x_factor = numeric.mul(-1, numeric.pow(matrix_x, 2))
+              const y_factor = numeric.mul(-1, numeric.pow(matrix_y, 2))
+              const varScale = 2 * numeric.pow([this.sc], 2)
+              const tmp = numeric.add(numeric.div(x_factor, varScale), numeric.div(y_factor, varScale));
+              exp_value = numeric.exp(tmp)
+            }
+          
+            let cnt = 3;
+            for (let i = 0; i < gauss_width; i++) {
+              for (let j = 0; j < gauss_width; j++) {
+                invisible_img.data[cnt] = exp_value[i][j] * 255 // 透明度を変更
+                cnt = cnt + 4;
+              }
+            }
+            this.masking_img = invisible_img;
+            return
+          }
+
+          if (this.mask === 'circle' || this.mask === 'rect'){
+            if (typeof this.width === 'undefined') {
+              alert('You have to specify the width property for the circle/rect mask.');
+              return;
+            }
+            if (typeof this.height === 'undefined') {
+              alert('You have to specify the height property for the circle/rect mask.');
+              return;
+            }
+            if (typeof this.center_x === 'undefined') {
+              alert('You have to specify the center_x property for the circle/rect mask.');
+              return;
+            }
+            if (typeof this.center_y === 'undefined') {
+              alert('You have to specify the center_y property for the circle/rect mask.');
+              return;
+            }
+
+            const oval_width = this.width
+            const oval_height = this.height
+            const oval_cx = this.center_x
+            const oval_cy = this.center_y
+                        
+            // 画像の全体ではなく、フィルタリングを行う部分だけを取り出す
+            // Getting only the areas to be filtered, not the whole image.
+            const invisible_img = invisible_ctx.getImageData(oval_cx - oval_width/2, oval_cy - oval_height/2, oval_width, oval_height);
+
+            const cx = invisible_img.width/2
+            const cy = invisible_img.height/2
+
+            if (this.mask === 'circle'){
+              let cnt = 3;
+              for (let j = 0; j < oval_height; j++) {
+                for (let i = 0; i < oval_width; i++) {
+                  const tmp = Math.pow(i-cx, 2)/Math.pow(cx, 2) + Math.pow(j-cy, 2)/Math.pow(cy, 2)
+                  if (tmp > 1){
+                    invisible_img.data[cnt] = 0 // invisible
+                  }
+                  cnt = cnt + 4;
+                }
+              }
+            }
+
+            // When this.mask === 'rect', the alpha (transparency) value does not chage at all.
+
+            this.masking_img = invisible_img;
+            return
+          }
+        }  
       }
 
       show(){
-        const scale = typeof this.scale === 'undefined' ? 1:this.scale;
-        const tmpW = this.img.width * scale;
-        const tmpH = this.img.height * scale;              
-        ctx.drawImage(this.img, 0, 0, this.img.width, this.img.height, this.currentX - tmpW / 2, this.currentY - tmpH / 2, tmpW, tmpH);   
+        if (this.mask || this.filter){
+          // Note that filtering is done to the invisible_ctx.
+          ctx.putImageData(this.masking_img, this.currentX - this.masking_img.width/2, this.currentY - this.masking_img.height/2);
+        } else {
+          const scale = typeof this.scale === 'undefined' ? 1:this.scale;
+          const tmpW = this.img.width * scale;
+          const tmpH = this.img.height * scale;              
+          ctx.drawImage(this.img, 0, 0, this.img.width, this.img.height, this.currentX - tmpW / 2, this.currentY - tmpH / 2, tmpW, tmpH);   
+        }
       }
     }
 
@@ -637,6 +794,12 @@ jsPsych.plugins["psychophysics"] = (function() {
       }
 
       show(){
+        if (typeof this.filter === 'undefined') {
+          ctx.filter = 'none'
+        } else {
+          ctx.filter = this.filter
+        }
+
         // common
         ctx.beginPath();            
         ctx.lineWidth = this.line_width;
@@ -667,6 +830,12 @@ jsPsych.plugins["psychophysics"] = (function() {
       }
 
       show(){
+        if (typeof this.filter === 'undefined') {
+          ctx.filter = 'none'
+        } else {
+          ctx.filter = this.filter
+        }
+
         // common
         // ctx.beginPath();            
         ctx.lineWidth = this.line_width;
@@ -695,6 +864,12 @@ jsPsych.plugins["psychophysics"] = (function() {
       }
 
       show(){
+        if (typeof this.filter === 'undefined') {
+          ctx.filter = 'none'
+        } else {
+          ctx.filter = this.filter
+        }
+
         // common
         ctx.beginPath();            
         ctx.lineWidth = this.line_width;
@@ -728,6 +903,12 @@ jsPsych.plugins["psychophysics"] = (function() {
       }
 
       show(){
+        if (typeof this.filter === 'undefined') {
+          ctx.filter = 'none'
+        } else {
+          ctx.filter = this.filter
+        }
+
         // common
         ctx.beginPath();            
         ctx.lineWidth = this.line_width;
@@ -759,6 +940,12 @@ jsPsych.plugins["psychophysics"] = (function() {
       }
 
       show(){
+        if (typeof this.filter === 'undefined') {
+          ctx.filter = 'none'
+        } else {
+          ctx.filter = this.filter
+        }
+
         // common
         // ctx.beginPath();            
         ctx.lineWidth = this.line_width;
@@ -779,8 +966,9 @@ jsPsych.plugins["psychophysics"] = (function() {
             if (char == "\n") {    
                 line++;
                 column[line] = '';
+            } else {
+              column[line] += char;
             }
-            column[line] += char;
         }
 
         for (let i = 0; i < column.length; i++) {
@@ -806,37 +994,44 @@ jsPsych.plugins["psychophysics"] = (function() {
           alert('You have to specify the file property.')
           return;
         }
-  
+
         // setup stimulus
         this.context = jsPsych.pluginAPI.audioContext();
-        if(this.context !== null){
-          this.source = this.context.createBufferSource();
-          this.source.buffer = jsPsych.pluginAPI.getAudioBuffer(this.file);
-          this.source.connect(this.context.destination);
-          console.log('WebAudio')
-        } else {
-          this.audio = jsPsych.pluginAPI.getAudioBuffer(this.file);
-          this.audio.currentTime = 0;
-          console.log('HTML5 audio')
-        }
+
+        // load audio file
+        jsPsych.pluginAPI.getAudioBuffer(this.file)
+          .then(function (buffer) {
+            if (this.context !== null) {
+              this.audio = this.context.createBufferSource();
+              this.audio.buffer = buffer;
+              this.audio.connect(this.context.destination);
+              console.log('WebAudio')
+            } else {
+              this.audio = buffer;
+              this.audio.currentTime = 0;
+              console.log('HTML5 audio')
+            }
+            // setupTrial();
+          }.bind(this))
+          .catch(function (err) {
+            console.error(`Failed to load audio file "${this.file}". Try checking the file path. We recommend using the preload plugin to load audio files.`)
+            console.error(err)
+          }.bind(this));
+
   
         // set up end event if trial needs it
-        if(this.trial_ends_after_audio){
-          if(this.context !== null){
-            this.source.onended = function() {
-              end_trial();
-            }
-          } else {
-            this.audio.addEventListener('ended', end_trial);
-          }
+        if (this.trial_ends_after_audio) {
+          this.audio.addEventListener('ended', end_trial);
         }
       }
   
       play(){
         // start audio
         if(this.context !== null){
-          //startTime = this.context.currentTime;
-          this.source.start(this.context.currentTime);
+          //startTime = this.context.currentTime; 
+          // オリジナルのjspsychではwebaudioが使えるときは時間のデータとしてcontext.currentTimeを使っている。
+          // psychophysicsプラグインでは、performance.now()で統一している
+          this.audio.start(this.context.currentTime);
         } else {
           this.audio.play();
         }
@@ -844,12 +1039,13 @@ jsPsych.plugins["psychophysics"] = (function() {
 
       stop(){
         if(this.context !== null){
-          this.source.stop();
-          this.source.onended = function() { }
+          this.audio.stop();
+          // this.source.onended = function() { }
         } else {
           this.audio.pause();
-          this.audio.removeEventListener('ended', end_trial);
+          
         }
+        this.audio.removeEventListener('ended', end_trial);
 
       }
     }
@@ -1161,6 +1357,7 @@ jsPsych.plugins["psychophysics"] = (function() {
       trial_data['rt'] = response.rt;
       trial_data['response_type'] = trial.response_type;
       trial_data['key_press'] = response.key;
+      trial_data['response'] = response.key; // compatible with the jsPsych >= 6.3.0
       trial_data['avg_frame_time'] = elapsedTime/sumOfStep;
       trial_data['center_x'] = centerX;
       trial_data['center_y'] = centerY;
