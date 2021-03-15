@@ -109,11 +109,20 @@ The extension uses the default mode specified by WebGazer (currently `ridge`).
 
 ### getCurrentPrediction()
 
-Get the current predicted gaze location from WebGazer. Returns an object with `x`, `y`, and `eyeFeature` properties. This function is asynchronus, so proper use requires either the `await` keyword in the context of another `async function` or using `.then()`. 
+Get the current predicted gaze location from WebGazer. Returns an object with `x`, `y`, and, if currently in a trial with the extension turned on, the time `t` in ms since the start of the trial.
+
+### onGazeUpdate(callback)
+
+Subscribe to gaze updates. The `callback` will be invoked every time a new gaze prediction is generated. The first argument of the `callback` will be an object with `x`, `y`, and, if currently in a trial with the extension turned on, the time `t` in ms since the start of the trial.
+
+This function returns a close handler. When you no longer need to subscribe to gaze updates, call the close handler. Example:
 
 ```js
-jsPsych.extensions.webgazer.getCurrentPrediction().then(function(data){
-  console.log(`Currently looking at coordinate ${data.x}, ${data.y}`)
+var cancelGazeUpdateHandler = jsPsych.extensions.webgazer.onGazeUpdate(function(prediction){
+  console.log(`Currently looking at ${prediction.x}, ${prediction.y}`);
 });
+
+cancelGazeUpdateHandler();
 ```
 
+You can add multiple handlers. Handlers are not closed automatically, so be sure to cancel them when no longer needed.
