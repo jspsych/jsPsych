@@ -33,6 +33,7 @@ jsPsych.extensions['webgazer'] = (function () {
       state.initialized = false;
       state.activeTrial = false;
       state.round_predictions = params.round_predictions;
+      state.gazeUpdateCallbacks = [];
 
       // hide video by default
       extension.hideVideo();
@@ -191,6 +192,15 @@ jsPsych.extensions['webgazer'] = (function () {
     return state.currentGaze;
   }
 
+  extension.onGazeUpdate = function(callback){
+    state.gazeUpdateCallbacks.push(callback);
+    return function(){
+      state.gazeUpdateCallbacks = state.gazeUpdateCallbacks.filter(function(item){
+        return item !== callback;
+      });
+    }
+  }
+
   function handleGazeDataUpdate(gazeData, elapsedTime) {
     if (gazeData !== null){
       var d = {
@@ -202,6 +212,9 @@ jsPsych.extensions['webgazer'] = (function () {
         state.currentTrialData.push(d); // add data to current trial's data
       }
       state.currentGaze = d;
+      for(var i=0; i<state.gazeUpdateCallbacks.length; i++){
+        state.gazeUpdateCallbacks[i](d);
+      }
     } else {
       state.currentGaze = null;
     }

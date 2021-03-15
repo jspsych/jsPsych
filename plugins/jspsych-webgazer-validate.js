@@ -104,17 +104,18 @@
       var pt_finish = pt_start_val + trial.validation_duration;
 
       var pt_data = [];
-      
-      requestAnimationFrame(function watch_dot(){
-        
+
+      var cancelGazeUpdate = jsPsych.extensions['webgazer'].onGazeUpdate(function(prediction){
         if(performance.now() > pt_start_val){
-          var prediction = jsPsych.extensions['webgazer'].getCurrentPrediction();
           pt_data.push({dx: prediction.x - x, dy: prediction.y - y, t: Math.round(performance.now()-start)});
         }
+      })
+      requestAnimationFrame(function watch_dot(){
         if(performance.now() < pt_finish){
           requestAnimationFrame(watch_dot);
         } else {
           trial_data.raw_gaze.push(pt_data);
+          cancelGazeUpdate();
           next_validation_point();
         }
       });
