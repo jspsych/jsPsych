@@ -32,8 +32,22 @@
       scale_width: 500
   };
 
+  var likert_image_many_questions = {
+      type: 'survey-likert',
+      preamble: `<img src="img/happy_face_1.jpg">`,
+      questions: [
+        {prompt: "Question 1", labels: scale}, 
+        {prompt: "Question 2", labels: scale},
+        {prompt: "Question 3", labels: scale},
+        {prompt: "Question 4", labels: scale},
+        {prompt: "Question 5", labels: scale}
+      ],
+      scale_width: 500,
+      scale_height: 250,
+  };
+
   jsPsych.init({
-    timeline: [likert_trial, likert_trial_random_order],
+    timeline: [likert_trial, likert_trial_random_order, likert_image_many_questions],
     on_finish: function() { jsPsych.data.displayData(); }
   });
 

@@ -66,6 +66,13 @@ jsPsych.plugins['survey-likert'] = (function() {
         default: null,
         description: 'Width of the likert scales in pixels.'
       },
+      scale_height: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Scale height',
+        default: null,
+        description: 'Height of the likert scales in pixels.'
+      },
+
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
@@ -104,6 +111,10 @@ jsPsych.plugins['survey-likert'] = (function() {
     // show preamble text
     if(trial.preamble !== null){
       html += '<div id="jspsych-survey-likert-preamble" class="jspsych-survey-likert-preamble">'+trial.preamble+'</div>';
+    }
+
+    if (trial.scale_height !== null) {
+      html += `<div style="width: 100%; height: ${trial.scale_height}px; overflow-y: scroll">`;
     }
 
     if ( trial.autocomplete ) {
@@ -145,6 +156,11 @@ jsPsych.plugins['survey-likert'] = (function() {
     html += '<input type="submit" id="jspsych-survey-likert-next" class="jspsych-survey-likert jspsych-btn" value="'+trial.button_label+'"></input>';
 
     html += '</form>'
+
+    if (trial.scale_height !== null) {
+      html += `</div">`;
+    }
+
 
     display_element.innerHTML = html;
 
