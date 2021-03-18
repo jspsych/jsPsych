@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-rok.js"></script>
+    <script src="../plugins/jspsych-preload.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+    /*
+    We would appreciate it if you cited this paper when you use the rok:
+    ...
+    */
+
+
+    //---------Create trials---------
+
+    let preload = {
+        type: 'preload',
+        auto_preload: true
+    };
+
+    // create default trial with prompt
+    let trial_0 = {
+        type: 'rok',
+        choices: ['f', 'j'],
+        correct_choice: 'f',
+        prompt: 'Press f or j to continue'
+    };
+
+    // trial with images
+    let trial_1 = {
+        type: 'rok',
+        choices: ['f', 'j'],
+        correct_choice: 'f',
+        fade_out: 1, // this fades out the oobs at the edges
+        stimulus_type: 4, // oobs are loaded via image
+        number_of_oobs: 100, // number of oobs presented
+        oob_size: 8, // size of the oobs
+        stimulus_image: ['img/bird1_4.png'], // path to the source of image sheet
+        stimulus_image_keyframes: 4, //number of keyframes in the image sheet
+        stimulus_keyframe_time: .1, // time in seconds each keyframe is presented
+        stimulus_mirror: 1, // if 1 there is a mirrored version of the image in the image sheet (used so birds don't fly upside down)
+        coherent_orientation: 0, // coherent orientation in degree
+        coherent_movement_direction: 0, // coherent movement in degree
+        coherence_orientation: 0, // 70% of oobs are orientation in coherent orientation
+        coherence_orientation_opposite: 0, // 20/% of oobs are orientated opposite to coherent orientation (the remaining 50% are orientated at random)
+        coherence_movement: 50, // 50% of oobs move in coherent direction
+        coherence_movement_opposite: 0, // 0% in anticoherent direction (therefore remaining 50% move in random direction)
+        experiment_congruency_mode: 2, // random oobs have same direction and movement direction
+        experiment_main_task: 0, // main task is movement task
+        movement_speed_randomisation: 40, // random
+    };
+
+    let width = window.innerWidth *.9;
+    let height = window.innerHeight * .9;
+
+    // overlapping stimuli to create distraction
+    let trial_2 = {
+        type: 'rok',
+        // Set the apertures on top of each other
+        number_of_apertures: 3, // this is NEEDED for overlapping stimuli!!
+        aperture_position_left: [50, 50, 50], // 50 being the middle of the screen
+        aperture_position_top: [50, 50, 50],
+		aperture_width: width,
+		aperture_height: height,
+        // set the trial parameters
+        choices: ['f', 'j'],
+        correct_choice: 'f',
+		background_color: 'black',
+        // set the stimulis
+		stimulus_type: 4,
+        stimulus_image: ['img/alien1_5.png', 'img/alien2_5.png', 'img/alien3_5.png'],
+		stimulus_image_keyframes: [5,5,5],
+		stimulus_keyframe_time: [.3,.3,.3],
+		oob_size: [32, 48 , 64],
+        number_of_oobs: [300, 150, 100],
+        coherent_orientation: [0, 0, 0],
+        coherent_movement_direction: [0, 180, 90],
+        coherence_orientation: [70, 80, 90],
+        coherence_movement: [70, 80, 90],
+		movement_speed: [12, 24, 48],
+		movement_speed_randomisation: 50,
+        fade_out: 1,
+		units: 'px',
+    };
+
+
+    //---------Run the experiment---------
+
+    //Initiate the experiment
+    jsPsych.init({
+        timeline: [preload, trial_0, trial_1, trial_2],
+        on_finish: function () { //Execute this when the experiment finishes
+            jsPsych.data.displayData(); //Display the data onto the browser screen
+        }
+    });
+
+</script>
+</html>
