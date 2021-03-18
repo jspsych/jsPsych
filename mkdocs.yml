@@ -89,6 +89,7 @@ nav:
   - 'jspsych-rdk': 'plugins/jspsych-rdk.md'
   - 'jspsych-reconstruction': 'plugins/jspsych-reconstruction.md'
   - 'jspsych-resize': 'plugins/jspsych-resize.md'
+  - 'jspsych-rok': 'plugins/jspsych-rok.md'
   - 'jspsych-same-different-html': 'plugins/jspsych-same-different-html.md'
   - 'jspsych-same-different-image': 'plugins/jspsych-same-different-image.md'
   - 'jspsych-serial-reaction-time': 'plugins/jspsych-serial-reaction-time.md'

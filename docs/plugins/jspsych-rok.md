@@ -8,46 +8,46 @@ We would appreciate it if you cited this paper when you use the plugin:
 
 ## Parameters
 
-Parameters can be left unspecified if the default value is acceptable. If more then one aperture is displayed most of the parameters should be specified as array (specified by the array column).
-The elements of the array then apply to the corresponding aperture. Features that are not fully implemented yet are marked with an x
+In addition to the [parameters available in all plugins](/overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Parameters can be left unspecified if the default value is acceptable.
+If more then one aperture is displayed most of the parameters can be specified as array. The elements of the array then apply to the corresponding aperture.
 
-|Parameter|Type|Default Value| Descripton|Array|
-|---------|----|-------------|-----------|-----|
-choices|array|[]|The valid keys that the subject can press to indicate a response|must|
-correct_choice|string|undefined|The correct keys for that trial|can|
-number_of_apertures|INT|1|Number of apertures. If greater then one, other parameters of trial should be arrays|can|
-aperture_width|INT|600|The width of the aperture in pixels|can|
-aperture_height|INT|400|he height of the aperture in pixels|can|
-aperture_position_left|INT|50|Position of midpoint of aperture in x direction in percentage of window width (50 being middle)|can|
+|Parameter|Type|Default Value| Descripton|
+|---------|----|-------------|-----------|
+choices|array|[]|The valid keys that the subject can press to indicate a response (must be an array)|
+correct_choice|string|undefined|The correct keys for that trial (can be an array)|
+number_of_apertures|INT|1|Number of apertures. If greater then one, other parameters of trial should be arrays (can be an array)|
+aperture_width|INT|600|The width of the aperture in pixels (can be an array)|
+aperture_height|INT|400|he height of the aperture in pixels (can be an array)|
+aperture_position_left|INT|50|Position of midpoint of aperture in x direction in percentage of window width (50 being middle) (can be an array)|
 aperture_position_top|INT|50|Position of midpoint of aperture in y direction in percentage of window width (0 being top, 50 being middle, 100 being bottom)|can
-aperture_shape|INT|0|0 - rectangular, 1 - elliptic|can|
-trial_duration|int|0|The length of stimulus presentation. Zero for endless loop|no|
-response_ends_trial|bool|true|If true, then any valid key will end the trial|no|
-number_of_oobs|int|300|The number of oriented objects per set in the stimulus|can|
-oob_size|INT|2|The size of the orientated objects in percentage of aperture_width|can|
-oob_color|STRING,|white|The color of the oobs|can|
-stimulus_type|INT|0|Appearance of stimulus (0-triangles, 1-circle,2-square,3-bird, 4-image)|can|
-stimulus_image|IMAGE|null|Pictures of stimuli, can be key-framed(animated) or randomised, see documentation|can|
-stimulus_image_keyframes|INT|1|Number of keyframes in stimulus images|can|
-stimulus_keyframe_time|FLOAT|.1|Time between keyframes in seconds|can|
-stimulus_mirror|INT|0|Mirror image instead of rotating (1 - x axis, 2 - y axis) Can be useful for oobs that have two orientation axis (e.g front to back and up and down)|can|
-coherent_movement_direction|INT|0|The direction of coherent motion in degrees (0 degree meaning right)|can|
-coherent_orientation|INT|0|The orientation of the objects in degree (0 degree meaning right)|can|
-coherence_movement|INT|50|The percentage of oriented objects moving in the coherent direction|can|
-coherence_orientation|INT|50|The percentage of objects that are oriented in the coherent orientation|can|
-coherence_movement_opposite|INT|0|The percentage of oriented objects moving in the direction opposite of the coherent direction|can|
-coherence_orientation_opposite|INT|0|The percentage of objects that are oriented opposite of the coherent orientation|can|
-movement_speed|INT|10|The movement speed of the oobs in (percentage of aperature_width)/second|can|
-movement_speed_randomisation|INT|0|The percentage of randomisation in movement speed (0 meaning all orientated objects move with speed defined in movement_speed, 100 meaning movement speeds from 0 to 2x movement_speed)|can|
-random_movement_type|INT|0|ype of random movement (0 direction is random but fixed, 1 movement direction of incoherent oobs changes over time|can|
-random_orientation_type|INT|0|Type of random movement (0 - orientation is random but fixed, 1 - orientation of incoherent oobs changes over time|can|
-background_color|STRING|gray|The background of the stimulus|can|
-background_image|IMAGE|null|Background image, can be|can|
-prompt|STRING|null|Prompt that is presented above the stimulus|can|
-fade_out|INT|0|Fade the oobs on the edges of the aperture|can|
-experiment_congruency_mode|INT|0|Sets experiment to congruency mode: experiment_main_task has to be  set (0 = movement or 1 = direction) if this is set to 1 or 2. The congruency of the task does only apply to coherent oobs of main task. If this is set to 1 the remaining oobs secondary feature (the non task feature) is set at random. If this is set to 2 the remaining oobs have the same direction and orientation|no|
-experiment_main_task|INT|0|Sets the main task when experiment is in congruency mode. The congruency of the other task then only applies to non random oobs of main task(0 - movement task, 1 - orientation task)|can|
-units|STRING|null|Units in which size and speed of oobs is expressed (null - percentage of aperture width, px - pixels|no|
+aperture_shape|INT|0|0 - rectangular, 1 - elliptic (can be an array)|
+trial_duration|int|0|The length of stimulus presentation. Zero for endless loop|
+response_ends_trial|bool|true|If true, then any valid key will end the trial|
+number_of_oobs|int|300|The number of oriented objects per set in the stimulus (can be an array)|
+oob_size|INT|2|The size of the orientated objects in percentage of aperture_width (can be an array)|
+oob_color|STRING,|white|The color of the oobs (can be an array)|
+stimulus_type|INT|0|Appearance of stimulus (0-triangles, 1-circle,2-square,3-bird, 4-image) (can be an array)|
+stimulus_image|IMAGE|null|Pictures of stimuli, can be key-framed(animated) or randomised, see documentation (can be an array)|
+stimulus_image_keyframes|INT|1|Number of keyframes in stimulus images (can be an array)|
+stimulus_keyframe_time|FLOAT|.1|Time between keyframes in seconds (can be an array)|
+stimulus_mirror|INT|0|Mirror image instead of rotating (1 - x axis, 2 - y axis) Can be useful for oobs that have two orientation axis (e.g front to back and up and down) (can be an array)|
+coherent_movement_direction|INT|0|The direction of coherent motion in degrees (0 degree meaning right) (can be an array)|
+coherent_orientation|INT|0|The orientation of the objects in degree (0 degree meaning right) (can be an array)|
+coherence_movement|INT|50|The percentage of oriented objects moving in the coherent direction (can be an array)|
+coherence_orientation|INT|50|The percentage of objects that are oriented in the coherent orientation (can be an array)|
+coherence_movement_opposite|INT|0|The percentage of oriented objects moving in the direction opposite of the coherent direction (can be an array)|
+coherence_orientation_opposite|INT|0|The percentage of objects that are oriented opposite of the coherent orientation (can be an array)|
+movement_speed|INT|10|The movement speed of the oobs in (percentage of aperature_width)/second (can be an array)|
+movement_speed_randomisation|INT|0|The percentage of randomisation in movement speed (0 meaning all orientated objects move with speed defined in movement_speed, 100 meaning movement speeds from 0 to 2x movement_speed) (can be an array)|
+random_movement_type|INT|0|ype of random movement (0 direction is random but fixed, 1 movement direction of incoherent oobs changes over time (can be an array)|
+random_orientation_type|INT|0|Type of random movement (0 - orientation is random but fixed, 1 - orientation of incoherent oobs changes over time (can be an array)|
+background_color|STRING|gray|The background of the stimulus (can be an array)|
+background_image|IMAGE|null|Background image, can be (can be an array)|
+prompt|STRING|null|Prompt that is presented above the stimulus (can be an array)|
+fade_out|INT|0|Fade the oobs on the edges of the aperture (can be an array)|
+experiment_congruency_mode|INT|0|Sets experiment to congruency mode: experiment_main_task has to be  set (0 = movement or 1 = direction) if this is set to 1 or 2. The congruency of the task does only apply to coherent oobs of main task. If this is set to 1 the remaining oobs secondary feature (the non task feature) is set at random. If this is set to 2 the remaining oobs have the same direction and orientation|
+experiment_main_task|INT|0|Sets the main task when experiment is in congruency mode. The congruency of the other task then only applies to non random oobs of main task(0 - movement task, 1 - orientation task) (can be an array)|
+units|STRING|null|Units in which size and speed of oobs is expressed (null - percentage of aperture width, px - pixels|
 
 
 ### Image Loading
