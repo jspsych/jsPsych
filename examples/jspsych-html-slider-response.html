@@ -41,8 +41,18 @@
     stimulus_duration: 1000
   }
 
+  var trial_4 = {
+    type: 'html-slider-response',
+    stimulus: '<div style="margin: 50px auto; width: 100px; height: 100px; background-color: rgb(46, 26, 122);"></div>',
+    labels: [['Purple', 'Blue'],['0%','25%','50%','75%','100%']],
+    slider_width: [500,1000],
+    slider_start: [0,50],
+    require_movement: [true,false],
+    prompt: ['<p>Is this color closer to purple or blue? Use the slider above.(requires movement, custom start)</p>',"<p>How certain are you? Use slider above.(doesn't require movement)</p>"]
+  }
+
   jsPsych.init({
-    timeline: [trial_1, trial_2, trial_3],
+    timeline: [trial_1, trial_2, trial_3, trial_4],
     on_finish: function() {
       jsPsych.data.displayData();
     },

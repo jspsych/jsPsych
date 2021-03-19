@@ -17,7 +17,7 @@ jsPsych.plugins['audio-slider-response'] = (function () {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Min slider',
         default: 0,
-        description: 'Sets the minimum value of the slider.'
+        description: 'Sets the minimum value of the slider'
       },
       max: {
         type: jsPsych.plugins.parameterType.INT,
