@@ -804,38 +804,39 @@ jsPsych.plugins["rok"] = (function () {
         } //End of after_response
 
         //Function that determines if the response is correct
-        function correctOrNot() {
+                function correctOrNot() {
 
             //Check that the correct_choice has been defined
-            if (typeof trial.correct_choice !== 'undefined') {
+            if(typeof trial.correct_choice !== 'undefined'){
                 //If the correct_choice variable holds an array
-                if (trial.correct_choice.constructor === Array) { //If it is an array
+                if(trial.correct_choice.constructor === Array){ //If it is an array
                     //If the elements are characters
-                    if (typeof trial.correct_choice[0] === 'string' || trial.correct_choice[0] instanceof String) {
-                        trial.correct_choice = trial.correct_choice.map(function (x) {
-                            return x.toUpperCase();
-                        }); //Convert all the values to upper case
-                        return trial.correct_choice.includes(String.fromCharCode(response.key)); //If the response is included in the correct_choice array, return true. Else, return false.
+                    if(typeof trial.correct_choice[0] === 'string' || trial.correct_choice[0] instanceof String){
+                        var key_in_choices = trial.correct_choice.every(function(x) {
+                            return jsPsych.pluginAPI.compareKeys(x,response.key);
+                        });
+                        return key_in_choices; //If the response is included in the correct_choice array, return true. Else, return false.
                     }
                     //Else if the elements are numbers (javascript character codes)
-                    else if (typeof trial.correct_choice[0] === 'number') {
-                        return trial.correct_choice.includes(response.key); //If the response is included in the correct_choice array, return true. Else, return false.
+                    else if (typeof trial.correct_choice[0] === 'number'){
+                        console.error('Error in ROK plugin: correct_choice value must be a string.');
                     }
                 }
                 //Else compare the char with the response key
-                else {
+                else{
                     //If the element is a character
-                    if (typeof trial.correct_choice === 'string' || trial.correct_choice instanceof String) {
+                    if(typeof trial.correct_choice === 'string' || trial.correct_choice instanceof String){
                         //Return true if the user's response matches the correct answer. Return false otherwise.
-                        return response.key == trial.correct_choice.toUpperCase().charCodeAt(0);
+                        return jsPsych.pluginAPI.compareKeys(response.key, trial.correct_choice);
                     }
                     //Else if the element is a number (javascript character codes)
-                    else if (typeof trial.correct_choice === 'number') {
-                        return response.key == trial.correct_choice;
+                    else if (typeof trial.correct_choice === 'number'){
+                        console.error('Error in ROK plugin: correct_choice value must be a string.');
                     }
                 }
             }
         }
+
 
 
         //Function that clears the dots on the canvas by drawing over it with the color of the baclground
