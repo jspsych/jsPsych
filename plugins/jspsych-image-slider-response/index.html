@@ -1565,7 +1565,7 @@
 <td>render_on_canvas</td>
 <td>boolean</td>
 <td>true</td>
-<td>If true, the image will be drawn onto a canvas element. This prevents a blank screen (white flash) between consecutive image trials in some browsers, like Firefox and Edge. If false, the image will be shown via an img element, as in previous versions of jsPsych.</td>
+<td>If true, the image will be drawn onto a canvas element. This prevents a blank screen (white flash) between consecutive image trials in some browsers, like Firefox and Edge. If false, the image will be shown via an img element, as in previous versions of jsPsych. If the stimulus is an <strong>animated gif</strong>, you must set this parameter to false, because the canvas rendering method will only present static images.</td>
 </tr>
 </tbody>
 </table>
