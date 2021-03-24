@@ -407,50 +407,11 @@
     on_close
   </a>
   
-    <nav class="md-nav" aria-label="on_close">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
   <a href="#on_data_update" class="md-nav__link">
     on_data_update
-  </a>
-  
-    <nav class="md-nav" aria-label="on_data_update">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_1" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#jspsychinit-timeline-exp-on_data_update-functiondata-consolelogjust-added-new-data-the-contents-of-the-data-are-jsonstringifydata" class="md-nav__link">
-    jsPsych.init({
-  timeline: exp,
-  on_data_update: function(data) {
-    console.log(&#39;Just added new data. The contents of the data are: &#39;+JSON.stringify(data));
-  }
-});
-
   </a>
   
 </li>
@@ -460,68 +421,11 @@
     on_finish (trial)
   </a>
   
-    <nav class="md-nav" aria-label="on_finish (trial)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_2" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#var-trial-type-image-keyboard-response-stimulus-imgapng-on_finish-functiondata-ifjspsychpluginapicomparekeysdataresponse-j-datacorrect-true-else-datacorrect-false" class="md-nav__link">
-    var trial = {
-  type: &#39;image-keyboard-response&#39;,
-  stimulus: &#39;imgA.png&#39;,
-  on_finish: function(data) {
-    if(jsPsych.pluginAPI.compareKeys(data.response, &#39;j&#39;)){
-      data.correct = true;
-    } else {
-      data.correct = false;
-    }
-  }
-};
-
-  </a>
-  
 </li>
       
         <li class="md-nav__item">
   <a href="#on_finish-experiment" class="md-nav__link">
     on_finish (experiment)
-  </a>
-  
-    <nav class="md-nav" aria-label="on_finish (experiment)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_3" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#jspsychinit-timeline-exp-on_finish-functiondata-consolelogthe-experiment-is-over-here-is-all-the-data-jsonstringifydata" class="md-nav__link">
-    jsPsych.init({
-  timeline: exp,
-  on_finish: function(data) {
-    console.log(&#39;The experiment is over! Here is all the data: &#39;+JSON.stringify(data));
-  }
-});
-
   </a>
   
 </li>
@@ -531,33 +435,6 @@
     on_load
   </a>
   
-    <nav class="md-nav" aria-label="on_load">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_4" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#var-trial-type-image-keyboard-response-stimulus-imgapng-on_load-function-consolelogthe-trial-just-finished-loading" class="md-nav__link">
-    var trial = {
-  type: &#39;image-keyboard-response&#39;,
-  stimulus: &#39;imgA.png&#39;,
-  on_load: function() {
-    console.log(&#39;The trial just finished loading.&#39;);
-  }
-};
-
-  </a>
-  
 </li>
       
         <li class="md-nav__item">
@@ -565,60 +442,11 @@
     on_start (trial)
   </a>
   
-    <nav class="md-nav" aria-label="on_start (trial)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_5" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
   <a href="#on_timeline_finish" class="md-nav__link">
     on_timeline_finish
-  </a>
-  
-    <nav class="md-nav" aria-label="on_timeline_finish">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_6" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#var-procedure-timeline-trial1-trial2-timeline_variables-stimulus-person-1jpg-stimulus-person-2jpg-stimulus-person-3jpg-stimulus-person-4jpg-on_timeline_finish-function-consolelogthis-timeline-has-finished-loop_function-function-consolelogthis-loop-function-will-execute-after-on_timeline_finish-return-false" class="md-nav__link">
-    var procedure = {
-    timeline: [trial1, trial2],
-    timeline_variables: [
-        { stimulus: &#39;person-1.jpg&#39; },
-        { stimulus: &#39;person-2.jpg&#39; },
-        { stimulus: &#39;person-3.jpg&#39; },
-        { stimulus: &#39;person-4.jpg&#39; }
-    ],
-  on_timeline_finish: function() {
-    console.log(&#39;This timeline has finished.&#39;);
-  },
-  loop_function: function() {
-    console.log(&#39;This loop function will execute after on_timeline_finish.&#39;);
-    return false;
-  }
-}
-
   </a>
   
 </li>
@@ -628,68 +456,11 @@
     on_timeline_start
   </a>
   
-    <nav class="md-nav" aria-label="on_timeline_start">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_7" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#var-procedure-timeline-trial1-trial2-conditional_function-function-consolelogthis-conditional-function-will-execute-first-return-true-on_timeline_start-function-consolelogthis-timeline-has-started" class="md-nav__link">
-    var procedure = {
-    timeline: [trial1, trial2],
-  conditional_function: function() {
-    console.log(&#39;This conditional function will execute first.&#39;)
-    return true;
-  },
-  on_timeline_start: function() {
-    console.log(&#39;This timeline has started&#39;);
-  }
-}
-
-  </a>
-  
 </li>
       
         <li class="md-nav__item">
   <a href="#on_trial_finish" class="md-nav__link">
     on_trial_finish
-  </a>
-  
-    <nav class="md-nav" aria-label="on_trial_finish">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_8" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#jspsychinit-timeline-exp-on_trial_finish-functiondata-consoleloga-trial-just-ended-consolelogjsonstringifydata" class="md-nav__link">
-    jsPsych.init({
-  timeline: exp,
-  on_trial_finish: function(data) {
-    console.log(&#39;A trial just ended.&#39;);
-    console.log(JSON.stringify(data));
-  }
-});
-
   </a>
   
 </li>
@@ -698,19 +469,6 @@
   <a href="#on_trial_start" class="md-nav__link">
     on_trial_start
   </a>
-  
-    <nav class="md-nav" aria-label="on_trial_start">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_9" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1682,50 +1440,11 @@
     on_close
   </a>
   
-    <nav class="md-nav" aria-label="on_close">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
   <a href="#on_data_update" class="md-nav__link">
     on_data_update
-  </a>
-  
-    <nav class="md-nav" aria-label="on_data_update">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_1" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#jspsychinit-timeline-exp-on_data_update-functiondata-consolelogjust-added-new-data-the-contents-of-the-data-are-jsonstringifydata" class="md-nav__link">
-    jsPsych.init({
-  timeline: exp,
-  on_data_update: function(data) {
-    console.log(&#39;Just added new data. The contents of the data are: &#39;+JSON.stringify(data));
-  }
-});
-
   </a>
   
 </li>
@@ -1735,68 +1454,11 @@
     on_finish (trial)
   </a>
   
-    <nav class="md-nav" aria-label="on_finish (trial)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_2" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#var-trial-type-image-keyboard-response-stimulus-imgapng-on_finish-functiondata-ifjspsychpluginapicomparekeysdataresponse-j-datacorrect-true-else-datacorrect-false" class="md-nav__link">
-    var trial = {
-  type: &#39;image-keyboard-response&#39;,
-  stimulus: &#39;imgA.png&#39;,
-  on_finish: function(data) {
-    if(jsPsych.pluginAPI.compareKeys(data.response, &#39;j&#39;)){
-      data.correct = true;
-    } else {
-      data.correct = false;
-    }
-  }
-};
-
-  </a>
-  
 </li>
       
         <li class="md-nav__item">
   <a href="#on_finish-experiment" class="md-nav__link">
     on_finish (experiment)
-  </a>
-  
-    <nav class="md-nav" aria-label="on_finish (experiment)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_3" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#jspsychinit-timeline-exp-on_finish-functiondata-consolelogthe-experiment-is-over-here-is-all-the-data-jsonstringifydata" class="md-nav__link">
-    jsPsych.init({
-  timeline: exp,
-  on_finish: function(data) {
-    console.log(&#39;The experiment is over! Here is all the data: &#39;+JSON.stringify(data));
-  }
-});
-
   </a>
   
 </li>
@@ -1806,33 +1468,6 @@
     on_load
   </a>
   
-    <nav class="md-nav" aria-label="on_load">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_4" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#var-trial-type-image-keyboard-response-stimulus-imgapng-on_load-function-consolelogthe-trial-just-finished-loading" class="md-nav__link">
-    var trial = {
-  type: &#39;image-keyboard-response&#39;,
-  stimulus: &#39;imgA.png&#39;,
-  on_load: function() {
-    console.log(&#39;The trial just finished loading.&#39;);
-  }
-};
-
-  </a>
-  
 </li>
       
         <li class="md-nav__item">
@@ -1840,60 +1475,11 @@
     on_start (trial)
   </a>
   
-    <nav class="md-nav" aria-label="on_start (trial)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_5" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
   <a href="#on_timeline_finish" class="md-nav__link">
     on_timeline_finish
-  </a>
-  
-    <nav class="md-nav" aria-label="on_timeline_finish">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_6" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#var-procedure-timeline-trial1-trial2-timeline_variables-stimulus-person-1jpg-stimulus-person-2jpg-stimulus-person-3jpg-stimulus-person-4jpg-on_timeline_finish-function-consolelogthis-timeline-has-finished-loop_function-function-consolelogthis-loop-function-will-execute-after-on_timeline_finish-return-false" class="md-nav__link">
-    var procedure = {
-    timeline: [trial1, trial2],
-    timeline_variables: [
-        { stimulus: &#39;person-1.jpg&#39; },
-        { stimulus: &#39;person-2.jpg&#39; },
-        { stimulus: &#39;person-3.jpg&#39; },
-        { stimulus: &#39;person-4.jpg&#39; }
-    ],
-  on_timeline_finish: function() {
-    console.log(&#39;This timeline has finished.&#39;);
-  },
-  loop_function: function() {
-    console.log(&#39;This loop function will execute after on_timeline_finish.&#39;);
-    return false;
-  }
-}
-
   </a>
   
 </li>
@@ -1903,68 +1489,11 @@
     on_timeline_start
   </a>
   
-    <nav class="md-nav" aria-label="on_timeline_start">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_7" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#var-procedure-timeline-trial1-trial2-conditional_function-function-consolelogthis-conditional-function-will-execute-first-return-true-on_timeline_start-function-consolelogthis-timeline-has-started" class="md-nav__link">
-    var procedure = {
-    timeline: [trial1, trial2],
-  conditional_function: function() {
-    console.log(&#39;This conditional function will execute first.&#39;)
-    return true;
-  },
-  on_timeline_start: function() {
-    console.log(&#39;This timeline has started&#39;);
-  }
-}
-
-  </a>
-  
 </li>
       
         <li class="md-nav__item">
   <a href="#on_trial_finish" class="md-nav__link">
     on_trial_finish
-  </a>
-  
-    <nav class="md-nav" aria-label="on_trial_finish">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_8" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#jspsychinit-timeline-exp-on_trial_finish-functiondata-consoleloga-trial-just-ended-consolelogjsonstringifydata" class="md-nav__link">
-    jsPsych.init({
-  timeline: exp,
-  on_trial_finish: function(data) {
-    console.log(&#39;A trial just ended.&#39;);
-    console.log(JSON.stringify(data));
-  }
-});
-
   </a>
   
 </li>
@@ -1973,19 +1502,6 @@
   <a href="#on_trial_start" class="md-nav__link">
     on_trial_start
   </a>
-  
-    <nav class="md-nav" aria-label="on_trial_start">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-use_9" class="md-nav__link">
-    Sample use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2011,7 +1527,6 @@
 <hr />
 <h2 id="on_close">on_close<a class="headerlink" href="#on_close" title="Permanent link">&para;</a></h2>
 <p>The <code>on_close</code> callback can be declared in the <code>jsPsych.init</code> method. The callback triggers when the user leaves the page, but before any content on the page is removed from the browser's memory. This can be used, for example, to save data as the user is leaving the page.</p>
-<h4 id="sample-use">Sample use<a class="headerlink" href="#sample-use" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
   <span class="nx">timeline</span><span class="o">:</span> <span class="nx">exp</span><span class="p">,</span>
   <span class="nx">on_close</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
@@ -2023,18 +1538,17 @@
 <hr />
 <h2 id="on_data_update">on_data_update<a class="headerlink" href="#on_data_update" title="Permanent link">&para;</a></h2>
 <p>The <code>on_data_update</code> callback can be declared in the <code>jsPsych.init</code> method. The callback triggers at the end of a data update cycle. This happens after every trial, after the on_finish (trial) and on_trial_finish events execute, allowing you to modify the data in those callbacks, and then use this callback to store the data. The function will be passed a single argument, which contains the data that was written.</p>
-<h4 id="sample-use_1">Sample use<a class="headerlink" href="#sample-use_1" title="Permanent link">&para;</a></h4>
-<h2 id="jspsychinit-timeline-exp-on_data_update-functiondata-consolelogjust-added-new-data-the-contents-of-the-data-are-jsonstringifydata"><div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
   <span class="nx">timeline</span><span class="o">:</span> <span class="nx">exp</span><span class="p">,</span>
   <span class="nx">on_data_update</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Just added new data. The contents of the data are: &#39;</span><span class="o">+</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">));</span>
   <span class="p">}</span>
 <span class="p">});</span>
-</code></pre></div><a class="headerlink" href="#jspsychinit-timeline-exp-on_data_update-functiondata-consolelogjust-added-new-data-the-contents-of-the-data-are-jsonstringifydata" title="Permanent link">&para;</a></h2>
+</code></pre></div>
+<hr />
 <h2 id="on_finish-trial">on_finish (trial)<a class="headerlink" href="#on_finish-trial" title="Permanent link">&para;</a></h2>
 <p>The <code>on_finish</code> callback can be added to any trial. The callback will trigger whenever the trial ends. The callback function will be passed a single argument, containing the data object from the trial. This data object is <em>editable</em>. Any changes made in the on_finish function will be stored in the internal data collection.</p>
-<h4 id="sample-use_2">Sample use<a class="headerlink" href="#sample-use_2" title="Permanent link">&para;</a></h4>
-<h2 id="var-trial-type-image-keyboard-response-stimulus-imgapng-on_finish-functiondata-ifjspsychpluginapicomparekeysdataresponse-j-datacorrect-true-else-datacorrect-false"><div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">,</span>
   <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;imgA.png&#39;</span><span class="p">,</span>
   <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
@@ -2045,31 +1559,31 @@
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div><a class="headerlink" href="#var-trial-type-image-keyboard-response-stimulus-imgapng-on_finish-functiondata-ifjspsychpluginapicomparekeysdataresponse-j-datacorrect-true-else-datacorrect-false" title="Permanent link">&para;</a></h2>
+</code></pre></div>
+<hr />
 <h2 id="on_finish-experiment">on_finish (experiment)<a class="headerlink" href="#on_finish-experiment" title="Permanent link">&para;</a></h2>
 <p>The <code>on_finish</code> callback can be declared in the <code>jsPsych.init</code> method. The callback will trigger once all trials in the experiment have been run. The method will be passed a single argument, containing all of the data generated in the experiment.</p>
-<h4 id="sample-use_3">Sample use<a class="headerlink" href="#sample-use_3" title="Permanent link">&para;</a></h4>
-<h2 id="jspsychinit-timeline-exp-on_finish-functiondata-consolelogthe-experiment-is-over-here-is-all-the-data-jsonstringifydata"><div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
   <span class="nx">timeline</span><span class="o">:</span> <span class="nx">exp</span><span class="p">,</span>
   <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;The experiment is over! Here is all the data: &#39;</span><span class="o">+</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">));</span>
   <span class="p">}</span>
 <span class="p">});</span>
-</code></pre></div><a class="headerlink" href="#jspsychinit-timeline-exp-on_finish-functiondata-consolelogthe-experiment-is-over-here-is-all-the-data-jsonstringifydata" title="Permanent link">&para;</a></h2>
+</code></pre></div>
+<hr />
 <h2 id="on_load">on_load<a class="headerlink" href="#on_load" title="Permanent link">&para;</a></h2>
 <p>The <code>on_load</code> callback can be added to any trial. The callback will trigger once the trial has completed loading. For most plugins, this will occur once the display has been initially updated but before any user interactions or timed events (e.g., animations) have occurred.</p>
-<h4 id="sample-use_4">Sample use<a class="headerlink" href="#sample-use_4" title="Permanent link">&para;</a></h4>
-<h2 id="var-trial-type-image-keyboard-response-stimulus-imgapng-on_load-function-consolelogthe-trial-just-finished-loading"><div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">,</span>
   <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;imgA.png&#39;</span><span class="p">,</span>
   <span class="nx">on_load</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;The trial just finished loading.&#39;</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div><a class="headerlink" href="#var-trial-type-image-keyboard-response-stimulus-imgapng-on_load-function-consolelogthe-trial-just-finished-loading" title="Permanent link">&para;</a></h2>
+</code></pre></div>
+<hr />
 <h2 id="on_start-trial">on_start (trial)<a class="headerlink" href="#on_start-trial" title="Permanent link">&para;</a></h2>
 <p>The <code>on_start</code> callback can be added to any trial. The callback will trigger right before the trial begins. The callback function will be passed a single argument, containing the trial object. If any of the parameters of the trial are functions or timeline variables, these will be evaluated before <code>on_start</code> is called, and the trial object will contain the evaluated value. The trial object is modifiable, and any changes made will affect the trial.</p>
-<h4 id="sample-use_5">Sample use<a class="headerlink" href="#sample-use_5" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">,</span>
   <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;imgA.png&#39;</span><span class="p">,</span>
@@ -2082,8 +1596,7 @@
 <hr />
 <h2 id="on_timeline_finish">on_timeline_finish<a class="headerlink" href="#on_timeline_finish" title="Permanent link">&para;</a></h2>
 <p>The <code>on_timeline_finish</code> callback can be declared in a timeline node. The callback will be triggered when the timeline ends during the experiment. If <code>timeline_variables</code>, <code>conditional_function</code>, <code>loop_function</code>, or <code>sample</code> options are used, this function will execute when all trials have finished. If a <code>loop_function</code> is used, then this <code>on_timeline_finish</code> function will be triggered before the loop function. If the <code>repetitions</code> option is used, this function will be triggered at the end of every repetition.</p>
-<h4 id="sample-use_6">Sample use<a class="headerlink" href="#sample-use_6" title="Permanent link">&para;</a></h4>
-<h2 id="var-procedure-timeline-trial1-trial2-timeline_variables-stimulus-person-1jpg-stimulus-person-2jpg-stimulus-person-3jpg-stimulus-person-4jpg-on_timeline_finish-function-consolelogthis-timeline-has-finished-loop_function-function-consolelogthis-loop-function-will-execute-after-on_timeline_finish-return-false"><div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">procedure</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">procedure</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">trial1</span><span class="p">,</span> <span class="nx">trial2</span><span class="p">],</span>
     <span class="nx">timeline_variables</span><span class="o">:</span> <span class="p">[</span>
         <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;person-1.jpg&#39;</span> <span class="p">},</span>
@@ -2099,11 +1612,11 @@
     <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div><a class="headerlink" href="#var-procedure-timeline-trial1-trial2-timeline_variables-stimulus-person-1jpg-stimulus-person-2jpg-stimulus-person-3jpg-stimulus-person-4jpg-on_timeline_finish-function-consolelogthis-timeline-has-finished-loop_function-function-consolelogthis-loop-function-will-execute-after-on_timeline_finish-return-false" title="Permanent link">&para;</a></h2>
+</code></pre></div>
+<hr />
 <h2 id="on_timeline_start">on_timeline_start<a class="headerlink" href="#on_timeline_start" title="Permanent link">&para;</a></h2>
 <p>The <code>on_timeline_start</code> callback can be declared in a timeline node. The callback will be triggered when the timeline starts during the experiment, including when <code>timeline_variables</code>, <code>loop_function</code>, or <code>sample</code> options are used. If a <code>conditional_function</code> is used, then the conditional function will execute first, and the <code>on_timeline_start</code> function will only execute if the conditional function returns <code>true</code>. If the <code>repetitions</code> option is used, this function will be triggered at the start of every repetition. </p>
-<h4 id="sample-use_7">Sample use<a class="headerlink" href="#sample-use_7" title="Permanent link">&para;</a></h4>
-<h2 id="var-procedure-timeline-trial1-trial2-conditional_function-function-consolelogthis-conditional-function-will-execute-first-return-true-on_timeline_start-function-consolelogthis-timeline-has-started"><div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">procedure</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">procedure</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">trial1</span><span class="p">,</span> <span class="nx">trial2</span><span class="p">],</span>
   <span class="nx">conditional_function</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;This conditional function will execute first.&#39;</span><span class="p">)</span>
@@ -2113,21 +1626,21 @@
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;This timeline has started&#39;</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div><a class="headerlink" href="#var-procedure-timeline-trial1-trial2-conditional_function-function-consolelogthis-conditional-function-will-execute-first-return-true-on_timeline_start-function-consolelogthis-timeline-has-started" title="Permanent link">&para;</a></h2>
+</code></pre></div>
+<hr />
 <h2 id="on_trial_finish">on_trial_finish<a class="headerlink" href="#on_trial_finish" title="Permanent link">&para;</a></h2>
 <p>The <code>on_trial_finish</code> callback can be declared in the <code>jsPsych.init</code> method. The callback will trigger at the end of every trial in the experiment. If you want a callback to trigger only for the end of certain trials, use the <a href="#onfinishtrial"><code>on_finish</code></a> callback on the trial object. The callback function will be passed a single argument, containing the data object from the trial.</p>
-<h4 id="sample-use_8">Sample use<a class="headerlink" href="#sample-use_8" title="Permanent link">&para;</a></h4>
-<h2 id="jspsychinit-timeline-exp-on_trial_finish-functiondata-consoleloga-trial-just-ended-consolelogjsonstringifydata"><div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
   <span class="nx">timeline</span><span class="o">:</span> <span class="nx">exp</span><span class="p">,</span>
   <span class="nx">on_trial_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;A trial just ended.&#39;</span><span class="p">);</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">));</span>
   <span class="p">}</span>
 <span class="p">});</span>
-</code></pre></div><a class="headerlink" href="#jspsychinit-timeline-exp-on_trial_finish-functiondata-consoleloga-trial-just-ended-consolelogjsonstringifydata" title="Permanent link">&para;</a></h2>
+</code></pre></div>
+<hr />
 <h2 id="on_trial_start">on_trial_start<a class="headerlink" href="#on_trial_start" title="Permanent link">&para;</a></h2>
 <p>The <code>on_trial_start</code> callback can be declared in the <code>jsPsych.init</code> method. The callback will trigger at the start of every trial in the experiment. The function receives a single argument: a modifiable copy of the trial object that will be used to run the next trial. Changes can be made to this object to alter the parameters of the upcoming trial.</p>
-<h4 id="sample-use_9">Sample use<a class="headerlink" href="#sample-use_9" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">current_score</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span> <span class="c1">// a variable that is updated throughout the experiment to keep track of the current score.</span>
 
 <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>

@@ -756,41 +756,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#var-trial1-stimulus-imgfaceajpg-correct_key-p-person_name-joe-var-trial2-stimulus-imgfacebjpg-correct_key-p-person_name-fred-var-trial3-stimulus-imgfacecjpg-correct_key-q-person_name-mary-var-myarray-trial1-trial2-trial3-var-shuffledarray-jspsychrandomizationrepeatmyarray-2-true-output-shuffledarray-stimulus-imgfacebjpgimgfaceajpgimgfacecjpgimgfaceajpgimgfacecjpgimgfacebjpg-correct_key-p-p-q-p-q-p-person_name-fred-joe-mary-joe-mary-fred" class="md-nav__link">
-    var trial1 = {
-    stimulus: &#39;img/faceA.jpg&#39;,
-    correct_key: &#39;p&#39;,
-    person_name: &#39;Joe&#39;
-}
-
-var trial2 = {
-    stimulus: &#39;img/faceB.jpg&#39;,
-    correct_key: &#39;p&#39;,
-    person_name: &#39;Fred&#39;
-}
-
-var trial3 = {
-    stimulus: &#39;img/faceC.jpg&#39;,
-    correct_key: &#39;q&#39;,
-    person_name: &#39;Mary&#39;
-}
-
-var myArray = [ trial1, trial2, trial3 ];
-var shuffledArray = jsPsych.randomization.repeat(myArray, 2, true);
-
-/*
-output: shuffledArray = {
-    stimulus: [&#39;img/faceB.jpg&#39;,&#39;img/faceA.jpg&#39;,&#39;img/faceC.jpg&#39;,&#39;img/faceA.jpg&#39;,&#39;img/faceC.jpg&#39;,&#39;img/faceB.jpg&#39;],
-    correct_key: [&#39;p&#39;, &#39;p&#39;, &#39;q&#39;, &#39;p&#39;, &#39;q&#39;, &#39;p&#39;],
-    person_name: [&#39;Fred&#39;, &#39;Joe&#39;, &#39;Mary&#39;, &#39;Joe&#39;, &#39;Mary&#39;, &#39;Fred&#39;]
-}
-*/
-
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#jspsychrandomizationsamplewithreplacement" class="md-nav__link">
     jsPsych.randomization.sampleWithReplacement
   </a>
@@ -1999,41 +1964,6 @@ output: shuffledArray = {
 </li>
       
         <li class="md-nav__item">
-  <a href="#var-trial1-stimulus-imgfaceajpg-correct_key-p-person_name-joe-var-trial2-stimulus-imgfacebjpg-correct_key-p-person_name-fred-var-trial3-stimulus-imgfacecjpg-correct_key-q-person_name-mary-var-myarray-trial1-trial2-trial3-var-shuffledarray-jspsychrandomizationrepeatmyarray-2-true-output-shuffledarray-stimulus-imgfacebjpgimgfaceajpgimgfacecjpgimgfaceajpgimgfacecjpgimgfacebjpg-correct_key-p-p-q-p-q-p-person_name-fred-joe-mary-joe-mary-fred" class="md-nav__link">
-    var trial1 = {
-    stimulus: &#39;img/faceA.jpg&#39;,
-    correct_key: &#39;p&#39;,
-    person_name: &#39;Joe&#39;
-}
-
-var trial2 = {
-    stimulus: &#39;img/faceB.jpg&#39;,
-    correct_key: &#39;p&#39;,
-    person_name: &#39;Fred&#39;
-}
-
-var trial3 = {
-    stimulus: &#39;img/faceC.jpg&#39;,
-    correct_key: &#39;q&#39;,
-    person_name: &#39;Mary&#39;
-}
-
-var myArray = [ trial1, trial2, trial3 ];
-var shuffledArray = jsPsych.randomization.repeat(myArray, 2, true);
-
-/*
-output: shuffledArray = {
-    stimulus: [&#39;img/faceB.jpg&#39;,&#39;img/faceA.jpg&#39;,&#39;img/faceC.jpg&#39;,&#39;img/faceA.jpg&#39;,&#39;img/faceC.jpg&#39;,&#39;img/faceB.jpg&#39;],
-    correct_key: [&#39;p&#39;, &#39;p&#39;, &#39;q&#39;, &#39;p&#39;, &#39;q&#39;, &#39;p&#39;],
-    person_name: [&#39;Fred&#39;, &#39;Joe&#39;, &#39;Mary&#39;, &#39;Joe&#39;, &#39;Mary&#39;, &#39;Fred&#39;]
-}
-*/
-
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#jspsychrandomizationsamplewithreplacement" class="md-nav__link">
     jsPsych.randomization.sampleWithReplacement
   </a>
@@ -2284,7 +2214,7 @@ output: shuffledArray = {
 <p>The jsPsych.randomization module contains methods that are useful for generating random lists of trial variables.</p>
 <hr />
 <h2 id="jspsychrandomizationfactorial">jsPsych.randomization.factorial<a class="headerlink" href="#jspsychrandomizationfactorial" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>jsPsych.randomization.factorial(factors, repetitions, unpack)
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">factorial</span><span class="p">(</span><span class="nx">factors</span><span class="p">,</span> <span class="nx">repetitions</span><span class="p">,</span> <span class="nx">unpack</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
 <table>
@@ -2376,7 +2306,7 @@ output: shuffledArray = {
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationrandomid">jsPsych.randomization.randomID<a class="headerlink" href="#jspsychrandomizationrandomid" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>jsPsych.randomization.randomID(length)
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">randomID</span><span class="p">(</span><span class="nx">length</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="parameters_1">Parameters<a class="headerlink" href="#parameters_1" title="Permanent link">&para;</a></h3>
 <table>
@@ -2408,7 +2338,7 @@ output: shuffledArray = {
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationrepeat">jsPsych.randomization.repeat<a class="headerlink" href="#jspsychrandomizationrepeat" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>jsPsych.randomization.repeat(array, repetitions, unpack)
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span> <span class="nx">repetitions</span><span class="p">,</span> <span class="nx">unpack</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="parameters_2">Parameters<a class="headerlink" href="#parameters_2" title="Permanent link">&para;</a></h3>
 <table>
@@ -2446,13 +2376,11 @@ output: shuffledArray = {
 <h4 id="shuffle-an-array-no-repeats">Shuffle an array, no repeats<a class="headerlink" href="#shuffle-an-array-no-repeats" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
 <span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mf">1</span><span class="p">);</span>
-
 <span class="c1">// output: shuffledArray = [3,2,4,1,5]</span>
 </code></pre></div>
 <h4 id="shuffle-an-array-with-repeats">Shuffle an array with repeats<a class="headerlink" href="#shuffle-an-array-with-repeats" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
 <span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mf">2</span><span class="p">);</span>
-
 <span class="c1">// output: shuffledArray = [1,3,4,2,2,4,5,1,5,3]</span>
 </code></pre></div>
 <h4 id="shuffle-an-array-of-objects">Shuffle an array of objects<a class="headerlink" href="#shuffle-an-array-of-objects" title="Permanent link">&para;</a></h4>
@@ -2480,7 +2408,7 @@ output: shuffledArray = {
 <span class="c1">// output: shuffledArray = [ trial1, trial3, trial3, trial2, trial1, trial2 ]</span>
 </code></pre></div>
 <h4 id="shuffle-an-array-of-objects-with-unpack">Shuffle an array of objects, with unpack<a class="headerlink" href="#shuffle-an-array-of-objects-with-unpack" title="Permanent link">&para;</a></h4>
-<h2 id="var-trial1-stimulus-imgfaceajpg-correct_key-p-person_name-joe-var-trial2-stimulus-imgfacebjpg-correct_key-p-person_name-fred-var-trial3-stimulus-imgfacecjpg-correct_key-q-person_name-mary-var-myarray-trial1-trial2-trial3-var-shuffledarray-jspsychrandomizationrepeatmyarray-2-true-output-shuffledarray-stimulus-imgfacebjpgimgfaceajpgimgfacecjpgimgfaceajpgimgfacecjpgimgfacebjpg-correct_key-p-p-q-p-q-p-person_name-fred-joe-mary-joe-mary-fred"><div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial1</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial1</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/faceA.jpg&#39;</span><span class="p">,</span>
     <span class="nx">correct_key</span><span class="o">:</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span>
     <span class="nx">person_name</span><span class="o">:</span> <span class="s1">&#39;Joe&#39;</span>
@@ -2508,9 +2436,10 @@ output: shuffledArray = {
 <span class="cm">    person_name: [&#39;Fred&#39;, &#39;Joe&#39;, &#39;Mary&#39;, &#39;Joe&#39;, &#39;Mary&#39;, &#39;Fred&#39;]</span>
 <span class="cm">}</span>
 <span class="cm">*/</span>
-</code></pre></div><a class="headerlink" href="#var-trial1-stimulus-imgfaceajpg-correct_key-p-person_name-joe-var-trial2-stimulus-imgfacebjpg-correct_key-p-person_name-fred-var-trial3-stimulus-imgfacecjpg-correct_key-q-person_name-mary-var-myarray-trial1-trial2-trial3-var-shuffledarray-jspsychrandomizationrepeatmyarray-2-true-output-shuffledarray-stimulus-imgfacebjpgimgfaceajpgimgfacecjpgimgfaceajpgimgfacecjpgimgfacebjpg-correct_key-p-p-q-p-q-p-person_name-fred-joe-mary-joe-mary-fred" title="Permanent link">&para;</a></h2>
+</code></pre></div>
+<hr />
 <h2 id="jspsychrandomizationsamplewithreplacement">jsPsych.randomization.sampleWithReplacement<a class="headerlink" href="#jspsychrandomizationsamplewithreplacement" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>jsPsych.randomization.sampleWithReplacement(array, sampleSize, weights)
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithReplacement</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span> <span class="nx">sampleSize</span><span class="p">,</span> <span class="nx">weights</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="parameters_3">Parameters<a class="headerlink" href="#parameters_3" title="Permanent link">&para;</a></h3>
 <table>
@@ -2547,18 +2476,16 @@ output: shuffledArray = {
 <h4 id="sample-with-equal-probability">Sample with equal probability<a class="headerlink" href="#sample-with-equal-probability" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
 <span class="kd">var</span> <span class="nx">sample</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithReplacement</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mf">10</span><span class="p">);</span>
-
 <span class="c1">// output: sample = [3, 1, 2, 2, 5, 1, 4, 3, 1, 5];</span>
 </code></pre></div>
 <h4 id="sample-with-unequal-probability">Sample with unequal probability<a class="headerlink" href="#sample-with-unequal-probability" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
 <span class="kd">var</span> <span class="nx">sample</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithReplacement</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mf">10</span><span class="p">,</span> <span class="p">[</span><span class="mf">6</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">1</span><span class="p">]);</span>
-
 <span class="c1">// output: sample = [3, 4, 5, 1, 2, 1, 3, 1, 1, 1];</span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationsamplewithoutreplacement">jsPsych.randomization.sampleWithoutReplacement<a class="headerlink" href="#jspsychrandomizationsamplewithoutreplacement" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>jsPsych.randomization.sampleWithoutReplacement(array, sampleSize)
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span> <span class="nx">sampleSize</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="parameters_4">Parameters<a class="headerlink" href="#parameters_4" title="Permanent link">&para;</a></h3>
 <table>
@@ -2590,12 +2517,11 @@ output: shuffledArray = {
 <h4 id="sample-without-replacement">Sample without replacement<a class="headerlink" href="#sample-without-replacement" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
 <span class="kd">var</span> <span class="nx">sample</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mf">2</span><span class="p">);</span>
-
 <span class="c1">// output: sample = [3,2];</span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationshuffle">jsPsych.randomization.shuffle<a class="headerlink" href="#jspsychrandomizationshuffle" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>jsPsych.randomization.shuffle(array)
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">(</span><span class="nx">array</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="parameters_5">Parameters<a class="headerlink" href="#parameters_5" title="Permanent link">&para;</a></h3>
 <table>
@@ -2622,12 +2548,11 @@ output: shuffledArray = {
 <h4 id="shuffle-an-array">Shuffle an array<a class="headerlink" href="#shuffle-an-array" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
 <span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">(</span><span class="nx">myArray</span><span class="p">);</span>
-
 <span class="c1">// output: shuffledArray = [3,2,4,1,5]</span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationshufflenorepeats">jsPsych.randomization.shuffleNoRepeats<a class="headerlink" href="#jspsychrandomizationshufflenorepeats" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>jsPsych.randomization.shuffleNoRepeats(array, equalityTest)
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffleNoRepeats</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span> <span class="nx">equalityTest</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="parameters_6">Parameters<a class="headerlink" href="#parameters_6" title="Permanent link">&para;</a></h3>
 <table>
@@ -2660,7 +2585,6 @@ output: shuffledArray = {
 <h4 id="basic-example">Basic example<a class="headerlink" href="#basic-example" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
 <span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffleNoRepeats</span><span class="p">(</span><span class="nx">myArray</span><span class="p">);</span>
-
 <span class="c1">// output: shuffledArray = [2, 3, 5, 1, 2, 4, 1, 5, 4, 1, 3, 5, 4, 3, 2]</span>
 </code></pre></div>
 <h4 id="custom-equalitytest">Custom equalityTest<a class="headerlink" href="#custom-equalitytest" title="Permanent link">&para;</a></h4>
