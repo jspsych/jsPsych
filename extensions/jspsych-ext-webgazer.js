@@ -20,7 +20,7 @@ jsPsych.extensions['webgazer'] = (function () {
         if (window.webgazer) {
           state.webgazer = window.webgazer;
         } else {
-          reject(new Error('webgazer extension failed to initialize. webgazer.js not loaded. Load webgazer.js before calling jsPsych.init()'));
+          reject(new Error('Webgazer extension failed to initialize. webgazer.js not loaded. Load webgazer.js before calling jsPsych.init()'));
         }
       } else {
         state.webgazer = params.webgazer;
@@ -114,6 +114,10 @@ jsPsych.extensions['webgazer'] = (function () {
   }
 
   extension.start = function () {
+    if(typeof state.webgazer == 'undefined'){
+      console.error('Failed to start webgazer. Things to check: Is webgazer.js loaded? Is the webgazer extension included in jsPsych.init?')
+      return;
+    }
     return new Promise(function (resolve, reject) {
       state.webgazer.begin().then(function () {
         state.initialized = true;

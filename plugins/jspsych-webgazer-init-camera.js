@@ -31,7 +31,8 @@ jsPsych.plugins["webgazer-init-camera"] = (function () {
     if (!jsPsych.extensions.webgazer.isInitialized()) {
       jsPsych.extensions.webgazer.start().then(function () {
         showTrial();
-      }).catch(function () {
+      }).catch(function (err) {
+        console.error(`Error starting webgazer: ${err}`)
         display_element.innerHTML = `<p>The experiment cannot continue because the eye tracker failed to start.</p>
             <p>This may be because of a technical problem or because you did not grant permission for the page to use your camera.</p>`
       });
