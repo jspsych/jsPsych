@@ -30,7 +30,7 @@ jsPsych.extensions['webgazer'] = (function () {
       state.webgazer.setGazeListener(handleGazeDataUpdate);
 
       // default to threadedRidge regression
-      state.webgazer.setRegressionType('threadedRidge');
+      state.webgazer.setRegression('threadedRidge');
 
       // sets state for initialization
       state.initialized = false;
