@@ -29,6 +29,9 @@ jsPsych.extensions['webgazer'] = (function () {
       // sets up event handler for webgazer data
       state.webgazer.setGazeListener(handleGazeDataUpdate);
 
+      // default to threadedRidge regression
+      state.webgazer.setRegressionType('threadedRidge');
+
       // sets state for initialization
       state.initialized = false;
       state.activeTrial = false;
@@ -184,7 +187,7 @@ jsPsych.extensions['webgazer'] = (function () {
   }
 
   extension.setRegressionType = function (regression_type) {
-    var valid_regression_models = ['ridge', 'weigthedRidge', 'threadedRidge'];
+    var valid_regression_models = ['ridge', 'weightedRidge', 'threadedRidge'];
     if (valid_regression_models.includes(regression_type)) {
       state.webgazer.setRegression(regression_type)
     } else {
