@@ -73,6 +73,12 @@ jsPsych.plugins['html-slider-response'] = (function() {
         default: false,
         description: 'If true, the participant will have to move the slider before continuing.'
       },
+      show_value: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: "Show value",
+        default: false,
+        description: "If true, value of current position on slider will be shown below the slider."
+      },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
@@ -114,7 +120,11 @@ jsPsych.plugins['html-slider-response'] = (function() {
       html += 'width:auto;';
     }
     html += '">';
-    html += '<input type="range" class="jspsych-slider" value="'+trial.slider_start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" id="jspsych-html-slider-response-response"></input>';
+    if (trial.show_value) {
+      html += '<input type="range" class="jspsych-slider" value="' + trial.slider_start + '" min="' + trial.min + '" max="' + trial.max + '" step="' + trial.step + '" id="jspsych-html-slider-response-response" oninput="this.nextElementSibling.value = this.value"></input><output>' + trial.slider_start + '</output>';
+    } else {
+      html += '<input type="range" class="jspsych-slider" value="' + trial.slider_start + '" min="' + trial.min + '" max="' + trial.max + '" step="' + trial.step + '" id="jspsych-html-slider-response-response"></input><output></output>';
+    }
     html += '<div>'
     for(var j=0; j < trial.labels.length; j++){
       var label_width_perc = 100/(trial.labels.length-1);
