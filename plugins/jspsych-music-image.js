@@ -210,6 +210,7 @@ jsPsych.plugins["music-image"] = (function() {
 
       if(trial.displayQuestionsAtStart) {
         $("#questions").removeClass("d-none");
+        $("#questions .form-actions input").attr({'disabled':true})
       }
       
       
