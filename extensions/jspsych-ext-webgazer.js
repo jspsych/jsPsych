@@ -30,13 +30,15 @@ jsPsych.extensions['webgazer'] = (function () {
       state.webgazer.setGazeListener(handleGazeDataUpdate);
 
       // default to threadedRidge regression
-      state.webgazer.setRegression('threadedRidge');
+      state.webgazer.workerScriptURL = 'js/ridgeWorker.mjs';
+      //state.webgazer.setRegression('threadedRidge');
 
       // sets state for initialization
       state.initialized = false;
       state.activeTrial = false;
       state.round_predictions = params.round_predictions;
       state.gazeUpdateCallbacks = [];
+      state.domObserver = new MutationObserver(mutationObserverCallback);
 
       // hide video by default
       extension.hideVideo();
@@ -65,7 +67,11 @@ jsPsych.extensions['webgazer'] = (function () {
   // required, will be called when the trial starts (before trial loads)
   extension.on_start = function (params) {
     state.currentTrialData = [];
-    state.currentTrialTargets = [];
+    state.currentTrialTargets = {};
+    state.currentTrialSelectors = params.targets;
+
+    state.domObserver.observe(jsPsych.getDisplayElement(), {childList: true})
+    
   }
 
   // required will be called when the trial loads
@@ -75,36 +81,27 @@ jsPsych.extensions['webgazer'] = (function () {
     state.currentTrialStart = performance.now();
 
     // resume data collection
-    state.webgazer.resume();
+    // state.webgazer.resume();
+
+    state.gazeInterval = setInterval(function(){
+      state.webgazer.getCurrentPrediction().then(handleGazeDataUpdate);
+    }, 50); // TODO parameterize this!
 
     // set internal flag
     state.activeTrial = true;
-
-    // record bounding box of any elements in params.targets
-    if (typeof params !== 'undefined') {
-      if (typeof params.targets !== 'undefined') {
-        for (var i = 0; i < params.targets.length; i++) {
-          var target = document.querySelector(params.targets[i]);
-          if (target !== null) {
-            var bounding_rect = target.getBoundingClientRect();
-            state.currentTrialTargets.push({
-              selector: params.targets[i],
-              top: bounding_rect.top,
-              bottom: bounding_rect.bottom,
-              left: bounding_rect.left,
-              right: bounding_rect.right
-            })
-          }
-        }
-      }
-    }
   }
 
   // required, will be called when jsPsych.finishTrial() is called
   // must return data object to be merged into data.
   extension.on_finish = function (params) {
+    
     // pause the eye tracker
-    state.webgazer.pause();
+    clearInterval(state.gazeInterval);
+
+    // stop watching the DOM
+    state.domObserver.disconnect();
+
+    // state.webgazer.pause();
 
     // set internal flag
     state.activeTrial = false;
@@ -196,7 +193,7 @@ jsPsych.extensions['webgazer'] = (function () {
   }
 
   extension.getCurrentPrediction = function () {
-    return state.currentGaze;
+    return state.webgazer.getCurrentPrediction();
   }
 
   extension.onGazeUpdate = function(callback){
@@ -224,6 +221,27 @@ jsPsych.extensions['webgazer'] = (function () {
       }
     } else {
       state.currentGaze = null;
+    }
+  }
+
+  function mutationObserverCallback(mutationsList, observer){
+    // for(const mutation of mutationsList){
+    //   if(mutation.type === 'childList'){
+    //     for(const node of mutation.addedNodes){
+    //       for(const selector of state.currentTrialTargets){
+    //         if(node.matches(selector)){
+    //           console.log('MATCH');
+    //         }
+    //       }
+    //       console.log(node);
+    //     }
+    //   }
+    // }
+    for(const selector of state.currentTrialSelectors){
+      if(jsPsych.getDisplayElement().querySelector(selector)){
+        var coords = jsPsych.getDisplayElement().querySelector(selector).getBoundingClientRect();
+        state.currentTrialTargets[selector] = coords;
+      }
     }
   }
 

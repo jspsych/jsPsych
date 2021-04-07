@@ -10983,7 +10983,7 @@ function globals_engine() {
  * - `numBytes`: Number of bytes allocated (undisposed) at this time.
  * - `numTensors`: Number of unique tensors allocated.
  * - `numDataBuffers`: Number of unique data buffers allocated
- *   (undisposed) at this time, which is â‰¤ the number of tensors
+ *   (undisposed) at this time, which is ≤ the number of tensors
  *   (e.g. `a.reshape(newShape)` makes a new Tensor that shares the same
  *   data buffer with `a`).
  * - `unreliable`: True if the memory usage is unreliable. See `reasons` when
@@ -29955,7 +29955,7 @@ mixkey(math.random(), pool);
   52    // significance: there are 52 significant digits in a double
   ));
 /* This file is a slightly modified version of quadprog.js from Alberto Santini.
- * It has been slightly modified by SÃ©bastien Loisel to make sure that it handles
+ * It has been slightly modified by Sébastien Loisel to make sure that it handles
  * 0-based Arrays instead of 1-based Arrays.
  * License is in resources/LICENSE.quadprog */
 (function(exports) {
@@ -33573,7 +33573,7 @@ function isPrimitive(value) {
 // var x = random();       // 0 <= x < 1.  Every bit is random.
 // var x = random.quick(); // 0 <= x < 1.  32 bits of randomness.
 
-// alea, a 53-bit multiply-with-carry generator by Johannes BaagÃ¸e.
+// alea, a 53-bit multiply-with-carry generator by Johannes Baagøe.
 // Period: ~2^116
 // Reported to pass all BigCrush tests.
 var alea = __webpack_require__(68);
@@ -33588,7 +33588,7 @@ var xor128 = __webpack_require__(69);
 // Reported to fail: CollisionOver, SimpPoker, and LinearComp.
 var xorwow = __webpack_require__(70);
 
-// xorshift7, by FranÃ§ois Panneton and Pierre L'ecuyer, takes
+// xorshift7, by François Panneton and Pierre L'ecuyer, takes
 // a different approach: it adds robustness by allowing more shifts
 // than Marsaglia's original three.  It is a 7-shift generator
 // with 256 bits, that passes BigCrush with no systmatic failures.
@@ -34333,7 +34333,7 @@ class backend_cpu_MathBackendCPU extends dist["KernelBackend"] {
             this.firstUse = false;
             if (Object(dist["env"])().get('IS_NODE')) {
                 dist["backend_util"].warn('\n============================\n' +
-                    'Hi there ðŸ‘‹. Looks like you are running TensorFlow.js in ' +
+                    'Hi there 👋. Looks like you are running TensorFlow.js in ' +
                     'Node.js. To speed things up dramatically, install our node ' +
                     'backend, which binds to TensorFlow C++, by running ' +
                     'npm i @tensorflow/tfjs-node, ' +
@@ -48696,12 +48696,12 @@ module.exports = Array.isArray || function (arr) {
 /* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_RESULT__;// A port of an algorithm by Johannes BaagÃ¸e <baagoe@baagoe.com>, 2010
+/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_RESULT__;// A port of an algorithm by Johannes Baagøe <baagoe@baagoe.com>, 2010
 // http://baagoe.com/en/RandomMusings/javascript/
 // https://github.com/nquinlan/better-random-numbers-for-javascript-mirror
 // Original work is under MIT license -
 
-// Copyright (C) 2010 by Johannes BaagÃ¸e <baagoe@baagoe.org>
+// Copyright (C) 2010 by Johannes Baagøe <baagoe@baagoe.org>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -49002,7 +49002,7 @@ if (module && module.exports) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_RESULT__;// A Javascript implementaion of the "xorshift7" algorithm by
-// FranÃ§ois Panneton and Pierre L'ecuyer:
+// François Panneton and Pierre L'ecuyer:
 // "On the Xorgshift Random Number Generators"
 // http://saluc.engr.uconn.edu/refs/crypto/rng/panneton05onthexorshift.pdf
 
@@ -49876,7 +49876,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
         installMessageChannelImplementation();
 
     } else if (doc && "onreadystatechange" in doc.createElement("script")) {
-        // For IE 6â€“8
+        // For IE 6–8
         installReadyStateChangeImplementation();
 
     } else {
@@ -86074,6 +86074,7 @@ var regression = __webpack_require__(80);
 // CONCATENATED MODULE: ./src/params.mjs
 const params = {
   moveTickSize: 50,
+  videoContainerId: 'webgazerVideoContainer',
   videoElementId: 'webgazerVideoFeed',
   videoElementCanvasId: 'webgazerVideoCanvas',
   faceOverlayId: 'webgazerFaceOverlay',
@@ -86716,7 +86717,7 @@ util.DataWindow.prototype.addAll = function(data) {
  * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
  * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
  * The name of Eduardo A. Lundgren Melo may not be used to endorse or promote products derived from this software without specific prior written permission of Eduardo A. Lundgren Melo.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS â€œAS ISâ€ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -87604,7 +87605,7 @@ ridgeRegThreaded_reg.RidgeRegThreaded = function() {
 /**
  * Initialize new arrays and initialize Kalman filter.
  */
-ridgeRegThreaded_reg.RidgeRegThreaded.prototype.init = function() {
+ridgeRegThreaded_reg.RidgeRegThreaded.prototype.init = function(workerScriptURL) {
     this.screenXClicksArray = new src_util.DataWindow(ridgeRegThreaded_dataWindow);
     this.screenYClicksArray = new src_util.DataWindow(ridgeRegThreaded_dataWindow);
     this.eyeFeaturesClicks = new src_util.DataWindow(ridgeRegThreaded_dataWindow);
@@ -87618,7 +87619,8 @@ ridgeRegThreaded_reg.RidgeRegThreaded.prototype.init = function() {
 
     // Place the src/ridgeworker.js file into the same directory as your html file.
     if (!this.worker) {
-        this.worker = new Worker('ridgeWorker.mjs'); // [20200708] TODO: Figure out how to make this inline
+        //this.worker = new Worker('ridgeWorker.mjs'); // [20200708] TODO: Figure out how to make this inline
+        this.worker = new Worker(workerScriptURL);
         this.worker.onerror = function(err) { console.log(err.message); };
         this.worker.onmessage = function(evt) {
             weights.X = evt.data.X;
@@ -87774,11 +87776,13 @@ src_webgazer.reg.RidgeWeightedReg = ridgeWeightedReg.RidgeWeightedReg;
 src_webgazer.reg.RidgeRegThreaded = ridgeRegThreaded.RidgeRegThreaded;
 src_webgazer.util = src_util;
 src_webgazer.params = src_params;
+src_webgazer.workerScriptURL = 'ridgeWorker.mjs';
 
 //PRIVATE VARIABLES
 
 //video elements
 var videoStream = null;
+var videoContainerElement = null;
 var videoElement = null;
 var videoElementCanvas = null;
 var faceOverlay = null;
@@ -87821,7 +87825,7 @@ var curTrackerMap = {
 var regressionMap = {
   'ridge': function() { return new src_webgazer.reg.RidgeReg(); },
   'weightedRidge': function() { return new src_webgazer.reg.RidgeWeightedReg(); },
-  'threadedRidge': function() { return new src_webgazer.reg.RidgeRegThreaded(); },
+  'threadedRidge': function() { return new src_webgazer.reg.RidgeRegThreaded(src_webgazer.workerScriptURL); },
 };
 
 //localstorage name
@@ -87985,6 +87989,12 @@ function paintCurrentFrame(canvas, width, height) {
  * @returns {*}
  */
 async function getPrediction(regModelIndex) {
+  // this allows getPrediction to work even when webgazer is paused, since the only necessary
+  // component for getPrediction in loop() is paintCurrentFrame().
+  if(paused){
+    paintCurrentFrame(videoElementCanvas, videoElementCanvas.width, videoElementCanvas.height);
+  }
+
   var predictions = [];
   // [20200617 xk] TODO: this call should be made async somehow. will take some work.
   latestEyeFeatures = await getPupilFeatures(videoElementCanvas, videoElementCanvas.width, videoElementCanvas.height);
@@ -88234,14 +88244,23 @@ async function init(stream) {
   // used for webgazer.stopVideo() and webgazer.setCameraConstraints()
   videoStream = stream;
 
+  // create a video element container to enable customizable placement on the page
+  videoContainerElement = document.createElement('div');
+  videoContainerElement.id = src_webgazer.params.videoContainerId;
+  videoContainerElement.style.display = src_webgazer.params.showVideo ? 'block' : 'none';
+  videoContainerElement.style.position = 'fixed';
+  videoContainerElement.style.top = topDist;
+  videoContainerElement.style.left = leftDist;
+  videoContainerElement.style.width = src_webgazer.params.videoViewerWidth + 'px';
+  videoContainerElement.style.height = src_webgazer.params.videoViewerHeight + 'px';
+  
   videoElement = document.createElement('video');
+  videoElement.setAttribute('playsinline', '');
   videoElement.id = src_webgazer.params.videoElementId;
   videoElement.srcObject = stream;
   videoElement.autoplay = true;
   videoElement.style.display = src_webgazer.params.showVideo ? 'block' : 'none';
-  videoElement.style.position = 'fixed';
-  videoElement.style.top = topDist;
-  videoElement.style.left = leftDist;
+  videoElement.style.position = 'absolute';
   // We set these to stop the video appearing too large when it is added for the very first time
   videoElement.style.width = src_webgazer.params.videoViewerWidth + 'px';
   videoElement.style.height = src_webgazer.params.videoViewerHeight + 'px';
@@ -88257,9 +88276,7 @@ async function init(stream) {
   faceOverlay = document.createElement('canvas');
   faceOverlay.id = src_webgazer.params.faceOverlayId;
   faceOverlay.style.display = src_webgazer.params.showFaceOverlay ? 'block' : 'none';
-  faceOverlay.style.position = 'fixed';
-  faceOverlay.style.top = topDist;
-  faceOverlay.style.left = leftDist;
+  faceOverlay.style.position = 'absolute';
 
   // Mirror video feed
   if (src_webgazer.params.mirrorVideo) {
@@ -88280,8 +88297,8 @@ async function init(stream) {
   faceFeedbackBox = document.createElement('canvas');
   faceFeedbackBox.id = src_webgazer.params.faceFeedbackBoxId;
   faceFeedbackBox.style.display = src_webgazer.params.showFaceFeedbackBox ? 'block' : 'none';
-  faceFeedbackBox.style.position = 'fixed';
   faceFeedbackBox.style.border = 'solid';
+  faceFeedbackBox.style.position = 'absolute';
 
   // Gaze dot
   // Starts offscreen
@@ -88299,16 +88316,17 @@ async function init(stream) {
   gazeDot.style.height = '10px';
 
   // Add other preview/feedback elements to the screen once the video has shown and its parameters are initialized
-  document.body.appendChild(videoElement);
+  videoContainerElement.appendChild(videoElement);
+  document.body.appendChild(videoContainerElement);
   function setupPreviewVideo(e) {
 
     // All video preview parts have now been added, so set the size both internally and in the preview window.
     setInternalVideoBufferSizes( videoElement.videoWidth, videoElement.videoHeight );
     src_webgazer.setVideoViewerSize( src_webgazer.params.videoViewerWidth, src_webgazer.params.videoViewerHeight );
 
-    document.body.appendChild(videoElementCanvas);
-    document.body.appendChild(faceOverlay);
-    document.body.appendChild(faceFeedbackBox);
+    videoContainerElement.appendChild(videoElementCanvas);
+    videoContainerElement.appendChild(faceOverlay);
+    videoContainerElement.appendChild(faceFeedbackBox);
     document.body.appendChild(gazeDot);
 
     // Run this only once, so remove the event listener
@@ -88513,6 +88531,9 @@ src_webgazer.showVideo = function(val) {
   src_webgazer.params.showVideo = val;
   if(videoElement) {
     videoElement.style.display = val ? 'block' : 'none';
+  }
+  if(videoContainerElement) {
+    videoContainerElement.style.display = val ? 'block' : 'none';
   }
   return src_webgazer;
 };
