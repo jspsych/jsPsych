@@ -7,6 +7,7 @@
     <script src="../plugins/jspsych-html-keyboard-response.js"></script>
     <script src="../plugins/jspsych-webgazer-init-camera.js"></script>
     <script src="../plugins/jspsych-webgazer-calibrate.js"></script>
+    <script src="../plugins/jspsych-webgazer-validate.js"></script>
     <script src="js/webgazer.js"></script>
     <script src="../extensions/jspsych-ext-webgazer.js"></script>
     <link rel="stylesheet" href="../css/jspsych.css">
@@ -27,10 +28,27 @@ var init_camera = {
   type: 'webgazer-init-camera'
 }
 
-var validation = {
+var start_cal = {
+  type: 'html-keyboard-response',
+  stimulus: '<p>As each dot appears, look at it and then click on it.</p><p>Press a key to start.</p>'
+}
+
+var calibration = {
   type: 'webgazer-calibrate',
   calibration_points: [
     [25,25],[25,75],[50,50],[75,75],[75,25]
+  ]
+}
+
+var start_val = {
+  type: 'html-keyboard-response',
+  stimulus: '<p>As each dot appears, look at it.</p><p>Press a key to start.</p>'
+}
+
+var validation = {
+  type: 'webgazer-validate',
+  validation_points: [
+    [25,50],[75,50]
   ]
 }
 
@@ -49,7 +67,7 @@ var trial = {
     </div>
   `,
   choices: jsPsych.NO_KEYS,
-  trial_duration: 1000,
+  trial_duration: 2000,
   extensions: [
     {
       type: 'webgazer', 
@@ -59,7 +77,7 @@ var trial = {
 }
 
 jsPsych.init({
-  timeline: [preload, init_camera, validation, start, trial],
+  timeline: [preload, init_camera, start_cal, calibration, start_val, validation, start, trial],
   extensions: [
     {type: 'webgazer'}
   ],

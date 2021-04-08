@@ -49,8 +49,6 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
         </div>`
   
       display_element.innerHTML = html;
-
-      jsPsych.extensions['webgazer'].resume();
   
       var wg_container = display_element.querySelector('#webgazer-calibrate-container');
         

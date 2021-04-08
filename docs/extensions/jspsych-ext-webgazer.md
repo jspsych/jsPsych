@@ -21,6 +21,7 @@ Parameter | Type | Default Value | Description
 webgazer  | object | `undefined` | You can explicitly pass a reference to a loaded instance of the webgazer.js library. If no explicit reference is passed then the extension will look for a global `webgazer` object. If you are loading webgazer.js via a `<script>` tag you do not need to set this parameter in most circumstances.
 auto_initialize | bool | false | Whether to automatically initialize webgazer when the experiment begins. If set to `true` then the experiment will attempt to access the user's webcam immediately upon page load. The default value is `false` because it is probably a good idea to explain to the user why camera permission will be needed before asking for it. The `webgazer-init-camera` plugin can be used to initialize the camera during the experiment.
 round_predictions | bool | true | Whether to round the `x`,`y` coordinates predicted by WebGazer to the nearest whole number. This *greatly* reduces the size of the data, as WebGazer records data to 15 decimal places by default. Given the noise of the system, there's really no need to record data to this level of precision.
+sampling_interval | numeric | 50 | Sets the interval between gaze predictions. Because the underlying code is partially asynchronous, this interval is only approximate. The sampling interval will not be faster than this, on average, but the time between samples may fluctuate. Setting the interval too fast will create performance problems and produce redundant data, as the video feed from most webcams only updates about 30 times per second.
 
 ### Trial Parameters
 
@@ -44,7 +45,7 @@ targets | array | [] | A list of elements on the page that you would like to rec
 Name | Type | Value
 -----|------|------
 webgazer_data | array | An array of objects containing gaze data for the trial. Each object has an `x`, a `y`, and a `t` property. The `x` and `y` properties specify the gaze location in pixels and `t` specifies the time in milliseconds since the start of the trial.
-webgazer_targets | array | An array of objects contain the pixel coordinates of elements on the screen specified by the `.targets` parameter. Each object contains a `selector` property, containing the CSS selector string used to find the element, plus `top`, `bottom`, `left`, and `right` parameters which specify the [bounding rectangle](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) of the element. 
+webgazer_targets | object | An object contain the pixel coordinates of elements on the screen specified by the `.targets` parameter. Each key in this object will be a `selector` property, containing the CSS selector string used to find the element. The object corresponding to each key will contain `x` and `y` properties specifying the top-left corner of the object, `width` and `height` values, plus `top`, `bottom`, `left`, and `right` parameters which specify the [bounding rectangle](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) of the element. 
 
 ## Functions
 

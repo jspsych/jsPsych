@@ -14,6 +14,7 @@ jsPsych.extensions['webgazer'] = (function () {
     // setting default values for params if not defined
     params.round_predictions = typeof params.round_predictions === 'undefined' ? true : params.round_predictions;
     params.auto_initialize = typeof params.auto_initialize === 'undefined' ? false : params.auto_initialize;
+    params.sampling_interval = typeof params.sampling_interval === 'undefined' ? 34 : params.sampling_interval;
 
     return new Promise(function (resolve, reject) {
       if (typeof params.webgazer === 'undefined') {
@@ -31,12 +32,16 @@ jsPsych.extensions['webgazer'] = (function () {
 
       // default to threadedRidge regression
       state.webgazer.workerScriptURL = 'js/ridgeWorker.mjs';
-      //state.webgazer.setRegression('threadedRidge');
+      state.webgazer.setRegression('threadedRidge');
+      state.webgazer.applyKalmanFilter(false); // kalman filter doesn't seem to work yet with threadedridge.
+
+      // set state parameters
+      state.round_predictions = params.round_predictions;
+      state.sampling_interval = params.sampling_interval;
 
       // sets state for initialization
       state.initialized = false;
       state.activeTrial = false;
-      state.round_predictions = params.round_predictions;
       state.gazeUpdateCallbacks = [];
       state.domObserver = new MutationObserver(mutationObserverCallback);
 
@@ -83,9 +88,7 @@ jsPsych.extensions['webgazer'] = (function () {
     // resume data collection
     // state.webgazer.resume();
 
-    state.gazeInterval = setInterval(function(){
-      state.webgazer.getCurrentPrediction().then(handleGazeDataUpdate);
-    }, 50); // TODO parameterize this!
+    extension.startSampleInterval();
 
     // set internal flag
     state.activeTrial = true;
@@ -96,7 +99,7 @@ jsPsych.extensions['webgazer'] = (function () {
   extension.on_finish = function (params) {
     
     // pause the eye tracker
-    clearInterval(state.gazeInterval);
+    extension.stopSampleInterval();
 
     // stop watching the DOM
     state.domObserver.disconnect();
@@ -129,6 +132,20 @@ jsPsych.extensions['webgazer'] = (function () {
         reject(error);
       });
     });
+  }
+
+  extension.startSampleInterval = function(interval){
+    interval = typeof interval == 'undefined' ? state.sampling_interval : interval;
+    state.gazeInterval = setInterval(function(){
+      state.webgazer.getCurrentPrediction().then(handleGazeDataUpdate);
+    }, state.sampling_interval);
+    // repeat the call here so that we get one immediate execution. above will not
+    // start until state.sampling_interval is reached the first time.
+    state.webgazer.getCurrentPrediction().then(handleGazeDataUpdate);
+  }
+
+  extension.stopSampleInterval = function(){
+    clearInterval(state.gazeInterval);
   }
 
   extension.isInitialized = function(){
@@ -225,22 +242,12 @@ jsPsych.extensions['webgazer'] = (function () {
   }
 
   function mutationObserverCallback(mutationsList, observer){
-    // for(const mutation of mutationsList){
-    //   if(mutation.type === 'childList'){
-    //     for(const node of mutation.addedNodes){
-    //       for(const selector of state.currentTrialTargets){
-    //         if(node.matches(selector)){
-    //           console.log('MATCH');
-    //         }
-    //       }
-    //       console.log(node);
-    //     }
-    //   }
-    // }
     for(const selector of state.currentTrialSelectors){
-      if(jsPsych.getDisplayElement().querySelector(selector)){
-        var coords = jsPsych.getDisplayElement().querySelector(selector).getBoundingClientRect();
-        state.currentTrialTargets[selector] = coords;
+      if(!state.currentTrialTargets[selector]){
+        if(jsPsych.getDisplayElement().querySelector(selector)){
+          var coords = jsPsych.getDisplayElement().querySelector(selector).getBoundingClientRect();
+          state.currentTrialTargets[selector] = coords;
+        }
       }
     }
   }

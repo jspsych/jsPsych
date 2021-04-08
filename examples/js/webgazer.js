@@ -87598,8 +87598,8 @@ var ridgeRegThreaded_trailDataWindow = 10;
  * this object allow to perform threaded ridge regression
  * @constructor
  */
-ridgeRegThreaded_reg.RidgeRegThreaded = function() {
-    this.init();
+ridgeRegThreaded_reg.RidgeRegThreaded = function(workerScriptURL) {
+    this.init(workerScriptURL);
 };
 
 /**

@@ -75,7 +75,8 @@
         val_points = trial.validation_points;
       }
       points_completed = -1;
-      jsPsych.extensions['webgazer'].resume();
+      //jsPsych.extensions['webgazer'].resume();
+      jsPsych.extensions.webgazer.startSampleInterval();
       //jsPsych.extensions.webgazer.showPredictions();  
       next_validation_point();
     }
@@ -109,13 +110,15 @@
         if(performance.now() > pt_start_val){
           pt_data.push({dx: prediction.x - x, dy: prediction.y - y, t: Math.round(performance.now()-start)});
         }
-      })
+      });
+
       requestAnimationFrame(function watch_dot(){
         if(performance.now() < pt_finish){
           requestAnimationFrame(watch_dot);
         } else {
           trial_data.raw_gaze.push(pt_data);
           cancelGazeUpdate();
+          
           next_validation_point();
         }
       });
@@ -284,9 +287,7 @@
 
     // function to end trial when it is time
     function end_trial() {
-      jsPsych.extensions['webgazer'].pause();
-      jsPsych.extensions['webgazer'].hidePredictions();
-      jsPsych.extensions['webgazer'].hideVideo();
+      jsPsych.extensions.webgazer.stopSampleInterval();
 
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();    
