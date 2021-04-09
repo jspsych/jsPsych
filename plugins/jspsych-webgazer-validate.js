@@ -265,6 +265,7 @@
         trial_data.average_offset[i] = calculateGazeCentroid(trial_data.raw_gaze[i]);
       }
       if(trial.show_validation_data){
+        
         show_validation_data();
       } else {
         end_trial();
@@ -280,11 +281,17 @@
           html += drawRawDataPoint(trial.validation_points[i][0], trial.validation_points[i][1], trial_data.raw_gaze[i][j].dx, trial_data.raw_gaze[i][j].dy)
         }
       }
-      // debugging
+      
       html += '<button id="cont" style="position:absolute; top: 50%; left:calc(50% - 50px); width: 100px;" class="jspsych-btn">Continue</btn>';
       wg_container.innerHTML = html;
-      wg_container.querySelector('#cont').addEventListener('click', end_trial);
-      jsPsych.extensions.webgazer.showPredictions();        
+      wg_container.querySelector('#cont').addEventListener('click', function(){
+        jsPsych.extensions.webgazer.pause();
+        end_trial();
+      });
+      // turn on webgazer's loop
+      jsPsych.extensions.webgazer.showPredictions();
+      jsPsych.extensions.webgazer.stopSampleInterval();
+      jsPsych.extensions.webgazer.resume();        
     }
 
     // function to end trial when it is time
