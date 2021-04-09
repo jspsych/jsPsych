@@ -21,7 +21,7 @@ Parameter | Type | Default Value | Description
 webgazer  | object | `undefined` | You can explicitly pass a reference to a loaded instance of the webgazer.js library. If no explicit reference is passed then the extension will look for a global `webgazer` object. If you are loading webgazer.js via a `<script>` tag you do not need to set this parameter in most circumstances.
 auto_initialize | bool | false | Whether to automatically initialize webgazer when the experiment begins. If set to `true` then the experiment will attempt to access the user's webcam immediately upon page load. The default value is `false` because it is probably a good idea to explain to the user why camera permission will be needed before asking for it. The `webgazer-init-camera` plugin can be used to initialize the camera during the experiment.
 round_predictions | bool | true | Whether to round the `x`,`y` coordinates predicted by WebGazer to the nearest whole number. This *greatly* reduces the size of the data, as WebGazer records data to 15 decimal places by default. Given the noise of the system, there's really no need to record data to this level of precision.
-sampling_interval | numeric | 50 | Sets the interval between gaze predictions. Because the underlying code is partially asynchronous, this interval is only approximate. The sampling interval will not be faster than this, on average, but the time between samples may fluctuate. Setting the interval too fast will create performance problems and produce redundant data, as the video feed from most webcams only updates about 30 times per second.
+sampling_interval | numeric | 34 | Sets the interval between gaze predictions. Because the underlying code is partially asynchronous, this interval is only approximate. The sampling interval will not be faster than this, on average, but the time between samples may fluctuate. Setting the interval too fast will create performance problems and produce redundant data, as the video feed from most webcams only updates about 30 times per second.
 
 ### Trial Parameters
 
@@ -110,11 +110,19 @@ The extension uses the default mode specified by WebGazer (currently `ridge`).
 
 ### getCurrentPrediction()
 
-Get the current predicted gaze location from WebGazer. Returns an object with `x`, `y`, and, if currently in a trial with the extension turned on, the time `t` in ms since the start of the trial.
+Get the current predicted gaze location from WebGazer. This returns a Promise that resolves once WebGazer has finished computing the gaze prediction. The Promise has a single parameter with an object with `x`, `y`, and, `t` parameters. `t` will be the value of `performance.now()` at approximately the time that the video frame was recorded. 
+
+### startSampleInterval(interval)
+
+Starts sampling gaze predictions every `interval` milliseconds. If `interval` is left undefined then the default value at extension initialization is used. Every sample will trigger an `onGazeUpdate` callback, as well as side effects that result in data storage within the extension.
+
+### stopSampleInterval()
+
+Stops the sampling started by `startSampleInterval()`.
 
 ### onGazeUpdate(callback)
 
-Subscribe to gaze updates. The `callback` will be invoked every time a new gaze prediction is generated. The first argument of the `callback` will be an object with `x`, `y`, and, if currently in a trial with the extension turned on, the time `t` in ms since the start of the trial.
+Subscribe to gaze updates. The `callback` will be invoked every time a new gaze prediction is generated. The first argument of the `callback` will be an object with `x`, `y`, and, if currently in a trial with the extension turned on, the time `t` in ms since the start of the trial. `t` will be the value of `performance.now()` at approximately the time that the video frame was recorded. If currently in an active trial then `t` will be relative to the start of the trial.
 
 This function returns a close handler. When you no longer need to subscribe to gaze updates, call the close handler. Example:
 
