@@ -2337,7 +2337,7 @@ jsPsych.pluginAPI = (function() {
         }
         parameters.callback_function({
           key: key,
-          rt: rt,
+          rt: rt_ms,
         });
 
         if (keyboard_listeners.includes(listener_id)) {
