@@ -3,9 +3,10 @@
 The pluginAPI module contains functions that are useful when developing new plugins.
 
 ---
+
 ## jsPsych.pluginAPI.cancelAllKeyboardResponses
 
-```
+```javascript
 jsPsych.pluginAPI.cancelAllKeyboardResponses()
 ```
 
@@ -21,16 +22,17 @@ Returns nothing.
 
 Cancels all currently active keyboard listeners created by `jsPsych.pluginAPI.getKeyboardResponse`.
 
-### Examples
+### Example
 
 ```javascript
 jsPsych.pluginAPI.cancelAllKeyboardResponses();
 ```
 
 ---
+
 ## jsPsych.pluginAPI.cancelKeyboardResponse
 
-```
+```javascript
 jsPsych.pluginAPI.cancelKeyboardResponse(listener_id)
 ```
 
@@ -48,8 +50,7 @@ Returns nothing.
 
 Cancels a specific keyboard listener created by `jsPsych.pluginAPI.getKeyboardResponse`.
 
-
-### Examples
+### Example
 
 ```javascript
 // create a persistent keyboard listener
@@ -66,9 +67,10 @@ jsPsych.pluginAPI.cancelKeyboardResponse(listener_id);
 ```
 
 ---
+
 ## jsPsych.pluginAPI.clearAllTimeouts
 
-```
+```javascript
 jsPsych.pluginAPI.clearAllTimeouts()
 ```
 
@@ -82,12 +84,13 @@ Returns nothing.
 
 ### Description
 
-Clears any pending timeouts that were set using jsPsych.pluginAPI.setTimeout()
+Clears any pending timeouts that were set using jsPsych.pluginAPI.setTimeout().
 
 ---
+
 ## jsPsych.pluginAPI.compareKeys
 
-```
+```javascript
 jsPsych.pluginAPI.compareKeys(key1, key2)
 ```
 
@@ -113,6 +116,7 @@ We recommend using this function to compare keys in all plugin and experiment co
 ### Examples
 
 #### Basic examples
+
 ```javascript
 jsPsych.pluginAPI.compareKeys('a', 'A');
 // returns true when case_sensitive_responses is false in jsPsych.init
@@ -129,6 +133,7 @@ jsPsych.pluginAPI.compareKeys('space', 31);
 ```
 
 #### Comparing a key response and key parameter value in plugins
+
 ```javascript
 // this is the callback_function passed to jsPsych.pluginAPI.getKeyboardResponse
 var after_response = function(info) {
@@ -139,6 +144,7 @@ var after_response = function(info) {
 ```
 
 #### Scoring a key response in experiment code
+
 ```javascript
 var trial = {
   type: 'html-keyboard-response',
@@ -158,9 +164,10 @@ var trial = {
 ```
 
 ---
+
 ## jsPsych.pluginAPI.getAudioBuffer
 
-```
+```javascript
 jsPsych.pluginAPI.getAudioBuffer(filepath)
 ```
 
@@ -183,6 +190,7 @@ It is strongly recommended that you preload audio files before calling this meth
 ### Examples
 
 #### HTML 5 Audio
+
 ```javascript
 jsPsych.pluginAPI.getAudioBuffer('my-sound.mp3')
   .then(function(audio){
@@ -194,6 +202,7 @@ jsPsych.pluginAPI.getAudioBuffer('my-sound.mp3')
 ```
 
 #### WebAudio API
+
 ```javascript
 var context = jsPsych.pluginAPI.audioContext();
 
@@ -212,9 +221,10 @@ jsPsych.pluginAPI.getAudioBuffer('my-sound.mp3')
 See the `audio-keyboard-response` plugin for an example in a fuller context.
 
 ---
+
 ## jsPsych.pluginAPI.getAutoPreloadList
 
-```
+```javascript
 jsPsych.pluginAPI.getAutoPreloadList(timeline)
 ```
 
@@ -258,9 +268,10 @@ jsPsych.pluginAPI.getAutoPreloadList(timeline);
 ```
 
 ---
+
 ## jsPsych.pluginAPI.getKeyboardResponse
 
-```
+```javascript
 jsPsych.pluginAPI.getKeyboardResponse(parameters)
 ```
 
@@ -295,6 +306,7 @@ This function uses the `.key` value of the keyboard event, which is _case sensit
 ### Examples
 
 #### Get a single response from any key
+
 ```javascript
 
 var after_response = function(info){
@@ -310,6 +322,7 @@ jsPsych.pluginAPI.getKeyboardResponse({
 ```
 
 #### Get a responses from a key until the letter q is pressed
+
 ```javascript
 
 var after_response = function(info){
@@ -329,9 +342,10 @@ var listener = jsPsych.pluginAPI.getKeyboardResponse({
 ```
 
 ---
+
 ## jsPsych.pluginAPI.preloadAudio
 
-```
+```javascript
 jsPsych.pluginAPI.preloadAudio(files, callback_complete, callback_load, callback_error)
 ```
 
@@ -359,8 +373,8 @@ The `callback_load` and `callback_error` functions are called after each file ha
 ### Examples
 
 #### Basic use
-```javascript
 
+```javascript
 var sounds = ['file1.mp3', 'file2.mp3', 'file3.mp3'];
 
 jsPsych.pluginAPI.preloadAudio(sounds, 
@@ -374,7 +388,6 @@ function startExperiment(){
         timeline: exp
     });
 }
-
 ```
 
 #### Show progress of loading
@@ -386,7 +399,7 @@ var n_loaded = 0;
 jsPsych.pluginAPI.preloadAudio(sounds, function(){ startExperiment(); }, function(file) { updateLoadedCount(file); });
 
 function updateLoadedCount(file){
-    n_loaded++;
+  n_loaded++;
 	var percentcomplete = n_loaded / sounds.length * 100;
 
 	// could put something fancier here, like a progress bar
@@ -395,16 +408,17 @@ function updateLoadedCount(file){
 }
 
 function startExperiment(){
-    jsPsych.init({
-        timeline: exp
-    });
+  jsPsych.init({
+    timeline: exp
+  });
 }
 ```
 
 ---
+
 ## jsPsych.pluginAPI.preloadImages
 
-```
+```javascript
 jsPsych.pluginAPI.preloadImages(images, callback_complete, callback_load, callback_error)
 ```
 
@@ -432,8 +446,8 @@ The `callback_load` and `callback_error` functions are called after each file ha
 ### Examples
 
 #### Basic use
-```javascript
 
+```javascript
 var images = ['img/file1.png', 'img/file2.png', 'img/file3.png'];
 
 jsPsych.pluginAPI.preloadImages(images, 
@@ -447,7 +461,6 @@ function startExperiment(){
         timeline: exp
     });
 }
-
 ```
 
 #### Show progress of loading
@@ -459,7 +472,7 @@ var n_loaded = 0;
 jsPsych.pluginAPI.preloadImages(images, function(){ startExperiment(); }, function(file) { updateLoadedCount(file); });
 
 function updateLoadedCount(file){
-    n_loaded++;
+  n_loaded++;
 	var percentcomplete = n_loaded / images.length * 100;
 
 	// could put something fancier here, like a progress bar
@@ -468,16 +481,17 @@ function updateLoadedCount(file){
 }
 
 function startExperiment(){
-    jsPsych.init({
-        timeline: exp
-    });
+  jsPsych.init({
+    timeline: exp
+  });
 }
 ```
 
 ---
+
 ## jsPsych.pluginAPI.preloadVideo
 
-```
+```javascript
 jsPsych.pluginAPI.preloadVideo(video, callback_complete, callback_load, callback_error)
 ```
 
@@ -505,22 +519,21 @@ The `callback_load` and `callback_error` functions are called after each file ha
 ### Examples
 
 #### Basic use
-```javascript
 
+```javascript
 var videos = ['vid/file1.mp4', 'vid/file2.mp4', 'vid/file3.mp4'];
 
 jsPsych.pluginAPI.preloadVideo(videos, 
-    function(){ startExperiment(); },
-    function(file){ console.log('file loaded: ', file); }
-    function(file){ console.log('error loading file: ', file); }
+  function(){ startExperiment(); },
+  function(file){ console.log('file loaded: ', file); }
+  function(file){ console.log('error loading file: ', file); }
 );
 
 function startExperiment(){
-    jsPsych.init({
-        timeline: exp
-    });
+  jsPsych.init({
+    timeline: exp
+  });
 }
-
 ```
 
 #### Show progress of loading
@@ -532,7 +545,7 @@ var n_loaded = 0;
 jsPsych.pluginAPI.preloadVideo(videos, function(){ startExperiment(); }, function(file) { updateLoadedCount(file); });
 
 function updateLoadedCount(file){
-    n_loaded++;
+  n_loaded++;
 	var percentcomplete = n_loaded / videos.length * 100;
 
 	// could put something fancier here, like a progress bar
@@ -541,16 +554,17 @@ function updateLoadedCount(file){
 }
 
 function startExperiment(){
-    jsPsych.init({
-        timeline: exp
-    });
+  jsPsych.init({
+    timeline: exp
+  });
 }
 ```
 
 ---
+
 ## jsPsych.pluginAPI.registerPreload
 
-```
+```javascript
 jsPsych.pluginAPI.registerPreload(plugin_name, parameter, media_type)
 ```
 
@@ -578,7 +592,7 @@ For an example, see the [image-keyboard-response](https://github.com/jspsych/jsP
 
 ## jsPsych.pluginAPI.setTimeout
 
-```
+```javascript
 jsPsych.pluginAPI.setTimeout(callback, delay)
 ```
 
@@ -597,7 +611,7 @@ Returns the ID of the setTimeout handle.
 
 This is simply a call to the standard setTimeout function in JavaScript with the added benefit of registering the setTimeout call in a central list. This is useful for scenarios where some other event (the trial ending, aborting the experiment) should stop the execution of queued timeouts.
 
-### Examples
+### Example
 
 ```javascript
 // print the time

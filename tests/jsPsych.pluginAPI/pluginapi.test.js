@@ -297,6 +297,30 @@ describe('#compareKeys', function(){
     expect(jsPsych.pluginAPI.compareKeys('q', 'Q')).toBe(true);
     expect(jsPsych.pluginAPI.compareKeys('q', 'q')).toBe(true);
   });
+  test('should accept null as argument, and return true if both arguments are null, and return false if one argument is null and other is string or numeric', function() {
+    const spy = jest.spyOn(console, 'error').mockImplementation();
+    expect(jsPsych.pluginAPI.compareKeys(null, 'Q')).toBe(false);
+    expect(jsPsych.pluginAPI.compareKeys(80, null)).toBe(false);
+    expect(jsPsych.pluginAPI.compareKeys(null, null)).toBe(true);
+    expect(console.error).not.toHaveBeenCalled();
+    spy.mockRestore();
+  });
+  test('should return undefined and produce a console warning if either/both arguments are not a string, integer, or null', function() {
+    const spy = jest.spyOn(console, 'error').mockImplementation();
+    var t1 = jsPsych.pluginAPI.compareKeys({}, 'Q');
+    var t2 = jsPsych.pluginAPI.compareKeys(true, null);
+    var t3 = jsPsych.pluginAPI.compareKeys(null, ['Q']);
+    expect(typeof t1).toBe('undefined');
+    expect(typeof t2).toBe('undefined');
+    expect(typeof t3).toBe('undefined');
+    expect(console.error).toHaveBeenCalledTimes(3);
+    expect(console.error.mock.calls).toEqual([
+      ['Error in jsPsych.pluginAPI.compareKeys: arguments must be numeric key codes, key strings, or null.'],
+      ['Error in jsPsych.pluginAPI.compareKeys: arguments must be numeric key codes, key strings, or null.'],
+      ['Error in jsPsych.pluginAPI.compareKeys: arguments must be numeric key codes, key strings, or null.'],
+    ]);
+    spy.mockRestore();
+  });
 });
 
 describe('#convertKeyCharacterToKeyCode', function(){

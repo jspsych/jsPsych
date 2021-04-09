@@ -23,6 +23,7 @@ Include the `webgazer.js` file in your experiment via a `<script>` tag.
 
 The [webgazer extension](/extensions/jspsych-ext-webgazer.md) adds functionality to jsPsych for interacting with webgazer. Load it like you would a plugin file.
 
+
 ```html
 <head>
   <script src="jspsych/jspsych.js"></script>
@@ -42,6 +43,7 @@ jsPsych.init({
 })
 ```
 
+
 !!! tip 
     Example experiments using WebGazer are available in the **/examples** folder of the jsPsych release. See `webgazer.html`, `webgazer_image.html`, and `webgazer_audio.html`.
 
@@ -49,11 +51,13 @@ jsPsych.init({
 
 To help the participant position their face correctly for eye tracking you can use the [jspsych-webgazer-init-camera plugin](/plugins/jspsych-webgazer-init-camera.ms). This will show the participant what the camera sees, including facial feature landmarks, and prevent the participant from continuing until their face is in good position for eye tracking. This plugin will also trigger the experiment to request permission to access the user's webcam if it hasn't already been granted.
 
+
 ```js
 var init_camera_trial = {
   type: 'webgazer-init-camera'
 }
 ```
+
 
 ### Calibration
 
@@ -69,9 +73,11 @@ var calibration_trial = {
 }
 ```
 
+
 ### Validation
 
 To measure the accuracy and precision of the calibration, you can use the [jspsych-webgazer-vaidate plugin](/plugins/jspsych-webgazer-validate.md). Like the calibration plugin, you can specify a list of points to perform validation on. Here you can specify the points as either percentages or in terms of the distance from the center of the screen in pixels. Which mode you use will probably depend on how you are defining your stimuli throughout the experiment. You can also specify the radius of tolerance around each point, and the plugin will calculate the percentage of measured gaze samples within that radius. This is a potentially useful heuristic for deciding whether or not to calibrate again. Options for controlling other details of the validation are explained in the [documentation for the plugin](/plugins/jspsych-webgazer-validate.md).
+
 
 ```js
 var validation_trial = {
