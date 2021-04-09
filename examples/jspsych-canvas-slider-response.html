@@ -55,10 +55,22 @@
             data.color1 = colors[0];
             data.color2 = colors[1];
         }
+    }
+    
+    var trial_3 = {
+        type: 'canvas-slider-response',
+        stimulus: twoSquares,
+        labels: ['0','10'],
+        canvas_size: [200, 500],
+        prompt: '<p>How different would you say the colors of these two squares are on a scale from 0 (the same) to 10 (completely different)?</p>',
+        data: {color1: '#FF3333', color2: '#FF6A33'},
+        slider_width: 500,
+        slider_number: true
     };
 
+
     jsPsych.init({
-        timeline: [trial_1, trial_2],
+        timeline: [trial_3, trial_1, trial_2],
         on_finish: function () { 
             jsPsych.data.displayData(); 
         }

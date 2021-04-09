@@ -53,9 +53,28 @@
     autoplay: true,
     response_allowed_while_playing: false
   }
+  
+  var trial_3 = {
+    type: 'video-slider-response',
+    stimulus: ['video/sample_video.mp4'],
+    labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+    min: 1,
+    max: 5,
+    step: 1,
+    slider_start: 1,
+    prompt: '<p>Rate this video clip.</p><p>Slider movement is required, so you must interact with (click) the slider cursor to continue.</p>',
+    require_movement: true,
+    width: 600,
+    slider_width: 500,
+    autoplay: true,
+    rate: 1.5,
+    response_ends_trial: true,
+    slider_number: true
+  }
+
 
   jsPsych.init({
-    timeline: [preload, pre_trial, trial_1, trial_2],
+    timeline: [preload, pre_trial, trial_3, trial_1, trial_2],
     on_finish: function() { jsPsych.data.displayData(); }
   });
 

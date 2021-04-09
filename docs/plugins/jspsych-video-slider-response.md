@@ -25,6 +25,7 @@ slider_start | integer | 50 | Sets the starting value of the slider
 step | integer | 1 | Sets the step of the slider. This is the smallest amount by which the slider can change.
 labels | array of strings | [] | Labels displayed at equidistant locations on the slider. For example, two labels will be placed at the ends of the slider. Three labels would place two at the ends and one in the middle. Four will place two at the ends, and the other two will be at 33% and 67% of the slider width.
 slider_width | integer | null | Set the width of the slider in pixels. If left null, then the width will be equal to the widest element in the display.
+slider_number | boolean | false | If true, includes a number with the selected value next to the slider.
 require_movement | boolean | false | If true, the subject must move the slider before clicking the continue button.
 button_label | string | 'Continue' | Label of the button to end the trial.
 trial_ends_after_video | bool | false | If true, then the trial will end as soon as the video file finishes playing.

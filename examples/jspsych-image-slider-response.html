@@ -72,9 +72,19 @@
     prompt: '<p>How happy is this person on a scale of 1-100? (1s stimulus duration)</p>',
     stimulus_duration: 1000
   }
+  
+  var trial_4 = {
+    type: 'image-slider-response',
+    stimulus: 'img/happy_face_1.jpg',
+    labels: ['1 (least happy)', '100 (most happy)'],
+    slider_width: 500,
+    require_movement: true,
+    prompt: '<p>How happy is this person on a scale of 1-100? (Interaction with slider is required)</p>',
+    slider_number: true
+  }
 
   jsPsych.init({
-    timeline: [preload, trial_proc, trial_1, trial_2, trial_3],
+    timeline: [preload, trial_proc, trial_4, trial_1, trial_2, trial_3],
     on_finish: function() {
       jsPsych.data.displayData();
     },

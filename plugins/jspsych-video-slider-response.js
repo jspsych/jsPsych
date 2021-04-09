@@ -109,6 +109,12 @@ jsPsych.plugins["video-slider-response"] = (function() {
         default: null,
         description: 'Width of the slider in pixels.'
       },
+      slider_number: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name:'Slider with number',
+        default: false,
+        description: 'Include a number with the selected value in the slider.'
+      },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
@@ -205,11 +211,17 @@ jsPsych.plugins["video-slider-response"] = (function() {
       html += 'auto;'
     }
     html += '">';
-    html += '<input type="range" class="jspsych-slider" value="'+trial.slider_start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" id="jspsych-video-slider-response-response"';
+    html += '<input type="range" class="jspsych-slider" value="'+trial.slider_start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" id="jspsych-video-slider-response-response" oninput="document.getElementById(&quot;output&quot;).value = this.value"';
     if (!trial.response_allowed_while_playing) {
       html += ' disabled';
     }
-    html += '></input><div>'
+    html += '></input>';
+    if(trial.slider_number){
+      html += '<div style="font-weight: bold; vertical-align: top; width: '+ (trial.slider_width + 40) +'px; text-align: right; position: absolute; top: 0px; z-index: -1;"><output id = "output">' + trial.slider_start + '</output></div>';
+    } else {
+      html += '<div style="font-weight: bold; vertical-align: top; width: '+ (trial.slider_width + 40) +'px; text-align: right; position: absolute; top: 0px; z-index: -1; display:none;"><output id = "output">' + trial.slider_start + '</output></div>';
+    }
+    html += '<div>'
     for(var j=0; j < trial.labels.length; j++){
       var label_width_perc = 100/(trial.labels.length-1);
       var percent_of_range = j * (100/(trial.labels.length - 1));
