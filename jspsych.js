@@ -2289,7 +2289,11 @@ jsPsych.pluginAPI = (function() {
         minimum_valid_rt = jsPsych.initSettings().minimum_valid_rt || 0;
       }
 
-      if(rt < minimum_valid_rt){
+      var rt_ms = rt;
+      if (parameters.rt_method == 'audio') {
+        rt_ms = rt_ms * 1000;
+      }
+      if(rt_ms < minimum_valid_rt) {
         return;
       }
 
