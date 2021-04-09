@@ -19,6 +19,10 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
           type: jsPsych.plugins.parameterType.STRING,
           default: 'click', // options: 'click', 'view'
         },
+        point_size:{
+          type: jsPsych.plugins.parameterType.INT,
+          default: 20
+        },
         repetitions_per_point: {
           type: jsPsych.plugins.parameterType.INT,
           default: 1
@@ -38,12 +42,6 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
       }
     }
   
-    // provide options for calibration routines?
-    // dot clicks?
-    // track a dot with mouse?
-    
-    // then a validation phase of staring at the dot in different locations?
-  
     plugin.trial = function(display_element, trial) {
   
       var html = `
@@ -51,8 +49,6 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
         </div>`
   
       display_element.innerHTML = html;
-
-      jsPsych.extensions['webgazer'].resume();
   
       var wg_container = display_element.querySelector('#webgazer-calibrate-container');
         
@@ -62,7 +58,6 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
 
       calibrate();
       
-
       function calibrate(){
         jsPsych.extensions['webgazer'].resume();
         if(trial.calibration_mode == 'click'){
@@ -97,7 +92,7 @@ jsPsych.plugins["webgazer-calibrate"] = (function() {
       }
 
       function calibration_display_gaze_only(pt){
-        var pt_html = '<div id="calibration-point" style="width:10px; height:10px; border-radius:10px; border: 1px solid #000; background-color: #333; position: absolute; left:'+pt[0]+'%; top:'+pt[1]+'%;"></div>'
+        var pt_html = `<div id="calibration-point" style="width:${trial.point_size}px; height:${trial.point_size}px; border-radius:${trial.point_size}px; border: 1px solid #000; background-color: #333; position: absolute; left:${pt[0]}%; top:${pt[1]}%;"></div>`
         wg_container.innerHTML = pt_html;
 
         var pt_dom = wg_container.querySelector('#calibration-point');

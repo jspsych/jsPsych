@@ -17,8 +17,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 Name | Type | Value
 -----|------|------
-
-No additional data collected.
+load_time | numeric | The time it took for webgazer to initialize. This can be a long time in some situations, so this value is recorded for troubleshooting when participants are reporting difficulty.
 
 ## Example
 

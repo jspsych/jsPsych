@@ -15,7 +15,7 @@ repetitions_per_point | numeric | 1 | The number of times to repeat the sequence
 randomize_validation_order | bool | `false` | Whether to randomize the order of the validation points.
 time_to_saccade | numeric | 1000 | The delay before validating after showing a point. Gives the participant time to fixate on the new target before assuming that the participant is looking at the target.
 validation_duration | numeric | 2000 | If `calibration_mode` is set to `view`, then this is the length of time to show a point while calibrating. Note that if `click` calibration is used then the point will remain on the screen until clicked.
-point_size | numeric | 10 | Diameter of the validation points in pixels.
+point_size | numeric | 20 | Diameter of the validation points in pixels.
 show_validation_data | bool | false | If `true` then a visualization of the validation data will be shown on the screen after the validation is complete. This will show each measured gaze location color coded by whether it is within the `roi_radius` of the target point. This is mainly intended for testing and debugging.
 
 ## Data Generated
@@ -24,10 +24,11 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 Name | Type | Value
 -----|------|------
-raw_gaze | array | Raw gaze data for the trial. The array will contain a nested array for each validation point. Within each nested array will be a list of `{dx,dy}` values specifying the distance from the target for that gaze point.
+raw_gaze | array | Raw gaze data for the trial. The array will contain a nested array for each validation point. Within each nested array will be a list of `{x,y,dx,dy}` values specifying the absolute x and y pixels, as well as the distance from the target for that gaze point.
 percent_in_roi | array | The percentage of samples within the `roi_radius` for each validation point.
 average_offset | array | The average `x` and `y` distance from each validation point, plus the median distance `r` of the points from this average offset.
 samples_per_sec | numeric | The average number of samples per second. Calculated by finding samples per second for each point and then averaging these estimates together.
+validation_points | array | The list of validation points, in the order that they appeared.
 
 ## Example
 

@@ -11,6 +11,7 @@ Parameter | Type | Default Value | Description
 calibration_points | array | `[[10,10], [10,50], [10,90], [50,10], [50,50], [50,90], [90,10], [90,50], [90,90]]` | Array of points in `[x,y]` coordinates. Specified as a percentage of the screen width and height, from the left and top edge. The default grid is 9 points.
 calibration_mode | string | `'click'` | Can specify `click` to have subjects click on calibration points or `view` to have subjects passively watch calibration points.
 repetitions_per_point | numeric | 1 | The number of times to repeat the sequence of calibration points.
+point_size | numeric | 20 | Diameter of the calibration points in pixels.
 randomize_calibration_order | bool | `false` | Whether to randomize the order of the calibration points.
 time_to_saccade | numeric | 1000 | If `calibration_mode` is set to `view`, then this is the delay before calibrating after showing a point. Gives the participant time to fixate on the new target before assuming that the participant is looking at the target.
 time_per_point | numeric | 1000 | If `calibration_mode` is set to `view`, then this is the length of time to show a point while calibrating. Note that if `click` calibration is used then the point will remain on the screen until clicked.
