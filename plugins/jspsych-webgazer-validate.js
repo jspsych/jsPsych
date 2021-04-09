@@ -110,7 +110,7 @@
 
       var cancelGazeUpdate = jsPsych.extensions['webgazer'].onGazeUpdate(function(prediction){
         if(performance.now() > pt_start_val){
-          pt_data.push({x: prediction.x, y: prediction.y, dx: prediction.x - x, dy: prediction.y - y, t: Math.round(performance.now()-start)});
+          pt_data.push({x: prediction.x, y: prediction.y, dx: prediction.x - x, dy: prediction.y - y, t: Math.round(prediction.t-start)});
         }
       });
 

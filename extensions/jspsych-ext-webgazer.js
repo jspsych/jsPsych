@@ -226,10 +226,12 @@ jsPsych.extensions['webgazer'] = (function () {
     if (gazeData !== null){
       var d = {
         x: state.round_predictions ? Math.round(gazeData.x) : gazeData.x,
-        y: state.round_predictions ? Math.round(gazeData.y) : gazeData.y
+        y: state.round_predictions ? Math.round(gazeData.y) : gazeData.y,
+        t: gazeData.t
       }
       if(state.activeTrial) {
-        d.t = Math.round(performance.now() - state.currentTrialStart)
+        console.log(`handleUpdate: t = ${Math.round(gazeData.t)}, now = ${Math.round(performance.now())}`);
+        d.t = Math.round(gazeData.t - state.currentTrialStart)
         state.currentTrialData.push(d); // add data to current trial's data
       }
       state.currentGaze = d;
