@@ -52,6 +52,7 @@
     trial_data.raw_gaze = [];
     trial_data.percent_in_roi = [];
     trial_data.average_offset = [];
+    trial_data.validation_points = null;
 
     var html = `
       <div id='webgazer-validate-container' style='position: relative; width:100vw; height:100vh; overflow: hidden;'>
@@ -74,6 +75,7 @@
       } else {
         val_points = trial.validation_points;
       }
+      trial_data.validation_points = val_points;
       points_completed = -1;
       //jsPsych.extensions['webgazer'].resume();
       jsPsych.extensions.webgazer.startSampleInterval();
