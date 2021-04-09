@@ -6,7 +6,7 @@ jsPsych supports eye tracking through the [WebGazer](https://webgazer.cs.brown.e
 
 ### Load webgazer.js
 
-The [official version of WebGazer](https://webgazer.cs.brown.edu/#download) is currently not supported by jsPsych. Our [fork of the library]() contains some minor improvements aimed at the kind of experiments that jsPsych is typically used for, e.g., situations in which the timing of display screens needs to be accurate. 
+The [official version of WebGazer](https://webgazer.cs.brown.edu/#download) is currently **not** supported by jsPsych. Our [fork of the library](https://github.com/jspsych/WebGazer) contains some minor improvements aimed at the kind of experiments that jsPsych is typically used for, e.g., situations in which the timing of display screens needs to be accurate. 
 
 A copy of our fork is included in the jsPsych release, in the `/examples/js/webgazer` folder. You will need to copy this folder into your project directory. This guide will assume that the folder is located at `/js/webgazer`, but you can change the path as you'd like. 
 
