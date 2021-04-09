@@ -31,9 +31,10 @@ jsPsych.extensions['webgazer'] = (function () {
       state.webgazer.setGazeListener(handleGazeDataUpdate);
 
       // default to threadedRidge regression
-      state.webgazer.workerScriptURL = 'js/ridgeWorker.mjs';
-      state.webgazer.setRegression('threadedRidge');
-      state.webgazer.applyKalmanFilter(false); // kalman filter doesn't seem to work yet with threadedridge.
+      // NEVER MIND... kalman filter is too useful.
+      //state.webgazer.workerScriptURL = 'js/webgazer/ridgeWorker.mjs';
+      //state.webgazer.setRegression('threadedRidge');
+      //state.webgazer.applyKalmanFilter(false); // kalman filter doesn't seem to work yet with threadedridge.
 
       // set state parameters
       state.round_predictions = params.round_predictions;
@@ -182,6 +183,10 @@ jsPsych.extensions['webgazer'] = (function () {
 
   extension.pause = function () {
     state.webgazer.pause();
+    // sometimes gaze dot will show and freeze after pause?
+    if(document.querySelector('#webgazerGazeDot')){
+      document.querySelector('#webgazerGazeDot').style.display = 'none';
+    }
   }
 
   extension.resetCalibration = function(){
@@ -230,7 +235,7 @@ jsPsych.extensions['webgazer'] = (function () {
         t: gazeData.t
       }
       if(state.activeTrial) {
-        console.log(`handleUpdate: t = ${Math.round(gazeData.t)}, now = ${Math.round(performance.now())}`);
+        //console.log(`handleUpdate: t = ${Math.round(gazeData.t)}, now = ${Math.round(performance.now())}`);
         d.t = Math.round(gazeData.t - state.currentTrialStart)
         state.currentTrialData.push(d); // add data to current trial's data
       }
