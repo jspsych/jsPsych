@@ -3,7 +3,7 @@
  * Josh de Leeuw
  **/
 
-jsPsych.plugins["webgazer-init-camera"] = (function () {
+ jsPsych.plugins["webgazer-init-camera"] = (function () {
 
   var plugin = {};
 
@@ -15,9 +15,9 @@ jsPsych.plugins["webgazer-init-camera"] = (function () {
         type: jsPsych.plugins.parameterType.HTML_STRING,
         default: `
             <p>Position your head so that the webcam has a good view of your eyes.</p>
-            <p>Use the video in the upper-left corner as a guide. Center your face in the box and look directly towards the camera.</p>
-            <p>It is important that you try and keep your head reasonably still throughout the experiment, so please take a moment to adjust your setup as needed.</p>
-            <p>When your face is centered in the box and the box turns green, you can click to continue.</p>`
+            <p>Center your face in the box and look directly towards the camera.</p>
+            <p>It is important that you try and keep your head reasonably still throughout the experiment, so please take a moment to adjust your setup to be comfortable.</p>
+            <p>When your face is centered in the box and the box is green, you can click to continue.</p>`
       },
       button_text: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -28,11 +28,13 @@ jsPsych.plugins["webgazer-init-camera"] = (function () {
 
   plugin.trial = function (display_element, trial) {
 
+    var start_time = performance.now();
+    var load_time;
+
     if (!jsPsych.extensions.webgazer.isInitialized()) {
       jsPsych.extensions.webgazer.start().then(function () {
         showTrial();
-      }).catch(function (err) {
-        console.error(`Error starting webgazer: ${err}`)
+      }).catch(function () {
         display_element.innerHTML = `<p>The experiment cannot continue because the eye tracker failed to start.</p>
             <p>This may be because of a technical problem or because you did not grant permission for the page to use your camera.</p>`
       });
@@ -41,6 +43,16 @@ jsPsych.plugins["webgazer-init-camera"] = (function () {
     }
 
     function showTrial() {
+
+      load_time = Math.round(performance.now() - start_time);
+
+      var style = `
+        <style id="webgazer-center-style">
+          #webgazerVideoContainer { top: 20px !important; left: calc(50% - 160px) !important;}
+        </style>
+      `
+      document.querySelector('head').insertAdjacentHTML('beforeend', style);
+
       var html = `
         <div id='webgazer-init-container' style='position: relative; width:100vw; height:100vh'>
         </div>`
@@ -54,7 +66,7 @@ jsPsych.plugins["webgazer-init-camera"] = (function () {
 
 
       wg_container.innerHTML = `
-        <div style='position: absolute; top: 50%; left: calc(50% - 350px); transform: translateY(-50%); width:700px;'>
+        <div style='position: absolute; top: max(260px, 40%); left: calc(50% - 400px); width:800px;'>
         ${trial.instructions}
         <button id='jspsych-wg-cont' class='jspsych-btn' disabled>${trial.button_text}</button>
         </div>`
@@ -99,19 +111,23 @@ jsPsych.plugins["webgazer-init-camera"] = (function () {
 
     // function to end trial when it is time
     function end_trial() {
+      
       jsPsych.extensions['webgazer'].pause();
       jsPsych.extensions['webgazer'].hideVideo();
+
 
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
 
       // gather the data to store for the trial
       var trial_data = {
-
+        load_time: load_time
       };
 
       // clear the display
       display_element.innerHTML = '';
+
+      document.querySelector('#webgazer-center-style').remove();
 
       // move on to the next trial
       jsPsych.finishTrial(trial_data);
