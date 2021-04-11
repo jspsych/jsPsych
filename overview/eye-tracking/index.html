@@ -455,6 +455,54 @@
     Getting Started
   </a>
   
+    <nav class="md-nav" aria-label="Getting Started">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#load-webgazerjs" class="md-nav__link">
+    Load webgazer.js
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load-the-jspsych-webgazer-extension" class="md-nav__link">
+    Load the jsPsych webgazer extension
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initialize-the-camera" class="md-nav__link">
+    Initialize the camera
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calibration" class="md-nav__link">
+    Calibration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    Validation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-eye-tracking-to-a-trial" class="md-nav__link">
+    Adding eye tracking to a trial
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1391,6 +1439,54 @@
     Getting Started
   </a>
   
+    <nav class="md-nav" aria-label="Getting Started">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#load-webgazerjs" class="md-nav__link">
+    Load webgazer.js
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load-the-jspsych-webgazer-extension" class="md-nav__link">
+    Load the jsPsych webgazer extension
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initialize-the-camera" class="md-nav__link">
+    Initialize the camera
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calibration" class="md-nav__link">
+    Calibration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    Validation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-eye-tracking-to-a-trial" class="md-nav__link">
+    Adding eye tracking to a trial
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1427,17 +1523,23 @@
                 <h1 id="eye-tracking">Eye Tracking<a class="headerlink" href="#eye-tracking" title="Permanent link">&para;</a></h1>
 <p>jsPsych supports eye tracking through the <a href="https://webgazer.cs.brown.edu/">WebGazer</a> library. WebGazer uses computer vision techniques to identify features of the participant's eyes via a webcam and predicts gaze location. The system is calibrated by having the participant click on or look at known locations on the screen. These locations are linked to eye features. Gaze location is predicted using regression.</p>
 <h2 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h2>
-<p>First, <a href="https://webgazer.cs.brown.edu/#download">download WebGazer.js </a> and include it in your experiment file via a <code>&lt;script&gt;</code> tag. You'll also need to include jsPsych's <a href="../../extensions/jspsych-ext-webgazer/">webgazer extension</a>.</p>
+<h3 id="load-webgazerjs">Load webgazer.js<a class="headerlink" href="#load-webgazerjs" title="Permanent link">&para;</a></h3>
+<p>The <a href="https://webgazer.cs.brown.edu/#download">official version of WebGazer</a> is currently <strong>not</strong> supported by jsPsych. Our <a href="https://github.com/jspsych/WebGazer">fork of the library</a> contains some minor improvements aimed at the kind of experiments that jsPsych is typically used for, e.g., situations in which the timing of display screens needs to be accurate. </p>
+<p>A copy of our fork is included in the jsPsych release, in the <code>/examples/js/webgazer</code> folder. You will need to copy this folder into your project directory. This guide will assume that the folder is located at <code>/js/webgazer</code>, but you can change the path as you'd like. </p>
+<p>Include the <code>webgazer.js</code> file in your experiment via a <code>&lt;script&gt;</code> tag. </p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;js/webgazer/webgazer.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</code></pre></div>
+<h3 id="load-the-jspsych-webgazer-extension">Load the jsPsych webgazer extension<a class="headerlink" href="#load-the-jspsych-webgazer-extension" title="Permanent link">&para;</a></h3>
+<p>The <a href="/extensions/jspsych-ext-webgazer.md">webgazer extension</a> adds functionality to jsPsych for interacting with webgazer. Load it like you would a plugin file.</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;webgazer.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych/extensions/jspsych-ext-webgazer.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
 </code></pre></div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>An example experiment using WebGazer is available in the <strong>/examples</strong> folder of the jsPsych release. See <code>webgazer.html</code>.</p>
-</div>
 <p>To use the WebGazer extension in an experiment, include it in the list of extensions passed to <code>jsPsych.init()</code></p>
 <div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
   <span class="nx">timeline</span><span class="o">:</span> <span class="p">[...],</span>
@@ -1446,12 +1548,18 @@
   <span class="p">]</span>
 <span class="p">})</span>
 </code></pre></div>
-<p>To help the participant position their face correctly for eye tracking you can use the <a href="../../plugins/jspsych-webgazer-init-camera/">jspsych-webgazer-init-camera plugin</a>. This will show the participant what the camera sees, including facial feature landmarks, and prevent the participant from continuing until their face is in good position for eye tracking.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Example experiments using WebGazer are available in the <strong>/examples</strong> folder of the jsPsych release. See <code>webgazer.html</code>, <code>webgazer_image.html</code>, and <code>webgazer_audio.html</code>.</p>
+</div>
+<h3 id="initialize-the-camera">Initialize the camera<a class="headerlink" href="#initialize-the-camera" title="Permanent link">&para;</a></h3>
+<p>To help the participant position their face correctly for eye tracking you can use the <a href="/plugins/jspsych-webgazer-init-camera.ms">jspsych-webgazer-init-camera plugin</a>. This will show the participant what the camera sees, including facial feature landmarks, and prevent the participant from continuing until their face is in good position for eye tracking. This plugin will also trigger the experiment to request permission to access the user's webcam if it hasn't already been granted.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">init_camera_trial</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;webgazer-init-camera&#39;</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>To calibrate WebGazer, you can use the <a href="../../plugins/jspsych-webgazer-calibrate/">jspsych-webgazer-calibrate plugin</a>. This plugin allows you to specify a set of points on the screen for calibration and to choose the method for calibrating -- either clicking on each point or simply fixating on each point. The location of calibration points is specified in percentages, e.g., <code>[25,50]</code> will result in a point that is 25% of the width of the screen from the left edge and 50% of the height of the screen from the top edge. Options for controlling other details of the calibration are explained in the <a href="../../plugins/jspsych-webgazer-calibrate/">documentation for the plugin</a>.</p>
+<h3 id="calibration">Calibration<a class="headerlink" href="#calibration" title="Permanent link">&para;</a></h3>
+<p>To calibrate WebGazer, you can use the <a href="/plugins/jspsych-webgazer-calibrate.md">jspsych-webgazer-calibrate plugin</a>. This plugin allows you to specify a set of points on the screen for calibration and to choose the method for calibrating -- either clicking on each point or simply fixating on each point. The location of calibration points is specified in percentages, e.g., <code>[25,50]</code> will result in a point that is 25% of the width of the screen from the left edge and 50% of the height of the screen from the top edge. Options for controlling other details of the calibration are explained in the <a href="/plugins/jspsych-webgazer-calibrate.md">documentation for the plugin</a>.</p>
 <p>Note that instructions are not included in the calibration plugin, so you'll likely want to use a different plugin (e.g., <code>html-button-response</code>) to display instructions prior to running the calibration. </p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">calibration_trial</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;webgazer-calibrate&#39;</span><span class="p">,</span>
@@ -1459,7 +1567,8 @@
   <span class="nx">calibration_mode</span><span class="o">:</span> <span class="s1">&#39;click&#39;</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>To measure the accuracy and precision of the calibration, you can use the <a href="../../plugins/jspsych-webgazer-validate/">jspsych-webgazer-vaidate plugin</a>. Like the calibration plugin, you can specify a list of points to perform validation on. Here you can specify the points as either percentages or in terms of the distance from the center of the screen in pixels. Which mode you use will probably depend on how you are defining your stimuli throughout the experiment. You can also specify the radius of tolerance around each point, and the plugin will calculate the percentage of measured gaze samples within that radius. This is a potentially useful heuristic for deciding whether or not to calibrate again. Options for controlling other details of the validation are explained in the <a href="../../plugins/jspsych-webgazer-validate/">documentation for the plugin</a>.</p>
+<h3 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h3>
+<p>To measure the accuracy and precision of the calibration, you can use the <a href="/plugins/jspsych-webgazer-validate.md">jspsych-webgazer-vaidate plugin</a>. Like the calibration plugin, you can specify a list of points to perform validation on. Here you can specify the points as either percentages or in terms of the distance from the center of the screen in pixels. Which mode you use will probably depend on how you are defining your stimuli throughout the experiment. You can also specify the radius of tolerance around each point, and the plugin will calculate the percentage of measured gaze samples within that radius. This is a potentially useful heuristic for deciding whether or not to calibrate again. Options for controlling other details of the validation are explained in the <a href="/plugins/jspsych-webgazer-validate.md">documentation for the plugin</a>.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">validation_trial</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;webgazer-validate&#39;</span><span class="p">,</span>
   <span class="nx">validation_points</span><span class="o">:</span> <span class="p">[[</span><span class="o">-</span><span class="mf">200</span><span class="p">,</span><span class="mf">200</span><span class="p">],</span> <span class="p">[</span><span class="mf">200</span><span class="p">,</span><span class="mf">200</span><span class="p">],[</span><span class="o">-</span><span class="mf">200</span><span class="p">,</span><span class="o">-</span><span class="mf">200</span><span class="p">],[</span><span class="mf">200</span><span class="p">,</span><span class="o">-</span><span class="mf">200</span><span class="p">]],</span>
@@ -1476,6 +1585,7 @@
 <span class="p">}</span>
 </code></pre></div>
 <p>We recommend performing calibration and validation periodically throughout your experiment.</p>
+<h3 id="adding-eye-tracking-to-a-trial">Adding eye tracking to a trial<a class="headerlink" href="#adding-eye-tracking-to-a-trial" title="Permanent link">&para;</a></h3>
 <p>To enable eye tracking for a trial in your experiment, you can simply add the WebGazer extension to the trial.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
@@ -1492,10 +1602,10 @@
 </code></pre></div>
 <p>This will turn on WebGazer at the start of the trial. </p>
 <p>The <code>params</code> property in the <code>extensions</code> declaration allows you to pass in a list of <a href="https://www.w3schools.com/cssref/css_selectors.asp">CSS selector strings</a>. The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect">bounding rectangle</a> of the DOM element that matches each selector will be recorded in the data for that trial. This allows for easy alignment of the gaze data and objects on the screen.</p>
-<div class="highlight"><pre><span></span><code><span class="nx">webgazer_targets</span> <span class="o">:</span> <span class="p">[</span>
-  <span class="p">{</span><span class="nx">selector</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">top</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">left</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">right</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">bottom</span><span class="o">:</span><span class="p">...},</span>
-  <span class="p">{</span><span class="nx">selector</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">top</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">left</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">right</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">bottom</span><span class="o">:</span><span class="p">...},</span>
-<span class="p">]</span>
+<div class="highlight"><pre><span></span><code><span class="nx">webgazer_targets</span> <span class="o">:</span> <span class="p">{</span>
+  <span class="s1">&#39;selector&#39;</span><span class="o">:</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">y</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">height</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">width</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">top</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">left</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">right</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">bottom</span><span class="o">:</span><span class="p">...}</span>
+  <span class="s1">&#39;selector&#39;</span><span class="o">:</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">y</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">height</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">width</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">top</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">left</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">right</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">bottom</span><span class="o">:</span><span class="p">...}</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>Gaze data will be added to the trial's data under the property <code>webgazer_data</code>. The gaze data is an array of objects. Each object has an <code>x</code>, a <code>y</code>, and a <code>t</code> property. The <code>x</code> and <code>y</code> properties specify the gaze location in pixels and <code>t</code> specifies the time in milliseconds since the start of the trial. Note that establishing the precision and accuracy of these measurements across the variety of web browsers and systems that your experiment participants might be using is quite difficult. For example, different browsers may cause small systematic shifts in the accuracy of <code>t</code> values. </p>
 <div class="highlight"><pre><span></span><code><span class="nx">webgazer_data</span><span class="o">:</span> <span class="p">[</span>
@@ -1525,7 +1635,7 @@
     <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych/plugins/jspsych-webgazer-init-camera.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych/plugins/jspsych-webgazer-calibrate.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych/plugins/jspsych-webgazer-validation.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;js/webgazer.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;js/webgazer/webgazer.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych/extensions/jspsych-ext-webgazer.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jspsych/css/jspsych.css&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -1611,10 +1721,13 @@
     <span class="p">{</span> <span class="s2">&quot;x&quot;</span><span class="o">:</span> <span class="mf">606</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="o">:</span> <span class="mf">221</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="o">:</span> <span class="mf">987</span><span class="p">}</span>
   <span class="p">],</span>
   <span class="s2">&quot;webgazer_targets&quot;</span><span class="o">:</span> <span class="p">[</span>
-    <span class="p">{</span>
-      <span class="s2">&quot;selector&quot;</span><span class="o">:</span> <span class="s2">&quot;#jspsych-image-keyboard-response-stimulus&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;top&quot;</span><span class="o">:</span> <span class="mf">135.33334350585938</span><span class="p">,</span>
-      <span class="s2">&quot;bottom&quot;</span><span class="o">:</span> <span class="mf">435.3333435058594</span><span class="p">,</span>
+    <span class="s2">&quot;#jspsych-image-keyboard-response-stimulus&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;x&quot;</span><span class="o">:</span> <span class="mf">490</span><span class="p">,</span>
+      <span class="s2">&quot;y&quot;</span><span class="o">:</span> <span class="mf">135</span><span class="p">,</span>
+      <span class="s2">&quot;height&quot;</span><span class="o">:</span> <span class="mf">300</span><span class="p">,</span>
+      <span class="s2">&quot;width&quot;</span><span class="o">:</span> <span class="mf">300</span><span class="p">,</span>
+      <span class="s2">&quot;top&quot;</span><span class="o">:</span> <span class="mf">135</span><span class="p">,</span>
+      <span class="s2">&quot;bottom&quot;</span><span class="o">:</span> <span class="mf">435</span><span class="p">,</span>
       <span class="s2">&quot;left&quot;</span><span class="o">:</span> <span class="mf">490</span><span class="p">,</span>
       <span class="s2">&quot;right&quot;</span><span class="o">:</span> <span class="mf">790</span>
     <span class="p">}</span>

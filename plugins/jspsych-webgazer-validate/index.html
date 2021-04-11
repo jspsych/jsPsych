@@ -1509,7 +1509,7 @@
 <tr>
 <td>point_size</td>
 <td>numeric</td>
-<td>10</td>
+<td>20</td>
 <td>Diameter of the validation points in pixels.</td>
 </tr>
 <tr>
@@ -1534,7 +1534,7 @@
 <tr>
 <td>raw_gaze</td>
 <td>array</td>
-<td>Raw gaze data for the trial. The array will contain a nested array for each validation point. Within each nested array will be a list of <code>{dx,dy}</code> values specifying the distance from the target for that gaze point.</td>
+<td>Raw gaze data for the trial. The array will contain a nested array for each validation point. Within each nested array will be a list of <code>{x,y,dx,dy}</code> values specifying the absolute x and y pixels, as well as the distance from the target for that gaze point.</td>
 </tr>
 <tr>
 <td>percent_in_roi</td>
@@ -1550,6 +1550,11 @@
 <td>samples_per_sec</td>
 <td>numeric</td>
 <td>The average number of samples per second. Calculated by finding samples per second for each point and then averaging these estimates together.</td>
+</tr>
+<tr>
+<td>validation_points</td>
+<td>array</td>
+<td>The list of validation points, in the order that they appeared.</td>
 </tr>
 </tbody>
 </table>
