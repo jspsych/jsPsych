@@ -137,6 +137,13 @@ jsPsych.plugins['self-paced-reading'] = (function () {
         default: 'top',
         description: 'Y align multi-line text in the centre',
       },
+      inter_word_interval: {
+        type: jsPsych.plugins.parameterType.INT,
+        array: false,
+        pretty_name: 'inter-word-interval',
+        default: 0,
+        description: 'inter-word-interval',
+      },
     },
   };
 
@@ -233,21 +240,11 @@ jsPsych.plugins['self-paced-reading'] = (function () {
     const word = display_word(trial.mask_type);
     const mask = display_mask(trial.mask_type, trial.mask_on_word, trial.mask_character, trial.mask_gap_character);
 
-    function draw() {
+    function draw_mask() {
       // canvas
       ctx.fillStyle = trial.canvas_colour;
       ctx.fillRect(canvas_rect[0], canvas_rect[1], canvas_rect[2], canvas_rect[3]);
-
-      // text + mask
       if (trial.mask_type !== 3) {
-        // words
-        ctx.fillStyle = trial.font_colour;
-        ctx.fillText(
-          word(words[line_number], word_number_line),
-          trial.xy_position[0],
-          trial.xy_position[1] + line_number * trial.line_height,
-        );
-        // mask
         ctx.fillStyle = trial.mask_colour;
         for (let i = 0; i < words.length; i++) {
           let mw = i === line_number ? word_number_line : -1;
@@ -257,17 +254,24 @@ jsPsych.plugins['self-paced-reading'] = (function () {
             trial.xy_position[1] + i * trial.line_height + trial.mask_y_offset,
           );
         }
-      } else {
-        // mask type 3 always in center
-        if (word_number === -1) {
-          ctx.fillStyle = trial.mask_colour;
-          ctx.fillText(trial.mask_character, trial.xy_position[0], trial.xy_position[1] + trial.mask_y_offset);
-        } else {
-          ctx.fillStyle = trial.font_colour;
-          ctx.fillText(words[word_number], trial.xy_position[0], trial.xy_position[1]);
-        }
+      } else if (trial.mask_type === 3 && word_number === -1) {
+        ctx.fillStyle = trial.mask_colour;
+        ctx.fillText(trial.mask_character, trial.xy_position[0], trial.xy_position[1] + trial.mask_y_offset);
       }
+    }
 
+    function draw_word() {
+      if (trial.mask_type !== 3) {
+        ctx.fillStyle = trial.font_colour;
+        ctx.fillText(
+          word(words[line_number], word_number_line),
+          trial.xy_position[0],
+          trial.xy_position[1] + line_number * trial.line_height,
+        );
+      } else if (trial.mask_type === 3 && word_number > -1) {
+        ctx.fillStyle = trial.font_colour;
+        ctx.fillText(words[word_number], trial.xy_position[0], trial.xy_position[1]);
+      }
       // set line/word numbers
       if (word_number_line + 1 < line_length[line_number]) {
         word_number_line++;
@@ -285,20 +289,23 @@ jsPsych.plugins['self-paced-reading'] = (function () {
       sentence: null,
     };
 
-    draw(); // draw initial sentence outline
+    // initial draw
+    draw_mask();
+    draw_word();
 
     // function to end trial when it is time
-    const end_trial = function () {
+    const end_trial = function() {
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
 
+      jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
       // clear the display and move to next trial
       display_element.innerHTML = '';
       jsPsych.finishTrial(response);
     };
 
     // function to handle responses by the subject
-    const after_response = function (info) {
+    const after_response = function(info) {
       response.rt = info.rt;
       response.word = words_concat[word_number];
       response.word_number = word_number + 1;
@@ -313,17 +320,17 @@ jsPsych.plugins['self-paced-reading'] = (function () {
 
       // keep drawing until words in sentence complete
       word_number++;
-      if (word_number < sentence_length) {
-        //jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+      draw_mask();
+      jsPsych.pluginAPI.setTimeout(function() {
         keyboardListener = key();
-        draw();
-      } else {
-        end_trial();
-      }
+        (word_number < sentence_length) ? draw_word() : end_trial();
+      }, trial.inter_word_interval);
+
     };
 
     // start the response listener
     let keyboardListener = key();
+
     function key() {
       return jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
@@ -333,7 +340,6 @@ jsPsych.plugins['self-paced-reading'] = (function () {
         allow_held_key: false,
       });
     }
-  };
-
+  }
   return plugin;
 })();
