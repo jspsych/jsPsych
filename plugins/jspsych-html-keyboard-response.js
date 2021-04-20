@@ -77,7 +77,7 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
     };
 
     // function to end trial when it is time
-    var end_trial = function() {
+    var end_trial = function(dur) {
 
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
@@ -91,7 +91,8 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
       var trial_data = {
         rt: response.rt,
         stimulus: trial.stimulus,
-        response: response.key
+        response: response.key,
+        trial_duration: dur
       };
 
       // clear the display
@@ -138,8 +139,8 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
 
     // end trial if trial_duration is set
     if (trial.trial_duration !== null) {
-      jsPsych.pluginAPI.setTimeout(function() {
-        end_trial();
+      jsPsych.pluginAPI.setTimeout(function(dur) {
+        end_trial(dur);
       }, trial.trial_duration);
     }
 
