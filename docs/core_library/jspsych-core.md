@@ -2,7 +2,8 @@
 
 ---
 ## jsPsych.addNodeToEndOfTimeline
-```
+
+```javascript
 jsPsych.addNodeToEndOfTimeline(node_parameters)
 ```
 
@@ -20,9 +21,7 @@ None.
 
 Adds the timeline to the end of the experiment.
 
-### Examples
-
-#### Without callback
+### Example
 
 ```javascript
 var trial = {
@@ -37,28 +36,10 @@ var new_timeline = {
 jsPsych.addNodeToEndOfTimeline(new_timeline)
 ```
 
-### With callback
-
-```javascript
-var first = {
-  type: 'html-keyboard-response',
-  stimulus: 'first trial; new trial added when on_finish is called',
-  on_finish: function(){
-    jsPsych.pauseExperiment();
-    jsPsych.addNodeToEndOfTimeline({
-      timeline: [{
-        type: 'image-keyboard-response',
-        stimulus: 'img/happy_face_4.jpg'
-      }]
-    }, jsPsych.resumeExperiment)
-  }
-}
-```
-
 ---
 ## jsPsych.allTimelineVariables
 
-```
+```javascript
 jsPsych.allTimelineVariables()
 ```
 
@@ -91,7 +72,7 @@ var trial = {
 ---
 ## jsPsych.currentTimelineNodeID
 
-```
+```javascript
 jsPsych.currentTimelineNodeID()
 ```
 
@@ -131,14 +112,13 @@ The rules about iterations apply throughout the hierarchical ID:
 
 ```javascript
 var id = jsPsych.currentTimelineNodeID();
-
 console.log('The current TimelineNode ID is '+id);
 ```
 
 ---
 ## jsPsych.currentTrial
 
-```
+```javascript
 jsPsych.currentTrial()
 ```
 
@@ -157,16 +137,15 @@ Get a description of the current trial
 ### Example
 
 ```javascript
-
 var trial = jsPsych.currentTrial();
-
 console.log('The current trial is using the '+trial.type+' plugin');
 ```
+
 ---
 ## jsPsych.endCurrentTimeline
 
-```
-jsPsych.endCurrentTimeline
+```javascript
+jsPsych.endCurrentTimeline()
 ```
 
 ### Parameters
@@ -186,7 +165,6 @@ Ends the current timeline. If timelines are nested, then only the timeline that 
 #### End timeline if a particular key is pressed
 
 ```javascript
-
 var images = [
   "img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif",
   "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif",
@@ -223,13 +201,12 @@ jsPsych.init({
     jsPsych.data.displayData();
   }
 });
-
 ```
 
 ---
 ## jsPsych.endExperiment
 
-```
+```javascript
 jsPsych.endExperiment(end_message)
 ```
 
@@ -268,7 +245,7 @@ var trial = {
 ---
 ## jsPsych.finishTrial
 
-```
+```javascript
 jsPsych.finishTrial(data)
 ```
 
@@ -297,15 +274,14 @@ This method tells jsPsych that the current trial is over. It is used in all of t
 ### Example
 
 ```javascript
-
 // this code would be in a plugin
 jsPsych.finishTrial({correct_response: true});
-
 ```
+
 ---
 ## jsPsych.getDisplayElement
 
-```
+```javascript
 jsPsych.getDisplayElement()
 ```
 
@@ -333,7 +309,7 @@ el.style.visibility = 'hidden';
 ---
 ## jsPsych.getProgressBarCompleted
 
-```
+```javascript
 jsPsych.getProgressBarCompleted()
 ```
 
@@ -358,7 +334,7 @@ var progress_bar_amount = jsPsych.getProgressBarCompleted();
 ---
 ## jsPsych.init
 
-```
+```javascript
 jsPsych.init(settings)
 ```
 
@@ -413,9 +389,10 @@ This method configures and starts the experiment.
 See any of the plugin examples in the [examples folder](https://github.com/jodeleeuw/jsPsych/tree/master/examples) in the GitHub repository.
 
 ---
+
 ## jsPsych.initSettings
 
-```
+```javascript
 jsPsych.initSettings()
 ```
 
@@ -441,8 +418,10 @@ console.log(JSON.stringify(settings.timeline));
 ```
 
 ---
+
 ## jsPsych.pauseExperiment
-```
+
+```javascript
 jsPsych.pauseExperiment()
 ```
 
@@ -475,9 +454,10 @@ var trial = {
 ```
 
 ---
+
 ## jsPsych.progress
 
-```
+```javascript
 jsPsych.progress()
 ```
 
@@ -503,15 +483,15 @@ This method returns information about the length of the experiment and the subje
 ### Example
 
 ```javascript
-
 var progress = jsPsych.progress();
-
 alert('You have completed approximately '+progress.percent_complete+'% of the experiment');
+```
 
-```
 ---
+
 ## jsPsych.resumeExperiment
-```
+
+```javascript
 jsPsych.resumeExperiment()
 ```
 
@@ -544,9 +524,10 @@ var trial = {
 ```
 
 ---
+
 ## jsPsych.setProgressBar
 
-```
+```javascript
 jsPsych.setProgressBar(value)
 ```
 
@@ -572,9 +553,10 @@ jsPsych.setProgressBar(0.85);
 ```
 
 ---
+
 ## jsPsych.startTime
 
-```
+```javascript
 jsPsych.startTime()
 ```
 
@@ -597,20 +579,19 @@ var start_time = jsPsych.startTime();
 ```
 
 ---
+
 ## jsPsych.timelineVariable
 
-```
+```javascript
 jsPsych.timelineVariable(variable, call_immediate)
 ```
 
 ### Parameters
 
-
 Parameter | Type | Description
 ----------|------|------------
 variable | string | Name of the timeline variable
 call_immediate | bool | This parameter is optional and can usually be omitted. It determines the return value of `jsPsych.timelineVariable`. If `true`, the function returns the _value_ of the current timeline variable. If `false`, the function returns _a function that returns the value_ of the current timeline variable. When `call_immediate` is omitted, the appropriate option is determined automatically based on the context in which this function is called. When `jsPsych.timelineVariable` is used as a parameter value, `call_immediate` will be `false`. This allows it to be used as a [dynamic trial parameter](/overview/dynamic-parameters). When `jsPsych.timelineVariable` is used inside of a function, `call_immediate` will be `true`. It is possible to explicitly set this option to `true` to force the function to immediately return the current value of the timeline variable. 
-
 
 ### Return value
 
@@ -623,6 +604,7 @@ Either a function that returns the value of the timeline variable, or the value 
 ### Examples
 
 #### Standard use as a parameter for a trial
+
 ```javascript
 var trial = {
   type: 'image-keyboard-response',
@@ -641,6 +623,7 @@ var procedure = {
 ```
 
 #### Invoking immediately in a function
+
 ```javascript
 var trial = {
   type: 'html-keyboard-response',
@@ -659,7 +642,9 @@ var procedure = {
   ]
 }
 ```
+
 Prior to jsPsych v6.3.0, the `call_immediate` parameter must be set to `true` when `jsPsych.timelineVariable` is called from within a function, such as a [dynamic parameter](/overview/dynamic-parameters):
+
 ```javascript
 var trial = {
   type: 'html-keyboard-response',
@@ -680,9 +665,10 @@ var procedure = {
 ```
 
 ---
+
 ## jsPsych.totalTime
 
-```
+```javascript
 jsPsych.totalTime()
 ```
 
@@ -701,17 +687,16 @@ Gets the total time the subject has been in the experiment.
 ### Example
 
 ```javascript
-
 var time = jsPsych.totalTime();
 console.log(time);
-
 ```
 
 ---
+
 ## jsPsych.version
 
-```
-jsPsych.version
+```javascript
+jsPsych.version()
 ```
 
 ### Parameters

@@ -4,7 +4,25 @@ jsPsych supports eye tracking through the [WebGazer](https://webgazer.cs.brown.e
 
 ## Getting Started
 
-First, [download WebGazer.js ](https://webgazer.cs.brown.edu/#download) and include it in your experiment file via a `<script>` tag. You'll also need to include jsPsych's [webgazer extension](../extensions/jspsych-ext-webgazer.md).
+### Load webgazer.js
+
+The [official version of WebGazer](https://webgazer.cs.brown.edu/#download) is currently **not** supported by jsPsych. Our [fork of the library](https://github.com/jspsych/WebGazer) contains some minor improvements aimed at the kind of experiments that jsPsych is typically used for, e.g., situations in which the timing of display screens needs to be accurate. 
+
+A copy of our fork is included in the jsPsych release, in the `/examples/js/webgazer` folder. You will need to copy this folder into your project directory. This guide will assume that the folder is located at `/js/webgazer`, but you can change the path as you'd like. 
+
+Include the `webgazer.js` file in your experiment via a `<script>` tag. 
+
+```html
+<head>
+  <script src="jspsych/jspsych.js"></script>
+  <script src="js/webgazer/webgazer.js"></script>
+</head>
+```
+
+### Load the jsPsych webgazer extension
+
+The [webgazer extension](/extensions/jspsych-ext-webgazer.md) adds functionality to jsPsych for interacting with webgazer. Load it like you would a plugin file.
+
 
 ```html
 <head>
@@ -13,9 +31,6 @@ First, [download WebGazer.js ](https://webgazer.cs.brown.edu/#download) and incl
   <script src="jspsych/extensions/jspsych-ext-webgazer.js"></script>
 </head>
 ```
-
-!!! tip 
-    An example experiment using WebGazer is available in the **/examples** folder of the jsPsych release. See `webgazer.html`.
 
 To use the WebGazer extension in an experiment, include it in the list of extensions passed to `jsPsych.init()`
 
@@ -28,7 +43,14 @@ jsPsych.init({
 })
 ```
 
-To help the participant position their face correctly for eye tracking you can use the [jspsych-webgazer-init-camera plugin](../plugins/jspsych-webgazer-init-camera.md). This will show the participant what the camera sees, including facial feature landmarks, and prevent the participant from continuing until their face is in good position for eye tracking.
+
+!!! tip 
+    Example experiments using WebGazer are available in the **/examples** folder of the jsPsych release. See `webgazer.html`, `webgazer_image.html`, and `webgazer_audio.html`.
+
+### Initialize the camera
+
+To help the participant position their face correctly for eye tracking you can use the [jspsych-webgazer-init-camera plugin](/plugins/jspsych-webgazer-init-camera.ms). This will show the participant what the camera sees, including facial feature landmarks, and prevent the participant from continuing until their face is in good position for eye tracking. This plugin will also trigger the experiment to request permission to access the user's webcam if it hasn't already been granted.
+
 
 ```js
 var init_camera_trial = {
@@ -36,7 +58,10 @@ var init_camera_trial = {
 }
 ```
 
-To calibrate WebGazer, you can use the [jspsych-webgazer-calibrate plugin](../plugins/jspsych-webgazer-calibrate.md). This plugin allows you to specify a set of points on the screen for calibration and to choose the method for calibrating -- either clicking on each point or simply fixating on each point. The location of calibration points is specified in percentages, e.g., `[25,50]` will result in a point that is 25% of the width of the screen from the left edge and 50% of the height of the screen from the top edge. Options for controlling other details of the calibration are explained in the [documentation for the plugin](../plugins/jspsych-webgazer-calibrate.md).
+
+### Calibration
+
+To calibrate WebGazer, you can use the [jspsych-webgazer-calibrate plugin](/plugins/jspsych-webgazer-calibrate.md). This plugin allows you to specify a set of points on the screen for calibration and to choose the method for calibrating -- either clicking on each point or simply fixating on each point. The location of calibration points is specified in percentages, e.g., `[25,50]` will result in a point that is 25% of the width of the screen from the left edge and 50% of the height of the screen from the top edge. Options for controlling other details of the calibration are explained in the [documentation for the plugin](/plugins/jspsych-webgazer-calibrate.md).
 
 Note that instructions are not included in the calibration plugin, so you'll likely want to use a different plugin (e.g., `html-button-response`) to display instructions prior to running the calibration. 
 
@@ -48,7 +73,11 @@ var calibration_trial = {
 }
 ```
 
-To measure the accuracy and precision of the calibration, you can use the [jspsych-webgazer-vaidate plugin](../plugins/jspsych-webgazer-validate.md). Like the calibration plugin, you can specify a list of points to perform validation on. Here you can specify the points as either percentages or in terms of the distance from the center of the screen in pixels. Which mode you use will probably depend on how you are defining your stimuli throughout the experiment. You can also specify the radius of tolerance around each point, and the plugin will calculate the percentage of measured gaze samples within that radius. This is a potentially useful heuristic for deciding whether or not to calibrate again. Options for controlling other details of the validation are explained in the [documentation for the plugin](../plugins/jspsych-webgazer-validate.md).
+
+### Validation
+
+To measure the accuracy and precision of the calibration, you can use the [jspsych-webgazer-vaidate plugin](/plugins/jspsych-webgazer-validate.md). Like the calibration plugin, you can specify a list of points to perform validation on. Here you can specify the points as either percentages or in terms of the distance from the center of the screen in pixels. Which mode you use will probably depend on how you are defining your stimuli throughout the experiment. You can also specify the radius of tolerance around each point, and the plugin will calculate the percentage of measured gaze samples within that radius. This is a potentially useful heuristic for deciding whether or not to calibrate again. Options for controlling other details of the validation are explained in the [documentation for the plugin](/plugins/jspsych-webgazer-validate.md).
+
 
 ```js
 var validation_trial = {
@@ -72,6 +101,8 @@ The validation procedure stores the raw gaze data for each validation point, the
 
 We recommend performing calibration and validation periodically throughout your experiment.
 
+### Adding eye tracking to a trial
+
 To enable eye tracking for a trial in your experiment, you can simply add the WebGazer extension to the trial.
 
 ```js
@@ -94,10 +125,10 @@ This will turn on WebGazer at the start of the trial.
 The `params` property in the `extensions` declaration allows you to pass in a list of [CSS selector strings](https://www.w3schools.com/cssref/css_selectors.asp). The [bounding rectangle](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) of the DOM element that matches each selector will be recorded in the data for that trial. This allows for easy alignment of the gaze data and objects on the screen.
 
 ```js
-webgazer_targets : [
-  {selector: ..., top: ..., left: ..., right: ..., bottom:...},
-  {selector: ..., top: ..., left: ..., right: ..., bottom:...},
-]
+webgazer_targets : {
+  'selector': {x: ..., y: ..., height: ..., width: ..., top: ..., left: ..., right: ..., bottom:...}
+  'selector': {x: ..., y: ..., height: ..., width: ..., top: ..., left: ..., right: ..., bottom:...}
+}
 ```
 
 Gaze data will be added to the trial's data under the property `webgazer_data`. The gaze data is an array of objects. Each object has an `x`, a `y`, and a `t` property. The `x` and `y` properties specify the gaze location in pixels and `t` specifies the time in milliseconds since the start of the trial. Note that establishing the precision and accuracy of these measurements across the variety of web browsers and systems that your experiment participants might be using is quite difficult. For example, different browsers may cause small systematic shifts in the accuracy of `t` values. 
@@ -136,7 +167,7 @@ The code below shows a basic example of what it looks like when you put all of t
     <script src="jspsych/plugins/jspsych-webgazer-init-camera.js"></script>
     <script src="jspsych/plugins/jspsych-webgazer-calibrate.js"></script>
     <script src="jspsych/plugins/jspsych-webgazer-validation.js"></script>
-    <script src="js/webgazer.js"></script>
+    <script src="js/webgazer/webgazer.js"></script>
     <script src="jspsych/extensions/jspsych-ext-webgazer.js"></script>
     <link rel="stylesheet" href="jspsych/css/jspsych.css">
 </head>
@@ -225,10 +256,13 @@ Below is example data from the image-keyboard-response trial taken from the expe
     { "x": 606, "y": 221, "t": 987}
   ],
   "webgazer_targets": [
-    {
-      "selector": "#jspsych-image-keyboard-response-stimulus",
-      "top": 135.33334350585938,
-      "bottom": 435.3333435058594,
+    "#jspsych-image-keyboard-response-stimulus": {
+      "x": 490,
+      "y": 135,
+      "height": 300,
+      "width": 300,
+      "top": 135,
+      "bottom": 435,
       "left": 490,
       "right": 790
     }

@@ -6,7 +6,7 @@ The jsPsych.randomization module contains methods that are useful for generating
 
 ## jsPsych.randomization.factorial
 
-```
+```javascript
 jsPsych.randomization.factorial(factors, repetitions, unpack)
 ```
 
@@ -29,6 +29,7 @@ This method takes a list of factors and their levels, and creates a full factori
 ### Examples
 
 #### Create full factorial design
+
 ```javascript
 var factors = {
 	stimulus: ['a.jpg', 'b.jpg'],
@@ -49,6 +50,7 @@ full_design = [
 ```
 
 #### Create full factorial design with repeats
+
 ```javascript
 var factors = {
 	stimulus: ['a.jpg', 'b.jpg'],
@@ -73,6 +75,7 @@ full_design = [
 ```
 
 #### Create full factorial design, unpacked
+
 ```javascript
 var factors = {
 	stimulus: ['a.jpg', 'b.jpg'],
@@ -91,9 +94,10 @@ full_design = {
 ```
 
 ---
+
 ## jsPsych.randomization.randomID
 
-```
+```javascript
 jsPsych.randomization.randomID(length)
 ```
 
@@ -114,19 +118,18 @@ Generates a random string that is likely to be unique. If length is undefined, t
 ### Example
 
 ```javascript
-
 console.log(jsPsych.randomization.randomID());
 // outputs: "t7dwz0e713pc8juuaayyfvpkdd9un239"
 
 console.log(jsPsych.randomization.randomID(8));
 // outputs: "3xtpcbck"
-
 ```
 
 ---
+
 ## jsPsych.randomization.repeat
 
-```
+```javascript
 jsPsych.randomization.repeat(array, repetitions, unpack)
 ```
 
@@ -153,27 +156,22 @@ If the array elements are objects with the same set of properties, then this met
 #### Shuffle an array, no repeats
 
 ```javascript
-
 var myArray = [1,2,3,4,5];
 var shuffledArray = jsPsych.randomization.repeat(myArray, 1);
-
 // output: shuffledArray = [3,2,4,1,5]
 ```
 
 #### Shuffle an array with repeats
 
 ```javascript
-
 var myArray = [1,2,3,4,5];
 var shuffledArray = jsPsych.randomization.repeat(myArray, 2);
-
 // output: shuffledArray = [1,3,4,2,2,4,5,1,5,3]
 ```
 
 #### Shuffle an array of objects
 
 ```javascript
-
 var trial1 = {
 	stimulus: 'img/faceA.jpg',
 	correct_key: 'p',
@@ -201,7 +199,6 @@ var shuffledArray = jsPsych.randomization.repeat(myArray, 2);
 #### Shuffle an array of objects, with unpack
 
 ```javascript
-
 var trial1 = {
 	stimulus: 'img/faceA.jpg',
 	correct_key: 'p',
@@ -231,10 +228,12 @@ output: shuffledArray = {
 }
 */
 ```
+
 ---
+
 ## jsPsych.randomization.sampleWithReplacement
 
-```
+```javascript
 jsPsych.randomization.sampleWithReplacement(array, sampleSize, weights)
 ```
 
@@ -259,27 +258,24 @@ This method returns a sample drawn at random from a set of values with replaceme
 #### Sample with equal probability
 
 ```javascript
-
 var myArray = [1,2,3,4,5];
 var sample = jsPsych.randomization.sampleWithReplacement(myArray, 10);
-
 // output: sample = [3, 1, 2, 2, 5, 1, 4, 3, 1, 5];
 ```
 
 #### Sample with unequal probability
 
 ```javascript
-
 var myArray = [1,2,3,4,5];
 var sample = jsPsych.randomization.sampleWithReplacement(myArray, 10, [6,1,1,1,1]);
-
 // output: sample = [3, 4, 5, 1, 2, 1, 3, 1, 1, 1];
 ```
 
 ---
+
 ## jsPsych.randomization.sampleWithoutReplacement
 
-```
+```javascript
 jsPsych.randomization.sampleWithoutReplacement(array, sampleSize)
 ```
 
@@ -303,17 +299,16 @@ This method returns a sample drawn at random from a set of values without replac
 #### Sample without replacement
 
 ```javascript
-
 var myArray = [1,2,3,4,5];
 var sample = jsPsych.randomization.sampleWithoutReplacement(myArray, 2);
-
 // output: sample = [3,2];
 ```
 
 ---
+
 ## jsPsych.randomization.shuffle
 
-```
+```javascript
 jsPsych.randomization.shuffle(array)
 ```
 
@@ -336,17 +331,16 @@ A simple method for shuffling the order of an array.
 #### Shuffle an array
 
 ```javascript
-
 var myArray = [1,2,3,4,5];
 var shuffledArray = jsPsych.randomization.shuffle(myArray);
-
 // output: shuffledArray = [3,2,4,1,5]
 ```
 
 ---
+
 ## jsPsych.randomization.shuffleNoRepeats
 
-```
+```javascript
 jsPsych.randomization.shuffleNoRepeats(array, equalityTest)
 ```
 
@@ -372,10 +366,8 @@ Shuffle an array, ensuring that neighboring elements in the array are different.
 #### Basic example
 
 ```javascript
-
 var myArray = [1,2,3,4,5,1,2,3,4,5,1,2,3,4,5];
 var shuffledArray = jsPsych.randomization.shuffleNoRepeats(myArray);
-
 // output: shuffledArray = [2, 3, 5, 1, 2, 4, 1, 5, 4, 1, 3, 5, 4, 3, 2]
 ```
 

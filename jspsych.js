@@ -2289,7 +2289,11 @@ jsPsych.pluginAPI = (function() {
         minimum_valid_rt = jsPsych.initSettings().minimum_valid_rt || 0;
       }
 
-      if(rt < minimum_valid_rt){
+      var rt_ms = rt;
+      if (parameters.rt_method == 'audio') {
+        rt_ms = rt_ms * 1000;
+      }
+      if(rt_ms < minimum_valid_rt) {
         return;
       }
 
@@ -2333,7 +2337,7 @@ jsPsych.pluginAPI = (function() {
         }
         parameters.callback_function({
           key: key,
-          rt: rt,
+          rt: rt_ms,
         });
 
         if (keyboard_listeners.includes(listener_id)) {
@@ -2410,8 +2414,12 @@ jsPsych.pluginAPI = (function() {
       } else {
         return key1.toLowerCase() == key2.toLowerCase();
       }
+    } else if (key1 === null && (typeof key2 === 'string' || Number.isFinite(key2)) || key2 === null && (typeof key1 === 'string' || Number.isFinite(key1))) {
+      return false;
+    } else if (key1 === null && key2 === null) {
+      return true;
     } else {
-      console.error('Error in jsPsych.pluginAPI.compareKeys: arguments must be either numeric key codes or key strings.');
+      console.error('Error in jsPsych.pluginAPI.compareKeys: arguments must be numeric key codes, key strings, or null.');
       return undefined;
     }
   }

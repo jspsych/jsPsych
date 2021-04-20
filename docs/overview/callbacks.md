@@ -8,7 +8,6 @@ jsPsych offers the ability to call arbitrary functions in response to certain ev
 
 The `on_close` callback can be declared in the `jsPsych.init` method. The callback triggers when the user leaves the page, but before any content on the page is removed from the browser's memory. This can be used, for example, to save data as the user is leaving the page.
 
-#### Sample use
 ```javascript
 jsPsych.init({
   timeline: exp,
@@ -25,7 +24,6 @@ jsPsych.init({
 
 The `on_data_update` callback can be declared in the `jsPsych.init` method. The callback triggers at the end of a data update cycle. This happens after every trial, after the on_finish (trial) and on_trial_finish events execute, allowing you to modify the data in those callbacks, and then use this callback to store the data. The function will be passed a single argument, which contains the data that was written.
 
-#### Sample use
 ```javascript
 jsPsych.init({
   timeline: exp,
@@ -34,13 +32,13 @@ jsPsych.init({
   }
 });
 ```
+
 ---
 
 ## on_finish (trial)
 
 The `on_finish` callback can be added to any trial. The callback will trigger whenever the trial ends. The callback function will be passed a single argument, containing the data object from the trial. This data object is *editable*. Any changes made in the on_finish function will be stored in the internal data collection.
 
-#### Sample use
 ```javascript
 var trial = {
   type: 'image-keyboard-response',
@@ -54,13 +52,13 @@ var trial = {
   }
 };
 ```
+
 ---
 
 ## on_finish (experiment)
 
 The `on_finish` callback can be declared in the `jsPsych.init` method. The callback will trigger once all trials in the experiment have been run. The method will be passed a single argument, containing all of the data generated in the experiment.
 
-#### Sample use
 ```javascript
 jsPsych.init({
   timeline: exp,
@@ -69,13 +67,13 @@ jsPsych.init({
   }
 });
 ```
+
 ---
 
 ## on_load
 
 The `on_load` callback can be added to any trial. The callback will trigger once the trial has completed loading. For most plugins, this will occur once the display has been initially updated but before any user interactions or timed events (e.g., animations) have occurred.
 
-#### Sample use
 ```javascript
 var trial = {
   type: 'image-keyboard-response',
@@ -85,13 +83,13 @@ var trial = {
   }
 };
 ```
+
 ---
 
 ## on_start (trial)
 
 The `on_start` callback can be added to any trial. The callback will trigger right before the trial begins. The callback function will be passed a single argument, containing the trial object. If any of the parameters of the trial are functions or timeline variables, these will be evaluated before `on_start` is called, and the trial object will contain the evaluated value. The trial object is modifiable, and any changes made will affect the trial.
 
-#### Sample use
 ```javascript
 var trial = {
   type: 'image-keyboard-response',
@@ -109,7 +107,6 @@ var trial = {
 
 The `on_timeline_finish` callback can be declared in a timeline node. The callback will be triggered when the timeline ends during the experiment. If `timeline_variables`, `conditional_function`, `loop_function`, or `sample` options are used, this function will execute when all trials have finished. If a `loop_function` is used, then this `on_timeline_finish` function will be triggered before the loop function. If the `repetitions` option is used, this function will be triggered at the end of every repetition.
 
-#### Sample use
 ```javascript
 var procedure = {
 	timeline: [trial1, trial2],
@@ -128,13 +125,13 @@ var procedure = {
   }
 }
 ```
+
 ---
 
 ## on_timeline_start
 
 The `on_timeline_start` callback can be declared in a timeline node. The callback will be triggered when the timeline starts during the experiment, including when `timeline_variables`, `loop_function`, or `sample` options are used. If a `conditional_function` is used, then the conditional function will execute first, and the `on_timeline_start` function will only execute if the conditional function returns `true`. If the `repetitions` option is used, this function will be triggered at the start of every repetition. 
 
-#### Sample use
 ```javascript
 var procedure = {
 	timeline: [trial1, trial2],
@@ -147,13 +144,13 @@ var procedure = {
   }
 }
 ```
+
 ---
 
 ## on_trial_finish
 
 The `on_trial_finish` callback can be declared in the `jsPsych.init` method. The callback will trigger at the end of every trial in the experiment. If you want a callback to trigger only for the end of certain trials, use the [`on_finish`](#onfinishtrial) callback on the trial object. The callback function will be passed a single argument, containing the data object from the trial.
 
-#### Sample use
 ```javascript
 jsPsych.init({
   timeline: exp,
@@ -163,13 +160,12 @@ jsPsych.init({
   }
 });
 ```
+
 ---
 
 ## on_trial_start
 
 The `on_trial_start` callback can be declared in the `jsPsych.init` method. The callback will trigger at the start of every trial in the experiment. The function receives a single argument: a modifiable copy of the trial object that will be used to run the next trial. Changes can be made to this object to alter the parameters of the upcoming trial.
-
-#### Sample use
 
 ```javascript
 var current_score = 0; // a variable that is updated throughout the experiment to keep track of the current score.
