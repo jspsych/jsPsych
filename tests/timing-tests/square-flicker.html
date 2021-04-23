@@ -36,7 +36,10 @@
     }
 
     jsPsych.init({
-      timeline: [start_calibration, calibration, start, loop]
+      timeline: [start_calibration, calibration, start, loop],
+      // on_finish: function() {
+      //   jsPsych.data.displayData();
+      // }
     })
   </script>
 </html>
