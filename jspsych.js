@@ -334,13 +334,13 @@ window.jsPsych = (function() {
     // wait for iti
     if (typeof current_trial.post_trial_gap === null || typeof current_trial.post_trial_gap === 'undefined') {
       if (opts.default_iti > 0) {
-        setTimeout(nextTrial, opts.default_iti);
+        jsPsych.pluginAPI.setTimeout(nextTrial, opts.default_iti);
       } else {
         nextTrial();
       }
     } else {
       if (current_trial.post_trial_gap > 0) {
-        setTimeout(nextTrial, current_trial.post_trial_gap);
+        jsPsych.pluginAPI.setTimeout(nextTrial, current_trial.post_trial_gap);
       } else {
         nextTrial();
       }
