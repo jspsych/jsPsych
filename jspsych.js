@@ -1015,23 +1015,28 @@ window.jsPsych = (function() {
       }
     }
 
-    // execute trial method
-    jsPsych.plugins[trial.type].trial(DOM_target, trial);
+    // execute trial method on next frame update
+    // for browser compatibility
+    var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    requestAnimationFrame(function(timestamp) {
+      jsPsych.plugins[trial.type].trial(DOM_target, trial);
 
-    // call trial specific loaded callback if it exists
-    if(typeof trial.on_load == 'function'){
-      trial.on_load();
-    }
-
-    // call any on_load functions for extensions
-    if(Array.isArray(trial.extensions)){
-      for(var i=0; i<trial.extensions.length; i++){
-        jsPsych.extensions[trial.extensions[i].type].on_load(current_trial.extensions[i].params);
+      // call trial specific loaded callback if it exists
+      if(typeof trial.on_load == 'function'){
+        trial.on_load();
       }
-    }
-    
-    // done with callbacks
-    jsPsych.internal.call_immediate = false;
+
+      // call any on_load functions for extensions
+      if(Array.isArray(trial.extensions)){
+        for(var i=0; i<trial.extensions.length; i++){
+          jsPsych.extensions[trial.extensions[i].type].on_load(current_trial.extensions[i].params);
+        }
+      }
+      
+      // done with callbacks
+      jsPsych.internal.call_immediate = false;
+    });
   }
 
   function evaluateTimelineVariables(trial){
