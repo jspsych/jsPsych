@@ -2532,7 +2532,7 @@ jsPsych.pluginAPI = (function() {
   module.setTimeout = function(callback, delay){
     var handle = requestAnimationFrame(function(timestamp) {
       // record the start time 
-      var start_time = timestamp;
+      var start_time = performance.now();
       // setup the next rAF call to check for timeouts and update handle value
       handle = requestAnimationFrame(function(timestamp) {
         checkForTimeouts(timestamp, start_time, callback, delay, handle);
@@ -2550,7 +2550,7 @@ jsPsych.pluginAPI = (function() {
   }
 
   function checkForTimeouts(timestamp, start_time, callback, delay, handle) {
-    var curr_duration = timestamp - start_time;
+    var curr_duration = performance.now() - start_time;
     // check if the current duration is at least as long as the intended duration
     // minus half the typical frame duration (~16 ms). this helps avoid displaying the stimulus
     // for one too many frames.
