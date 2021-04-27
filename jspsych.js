@@ -2538,10 +2538,8 @@ jsPsych.pluginAPI = (function() {
     // record the start time 
     var start_time = performance.now();
     var handle = requestAnimationFrame(function(timestamp) {
-      // setup the next rAF call to check for timeouts and update handle value
-      handle = requestAnimationFrame(function(timestamp) {
-        checkForTimeouts(timestamp, start_time, callback, delay, handle);
-      });
+      // check for timeouts and update handle value
+      checkForTimeouts(timestamp, start_time, callback, delay, handle);
     });
     timeout_handlers.push(handle);
     return handle;
