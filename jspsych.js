@@ -2560,10 +2560,12 @@ jsPsych.pluginAPI = (function() {
     if (curr_duration >= delay - 8) {
       callback(curr_duration);
     } else {
-      // setup the next rAF call and update handle value
+      // remove the old rAF handle from timeout_handlers, setup the next rAF call, and update handle and timeout_handlers
+      timeout_handlers = timeout_handlers.filter(function(el) { return el !== handle; });
       handle = requestAnimationFrame(function(timestamp) {
         checkForTimeouts(timestamp, start_time, callback, delay, handle);
       });
+      timeout_handlers.push(handle);
     }
   }
 
