@@ -2530,9 +2530,9 @@ jsPsych.pluginAPI = (function() {
   var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 
   module.setTimeout = function(callback, delay){
+    // record the start time 
+    var start_time = performance.now();
     var handle = requestAnimationFrame(function(timestamp) {
-      // record the start time 
-      var start_time = performance.now();
       // setup the next rAF call to check for timeouts and update handle value
       handle = requestAnimationFrame(function(timestamp) {
         checkForTimeouts(timestamp, start_time, callback, delay, handle);
