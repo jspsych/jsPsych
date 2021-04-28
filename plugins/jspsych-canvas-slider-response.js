@@ -150,11 +150,13 @@ jsPsych.plugins['canvas-slider-response'] = (function () {
             response: null
         };
 
-        if (trial.require_movement) {
-            display_element.querySelector('#jspsych-canvas-slider-response-response').addEventListener('click', function () {
-                display_element.querySelector('#jspsych-canvas-slider-response-next').disabled = false;
-            })
-        }
+		if (trial.require_movement) {
+			var enable_button = function(){
+				display_element.querySelector('#jspsych-canvas-slider-response-next').disabled = false;
+			};
+			display_element.querySelector('#jspsych-canvas-slider-response-response').addEventListener('click', enable_button);
+			display_element.querySelector('#jspsych-canvas-slider-response-response').addEventListener('touchstart', enable_button);
+		}
 
         display_element.querySelector('#jspsych-canvas-slider-response-next').addEventListener('click', function () {
             // measure response time

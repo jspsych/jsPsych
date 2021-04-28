@@ -145,9 +145,11 @@ jsPsych.plugins['html-slider-response'] = (function() {
     };
 
     if(trial.require_movement){
-      display_element.querySelector('#jspsych-html-slider-response-response').addEventListener('click', function(){
+      var enable_button = function(){
         display_element.querySelector('#jspsych-html-slider-response-next').disabled = false;
-      });
+      };
+      display_element.querySelector('#jspsych-html-slider-response-response').addEventListener('click', enable_button);
+      display_element.querySelector('#jspsych-html-slider-response-response').addEventListener('touchstart', enable_button);
     }
 
     display_element.querySelector('#jspsych-html-slider-response-next').addEventListener('click', function() {
