@@ -69,6 +69,7 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
 
     // draw
     display_element.innerHTML = new_html;
+    console.log('display time: ', performance.now());
 
     // store response
     var response = {
@@ -97,6 +98,7 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
 
       // clear the display
       display_element.innerHTML = '';
+      console.log('clear display time: ', performance.now());
 
       // move on to the next trial
       jsPsych.finishTrial(trial_data);

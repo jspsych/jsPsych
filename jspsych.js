@@ -2533,10 +2533,12 @@ jsPsych.pluginAPI = (function() {
                             window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
   var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
-
+  var raf_count;
   module.setTimeout = function(callback, delay){
     // record the start time 
+    raf_count = 0;
     var start_time = performance.now();
+    console.log('setTimeout start time: ', start_time);
     var handle = requestAnimationFrame(function(timestamp) {
       // check for timeouts and update handle value
       checkForTimeouts(timestamp, start_time, callback, delay, handle);
@@ -2554,6 +2556,8 @@ jsPsych.pluginAPI = (function() {
 
   function checkForTimeouts(timestamp, start_time, callback, delay, handle) {
     var curr_duration = performance.now() - start_time;
+    raf_count++;
+    console.log('count: ', raf_count, ' time: ', performance.now() - start_time);
     // check if the current duration is at least as long as the intended duration
     // minus half the typical frame duration (~16 ms). this helps avoid displaying the stimulus
     // for one too many frames.
