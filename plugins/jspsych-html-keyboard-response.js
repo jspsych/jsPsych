@@ -79,7 +79,7 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
     // function to end trial when it is time
     var end_trial = function(dur) {
 
-      display_element.querySelector('#jspsych-html-keyboard-response-stimulus').style.visibility = 'hidden';
+      display_element.querySelector('#jspsych-html-keyboard-response-stimulus').style.opacity = 0;
 
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
