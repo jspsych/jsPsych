@@ -108,7 +108,7 @@ jsPsych.init({
 
 JavaScript keyboard events make a distinction between uppercase and lowercase key responses (e.g. 'a' and 'A'). Often the researcher just cares about which physical key was pressed, and not whether the key press would result in an uppercase letter (for instance, if CapsLock is on or if the Shift key is held down). For this reason, jsPsych converts all key choice parameters and key responses as lowercase by default. This makes it easier to specify key choices (e.g. `choices: ['a']`, instead of `choices: ['a','A']`), and it makes it easier to check and score a participant's response. 
 
-There may be situations when you want key choices and responses to be case-sensitive. You can change this by setting the `case_sensitive` parameter to `true` in `jsPsych.init`.
+There may be situations when you want key choices and responses to be case-sensitive. You can change this by setting the `case_sensitive_responses` parameter to `true` in `jsPsych.init`.
 
 ```js
 // use case-sensitive key choices and responses, 
@@ -116,7 +116,7 @@ There may be situations when you want key choices and responses to be case-sensi
 // and will be recorded this way in the data
 jsPsych.init({
     timeline: [...],
-    case_sensitive: true
+    case_sensitive_responses: true
 });
 ```
 
