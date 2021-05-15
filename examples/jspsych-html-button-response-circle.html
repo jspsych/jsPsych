@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-html-button-response-circle.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+    <style> 
+            .custombutton {
+              padding: 0px;
+              border: 1px solid transparent;
+            }
+            
+            .custombutton:hover {
+                border-radius: 0px;
+                background-color: #fff;
+            }
+    </style>
+  </head>
+  <body></body>
+  <script>
+
+  var timeline = [];
+
+  timeline.push({
+    type: 'html-button-response-circle',
+    choices: ["img/1.gif"]
+  });
+      
+  timeline.push({
+    type: 'html-button-response-circle',
+    choices: ["A","B","C","D","E","F"],
+    button_html: '<button class="jspsych-btn" style="height:100px; width:100px; border-radius:50%;">%choice%</button>',
+    button_size : [100,100],
+    fixation_html: "Please click the letter you prefer",
+    fixation_size: [200,100]
+  });
+      
+  timeline.push({
+    type: 'html-button-response-circle',
+    choices: ["img/1.gif","img/2.gif","img/3.gif","img/4.gif",
+             "img/5.gif","img/6.gif","img/7.gif","img/8.gif"],
+    prompt_html: "Please click the image you prefer (fixed circle_offset)",
+    fixation_html: "<img src='img/fixation.gif'>",
+    circle_diameter: 500,
+    circle_offset: 22 
+  });
+      
+      
+  timeline.push({
+    type: 'html-button-response-circle',
+    choices: ["img/1.gif","img/2.gif","img/3.gif","img/4.gif",
+             "img/5.gif","img/6.gif","img/7.gif","img/8.gif"],
+    button_size : [120,120],
+    prompt_html: "Please click the image you prefer (random circle_offset)",      
+    fixation_html: "<img src='img/fixation.gif'  width='5px'>",
+    circle_diameter: 500,
+    circle_offset: Math.floor(Math.random() * 360)
+  });
+      
+
+  timeline.push({
+    type: 'html-button-response-circle',
+      choices: ["img/1.gif","img/2.gif","img/3.gif","img/4.gif",
+                "img/5.gif","img/6.gif","img/7.gif","img/8.gif"],      
+    button_html: '<button class="jspsych-btn custombutton"><img src=%choice% width="100"></button>',
+    button_size : [100,100],
+    fixation_html: "Please click your preferred rainbow color (custom button html & css)",
+    fixation_size: [250,100],
+    circle_diameter: 500,
+    circle_offset: 22
+  });
+      
+  timeline.push({
+    type: 'html-button-response-circle',
+      choices: ['<p style="color:red">red</p>',
+                '<p style="color:orange">orange</p>',
+                '<p style="color:yellow">yellow</p>',
+                '<p style="color:green">green</p>',
+                '<p style="color:blue">blue</p>',
+                '<p style="color:violet">violet</p>',
+                '<p style="color:indigo">indigo</p>'
+                ],     
+    button_html: '<button class="jspsych-btn" style="height:100px; width:100px;border-radius:50%;">%choice%</button>',
+    button_size : [100,100],
+    fixation_html: "Please click your preferred rainbow color (custom button html & css)",
+    fixation_size: [250,100],
+    circle_diameter: 500,
+    circle_offset: 22
+  });
+
+
+
+  jsPsych.init({
+    timeline: timeline,
+    on_finish: function(){jsPsych.data.displayData();}
+  });
+
+  </script>
+</html>
