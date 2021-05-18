@@ -2,7 +2,7 @@ window.jsPsych = (function() {
 
   var core = {};
 
-  core.version = function() { return "6.3.0" };
+  core.version = function() { return "6.3.1" };
 
   //
   // private variables
