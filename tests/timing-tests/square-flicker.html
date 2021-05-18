@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="../../jspsych.js"></script>
+    <script src="../../plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="calibration-timeline.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../css/jspsych.css">
+    <style>
+      html, body { background: black; color: white;}
+    </style>
+  </head>
+  <body>
+  </body>
+  <script>
+
+    var start_calibration = {
+      type: 'html-keyboard-response',
+      stimulus: 'Press any key to start calibration. Press spacebar when calibration is complete.'
+    }
+
+    var start = {
+      type: 'html-keyboard-response',
+      stimulus: 'Press any key to start the test.'
+    }
+
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: `<div style="width:200px; height: 200px; background: white;"></div>`,
+      trial_duration: 500,
+      post_trial_gap: 250
+    }
+
+    var loop = {
+      timeline: [trial],
+      repetitions: 10
+    }
+
+    jsPsych.init({
+      timeline: [start_calibration, calibration, start, loop]
+    })
+  </script>
+</html>
