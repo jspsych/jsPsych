@@ -110,8 +110,8 @@ jsPsych.plugins["music-image"] = (function() {
     // store response
     //var vtargresponses = []
     var trial_data = {
-        "sound": [],
-        "picture": [],
+        "sound": trial.stimulus.replace(/^.*[\\\/]/, ''),
+        "picture": trial.image.replace(/^.*[\\\/]/, ''),
       };
     var response = {
       rt: null,
