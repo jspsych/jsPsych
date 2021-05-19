@@ -1610,13 +1610,13 @@
 </code></pre></div>
 <h2 id="choose-whether-you-want-keyboard-choicesresponses-to-be-case-sensitive">Choose whether you want keyboard choices/responses to be case-sensitive<a class="headerlink" href="#choose-whether-you-want-keyboard-choicesresponses-to-be-case-sensitive" title="Permanent link">&para;</a></h2>
 <p>JavaScript keyboard events make a distinction between uppercase and lowercase key responses (e.g. 'a' and 'A'). Often the researcher just cares about which physical key was pressed, and not whether the key press would result in an uppercase letter (for instance, if CapsLock is on or if the Shift key is held down). For this reason, jsPsych converts all key choice parameters and key responses as lowercase by default. This makes it easier to specify key choices (e.g. <code>choices: ['a']</code>, instead of <code>choices: ['a','A']</code>), and it makes it easier to check and score a participant's response. </p>
-<p>There may be situations when you want key choices and responses to be case-sensitive. You can change this by setting the <code>case_sensitive</code> parameter to <code>true</code> in <code>jsPsych.init</code>.</p>
+<p>There may be situations when you want key choices and responses to be case-sensitive. You can change this by setting the <code>case_sensitive_responses</code> parameter to <code>true</code> in <code>jsPsych.init</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// use case-sensitive key choices and responses, </span>
 <span class="c1">// i.e. uppercase and lower case letters (&#39;a&#39; and &#39;A&#39;) will be treated as different key choices, </span>
 <span class="c1">// and will be recorded this way in the data</span>
 <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
     <span class="nx">timeline</span><span class="o">:</span> <span class="p">[...],</span>
-    <span class="nx">case_sensitive</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="nx">case_sensitive_responses</span><span class="o">:</span> <span class="kc">true</span>
 <span class="p">});</span>
 </code></pre></div>
 <p>Note that this setting only applies to key choices and responses that use jsPsych's keyboard response listener, such as in the *<code>-keyboard-response</code> plugins. This does NOT apply to responses that are made by typing into a text box, such as in the <code>survey-text</code> and <code>cloze</code> plugins.</p>
