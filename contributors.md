@@ -51,6 +51,7 @@ The following people have contributed to the development of jsPsych by writing c
 * Dominik Strohmeier - https://github.com/onkeltom
 * Nabeel Sulieman - https://github.com/nabsul
 * Hitoshi Tominaga - https://github.com/tbrotherm
+* Eline Van Geert - https://github.com/ElineVG
 * Tim Vergenz - https://github.com/vergenzt
 * Matteo Visconti di Oleggio Castello - https://github.com/mvdoc
 * Ilya Vorontsov - https://github.com/VorontsovIE
