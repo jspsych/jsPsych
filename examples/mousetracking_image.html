@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-preload.js"></script>
+    <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="../extensions/jspsych-ext-mousetracking.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+var preload = {
+  type: 'preload',
+  images: ['img/blue.png','img/orange.png' ]
+}
+
+var start = {
+  type: 'html-keyboard-response',
+  stimulus: 'Press any key to start.'
+}
+
+
+// with target data 
+var trial_1 = {
+  type: 'image-keyboard-response',
+  stimulus: 'img/blue.png',
+  render_on_canvas: false,
+  choices: jsPsych.NO_KEYS,
+  trial_duration: 2000,
+  extensions: [
+    {
+      type: 'mousetracking', 
+      params: {targets: ['#jspsych-image-keyboard-response-stimulus']}
+    }
+  ]
+}
+
+
+// without target data
+var trial_2 = {
+  type: 'image-keyboard-response',
+  stimulus: 'img/orange.png',
+  render_on_canvas: false,
+  choices: jsPsych.NO_KEYS,
+  trial_duration: 4000,
+  extensions: [
+    {
+      type: 'mousetracking', 
+      params: {targets: []}
+    }
+  ]
+}
+
+jsPsych.init({
+  timeline: [preload, start, trial_1, trial_2],
+  extensions: [
+    {type: 'mousetracking'}
+  ],
+  on_finish: function() {
+      jsPsych.data.displayData();
+  }
+})
+
+</script>
+</html>
