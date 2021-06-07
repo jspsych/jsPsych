@@ -147,7 +147,13 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
 
   plugin.simulate = function(trial, simulate_opts) {
     if(trial.choices !== jsPsych.NO_KEYS) {
-      var key_response = jsPsych.randomization.sampleWithoutReplacement(trial.choices, 1)[0];
+      let valid_keys
+      if (trial.choices === jsPsych.ALL_KEYS) {
+        valid_keys = ['enter', 'space', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+      } else {
+        valid_keys = trial.choices
+      }
+      var key_response = jsPsych.randomization.sampleWithoutReplacement(valid_keys, 1)[0];
       setTimeout(function(){
         document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {key: key_response}));
         document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: key_response}));

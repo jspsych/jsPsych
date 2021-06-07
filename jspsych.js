@@ -104,7 +104,8 @@ window.jsPsych = (function() {
         'simulate': false,
         'simulate_opts': {
           'trial_duration': 500,
-          'response_ends_trial': true
+          'response_ends_trial': true,
+          'remove_post_trial_gap': true
         }
       };
 
@@ -1030,6 +1031,9 @@ window.jsPsych = (function() {
       }
       if (trial.response_ends_trial !== true) {
         trial.response_ends_trial = true
+      }
+      if (curr_trial_opts.remove_post_trial_gap === true) {
+        trial.post_trial_gap = 0
       }
 
 
