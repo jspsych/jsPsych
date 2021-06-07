@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-html-slider-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css">
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+<body></body>
+<script>
+
+  var trial_1 = {
+    type: 'html-slider-response',
+    stimulus: '<div style="margin: 50px auto; width: 100px; height: 100px; background-color: rgb(46, 26, 122);"></div>',
+    labels: ['Purple', 'Blue'],
+    slider_width: 500,
+    require_movement: true,
+    prompt: '<p>Is this color closer to purple or blue? Use the slider above.</p>'
+  }
+
+  var trial_2 = {
+    type: 'html-slider-response',
+    stimulus: '<div style="margin: 50px auto; width: 100px; height: 100px; background-color: rgb(29, 23, 138)"></div>',
+    labels: ['Purple', 'Blue'],
+    slider_start: 10,
+    slider_width: 500,
+    prompt: '<p>Is this color closer to purple or blue? Use the slider above. (5s time limit; custom starting value).</p>',
+    trial_duration: 5000
+  }
+
+  var trial_3 = {
+    type: 'html-slider-response',
+    stimulus: '<div style="margin: 50px auto; width: 100px; height: 100px; background-color: rgb(63, 17, 129)"></div>',
+    labels: ['Purple', 'Blue'],
+    prompt: '<p>Is this color closer to purple or blue? Use the slider above. (1s display).</p>',
+    slider_width: 500,
+    stimulus_duration: 1000
+  }
+
+  jsPsych.init({
+    timeline: [trial_1, trial_2, trial_3],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+</script>
+
+</html>

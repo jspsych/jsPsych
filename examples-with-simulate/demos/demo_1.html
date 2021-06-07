@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../../jspsych.js"></script>
+        <script src="../../plugins/jspsych-instructions.js"></script>
+        <script src="../../plugins/jspsych-preload.js"></script>
+        <link rel="stylesheet" href="../../css/jspsych.css">
+    </head>
+    <body>
+    </body>
+    <script>
+    var preload = {
+        type: 'preload',
+        images: ["../img/age/of2.jpg"]
+    }
+
+    var trial = {       
+        type: 'instructions',     
+        pages: [      
+        'Welcome to the experiment. Click next to begin.',      
+        '<div>In this experiment, you will view a ' +       
+        'series of images and answer questions.<br>' +      
+        'Answer with the keys "y" or "n".',     
+        'Here is an example:<br><br> ' +        
+        '<img src="../img/age/of2.jpg"></img><br><br>' +       
+        'Is this person OLD or YOUNG?'      
+        ],        
+        show_clickable_nav: true      
+    }       
+
+    jsPsych.init({      
+        timeline: [preload, trial],        
+    });
+    </script>
+</html>

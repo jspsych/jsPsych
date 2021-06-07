@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../../jspsych.js"></script>
+	<script src="../../plugins/jspsych-image-keyboard-response.js"></script>
+  <script src="../../plugins/jspsych-preload.js"></script>
+	<link rel="stylesheet" href="../../css/jspsych.css">
+</head>
+<body>
+</body>
+<script>
+  var preload = {
+    type: 'preload',
+    auto_preload: true
+  }
+
+	var trial_1 = {
+		type: "image-keyboard-response",
+		stimulus: '../img/happy_face_1.jpg',
+    choices: ['y','n'],
+    render_on_canvas: false,
+    stimulus_width: 300,
+		prompt: '<p>Is this face happy? Press "y" or "n".</p>'
+  }
+
+  var trial_2 = {
+    type: 'image-keyboard-response',
+    stimulus: '../img/sad_face_2.jpg',
+    choices: ['y','n'], 
+    render_on_canvas: false,
+    stimulus_width: 300,
+    prompt: '<p>Is this face happy? Press "y" or "n".</p>'
+  }
+
+  var trial_3 = {
+    type: 'image-keyboard-response',
+    stimulus: '../img/happy_face_2.jpg',
+    choices: ['y','n'], 
+    render_on_canvas: false,
+    stimulus_width: 300,
+    prompt: '<p>Is this face happy? Press "y" or "n".</p>',
+  }
+
+
+  jsPsych.init({
+    timeline: [preload, trial_1, trial_2, trial_3],
+    default_iti: 250
+  });
+</script>
+</html>

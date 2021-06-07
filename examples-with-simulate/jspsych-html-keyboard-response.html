@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css">
+</head>
+<body></body>
+<script>
+  var trial_1 = {
+    type: 'html-keyboard-response',
+    stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
+    choices: ['y', 'n'],
+    prompt: '<p>Does the color match the word? (y or n)</p>'
+  }
+
+  var trial_2 = {
+    type: 'html-keyboard-response',
+    stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">RED</p>',
+    choices: ['y', 'n'],
+    trial_duration: 5000,
+    prompt: '<p>Does the color match the word? (y or n; 5s time limit)</p>'
+  }
+
+  var trial_3 = {
+    type: 'html-keyboard-response',
+    stimulus: '<p style="color: orange; font-size: 48px; font-weight: bold;">BLUE</p>',
+    choices: jsPsych.NO_KEYS,
+    trial_duration: 2000,
+    prompt: '<p>No response allowed. 2s wait.</p>'
+  }
+
+  jsPsych.init({
+    timeline: [trial_1, trial_2, trial_3],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+</script>
+
+</html>
