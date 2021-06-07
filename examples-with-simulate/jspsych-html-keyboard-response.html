@@ -11,7 +11,8 @@
     type: 'html-keyboard-response',
     stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
     choices: ['y', 'n'],
-    prompt: '<p>Does the color match the word? (y or n)</p>'
+    prompt: '<p>Does the color match the word? (y or n)</p>',
+    simulate: false
   }
 
   var trial_2 = {
@@ -35,7 +36,8 @@
     on_finish: function() {
       jsPsych.data.displayData();
     },
-    default_iti: 250
+    default_iti: 250,
+    simulate: true
   });
 </script>
 

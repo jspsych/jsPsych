@@ -124,8 +124,8 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
         callback_function: after_response,
         valid_responses: trial.choices,
         rt_method: 'performance',
-        persist: false,
-        allow_held_key: false
+        persist: true,//false,
+        allow_held_key: true//false
       });
     }
 
@@ -144,6 +144,17 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
     }
 
   };
+
+  plugin.simulate = function(trial, simulate_trial_duration) {
+    if(trial.choices !== jsPsych.NO_KEYS) {
+      var key_response = jsPsych.randomization.sampleWithoutReplacement(trial.choices, 1)[0];
+      console.log(key_response)
+      setTimeout(function(){
+        document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {key: key_response}));
+        document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: key_response}));
+      }, 500);
+    }
+  }
 
   return plugin;
 })();
