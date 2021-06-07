@@ -259,5 +259,16 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
     }
   };
 
+  plugin.simulate = function(trial, simulate_opts) {
+    console.log('vleze')
+    if(trial.choices !== jsPsych.NO_KEYS) {
+      var key_response = jsPsych.randomization.sampleWithoutReplacement(trial.choices, 1)[0];
+      setTimeout(function(){
+        document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {key: key_response}));
+        document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: key_response}));
+      }, simulate_opts.trial_duration);
+    }
+  }
+
   return plugin;
 })();
