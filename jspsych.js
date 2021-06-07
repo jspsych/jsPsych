@@ -100,7 +100,12 @@ window.jsPsych = (function() {
         'experiment_width': null,
         'override_safe_mode': false,
         'case_sensitive_responses': false,
-        'extensions': []
+        'extensions': [],
+        'simulate': false,
+        'simulate_opts': {
+          'trial_duration': 500,
+          'response_ends_trial': true
+        }
       };
 
       // detect whether page is running in browser as a local file, and if so, disable web audio and video preloading to prevent CORS issues
@@ -1015,6 +1020,22 @@ window.jsPsych = (function() {
       }
     }
 
+
+    if ((trial.simulate === true) || (trial.simulate !== false && opts.simulate === true)) {
+      let curr_trial_opts = typeof trial.simulate_opts !== 'undefined' ? trial.simulate_opts : opts.simulate_opts
+      
+
+      if (trial.choices === jsPsych.NO_KEYS) {
+        trial.trial_duration = curr_trial_opts['trial_duration']
+      }
+      if (trial.response_ends_trial !== true) {
+        trial.response_ends_trial = true
+      }
+
+
+    }    
+    console.log(trial)
+
     // execute trial method
     jsPsych.plugins[trial.type].trial(DOM_target, trial);
 
@@ -1032,6 +1053,23 @@ window.jsPsych = (function() {
     
     // done with callbacks
     jsPsych.internal.call_immediate = false;
+
+    // console.log('trial.simulate', trial.simulate)
+    // console.log('trial.simulate_opts', trial.simulate_opts)
+    // console.log('opts.simulate', opts.simulate)
+    // console.log('opts.simulate_opts', opts.simulate_opts)
+
+    // console.log('eval', (trial.simulate === true) || (trial.simulate !== false && opts.simulate === true))
+
+    // trial.trial
+    // console.log(trial)
+
+    if ((trial.simulate === true) || (trial.simulate !== false && opts.simulate === true)) {
+      let curr_trial_opts = typeof trial.simulate_opts !== 'undefined' ? trial.simulate_opts : opts.simulate_opts
+      jsPsych.plugins[trial.type].simulate(trial, curr_trial_opts)
+    }
+    
+
   }
 
   function evaluateTimelineVariables(trial){
@@ -1064,6 +1102,7 @@ window.jsPsych = (function() {
 
     // start by getting a list of the parameters
     var keys = Object.keys(trial);
+    // console.log('keys', keys)
 
     // iterate over each parameter
     for (var i = 0; i < keys.length; i++) {
@@ -1072,6 +1111,8 @@ window.jsPsych = (function() {
         // this if statement is checking to see if the parameter type is expected to be a function, in which case we should NOT evaluate it.
         // the first line checks if the parameter is defined in the universalPluginParameters set
         // the second line checks the plugin-specific parameters
+        // console.log('keys[i]', keys[i])
+        // console.log('lookup', jsPsych.plugins.universalPluginParameters[keys[i]])
         if(typeof jsPsych.plugins.universalPluginParameters[keys[i]] !== 'undefined' && 
           jsPsych.plugins.universalPluginParameters[keys[i]].type !== jsPsych.plugins.parameterType.FUNCTION ){
           trial[keys[i]] = replaceFunctionsWithValues(trial[keys[i]], null);
@@ -1120,6 +1161,7 @@ window.jsPsych = (function() {
 
   function setDefaultValues(trial){
     for(var param in jsPsych.plugins[trial.type].info.parameters){
+      // console.log(param)
       // check if parameter is complex with nested defaults
       if(jsPsych.plugins[trial.type].info.parameters[param].type == jsPsych.plugins.parameterType.COMPLEX){
         if(jsPsych.plugins[trial.type].info.parameters[param].array == true){
@@ -1302,6 +1344,18 @@ jsPsych.plugins = (function() {
       pretty_name: 'Custom CSS classes',
       default: null,
       description: 'A list of CSS classes to add to the jsPsych display element for the duration of this trial'
+    },
+    simulate: {
+      type: module.parameterType.BOOL,
+      pretty_name: 'Simulation',
+      default: null,
+      description: 'Coming soon...'
+    },
+    simulate_opts: {
+      type: module.parameterType.OBJECT,
+      pretty_name: 'Simulation options',
+      default: {},
+      description: 'Coming soon...'
     }
   }
 
