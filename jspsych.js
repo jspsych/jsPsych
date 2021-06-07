@@ -102,7 +102,10 @@ window.jsPsych = (function() {
         'case_sensitive_responses': false,
         'extensions': [],
         'simulate': false,
-        'simulate_opts': {}
+        'simulate_opts': {
+          'trial_duration': 500,
+          'response_ends_trial': true
+        }
       };
 
       // detect whether page is running in browser as a local file, and if so, disable web audio and video preloading to prevent CORS issues
@@ -1017,6 +1020,22 @@ window.jsPsych = (function() {
       }
     }
 
+
+    if ((trial.simulate === true) || (trial.simulate !== false && opts.simulate === true)) {
+      let curr_trial_opts = typeof trial.simulate_opts !== 'undefined' ? trial.simulate_opts : opts.simulate_opts
+      
+
+      if (trial.choices === jsPsych.NO_KEYS) {
+        trial.trial_duration = curr_trial_opts['trial_duration']
+      }
+      if (trial.response_ends_trial !== true) {
+        trial.response_ends_trial = true
+      }
+
+
+    }    
+    console.log(trial)
+
     // execute trial method
     jsPsych.plugins[trial.type].trial(DOM_target, trial);
 
@@ -1035,15 +1054,21 @@ window.jsPsych = (function() {
     // done with callbacks
     jsPsych.internal.call_immediate = false;
 
-    curr_trial_simulate_trial_duration = 500
-    console.log(trial.simulate)
-    console.log('opts.simulate', opts.simulate)
-    console.log('opts.simulate_opts', opts.simulate_opts)
-    if (trial.simulate !== 'undefined') {
-      if (opts.simulate === true || trial.simulate === true) {
-        jsPsych.plugins[trial.type].simulate(trial, curr_trial_simulate_trial_duration);
-      }
+    // console.log('trial.simulate', trial.simulate)
+    // console.log('trial.simulate_opts', trial.simulate_opts)
+    // console.log('opts.simulate', opts.simulate)
+    // console.log('opts.simulate_opts', opts.simulate_opts)
+
+    // console.log('eval', (trial.simulate === true) || (trial.simulate !== false && opts.simulate === true))
+
+    // trial.trial
+    // console.log(trial)
+
+    if ((trial.simulate === true) || (trial.simulate !== false && opts.simulate === true)) {
+      let curr_trial_opts = typeof trial.simulate_opts !== 'undefined' ? trial.simulate_opts : opts.simulate_opts
+      jsPsych.plugins[trial.type].simulate(trial, curr_trial_opts)
     }
+    
 
   }
 
@@ -1329,7 +1354,7 @@ jsPsych.plugins = (function() {
     simulate_opts: {
       type: module.parameterType.OBJECT,
       pretty_name: 'Simulation options',
-      default: {'a': 500},
+      default: {},
       description: 'Coming soon...'
     }
   }
