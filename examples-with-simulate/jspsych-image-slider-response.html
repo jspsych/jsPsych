@@ -24,7 +24,7 @@
   var trial = {
     type: 'image-slider-response',
     stimulus: jsPsych.timelineVariable('stim'),
-    trial_duration: 1000,
+    trial_duration: 10000,
     labels: ['1 (least happy)', '100 (most happy)'],
     prompt: '<p>How happy is this person on a scale of 1-100?</p><p>(Consecutive images with no post_trial_gap)</p>',
     response_ends_trial: false,
@@ -78,7 +78,8 @@
     on_finish: function() {
       jsPsych.data.displayData();
     },
-    default_iti: 250
+    default_iti: 250,
+    simulate: true
   });
 </script>
 
