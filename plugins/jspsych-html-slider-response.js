@@ -198,13 +198,5 @@ jsPsych.plugins['html-slider-response'] = (function() {
     var startTime = performance.now();
   };
 
-  plugin.simulate = function(trial, simulate_opts) {
-    setTimeout(function(){
-        document.querySelector('#jspsych-html-slider-response-response').dispatchEvent(new Event('click'))
-        document.querySelector('#jspsych-html-slider-response-response').value = Math.floor(Math.random() * (trial.max - trial.min + 1)) + trial.min
-        document.querySelector('#jspsych-html-slider-response-next').dispatchEvent(new Event('click'));
-    }, simulate_opts.trial_duration);
-  }
-
   return plugin;
 })();

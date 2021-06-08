@@ -184,14 +184,5 @@ jsPsych.plugins["html-button-response"] = (function() {
 
   };
 
-  plugin.simulate = function(trial, simulate_opts) {
-    if(trial.choices !== []) { //this if is most likely not possible and hence can be removed
-      var choice = Math.floor(Math.random() * trial.choices.length).toString() // from the buttons, get a random data-choice label (see event listener above)
-      setTimeout(function(){
-        document.querySelector('#jspsych-html-button-response-button-' + choice).dispatchEvent(new Event('click'));
-      }, simulate_opts.trial_duration);
-    }
-  }
-
   return plugin;
 })();

@@ -104,8 +104,7 @@
       <p>Your average response time was ${rt}ms.</p>
       <p>Press any key to complete the experiment. Thank you!</p>`;
 
-    },
-    simulate: false
+    }
   };
   timeline.push(debrief_block);
 
@@ -114,12 +113,6 @@
     timeline: timeline,
     on_finish: function () {
       jsPsych.data.displayData();
-    },
-    simulate: true,
-    simulate_opts: {
-      'remove_post_trial_gap': true,
-      'response_ends_trial': true,
-      'trial_duration': 25
     }
   });
 </script>

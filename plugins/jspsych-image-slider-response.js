@@ -365,13 +365,5 @@ jsPsych.plugins['image-slider-response'] = (function() {
     var startTime = performance.now();
   };
 
-  plugin.simulate = function(trial, simulate_opts) {
-    setTimeout(function(){
-        document.querySelector('#jspsych-image-slider-response-response').dispatchEvent(new Event('click'))
-        document.querySelector('#jspsych-image-slider-response-response').value = Math.floor(Math.random() * (trial.max - trial.min + 1)) + trial.min
-        document.querySelector('#jspsych-image-slider-response-next').dispatchEvent(new Event('click'));
-    }, simulate_opts.trial_duration);
-  }
-
   return plugin;
 })();

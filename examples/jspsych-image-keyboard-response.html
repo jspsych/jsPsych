@@ -22,7 +22,7 @@
   var trial = {
     type: 'image-keyboard-response',
     stimulus: jsPsych.timelineVariable('stim'),
-    trial_duration: 3000,
+    trial_duration: 300,
     choices: jsPsych.NO_KEYS,
     prompt: '<p>Watch the faces.</p>',
     stimulus_width: 400, 
@@ -77,10 +77,8 @@
   jsPsych.init({
     timeline: [preload, trial_proc, trial_1, trial_2, trial_3, trial_4],
     on_finish: function() {
-      jsPsych.data.displayData()
-    },
-    simulate: true,
-    simulate_opts: {'trial_duration': 250}
+      jsPsych.data.displayData();
+    }
   });
 </script>
 

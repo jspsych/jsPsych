@@ -11,8 +11,7 @@
     type: 'html-keyboard-response',
     stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
     choices: ['y', 'n'],
-    prompt: '<p>Does the color match the word? (y or n)</p>',
-    response_ends_trial: true
+    prompt: '<p>Does the color match the word? (y or n)</p>'
   }
 
   var trial_2 = {
@@ -20,8 +19,7 @@
     stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">RED</p>',
     choices: ['y', 'n'],
     trial_duration: 5000,
-    prompt: '<p>Does the color match the word? (y or n; 5s time limit)</p>',
-    response_ends_trial: false
+    prompt: '<p>Does the color match the word? (y or n; 5s time limit)</p>'
   }
 
   var trial_3 = {
@@ -37,9 +35,7 @@
     on_finish: function() {
       jsPsych.data.displayData();
     },
-    default_iti: 250,
-    simulate: true,
-    simulate_opts: {'trial_duration': 250}
+    default_iti: 250
   });
 </script>
 

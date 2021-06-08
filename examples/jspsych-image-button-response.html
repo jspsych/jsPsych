@@ -24,7 +24,7 @@
   var trial = {
     type: 'image-button-response',
     stimulus: jsPsych.timelineVariable('stim'),
-    trial_duration: 5000,
+    trial_duration: 1000,
     choices: ['Happy', 'Sad'],
     prompt: '<p>What emotion is this person showing?</p><p>(1s duration, consecutive images with no post_trial_gap)</p>',
     stimulus_width: 400, 
@@ -84,7 +84,6 @@
 
   jsPsych.init({
     timeline: timeline,
-    simulate: true,
     on_finish: function(){jsPsych.data.displayData();}
   });
 

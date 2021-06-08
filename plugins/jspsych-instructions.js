@@ -233,23 +233,5 @@ jsPsych.plugins.instructions = (function() {
     }
   };
 
-  plugin.simulate = function(trial, simulate_opts) {
-    for (var page_num = 0; page_num < trial.pages.length; page_num++) {
-      if (trial.allow_keys) {
-        setTimeout(function(){
-          document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keydown', {key: trial.key_forward}));
-          document.querySelector('.jspsych-display-element').dispatchEvent(new KeyboardEvent('keyup', {key: trial.key_forward}))
-        }, simulate_opts.trial_duration)
-      }
-      else if (trial.show_clickable_nav) {
-        setTimeout(function(){
-          document.querySelector('#jspsych-instructions-next').dispatchEvent(new Event('click'));
-        }, simulate_opts.trial_duration)
-      } else {
-        alert('No way to continue past these instructions. Please modify the trial.')
-      }
-    }
-  }
-
   return plugin;
 })();
