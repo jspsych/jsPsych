@@ -38,6 +38,7 @@ The following people have contributed to the development of jsPsych by writing c
 * Vijay Marupudi - https://github.com/vijaymarupudi
 * Adrian Oesch - https://github.com/adrianoesch
 * Benjamin Ooghe-Tabanou - https://github.com/boogheta
+* Nikolay B Petrov - https://github.com/nikbpetrov
 * Dillon Plunkett - https://github.com/dillonplunkett
 * Junyan Qi - https://github.com/GavinQ1
 * Sivananda Rajananda - https://github.com/vrsivananda
