@@ -3,9 +3,10 @@
 The jsPsych.turk module contains functions for interacting with Mechanical Turk. 
 
 ---
+
 ## jsPsych.turk.submitToTurk
 
-```
+```javascript
 jsPsych.turk.submitToTurk(data)
 ```
 
@@ -13,7 +14,7 @@ jsPsych.turk.submitToTurk(data)
 
 Parameter | Type | Description
 ----------|------|------------
-data | object | The `data` parameter is an object of `key: value` pairs. Any pairs in the `data` parameter will be saved by Mechanical Turk, and can be downloaded in a CSV file through the Mechanical Turk interface.
+data | object | The `data` parameter is an object of `key: value` pairs. Any pairs in the `data` parameter will be saved by Mechanical Turk, and can be downloaded in a CSV file through the Mechanical Turk interface. **Important**: the `data` parameter must contain at least one `key: value` pair, even just a dummy value, or the HIT will not be submitted correctly.
 
 ### Return value
 
@@ -28,7 +29,6 @@ This method will only work when called from within the mechanical turk website. 
 ### Example
 
 ```html
-
 <p>Enter the code you were given:</p>
 <input type="text" id="code"></input>
 <button onclick="sendData();">Submit HIT</button>
@@ -52,7 +52,7 @@ function sendData() {
 
 ## jsPsych.turk.turkInfo
 
-```
+```javascript
 jsPsych.turk.turkInfo()
 ```
 
@@ -78,7 +78,6 @@ This method returns basic information about the current Mechanical Turk session,
 ### Example
 
 ```javascript
-
 var turkInfo = jsPsych.turk.turkInfo();
 
 alert('Worker ID is: ' + turkInfo.workerId);
@@ -97,6 +96,3 @@ alert('Preview mode? ' + turkInfo.previewMode);
 // false otherwise.
 alert('Outside turk? ' + turkInfo.outsideTurk);
 ```
-
-
-

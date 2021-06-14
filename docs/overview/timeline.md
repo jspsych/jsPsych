@@ -130,7 +130,8 @@ In the above version, there are four separate trials defined in the `timeline_va
 
 What if we wanted the stimuli to be a little more complex, with a name displayed below each face? And let's add an additional step where the name is displayed prior to the face appearing. (Maybe this is one condition of an experiment investigating whether the order of name-face or face-name affects retention.)
 
-To do this, we will need to use the `jsPsych.timelineVariable()` method in a slightly different way. Instead of using it as the parameter, we are going to create a dynamic parameter using a function and place the call to `jsPsych.timelineVariable()` inside this function. This will allow us to create an HTML string that has both the image and the name. Note that there is a subtle syntax difference: there is an extra parameter when `jsPsych.timelineVariable()` is called within a function. This `true` value causes the `jsPsych.timelineVariable()` to immediately return the value of the timeline variable. In a normal context, the function `jsPsych.timelineVariable()` returns a function. This is why `jsPsych.timelineVariable()` can be used directly as a parameter even though the parameter is dynamic.
+This time, instead of using `jsPsych.timelineVariable()` as the stimulus parameter value, we are going to create a dynamic parameter (function), and place the call to `jsPsych.timelineVariable()` inside this function. This will allow us to create a parameter value that combines multiple bits of information, such as one or more of the values that change across trials (which come from the `timeline_variables` array), and/or anything that doesn't change across trials. In this example, we'll need to switch to using the "html-keyboard-response" plugin so that we can define the stimulus as a custom HTML string that contains an image and text (instead of just an image file). The value of the stimulus parameter will be a function that returns an HTML string that contains both the image and the name. 
+(Note: in previous versions of jsPsych, there's an extra `true` parameter that you must add when calling `jsPsych.timelineVariable()` from inside a function. As of jsPsych v6.3, `jsPsych.timelineVariable()` automatically detects the context in which it's called, so this additional `true` parameter is not required.)
 
 
 ```javascript
@@ -151,8 +152,8 @@ var face_name_procedure = {
 		{
 			type: 'html-keyboard-response',
 			stimulus: function(){
-				var html="<img src='"+jsPsych.timelineVariable('face', true)+"'>";
-				html += "<p>"+jsPsych.timelineVariable('name', true)+"</p>";
+				var html="<img src='"+jsPsych.timelineVariable('face')+"'>";
+				html += "<p>"+jsPsych.timelineVariable('name')+"</p>";
 				return html;
 			},			
 			choices: jsPsych.NO_KEYS,
@@ -181,24 +182,6 @@ var face_name_procedure = {
 		{ face: 'person-4.jpg', name: 'Dave' }
 	],
 	randomize_order: true
-}
-```
-
-### Repeating trials
-
-If we want to repeat the set of trials multiple times, then we can set `repetitions` to an integer. If `randomize_order` is also `true`, the order will re-randomize before every repetition.
-
-```javascript
-var face_name_procedure = {
-	// timeline parameter hidden to save space ...
-	timeline_variables: [
-		{ face: 'person-1.jpg', name: 'Alex' },
-		{ face: 'person-2.jpg', name: 'Beth' },
-		{ face: 'person-3.jpg', name: 'Chad' },
-		{ face: 'person-4.jpg', name: 'Dave' }
-	],
-	randomize_order: true,
-	repetitions: 3
 }
 ```
 
@@ -324,9 +307,41 @@ var face_name_procedure = {
 }
 ```
 
+## Repeating a set of trials
+
+To repeat a timeline multiple times, you can create an object (node) that contains a `timeline`, which is the timeline array to repeat, and `repetitions`, which is the number of times to repeat that timeline. 
+
+```javascript
+var trial = {
+	type: 'html-keyboard-response',
+	stimulus: 'This trial will be repeated twice.'
+}
+
+var node = {
+	timeline: [trial],
+	repetitions: 2
+}
+```
+
+The `repetitions` parameter can be used alongside other node parameters, such as timeline variables, loop functions, and/or conditional functions. If you are using `timeline_variables` and `randomize_order` is `true`, then the order of the timeline variables will re-randomize before every repetition.
+
+```javascript
+var face_name_procedure = {
+	// timeline parameter hidden to save space ...
+	timeline_variables: [
+		{ face: 'person-1.jpg', name: 'Alex' },
+		{ face: 'person-2.jpg', name: 'Beth' },
+		{ face: 'person-3.jpg', name: 'Chad' },
+		{ face: 'person-4.jpg', name: 'Dave' }
+	],
+	randomize_order: true,
+	repetitions: 3 
+}
+```
+
 ## Looping timelines
 
-Any timeline can be looped using the `loop_function` option. The loop function should be a function that evaluates to `true` if the timeline should repeat, and `false` if the timeline should end. It receives a single parameter: the DataCollection object with all of the data from the trials executed in the last iteration of the timeline. The loop function will be evaluated after the timeline is completed.
+Any timeline can be looped using the `loop_function` option. The loop function should be a function that evaluates to `true` if the timeline should repeat, and `false` if the timeline should end. It receives a single parameter, named `data` by convention. This parameter will be the [DataCollection object](/core_library/jspsych-data/#datacollection) with all of the data from the trials executed in the last iteration of the timeline. The loop function will be evaluated after the timeline is completed.
 
 ```javascript
 var trial = {
@@ -337,7 +352,7 @@ var trial = {
 var loop_node = {
 	timeline: [trial],
 	loop_function: function(data){
-		if(jsPsych.pluginAPI.convertKeyCharacterToKeyCode('r') == data.values()[0].key_press){
+		if(jsPsych.pluginAPI.compareKeys(data.values()[0].response, 'r')){
 			return true;
 		} else {
 			return false;
@@ -367,7 +382,7 @@ var if_node = {
 		// get the data from the previous trial,
 		// and check which key was pressed
 		var data = jsPsych.data.get().last(1).values()[0];
-		if(data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('s')){
+		if(jsPsych.pluginAPI.compareKeys(data.response, 's')){
 			return false;
 		} else {
 			return true;
@@ -384,4 +399,59 @@ jsPsych.init({
 	timeline: [pre_if_trial, if_node, after_if_trial],
 	on_finish: function(){jsPsych.data.displayData(); }
 });
+```
+
+## Timeline start and finish functions
+
+You can run a custom function at the start and end of a timeline node using the `on_timeline_start` and `on_timeline_finish` callback function parameters. These are functions that will run when the timeline starts and ends, respectively. 
+
+```javascript
+var procedure = {
+	timeline: [trial_1, trial_2],
+	on_timeline_start: function() {
+		console.log('The trial procedure just started.')
+	},
+	on_timeline_finish: function() {
+		console.log('The trial procedure just finished.')
+	}
+}
+```
+
+This works the same way with timeline variables. The `on_timeline_start` and `on_timeline_finish` functions will run when timeline variables trials start and end, respectively.
+
+```javascript
+var face_name_procedure = {
+	// timeline parameter hidden to save space ...
+	timeline_variables: [
+		{ face: 'person-1.jpg', name: 'Alex' },
+		{ face: 'person-2.jpg', name: 'Beth' },
+		{ face: 'person-3.jpg', name: 'Chad' },
+		{ face: 'person-4.jpg', name: 'Dave' }
+	],
+	randomize_order: true,
+	on_timeline_start: function() {
+		console.log('First trial is starting.')
+	},
+	on_timeline_finish: function() {
+		console.log('Last trial just finished.')
+	}
+}
+```
+
+When the `repetititons` option is used (and is greater than 1), these functions will run once per repetition of the timeline.
+
+```javascript
+var repetition_count = 0;
+
+var procedure = {
+	timeline: [trial_1, trial_2],
+	repetitions: 3,
+	on_timeline_start: function() {
+		repetition_count++;
+		console.log('Repetition number ',repetition_count,' has just started.');
+	},
+	on_timeline_finish: function() {
+		console.log('Repetition number ',repetition_count,' has just finished.')
+	}
+}
 ```

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-preload.js"></script>
+    <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="../plugins/jspsych-webgazer-init-camera.js"></script>
+    <script src="../plugins/jspsych-webgazer-calibrate.js"></script>
+    <script src="js/webgazer/webgazer.js"></script>
+    <script src="../extensions/jspsych-ext-webgazer.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+var preload = {
+  type: 'preload',
+  images: ['img/blue.png']
+}
+
+var init_camera = {
+  type: 'webgazer-init-camera'
+}
+
+var validation = {
+  type: 'webgazer-calibrate',
+}
+
+var start = {
+  type: 'html-keyboard-response',
+  stimulus: 'Press any key to start.'
+}
+
+var trial = {
+  type: 'image-keyboard-response',
+  stimulus: 'img/blue.png',
+  render_on_canvas: false,
+  choices: jsPsych.NO_KEYS,
+  trial_duration: 1000,
+  extensions: [
+    {
+      type: 'webgazer', 
+      params: {targets: ['#jspsych-image-keyboard-response-stimulus']}
+    }
+  ]
+}
+
+jsPsych.init({
+  timeline: [preload, init_camera, validation, start, trial],
+  extensions: [
+    {type: 'webgazer'}
+  ],
+  on_finish: function() {
+      jsPsych.data.displayData();
+  }
+})
+
+</script>
+</html>

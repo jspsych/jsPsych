@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-preload.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css">
+  <style>
+    /* 
+      Any CSS classes listed in the 'css_classes' parameter will only be added to the jspsych-content div.
+      Certain CSS rules will automatically be applied to all other elements _inside_ this div (stimulus, prompt, etc.),
+      through CSS inheritance. However, not all CSS properties are inherited from parent elements.
+      To learn more about CSS inheritance, see:
+      https://developer.mozilla.org/en-US/docs/Web/CSS/inheritance
+      https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Cascade_and_inheritance#inheritance
+      https://stackoverflow.com/questions/5612302/which-css-properties-are-inherited
+
+      In the CSS rules below, the rules are applied to the jspsych-content div, and then applied to 
+      other elements inside of the jspsych-content div through inheritance. This is why both the stimulus and
+      prompt are affected by these rules in the trial_procedure_1 trials.
+    */
+    .condition1 {
+      color: red;
+      font: small-caps bold 25px/25px Arial, sans-serif;
+      line-height: 150%;
+    }
+    .condition2 {
+      font-size: 20px;
+      font-weight: bold;
+      text-shadow: 2px 2px white;
+      line-height: 200%;
+      background-color: lightgray
+    }
+    /* 
+      It's also possible to use more specific CSS selectors so that the CSS rule only affects certain elements on the page.
+      To create these CSS rules, we start with the class name used in "css_classes". This will select the 'parent' element (jspsych-content div):
+        .left-align 
+      After that, add the more specific CSS selector(s) to select any particular element(s) that should be modified inside the parent element. 
+      For example, to select only the "p" elements that are inside of the 'parent' element, you can use this:
+        .left-align p {...}
+      This method allows you to use different styles for different 'child' elements inside the jspsych-content div.
+      This method also allows you to modify properties that can't be modified through inheritance.
+
+      Options for CSS selectors include the element's tag name, ID, class, and combinations of these.
+      For example, to select a the element with the ID "jspsych-html-keyboard-response-stimulus":
+        .left-align #jspsych-html-keyboard-response-stimulus {...}  
+      Or to select all "p" elements that also have the class "stimulus":
+        .left-align p.stimulus {...}
+      See here for more info about CSS selectors: https://www.w3schools.com/css/css_selectors.asp
+
+      In the trial_procedure_2 trials, the stimulus text is inside of <p> tags and the prompt text is not inside of <p> tags.
+      Therefore the CSS rules below will only affect the stimulus element in these trials.
+    */
+    .left-align p {text-align: left; width: 600px;}
+    .right-align p {text-align: right; width: 600px;}
+    .teal p {color: teal;}
+    .purple p {color: purple;}
+    .large-text p {font-size: 40px; line-height: 1.5em;}
+    .black-border p {border: 4px solid black;}
+
+    /* 
+      The CSS rules below are used in trial_procedure_3 to format the fixation cross
+      and move the img element to the left or right.
+    */
+    .fixation {font-size: 90px; font-weight: bold;}
+    .img-left img {transform: translate(-300px);}
+    .img-right img {transform: translate(300px);}
+  </style>
+</head>
+<body></body>
+<script>
+
+  var preload = {
+    type: 'preload',
+    auto_preload: true
+  }
+
+  var trial_procedure_1 = {
+    timeline: [{
+      type: 'html-keyboard-response',
+      stimulus: jsPsych.timelineVariable('stim'),
+      css_classes: jsPsych.timelineVariable('css_class'),
+      prompt: 'This is the prompt.<br>In this set of trials, the CSS styles are applied to the parent element<br>'+
+      'and passed on to all other jsPsych content through inheritance,<br>'+
+      'which is why they also affect both the stimulus and prompt text.<br>Press any key to continue.'
+    }],
+    timeline_variables: [
+      {css_class: ['condition1'], stim: '<p>This is a Condition 1 stimulus.</p>'},
+      {css_class: ['condition2'], stim: '<p>This is a Condition 2 stimulus.</p>'}
+    ]
+  }
+
+  var trial_procedure_2 = {
+    timeline: [{
+      type: 'html-keyboard-response',
+      stimulus: '<p>This is the stimulus.</p>',
+      css_classes: jsPsych.timelineVariable('css_classes'),
+      prompt: 'In this set of trials, the CSS rules are applied more selectively<br>so that they only affect the stimulus text, not the prompt text<br>'+
+      '(see the comments in the HTML file for more information).<br>Press any key to continue.'
+    }],
+    timeline_variables: [
+      {css_classes: ['teal','left-align','black-border','large-text']},
+      {css_classes: ['teal','right-align','black-border','large-text']},
+      {css_classes: ['purple','left-align','large-text']},
+      {css_classes: ['purple','right-align','large-text']}
+    ]
+  }
+
+  var trial_procedure_3 = {
+    timeline: [
+      {
+        type: 'html-keyboard-response',
+        stimulus: '+',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: 500,
+        css_classes: ['fixation']
+      },
+      {
+        type: 'image-keyboard-response',
+        stimulus: 'img/blue.png',
+        css_classes: jsPsych.timelineVariable('image_side'),
+        prompt: '<p>Press <strong>f</strong> if the image is on the <strong>left</strong>.</p>'+
+        '<p>Press <strong>j</strong> if the image is on the <strong>right</strong>.</p>',
+        choices: ['f','j'],
+        render_on_canvas: false
+      }
+    ],
+    timeline_variables: [
+      {image_side: ['img-left'], correct_response: 'f'},
+      {image_side: ['img-right'], correct_response: 'j'}
+    ]
+  }
+
+  jsPsych.init({
+    timeline: [preload, trial_procedure_1, trial_procedure_2, trial_procedure_3],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+
+</script>
+
+</html>

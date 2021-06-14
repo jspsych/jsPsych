@@ -2,13 +2,14 @@
 
 There are several options that can be set when calling `jsPsych.init()` to launch the experiment.
 
-Options are specified in the object passed to `jsPsych.init`. For example, to specify a set of images to preload and the default inter-trial interval the object would contain:
+Options are specified in the object passed to `jsPsych.init`. For example, to specify a default inter-trial interval, a minimum valid response time duration, and a maximum width for all of the experiment's page content, the object would contain:
 
 ```js
 jsPsych.init({
     timeline: [...],
-    preload_images: ['img1.png', 'img2.png'],
-    default_iti: 500
+    default_iti: 250, 
+    minimum_valid_rt: 100, 
+    experiment_width: 800 
 });
 ```
 
@@ -50,17 +51,13 @@ Exclusion criteria can be specified based on features of the user's web browser,
 
 ## Display a progress bar
 
-An automatic or manually updated progress bar can be displayed at the top of the screen. See the [progress bar page](progress-bar.md) for more details.
-
-## Preload media elements
-
-Images, audio files, and movies can be preloaded to reduce latency during the experiment. In many cases, this preloading is automatic. In certain situations, such as using a custom plugin, using [timeline variables](timeline.md#timeline-variables), or using [functions to determine which stimulus to show](trial.md#dynamic-parameters), it is necessary to provide jsPsych with a list of media elements to preload. The [media preloading](media-preloading.md) page describes this process in detail.
+An automatic or manually updated progress bar can be displayed at the top of the screen. By default, the text next to the progress bar is "Completion Progress", but this text can be changed with the `message_progress_bar` parameter in `jsPsych.init`. See the [progress bar page](progress-bar.md) for more details.
 
 ## Choose the method for playing audio files
 
-By default, jsPsych uses the WebAudio API to play audio files. Among other features, the WebAudio API allows for more precise measurement of response times relative to the onset of the audio. 
+Specifying the `use_webaudio` parameter in `jsPsych.init()` allows you to choose whether to use the WebAudio API or HTML5 audio for playing audio files during your experiment. By default, jsPsych uses the WebAudio API to play audio files. Among other features, the WebAudio API allows for more precise measurement of response times relative to the onset of the audio. 
 
-However, loading files through the WebAudio API may not work when running an experiment locally (i.e., not on a live web server). This is due to the [cross-origin security policy](https://security.stackexchange.com/a/190321) implemented by web browsers. One option is to [temporarily disable the security](https://stackoverflow.com/q/4819060/3726673) for testing purposes. Another is to use HTML5 Audio instead of the WebAudio API. This can be done by specifying the `use_webaudio` parameter in `jsPsych.init()`.
+However, loading files through the WebAudio API causes errors when running an experiment offline (i.e., by double-clicking on the HTML file, rather than hosting it on a web server). This is due to the [cross-origin security policy](https://security.stackexchange.com/a/190321) implemented by web browsers. For this reason, jsPsych switches to a 'safe mode' when it detects that the webpage is running offline, and automatically uses HTML5 audio to prevent errors, even when `use_webaudio` has been explicitly set to `true`. For more information, see the section [Cross-origin requests (CORS) and safe mode](running-experiments.md#cross-origin-requests-cors-and-safe-mode) on the Running Experiments page.
 
 ```js
 jsPsych.init({
@@ -95,3 +92,58 @@ jsPsych.init({
 });
 ```
 
+## Specify a minimum valid response time
+
+By default, jsPsych will treat any keyboard response time as valid. However, it's possible to specify a minimum valid response time (in ms) for key presses. Any key press that is less than this value will be treated as invalid and ignored. Note that this parameter only applies to _keyboard responses_, and not to other response types such as buttons and sliders. The default value is 0.
+
+```js
+// ignore any keyboard responses that are less than 100 ms
+jsPsych.init({
+    timeline: [...],
+    minimum_valid_rt: 100
+});
+```
+
+## Choose whether you want keyboard choices/responses to be case-sensitive
+
+JavaScript keyboard events make a distinction between uppercase and lowercase key responses (e.g. 'a' and 'A'). Often the researcher just cares about which physical key was pressed, and not whether the key press would result in an uppercase letter (for instance, if CapsLock is on or if the Shift key is held down). For this reason, jsPsych converts all key choice parameters and key responses as lowercase by default. This makes it easier to specify key choices (e.g. `choices: ['a']`, instead of `choices: ['a','A']`), and it makes it easier to check and score a participant's response. 
+
+There may be situations when you want key choices and responses to be case-sensitive. You can change this by setting the `case_sensitive_responses` parameter to `true` in `jsPsych.init`.
+
+```js
+// use case-sensitive key choices and responses, 
+// i.e. uppercase and lower case letters ('a' and 'A') will be treated as different key choices, 
+// and will be recorded this way in the data
+jsPsych.init({
+    timeline: [...],
+    case_sensitive_responses: true
+});
+```
+
+Note that this setting only applies to key choices and responses that use jsPsych's keyboard response listener, such as in the *`-keyboard-response` plugins. This does NOT apply to responses that are made by typing into a text box, such as in the `survey-text` and `cloze` plugins.
+
+## Override 'safe mode' when running experiments offline
+
+By default, jsPsych switches to a 'safe mode' when it detects that the webpage is running offline (via the `file://` protocol) in order to prevent certain errors. Specifically, in safe mode, HTML5 audio is used to play audio files (even when `use_webaudio` has been explicitly set to `true`) and video preloading is disabled (both automatic and manual preloading). For more information, see the [Cross-origin requests (CORS) and safe mode](running-experiments.md#cross-origin-requests-cors-and-safe-mode) section on the Running Experiments page.
+
+It's possible to override this safe mode feature by setting the `override_safe_mode` parameter to `true` in `jsPsych.init`. This is something you might do if you've disabled certain security settings in your browser for testing purposes. This parameter has no effect when your experiment is running online (on a server), because it will be using the `http://` or `https://` protocol, which does not trigger safe mode. 
+
+```js
+jsPsych.init({
+    timeline: [...],
+    override_safe_mode: true
+});
+```
+
+## Add extensions
+
+Extensions are jsPsych modules that can run throughout the experiment and interface with any plugin to extend the functionality of the plugin. One example of an extension is eye tracking, which allows you to gather gaze data during any trial and add it to that trial's data object. If you want to use extensions in your experiment, you must specify this when you initialize the experiment with `jsPsych.init`. The `extensions` parameter in `jsPsych.init` is an array of objects, where each object specifies the extension that you'd like to use in the experiment. Below is an example of adding the webgazer extension.
+
+```js
+jsPsych.init({
+    timeline: [...],
+    extensions: [
+        {type: 'webgazer'}
+    ]
+});
+```

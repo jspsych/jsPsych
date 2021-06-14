@@ -4,7 +4,7 @@ The survey-html-form plugin displays a set of `<inputs>` from a HTML string. The
 
 ## Parameters
 
-Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+In addition to the [parameters available in all plugins](/overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
@@ -12,15 +12,17 @@ html | string | *undefined* | HTML formatted string containing all the input ele
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions.
 button_label | string |  'Continue' | The text that appears on the button to finish the trial.
 dataAsArray | boolean |  false | Retrieve the data as an array e.g. [{name: "INPUT_NAME", value: "INPUT_VALUE"}, ...] instead of an object e.g. {INPUT_NAME: INPUT_VALUE, ...}. This might be useful if you omit naming your inputs.
+autofocus | string | empty string | The HTML element ID of a form field to autofocus on. The focused element is the element that will receive keyboard events. For elements like `<input type="text">` or `<textbox>`, autofocus means that the cursor will appear in the text input area when the trial loads.
+autocomplete | boolean | false | This determines whether or not all of the input elements on the page should allow autocomplete. Setting this to true will enable autocomplete or auto-fill for the form.
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](/overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
-responses | string | A JS object encoded in JSON format containing the response for each input. The encoded object will have a separate variable for the response to each input, with each variable being named after its corresponding input element. Each response is a string containing whatever the subject answered for this particular input.
-rt | numeric | The response time in milliseconds for the subject to make a response.
+response | object | An object containing the response for each input. The object will have a separate key (variable) for the response to each input, with each variable being named after its corresponding input element. Each response is a string containing whatever the subject answered for this particular input. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
+rt | numeric | The response time in milliseconds for the subject to make a response. |
 
 ## Examples
 
@@ -31,5 +33,18 @@ var form_trial = {
   type: 'survey-html-form',
   preamble: '<p> How are you feeling <b>right now?</b> </p>',
   html: '<p> I am feeling <input name="first" type="text" />, <input name="second" type="text" />, and <input name="third" type="text" />.</p>'
+};
+```
+
+### Example using the autofocus parameter
+
+In this example, the browser will focus on the element with the ID `test-resp-box` when the trial loads. For `<input type="text">` elements, this means that the cursor will appear inside the text box.
+
+```javascript
+var autofocus_trial = {
+  type: 'survey-html-form',
+  preamble: '<p> What is your favorite bird?</p>',
+  html: '<p>My favorite bird is <input type="text" id="test-resp-box" name="response" size="10" /></p>',
+  autofocus: 'test-resp-box'
 };
 ```

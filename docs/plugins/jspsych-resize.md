@@ -4,7 +4,7 @@ This plugin displays a resizable div container that allows the user to drag unti
 
 ## Parameters
 
-Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+In addition to the [parameters available in all plugins](/overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
@@ -14,6 +14,15 @@ pixels_per_unit | numeric | 100 | After the scaling factor is applied, this many
 prompt | string | `''` | HTML content to display below the resizable box, and above the button.
 button_label | string | 'Continue' | Label to display on the button to complete calibration.
 starting_size | numeric | 100 | The initial size of the box, in pixels, along the largest dimension. The aspect ratio will be set automatically to match the item width and height.
+
+## Data Generated
+
+In addition to the [default data collected by all plugins](/overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
+
+Name | Type | Value
+-----|------|------
+final_width_px | numeric | Final width of the resizable div container, in pixels.
+scale_factor | numeric | Scaling factor that will be applied to the div containing jsPsych content.
 
 ## Examples
 

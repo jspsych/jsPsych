@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-html-button-response.js"></script>
+  <script src="../plugins/jspsych-webgazer-init-camera.js"></script>
+  <script src="../plugins/jspsych-webgazer-calibrate.js"></script>
+  <script src="../plugins/jspsych-webgazer-validate.js"></script>
+  <script src="js/webgazer/webgazer.js"></script>
+  <script src="../extensions/jspsych-ext-webgazer.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css">
+  <style>
+    .jspsych-content { max-width: 100%;}
+  </style>
+</head>
+
+<body></body>
+
+<script>
+
+  var camera_instructions = {
+    type: 'html-button-response',
+    stimulus: `
+      <p>This experiment uses your camera for eye tracking.</p>
+      <p>In order to participate you must allow the experiment to use your camera.</p>
+      <p>You will be prompted to do this on the next screen.</p>
+      <p>If you do not want to permit the experiment to use your camera, please close the page.</p>
+    `,
+    choices: ['Click to begin'],
+    post_trial_gap: 1000
+  }
+
+  var init_camera = {
+    type: 'webgazer-init-camera'
+  }
+
+  var calibration_instructions = {
+    type: 'html-button-response',
+    stimulus: `
+      <p>Great! Now the eye tracker will be calibrated to translate the image of your eyes from the webcam to a location on your screen.</p>
+      <p>To do this, you need to click a series of dots.</p>
+      <p>Keep your head still, and click on each dot as it appears. Look at the dot as you click it.</p>
+    `,
+    choices: ['Click to begin'],
+    post_trial_gap: 1000
+  }
+
+  var calibration = {
+    type: 'webgazer-calibrate',
+    calibration_points: [[50,50], [25,25], [25,75], [75,25], [75,75]],
+    //calibration_points: [[10,10],[10,30],[10,50],[10,70],[10,90],[30,10],[30,30],[30,50],[30,70],[30,90],[50,10],[50,30],[50,50],[50,70],[50,90],[70,10],[70,30],[70,50],[70,70],[70,90],[90,10],[90,30],[90,50],[90,70],[90,90]],
+    // calibration_points: [
+    //   [10,10],[10,50],[10,90],
+    //   [30,10],[30,50],[30,90],
+    //   [40,10],[40,30],[40,40],[40,45],[40,50],[40,55],[40,60],[40,70],[40,90],
+    //   [50,10],[50,30],[50,40],[50,45],[50,50],[50,55],[50,60],[50,70],[50,90],
+    //   [60,10],[60,30],[60,40],[60,45],[60,50],[60,55],[60,60],[60,70],[60,90],
+    //   [70,10],[70,50],[70,90],
+    //   [90,10],[90,50],[90,90]],
+    repetitions_per_point: 3,
+    randomize_calibration_order: true,
+  }
+
+  var validation_instructions = {
+    type: 'html-button-response',
+    stimulus: `
+      <p>Let's see how accurate the eye tracking is. </p>
+      <p>Keep your head still, and move your eyes to focus on each dot as it appears.</p>
+      <p>You do not need to click on the dots. Just move your eyes to look at the dots.</p>
+    `,
+    choices: ['Click to begin'],
+    post_trial_gap: 1000
+  }
+
+  var validation = {
+    type: 'webgazer-validate',
+    validation_points: [[25,25], [25,75], [75,25], [75,75]],
+    show_validation_data: true
+  }
+
+  var task_instructions = {
+    type: 'html-button-response',
+    stimulus: `
+      <p>We're ready for the task now.</p>
+      <p>You'll see an arrow symbol (⬅ or ➡) appear on the screen.</p>
+      <p>Your job is to press A if ⬅ appears, and L if ➡ appears.</p>
+      <p>This will repeat 8 times.</p>
+    `,
+    choices: ['I am ready!'],
+    post_trial_gap: 1000
+  }
+
+  var fixation = {
+    type: 'html-keyboard-response',
+    stimulus: '<p style="font-size:40px;">+</p>',
+    choices: jsPsych.NO_KEYS,
+    trial_duration: 500    
+  }
+
+  var trial = {
+    type: 'html-keyboard-response',
+    stimulus: function () {
+      return(
+      `<div style="position: relative; width: 400px; height: 400px;">
+        <div style="position: absolute; top:${jsPsych.timelineVariable('top', true)}%; left: ${jsPsych.timelineVariable('left', true)}%">
+          <span id="arrow-target" style="font-size: 40px; transform: translate(-50%, -50%);">${jsPsych.timelineVariable('direction', true) == 'left' ? '⬅' : '➡'}</span>
+        </div>
+      </div>`
+      )
+    },
+    choices: ['a', 'l'],
+    post_trial_gap: 750,
+    data: {
+      top: jsPsych.timelineVariable('top'),
+      left: jsPsych.timelineVariable('left')
+    },
+    extensions: [
+      {type: 'webgazer', params: {targets: ['#arrow-target']}}
+    ]
+  }
+
+  var params = [
+    { left: 0, top: 0, direction: 'left' },
+    { left: 100, top: 0, direction: 'left' },
+    { left: 0, top: 100, direction: 'left' },
+    { left: 100, top: 100, direction: 'left' },
+    { left: 0, top: 0, direction: 'right' },
+    { left: 100, top: 0, direction: 'right' },
+    { left: 0, top: 100, direction: 'right' },
+    { left: 100, top: 100, direction: 'right' },
+  ]
+
+  var trial_proc = {
+    timeline: [fixation, trial],
+    timeline_variables: params,
+    randomize_order: true
+  }
+
+  var done = {
+    type: 'html-button-response',
+    choices: ['CSV', 'JSON'],
+    stimulus: `<p>Done!</p><p>If you'd like to download a copy of the data to explore, click the format you'd like below</p>`,
+    on_finish: function(data){
+      if(data.response == 0){
+        jsPsych.data.get().localSave('csv','webgazer-sample-data.csv');
+      }
+      if(data.response == 1){
+        jsPsych.data.get().localSave('json', 'webgazer-sample-data.json');
+      }
+    }
+  }
+
+  var timeline = [];
+  timeline.push(camera_instructions);
+  timeline.push(init_camera);
+  timeline.push(calibration_instructions);
+  timeline.push(calibration);
+  timeline.push(validation_instructions);
+  timeline.push(validation);
+  timeline.push(task_instructions);
+  timeline.push(trial_proc);
+  timeline.push(done);
+
+  jsPsych.init({
+    timeline: timeline,
+    extensions: [
+      {type: 'webgazer'}
+    ]
+  })
+</script>
+
+</html>

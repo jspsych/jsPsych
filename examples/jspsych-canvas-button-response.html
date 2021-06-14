@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-canvas-button-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+    // stimulus function that takes the canvas and additional parameters (radius, color)
+    // this can be called inside of an anonymous stimulus function, which takes the canvas (c) as its only argument
+    function filledCirc(canvas, radius, color) {
+        var ctx = canvas.getContext("2d");
+        ctx.beginPath();
+        ctx.arc(250, 250, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = color;
+        ctx.fill();
+    }
+
+    var circle_1 = {
+        type: 'canvas-button-response',
+        stimulus: function(c) {
+            filledCirc(c, 100, 'blue');
+        },
+        choices: ['Red', 'Green', 'Blue'],
+        prompt: '<p>What color is the circle?</p>',
+        data: {color: 'blue', radius: 100}
+    };
+
+    var circle_2 = {
+        type: 'canvas-button-response',
+        stimulus: function(c) {
+            filledCirc(c, 150, 'green');
+        },
+        choices: ['Larger', 'Smaller'],
+        stimulus_duration: 1000,
+        prompt: '<p>Is this circle larger or smaller than the last one?</p>'+
+          '<p>Stimulus will be hidden after 1 second.</p>',
+        data: {color: 'green', radius: 150}
+    };
+
+    // write the canvas stimulus drawing function without using a named function
+    // the anonymous function must take the canvas as an argument
+    var lines = {
+        type: 'canvas-button-response',
+        stimulus: function(c) {
+            var ctx = c.getContext("2d");
+            // first line
+            ctx.beginPath();
+            ctx.moveTo(300, 10);
+            ctx.lineTo(300, 300);
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = 'MediumBlue';
+            ctx.stroke();
+            // second line
+            ctx.beginPath();
+            ctx.moveTo(20, 200);
+            ctx.lineTo(100, 350);
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = 'MediumPurple';
+            ctx.stroke();
+        },
+        choices: ['Blue line', 'Purple line'],
+        prompt: '<p>Which line is longer?</p>',
+        data: {line1_color: 'blue', line1_length: 290, line2_color: "purple", line2_length: 170}
+    };
+
+    // to use the canvas stimulus function with timeline variables,
+    // the jsPsych.timelineVariable() function can be used inside your stimulus function
+    var circle_procedure = {
+        timeline: [{
+            type: 'canvas-button-response',
+            stimulus: function(c) {
+                filledCirc(c, jsPsych.timelineVariable('radius'), jsPsych.timelineVariable('color'));
+            },
+            choices: ['Red', 'Green', 'Blue'],
+            prompt: '<p>What color is the circle?</p>',
+            data: {radius: jsPsych.timelineVariable('radius'), color: jsPsych.timelineVariable('color')}
+        }],
+        timeline_variables: [
+            {radius: 100, color: 'red'},
+            {radius: 200, color: 'green'},
+            {radius: 50, color: 'blue'}
+        ]
+    };
+
+    jsPsych.init({
+        timeline: [circle_1, circle_2, lines, circle_procedure],
+        on_finish: function () { 
+            jsPsych.data.displayData(); 
+        }
+    });
+</script>
+</html>

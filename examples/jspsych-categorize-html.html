@@ -5,23 +5,18 @@
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-categorize-html.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css">
-  <style>
-    img {
-      width: 300px;
-    }
-  </style>
 </head>
 <body></body>
 <script>
   var trial = {
     type: 'categorize-html',
     stimulus: '<div style="margin: auto; width: 200px; height: 200px; background-color: blue;"></div>',
-    key_answer: 66,
-    choices: [66, 80],
-    text_answer: 'happy',
+    key_answer: 'b',
+    choices: ['b', 'p'],
+    text_answer: 'blue',
     correct_text: "<p>Correct. This color is %ANS%.</p>",
     incorrect_text: "<p>Incorrect. This color is %ANS%. Please press the correct key to continue.</p>",
-    prompt: "<p>Press B if the square is blue. Press P if the square is purple.</p>",
+    prompt: "<p>Press &quot;b&quot; if the square is blue. Press &quot;p&quot; if the square is purple.</p>",
     trial_duration: 1500,
     show_feedback_on_timeout: false,
     force_correct_button_press: true

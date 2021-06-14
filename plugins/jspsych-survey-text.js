@@ -31,7 +31,7 @@ jsPsych.plugins['survey-text'] = (function() {
           },
           placeholder: {
             type: jsPsych.plugins.parameterType.STRING,
-            pretty_name: 'Value',
+            pretty_name: 'Placeholder',
             default: "",
             description: 'Placeholder text in the textfield.'
           },
@@ -168,8 +168,8 @@ jsPsych.plugins['survey-text'] = (function() {
       }
       // save data
       var trialdata = {
-        "rt": response_time,
-        "responses": JSON.stringify(question_data)
+        rt: response_time,
+        response: question_data
       };
 
       display_element.innerHTML = '';

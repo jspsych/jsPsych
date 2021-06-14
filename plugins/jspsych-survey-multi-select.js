@@ -214,9 +214,9 @@ jsPsych.plugins['survey-multi-select'] = (function() {
 
       // save data
       var trial_data = {
-        "rt": response_time,
-        "responses": JSON.stringify(question_data),
-        "question_order": JSON.stringify(question_order)
+        rt: response_time,
+        response: question_data,
+        question_order: question_order
       };
       display_element.innerHTML = '';
 
