@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-audio-slider-response.js"></script>
+  <script src="../plugins/jspsych-html-button-response.js"></script>
+  <script src="../plugins/jspsych-preload.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+  var preload = {
+    type: 'preload',
+    auto_preload: true
+  }
+
+  var pre_audio = {
+    type: 'html-button-response',
+    stimulus: '<div style="max-width:600px;"><p>Some browsers now require the user to interact with a page before it can play audio. '+
+    'Clicking the button below counts as an interaction.</p><p>Be aware of this when planning audio experiments if '+
+    'you want the first trial to include audio.</p></div>',
+    choices: ['Continue']
+  }
+
+  var trial_1 = {
+    type: 'audio-slider-response',
+    stimulus: 'sound/speech_joke.mp3',
+    labels: ['Not Funny', 'Funny'],
+    slider_width: 500,
+    prompt: '<p>How funny is the joke?</p>'
+  }
+
+  var trial_2 = {
+    type: 'audio-slider-response',
+    stimulus: 'sound/speech_red.mp3',
+    labels: ['Hate it', 'It&quot;s OK', 'Love it'],
+    slider_width: 500,
+    prompt: '<p>How much do you like this color?</p><p>Slider movement is required, so you must interact with (click) the slider before you can continue.</p>',
+    require_movement: true
+  }
+
+  var trial_3 = {
+    type: 'audio-slider-response',
+    stimulus: 'sound/hammer.mp3',
+    labels: ['Unpleasant', 'OK', 'Very pleasant'],
+    slider_width: 500,
+    prompt: '<p>How pleasant was this sound?</p><p>The slider will be enabled after the audio ends.</p>',
+    response_allowed_while_playing: false
+  }
+
+  jsPsych.init({
+		simulate: true,
+    timeline: [preload, pre_audio, trial_1, trial_2, trial_3],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+</script>
+
+</html>

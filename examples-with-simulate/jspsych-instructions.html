@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-instructions.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
+
+  var trial_1 = {
+    type: 'instructions',
+    pages: ['<p>Welcome to the experiment.</p><p>This is the first set of instructions.</p><p>Click next to begin.</p>',
+      '<p>This is the second page of instructions.</p>',
+      '<p>This is the final page.</p>'],
+    show_clickable_nav: true
+  }
+
+  var trial_2 = {
+    type: 'instructions',
+    pages: ['<p>This is a new set of instructions.</p><p>Custom "Page X/Y" and next/previous button labels provide support for different languages.</p>',
+      '<p>This is the second page of instructions.</p>',
+      '<p>This is the final page.</p>'],
+    show_clickable_nav: true,
+    show_page_number: true,
+    button_label_previous: 'Anterior',
+    button_label_next: 'Próxima',
+    page_label: 'Página',
+  }
+
+  jsPsych.init({
+		simulate: true,
+    timeline: [trial_1, trial_2],
+    on_finish: function(){ jsPsych.data.displayData(); }
+  });
+
+  </script>
+</html>

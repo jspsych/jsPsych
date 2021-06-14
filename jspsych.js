@@ -1,3 +1,30 @@
+// ----------------------------CODE UNDER REVIEW--------------------------
+// There might be bugs so use cautiously
+// Author of the simulation functionality: Nikolay Petrov (github: @nikbpetrov)
+simulate_method_script = document.createElement('script')
+simulate_method_script.src = 'js/get_simulate_method.js'
+document.head.appendChild(simulate_method_script)
+
+simulate_options_script = document.createElement('script')
+simulate_options_script.src = 'js/modify_trial_options_for_simulation.js'
+document.head.appendChild(simulate_options_script)
+
+function Object_assign_nested({...target}, ...sources) { // will not overwrite the inputs!!
+  // partial credits: https://stackoverflow.com/a/58089332
+  sources.forEach(source => {
+    Object.keys(source).forEach(key => {
+      const s_val = source[key][]
+      const t_val = target[key]
+      target[key] = t_val && s_val && typeof t_val === 'object' && typeof s_val === 'object'
+                  ? Object_assign_nested({...t_val}, s_val)
+                  : s_val
+    })
+  })
+  return target
+}
+
+
+
 window.jsPsych = (function() {
 
   var core = {};
@@ -100,7 +127,68 @@ window.jsPsych = (function() {
         'experiment_width': null,
         'override_safe_mode': false,
         'case_sensitive_responses': false,
-        'extensions': []
+        'extensions': [],
+        'simulate': false,
+        'simulate_all_trials_opts': {
+          'simulate_response_time': 500, 
+          'post_trial_gap': 0 // note that setting the post_trial_gap to 0 by default means that the default_iti will never get executed
+        },
+        'simulate_trial_type_opts': {
+          // NB: the six audio/video plugins (audio-button, audio-keyboard, audio-slider, video-button, video-keyboard, video-slider)
+          // do not play at all (the context-loading is doomed to fail as there is no human interaction) -- they proceed either after a response or after trial duration expires
+          'animation': {'frame_time': 'same_as_simulate_response_time', 
+                        'frame_isi': 'same_as_simulate_response_time'},
+          'audio-button-response': {},
+          'audio-keyboard-response': {},
+          'audio-slider-response': {},
+          'call-function': {},
+          'canvas-button-response': {},
+          'canvas-keyboard-response': {},
+          'canvas-slider-response': {},
+          'categorize-animation': { 'frame_time': 'same_as_simulate_response_time', 
+                                    'feedback_duration': 'same_as_simulate_response_time'},
+          'categorize-html': {'feedback_duration': 'same_as_simulate_response_time'},
+          'categorize-image': {'feedback_duration': 'same_as_simulate_response_time'},
+          'cloze': {},
+          'external-html': {},
+          'free-sort': {},
+          'fullscreen': {'delay_after': 'same_as_simulate_response_time'},
+          'html-button-response': {},
+          'html-keyboard-response': {},
+          'html-slider-response': {},
+          'iat-html': {},
+          'iat-image': {},
+          'image-button-response': {},
+          'image-keyboard-response': {},
+          'image-slider-response': {},
+          'instructions': {},
+          'maxdiff': {},
+          'preload': {},
+          'rdk': {},
+          'reconstruction': {},
+          'resize': {},
+          'same-different-html': {'gap_duration': 'same_as_simulate_response_time', 
+                                  'first_stim_duration': 'same_as_simulate_response_time', 
+                                  'second_stim_duration': 'same_as_simulate_response_time'},
+          'same-different-image': { 'gap_duration': 'same_as_simulate_response_time', 
+                                    'first_stim_duration': 'same_as_simulate_response_time', 
+                                    'second_stim_duration': 'same_as_simulate_response_time'},
+          'serial-reaction-time-mouse': {'pre_target_duration': 'same_as_simulate_response_time'},
+          'serial-reaction-time': { 'feedback_duration': 'same_as_simulate_response_time', 
+                                    'pre_target_duration': 'same_as_simulate_response_time'},
+          'survey-html-form': {},
+          'survey-likert': {},
+          'survey-multi-choice': {},
+          'survey-multi-select': {},
+          'survey-text': {},
+          'video-button-response': {},
+          'video-keyboard-response': {},
+          'video-slider-response': {},
+          'virtual-chinrest': {},
+          'visual-search-circle': {'fixation_duration': 'same_as_simulate_response_time'},
+          'vsl-animate-occlusion': {'pre_movement_duration': 'same_as_simulate_response_time', 'cycle_duration': 'same_as_simulate_response_time'},
+          'vsl-grid-scene': {'trial_duration': 'same_as_simulate_response_time'}
+        }
       };
 
       // detect whether page is running in browser as a local file, and if so, disable web audio and video preloading to prevent CORS issues
@@ -114,7 +202,8 @@ window.jsPsych = (function() {
       }
 
       // override default options if user specifies an option
-      opts = Object.assign({}, defaults, options);
+      // using custom function as some of the defaults (simulate-related) are nested
+      opts = Object_assign_nested(defaults, options)
 
       // set DOM element where jsPsych will render content
       // if undefined, then jsPsych will use the <body> tag and the entire page
@@ -981,6 +1070,14 @@ window.jsPsych = (function() {
     // get default values for parameters
     setDefaultValues(trial);
 
+    // update trial options for simulation if needed
+    if ((trial.simulate === true) || (trial.simulate !== false && opts.simulate === true)) {
+      trial = modify_trial_options_for_simulation(trial, opts.simulate_all_trials_opts, opts.simulate_trial_type_opts)
+      // evaluating timeline and function variables again to allow this functionality to be set in the simulate_opts values
+      evaluateTimelineVariables(trial);
+      evaluateFunctionParameters(trial);
+    }
+
     // about to execute callbacks
     jsPsych.internal.call_immediate = true;
 
@@ -1032,6 +1129,12 @@ window.jsPsych = (function() {
     
     // done with callbacks
     jsPsych.internal.call_immediate = false;
+
+    // execute simulation method if requested
+    if ((trial.simulate === true) || (trial.simulate !== false && opts.simulate === true)) {
+      get_simulate_method(jsPsych.plugins[trial.type], trial.type)
+      jsPsych.plugins[trial.type].simulate(trial)
+    }
   }
 
   function evaluateTimelineVariables(trial){
@@ -1302,6 +1405,24 @@ jsPsych.plugins = (function() {
       pretty_name: 'Custom CSS classes',
       default: null,
       description: 'A list of CSS classes to add to the jsPsych display element for the duration of this trial'
+    },
+    simulate: {
+      type: module.parameterType.BOOL,
+      pretty_name: 'Simulation',
+      default: null,
+      description: 'Determines whether the experiment will run in simulation mode. If false, ignores simulation-related parameters.'
+    },
+    simulate_response_time: {
+      type: module.parameterType.INT,
+      pretty_name: 'Simulation respnse time',
+      default: null,
+      description: 'Time until a simulated response is provided'
+    },
+    simulate_opts: {
+      type: module.parameterType.OBJECT,
+      pretty_name: 'Simulation options',
+      default: {},
+      description: 'Trial-specific options for the simulation, executed with highest priority, over any options set on the init method of the experiment. See documentation for details.'
     }
   }
 

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-preload.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css">
+</head>
+<body></body>
+<script>
+  var images = ["img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif", "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif", "img/9.gif", "img/10.gif"];
+
+  var trials = [];
+  for (var i = 0; i < images.length; i++) {
+    trials.push({
+      stimulus: images[i]
+    });
+  }
+
+  var preload = {
+    type: 'preload',
+    auto_preload: true
+  }
+
+  var block = {
+    type: 'image-keyboard-response',
+    choices: ['y','n'], 
+    prompt: '<p>Press "y" to continue. Press "n" to end the experiment.</p>',
+    stimulus_width: 300,
+    on_finish: function(data) {
+      if (jsPsych.pluginAPI.compareKeys(data.response, 'n')) {
+        jsPsych.endExperiment('The experiment was ended. This is the end message.');
+      }
+    },
+    timeline: trials
+  }
+
+
+  jsPsych.init({
+		simulate: true,
+    timeline: [preload, block]
+  });
+</script>
+
+</html>

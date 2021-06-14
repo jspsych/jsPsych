@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-free-sort.js"></script>
+    <script src="../plugins/jspsych-canvas-keyboard-response.js"></script>
+    <script src="../plugins/jspsych-preload.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
+
+  var preload = {
+    type: 'preload',
+    auto_preload: true
+  };
+
+  var trial_1 = {
+    type: 'free-sort',
+    stimuli: ['img/happy_face_1.jpg','img/happy_face_3.jpg','img/sad_face_2.jpg','img/sad_face_4.jpg'],
+    stim_height: 120,
+    stim_width: 160,
+    sort_area_height: 500,
+    sort_area_width: 500,
+    prompt: 'Please group similar expressions together. ',
+    column_spread_factor: .5
+  };
+
+  var trial_2 = {
+    type: 'free-sort',
+    stimuli: ['img/happy_face_1.jpg','img/happy_face_3.jpg','img/sad_face_2.jpg','img/sad_face_4.jpg'],
+    stim_height: 120,
+    stim_width: 160,
+    prompt: '<p>Arrange the faces.</p>',
+    prompt_location: "below",
+    sort_area_height: 400,
+    sort_area_width: 500,
+    sort_area_shape: "square",
+    scale_factor: 1.2,
+    border_color_in: '#DCDCDC',
+    border_color_out: 'red'
+  };
+
+  var trial_3 = {
+    type: 'canvas-keyboard-response',
+    stimulus: function(c) {
+      c.style.border = "5px solid #A9A9A9";
+      // present images on a canvas at specific locations
+      var ctx = c.getContext('2d');
+      var img1 = new Image();
+      var img2 = new Image();
+      var img3 = new Image();
+      img1.src = 'img/1.gif';
+      img2.src = 'img/2.gif';
+      img3.src = 'img/3.gif';
+      img1.addEventListener('load', function() {
+        ctx.drawImage(img1, 0, 0, 90, 90);
+      }, false);
+      img2.addEventListener('load', function() {
+        ctx.drawImage(img2, 400, 400,  90, 90);
+      }, false);
+      img3.addEventListener('load', function() {
+        ctx.drawImage(img3, 300, 100,  90, 90);
+      }, false);
+    },
+    canvas_size: [500,500],
+    prompt: "Memorize the image locations (5s).",
+    choices: jsPsych.NO_KEYS,
+    trial_duration: 5000
+  };
+
+  var trial_4 = {
+    type: 'free-sort',
+    stimuli: ['img/1.gif','img/2.gif','img/3.gif'],
+    stim_height: 90,
+    stim_width: 90,
+    scale_factor: 1.0,
+    prompt: '<p>Where were the images?</p>',
+    prompt_location: 'below',
+    sort_area_shape: "square",
+    sort_area_height: 500,
+    sort_area_width: 500,
+    change_border_background_color: false,
+    border_width: 5,
+    counter_text_unfinished: "Not done yet...",
+    counter_text_finished: "Done!",
+    column_spread_factor: .5
+  };
+
+  var trial_5 = {
+    type: 'free-sort',
+    stimuli: ['img/4.gif','img/5.gif','img/6.gif'],
+    prompt: '<p>Arrange the images.</p><p>Images start at random locations inside the sort area.</p>',
+    change_border_background_color: false,
+    border_width: 3,
+    counter_text_unfinished: "",
+    counter_text_finished: "",
+    stim_starts_inside: true,
+    sort_area_shape: "square"
+  };
+
+  jsPsych.init({
+		simulate: true,
+    timeline: [preload, trial_1, trial_2, trial_3, trial_4, trial_5],
+    on_finish: function(){jsPsych.data.displayData();}
+  });
+
+
+  </script>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-image-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-preload.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css">
+</head>
+
+<body>
+</body>
+<script>
+
+  // manually preload the image files, since they are passed to the image-keyboard-response stimulus parameter
+  // through timeline variables, and therefore cannot be automatically preloaded
+  var images = ['img/happy_face_1.jpg', 'img/happy_face_2.jpg', 'img/happy_face_3.jpg'];
+  var preload = {
+    type: 'preload',
+    images: images
+  }
+
+  var timeline_variables = [
+    { v1: 'img/happy_face_1.jpg', v2: 'Ann' },
+    { v1: 'img/happy_face_2.jpg', v2: 'Jackson' },
+    { v1: 'img/happy_face_3.jpg', v2: 'Riley' }
+  ];
+
+  var node = {
+    timeline_variables: timeline_variables,
+    timeline: [
+      {
+        type: 'html-keyboard-response',
+        choices: jsPsych.NO_KEYS,
+        stimulus: "<p style='text-align:center; font-size:80px;'>+</p>",
+        trial_duration: 500
+      },
+      {
+        type: 'image-keyboard-response',
+        choices: ['y','n'], 
+        stimulus: jsPsych.timelineVariable('v1'),
+        prompt: function() { 
+          return '<p>Have you seen '+jsPsych.timelineVariable('v2', true)+ ' before? Press "y" or "n".</p>' 
+        },
+        stimulus_width: 300
+      }
+    ],
+    randomize_order: true,
+    repetitions: 2
+  }
+
+  jsPsych.init({
+		simulate: true,
+    timeline: [preload, node],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+
+</script>
+
+</html>
