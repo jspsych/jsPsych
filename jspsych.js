@@ -13,7 +13,7 @@ function Object_assign_nested({...target}, ...sources) { // will not overwrite t
   // partial credits: https://stackoverflow.com/a/58089332
   sources.forEach(source => {
     Object.keys(source).forEach(key => {
-      const s_val = source[key][]
+      const s_val = source[key]
       const t_val = target[key]
       target[key] = t_val && s_val && typeof t_val === 'object' && typeof s_val === 'object'
                   ? Object_assign_nested({...t_val}, s_val)
