@@ -387,3 +387,36 @@ var shuffled = jsPsych.randomization.shuffleNoRepeats(repeatedSet, function(a,b)
 // console.log(JSON.stringify(shuffled))
 // "[{"color":"red"},{"color":"yellow"},{"color":"blue"},{"color":"yellow"},{"color":"orange"},{"color":"red"},{"color":"yellow"},{"color":"orange"},{"color":"blue"},{"color":"orange"},{"color":"red"},{"color":"blue"}]"
 ```
+
+---
+
+## jsPsych.randomization.getRandomInt
+
+```javascript
+jsPsych.randomization.getRandomInt(min, max)
+```
+
+### Parameters
+
+| Parameter    | Type     | Description                              |
+| ------------ | -------- | ---------------------------------------- |
+| min          | int      | The minimum value for the range within which to sample (inclusive).  |
+| max          | int      | The maximum value for the range within which to sample (inclusive).  |
+
+
+### Return value
+
+Returns a random integer between the minimum and the maximum values provided (inclusive).
+
+### Description
+
+A simple method for sampling an integer within bounds.
+
+### Examples
+
+#### Get a random integer between 1 and 5
+
+```javascript
+var myRandomInt = jsPsych.randomization.getRandomInt(1, 5);
+// output: myRandomInt = 4
+```

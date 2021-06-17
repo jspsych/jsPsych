@@ -2180,6 +2180,18 @@ jsPsych.randomization = (function() {
     return result;
   }
 
+  module.getRandomInt = function(min, max) {
+    if (typeof min === 'number' && isFinite(min) && min === parseInt(min) &&
+        typeof max === 'number' && isFinite(max) && max === parseInt(max)) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      var randomInt = Math.floor(Math.random() * (max - min + 1)) + min
+    } else {
+      console.error('Please enter valid integers for min and max when using getRandomInt.')
+    }
+    return randomInt
+  }
+
   function unpackArray(array) {
 
     var out = {};
