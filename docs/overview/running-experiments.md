@@ -8,7 +8,10 @@ You can run your jsPsych experiment:
 
 The way that you run your experiment will have consequences for certain aspects about how the experiment works, and what your experiment will be able to do. This page explains what you need to know about both of these options.
 
-
+!!! info
+    If you are looking for a tool to automate deployment-related tasks, check out [jsPsych Builder](https://github.com/bjoluc/jspsych-builder), a CLI utility that helps to get jsPsych deployments right.
+    It automatically bundles scripts and style sheets, configures media preloading, and yields a zip file that contains all files for deployment (online or offline).
+    jsPsych Builder can also directly build JATOS experiment files (.jzip) that you can upload to a JATOS server.
 
 ## Offline
 
