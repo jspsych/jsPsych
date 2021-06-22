@@ -116,29 +116,17 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         display_element.innerHTML = trial.prompt;
       }
 
-      // start audio
-      if (context !== null) {
-        startTime = context.currentTime;
-        audio.start(startTime);
+      // Either start the trial or wait for the user to click start
+      if(!trial.click_to_start || context==null){
+        start_audio();
       } else {
-        audio.play();
-      }
-
-      // start keyboard listener when trial starts or sound ends
-      if (trial.response_allowed_while_playing) {
-        setup_keyboard_listener();
-      } else if (!trial.trial_ends_after_audio) {
-        audio.addEventListener('ended', setup_keyboard_listener);
-      }
-
-      // end trial if time limit is set
-      if (trial.trial_duration !== null) {
-        jsPsych.pluginAPI.setTimeout(function () {
-          end_trial();
-        }, trial.trial_duration);
+        // Register callback for start sound button if we have one
+        $('#start_button').on('click', function(ev){
+          ev.preventDefault();
+          start_audio();
+        })
       }
     }
-
 
     // function to end trial when it is time
     function end_trial() {
@@ -211,20 +199,16 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
     }
 
     // Embed the rest of the trial into a function so that we can attach to a button if desired
-    var start_audio = function(){
+    function start_audio(){
       if(context !== null){
-        context.resume(); 
         startTime = context.currentTime;
-        source.start(startTime);
+        audio.start(startTime);
       } else {
         audio.play();
       }
 
       // clear the display
       display_element.innerHTML = trial.sound_text;
-
-      // start the response listener
-      setup_keyboard_listener();
 
       // end trial if time limit is set
       if (trial.trial_duration !== null) {
@@ -234,16 +218,6 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
       }
     }
 
-    // Either start the trial or wait for the user to click start
-    if(!trial.click_to_start || context==null){
-      start_audio();
-    } else {
-      // Register callback for start sound button if we have one
-      $('#start_button').on('click', function(ev){
-        ev.preventDefault();
-        start_audio();
-      })
-    }
   };
 
   return plugin;
