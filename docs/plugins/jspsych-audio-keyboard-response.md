@@ -34,7 +34,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ## Examples
 
-#### Displaying trial until subject gives a response
+#### Trial continues until subject gives a response
 
 ```javascript
 var trial = {
@@ -42,9 +42,13 @@ var trial = {
 	stimulus: 'sound/tone.mp3',
 	choices: ['e', 'i'],
 	prompt: "<p>Is the pitch high or low? Press 'e' for low and 'i' for high.</p>",
-    response_ends_trial: false
+    response_ends_trial: true
 };
 ```
+
+<div>
+    <iframe src="../demos/jspsych-audio-keyboard-response-demo.html" width="100%;" height="600px;">You must be online to view the plugin demo.</iframe>
+</div>
 
 #### Play a sound with no user response; trial ends after sound plays
 

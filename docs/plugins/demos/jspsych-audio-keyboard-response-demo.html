@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-audio-keyboard-response.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+  var preload = {
+    type: 'preload',
+    auto_preload: true
+  }
+
+  var pre_audio = {
+    type: 'html-button-response',
+    stimulus: '<div style="max-width:600px;"><p>Some browsers now require the user to interact with a page before it can play audio. '+
+    'Clicking the button below counts as an interaction.</p><p>Be aware of this when planning audio experiments if '+
+    'you want the first trial to include audio.</p></div>',
+    choices: ['Continue']
+  }
+
+  var trial = {
+    type: 'audio-keyboard-response',
+    stimulus: 'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/sound/tone.mp3',
+    choices: ['e', 'i'],
+    prompt: "<p>Is the pitch high or low? Press 'e' for low and 'i' for high.</p>",
+    response_ends_trial: true
+  };
+
+  if (typeof jsPsych !== "undefined") {
+    jsPsych.init({
+      timeline: [preload, pre_audio, trial],
+      on_finish: function() {
+        jsPsych.data.displayData();
+      },
+      default_iti: 250
+    });
+  } else {
+    document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+  }
+</script>
+
+</html>

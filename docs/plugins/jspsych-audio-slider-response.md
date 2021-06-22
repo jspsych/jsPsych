@@ -51,3 +51,7 @@ var trial_1 = {
 	prompt: '<p>How funny is the joke?</p>'
 }
 ```
+
+<div>
+    <iframe src="../demos/jspsych-audio-slider-response-demo.html" width="100%;" height="600px;">You must be online to view the plugin demo.</iframe>
+</div>

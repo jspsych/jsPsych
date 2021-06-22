@@ -47,6 +47,10 @@ var trial = {
 };
 ```
 
+<div>
+    <iframe src="../demos/jspsych-audio-button-response-demo.html" width="100%;" height="600px;">You must be online to view the plugin demo.</iframe>
+</div>
+
 #### Using custom button HTML to use images as buttons
 
 ```javascript
