@@ -1,0 +1,35 @@
+{
+  "name": "@jspsych/plugin-preload",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "src/index.js",
+  "unpkg": "dist/index.min.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "test": "jest --config jest.config.cjs",
+    "build": "rollup --config rollup.config.mjs",
+    "watch": "npm run build -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jspsych/jsPsych.git"
+  },
+  "author": "Josh de Leeuw",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jspsych/jsPsych/issues"
+  },
+  "homepage": "https://github.com/jspsych/jsPsych#readme",
+  "peerDependencies": {
+    "jspsych": ">=7"
+  },
+  "devDependencies": {
+    "@jspsych/plugin-audio-keyboard-response": "*",
+    "@jspsych/plugin-image-keyboard-response": "*",
+    "@jspsych/plugin-video-keyboard-response": "*"
+  }
+}

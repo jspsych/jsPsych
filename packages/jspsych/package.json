@@ -1,0 +1,31 @@
+{
+  "name": "jspsych",
+  "version": "7.0.0",
+  "description": "Behavioral experiments in a browser",
+  "type": "module",
+  "main": "src/index.js",
+  "unpkg": "dist/index.min.js",
+  "files": [
+    "src",
+    "dist",
+    "css"
+  ],
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest --config jest.config.cjs",
+    "build": "rollup --config rollup.config.mjs",
+    "watch": "npm run build -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jspsych/jsPsych.git"
+  },
+  "author": "Josh de Leeuw",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jspsych/jsPsych/issues"
+  },
+  "homepage": "https://github.com/jspsych/jsPsych#readme"
+}
