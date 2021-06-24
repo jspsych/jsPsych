@@ -24,6 +24,7 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.superfences
+  - pymdownx.tabbed
   - pymdownx.details
 repo_url: 'https://github.com/jspsych/jsPsych'
 repo_name: 'jspsych/jspsych'
