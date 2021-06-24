@@ -29,18 +29,23 @@ response | array | An array, where each element is an object representing a resp
 
 #### Displaying a single sequence multiple times
 
+Code 
+
 ```javascript
 var animation_sequence = ["img/happy_face_1.jpg", "img/happy_face_2.jpg", "img/happy_face_3.jpg", "img/happy_face_4.jpg"];
 
 var animation_trial = {
     type: 'animation',
     stimuli: animation_sequence,
-    equence_reps: 3,
+    sequence_reps: 3,
     frame_time: 300,
     prompt: '<p>Watch the faces.</p>',
 };
 ```
 
-<div>
-    <iframe src="../demos/jspsych-animation-demo.html" width="100%;" height="600px;">You must be online to view the plugin demo.</iframe>
-</div>
+<a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-animation-demo.html">Open demo in new tab</a>
+
+??? "View demo"
+    <div style="text-align:center;">
+        <iframe src="../demos/jspsych-animation-demo.html" width="90%;" height="500px;"></iframe>
+    </div>

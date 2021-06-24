@@ -38,6 +38,8 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 #### Displaying question until subject gives a response
 
+Code
+
 ```javascript
 var trial = {
 	type: 'audio-button-response',
@@ -47,9 +49,12 @@ var trial = {
 };
 ```
 
-<div>
-    <iframe src="../demos/jspsych-audio-button-response-demo.html" width="100%;" height="600px;">You must be online to view the plugin demo.</iframe>
-</div>
+<a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-audio-button-response-demo.html">Open demo in new tab</a>
+
+??? "View demo"
+    <div style="text-align:center;">
+    	<iframe src="../demos/jspsych-audio-button-response-demo.html" width="90%;" height="500px;"></iframe>
+	</div>
 
 #### Using custom button HTML to use images as buttons
 

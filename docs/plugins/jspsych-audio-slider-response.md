@@ -43,6 +43,8 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 #### A simple rating scale
 
+Code
+
 ```javascript
 var trial_1 = {
 	type: 'audio-slider-response',
@@ -52,6 +54,9 @@ var trial_1 = {
 }
 ```
 
-<div>
-    <iframe src="../demos/jspsych-audio-slider-response-demo.html" width="100%;" height="600px;">You must be online to view the plugin demo.</iframe>
-</div>
+<a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-audio-slider-response-demo.html">Open demo in new tab</a>
+
+??? "View demo"
+    <div style="text-align:center;">
+		<iframe src="../demos/jspsych-audio-slider-response-demo.html" width="90%;" height="500px;"></iframe>
+	</div>
