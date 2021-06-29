@@ -1,6 +1,7 @@
 /**
  * jspsych-music-image
  * Benjamin Kubit 01Oct2020
+ * updated 29Jun2021 - moved functions inside setupTrial
  *
  * plugin for displaying single image (+text) while auditory stim plays in the background
  *
