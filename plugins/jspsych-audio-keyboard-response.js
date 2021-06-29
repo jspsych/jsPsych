@@ -125,6 +125,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
 
 
       /////////////////////////////////
+
       // Either start the trial or wait for the user to click start
       if(!trial.click_to_start || context==null){
         start_audio();
@@ -143,8 +144,8 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         audio.addEventListener('ended', setup_keyboard_listener);
       }
 
-    }
 
+    }
 
     // function to end trial when it is time
     function end_trial() {
@@ -228,6 +229,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         audio.play();
       }
 
+
       // end trial if time limit is set
       if (trial.trial_duration !== null) {
         jsPsych.pluginAPI.setTimeout(function () {
@@ -243,6 +245,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
     }
 
     
+
   };
 
   return plugin;
