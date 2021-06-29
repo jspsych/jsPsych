@@ -1,6 +1,7 @@
 /**
  * jspsych-music-free-tap-keyboard-reponse.js
  * Benjamin Kubit 18Oct2020
+ * updated 29Jun2021 - moved functions inside setupTrial
  *
  * plugin for auditory target detection task with tone bleeps while auditory stim is playing in the background
  *
@@ -86,6 +87,11 @@ jsPsych.plugins["music-free-tap-keyboard-reponse"] = (function() {
         default: 1000,
         description: 'Number to multiply time values by (1000 = ms).'
       },
+      click_to_start: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Button to start sound',
+        description: 'If true, requires button click for trial to start.'
+      },
     }
   }
 
@@ -93,31 +99,8 @@ jsPsych.plugins["music-free-tap-keyboard-reponse"] = (function() {
 
     // setup stimulus
     var context = jsPsych.pluginAPI.audioContext();
-    if(context !== null){
-      var source = context.createBufferSource();
-      source.buffer = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
-      source.connect(context.destination);
-
-    } else {
-      var audio = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
-      audio.currentTime = 0;
-    }
-
-    // show prompt if there is one
-    if (trial.prompt !== null) {
-      display_element.innerHTML = trial.prompt;
-    }
-
-    // set up end event if trial needs it
-    if(trial.trial_ends_after_audio){
-      if(context !== null){
-        source.onended = function() {
-          end_trial();
-        }
-      } else {
-        audio.addEventListener('ended', end_trial);
-      }
-    }
+    var audio;
+    var end_time = 0;
 
     // store response
     var run_events = [];
@@ -161,20 +144,69 @@ jsPsych.plugins["music-free-tap-keyboard-reponse"] = (function() {
       $(svg).append(fixp);
     }
 
+    // load audio file
+    jsPsych.pluginAPI.getAudioBuffer(trial.stimulus)
+      .then(function (buffer) {
+        if (context !== null) {
+          audio = context.createBufferSource();
+          audio.buffer = buffer;
+          audio.connect(context.destination);
+        } else {
+          audio = buffer;
+          audio.currentTime = 0;
+        }
+        setupTrial();
+      })
+      .catch(function (err) {
+        console.error(`Failed to load audio file "${trial.stimulus}". Try checking the file path. We recommend using the preload plugin to load audio files.`)
+        console.error(err)
+      });
+
+    ///////////////////////////////////////////////////
+    function setupTrial() {
+      // set up end event if trial needs it
+      if (trial.trial_ends_after_audio) {
+        audio.addEventListener('ended', end_trial);
+      }
+
+       // show prompt if there is one
+      if (trial.prompt !== null) {
+        display_element.innerHTML = trial.prompt;
+      }
+
+      // Either start the trial or wait for the user to click start
+      if(!trial.click_to_start || context==null){
+        start_audio();
+      } else {
+        // Register callback for start sound button if we have one
+        $('#start_button').on('click', function(ev){
+          ev.preventDefault();
+          start_audio();
+        })
+      }
+
+    }
+    //////////////////////////////////////////////////////////////////////
+
     // function to end trial when it is time
     function end_trial() {
-      // kill any remaining setTimeout handlers (including vtargs)
+      // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
 
       // stop the audio file if it is playing
       // remove end event listeners if they exist
-      if(context !== null){
-        source.stop();
-        source.onended = function() { }
+      if (context !== null) {
+        audio.stop();
       } else {
         audio.pause();
-        audio.removeEventListener('ended', end_trial);
       }
+
+      audio.removeEventListener('ended', end_trial);
+      //audio.removeEventListener('ended', setup_keyboard_listener);
+
+
+      // kill keyboard listeners
+      jsPsych.pluginAPI.cancelAllKeyboardResponses();
 
       // clear the display
       display_element.innerHTML = '';
@@ -190,7 +222,7 @@ jsPsych.plugins["music-free-tap-keyboard-reponse"] = (function() {
 
       //append this info to current trial_data
       response_data.stimulus = trial.stimulus.replace(/^.*[\\\/]/, '');
-      response_data.time = Math.round(response.rt * trial.timeConvert);
+      response_data.time = Math.round(response.rt); // * trial.timeConvert
       response_data.key_press = response.key;
       response_data.type = 'response';
       response_data.ITI = response_data.time-prev_tap_time;//inter-tap-interval
@@ -214,13 +246,19 @@ jsPsych.plugins["music-free-tap-keyboard-reponse"] = (function() {
 
     // Embed the rest of the trial into a function so that we can attach to a button if desired
     var start_audio = function(){
-      if(context !== null){
-        context.resume(); 
+      // start audio
+      if (context !== null) {
         startTime = context.currentTime;
-        source.start(startTime);
-        
+        audio.start(startTime);
       } else {
-        audio.play();
+        audio.play(); 
+      }
+
+       // end trial if time limit is set
+      if(trial.trial_duration !== null) {
+        jsPsych.pluginAPI.setTimeout(function() {
+          end_trial();
+        }, trial.trial_duration); 
       }
 
       music_data.stimulus = trial.stimulus.replace(/^.*[\\\/]/, '');
@@ -252,26 +290,9 @@ jsPsych.plugins["music-free-tap-keyboard-reponse"] = (function() {
         });
       }
 
-      // end trial if time limit is set
-      if(trial.trial_duration !== null) {
-        jsPsych.pluginAPI.setTimeout(function() {
-          end_trial();
-        }, trial.trial_duration); 
-      }
-
       display_element.innerHTML = svg.outerHTML;
     };
 
-    // Either start the trial or wait for the user to click start
-    if(!trial.click_to_start || context==null){
-      start_audio();
-    } else {
-      // Register callback for start sound button if we have one
-      $('#start_button').on('click', function(ev){
-        ev.preventDefault();
-        start_audio();
-      })
-    }
   };
 
   return plugin;
