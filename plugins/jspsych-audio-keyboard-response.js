@@ -9,7 +9,7 @@
  **/
 
 // BMK 23Jan2021 added sound_text param 
-//     29July2021 moved functions inside setupTrial
+//     29Jun2021 moved functions inside setupTrial
 
 
 jsPsych.plugins["audio-keyboard-response"] = (function() {
@@ -123,6 +123,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         display_element.innerHTML = trial.prompt;
       }
 
+
       /////////////////////////////////
       // Either start the trial or wait for the user to click start
       if(!trial.click_to_start || context==null){
@@ -142,12 +143,6 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         audio.addEventListener('ended', setup_keyboard_listener);
       }
 
-      // end trial if time limit is set
-      if (trial.trial_duration !== null) {
-        jsPsych.pluginAPI.setTimeout(function () {
-          end_trial();
-        }, trial.trial_duration);
-      }
     }
 
 
@@ -224,6 +219,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
     // Embed the rest of the trial into a function so that we can attach to a button if desired
     var start_audio = function(){
 
+
       // start audio
       if (context !== null) {
         startTime = context.currentTime;
@@ -231,6 +227,14 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
       } else {
         audio.play();
       }
+
+      // end trial if time limit is set
+      if (trial.trial_duration !== null) {
+        jsPsych.pluginAPI.setTimeout(function () {
+          end_trial();
+        }, trial.trial_duration);
+      }
+      
 
       // clear the display
       display_element.innerHTML = trial.sound_text;
