@@ -9,6 +9,8 @@
  **/
 
 // BMK 23Jan2021 added sound_text param 
+//     29July2021 moved functions inside setupTrial
+
 
 jsPsych.plugins["audio-keyboard-response"] = (function() {
   var plugin = {};
@@ -68,6 +70,11 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         default: true,
         description: 'If true, then responses are allowed while the audio is playing. ' +
           'If false, then the audio must finish playing before a response is accepted.'
+      },
+      click_to_start: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Button to start sound',
+        description: 'If true, requires button click for trial to start.'
       }
     }
   }
@@ -116,12 +123,16 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         display_element.innerHTML = trial.prompt;
       }
 
-      // start audio
-      if (context !== null) {
-        startTime = context.currentTime;
-        audio.start(startTime);
+      /////////////////////////////////
+      // Either start the trial or wait for the user to click start
+      if(!trial.click_to_start || context==null){
+        start_audio();
       } else {
-        audio.play();
+        // Register callback for start sound button if we have one
+        $('#start_button').on('click', function(ev){
+          ev.preventDefault();
+          start_audio();
+        })
       }
 
       // start keyboard listener when trial starts or sound ends
@@ -212,10 +223,11 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
 
     // Embed the rest of the trial into a function so that we can attach to a button if desired
     var start_audio = function(){
-      if(context !== null){
-        context.resume(); 
+
+      // start audio
+      if (context !== null) {
         startTime = context.currentTime;
-        source.start(startTime);
+        audio.start(startTime);
       } else {
         audio.play();
       }
@@ -223,27 +235,10 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
       // clear the display
       display_element.innerHTML = trial.sound_text;
 
-      // start the response listener
-      setup_keyboard_listener();
-
-      // end trial if time limit is set
-      if (trial.trial_duration !== null) {
-        jsPsych.pluginAPI.setTimeout(function() {
-          end_trial();
-        }, trial.trial_duration);
-      }
+      
     }
 
-    // Either start the trial or wait for the user to click start
-    if(!trial.click_to_start || context==null){
-      start_audio();
-    } else {
-      // Register callback for start sound button if we have one
-      $('#start_button').on('click', function(ev){
-        ev.preventDefault();
-        start_audio();
-      })
-    }
+    
   };
 
   return plugin;
