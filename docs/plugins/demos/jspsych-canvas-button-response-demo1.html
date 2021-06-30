@@ -22,10 +22,9 @@
     type: 'html-button-response',
     stimulus: function() {
       var trial_data = jsPsych.data.get().filter({trial_type: 'canvas-button-response'}).values();
-      console.log(trial_data)
       var trial_json = JSON.stringify(trial_data, null, 2);
       return `<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>
-        <pre style="margin-top:0px;text-align:left;">'${trial_json}</pre>`;
+        <pre style="margin-top:0px;text-align:left;">${trial_json}</pre>`;
     },
     choices: ['Repeat demo']
   };
@@ -63,53 +62,8 @@
     data: {color: 'green', radius: 150}
   };
 
-  // write the canvas stimulus drawing function without using a named function
-  // the anonymous function must take the canvas as an argument
-  var lines = {
-    type: 'canvas-button-response',
-    stimulus: function(c) {
-      var ctx = c.getContext("2d");
-      // first line
-      ctx.beginPath();
-      ctx.moveTo(300, 10);
-      ctx.lineTo(300, 300);
-      ctx.lineWidth = 10;
-      ctx.strokeStyle = 'MediumBlue';
-      ctx.stroke();
-      // second line
-      ctx.beginPath();
-      ctx.moveTo(20, 200);
-      ctx.lineTo(100, 350);
-      ctx.lineWidth = 10;
-      ctx.strokeStyle = 'MediumPurple';
-      ctx.stroke();
-    },
-    choices: ['Blue line', 'Purple line'],
-    prompt: '<p>Which line is longer?</p>',
-    data: {line1_color: 'blue', line1_length: 290, line2_color: "purple", line2_length: 170}
-  };
-
-  // to use the canvas stimulus function with timeline variables,
-  // the jsPsych.timelineVariable() function can be used inside your stimulus function
-  var circle_procedure = {
-    timeline: [{
-      type: 'canvas-button-response',
-      stimulus: function(c) {
-          filledCirc(c, jsPsych.timelineVariable('radius'), jsPsych.timelineVariable('color'));
-      },
-      choices: ['Red', 'Green', 'Blue'],
-      prompt: '<p>What color is the circle?</p>',
-      data: {radius: jsPsych.timelineVariable('radius'), color: jsPsych.timelineVariable('color')}
-    }],
-    timeline_variables: [
-      {radius: 100, color: 'red'},
-      {radius: 200, color: 'green'},
-      {radius: 50, color: 'blue'}
-    ]
-  };
-
   var canvas_data_loop = {
-    timeline: [circle_1, circle_2, lines, circle_procedure, show_data],
+    timeline: [circle_1, circle_2, show_data],
     loop_function: function() {
       return true;
     }

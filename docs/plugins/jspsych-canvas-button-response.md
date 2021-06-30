@@ -64,3 +64,59 @@ var circle_2 = {
 };
 
 ```
+
+### Using an anonymous stimulus function
+
+```javascript
+var lines = {
+    type: 'canvas-button-response',
+    stimulus: function(c) {
+      var ctx = c.getContext("2d");
+      // first line
+      ctx.beginPath();
+      ctx.moveTo(300, 10);
+      ctx.lineTo(300, 300);
+      ctx.lineWidth = 10;
+      ctx.strokeStyle = 'MediumBlue';
+      ctx.stroke();
+      // second line
+      ctx.beginPath();
+      ctx.moveTo(20, 200);
+      ctx.lineTo(100, 350);
+      ctx.lineWidth = 10;
+      ctx.strokeStyle = 'MediumPurple';
+      ctx.stroke();
+    },
+    choices: ['Blue line', 'Purple line'],
+    prompt: '<p>Which line is longer?</p>',
+    data: {line1_color: 'blue', line1_length: 290, line2_color: "purple", line2_length: 170}
+  };
+```
+
+### Using the canvas stimulus function with timeline variables, and recording the correctness of responses
+
+```javascript
+var circle_procedure = {
+    timeline: [{
+      type: 'canvas-button-response',
+      stimulus: function(c) {
+          filledCirc(c, jsPsych.timelineVariable('radius'), jsPsych.timelineVariable('color'));
+      },
+      choices: ['Red', 'Green', 'Blue'],
+      prompt: '<p>What color is the circle?</p>',
+      data: {
+        radius: jsPsych.timelineVariable('radius'), 
+        color: jsPsych.timelineVariable('color'),
+        correct_response: jsPsych.timelineVariable('correct_response')},
+      on_finish: function(data){
+        data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+      }
+    }],
+    timeline_variables: [
+      {radius: 100, color: 'red', correct_response: 0},
+      {radius: 200, color: 'green', correct_response: 1},
+      {radius: 50, color: 'blue', correct_response: 2}
+    ],
+    randomize_order: true
+  };
+```
