@@ -1,1 +1,4 @@
-module.exports = require("@jspsych/config/jest.config");
+const { makePackageConfig } = require("@jspsych/config/jest");
+const packageJson = require("./package.json");
+
+module.exports = makePackageConfig(packageJson);

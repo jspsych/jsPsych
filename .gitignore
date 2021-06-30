@@ -6,3 +6,5 @@ Thumbs.db
 /.tern-project
 site/
 dist/
+coverage/
+.vscode/

@@ -2,7 +2,6 @@
   "private": true,
   "name": "@jspsych/config",
   "scripts": {
-    "test": "",
     "build": ""
   }
 }
