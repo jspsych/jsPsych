@@ -12,6 +12,9 @@ module.exports.makePackageConfig = (packageJson) => {
     transform: {
       "\\.js$": ["babel-jest", { configFile: "@jspsych/config/babel.test.config.js" }],
     },
-    displayName: packageBaseName,
+    displayName: {
+      name: packageBaseName,
+      color: packageBaseName === "jspsych" ? "white" : "cyanBright",
+    },
   };
 };
