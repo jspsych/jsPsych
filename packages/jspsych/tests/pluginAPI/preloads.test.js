@@ -1,6 +1,7 @@
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 
 import jsPsych from "../../src";
+import * as pluginAPI from "../../src/plugin-api";
 
 describe("getAutoPreloadList", function () {
   test("gets whole timeline when no argument provided", function () {
@@ -16,7 +17,7 @@ describe("getAutoPreloadList", function () {
       timeline: timeline,
     });
 
-    var images = jsPsych.pluginAPI.getAutoPreloadList().images;
+    var images = pluginAPI.getAutoPreloadList().images;
 
     expect(images[0]).toBe("img/foo.png");
   });
@@ -28,7 +29,7 @@ describe("getAutoPreloadList", function () {
 
     var timeline = [t];
 
-    var images = jsPsych.pluginAPI.getAutoPreloadList(timeline).images;
+    var images = pluginAPI.getAutoPreloadList(timeline).images;
 
     expect(images[0]).toBe("img/foo.png");
   });

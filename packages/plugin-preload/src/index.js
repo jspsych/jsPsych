@@ -5,8 +5,6 @@
 
 import jsPsych from "jspsych";
 
-console.log(jsPsych.pluginAPI.preloadImages);
-
 const plugin = {};
 
 plugin.info = {

@@ -3,6 +3,7 @@ import audioKeyboardResponse from "@jspsych/plugin-audio-keyboard-response";
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 import videoKeyboardResponse from "@jspsych/plugin-video-keyboard-response";
 import jsPsych from "jspsych";
+import * as pluginAPI from "jspsych/src/plugin-api";
 
 import preloadPlugin from "./";
 
@@ -13,7 +14,7 @@ describe("preload plugin", function () {
 
   describe("auto_preload", function () {
     test("auto_preload method works with simple timeline and image stimulus", function () {
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => {
+      pluginAPI.preloadImages = jest.fn((x, cb) => {
         cb();
       });
 
@@ -32,12 +33,11 @@ describe("preload plugin", function () {
         timeline: [preload, trial],
       });
 
-      console.log(jsPsych.pluginAPI.preloadImages.mock);
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
+      expect(pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
 
     test("auto_preload method works with simple timeline and audio stimulus", function () {
-      jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb) => {
+      pluginAPI.preloadAudio = jest.fn((x, cb) => {
         cb();
       });
 
@@ -55,11 +55,11 @@ describe("preload plugin", function () {
         timeline: [preload, trial],
       });
 
-      expect(jsPsych.pluginAPI.preloadAudio.mock.calls[0][0]).toStrictEqual(["sound/foo.mp3"]);
+      expect(pluginAPI.preloadAudio.mock.calls[0][0]).toStrictEqual(["sound/foo.mp3"]);
     });
 
     test("auto_preload method works with simple timeline and video stimulus", function () {
-      jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb) => {
+      pluginAPI.preloadVideo = jest.fn((x, cb) => {
         cb();
       });
 
@@ -77,11 +77,11 @@ describe("preload plugin", function () {
         timeline: [preload, trial],
       });
 
-      expect(jsPsych.pluginAPI.preloadVideo.mock.calls[0][0]).toStrictEqual(["video/foo.mp4"]);
+      expect(pluginAPI.preloadVideo.mock.calls[0][0]).toStrictEqual(["video/foo.mp4"]);
     });
 
     test("auto_preload method works with nested timeline", function () {
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => {
+      pluginAPI.preloadImages = jest.fn((x, cb) => {
         cb();
       });
 
@@ -100,11 +100,11 @@ describe("preload plugin", function () {
         timeline: [preload, trial],
       });
 
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
+      expect(pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
 
     test("auto_preload method works with looping timeline", function () {
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => {
+      pluginAPI.preloadImages = jest.fn((x, cb) => {
         cb();
       });
 
@@ -135,11 +135,11 @@ describe("preload plugin", function () {
         timeline: [preload, loop],
       });
 
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
+      expect(pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
 
     test("auto_preload method works with conditional timeline", function () {
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => {
+      pluginAPI.preloadImages = jest.fn((x, cb) => {
         cb();
       });
 
@@ -170,11 +170,11 @@ describe("preload plugin", function () {
         timeline: [preload, conditional],
       });
 
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
+      expect(pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
 
     test("auto_preload method works with timeline variables when stim is statically defined in trial object", function () {
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => {
+      pluginAPI.preloadImages = jest.fn((x, cb) => {
         cb();
       });
 
@@ -203,13 +203,13 @@ describe("preload plugin", function () {
         timeline: [preload, trial_procedure],
       });
 
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
+      expect(pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
   });
 
   describe("trials parameter", function () {
     test("trials parameter works with simple timeline", function () {
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => {
+      pluginAPI.preloadImages = jest.fn((x, cb) => {
         cb();
       });
 
@@ -228,11 +228,11 @@ describe("preload plugin", function () {
         timeline: [preload],
       });
 
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
+      expect(pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
 
     test("trials parameter works with looping timeline", function () {
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => {
+      pluginAPI.preloadImages = jest.fn((x, cb) => {
         cb();
       });
 
@@ -263,11 +263,11 @@ describe("preload plugin", function () {
         timeline: [preload],
       });
 
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
+      expect(pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
 
     test("trials parameter works with conditional timeline", function () {
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => {
+      pluginAPI.preloadImages = jest.fn((x, cb) => {
         cb();
       });
 
@@ -298,11 +298,11 @@ describe("preload plugin", function () {
         timeline: [preload],
       });
 
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
+      expect(pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
 
     test("trials parameter works with timeline variables when stim is statically defined in trial object", function () {
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => {
+      pluginAPI.preloadImages = jest.fn((x, cb) => {
         cb();
       });
 
@@ -331,13 +331,13 @@ describe("preload plugin", function () {
         timeline: [preload],
       });
 
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
+      expect(pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
   });
 
   describe("calls to pluginAPI preload functions", function () {
     test("auto_preload, trials, and manual preload array parameters can be used together", function () {
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => {
+      pluginAPI.preloadImages = jest.fn((x, cb) => {
         cb();
       });
 
@@ -364,15 +364,15 @@ describe("preload plugin", function () {
         timeline: [preload, trial_1],
       });
 
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls.length).toBe(1);
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0].length).toBe(3);
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toContain("img/foo.png");
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toContain("img/bar.png");
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toContain("img/fizz.png");
+      expect(pluginAPI.preloadImages.mock.calls.length).toBe(1);
+      expect(pluginAPI.preloadImages.mock.calls[0][0].length).toBe(3);
+      expect(pluginAPI.preloadImages.mock.calls[0][0]).toContain("img/foo.png");
+      expect(pluginAPI.preloadImages.mock.calls[0][0]).toContain("img/bar.png");
+      expect(pluginAPI.preloadImages.mock.calls[0][0]).toContain("img/fizz.png");
     });
 
     test("plugin only attempts to load duplicate files once", function () {
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb) => {
+      pluginAPI.preloadImages = jest.fn((x, cb) => {
         cb();
       });
 
@@ -398,14 +398,14 @@ describe("preload plugin", function () {
         timeline: [preload, trial_1],
       });
 
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls.length).toBe(1);
-      expect(jsPsych.pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
+      expect(pluginAPI.preloadImages.mock.calls.length).toBe(1);
+      expect(pluginAPI.preloadImages.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
   });
 
   describe("continue_after_error and error messages", function () {
     test("experiment continues when image loads successfully", function () {
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
+      pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
         cb_load();
         cb_complete();
       });
@@ -433,7 +433,7 @@ describe("preload plugin", function () {
     });
 
     test("error_message is shown when continue_after_error is false and files fail", function () {
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
+      pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
         cb_error({
           source: x,
           error: {},
@@ -469,7 +469,7 @@ describe("preload plugin", function () {
       var mock_fn = jest.fn(function (x) {
         return x;
       });
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
+      pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
         // don't return anything here to simulate waiting forever for image to load
       });
 
@@ -503,7 +503,7 @@ describe("preload plugin", function () {
       var mock_fn = jest.fn(function (x) {
         return x;
       });
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
+      pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
         cb_error({
           source: x,
           error: {},
@@ -543,7 +543,7 @@ describe("preload plugin", function () {
       var mock_fn = jest.fn(function (x) {
         return x;
       });
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
+      pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
         // don't return anything here to simulate waiting forever for image to load
       });
 
@@ -580,7 +580,7 @@ describe("preload plugin", function () {
       var mock_fn = jest.fn(function (x) {
         return x;
       });
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
+      pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
         cb_error({
           source: x,
           error: {},
@@ -665,7 +665,7 @@ describe("preload plugin", function () {
       var mock_fn = jest.fn(function (x) {
         return x;
       });
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
+      pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
         if (x.includes("blue.png")) {
           cb_load();
           cb_complete();
@@ -676,13 +676,13 @@ describe("preload plugin", function () {
           });
         }
       });
-      jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb_complete, cb_load, cb_error) => {
+      pluginAPI.preloadVideo = jest.fn((x, cb_complete, cb_load, cb_error) => {
         cb_error({
           source: x,
           error: {},
         });
       });
-      jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb_complete, cb_load, cb_error) => {
+      pluginAPI.preloadAudio = jest.fn((x, cb_complete, cb_load, cb_error) => {
         cb_error({
           source: x,
           error: {},
@@ -730,13 +730,13 @@ describe("preload plugin", function () {
         return x;
       });
       var cancel_preload_spy = jest.spyOn(jsPsych.pluginAPI, "cancelPreloads");
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
+      pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
         // empty to simulate timeout
       });
-      jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb_complete, cb_load, cb_error) => {
+      pluginAPI.preloadVideo = jest.fn((x, cb_complete, cb_load, cb_error) => {
         // empty to simulate timeout
       });
-      jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb_complete, cb_load, cb_error) => {
+      pluginAPI.preloadAudio = jest.fn((x, cb_complete, cb_load, cb_error) => {
         // empty to simulate timeout
       });
       jest.useFakeTimers();
@@ -777,15 +777,15 @@ describe("preload plugin", function () {
       });
       var cancel_preload_spy = jest.spyOn(jsPsych.pluginAPI, "cancelPreloads");
       jest.useFakeTimers();
-      jsPsych.pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
+      pluginAPI.preloadImages = jest.fn((x, cb_complete, cb_load, cb_error) => {
         if (x.includes("blue.png")) {
           cb_load();
           cb_complete();
         } else {
         }
       });
-      jsPsych.pluginAPI.preloadVideo = jest.fn((x, cb_complete, cb_load, cb_error) => {});
-      jsPsych.pluginAPI.preloadAudio = jest.fn((x, cb_complete, cb_load, cb_error) => {});
+      pluginAPI.preloadVideo = jest.fn((x, cb_complete, cb_load, cb_error) => {});
+      pluginAPI.preloadAudio = jest.fn((x, cb_complete, cb_load, cb_error) => {});
 
       var preload_1 = {
         type: preloadPlugin,

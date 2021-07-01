@@ -1,6 +1,8 @@
+import { describe, expect, jest, test } from "@jest/globals";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
 import jsPsych from "../../src";
+import * as pluginAPI from "../../src/plugin-api";
 
 describe("#getKeyboardResponse", function () {
   test("should execute a function after successful keypress", function () {
@@ -13,7 +15,7 @@ describe("#getKeyboardResponse", function () {
     jsPsych.init({
       timeline: [t],
     });
-    jsPsych.pluginAPI.getKeyboardResponse({ callback_function: callback });
+    pluginAPI.getKeyboardResponse({ callback_function: callback });
     expect(callback.mock.calls.length).toBe(0);
     document
       .querySelector(".jspsych-display-element")
@@ -34,7 +36,7 @@ describe("#getKeyboardResponse", function () {
     jsPsych.init({
       timeline: [t],
     });
-    jsPsych.pluginAPI.getKeyboardResponse({ callback_function: callback, valid_responses: ["a"] });
+    pluginAPI.getKeyboardResponse({ callback_function: callback, valid_responses: ["a"] });
     expect(callback.mock.calls.length).toBe(0);
     document
       .querySelector(".jspsych-display-element")
@@ -61,7 +63,7 @@ describe("#getKeyboardResponse", function () {
     jsPsych.init({
       timeline: [t],
     });
-    jsPsych.pluginAPI.getKeyboardResponse({
+    pluginAPI.getKeyboardResponse({
       callback_function: callback,
       valid_responses: jsPsych.NO_KEYS,
     });
@@ -94,7 +96,7 @@ describe("#getKeyboardResponse", function () {
     document
       .querySelector(".jspsych-display-element")
       .dispatchEvent(new KeyboardEvent("keydown", { key: "a" }));
-    jsPsych.pluginAPI.getKeyboardResponse({
+    pluginAPI.getKeyboardResponse({
       callback_function: callback,
       valid_responses: jsPsych.ALL_KEYS,
       allow_held_key: false,
@@ -127,7 +129,7 @@ describe("#getKeyboardResponse", function () {
     document
       .querySelector(".jspsych-display-element")
       .dispatchEvent(new KeyboardEvent("keydown", { key: "a" }));
-    jsPsych.pluginAPI.getKeyboardResponse({
+    pluginAPI.getKeyboardResponse({
       callback_function: callback,
       valid_responses: jsPsych.ALL_KEYS,
       allow_held_key: true,
@@ -151,7 +153,7 @@ describe("#getKeyboardResponse", function () {
       timeline: [t],
       case_sensitive_responses: false,
     });
-    jsPsych.pluginAPI.getKeyboardResponse({ callback_function: callback, valid_responses: ["a"] });
+    pluginAPI.getKeyboardResponse({ callback_function: callback, valid_responses: ["a"] });
     expect(callback.mock.calls.length).toBe(0);
     document
       .querySelector(".jspsych-display-element")
@@ -172,7 +174,7 @@ describe("#getKeyboardResponse", function () {
       timeline: [t],
       case_sensitive_responses: true,
     });
-    jsPsych.pluginAPI.getKeyboardResponse({ callback_function: callback, valid_responses: ["a"] });
+    pluginAPI.getKeyboardResponse({ callback_function: callback, valid_responses: ["a"] });
     expect(callback.mock.calls.length).toBe(0);
     document
       .querySelector(".jspsych-display-element")
@@ -196,7 +198,7 @@ describe("#getKeyboardResponse", function () {
     document
       .querySelector(".jspsych-display-element")
       .dispatchEvent(new KeyboardEvent("keydown", { key: "A" }));
-    jsPsych.pluginAPI.getKeyboardResponse({
+    pluginAPI.getKeyboardResponse({
       callback_function: callback,
       valid_responses: ["a"],
       allow_held_key: false,
@@ -230,7 +232,7 @@ describe("#getKeyboardResponse", function () {
     document
       .querySelector(".jspsych-display-element")
       .dispatchEvent(new KeyboardEvent("keydown", { key: "A" }));
-    jsPsych.pluginAPI.getKeyboardResponse({
+    pluginAPI.getKeyboardResponse({
       callback_function: callback,
       valid_responses: ["a"],
       allow_held_key: true,
@@ -257,7 +259,7 @@ describe("#getKeyboardResponse", function () {
     document
       .querySelector(".jspsych-display-element")
       .dispatchEvent(new KeyboardEvent("keydown", { key: "A" }));
-    jsPsych.pluginAPI.getKeyboardResponse({
+    pluginAPI.getKeyboardResponse({
       callback_function: callback,
       valid_responses: ["a"],
       allow_held_key: true,
@@ -284,7 +286,7 @@ describe("#getKeyboardResponse", function () {
     document
       .querySelector(".jspsych-display-element")
       .dispatchEvent(new KeyboardEvent("keydown", { key: "A" }));
-    jsPsych.pluginAPI.getKeyboardResponse({
+    pluginAPI.getKeyboardResponse({
       callback_function: callback,
       valid_responses: ["a"],
       allow_held_key: false,
@@ -298,20 +300,20 @@ describe("#getKeyboardResponse", function () {
       .dispatchEvent(new KeyboardEvent("keyup", { key: "A" }));
   });
   test("should default to case insensitive when used before jsPsych.init is called", function () {
-    expect(typeof jsPsych.initSettings().case_sensitive_responses).toBe("undefined");
+    expect(jsPsych.initSettings().case_sensitive_responses).toBeUndefined();
     var callback = jest.fn();
-    jsPsych.pluginAPI.getKeyboardResponse({ callback_function: callback, valid_responses: ["a"] });
-    jsPsych.pluginAPI.createKeyboardEventListeners(document.body);
+    pluginAPI.getKeyboardResponse({ callback_function: callback, valid_responses: ["a"] });
+    pluginAPI.createKeyboardEventListeners(document.body);
     expect(callback.mock.calls.length).toBe(0);
     document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "a" }));
     document.body.dispatchEvent(new KeyboardEvent("keyup", { key: "a" }));
     expect(callback.mock.calls.length).toBe(1);
-    jsPsych.pluginAPI.getKeyboardResponse({ callback_function: callback, valid_responses: ["a"] });
-    jsPsych.pluginAPI.createKeyboardEventListeners(document.body);
+    pluginAPI.getKeyboardResponse({ callback_function: callback, valid_responses: ["a"] });
+    pluginAPI.createKeyboardEventListeners(document.body);
     document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "A" }));
     document.body.dispatchEvent(new KeyboardEvent("keyup", { key: "A" }));
     expect(callback.mock.calls.length).toBe(2);
-    jsPsych.pluginAPI.reset(document.body);
+    pluginAPI.reset(document.body);
   });
 });
 
@@ -326,9 +328,9 @@ describe("#cancelKeyboardResponse", function () {
     jsPsych.init({
       timeline: [t],
     });
-    var listener = jsPsych.pluginAPI.getKeyboardResponse({ callback_function: callback });
+    var listener = pluginAPI.getKeyboardResponse({ callback_function: callback });
     expect(callback.mock.calls.length).toBe(0);
-    jsPsych.pluginAPI.cancelKeyboardResponse(listener);
+    pluginAPI.cancelKeyboardResponse(listener);
     document
       .querySelector(".jspsych-display-element")
       .dispatchEvent(new KeyboardEvent("keydown", { key: "q" }));
@@ -350,9 +352,9 @@ describe("#cancelAllKeyboardResponses", function () {
     jsPsych.init({
       timeline: [t],
     });
-    jsPsych.pluginAPI.getKeyboardResponse({ callback_function: callback });
+    pluginAPI.getKeyboardResponse({ callback_function: callback });
     expect(callback.mock.calls.length).toBe(0);
-    jsPsych.pluginAPI.cancelAllKeyboardResponses();
+    pluginAPI.cancelAllKeyboardResponses();
     document
       .querySelector(".jspsych-display-element")
       .dispatchEvent(new KeyboardEvent("keydown", { key: "q" }));
@@ -365,12 +367,12 @@ describe("#cancelAllKeyboardResponses", function () {
 
 describe("#compareKeys", function () {
   test("should compare keys regardless of type (old key-keyCode functionality)", function () {
-    expect(jsPsych.pluginAPI.compareKeys("q", 81)).toBe(true);
-    expect(jsPsych.pluginAPI.compareKeys(81, 81)).toBe(true);
-    expect(jsPsych.pluginAPI.compareKeys("q", "Q")).toBe(true);
-    expect(jsPsych.pluginAPI.compareKeys(80, 81)).toBe(false);
-    expect(jsPsych.pluginAPI.compareKeys("q", "1")).toBe(false);
-    expect(jsPsych.pluginAPI.compareKeys("q", 80)).toBe(false);
+    expect(pluginAPI.compareKeys("q", 81)).toBe(true);
+    expect(pluginAPI.compareKeys(81, 81)).toBe(true);
+    expect(pluginAPI.compareKeys("q", "Q")).toBe(true);
+    expect(pluginAPI.compareKeys(80, 81)).toBe(false);
+    expect(pluginAPI.compareKeys("q", "1")).toBe(false);
+    expect(pluginAPI.compareKeys("q", 80)).toBe(false);
   });
   test("should be case sensitive when case_sensitive_responses is true", function () {
     var t = {
@@ -381,8 +383,8 @@ describe("#compareKeys", function () {
       timeline: [t],
       case_sensitive_responses: true,
     });
-    expect(jsPsych.pluginAPI.compareKeys("q", "Q")).toBe(false);
-    expect(jsPsych.pluginAPI.compareKeys("q", "q")).toBe(true);
+    expect(pluginAPI.compareKeys("q", "Q")).toBe(false);
+    expect(pluginAPI.compareKeys("q", "q")).toBe(true);
   });
   test("should not be case sensitive when case_sensitive_responses is false", function () {
     var t = {
@@ -393,27 +395,27 @@ describe("#compareKeys", function () {
       timeline: [t],
       case_sensitive_responses: false,
     });
-    expect(jsPsych.pluginAPI.compareKeys("q", "Q")).toBe(true);
-    expect(jsPsych.pluginAPI.compareKeys("q", "q")).toBe(true);
+    expect(pluginAPI.compareKeys("q", "Q")).toBe(true);
+    expect(pluginAPI.compareKeys("q", "q")).toBe(true);
   });
   test("should default to case insensitive for strings when used before jsPsych.init is called", function () {
-    expect(typeof jsPsych.initSettings().case_sensitive_responses).toBe("undefined");
-    expect(jsPsych.pluginAPI.compareKeys("q", "Q")).toBe(true);
-    expect(jsPsych.pluginAPI.compareKeys("q", "q")).toBe(true);
+    expect(jsPsych.initSettings().case_sensitive_responses).toBeUndefined();
+    expect(pluginAPI.compareKeys("q", "Q")).toBe(true);
+    expect(pluginAPI.compareKeys("q", "q")).toBe(true);
   });
   test("should accept null as argument, and return true if both arguments are null, and return false if one argument is null and other is string or numeric", function () {
     const spy = jest.spyOn(console, "error").mockImplementation();
-    expect(jsPsych.pluginAPI.compareKeys(null, "Q")).toBe(false);
-    expect(jsPsych.pluginAPI.compareKeys(80, null)).toBe(false);
-    expect(jsPsych.pluginAPI.compareKeys(null, null)).toBe(true);
+    expect(pluginAPI.compareKeys(null, "Q")).toBe(false);
+    expect(pluginAPI.compareKeys(80, null)).toBe(false);
+    expect(pluginAPI.compareKeys(null, null)).toBe(true);
     expect(console.error).not.toHaveBeenCalled();
     spy.mockRestore();
   });
   test("should return undefined and produce a console warning if either/both arguments are not a string, integer, or null", function () {
     const spy = jest.spyOn(console, "error").mockImplementation();
-    var t1 = jsPsych.pluginAPI.compareKeys({}, "Q");
-    var t2 = jsPsych.pluginAPI.compareKeys(true, null);
-    var t3 = jsPsych.pluginAPI.compareKeys(null, ["Q"]);
+    var t1 = pluginAPI.compareKeys({}, "Q");
+    var t2 = pluginAPI.compareKeys(true, null);
+    var t3 = pluginAPI.compareKeys(null, ["Q"]);
     expect(typeof t1).toBe("undefined");
     expect(typeof t2).toBe("undefined");
     expect(typeof t3).toBe("undefined");
@@ -435,19 +437,19 @@ describe("#compareKeys", function () {
 
 describe("#convertKeyCharacterToKeyCode", function () {
   test("should return the keyCode for a particular character", function () {
-    expect(jsPsych.pluginAPI.convertKeyCharacterToKeyCode("q")).toBe(81);
-    expect(jsPsych.pluginAPI.convertKeyCharacterToKeyCode("1")).toBe(49);
-    expect(jsPsych.pluginAPI.convertKeyCharacterToKeyCode("space")).toBe(32);
-    expect(jsPsych.pluginAPI.convertKeyCharacterToKeyCode("enter")).toBe(13);
+    expect(pluginAPI.convertKeyCharacterToKeyCode("q")).toBe(81);
+    expect(pluginAPI.convertKeyCharacterToKeyCode("1")).toBe(49);
+    expect(pluginAPI.convertKeyCharacterToKeyCode("space")).toBe(32);
+    expect(pluginAPI.convertKeyCharacterToKeyCode("enter")).toBe(13);
   });
 });
 
 describe("#convertKeyCodeToKeyCharacter", function () {
   test("should return the keyCode for a particular character", function () {
-    expect(jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(81)).toBe("q");
-    expect(jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(49)).toBe("1");
-    expect(jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(32)).toBe("space");
-    expect(jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(13)).toBe("enter");
+    expect(pluginAPI.convertKeyCodeToKeyCharacter(81)).toBe("q");
+    expect(pluginAPI.convertKeyCodeToKeyCharacter(49)).toBe("1");
+    expect(pluginAPI.convertKeyCodeToKeyCharacter(32)).toBe("space");
+    expect(pluginAPI.convertKeyCodeToKeyCharacter(13)).toBe("enter");
   });
 });
 
@@ -455,7 +457,7 @@ describe("#setTimeout", function () {
   test("basic setTimeout control with centralized storage", function () {
     jest.useFakeTimers();
     var callback = jest.fn();
-    jsPsych.pluginAPI.setTimeout(callback, 1000);
+    pluginAPI.setTimeout(callback, 1000);
     expect(callback).not.toBeCalled();
     jest.runAllTimers();
     expect(callback).toBeCalled();
@@ -466,9 +468,9 @@ describe("#clearAllTimeouts", function () {
   test("clear timeouts before they execute", function () {
     jest.useFakeTimers();
     var callback = jest.fn();
-    jsPsych.pluginAPI.setTimeout(callback, 5000);
+    pluginAPI.setTimeout(callback, 5000);
     expect(callback).not.toBeCalled();
-    jsPsych.pluginAPI.clearAllTimeouts();
+    pluginAPI.clearAllTimeouts();
     jest.runAllTimers();
     expect(callback).not.toBeCalled();
   });
