@@ -1,7 +1,9 @@
 # jsPsych "Hello world" experiment
 
 In the long tradition of **"Hello world!"** examples, this tutorial creates an experiment that outputs the phrase "Hello world!" to the browser. Though useless as an actual experiment, the process is helpful for learning the basics of using the jsPsych library. This tutorial will assume that you know very little about how to set up a web page.
-If this does not apply to you and you would like to utilize modern JavaScript and NPM, consider using [jsPsych Builder](https://github.com/bjoluc/jspsych-builder) instead to automate the setup, spin up a development server, and later on transpile and bundle scripts and styles.
+
+!!! info
+    If you would like to use modern web development tools (e.g. ES6 modules, Node/NPM, webpack, Babel), you may want to check out the [jsPsych Builder](https://github.com/bjoluc/jspsych-builder) CLI utility. jsPsych Builder allows you to automate the experiment setup, spin up a development server, and transpile and bundle scripts and styles. There are getting started instructions on the jsPsych Builder GitHub page that you can follow alongside this Hello World tutorial.
 
 ## Step 1: Download the jsPsych library
 
