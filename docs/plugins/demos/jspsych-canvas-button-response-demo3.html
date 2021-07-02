@@ -21,8 +21,9 @@
   var show_data = {
     type: 'html-button-response',
     stimulus: function() {
-      var trial_data = jsPsych.data.get().filter({trial_type: 'canvas-button-response'}).values();
-      var trial_json = JSON.stringify(trial_data, null, 2);
+      var all_trial_data = jsPsych.data.get().filter({trial_type: 'canvas-button-response'});
+      var last_three_data = all_trial_data.last(3).values(); // One block consists of three canvas-button-response trials
+      var trial_json = JSON.stringify(last_three_data, null, 2);
       return `<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>
         <pre style="margin-top:0px;text-align:left;">${trial_json}</pre>`;
     },
@@ -32,7 +33,7 @@
   function filledCirc(canvas, radius, color) {
     var ctx = canvas.getContext("2d");
     ctx.beginPath();
-    ctx.arc(250, 250, radius, 0, 2 * Math.PI);
+    ctx.arc(150, 150, radius, 0, 2 * Math.PI);
     ctx.fillStyle = color;
     ctx.fill();
   }
@@ -46,6 +47,7 @@
       stimulus: function(c) {
           filledCirc(c, jsPsych.timelineVariable('radius'), jsPsych.timelineVariable('color'));
       },
+      canvas_size: [300, 300],
       choices: ['Red', 'Green', 'Blue'],
       prompt: '<p>What color is the circle?</p>',
       data: {
@@ -57,8 +59,8 @@
       }
     }],
     timeline_variables: [
-      {radius: 100, color: 'red', correct_response: 0},
-      {radius: 200, color: 'green', correct_response: 1},
+      {radius: 80, color: 'red', correct_response: 0},
+      {radius: 100, color: 'green', correct_response: 1},
       {radius: 50, color: 'blue', correct_response: 2}
     ],
     randomize_order: true

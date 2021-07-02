@@ -21,7 +21,7 @@
   var show_data = {
     type: 'html-button-response',
     stimulus: function() {
-      var trial_data = jsPsych.data.get().filter({trial_type: 'canvas-button-response'}).values();
+      var trial_data = jsPsych.data.getLastTrialData().values();
       var trial_json = JSON.stringify(trial_data, null, 2);
       return `<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>
         <pre style="margin-top:0px;text-align:left;">${trial_json}</pre>`;
@@ -37,19 +37,20 @@
       var ctx = c.getContext("2d");
       // first line
       ctx.beginPath();
-      ctx.moveTo(300, 10);
-      ctx.lineTo(300, 300);
+      ctx.moveTo(200, 10);
+      ctx.lineTo(200, 250);
       ctx.lineWidth = 10;
       ctx.strokeStyle = 'MediumBlue';
       ctx.stroke();
       // second line
       ctx.beginPath();
-      ctx.moveTo(20, 200);
-      ctx.lineTo(100, 350);
+      ctx.moveTo(20, 100);
+      ctx.lineTo(100, 250);
       ctx.lineWidth = 10;
       ctx.strokeStyle = 'MediumPurple';
       ctx.stroke();
     },
+    canvas_size: [300, 300],
     choices: ['Blue line', 'Purple line'],
     prompt: '<p>Which line is longer?</p>',
     data: {line1_color: 'blue', line1_length: 290, line2_color: "purple", line2_length: 170}
