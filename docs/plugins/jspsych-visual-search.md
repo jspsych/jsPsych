@@ -1,8 +1,6 @@
 # jspsych-visual-search plugin
 
-This plugin presents a customizable visual-search task modelled after Treisman and Gelade (1980). The subject indicates whether or not a target is present among a set of distractors. The stimuli can be displayed in a circle or grid format. Here is an example using normal and backward Ns:
-
-![Sample Visual Search Stimulus](/img/visual_search_example.jpg)
+This plugin presents a customizable visual-search task modelled after Treisman and Gelade (1980). The subject indicates whether or not a target is present among a set of distractors. The stimuli can be displayed in a circle or grid format. The stimuli can also be jittered as a ratio of image size
 
 ## Parameters
 
@@ -17,11 +15,13 @@ In addition to the [parameters available in all plugins](/overview/plugins#param
 | fixation_image     | string          | *undefined*   | Path to image file that is a fixation target. |
 | target_size        | array           | `[50, 50]`    | Two element array indicating the height and width of the search array element images. |
 | fixation_size      | array           | `[16, 16]`    | Two element array indicating the height and width of the fixation image. |
-| circle_diameter    | numeric         | 250           | The diameter of the search array circle in pixels. |
+| circle_diameter    | numeric         | 500           | The diameter of the search array circle in pixels. |
 | target_present_key | string          | 'j'           | The key to press if the target is present in the search array. |
 | target_absent_key  | string          | 'f'           | The key to press if the target is not present in the search array. |
 | trial_duration     | numeric         | null          | The maximum amount of time the subject is allowed to search before the trial will continue. A value of null will allow the subject to search indefinitely. |
 | fixation_duration  | numeric         | 1000          | How long to show the fixation image for before the search array (in milliseconds). |
+| usegrid            | boolean         | false         | Are we using a grid for the visual search task? |
+| jitter_ratio       | numeric         | 0.0           | The distance to jitter the image as ratio of image size (average of x and y). |
 
 ## Data Generated
 
@@ -36,17 +36,32 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 | target_present | boolean     | True if the target is present in the search array |
 | locations      | array       | Array where each element is the pixel value of the center of an image in the search array. If the target is present, then the first element will represent the location of the target. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 
-## Example
+## Examples
 
-#### Search for the backward N
+#### Search for the green T in the grid, no jitter
 
 ```javascript
 var trial_1 = {
-  type: 'visual-search-circle',
-  target: 'img/backwardN.gif',
-  foil: 'img/normalN.gif',
-  fixation_image: 'img/fixation.gif',
+  type: 'visual-search',
+  target: 'img/greenT.png',
+  foil: 'img/greenL.png',
+  fixation_image: 'img/fixation.png',
   target_present: true,
   set_size: 4
+  usegrid: true
+}
+```
+
+#### Search for the green T in the circle, jitter 
+
+```javascript
+var trial_1 = {
+  type: 'visual-search',
+  target: 'img/greenT.png',
+  foil: 'img/greenL.png',
+  fixation_image: 'img/fixation.png',
+  target_present: true,
+  set_size: 4
+  jitter_ratio: 1.0
 }
 ```
