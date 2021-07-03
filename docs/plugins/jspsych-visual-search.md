@@ -1,6 +1,6 @@
-# jspsych-visual-search-circle plugin
+# jspsych-visual-search plugin
 
-This plugin presents a customizable visual-search task modelled after [Wang, Cavanagh, & Green (1994)](http://dx.doi.org/10.3758/BF03206946). The subject indicates whether or not a target is present among a set of distractors. The stimuli are displayed in a circle, evenly-spaced, equidistant from a fixation point. Here is an example using normal and backward Ns:
+This plugin presents a customizable visual-search task modelled after Treisman and Gelade (1980). The subject indicates whether or not a target is present among a set of distractors. The stimuli can be displayed in a circle or grid format. Here is an example using normal and backward Ns:
 
 ![Sample Visual Search Stimulus](/img/visual_search_example.jpg)
 
