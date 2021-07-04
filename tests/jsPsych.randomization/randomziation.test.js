@@ -2,6 +2,7 @@ const root = '../../';
 
 require(root + 'jspsych.js');
 
+const originalRandomFunction = Math.random;
 
 describe('#shuffle', function(){
   test('should produce fixed order with mock RNG', function(){
@@ -25,3 +26,20 @@ describe('#randomID', function(){
     expect(jsPsych.randomization.randomID(3)).toBe("37a");
   });
 });
+
+describe('shuffleNoRepeats', function(){
+  test('should generate a random order with no repeats', function(){
+    if(typeof Math.random.mock !== 'undefined'){
+      Math.random = originalRandomFunction;
+    }
+    var equalityTest = function(a,b){ return a === b };
+    var toShuffle = ['a','b','c','d'];
+    var repeated = jsPsych.randomization.repeat(toShuffle, 20);
+    var randomOrder = jsPsych.randomization.shuffleNoRepeats(repeated, equalityTest);
+    var repeats = 0;
+    for(var i=1; i<randomOrder.length; i++){
+      if(equalityTest(randomOrder[i], randomOrder[i-1])) { repeats++; }
+    }
+    expect(repeats).toBe(0);
+  })
+})
