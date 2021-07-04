@@ -90,6 +90,7 @@ jsPsych.plugins["music-free-tap-keyboard-reponse"] = (function() {
       click_to_start: {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Button to start sound',
+        default: true,
         description: 'If true, requires button click for trial to start.'
       },
     }
@@ -245,7 +246,7 @@ jsPsych.plugins["music-free-tap-keyboard-reponse"] = (function() {
     };
 
     // Embed the rest of the trial into a function so that we can attach to a button if desired
-    var start_audio = function(){
+    function start_audio(){
       // start audio
       if (context !== null) {
         startTime = context.currentTime;

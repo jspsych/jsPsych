@@ -74,6 +74,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
       click_to_start: {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Button to start sound',
+        default: false,
         description: 'If true, requires button click for trial to start.'
       }
     }
@@ -122,9 +123,6 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
       if (trial.prompt !== null) {
         display_element.innerHTML = trial.prompt;
       }
-
-
-      /////////////////////////////////
 
       // Either start the trial or wait for the user to click start
       if(!trial.click_to_start || context==null){
@@ -218,9 +216,7 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
     }
 
     // Embed the rest of the trial into a function so that we can attach to a button if desired
-    var start_audio = function(){
-
-
+    function start_audio(){
       // start audio
       if (context !== null) {
         startTime = context.currentTime;
@@ -229,7 +225,6 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         audio.play();
       }
 
-
       // end trial if time limit is set
       if (trial.trial_duration !== null) {
         jsPsych.pluginAPI.setTimeout(function () {
@@ -237,14 +232,9 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         }, trial.trial_duration);
       }
       
-
       // clear the display
       display_element.innerHTML = trial.sound_text;
-
-      
     }
-
-    
 
   };
 
