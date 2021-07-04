@@ -12,7 +12,7 @@
 //     29Jun2021 moved functions inside setupTrial
 
 
-jsPsych.plugins["audio-keyboard-response"] = (function() {
+jsPsych.plugins["audio-keyboard-response"] = (function () {
   var plugin = {};
 
   jsPsych.pluginAPI.registerPreload('audio-keyboard-response', 'stimulus', 'audio');
@@ -141,8 +141,6 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
       } else if (!trial.trial_ends_after_audio) {
         audio.addEventListener('ended', setup_keyboard_listener);
       }
-
-
     }
 
     // function to end trial when it is time
@@ -235,7 +233,6 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
       // clear the display
       display_element.innerHTML = trial.sound_text;
     }
-
   };
 
   return plugin;
