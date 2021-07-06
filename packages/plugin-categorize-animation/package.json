@@ -3,16 +3,19 @@
   "version": "1.0.0",
   "description": "jspsych plugin for categorization trials with feedback and animated stimuli",
   "type": "module",
-  "main": "src/index.js",
-  "unpkg": "dist/index.min.js",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "unpkg": "dist/index.browser.min.js",
   "files": [
     "src",
     "dist"
   ],
+  "source": "src/index.ts",
   "scripts": {
     "test": "jest --config jest.config.cjs",
     "build": "rollup --config rollup.config.mjs",
-    "watch": "npm run build -- --watch"
+    "watch": "npm run build -- --watch",
+    "tsc": "tsc"
   },
   "repository": {
     "type": "git",

@@ -3,20 +3,23 @@
   "version": "7.0.0",
   "description": "Behavioral experiments in a browser",
   "type": "module",
-  "main": "src/index.js",
-  "unpkg": "dist/index.min.js",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "unpkg": "dist/index.browser.min.js",
   "files": [
     "src",
     "dist",
     "css"
   ],
+  "source": "src/index.ts",
   "directories": {
     "test": "tests"
   },
   "scripts": {
     "test": "jest --config jest.config.cjs",
     "build": "rollup --config rollup.config.mjs",
-    "watch": "npm run build -- --watch"
+    "watch": "npm run build -- --watch",
+    "tsc": "tsc"
   },
   "repository": {
     "type": "git",

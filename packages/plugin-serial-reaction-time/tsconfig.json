@@ -1,0 +1,3 @@
+{
+  "extends": "@jspsych/config/tsconfig.json"
+}

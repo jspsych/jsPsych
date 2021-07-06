@@ -1,7 +1,26 @@
-module.exports.makePackageConfig = (packageJson) => {
+const ts = require("typescript");
+const { pathsToModuleNameMapper } = require("ts-jest/utils");
+
+module.exports.makePackageConfig = (dirname) => {
+  const packageJson = require(dirname + "/package.json");
   const packageBaseName = packageJson.name.replace("@jspsych/", "");
 
+  // based on https://github.com/formium/tsdx/blob/462af2d002987f985695b98400e0344b8f2754b7/src/createRollupConfig.ts#L51-L57
+  const tsCompilerOptions = ts.parseJsonConfigFileContent(
+    ts.readConfigFile(dirname + "/tsconfig.json", ts.sys.readFile).config,
+    ts.sys,
+    dirname
+  ).options;
+
   return {
+    preset: "ts-jest",
+    // moduleNameMapper: {
+    //   "^@jspsych/(.*)$": "<rootDir>/../$1/src",
+    //   "^jspsych(.*)$": "<rootDir>/../jspsych/src$1",
+    // },
+    moduleNameMapper: pathsToModuleNameMapper(tsCompilerOptions.paths, {
+      prefix: "<rootDir>/../../",
+    }),
     resetModules: true,
     testEnvironment: "jsdom",
     testEnvironmentOptions: {
@@ -9,9 +28,6 @@ module.exports.makePackageConfig = (packageJson) => {
       pretendToBeVisual: true,
     },
     testURL: "http://localhost/",
-    transform: {
-      "\\.js$": ["babel-jest", { configFile: "@jspsych/config/babel.test.config.js" }],
-    },
     displayName: {
       name: packageBaseName,
       color: packageBaseName === "jspsych" ? "white" : "cyanBright",
