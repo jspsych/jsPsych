@@ -77,3 +77,29 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
     </div>
 
     <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-instructions-demo-2.html">Open demo in new tab</a>
+
+#### Changing Button Text
+
+???+ example "Changing Button Text"
+
+    === "Code"
+    ```javascript
+    var trial = {
+      type: 'instructions',
+      pages: [
+        'Welcome to the experiment. Click next to begin.',
+        'This is the second page of instructions.',
+        'This is the final page.'
+      ],
+      button_label_next: "Continue",
+      button_label_previous: "Return to the dark side",
+      show_clickable_nav: true
+    }
+    ```
+
+    === "Demo"
+    <div style="text-align:center;">
+        <iframe src="../plugins/demos/jspsych-instructions-demo-3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+    </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-instructions-demo-3.html">Open demo in new tab</a>
