@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- REQUIRED for any plugin -->
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-preload.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css" />
+    <!-- CURRENT plugin -->
+    <script src="../plugins/jspsych-informed-consent.js"></script>
+  </head>
+  <body></body>
+  <script>
+    var demo_trial = {
+      type: "informed-consent",
+      url: "../examples/external_html/informed_consent.html",
+      on_finish: function (data) {
+        // End Experiment if Consent was declined
+        if (jsPsych.data.get().last(1).values()[0].consent_declined) {
+          // Consent was declined, end the experiment.
+          // End experiment
+          jsPsych.endExperiment(
+            "The experiment was ended because you declined consent"
+          );
+        } // END IF end experiment
+      }, // END on_finish
+    }; // END demo_trial
+
+    // Initialize experiment
+    jsPsych.init({
+      // Create timeline
+      timeline: [demo_trial],
+      // Show data upon finish
+      on_finish: function () {
+        jsPsych.data.displayData("json");
+      },
+    });
+  </script>
+</html>
