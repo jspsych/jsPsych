@@ -28,12 +28,14 @@ jsPsych.plugins["informed-consent"] = (function () {
     // Name of the plugin - should be same as defined at the top.
     name: "informed-consent",
     parameters: {
+      // EXTERNAL WEBPAGE
       url: {
         description: "A link to the external HTML page you wish to display.",
         pretty_name: "URL",
         type: jsPsych.plugins.parameterType.STRING,
         default: undefined,
       },
+      // BUTTONS
       download_information_letter: {
         description:
           "Do you want to present participants the option of downloading the information letter? [TRUE/FALSE]",
@@ -49,15 +51,35 @@ jsPsych.plugins["informed-consent"] = (function () {
       },
       button_label_next: {
         description: "The text you want to display on the continue button",
-        type: jsPsych.plugins.parameterType.STRING,
         pretty_name: "Button Label Continue",
+        type: jsPsych.plugins.parameterType.STRING,
         default: "Accept & Continue",
       },
       button_label_decline: {
         description: "The text you want to display on the decline button",
-        type: jsPsych.plugins.parameterType.STRING,
         pretty_name: "Button Label Decline",
+        type: jsPsych.plugins.parameterType.STRING,
         default: "Decline & Exit",
+      },
+      // CONSENT STATEMENTS
+      consent_header: {
+        description:
+          "A short and concisce description you want to show above the consent statement",
+        pretty_name: "Consent Header",
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        default: "By accepting and continuing I agree that: ",
+      },
+      consent_statements: {
+        description:
+          "An array of statements to which you want the participants to provide active consent",
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: "Consent Statements",
+        array: true,
+        default: [
+          "I have read and understood the information letter;",
+          "I agree to participate in this study;",
+          "I agree with the use of the data that are collected;",
+        ],
       },
     }, // END parameters
   }; // END plugin.info
@@ -72,6 +94,8 @@ jsPsych.plugins["informed-consent"] = (function () {
     var container_width = "80vw"; // 80% of available view width
     var container_border = "1px solid #aaa"; // light-grey
     var button_margin = "1em";
+    var consent_status = [];
+    var start_time = performance.now();
 
     // CREATE IFRAME CONTAINER
     // Create a div element that holds the iframe (external html)
@@ -101,7 +125,35 @@ jsPsych.plugins["informed-consent"] = (function () {
     // Add the entire container element to the HTML
     display_element.appendChild(iframe_container);
 
-    // CREATE BUTTON iframe_container
+    // CREATE CONSENT CONTAINER
+    // Create a div element that holds the buttons that allow
+    // ... participants to abort, download, and/or continue
+    consent_container = document.createElement("div");
+    // Add a custom id so that we can refer to it later
+    consent_container.id = "jspsych-content-consent-container";
+    // Set styling
+    consent_container.style.width = container_width;
+    consent_container.style.height = "20vh"; // 20% of available view height
+    consent_container.style.margin = container_margin;
+    consent_container.style.textAlign = "left";
+    consent_container.innerHTML = trial.consent_header;
+    // Initilize list
+    consent_statements = document.createElement("ul");
+
+    // ADD CONSENT STATEMENTS
+    for (i = 0; i < trial.consent_statements.length; i++) {
+      statement = document.createElement("li");
+      statement.id = "jspsych-consent-statement-" + i;
+      statement.innerHTML = trial.consent_statements[i];
+      // add to list
+      consent_statements.appendChild(statement);
+    }
+    // Add list to container
+    consent_container.appendChild(consent_statements);
+    // Add the entire container element to the HTML
+    display_element.appendChild(consent_container);
+
+    // CREATE BUTTON CONTAINER
     // Create a div element that holds the buttons that allow
     // ... participants to abort, download, and/or continue
     button_container = document.createElement("div");
@@ -122,6 +174,12 @@ jsPsych.plugins["informed-consent"] = (function () {
     decline_button.innerHTML = trial.button_label_decline;
     // Add styling
     decline_button.style.marginRight = button_margin;
+    // Add responsivity
+    decline_button.onclick = function () {
+      // Log consent
+      consent_status.push(trial.button_label_decline);
+      endTrial();
+    };
     // Add to container
     button_container.appendChild(decline_button);
 
@@ -137,6 +195,9 @@ jsPsych.plugins["informed-consent"] = (function () {
       download_button.style.marginRight = button_margin;
       // Add responsivity
       download_button.onclick = function () {
+        // Log consent
+        consent_status.push(trial.button_label_download);
+        // Open external html in seperate window
         window.open(trial.url, "_blank");
       };
       // Add to container
@@ -150,12 +211,36 @@ jsPsych.plugins["informed-consent"] = (function () {
     // Add content
     next_button.innerHTML = trial.button_label_next;
     // Add styling
-    download_button.style.marginRight = button_margin;
+    next_button.style.marginRight = button_margin;
+    // Add responsivity
+    next_button.onclick = function () {
+      // Log consent
+      consent_status.push(trial.button_label_next);
+
+      endTrial();
+    };
     // Add to container
     button_container.appendChild(next_button);
 
     // Add the container element to the HTML
     display_element.appendChild(button_container);
+
+    var endTrial = function () {
+      // Clean all content from the screen for next trial
+      display_element.innerHTML = "";
+
+      // Save trial data
+      var trial_data = {
+        rt: performance.now() - start_time,
+        consent_downloaded: consent_status.includes(
+          trial.button_label_download
+        ),
+        consent_declined: consent_status.includes(trial.button_label_decline),
+      };
+
+      // Save data and finish trial
+      jsPsych.finishTrial(trial_data);
+    };
   }; // END plugin.trial
 
   return plugin;
