@@ -63,7 +63,9 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
       type: 'instructions',
       pages: [
         'Welcome to the experiment. Click next to begin.',
-        'Here is a picture of what you will do: <img src="instruction_image.jpg"></img>'
+        'You will be looking at images of arrows: ' +
+        '<br>' + 
+        '<img src="con2.png"></img>'
       ],
       show_clickable_nav: true
     }
