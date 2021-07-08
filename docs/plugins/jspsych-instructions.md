@@ -28,31 +28,78 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 | view_history | array       | An array containing the order of pages the subject viewed (including when the subject returned to previous pages) and the time spent viewing each page. Each object in the array represents a single page view, and contains keys called `page_index` (the page number, starting with 0) and `viewing_time` (duration of the page view). This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 | rt           | numeric     | The response time in milliseconds for the subject to view all of the pages. |
 
-## Example
+## Examples
 
 #### Showing simple text instructions
 
-```javascript
-var trial = {
-	type: 'instructions',
-	pages: [
-		'Welcome to the experiment. Click next to begin.',
-		'This is the second page of instructions.',
-		'This is the final page.'
-	],
-	show_clickable_nav: true
-}
-```
+???+ example "Showing simple text instructions"
+    === "Code"
+    ```javascript
+    var trial = {
+      type: 'instructions',
+      pages: [
+        'Welcome to the experiment. Click next to begin.',
+        'This is the second page of instructions.',
+        'This is the final page.'
+      ],
+      show_clickable_nav: true
+    }
+    ```
+
+    === "Demo"
+    <div style="text-align:center;">
+        <iframe src="../plugins/demos/jspsych-instructions-demo-1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+    </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-instructions-demo-1.html">Open demo in new tab</a>
 
 #### Including images
 
-```javascript
-var trial = {
-	type: 'instructions',
-	pages: [
-		'Welcome to the experiment. Click next to begin.',
-		'Here is a picture of what you will do: <img src="instruction_image.jpg"></img>'
-	],
-	show_clickable_nav: true
-}
-```
+???+ example "Including Images"
+
+    === "Code"
+    ```javascript
+    var trial = {
+      type: 'instructions',
+      pages: [
+        'Welcome to the experiment. Click next to begin.',
+        'You will be looking at images of arrows: ' +
+        '<br>' + 
+        '<img src="con2.png"></img>'
+      ],
+      show_clickable_nav: true
+    }
+    ```
+
+    === "Demo"
+    <div style="text-align:center;">
+        <iframe src="../plugins/demos/jspsych-instructions-demo-2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+    </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-instructions-demo-2.html">Open demo in new tab</a>
+
+#### Changing Button Text
+
+???+ example "Changing Button Text"
+
+    === "Code"
+    ```javascript
+    var trial = {
+      type: 'instructions',
+      pages: [
+        'Welcome to the experiment. Click next to begin.',
+        'This is the second page of instructions.',
+        'This is the final page.'
+      ],
+      button_label_next: "Continue",
+      button_label_previous: "Return to the dark side",
+      show_clickable_nav: true
+    }
+    ```
+
+    === "Demo"
+    <div style="text-align:center;">
+        <iframe src="../plugins/demos/jspsych-instructions-demo-3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+    </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-instructions-demo-3.html">Open demo in new tab</a>
