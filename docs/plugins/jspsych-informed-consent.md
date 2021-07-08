@@ -40,3 +40,97 @@ consent_downloaded | boolean | A true or false value indicating whether the part
 consent_declined | boolean | A `true` or `false` value indicating whether the participant provided consent (`consent_declined == false`) or declined consent (`consent_declined == true`). 
 
 ## Examples
+
+*Note* the addition of `on_finish` is currently the only way in which we can save the consent data *and* end the experiment. You can change the text of the `endExperiment` message, but you should not change anything else.
+
+### Default Values
+
+This is the most basic way of using the plugin - everything is organized by default values! Just change the url to include your own information letter.
+
+``` javascript
+var demo_trial = {
+      type: "informed-consent",
+      url: "../examples/external_html/informed_consent.html",
+      on_finish: function (data) {
+        // End Experiment if Consent was declined
+        if (jsPsych.data.get().last(1).values()[0].consent_declined) {
+          // Consent was declined, end the experiment.
+          // End experiment
+          jsPsych.endExperiment(
+            "The experiment was ended because you declined consent"
+          );
+        } // END IF end experiment
+      }, // END on_finish
+    }; // END demo_trial
+```
+
+### Remove Print Button
+
+If you do not want participants to be able to download the information letter.
+
+``` javascript
+var demo_trial = {
+      type: "informed-consent",
+      url: "../examples/external_html/informed_consent.html",
+      download_information_letter: false,
+      on_finish: function (data) {
+        // End Experiment if Consent was declined
+        if (jsPsych.data.get().last(1).values()[0].consent_declined) {
+          // Consent was declined, end the experiment.
+          // End experiment
+          jsPsych.endExperiment(
+            "The experiment was ended because you declined consent"
+          );
+        } // END IF end experiment
+      }, // END on_finish
+    }; // END demo_trial
+```
+
+### Change Button Labels
+
+If you want to change the text on the buttons. For example, to make your experiment suited for a different language.
+
+``` javascript
+var demo_trial = {
+      type: "informed-consent",
+      url: "../examples/external_html/informed_consent.html",
+      button_label_decline: "No I will not take part",
+      button_label_download: "Download",
+      button_label_next: "Yeah! Let's get started!",
+      on_finish: function (data) {
+        // End Experiment if Consent was declined
+        if (jsPsych.data.get().last(1).values()[0].consent_declined) {
+          // Consent was declined, end the experiment.
+          // End experiment
+          jsPsych.endExperiment(
+            "The experiment was ended because you declined consent"
+          );
+        } // END IF end experiment
+      }, // END on_finish
+    }; // END demo_trial
+```
+
+### Change Consent Request
+
+Update to what the participants are consenting.
+
+``` javascript
+var demo_trial = {
+      type: "informed-consent",
+      url: "../examples/external_html/informed_consent.html",
+      consent_statements: [
+          "I have read and understood the information letter;",
+          "I am 16 years or older",
+        ],
+      on_finish: function (data) {
+        // End Experiment if Consent was declined
+        if (jsPsych.data.get().last(1).values()[0].consent_declined) {
+          // Consent was declined, end the experiment.
+          // End experiment
+          jsPsych.endExperiment(
+            "The experiment was ended because you declined consent"
+          );
+        } // END IF end experiment
+      }, // END on_finish
+    }; // END demo_trial
+```
