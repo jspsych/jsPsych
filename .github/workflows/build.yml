@@ -1,0 +1,44 @@
+name: build
+
+on: [push, pull_request]
+
+env:
+  HUSKY: 0
+
+jobs:
+  test:
+    name: Build, lint, and test on Node.js ${{ matrix.node }}
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [14.x, 16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install npm@v7
+        run: npm install -g npm@7
+
+      - name: Install dependencies and build packages
+        run: npm ci
+
+      - name: Check types
+        run: npm run tsc
+
+      # TODO setup linting
+      # - name: Lint
+      #   run: npm run lint
+
+      - name: Run tests
+        run: npm run test -- --ci --coverage --maxWorkers=2
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096" # Increase heap size for jest
+      # TODO setup codecov or coveralls
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v1
