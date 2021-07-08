@@ -21,7 +21,13 @@ export const makeRollupConfig = (outputOptions, globalOptions = {}) => {
       resolve(),
       typescript({
         typescript: ts,
-        tsconfigOverride: { compilerOptions: { rootDir: "./src", outDir: "./dist" } },
+        tsconfigOverride: {
+          compilerOptions: {
+            rootDir: "./src",
+            outDir: "./dist",
+            paths: {}, // Do not include files referenced via paths
+          },
+        },
       }),
       json(),
     ],
