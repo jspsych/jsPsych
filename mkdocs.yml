@@ -83,6 +83,7 @@ nav:
   - 'jspsych-image-button-response': 'plugins/jspsych-image-button-response.md'
   - 'jspsych-image-keyboard-response': 'plugins/jspsych-image-keyboard-response.md'
   - 'jspsych-image-slider-response': 'plugins/jspsych-image-slider-response.md'
+  - 'jspsych-informed-consent': 'plugins/jspsych-informed-consent.md'
   - 'jspsych-instructions': 'plugins/jspsych-instructions.md'
   - 'jspsych-maxdiff': 'plugins/jspsych-maxdiff.md'
   - 'jspsych-preload': 'plugins/jspsych-preload.md'
