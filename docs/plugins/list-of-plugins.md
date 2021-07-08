@@ -24,6 +24,7 @@ Plugin | Description
 [jspsych&#8209;html&#8209;slider&#8209;response](/plugins/jspsych-html-slider-response) | Display an HTML-formatted stimulus and allow the subject to respond by moving a slider to indicate a value.
 [jspsych&#8209;iat&#8209;html](/plugins/jspsych-iat-html) | The implicit association task, using HTML-formatted stimuli.
 [jspsych&#8209;iat&#8209;image](/plugins/jspsych-iat-image) | The implicit association task, using images as stimuli.
+[jspsych&#8209;informed&#8209;consent](/plugins/jspsych-informed-consent) | Display an information letter (separate HTML file) to participants and request active informed consent. Participants have the option to download the information letter. The experiment only continues if active consent is provided.
 [jspsych&#8209;image&#8209;button&#8209;response](/plugins/jspsych-image-button-response) | Display an image and allow the subject to respond by choosing a button to click. The button can be customized extensively, e.g., using images in place of standard buttons.
 [jspsych&#8209;image&#8209;keyboard&#8209;response](/plugins/jspsych-image-keyboard-response) | Display an image and allow the subject to respond by pressing a key.
 [jspsych&#8209;image&#8209;slider&#8209;response](/plugins/jspsych-image-slider-response) | Display an image and allow the subject to respond by moving a slider to indicate a value.
