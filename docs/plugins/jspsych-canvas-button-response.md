@@ -46,7 +46,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
         var circle_1 = {
             type: 'canvas-button-response',
             stimulus: function(c) {
-            filledCirc(c, 100, 'blue');
+                filledCirc(c, 100, 'blue');
             },
             canvas_size: [300, 300],
             choices: ['Red', 'Green', 'Blue'],
@@ -57,13 +57,13 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
         var circle_2 = {
             type: 'canvas-button-response',
             stimulus: function(c) {
-            filledCirc(c, 150, 'green');
+                filledCirc(c, 150, 'green');
             },
             canvas_size: [300, 300],
             choices: ['Larger', 'Smaller'],
             stimulus_duration: 1000,
             prompt: '<p>Is this circle larger or smaller than the last one?</p>'+
-            '<p>Stimulus will be hidden after 1 second.</p>',
+                '<p>Stimulus will be hidden after 1 second.</p>',
             data: {color: 'green', radius: 150}
         };
         ```
@@ -81,21 +81,21 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
         var lines = {
             type: 'canvas-button-response',
             stimulus: function(c) {
-            var ctx = c.getContext("2d");
-            // first line
-            ctx.beginPath();
-            ctx.moveTo(200, 10);
-            ctx.lineTo(200, 250);
-            ctx.lineWidth = 10;
-            ctx.strokeStyle = 'MediumBlue';
-            ctx.stroke();
-            // second line
-            ctx.beginPath();
-            ctx.moveTo(20, 100);
-            ctx.lineTo(100, 250);
-            ctx.lineWidth = 10;
-            ctx.strokeStyle = 'MediumPurple';
-            ctx.stroke();
+                var ctx = c.getContext("2d");
+                // first line
+                ctx.beginPath();
+                ctx.moveTo(200, 10);
+                ctx.lineTo(200, 250);
+                ctx.lineWidth = 10;
+                ctx.strokeStyle = 'MediumBlue';
+                ctx.stroke();
+                // second line
+                ctx.beginPath();
+                ctx.moveTo(20, 100);
+                ctx.lineTo(100, 250);
+                ctx.lineWidth = 10;
+                ctx.strokeStyle = 'MediumPurple';
+                ctx.stroke();
             },
             canvas_size: [300, 300],
             choices: ['Blue line', 'Purple line'],
@@ -124,26 +124,29 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
         }
 
         var circle_procedure = {
-            timeline: [{
-            type: 'canvas-button-response',
-            stimulus: function(c) {
-                filledCirc(c, jsPsych.timelineVariable('radius'), jsPsych.timelineVariable('color'));
-            },
-            canvas_size: [300, 300],
-            choices: ['Red', 'Green', 'Blue'],
-            prompt: '<p>What color is the circle?</p>',
-            data: {
-                radius: jsPsych.timelineVariable('radius'), 
-                color: jsPsych.timelineVariable('color'),
-                correct_response: jsPsych.timelineVariable('correct_response')},
-            on_finish: function(data){
-                data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
-            }
-            }],
+            timeline: [
+                {
+                    type: 'canvas-button-response',
+                    stimulus: function(c) {
+                        filledCirc(c, jsPsych.timelineVariable('radius'), jsPsych.timelineVariable('color'));
+                    },
+                    canvas_size: [300, 300],
+                    choices: ['Red', 'Green', 'Blue'],
+                    prompt: '<p>What color is the circle?</p>',
+                    data: {
+                        radius: jsPsych.timelineVariable('radius'), 
+                        color: jsPsych.timelineVariable('color'),
+                        correct_response: jsPsych.timelineVariable('correct_response')
+                    },
+                    on_finish: function(data){
+                        data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+                    }
+                }
+            ],
             timeline_variables: [
-            {radius: 80, color: 'red', correct_response: 0},
-            {radius: 100, color: 'green', correct_response: 1},
-            {radius: 50, color: 'blue', correct_response: 2}
+                {radius: 80, color: 'red', correct_response: 0},
+                {radius: 100, color: 'green', correct_response: 1},
+                {radius: 50, color: 'blue', correct_response: 2}
             ],
             randomize_order: true
         };        
