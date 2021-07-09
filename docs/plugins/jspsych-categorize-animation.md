@@ -34,27 +34,51 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ## Examples
 
-#### Basic example
+???+ example "Basic example"
+    === "Code"
+        ```javascript
+        var animation_trial = {
+          type: 'categorize-animation',
+          stimuli: [
+            'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_1.jpg', 
+            'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_2.jpg', 
+            'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_3.jpg', 
+            'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_4.jpg'
+          ],
+          choices: ['p', 'q'], 
+          key_answer: 'q', 
+        };
+        ```
+    === "Demo"
+      <div style="text-align:center;">
+          <iframe src="../plugins/demos/jspsych-categorize-animation-demo1.html" width="90%;" height="550px;" frameBorder="0"></iframe>
+      </div>
 
-```javascript
-var animation_trial = {
-  type: 'categorize-animation',
-  stimuli: ["img/face_3.jpg", "img/face_2.jpg", "img/face_4.jpg", "img/face_1.jpg"],
-	choices: ['p', 'q'], 
-	key_answer: 'q', 
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-categorize-animation-demo1.html">Open demo in new tab</a>
 
-#### Giving feedback with `%ANS%` string
+???+ example "Giving feedback with `%ANS%` string"
+    === "Code"
+        ```javascript
+        var images = [
+            'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_1.jpg', 
+            'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_2.jpg', 
+            'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_3.jpg', 
+            'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_4.jpg'
+        ];
 
-```javascript
-var animation_trial = {
-  type: 'categorize-animation',
-  stimuli: ["img/face_3.jpg", "img/face_2.jpg", "img/face_4.jpg", "img/face_1.jpg"],
-  choices: ['p', 'q'], 
-  key_answer: 'q', 
-	text_answer: 'Dax', // the label for the sequence is 'Dax'
-	correct_text: 'Correct! This was a %ANS%.',
-	incorrect_text: 'Incorrect. This was a %ANS%.'
-};
-```
+        var animation_trial = {
+            type: 'categorize-animation',
+            stimuli: images,
+            choices: ['p', 'q'], 
+            key_answer: 'q', 
+            text_answer: 'Dax', // the label for the sequence is 'Dax'
+            correct_text: 'Correct! This was a %ANS%.',
+            incorrect_text: 'Incorrect. This was a %ANS%.'
+        };
+        ```
+    === "Demo"
+      <div style="text-align:center;">
+          <iframe src="../plugins/demos/jspsych-categorize-animation-demo2.html" width="90%;" height="550px;" frameBorder="0"></iframe>
+      </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-categorize-animation-demo2.html">Open demo in new tab</a>
