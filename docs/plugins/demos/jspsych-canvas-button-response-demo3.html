@@ -53,9 +53,10 @@
       data: {
         radius: jsPsych.timelineVariable('radius'), 
         color: jsPsych.timelineVariable('color'),
-        correct_response: jsPsych.timelineVariable('correct_response')},
+        correct_response: jsPsych.timelineVariable('correct_response')
+      },
       on_finish: function(data){
-        data.correct = (data.response == data.correct_response;
+        data.correct = (data.response == data.correct_response);
       }
     }],
     timeline_variables: [
