@@ -50,10 +50,10 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
         ```
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="../plugins/demos/jspsych-canvas-keyboard-response-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+            <iframe src="../demos/jspsych-canvas-keyboard-response-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-canvas-keyboard-response-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-canvas-keyboard-response-demo1.html">Open demo in new tab</a>
     
 ???+ example "Draw circle, no response allowed"
     === "Code"
@@ -69,7 +69,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
             type: 'canvas-keyboard-response',
             canvas_size: [300, 300],
             stimulus: drawCirc,
-            prompt: '<p>No key response is accepted</p><p>The stimulus disappears after 3 seconds.</p>',
+            prompt: '<p>No key response is allowed.</p><p>The stimulus disappears after 3 seconds.</p>',
             choices: jsPsych.NO_KEYS,
             trial_duration: 3000,
             data: {shape: 'circle', radius: 50}
@@ -78,7 +78,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
             
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="../plugins/demos/jspsych-canvas-keyboard-response-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+            <iframe src="../demos/jspsych-canvas-keyboard-response-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-canvas-keyboard-response-demo2.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-canvas-keyboard-response-demo2.html">Open demo in new tab</a>
