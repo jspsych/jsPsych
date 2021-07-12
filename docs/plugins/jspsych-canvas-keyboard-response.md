@@ -29,40 +29,56 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
 
 ## Examples
 
-### Draw rectangle and wait for response
+???+ example "Draw rectangle and wait for response"
+    === "Code"
+        ```javascript
+        function drawRect(c){
+            var ctx = c.getContext('2d');
+            ctx.beginPath();
+            ctx.rect(30, 30, 200, 50);
+            ctx.stroke();
+        }
 
-```javascript
-function drawRect(c){
-    var ctx = c.getContext('2d');
-    ctx.beginPath();
-    ctx.rect(30, 30, 200, 50);
-    ctx.stroke();
-}
+        var trial = {
+            type: 'canvas-keyboard-response',
+            canvas_size: [300, 300],
+            stimulus: drawRect,
+            choices: ['e','i'],
+            prompt: '<p>Is this a circle or a rectangle? Press "e" for circle and "i" for rectangle.</p>',
+            data: {shape: 'rectangle'}
+        }
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../plugins/demos/jspsych-canvas-keyboard-response-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-var trial = {
-    type: 'canvas-keyboard-response',
-    stimulus: drawRect,
-    choices: ['e','i'],
-    prompt: '<p>Is this a circle or a rectangle? Press "e" for circle and "i" for rectangle.</p>',
-    data: {shape: 'rectangle'}
-}
-```
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-canvas-keyboard-response-demo1.html">Open demo in new tab</a>
+    
+???+ example "Draw circle, no response allowed"
+    === "Code"
+        ```javascript
+        function drawCirc(c){
+            var ctx = c.getContext('2d');
+            ctx.beginPath();
+            ctx.arc(100, 75, 50, 0, 2 * Math.PI);
+            ctx.stroke();
+        }
 
-### Draw circle, no response allowed
+        var trial = {
+            type: 'canvas-keyboard-response',
+            canvas_size: [300, 300],
+            stimulus: drawCirc,
+            prompt: '<p>No key response is accepted</p><p>The stimulus disappears after 3 seconds.</p>',
+            choices: jsPsych.NO_KEYS,
+            trial_duration: 3000,
+            data: {shape: 'circle', radius: 50}
+        }
+        ```
+            
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../plugins/demos/jspsych-canvas-keyboard-response-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-function drawCirc(c){
-    var ctx = c.getContext('2d');
-    ctx.beginPath();
-    ctx.arc(100, 75, 50, 0, 2 * Math.PI);
-    ctx.stroke();
-}
-
-var trial = {
-    type: 'canvas-keyboard-response',
-    stimulus: drawCirc,
-    choices: jsPsych.NO_KEYS,
-    trial_duration: 1000,
-    data: {shape: 'circle', radius: 50}
-}
-```
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-canvas-keyboard-response-demo2.html">Open demo in new tab</a>

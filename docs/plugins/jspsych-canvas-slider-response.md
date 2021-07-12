@@ -36,54 +36,72 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
 
 ## Examples
 
-### Draw two squares
+???+ example "Draw two squares"
+    === "Code"
+        ```javascript
+        var colors = ['#FF3333', '#FF6A33'];
 
-```javascript
-var colors = [#'FF3333', '#FF6A33'];
+        function twoSquares(c) {    
+            var ctx = c.getContext('2d');
+            ctx.fillStyle = colors[0];
+            ctx.fillRect(200, 70, 40, 40);
+            ctx.fillStyle = colors[1];
+            ctx.fillRect(260, 70, 40, 40);
+        }
 
-function twoSquares(c) {    
-    var ctx = c.getContext('2d');
-    ctx.fillStyle = colors[0];
-    ctx.fillRect(200, 70, 40, 40);
-    ctx.fillStyle = colors[1];
-    ctx.fillRect(260, 70, 40, 40);
-}
+        var trial = {
+            type: 'canvas-slider-response',
+            stimulus: twoSquares,
+            labels: ['0','10'],
+            canvas_size: [150, 500],
+            prompt: '<p>How different would you say the colors of these two squares are on a scale from 0 (the same) to 10 (completely different)</p>',
+            data: {color1: colors[0], color2: colors[1]}
+        }
+        ```
 
-var trial = {
-    type: 'canvas-slider-response',
-    stimulus: twoSquares,
-    labels: ['0','10'],
-    canvas_size: [200, 500],
-    prompt: '<p>How different would you say the colors of these two squares are on a scale from 0 (the same) to 10 (completely different)</p>',
-    data: {color1: colors[0], color2: colors[1]}
-}
-```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../plugins/demos/jspsych-canvas-slider-response-demo1.html" width="90%;" height="550px;" frameBorder="0"></iframe>
+        </div>
 
-### Draw two squares with additional parameters
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-canvas-slider-response-demo1.html">Open demo in new tab</a>
 
-```javascript
-var colors;
 
-function twoSquares(c, colors) {
-    var ctx = c.getContext('2d');
-    ctx.fillStyle = colors[0];
-    ctx.fillRect(200, 70, 40, 40);
-    ctx.fillStyle = colors[1];
-    ctx.fillRect(260, 70, 40, 40);
-}
+???+ example "Draw two squares with additional parameters"
+    === "Code"
+        ```javascript
+        var colors;
 
-var trial = {
-    type: 'canvas-slider-response',
-    stimulus: function(c) {
-        colors = ['darkred', 'cyan'];
-        twoSquares(c, colors);
-    },
-    labels: ['Exactly<br>the same','Totally<br>different'],
-    canvas_size: [200, 500],
-    prompt: '<p>How different would you say the colors of these two squares are?</p>',
-    on_finish: function(data) {
-        data.color1 = colors[0];
-        data.color2 = colors[1];
-    }
-};
-```
+        function twoSquares(c, colors) {
+            var ctx = c.getContext('2d');
+            ctx.fillStyle = colors[0];
+            ctx.fillRect(200, 70, 40, 40);
+            ctx.fillStyle = colors[1];
+            ctx.fillRect(260, 70, 40, 40);
+        }
+
+        var trial = {
+            type: 'canvas-slider-response',
+            stimulus: function(c) {
+                colors = ['darkred', 'cyan'];
+                twoSquares(c, colors);
+            },
+            labels: ['Exactly<br>the same','Totally<br>different'],
+            canvas_size: [200, 500],
+            prompt: '<p>How different would you say the colors of these two squares are?</p>',
+            on_finish: function(data) {
+                data.color1 = colors[0];
+                data.color2 = colors[1];
+            }
+        };
+
+        ```
+
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../plugins/demos/jspsych-canvas-slider-response-demo2.html" width="90%;" height="550px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-canvas-slider-response-demo2.html">Open demo in new tab</a>
+
+
