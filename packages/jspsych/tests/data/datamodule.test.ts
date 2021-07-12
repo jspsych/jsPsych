@@ -1,12 +1,18 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import jsPsych from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
 import { pressKey } from "../utils";
+
+let jsPsych: JsPsych;
+
+afterEach(() => {
+  jsPsych = undefined;
+});
 
 describe("Basic data recording", function () {
   test("should be able to get rt after running experiment", function () {
     var timeline = [{ type: htmlKeyboardResponse, stimulus: "hello" }];
-    jsPsych.init({ timeline: timeline });
+    jsPsych = initJsPsych({ timeline: timeline });
     // click through first trial
     pressKey("a");
     // check if data contains rt
@@ -15,20 +21,9 @@ describe("Basic data recording", function () {
 });
 
 describe("#addProperties", function () {
-  test("should add data to all trials if called before experiment starts", function () {
-    var timeline = [{ type: htmlKeyboardResponse, stimulus: "hello" }];
-    jsPsych.data.addProperties({ testprop: 1 });
-    jsPsych.init({ timeline: timeline });
-    // click through first trial
-    pressKey("a");
-    // check if data contains testprop
-    expect(jsPsych.data.get().select("testprop").count()).toBe(1);
-  });
-
   test("should add data to all trials retroactively", function () {
-    jsPsych.data._fullreset();
     var timeline = [{ type: htmlKeyboardResponse, stimulus: "hello" }];
-    jsPsych.init({ timeline: timeline });
+    jsPsych = initJsPsych({ timeline: timeline });
     // click through first trial
     pressKey("a");
     // check if data contains testprop
@@ -40,7 +35,6 @@ describe("#addProperties", function () {
 
 describe("#addDataToLastTrial", function () {
   test("should add any data properties to the last trial", function () {
-    jsPsych.data._fullreset();
     var timeline = [
       {
         type: htmlKeyboardResponse,
@@ -50,7 +44,7 @@ describe("#addDataToLastTrial", function () {
         },
       },
     ];
-    jsPsych.init({ timeline: timeline });
+    jsPsych = initJsPsych({ timeline: timeline });
     // click through first trial
     pressKey("a");
     // check data structure
@@ -61,12 +55,11 @@ describe("#addDataToLastTrial", function () {
 
 describe("#getLastTrialData", function () {
   test("should return a new DataCollection with only the last trial's data", function () {
-    jsPsych.data._fullreset();
     var timeline = [
       { type: htmlKeyboardResponse, stimulus: "hello" },
       { type: htmlKeyboardResponse, stimulus: "world" },
     ];
-    jsPsych.init({ timeline: timeline });
+    jsPsych = initJsPsych({ timeline: timeline });
     // click through first trial
     pressKey("a");
     // click through second trial
@@ -78,7 +71,6 @@ describe("#getLastTrialData", function () {
 
 describe("#getLastTimelineData", function () {
   test("should return a new DataCollection with only the last timeline's data", function () {
-    jsPsych.data._fullreset();
     var timeline = [
       {
         timeline: [
@@ -93,7 +85,7 @@ describe("#getLastTimelineData", function () {
         ],
       },
     ];
-    jsPsych.init({ timeline: timeline });
+    jsPsych = initJsPsych({ timeline: timeline });
     // click through all four trials
     for (var i = 0; i < 4; i++) {
       pressKey("a");
@@ -108,7 +100,7 @@ describe("#getLastTimelineData", function () {
 describe("#displayData", function () {
   test("should display in json format", function () {
     var timeline = [{ type: htmlKeyboardResponse, stimulus: "hello" }];
-    jsPsych.init({ timeline: timeline });
+    jsPsych = initJsPsych({ timeline: timeline });
     // click through first trial
     pressKey("a");
     // overwrite data with custom data
@@ -127,7 +119,7 @@ describe("#displayData", function () {
   });
   test("should display in csv format", function () {
     var timeline = [{ type: htmlKeyboardResponse, stimulus: "hello" }];
-    jsPsych.init({ timeline: timeline });
+    jsPsych = initJsPsych({ timeline: timeline });
     // click through first trial
     pressKey("a");
     // overwrite data with custom data

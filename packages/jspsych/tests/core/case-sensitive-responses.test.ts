@@ -1,7 +1,9 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import jsPsych from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
 import { pressKey } from "../utils";
+
+let jsPsych: JsPsych;
 
 describe("case_sensitive_responses parameter", function () {
   test("has a default value of false", function () {
@@ -11,7 +13,7 @@ describe("case_sensitive_responses parameter", function () {
       choices: ["a"],
     };
 
-    jsPsych.init({ timeline: [t] });
+    jsPsych = initJsPsych({ timeline: [t] });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
     pressKey("A");
@@ -25,7 +27,7 @@ describe("case_sensitive_responses parameter", function () {
       choices: ["a"],
     };
 
-    jsPsych.init({ timeline: [t], case_sensitive_responses: false });
+    jsPsych = initJsPsych({ timeline: [t], case_sensitive_responses: false });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
     pressKey("A");
@@ -39,7 +41,7 @@ describe("case_sensitive_responses parameter", function () {
       choices: ["a"],
     };
 
-    jsPsych.init({ timeline: [t], case_sensitive_responses: true });
+    jsPsych = initJsPsych({ timeline: [t], case_sensitive_responses: true });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
     pressKey("A");

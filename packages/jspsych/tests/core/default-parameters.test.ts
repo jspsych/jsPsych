@@ -1,6 +1,8 @@
 import surveyText from "@jspsych/plugin-survey-text";
 
-import jsPsych from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
+
+let jsPsych: JsPsych;
 
 describe("nested defaults", function () {
   test("work in basic situation", function () {
@@ -16,7 +18,7 @@ describe("nested defaults", function () {
       ],
     };
 
-    jsPsych.init({ timeline: [t] });
+    jsPsych = initJsPsych({ timeline: [t] });
 
     var display = jsPsych.getDisplayElement();
 
@@ -41,7 +43,7 @@ describe("nested defaults", function () {
       ],
     };
 
-    jsPsych.init({ timeline: [t] });
+    jsPsych = initJsPsych({ timeline: [t] });
 
     var display = jsPsych.getDisplayElement();
 

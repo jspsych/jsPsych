@@ -1,10 +1,12 @@
 import { jest } from "@jest/globals";
-import jsPsych from "jspsych";
+import { JsPsych, initJsPsych } from "jspsych";
 import { pressKey } from "jspsych/tests/utils";
 
 import htmlKeyboardResponse from ".";
 
 jest.useFakeTimers();
+
+let jsPsych: JsPsych;
 
 describe("html-keyboard-response", function () {
   test("displays html stimulus", function () {
@@ -13,7 +15,7 @@ describe("html-keyboard-response", function () {
       stimulus: "this is html",
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -31,7 +33,7 @@ describe("html-keyboard-response", function () {
       choices: ["f", "j"],
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -52,7 +54,7 @@ describe("html-keyboard-response", function () {
       prompt: '<div id="foo">this is a prompt</div>',
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -73,20 +75,22 @@ describe("html-keyboard-response", function () {
       stimulus_duration: 500,
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
     expect(
-      jsPsych.getDisplayElement().querySelector("#jspsych-html-keyboard-response-stimulus").style
-        .visibility
+      jsPsych
+        .getDisplayElement()
+        .querySelector<HTMLElement>("#jspsych-html-keyboard-response-stimulus").style.visibility
     ).toMatch("");
 
     jest.advanceTimersByTime(500);
 
     expect(
-      jsPsych.getDisplayElement().querySelector("#jspsych-html-keyboard-response-stimulus").style
-        .visibility
+      jsPsych
+        .getDisplayElement()
+        .querySelector<HTMLElement>("#jspsych-html-keyboard-response-stimulus").style.visibility
     ).toMatch("hidden");
 
     pressKey("f");
@@ -100,7 +104,7 @@ describe("html-keyboard-response", function () {
       trial_duration: 500,
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -119,7 +123,7 @@ describe("html-keyboard-response", function () {
       response_ends_trial: true,
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -140,7 +144,7 @@ describe("html-keyboard-response", function () {
       response_ends_trial: false,
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 

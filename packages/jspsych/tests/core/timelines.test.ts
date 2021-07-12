@@ -1,7 +1,9 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import jsPsych from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
 import { pressKey } from "../utils";
+
+let jsPsych: JsPsych;
 
 describe("loop function", function () {
   test("repeats a timeline when returns true", function () {
@@ -24,7 +26,7 @@ describe("loop function", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -52,7 +54,7 @@ describe("loop function", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -89,7 +91,7 @@ describe("loop function", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -137,7 +139,7 @@ describe("loop function", function () {
       timeline_variables: [{ word: "a" }, { word: "b" }, { word: "c" }],
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [outertimeline],
     });
 
@@ -176,7 +178,7 @@ describe("loop function", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -211,7 +213,7 @@ describe("conditional function", function () {
       stimulus: "bar",
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [conditional, trial],
     });
 
@@ -239,7 +241,7 @@ describe("conditional function", function () {
       stimulus: "bar",
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [conditional, trial],
     });
 
@@ -279,7 +281,7 @@ describe("conditional function", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -313,7 +315,7 @@ describe("conditional function", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -347,7 +349,7 @@ describe("conditional function", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -391,7 +393,7 @@ describe("conditional function", function () {
       timeline_variables: [{ word: "a" }, { word: "b" }, { word: "c" }],
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [outertimeline],
     });
 
@@ -431,7 +433,7 @@ describe("endCurrentTimeline", function () {
       stimulus: "woo",
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [t, t2],
     });
 
@@ -474,7 +476,7 @@ describe("endCurrentTimeline", function () {
       stimulus: "woo",
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [t, t2],
     });
 
@@ -508,7 +510,7 @@ describe("nested timelines", function () {
       timeline: [t1, t2],
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trials],
     });
 
@@ -543,7 +545,7 @@ describe("add node to end of timeline", function () {
       },
     ];
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: timeline,
     });
 

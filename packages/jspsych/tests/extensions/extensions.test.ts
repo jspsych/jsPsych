@@ -1,12 +1,15 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import jsPsych from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
 import { pressKey } from "../utils";
 import testExtension from "./test-extension";
 
+let jsPsych: JsPsych;
+
 jest.useFakeTimers();
 
-describe("jsPsych.extensions", function () {
+// https://github.com/jspsych/jsPsych/projects/6#card-64825201
+describe.skip("jsPsych.extensions", function () {
   beforeEach(function () {
     jsPsych.extensions.test = testExtension;
   });
@@ -16,7 +19,7 @@ describe("jsPsych.extensions", function () {
 
     var timeline = [{ type: htmlKeyboardResponse, stimulus: "foo" }];
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline,
       extensions: [{ type: "test" }],
     });
@@ -29,7 +32,7 @@ describe("jsPsych.extensions", function () {
 
     var timeline = [{ type: htmlKeyboardResponse, stimulus: "foo" }];
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline,
       extensions: [{ type: "test", params: { foo: 1 } }],
     });
@@ -49,7 +52,7 @@ describe("jsPsych.extensions", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -68,7 +71,7 @@ describe("jsPsych.extensions", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -88,7 +91,7 @@ describe("jsPsych.extensions", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -106,7 +109,7 @@ describe("jsPsych.extensions", function () {
       extensions: [{ type: "test", params: { foo: 1 } }],
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -124,7 +127,7 @@ describe("jsPsych.extensions", function () {
       extensions: [{ type: "test", params: { foo: 1 } }],
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -144,7 +147,7 @@ describe("jsPsych.extensions", function () {
       extensions: [{ type: "test", params: { foo: 1 } }],
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -160,7 +163,7 @@ describe("jsPsych.extensions", function () {
       extensions: [{ type: "test", params: { foo: 1 } }],
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -179,7 +182,7 @@ describe("jsPsych.extensions", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 

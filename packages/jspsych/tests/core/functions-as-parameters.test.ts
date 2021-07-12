@@ -3,8 +3,10 @@ import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import surveyMultiChoice from "@jspsych/plugin-survey-multi-choice";
 import surveyText from "@jspsych/plugin-survey-text";
 
-import jsPsych from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
 import { clickTarget, pressKey } from "../utils";
+
+let jsPsych: JsPsych;
 
 describe("standard use of function as parameter", function () {
   test("function value is used as parameter", function () {
@@ -15,7 +17,7 @@ describe("standard use of function as parameter", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -35,7 +37,7 @@ describe("standard use of function as parameter", function () {
 
     x = "bar";
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -53,7 +55,7 @@ describe("standard use of function as parameter", function () {
       mistake_fn: mock,
     };
 
-    jsPsych.init({ timeline: [trial] });
+    jsPsych = initJsPsych({ timeline: [trial] });
 
     expect(mock).not.toHaveBeenCalled();
     clickTarget(document.querySelector("#finish_cloze_button"));
@@ -71,7 +73,7 @@ describe("data as function", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -90,7 +92,7 @@ describe("data as function", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -108,7 +110,7 @@ describe("nested parameters as functions", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -132,7 +134,7 @@ describe("nested parameters as functions", function () {
       ],
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -167,7 +169,7 @@ describe("nested parameters as functions", function () {
       ],
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -222,7 +224,7 @@ describe("nested parameters as functions", function () {
       ],
     };
 
-    jsPsych.init({ timeline: [trial] });
+    jsPsych = initJsPsych({ timeline: [trial] });
 
     var data = jsPsych.data.get().values()[0];
     expect(data.not_protected).toBe("x");

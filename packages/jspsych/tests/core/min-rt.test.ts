@@ -1,7 +1,9 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import jsPsych from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
 import { pressKey } from "../utils";
+
+let jsPsych: JsPsych;
 
 // ideally, use fake timers for this test, but 'modern' timers that work
 // with performance.now() break something in the first test. wait for fix?
@@ -20,7 +22,7 @@ describe("minimum_valid_rt parameter", function () {
       stimulus: "bar",
     };
 
-    jsPsych.init({ timeline: [t, t2] });
+    jsPsych = initJsPsych({ timeline: [t, t2] });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
     pressKey("a");
@@ -39,7 +41,7 @@ describe("minimum_valid_rt parameter", function () {
       stimulus: "bar",
     };
 
-    jsPsych.init({ timeline: [t, t2], minimum_valid_rt: 100 });
+    jsPsych = initJsPsych({ timeline: [t, t2], minimum_valid_rt: 100 });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
     pressKey("a");

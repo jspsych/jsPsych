@@ -1,4 +1,5 @@
 import { babel } from "@rollup/plugin-babel";
+import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import resolve from "@rollup/plugin-node-resolve";
 import { defineConfig } from "rollup";
@@ -12,15 +13,19 @@ export const makeRollupConfig = (outputOptions, globalOptions = {}) => {
 
   outputOptions = {
     sourcemap: true,
+    exports: "default", // for iife outputs
     ...outputOptions,
   };
 
-  const commonConfig = {
+  const commonConfig = defineConfig({
     input: `${source}.ts`,
     plugins: [
       resolve(),
       typescript({
         typescript: ts,
+        tsconfigDefaults: {
+          exclude: ["./tests", "**/*.spec.ts", "**/*.test.ts", "./dist"],
+        },
         tsconfigOverride: {
           compilerOptions: {
             rootDir: "./src",
@@ -30,9 +35,10 @@ export const makeRollupConfig = (outputOptions, globalOptions = {}) => {
         },
       }),
       json(),
+      commonjs(),
     ],
     ...globalOptions,
-  };
+  });
 
   return defineConfig([
     {
@@ -49,7 +55,6 @@ export const makeRollupConfig = (outputOptions, globalOptions = {}) => {
           // Build file to be used for tinkering in modern browsers
           file: `${destination}.browser.js`,
           format: "iife",
-          exports: "default",
           ...outputOptions,
         },
       ],
@@ -68,7 +73,6 @@ export const makeRollupConfig = (outputOptions, globalOptions = {}) => {
           // Minified production build file
           file: `${destination}.browser.min.js`,
           format: "iife",
-          exports: "default",
           plugins: [terser()],
           ...outputOptions,
         },
@@ -81,7 +85,7 @@ export const makeRollupConfigForPlugin = (iifeName) =>
   makeRollupConfig(
     {
       name: iifeName,
-      globals: { jspsych: "jsPsych" },
+      globals: { jspsych: "jsPsychModule" },
     },
     { external: ["jspsych"] }
   );

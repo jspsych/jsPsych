@@ -1,7 +1,9 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import jsPsych from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
 import { pressKey } from "../utils";
+
+let jsPsych: JsPsych;
 
 describe("The css_classes parameter for trials", function () {
   test("Adds a single CSS class to the root jsPsych element", function () {
@@ -11,7 +13,7 @@ describe("The css_classes parameter for trials", function () {
       css_classes: ["foo"],
     };
 
-    jsPsych.init({ timeline: [trial] });
+    jsPsych = initJsPsych({ timeline: [trial] });
 
     expect(jsPsych.getDisplayElement().classList).toContain("foo");
     pressKey("a");
@@ -24,7 +26,7 @@ describe("The css_classes parameter for trials", function () {
       css_classes: "foo",
     };
 
-    jsPsych.init({ timeline: [trial] });
+    jsPsych = initJsPsych({ timeline: [trial] });
 
     expect(jsPsych.getDisplayElement().classList).toContain("foo");
     pressKey("a");
@@ -37,7 +39,7 @@ describe("The css_classes parameter for trials", function () {
       css_classes: ["foo"],
     };
 
-    jsPsych.init({ timeline: [trial] });
+    jsPsych = initJsPsych({ timeline: [trial] });
 
     expect(jsPsych.getDisplayElement().classList).toContain("foo");
     pressKey("a");
@@ -55,7 +57,7 @@ describe("The css_classes parameter for trials", function () {
       css_classes: ["foo"],
     };
 
-    jsPsych.init({ timeline: [tm] });
+    jsPsych = initJsPsych({ timeline: [tm] });
 
     expect(jsPsych.getDisplayElement().classList).toContain("foo");
     pressKey("a");
@@ -71,7 +73,7 @@ describe("The css_classes parameter for trials", function () {
       },
     };
 
-    jsPsych.init({ timeline: [trial] });
+    jsPsych = initJsPsych({ timeline: [trial] });
 
     expect(jsPsych.getDisplayElement().classList).toContain("foo");
     pressKey("a");
@@ -90,7 +92,7 @@ describe("The css_classes parameter for trials", function () {
       timeline_variables: [{ css: ["foo"] }],
     };
 
-    jsPsych.init({ timeline: [t] });
+    jsPsych = initJsPsych({ timeline: [t] });
 
     expect(jsPsych.getDisplayElement().classList).toContain("foo");
     pressKey("a");

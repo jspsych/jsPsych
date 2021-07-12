@@ -127,11 +127,7 @@ export function shuffleNoRepeats(arr, equalityTest) {
   return random_shuffle;
 }
 
-export function shuffleAlternateGroups(arr_groups, random_group_order) {
-  if (typeof random_group_order == "undefined") {
-    random_group_order = false;
-  }
-
+export function shuffleAlternateGroups(arr_groups, random_group_order = false) {
   var n_groups = arr_groups.length;
   if (n_groups == 1) {
     console.warn(

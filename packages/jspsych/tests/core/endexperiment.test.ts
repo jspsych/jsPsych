@@ -1,7 +1,9 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import jsPsych from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
 import { pressKey } from "../utils";
+
+let jsPsych: JsPsych;
 
 test("works on basic timeline", function () {
   var timeline = [
@@ -18,7 +20,7 @@ test("works on basic timeline", function () {
     },
   ];
 
-  jsPsych.init({ timeline });
+  jsPsych = initJsPsych({ timeline });
 
   expect(jsPsych.getDisplayElement().innerHTML).toMatch("trial 1");
 
@@ -37,7 +39,7 @@ test("works with looping timeline (#541)", function () {
     },
   ];
 
-  jsPsych.init({ timeline });
+  jsPsych = initJsPsych({ timeline });
 
   expect(jsPsych.getDisplayElement().innerHTML).toMatch("trial 1");
 

@@ -1,3 +1,62 @@
+import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+
+const info = <const>{
+  name: "html-keyboard-response",
+  parameters: {
+    /**
+     * The HTML string to be displayed
+     */
+    stimulus: {
+      type: parameterType.HTML_STRING,
+      pretty_name: "Stimulus",
+      default: undefined,
+    },
+    /**
+     * The keys the subject is allowed to press to respond to the stimulus.
+     */
+    choices: {
+      type: parameterType.KEY,
+      array: true,
+      pretty_name: "Choices",
+      default: "allkeys", // cannot access jsPsych.ALL_KEYS here – ideally, it would be static
+    },
+    /**
+     * Any content here will be displayed below the stimulus.
+     */
+    prompt: {
+      type: parameterType.STRING,
+      pretty_name: "Prompt",
+      default: null,
+    },
+    /**
+     * How long to hide the stimulus.
+     */
+    stimulus_duration: {
+      type: parameterType.INT,
+      pretty_name: "Stimulus duration",
+      default: null,
+    },
+    /**
+     * How long to show trial before it ends.
+     */
+    trial_duration: {
+      type: parameterType.INT,
+      pretty_name: "Trial duration",
+      default: null,
+    },
+    /**
+     * If true, trial will end when subject makes a response.
+     */
+    response_ends_trial: {
+      type: parameterType.BOOL,
+      pretty_name: "Response ends trial",
+      default: true,
+    },
+  },
+};
+
+type Info = typeof info;
+
 /**
  * jspsych-html-keyboard-response
  * Josh de Leeuw
@@ -7,138 +66,98 @@
  * documentation: docs.jspsych.org
  *
  **/
+class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
+  info = info;
 
-import jsPsych from "jspsych";
+  constructor(private jsPsych: JsPsych) {}
 
-const plugin = <any>{};
+  trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    var new_html = '<div id="jspsych-html-keyboard-response-stimulus">' + trial.stimulus + "</div>";
 
-plugin.info = {
-  name: "html-keyboard-response",
-  description: "",
-  parameters: {
-    stimulus: {
-      type: jsPsych.plugins.parameterType.HTML_STRING,
-      pretty_name: "Stimulus",
-      default: undefined,
-      description: "The HTML string to be displayed",
-    },
-    choices: {
-      type: jsPsych.plugins.parameterType.KEY,
-      array: true,
-      pretty_name: "Choices",
-      default: jsPsych.ALL_KEYS,
-      description: "The keys the subject is allowed to press to respond to the stimulus.",
-    },
-    prompt: {
-      type: jsPsych.plugins.parameterType.STRING,
-      pretty_name: "Prompt",
-      default: null,
-      description: "Any content here will be displayed below the stimulus.",
-    },
-    stimulus_duration: {
-      type: jsPsych.plugins.parameterType.INT,
-      pretty_name: "Stimulus duration",
-      default: null,
-      description: "How long to hide the stimulus.",
-    },
-    trial_duration: {
-      type: jsPsych.plugins.parameterType.INT,
-      pretty_name: "Trial duration",
-      default: null,
-      description: "How long to show trial before it ends.",
-    },
-    response_ends_trial: {
-      type: jsPsych.plugins.parameterType.BOOL,
-      pretty_name: "Response ends trial",
-      default: true,
-      description: "If true, trial will end when subject makes a response.",
-    },
-  },
-};
-
-plugin.trial = function (display_element, trial) {
-  var new_html = '<div id="jspsych-html-keyboard-response-stimulus">' + trial.stimulus + "</div>";
-
-  // add prompt
-  if (trial.prompt !== null) {
-    new_html += trial.prompt;
-  }
-
-  // draw
-  display_element.innerHTML = new_html;
-
-  // store response
-  var response = {
-    rt: null,
-    key: null,
-  };
-
-  // function to end trial when it is time
-  var end_trial = function () {
-    // kill any remaining setTimeout handlers
-    jsPsych.pluginAPI.clearAllTimeouts();
-
-    // kill keyboard listeners
-    if (typeof keyboardListener !== "undefined") {
-      jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+    // add prompt
+    if (trial.prompt !== null) {
+      new_html += trial.prompt;
     }
 
-    // gather the data to store for the trial
-    var trial_data = {
-      rt: response.rt,
-      stimulus: trial.stimulus,
-      response: response.key,
+    // draw
+    display_element.innerHTML = new_html;
+
+    // store response
+    var response = {
+      rt: null,
+      key: null,
     };
 
-    // clear the display
-    display_element.innerHTML = "";
+    // function to end trial when it is time
+    const end_trial = () => {
+      // kill any remaining setTimeout handlers
+      this.jsPsych.pluginAPI.clearAllTimeouts();
 
-    // move on to the next trial
-    jsPsych.finishTrial(trial_data);
-  };
+      // kill keyboard listeners
+      if (typeof keyboardListener !== "undefined") {
+        this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+      }
 
-  // function to handle responses by the subject
-  var after_response = function (info) {
-    // after a valid response, the stimulus will have the CSS class 'responded'
-    // which can be used to provide visual feedback that a response was recorded
-    display_element.querySelector("#jspsych-html-keyboard-response-stimulus").className +=
-      " responded";
+      // gather the data to store for the trial
+      var trial_data = {
+        rt: response.rt,
+        stimulus: trial.stimulus,
+        response: response.key,
+      };
 
-    // only record the first response
-    if (response.key == null) {
-      response = info;
+      // clear the display
+      display_element.innerHTML = "";
+
+      // move on to the next trial
+      this.jsPsych.finishTrial(trial_data);
+    };
+
+    // function to handle responses by the subject
+    var after_response = function (info) {
+      // after a valid response, the stimulus will have the CSS class 'responded'
+      // which can be used to provide visual feedback that a response was recorded
+      display_element.querySelector("#jspsych-html-keyboard-response-stimulus").className +=
+        " responded";
+
+      // only record the first response
+      if (response.key == null) {
+        response = info;
+      }
+
+      if (trial.response_ends_trial) {
+        end_trial();
+      }
+    };
+
+    // start the response listener
+    // @ts-ignore TODO jsPsych.NO_KEYS is not an array, but `array: true` is set for the parameter.
+    // How should we handle this?
+    if (trial.choices != this.jsPsych.NO_KEYS) {
+      var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        rt_method: "performance",
+        persist: false,
+        allow_held_key: false,
+      });
     }
 
-    if (trial.response_ends_trial) {
-      end_trial();
+    // hide stimulus if stimulus_duration is set
+    if (trial.stimulus_duration !== null) {
+      this.jsPsych.pluginAPI.setTimeout(function () {
+        display_element.querySelector<HTMLElement>(
+          "#jspsych-html-keyboard-response-stimulus"
+        ).style.visibility = "hidden";
+      }, trial.stimulus_duration);
     }
-  };
 
-  // start the response listener
-  if (trial.choices != jsPsych.NO_KEYS) {
-    var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-      callback_function: after_response,
-      valid_responses: trial.choices,
-      rt_method: "performance",
-      persist: false,
-      allow_held_key: false,
-    });
+    // end trial if trial_duration is set
+    if (trial.trial_duration !== null) {
+      this.jsPsych.pluginAPI.setTimeout(function () {
+        end_trial();
+      }, trial.trial_duration);
+    }
   }
+}
 
-  // hide stimulus if stimulus_duration is set
-  if (trial.stimulus_duration !== null) {
-    jsPsych.pluginAPI.setTimeout(function () {
-      display_element.querySelector("#jspsych-html-keyboard-response-stimulus").style.visibility =
-        "hidden";
-    }, trial.stimulus_duration);
-  }
-
-  // end trial if trial_duration is set
-  if (trial.trial_duration !== null) {
-    jsPsych.pluginAPI.setTimeout(function () {
-      end_trial();
-    }, trial.trial_duration);
-  }
-};
-
-export default plugin;
+export default HtmlKeyboardResponsePlugin;

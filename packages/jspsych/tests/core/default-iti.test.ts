@@ -1,8 +1,10 @@
 import { jest } from "@jest/globals";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import jsPsych from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
 import { pressKey } from "../utils";
+
+let jsPsych: JsPsych;
 
 jest.useFakeTimers();
 
@@ -18,7 +20,7 @@ describe("default iti parameter", function () {
       stimulus: "bar",
     };
 
-    jsPsych.init({ timeline: [t, t2] });
+    jsPsych = initJsPsych({ timeline: [t, t2] });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
     pressKey("a");
@@ -37,7 +39,7 @@ describe("default iti parameter", function () {
       stimulus: "bar",
     };
 
-    jsPsych.init({ timeline: [t, t2], default_iti: 100 });
+    jsPsych = initJsPsych({ timeline: [t, t2], default_iti: 100 });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
     pressKey("a");

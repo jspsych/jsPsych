@@ -2,8 +2,10 @@ import callFunction from "@jspsych/plugin-call-function";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import jsPsych from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
 import { pressKey } from "../utils";
+
+let jsPsych: JsPsych;
 
 describe("randomize order", function () {
   test("holder", function () {
@@ -49,7 +51,7 @@ describe("sampling", function () {
       },
     };
 
-    jsPsych.init({ timeline: [trial] });
+    jsPsych = initJsPsych({ timeline: [trial] });
     var last = jsPsych.getDisplayElement().innerHTML;
     for (var i = 0; i < 23; i++) {
       pressKey("a");
@@ -82,7 +84,7 @@ describe("sampling", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -118,7 +120,7 @@ describe("timeline variables are correctly evaluated", function () {
       timeline_variables: tvs,
     });
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: timeline,
     });
 
@@ -157,7 +159,7 @@ describe("timeline variables are correctly evaluated", function () {
       timeline_variables: tvs,
     });
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: timeline,
       on_finish: function () {
         expect(mockFn.mock.calls.length).toBe(2);
@@ -190,7 +192,7 @@ describe("timeline variables are correctly evaluated", function () {
       },
     });
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: timeline,
     });
 
@@ -234,7 +236,7 @@ describe("timeline variables are correctly evaluated", function () {
       },
     });
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: timeline,
     });
 
@@ -260,7 +262,7 @@ describe("timeline variables are correctly evaluated", function () {
       timeline_variables: tvs,
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [p],
     });
 
@@ -288,7 +290,7 @@ describe("timeline variables are correctly evaluated", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [p],
     });
 
@@ -315,7 +317,7 @@ describe("timeline variables are correctly evaluated", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [p],
     });
 
@@ -339,7 +341,7 @@ describe("timeline variables are correctly evaluated", function () {
       timeline_variables: tvs,
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [t],
     });
 
@@ -365,7 +367,7 @@ describe("timeline variables are correctly evaluated", function () {
       timeline_variables: tvs,
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [t],
     });
 
@@ -391,7 +393,7 @@ describe("timeline variables are correctly evaluated", function () {
       timeline_variables: tvs,
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [t],
     });
 
@@ -419,7 +421,7 @@ describe("jsPsych.allTimelineVariables()", function () {
       ],
     };
 
-    jsPsych.init({ timeline: [t] });
+    jsPsych = initJsPsych({ timeline: [t] });
 
     pressKey("a");
     pressKey("a");
@@ -454,7 +456,7 @@ describe("jsPsych.allTimelineVariables()", function () {
       timeline_variables: [{ c: 1 }, { c: 2 }],
     };
 
-    jsPsych.init({ timeline: [t2] });
+    jsPsych = initJsPsych({ timeline: [t2] });
 
     pressKey("a");
     pressKey("a");
@@ -497,7 +499,7 @@ describe("jsPsych.allTimelineVariables()", function () {
       },
     };
 
-    jsPsych.init({ timeline: [t] });
+    jsPsych = initJsPsych({ timeline: [t] });
 
     pressKey("a");
     pressKey("a");

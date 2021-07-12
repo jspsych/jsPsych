@@ -1,7 +1,9 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import jsPsych from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
 import { pressKey } from "../utils";
+
+let jsPsych: JsPsych;
 
 describe("automatic progress bar", function () {
   test("progress bar does not display by default", function () {
@@ -10,7 +12,7 @@ describe("automatic progress bar", function () {
       stimulus: "foo",
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -25,7 +27,7 @@ describe("automatic progress bar", function () {
       stimulus: "foo",
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
       show_progress_bar: true,
     });
@@ -43,7 +45,7 @@ describe("automatic progress bar", function () {
       stimulus: "foo",
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial, trial, trial, trial],
       show_progress_bar: true,
     });
@@ -75,7 +77,7 @@ describe("automatic progress bar", function () {
       stimulus: "foo",
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial, trial, trial, trial],
       show_progress_bar: true,
       auto_update_progress_bar: false,
@@ -119,7 +121,7 @@ describe("automatic progress bar", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial, trial_2],
       show_progress_bar: true,
       auto_update_progress_bar: false,
@@ -155,7 +157,7 @@ describe("automatic progress bar", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial, trial_2],
       show_progress_bar: true,
       auto_update_progress_bar: false,
@@ -176,7 +178,7 @@ describe("automatic progress bar", function () {
       stimulus: "foo",
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial, trial, trial, trial],
       show_progress_bar: true,
     });

@@ -2,8 +2,10 @@ import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import reconstruction from "@jspsych/plugin-reconstruction";
 import surveyText from "@jspsych/plugin-survey-text";
 
-import jsPsych from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
 import { clickTarget, pressKey } from "../utils";
+
+let jsPsych: JsPsych;
 
 describe("Trial parameters in the data", function () {
   test("Can be added by specifying the parameter with a value of true in save_trial_parameters", function () {
@@ -16,7 +18,7 @@ describe("Trial parameters in the data", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -36,7 +38,7 @@ describe("Trial parameters in the data", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -56,7 +58,7 @@ describe("Trial parameters in the data", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -79,7 +81,7 @@ describe("Trial parameters in the data", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -99,7 +101,7 @@ describe("Trial parameters in the data", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -133,7 +135,7 @@ describe("Trial parameters in the data", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -155,7 +157,7 @@ describe("Trial parameters in the data", function () {
       },
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 

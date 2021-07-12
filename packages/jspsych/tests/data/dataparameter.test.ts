@@ -1,7 +1,9 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import jsPsych from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
 import { pressKey } from "../utils";
+
+let jsPsych: JsPsych;
 
 describe("The data parameter", function () {
   test("should record data to a trial", function () {
@@ -14,7 +16,7 @@ describe("The data parameter", function () {
         data: { added: true },
       };
 
-      jsPsych.init({
+      jsPsych = initJsPsych({
         timeline: [trial],
         on_finish: function () {
           var d = jsPsych.data.get().values()[0].added;
@@ -40,7 +42,7 @@ describe("The data parameter", function () {
         data: { added: true },
       };
 
-      jsPsych.init({
+      jsPsych = initJsPsych({
         timeline: [trial],
         on_finish: function () {
           var d = jsPsych.data.get().filter({ added: true }).count();
@@ -70,7 +72,7 @@ describe("The data parameter", function () {
         data: { added: true },
       };
 
-      jsPsych.init({
+      jsPsych = initJsPsych({
         timeline: [trial],
         on_finish: function () {
           var d = jsPsych.data.get().filter({ added: true }).count();
@@ -96,7 +98,7 @@ describe("The data parameter", function () {
       timeline_variables: [{ d: { added: true } }, { d: { added: false } }],
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -119,7 +121,7 @@ describe("The data parameter", function () {
       timeline_variables: [{ added: true }, { added: false }],
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -145,7 +147,7 @@ describe("The data parameter", function () {
       timeline_variables: [{ added: true }, { added: false }],
     };
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: [trial],
     });
 
@@ -174,7 +176,7 @@ describe("The data parameter", function () {
         data: { added: true },
       };
 
-      jsPsych.init({
+      jsPsych = initJsPsych({
         timeline: [trial],
         on_finish: function () {
           var d = jsPsych.data.get().filter({ added: true, foo: 1 }).count();
@@ -205,7 +207,7 @@ describe("The data parameter", function () {
 
     var timeline = [trial];
 
-    jsPsych.init({
+    jsPsych = initJsPsych({
       timeline: timeline,
       on_finish: function () {
         expect(jsPsych.data.get().values()[0].a).toBe(1);

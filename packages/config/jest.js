@@ -14,14 +14,9 @@ module.exports.makePackageConfig = (dirname) => {
 
   return {
     preset: "ts-jest",
-    // moduleNameMapper: {
-    //   "^@jspsych/(.*)$": "<rootDir>/../$1/src",
-    //   "^jspsych(.*)$": "<rootDir>/../jspsych/src$1",
-    // },
     moduleNameMapper: pathsToModuleNameMapper(tsCompilerOptions.paths, {
-      prefix: "<rootDir>/../../",
+      prefix: "<rootDir>/",
     }),
-    resetModules: true,
     testEnvironment: "jsdom",
     testEnvironmentOptions: {
       fetchExternalResources: true,

@@ -3,8 +3,10 @@ import sameDifferentHtml from "@jspsych/plugin-same-different-html";
 import surveyMultiSelect from "@jspsych/plugin-survey-multi-select";
 import surveyText from "@jspsych/plugin-survey-text";
 
-import jsPsych from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
 import { clickTarget, pressKey } from "../utils";
+
+let jsPsych: JsPsych;
 
 jest.useFakeTimers();
 
@@ -17,7 +19,7 @@ describe("data conversion to json", function () {
 
     var timeline = [trial];
 
-    jsPsych.init({ timeline });
+    jsPsych = initJsPsych({ timeline });
 
     document.querySelector<HTMLInputElement>("#input-0").value = "Response 1";
     document.querySelector<HTMLInputElement>("#input-1").value = "Response 2";
@@ -44,7 +46,7 @@ describe("data conversion to json", function () {
 
     var timeline = [trial];
 
-    jsPsych.init({ timeline: timeline });
+    jsPsych = initJsPsych({ timeline: timeline });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch("<p>Climbing</p>");
     pressKey("q");
@@ -85,7 +87,7 @@ describe("data conversion to json", function () {
 
     var timeline = [trial];
 
-    jsPsych.init({ timeline: timeline });
+    jsPsych = initJsPsych({ timeline: timeline });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
     clickTarget(document.querySelector("#jspsych-survey-multi-select-response-0-0"));
@@ -116,7 +118,7 @@ describe("data conversion to json", function () {
       allow_keys: true,
     };
 
-    jsPsych.init({ timeline: [trial] });
+    jsPsych = initJsPsych({ timeline: [trial] });
 
     expect(jsPsych.getDisplayElement().innerHTML).toMatch("page 1");
     pressKey("a");
