@@ -7,7 +7,8 @@
   <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
   <style>
-      .jspsych-btn {margin-bottom: 10px;}
+    #jspsych-categorize-animation-stimulus {height:80% !important; width: 80% !important;}
+    .jspsych-btn {margin-bottom: 10px;}
   </style>
 </head>
 <body></body>
@@ -22,7 +23,6 @@
   var show_data = {
     type: 'html-button-response',
     stimulus: function() {
-      console.log(jsPsych.data.get().values())
       var trial_data = jsPsych.data.getLastTrialData().values();
       var trial_json = JSON.stringify(trial_data, null, 2);
       return `<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>
@@ -46,7 +46,8 @@
   var animation_trial = {
     type: 'categorize-animation',
     stimuli: images,
-    choices: ['p', 'q'], 
+    choices: ['p', 'q'],
+    prompt: `Press the P or Q key.`,
     key_answer: 'q', 
     text_answer: 'Dax', // the label for the sequence is 'Dax'
     correct_text: 'Correct! This was a %ANS%.',
