@@ -41,7 +41,7 @@ jsPsych.plugins["survey-complex"] = (function () {
           "An easy identifier of the question. Not necessary, but can be used for easier data-analyses afterwards.",
         pretty_name: "question_id",
         type: jsPsych.plugins.parameterType.STRING,
-        default: undefined,
+        default: "",
       },
       question_text: {
         description:
@@ -82,14 +82,14 @@ jsPsych.plugins["survey-complex"] = (function () {
             description:
               "One of the following: single-choice; single-choice-text; multi-choice; multi-choice-text. See the documentation for examples of each.",
             pretty_name: "answer_type",
-            type: jsPsych.plugins.parameterType.HTML_STRING,
+            type: jsPsych.plugins.parameterType.STRING,
             default: undefined,
           },
           answer_consequence: {
             description:
               "Optional data to be passed when an answer option is selected. Can be used in combination with condition nodes to abort questionnaires if specific answers are given.",
             pretty_name: "answer_consequence",
-            type: jsPsych.plugins.parameterType.HTML_STRING,
+            type: jsPsych.plugins.parameterType.STRING,
             default: "Continue",
           },
         },
@@ -368,6 +368,7 @@ jsPsych.plugins["survey-complex"] = (function () {
 
       // SAVE DATA
       var trial_data = {
+        question_id: trial.question_id,
         response_time: response_time,
         response: checked_answers,
         stop_questionnaire: stop_questionnaire,
