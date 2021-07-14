@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <!-- JSPSYCH FILES -->
+    <!-- IMPORT the jsPsych library files  -->
+    <script src="../jspsych.js"></script>
+
+    <!-- IMPORT styling (e.g., centering in page) -->
+    <link href="../css/jspsych.css" rel="stylesheet" type="text/css" />
+    <link
+      href="../css/jspsych-survey-complex.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+
+    <!-- IMPORT plugins required for building the experiment -->
+    <script src="../plugins/jspsych-survey-complex.js"></script>
+
+    <!-- DEMO -->
+    <script>
+      // CREATE TRIAL
+      var demo_trial = {
+        // custom plugin type
+        type: "survey-complex",
+        question_id: "single-choice",
+        // question header (larger font)
+        question_text: "Simple Question",
+        // question explanation (smaller font)
+        question_subtext:
+          "With a simple explanation of what to do. It is also possible to add <em> additional html styling </em>",
+        // Text to display on form submit button
+        button_label: "Save & Continue",
+        // Each of the answer options to be displayed
+        answers: [
+          {
+            // Label
+            answer_text: "answer_type: multi-choice",
+            // Explanations
+            answer_explanation: "",
+            // Input type
+            answer_type: "multi-choice",
+            // Consequence
+            answer_consequence: "Continue",
+          },
+          {
+            // Label
+            answer_text: "answer_type: multi-choice",
+            // Explanations
+            answer_explanation: "",
+            // Input type
+            answer_type: "multi-choice",
+            // Consequence
+            answer_consequence: "Continue",
+          },
+          {
+            // Label
+            answer_text: "answer_type: multi-choice-text",
+            // Explanations
+            answer_explanation: "",
+            // Input type
+            answer_type: "multi-choice-text",
+            // Consequence
+            answer_consequence: "Continue",
+          },
+          {
+            // Label
+            answer_text: "answer_type: single-choice",
+            // Explanations
+            answer_explanation: "",
+            // Input type
+            answer_type: "single-choice",
+            // Consequence
+            answer_consequence: "Continue",
+          },
+          {
+            // Label
+            answer_text: "answer_type: single-choice-text",
+            // Explanations
+            answer_explanation: "",
+            // Input type
+            answer_type: "single-choice-text",
+            // Consequence
+            answer_consequence: "Continue",
+          },
+        ],
+      };
+
+      // RUN DEMO
+      jsPsych.init({
+        // Pass on the timeline variable we created with the individual trials
+        timeline: [demo_trial],
+        // Show data when done
+        on_finish: function () {
+          jsPsych.data.displayData("json");
+        },
+      });
+    </script>
+  </head>
+  <body></body>
+</html>
