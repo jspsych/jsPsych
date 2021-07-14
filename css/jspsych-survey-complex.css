@@ -19,7 +19,7 @@
   /* Spacing BETWEEN input selector and label */
   --inputMargin: 0.5em;
   /* Spacing WITHIN submit button */
-  --buttonPadding: 0.5em;
+  --buttonPadding: 0.8em;
   /* Spacing BETWEEN submit button and container */
   --buttonMargin: 0.5em;
 
@@ -244,6 +244,7 @@ We then apply our own styling of radio/checkboxes to be shown over the top */
 .jspsych-submit-button {
   /* text size and color */
   font-size: var(--buttonSize);
+  font-weight: bold;
   color: var(--buttonTextColor);
   text-align: center;
   /* Create colored box with rounded corners */
@@ -253,8 +254,6 @@ We then apply our own styling of radio/checkboxes to be shown over the top */
   /* spacing between text and box border */
   padding: var(--buttonPadding);
   margin-right: var(--buttonMargin);
-  margin-bottom: var(--buttonMargin);
-  margin-top: var(--buttonMargin);
 }
 
 .jspsych-submit-button:disabled {
@@ -266,4 +265,8 @@ We then apply our own styling of radio/checkboxes to be shown over the top */
   font-size: var(--buttonSize);
   font-weight: bold;
   color: var(--buttonColor);
+  /* same as button margins to keep consistent button size when no message is shown */
+  margin-left: var(--buttonMargin);
+  margin-top: var(--buttonMargin);
+  margin-bottom: var(--buttonMargin);
 }
