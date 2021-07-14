@@ -1,0 +1,269 @@
+/* VARIABLES */
+/* Change the values of these variables to update the styling of all elements */
+/* NOTE: the values of 'em' make the spacing relative to the chosen fontsize */
+:root {
+  /* FONT SIZES */
+  --questionSize: x-large;
+  --explanationSize: medium;
+  --answerSize: medium;
+  --answerExplanationSize: small;
+  --buttonSize: medium;
+
+  /* SPACING */
+  /* Spacing BETWEEN elements of the QUESTION */
+  --questionMargin: 0.5em;
+  /* Spacing BETWEEN ANSWER OPTIONS */
+  --answerMargin: 0.8em;
+  /* Spacing WITHIN ANSWER OPTIONS (increases size of the surrounding box) */
+  --answerPadding: 0.5em;
+  /* Spacing BETWEEN input selector and label */
+  --inputMargin: 0.5em;
+  /* Spacing WITHIN submit button */
+  --buttonPadding: 0.5em;
+  /* Spacing BETWEEN submit button and container */
+  --buttonMargin: 0.5em;
+
+  /* COLORS */
+  /* Color of the multiple-answers allowed text reminder */
+  --multiChoiceColor: #2196f3; /* light-blue */
+  /* Color of the boxes around each answer option */
+  --answerContainerColor: #2196f3; /* light-blue */
+  /* Color of the answer options (labels) */
+  --answerTextColor: #000000; /*black */
+  /* Color of the radio/checkbox elements */
+  --inputSelectorColor: #2196f3; /* light-blue */
+  --checkmarkColor: white; /* white */
+  /* Color of the answer text */
+  --labelColor: #000000; /*black */
+  /* Color of the button */
+  --buttonColor: #2196f3; /* light-blue */
+  --disabledButtonColor: rgb(204, 203, 203); /* light-grey*/
+  /* Color of the button text */
+  --buttonTextColor: #fcfafa; /* white */
+}
+
+/* QUESTION & FORM CONTAINER */
+/* Container elements which hold the actual content */
+.jspsych-question-container,
+.jspsych-form-container {
+  /* Show question/answers below eachother */
+  display: flex;
+  flex-direction: column;
+  /* Create spacing between elements */
+  margin-bottom: var(--questionMargin);
+  /* Allow the boxes to be 90% of the available jspsych-content */
+  width: 90%;
+  /* Align text to left of the boxes */
+  text-align: left;
+}
+
+/* QUESTION */
+/* Header element of the question (question_text) */
+.jspsych-question-text {
+  font-size: var(--questionSize);
+  margin-bottom: var(--questionMargin);
+  margin-top: 0;
+}
+
+/* QUESTION SUBTEXT */
+/* Subtext explanation of the question (question_explanation) */
+.jspsych-question-subtext {
+  font-size: var(--explanationSize);
+  margin-bottom: var(--questionMargin);
+  margin-top: 0;
+}
+
+/* QUESTION MULTIPLE CHOICE */
+/* Shows a reminder whether multiple answers can be selected */
+.jspsych-question-multi-choice {
+  font-size: var(--explanationSize);
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: bold;
+  color: var(--multiChoiceColor);
+}
+
+/* ANSWER CONTAINERS */
+/* Each answer option is shown as a seperate container */
+.jspsych-answer-container {
+  /* Spacing BETWEEN answer options */
+  margin-bottom: var(--answerMargin);
+  /* Spacing WITHIN answer option -  larger boxes */
+  padding: var(--answerPadding);
+  /* Create pretty box with rounded corners */
+  border: 0.1em solid var(--answerContainerColor);
+  border-radius: 0.25em;
+}
+
+/* When hovering over an answer option show emphasis */
+.jspsych-answer-container:hover {
+  box-shadow: 0 0 0 0.05em white, 0 0 0.15em 0.1em var(--answerContainerColor);
+}
+
+/* INPUT STYLING */
+/* ADAPTED FROM:
+https://moderncss.dev/pure-css-custom-styled-radio-buttons/#step-3-improve-input-vs-label-alignment
+https://www.w3schools.com/howto/howto_css_custom_checkbox.asp
+https://www.geeksforgeeks.org/how-to-style-a-checkbox-using-css/
+*/
+
+/* "This means that padding and border will be included in the calculation
+ of any elements computed final size instead of increasing the computed size
+ beyond any set dimensions."
+*/
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+/* CONTAINER SPANS (INPUT + LABEL) */
+/* General parameters that are passed down to the included content
+For example, font-size is used to determine the size of the checkboxes */
+.jspsych-label-container {
+  font-size: var(--answerSize);
+  color: var(--answerTextColor);
+  /* Spacing between text and border of the answer box */
+  padding-top: var(--answerPadding);
+  padding-bottom: var(--answerPadding);
+  /* "Our label is also the layout container for our design, and we're going
+   to set it up to use CSS grid layout to take advantage of grid-gap" */
+  display: grid;
+  grid-template-columns: min-content auto;
+  /* spacing between input and label dependent on font size */
+  grid-gap: var(--inputMargin);
+}
+
+/* HIDE NATIVE INPUT */
+/* Each browser applies it's own styling to input elements.
+We hide the elements visually, but keep them on page to allow their native behaviors
+We then apply our own styling of radio/checkboxes to be shown over the top */
+.jspsych-input-single-choice,
+.jspsych-input-single-choice-text,
+.jspsych-input-multi-choice,
+.jspsych-input-multi-choice-text {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+
+/* ALIGN INPUT & LABEL */
+/* Create a grid layout */
+.jspsych-input-container {
+  display: grid;
+  grid-template-areas: "input";
+}
+/* Map content to created grid */
+.jspsych-input-container > * {
+  grid-area: input;
+}
+/* Setting line-height ensures that the elements are aligned */
+.jspsych-label {
+  line-height: 1;
+}
+
+/* CREATE RADIO BUTTONS */
+/* Unchecked: outer-circle only */
+.jspsych-input-radio {
+  display: grid;
+  place-items: center;
+  /* actual size dependent on font-size of label (--answerSize) */
+  width: 1em;
+  height: 1em;
+  /* Create colored circle */
+  border-radius: 50%;
+  border: 0.1em solid var(--inputSelectorColor);
+}
+
+/* Checked: change background color = filled circle */
+.jspsych-input-container input:checked ~ .jspsych-input-radio {
+  background-color: var(--inputSelectorColor);
+}
+
+/* CREATE CHECKBOX */
+/* Unchecked: outer-box with rounded corners only */
+.jspsych-input-checkbox {
+  display: grid;
+  place-items: center;
+  /* actual size dependent on font-size of label (--answerSize) */
+  width: 1em;
+  height: 1em;
+  /* Create colored circle */
+  border-radius: 0.25em;
+  border: 0.1em solid var(--inputSelectorColor);
+}
+
+/* Checked: fill box */
+.jspsych-input-container input:checked ~ .jspsych-input-checkbox {
+  background-color: var(--inputSelectorColor);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.jspsych-input-checkbox:after {
+  content: "";
+  transform: scale(0);
+}
+
+/* Show the checkmark when input is checked */
+.jspsych-input-container input:checked ~ .jspsych-input-checkbox {
+  transform: (scale(1));
+}
+
+/* Checkmark styling */
+.jspsych-input-container .jspsych-input-checkbox:after {
+  width: 0.3em;
+  height: 0.6em;
+  border: solid var(--checkmarkColor);
+  border-width: 0 0.15em 0.15em 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* ANSWER EXPLANATION */
+/* If an additional explanation is added to the answer option */
+.jspsych-answer-explanation {
+  font-size: var(--answerExplanationSize);
+  /* Add italic emphasis */
+  font-style: italic;
+}
+
+/* ANSWER TEXTBOX */
+.jspsych-answer-textbox {
+  font-size: var(--explanationSize);
+  width: 100%;
+}
+
+/* SUBMIT CONTAINER */
+.jspsych-submit-container {
+  display: flex;
+}
+
+/* SUBMIT BUTTON */
+.jspsych-submit-button {
+  /* text size and color */
+  font-size: var(--buttonSize);
+  color: var(--buttonTextColor);
+  text-align: center;
+  /* Create colored box with rounded corners */
+  border-radius: 0.25em;
+  background-color: var(--buttonColor);
+  border: none;
+  /* spacing between text and box border */
+  padding: var(--buttonPadding);
+  margin-right: var(--buttonMargin);
+  margin-bottom: var(--buttonMargin);
+  margin-top: var(--buttonMargin);
+}
+
+.jspsych-submit-button:disabled {
+  background-color: var(--disabledButtonColor);
+}
+
+/* VALIDATION MESSAGE */
+.jspsych-validation-message {
+  font-size: var(--buttonSize);
+  font-weight: bold;
+  color: var(--buttonColor);
+}
