@@ -37,6 +37,7 @@ Plugin | Description
 [jspsych&#8209;same&#8209;different&#8209;image](/plugins/jspsych-same-different-image) | A same-different judgment task. An image is shown, followed by a brief gap, and then another stimulus is shown. The subject indicates whether the stimuli are the same or different.
 [jspsych&#8209;serial&#8209;reaction&#8209;time](/plugins/jspsych-serial-reaction-time) | A set of boxes are displayed on the screen and one of them changes color. The subject presses a key that corresponds to the different color box as fast as possible.
 [jspsych&#8209;serial&#8209;reaction&#8209;time&#8209;mouse](/plugins/jspsych-serial-reaction-time-mouse) | A set of boxes are displayed on the screen and one of them changes color. The subjects clicks the box that changed color as fast as possible.
+[jspsych&#8209;survey&#8209;complex](/plugins/jspsych-survey-complex) | Display a single question per page, with one or more answers allowed per question. Also allows for text entry questions (e.g., other...).
 [jspsych&#8209;survey&#8209;html&#8209;form](/plugins/jspsych-survey-html-form) | Renders a custom HTML form. Allows for mixing multiple kinds of form input.
 [jspsych&#8209;survey&#8209;likert](/plugins/jspsych-survey-likert) | Displays likert-style questions.
 [jspsych&#8209;survey&#8209;multi&#8209;choice](/plugins/jspsych-survey-multi-choice) | Displays multiple choice questions with one answer allowed per question.

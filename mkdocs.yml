@@ -93,6 +93,7 @@ nav:
   - 'jspsych-same-different-image': 'plugins/jspsych-same-different-image.md'
   - 'jspsych-serial-reaction-time': 'plugins/jspsych-serial-reaction-time.md'
   - 'jspsych-serial-reaction-time-mouse': 'plugins/jspsych-serial-reaction-time-mouse.md'
+  - 'jspsych-survey-complex': 'plugins/jspsych-survey-complex.md'
   - 'jspsych-survey-html-form' : 'plugins/jspsych-survey-html-form.md'
   - 'jspsych-survey-likert': 'plugins/jspsych-survey-likert.md'
   - 'jspsych-survey-multi-choice': 'plugins/jspsych-survey-multi-choice.md'
