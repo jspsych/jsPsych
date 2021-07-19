@@ -18,7 +18,7 @@ export function createJointPluginAPIObject(jsPsych: JsPsych) {
         jsPsych.NO_KEYS
       ),
       new TimeoutAPI(),
-      new MediaAPI(settings.use_webaudio, jsPsych.webaudio_context, settings.timeline),
+      new MediaAPI(settings.use_webaudio, jsPsych.webaudio_context),
       new HardwareAPI(),
     ].map((object) => autoBind(object))
   ) as KeyboardListenerAPI & TimeoutAPI & MediaAPI & HardwareAPI;

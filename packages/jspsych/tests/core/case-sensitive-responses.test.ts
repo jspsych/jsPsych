@@ -1,52 +1,55 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { JsPsych, initJsPsych } from "../../src";
-import { pressKey } from "../utils";
+import { pressKey, startTimeline } from "../utils";
 
-let jsPsych: JsPsych;
+describe("case_sensitive_responses parameter", () => {
+  test("has a default value of false", async () => {
+    const { getHTML, expectFinished } = await startTimeline([
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        choices: ["a"],
+      },
+    ]);
 
-describe("case_sensitive_responses parameter", function () {
-  test("has a default value of false", function () {
-    var t = {
-      type: htmlKeyboardResponse,
-      stimulus: "foo",
-      choices: ["a"],
-    };
-
-    jsPsych = initJsPsych({ timeline: [t] });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
+    expect(getHTML()).toMatch("foo");
     pressKey("A");
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("");
+    await expectFinished();
   });
 
-  test("responses are not case sensitive when set to false", function () {
-    var t = {
-      type: htmlKeyboardResponse,
-      stimulus: "foo",
-      choices: ["a"],
-    };
+  test("responses are not case sensitive when set to false", async () => {
+    const { getHTML, expectFinished } = await startTimeline(
+      [
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "foo",
+          choices: ["a"],
+        },
+      ],
+      { case_sensitive_responses: false }
+    );
 
-    jsPsych = initJsPsych({ timeline: [t], case_sensitive_responses: false });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
+    expect(getHTML()).toMatch("foo");
     pressKey("A");
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("");
+    await expectFinished();
   });
 
-  test("responses are case sensitive when set to true", function () {
-    var t = {
-      type: htmlKeyboardResponse,
-      stimulus: "foo",
-      choices: ["a"],
-    };
+  test("responses are case sensitive when set to true", async () => {
+    const { getHTML, expectFinished } = await startTimeline(
+      [
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "foo",
+          choices: ["a"],
+        },
+      ],
+      { case_sensitive_responses: true }
+    );
 
-    jsPsych = initJsPsych({ timeline: [t], case_sensitive_responses: true });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
+    expect(getHTML()).toMatch("foo");
     pressKey("A");
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
+    expect(getHTML()).toMatch("foo");
     pressKey("a");
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("");
+    await expectFinished();
   });
 });

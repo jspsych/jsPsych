@@ -1,11 +1,7 @@
 import { flatten, unique } from "../utils";
 
 export class MediaAPI {
-  constructor(
-    private useWebaudio: boolean,
-    private webaudioContext: AudioContext,
-    private timeline
-  ) {}
+  constructor(private useWebaudio: boolean, private webaudioContext: AudioContext) {}
 
   // video //
   private video_buffers = {};
@@ -258,7 +254,7 @@ export class MediaAPI {
     this.preloads.push(preload);
   }
 
-  getAutoPreloadList(timeline_description?) {
+  getAutoPreloadList(timeline_description: any[]) {
     function getTrialsOfTypeFromTimelineDescription(td, target_type, inherited_type?) {
       var trials = [];
 
@@ -282,10 +278,6 @@ export class MediaAPI {
       }
 
       return trials;
-    }
-
-    if (typeof timeline_description == "undefined") {
-      timeline_description = this.timeline;
     }
 
     // list of items to preload

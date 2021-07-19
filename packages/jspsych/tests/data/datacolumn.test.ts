@@ -8,63 +8,63 @@ const data = [
   { rt: 500, filter: false },
 ];
 
-describe("DataColumn", function () {
+describe("DataColumn", () => {
   let dataCollection: DataCollection;
   beforeEach(() => {
     dataCollection = new DataCollection(data);
   });
 
-  test("#sum", function () {
+  test("#sum", () => {
     expect(dataCollection.select("rt").sum()).toBe(1500);
   });
-  test("#mean", function () {
+  test("#mean", () => {
     expect(dataCollection.select("rt").mean()).toBe(300);
   });
-  test("#count", function () {
+  test("#count", () => {
     expect(dataCollection.select("rt").count()).toBe(5);
   });
-  test("#min", function () {
+  test("#min", () => {
     expect(dataCollection.select("rt").min()).toBe(100);
   });
-  test("#max", function () {
+  test("#max", () => {
     expect(dataCollection.select("rt").max()).toBe(500);
   });
-  test("#variance", function () {
+  test("#variance", () => {
     expect(dataCollection.select("rt").variance()).toBe(
       (Math.pow(200, 2) + Math.pow(100, 2) + Math.pow(100, 2) + Math.pow(200, 2)) / (5 - 1)
     );
   });
-  test("#sd", function () {
+  test("#sd", () => {
     expect(dataCollection.select("rt").sd()).toBe(
       Math.sqrt(
         (Math.pow(200, 2) + Math.pow(100, 2) + Math.pow(100, 2) + Math.pow(200, 2)) / (5 - 1)
       )
     );
   });
-  test("#median", function () {
+  test("#median", () => {
     expect(dataCollection.select("rt").median()).toBe(300);
   });
-  test("#subset", function () {
+  test("#subset", () => {
     expect(
       dataCollection
         .select("rt")
-        .subset(function (x) {
+        .subset((x) => {
           return x > 300;
         })
         .count()
     ).toBe(2);
   });
-  test("#frequencies", function () {
+  test("#frequencies", () => {
     expect(dataCollection.select("filter").frequencies()).toEqual({ true: 2, false: 3 });
   });
-  test("#all", function () {
+  test("#all", () => {
     expect(
-      dataCollection.select("rt").all(function (x) {
+      dataCollection.select("rt").all((x) => {
         return x < 600;
       })
     ).toBe(true);
     expect(
-      dataCollection.select("filter").all(function (x) {
+      dataCollection.select("filter").all((x) => {
         return x;
       })
     ).toBe(false);

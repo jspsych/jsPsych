@@ -1,220 +1,176 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { JsPsych, initJsPsych } from "../../src";
-import { pressKey } from "../utils";
+import { initJsPsych } from "../../src";
+import { pressKey, startTimeline } from "../utils";
 
-let jsPsych: JsPsych;
-
-describe("The data parameter", function () {
-  test("should record data to a trial", function () {
-    return new Promise(function (resolve, reject) {
-      var key_data = null;
-
-      var trial = {
+describe("The data parameter", () => {
+  test("should record data to a trial", async () => {
+    const { finished, getData } = await startTimeline([
+      {
         type: htmlKeyboardResponse,
         stimulus: "hello",
         data: { added: true },
-      };
+      },
+    ]);
 
-      jsPsych = initJsPsych({
-        timeline: [trial],
-        on_finish: function () {
-          var d = jsPsych.data.get().values()[0].added;
-          resolve(d);
-        },
-      });
+    pressKey("a");
+    await finished;
 
-      pressKey("a");
-
-      //resolve();
-    }).then(function (data) {
-      expect(data).toBe(true);
-    });
+    expect(getData().values()[0].added).toBe(true);
   });
 
-  test("should record data to all nested trials", function () {
-    return new Promise(function (resolve, reject) {
-      var key_data = null;
-
-      var trial = {
+  test("should record data to all nested trials", async () => {
+    const { finished, getData } = await startTimeline([
+      {
         type: htmlKeyboardResponse,
         timeline: [{ stimulus: "a" }, { stimulus: "b" }],
         data: { added: true },
-      };
-
-      jsPsych = initJsPsych({
-        timeline: [trial],
-        on_finish: function () {
-          var d = jsPsych.data.get().filter({ added: true }).count();
-          resolve(d);
-        },
-      });
-
-      pressKey("a");
-
-      pressKey("a");
-
-      //resolve();
-    }).then(function (data) {
-      expect(data).toBe(2);
-    });
-  });
-
-  test("should record data to all nested trials with timeline variables", function () {
-    return new Promise(function (resolve, reject) {
-      var key_data = null;
-
-      var vars = [{ stimulus: "a" }, { stimulus: "b" }];
-
-      var trial = {
-        timeline: [{ type: htmlKeyboardResponse, stimulus: jsPsych.timelineVariable("stimulus") }],
-        timeline_variables: vars,
-        data: { added: true },
-      };
-
-      jsPsych = initJsPsych({
-        timeline: [trial],
-        on_finish: function () {
-          var d = jsPsych.data.get().filter({ added: true }).count();
-          resolve(d);
-        },
-      });
-
-      pressKey("a");
-
-      pressKey("a");
-
-      //resolve();
-    }).then(function (data) {
-      expect(data).toBe(2);
-    });
-  });
-
-  test("should work as timeline variable at root level", function () {
-    var trial = {
-      timeline: [
-        { type: htmlKeyboardResponse, stimulus: "foo", data: jsPsych.timelineVariable("d") },
-      ],
-      timeline_variables: [{ d: { added: true } }, { d: { added: false } }],
-    };
-
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
-
-    pressKey("a"); // trial 1
-    pressKey("a"); // trial 2
-
-    expect(jsPsych.data.get().filter({ added: true }).count()).toBe(1);
-    expect(jsPsych.data.get().filter({ added: false }).count()).toBe(1);
-  });
-
-  test("should work as timeline variable at nested level", function () {
-    var trial = {
-      timeline: [
-        {
-          type: htmlKeyboardResponse,
-          stimulus: "foo",
-          data: { added: jsPsych.timelineVariable("added") },
-        },
-      ],
-      timeline_variables: [{ added: true }, { added: false }],
-    };
-
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
-
-    pressKey("a"); // trial 1
-    pressKey("a"); // trial 2
-
-    expect(jsPsych.data.get().filter({ added: true }).count()).toBe(1);
-    expect(jsPsych.data.get().filter({ added: false }).count()).toBe(1);
-  });
-
-  test("timeline variable should be available in trial on_finish", function () {
-    var trial = {
-      timeline: [
-        {
-          type: htmlKeyboardResponse,
-          stimulus: "foo",
-          data: { added: jsPsych.timelineVariable("added") },
-          on_finish: function (data) {
-            data.added_copy = data.added;
-          },
-        },
-      ],
-      timeline_variables: [{ added: true }, { added: false }],
-    };
-
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
-
-    pressKey("a"); // trial 1
-    pressKey("a"); // trial 2
-
-    expect(jsPsych.data.get().filter({ added_copy: true }).count()).toBe(1);
-    expect(jsPsych.data.get().filter({ added_copy: false }).count()).toBe(1);
-  });
-
-  test("should record data to all nested trials with timeline variables even when nested trials have own data", function () {
-    return new Promise(function (resolve, reject) {
-      var key_data = null;
-
-      var vars = [{ stimulus: "a" }, { stimulus: "b" }];
-
-      var trial = {
-        timeline: [
-          {
-            type: htmlKeyboardResponse,
-            stimulus: jsPsych.timelineVariable("stimulus"),
-            data: { foo: 1 },
-          },
-        ],
-        timeline_variables: vars,
-        data: { added: true },
-      };
-
-      jsPsych = initJsPsych({
-        timeline: [trial],
-        on_finish: function () {
-          var d = jsPsych.data.get().filter({ added: true, foo: 1 }).count();
-          resolve(d);
-        },
-      });
-
-      pressKey("a");
-
-      pressKey("a");
-
-      //resolve();
-    }).then(function (data) {
-      expect(data).toBe(2);
-    });
-  });
-
-  test("should accept a function as a parameter", function (done) {
-    var trial = {
-      type: htmlKeyboardResponse,
-      stimulus: "foo",
-      data: {
-        a: function () {
-          return 1;
-        },
       },
-    };
-
-    var timeline = [trial];
-
-    jsPsych = initJsPsych({
-      timeline: timeline,
-      on_finish: function () {
-        expect(jsPsych.data.get().values()[0].a).toBe(1);
-        done();
-      },
-    });
+    ]);
 
     pressKey("a");
+    pressKey("a");
+    await finished;
+
+    expect(getData().filter({ added: true }).count()).toBe(2);
+  });
+
+  test("should record data to all nested trials with timeline variables", async () => {
+    const jsPsych = initJsPsych();
+    const { finished, getData } = await startTimeline(
+      [
+        {
+          timeline: [
+            { type: htmlKeyboardResponse, stimulus: jsPsych.timelineVariable("stimulus") },
+          ],
+          timeline_variables: [{ stimulus: "a" }, { stimulus: "b" }],
+          data: { added: true },
+        },
+      ],
+      jsPsych
+    );
+
+    pressKey("a");
+    pressKey("a");
+    await finished;
+
+    expect(getData().filter({ added: true }).count()).toBe(2);
+  });
+
+  test("should work as timeline variable at root level", async () => {
+    const jsPsych = initJsPsych();
+    const { getData } = await startTimeline(
+      [
+        {
+          timeline: [
+            { type: htmlKeyboardResponse, stimulus: "foo", data: jsPsych.timelineVariable("d") },
+          ],
+          timeline_variables: [{ d: { added: true } }, { d: { added: false } }],
+        },
+      ],
+      jsPsych
+    );
+
+    pressKey("a"); // trial 1
+    pressKey("a"); // trial 2
+
+    expect(getData().filter({ added: true }).count()).toBe(1);
+    expect(getData().filter({ added: false }).count()).toBe(1);
+  });
+
+  test("should work as timeline variable at nested level", async () => {
+    const jsPsych = initJsPsych();
+    const { getData } = await startTimeline(
+      [
+        {
+          timeline: [
+            {
+              type: htmlKeyboardResponse,
+              stimulus: "foo",
+              data: { added: jsPsych.timelineVariable("added") },
+            },
+          ],
+          timeline_variables: [{ added: true }, { added: false }],
+        },
+      ],
+      jsPsych
+    );
+
+    pressKey("a"); // trial 1
+    pressKey("a"); // trial 2
+
+    expect(getData().filter({ added: true }).count()).toBe(1);
+    expect(getData().filter({ added: false }).count()).toBe(1);
+  });
+
+  test("timeline variable should be available in trial on_finish", async () => {
+    const jsPsych = initJsPsych();
+    const { getData } = await startTimeline(
+      [
+        {
+          timeline: [
+            {
+              type: htmlKeyboardResponse,
+              stimulus: "foo",
+              data: { added: jsPsych.timelineVariable("added") },
+              on_finish: (data) => {
+                data.added_copy = data.added;
+              },
+            },
+          ],
+          timeline_variables: [{ added: true }, { added: false }],
+        },
+      ],
+      jsPsych
+    );
+
+    pressKey("a"); // trial 1
+    pressKey("a"); // trial 2
+
+    expect(getData().filter({ added_copy: true }).count()).toBe(1);
+    expect(getData().filter({ added_copy: false }).count()).toBe(1);
+  });
+
+  test("should record data to all nested trials with timeline variables even when nested trials have own data", async () => {
+    const jsPsych = initJsPsych();
+    const { finished, getData } = await startTimeline(
+      [
+        {
+          timeline: [
+            {
+              type: htmlKeyboardResponse,
+              stimulus: jsPsych.timelineVariable("stimulus"),
+              data: { foo: 1 },
+            },
+          ],
+          timeline_variables: [{ stimulus: "a" }, { stimulus: "b" }],
+          data: { added: true },
+        },
+      ],
+      jsPsych
+    );
+
+    pressKey("a");
+    pressKey("a");
+    await finished;
+
+    expect(getData().filter({ added: true, foo: 1 }).count()).toBe(2);
+  });
+
+  test("should accept a function as a parameter", async () => {
+    const { finished, getData } = await startTimeline([
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        data: {
+          a: () => 1,
+        },
+      },
+    ]);
+
+    pressKey("a");
+    await finished;
+
+    expect(getData().values()[0].a).toBe(1);
   });
 });

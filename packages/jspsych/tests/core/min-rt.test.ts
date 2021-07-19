@@ -1,56 +1,49 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { JsPsych, initJsPsych } from "../../src";
-import { pressKey } from "../utils";
+import { pressKey, startTimeline } from "../utils";
 
-let jsPsych: JsPsych;
+jest.useFakeTimers("modern");
 
-// ideally, use fake timers for this test, but 'modern' timers that work
-// with performance.now() break something in the first test. wait for fix?
-//jest.useFakeTimers('modern');
-//jest.useFakeTimers();
+describe("minimum_valid_rt parameter", () => {
+  test("has a default value of 0", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+      },
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "bar",
+      },
+    ]);
 
-describe("minimum_valid_rt parameter", function () {
-  test("has a default value of 0", function () {
-    var t = {
-      type: htmlKeyboardResponse,
-      stimulus: "foo",
-    };
-
-    var t2 = {
-      type: htmlKeyboardResponse,
-      stimulus: "bar",
-    };
-
-    jsPsych = initJsPsych({ timeline: [t, t2] });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
+    expect(getHTML()).toMatch("foo");
     pressKey("a");
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("bar");
-    pressKey("a");
+    expect(getHTML()).toMatch("bar");
   });
 
-  test("correctly prevents fast responses when set", function (done) {
-    var t = {
-      type: htmlKeyboardResponse,
-      stimulus: "foo",
-    };
+  test("correctly prevents fast responses when set", async () => {
+    const { getHTML } = await startTimeline(
+      [
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "foo",
+        },
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "bar",
+        },
+      ],
+      { minimum_valid_rt: 100 }
+    );
 
-    var t2 = {
-      type: htmlKeyboardResponse,
-      stimulus: "bar",
-    };
-
-    jsPsych = initJsPsych({ timeline: [t, t2], minimum_valid_rt: 100 });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
+    expect(getHTML()).toMatch("foo");
     pressKey("a");
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
-    setTimeout(function () {
-      pressKey("a");
-      expect(jsPsych.getDisplayElement().innerHTML).toMatch("bar");
-      pressKey("a");
-      done();
-    }, 100);
+    expect(getHTML()).toMatch("foo");
+
+    jest.advanceTimersByTime(100);
+
+    pressKey("a");
+    expect(getHTML()).toMatch("bar");
   });
 });

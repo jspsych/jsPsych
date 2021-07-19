@@ -1,155 +1,139 @@
 import { jest } from "@jest/globals";
-import { JsPsych, initJsPsych } from "jspsych";
-import { pressKey } from "jspsych/tests/utils";
+import { pressKey, startTimeline } from "jspsych/tests/utils";
 
 import htmlKeyboardResponse from ".";
 
 jest.useFakeTimers();
 
-let jsPsych: JsPsych;
-
 describe("html-keyboard-response", function () {
-  test("displays html stimulus", function () {
-    var trial = {
-      type: htmlKeyboardResponse,
-      stimulus: "this is html",
-    };
+  test("displays html stimulus", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "this is html",
+      },
+    ]);
 
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toBe(
-      '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
-    );
-
+    expect(getHTML()).toBe('<div id="jspsych-html-keyboard-response-stimulus">this is html</div>');
     pressKey("a");
   });
 
-  test("display clears after key press", function () {
-    var trial = {
-      type: htmlKeyboardResponse,
-      stimulus: "this is html",
-      choices: ["f", "j"],
-    };
-
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
-      new RegExp('<div id="jspsych-html-keyboard-response-stimulus">this is html</div>')
+  test("display clears after key press", async () => {
+    const { getHTML, expectFinished } = await startTimeline([
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "this is html",
+        choices: ["f", "j"],
+      },
+    ]);
+    console.log(getHTML());
+    expect(getHTML()).toEqual(
+      expect.stringContaining(
+        '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
+      )
     );
 
     pressKey("f");
-
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+    await expectFinished();
   });
 
-  test("prompt should append html below stimulus", function () {
-    var trial = {
-      type: htmlKeyboardResponse,
-      stimulus: "this is html",
-      choices: ["f", "j"],
-      prompt: '<div id="foo">this is a prompt</div>',
-    };
+  test("prompt should append html below stimulus", async () => {
+    const { getHTML, expectFinished } = await startTimeline([
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "this is html",
+        choices: ["f", "j"],
+        prompt: '<div id="foo">this is a prompt</div>',
+      },
+    ]);
 
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
-      new RegExp(
+    expect(getHTML()).toEqual(
+      expect.stringContaining(
         '<div id="jspsych-html-keyboard-response-stimulus">this is html</div><div id="foo">this is a prompt</div>'
       )
     );
 
     pressKey("f");
+    await expectFinished();
   });
 
-  test("should hide stimulus if stimulus-duration is set", function () {
-    var trial = {
-      type: htmlKeyboardResponse,
-      stimulus: "this is html",
-      choices: ["f", "j"],
-      stimulus_duration: 500,
-    };
-
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
+  test("should hide stimulus if stimulus-duration is set", async () => {
+    const { displayElement, expectFinished } = await startTimeline([
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "this is html",
+        choices: ["f", "j"],
+        stimulus_duration: 500,
+      },
+    ]);
 
     expect(
-      jsPsych
-        .getDisplayElement()
-        .querySelector<HTMLElement>("#jspsych-html-keyboard-response-stimulus").style.visibility
+      displayElement.querySelector<HTMLElement>("#jspsych-html-keyboard-response-stimulus").style
+        .visibility
     ).toMatch("");
 
     jest.advanceTimersByTime(500);
 
     expect(
-      jsPsych
-        .getDisplayElement()
-        .querySelector<HTMLElement>("#jspsych-html-keyboard-response-stimulus").style.visibility
+      displayElement.querySelector<HTMLElement>("#jspsych-html-keyboard-response-stimulus").style
+        .visibility
     ).toMatch("hidden");
 
     pressKey("f");
+    await expectFinished();
   });
 
-  test("should end trial when trial duration is reached", function () {
-    var trial = {
-      type: htmlKeyboardResponse,
-      stimulus: "this is html",
-      choices: ["f", "j"],
-      trial_duration: 500,
-    };
+  test("should end trial when trial duration is reached", async () => {
+    const { getHTML, expectFinished } = await startTimeline([
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "this is html",
+        choices: ["f", "j"],
+        trial_duration: 500,
+      },
+    ]);
 
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
+    expect(getHTML()).toMatch(
       '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
     );
     jest.advanceTimersByTime(500);
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+    await expectFinished();
   });
 
-  test("should end trial when key press", function () {
-    var trial = {
-      type: htmlKeyboardResponse,
-      stimulus: "this is html",
-      choices: ["f", "j"],
-      response_ends_trial: true,
-    };
+  test("should end trial when key press", async () => {
+    const { getHTML, expectFinished } = await startTimeline([
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "this is html",
+        choices: ["f", "j"],
+        response_ends_trial: true,
+      },
+    ]);
 
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
-      new RegExp('<div id="jspsych-html-keyboard-response-stimulus">this is html</div>')
+    expect(getHTML()).toEqual(
+      expect.stringContaining(
+        '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
+      )
     );
 
     pressKey("f");
-
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+    await expectFinished();
   });
 
-  test("class should say responded when key is pressed", function () {
-    var trial = {
-      type: htmlKeyboardResponse,
-      stimulus: "this is html",
-      choices: ["f", "j"],
-      response_ends_trial: false,
-    };
+  test("class should say responded when key is pressed", async () => {
+    const { getHTML, expectRunning } = await startTimeline([
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "this is html",
+        choices: ["f", "j"],
+        response_ends_trial: false,
+      },
+    ]);
 
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
-      new RegExp('<div id="jspsych-html-keyboard-response-stimulus">this is html</div>')
+    expect(getHTML()).toEqual(
+      expect.stringContaining(
+        '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
+      )
     );
 
     pressKey("f");
@@ -157,5 +141,7 @@ describe("html-keyboard-response", function () {
     expect(document.querySelector("#jspsych-html-keyboard-response-stimulus").className).toBe(
       " responded"
     );
+
+    await expectRunning();
   });
 });

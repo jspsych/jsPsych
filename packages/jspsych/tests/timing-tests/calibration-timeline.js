@@ -7,7 +7,7 @@ var calibration = {
       post_trial_gap: 100,
     },
   ],
-  loop_function: function (data) {
+  loop_function: (data) => {
     if (data.values()[0].response == " ") {
       return false;
     } else {

@@ -8,21 +8,21 @@ var state = {};
 
 // required, will be called at jsPsych.init
 // should return a Promise
-extension.initialize = function (params) {
-  return new Promise<void>(function (resolve, reject) {
+extension.initialize = (params) => {
+  return new Promise<void>((resolve, reject) => {
     resolve();
   });
 };
 
 // required, will be called when the trial starts (before trial loads)
-extension.on_start = function (params) {};
+extension.on_start = (params) => {};
 
 // required will be called when the trial loads
-extension.on_load = function (params) {};
+extension.on_load = (params) => {};
 
 // required, will be called when jsPsych.finishTrial() is called
 // must return data object to be merged into data.
-extension.on_finish = function (params) {
+extension.on_finish = (params) => {
   // send back data
   return {
     extension_data: true,

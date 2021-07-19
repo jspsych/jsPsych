@@ -1,8 +1,8 @@
 import { randomID, shuffle, shuffleAlternateGroups } from "../../src/modules/randomization";
 
-describe("#shuffle", function () {
-  test("should produce fixed order with mock RNG", function () {
-    Math.random = jest.fn().mockImplementation(function () {
+describe("#shuffle", () => {
+  test("should produce fixed order with mock RNG", () => {
+    Math.random = jest.fn().mockImplementation(() => {
       return 0.5;
     });
     var arr = [1, 2, 3, 4, 5, 6];
@@ -10,9 +10,9 @@ describe("#shuffle", function () {
   });
 });
 
-describe("shuffleAlternateGroups", function () {
-  test("should shuffle in alternating groups", function () {
-    Math.random = jest.fn().mockImplementation(function () {
+describe("shuffleAlternateGroups", () => {
+  test("should shuffle in alternating groups", () => {
+    Math.random = jest.fn().mockImplementation(() => {
       return 0.5;
     });
     var toShuffle = [
@@ -23,8 +23,8 @@ describe("shuffleAlternateGroups", function () {
   });
 });
 
-describe("#randomID", function () {
-  test("should produce ID based on mock RNG", function () {
+describe("#randomID", () => {
+  test("should produce ID based on mock RNG", () => {
     Math.random = jest
       .fn()
       .mockReturnValueOnce(0.1)

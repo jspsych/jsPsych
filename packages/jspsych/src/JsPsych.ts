@@ -33,7 +33,7 @@ export class JsPsych {
   /**
    * options
    */
-  private opts = <any>{};
+  private opts: any = {};
 
   /**
    * experiment timeline
@@ -42,7 +42,7 @@ export class JsPsych {
 
   // flow control
   private global_trial_index = 0;
-  private current_trial = <any>{};
+  private current_trial: any = {};
   private current_trial_finished = false;
 
   // target DOM element
@@ -61,15 +61,15 @@ export class JsPsych {
   private waiting = false;
 
   /**
-   * done loading?
-   */
-  private loaded = false;
-  private loadfail = false;
-
-  /**
    * is the page retrieved directly via file:// protocol (true) or hosted on a server (false)?
    */
   private file_protocol = false;
+
+  /**
+   * Promise that is resolved when `finishExperiment()` is called
+   */
+  private finished: Promise<void>;
+  private resolveFinishedPromise: () => void;
 
   // storing a single webaudio context to prevent problems with multiple inits
   // of jsPsych
@@ -85,52 +85,16 @@ export class JsPsych {
     call_immediate: false,
   };
 
-  constructor(options) {
-    // execute init() when the document is ready
-    // if (document.readyState === "complete") {
-    //   init();
-    // } else {
-    //   window.addEventListener("load", init);
-    // }
-
-    autoBind(this); // just in case people do weird things with JsPsych methods
-
-    this.webaudio_context =
-      typeof window !== "undefined" && typeof window.AudioContext !== "undefined"
-        ? new AudioContext()
-        : null;
-
-    if (typeof options.timeline === "undefined") {
-      console.error("No timeline declared in jsPsych.init. Cannot start experiment.");
-    }
-
-    if (options.timeline.length == 0) {
-      console.error(
-        "No trials have been added to the timeline (the timeline is an empty array). Cannot start experiment."
-      );
-    }
-
+  constructor(options?) {
     // override default options if user specifies an option
-    const opts = {
+    options = {
       display_element: undefined,
-      on_finish: function (data) {
-        return undefined;
-      },
-      on_trial_start: function (trial) {
-        return undefined;
-      },
-      on_trial_finish: function () {
-        return undefined;
-      },
-      on_data_update: function (data) {
-        return undefined;
-      },
-      on_interaction_data_update: function (data) {
-        return undefined;
-      },
-      on_close: function () {
-        return undefined;
-      },
+      on_finish: () => {},
+      on_trial_start: () => {},
+      on_trial_finish: () => {},
+      on_data_update: () => {},
+      on_interaction_data_update: () => {},
+      on_close: () => {},
       use_webaudio: true,
       exclusions: {},
       show_progress_bar: false,
@@ -144,7 +108,14 @@ export class JsPsych {
       extensions: [],
       ...options,
     };
-    this.opts = opts;
+    this.opts = options;
+
+    autoBind(this); // just in case people do weird things with JsPsych methods
+
+    this.webaudio_context =
+      typeof window !== "undefined" && typeof window.AudioContext !== "undefined"
+        ? new AudioContext()
+        : null;
 
     // detect whether page is running in browser as a local file, and if so, disable web audio and video preloading to prevent CORS issues
     if (
@@ -161,113 +132,47 @@ export class JsPsych {
       );
     }
 
-    // set DOM element where jsPsych will render content
-    // if undefined, then jsPsych will use the <body> tag and the entire page
-    if (typeof opts.display_element === "undefined") {
-      // check if there is a body element on the page
-      var body = document.querySelector("body");
-      if (body === null) {
-        document.documentElement.appendChild(document.createElement("body"));
-      }
-      // using the full page, so we need the HTML element to
-      // have 100% height, and body to be full width and height with
-      // no margin
-      document.querySelector("html").style.height = "100%";
-      document.querySelector("body").style.margin = "0px";
-      document.querySelector("body").style.height = "100%";
-      document.querySelector("body").style.width = "100%";
-      opts.display_element = document.querySelector("body");
-    } else {
-      // make sure that the display element exists on the page
-      const display =
-        opts.display_element instanceof Element
-          ? opts.display_element
-          : document.querySelector("#" + opts.display_element);
-      if (display === null) {
-        console.error("The display_element specified in jsPsych.init() does not exist in the DOM.");
-      } else {
-        opts.display_element = display;
-      }
-    }
-
-    opts.display_element.innerHTML =
-      '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
-    this.DOM_container = opts.display_element;
-    this.DOM_target = document.querySelector("#jspsych-content");
-
-    // add tabIndex attribute to scope event listeners
-    opts.display_element.tabIndex = 0;
-
-    // add CSS class to DOM_target
-    if (opts.display_element.className.indexOf("jspsych-display-element") == -1) {
-      opts.display_element.className += " jspsych-display-element";
-    }
-    this.DOM_target.className += "jspsych-content";
-
-    // set experiment_width if not null
-    if (opts.experiment_width !== null) {
-      this.DOM_target.style.width = opts.experiment_width + "px";
-    }
-
     // initialize modules
     this.data = new JsPsychData(this);
     this.pluginAPI = createJointPluginAPIObject(this);
 
-    // create experiment timeline
-    this.timeline = new TimelineNode(this, {
-      timeline: opts.timeline,
-    });
-
     // initialize audio context based on options and browser capabilities
     this.pluginAPI.initAudio();
-
-    // below code resets event listeners that may have lingered from
-    // a previous incomplete experiment loaded in same DOM.
-    this.pluginAPI.reset(opts.display_element);
-    // create keyboard event listeners
-    this.pluginAPI.createKeyboardEventListeners(opts.display_element);
-    // create listeners for user browser interaction
-    this.data.createInteractionListeners();
-
-    // add event for closing window
-    window.addEventListener("beforeunload", opts.on_close);
-
-    // Start exclusions check. Once that's done, load extensions
-    // TODO how to handle asynchronous checks / setup? They need to be awaited in tests.
-    // this.checkExclusions(opts.exclusions)
-    //   .then(() => this.loadExtensions(opts.extensions))
-    //   .then(() => {
-    //     // //Leave a trace in the DOM that jspsych was loaded
-    //     document.documentElement.setAttribute("jspsych", "present");
-    //   })
-    //   .then(() => this.startExperiment());
-
-    this.startExperiment();
-  }
-
-  private async loadExtensions(extensions) {
-    // run the .initialize method of any extensions that are in use
-    // these should return a Promise to indicate when loading is complete
-
-    try {
-      await Promise.all(
-        extensions.map((extension) =>
-          this.extensions[extension.type].initialize(extension.params || {})
-        )
-      );
-    } catch (error_message) {
-      console.error(error_message);
-      throw new Error(error_message);
-    }
   }
 
   // enumerated variables for special parameter types
   readonly ALL_KEYS = "allkeys";
   readonly NO_KEYS = "none";
 
-  //
-  // public methods
-  //
+  /**
+   * Starts an experiment using the provided timeline and returns a promise that is resolved when
+   * the experiment is finished.
+   *
+   * @param timeline The timeline to be run
+   */
+  async run(timeline: any[]) {
+    if (typeof timeline === "undefined") {
+      console.error("No timeline declared in jsPsych.run. Cannot start experiment.");
+    }
+
+    if (timeline.length == 0) {
+      console.error(
+        "No trials have been added to the timeline (the timeline is an empty array). Cannot start experiment."
+      );
+    }
+
+    // create experiment timeline
+    this.timeline = new TimelineNode(this, { timeline });
+
+    await this.prepareDom();
+    await this.checkExclusions(this.opts.exclusions);
+    await this.loadExtensions(this.opts.extensions);
+
+    document.documentElement.setAttribute("jspsych", "present");
+
+    this.startExperiment();
+    await this.finished;
+  }
 
   progress() {
     return {
@@ -447,7 +352,6 @@ export class JsPsych {
 
   loadFail(message) {
     message = message || "<p>The experiment failed to load.</p>";
-    this.loadfail = true;
     this.DOM_target.innerHTML = message;
   }
 
@@ -455,8 +359,96 @@ export class JsPsych {
     return this.file_protocol;
   }
 
+  private async prepareDom() {
+    // Wait until the document is ready
+    if (document.readyState !== "complete") {
+      await new Promise((resolve) => {
+        window.addEventListener("load", resolve);
+      });
+    }
+
+    const options = this.opts;
+
+    // set DOM element where jsPsych will render content
+    // if undefined, then jsPsych will use the <body> tag and the entire page
+    if (typeof options.display_element === "undefined") {
+      // check if there is a body element on the page
+      var body = document.querySelector("body");
+      if (body === null) {
+        document.documentElement.appendChild(document.createElement("body"));
+      }
+      // using the full page, so we need the HTML element to
+      // have 100% height, and body to be full width and height with
+      // no margin
+      document.querySelector("html").style.height = "100%";
+      document.querySelector("body").style.margin = "0px";
+      document.querySelector("body").style.height = "100%";
+      document.querySelector("body").style.width = "100%";
+      options.display_element = document.querySelector("body");
+    } else {
+      // make sure that the display element exists on the page
+      const display =
+        options.display_element instanceof Element
+          ? options.display_element
+          : document.querySelector("#" + options.display_element);
+      if (display === null) {
+        console.error("The display_element specified in jsPsych.init() does not exist in the DOM.");
+      } else {
+        options.display_element = display;
+      }
+    }
+
+    options.display_element.innerHTML =
+      '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
+    this.DOM_container = options.display_element;
+    this.DOM_target = document.querySelector("#jspsych-content");
+
+    // set experiment_width if not null
+    if (options.experiment_width !== null) {
+      this.DOM_target.style.width = options.experiment_width + "px";
+    }
+
+    // add tabIndex attribute to scope event listeners
+    options.display_element.tabIndex = 0;
+
+    // add CSS class to DOM_target
+    if (options.display_element.className.indexOf("jspsych-display-element") == -1) {
+      options.display_element.className += " jspsych-display-element";
+    }
+    this.DOM_target.className += "jspsych-content";
+
+    // below code resets event listeners that may have lingered from
+    // a previous incomplete experiment loaded in same DOM.
+    this.pluginAPI.reset(options.display_element);
+    // create keyboard event listeners
+    this.pluginAPI.createKeyboardEventListeners(options.display_element);
+    // create listeners for user browser interaction
+    this.data.createInteractionListeners();
+
+    // add event for closing window
+    window.addEventListener("beforeunload", options.on_close);
+  }
+
+  private async loadExtensions(extensions) {
+    // run the .initialize method of any extensions that are in use
+    // these should return a Promise to indicate when loading is complete
+
+    try {
+      await Promise.all(
+        extensions.map((extension) =>
+          this.extensions[extension.type].initialize(extension.params || {})
+        )
+      );
+    } catch (error_message) {
+      console.error(error_message);
+      throw new Error(error_message);
+    }
+  }
+
   private startExperiment() {
-    this.loaded = true;
+    this.finished = new Promise((resolve) => {
+      this.resolveFinishedPromise = resolve;
+    });
 
     // show progress bar if requested
     if (this.opts.show_progress_bar === true) {
@@ -477,6 +469,8 @@ export class JsPsych {
     }
 
     this.opts.on_finish(this.data.get());
+
+    this.resolveFinishedPromise();
   }
 
   private nextTrial() {

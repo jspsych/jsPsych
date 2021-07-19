@@ -1,15 +1,13 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { JsPsych, initJsPsych } from "../../src";
+import { flushPromises, startTimeline } from "../utils";
 
-let jsPsych: JsPsych;
-
-describe("jsPsych init", () => {
+describe("jsPsych.run()", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
   });
 
-  function setReadyState(targetState) {
+  function setReadyState(targetState: "loading" | "complete") {
     jest.spyOn(document, "readyState", "get").mockImplementation(() => targetState);
   }
 
@@ -17,34 +15,33 @@ describe("jsPsych init", () => {
     return document.body.innerHTML;
   }
 
-  function init() {
-    jsPsych = initJsPsych({
-      timeline: [
-        {
-          type: htmlKeyboardResponse,
-          stimulus: "foo",
-        },
-      ],
-    });
+  async function init() {
+    await startTimeline([
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+      },
+    ]);
   }
 
   // Currently not implemented – we need a way to await promises
-  it.skip("should delay execution until the document is ready", () => {
+  it("should delay execution until the document is ready", async () => {
     expect(getBodyHTML()).toBe("");
 
     setReadyState("loading");
-    init();
+    await init();
     expect(getBodyHTML()).toBe("");
 
     // Simulate the document getting ready
     setReadyState("complete");
     window.dispatchEvent(new Event("load"));
+    await flushPromises();
     expect(getBodyHTML()).not.toBe("");
   });
 
-  it("should execute immediately when the document is ready", () => {
+  it("should execute immediately when the document is ready", async () => {
     // The document is ready by default in jsdom
-    init();
+    await init();
     expect(getBodyHTML()).not.toBe("");
   });
 });

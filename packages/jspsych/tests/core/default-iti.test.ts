@@ -1,51 +1,47 @@
 import { jest } from "@jest/globals";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { JsPsych, initJsPsych } from "../../src";
-import { pressKey } from "../utils";
-
-let jsPsych: JsPsych;
+import { pressKey, startTimeline } from "../utils";
 
 jest.useFakeTimers();
 
-describe("default iti parameter", function () {
-  test("has a default value of 0", function () {
-    var t = {
-      type: htmlKeyboardResponse,
-      stimulus: "foo",
-    };
+describe("default iti parameter", () => {
+  test("has a default value of 0", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+      },
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "bar",
+      },
+    ]);
 
-    var t2 = {
-      type: htmlKeyboardResponse,
-      stimulus: "bar",
-    };
-
-    jsPsych = initJsPsych({ timeline: [t, t2] });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
+    expect(getHTML()).toMatch("foo");
     pressKey("a");
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("bar");
-    pressKey("a");
+    expect(getHTML()).toMatch("bar");
   });
 
-  test("creates a correct delay when set", function () {
-    var t = {
-      type: htmlKeyboardResponse,
-      stimulus: "foo",
-    };
+  test("creates a correct delay when set", async () => {
+    const { getHTML } = await startTimeline(
+      [
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "foo",
+        },
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "bar",
+        },
+      ],
+      { default_iti: 100 }
+    );
 
-    var t2 = {
-      type: htmlKeyboardResponse,
-      stimulus: "bar",
-    };
-
-    jsPsych = initJsPsych({ timeline: [t, t2], default_iti: 100 });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
+    expect(getHTML()).toMatch("foo");
+    expect(getHTML()).not.toMatch("bar");
     pressKey("a");
-    expect(jsPsych.getDisplayElement().innerHTML).not.toMatch("bar");
     jest.advanceTimersByTime(100);
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("bar");
-    pressKey("a");
+    expect(getHTML()).toMatch("bar");
   });
 });

@@ -1,49 +1,49 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { JsPsych, initJsPsych } from "../../src";
-import { pressKey } from "../utils";
+import { initJsPsych } from "../../src";
+import { pressKey, startTimeline } from "../utils";
 
-let jsPsych: JsPsych;
-
-test("works on basic timeline", function () {
-  var timeline = [
-    {
-      type: htmlKeyboardResponse,
-      stimulus: "trial 1",
-      on_finish: function () {
-        jsPsych.endExperiment("the end");
+test("works on basic timeline", async () => {
+  const jsPsych = initJsPsych();
+  const { getHTML, expectFinished } = await startTimeline(
+    [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "trial 1",
+        on_finish: () => {
+          jsPsych.endExperiment("the end");
+        },
       },
-    },
-    {
-      type: htmlKeyboardResponse,
-      stimulus: "trial 2",
-    },
-  ];
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "trial 2",
+      },
+    ],
+    jsPsych
+  );
 
-  jsPsych = initJsPsych({ timeline });
-
-  expect(jsPsych.getDisplayElement().innerHTML).toMatch("trial 1");
-
+  expect(getHTML()).toMatch("trial 1");
   pressKey("a");
-
-  expect(jsPsych.getDisplayElement().innerHTML).toMatch("the end");
+  expect(getHTML()).toMatch("the end");
+  await expectFinished();
 });
 
-test("works with looping timeline (#541)", function () {
-  var timeline = [
-    {
-      timeline: [{ type: htmlKeyboardResponse, stimulus: "trial 1" }],
-      loop_function: function () {
-        jsPsych.endExperiment("the end");
+test("works with looping timeline (#541)", async () => {
+  const jsPsych = initJsPsych();
+  const { getHTML, expectFinished } = await startTimeline(
+    [
+      {
+        timeline: [{ type: htmlKeyboardResponse, stimulus: "trial 1" }],
+        loop_function: () => {
+          jsPsych.endExperiment("the end");
+        },
       },
-    },
-  ];
+    ],
+    jsPsych
+  );
 
-  jsPsych = initJsPsych({ timeline });
-
-  expect(jsPsych.getDisplayElement().innerHTML).toMatch("trial 1");
-
+  expect(getHTML()).toMatch("trial 1");
   pressKey("a");
-
-  expect(jsPsych.getDisplayElement().innerHTML).toMatch("the end");
+  expect(getHTML()).toMatch("the end");
+  await expectFinished();
 });

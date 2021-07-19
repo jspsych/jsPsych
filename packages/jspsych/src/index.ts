@@ -19,7 +19,7 @@ if (
  * @param options The options to pass to the JsPsych constructor
  * @returns A new JsPsych instance
  */
-export function initJsPsych(options) {
+export function initJsPsych(options?) {
   return new JsPsych(options);
 }
 
