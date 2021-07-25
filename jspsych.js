@@ -2,7 +2,7 @@ window.jsPsych = (function() {
 
   var core = {};
 
-  core.version = function() { return "6.3.0" };
+  core.version = function() { return "6.3.1" };
 
   //
   // private variables
@@ -2289,7 +2289,11 @@ jsPsych.pluginAPI = (function() {
         minimum_valid_rt = jsPsych.initSettings().minimum_valid_rt || 0;
       }
 
-      if(rt < minimum_valid_rt){
+      var rt_ms = rt;
+      if (parameters.rt_method == 'audio') {
+        rt_ms = rt_ms * 1000;
+      }
+      if(rt_ms < minimum_valid_rt) {
         return;
       }
 
@@ -2333,7 +2337,7 @@ jsPsych.pluginAPI = (function() {
         }
         parameters.callback_function({
           key: key,
-          rt: rt,
+          rt: rt_ms,
         });
 
         if (keyboard_listeners.includes(listener_id)) {

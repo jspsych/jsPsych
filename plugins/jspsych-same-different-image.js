@@ -47,7 +47,7 @@ jsPsych.plugins['same-different-image'] = (function() {
       first_stim_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'First stimulus duration',
-        default: null,
+        default: 1000,
         description: 'How long to show the first stimulus for in milliseconds. If null, then the stimulus will remain on the screen until any keypress is made.'
       },
       gap_duration: {
@@ -59,7 +59,7 @@ jsPsych.plugins['same-different-image'] = (function() {
       second_stim_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Second stimulus duration',
-        default: null,
+        default: 1000,
         description: 'How long to show the second stimulus for in milliseconds. If null, then the stimulus will remain on the screen until a valid response is made.'
       },
       prompt: {

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-preload.js"></script>
+    <script src="../plugins/jspsych-audio-keyboard-response.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="../plugins/jspsych-webgazer-init-camera.js"></script>
+    <script src="../plugins/jspsych-webgazer-calibrate.js"></script>
+    <script src="../plugins/jspsych-webgazer-validate.js"></script>
+    <script src="js/webgazer/webgazer.js"></script>
+    <script src="../extensions/jspsych-ext-webgazer.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+    <style>
+      .jspsych-content { max-width: 100%;}
+    </style>
+</head>
+<body></body>
+<script>
+
+var preload = {
+  type: 'preload',
+  images: ['img/blue.png', 'img/orange.png'],
+  audio: ['sound/speech_blue.mp3']
+}
+
+var init_camera = {
+  type: 'webgazer-init-camera'
+}
+
+var start_cal = {
+  type: 'html-keyboard-response',
+  stimulus: '<p>As each dot appears, look at it and then click on it.</p><p>Press a key to start.</p>'
+}
+
+var calibration = {
+  type: 'webgazer-calibrate',
+  calibration_points: [
+    [25,25],[25,75],[50,50],[75,75],[75,25]
+  ]
+}
+
+var start_val = {
+  type: 'html-keyboard-response',
+  stimulus: '<p>As each dot appears, look at it.</p><p>Press a key to start.</p>'
+}
+
+var validation = {
+  type: 'webgazer-validate',
+  validation_points: [
+    [25,50],[75,50]
+  ]
+}
+
+var start = {
+  type: 'html-keyboard-response',
+  stimulus: 'Look at the spoken color. Press a key to start.'
+}
+
+var trial = {
+  type: 'audio-keyboard-response',
+  stimulus: 'sound/speech_blue.mp3',
+  prompt: `
+    <div style="width:100vw; height:300px;">
+      <img id="blue-target" style="float:left;" src="img/blue.png"></img>
+      <img id="orange-target" style="float:right;" src="img/orange.png"></img>
+    </div>
+  `,
+  choices: jsPsych.NO_KEYS,
+  trial_duration: 2000,
+  extensions: [
+    {
+      type: 'webgazer', 
+      params: {targets: ['#blue-target', '#orange-target']}
+    }
+  ]
+}
+
+jsPsych.init({
+  timeline: [preload, init_camera, start_cal, calibration, start_val, validation, start, trial],
+  extensions: [
+    {type: 'webgazer'}
+  ],
+  on_finish: function() {
+      jsPsych.data.displayData();
+  }
+})
+
+</script>
+</html>

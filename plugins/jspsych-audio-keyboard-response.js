@@ -155,9 +155,6 @@ jsPsych.plugins["audio-keyboard-response"] = (function () {
       jsPsych.pluginAPI.cancelAllKeyboardResponses();
 
       // gather the data to store for the trial
-      if (context !== null && response.rt !== null) {
-        response.rt = Math.round(response.rt * 1000);
-      }
       var trial_data = {
         rt: response.rt,
         stimulus: trial.stimulus,

@@ -28,7 +28,7 @@ question_order | array | An array with the order of questions. For example `[2,0
 
 ```javascript
 var page_1_options = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
-var page_2_options = ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neural", "Somewhat Agree", "Agree", "Strongly Agree"];
+var page_2_options = ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neutral", "Somewhat Agree", "Agree", "Strongly Agree"];
 
 var multi_choice_block = {
   type: 'survey-multi-choice',

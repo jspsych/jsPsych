@@ -49,7 +49,7 @@ var circle_1 = {
         filledCirc(c, 100, 'blue');
     },
     choices: ['Red', 'Green', 'Blue'],
-    prompt: '<p>What color is the circle?</p>'
+    prompt: '<p>What color is the circle?</p>',
     data: {color: 'blue', radius: 100}
 };
 
