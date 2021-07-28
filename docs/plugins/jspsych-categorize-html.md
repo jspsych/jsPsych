@@ -36,18 +36,23 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ## Examples
 
-#### Categorizing HTML content
+???+ example "Categorizing HTML content"
+    === "Code"
+        ```javascript
+            var categorization_trial = {
+                type: 'categorize-html',
+                stimulus: '<p>B</p>',
+                key_answer: 'p',
+                text_answer: 'letter',
+                choices: ['p', 'q'],
+                correct_text: "<p class='prompt'>Correct, this is a %ANS%.</p>",
+                incorrect_text: "<p class='prompt'>Incorrect, this is a %ANS%.</p>",
+                prompt: "<p>Press p for letter. Press q for number.</p>"
+            };
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../plugins/demos/jspsych-categorize-html-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var categorization_trial = {
-    type: 'categorize',
-    stimulus: '<p>B</p>',
-    key_answer: 'p',
-    text_answer: 'letter',
-    choices: ['p', 'q'],
-    correct_text: "<p class='prompt'>Correct, this is a %ANS%.</p>",
-    incorrect_text: "<p class='prompt'>Incorrect, this is a %ANS%.</p>",
-    prompt: "<p>Press p for letter. Press q for number.</p>"
-};
-```
-
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-categorize-html-demo1.html">Open demo in new tab</a>

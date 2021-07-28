@@ -23,23 +23,36 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ## Examples
 
-#### Simple cloze using default settings (no check against correct solution, no custom button text)
+???+ example "Simple cloze using default settings (no check against correct solution, no custom button text)"
+    === "Code"
+        ```javascript
+            var cloze_trial = {
+                type: 'cloze',
+                text: 'The %% is the largest terrestrial mammal. It lives in both %% and %%.'
+            };
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../plugins/demos/jspsych-cloze-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var trial = {
-	type: 'cloze',
-	text: 'The %% is the largest terrestrial mammal. It lives in both %% and %%.'
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-cloze-demo1.html">Open demo in new tab</a>
 
-#### More elaborate example (with check against correct solution, custom error handling and modified button text)
 
-```javascript
-var trial = {
-    type: 'cloze',
-    text: 'A rectangle has % 4 % corners and a triangle has % 3 %.',
-    check_answers: true,
-    button_text: 'Next',
-    mistake_fn: function(){alert("Wrong answer. Please check again.")}
-};
-```
+???+ example "More elaborate example (with check against correct solution, custom error handling and modified button text)"
+    === "Code"
+        ```javascript
+            var cloze_trial = {
+                type: 'cloze',
+                text: 'A rectangle has % 4 % corners and a triangle has % 3 %.',
+                check_answers: true,
+                button_text: 'Next',
+                mistake_fn: function(){alert("Wrong answer. Please check again.")}
+            };
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../plugins/demos/jspsych-cloze-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-cloze-demo2.html">Open demo in new tab</a>
