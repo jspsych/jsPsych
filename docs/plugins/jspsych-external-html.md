@@ -44,27 +44,33 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 </div>
 ```
 
-##### jsPsych code to load above page.
-```javascript
-// sample function that might be used to check if a subject has given
-// consent to participate.
-var check_consent = function(elem) {
-  if (document.getElementById('consent_checkbox').checked) {
-    return true;
-  }
-  else {
-    alert("If you wish to participate, you must check the box next to the statement 'I agree to participate in this study.'");
-    return false;
-  }
-  return false;
-};
+???+ example "jsPsych code to load above page."
+    === "Code"
+        ```javascript
+        // sample function that might be used to check if a subject has given
+        // consent to participate.
+        var check_consent = function(elem) {
+            if (document.getElementById('consent_checkbox').checked) {
+                return true;
+            }
+            else {
+                alert("If you wish to participate, you must check the box next to the statement 'I agree to participate in this study.'");
+                return false;
+            }
+            return false;
+        };
 
+        // declare the block.
+        var trial = {
+            type:'external-html',
+            url: "external_page.html",
+            cont_btn: "start",
+            check_fn: check_consent
+        };
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../plugins/demos/jspsych-external-html-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-// declare the block.
-var trial = {
-  type:'external-html',
-  url: "external_page.html",
-  cont_btn: "start",
-  check_fn: check_consent
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-external-html-demo1.html">Open demo in new tab</a>
