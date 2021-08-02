@@ -34,6 +34,12 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
             default: undefined,
             description: 'Displays options for an individual question.'
           },
+          randomize_option_order: {
+            type: jsPsych.plugins.parameterType.BOOL,
+            pretty_name: 'Randomize Option Order',
+            default: false,
+            description: 'If true, the order of the options will be randomized'
+          },
           required: {
             type: jsPsych.plugins.parameterType.BOOL,
             pretty_name: 'Required',
@@ -138,20 +144,31 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       }
       html += '</p>';
 
+      // generate option order
+      var option_order = [];
+      for (var i=0; i<question.options.length; i++){
+          option_order.push(i);
+      }
+      if (question.randomize_option_order){
+          option_order = jsPsych.randomization.shuffle(option_order);
+      }
+      
       // create option radio buttons
       for (var j = 0; j < question.options.length; j++) {
+        var option_id = option_order[j];
+
         // add label and question text
-        var option_id_name = "jspsych-survey-multi-choice-option-"+question_id+"-"+j;
+        var option_id_name = "jspsych-survey-multi-choice-option-"+question_id+"-"+option_id;
         var input_name = 'jspsych-survey-multi-choice-response-'+question_id;
-        var input_id = 'jspsych-survey-multi-choice-response-'+question_id+'-'+j;
+        var input_id = 'jspsych-survey-multi-choice-response-'+question_id+'-'+option_id;
 
         var required_attr = question.required ? 'required' : '';
 
         // add radio button container
         html += '<div id="'+option_id_name+'" class="jspsych-survey-multi-choice-option">';
         html += '<label class="jspsych-survey-multi-choice-text" for="'+input_id+'">';
-        html += '<input type="radio" name="'+input_name+'" id="'+input_id+'" value="'+question.options[j]+'" '+required_attr+'></input>';
-        html += question.options[j]+'</label>';
+        html += '<input type="radio" name="'+input_name+'" id="'+input_id+'" value="'+question.options[option_order[j]]+'" '+required_attr+'></input>';
+        html += question.options[option_order[j]]+'</label>';
         html += '</div>';
       }
 

@@ -32,6 +32,12 @@ jsPsych.plugins['survey-multi-select'] = (function() {
             default: undefined,
             description: 'Displays options for an individual question.'
           },
+          randomize_option_order: {
+            type: jsPsych.plugins.parameterType.BOOL,
+            pretty_name: 'Randomize Option Order',
+            default: false,
+            description: 'If true, the order of the options will be randomized'
+          },
           horizontal: {
             type: jsPsych.plugins.parameterType.BOOL,
             pretty_name: 'Horizontal',
@@ -139,9 +145,19 @@ jsPsych.plugins['survey-multi-select'] = (function() {
       // add question text
       display_element.querySelector(question_selector).innerHTML += '<p id="survey-question" class="' + plugin_id_name + '-text survey-multi-select">' + question.prompt + '</p>';
 
+      // generate option order
+      var option_order = [];
+      for (var i=0; i<question.options.length; i++){
+          option_order.push(i);
+      }
+      if (question.randomize_option_order){
+          option_order = jsPsych.randomization.shuffle(option_order);
+      }
+  
       // create option check boxes
       for (var j = 0; j < question.options.length; j++) {
-        var option_id_name = _join(plugin_id_name, "option", question_id, j);
+        var option_id = option_order[j];
+        var option_id_name = _join(plugin_id_name, "option", question_id, option_id);
 
         // add check box container
         display_element.querySelector(question_selector).innerHTML += '<div id="'+option_id_name+'" class="'+_join(plugin_id_name, 'option')+'"></div>';
@@ -149,10 +165,10 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         // add label and question text
         var form = document.getElementById(option_id_name)
         var input_name = _join(plugin_id_name, 'response', question_id);
-        var input_id = _join(plugin_id_name, 'response', question_id, j);
+        var input_id = _join(plugin_id_name, 'response', question_id, option_id);
         var label = document.createElement('label');
         label.setAttribute('class', plugin_id_name+'-text');
-        label.innerHTML = question.options[j];
+        label.innerHTML = question.options[option_order[j]];
         label.setAttribute('for', input_id)
 
         // create checkboxes
@@ -160,7 +176,7 @@ jsPsych.plugins['survey-multi-select'] = (function() {
         input.setAttribute('type', "checkbox");
         input.setAttribute('name', input_name);
         input.setAttribute('id', input_id);
-        input.setAttribute('value', question.options[j])
+        input.setAttribute('value', question.options[option_order[j]])
         form.appendChild(label)
         label.insertBefore(input, label.firstChild)
       }
