@@ -30,13 +30,21 @@ stimulus | string | The HTML content that was displayed on the screen.
 
 ## Examples
 
-#### Displaying question until subject gives a response
+???+ example "Displaying question until subject gives a response"
+    === "Code"
+        ```javascript
+		var trial = {
+			type: 'html-button-response',
+			stimulus: '<p>Running</p>',
+			choices: ['Healthy', 'Unhealthy'],
+			prompt: "<p>Is this activity healthy or unhealthy?</p>"
+		};
+		```
+	=== "Demo"
+        <div style="text-align:center;">
+            <iframe src="../plugins/demos/jspsych-html-button-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var trial = {
-	type: 'html-button-response',
-	stimulus: '<p>Running</p>',
-	choices: ['Healthy', 'Unhealthy'],
-	prompt: "<p>Is this activity healthy or unhealthy?</p>"
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-html-button-response-demo1.html">Open demo in new tab</a>
+
+
