@@ -159,7 +159,7 @@ describe("jsPsych.extensions", () => {
     var trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
-      extensions: [{ type: testExtension, params: { foo: 1 } }],
+      extensions: [{ type: testExtension }],
       on_load: () => {
         expect(onFinishFunc).not.toHaveBeenCalled();
         pressKey("a");
@@ -207,7 +207,7 @@ describe("jsPsych.extensions", () => {
     var trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
-      extensions: [{ type: testExtension, params: { foo: 1 } }],
+      extensions: [{ type: testExtension }],
       on_load: () => {
         pressKey("a");
       }
@@ -229,7 +229,7 @@ describe("jsPsych.extensions", () => {
     var trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
-      extensions: [{ type: testExtension, params: { foo: 1 } }],
+      extensions: [{ type: testExtension }],
       on_load: () => {
         pressKey("a");
       },
