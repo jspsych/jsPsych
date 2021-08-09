@@ -27,31 +27,39 @@ class WebGazerExtension implements JsPsychExtension {
   // so that state manipulations are checked.
   private currentTrialData = [];
   private currentTrialTargets = {};
-  private currentTrialSelectors;
-  private domObserver;
+  private currentTrialSelectors:Array<string>;
+  private domObserver:MutationObserver;
   private webgazer;
-  private initialized = false;
-  private currentTrialStart;
-  private activeTrial = false;
-  private sampling_interval;
-  private round_predictions;
-  private gazeInterval;
-  private gazeUpdateCallbacks;
-  private currentGaze;
+  private initialized:boolean = false;
+  private currentTrialStart:number;
+  private activeTrial:boolean = false;
+  private sampling_interval:number;
+  private round_predictions:boolean;
+  private gazeInterval:number;
+  private gazeUpdateCallbacks:Array<any>;
+  private currentGaze:Object;
 
   // required, will be called at jsPsych.init
   // should return a Promise
-  initialize({ round_predictions = true, auto_initialize = false, sampling_interval = 34 }: InitializeParameters): Promise<void> {
+  initialize({ round_predictions = true, auto_initialize = false, sampling_interval = 34, webgazer }: InitializeParameters): Promise<void> {
+
+    // set initial state of the extension
+    this.round_predictions = round_predictions;
+    this.sampling_interval = sampling_interval;
+    this.initialized = false;
+    this.activeTrial = false;
+    this.gazeUpdateCallbacks = [];
+    this.domObserver = new MutationObserver(this.mutationObserverCallback);
 
     return new Promise((resolve, reject) => {
-      if (typeof params.webgazer === 'undefined') {
+      if (typeof webgazer === 'undefined') {
         if (window.webgazer) {
           this.webgazer = window.webgazer;
         } else {
           reject(new Error('Webgazer extension failed to initialize. webgazer.js not loaded. Load webgazer.js before calling jsPsych.init()'));
         }
       } else {
-        this.webgazer = params.webgazer;
+        this.webgazer = webgazer;
       }
 
       // sets up event handler for webgazer data
@@ -63,23 +71,14 @@ class WebGazerExtension implements JsPsychExtension {
       //state.webgazer.setRegression('threadedRidge');
       //state.webgazer.applyKalmanFilter(false); // kalman filter doesn't seem to work yet with threadedridge.
 
-      // set state parameters
-      this.round_predictions = params.round_predictions;
-      this.sampling_interval = params.sampling_interval;
-
-      // sets state for initialization
-      this.initialized = false;
-      this.activeTrial = false;
-      this.gazeUpdateCallbacks = [];
-      this.domObserver = new MutationObserver(this.mutationObserverCallback);
-
+      
       // hide video by default
       this.hideVideo();
 
       // hide predictions by default
       this.hidePredictions();
 
-      if (params.auto_initialize) {
+      if (auto_initialize) {
         // starts webgazer, and once it initializes we stop mouseCalibration and
         // pause webgazer data.
         this.webgazer.begin().then(() => {
