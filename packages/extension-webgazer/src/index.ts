@@ -41,11 +41,7 @@ class WebGazerExtension implements JsPsychExtension {
 
   // required, will be called at jsPsych.init
   // should return a Promise
-  initialize(params: InitializeParameters): Promise<void> {
-    // setting default values for params if not defined
-    params.round_predictions = typeof params.round_predictions === 'undefined' ? true : params.round_predictions;
-    params.auto_initialize = typeof params.auto_initialize === 'undefined' ? false : params.auto_initialize;
-    params.sampling_interval = typeof params.sampling_interval === 'undefined' ? 34 : params.sampling_interval;
+  initialize({ round_predictions = true, auto_initialize = false, sampling_interval = 34 }: InitializeParameters): Promise<void> {
 
     return new Promise((resolve, reject) => {
       if (typeof params.webgazer === 'undefined') {
@@ -293,4 +289,3 @@ class WebGazerExtension implements JsPsychExtension {
 }
 
 export default WebGazerExtension;
-
