@@ -8,3 +8,4 @@ site/
 dist/
 coverage/
 .vscode/
+dist.zip
