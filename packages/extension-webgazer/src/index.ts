@@ -7,9 +7,29 @@ declare global {
 }
 
 interface InitializeParameters extends JsPsychExtensionParameters {
+  /**
+   * Whether to round WebGazer's predicted x, y coordinates to the nearest integer. Recommended
+   * to leave this as `true` because it saves significant space in the data object and the
+   * predictions aren't precise to the level of partial pixels.
+   * @default true
+   */
   round_predictions: boolean;
+  /**
+   * Whether to initialize WebGazer automatically when the plugin loads. Leave this as `false`
+   * if you plan to initialize WebGazer later in the experiment using a plugin.
+   * @default false
+   */
   auto_initialize: boolean;
+  /**
+   * The number of milliseconds between each sample. Note that this is only a request, and the 
+   * actual interval will vary depending on processing time.
+   * @default 34
+   */
   sampling_interval: number;
+  /**
+   * An instance of WebGazer. If left undefined then the global window.webgazer object will be used
+   * if it exists.
+   */
   webgazer: any;
 }
 
