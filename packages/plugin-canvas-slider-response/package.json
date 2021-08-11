@@ -28,6 +28,6 @@
   },
   "homepage": "https://github.com/jspsych/jsPsych#readme",
   "peerDependencies": {
-    "jspsych": ">=7"
+    "jspsych": ">=6"
   }
 }
