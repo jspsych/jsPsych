@@ -1,144 +1,150 @@
-/**
- * jspsych-webgazer-init-camera
- * Josh de Leeuw
- **/
+import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
 
-import jsPsych from "jspsych";
-
-const plugin = <any>{};
-
-plugin.info = {
+const info = <const>{
   name: "webgazer-init-camera",
-  description: "",
   parameters: {
+    /* Instruction text */
     instructions: {
-      type: jsPsych.plugins.parameterType.HTML_STRING,
+      type: parameterType.HTML_STRING,
       default: `
             <p>Position your head so that the webcam has a good view of your eyes.</p>
             <p>Center your face in the box and look directly towards the camera.</p>
             <p>It is important that you try and keep your head reasonably still throughout the experiment, so please take a moment to adjust your setup to be comfortable.</p>
             <p>When your face is centered in the box and the box is green, you can click to continue.</p>`,
     },
+    /* Text for the button that participants click to end the trial. */
     button_text: {
-      type: jsPsych.plugins.parameterType.STRING,
+      type: parameterType.STRING,
       default: "Continue",
     },
   },
 };
 
-plugin.trial = function (display_element, trial) {
-  var start_time = performance.now();
-  var load_time;
+type Info = typeof info;
 
-  if (!jsPsych.extensions.webgazer.isInitialized()) {
-    jsPsych.extensions.webgazer
-      .start()
-      .then(function () {
-        showTrial();
-      })
-      .catch(function () {
-        display_element.innerHTML = `<p>The experiment cannot continue because the eye tracker failed to start.</p>
-            <p>This may be because of a technical problem or because you did not grant permission for the page to use your camera.</p>`;
-      });
-  } else {
-    showTrial();
-  }
+/**
+ * jspsych-webgazer-init-camera
+ * Josh de Leeuw
+ **/
+class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
+  info = info;
 
-  function showTrial() {
-    load_time = Math.round(performance.now() - start_time);
+  constructor(private jsPsych: JsPsych) {}
 
-    var style = `
-        <style id="webgazer-center-style">
-          #webgazerVideoContainer { top: 20px !important; left: calc(50% - 160px) !important;}
-        </style>
-      `;
-    document.querySelector("head").insertAdjacentHTML("beforeend", style);
+  trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    var start_time = performance.now();
+    var load_time: number;
 
-    var html = `
-        <div id='webgazer-init-container' style='position: relative; width:100vw; height:100vh'>
-        </div>`;
+    // function to end trial when it is time
+    const end_trial = () => {
+      this.jsPsych.extensions["webgazer"].pause();
+      this.jsPsych.extensions["webgazer"].hideVideo();
 
-    display_element.innerHTML = html;
+      // kill any remaining setTimeout handlers
+      this.jsPsych.pluginAPI.clearAllTimeouts();
 
-    jsPsych.extensions["webgazer"].showVideo();
-    jsPsych.extensions["webgazer"].resume();
+      // gather the data to store for the trial
+      var trial_data = {
+        load_time: load_time,
+      };
 
-    var wg_container = display_element.querySelector("#webgazer-init-container");
+      // clear the display
+      display_element.innerHTML = "";
 
-    wg_container.innerHTML = `
-        <div style='position: absolute; top: max(260px, 40%); left: calc(50% - 400px); width:800px;'>
-        ${trial.instructions}
-        <button id='jspsych-wg-cont' class='jspsych-btn' disabled>${trial.button_text}</button>
-        </div>`;
+      document.querySelector("#webgazer-center-style").remove();
 
-    if (is_face_detect_green()) {
-      (document.querySelector("#jspsych-wg-cont") as HTMLButtonElement).disabled = false;
-    } else {
-      var observer = new MutationObserver(face_detect_event_observer);
-      observer.observe(document, {
-        attributes: true,
-        attributeFilter: ["style"],
-        subtree: true,
-      });
-    }
-
-    document.querySelector("#jspsych-wg-cont").addEventListener("click", function () {
-      if (observer) {
-        observer.disconnect();
-      }
-      end_trial();
-    });
-  }
-
-  function is_face_detect_green() {
-    if (document.querySelector("#webgazerFaceFeedbackBox")) {
-      return (
-        (document.querySelector("#webgazerFaceFeedbackBox") as HTMLElement).style.borderColor ==
-        "green"
-      );
-    } else {
-      return false;
-    }
-  }
-
-  function face_detect_event_observer(mutationsList, observer) {
-    if (mutationsList[0].target == document.querySelector("#webgazerFaceFeedbackBox")) {
-      if (
-        mutationsList[0].type == "attributes" &&
-        mutationsList[0].target.style.borderColor == "green"
-      ) {
-        (document.querySelector("#jspsych-wg-cont") as HTMLButtonElement).disabled = false;
-      }
-      if (
-        mutationsList[0].type == "attributes" &&
-        mutationsList[0].target.style.borderColor == "red"
-      ) {
-        (document.querySelector("#jspsych-wg-cont") as HTMLButtonElement).disabled = true;
-      }
-    }
-  }
-
-  // function to end trial when it is time
-  function end_trial() {
-    jsPsych.extensions["webgazer"].pause();
-    jsPsych.extensions["webgazer"].hideVideo();
-
-    // kill any remaining setTimeout handlers
-    jsPsych.pluginAPI.clearAllTimeouts();
-
-    // gather the data to store for the trial
-    var trial_data = {
-      load_time: load_time,
+      // move on to the next trial
+      this.jsPsych.finishTrial(trial_data);
     };
 
-    // clear the display
-    display_element.innerHTML = "";
+    const showTrial = () => {
+      load_time = Math.round(performance.now() - start_time);
 
-    document.querySelector("#webgazer-center-style").remove();
+      var style = `
+          <style id="webgazer-center-style">
+            #webgazerVideoContainer { top: 20px !important; left: calc(50% - 160px) !important;}
+          </style>
+        `;
+      document.querySelector("head").insertAdjacentHTML("beforeend", style);
 
-    // move on to the next trial
-    jsPsych.finishTrial(trial_data);
+      var html = `
+          <div id='webgazer-init-container' style='position: relative; width:100vw; height:100vh'>
+          </div>`;
+
+      display_element.innerHTML = html;
+
+      this.jsPsych.extensions["webgazer"].showVideo();
+      this.jsPsych.extensions["webgazer"].resume();
+
+      var wg_container = display_element.querySelector("#webgazer-init-container");
+
+      wg_container.innerHTML = `
+          <div style='position: absolute; top: max(260px, 40%); left: calc(50% - 400px); width:800px;'>
+          ${trial.instructions}
+          <button id='jspsych-wg-cont' class='jspsych-btn' disabled>${trial.button_text}</button>
+          </div>`;
+
+      if (is_face_detect_green()) {
+        (document.querySelector("#jspsych-wg-cont") as HTMLButtonElement).disabled = false;
+      } else {
+        var observer = new MutationObserver(face_detect_event_observer);
+        observer.observe(document, {
+          attributes: true,
+          attributeFilter: ["style"],
+          subtree: true,
+        });
+      }
+
+      document.querySelector("#jspsych-wg-cont").addEventListener("click", function () {
+        if (observer) {
+          observer.disconnect();
+        }
+        end_trial();
+      });
+    };
+
+    if (!this.jsPsych.extensions.webgazer.isInitialized()) {
+      this.jsPsych.extensions.webgazer
+        .start()
+        .then(function () {
+          showTrial();
+        })
+        .catch(function () {
+          display_element.innerHTML = `<p>The experiment cannot continue because the eye tracker failed to start.</p>
+              <p>This may be because of a technical problem or because you did not grant permission for the page to use your camera.</p>`;
+        });
+    } else {
+      showTrial();
+    }
+
+    function is_face_detect_green() {
+      if (document.querySelector("#webgazerFaceFeedbackBox")) {
+        return (
+          (document.querySelector("#webgazerFaceFeedbackBox") as HTMLElement).style.borderColor ==
+          "green"
+        );
+      } else {
+        return false;
+      }
+    }
+
+    function face_detect_event_observer(mutationsList, observer) {
+      if (mutationsList[0].target == document.querySelector("#webgazerFaceFeedbackBox")) {
+        if (
+          mutationsList[0].type == "attributes" &&
+          mutationsList[0].target.style.borderColor == "green"
+        ) {
+          (document.querySelector("#jspsych-wg-cont") as HTMLButtonElement).disabled = false;
+        }
+        if (
+          mutationsList[0].type == "attributes" &&
+          mutationsList[0].target.style.borderColor == "red"
+        ) {
+          (document.querySelector("#jspsych-wg-cont") as HTMLButtonElement).disabled = true;
+        }
+      }
+    }
   }
-};
+}
 
-export default plugin;
+export default WebgazerInitCameraPlugin;
