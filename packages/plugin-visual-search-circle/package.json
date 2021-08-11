@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-visual-search-circle",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "jsPsych visual search circle plugin",
   "type": "module",
   "main": "dist/index.js",

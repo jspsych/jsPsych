@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-instructions",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "jsPsych plugin to display instructions",
   "type": "module",
   "main": "dist/index.js",

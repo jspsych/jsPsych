@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-audio-button-response",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "jsPsych plugin for playing an audio file and getting a button response",
   "type": "module",
   "main": "dist/index.js",

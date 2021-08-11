@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-cloze",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "jsPsych plugin for displaying a cloze test and checking participants answers against a correct solution",
   "type": "module",
   "main": "dist/index.js",

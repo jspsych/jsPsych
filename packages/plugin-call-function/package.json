@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-call-function",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "jsPsych plugin for calling an arbitrary function during a jspsych experiment",
   "type": "module",
   "main": "dist/index.js",

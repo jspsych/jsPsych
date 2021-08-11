@@ -1,6 +1,6 @@
 {
   "name": "jspsych",
-  "version": "7.0.0",
+  "version": "6.3.1",
   "description": "Behavioral experiments in a browser",
   "type": "module",
   "main": "dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-resize",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "jsPsych plugin for controlling the real world size of the display",
   "type": "module",
   "main": "dist/index.js",

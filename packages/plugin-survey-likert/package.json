@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-survey-likert",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "a jspsych plugin for measuring items on a likert scale",
   "type": "module",
   "main": "dist/index.js",

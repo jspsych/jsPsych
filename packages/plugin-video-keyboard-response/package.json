@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-video-keyboard-response",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "jsPsych plugin for playing a video file and getting a keyboard response",
   "type": "module",
   "main": "dist/index.js",

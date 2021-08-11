@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-survey-html-form",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "a jspsych plugin for free html forms",
   "type": "module",
   "main": "dist/index.js",
