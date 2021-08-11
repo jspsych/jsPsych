@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-canvas-button-response.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css">
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-canvas-button-response/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
 </head>
 <body></body>
 <script>
+
+    var jsPsych = initJsPsych();
 
     // stimulus function that takes the canvas and additional parameters (radius, color)
     // this can be called inside of an anonymous stimulus function, which takes the canvas (c) as its only argument
@@ -19,7 +21,7 @@
     }
 
     var circle_1 = {
-        type: 'canvas-button-response',
+        type: jsPsychCanvasButtonResponse,
         stimulus: function(c) {
             filledCirc(c, 100, 'blue');
         },
@@ -29,7 +31,7 @@
     };
 
     var circle_2 = {
-        type: 'canvas-button-response',
+        type: jsPsychCanvasButtonResponse,
         stimulus: function(c) {
             filledCirc(c, 150, 'green');
         },
@@ -43,7 +45,7 @@
     // write the canvas stimulus drawing function without using a named function
     // the anonymous function must take the canvas as an argument
     var lines = {
-        type: 'canvas-button-response',
+        type: jsPsychCanvasButtonResponse,
         stimulus: function(c) {
             var ctx = c.getContext("2d");
             // first line
@@ -70,7 +72,7 @@
     // the jsPsych.timelineVariable() function can be used inside your stimulus function
     var circle_procedure = {
         timeline: [{
-            type: 'canvas-button-response',
+            type: jsPsychCanvasButtonResponse,
             stimulus: function(c) {
                 filledCirc(c, jsPsych.timelineVariable('radius'), jsPsych.timelineVariable('color'));
             },
@@ -85,11 +87,7 @@
         ]
     };
 
-    jsPsych.init({
-        timeline: [circle_1, circle_2, lines, circle_procedure],
-        on_finish: function () { 
-            jsPsych.data.displayData(); 
-        }
-    });
+    jsPsych.run([circle_1, circle_2, lines, circle_procedure]);  // TO DO: on_finish: display data
+
 </script>
 </html>

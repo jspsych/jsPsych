@@ -1,3 +1,51 @@
+import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+
+const info = <const>{
+  name: "external-html",
+  parameters: {
+    /* The url of the external html page */
+    url: {
+      type: parameterType.STRING,
+      pretty_name: "URL",
+      default: undefined
+    },
+    /* The key to continue to the next page. */
+    cont_key: {
+      type: parameterType.KEY,
+      pretty_name: "Continue key",
+      default: null
+    },
+    /* The button to continue to the next page. */
+    cont_btn: {
+      type: parameterType.STRING,
+      pretty_name: "Continue button",
+      default: null
+    },
+    /* Function to check whether user is allowed to continue after clicking cont_key or clicking cont_btn */
+    check_fn: {
+      type: parameterType.FUNCTION,
+      pretty_name: "Check function",
+      default: function () {
+        return true;
+      }
+    },
+    /* Whether or not to force a page refresh. */
+    force_refresh: {
+      type: parameterType.BOOL,
+      pretty_name: "Force refresh",
+      default: false
+    },
+    /* If execute_Script == true, then all JavasScript code on the external page will be executed. */
+    execute_script: {
+      type: parameterType.BOOL,
+      pretty_name: "Execute scripts",
+      default: false
+    }
+  }
+};
+
+type Info = typeof info;
+
 /**
  * (July 2012, Erik Weitnauer)
  * The html-plugin will load and display an external html pages. To proceed to the next, the
@@ -6,115 +54,73 @@
  *
  * documentation: docs.jspsych.org
  */
+class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
+  info = info;
 
-import jsPsych from "jspsych";
+  constructor(private jsPsych: JsPsych) {}
 
-const plugin = <any>{};
+  trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    var url = trial.url;
+    if (trial.force_refresh) {
+      url = trial.url + "?t=" + performance.now();
+    }
 
-plugin.info = {
-  name: "external-html",
-  description: "",
-  parameters: {
-    url: {
-      type: jsPsych.plugins.parameterType.STRING,
-      pretty_name: "URL",
-      default: undefined,
-      description: "The url of the external html page",
-    },
-    cont_key: {
-      type: jsPsych.plugins.parameterType.KEY,
-      pretty_name: "Continue key",
-      default: null,
-      description: "The key to continue to the next page.",
-    },
-    cont_btn: {
-      type: jsPsych.plugins.parameterType.STRING,
-      pretty_name: "Continue button",
-      default: null,
-      description: "The button to continue to the next page.",
-    },
-    check_fn: {
-      type: jsPsych.plugins.parameterType.FUNCTION,
-      pretty_name: "Check function",
-      default: function () {
-        return true;
-      },
-      description: "",
-    },
-    force_refresh: {
-      type: jsPsych.plugins.parameterType.BOOL,
-      pretty_name: "Force refresh",
-      default: false,
-      description: "Refresh page.",
-    },
-    // if execute_Script == true, then all javascript code on the external page
-    // will be executed in the plugin site within your jsPsych test
-    execute_script: {
-      type: jsPsych.plugins.parameterType.BOOL,
-      pretty_name: "Execute scripts",
-      default: false,
-      description: "If true, JS scripts on the external html file will be executed.",
-    },
-  },
-};
+    // helper to load via XMLHttpRequest
+    const load = (element, file, callback) => {
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.open("GET", file, true);
+      xmlhttp.onload = function () {
+        if (xmlhttp.status == 200 || xmlhttp.status == 0) {
+          //Check if loaded
+          element.innerHTML = xmlhttp.responseText;
+          callback();
+        }
+      };
+      xmlhttp.send();
+    }
 
-plugin.trial = function (display_element, trial) {
-  var url = trial.url;
-  if (trial.force_refresh) {
-    url = trial.url + "?t=" + performance.now();
-  }
+    load(display_element, url, function () {
+      var t0 = performance.now();
+      var finish = function () {
+        if (trial.check_fn && !trial.check_fn(display_element)) {
+          return;
+        }
+        if (trial.cont_key) {
+          display_element.removeEventListener("keydown", key_listener);
+        }
+        var trial_data = {
+          rt: performance.now() - t0,
+          url: trial.url,
+        };
+        display_element.innerHTML = "";
+        this.jsPsych.finishTrial(trial_data);
+      };
 
-  load(display_element, url, function () {
-    var t0 = performance.now();
-    var finish = function () {
-      if (trial.check_fn && !trial.check_fn(display_element)) {
-        return;
+      // by default, scripts on the external page are not executed with XMLHttpRequest().
+      // To activate their content through DOM manipulation, we need to relocate all script tags
+      if (trial.execute_script) {
+        // changed for..of getElementsByTagName("script") here to for i loop due to TS error: 
+        // Type 'HTMLCollectionOf<HTMLScriptElement>' must have a '[Symbol.iterator]()' method that returns an iterator.ts(2488)
+        var all_scripts = display_element.getElementsByTagName("script");
+        for (var i=0; i<all_scripts.length; i++) {
+          const relocatedScript = document.createElement("script");
+          const curr_script = all_scripts[i];
+          relocatedScript.text = curr_script.text;
+          curr_script.parentNode.replaceChild(relocatedScript, curr_script);
+        }
+      }
+
+      if (trial.cont_btn) {
+        display_element.querySelector("#" + trial.cont_btn).addEventListener("click", finish);
       }
       if (trial.cont_key) {
-        display_element.removeEventListener("keydown", key_listener);
+        var key_listener = function (e) {
+          if (this.jsPsych.pluginAPI.compareKeys(e.key, trial.cont_key)) finish();
+        };
+        display_element.addEventListener("keydown", key_listener);
       }
-      var trial_data = {
-        rt: performance.now() - t0,
-        url: trial.url,
-      };
-      display_element.innerHTML = "";
-      jsPsych.finishTrial(trial_data);
-    };
-
-    // by default, scripts on the external page are not executed with XMLHttpRequest().
-    // To activate their content through DOM manipulation, we need to relocate all script tags
-    if (trial.execute_script) {
-      for (const scriptElement of display_element.getElementsByTagName("script")) {
-        const relocatedScript = document.createElement("script");
-        relocatedScript.text = scriptElement.text;
-        scriptElement.parentNode.replaceChild(relocatedScript, scriptElement);
-      }
-    }
-
-    if (trial.cont_btn) {
-      display_element.querySelector("#" + trial.cont_btn).addEventListener("click", finish);
-    }
-    if (trial.cont_key) {
-      var key_listener = function (e) {
-        if (jsPsych.pluginAPI.compareKeys(e.key, trial.cont_key)) finish();
-      };
-      display_element.addEventListener("keydown", key_listener);
-    }
-  });
-};
-
-// helper to load via XMLHttpRequest
-function load(element, file, callback) {
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.open("GET", file, true);
-  xmlhttp.onload = function () {
-    if (xmlhttp.status == 200 || xmlhttp.status == 0) {
-      //Check if loaded
-      element.innerHTML = xmlhttp.responseText;
-      callback();
-    }
-  };
-  xmlhttp.send();
+    });
+  }
 }
 
-export default plugin;
+export default ExternalHtmlPlugin;

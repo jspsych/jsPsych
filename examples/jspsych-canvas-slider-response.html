@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-canvas-slider-response.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css">
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-canvas-slider-response/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
 </head>
 <body></body>
 <script>
+
+    var jsPsych = initJsPsych();
 
     var colors;
 
@@ -21,7 +23,7 @@
     }
 
     var trial_1 = {
-        type: 'canvas-slider-response',
+        type: jsPsychCanvasSliderResponse,
         stimulus: twoSquares,
         labels: ['0','10'],
         canvas_size: [200, 500],
@@ -40,7 +42,7 @@
     }
 
     var trial_2 = {
-        type: 'canvas-slider-response',
+        type: jsPsychCanvasSliderResponse,
         stimulus: function(c) {
             colors = ['darkred', 'cyan'];
             twoSquaresColors(c, colors);
@@ -57,11 +59,7 @@
         }
     };
 
-    jsPsych.init({
-        timeline: [trial_1, trial_2],
-        on_finish: function () { 
-            jsPsych.data.displayData(); 
-        }
-    });
+    jsPsych.run([trial_1, trial_2]); // TO DO: on_finish: display data
+
 </script>
 </html>

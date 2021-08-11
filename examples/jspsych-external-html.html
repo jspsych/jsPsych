@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../packages/jspsych/dist/index.browser.js"></script>
+  <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
+  <script src="../packages/plugin-external-html/dist/index.browser.js"></script>
+  <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+  var jsPsych = initJsPsych();
+
+  var trial_1 = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<p>This is a normal jsPsych trial.</p><p>The next trial will display an external HTML page.</p><p>Press any key to continue.</p>'
+  }
+
+  var trial_2 = {
+    type: jsPsychExternalHtml,
+    url: 'external_html/simple_consent.html',
+    cont_button: 'start',
+    check_fn: function() {
+        if (document.getElementById('consent_checkbox').checked) {
+            return true;
+        } else {
+            alert('You must tick the checkbox to continue with the study.')
+        }
+    }
+  }
+
+  var trial_3 = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: 'This is another normal jsPsych trial.'
+  }
+
+  jsPsych.run([trial_1, trial_2, trial_3]);  // TO DO: on_finish: jsPsych.data.displayData()
+  
+</script>
+</html>

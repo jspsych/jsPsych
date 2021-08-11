@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-canvas-keyboard-response.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css">
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-canvas-keyboard-response/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
 </head>
 <body></body>
 <script>
+
+    var jsPsych = initJsPsych();
 
     // stimulus functions that take the canvas as its only argument
     // these function names can be used as the value for the stimulus parameter
@@ -25,7 +27,7 @@
     }
 
     var trial_1 = {
-        type: 'canvas-keyboard-response',
+        type: jsPsychCanvasKeyboardResponse,
         stimulus: drawRect,
         choices: ['e','i'],
         prompt: '<p>Is this a circle or a rectangle? Press "e" for circle and "i" for rectangle.</p>',
@@ -33,7 +35,7 @@
     };
 
     var trial_2 = {
-        type: 'canvas-keyboard-response',
+        type: jsPsychCanvasKeyboardResponse,
         stimulus: drawCirc,
         choices: ['e','i'],
         prompt: '<p>Is this a circle or a rectangle? Press "e" for circle and "i" for rectangle.</p>',
@@ -44,7 +46,7 @@
     // the jsPsych.timelineVariable() function can be used inside your stimulus function
     var trial_procedure = {
         timeline: [{
-            type: 'canvas-keyboard-response',
+            type: jsPsychCanvasKeyboardResponse,
             stimulus: function(c) {
                 var ctx = c.getContext('2d');
                 ctx.beginPath();
@@ -68,11 +70,7 @@
         ]
     };
 
-    jsPsych.init({
-        timeline: [trial_1, trial_2, trial_procedure],
-        on_finish: function () { 
-            jsPsych.data.displayData(); 
-        }
-    });
+    jsPsych.run([trial_1, trial_2, trial_procedure]);  // TO DO: on_finish: display data
+    
 </script>
 </html>

@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-free-sort.js"></script>
-    <script src="../plugins/jspsych-canvas-keyboard-response.js"></script>
-    <script src="../plugins/jspsych-preload.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css">
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-free-sort/dist/index.browser.js"></script>
+    <script src="../packages/plugin-canvas-keyboard-response/dist/index.browser.js"></script>
+    <!-- <script src="../packages/plugin-preload/dist/index.browser.js"></script> -->
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body></body>
   <script>
 
-  var preload = {
-    type: 'preload',
-    auto_preload: true
-  };
+  var jsPsych = initJsPsych();
+
+  // var preload = {
+  //   type: jsPsychPreload,
+  //   auto_preload: true
+  // };
 
   var trial_1 = {
-    type: 'free-sort',
+    type: jsPsychFreeSort,
     stimuli: ['img/happy_face_1.jpg','img/happy_face_3.jpg','img/sad_face_2.jpg','img/sad_face_4.jpg'],
     stim_height: 120,
     stim_width: 160,
@@ -27,7 +29,7 @@
   };
 
   var trial_2 = {
-    type: 'free-sort',
+    type: jsPsychFreeSort,
     stimuli: ['img/happy_face_1.jpg','img/happy_face_3.jpg','img/sad_face_2.jpg','img/sad_face_4.jpg'],
     stim_height: 120,
     stim_width: 160,
@@ -42,7 +44,7 @@
   };
 
   var trial_3 = {
-    type: 'canvas-keyboard-response',
+    type: jsPsychCanvasKeyboardResponse,
     stimulus: function(c) {
       c.style.border = "5px solid #A9A9A9";
       // present images on a canvas at specific locations
@@ -70,7 +72,7 @@
   };
 
   var trial_4 = {
-    type: 'free-sort',
+    type: jsPsychFreeSort,
     stimuli: ['img/1.gif','img/2.gif','img/3.gif'],
     stim_height: 90,
     stim_width: 90,
@@ -88,7 +90,7 @@
   };
 
   var trial_5 = {
-    type: 'free-sort',
+    type: jsPsychFreeSort,
     stimuli: ['img/4.gif','img/5.gif','img/6.gif'],
     prompt: '<p>Arrange the images.</p><p>Images start at random locations inside the sort area.</p>',
     change_border_background_color: false,
@@ -99,11 +101,7 @@
     sort_area_shape: "square"
   };
 
-  jsPsych.init({
-    timeline: [preload, trial_1, trial_2, trial_3, trial_4, trial_5],
-    on_finish: function(){jsPsych.data.displayData();}
-  });
-
+  jsPsych.run([trial_1, trial_2, trial_3, trial_4, trial_5]); // TO DO: add preload, on_finish: display data
 
   </script>
 </html>

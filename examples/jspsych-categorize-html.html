@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <script src="../jspsych.js"></script>
-  <script src="../plugins/jspsych-categorize-html.js"></script>
-  <link rel="stylesheet" href="../css/jspsych.css">
+  <script src="../packages/jspsych/dist/index.browser.js"></script>
+  <script src="../packages/plugin-categorize-html/dist/index.browser.js"></script>
+  <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
 </head>
 <body></body>
 <script>
+
+  var jsPsych = initJsPsych();
+
   var trial = {
-    type: 'categorize-html',
+    type: jsPsychCategorizeHtml,
     stimulus: '<div style="margin: auto; width: 200px; height: 200px; background-color: blue;"></div>',
     key_answer: 'b',
     choices: ['b', 'p'],
@@ -22,12 +24,7 @@
     force_correct_button_press: true
   };
 
-  jsPsych.init({
-    timeline: [trial],
-    on_finish: function() {
-      jsPsych.data.displayData();
-    }
-  });
-</script>
+  jsPsych.run([trial]); // TO DO: on_finish: display data
 
+</script>
 </html>

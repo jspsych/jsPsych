@@ -1,3 +1,25 @@
+import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+
+const info = <const>{
+  name: "call-function",
+  parameters: {
+    /* Function to call */
+    func: {
+      type: parameterType.FUNCTION,
+      pretty_name: "Function",
+      default: undefined
+    },
+    /* Is the function call asynchronous? */
+    async: {
+      type: parameterType.BOOL,
+      pretty_name: "Asynchronous",
+      default: false
+    }
+  }
+};
+
+type Info = typeof info;
+
 /**
  * jspsych-call-function
  * plugin for calling an arbitrary function during a jspsych experiment
@@ -7,51 +29,34 @@
  *
  **/
 
-import jsPsych from "jspsych";
+class CallFunctionPlugin implements JsPsychPlugin<Info> {
+  info = info;
 
-const plugin = <any>{};
+  constructor(private jsPsych: JsPsych) {}
 
-plugin.info = {
-  name: "call-function",
-  description: "",
-  parameters: {
-    func: {
-      type: jsPsych.plugins.parameterType.FUNCTION,
-      pretty_name: "Function",
-      default: undefined,
-      description: "Function to call",
-    },
-    async: {
-      type: jsPsych.plugins.parameterType.BOOL,
-      pretty_name: "Asynchronous",
-      default: false,
-      description: "Is the function call asynchronous?",
-    },
-  },
-};
+  trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    //trial.post_trial_gap = 0;  // TO DO: TS error: number not assignable to type any[]. I don't think this param should be an array..?
+    var return_val;
 
-plugin.trial = function (display_element, trial) {
-  trial.post_trial_gap = 0;
-  var return_val;
+    const end_trial = () => {
+      var trial_data = {
+        value: return_val,
+      };
 
-  if (trial.async) {
-    var done = function (data) {
-      return_val = data;
+      this.jsPsych.finishTrial(trial_data);
+    }
+
+    if (trial.async) {
+      var done = function (data) {
+        return_val = data;
+        end_trial();
+      };
+      trial.func(done);
+    } else {
+      return_val = trial.func();
       end_trial();
-    };
-    trial.func(done);
-  } else {
-    return_val = trial.func();
-    end_trial();
+    }
   }
+}
 
-  function end_trial() {
-    var trial_data = {
-      value: return_val,
-    };
-
-    jsPsych.finishTrial(trial_data);
-  }
-};
-
-export default plugin;
+export default CallFunctionPlugin;

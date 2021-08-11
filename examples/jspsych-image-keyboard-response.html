@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="../jspsych.js"></script>
-  <script src="../plugins/jspsych-image-keyboard-response.js"></script>
-  <script src="../plugins/jspsych-preload.js"></script>
-  <link rel="stylesheet" href="../css/jspsych.css">
+  <script src="../packages/jspsych/dist/index.browser.js"></script>
+  <script src="../packages/plugin-image-keyboard-response/dist/index.browser.js"></script>
+  <!-- <script src="../packages/plugin-preload/dist/index.browser.js"></script> -->
+  <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
 </head>
 <body></body>
 <script>
 
+  var jsPsych = initJsPsych();
+
   // all images are used in standard trials that can be automatically preloaded (as well as being used in trials 
   // that use timeline variables), so we can preload all image files with the auto_preload option
-  var preload = {
-    type: 'preload',
-    auto_preload: true
-  };
+  // var preload = {
+  //   type: jsPsychPreload,
+  //   auto_preload: true
+  // };
 
   // If render_on_canvas is false, the images will be shown via an <img> rather than <canvas> element.
   // In some browsers, the first time the images are shown, the <img> method (render_on_canvas: false) will produce a brief 
   // blank screen (white flash) between images that are presented consecutively with no post_trial_gap between them.
   var trial = {
-    type: 'image-keyboard-response',
+    type: jsPsychImageKeyboardResponse,
     stimulus: jsPsych.timelineVariable('stim'),
     trial_duration: 300,
     choices: jsPsych.NO_KEYS,
@@ -43,14 +45,14 @@
   }
 
   var trial_1 = {
-    type: 'image-keyboard-response',
+    type: jsPsychImageKeyboardResponse,
     stimulus: 'img/happy_face_1.jpg',
     choices: ['y','n'],
     prompt: '<p>Have you seen this face before? Press y or n.</p>'
   }
 
   var trial_2 = {
-    type: 'image-keyboard-response',
+    type: jsPsychImageKeyboardResponse,
     stimulus: 'img/happy_face_2.jpg',
     choices: ['y','n'],
     trial_duration: 5000,
@@ -58,7 +60,7 @@
   }
 
   var trial_3 = {
-    type: 'image-keyboard-response',
+    type: jsPsychImageKeyboardResponse,
     stimulus: 'img/happy_face_3.jpg',
     choices: jsPsych.NO_KEYS,
     trial_duration: 2000,
@@ -66,7 +68,7 @@
   }
 
   var trial_4 = {
-    type: 'image-keyboard-response',
+    type: jsPsychImageKeyboardResponse,
     stimulus: 'img/happy_face_4.jpg',
     choices: ['y','n'],
     stimulus_width: 400,
@@ -74,12 +76,7 @@
     prompt: '<p>Have you seen this face before? Press y or n.</p><p>(Stimulus_width set to a smaller value and maintain_aspect_ratio set to false.)</p>'
   }
 
-  jsPsych.init({
-    timeline: [preload, trial_proc, trial_1, trial_2, trial_3, trial_4],
-    on_finish: function() {
-      jsPsych.data.displayData();
-    }
-  });
-</script>
+  jsPsych.run([trial_proc, trial_1, trial_2, trial_3, trial_4]); // TO DO: add preload trial, on_finish: display data
 
+</script>
 </html>
