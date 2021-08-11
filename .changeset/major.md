@@ -52,3 +52,7 @@
 ---
 
 Decompose jsPsych into multiple NPM packages (details and upgrading instructions go here)
+
+author: @jodeleeuw
+author: @becky-gilbert
+author: @bjoluc
