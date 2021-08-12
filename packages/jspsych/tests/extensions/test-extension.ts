@@ -6,6 +6,8 @@ class TestExtension implements JsPsychExtension {
     name: 'test'
   }
 
+  constructor(private jsPsych:JsPsych) {};
+
   // required, will be called at jsPsych.init
   // should return a Promise
   initialize(params) {

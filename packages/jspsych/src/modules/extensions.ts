@@ -6,7 +6,12 @@ export interface JsPsychExtensionData {
   [key: string]: any;
 }
 
+export interface JsPsychExtensionInfo {
+  name: string;
+}
+
 export interface JsPsychExtension {
+
   /**
     * Called once at the start of the experiment to initialize the extension
     */

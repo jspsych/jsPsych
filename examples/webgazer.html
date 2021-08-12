@@ -7,7 +7,6 @@
     <script src="../packages/plugin-webgazer-init-camera/dist/index.browser.js"></script>
     <script src="../packages/plugin-webgazer-calibrate/dist/index.browser.js"></script>
     <script src="../packages/plugin-webgazer-validate/dist/index.browser.js"></script>
-    <!-- <script src="../extensions/jspsych-ext-webgazer.js"></script> // this script is no longer needed right? -->
     <script src="js/webgazer/webgazer.js"></script>
     <script src="../packages/extension-webgazer/dist/index.browser.js"></script>
     <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
@@ -20,7 +19,11 @@
   <body></body>
   <script>
 
-    var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      extensions: [
+        {type: jsPsychWebgazerExtension}
+      ]
+    });
     //var jsPsych = initJsPsych({extensions: jsPsychWebgazerExtension}); // Not sure how to add webgazer extension to init settings here?
 
     var camera_instructions = {
@@ -119,9 +122,9 @@
         top: jsPsych.timelineVariable('top'),
         left: jsPsych.timelineVariable('left')
       },
-      // extensions: [
-      //   {type: 'webgazer', params: {targets: ['#arrow-target']}}  // extension type should be a variable rather than string here?
-      // ]
+      extensions: [
+        {type: jsPsychWebgazerExtension, params: {targets: ['#arrow-target']}}  
+      ]
     }
 
     var params = [
@@ -157,11 +160,11 @@
 
     var timeline = [];
     timeline.push(camera_instructions);
-    //timeline.push(init_camera);
+    timeline.push(init_camera);
     timeline.push(calibration_instructions);
-    //timeline.push(calibration);
+    timeline.push(calibration);
     timeline.push(validation_instructions);
-    //timeline.push(validation);
+    timeline.push(validation);
     timeline.push(task_instructions);
     timeline.push(trial_proc);
     timeline.push(done);

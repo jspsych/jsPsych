@@ -40,6 +40,11 @@ interface OnStartParameters extends JsPsychExtensionParameters {
 }
 
 class WebGazerExtension implements JsPsychExtension {
+
+  static info = {
+    name: 'webgazer'
+  }
+
   constructor(private jsPsych: JsPsych) {}
 
   // private state for the extension
@@ -88,7 +93,7 @@ class WebGazerExtension implements JsPsychExtension {
       }
 
       // sets up event handler for webgazer data
-      this.webgazer.setGazeListener(this.handleGazeDataUpdate);
+      // this.webgazer.setGazeListener(this.handleGazeDataUpdate);
 
       // default to threadedRidge regression
       // NEVER MIND... kalman filter is too useful.
@@ -168,7 +173,7 @@ class WebGazerExtension implements JsPsychExtension {
   }
 
   start() {
-    return new Promise<void>(function (resolve, reject) {
+    return new Promise<void>((resolve, reject) => {
       if (typeof this.webgazer == "undefined") {
         const error =
           "Failed to start webgazer. Things to check: Is webgazer.js loaded? Is the webgazer extension included in jsPsych.init?";
@@ -177,13 +182,13 @@ class WebGazerExtension implements JsPsychExtension {
       }
       this.webgazer
         .begin()
-        .then(function () {
+        .then(() => {
           this.initialized = true;
           this.stopMouseCalibration();
           this.pause();
           resolve();
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.error(error);
           reject(error);
         });

@@ -138,7 +138,7 @@ export class JsPsych {
 
     // create instances of extensions
     for(const extension of options.extensions){
-      this.extensions[extension.type.info.name] = new extension.type();
+      this.extensions[extension.type.info.name] = new extension.type(this);
     }
 
     // initialize audio context based on options and browser capabilities

@@ -1,3 +1,3 @@
 import { makeRollupConfigForPlugin } from "@jspsych/config/rollup.mjs";
 
-export default makeRollupConfigForPlugin("jsPsychExtensionWebgazer");
+export default makeRollupConfigForPlugin("jsPsychWebgazerExtension");

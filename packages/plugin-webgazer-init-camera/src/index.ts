@@ -106,10 +106,11 @@ class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
     if (!this.jsPsych.extensions.webgazer.isInitialized()) {
       this.jsPsych.extensions.webgazer
         .start()
-        .then(function () {
+        .then(() => {
           showTrial();
         })
-        .catch(function () {
+        .catch((error) => {
+          console.log(error);
           display_element.innerHTML = `<p>The experiment cannot continue because the eye tracker failed to start.</p>
               <p>This may be because of a technical problem or because you did not grant permission for the page to use your camera.</p>`;
         });
