@@ -21,7 +21,7 @@
 
     var jsPsych = initJsPsych({
       extensions: [
-        {type: jsPsychWebgazerExtension}
+        {type: jsPsychExtensionWebgazer}
       ]
     });
     //var jsPsych = initJsPsych({extensions: jsPsychWebgazerExtension}); // Not sure how to add webgazer extension to init settings here?
@@ -123,7 +123,7 @@
         left: jsPsych.timelineVariable('left')
       },
       extensions: [
-        {type: jsPsychWebgazerExtension, params: {targets: ['#arrow-target']}}  
+        {type: jsPsychExtensionWebgazer, params: {targets: ['#arrow-target']}}  
       ]
     }
 
