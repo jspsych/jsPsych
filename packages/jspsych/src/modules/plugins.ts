@@ -140,13 +140,10 @@ export interface PluginInfo {
 }
 
 export interface JsPsychPlugin<I extends PluginInfo> {
-  info: I;
   trial(display_element: HTMLElement, trial: TrialType<I>): void;
 }
 
 export type TrialType<I extends PluginInfo> = InferredParameters<I["parameters"]> &
   UniversalPluginParameters;
 
-export type PluginParameters<P extends JsPsychPlugin<any>> = InferredParameters<
-  P["info"]["parameters"]
->;
+export type PluginParameters<I extends PluginInfo> = InferredParameters<I["parameters"]>;
