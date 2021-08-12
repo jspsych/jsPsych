@@ -119,9 +119,9 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
 
       var pt_data = [];
 
-      var cancelGazeUpdate = this.jsPsych.extensions["webgazer"].onGazeUpdate(function (
+      var cancelGazeUpdate = this.jsPsych.extensions["webgazer"].onGazeUpdate((
         prediction
-      ) {
+      ) => {
         if (performance.now() > pt_start_val) {
           pt_data.push({
             x: prediction.x,
@@ -193,7 +193,7 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
       html +=
         '<button id="cont" style="position:absolute; top: 50%; left:calc(50% - 50px); width: 100px;" class="jspsych-btn">Continue</btn>';
       wg_container.innerHTML = html;
-      wg_container.querySelector("#cont").addEventListener("click", function () {
+      wg_container.querySelector("#cont").addEventListener("click", () => {
         this.jsPsych.extensions.webgazer.pause();
         end_trial();
       });
