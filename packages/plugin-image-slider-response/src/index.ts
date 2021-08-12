@@ -125,7 +125,7 @@ type Info = typeof info;
  *
  */
 class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -243,10 +243,11 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
         display_element.insertAdjacentHTML("beforeend", trial.prompt);
       }
       // add submit button
-      var submit_btn = document.createElement("button");
+      var submit_btn = document.createElement("button") as HTMLButtonElement;
       submit_btn.id = "jspsych-image-slider-response-next";
       submit_btn.classList.add("jspsych-btn");
       submit_btn.disabled = trial.require_movement ? true : false;
+      //@ts-ignore
       submit_btn.innerHTML = trial.button_label;
       display_element.insertBefore(submit_btn, display_element.nextElementSibling);
     } else {
@@ -360,6 +361,23 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
         });
     }
 
+    const end_trial = () => {
+      this.jsPsych.pluginAPI.clearAllTimeouts();
+
+      // save data
+      var trialdata = {
+        rt: response.rt,
+        stimulus: trial.stimulus,
+        slider_start: trial.slider_start,
+        response: response.response,
+      };
+
+      display_element.innerHTML = "";
+
+      // next trial
+      this.jsPsych.finishTrial(trialdata);
+    }
+
     display_element
       .querySelector("#jspsych-image-slider-response-next")
       .addEventListener("click", function () {
@@ -376,23 +394,6 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
           display_element.querySelector<HTMLButtonElement>("#jspsych-image-slider-response-next").disabled = true;
         }
       });
-
-    function end_trial() {
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
-      // save data
-      var trialdata = {
-        rt: response.rt,
-        stimulus: trial.stimulus,
-        slider_start: trial.slider_start,
-        response: response.response,
-      };
-
-      display_element.innerHTML = "";
-
-      // next trial
-      this.jsPsych.finishTrial(trialdata);
-    }
 
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(function () {

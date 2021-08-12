@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="../jspsych.js"></script>
-  <script src="../plugins/jspsych-image-slider-response.js"></script>
-  <script src="../plugins/jspsych-preload.js"></script>
-  <link rel="stylesheet" href="../css/jspsych.css">
+  <script src="../packages/jspsych/dist/index.browser.js"></script>
+  <script src="../packages/plugin-image-slider-response/dist/index.browser.js"></script>
+  <!-- <script src="../packages/plugin-preload/dist/index.browser.js"></script> -->
+  <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
 </head>
 <body></body>
 <script>
 
+  var jsPsych = initJsPsych(); // TO DO: add preload, add default_iti: 250, on_finish: display data
+
   // three images are used in a standard way in image-* plugins and can therefore be automatically preloaded.
   // there's one additional image ('img/happy_face_4.jpg') that is only used in timeline variables 
   // and will not be automatically preloaded, so this file must be preloaded manually.
-  var preload = {
-    type: 'preload',
-    auto_preload: true, 
-    images: ['img/happy_face_4.jpg']
-  }
+  // var preload = {
+  //   type: jsPsychPreload,
+  //   auto_preload: true, 
+  //   images: ['img/happy_face_4.jpg']
+  // }
 
   // If render_on_canvas is false, the images will be shown via an <img> rather than <canvas> element.
   // In some browsers, the first time the images are shown, the <img> method (render_on_canvas: false) will produce a brief 
   // blank screen (white flash) between images that are presented consecutively with no post_trial_gap between them.
   var trial = {
-    type: 'image-slider-response',
+    type: jsPsychImageSliderResponse,
     stimulus: jsPsych.timelineVariable('stim'),
     trial_duration: 1000,
     labels: ['1 (least happy)', '100 (most happy)'],
@@ -46,7 +48,7 @@
   }
 
   var trial_1 = {
-    type: 'image-slider-response',
+    type: jsPsychImageSliderResponse,
     stimulus: 'img/happy_face_1.jpg',
     labels: ['1 (least happy)', '100 (most happy)'],
     slider_width: 500,
@@ -55,7 +57,7 @@
   }
 
   var trial_2 = {
-    type: 'image-slider-response',
+    type: jsPsychImageSliderResponse,
     stimulus: 'img/happy_face_2.jpg',
     labels: ['1 (least happy)', '100 (most happy)'],
     slider_start: 80,
@@ -65,7 +67,7 @@
   }
 
   var trial_3 = {
-    type: 'image-slider-response',
+    type: jsPsychImageSliderResponse,
     stimulus: 'img/happy_face_3.jpg',
     labels: ['1 (least happy)', '100 (most happy)'],
     slider_width: 500,
@@ -73,13 +75,7 @@
     stimulus_duration: 1000
   }
 
-  jsPsych.init({
-    timeline: [preload, trial_proc, trial_1, trial_2, trial_3],
-    on_finish: function() {
-      jsPsych.data.displayData();
-    },
-    default_iti: 250
-  });
-</script>
+  jsPsych.run([trial_proc, trial_1, trial_2, trial_3]);
 
+</script>
 </html>

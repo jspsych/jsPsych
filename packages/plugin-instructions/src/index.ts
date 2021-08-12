@@ -85,7 +85,7 @@ type Info = typeof info;
  *
  */
 class InstructionsPlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -197,7 +197,7 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
       last_page_update_time = current_time;
     }
 
-    function endTrial() {
+    const endTrial = () => {
       if (trial.allow_keys) {
         this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboard_listener);
       }
@@ -212,7 +212,7 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
       this.jsPsych.finishTrial(trial_data);
     }
 
-    var after_response = function (info) {
+    const after_response = (info) => {
       // have to reinitialize this instead of letting it persist to prevent accidental skips of pages by holding down keys too long
       keyboard_listener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
