@@ -221,7 +221,7 @@ type Info = typeof info;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 class RdkPlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {};
 

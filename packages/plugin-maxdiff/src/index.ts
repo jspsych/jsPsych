@@ -54,7 +54,7 @@ type Info = typeof info;
  *
  */
 class MaxdiffPlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {};
 
@@ -168,7 +168,7 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
 
     // Get the data once the submit button is clicked
     // Get the data once the submit button is clicked
-    display_element.querySelector("#jspsych-maxdiff-form").addEventListener("submit", function (e) {
+    display_element.querySelector("#jspsych-maxdiff-form").addEventListener("submit", (e) => {
       e.preventDefault();
 
       // measure response time
@@ -192,6 +192,9 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
         labels: { left: trial.labels[0], right: trial.labels[1] },
         response: { left: get_response("left"), right: get_response("right") },
       };
+
+      // clear the display
+      display_element.innerHTML = "";
 
       // next trial
       this.jsPsych.finishTrial(trial_data);

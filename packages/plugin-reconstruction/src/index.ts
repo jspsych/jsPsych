@@ -3,43 +3,41 @@ import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
 const info = <const>{
   name: "reconstruction",
   parameters: {
+    /* A function with a single parameter that returns an HTML-formatted string representing the stimulus. */
     stim_function: {
       type: parameterType.FUNCTION,
       pretty_name: "Stimulus function",
-      default: undefined,
-      description:
-        "A function with a single parameter that returns an HTML-formatted string representing the stimulus.",
+      default: undefined
     },
+    /* The starting value of the stimulus parameter. */
     starting_value: {
       type: parameterType.FLOAT,
       pretty_name: "Starting value",
-      default: 0.5,
-      description: "The starting value of the stimulus parameter.",
+      default: 0.5
     },
+    /* The change in the stimulus parameter caused by pressing one of the modification keys. */
     step_size: {
       type: parameterType.FLOAT,
       pretty_name: "Step size",
-      default: 0.05,
-      description:
-        "The change in the stimulus parameter caused by pressing one of the modification keys.",
+      default: 0.05
     },
+    /* The key to press for increasing the parameter value. */
     key_increase: {
       type: parameterType.KEY,
       pretty_name: "Key increase",
-      default: "h",
-      description: "The key to press for increasing the parameter value.",
+      default: "h"
     },
+    /* The key to press for decreasing the parameter value. */
     key_decrease: {
       type: parameterType.KEY,
       pretty_name: "Key decrease",
-      default: "g",
-      description: "The key to press for decreasing the parameter value.",
+      default: "g"
     },
+    /* The text that appears on the button to finish the trial. */
     button_label: {
       type: parameterType.STRING,
       pretty_name: "Button label",
-      default: "Continue",
-      description: "The text that appears on the button to finish the trial.",
+      default: "Continue"
     }
   }
 };
@@ -57,7 +55,7 @@ type Info = typeof info;
  *
  */
 class ReconstructionPlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {};
 
@@ -66,7 +64,7 @@ class ReconstructionPlugin implements JsPsychPlugin<Info> {
     var param = trial.starting_value;
 
     // set-up key listeners
-    var after_response = function (info) {
+    const after_response = (info: {key: string, rt: number}) => {
       //console.log('fire');
 
       var key_i = trial.key_increase;
@@ -95,24 +93,7 @@ class ReconstructionPlugin implements JsPsychPlugin<Info> {
     // draw first iteration
     draw(param);
 
-    function draw(param) {
-      //console.log(param);
-
-      display_element.innerHTML =
-        '<div id="jspsych-reconstruction-stim-container">' + trial.stim_function(param) + "</div>";
-
-      // add submit button
-      display_element.innerHTML +=
-        '<button id="jspsych-reconstruction-next" class="jspsych-btn jspsych-reconstruction">' +
-        trial.button_label +
-        "</button>";
-
-      display_element
-        .querySelector("#jspsych-reconstruction-next")
-        .addEventListener("click", endTrial);
-    }
-
-    function endTrial() {
+    const endTrial = () => {
       // measure response time
       var endTime = performance.now();
       var response_time = endTime - startTime;
@@ -131,6 +112,23 @@ class ReconstructionPlugin implements JsPsychPlugin<Info> {
 
       // next trial
       this.jsPsych.finishTrial(trial_data);
+    }
+
+    function draw(param: number) {
+      //console.log(param);
+
+      display_element.innerHTML =
+        '<div id="jspsych-reconstruction-stim-container">' + trial.stim_function(param) + "</div>";
+
+      // add submit button
+      display_element.innerHTML +=
+        '<button id="jspsych-reconstruction-next" class="jspsych-btn jspsych-reconstruction">' +
+        trial.button_label +
+        "</button>";
+
+      display_element
+        .querySelector("#jspsych-reconstruction-next")
+        .addEventListener("click", endTrial);
     }
 
     var startTime = performance.now();

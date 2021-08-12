@@ -54,7 +54,7 @@ type Info = typeof info;
  *
  **/
 class ResizePlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {};
 
@@ -87,6 +87,26 @@ class ResizePlugin implements JsPsychPlugin<Info> {
 
     // render
     display_element.innerHTML = html;
+
+    // function to end trial
+    const end_trial = () => {
+      // clear document event listeners
+      document.removeEventListener("mousemove", resizeevent);
+      document.removeEventListener("mouseup", mouseupevent);
+
+      // clear the screen
+      display_element.innerHTML = "";
+
+      // finishes trial
+
+      var trial_data = {
+        final_height_px: final_height_px,
+        final_width_px: final_width_px,
+        scale_factor: scale_factor,
+      };
+
+      this.jsPsych.finishTrial(trial_data);
+    }
 
     // listens for the click
     document.getElementById("jspsych-resize-btn").addEventListener("click", function () {
@@ -147,26 +167,6 @@ class ResizePlugin implements JsPsychPlugin<Info> {
 
       scale_factor = pixels_unit_screen / trial.pixels_per_unit;
       document.getElementById("jspsych-content").style.transform = "scale(" + scale_factor + ")";
-    }
-
-    // function to end trial
-    function end_trial() {
-      // clear document event listeners
-      document.removeEventListener("mousemove", resizeevent);
-      document.removeEventListener("mouseup", mouseupevent);
-
-      // clear the screen
-      display_element.innerHTML = "";
-
-      // finishes trial
-
-      var trial_data = {
-        final_height_px: final_height_px,
-        final_width_px: final_width_px,
-        scale_factor: scale_factor,
-      };
-
-      this.jsPsych.finishTrial(trial_data);
     }
   }
 }
