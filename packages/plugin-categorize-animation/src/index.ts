@@ -91,7 +91,7 @@ type Info = typeof info;
  * documentation: docs.jspsych.org
  **/
 class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {}
 

@@ -68,7 +68,7 @@ type Info = typeof info;
  *
  */
 class SameDifferentHtmlPlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {};
 
@@ -76,13 +76,13 @@ class SameDifferentHtmlPlugin implements JsPsychPlugin<Info> {
     display_element.innerHTML =
       '<div class="jspsych-same-different-stimulus">' + trial.stimuli[0] + "</div>";
 
-    var first_stim_info;
+    var first_stim_info: {key: string, rt: number};
     if (trial.first_stim_duration > 0) {
       this.jsPsych.pluginAPI.setTimeout(function () {
         showBlankScreen();
       }, trial.first_stim_duration);
     } else {
-      const afterKeyboardResponse = (info) => {
+      const afterKeyboardResponse = (info: {key: string, rt: number}) => {
         first_stim_info = info;
         showBlankScreen();
       };
@@ -95,7 +95,7 @@ class SameDifferentHtmlPlugin implements JsPsychPlugin<Info> {
       });
     }
 
-    function showBlankScreen() {
+    const showBlankScreen = () => {
       display_element.innerHTML = "";
 
       this.jsPsych.pluginAPI.setTimeout(function () {
@@ -103,7 +103,7 @@ class SameDifferentHtmlPlugin implements JsPsychPlugin<Info> {
       }, trial.gap_duration);
     }
 
-    function showSecondStim() {
+    const showSecondStim = () => {
       var html = '<div class="jspsych-same-different-stimulus">' + trial.stimuli[1] + "</div>";
       //show prompt here
       if (trial.prompt !== null) {
@@ -118,7 +118,7 @@ class SameDifferentHtmlPlugin implements JsPsychPlugin<Info> {
         }, trial.second_stim_duration);
       }
 
-      var after_response = function (info) {
+      const after_response = (info: {key: string, rt: number}) => {
         // kill any remaining setTimeout handlers
         this.jsPsych.pluginAPI.clearAllTimeouts();
 

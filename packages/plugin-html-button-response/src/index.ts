@@ -74,7 +74,7 @@ type Info = typeof info;
  *
  **/
 class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {}
 

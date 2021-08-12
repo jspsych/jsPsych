@@ -84,7 +84,7 @@ type Info = typeof info;
  **/
 
  class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {}
 

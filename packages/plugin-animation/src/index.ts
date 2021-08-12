@@ -63,7 +63,7 @@ type Info = typeof info;
  */
 
 class AnimationPlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {}
 

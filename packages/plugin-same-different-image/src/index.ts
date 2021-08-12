@@ -5,58 +5,55 @@ import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
 const info = <const>{
   name: "same-different-image",
   parameters: {
+    /* The images to be displayed. */
     stimuli: {
       type: parameterType.IMAGE,
       pretty_name: "Stimuli",
       default: undefined,
-      array: true,
-      description: "The images to be displayed.",
+      array: true
     },
+    /* Either "same" or "different". */
     answer: {
       type: parameterType.SELECT,
       pretty_name: "Answer",
       options: ["same", "different"],
-      default: undefined,
-      description: 'Either "same" or "different".',
+      default: undefined
     },
+    /* The key that subjects should press to indicate that the two stimuli are the same. */
     same_key: {
       type: parameterType.KEY,
       pretty_name: "Same key",
-      default: "q",
-      description: "",
+      default: "q"
     },
+    /* The key that subjects should press to indicate that the two stimuli are different. */
     different_key: {
       type: parameterType.KEY,
       pretty_name: "Different key",
-      default: "p",
-      description:
-        "The key that subjects should press to indicate that the two stimuli are the same.",
+      default: "p"
     },
+    /* How long to show the first stimulus for in milliseconds. If null, then the stimulus will remain on the screen until any keypress is made. */
     first_stim_duration: {
       type: parameterType.INT,
       pretty_name: "First stimulus duration",
-      default: 1000,
-      description:
-        "How long to show the first stimulus for in milliseconds. If null, then the stimulus will remain on the screen until any keypress is made.",
+      default: 1000
     },
+    /* How long to show a blank screen in between the two stimuli */
     gap_duration: {
       type: parameterType.INT,
       pretty_name: "Gap duration",
-      default: 500,
-      description: "How long to show a blank screen in between the two stimuli.",
+      default: 500
     },
+    /* How long to show the second stimulus for in milliseconds. If null, then the stimulus will remain on the screen until a valid response is made. */
     second_stim_duration: {
       type: parameterType.INT,
       pretty_name: "Second stimulus duration",
-      default: 1000,
-      description:
-        "How long to show the second stimulus for in milliseconds. If null, then the stimulus will remain on the screen until a valid response is made.",
+      default: 1000
     },
+    /* Any content here will be displayed below the stimulus. */
     prompt: {
       type: parameterType.STRING,
       pretty_name: "Prompt",
-      default: null,
-      description: "Any content here will be displayed below the stimulus.",
+      default: null
     }
   }
 };
@@ -73,7 +70,7 @@ type Info = typeof info;
  *
  */
 class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {};
 
@@ -81,13 +78,13 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
     display_element.innerHTML =
       '<img class="jspsych-same-different-stimulus" src="' + trial.stimuli[0] + '"></img>';
 
-    var first_stim_info;
+    var first_stim_info: {key: string, rt: number};
     if (trial.first_stim_duration > 0) {
       this.jsPsych.pluginAPI.setTimeout(function () {
         showBlankScreen();
       }, trial.first_stim_duration);
     } else {
-      const afterKeyboardResponse = (info) => {
+      const afterKeyboardResponse = (info: {key: string, rt: number}) => {
         first_stim_info = info;
         showBlankScreen();
       };
@@ -100,7 +97,7 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
       });
     }
 
-    function showBlankScreen() {
+    const showBlankScreen = () => {
       display_element.innerHTML = "";
 
       this.jsPsych.pluginAPI.setTimeout(function () {
@@ -108,7 +105,7 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
       }, trial.gap_duration);
     }
 
-    function showSecondStim() {
+    const showSecondStim = () => {
       var html = '<img class="jspsych-same-different-stimulus" src="' + trial.stimuli[1] + '"></img>';
       //show prompt
       if (trial.prompt !== null) {
@@ -124,7 +121,7 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
         }, trial.second_stim_duration);
       }
 
-      var after_response = function (info) {
+      const after_response = (info: {key: string, rt: number}) => {
         // kill any remaining setTimeout handlers
         this.jsPsych.pluginAPI.clearAllTimeouts();
 
@@ -137,7 +134,7 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
           correct = true;
         }
 
-        if (this.sPsych.pluginAPI.compareKeys(info.key, dkey) && trial.answer == "different") {
+        if (this.jsPsych.pluginAPI.compareKeys(info.key, dkey) && trial.answer == "different") {
           correct = true;
         }
 
@@ -155,7 +152,7 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
 
         display_element.innerHTML = "";
 
-        this.sPsych.finishTrial(trial_data);
+        this.jsPsych.finishTrial(trial_data);
       };
 
       this.jsPsych.pluginAPI.getKeyboardResponse({

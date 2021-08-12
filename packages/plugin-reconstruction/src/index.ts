@@ -63,6 +63,44 @@ class ReconstructionPlugin implements JsPsychPlugin<Info> {
     // current param level
     var param = trial.starting_value;
 
+    const endTrial = () => {
+      // measure response time
+      var endTime = performance.now();
+      var response_time = endTime - startTime;
+
+      // clear keyboard response
+      this.jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
+
+      // save data
+      var trial_data = {
+        rt: response_time,
+        final_value: param,
+        start_value: trial.starting_value,
+      };
+
+      display_element.innerHTML = "";
+
+      // next trial
+      this.jsPsych.finishTrial(trial_data);
+    }
+
+    const draw = (param: number) => {
+      //console.log(param);
+
+      display_element.innerHTML =
+        '<div id="jspsych-reconstruction-stim-container">' + trial.stim_function(param) + "</div>";
+
+      // add submit button
+      display_element.innerHTML +=
+        '<button id="jspsych-reconstruction-next" class="jspsych-btn jspsych-reconstruction">' +
+        trial.button_label +
+        "</button>";
+
+      display_element
+        .querySelector("#jspsych-reconstruction-next")
+        .addEventListener("click", endTrial);
+    }
+
     // set-up key listeners
     const after_response = (info: {key: string, rt: number}) => {
       //console.log('fire');
@@ -90,46 +128,9 @@ class ReconstructionPlugin implements JsPsychPlugin<Info> {
       persist: true,
       allow_held_key: true,
     });
+    
     // draw first iteration
     draw(param);
-
-    const endTrial = () => {
-      // measure response time
-      var endTime = performance.now();
-      var response_time = endTime - startTime;
-
-      // clear keyboard response
-      this.jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
-
-      // save data
-      var trial_data = {
-        rt: response_time,
-        final_value: param,
-        start_value: trial.starting_value,
-      };
-
-      display_element.innerHTML = "";
-
-      // next trial
-      this.jsPsych.finishTrial(trial_data);
-    }
-
-    function draw(param: number) {
-      //console.log(param);
-
-      display_element.innerHTML =
-        '<div id="jspsych-reconstruction-stim-container">' + trial.stim_function(param) + "</div>";
-
-      // add submit button
-      display_element.innerHTML +=
-        '<button id="jspsych-reconstruction-next" class="jspsych-btn jspsych-reconstruction">' +
-        trial.button_label +
-        "</button>";
-
-      display_element
-        .querySelector("#jspsych-reconstruction-next")
-        .addEventListener("click", endTrial);
-    }
 
     var startTime = performance.now();
   }

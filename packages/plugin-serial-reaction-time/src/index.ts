@@ -94,7 +94,7 @@ type Info = typeof info;
  *
  **/
 class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {};
 
@@ -105,23 +105,6 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
       flat_choices.splice(flat_choices.indexOf(""), 1);
     }
 
-    // display stimulus
-    var stimulus = this.stimulus(trial.grid, trial.grid_square_size);
-    display_element.innerHTML = stimulus;
-
-    if (trial.pre_target_duration <= 0) {
-      showTarget();
-    } else {
-      this.jsPsych.pluginAPI.setTimeout(function () {
-        showTarget();
-      }, trial.pre_target_duration);
-    }
-
-    //show prompt if there is one
-    if (trial.prompt !== null) {
-      display_element.innerHTML += trial.prompt;
-    }
-
     var keyboardListener = {};
 
     var response = <any>{
@@ -130,53 +113,7 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
       correct: false,
     };
 
-    function showTarget() {
-      if (trial.fade_duration == null) {
-        display_element.querySelector<HTMLElement>(
-          "#jspsych-serial-reaction-time-stimulus-cell-" + trial.target[0] + "-" + trial.target[1]
-        ).style.backgroundColor = trial.target_color;
-      } else {
-        display_element.querySelector<HTMLElement>(
-          "#jspsych-serial-reaction-time-stimulus-cell-" + trial.target[0] + "-" + trial.target[1]
-        ).style.transition = "background-color " + trial.fade_duration;
-        display_element.querySelector<HTMLElement>(
-          "#jspsych-serial-reaction-time-stimulus-cell-" + trial.target[0] + "-" + trial.target[1]
-        ).style.backgroundColor = trial.target_color;
-      }
-
-      keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
-        callback_function: after_response,
-        valid_responses: flat_choices,
-        allow_held_key: false,
-      });
-
-      if (trial.trial_duration !== null) {
-        this.jsPsych.pluginAPI.setTimeout(showFeedback, trial.trial_duration);
-      }
-    }
-
-    function showFeedback() {
-      if (response.rt == null || trial.show_response_feedback == false) {
-        endTrial();
-      } else {
-        var color = response.correct ? "#0f0" : "#f00";
-        display_element.querySelector<HTMLElement>(
-          "#jspsych-serial-reaction-time-stimulus-cell-" +
-            response.responseLoc[0] +
-            "-" +
-            response.responseLoc[1]
-        ).style.transition = "";
-        display_element.querySelector<HTMLElement>(
-          "#jspsych-serial-reaction-time-stimulus-cell-" +
-            response.responseLoc[0] +
-            "-" +
-            response.responseLoc[1]
-        ).style.backgroundColor = color;
-        this.jsPsych.pluginAPI.setTimeout(endTrial, trial.feedback_duration);
-      }
-    }
-
-    function endTrial() {
+    const endTrial = () => {
       // kill any remaining setTimeout handlers
       this.jsPsych.pluginAPI.clearAllTimeouts();
 
@@ -201,8 +138,29 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
       this.jsPsych.finishTrial(trial_data);
     }
 
+    const showFeedback = () => {
+      if (response.rt == null || trial.show_response_feedback == false) {
+        endTrial();
+      } else {
+        var color = response.correct ? "#0f0" : "#f00";
+        display_element.querySelector<HTMLElement>(
+          "#jspsych-serial-reaction-time-stimulus-cell-" +
+            response.responseLoc[0] +
+            "-" +
+            response.responseLoc[1]
+        ).style.transition = "";
+        display_element.querySelector<HTMLElement>(
+          "#jspsych-serial-reaction-time-stimulus-cell-" +
+            response.responseLoc[0] +
+            "-" +
+            response.responseLoc[1]
+        ).style.backgroundColor = color;
+        this.jsPsych.pluginAPI.setTimeout(endTrial, trial.feedback_duration);
+      }
+    }
+
     // function to handle responses by the subject
-    function after_response(info) {
+    const after_response = (info: {key: string, rt: number}) => {
       // only record first response
       response = response.rt == null ? info : response;
 
@@ -222,13 +180,55 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
 
       if (trial.response_ends_trial) {
         if (trial.show_response_feedback) {
-          // @ts-ignore How was this supposed to work?
-          showFeedback(response.correct);
+          showFeedback();
         } else {
           endTrial();
         }
       }
     }
+
+    const showTarget = () => {
+      if (trial.fade_duration == null) {
+        display_element.querySelector<HTMLElement>(
+          "#jspsych-serial-reaction-time-stimulus-cell-" + trial.target[0] + "-" + trial.target[1]
+        ).style.backgroundColor = trial.target_color;
+      } else {
+        display_element.querySelector<HTMLElement>(
+          "#jspsych-serial-reaction-time-stimulus-cell-" + trial.target[0] + "-" + trial.target[1]
+        ).style.transition = "background-color " + trial.fade_duration;
+        display_element.querySelector<HTMLElement>(
+          "#jspsych-serial-reaction-time-stimulus-cell-" + trial.target[0] + "-" + trial.target[1]
+        ).style.backgroundColor = trial.target_color;
+      }
+
+      keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: after_response,
+        valid_responses: flat_choices,
+        allow_held_key: false,
+      });
+
+      if (trial.trial_duration !== null) {
+        this.jsPsych.pluginAPI.setTimeout(showFeedback, trial.trial_duration);
+      }
+    }
+
+    // display stimulus
+    var stimulus = this.stimulus(trial.grid, trial.grid_square_size);
+    display_element.innerHTML = stimulus;
+
+    if (trial.pre_target_duration <= 0) {
+      showTarget();
+    } else {
+      this.jsPsych.pluginAPI.setTimeout(function () {
+        showTarget();
+      }, trial.pre_target_duration);
+    }
+
+    //show prompt if there is one
+    if (trial.prompt !== null) {
+      display_element.innerHTML += trial.prompt;
+    }
+
   }
 
   stimulus = function (grid, square_size: number, target?: number[], target_color?: string, labels?) {  // TO DO: types for nested arrays of numbers/strings?

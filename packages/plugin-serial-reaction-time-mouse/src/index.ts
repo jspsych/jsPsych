@@ -3,70 +3,67 @@ import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
 const info = <const>{
   name: "serial-reaction-time-mouse",
   parameters: {
+    /* The location of the target. The array should be the [row, column] of the target. */
     target: {
       type: parameterType.INT,
       pretty_name: "Target",
       array: true,
-      default: undefined,
-      description:
-        "The location of the target. The array should be the [row, column] of the target.",
+      default: undefined
     },
+    /* This array represents the grid of boxes shown on the screen. */
     grid: {
       type: parameterType.BOOL,
       pretty_name: "Grid",
       array: true,
-      default: [[1, 1, 1, 1]],
-      description: "This array represents the grid of boxes shown on the screen.",
+      default: [[1, 1, 1, 1]]
     },
+    /* The width and height in pixels of each square in the grid. */
     grid_square_size: {
       type: parameterType.INT,
       pretty_name: "Grid square size",
-      default: 100,
-      description: "The width and height in pixels of each square in the grid.",
+      default: 100
     },
+    /* The color of the target square. */
     target_color: {
       type: parameterType.STRING,
       pretty_name: "Target color",
-      default: "#999",
-      description: "The color of the target square.",
+      default: "#999"
     },
+    /* If true, the trial ends after a mouse click. */
     response_ends_trial: {
       type: parameterType.BOOL,
       pretty_name: "Response ends trial",
-      default: true,
-      description: "If true, the trial ends after a mouse click.",
+      default: true
     },
+    /* The number of milliseconds to display the grid before the target changes color. */
     pre_target_duration: {
       type: parameterType.INT,
       pretty_name: "Pre-target duration",
-      default: 0,
-      description:
-        "The number of milliseconds to display the grid before the target changes color.",
+      default: 0
     },
+    /* How long to show the trial */
     trial_duration: {
       type: parameterType.INT,
       pretty_name: "Trial duration",
-      default: null,
-      description: "How long to show the trial",
+      default: null
     },
+    /* If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds. */
     fade_duration: {
       type: parameterType.INT,
       pretty_name: "Fade duration",
-      default: null,
-      description:
-        "If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds.",
+      default: null
     },
+    /* If true, then user can make nontarget response. */
     allow_nontarget_responses: {
       type: parameterType.BOOL,
       pretty_name: "Allow nontarget response",
-      default: false,
-      description: "If true, then user can make nontarget response.",
+      default: false
     },
+    /* Any content here will be displayed below the stimulus */
     prompt: {
       type: parameterType.STRING,
       pretty_name: "Prompt",
-      default: null,
-      description: "Any content here will be displayed below the stimulus",
+      default: null
     }
   }
 };
@@ -83,7 +80,7 @@ type Info = typeof info;
  *
  **/
 class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {};
 
@@ -95,24 +92,7 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
       column: null,
     };
 
-    // display stimulus
-    var stimulus = this.stimulus(trial.grid, trial.grid_square_size);
-    display_element.innerHTML = stimulus;
-
-    if (trial.pre_target_duration <= 0) {
-      showTarget();
-    } else {
-      this.jsPsych.pluginAPI.setTimeout(function () {
-        showTarget();
-      }, trial.pre_target_duration);
-    }
-
-    //show prompt if there is one
-    if (trial.prompt !== null) {
-      display_element.insertAdjacentHTML("beforeend", trial.prompt);
-    }
-
-    function showTarget() {
+    const showTarget = () => {
       var resp_targets;
       if (!trial.allow_nontarget_responses) {
         resp_targets = [
@@ -159,7 +139,24 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
       }
     }
 
-    function endTrial() {
+    // display stimulus
+    var stimulus = this.stimulus(trial.grid, trial.grid_square_size);
+    display_element.innerHTML = stimulus;
+
+    if (trial.pre_target_duration <= 0) {
+      showTarget();
+    } else {
+      this.jsPsych.pluginAPI.setTimeout(function () {
+        showTarget();
+      }, trial.pre_target_duration);
+    }
+
+    //show prompt if there is one
+    if (trial.prompt !== null) {
+      display_element.insertAdjacentHTML("beforeend", trial.prompt);
+    }
+
+    const endTrial = () => {
       // kill any remaining setTimeout handlers
       this.jsPsych.pluginAPI.clearAllTimeouts();
 
@@ -180,7 +177,7 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
     }
 
     // function to handle responses by the subject
-    function after_response(info) {
+    function after_response(info: {rt: string, row: number, column: number}) {
       // only record first response
       response = response.rt == null ? info : response;
 

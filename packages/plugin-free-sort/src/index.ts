@@ -138,7 +138,7 @@ type Info = typeof info;
  * documentation: docs.jspsych.org
  */
 class FreeSortPlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {}
 

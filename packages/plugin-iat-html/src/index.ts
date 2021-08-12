@@ -100,7 +100,7 @@ type Info = typeof info;
  *
  **/
 class IatHtmlPlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {}
 

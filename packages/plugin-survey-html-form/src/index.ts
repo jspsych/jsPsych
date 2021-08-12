@@ -54,7 +54,7 @@ type Info = typeof info;
  *
  */
 class SurveyHtmlFormPlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {};
 
