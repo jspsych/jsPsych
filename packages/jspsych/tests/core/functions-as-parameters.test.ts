@@ -166,7 +166,7 @@ describe("nested parameters as functions", () => {
     };
 
     class FunctionTestPlugin implements JsPsychPlugin<typeof info> {
-      info = info;
+      static info = info;
 
       constructor(private jsPsych: JsPsych) {}
 

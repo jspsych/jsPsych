@@ -39,7 +39,7 @@ export class JsPsychData {
     //var trial_opt_data = typeof trial.data == 'function' ? trial.data() : trial.data;
 
     var default_data = {
-      trial_type: trial.type,
+      trial_type: trial.type.info.name,
       trial_index: progress.current_trial_global,
       time_elapsed: this.jsPsych.totalTime(),
       internal_node_id: this.jsPsych.currentTimelineNodeID(),
