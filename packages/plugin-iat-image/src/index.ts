@@ -8,7 +8,7 @@ const info = <const>{
       type: parameterType.IMAGE,
       pretty_name: "Stimulus",
       default: undefined,
-      preload: 'image'
+      preload: true
     },
     /* Key press that is associated with the left category label. */
     left_category_key: {

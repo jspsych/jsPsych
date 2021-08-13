@@ -25,7 +25,7 @@ plugin.info = {
       default: undefined,
       array: true,
       description: "A stimulus is a path to an image file.",
-      preload: 'image'
+      preload: true
     },
     choices: {
       type: jsPsych.plugins.parameterType.KEY,

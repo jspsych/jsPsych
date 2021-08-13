@@ -9,7 +9,7 @@ const info = <const>{
       pretty_name: "Stimuli",
       default: undefined,
       array: true,
-      preload: 'image'
+      preload: true
     },
     /* Height of items in pixels. */
     stim_height: {

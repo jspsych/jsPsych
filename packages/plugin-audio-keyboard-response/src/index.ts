@@ -8,7 +8,7 @@ const info = <const>{
       type: parameterType.AUDIO,
       pretty_name: "Stimulus",
       default: undefined,
-      preload: 'audio'
+      preload: true
     },
     /* The keys the subject is allowed to press to respond to the stimulus. */
     choices: {

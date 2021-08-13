@@ -8,7 +8,7 @@ const info = <const>{
       type: parameterType.IMAGE,
       pretty_name: "Stimuli",
       default: undefined,
-      preload: 'image'
+      preload: true
     },
     /* The key to indicate correct response */
     key_answer: {

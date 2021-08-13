@@ -8,7 +8,7 @@ const info = <const>{
       pretty_name: "Stimulus",
       default: undefined,
       description: "The image content to be displayed.",
-      preload: 'image'
+      preload: true
     },
     key_answer: {
       type: parameterType.KEY,

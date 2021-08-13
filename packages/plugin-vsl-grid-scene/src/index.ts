@@ -25,7 +25,7 @@ plugin.info = {
       array: true,
       default: undefined,
       description: "An array that defines a grid.",
-      preload: 'image'
+      preload: true
     },
     image_size: {
       type: jsPsych.plugins.parameterType.INT,

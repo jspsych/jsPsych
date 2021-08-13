@@ -8,7 +8,7 @@ const info = <const>{
       type: parameterType.AUDIO,
       pretty_name: "Stimulus",
       default: undefined,
-      preload: 'audio'
+      preload: true
     },
     /* Sets the minimum value of the slider. */
     min: {

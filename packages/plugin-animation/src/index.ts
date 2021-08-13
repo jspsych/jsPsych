@@ -9,7 +9,7 @@ const info = <const>{
       pretty_name: "Stimuli",
       default: undefined,
       array: true,
-      preload: 'image'
+      preload: true
     },
     /* Duration to display each image. */
     frame_time: {

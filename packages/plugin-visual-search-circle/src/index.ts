@@ -25,21 +25,21 @@ plugin.info = {
       pretty_name: "Target",
       default: undefined,
       description: "The image to be displayed.",
-      preload: 'image'
+      preload: true
     },
     foil: {
       type: jsPsych.plugins.parameterType.IMAGE,
       pretty_name: "Foil",
       default: undefined,
       description: "Path to image file that is the foil/distractor.",
-      preload: 'image'
+      preload: true
     },
     fixation_image: {
       type: jsPsych.plugins.parameterType.IMAGE,
       pretty_name: "Fixation image",
       default: undefined,
       description: "Path to image file that is a fixation target.",
-      preload: 'image'
+      preload: true
     },
     set_size: {
       type: jsPsych.plugins.parameterType.INT,

@@ -21,7 +21,7 @@ plugin.info = {
       pretty_name: "Video",
       default: undefined,
       description: "The video file to play.",
-      preload: 'video'
+      preload: true
     },
     choices: {
       type: jsPsych.plugins.parameterType.STRING,

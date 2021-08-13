@@ -8,7 +8,7 @@ const info = <const>{
       type: parameterType.AUDIO,
       pretty_name: "Stimulus",
       default: undefined,
-      preload: 'audio'
+      preload: true
     },
     /* The button labels. */
     choices: {

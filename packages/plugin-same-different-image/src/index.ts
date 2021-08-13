@@ -9,7 +9,7 @@ const info = <const>{
       pretty_name: "Stimuli",
       default: undefined,
       array: true,
-      preload: 'image'
+      preload: true
     },
     /* Either "same" or "different". */
     answer: {
