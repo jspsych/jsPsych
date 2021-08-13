@@ -1,4 +1,4 @@
-import { JsPsych, JsPsychExtension, JsPsychExtensionParameters } from "jspsych";
+import { JsPsych, JsPsychExtension, JsPsychExtensionInfo } from "jspsych";
 
 // we have to add webgazer to the global window object because webgazer attaches itself to
 // the window when it loads
@@ -8,7 +8,7 @@ declare global {
   }
 }
 
-interface InitializeParameters extends JsPsychExtensionParameters {
+interface InitializeParameters {
   /**
    * Whether to round WebGazer's predicted x, y coordinates to the nearest integer. Recommended
    * to leave this as `true` because it saves significant space in the data object and the
@@ -35,7 +35,7 @@ interface InitializeParameters extends JsPsychExtensionParameters {
   webgazer: any;
 }
 
-interface OnStartParameters extends JsPsychExtensionParameters {
+interface OnStartParameters {
   targets: Array<string>;
 }
 
@@ -127,7 +127,6 @@ class WebGazerExtension implements JsPsychExtension {
     });
   };
 
-  // required, will be called when the trial starts (before trial loads)
   on_start = (params: OnStartParameters): void => {
     this.currentTrialData = [];
     this.currentTrialTargets = {};
@@ -136,7 +135,6 @@ class WebGazerExtension implements JsPsychExtension {
     this.domObserver.observe(this.jsPsych.getDisplayElement(), { childList: true });
   };
 
-  // required will be called when the trial loads
   on_load = () => {
     // set current trial start time
     this.currentTrialStart = performance.now();
@@ -150,8 +148,6 @@ class WebGazerExtension implements JsPsychExtension {
     this.activeTrial = true;
   };
 
-  // required, will be called when jsPsych.finishTrial() is called
-  // must return data object to be merged into data.
   on_finish = () => {
     // pause the eye tracker
     this.stopSampleInterval();
