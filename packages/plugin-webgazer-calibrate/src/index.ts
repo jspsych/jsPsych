@@ -59,7 +59,7 @@ type Info = typeof info;
  * Josh de Leeuw
  **/
 class WebgazerCalibratePlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {}
 

@@ -67,7 +67,7 @@ type Info = typeof info;
  * Josh de Leeuw
  **/
 class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
-  info = info;
+  static info = info;
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -119,9 +119,7 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
 
       var pt_data = [];
 
-      var cancelGazeUpdate = this.jsPsych.extensions["webgazer"].onGazeUpdate((
-        prediction
-      ) => {
+      var cancelGazeUpdate = this.jsPsych.extensions["webgazer"].onGazeUpdate((prediction) => {
         if (performance.now() > pt_start_val) {
           pt_data.push({
             x: prediction.x,
