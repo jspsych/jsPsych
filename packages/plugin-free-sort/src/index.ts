@@ -1,16 +1,15 @@
 import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
 
-//jsPsych.pluginAPI.registerPreload("free-sort", "stimuli", "image"); // TO DO
-
 const info = <const>{
   name: "free-sort",
   parameters: {
     /* items to be displayed. */
     stimuli: {
-      type: parameterType.STRING,
+      type: parameterType.IMAGE,
       pretty_name: "Stimuli",
       default: undefined,
-      array: true
+      array: true,
+      preload: 'image'
     },
     /* Height of items in pixels. */
     stim_height: {

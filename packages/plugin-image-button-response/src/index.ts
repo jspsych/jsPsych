@@ -1,7 +1,5 @@
 import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
 
-//jsPsych.pluginAPI.registerPreload("image-button-response", "stimulus", "image"); // TO DO
-
 const info = <const>{
   name: "image-button-response",
   parameters: {
@@ -9,7 +7,8 @@ const info = <const>{
     stimulus: {
       type: parameterType.IMAGE,
       pretty_name: "Stimulus",
-      default: undefined
+      default: undefined,
+      preload: 'image'
     },
     /* Set the image height in pixels */
     stimulus_height: {

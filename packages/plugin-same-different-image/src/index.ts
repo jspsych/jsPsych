@@ -1,7 +1,5 @@
 import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
 
-//jsPsych.pluginAPI.registerPreload("same-different-image", "stimuli", "image"); // TO DO
-
 const info = <const>{
   name: "same-different-image",
   parameters: {
@@ -10,7 +8,8 @@ const info = <const>{
       type: parameterType.IMAGE,
       pretty_name: "Stimuli",
       default: undefined,
-      array: true
+      array: true,
+      preload: 'image'
     },
     /* Either "same" or "different". */
     answer: {

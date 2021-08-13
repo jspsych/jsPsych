@@ -1,7 +1,5 @@
 import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
 
-// jsPsych.pluginAPI.registerPreload("audio-slider-response", "stimulus", "audio"); // TO DO
-
 const info = <const>{
   name: "audio-slider-response",
   parameters: {
@@ -9,7 +7,8 @@ const info = <const>{
     stimulus: {
       type: parameterType.AUDIO,
       pretty_name: "Stimulus",
-      default: undefined
+      default: undefined,
+      preload: 'audio'
     },
     /* Sets the minimum value of the slider. */
     min: {

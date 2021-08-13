@@ -16,10 +16,6 @@ import jsPsych from "jspsych";
 
 const plugin = <any>{};
 
-jsPsych.pluginAPI.registerPreload("visual-search-circle", "target", "image");
-jsPsych.pluginAPI.registerPreload("visual-search-circle", "foil", "image");
-jsPsych.pluginAPI.registerPreload("visual-search-circle", "fixation_image", "image");
-
 plugin.info = {
   name: "visual-search-circle",
   description: "",
@@ -29,18 +25,21 @@ plugin.info = {
       pretty_name: "Target",
       default: undefined,
       description: "The image to be displayed.",
+      preload: 'image'
     },
     foil: {
       type: jsPsych.plugins.parameterType.IMAGE,
       pretty_name: "Foil",
       default: undefined,
       description: "Path to image file that is the foil/distractor.",
+      preload: 'image'
     },
     fixation_image: {
       type: jsPsych.plugins.parameterType.IMAGE,
       pretty_name: "Fixation image",
       default: undefined,
       description: "Path to image file that is a fixation target.",
+      preload: 'image'
     },
     set_size: {
       type: jsPsych.plugins.parameterType.INT,

@@ -1,7 +1,5 @@
 import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
 
-//jsPsych.pluginAPI.registerPreload("audio-button-response", "stimulus", "audio"); // TO DO
-
 const info = <const>{
   name: "audio-button-response",
   parameters: {
@@ -9,7 +7,8 @@ const info = <const>{
     stimulus: {
       type: parameterType.AUDIO,
       pretty_name: "Stimulus",
-      default: undefined
+      default: undefined,
+      preload: 'audio'
     },
     /* The button labels. */
     choices: {

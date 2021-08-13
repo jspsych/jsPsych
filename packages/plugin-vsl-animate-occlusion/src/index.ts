@@ -15,8 +15,6 @@ import jsPsych from "jspsych";
 
 const plugin = <any>{};
 
-jsPsych.pluginAPI.registerPreload("vsl-animate-occlusion", "stimuli", "image");
-
 plugin.info = {
   name: "vsl-animate-occlusion",
   description: "",
@@ -27,6 +25,7 @@ plugin.info = {
       default: undefined,
       array: true,
       description: "A stimulus is a path to an image file.",
+      preload: 'image'
     },
     choices: {
       type: jsPsych.plugins.parameterType.KEY,

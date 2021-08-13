@@ -15,8 +15,6 @@ import jsPsych from "jspsych";
 
 const plugin = <any>{};
 
-jsPsych.pluginAPI.registerPreload("vsl-grid-scene", "stimuli", "image");
-
 plugin.info = {
   name: "vsl-grid-scene",
   description: "",
@@ -27,6 +25,7 @@ plugin.info = {
       array: true,
       default: undefined,
       description: "An array that defines a grid.",
+      preload: 'image'
     },
     image_size: {
       type: jsPsych.plugins.parameterType.INT,

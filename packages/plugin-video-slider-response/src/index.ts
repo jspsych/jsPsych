@@ -12,8 +12,6 @@ import jsPsych from "jspsych";
 
 const plugin = <any>{};
 
-jsPsych.pluginAPI.registerPreload("video-slider-response", "stimulus", "video");
-
 plugin.info = {
   name: "video-slider-response",
   description: "",
@@ -23,6 +21,7 @@ plugin.info = {
       pretty_name: "Video",
       default: undefined,
       description: "The video file to play.",
+      preload: 'video'
     },
     prompt: {
       type: jsPsych.plugins.parameterType.STRING,

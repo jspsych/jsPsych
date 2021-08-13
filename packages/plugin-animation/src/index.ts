@@ -1,16 +1,15 @@
 import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
 
-//jsPsych.pluginAPI.registerPreload("animation", "stimuli", "image");  // TO DO
-
 const info = <const>{
   name: "animation",
   parameters: {
     /* The images to be displayed */
     stimuli: {
-      type: parameterType.STRING,
+      type: parameterType.IMAGE,
       pretty_name: "Stimuli",
       default: undefined,
-      array: true
+      array: true,
+      preload: 'image'
     },
     /* Duration to display each image. */
     frame_time: {

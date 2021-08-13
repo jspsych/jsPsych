@@ -1,7 +1,5 @@
 import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
 
-//jsPsych.pluginAPI.registerPreload("categorize-animation", "stimuli", "image"); // TO DO
-
 const info = <const>{
   name: "categorize-animation",
   parameters: {
@@ -9,7 +7,8 @@ const info = <const>{
     stimuli: {
       type: parameterType.IMAGE,
       pretty_name: "Stimuli",
-      default: undefined
+      default: undefined,
+      preload: 'image'
     },
     /* The key to indicate correct response */
     key_answer: {

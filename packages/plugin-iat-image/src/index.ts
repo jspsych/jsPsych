@@ -1,7 +1,5 @@
 import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
 
-//jsPsych.pluginAPI.registerPreload("iat-image", "stimulus", "image"); // TO DO
-
 const info = <const>{
   name: "iat-image",
   parameters: {
@@ -9,7 +7,8 @@ const info = <const>{
     stimulus: {
       type: parameterType.IMAGE,
       pretty_name: "Stimulus",
-      default: undefined
+      default: undefined,
+      preload: 'image'
     },
     /* Key press that is associated with the left category label. */
     left_category_key: {
