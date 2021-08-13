@@ -509,12 +509,16 @@ export class JsPsych {
     this.current_trial = trial;
     this.current_trial_finished = false;
 
-    // instantiate the plugin for this trial
-    const info = trial.type.info;
-    trial.type = new trial.type(this);
-
     // process all timeline variables for this trial
     this.evaluateTimelineVariables(trial);
+
+    // instantiate the plugin for this trial
+    trial.type = {
+      // this is a hack to internally keep the old plugin object structure and prevent touching more
+      // of the core jspsych code
+      ...autoBind(new trial.type(this)),
+      info: trial.type.info,
+    };
 
     // evaluate variables that are functions
     this.evaluateFunctionParameters(trial);
