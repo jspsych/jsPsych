@@ -137,7 +137,7 @@ export class JsPsych {
     this.pluginAPI = createJointPluginAPIObject(this);
 
     // create instances of extensions
-    for(const extension of options.extensions){
+    for (const extension of options.extensions) {
       this.extensions[extension.type.info.name] = new extension.type(this);
     }
 
@@ -258,9 +258,7 @@ export class JsPsych {
     // handle extension callbacks
     if (Array.isArray(current_trial.extensions)) {
       for (const extension of current_trial.extensions) {
-        var ext_data_values = this.extensions[extension.type.info.name].on_finish(
-          extension.params
-        );
+        var ext_data_values = this.extensions[extension.type.info.name].on_finish(extension.params);
         Object.assign(trial_data_values, ext_data_values);
       }
     }
@@ -440,7 +438,7 @@ export class JsPsych {
 
     try {
       await Promise.all(
-        extensions.map((extension) => 
+        extensions.map((extension) =>
           this.extensions[extension.type.info.name].initialize(extension.params || {})
         )
       );

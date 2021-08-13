@@ -40,10 +40,9 @@ interface OnStartParameters extends JsPsychExtensionParameters {
 }
 
 class WebGazerExtension implements JsPsychExtension {
-
   static info = {
-    name: 'webgazer'
-  }
+    name: "webgazer",
+  };
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -126,7 +125,7 @@ class WebGazerExtension implements JsPsychExtension {
         resolve();
       }
     });
-  }
+  };
 
   // required, will be called when the trial starts (before trial loads)
   on_start = (params: OnStartParameters): void => {
@@ -135,7 +134,7 @@ class WebGazerExtension implements JsPsychExtension {
     this.currentTrialSelectors = params.targets;
 
     this.domObserver.observe(this.jsPsych.getDisplayElement(), { childList: true });
-  }
+  };
 
   // required will be called when the trial loads
   on_load = () => {
@@ -149,7 +148,7 @@ class WebGazerExtension implements JsPsychExtension {
 
     // set internal flag
     this.activeTrial = true;
-  }
+  };
 
   // required, will be called when jsPsych.finishTrial() is called
   // must return data object to be merged into data.
@@ -170,7 +169,7 @@ class WebGazerExtension implements JsPsychExtension {
       webgazer_data: this.currentTrialData,
       webgazer_targets: this.currentTrialTargets,
     };
-  }
+  };
 
   start = () => {
     return new Promise<void>((resolve, reject) => {
@@ -193,7 +192,7 @@ class WebGazerExtension implements JsPsychExtension {
           reject(error);
         });
     });
-  }
+  };
 
   startSampleInterval = (interval: number = this.sampling_interval) => {
     this.gazeInterval = setInterval(() => {
@@ -202,43 +201,43 @@ class WebGazerExtension implements JsPsychExtension {
     // repeat the call here so that we get one immediate execution. above will not
     // start until state.sampling_interval is reached the first time.
     this.webgazer.getCurrentPrediction().then(this.handleGazeDataUpdate);
-  }
+  };
 
   stopSampleInterval = () => {
     clearInterval(this.gazeInterval);
-  }
+  };
 
   isInitialized = () => {
     return this.initialized;
-  }
+  };
 
   faceDetected = () => {
     return this.webgazer.getTracker().predictionReady;
-  }
+  };
 
   showPredictions = () => {
     this.webgazer.showPredictionPoints(true);
-  }
+  };
 
   hidePredictions = () => {
     this.webgazer.showPredictionPoints(false);
-  }
+  };
 
   showVideo = () => {
     this.webgazer.showVideo(true);
     this.webgazer.showFaceOverlay(true);
     this.webgazer.showFaceFeedbackBox(true);
-  }
+  };
 
   hideVideo = () => {
     this.webgazer.showVideo(false);
     this.webgazer.showFaceOverlay(false);
     this.webgazer.showFaceFeedbackBox(false);
-  }
+  };
 
   resume = () => {
     this.webgazer.resume();
-  }
+  };
 
   pause = () => {
     this.webgazer.pause();
@@ -246,23 +245,23 @@ class WebGazerExtension implements JsPsychExtension {
     if (document.querySelector("#webgazerGazeDot")) {
       document.querySelector<HTMLElement>("#webgazerGazeDot").style.display = "none";
     }
-  }
+  };
 
   resetCalibration = () => {
     this.webgazer.clearData();
-  }
+  };
 
   stopMouseCalibration = () => {
     this.webgazer.removeMouseEventListeners();
-  }
+  };
 
   startMouseCalibration = () => {
     this.webgazer.addMouseEventListeners();
-  }
+  };
 
   calibratePoint = (x: number, y: number) => {
     this.webgazer.recordScreenPosition(x, y, "click");
-  }
+  };
 
   setRegressionType = (regression_type) => {
     var valid_regression_models = ["ridge", "weightedRidge", "threadedRidge"];
@@ -277,7 +276,7 @@ class WebGazerExtension implements JsPsychExtension {
 
   getCurrentPrediction = () => {
     return this.webgazer.getCurrentPrediction();
-  }
+  };
 
   onGazeUpdate = (callback) => {
     this.gazeUpdateCallbacks.push(callback);
@@ -286,7 +285,7 @@ class WebGazerExtension implements JsPsychExtension {
         return item !== callback;
       });
     };
-  }
+  };
 
   private handleGazeDataUpdate = (gazeData, elapsedTime) => {
     if (gazeData !== null) {
@@ -307,7 +306,7 @@ class WebGazerExtension implements JsPsychExtension {
     } else {
       this.currentGaze = null;
     }
-  }
+  };
 
   private mutationObserverCallback = (mutationsList, observer) => {
     for (const selector of this.currentTrialSelectors) {
@@ -321,7 +320,7 @@ class WebGazerExtension implements JsPsychExtension {
         }
       }
     }
-  }
+  };
 }
 
 export default WebGazerExtension;

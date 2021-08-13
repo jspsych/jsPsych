@@ -1,12 +1,11 @@
 import { JsPsych, JsPsychExtension, JsPsychExtensionParameters } from "jspsych";
 
 class TestExtension implements JsPsychExtension {
-
   static info = {
-    name: 'test'
-  }
+    name: "test",
+  };
 
-  constructor(private jsPsych:JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   // required, will be called at jsPsych.init
   // should return a Promise
@@ -14,13 +13,13 @@ class TestExtension implements JsPsychExtension {
     return new Promise<void>((resolve, reject) => {
       resolve();
     });
-  };
+  }
 
   // required, will be called when the trial starts (before trial loads)
-  on_start(params) { };
+  on_start(params) {}
 
   // required will be called when the trial loads
-  on_load(params) { };
+  on_load(params) {}
 
   // required, will be called when jsPsych.finishTrial() is called
   // must return data object to be merged into data.
@@ -29,7 +28,7 @@ class TestExtension implements JsPsychExtension {
     return {
       extension_data: true,
     };
-  };
+  }
 }
 
 export default TestExtension;
