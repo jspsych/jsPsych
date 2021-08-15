@@ -20,14 +20,15 @@ export const parameterType = <const>{
   FLOAT: 3,
   FUNCTION: 4,
   KEY: 5,
-  SELECT: 6,
-  HTML_STRING: 7,
-  IMAGE: 8,
-  AUDIO: 9,
-  VIDEO: 10,
-  OBJECT: 11,
-  COMPLEX: 12,
-  TIMELINE: 13,
+  KEYS: 6,
+  SELECT: 7,
+  HTML_STRING: 8,
+  IMAGE: 9,
+  AUDIO: 10,
+  VIDEO: 11,
+  OBJECT: 12,
+  COMPLEX: 13,
+  TIMELINE: 14,
 };
 
 type ParameterTypeMap = {
@@ -37,14 +38,15 @@ type ParameterTypeMap = {
   3: number; // FLOAT
   4: (...args: any[]) => any; // FUNCTION
   5: string; // KEY
-  6: any; // SELECT
-  7: string; // HTML_STRING
-  8: string; // IMAGE
-  9: string; // AUDIO
-  10: string; // VIDEO
-  11: object; // OBJECT
-  12: any; // COMPLEX
-  13: any; // TIMELINE
+  6: string[] | "none" | "allkeys"; // KEYS
+  7: any; // SELECT
+  8: string; // HTML_STRING
+  9: string; // IMAGE
+  10: string; // AUDIO
+  11: string; // VIDEO
+  12: object; // OBJECT
+  13: any; // COMPLEX
+  14: any; // TIMELINE
 };
 
 export interface ParameterInfo {
@@ -59,7 +61,7 @@ export interface ParameterInfos {
   [key: string]: ParameterInfo;
 }
 
-type ParameterType<I extends ParameterInfo> = I["array"] extends boolean // Hack to deal with type widening in parameter declarations inferred from JavaScript
+type ParameterType<I extends ParameterInfo> = I["array"] extends true
   ? Array<ParameterTypeMap[I["type"]]>
   : ParameterTypeMap[I["type"]];
 
