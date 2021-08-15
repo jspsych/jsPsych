@@ -18,7 +18,7 @@ const info = <const>{
       type: parameterType.KEY,
       array: true,
       pretty_name: "Choices",
-      default: "allkeys", // cannot access jsPsych.ALL_KEYS here – ideally, it would be static
+      default: "ALL_KEYS",
     },
     /**
      * Any content here will be displayed below the stimulus.

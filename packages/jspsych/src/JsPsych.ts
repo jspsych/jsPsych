@@ -140,10 +140,6 @@ export class JsPsych {
     this.pluginAPI.initAudio();
   }
 
-  // enumerated variables for special parameter types
-  readonly ALL_KEYS = "allkeys";
-  readonly NO_KEYS = "none";
-
   /**
    * Starts an experiment using the provided timeline and returns a promise that is resolved when
    * the experiment is finished.

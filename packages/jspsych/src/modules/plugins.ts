@@ -38,7 +38,7 @@ type ParameterTypeMap = {
   3: number; // FLOAT
   4: (...args: any[]) => any; // FUNCTION
   5: string; // KEY
-  6: string[] | "none" | "allkeys"; // KEYS
+  6: string[] | "ALL_KEYS" | "NO_KEYS"; // KEYS
   7: any; // SELECT
   8: string; // HTML_STRING
   9: string; // IMAGE
