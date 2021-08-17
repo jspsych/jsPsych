@@ -1,34 +1,32 @@
 <!DOCTYPE html>
 <html>
   <head>
-
-    <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-survey-text.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css">
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-survey-text/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body></body>
   <script>
 
-  var survey_page1 = {
-    type: 'survey-text',
-    questions: [
-      {prompt: 'How old are you?', columns: 3, required: true, name: 'Age'},
-      {prompt: 'Where were you born?', placeholder: 'City, State/Province, Country', columns: 50, name: 'BirthLocation'}
-    ],
-    randomize_question_order: true
-  };
+    var jsPsych = initJsPsych();
 
-  var survey_page2 = {
-    type: 'survey-text',
-    questions: [
-      {prompt: 'Tell me about your day', placeholder: 'How did it start?', rows:10, columns: 50}
-    ]
-  }
+    var survey_page1 = {
+      type: jsPsychSurveyText,
+      questions: [
+        {prompt: 'How old are you?', columns: 3, required: true, name: 'Age'},
+        {prompt: 'Where were you born?', placeholder: 'City, State/Province, Country', columns: 50, name: 'BirthLocation'}
+      ],
+      randomize_question_order: true
+    };
 
-  jsPsych.init({
-    timeline: [survey_page1, survey_page2],
-    on_finish: function() { jsPsych.data.displayData(); }
-  });
+    var survey_page2 = {
+      type: jsPsychSurveyText,
+      questions: [
+        {prompt: 'Tell me about your day', placeholder: 'How did it start?', rows:10, columns: 50}
+      ]
+    }
+
+    jsPsych.run([survey_page1, survey_page2]);
 
   </script>
 </html>

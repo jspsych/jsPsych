@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <title>Document</title>
-  <script src="../jspsych.js" ></script>
-  <script src="../plugins/jspsych-survey-multi-select.js" ></script>
-  <link rel="stylesheet" href="../css/jspsych.css">
-</head>
-
-<body>
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="../packages/jspsych/dist/index.browser.js" ></script>
+    <script src="../packages/plugin-survey-multi-select/dist/index.browser.js" ></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+  </head>
+  <body></body>
   <script>   
+
+    var jsPsych = initJsPsych();
+
     var multi_select_block = {
-        type: 'survey-multi-select',
+        type: jsPsychSurveyMultiSelect,
         questions: [
           {
             prompt: "Which of these colors do you like?", 
@@ -32,11 +32,8 @@
         ], 
         randomize_question_order: true
     };
-    jsPsych.init({
-      timeline: [multi_select_block],
-      on_finish: function(data) {
-        jsPsych.data.displayData();
-      },
-    });
+
+    jsPsych.run([multi_select_block]);
+
   </script>
 </html>

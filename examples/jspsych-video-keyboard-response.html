@@ -1,61 +1,60 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-video-keyboard-response.js"></script>
-    <script src="../plugins/jspsych-html-button-response.js"></script>
-    <script src="../plugins/jspsych-preload.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css">
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-video-keyboard-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-button-response/dist/index.browser.js"></script>
+    <!-- <script src="../packages/plugin-preload/dist/index.browser.js"></script> -->
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body></body>
   <script>
+
+    var jsPsych = initJsPsych();
   
-  // preloading videos only works when the file is running on a server
-  // if you run this experiment by opening the file directly in the browser, 
-  // then video preloading will be disabled to prevent CORS errors
-  var preload = {
-    type: 'preload',
-    auto_preload: true
-  }
+    // preloading videos only works when the file is running on a server
+    // if you run this experiment by opening the file directly in the browser, 
+    // then video preloading will be disabled to prevent CORS errors
+    // var preload = {
+    //   type: jsPsychPreload,
+    //   auto_preload: true
+    // }
 
-  var pre_trial = {
-    type: 'html-button-response',
-    stimulus: '<div style="max-width:600px;"><p>Some browsers now require that a user interacts with a web page before video or audio content will autoplay. Clicking the button below satisfies that requirement.</p><p>Without this trial, the video will load but not play.</p></div>',
-    choices: ['continue']
-  }
+    var pre_trial = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: '<div style="max-width:600px;"><p>Some browsers now require that a user interacts with a web page before video or audio content will autoplay. Clicking the button below satisfies that requirement.</p><p>Without this trial, the video will load but not play.</p></div>',
+      choices: ['continue']
+    }
 
-  var trial_1 = {
-    type: 'video-keyboard-response',
-    stimulus: ['video/sample_video.mp4'],
-    choices: ['y','n'],
-    prompt: 'Press y or n.',
-    width: 600,
-    //height: 600,
-    autoplay: true,
-    //controls: true,
-    //start: 8,
-    //stop: 9,
-    rate: 1.5,
-    //trial_duration: 2000,
-    //trial_ends_after_video: true,
-    response_ends_trial: true
-  }
+    var trial_1 = {
+      type: jsPsychVideoKeyboardResponse,
+      stimulus: ['video/sample_video.mp4'],
+      choices: ['y','n'],
+      prompt: 'Press y or n.',
+      width: 600,
+      //height: 600,
+      autoplay: true,
+      //controls: true,
+      //start: 8,
+      //stop: 9,
+      rate: 1.5,
+      //trial_duration: 2000,
+      //trial_ends_after_video: true,
+      response_ends_trial: true
+    }
 
-  var trial_2 = {
-    type: 'video-keyboard-response',
-    stimulus: ['video/sample_video.mp4'],
-    choices: jsPsych.ALL_KEYS,
-    prompt: '<p>When the video stops, press any key to end the trial.</p><p>Responses that are made before the video ends will be ignored.</p>',
-    width: 600,
-    autoplay: true,
-    response_ends_trial: true,
-    response_allowed_while_playing: false
-  }
+    var trial_2 = {
+      type: jsPsychVideoKeyboardResponse,
+      stimulus: ['video/sample_video.mp4'],
+      choices: jsPsych.ALL_KEYS,
+      prompt: '<p>When the video stops, press any key to end the trial.</p><p>Responses that are made before the video ends will be ignored.</p>',
+      width: 600,
+      autoplay: true,
+      response_ends_trial: true,
+      response_allowed_while_playing: false
+    }
 
-  jsPsych.init({
-    timeline: [preload, pre_trial, trial_1, trial_2],
-    on_finish: function() { jsPsych.data.displayData(); }
-  });
+    jsPsych.run([pre_trial, trial_1, trial_2]); // TO DO: add preload trial, display data
 
   </script>
 </html>
