@@ -24,5 +24,11 @@ export function initJsPsych(options?) {
 }
 
 export { JsPsych } from "./JsPsych";
-export { JsPsychPlugin, PluginInfo, TrialType } from "./modules/plugins";
-export { parameterType } from "./modules/plugins";
+export {
+  JsPsychPlugin,
+  PluginInfo,
+  TrialType,
+  ParameterType,
+  universalPluginParameters,
+  UniversalPluginParameters,
+} from "./modules/plugins";

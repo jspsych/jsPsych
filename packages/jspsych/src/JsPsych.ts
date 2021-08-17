@@ -3,7 +3,7 @@ import autoBind from "auto-bind";
 import { version } from "../package.json";
 import { JsPsychData } from "./modules/data";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
-import * as plugins from "./modules/plugins";
+import { ParameterType, universalPluginParameters } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
@@ -15,7 +15,6 @@ function delay(ms: number) {
 
 export class JsPsych {
   extensions = <any>{};
-  plugins = plugins;
   turk = turk;
   randomization = randomization;
   utils = utils;
@@ -610,14 +609,14 @@ export class JsPsych {
         // the first line checks if the parameter is defined in the universalPluginParameters set
         // the second line checks the plugin-specific parameters
         if (
-          typeof this.plugins.universalPluginParameters[key] !== "undefined" &&
-          this.plugins.universalPluginParameters[key].type !== this.plugins.parameterType.FUNCTION
+          typeof universalPluginParameters[key] !== "undefined" &&
+          universalPluginParameters[key].type !== ParameterType.FUNCTION
         ) {
           trial[key] = this.replaceFunctionsWithValues(trial[key], null);
         }
         if (
           typeof trial.type.info.parameters[key] !== "undefined" &&
-          trial.type.info.parameters[key].type !== this.plugins.parameterType.FUNCTION
+          trial.type.info.parameters[key].type !== ParameterType.FUNCTION
         ) {
           trial[key] = this.replaceFunctionsWithValues(trial[key], trial.type.info.parameters[key]);
         }
@@ -654,7 +653,7 @@ export class JsPsych {
         for (var i = 0; i < keys.length; i++) {
           if (
             typeof info.nested[keys[i]] == "object" &&
-            info.nested[keys[i]].type !== this.plugins.parameterType.FUNCTION
+            info.nested[keys[i]].type !== ParameterType.FUNCTION
           ) {
             obj[keys[i]] = this.replaceFunctionsWithValues(obj[keys[i]], info.nested[keys[i]]);
           }
@@ -669,7 +668,7 @@ export class JsPsych {
   private setDefaultValues(trial) {
     for (var param in trial.type.info.parameters) {
       // check if parameter is complex with nested defaults
-      if (trial.type.info.parameters[param].type == this.plugins.parameterType.COMPLEX) {
+      if (trial.type.info.parameters[param].type == ParameterType.COMPLEX) {
         if (trial.type.info.parameters[param].array == true) {
           // iterate over each entry in the array
           trial[param].forEach(function (ip, i) {

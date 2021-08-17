@@ -1,7 +1,7 @@
 // import cloze from "@jspsych/plugin-cloze";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "../../src";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "../../src";
 import { clickTarget, pressKey, startTimeline } from "../utils";
 
 // import surveyMultiChoice from "@jspsych/plugin-survey-multi-choice";
@@ -20,7 +20,7 @@ describe("standard use of function as parameter", () => {
     pressKey("a");
   });
 
-  test.skip("parameters can be protected from early evaluation using jsPsych.plugins.parameterType.FUNCTION", async () => {
+  test.skip("parameters can be protected from early evaluation using ParameterType.FUNCTION", async () => {
     var mock = jest.fn();
 
     await startTimeline([
@@ -142,22 +142,22 @@ describe("nested parameters as functions", () => {
     await expectFinished();
   });
 
-  test("nested parameters can be protected from early evaluation using jsPsych.plugins.parameterType.FUNCTION", async () => {
+  test("nested parameters can be protected from early evaluation using ParameterType.FUNCTION", async () => {
     // currently no plugins that use this feature (Jan. 2021), so here's a simple placeholder plugin.
 
     const info = <const>{
       name: "function-test-plugin",
       parameters: {
         foo: {
-          type: parameterType.COMPLEX,
+          type: ParameterType.COMPLEX,
           default: null,
           nested: {
             not_protected: {
-              type: parameterType.STRING,
+              type: ParameterType.STRING,
               default: null,
             },
             protected: {
-              type: parameterType.FUNCTION,
+              type: ParameterType.FUNCTION,
               default: null,
             },
           },
