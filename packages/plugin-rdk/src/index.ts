@@ -481,8 +481,8 @@ class RdkPlugin implements JsPsychPlugin<Info> {
     //Function to start the keyboard listener
     function startKeyboardListener() {
       //Start the response listener if there are choices for keys
+      // @ts-ignore - TO DO: this will always return true because choices should be an array. Should choices (KEYS) be string or string array?
       if (trial.choices != "NO_KEYS") {
-        // TO DO: is this right? "nokeys"?
         //Create the keyboard listener to listen for subjects' key response
         keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
           callback_function: after_response, //Function to call once the subject presses a valid key

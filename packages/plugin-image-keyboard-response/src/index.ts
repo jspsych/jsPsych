@@ -230,9 +230,8 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     // start the response listener
-    // @ts-ignore: ignoring the error "This condition will always return 'true' since the types 'string[]' and 'string' have no overlap.ts(2367)" until we fix NO_KEYS/ALL_KEYS
+    // @ts-ignore: TO DO: this will always return 'true' because choices is an array. Should choices (KEYS) be a string or array?
     if (trial.choices != "NO_KEYS") {
-      // TO DO: is this right? "nokeys"?
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,

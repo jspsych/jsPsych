@@ -291,7 +291,6 @@ class IatHtmlPlugin implements JsPsychPlugin<Info> {
 
     // start the response listener
     if (trial.left_category_key != "NO_KEYS" && trial.right_category_key != "NO_KEYS") {
-      // TO DO: what to use here? "nokeys"?
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: [trial.left_category_key, trial.right_category_key],
