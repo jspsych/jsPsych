@@ -2,7 +2,6 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "webgazer-calibrate",
-  description: "",
   parameters: {
     /* An array of calibration points, where each element is an array cointaining the coordinates for one calibration point: [x,y] */
     calibration_points: {

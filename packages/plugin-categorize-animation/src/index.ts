@@ -7,7 +7,7 @@ const info = <const>{
     stimuli: {
       type: ParameterType.IMAGE,
       pretty_name: "Stimuli",
-      default: undefined
+      default: undefined,
     },
     /* The key to indicate correct response */
     key_answer: {

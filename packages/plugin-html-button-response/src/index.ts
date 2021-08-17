@@ -3,61 +3,61 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "html-button-response",
   parameters: {
+    /* The HTML string to be displayed */
     stimulus: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Stimulus",
       default: undefined,
-      description: "The HTML string to be displayed",
     },
+    /* The labels for the buttons. */
     choices: {
       type: ParameterType.STRING,
       pretty_name: "Choices",
       default: undefined,
       array: true,
-      description: "The labels for the buttons.",
     },
+    /* The html of the button. Can create own style. */
     button_html: {
       type: ParameterType.STRING,
       pretty_name: "Button HTML",
       default: '<button class="jspsych-btn">%choice%</button>',
       array: true,
-      description: "The html of the button. Can create own style.",
     },
+    /* Any content here will be displayed under the button. */
     prompt: {
       type: ParameterType.STRING,
       pretty_name: "Prompt",
       default: null,
-      description: "Any content here will be displayed under the button.",
     },
+    /* How long to show the stimulus. */
     stimulus_duration: {
       type: ParameterType.INT,
       pretty_name: "Stimulus duration",
       default: null,
-      description: "How long to hide the stimulus.",
     },
+    /* How long to show the trial. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
-      description: "How long to show the trial.",
     },
+    /* The vertical margin of the button. */
     margin_vertical: {
       type: ParameterType.STRING,
       pretty_name: "Margin vertical",
       default: "0px",
-      description: "The vertical margin of the button.",
     },
+    /* The horizontal margin of the button. */
     margin_horizontal: {
       type: ParameterType.STRING,
       pretty_name: "Margin horizontal",
       default: "8px",
-      description: "The horizontal margin of the button.",
     },
+    /* If true, then trial will end when user responds. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
-      description: "If true, then trial will end when user responds.",
     },
   },
 };

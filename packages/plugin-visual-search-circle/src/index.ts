@@ -7,19 +7,19 @@ const info = <const>{
     target: {
       type: ParameterType.IMAGE,
       pretty_name: "Target",
-      default: undefined
+      default: undefined,
     },
     /* Path to image file that is the foil/distractor. */
     foil: {
       type: ParameterType.IMAGE,
       pretty_name: "Foil",
-      default: undefined
+      default: undefined,
     },
     /* Path to image file that is a fixation target. */
     fixation_image: {
       type: ParameterType.IMAGE,
       pretty_name: "Fixation image",
-      default: undefined
+      default: undefined,
     },
     /* How many items should be displayed? */
     set_size: {

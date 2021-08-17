@@ -3,34 +3,28 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "preload",
   parameters: {
+    /* Whether or not to automatically preload any media files based on the timeline passed to jsPsych.run. */
     auto_preload: {
       type: ParameterType.BOOL,
       default: false,
-      description:
-        "Whether or not to automatically preload any media files based on the timeline passed to jsPsych.init.",
     },
+    /* Array with a timeline of trials to automatically preload. If one or more trial objects is provided, 
+    then the plugin will attempt to preload the media files used in the trial(s). */
     trials: {
       type: ParameterType.TIMELINE,
       default: [],
-      description:
-        "Array with a timeline of trials to automatically preload. If one or more trial objects is provided, " +
-        "then the plugin will attempt to preload the media files used in the trial(s).",
     },
+    /* Array with one or more image files to load. This parameter is often used in cases where media files cannot 
+    be automatically preloaded based on the timeline, e.g. because the media files are passed into an image plugin/parameter with 
+    timeline variables or dynamic parameters, or because the image is embedded in an HTML string. */
     images: {
       type: ParameterType.STRING,
       default: [],
-      description:
-        "Array with one or more image files to load. This parameter is often used in cases where media files cannot " +
-        "be automatically preloaded based on the timeline, e.g. because the media files are passed into an image plugin/parameter with " +
-        "timeline variables or dynamic parameters, or because the image is embedded in an HTML string.",
     },
     audio: {
       type: ParameterType.STRING,
       default: [],
-      description:
-        "Array with one or more audio files to load. This parameter is often used in cases where media files cannot " +
-        "be automatically preloaded based on the timeline, e.g. because the media files are passed into an audio plugin/parameter with " +
-        "timeline variables or dynamic parameters, or because the audio is embedded in an HTML string.",
+      description: "",
     },
     video: {
       type: ParameterType.STRING,

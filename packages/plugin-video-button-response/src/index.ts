@@ -8,7 +8,7 @@ const info = <const>{
       type: ParameterType.VIDEO,
       pretty_name: "Video",
       default: undefined,
-      array: true
+      array: true,
     },
     /* The labels for the buttons. */
     choices: {

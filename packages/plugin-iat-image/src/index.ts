@@ -7,7 +7,7 @@ const info = <const>{
     stimulus: {
       type: ParameterType.IMAGE,
       pretty_name: "Stimulus",
-      default: undefined
+      default: undefined,
     },
     /* Key press that is associated with the left category label. */
     left_category_key: {
@@ -290,10 +290,7 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
     };
 
     // start the response listener
-    if (
-      trial.left_category_key != "NO_KEYS" &&
-      trial.right_category_key != "NO_KEYS"
-    ) {
+    if (trial.left_category_key != "NO_KEYS" && trial.right_category_key != "NO_KEYS") {
       // TO DO: Is this right? "nokeys"?
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,

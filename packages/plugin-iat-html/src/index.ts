@@ -249,7 +249,7 @@ class IatHtmlPlugin implements JsPsychPlugin<Info> {
           } else if (trial.response_ends_trial && trial.display_feedback != true) {
             var keyListener = this.jsPsych.pluginAPI.getKeyboardResponse({
               callback_function: end_trial,
-              valid_responses: ["ALL_KEYS"], 
+              valid_responses: ["ALL_KEYS"],
             });
           } else if (!trial.response_ends_trial && trial.display_feedback != true) {
           }
@@ -290,10 +290,7 @@ class IatHtmlPlugin implements JsPsychPlugin<Info> {
     };
 
     // start the response listener
-    if (
-      trial.left_category_key != "NO_KEYS" &&
-      trial.right_category_key != "NO_KEYS"
-    ) {
+    if (trial.left_category_key != "NO_KEYS" && trial.right_category_key != "NO_KEYS") {
       // TO DO: what to use here? "nokeys"?
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,

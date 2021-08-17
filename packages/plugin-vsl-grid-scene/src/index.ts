@@ -8,7 +8,7 @@ const info = <const>{
       type: ParameterType.IMAGE,
       pretty_name: "Stimuli",
       array: true,
-      default: undefined
+      default: undefined,
     },
     /* Array specifying the width and height of the images to show. */
     image_size: {

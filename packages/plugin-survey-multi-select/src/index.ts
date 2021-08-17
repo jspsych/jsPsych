@@ -59,7 +59,6 @@ const info = <const>{
       type: ParameterType.STRING,
       pretty_name: "Button label",
       default: "Continue",
-      description: "Label of the button.",
     },
     /* Message that will be displayed if one or more required questions is not answered. */
     required_message: {

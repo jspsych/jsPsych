@@ -39,7 +39,6 @@ const info = <const>{
       pretty_name: "Labels",
       default: [],
       array: true,
-      description: "",
     },
     /* Width of the slider in pixels. */
     slider_width: {

@@ -8,7 +8,7 @@ const info = <const>{
       type: ParameterType.IMAGE,
       pretty_name: "Stimuli",
       default: undefined,
-      array: true
+      array: true,
     },
     /* Duration to display each image. */
     frame_time: {

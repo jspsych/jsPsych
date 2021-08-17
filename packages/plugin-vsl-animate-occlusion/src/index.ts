@@ -2,14 +2,13 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "vsl-animate-occlusion",
-  description: "",
   parameters: {
     /* A stimulus is a path to an image file. */
     stimuli: {
       type: ParameterType.IMAGE,
       pretty_name: "Stimuli",
       default: undefined,
-      array: true
+      array: true,
     },
     /* This array contains the keys that the subject is allowed to press in order to respond to the stimulus. */
     choices: {

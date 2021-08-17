@@ -7,7 +7,7 @@ const info = <const>{
     stimulus: {
       type: ParameterType.IMAGE,
       pretty_name: "Stimulus",
-      default: undefined
+      default: undefined,
     },
     /* Set the image height in pixels */
     stimulus_height: {

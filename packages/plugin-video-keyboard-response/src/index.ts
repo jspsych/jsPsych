@@ -7,7 +7,7 @@ const info = <const>{
       /* Array of the video file(s) to play. Video can be provided in multiple file formats for better cross-browser support. */
       type: ParameterType.VIDEO,
       pretty_name: "Video",
-      default: undefined
+      default: undefined,
     },
     /* The keys the subject is allowed to press to respond to the stimulus. */
     choices: {

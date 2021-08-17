@@ -7,7 +7,7 @@ const info = <const>{
     stimulus: {
       type: ParameterType.VIDEO,
       pretty_name: "Video",
-      default: undefined
+      default: undefined,
     },
     /* Any content here will be displayed below the stimulus. */
     prompt: {

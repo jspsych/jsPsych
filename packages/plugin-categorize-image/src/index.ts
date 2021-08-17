@@ -4,91 +4,88 @@ const info = <const>{
   name: "categorize-image",
   parameters: {
     stimulus: {
+      /* The image content to be displayed. */
       type: ParameterType.IMAGE,
       pretty_name: "Stimulus",
       default: undefined,
-      description: "The image content to be displayed."
     },
+    /* The key to indicate the correct response. */
     key_answer: {
       type: ParameterType.KEY,
       pretty_name: "Key answer",
       default: undefined,
-      description: "The key to indicate the correct response.",
     },
+    /* The keys the subject is allowed to press to respond to the stimulus. */
     choices: {
       type: ParameterType.KEYS,
       pretty_name: "Choices",
       default: "ALL_KEYS",
       array: true,
-      description: "The keys the subject is allowed to press to respond to the stimulus.",
     },
+    /* Label that is associated with the correct answer. */
     text_answer: {
       type: ParameterType.STRING,
       pretty_name: "Text answer",
       default: null,
-      description: "Label that is associated with the correct answer.",
     },
+    /* String to show when correct answer is given. */
     correct_text: {
       type: ParameterType.STRING,
       pretty_name: "Correct text",
       default: "<p class='feedback'>Correct</p>",
-      description: "String to show when correct answer is given.",
     },
+    /* String to show when incorrect answer is given. */
     incorrect_text: {
       type: ParameterType.STRING,
       pretty_name: "Incorrect text",
-      default: "<p class='feedback'>Incorrect</p>",
-      description: "String to show when incorrect answer is given.",
     },
+    /* Any content here will be displayed below the stimulus. */
     prompt: {
       type: ParameterType.STRING,
       pretty_name: "Prompt",
       default: null,
-      description: "Any content here will be displayed below the stimulus.",
     },
+    /* If set to true, then the subject must press the correct response key after feedback in order to advance to next trial. */
     force_correct_button_press: {
       type: ParameterType.BOOL,
       pretty_name: "Force correct button press",
       default: false,
-      description:
-        "If set to true, then the subject must press the correct response key after feedback in order to advance to next trial.",
     },
+    /* Whether or not the stimulus should be shown on the feedback screen. */
     show_stim_with_feedback: {
       type: ParameterType.BOOL,
       default: true,
       no_function: false,
-      description: "",
     },
+    /* If true, stimulus will be shown during feedback. If false, only the text feedback will be displayed during feedback. */
     show_feedback_on_timeout: {
       type: ParameterType.BOOL,
       pretty_name: "Show feedback on timeout",
       default: false,
-      description:
-        "If true, stimulus will be shown during feedback. If false, only the text feedback will be displayed during feedback.",
     },
+    /* The message displayed on a timeout non-response. */
     timeout_message: {
       type: ParameterType.STRING,
       pretty_name: "Timeout message",
       default: "<p>Please respond faster.</p>",
-      description: "The message displayed on a timeout non-response.",
     },
+    /* How long to show the stimulus. */
     stimulus_duration: {
       type: ParameterType.INT,
       pretty_name: "Stimulus duration",
       default: null,
-      description: "How long to hide stimulus.",
     },
+    /* How long to show the trial. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
-      description: "How long to show trial",
     },
+    /* How long to show the feedback. */
     feedback_duration: {
       type: ParameterType.INT,
       pretty_name: "Feedback duration",
       default: 2000,
-      description: "How long to show feedback.",
     },
   },
 };

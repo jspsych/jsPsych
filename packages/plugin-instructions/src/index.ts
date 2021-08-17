@@ -3,69 +3,66 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "instructions",
   parameters: {
+    /* Each element of the array is the content for a single page. */
     pages: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Pages",
       default: undefined,
       array: true,
-      description: "Each element of the array is the content for a single page.",
     },
+    /* The key the subject can press in order to advance to the next page. */
     key_forward: {
       type: ParameterType.KEY,
       pretty_name: "Key forward",
       default: "ArrowRight",
-      description: "The key the subject can press in order to advance to the next page.",
     },
+    /* The key that the subject can press to return to the previous page. */
     key_backward: {
       type: ParameterType.KEY,
       pretty_name: "Key backward",
       default: "ArrowLeft",
-      description: "The key that the subject can press to return to the previous page.",
     },
+    /* If true, the subject can return to the previous page of the instructions. */
     allow_backward: {
       type: ParameterType.BOOL,
       pretty_name: "Allow backward",
       default: true,
-      description: "If true, the subject can return to the previous page of the instructions.",
     },
+    /* If true, the subject can use keyboard keys to navigate the pages. */
     allow_keys: {
       type: ParameterType.BOOL,
       pretty_name: "Allow keys",
       default: true,
-      description: "If true, the subject can use keyboard keys to navigate the pages.",
     },
+    /* If true, then a "Previous" and "Next" button will be displayed beneath the instructions. */
     show_clickable_nav: {
       type: ParameterType.BOOL,
       pretty_name: "Show clickable nav",
       default: false,
-      description:
-        'If true, then a "Previous" and "Next" button will be displayed beneath the instructions.',
     },
+    /* If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons. */
     show_page_number: {
       type: ParameterType.BOOL,
       pretty_name: "Show page number",
       default: false,
-      description:
-        "If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons.",
     },
+    /* The text that appears before x/y (current/total) pages displayed with show_page_number. */
     page_label: {
       type: ParameterType.STRING,
       pretty_name: "Page label",
       default: "Page",
-      description:
-        "The text that appears before x/y (current/total) pages displayed with show_page_number",
     },
+    /* The text that appears on the button to go backwards. */
     button_label_previous: {
       type: ParameterType.STRING,
       pretty_name: "Button label previous",
       default: "Previous",
-      description: "The text that appears on the button to go backwards.",
     },
+    /* The text that appears on the button to go forwards. */
     button_label_next: {
       type: ParameterType.STRING,
       pretty_name: "Button label next",
       default: "Next",
-      description: "The text that appears on the button to go forwards.",
     },
   },
 };

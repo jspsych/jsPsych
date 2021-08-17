@@ -8,7 +8,7 @@ const info = <const>{
       type: ParameterType.IMAGE,
       pretty_name: "Stimuli",
       default: undefined,
-      array: true
+      array: true,
     },
     /* Either "same" or "different". */
     answer: {
