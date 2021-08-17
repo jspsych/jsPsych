@@ -1,176 +1,149 @@
+export type KeyboardListener = {
+  type: "keydown";
+  fn: (e: KeyboardEvent) => void;
+};
+
+export type ValidResponses = string[] | "ALL_KEYS" | "NO_KEYS";
+
+export interface GetKeyboardResponseOptions {
+  callback_function: any;
+  valid_responses?: ValidResponses;
+  rt_method?: "performance" | "audio";
+  persist?: boolean;
+  audio_context?: AudioContext;
+  audio_context_start_time?: number;
+  allow_held_key?: boolean;
+  /**
+   * overiding via parameters for testing purposes.
+   * TODO (bjoluc): Why exactly?
+   */
+  minimum_valid_rt?: number;
+}
+
 export class KeyboardListenerAPI {
-  constructor(private areResponsesCaseSensitive: boolean, private minimumValidRt = 0) {}
+  constructor(private areResponsesCaseSensitive: boolean = false, private minimumValidRt = 0) {}
 
-  private keyboard_listeners = [];
+  private listeners = new Set<KeyboardListener>();
+  private heldKeys = new Set<string>();
 
-  private held_keys = {};
-
-  private root_keydown_listener(e) {
-    for (var i = 0; i < this.keyboard_listeners.length; i++) {
-      this.keyboard_listeners[i].fn(e);
+  private rootKeydownListener(e: KeyboardEvent) {
+    // Iterate over a static copy of the listeners set because listeners might add other listeners
+    // that we do not want to be included in the loop
+    for (const listener of Array.from(this.listeners)) {
+      listener.fn(e);
     }
-    this.held_keys[e.key] = true;
+    this.heldKeys.add(this.toLowerCaseIfInsensitive(e.key));
   }
 
-  private root_keyup_listener(e) {
-    this.held_keys[e.key] = false;
+  private toLowerCaseIfInsensitive(string: string) {
+    return this.areResponsesCaseSensitive ? string : string.toLowerCase();
   }
 
-  reset(root_element) {
-    this.keyboard_listeners = [];
-    this.held_keys = {};
-    root_element.removeEventListener("keydown", this.root_keydown_listener);
-    root_element.removeEventListener("keyup", this.root_keyup_listener);
+  private rootKeyupListener(e: KeyboardEvent) {
+    this.heldKeys.delete(this.toLowerCaseIfInsensitive(e.key));
   }
 
-  createKeyboardEventListeners(root_element) {
-    root_element.addEventListener("keydown", this.root_keydown_listener);
-    root_element.addEventListener("keyup", this.root_keyup_listener);
+  private isResponseValid(validResponses: ValidResponses, allowHeldKey: boolean, key: string) {
+    // check if key was already held down
+    if (!allowHeldKey && this.heldKeys.has(key)) {
+      return false;
+    }
+
+    if (validResponses === "ALL_KEYS") {
+      return true;
+    }
+    if (validResponses === "NO_KEYS") {
+      return false;
+    }
+
+    return validResponses.includes(key);
   }
 
-  getKeyboardResponse(parameters) {
-    //parameters are: callback_function, valid_responses, rt_method, persist, audio_context, audio_context_start_time, allow_held_key
+  reset(root_element: Element) {
+    this.listeners.clear();
+    this.heldKeys.clear();
+    root_element.removeEventListener("keydown", this.rootKeydownListener);
+    root_element.removeEventListener("keyup", this.rootKeyupListener);
+  }
 
-    parameters.rt_method =
-      typeof parameters.rt_method === "undefined" ? "performance" : parameters.rt_method;
-    if (parameters.rt_method != "performance" && parameters.rt_method != "audio") {
+  createKeyboardEventListeners(root_element: Element) {
+    root_element.addEventListener("keydown", this.rootKeydownListener);
+    root_element.addEventListener("keyup", this.rootKeyupListener);
+  }
+
+  getKeyboardResponse({
+    callback_function,
+    valid_responses = "ALL_KEYS",
+    rt_method = "performance",
+    persist,
+    audio_context,
+    audio_context_start_time,
+    allow_held_key = false,
+    minimum_valid_rt = this.minimumValidRt,
+  }: GetKeyboardResponseOptions) {
+    if (rt_method !== "performance" && rt_method !== "audio") {
       console.log(
         'Invalid RT method specified in getKeyboardResponse. Defaulting to "performance" method.'
       );
-      parameters.rt_method = "performance";
+      rt_method = "performance";
     }
 
-    var start_time;
-    if (parameters.rt_method == "performance") {
-      start_time = performance.now();
-    } else if (parameters.rt_method === "audio") {
-      start_time = parameters.audio_context_start_time;
+    const usePerformanceRt = rt_method === "performance";
+    const startTime = usePerformanceRt ? performance.now() : audio_context_start_time * 1000;
+
+    if (!this.areResponsesCaseSensitive && typeof valid_responses !== "string") {
+      valid_responses = valid_responses.map((r) => r.toLowerCase());
     }
 
-    var case_sensitive =
-      typeof this.areResponsesCaseSensitive === "undefined"
-        ? false
-        : this.areResponsesCaseSensitive;
-
-    var listener_id;
-
-    const listener_function = (e) => {
-      var key_time;
-      if (parameters.rt_method == "performance") {
-        key_time = performance.now();
-      } else if (parameters.rt_method === "audio") {
-        key_time = parameters.audio_context.currentTime;
-      }
-      var rt = key_time - start_time;
-
-      // overiding via parameters for testing purposes.
-      // TODO (bjoluc): Why exactly?
-      var minimum_valid_rt = parameters.minimum_valid_rt || this.minimumValidRt;
-
-      var rt_ms = rt;
-      if (parameters.rt_method == "audio") {
-        rt_ms = rt_ms * 1000;
-      }
-      if (rt_ms < minimum_valid_rt) {
-        return;
-      }
-
-      var valid_response = false;
-      if (typeof parameters.valid_responses === "undefined") {
-        valid_response = true;
-      } else if (parameters.valid_responses == "ALL_KEYS") {
-        valid_response = true;
-      } else if (parameters.valid_responses != "NO_KEYS") {
-        if (parameters.valid_responses.includes(e.key)) {
-          valid_response = true;
-        }
-        if (!case_sensitive) {
-          var valid_lower = parameters.valid_responses.map(function (v) {
-            return v.toLowerCase();
-          });
-          var key_lower = e.key.toLowerCase();
-          if (valid_lower.includes(key_lower)) {
-            valid_response = true;
-          }
-        }
-      }
-
-      // check if key was already held down
-      if (
-        (typeof parameters.allow_held_key === "undefined" || !parameters.allow_held_key) &&
-        valid_response
-      ) {
-        if (typeof this.held_keys[e.key] !== "undefined" && this.held_keys[e.key] == true) {
-          valid_response = false;
-        }
-        if (
-          !case_sensitive &&
-          typeof this.held_keys[e.key.toLowerCase()] !== "undefined" &&
-          this.held_keys[e.key.toLowerCase()] == true
-        ) {
-          valid_response = false;
-        }
-      }
-
-      if (valid_response) {
-        // if this is a valid response, then we don't want the key event to trigger other actions
-        // like scrolling via the spacebar.
-        e.preventDefault();
-        var key = e.key;
-        if (!case_sensitive) {
-          key = key.toLowerCase();
-        }
-        parameters.callback_function({
-          key: key,
-          rt: rt_ms,
-        });
-
-        if (this.keyboard_listeners.includes(listener_id)) {
-          if (!parameters.persist) {
-            // remove keyboard listener
-            this.cancelKeyboardResponse(listener_id);
-          }
-        }
-      }
-    };
-
-    // create listener id object
-    listener_id = {
+    const listener: KeyboardListener = {
       type: "keydown",
-      fn: listener_function,
+      fn: (e: KeyboardEvent) => {
+        const rt =
+          (rt_method == "performance" ? performance.now() : audio_context.currentTime * 1000) -
+          startTime;
+        if (rt < minimum_valid_rt) {
+          return;
+        }
+
+        const key = this.toLowerCaseIfInsensitive(e.key);
+
+        if (this.isResponseValid(valid_responses, allow_held_key, key)) {
+          // if this is a valid response, then we don't want the key event to trigger other actions
+          // like scrolling via the spacebar.
+          e.preventDefault();
+
+          if (!persist) {
+            // remove keyboard listener if it exists
+            this.cancelKeyboardResponse(listener);
+          }
+
+          callback_function({ key, rt });
+        }
+      },
     };
 
-    // add this keyboard listener to the list of listeners
-    this.keyboard_listeners.push(listener_id);
-
-    return listener_id;
+    this.listeners.add(listener);
+    return listener;
   }
 
-  cancelKeyboardResponse(listener) {
-    // remove the listener from the list of listeners
-    if (this.keyboard_listeners.includes(listener)) {
-      this.keyboard_listeners.splice(this.keyboard_listeners.indexOf(listener), 1);
-    }
+  cancelKeyboardResponse(listener: KeyboardListener) {
+    // remove the listener from the set of listeners if it is contained
+    this.listeners.delete(listener);
   }
 
   cancelAllKeyboardResponses() {
-    this.keyboard_listeners = [];
+    this.listeners.clear();
   }
 
-  convertKeyCharacterToKeyCode(character) {
+  convertKeyCharacterToKeyCode(character: string) {
     console.warn(
       "Warning: The jsPsych.pluginAPI.convertKeyCharacterToKeyCode function will be removed in future jsPsych releases. " +
         "We recommend removing this function and using strings to identify/compare keys."
     );
-    var code;
-    character = character.toLowerCase();
-    if (typeof KeyboardListenerAPI.keylookup[character] !== "undefined") {
-      code = KeyboardListenerAPI.keylookup[character];
-    }
-    return code;
+    return KeyboardListenerAPI.keylookup[character.toLowerCase()];
   }
 
-  convertKeyCodeToKeyCharacter(code) {
+  convertKeyCodeToKeyCharacter(code: number) {
     console.warn(
       "Warning: The jsPsych.pluginAPI.convertKeyCodeToKeyCharacter function will be removed in future jsPsych releases. " +
         "We recommend removing this function and using strings to identify/compare keys."
@@ -183,7 +156,7 @@ export class KeyboardListenerAPI {
     return undefined;
   }
 
-  compareKeys(key1, key2) {
+  compareKeys(key1: string | number | null, key2: string | number | null) {
     if (Number.isFinite(key1) || Number.isFinite(key2)) {
       // if either value is a numeric keyCode, then convert both to numeric keyCode values and compare (maintained for backwards compatibility)
       if (typeof key1 == "string") {
@@ -195,14 +168,10 @@ export class KeyboardListenerAPI {
       return key1 == key2;
     } else if (typeof key1 === "string" && typeof key2 === "string") {
       // if both values are strings, then check whether or not letter case should be converted before comparing (case_sensitive_responses in jsPsych.init)
-      var case_sensitive =
-        typeof this.areResponsesCaseSensitive === "undefined"
-          ? false
-          : this.areResponsesCaseSensitive;
-      if (case_sensitive) {
-        return key1 == key2;
+      if (this.areResponsesCaseSensitive) {
+        return key1 === key2;
       } else {
-        return key1.toLowerCase() == key2.toLowerCase();
+        return key1.toLowerCase() === key2.toLowerCase();
       }
     } else if (
       (key1 === null && (typeof key2 === "string" || Number.isFinite(key2))) ||

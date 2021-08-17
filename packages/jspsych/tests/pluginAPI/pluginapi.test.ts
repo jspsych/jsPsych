@@ -283,12 +283,13 @@ describe("#compareKeys", () => {
 
   test("should return undefined and produce a console warning if either/both arguments are not a string, integer, or null", () => {
     const spy = jest.spyOn(console, "error").mockImplementation(() => {});
-    var t1 = jsPsych.pluginAPI.compareKeys({}, "Q");
-    var t2 = jsPsych.pluginAPI.compareKeys(true, null);
-    var t3 = jsPsych.pluginAPI.compareKeys(null, ["Q"]);
-    expect(typeof t1).toBe("undefined");
-    expect(typeof t2).toBe("undefined");
-    expect(typeof t3).toBe("undefined");
+    // @ts-expect-error The compareKeys types forbid this
+    expect(jsPsych.pluginAPI.compareKeys({}, "Q")).toBeUndefined();
+    // @ts-expect-error The compareKeys types forbid this
+    expect(jsPsych.pluginAPI.compareKeys(true, null)).toBeUndefined();
+    // @ts-expect-error The compareKeys types forbid this
+    expect(jsPsych.pluginAPI.compareKeys(null, ["Q"])).toBeUndefined();
+
     expect(console.error).toHaveBeenCalledTimes(3);
     expect(spy.mock.calls).toEqual([
       [
