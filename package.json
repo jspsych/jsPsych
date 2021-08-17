@@ -52,5 +52,10 @@
   },
   "lint-staged": {
     "*.{ts,js,mjs,cjs}": "prettier --write"
+  },
+  "jest": {
+    "projects": [
+      "<rootDir>/packages/*"
+    ]
   }
 }
