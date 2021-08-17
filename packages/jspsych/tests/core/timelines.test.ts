@@ -1,6 +1,6 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { initJsPsych, parameterType } from "../../src";
+import { ParameterType, initJsPsych } from "../../src";
 import { TimelineNode } from "../../src/TimelineNode";
 import { pressKey, startTimeline } from "../utils";
 
@@ -520,13 +520,13 @@ describe("TimelineNode", () => {
           info: {
             name: "my-plugin",
             parameters: {
-              one: { type: parameterType.IMAGE },
-              two: { type: parameterType.VIDEO },
-              three: { type: parameterType.AUDIO },
-              four: { type: parameterType.IMAGE, preload: true },
-              five: { type: parameterType.IMAGE, preload: false },
+              one: { type: ParameterType.IMAGE },
+              two: { type: ParameterType.VIDEO },
+              three: { type: ParameterType.AUDIO },
+              four: { type: ParameterType.IMAGE, preload: true },
+              five: { type: ParameterType.IMAGE, preload: false },
               six: {
-                type: parameterType.STRING,
+                type: ParameterType.STRING,
                 // This is illegal! But it should still not be added
                 preload: true,
               },
@@ -551,7 +551,7 @@ describe("TimelineNode", () => {
             type: {
               info: {
                 name: "plugin1",
-                parameters: { one: { type: parameterType.STRING } },
+                parameters: { one: { type: ParameterType.STRING } },
               },
             },
           },
@@ -559,7 +559,7 @@ describe("TimelineNode", () => {
             type: {
               info: {
                 name: "plugin2",
-                parameters: { one: { type: parameterType.AUDIO } },
+                parameters: { one: { type: ParameterType.AUDIO } },
               },
             },
           },
@@ -570,8 +570,8 @@ describe("TimelineNode", () => {
                   info: {
                     name: "plugin3",
                     parameters: {
-                      one: { type: parameterType.VIDEO },
-                      two: { type: parameterType.IMAGE },
+                      one: { type: ParameterType.VIDEO },
+                      two: { type: ParameterType.IMAGE },
                     },
                   },
                 },

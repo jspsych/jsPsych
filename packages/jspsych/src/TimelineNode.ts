@@ -1,5 +1,5 @@
 import { JsPsych } from "./JsPsych";
-import { parameterType } from "./modules/plugins";
+import { ParameterType } from "./modules/plugins";
 import {
   repeat,
   sampleWithReplacement,
@@ -546,9 +546,9 @@ export class TimelineNode {
 
     /** Maps parameter types to their corresponding preload type */
     const parameterTypeMap = new Map<number, PreloadType>([
-      [parameterType.AUDIO, "audio"],
-      [parameterType.IMAGE, "image"],
-      [parameterType.VIDEO, "video"],
+      [ParameterType.AUDIO, "audio"],
+      [ParameterType.IMAGE, "image"],
+      [ParameterType.VIDEO, "video"],
     ]);
 
     function recurseTimeline(node: TimelineNode) {

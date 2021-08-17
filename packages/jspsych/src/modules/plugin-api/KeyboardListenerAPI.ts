@@ -1,10 +1,5 @@
 export class KeyboardListenerAPI {
-  constructor(
-    private areResponsesCaseSensitive: boolean,
-    private minimumValidRt = 0,
-    private readonly ALL_KEYS = "allkeys",
-    private readonly NO_KEYS = "none"
-  ) {}
+  constructor(private areResponsesCaseSensitive: boolean, private minimumValidRt = 0) {}
 
   private keyboard_listeners = [];
 
@@ -83,9 +78,9 @@ export class KeyboardListenerAPI {
       var valid_response = false;
       if (typeof parameters.valid_responses === "undefined") {
         valid_response = true;
-      } else if (parameters.valid_responses == this.ALL_KEYS) {
+      } else if (parameters.valid_responses == "ALL_KEYS") {
         valid_response = true;
-      } else if (parameters.valid_responses != this.NO_KEYS) {
+      } else if (parameters.valid_responses != "NO_KEYS") {
         if (parameters.valid_responses.includes(e.key)) {
           valid_response = true;
         }
