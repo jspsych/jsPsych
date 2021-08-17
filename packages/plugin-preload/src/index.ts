@@ -6,85 +6,91 @@ const info = <const>{
     /* Whether or not to automatically preload any media files based on the timeline passed to jsPsych.run. */
     auto_preload: {
       type: ParameterType.BOOL,
+      pretty_name: "Auto-preload",
       default: false,
     },
-    /* Array with a timeline of trials to automatically preload. If one or more trial objects is provided, 
-    then the plugin will attempt to preload the media files used in the trial(s). */
+    /* Array with a timeline of trials to automatically preload. If one or more trial objects is provided, then the plugin will attempt to preload the media files used in the trial(s). */
     trials: {
       type: ParameterType.TIMELINE,
+      pretty_name: "Trials",
       default: [],
     },
-    /* Array with one or more image files to load. This parameter is often used in cases where media files cannot 
+    /* Array with one or more image files to load. This parameter is often used in cases where media files cannot
     be automatically preloaded based on the timeline, e.g. because the media files are passed into an image plugin/parameter with 
     timeline variables or dynamic parameters, or because the image is embedded in an HTML string. */
     images: {
       type: ParameterType.STRING,
+      pretty_name: "Images",
       default: [],
     },
+    /* Array with one or more audio files to load. This parameter is often used in cases where media files cannot 
+    be automatically preloaded based on the timeline, e.g. because the media files are passed into an audio plugin/parameter with 
+    timeline variables or dynamic parameters, or because the audio is embedded in an HTML string. */
     audio: {
       type: ParameterType.STRING,
+      pretty_name: "Audio",
       default: [],
-      description: "",
     },
+    /* Array with one or more video files to load. This parameter is often used in cases where media files cannot 
+    be automatically preloaded based on the timeline, e.g. because the media files are passed into a video plugin/parameter with 
+    timeline variables or dynamic parameters, or because the video is embedded in an HTML string. */
     video: {
       type: ParameterType.STRING,
+      pretty_name: "Video",
       default: [],
-      description:
-        "Array with one or more video files to load. This parameter is often used in cases where media files cannot " +
-        "be automatically preloaded based on the timeline, e.g. because the media files are passed into a video plugin/parameter with " +
-        "timeline variables or dynamic parameters, or because the video is embedded in an HTML string.",
     },
+    /* HTML-formatted message to be shown above the progress bar while the files are loading. */
     message: {
       type: ParameterType.HTML_STRING,
+      pretty_name: "",
       default: null,
-      description:
-        "HTML-formatted message to be shown above the progress bar while the files are loading.",
     },
+    /* Whether or not to show the loading progress bar. */
     show_progress_bar: {
       type: ParameterType.BOOL,
+      pretty_name: "Message",
       default: true,
-      description: "Whether or not to show the loading progress bar.",
     },
+    /* Whether or not to continue with the experiment if a loading error occurs. If false, then if a loading error occurs, 
+    the error_message will be shown on the page and the trial will not end. If true, then if if a loading error occurs, the trial will end 
+    and preloading failure will be logged in the trial data. */
     continue_after_error: {
       type: ParameterType.BOOL,
+      pretty_name: "Continue after error",
       default: false,
-      description:
-        "Whether or not to continue with the experiment if a loading error occurs. If false, then if a loading error occurs, " +
-        "the error_message will be shown on the page and the trial will not end. If true, then if if a loading error occurs, the trial will end " +
-        "and preloading failure will be logged in the trial data.",
     },
+    /* Error message to show on the page in case of any loading errors. This parameter is only relevant when continue_after_error is false. */
     error_message: {
       type: ParameterType.HTML_STRING,
+      pretty_name: "Error message",
       default: "The experiment failed to load.",
-      description:
-        "Error message to show on the page in case of any loading errors. This parameter is only relevant when continue_after_error is false.",
     },
+    /* Whether or not to show a detailed error message on the page. If true, then detailed error messages will be shown on the 
+    page for all files that failed to load, along with the general error_message. This parameter is only relevant when continue_after_error is false. */
     show_detailed_errors: {
       type: ParameterType.BOOL,
+      pretty_name: "Show detailed errors",
       default: false,
-      description:
-        "Whether or not to show a detailed error message on the page. If true, then detailed error messages will be shown on the " +
-        "page for all files that failed to load, along with the general error_message. This parameter is only relevant when continue_after_error is false.",
     },
+    /* The maximum amount of time that the plugin should wait before stopping the preload and either ending the trial 
+    (if continue_after_error is true) or stopping the experiment with an error message (if continue_after_error is false). 
+    If null, the plugin will wait indefintely for the files to load. */
     max_load_time: {
       type: ParameterType.INT,
+      pretty_name: "Max load time",
       default: null,
-      description:
-        "The maximum amount of time that the plugin should wait before stopping the preload and either ending the trial " +
-        "(if continue_after_error is true) or stopping the experiment with an error message (if continue_after_error is false). " +
-        "If null, the plugin will wait indefintely for the files to load.",
     },
+    /* Function to be called after a file fails to load. The function takes the file name as its only argument. */
     on_error: {
       type: ParameterType.FUNCTION,
+      pretty_name: "On error",
       default: null,
-      description:
-        "Function to be called after a file fails to load. The function takes the file name as its only argument.",
     },
+    /* Function to be called after a file loads successfully. The function takes the file name as its only argument. */
     on_success: {
       type: ParameterType.FUNCTION,
+      pretty_name: "On success",
       default: null,
-      description:
-        "Function to be called after a file loads successfully. The function takes the file name as its only argument.",
     },
   },
 };
@@ -163,6 +169,70 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
     }
 
     display_element.innerHTML = html;
+
+    // called if all files load successfully
+    const on_success = () => {
+      if (typeof timeout !== "undefined" && timeout === false) {
+        // clear timeout immediately after finishing, to handle race condition with max_load_time
+        this.jsPsych.pluginAPI.clearAllTimeouts();
+        // need to call cancel preload function to clear global jsPsych preload_request list, even when they've all succeeded
+        this.jsPsych.pluginAPI.cancelPreloads();
+        success = true;
+        end_trial();
+      }
+    };
+
+    // called if all_files haven't finished loading when max_load_time is reached
+    const on_timeout = () => {
+      //console.log('timeout fired');
+      this.jsPsych.pluginAPI.cancelPreloads();
+      if (typeof success !== "undefined" && (success === false || success === null)) {
+        timeout = true;
+        if (loaded_success < total_n) {
+          success = false;
+        }
+        after_error("timeout"); // call trial's on_error event handler here, in case loading timed out with no file errors
+        detailed_errors.push(
+          "<p><strong>Loading timed out.</strong><br>" +
+            "Consider compressing your stimuli files, loading your files in smaller batches,<br>" +
+            "and/or increasing the <i>max_load_time</i> parameter.</p>"
+        );
+        if (trial.continue_after_error) {
+          end_trial();
+        } else {
+          stop_with_error_message();
+        }
+      }
+    };
+
+    const stop_with_error_message = () => {
+      this.jsPsych.pluginAPI.clearAllTimeouts();
+      this.jsPsych.pluginAPI.cancelPreloads();
+      // show error message
+      display_element.innerHTML = trial.error_message;
+      // show detailed errors, if necessary
+      if (trial.show_detailed_errors) {
+        display_element.innerHTML += "<p><strong>Error details:</strong></p>";
+        detailed_errors.forEach(function (e) {
+          display_element.innerHTML += e;
+        });
+      }
+    };
+
+    const end_trial = () => {
+      // clear timeout again when end_trial is called, to handle race condition with max_load_time
+      this.jsPsych.pluginAPI.clearAllTimeouts();
+      var trial_data = {
+        success: success,
+        timeout: timeout,
+        failed_images: failed_images,
+        failed_audio: failed_audio,
+        failed_video: failed_video,
+      };
+      // clear the display
+      display_element.innerHTML = "";
+      this.jsPsych.finishTrial(trial_data);
+    };
 
     // do preloading
 
@@ -270,7 +340,7 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
     }
 
     // called when a single file loads successfully
-    function file_loading_success(source) {
+    function file_loading_success(source: string) {
       update_loading_progress_bar();
       // call trial's on_success function
       after_success(source);
@@ -290,81 +360,17 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
       }
     }
 
-    // called if all files load successfully
-    function on_success() {
-      if (typeof timeout !== "undefined" && timeout === false) {
-        // clear timeout immediately after finishing, to handle race condition with max_load_time
-        this.jsPsych.pluginAPI.clearAllTimeouts();
-        // need to call cancel preload function to clear global jsPsych preload_request list, even when they've all succeeded
-        this.jsPsych.pluginAPI.cancelPreloads();
-        success = true;
-        end_trial();
-      }
-    }
-
-    // called if all_files haven't finished loading when max_load_time is reached
-    function on_timeout() {
-      //console.log('timeout fired');
-      this.jsPsych.pluginAPI.cancelPreloads();
-      if (typeof success !== "undefined" && (success === false || success === null)) {
-        timeout = true;
-        if (loaded_success < total_n) {
-          success = false;
-        }
-        after_error("timeout"); // call trial's on_error event handler here, in case loading timed out with no file errors
-        detailed_errors.push(
-          "<p><strong>Loading timed out.</strong><br>" +
-            "Consider compressing your stimuli files, loading your files in smaller batches,<br>" +
-            "and/or increasing the <i>max_load_time</i> parameter.</p>"
-        );
-        if (trial.continue_after_error) {
-          end_trial();
-        } else {
-          stop_with_error_message();
-        }
-      }
-    }
-
-    function stop_with_error_message() {
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-      this.jsPsych.pluginAPI.cancelPreloads();
-      // show error message
-      display_element.innerHTML = trial.error_message;
-      // show detailed errors, if necessary
-      if (trial.show_detailed_errors) {
-        display_element.innerHTML += "<p><strong>Error details:</strong></p>";
-        detailed_errors.forEach(function (e) {
-          display_element.innerHTML += e;
-        });
-      }
-    }
-
-    function after_error(source) {
+    function after_error(source: string) {
       // call on_error function and pass file name
       if (trial.on_error !== null) {
         trial.on_error(source);
       }
     }
-    function after_success(source) {
+    function after_success(source: string) {
       // call on_success function and pass file name
       if (trial.on_success !== null) {
         trial.on_success(source);
       }
-    }
-
-    function end_trial() {
-      // clear timeout again when end_trial is called, to handle race condition with max_load_time
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-      var trial_data = {
-        success: success,
-        timeout: timeout,
-        failed_images: failed_images,
-        failed_audio: failed_audio,
-        failed_video: failed_video,
-      };
-      // clear the display
-      display_element.innerHTML = "";
-      this.jsPsych.finishTrial(trial_data);
     }
   }
 }
