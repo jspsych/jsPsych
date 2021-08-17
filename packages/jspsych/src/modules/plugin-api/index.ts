@@ -11,12 +11,7 @@ export function createJointPluginAPIObject(jsPsych: JsPsych) {
   return Object.assign(
     {},
     ...[
-      new KeyboardListenerAPI(
-        settings.case_sensitive_responses,
-        settings.minimum_valid_rt,
-        jsPsych.ALL_KEYS,
-        jsPsych.NO_KEYS
-      ),
+      new KeyboardListenerAPI(settings.case_sensitive_responses, settings.minimum_valid_rt),
       new TimeoutAPI(),
       new MediaAPI(settings.use_webaudio, jsPsych.webaudio_context),
       new HardwareAPI(),

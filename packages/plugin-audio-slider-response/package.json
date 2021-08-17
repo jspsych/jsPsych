@@ -12,10 +12,11 @@
   ],
   "source": "src/index.ts",
   "scripts": {
-    "test": "jest --config jest.config.cjs --passWithNoTests",
-    "build": "rollup --config rollup.config.mjs",
-    "watch": "npm run build -- --watch",
-    "tsc": "tsc"
+    "test": "jest  --passWithNoTests",
+    "test:watch": "npm test -- --watch",
+    "tsc": "tsc",
+    "build": "rollup --config",
+    "build:watch": "npm run build -- --watch"
   },
   "repository": {
     "type": "git",

@@ -51,10 +51,10 @@ describe("#getKeyboardResponse", () => {
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  test("should not respond when jsPsych.NO_KEYS is used", () => {
+  test('should not respond when "NO_KEYS" is used', () => {
     jsPsych.pluginAPI.getKeyboardResponse({
       callback_function: callback,
-      valid_responses: jsPsych.NO_KEYS,
+      valid_responses: "NO_KEYS",
     });
 
     expect(callback).toHaveBeenCalledTimes(0);
@@ -69,7 +69,7 @@ describe("#getKeyboardResponse", () => {
 
     jsPsych.pluginAPI.getKeyboardResponse({
       callback_function: callback,
-      valid_responses: jsPsych.ALL_KEYS,
+      valid_responses: "ALL_KEYS",
       allow_held_key: false,
     });
 
@@ -85,7 +85,7 @@ describe("#getKeyboardResponse", () => {
 
     jsPsych.pluginAPI.getKeyboardResponse({
       callback_function: callback,
-      valid_responses: jsPsych.ALL_KEYS,
+      valid_responses: "ALL_KEYS",
       allow_held_key: true,
     });
 
