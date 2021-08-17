@@ -47,14 +47,15 @@ type ParameterTypeMap = {
   13: any; // TIMELINE
 };
 
-interface ParameterInfo {
+export interface ParameterInfo {
   type: keyof ParameterTypeMap;
   array?: boolean;
   pretty_name?: string;
   default?: any;
+  preload?: "image" | "video" | "audio";
 }
 
-interface ParameterInfos {
+export interface ParameterInfos {
   [key: string]: ParameterInfo;
 }
 
