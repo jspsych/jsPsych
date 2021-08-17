@@ -16,10 +16,12 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "jest --config jest.config.cjs",
-    "build": "rollup --config rollup.config.mjs",
-    "watch": "npm run build -- --watch",
-    "tsc": "tsc"
+    "test": "jest",
+    "test:watch": "npm test -- --watch",
+    "tsc": "tsc",
+    "build": "rollup --config",
+    "build:watch": "npm run build -- --watch",
+    "prepack": "cp ../../README.md ."
   },
   "repository": {
     "type": "git",
