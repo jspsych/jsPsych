@@ -1,72 +1,72 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "survey-multi-choice",
   parameters: {
     /* Array containing one or more objects with parameters for the question(s) that should be shown on the page. */
     questions: {
-      type: parameterType.COMPLEX,
+      type: ParameterType.COMPLEX,
       array: true,
       pretty_name: "Questions",
       nested: {
         /* Question prompt. */
         prompt: {
-          type: parameterType.STRING,
+          type: ParameterType.STRING,
           pretty_name: "Prompt",
-          default: undefined
+          default: undefined,
         },
         /* Array of multiple choice options for this question. */
         options: {
-          type: parameterType.STRING,
+          type: ParameterType.STRING,
           pretty_name: "Options",
           array: true,
-          default: undefined
+          default: undefined,
         },
         /* Whether or not a response to this question must be given in order to continue. */
         required: {
-          type: parameterType.BOOL,
+          type: ParameterType.BOOL,
           pretty_name: "Required",
-          default: false
+          default: false,
         },
         /* If true, then the question will be centered and options will be displayed horizontally. */
         horizontal: {
-          type: parameterType.BOOL,
+          type: ParameterType.BOOL,
           pretty_name: "Horizontal",
-          default: false
+          default: false,
         },
         /* Name of the question in the trial data. If no name is given, the questions are named Q0, Q1, etc. */
         name: {
-          type: parameterType.STRING,
+          type: ParameterType.STRING,
           pretty_name: "Question Name",
-          default: ""
-        }
-      }
+          default: "",
+        },
+      },
     },
     /* If true, the order of the questions in the 'questions' array will be randomized. */
     randomize_question_order: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Randomize Question Order",
-      default: false
+      default: false,
     },
     /* HTML-formatted string to display at top of the page above all of the questions. */
     preamble: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Preamble",
-      default: null
+      default: null,
     },
     /* Label of the button to submit responses. */
     button_label: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button label",
-      default: "Continue"
+      default: "Continue",
     },
     /* Setting this to true will enable browser auto-complete or auto-fill for the form. */
     autocomplete: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Allow autocomplete",
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -83,7 +83,7 @@ type Info = typeof info;
 class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var plugin_id_name = "jspsych-survey-multi-choice";
@@ -234,7 +234,7 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
     });
 
     var startTime = performance.now();
-  };
+  }
 }
 
 export default SurveyMultiChoicePlugin;

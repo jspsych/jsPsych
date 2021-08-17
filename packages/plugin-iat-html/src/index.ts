@@ -1,91 +1,91 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "iat-html",
   parameters: {
     /* The HTML string to be displayed. */
     stimulus: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Stimulus",
-      default: undefined
+      default: undefined,
     },
     /* Key press that is associated with the left category label.*/
     left_category_key: {
-      type: parameterType.KEY,
+      type: ParameterType.KEY,
       pretty_name: "Left category key",
-      default: "e"
+      default: "e",
     },
     /* Key press that is associated with the right category label. */
     right_category_key: {
-      type: parameterType.KEY,
+      type: ParameterType.KEY,
       pretty_name: "Right category key",
-      default: "i"
+      default: "i",
     },
     /* The label that is associated with the stimulus. Aligned to the left side of page */
     left_category_label: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Left category label",
       array: true,
-      default: ["left"]
+      default: ["left"],
     },
     /* The label that is associated with the stimulus. Aligned to the right side of the page. */
     right_category_label: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Right category label",
       array: true,
-      default: ["right"]
+      default: ["right"],
     },
     /* The keys that allow the user to advance to the next trial if their key press was incorrect. */
     key_to_move_forward: {
-      type: parameterType.KEY,
+      type: ParameterType.KEYS,
       pretty_name: "Key to move forward",
       array: true,
-      default: "allkeys"
+      default: "ALL_KEYS",
     },
     /* If true, then html when wrong will be displayed when user makes an incorrect key press. */
     display_feedback: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Display feedback",
-      default: false
+      default: false,
     },
     /* The HTML to display when a user presses the wrong key. */
     html_when_wrong: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "HTML when wrong",
-      default: '<span style="color: red; font-size: 80px">X</span>'
+      default: '<span style="color: red; font-size: 80px">X</span>',
     },
     /* Instructions shown at the bottom of the page. */
     bottom_instructions: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Bottom instructions",
-      default: "<p>If you press the wrong key, a red X will appear. Press any key to continue.</p>"
+      default: "<p>If you press the wrong key, a red X will appear. Press any key to continue.</p>",
     },
     /* If true, in order to advance to the next trial after a wrong key press the user will be forced to press the correct key. */
     force_correct_key_press: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Force correct key press",
-      default: false
+      default: false,
     },
     /* Stimulus will be associated with either "left" or "right". */
     stim_key_association: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Stimulus key association",
       options: ["left", "right"],
-      default: undefined
+      default: undefined,
     },
     /* If true, trial will end when user makes a response. */
     response_ends_trial: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
-      default: true
+      default: true,
     },
     /* How long to show the trial. */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: null
-    }
-  }
+      default: null,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -207,7 +207,7 @@ class IatHtmlPlugin implements JsPsychPlugin<Info> {
     var rightKeyCode = trial.right_category_key;
 
     // function to handle responses by the subject
-    const after_response = (info: {key: string, rt: number}) => {
+    const after_response = (info: { key: string; rt: number }) => {
       var wImg = document.getElementById("wrongImgContainer");
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
@@ -220,7 +220,10 @@ class IatHtmlPlugin implements JsPsychPlugin<Info> {
       }
 
       if (trial.stim_key_association == "right") {
-        if (response.rt !== null && this.jsPsych.pluginAPI.compareKeys(response.key, rightKeyCode)) {
+        if (
+          response.rt !== null &&
+          this.jsPsych.pluginAPI.compareKeys(response.key, rightKeyCode)
+        ) {
           response.correct = true;
           if (trial.response_ends_trial) {
             end_trial();
@@ -246,7 +249,7 @@ class IatHtmlPlugin implements JsPsychPlugin<Info> {
           } else if (trial.response_ends_trial && trial.display_feedback != true) {
             var keyListener = this.jsPsych.pluginAPI.getKeyboardResponse({
               callback_function: end_trial,
-              valid_responses: [this.jsPsych.ALL_KEYS], // TO DO: what to use here? "allkeys"?
+              valid_responses: ["ALL_KEYS"], 
             });
           } else if (!trial.response_ends_trial && trial.display_feedback != true) {
           }
@@ -278,7 +281,7 @@ class IatHtmlPlugin implements JsPsychPlugin<Info> {
           } else if (trial.response_ends_trial && trial.display_feedback != true) {
             var keyListener = this.jsPsych.pluginAPI.getKeyboardResponse({
               callback_function: end_trial,
-              valid_responses: [this.jsPsych.ALL_KEYS], // TO DO: what to use here? "allkeys"?
+              valid_responses: ["ALL_KEYS"],
             });
           } else if (!trial.response_ends_trial && trial.display_feedback != true) {
           }
@@ -287,7 +290,11 @@ class IatHtmlPlugin implements JsPsychPlugin<Info> {
     };
 
     // start the response listener
-    if (trial.left_category_key != this.jsPsych.NO_KEYS && trial.right_category_key != this.jsPsych.NO_KEYS) { // TO DO: what to use here? "nokeys"?
+    if (
+      trial.left_category_key != "NO_KEYS" &&
+      trial.right_category_key != "NO_KEYS"
+    ) {
+      // TO DO: what to use here? "nokeys"?
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: [trial.left_category_key, trial.right_category_key],

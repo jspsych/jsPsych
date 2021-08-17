@@ -1,86 +1,83 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "visual-search-circle",
   parameters: {
     /* The image to be displayed. */
     target: {
-      type: parameterType.IMAGE,
+      type: ParameterType.IMAGE,
       pretty_name: "Target",
-      default: undefined,
-      preload: true
+      default: undefined
     },
     /* Path to image file that is the foil/distractor. */
     foil: {
-      type: parameterType.IMAGE,
+      type: ParameterType.IMAGE,
       pretty_name: "Foil",
-      default: undefined,
-      preload: true
+      default: undefined
     },
     /* Path to image file that is a fixation target. */
     fixation_image: {
-      type: parameterType.IMAGE,
+      type: ParameterType.IMAGE,
       pretty_name: "Fixation image",
-      default: undefined,
-      preload: true
+      default: undefined
     },
     /* How many items should be displayed? */
     set_size: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Set size",
-      default: undefined
+      default: undefined,
     },
     /* Is the target present? */
     target_present: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Target present",
-      default: true
+      default: true,
     },
     /* Two element array indicating the height and width of the search array element images. */
     target_size: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Target size",
       array: true,
-      default: [50, 50]
+      default: [50, 50],
     },
     /* Two element array indicating the height and width of the fixation image. */
     fixation_size: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Fixation size",
       array: true,
-      default: [16, 16]
+      default: [16, 16],
     },
     /* The diameter of the search array circle in pixels. */
     circle_diameter: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Circle diameter",
-      default: 250
+      default: 250,
     },
     /* The key to press if the target is present in the search array. */
     target_present_key: {
-      type: parameterType.KEY,
+      type: ParameterType.KEY,
       pretty_name: "Target present key",
-      default: "j"
+      default: "j",
     },
     /* The key to press if the target is not present in the search array. */
     target_absent_key: {
-      type: parameterType.KEY,
+      type: ParameterType.KEY,
       pretty_name: "Target absent key",
-      default: "f"
+      default: "f",
     },
     /* The maximum duration to wait for a response. */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: null
+      default: null,
     },
     /* How long to show the fixation image for before the search array (in milliseconds). */
     fixation_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Fixation duration",
-      default: 1000
-    }
-  }
+      default: 1000,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -101,7 +98,7 @@ type Info = typeof info;
 class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // circle params
@@ -178,7 +175,7 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
         // after wait is over
         show_search_array();
       }, trial.fixation_duration);
-    }
+    };
 
     const end_trial = (rt: number, correct: boolean, key_press: string) => {
       // data saving
@@ -193,7 +190,7 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
 
       // go to next trial
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     show_fixation();
 
@@ -223,7 +220,7 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
 
       var trial_over = false;
 
-      const after_response = (info: {key: string, rt: number}) => {
+      const after_response = (info: { key: string; rt: number }) => {
         trial_over = true;
 
         var correct = false;
@@ -231,7 +228,8 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
         if (
           (this.jsPsych.pluginAPI.compareKeys(info.key, trial.target_present_key) &&
             trial.target_present) ||
-          (this.jsPsych.pluginAPI.compareKeys(info.key, trial.target_absent_key) && !trial.target_present)
+          (this.jsPsych.pluginAPI.compareKeys(info.key, trial.target_absent_key) &&
+            !trial.target_present)
         ) {
           correct = true;
         }
@@ -272,7 +270,7 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
       function clear_display() {
         display_element.innerHTML = "";
       }
-    }
+    };
 
     // helper function for determining stimulus locations
     function cosd(num: number) {
@@ -282,7 +280,7 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
     function sind(num: number) {
       return Math.sin((num / 180) * Math.PI);
     }
-  };
+  }
 }
 
 export default VisualSearchCirclePlugin;

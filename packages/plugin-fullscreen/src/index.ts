@@ -1,38 +1,38 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "fullscreen",
   parameters: {
     /* If true, experiment will enter fullscreen mode. If false, the browser will exit fullscreen mode. */
     fullscreen_mode: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Fullscreen mode",
       default: true,
-      array: false
+      array: false,
     },
     /* HTML content to display above the button to enter fullscreen mode */
     message: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Message",
       default:
         "<p>The experiment will switch to full screen mode when you press the button below</p>",
-      array: false
+      array: false,
     },
     /* The text that appears on the button to enter fullscreen */
     button_label: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button label",
       default: "Continue",
-      array: false
+      array: false,
     },
-     /* The length of time to delay after entering fullscreen mode before ending the trial. */
+    /* The length of time to delay after entering fullscreen mode before ending the trial. */
     delay_after: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Delay after",
       default: 1000,
-      array: false
-    }
-  }
+      array: false,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -49,7 +49,6 @@ class FullscreenPlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-
     const endTrial = () => {
       display_element.innerHTML = "";
 
@@ -60,8 +59,8 @@ class FullscreenPlugin implements JsPsychPlugin<Info> {
 
         this.jsPsych.finishTrial(trial_data);
       }, trial.delay_after);
-    }
-    
+    };
+
     // check if keys are allowed in fullscreen mode
     var keyboardNotAllowed = typeof Element !== "undefined" && "ALLOW_KEYBOARD_INPUT" in Element;
     if (keyboardNotAllowed) {

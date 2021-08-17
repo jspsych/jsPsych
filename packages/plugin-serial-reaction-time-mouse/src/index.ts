@@ -1,71 +1,71 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "serial-reaction-time-mouse",
   parameters: {
     /* The location of the target. The array should be the [row, column] of the target. */
     target: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Target",
       array: true,
-      default: undefined
+      default: undefined,
     },
     /* This array represents the grid of boxes shown on the screen. */
     grid: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Grid",
       array: true,
-      default: [[1, 1, 1, 1]]
+      default: [[1, 1, 1, 1]],
     },
     /* The width and height in pixels of each square in the grid. */
     grid_square_size: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Grid square size",
-      default: 100
+      default: 100,
     },
     /* The color of the target square. */
     target_color: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Target color",
-      default: "#999"
+      default: "#999",
     },
     /* If true, the trial ends after a mouse click. */
     response_ends_trial: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
-      default: true
+      default: true,
     },
     /* The number of milliseconds to display the grid before the target changes color. */
     pre_target_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Pre-target duration",
-      default: 0
+      default: 0,
     },
     /* How long to show the trial */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: null
+      default: null,
     },
     /* If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds. */
     fade_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Fade duration",
-      default: null
+      default: null,
     },
     /* If true, then user can make nontarget response. */
     allow_nontarget_responses: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Allow nontarget response",
-      default: false
+      default: false,
     },
     /* Any content here will be displayed below the stimulus */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
-      default: null
-    }
-  }
+      default: null,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -82,7 +82,7 @@ type Info = typeof info;
 class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var startTime = -1;
@@ -137,7 +137,7 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
       if (trial.trial_duration !== null) {
         this.jsPsych.pluginAPI.setTimeout(endTrial, trial.trial_duration);
       }
-    }
+    };
 
     // display stimulus
     var stimulus = this.stimulus(trial.grid, trial.grid_square_size);
@@ -174,10 +174,10 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     // function to handle responses by the subject
-    function after_response(info: {rt: string, row: number, column: number}) {
+    function after_response(info: { rt: string; row: number; column: number }) {
       // only record first response
       response = response.rt == null ? info : response;
 
@@ -185,7 +185,7 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
         endTrial();
       }
     }
-  };
+  }
 
   stimulus(grid, square_size: number, target?: number[], target_color?: string, labels?) {
     var stimulus =
@@ -235,7 +235,7 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
     stimulus += "</div>";
 
     return stimulus;
-  };
+  }
 }
 
 export default SerialReactionTimeMousePlugin;

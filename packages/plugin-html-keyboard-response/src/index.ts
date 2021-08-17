@@ -15,7 +15,7 @@ const info = <const>{
      * The keys the subject is allowed to press to respond to the stimulus.
      */
     choices: {
-      type: ParameterType.KEY,
+      type: ParameterType.KEYS,
       array: true,
       pretty_name: "Choices",
       default: "ALL_KEYS",
@@ -130,9 +130,8 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     // start the response listener
-    // @ts-ignore TODO jsPsych.NO_KEYS is not an array, but `array: true` is set for the parameter.
-    // How should we handle this?
-    if (trial.choices != this.jsPsych.NO_KEYS) {
+    // @ts-ignore: TO DO - string array vs string error
+    if (trial.choices != "NO_KEYS") {
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,

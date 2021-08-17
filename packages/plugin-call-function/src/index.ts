@@ -1,21 +1,21 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "call-function",
   parameters: {
     /* Function to call */
     func: {
-      type: parameterType.FUNCTION,
+      type: ParameterType.FUNCTION,
       pretty_name: "Function",
-      default: undefined
+      default: undefined,
     },
     /* Is the function call asynchronous? */
     async: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Asynchronous",
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -44,7 +44,7 @@ class CallFunctionPlugin implements JsPsychPlugin<Info> {
       };
 
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     if (trial.async) {
       var done = function (data) {

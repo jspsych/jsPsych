@@ -1,30 +1,29 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "vsl-grid-scene",
   parameters: {
     stimuli: {
       /* An array of images that defines a grid. */
-      type: parameterType.IMAGE,
+      type: ParameterType.IMAGE,
       pretty_name: "Stimuli",
       array: true,
-      default: undefined,
-      preload: true
+      default: undefined
     },
     /* Array specifying the width and height of the images to show. */
     image_size: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Image size",
       array: true,
-      default: [100, 100]
+      default: [100, 100],
     },
     /* How long to show the stimulus for in milliseconds. */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: 2000
-    }
-  }
+      default: 2000,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -44,7 +43,7 @@ type Info = typeof info;
 class VslGridScenePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     display_element.innerHTML = this.generate_stimulus(trial.stimuli, trial.image_size);
@@ -61,8 +60,8 @@ class VslGridScenePlugin implements JsPsychPlugin<Info> {
       };
 
       this.jsPsych.finishTrial(trial_data);
-    }
-  };
+    };
+  }
 
   generate_stimulus(pattern, image_size: number[]) {
     var nrows = pattern.length;
@@ -126,7 +125,7 @@ class VslGridScenePlugin implements JsPsychPlugin<Info> {
     html += "</div>";
 
     return html;
-  };
+  }
 }
 
 export default VslGridScenePlugin;

@@ -1,73 +1,72 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "audio-button-response",
   parameters: {
     /* The audio to be played. */
     stimulus: {
-      type: parameterType.AUDIO,
+      type: ParameterType.AUDIO,
       pretty_name: "Stimulus",
-      default: undefined,
-      preload: true
+      default: undefined
     },
     /* The button labels. */
     choices: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Choices",
       default: undefined,
-      array: true
+      array: true,
     },
     /* "Custom button. Can make your own style." */
     button_html: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Button HTML",
       default: '<button class="jspsych-btn">%choice%</button>',
-      array: true
+      array: true,
     },
     /* Any content here will be displayed below the stimulus. */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
-      default: null
+      default: null,
     },
     /* The maximum duration to wait for a response. */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: null
+      default: null,
     },
     /* Vertical margin of button. */
     margin_vertical: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Margin vertical",
-      default: "0px"
+      default: "0px",
     },
     /* Horizontal margin of button. */
     margin_horizontal: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Margin horizontal",
-      default: "8px"
+      default: "8px",
     },
     /* If true, the trial will end when user makes a response. */
     response_ends_trial: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
-      default: true
+      default: true,
     },
     /* If true, then the trial will end as soon as the audio file finishes playing. */
     trial_ends_after_audio: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Trial ends after audio",
-      default: false
+      default: false,
     },
     /* If true, then responses are allowed while the audio is playing.
     If false, then the audio must finish playing before a response is accepted. */
     response_allowed_while_playing: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response allowed while playing",
-      default: true
-    }
-  }
+      default: true,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -81,8 +80,7 @@ type Info = typeof info;
  * documentation: docs.jspsych.org
  *
  **/
-
- class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
+class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
   constructor(private jsPsych: JsPsych) {}

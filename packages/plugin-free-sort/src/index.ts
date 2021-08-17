@@ -1,130 +1,129 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "free-sort",
   parameters: {
     /* items to be displayed. */
     stimuli: {
-      type: parameterType.IMAGE,
+      type: ParameterType.IMAGE,
       pretty_name: "Stimuli",
       default: undefined,
-      array: true,
-      preload: true
+      array: true
     },
     /* Height of items in pixels. */
     stim_height: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Stimulus height",
-      default: 100
+      default: 100,
     },
     /* Width of items in pixels */
     stim_width: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Stimulus width",
-      default: 100
+      default: 100,
     },
     /* How much larger to make the stimulus while moving (1 = no scaling) */
     scale_factor: {
-      type: parameterType.FLOAT,
+      type: ParameterType.FLOAT,
       pretty_name: "Stimulus scaling factor",
-      default: 1.5
+      default: 1.5,
     },
     /* The height in pixels of the container that subjects can move the stimuli in. */
     sort_area_height: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Sort area height",
-      default: 700
+      default: 700,
     },
     /* The width in pixels of the container that subjects can move the stimuli in. */
     sort_area_width: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Sort area width",
-      default: 700
+      default: 700,
     },
     /* The shape of the sorting area */
     sort_area_shape: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Sort area shape",
       options: ["square", "ellipse"],
-      default: "ellipse"
+      default: "ellipse",
     },
     /* HTML to display above/below the sort area. It can be used to provide a reminder about the action the subject is supposed to take. */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
-      default: ""
+      default: "",
     },
     /* Indicates whether to show prompt "above" or "below" the sorting area. */
     prompt_location: {
-      type: parameterType.SELECT,
+      type: ParameterType.SELECT,
       pretty_name: "Prompt location",
       options: ["above", "below"],
-      default: "above"
+      default: "above",
     },
     /* The text that appears on the button to continue to the next trial. */
     button_label: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button label",
-      default: "Continue"
+      default: "Continue",
     },
     /* If true, the sort area border color will change while items are being moved in and out of the sort area, 
     and the background color will change once all items have been moved into the sort area. 
     If false, the border will remain black and the background will remain white throughout the trial. */
     change_border_background_color: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Change border background color",
-      default: true
+      default: true,
     },
     /* If change_border_background_color is true, the sort area border will change to this color 
     when an item is being moved into the sort area, and the background will change to this color 
     when all of the items have been moved into the sort area. */
     border_color_in: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Border color - in",
-      default: "#a1d99b"
+      default: "#a1d99b",
     },
     /* If change_border_background_color is true, this will be the color of the sort area border 
     when there are one or more items that still need to be moved into the sort area. */
     border_color_out: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Border color - out",
-      default: "#fc9272"
+      default: "#fc9272",
     },
     /* The width in pixels of the border around the sort area. If null, the border width defaults to 3% of the sort area height. */
     border_width: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Border width",
-      default: null
+      default: null,
     },
     /* Text to display when there are one or more items that still need to be placed in the sort area. 
     If "%n%" is included in the string, it will be replaced with the number of items that still need to be moved inside. 
     If "%s%" is included in the string, a "s" will be included when the number of items remaining is greater than one. */
     counter_text_unfinished: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Counter text unfinished",
-      default: "You still need to place %n% item%s% inside the sort area."
+      default: "You still need to place %n% item%s% inside the sort area.",
     },
     /* Text that will take the place of the counter_text_unfinished text when all items have been moved inside the sort area. */
     counter_text_finished: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Counter text finished",
-      default: "All items placed. Feel free to reposition items if necessary."
+      default: "All items placed. Feel free to reposition items if necessary.",
     },
     /* If false, the images will be positioned to the left and right of the sort area when the trial loads.
     If true, the images will be positioned at random locations inside the sort area when the trial loads. */
     stim_starts_inside: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Stim starts inside",
-      default: false
+      default: false,
     },
     /* When the images appear outside the sort area, this determines the x-axis spread of the image columns. 
     Default value is 1. Values less than 1 will compress the image columns along the x-axis, and values greater than 1 will spread them farther apart. */
     column_spread_factor: {
-      type: parameterType.FLOAT,
+      type: ParameterType.FLOAT,
       pretty_name: "column spread factor",
-      default: 1
-    }
-  }
+      default: 1,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -407,7 +406,7 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
           }
 
           // replace in overall array, grab index from item id
-          var elem_number = parseInt(elem.id.split("jspsych-free-sort-draggable-")[1],10);
+          var elem_number = parseInt(elem.id.split("jspsych-free-sort-draggable-")[1], 10);
           inside.splice(elem_number, 1, cur_in);
 
           // modify text and background if all items are inside
@@ -421,9 +420,8 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
           } else {
             border.style.background = "none";
             button.style.visibility = "hidden";
-            display_element.querySelector("#jspsych-free-sort-counter").innerHTML = get_counter_text(
-              inside.length - inside.filter(Boolean).length
-            );
+            display_element.querySelector("#jspsych-free-sort-counter").innerHTML =
+              get_counter_text(inside.length - inside.filter(Boolean).length);
           }
         };
         document.addEventListener(move_event_name, move_event);
@@ -451,36 +449,34 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
       });
     }
 
-    display_element
-      .querySelector("#jspsych-free-sort-done-btn")
-      .addEventListener("click", () => {
-        if (inside.every(Boolean)) {
-          const end_time = performance.now();
-          const rt = end_time - start_time;
-          // gather data
-          const items = display_element.querySelectorAll<HTMLElement>(".jspsych-free-sort-draggable");
-          // get final position of all items
-          let final_locations = [];
-          for (let i = 0; i < items.length; i++) {
-            final_locations.push({
-              src: items[i].dataset.src,
-              x: parseInt(items[i].style.left),
-              y: parseInt(items[i].style.top),
-            });
-          }
-
-          const trial_data = {
-            init_locations: init_locations,
-            moves: moves,
-            final_locations: final_locations,
-            rt: rt,
-          };
-
-          // advance to next part
-          display_element.innerHTML = "";
-          this.jsPsych.finishTrial(trial_data);
+    display_element.querySelector("#jspsych-free-sort-done-btn").addEventListener("click", () => {
+      if (inside.every(Boolean)) {
+        const end_time = performance.now();
+        const rt = end_time - start_time;
+        // gather data
+        const items = display_element.querySelectorAll<HTMLElement>(".jspsych-free-sort-draggable");
+        // get final position of all items
+        let final_locations = [];
+        for (let i = 0; i < items.length; i++) {
+          final_locations.push({
+            src: items[i].dataset.src,
+            x: parseInt(items[i].style.left),
+            y: parseInt(items[i].style.top),
+          });
         }
-      });
+
+        const trial_data = {
+          init_locations: init_locations,
+          moves: moves,
+          final_locations: final_locations,
+          rt: rt,
+        };
+
+        // advance to next part
+        display_element.innerHTML = "";
+        this.jsPsych.finishTrial(trial_data);
+      }
+    });
 
     function get_counter_text(n: number) {
       var text_out = "";
@@ -534,7 +530,9 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
       if (square) {
         return Math.abs(x - x0) <= rx && Math.abs(y - y0) <= ry;
       } else {
-        return (x - x0) * (x - x0) * (ry * ry) + (y - y0) * (y - y0) * (rx * rx) <= rx * rx * (ry * ry);
+        return (
+          (x - x0) * (x - x0) * (ry * ry) + (y - y0) * (y - y0) * (rx * rx) <= rx * rx * (ry * ry)
+        );
       }
     }
 

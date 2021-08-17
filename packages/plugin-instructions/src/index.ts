@@ -1,68 +1,68 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "instructions",
   parameters: {
     pages: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Pages",
       default: undefined,
       array: true,
       description: "Each element of the array is the content for a single page.",
     },
     key_forward: {
-      type: parameterType.KEY,
+      type: ParameterType.KEY,
       pretty_name: "Key forward",
       default: "ArrowRight",
       description: "The key the subject can press in order to advance to the next page.",
     },
     key_backward: {
-      type: parameterType.KEY,
+      type: ParameterType.KEY,
       pretty_name: "Key backward",
       default: "ArrowLeft",
       description: "The key that the subject can press to return to the previous page.",
     },
     allow_backward: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Allow backward",
       default: true,
       description: "If true, the subject can return to the previous page of the instructions.",
     },
     allow_keys: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Allow keys",
       default: true,
       description: "If true, the subject can use keyboard keys to navigate the pages.",
     },
     show_clickable_nav: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Show clickable nav",
       default: false,
       description:
         'If true, then a "Previous" and "Next" button will be displayed beneath the instructions.',
     },
     show_page_number: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Show page number",
       default: false,
       description:
         "If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons.",
     },
     page_label: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Page label",
       default: "Page",
       description:
         "The text that appears before x/y (current/total) pages displayed with show_page_number",
     },
     button_label_previous: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button label previous",
       default: "Previous",
       description: "The text that appears on the button to go backwards.",
     },
     button_label_next: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button label next",
       default: "Next",
       description: "The text that appears on the button to go forwards.",
@@ -210,7 +210,7 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
       };
 
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     const after_response = (info) => {
       // have to reinitialize this instead of letting it persist to prevent accidental skips of pages by holding down keys too long

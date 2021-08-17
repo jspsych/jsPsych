@@ -1,75 +1,75 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "virtual-chinrest",
   parameters: {
     /* What units to resize to? ["none"/"cm"/"inch"/"deg"]. If "none", no resizing will be done to the jsPsych content after this trial. */
     resize_units: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Resize units",
-      default: "none"
+      default: "none",
     },
     /* After the scaling factor is applied, this many pixels will equal one unit of measurement. */
     pixels_per_unit: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Pixels per unit",
-      default: 100
+      default: 100,
     },
     // mouse_adjustment: {
-    //   type: parameterType.BOOL,
+    //   type: ParameterType.BOOL,
     //   pretty_name: "Adjust Using Mouse?",
     //   default: true,
     // },
     /* Any content here will be displayed above the card stimulus. */
     adjustment_prompt: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Adjustment prompt",
       default: `
           <div style="text-align: left;">
           <p>Click and drag the lower right corner of the image until it is the same size as a credit card held up to the screen.</p>
           <p>You can use any card that is the same size as a credit card, like a membership card or driver's license.</p>
           <p>If you do not have access to a real card you can use a ruler to measure the image width to 3.37 inches or 85.6 mm.</p>
-          </div>`
+          </div>`,
     },
     /* Content of the button displayed below the card stimulus. */
     adjustment_button_prompt: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Adjustment button prompt",
-      default: "Click here when the image is the correct size"
+      default: "Click here when the image is the correct size",
     },
     /* Path to an image to be shown in the resizable item div. */
     item_path: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Item path",
-      default: "img/card.png"
+      default: "img/card.png",
     },
     /* The height of the item to be measured, in mm. */
     item_height_mm: {
-      type: parameterType.FLOAT,
+      type: ParameterType.FLOAT,
       pretty_name: "Item height (mm)",
-      default: 53.98
+      default: 53.98,
     },
     /* The width of the item to be measured, in mm. */
     item_width_mm: {
-      type: parameterType.FLOAT,
+      type: ParameterType.FLOAT,
       pretty_name: "Item width (mm)",
-      default: 85.6
+      default: 85.6,
     },
     /* The initial size of the card, in pixels, along the largest dimension. */
     item_init_size: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Initial Size",
-      default: 250
+      default: 250,
     },
     /* How many times to measure the blindspot location? If 0, blindspot will not be detected, and viewing distance and degree data not computed. */
     blindspot_reps: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Blindspot measurement repetitions",
-      default: 5
+      default: 5,
     },
     /* HTML-formatted prompt to be shown on the screen during blindspot estimates. */
     blindspot_prompt: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Blindspot prompt",
       default: `
           <p>Now we will quickly measure how far away you are sitting.</p>
@@ -82,40 +82,40 @@ const info = <const>{
             </ol>
           </div>
           <p>Press the space bar when you are ready to begin.</p>
-          `
+          `,
     },
     /* Content of the start button for the blindspot tasks. */
     // blindspot_start_prompt: {
-    //   type: parameterType.HTML_STRING,
+    //   type: ParameterType.HTML_STRING,
     //   pretty_name: "Blindspot start prompt",
     //   default: "Start"
     // },
     /* Text accompanying the remaining measurements counter. */
     blindspot_measurements_prompt: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Blindspot measurements prompt",
-      default: "Remaining measurements: "
+      default: "Remaining measurements: ",
     },
     /* HTML-formatted string for reporting the distance estimage. It can contain a span with ID 'distance-estimate', which will be replaced with the distance estimate. If "none" is given, viewing distance will not be reported to the participant. */
     viewing_distance_report: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Viewing distance report",
       default:
-        "<p>Based on your responses, you are sitting about <span id='distance-estimate' style='font-weight: bold;'></span> from the screen.</p><p>Does that seem about right?</p>"
+        "<p>Based on your responses, you are sitting about <span id='distance-estimate' style='font-weight: bold;'></span> from the screen.</p><p>Does that seem about right?</p>",
     },
     /* Label for the button that can be clicked on the viewing distance report screen to re-do the blindspot estimate(s). */
     redo_measurement_button_label: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Re-do measurement button label",
-      default: "No, that is not close. Try again."
+      default: "No, that is not close. Try again.",
     },
     /* Label for the button that can be clicked on the viewing distance report screen to accept the viewing distance estimate. */
     blindspot_done_prompt: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Blindspot done prompt",
-      default: "Yes"
-    }
-  }
+      default: "Yes",
+    },
+  },
 };
 
 type Info = typeof info;
@@ -141,7 +141,7 @@ declare global {
 class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     /* check parameter compatibility */
@@ -258,7 +258,9 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
       }
       display_element.addEventListener("mousemove", resizeevent);
 
-      display_element.querySelector("#end_resize_phase").addEventListener("click", finishResizePhase);
+      display_element
+        .querySelector("#end_resize_phase")
+        .addEventListener("click", finishResizePhase);
     }
 
     function finishResizePhase() {
@@ -293,7 +295,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
         allow_held_keys: false,
         persist: false,
       });
-    }
+    };
 
     const startBall = () => {
       const ball_position_listener = this.jsPsych.pluginAPI.getKeyboardResponse({
@@ -304,7 +306,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
         persist: true,
       });
       animateBall();
-    }
+    };
 
     const finishBlindSpotPhase = () => {
       window.ball.stop();
@@ -316,7 +318,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
       } else {
         showReport();
       }
-    }
+    };
 
     function showReport() {
       // Display data
@@ -327,13 +329,16 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
       )} inches)
         `;
 
-      display_element.querySelector("#redo_blindspot").addEventListener("click", startBlindSpotPhase);
+      display_element
+        .querySelector("#redo_blindspot")
+        .addEventListener("click", startBlindSpotPhase);
       display_element.querySelector("#proceed").addEventListener("click", endTrial);
     }
 
     function computeTransformation() {
       trial_data.item_width_deg =
-        (2 * Math.atan(trial_data["item_width_mm"] / 2 / trial_data["view_dist_mm"]) * 180) / Math.PI;
+        (2 * Math.atan(trial_data["item_width_mm"] / 2 / trial_data["view_dist_mm"]) * 180) /
+        Math.PI;
       trial_data.px2deg = trial_data["item_width_px"] / trial_data.item_width_deg; // size of item in pixels divided by size of item in degrees of visual angle
 
       let px2unit_scr = 0;
@@ -387,7 +392,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
 
       // finish the trial
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     function getScaledItemWidth() {
       return document.querySelector("#item").getBoundingClientRect().width;
@@ -466,9 +471,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
     const deg_to_radians = (degrees: number) => {
       return (degrees * Math.PI) / 180;
     };
-
-  };
-  
+  }
 }
 
 export default VirtualChinrestPlugin;

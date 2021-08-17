@@ -43,7 +43,7 @@
   var trial_3 = {
     type: jsPsychAudioKeyboardResponse,
     stimulus: 'sound/speech_red.mp3',
-    choices: jsPsych.NO_KEYS,
+    choices: "NO_KEYS",
     trial_duration: 2000,
     prompt: '<p>No response allowed. 2s wait.</p>'
   }
@@ -51,7 +51,7 @@
   trial_4 = {
     type: jsPsychAudioKeyboardResponse,
     stimulus: 'sound/speech_joke.mp3',
-    choices: jsPsych.ALL_KEYS,
+    choices: "ALL_KEYS",
     prompt: '<p>When the audio stops, press any key to end the trial.</p><p>Responses made while the audio is still playing will be ignored.</p>',
     response_allowed_while_playing: false
   }

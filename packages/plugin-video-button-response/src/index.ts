@@ -1,115 +1,114 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "video-button-response",
   parameters: {
     /* Array of the video file(s) to play. Video can be provided in multiple file formats for better cross-browser support. */
     stimulus: {
-      type: parameterType.VIDEO,
+      type: ParameterType.VIDEO,
       pretty_name: "Video",
       default: undefined,
-      array: true,
-      preload: true
+      array: true
     },
     /* The labels for the buttons. */
     choices: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Choices",
       default: undefined,
-      array: true
+      array: true,
     },
     /* The html of the button. Can create own style. */
     button_html: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button HTML",
       default: '<button class="jspsych-btn">%choice%</button>',
-      array: true
+      array: true,
     },
     /* Any content here will be displayed below the buttons. */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
-      default: null
+      default: null,
     },
     /* The width of the video in pixels. */
     width: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Width",
-      default: ""
+      default: "",
     },
     /* The height of the video display in pixels. */
     height: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Height",
-      default: ""
+      default: "",
     },
     /* If true, the video will begin playing as soon as it has loaded. */
     autoplay: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Autoplay",
-      default: true
+      default: true,
     },
     /* If true, the subject will be able to pause the video or move the playback to any point in the video. */
     controls: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Controls",
-      default: false
+      default: false,
     },
     /* Time to start the clip. If null (default), video will start at the beginning of the file. */
     start: {
-      type: parameterType.FLOAT,
+      type: ParameterType.FLOAT,
       pretty_name: "Start",
-      default: null
+      default: null,
     },
     /* Time to stop the clip. If null (default), video will stop at the end of the file. */
     stop: {
-      type: parameterType.FLOAT,
+      type: ParameterType.FLOAT,
       pretty_name: "Stop",
-      default: null
+      default: null,
     },
     /* The playback rate of the video. 1 is normal, <1 is slower, >1 is faster. */
     rate: {
-      type: parameterType.FLOAT,
+      type: ParameterType.FLOAT,
       pretty_name: "Rate",
-      default: 1
+      default: 1,
     },
     /* If true, the trial will end immediately after the video finishes playing. */
     trial_ends_after_video: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "End trial after video finishes",
-      default: false
+      default: false,
     },
     /* How long to show trial before it ends. */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: null
+      default: null,
     },
     /* The vertical margin of the button. */
     margin_vertical: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Margin vertical",
-      default: "0px"
+      default: "0px",
     },
     /* The horizontal margin of the button. */
     margin_horizontal: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Margin horizontal",
-      default: "8px"
+      default: "8px",
     },
     /* If true, the trial will end when subject makes a response. */
     response_ends_trial: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
-      default: true
+      default: true,
     },
     /* If true, then responses are allowed while the video is playing. If false, then the video must finish playing before a response is accepted. */
     response_allowed_while_playing: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response allowed while playing",
-      default: true
-    }
-  }
+      default: true,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -126,7 +125,7 @@ type Info = typeof info;
 class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // setup stimulus
@@ -164,7 +163,9 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
         var type = file_name.substr(file_name.lastIndexOf(".") + 1);
         type = type.toLowerCase();
         if (type == "mov") {
-          console.warn("Warning: video-button-response plugin does not reliably support .mov files.");
+          console.warn(
+            "Warning: video-button-response plugin does not reliably support .mov files."
+          );
         }
         video_html += '<source src="' + file_name + '" type="video/' + type + '">';
       }
@@ -214,7 +215,9 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     var start_time = performance.now();
 
-    var video_element = display_element.querySelector<HTMLVideoElement>("#jspsych-video-button-response-stimulus");
+    var video_element = display_element.querySelector<HTMLVideoElement>(
+      "#jspsych-video-button-response-stimulus"
+    );
 
     if (video_preload_blob) {
       video_element.src = video_preload_blob;
@@ -271,9 +274,12 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // stop the video file if it is playing
       // remove any remaining end event handlers
-      display_element.querySelector<HTMLVideoElement>("#jspsych-video-button-response-stimulus").pause();
-      display_element.querySelector<HTMLVideoElement>("#jspsych-video-button-response-stimulus").onended =
-        function () {};
+      display_element
+        .querySelector<HTMLVideoElement>("#jspsych-video-button-response-stimulus")
+        .pause();
+      display_element.querySelector<HTMLVideoElement>(
+        "#jspsych-video-button-response-stimulus"
+      ).onended = function () {};
 
       // gather the data to store for the trial
       var trial_data = {
@@ -287,7 +293,7 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     // function to handle responses by the subject
     function after_response(choice: string) {
@@ -342,7 +348,7 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
         end_trial();
       }, trial.trial_duration);
     }
-  };
+  }
 }
 
 export default VideoButtonResponsePlugin;

@@ -1,4 +1,4 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "vsl-animate-occlusion",
@@ -6,59 +6,58 @@ const info = <const>{
   parameters: {
     /* A stimulus is a path to an image file. */
     stimuli: {
-      type: parameterType.IMAGE,
+      type: ParameterType.IMAGE,
       pretty_name: "Stimuli",
       default: undefined,
-      array: true,
-      preload: true
+      array: true
     },
     /* This array contains the keys that the subject is allowed to press in order to respond to the stimulus. */
     choices: {
-      type: parameterType.KEY,
+      type: ParameterType.KEYS,
       pretty_name: "Choices",
       array: true,
-      default: "ALL_KEYS"
+      default: "ALL_KEYS",
     },
     /* Array specifying the width and height of the area that the animation will display in. */
     canvas_size: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Canvas size",
       array: true,
-      default: [400, 400]
+      default: [400, 400],
     },
     /* Array specifying the width and height of the images to show. */
     image_size: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Image size",
       array: true,
-      default: [100, 100]
+      default: [100, 100],
     },
     /* Which direction the stimulus should move first. */
     initial_direction: {
-      type: parameterType.SELECT,
+      type: ParameterType.SELECT,
       pretty_name: "Initial direction",
       choices: ["left", "right"],
-      default: "left"
+      default: "left",
     },
     /* If true, display a rectangle in the center of the screen that is just wide enough to occlude the image completely as it passes behind. */
     occlude_center: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Occlude center",
-      default: true
+      default: true,
     },
     /* How long it takes for a stimulus in the sequence to make a complete cycle. */
     cycle_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Cycle duration",
-      default: 1000
+      default: 1000,
     },
     /* How long to wait before the stimuli starts moving from behind the center rectangle. */
     pre_movement_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Pre movement duration",
-      default: 500
-    }
-  }
+      default: 500,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -78,7 +77,7 @@ type Info = typeof info;
 class VslAnimateOcclusionPlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // variable to keep track of timing info and responses
@@ -185,7 +184,7 @@ class VslAnimateOcclusionPlugin implements JsPsychPlugin<Info> {
     }
 
     // add key listener
-    var after_response = function(info: {key: string, rt: number}) {
+    var after_response = function (info: { key: string; rt: number }) {
       responses.push({
         key: info.key,
         stimulus: which_image - 1,
@@ -220,8 +219,8 @@ class VslAnimateOcclusionPlugin implements JsPsychPlugin<Info> {
       };
 
       this.jsPsych.finishTrial(trial_data);
-    }
-  };
+    };
+  }
 }
 
 export default VslAnimateOcclusionPlugin;

@@ -1,97 +1,96 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "categorize-image",
   parameters: {
     stimulus: {
-      type: parameterType.IMAGE,
+      type: ParameterType.IMAGE,
       pretty_name: "Stimulus",
       default: undefined,
-      description: "The image content to be displayed.",
-      preload: true
+      description: "The image content to be displayed."
     },
     key_answer: {
-      type: parameterType.KEY,
+      type: ParameterType.KEY,
       pretty_name: "Key answer",
       default: undefined,
       description: "The key to indicate the correct response.",
     },
     choices: {
-      type: parameterType.KEY,
+      type: ParameterType.KEYS,
       pretty_name: "Choices",
-      default: "allkeys",
+      default: "ALL_KEYS",
       array: true,
       description: "The keys the subject is allowed to press to respond to the stimulus.",
     },
     text_answer: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Text answer",
       default: null,
       description: "Label that is associated with the correct answer.",
     },
     correct_text: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Correct text",
       default: "<p class='feedback'>Correct</p>",
       description: "String to show when correct answer is given.",
     },
     incorrect_text: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Incorrect text",
       default: "<p class='feedback'>Incorrect</p>",
       description: "String to show when incorrect answer is given.",
     },
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
       default: null,
       description: "Any content here will be displayed below the stimulus.",
     },
     force_correct_button_press: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Force correct button press",
       default: false,
       description:
         "If set to true, then the subject must press the correct response key after feedback in order to advance to next trial.",
     },
     show_stim_with_feedback: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       default: true,
       no_function: false,
       description: "",
     },
     show_feedback_on_timeout: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Show feedback on timeout",
       default: false,
       description:
         "If true, stimulus will be shown during feedback. If false, only the text feedback will be displayed during feedback.",
     },
     timeout_message: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Timeout message",
       default: "<p>Please respond faster.</p>",
       description: "The message displayed on a timeout non-response.",
     },
     stimulus_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Stimulus duration",
       default: null,
       description: "How long to hide stimulus.",
     },
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
       description: "How long to show trial",
     },
     feedback_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Feedback duration",
       default: 2000,
       description: "How long to show feedback.",
-    }
-  }
+    },
+  },
 };
 
 type Info = typeof info;
@@ -116,8 +115,9 @@ class CategorizeImagePlugin implements JsPsychPlugin<Info> {
     // hide image after time if the timing parameter is set
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(function () {
-        display_element.querySelector<HTMLElement>("#jspsych-categorize-image-stimulus").style.visibility =
-          "hidden";
+        display_element.querySelector<HTMLElement>(
+          "#jspsych-categorize-image-stimulus"
+        ).style.visibility = "hidden";
       }, trial.stimulus_duration);
     }
 
@@ -129,7 +129,7 @@ class CategorizeImagePlugin implements JsPsychPlugin<Info> {
     var trial_data = {};
 
     // create response function
-    const after_response = (info: {key: string, rt: number}) => {
+    const after_response = (info: { key: string; rt: number }) => {
       // kill any remaining setTimeout handlers
       this.jsPsych.pluginAPI.clearAllTimeouts();
 
@@ -175,7 +175,7 @@ class CategorizeImagePlugin implements JsPsychPlugin<Info> {
     const endTrial = () => {
       display_element.innerHTML = "";
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     const doFeedback = (correct, timeout) => {
       if (timeout && !trial.show_feedback_on_timeout) {
@@ -222,7 +222,8 @@ class CategorizeImagePlugin implements JsPsychPlugin<Info> {
           endTrial();
         }, trial.feedback_duration);
       }
-    }
-  }}
+    };
+  }
+}
 
 export default CategorizeImagePlugin;

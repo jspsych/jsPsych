@@ -1,137 +1,136 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "video-slider-response",
   parameters: {
     /* Array of the video file(s) to play. Video can be provided in multiple file formats for better cross-browser support. */
     stimulus: {
-      type: parameterType.VIDEO,
+      type: ParameterType.VIDEO,
       pretty_name: "Video",
-      default: undefined,
-      preload: true
+      default: undefined
     },
     /* Any content here will be displayed below the stimulus. */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
-      default: null
+      default: null,
     },
     /* The width of the video in pixels. */
     width: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Width",
-      default: ""
+      default: "",
     },
     /* The height of the video display in pixels. */
     height: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Height",
-      default: ""
+      default: "",
     },
     /* If true, the video will begin playing as soon as it has loaded. */
     autoplay: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Autoplay",
-      default: true
+      default: true,
     },
     /* If true, the subject will be able to pause the video or move the playback to any point in the video. */
     controls: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Controls",
-      default: false
+      default: false,
     },
     /* Time to start the clip. If null (default), video will start at the beginning of the file. */
     start: {
-      type: parameterType.FLOAT,
+      type: ParameterType.FLOAT,
       pretty_name: "Start",
-      default: null
+      default: null,
     },
     /* Time to stop the clip. If null (default), video will stop at the end of the file. */
     stop: {
-      type: parameterType.FLOAT,
+      type: ParameterType.FLOAT,
       pretty_name: "Stop",
-      default: null
+      default: null,
     },
     /* The playback rate of the video. 1 is normal, <1 is slower, >1 is faster. */
     rate: {
-      type: parameterType.FLOAT,
+      type: ParameterType.FLOAT,
       pretty_name: "Rate",
-      default: 1
+      default: 1,
     },
     /* Sets the minimum value of the slider. */
     min: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Min slider",
-      default: 0
+      default: 0,
     },
     /* Sets the maximum value of the slider. */
     max: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Max slider",
-      default: 100
+      default: 100,
     },
     /* Sets the starting value of the slider. */
     slider_start: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Slider starting value",
-      default: 50
+      default: 50,
     },
     /* Sets the step of the slider. */
     step: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Step",
-      default: 1
+      default: 1,
     },
     /* Labels of the slider. */
     labels: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Labels",
       default: [],
-      array: true
+      array: true,
     },
     /* Width of the slider in pixels. */
     slider_width: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Slider width",
-      default: null
+      default: null,
     },
     /* Label of the button to advance. */
     button_label: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button label",
-      default: "Continue"
+      default: "Continue",
     },
     /* If true, the participant will have to move the slider before continuing. */
     require_movement: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Require movement",
-      default: false
+      default: false,
     },
     /* If true, the trial will end immediately after the video finishes playing. */
     trial_ends_after_video: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "End trial after video finishes",
-      default: false
+      default: false,
     },
     /* How long to show trial before it ends. */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: null
+      default: null,
     },
     /* If true, the trial will end when subject makes a response. */
     response_ends_trial: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
-      default: true
+      default: true,
     },
     /* If true, then responses are allowed while the video is playing. If false, then the video must finish playing before a response is accepted. */
     response_allowed_while_playing: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response allowed while playing",
-      default: true
-    }
-  }
+      default: true,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -148,7 +147,7 @@ type Info = typeof info;
 class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // half of the thumb width value from jspsych.css, used to adjust the label positions
@@ -188,7 +187,9 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
         var type = file_name.substr(file_name.lastIndexOf(".") + 1);
         type = type.toLowerCase();
         if (type == "mov") {
-          console.warn("Warning: video-slider-response plugin does not reliably support .mov files.");
+          console.warn(
+            "Warning: video-slider-response plugin does not reliably support .mov files."
+          );
         }
         video_html += '<source src="' + file_name + '" type="video/' + type + '">';
       }
@@ -305,7 +306,9 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
       display_element
         .querySelector("#jspsych-video-slider-response-response")
         .addEventListener("click", function () {
-          display_element.querySelector<HTMLButtonElement>("#jspsych-video-slider-response-next").disabled = false;
+          display_element.querySelector<HTMLButtonElement>(
+            "#jspsych-video-slider-response-next"
+          ).disabled = false;
         });
     }
 
@@ -324,9 +327,12 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
 
       // stop the video file if it is playing
       // remove any remaining end event handlers
-      display_element.querySelector<HTMLVideoElement>("#jspsych-video-slider-response-stimulus-video").pause();
-      display_element.querySelector<HTMLVideoElement>("#jspsych-video-slider-response-stimulus-video").onended =
-        function () {};
+      display_element
+        .querySelector<HTMLVideoElement>("#jspsych-video-slider-response-stimulus-video")
+        .pause();
+      display_element.querySelector<HTMLVideoElement>(
+        "#jspsych-video-slider-response-stimulus-video"
+      ).onended = function () {};
 
       // gather the data to store for the trial
       var trial_data = {
@@ -342,7 +348,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     display_element
       .querySelector("#jspsych-video-slider-response-next")
@@ -357,7 +363,9 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
         if (trial.response_ends_trial) {
           end_trial();
         } else {
-          display_element.querySelector<HTMLButtonElement>("#jspsych-video-slider-response-next").disabled = true;
+          display_element.querySelector<HTMLButtonElement>(
+            "#jspsych-video-slider-response-next"
+          ).disabled = true;
         }
       });
 
@@ -367,8 +375,9 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
         document.querySelector("#jspsych-video-slider-response-response") as HTMLInputElement
       ).disabled = false;
       if (!trial.require_movement) {
-        (document.querySelector("#jspsych-video-slider-response-next") as HTMLInputElement).disabled =
-          false;
+        (
+          document.querySelector("#jspsych-video-slider-response-next") as HTMLInputElement
+        ).disabled = false;
       }
     }
 
@@ -378,7 +387,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
         end_trial();
       }, trial.trial_duration);
     }
-  };
+  }
 }
 
 export default VideoSliderResponsePlugin;

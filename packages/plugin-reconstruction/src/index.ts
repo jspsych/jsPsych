@@ -1,45 +1,45 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "reconstruction",
   parameters: {
     /* A function with a single parameter that returns an HTML-formatted string representing the stimulus. */
     stim_function: {
-      type: parameterType.FUNCTION,
+      type: ParameterType.FUNCTION,
       pretty_name: "Stimulus function",
-      default: undefined
+      default: undefined,
     },
     /* The starting value of the stimulus parameter. */
     starting_value: {
-      type: parameterType.FLOAT,
+      type: ParameterType.FLOAT,
       pretty_name: "Starting value",
-      default: 0.5
+      default: 0.5,
     },
     /* The change in the stimulus parameter caused by pressing one of the modification keys. */
     step_size: {
-      type: parameterType.FLOAT,
+      type: ParameterType.FLOAT,
       pretty_name: "Step size",
-      default: 0.05
+      default: 0.05,
     },
     /* The key to press for increasing the parameter value. */
     key_increase: {
-      type: parameterType.KEY,
+      type: ParameterType.KEY,
       pretty_name: "Key increase",
-      default: "h"
+      default: "h",
     },
     /* The key to press for decreasing the parameter value. */
     key_decrease: {
-      type: parameterType.KEY,
+      type: ParameterType.KEY,
       pretty_name: "Key decrease",
-      default: "g"
+      default: "g",
     },
     /* The text that appears on the button to finish the trial. */
     button_label: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button label",
-      default: "Continue"
-    }
-  }
+      default: "Continue",
+    },
+  },
 };
 
 type Info = typeof info;
@@ -57,7 +57,7 @@ type Info = typeof info;
 class ReconstructionPlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // current param level
@@ -82,7 +82,7 @@ class ReconstructionPlugin implements JsPsychPlugin<Info> {
 
       // next trial
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     const draw = (param: number) => {
       //console.log(param);
@@ -99,10 +99,10 @@ class ReconstructionPlugin implements JsPsychPlugin<Info> {
       display_element
         .querySelector("#jspsych-reconstruction-next")
         .addEventListener("click", endTrial);
-    }
+    };
 
     // set-up key listeners
-    const after_response = (info: {key: string, rt: number}) => {
+    const after_response = (info: { key: string; rt: number }) => {
       //console.log('fire');
 
       var key_i = trial.key_increase;
@@ -128,7 +128,7 @@ class ReconstructionPlugin implements JsPsychPlugin<Info> {
       persist: true,
       allow_held_key: true,
     });
-    
+
     // draw first iteration
     draw(param);
 

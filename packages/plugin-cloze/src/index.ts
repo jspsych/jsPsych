@@ -1,33 +1,33 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "cloze",
   parameters: {
     /* The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. %solution%). */
     text: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Cloze text",
-      default: undefined
+      default: undefined,
     },
     /* Text of the button participants have to press for finishing the cloze test. */
     button_text: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button text",
-      default: "OK"
+      default: "OK",
     },
     /* Boolean value indicating if the answers given by participants should be compared against a correct solution given in the text (between % signs) after the button was clicked. */
     check_answers: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Check answers",
-      default: false
+      default: false,
     },
     /* Function called if check_answers is set to TRUE and there is a difference between the participants answers and the correct solution provided in the text. */
     mistake_fn: {
-      type: parameterType.FUNCTION,
+      type: ParameterType.FUNCTION,
       pretty_name: "Mistake function",
-      default: function () {}
-    }
-  }
+      default: function () {},
+    },
+  },
 };
 
 type Info = typeof info;
@@ -97,7 +97,7 @@ class ClozePlugin implements JsPsychPlugin<Info> {
       trial.button_text +
       "</button>";
     display_element.querySelector("#finish_cloze_button").addEventListener("click", check);
-  };
+  }
 }
 
 export default ClozePlugin;

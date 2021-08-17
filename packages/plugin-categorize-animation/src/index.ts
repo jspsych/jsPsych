@@ -1,84 +1,83 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "categorize-animation",
   parameters: {
     /* Array of paths to image files. */
     stimuli: {
-      type: parameterType.IMAGE,
+      type: ParameterType.IMAGE,
       pretty_name: "Stimuli",
-      default: undefined,
-      preload: true
+      default: undefined
     },
     /* The key to indicate correct response */
     key_answer: {
-      type: parameterType.KEY,
+      type: ParameterType.KEY,
       pretty_name: "Key answer",
-      default: undefined
+      default: undefined,
     },
     /* The keys subject is allowed to press to respond to stimuli. */
     choices: {
-      type: parameterType.KEY,
+      type: ParameterType.KEYS,
       pretty_name: "Choices",
-      default: "allkeys",
-      array: true
+      default: "ALL_KEYS",
+      array: true,
     },
     /* Text to describe correct answer. */
     text_answer: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Text answer",
-      default: null
+      default: null,
     },
     /* String to show when subject gives correct answer */
     correct_text: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Correct text",
-      default: "Correct."
+      default: "Correct.",
     },
     /* String to show when subject gives incorrect answer. */
     incorrect_text: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Incorrect text",
-      default: "Wrong."
+      default: "Wrong.",
     },
     /* Duration to display each image. */
     frame_time: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Frame time",
-      default: 500
+      default: 500,
     },
     /* How many times to display entire sequence. */
     sequence_reps: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Sequence repetitions",
-      default: 1
+      default: 1,
     },
     /* If true, subject can response before the animation sequence finishes */
     allow_response_before_complete: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Allow response before complete",
-      default: false
+      default: false,
     },
     /* How long to show feedback */
     feedback_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Feedback duration",
-      default: 2000
+      default: 2000,
     },
     /* Any content here will be displayed below the stimulus. */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
-      default: null
+      default: null,
     },
     /* If true, the images will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
     If false, the image will be shown via an img element. */
     render_on_canvas: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Render on canvas",
-      default: true
-    }
-  }
+      default: true,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -147,8 +146,9 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
 
       if (showAnimation) {
         if (trial.render_on_canvas) {
-          display_element.querySelector<HTMLElement>("#jspsych-categorize-animation-stimulus").style.visibility =
-            "visible";
+          display_element.querySelector<HTMLElement>(
+            "#jspsych-categorize-animation-stimulus"
+          ).style.visibility = "visible";
           var img = new Image();
           img.src = trial.stimuli[animate_frame];
           canvas.height = img.naturalHeight;
@@ -224,13 +224,13 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
       clearInterval(animate_interval); // stop animation!
       display_element.innerHTML = ""; // clear everything
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     var keyboard_listener;
     var trial_data = {};
 
     // @ts-ignore Error is: Unreachable code detected: Not all code paths return a value
-    const after_response = (info: {key: string, rt: number}) => {
+    const after_response = (info: { key: string; rt: number }) => {
       // ignore the response if animation is playing and subject
       // not allowed to respond before it is complete
       if (!trial.allow_response_before_complete && showAnimation) {
@@ -261,7 +261,6 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
       persist: true,
       allow_held_key: false,
     });
-
   }
 }
 

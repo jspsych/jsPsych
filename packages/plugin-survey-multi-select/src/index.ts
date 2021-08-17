@@ -1,79 +1,79 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "survey-multi-select",
   parameters: {
     /* Array containing one or more objects with parameters for the question(s) that should be shown on the page. */
     questions: {
-      type: parameterType.COMPLEX,
+      type: ParameterType.COMPLEX,
       array: true,
       pretty_name: "Questions",
       nested: {
         /* Question prompt. */
         prompt: {
-          type: parameterType.STRING,
+          type: ParameterType.STRING,
           pretty_name: "Prompt",
-          default: undefined
+          default: undefined,
         },
         /* Array of multiple select options for this question. */
         options: {
-          type: parameterType.STRING,
+          type: ParameterType.STRING,
           pretty_name: "Options",
           array: true,
-          default: undefined
+          default: undefined,
         },
         /* If true, then the question will be centered and options will be displayed horizontally. */
         horizontal: {
-          type: parameterType.BOOL,
+          type: ParameterType.BOOL,
           pretty_name: "Horizontal",
-          default: false
+          default: false,
         },
         /* Whether or not a response to this question must be given in order to continue. */
         required: {
-          type: parameterType.BOOL,
+          type: ParameterType.BOOL,
           pretty_name: "Required",
-          default: false
+          default: false,
         },
         /* Name of the question in the trial data. If no name is given, the questions are named Q0, Q1, etc. */
         name: {
-          type: parameterType.STRING,
+          type: ParameterType.STRING,
           pretty_name: "Question Name",
-          default: ""
-        }
-      }
+          default: "",
+        },
+      },
     },
     /* If true, the order of the questions in the 'questions' array will be randomized. */
     randomize_question_order: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Randomize Question Order",
-      default: false
+      default: false,
     },
     /* HTML-formatted string to display at top of the page above all of the questions. */
     preamble: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Preamble",
-      default: null
+      default: null,
     },
     /* Label of the button to submit responses. */
     button_label: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button label",
       default: "Continue",
       description: "Label of the button.",
     },
     /* Message that will be displayed if one or more required questions is not answered. */
     required_message: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Required message",
-      default: "You must choose at least one response for this question"
+      default: "You must choose at least one response for this question",
     },
     /* Setting this to true will enable browser auto-complete or auto-fill for the form. */
     autocomplete: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Allow autocomplete",
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -88,7 +88,7 @@ type Info = typeof info;
 class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var plugin_id_name = "jspsych-survey-multi-select";
@@ -105,7 +105,8 @@ class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
       ".jspsych-survey-multi-select-option { line-height: 2; }" +
       ".jspsych-survey-multi-select-horizontal .jspsych-survey-multi-select-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}" +
       "label.jspsych-survey-multi-select-text input[type='checkbox'] {margin-right: 1em;}";
-    display_element.innerHTML = '<style id="jspsych-survey-multi-select-css">' + cssstr + "</style>";
+    display_element.innerHTML =
+      '<style id="jspsych-survey-multi-select-css">' + cssstr + "</style>";
 
     // form element
     var trial_form_id = _join(plugin_id_name, "form");
@@ -210,8 +211,9 @@ class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
         for (var i = 0; i < trial.questions.length; i++) {
           if (trial.questions[i].required) {
             if (
-              display_element.querySelector("#jspsych-survey-multi-select-" + i + " input:checked") ==
-              null
+              display_element.querySelector(
+                "#jspsych-survey-multi-select-" + i + " input:checked"
+              ) == null
             ) {
               display_element
                 .querySelector<HTMLInputElement>("#jspsych-survey-multi-select-" + i + " input")
@@ -271,7 +273,7 @@ class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
     });
 
     var startTime = performance.now();
-  };
+  }
 }
 
 export default SurveyMultiSelectPlugin;

@@ -1,115 +1,114 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "image-slider-response",
   parameters: {
     /* The image to be displayed */
     stimulus: {
-      type: parameterType.IMAGE,
+      type: ParameterType.IMAGE,
       pretty_name: "Stimulus",
-      default: undefined,
-      preload: true
+      default: undefined
     },
     /* Set the image height in pixels */
     stimulus_height: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Image height",
-      default: null
+      default: null,
     },
     /* Set the image width in pixels */
     stimulus_width: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Image width",
-      default: null
+      default: null,
     },
     /* Maintain the aspect ratio after setting width or height */
     maintain_aspect_ratio: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Maintain aspect ratio",
-      default: true
+      default: true,
     },
     /* Sets the minimum value of the slider. */
     min: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Min slider",
-      default: 0
+      default: 0,
     },
     /* Sets the maximum value of the slider */
     max: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Max slider",
-      default: 100
+      default: 100,
     },
     /* Sets the starting value of the slider */
     slider_start: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Slider starting value",
-      default: 50
+      default: 50,
     },
     /* Sets the step of the slider */
     step: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Step",
-      default: 1
+      default: 1,
     },
     /* Labels of the slider. */
     labels: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Labels",
       default: [],
-      array: true
+      array: true,
     },
     /* Width of the slider in pixels. */
     slider_width: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Slider width",
-      default: null
+      default: null,
     },
     /* Label of the button to advance. */
     button_label: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button label",
       default: "Continue",
-      array: false
+      array: false,
     },
     /* If true, the participant will have to move the slider before continuing. */
     require_movement: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Require movement",
-      default: false
+      default: false,
     },
     /* Any content here will be displayed below the slider. */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
-      default: null
+      default: null,
     },
     /* How long to hide the stimulus. */
     stimulus_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Stimulus duration",
-      default: null
+      default: null,
     },
     /* How long to show the trial. */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: null
+      default: null,
     },
     /* If true, trial will end when user makes a response. */
     response_ends_trial: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
-      default: true
+      default: true,
     },
     /* If true, the image will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
     If false, the image will be shown via an img element. */
     render_on_canvas: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Render on canvas",
-      default: true
-    }
-  }
+      default: true,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -356,7 +355,9 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
       display_element
         .querySelector("#jspsych-image-slider-response-response")
         .addEventListener("click", function () {
-          display_element.querySelector<HTMLButtonElement>("#jspsych-image-slider-response-next").disabled = false;
+          display_element.querySelector<HTMLButtonElement>(
+            "#jspsych-image-slider-response-next"
+          ).disabled = false;
         });
     }
 
@@ -375,7 +376,7 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
 
       // next trial
       this.jsPsych.finishTrial(trialdata);
-    }
+    };
 
     display_element
       .querySelector("#jspsych-image-slider-response-next")
@@ -390,14 +391,17 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
         if (trial.response_ends_trial) {
           end_trial();
         } else {
-          display_element.querySelector<HTMLButtonElement>("#jspsych-image-slider-response-next").disabled = true;
+          display_element.querySelector<HTMLButtonElement>(
+            "#jspsych-image-slider-response-next"
+          ).disabled = true;
         }
       });
 
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(function () {
-        display_element.querySelector<HTMLElement>("#jspsych-image-slider-response-stimulus").style.visibility =
-          "hidden";
+        display_element.querySelector<HTMLElement>(
+          "#jspsych-image-slider-response-stimulus"
+        ).style.visibility = "hidden";
       }, trial.stimulus_duration);
     }
 
@@ -409,7 +413,7 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
     }
 
     var startTime = performance.now();
-  };
+  }
 }
 
 export default ImageSliderResponsePlugin;

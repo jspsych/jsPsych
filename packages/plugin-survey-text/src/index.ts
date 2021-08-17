@@ -1,71 +1,77 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "survey-text",
   parameters: {
     questions: {
-      type: parameterType.COMPLEX,
+      type: ParameterType.COMPLEX,
       array: true,
       pretty_name: "Questions",
       default: undefined,
       nested: {
         /* Question prompt. */
         prompt: {
-          type: parameterType.STRING,
+          type: ParameterType.STRING,
           pretty_name: "Prompt",
-          default: undefined
+          default: undefined,
         },
         /* Placeholder text in the response text box. */
         placeholder: {
-          type: parameterType.STRING,
+          type: ParameterType.STRING,
           pretty_name: "Placeholder",
-          default: ""
+          default: "",
         },
         /* The number of rows for the response text box. */
         rows: {
-          type: parameterType.INT,
+          type: ParameterType.INT,
           pretty_name: "Rows",
-          default: 1
+          default: 1,
         },
         /* The number of columns for the response text box. */
         columns: {
-          type: parameterType.INT,
+          type: ParameterType.INT,
           pretty_name: "Columns",
-          default: 40
+          default: 40,
         },
         /* Whether or not a response to this question must be given in order to continue. */
         required: {
-          type: parameterType.BOOL,
+          type: ParameterType.BOOL,
           pretty_name: "Required",
-          default: false
+          default: false,
         },
         /* Name of the question in the trial data. If no name is given, the questions are named Q0, Q1, etc. */
         name: {
-          type: parameterType.STRING,
+          type: ParameterType.STRING,
           pretty_name: "Question Name",
-          default: ""
-        }
-      }
+          default: "",
+        },
+      },
+    },
+    /* If true, the order of the questions in the 'questions' array will be randomized. */
+    randomize_question_order: {
+      type: ParameterType.BOOL,
+      pretty_name: "Randomize Question Order",
+      default: false,
     },
     /* HTML-formatted string to display at top of the page above all of the questions. */
     preamble: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Preamble",
-      default: null
+      default: null,
     },
     /* Label of the button to submit responses. */
     button_label: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button label",
-      default: "Continue"
+      default: "Continue",
     },
     /* Setting this to true will enable browser auto-complete or auto-fill for the form. */
     autocomplete: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Allow autocomplete",
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -82,7 +88,7 @@ type Info = typeof info;
 class SurveyTextPlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     for (var i = 0; i < trial.questions.length; i++) {
@@ -187,45 +193,43 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
     // backup in case autofocus doesn't work
     display_element.querySelector<HTMLInputElement>("#input-" + question_order[0]).focus();
 
-    display_element
-      .querySelector("#jspsych-survey-text-form")
-      .addEventListener("submit", (e) => {
-        e.preventDefault();
-        // measure response time
-        var endTime = performance.now();
-        var response_time = endTime - startTime;
+    display_element.querySelector("#jspsych-survey-text-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      // measure response time
+      var endTime = performance.now();
+      var response_time = endTime - startTime;
 
-        // create object to hold responses
-        var question_data = {};
+      // create object to hold responses
+      var question_data = {};
 
-        for (var index = 0; index < trial.questions.length; index++) {
-          var id = "Q" + index;
-          var q_element = document
-            .querySelector("#jspsych-survey-text-" + index)
-            .querySelector("textarea, input") as HTMLInputElement;
-          var val = q_element.value;
-          var name = q_element.attributes["data-name"].value;
-          if (name == "") {
-            name = id;
-          }
-          var obje = {};
-          obje[name] = val;
-          Object.assign(question_data, obje);
+      for (var index = 0; index < trial.questions.length; index++) {
+        var id = "Q" + index;
+        var q_element = document
+          .querySelector("#jspsych-survey-text-" + index)
+          .querySelector("textarea, input") as HTMLInputElement;
+        var val = q_element.value;
+        var name = q_element.attributes["data-name"].value;
+        if (name == "") {
+          name = id;
         }
-        // save data
-        var trialdata = {
-          rt: response_time,
-          response: question_data,
-        };
+        var obje = {};
+        obje[name] = val;
+        Object.assign(question_data, obje);
+      }
+      // save data
+      var trialdata = {
+        rt: response_time,
+        response: question_data,
+      };
 
-        display_element.innerHTML = "";
+      display_element.innerHTML = "";
 
-        // next trial
-        this.jsPsych.finishTrial(trialdata);
-      });
+      // next trial
+      this.jsPsych.finishTrial(trialdata);
+    });
 
     var startTime = performance.now();
-  };
+  }
 }
 
 export default SurveyTextPlugin;

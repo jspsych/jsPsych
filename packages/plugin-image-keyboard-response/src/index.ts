@@ -1,72 +1,71 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "image-keyboard-response",
   parameters: {
     /* The image to be displayed */
     stimulus: {
-      type: parameterType.IMAGE,
+      type: ParameterType.IMAGE,
       pretty_name: "Stimulus",
-      default: undefined,
-      preload: true
+      default: undefined
     },
     /* Set the image height in pixels */
     stimulus_height: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Image height",
-      default: null
+      default: null,
     },
     /* Set the image width in pixels */
     stimulus_width: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Image width",
-      default: null
+      default: null,
     },
     /* Maintain the aspect ratio after setting width or height */
     maintain_aspect_ratio: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Maintain aspect ratio",
-      default: true
+      default: true,
     },
     /* The keys the subject is allowed to press to respond to the stimulus. */
     choices: {
-      type: parameterType.KEY,
+      type: ParameterType.KEYS,
       array: true,
       pretty_name: "Choices",
-      default: "allkeys"
+      default: "ALL_KEYS",
     },
     /* Any content here will be displayed below the stimulus. */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
-      default: null
+      default: null,
     },
     /* How long to hide the stimulus. */
     stimulus_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Stimulus duration",
-      default: null
+      default: null,
     },
     /* How long to show trial before it ends */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: null
+      default: null,
     },
     /* If true, trial will end when subject makes a response. */
     response_ends_trial: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
-      default: true
+      default: true,
     },
     /* If true, the image will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
     If false, the image will be shown via an img element. */
     render_on_canvas: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Render on canvas",
-      default: true
-    }
-  }
+      default: true,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -232,7 +231,8 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
     // start the response listener
     // @ts-ignore: ignoring the error "This condition will always return 'true' since the types 'string[]' and 'string' have no overlap.ts(2367)" until we fix NO_KEYS/ALL_KEYS
-    if (trial.choices != this.jsPsych.NO_KEYS) {  // TO DO: is this right? "nokeys"?
+    if (trial.choices != "NO_KEYS") {
+      // TO DO: is this right? "nokeys"?
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,
@@ -245,8 +245,9 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     // hide stimulus if stimulus_duration is set
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(function () {
-        display_element.querySelector<HTMLElement>("#jspsych-image-keyboard-response-stimulus").style.visibility =
-          "hidden";
+        display_element.querySelector<HTMLElement>(
+          "#jspsych-image-keyboard-response-stimulus"
+        ).style.visibility = "hidden";
       }, trial.stimulus_duration);
     }
 
@@ -260,7 +261,7 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         "The experiment may be deadlocked. Try setting a trial duration or set response_ends_trial to true."
       );
     }
-  };
+  }
 }
 
 export default ImageKeyboardResponsePlugin;

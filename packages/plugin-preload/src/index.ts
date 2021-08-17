@@ -1,23 +1,23 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "preload",
   parameters: {
     auto_preload: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       default: false,
       description:
         "Whether or not to automatically preload any media files based on the timeline passed to jsPsych.init.",
     },
     trials: {
-      type: parameterType.TIMELINE,
+      type: ParameterType.TIMELINE,
       default: [],
       description:
         "Array with a timeline of trials to automatically preload. If one or more trial objects is provided, " +
         "then the plugin will attempt to preload the media files used in the trial(s).",
     },
     images: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       default: [],
       description:
         "Array with one or more image files to load. This parameter is often used in cases where media files cannot " +
@@ -25,7 +25,7 @@ const info = <const>{
         "timeline variables or dynamic parameters, or because the image is embedded in an HTML string.",
     },
     audio: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       default: [],
       description:
         "Array with one or more audio files to load. This parameter is often used in cases where media files cannot " +
@@ -33,7 +33,7 @@ const info = <const>{
         "timeline variables or dynamic parameters, or because the audio is embedded in an HTML string.",
     },
     video: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       default: [],
       description:
         "Array with one or more video files to load. This parameter is often used in cases where media files cannot " +
@@ -41,18 +41,18 @@ const info = <const>{
         "timeline variables or dynamic parameters, or because the video is embedded in an HTML string.",
     },
     message: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       default: null,
       description:
         "HTML-formatted message to be shown above the progress bar while the files are loading.",
     },
     show_progress_bar: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       default: true,
       description: "Whether or not to show the loading progress bar.",
     },
     continue_after_error: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       default: false,
       description:
         "Whether or not to continue with the experiment if a loading error occurs. If false, then if a loading error occurs, " +
@@ -60,20 +60,20 @@ const info = <const>{
         "and preloading failure will be logged in the trial data.",
     },
     error_message: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       default: "The experiment failed to load.",
       description:
         "Error message to show on the page in case of any loading errors. This parameter is only relevant when continue_after_error is false.",
     },
     show_detailed_errors: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       default: false,
       description:
         "Whether or not to show a detailed error message on the page. If true, then detailed error messages will be shown on the " +
         "page for all files that failed to load, along with the general error_message. This parameter is only relevant when continue_after_error is false.",
     },
     max_load_time: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       default: null,
       description:
         "The maximum amount of time that the plugin should wait before stopping the preload and either ending the trial " +
@@ -81,18 +81,18 @@ const info = <const>{
         "If null, the plugin will wait indefintely for the files to load.",
     },
     on_error: {
-      type: parameterType.FUNCTION,
+      type: ParameterType.FUNCTION,
       default: null,
       description:
         "Function to be called after a file fails to load. The function takes the file name as its only argument.",
     },
     on_success: {
-      type: parameterType.FUNCTION,
+      type: ParameterType.FUNCTION,
       default: null,
       description:
         "Function to be called after a file loads successfully. The function takes the file name as its only argument.",
-    }
-  }
+    },
+  },
 };
 
 type Info = typeof info;
@@ -100,16 +100,16 @@ type Info = typeof info;
 /**
  * jspsych-preload
  * Becky Gilbert
- * 
+ *
  * a jsPsych plugin for preloading image, audio, and video files
- * 
+ *
  * documentation: docs.jspsych.org
- * 
+ *
  **/
 class PreloadPlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var success = null;
@@ -127,7 +127,7 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
     var video = [];
 
     if (trial.auto_preload) {
-      var auto_preload = this.jsPsych.pluginAPI.getAutoPreloadList();  
+      var auto_preload = this.jsPsych.pluginAPI.getAutoPreloadList();
       images = images.concat(auto_preload.images);
       audio = audio.concat(auto_preload.audio);
       video = video.concat(auto_preload.video);
@@ -144,7 +144,7 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
     audio = audio.concat(trial.audio);
     video = video.concat(trial.video);
 
-    images = this.jsPsych.utils.unique(this.jsPsych.utils.flatten(images));  
+    images = this.jsPsych.utils.unique(this.jsPsych.utils.flatten(images));
     audio = this.jsPsych.utils.unique(this.jsPsych.utils.flatten(audio));
     video = this.jsPsych.utils.unique(this.jsPsych.utils.flatten(video));
 
@@ -248,7 +248,11 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
       if (e.error == "404") {
         err_msg += "404 - file not found.<br>";
       }
-      if (typeof e.error.loaded !== "undefined" && e.error.loaded !== null && e.error.loaded !== 0) {
+      if (
+        typeof e.error.loaded !== "undefined" &&
+        e.error.loaded !== null &&
+        e.error.loaded !== 0
+      ) {
         err_msg += e.error.loaded + " bytes transferred.";
       } else {
         err_msg +=

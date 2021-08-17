@@ -1,47 +1,47 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "maxdiff",
   parameters: {
     alternatives: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Alternatives",
       array: true,
       default: undefined,
       description: "Alternatives presented in the maxdiff table.",
     },
     labels: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       array: true,
       pretty_name: "Labels",
       default: undefined,
       description: "Labels to display for left and right response columns.",
     },
     randomize_alternative_order: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Randomize Alternative Order",
       default: false,
       description: "If true, the order of the alternatives will be randomized",
     },
     preamble: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Preamble",
       default: "",
       description: "String to display at top of the page.",
     },
     button_label: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button Label",
       default: "Continue",
       description: "Label of the button.",
     },
     required: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Required",
       default: false,
       description: "Makes answering the alternative required.",
-    }
-  }
+    },
+  },
 };
 
 type Info = typeof info;
@@ -56,7 +56,7 @@ type Info = typeof info;
 class MaxdiffPlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var html = "";
@@ -86,7 +86,7 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
       alternative_order.push(i);
     }
     if (trial.randomize_alternative_order) {
-      alternative_order = this.jsPsych.randomization.shuffle(alternative_order);  // TO DO: is randomization still in jsPsych core?
+      alternative_order = this.jsPsych.randomization.shuffle(alternative_order); // TO DO: is randomization still in jsPsych core?
     }
 
     // Start with column headings
@@ -157,7 +157,8 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
               (c: HTMLInputElement) => c.checked
             );
             if (left_checked && right_checked) {
-              (document.getElementById("jspsych-maxdiff-next") as HTMLInputElement).disabled = false;
+              (document.getElementById("jspsych-maxdiff-next") as HTMLInputElement).disabled =
+                false;
             } else {
               (document.getElementById("jspsych-maxdiff-next") as HTMLInputElement).disabled = true;
             }

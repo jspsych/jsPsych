@@ -1,90 +1,95 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "audio-slider-response",
   parameters: {
     /* The image to be displayed */
     stimulus: {
-      type: parameterType.AUDIO,
+      type: ParameterType.AUDIO,
       pretty_name: "Stimulus",
-      default: undefined,
-      preload: true
+      default: undefined
     },
     /* Sets the minimum value of the slider. */
     min: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Min slider",
-      default: 0
+      default: 0,
     },
     /* Sets the maximum value of the slider */
     max: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Max slider",
-      default: 100
+      default: 100,
     },
     /* Sets the starting value of the slider */
     slider_start: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Slider starting value",
-      default: 50
+      default: 50,
     },
     /* Sets the step of the slider */
     step: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Step",
-      default: 1
+      default: 1,
     },
     /* Labels of the slider */
     labels: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Labels",
       default: [],
-      array: true
+      array: true,
     },
     /* Width of the slider in pixels. */
     slider_width: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Slider width",
-      default: null
+      default: null,
     },
     /* Label of the button to advance. */
     button_label: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button label",
       default: "Continue",
-      array: false
+      array: false,
     },
     /* If true, the participant will have to move the slider before continuing. */
     require_movement: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Require movement",
-      default: false
+      default: false,
     },
     /* Any content here will be displayed below the slider. */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
       default: null,
     },
     /* How long to show the trial. */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: null
+      default: null,
     },
     /* If true, trial will end when user makes a response. */
     response_ends_trial: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
-      default: true
+      default: true,
+    },
+    /* If true, then the trial will end as soon as the audio file finishes playing. */
+    trial_ends_after_audio: {
+      type: ParameterType.BOOL,
+      pretty_name: "Trial ends after audio",
+      default: false,
     },
     /* If true, then responses are allowed while the audio is playing. If false, then the audio must finish playing before a response is accepted. */
     response_allowed_while_playing: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response allowed while playing",
-      default: true
-    }
-  }
+      default: true,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -220,15 +225,21 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
       };
 
       if (!trial.response_allowed_while_playing) {
-        display_element.querySelector<HTMLInputElement>("#jspsych-audio-slider-response-response").disabled = true;
-        display_element.querySelector<HTMLInputElement>("#jspsych-audio-slider-response-next").disabled = true;
+        display_element.querySelector<HTMLInputElement>(
+          "#jspsych-audio-slider-response-response"
+        ).disabled = true;
+        display_element.querySelector<HTMLInputElement>(
+          "#jspsych-audio-slider-response-next"
+        ).disabled = true;
       }
 
       if (trial.require_movement) {
         display_element
           .querySelector("#jspsych-audio-slider-response-response")
           .addEventListener("click", function () {
-            display_element.querySelector<HTMLInputElement>("#jspsych-audio-slider-response-next").disabled = false;
+            display_element.querySelector<HTMLInputElement>(
+              "#jspsych-audio-slider-response-next"
+            ).disabled = false;
           });
       }
 
@@ -250,7 +261,9 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
           if (trial.response_ends_trial) {
             end_trial();
           } else {
-            display_element.querySelector<HTMLInputElement>("#jspsych-audio-slider-response-next").disabled = true;
+            display_element.querySelector<HTMLInputElement>(
+              "#jspsych-audio-slider-response-next"
+            ).disabled = true;
           }
         });
 

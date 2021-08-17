@@ -1,53 +1,53 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "canvas-keyboard-response",
   parameters: {
     /* The drawing function to apply to the canvas. Should take the canvas object as argument. */
     stimulus: {
-      type: parameterType.FUNCTION,
+      type: ParameterType.FUNCTION,
       pretty_name: "Stimulus",
-      default: undefined
+      default: undefined,
     },
     /* The keys the subject is allowed to press to respond to the stimulus. */
     choices: {
-      type: parameterType.KEY,
+      type: ParameterType.KEYS,
       array: true,
       pretty_name: "Choices",
-      default: "allkeys"
+      default: "ALL_KEYS",
     },
     /* Any content here will be displayed below the stimulus. */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
-      default: null
+      default: null,
     },
     /* How long to hide the stimulus. */
     stimulus_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Stimulus duration",
-      default: null
+      default: null,
     },
     /* How long to show trial before it ends. */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: null
+      default: null,
     },
     /* If true, trial will end when subject makes a response. */
     response_ends_trial: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
-      default: true
+      default: true,
     },
     /* Array containing the height (first value) and width (second value) of the canvas element. */
     canvas_size: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       array: true,
       pretty_name: "Canvas size",
-      default: [500, 500]
-    }
-  }
+      default: [500, 500],
+    },
+  },
 };
 
 type Info = typeof info;
@@ -131,9 +131,8 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     // start the response listener
-    // @ts-ignore TODO jsPsych.NO_KEYS is not an array, but `array: true` is set for the parameter.
-    // How should we handle this?
-    if (trial.choices != this.jsPsych.NO_KEYS) {
+    // @ts-ignore: TO DO - string array vs string error
+    if (trial.choices != "NO_KEYS") {
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,
@@ -146,8 +145,9 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     // hide stimulus if stimulus_duration is set
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(function () {
-        display_element.querySelector<HTMLElement>("#jspsych-canvas-keyboard-response-stimulus").style.visibility =
-          "hidden";
+        display_element.querySelector<HTMLElement>(
+          "#jspsych-canvas-keyboard-response-stimulus"
+        ).style.visibility = "hidden";
       }, trial.stimulus_duration);
     }
 
@@ -157,7 +157,7 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         end_trial();
       }, trial.trial_duration);
     }
-  };
+  }
 }
 
 export default CanvasKeyboardResponsePlugin;

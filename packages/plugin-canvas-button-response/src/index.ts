@@ -1,72 +1,72 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "canvas-button-response",
   parameters: {
     /* The drawing function to apply to the canvas. Should take the canvas object as argument. */
     stimulus: {
-      type: parameterType.FUNCTION,
+      type: ParameterType.FUNCTION,
       pretty_name: "Stimulus",
-      default: undefined
+      default: undefined,
     },
     /* The labels for the buttons */
     choices: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Choices",
       default: undefined,
-      array: true
+      array: true,
     },
     /* The html of the button. Can create own style. */
     button_html: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button HTML",
       default: '<button class="jspsych-btn">%choice%</button>',
-      array: true
+      array: true,
     },
     /* Any content here will be displayed under the button. */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
-      default: null
+      default: null,
     },
     /* How long to hide the stimulus. */
     stimulus_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Stimulus duration",
-      default: null
+      default: null,
     },
     /* How long to show the trial. */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: null
+      default: null,
     },
     /* The vertical margin of the button. */
     margin_vertical: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Margin vertical",
-      default: "0px"
+      default: "0px",
     },
     /* The horizontal margin of the button. */
     margin_horizontal: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Margin horizontal",
-      default: "8px"
+      default: "8px",
     },
     /* If true, then trial will end when user responds. */
     response_ends_trial: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
-      default: true
+      default: true,
     },
     /* Array containing the height (first value) and width (second value) of the canvas element. */
     canvas_size: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       array: true,
       pretty_name: "Canvas size",
-      default: [500, 500]
-    }
-  }
+      default: [500, 500],
+    },
+  },
 };
 
 type Info = typeof info;
@@ -146,7 +146,7 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
     for (var i = 0; i < trial.choices.length; i++) {
       display_element
         .querySelector<HTMLButtonElement>("#jspsych-canvas-button-response-button-" + i)
-        .addEventListener("click", function(e: MouseEvent) {
+        .addEventListener("click", function (e: MouseEvent) {
           var choice = e.currentTarget as Element;
           choice.getAttribute("data-choice"); // don't use dataset for jsdom compatibility
           after_response(choice);
@@ -175,7 +175,7 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     // function to handle responses by the subject
     function after_response(choice) {
@@ -205,8 +205,9 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
     // hide image if timing is set
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(function () {
-        display_element.querySelector<HTMLElement>("#jspsych-canvas-button-response-stimulus").style.visibility =
-          "hidden";
+        display_element.querySelector<HTMLElement>(
+          "#jspsych-canvas-button-response-stimulus"
+        ).style.visibility = "hidden";
       }, trial.stimulus_duration);
     }
 

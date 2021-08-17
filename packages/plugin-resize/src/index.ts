@@ -1,45 +1,45 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "resize",
   parameters: {
     /* The height of the item to be measured. */
     item_height: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Item height",
-      default: 1
+      default: 1,
     },
     /* The width of the item to be measured. */
     item_width: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Item width",
-      default: 1
+      default: 1,
     },
     /* The content displayed below the resizable box and above the button. */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
-      default: null
+      default: null,
     },
     /* After the scaling factor is applied, this many pixels will equal one unit of measurement. */
     pixels_per_unit: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Pixels per unit",
-      default: 100
+      default: 100,
     },
     /* The initial size of the box, in pixels, along the larget dimension. */
     starting_size: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Starting size",
-      default: 100
+      default: 100,
     },
     /* Label to display on the button to complete calibration. */
     button_label: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button label",
-      default: "Continue"
-    }
-  }
+      default: "Continue",
+    },
+  },
 };
 
 type Info = typeof info;
@@ -56,7 +56,7 @@ type Info = typeof info;
 class ResizePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var aspect_ratio = trial.item_width / trial.item_height;
@@ -106,7 +106,7 @@ class ResizePlugin implements JsPsychPlugin<Info> {
       };
 
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     // listens for the click
     document.getElementById("jspsych-resize-btn").addEventListener("click", function () {

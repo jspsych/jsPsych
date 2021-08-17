@@ -1,47 +1,47 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "external-html",
   parameters: {
     /* The url of the external html page */
     url: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "URL",
-      default: undefined
+      default: undefined,
     },
     /* The key to continue to the next page. */
     cont_key: {
-      type: parameterType.KEY,
+      type: ParameterType.KEY,
       pretty_name: "Continue key",
-      default: null
+      default: null,
     },
     /* The button to continue to the next page. */
     cont_btn: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Continue button",
-      default: null
+      default: null,
     },
     /* Function to check whether user is allowed to continue after clicking cont_key or clicking cont_btn */
     check_fn: {
-      type: parameterType.FUNCTION,
+      type: ParameterType.FUNCTION,
       pretty_name: "Check function",
       default: function () {
         return true;
-      }
+      },
     },
     /* Whether or not to force a page refresh. */
     force_refresh: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Force refresh",
-      default: false
+      default: false,
     },
     /* If execute_Script == true, then all JavasScript code on the external page will be executed. */
     execute_script: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Execute scripts",
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -77,7 +77,7 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
         }
       };
       xmlhttp.send();
-    }
+    };
 
     load(display_element, url, function () {
       var t0 = performance.now();
@@ -99,10 +99,10 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
       // by default, scripts on the external page are not executed with XMLHttpRequest().
       // To activate their content through DOM manipulation, we need to relocate all script tags
       if (trial.execute_script) {
-        // changed for..of getElementsByTagName("script") here to for i loop due to TS error: 
+        // changed for..of getElementsByTagName("script") here to for i loop due to TS error:
         // Type 'HTMLCollectionOf<HTMLScriptElement>' must have a '[Symbol.iterator]()' method that returns an iterator.ts(2488)
         var all_scripts = display_element.getElementsByTagName("script");
-        for (var i=0; i<all_scripts.length; i++) {
+        for (var i = 0; i < all_scripts.length; i++) {
           const relocatedScript = document.createElement("script");
           const curr_script = all_scripts[i];
           relocatedScript.text = curr_script.text;

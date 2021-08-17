@@ -1,4 +1,4 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "webgazer-calibrate",
@@ -6,7 +6,7 @@ const info = <const>{
   parameters: {
     /* An array of calibration points, where each element is an array cointaining the coordinates for one calibration point: [x,y] */
     calibration_points: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       default: [
         [10, 10],
         [10, 50],
@@ -21,32 +21,32 @@ const info = <const>{
     },
     /* Options are 'click' and 'view' */
     calibration_mode: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       default: "click", // options: 'click', 'view'
     },
     /* Size of the calibration points, in pixels */
     point_size: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       default: 20,
     },
     /* Number of repetitions per calibration point */
     repetitions_per_point: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       default: 1,
     },
     /* Whether or not to randomize the calibration point order */
     randomize_calibration_order: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       default: false,
     },
     /* If calibration_mode is view, then this is the delay before calibration after the point is shown */
     time_to_saccade: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       default: 1000,
     },
     /* If calibration_mode is view, then this is the length of time to show the point while calibrating */
     time_per_point: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       default: 1000,
     },
   },

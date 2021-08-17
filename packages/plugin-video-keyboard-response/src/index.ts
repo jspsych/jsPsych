@@ -1,95 +1,94 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "video-keyboard-response",
   parameters: {
     stimulus: {
       /* Array of the video file(s) to play. Video can be provided in multiple file formats for better cross-browser support. */
-      type: parameterType.VIDEO,
+      type: ParameterType.VIDEO,
       pretty_name: "Video",
-      default: undefined,
-      preload: true
+      default: undefined
     },
     /* The keys the subject is allowed to press to respond to the stimulus. */
     choices: {
-      type: parameterType.KEY,
+      type: ParameterType.KEYS,
       pretty_name: "Choices",
       array: true,
-      default: "ALL_KEYS"
+      default: "ALL_KEYS",
     },
     /* Any content here will be displayed below the stimulus. */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
-      default: null
+      default: null,
     },
     /* The width of the video in pixels. */
     width: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Width",
-      default: ""
+      default: "",
     },
     /* The height of the video display in pixels. */
     height: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Height",
-      default: ""
+      default: "",
     },
     /* If true, the video will begin playing as soon as it has loaded. */
     autoplay: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Autoplay",
       default: true,
     },
     /* If true, the subject will be able to pause the video or move the playback to any point in the video. */
     controls: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Controls",
-      default: false
+      default: false,
     },
     /* Time to start the clip. If null (default), video will start at the beginning of the file. */
     start: {
-      type: parameterType.FLOAT,
+      type: ParameterType.FLOAT,
       pretty_name: "Start",
-      default: null
+      default: null,
     },
     /* Time to stop the clip. If null (default), video will stop at the end of the file. */
     stop: {
-      type: parameterType.FLOAT,
+      type: ParameterType.FLOAT,
       pretty_name: "Stop",
-      default: null
+      default: null,
     },
     /* The playback rate of the video. 1 is normal, <1 is slower, >1 is faster. */
     rate: {
-      type: parameterType.FLOAT,
+      type: ParameterType.FLOAT,
       pretty_name: "Rate",
-      default: 1
+      default: 1,
     },
     /* If true, the trial will end immediately after the video finishes playing. */
     trial_ends_after_video: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "End trial after video finishes",
-      default: false
+      default: false,
     },
     /* How long to show trial before it ends. */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: null
+      default: null,
     },
     /* If true, the trial will end when subject makes a response. */
     response_ends_trial: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
-      default: true
+      default: true,
     },
     /* If true, then responses are allowed while the video is playing. If false, then the video must finish playing before a response is accepted. */
     response_allowed_while_playing: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response allowed while playing",
-      default: true
-    }
-  }
+      default: true,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -106,7 +105,7 @@ type Info = typeof info;
 class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // setup stimulus
@@ -161,7 +160,9 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
     display_element.innerHTML = video_html;
 
-    var video_element = display_element.querySelector<HTMLVideoElement>("#jspsych-video-keyboard-response-stimulus");
+    var video_element = display_element.querySelector<HTMLVideoElement>(
+      "#jspsych-video-keyboard-response-stimulus"
+    );
 
     if (video_preload_blob) {
       video_element.src = video_preload_blob;
@@ -223,9 +224,12 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
       // stop the video file if it is playing
       // remove end event listeners if they exist
-      display_element.querySelector<HTMLVideoElement>("#jspsych-video-keyboard-response-stimulus").pause();
-      display_element.querySelector<HTMLVideoElement>("#jspsych-video-keyboard-response-stimulus").onended =
-        function () {};
+      display_element
+        .querySelector<HTMLVideoElement>("#jspsych-video-keyboard-response-stimulus")
+        .pause();
+      display_element.querySelector<HTMLVideoElement>(
+        "#jspsych-video-keyboard-response-stimulus"
+      ).onended = function () {};
 
       // gather the data to store for the trial
       var trial_data = {
@@ -239,7 +243,7 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     // function to handle responses by the subject
     var after_response = function (info) {
@@ -260,7 +264,7 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
     // start the response listener
     //@ts-ignore: TO DO change all ALL_KEYS / NO_KEYS and KEY/KEYS types in separate commit
-    if (trial.choices != this.jsPsych.NO_KEYS && trial.response_allowed_while_playing) {
+    if (trial.choices != "NO_KEYS" && trial.response_allowed_while_playing) {
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,
@@ -276,7 +280,7 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         end_trial();
       }, trial.trial_duration);
     }
-  };
+  }
 }
 
 export default VideoKeyboardResponsePlugin;

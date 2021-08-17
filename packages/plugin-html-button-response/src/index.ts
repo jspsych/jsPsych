@@ -1,60 +1,60 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "html-button-response",
   parameters: {
     stimulus: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Stimulus",
       default: undefined,
       description: "The HTML string to be displayed",
     },
     choices: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Choices",
       default: undefined,
       array: true,
       description: "The labels for the buttons.",
     },
     button_html: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button HTML",
       default: '<button class="jspsych-btn">%choice%</button>',
       array: true,
       description: "The html of the button. Can create own style.",
     },
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
       default: null,
       description: "Any content here will be displayed under the button.",
     },
     stimulus_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Stimulus duration",
       default: null,
       description: "How long to hide the stimulus.",
     },
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
       description: "How long to show the trial.",
     },
     margin_vertical: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Margin vertical",
       default: "0px",
       description: "The vertical margin of the button.",
     },
     margin_horizontal: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Margin horizontal",
       default: "8px",
       description: "The horizontal margin of the button.",
     },
     response_ends_trial: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
       description: "If true, then trial will end when user responds.",
@@ -158,7 +158,7 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     // function to handle responses by the subject
     function after_response(choice) {
@@ -188,8 +188,9 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
     // hide image if timing is set
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(function () {
-        display_element.querySelector<HTMLElement>("#jspsych-html-button-response-stimulus").style.visibility =
-          "hidden";
+        display_element.querySelector<HTMLElement>(
+          "#jspsych-html-button-response-stimulus"
+        ).style.visibility = "hidden";
       }, trial.stimulus_duration);
     }
 

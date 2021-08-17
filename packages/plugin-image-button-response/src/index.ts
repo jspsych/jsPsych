@@ -1,91 +1,90 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "image-button-response",
   parameters: {
     /* The image to be displayed */
     stimulus: {
-      type: parameterType.IMAGE,
+      type: ParameterType.IMAGE,
       pretty_name: "Stimulus",
-      default: undefined,
-      preload: true
+      default: undefined
     },
     /* Set the image height in pixels */
     stimulus_height: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Image height",
-      default: null
+      default: null,
     },
     /* Set the image width in pixels */
     stimulus_width: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Image width",
-      default: null
+      default: null,
     },
     /* Maintain the aspect ratio after setting width or height */
     maintain_aspect_ratio: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Maintain aspect ratio",
-      default: true
+      default: true,
     },
     /* The labels for the buttons. */
     choices: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Choices",
       default: undefined,
-      array: true
+      array: true,
     },
     /* The html of the button. Can create own style. */
     button_html: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Button HTML",
       default: '<button class="jspsych-btn">%choice%</button>',
-      array: true
+      array: true,
     },
     /* Any content here will be displayed under the button. */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
-      default: null
+      default: null,
     },
     /* How long to show the stimulus. */
     stimulus_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Stimulus duration",
-      default: null
+      default: null,
     },
     /* How long to show the trial. */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: null
+      default: null,
     },
     /* The vertical margin of the button. */
     margin_vertical: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Margin vertical",
-      default: "0px"
+      default: "0px",
     },
     /* The horizontal margin of the button. */
     margin_horizontal: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Margin horizontal",
-      default: "8px"
+      default: "8px",
     },
     /* If true, then trial will end when user responds. */
     response_ends_trial: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
-      default: true
+      default: true,
     },
     /* If true, the image will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
     If false, the image will be shown via an img element. */
     render_on_canvas: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Render on canvas",
-      default: true
-    }
-  }
+      default: true,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -102,7 +101,7 @@ type Info = typeof info;
 class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var height, width;
@@ -308,7 +307,7 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     // function to handle responses by the subject
     function after_response(choice) {
@@ -338,8 +337,9 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
     // hide image if timing is set
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(function () {
-        display_element.querySelector<HTMLElement>("#jspsych-image-button-response-stimulus").style.visibility =
-          "hidden";
+        display_element.querySelector<HTMLElement>(
+          "#jspsych-image-button-response-stimulus"
+        ).style.visibility = "hidden";
       }, trial.stimulus_duration);
     }
 

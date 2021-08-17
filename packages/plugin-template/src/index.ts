@@ -1,17 +1,17 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "PLUGIN-NAME",
   parameters: {
     parameter_name: {
-      type: parameterType.INT, // BOOL, STRING, INT, FLOAT, FUNCTION, KEY, KEYS, SELECT, HTML_STRING, IMAGE, AUDIO, VIDEO, OBJECT, COMPLEX
+      type: ParameterType.INT, // BOOL, STRING, INT, FLOAT, FUNCTION, KEY, KEYS, SELECT, HTML_STRING, IMAGE, AUDIO, VIDEO, OBJECT, COMPLEX
       default: undefined,
     },
     parameter_name2: {
-      type: parameterType.IMAGE,
+      type: ParameterType.IMAGE,
       default: undefined,
-    }
-  }
+    },
+  },
 };
 
 type Info = typeof info;
@@ -20,7 +20,7 @@ type Info = typeof info;
 class PluginNamePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // data saving
@@ -30,7 +30,7 @@ class PluginNamePlugin implements JsPsychPlugin<Info> {
 
     // end trial
     this.jsPsych.finishTrial(trial_data);
-  };
+  }
 }
 
 export default PluginNamePlugin;

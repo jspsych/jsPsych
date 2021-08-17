@@ -1,85 +1,85 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "serial-reaction-time",
   parameters: {
     /* This array represents the grid of boxes shown on the screen. */
     grid: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Grid",
       array: true,
-      default: [[1, 1, 1, 1]]
+      default: [[1, 1, 1, 1]],
     },
     /* The location of the target. The array should be the [row, column] of the target. */
     target: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Target",
       array: true,
-      default: undefined
+      default: undefined,
     },
     /* Each entry in this array is the key that should be pressed for that corresponding location in the grid. */
     choices: {
-      type: parameterType.KEY,
+      type: ParameterType.KEYS,
       pretty_name: "Choices",
       array: true,
-      default: [["3", "5", "7", "9"]]
+      default: [["3", "5", "7", "9"]],
     },
     /* The width and height in pixels of each square in the grid. */
     grid_square_size: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Grid square size",
-      default: 100
+      default: 100,
     },
     /* The color of the target square. */
     target_color: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Target color",
-      default: "#999"
+      default: "#999",
     },
     /* If true, trial ends when user makes a response */
     response_ends_trial: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
-      default: true
+      default: true,
     },
     /* The number of milliseconds to display the grid before the target changes color. */
     pre_target_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Pre-target duration",
-      default: 0
+      default: 0,
     },
     /* How long to show the trial. */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: null
+      default: null,
     },
     /* If true, show feedback indicating where the user responded and whether it was correct. */
     show_response_feedback: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Show response feedback",
-      default: false
+      default: false,
     },
     /* The length of time in milliseconds to show the feedback. */
     feedback_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Feedback duration",
-      default: 200
+      default: 200,
     },
     /* If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds. */
     fade_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Fade duration",
-      default: null
+      default: null,
     },
     /* Any content here will be displayed below the stimulus. */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
       default: null,
-      no_function: false
-    }
-  }
+      no_function: false,
+    },
+  },
 };
 
 type Info = typeof info;
@@ -96,7 +96,7 @@ type Info = typeof info;
 class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {};
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // create a flattened version of the choices array
@@ -136,7 +136,7 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     const showFeedback = () => {
       if (response.rt == null || trial.show_response_feedback == false) {
@@ -157,10 +157,10 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
         ).style.backgroundColor = color;
         this.jsPsych.pluginAPI.setTimeout(endTrial, trial.feedback_duration);
       }
-    }
+    };
 
     // function to handle responses by the subject
-    const after_response = (info: {key: string, rt: number}) => {
+    const after_response = (info: { key: string; rt: number }) => {
       // only record first response
       response = response.rt == null ? info : response;
 
@@ -185,7 +185,7 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
           endTrial();
         }
       }
-    }
+    };
 
     const showTarget = () => {
       if (trial.fade_duration == null) {
@@ -210,7 +210,7 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
       if (trial.trial_duration !== null) {
         this.jsPsych.pluginAPI.setTimeout(showFeedback, trial.trial_duration);
       }
-    }
+    };
 
     // display stimulus
     var stimulus = this.stimulus(trial.grid, trial.grid_square_size);
@@ -228,10 +228,16 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
     if (trial.prompt !== null) {
       display_element.innerHTML += trial.prompt;
     }
-
   }
 
-  stimulus = function (grid, square_size: number, target?: number[], target_color?: string, labels?) {  // TO DO: types for nested arrays of numbers/strings?
+  stimulus = function (
+    grid,
+    square_size: number,
+    target?: number[],
+    target_color?: string,
+    labels?
+  ) {
+    // TO DO: types for nested arrays of numbers/strings?
     var stimulus =
       "<div id='jspsych-serial-reaction-time-stimulus' style='margin:auto; display: table; table-layout: fixed; border-spacing:" +
       square_size / 4 +
@@ -270,7 +276,7 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
     stimulus += "</div>";
 
     return stimulus;
-  }
+  };
 }
 
 export default SerialReactionTimePlugin;

@@ -1,53 +1,52 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "animation",
   parameters: {
     /* The images to be displayed */
     stimuli: {
-      type: parameterType.IMAGE,
+      type: ParameterType.IMAGE,
       pretty_name: "Stimuli",
       default: undefined,
-      array: true,
-      preload: true
+      array: true
     },
     /* Duration to display each image. */
     frame_time: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Frame time",
-      default: 250
+      default: 250,
     },
     /* Length of gap to be shown between each image. */
     frame_isi: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Frame gap",
-      default: 0
+      default: 0,
     },
     /* Number of times to show entire sequence */
     sequence_reps: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Sequence repetitions",
-      default: 1
+      default: 1,
     },
     /* Keys subject uses to respond to stimuli. */
     choices: {
-      type: parameterType.KEY,
+      type: ParameterType.KEYS,
       pretty_name: "Choices",
-      default: "allkeys",
-      array: true
+      default: "ALL_KEYS",
+      array: true,
     },
     /* Any content here will be displayed below stimulus. */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
-      default: null
+      default: null,
     },
     /* If true, the images will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
     If false, the image will be shown via an img element. */
     render_on_canvas: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Render on canvas",
-      default: true
+      default: true,
     },
   },
 };
@@ -60,7 +59,6 @@ type Info = typeof info;
  *
  * documentation: docs.jspsych.org
  */
-
 class AnimationPlugin implements JsPsychPlugin<Info> {
   static info = info;
 
@@ -96,11 +94,11 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
 
       var trial_data = {
         animation_sequence: animation_sequence,
-        response: responses
+        response: responses,
       };
 
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     var animate_interval = setInterval(function () {
       var showImage = true;
@@ -124,7 +122,8 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
 
     function show_next_frame() {
       if (trial.render_on_canvas) {
-        display_element.querySelector<HTMLElement>("#jspsych-animation-image").style.visibility = "visible";
+        display_element.querySelector<HTMLElement>("#jspsych-animation-image").style.visibility =
+          "visible";
         var img = new Image();
         img.src = trial.stimuli[animate_frame];
         canvas.height = img.naturalHeight;
@@ -151,7 +150,8 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
 
       if (trial.frame_isi > 0) {
         this.jsPsych.pluginAPI.setTimeout(function () {
-          display_element.querySelector<HTMLElement>("#jspsych-animation-image").style.visibility = "hidden";
+          display_element.querySelector<HTMLElement>("#jspsych-animation-image").style.visibility =
+            "hidden";
           current_stim = "blank";
           // record when blank image was shown
           animation_sequence.push({
