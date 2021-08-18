@@ -361,6 +361,16 @@ export class JsPsych {
     return this.file_protocol;
   }
 
+  getTimelineDescription() {
+    var trials = [];
+    if (typeof this.timeline.timeline_parameters !== "undefined") {
+      for (var i = 0; i < this.timeline.timeline_parameters.timeline.length; i++) {
+        trials.push(this.timeline.timeline_parameters.timeline[i].trial_parameters);
+      }
+    }
+    return trials;
+  }
+
   private async prepareDom() {
     // Wait until the document is ready
     if (document.readyState !== "complete") {
