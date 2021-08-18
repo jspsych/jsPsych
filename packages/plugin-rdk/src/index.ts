@@ -228,59 +228,60 @@ class RdkPlugin implements JsPsychPlugin<Info> {
     //--------------------------------------
 
     //Note on '||' logical operator: If the first option is 'undefined', it evalutes to 'false' and the second option is returned as the assignment
-    trial.choices = assignParameterValue(trial.choices, []);
-    trial.correct_choice = assignParameterValue(trial.correct_choice, undefined);
-    trial.trial_duration = assignParameterValue(trial.trial_duration, 500);
-    trial.response_ends_trial = assignParameterValue(trial.response_ends_trial, true);
-    trial.number_of_apertures = assignParameterValue(trial.number_of_apertures, 1);
-    trial.number_of_dots = assignParameterValue(trial.number_of_dots, 300);
-    trial.number_of_sets = assignParameterValue(trial.number_of_sets, 1);
-    trial.coherent_direction = assignParameterValue(trial.coherent_direction, 0);
-    trial.coherence = assignParameterValue(trial.coherence, 0.5);
-    trial.opposite_coherence = assignParameterValue(trial.opposite_coherence, 0);
-    trial.dot_radius = assignParameterValue(trial.dot_radius, 2);
-    trial.dot_life = assignParameterValue(trial.dot_life, -1);
-    trial.move_distance = assignParameterValue(trial.move_distance, 1);
-    trial.aperture_width = assignParameterValue(trial.aperture_width, 600);
-    trial.aperture_height = assignParameterValue(trial.aperture_height, 400);
-    trial.dot_color = assignParameterValue(trial.dot_color, "white");
-    trial.background_color = assignParameterValue(trial.background_color, "gray");
-    trial.RDK_type = assignParameterValue(trial.RDK_type, 3);
-    trial.aperture_type = assignParameterValue(trial.aperture_type, 2);
-    trial.reinsert_type = assignParameterValue(trial.reinsert_type, 2);
-    trial.aperture_center_x = assignParameterValue(trial.aperture_center_x, window.innerWidth / 2);
-    trial.aperture_center_y = assignParameterValue(trial.aperture_center_y, window.innerHeight / 2);
-    trial.fixation_cross = assignParameterValue(trial.fixation_cross, false);
-    trial.fixation_cross_width = assignParameterValue(trial.fixation_cross_width, 20);
-    trial.fixation_cross_height = assignParameterValue(trial.fixation_cross_height, 20);
-    trial.fixation_cross_color = assignParameterValue(trial.fixation_cross_color, "black");
-    trial.fixation_cross_thickness = assignParameterValue(trial.fixation_cross_thickness, 1);
-    trial.border = assignParameterValue(trial.border, false);
-    trial.border_thickness = assignParameterValue(trial.border_thickness, 1);
-    trial.border_color = assignParameterValue(trial.border_color, "black");
+    // Note: trial properties are now read-only, so these params have all been changed to separate variables here and throughout trial function
+    var choices = assignParameterValue(trial.choices, []);
+    var correct_choice = assignParameterValue(trial.correct_choice, undefined);
+    var trial_duration = assignParameterValue(trial.trial_duration, 500);
+    var response_ends_trial = assignParameterValue(trial.response_ends_trial, true);
+    var number_of_apertures = assignParameterValue(trial.number_of_apertures, 1);
+    var number_of_dots = assignParameterValue(trial.number_of_dots, 300);
+    var number_of_sets = assignParameterValue(trial.number_of_sets, 1);
+    var coherent_direction = assignParameterValue(trial.coherent_direction, 0);
+    var coherence = assignParameterValue(trial.coherence, 0.5);
+    var opposite_coherence = assignParameterValue(trial.opposite_coherence, 0);
+    var dot_radius = assignParameterValue(trial.dot_radius, 2);
+    var dot_life = assignParameterValue(trial.dot_life, -1);
+    var move_distance = assignParameterValue(trial.move_distance, 1);
+    var aperture_width = assignParameterValue(trial.aperture_width, 600);
+    var aperture_height = assignParameterValue(trial.aperture_height, 400);
+    var dot_color = assignParameterValue(trial.dot_color, "white");
+    var background_color = assignParameterValue(trial.background_color, "gray");
+    var RDK_type = assignParameterValue(trial.RDK_type, 3);
+    var aperture_type = assignParameterValue(trial.aperture_type, 2);
+    var reinsert_type = assignParameterValue(trial.reinsert_type, 2);
+    var aperture_center_x = assignParameterValue(trial.aperture_center_x, window.innerWidth / 2);
+    var aperture_center_y = assignParameterValue(trial.aperture_center_y, window.innerHeight / 2);
+    var fixation_cross = assignParameterValue(trial.fixation_cross, false);
+    var fixation_cross_width = assignParameterValue(trial.fixation_cross_width, 20);
+    var fixation_cross_height = assignParameterValue(trial.fixation_cross_height, 20);
+    var fixation_cross_color = assignParameterValue(trial.fixation_cross_color, "black");
+    var fixation_cross_thickness = assignParameterValue(trial.fixation_cross_thickness, 1);
+    var border = assignParameterValue(trial.border, false);
+    var border_thickness = assignParameterValue(trial.border_thickness, 1);
+    var border_color = assignParameterValue(trial.border_color, "black");
 
     //For square and circle, set the aperture height == aperture width
     if (apertureType == 1 || apertureType == 3) {
-      trial.aperture_height = trial.aperture_width;
+      aperture_height = aperture_width;
     }
 
     //Convert the parameter variables to those that the code below can use
 
-    var nApertures = trial.number_of_apertures; //The number of apertures
-    var nDots = trial.number_of_dots; //Number of dots per set (equivalent to number of dots per frame)
-    var nSets = trial.number_of_sets; //Number of sets to cycle through per frame
-    var coherentDirection = trial.coherent_direction; //The direction of the coherentDots in degrees. Starts at 3 o'clock and goes counterclockwise (0 == rightwards, 90 == upwards, 180 == leftwards, 270 == downwards), range 0 - 360
-    var coherence = trial.coherence; //Proportion of dots to move together, range from 0 to 1
-    var oppositeCoherence = trial.opposite_coherence; // The coherence for the dots going the opposite direction as the coherent dots
-    var dotRadius = trial.dot_radius; //Radius of each dot in pixels
-    var dotLife = trial.dot_life; //How many frames a dot will keep following its trajectory before it is redrawn at a random location. -1 denotes infinite life (the dot will only be redrawn if it reaches the end of the aperture).
-    var moveDistance = trial.move_distance; //How many pixels the dots move per frame
-    var apertureWidth = trial.aperture_width; // How many pixels wide the aperture is. For square aperture this will be the both height and width. For circle, this will be the diameter.
-    var apertureHeight = trial.aperture_height; //How many pixels high the aperture is. Only relevant for ellipse and rectangle apertures. For circle and square, this is ignored.
-    var dotColor = trial.dot_color; //Color of the dots
-    var backgroundColor = trial.background_color; //Color of the background
-    var apertureCenterX = trial.aperture_center_x; // The x-coordinate of center of the aperture on the screen, in pixels
-    var apertureCenterY = trial.aperture_center_y; // The y-coordinate of center of the aperture on the screen, in pixels
+    var nApertures = number_of_apertures; //The number of apertures
+    var nDots = number_of_dots; //Number of dots per set (equivalent to number of dots per frame)
+    var nSets = number_of_sets; //Number of sets to cycle through per frame
+    var coherentDirection = coherent_direction; //The direction of the coherentDots in degrees. Starts at 3 o'clock and goes counterclockwise (0 == rightwards, 90 == upwards, 180 == leftwards, 270 == downwards), range 0 - 360
+    var coherence = coherence; //Proportion of dots to move together, range from 0 to 1
+    var oppositeCoherence = opposite_coherence; // The coherence for the dots going the opposite direction as the coherent dots
+    var dotRadius = dot_radius; //Radius of each dot in pixels
+    var dotLife = dot_life; //How many frames a dot will keep following its trajectory before it is redrawn at a random location. -1 denotes infinite life (the dot will only be redrawn if it reaches the end of the aperture).
+    var moveDistance = move_distance; //How many pixels the dots move per frame
+    var apertureWidth = aperture_width; // How many pixels wide the aperture is. For square aperture this will be the both height and width. For circle, this will be the diameter.
+    var apertureHeight = aperture_height; //How many pixels high the aperture is. Only relevant for ellipse and rectangle apertures. For circle and square, this is ignored.
+    var dotColor = dot_color; //Color of the dots
+    var backgroundColor = background_color; //Color of the background
+    var apertureCenterX = aperture_center_x; // The x-coordinate of center of the aperture on the screen, in pixels
+    var apertureCenterY = aperture_center_y; // The y-coordinate of center of the aperture on the screen, in pixels
 
     /* RDK type parameter
       ** See Fig. 1 in Scase, Braddick, and Raymond (1996) for a visual depiction of these different signal selection rules and noise types
@@ -306,7 +307,7 @@ class RdkPlugin implements JsPsychPlugin<Info> {
       5 - different && random walk
       6 - different && random direction         */
 
-    var RDK = trial.RDK_type;
+    var RDK = RDK_type;
 
     /* 
       Shape of aperture
@@ -315,7 +316,7 @@ class RdkPlugin implements JsPsychPlugin<Info> {
       3 - Square
       4 - Rectangle
       */
-    var apertureType = trial.aperture_type;
+    var apertureType = aperture_type;
 
     /*
       Out of Bounds Decision
@@ -323,19 +324,19 @@ class RdkPlugin implements JsPsychPlugin<Info> {
       1 - Randomly appear anywhere in the aperture
       2 - Appear on the opposite edge of the aperture (Random if square or rectangle, reflected about origin in circle and ellipse)
       */
-    var reinsertType = trial.reinsert_type;
+    var reinsertType = reinsert_type;
 
     //Fixation Cross Parameters
-    var fixationCross = trial.fixation_cross; //To display or not to display the cross
-    var fixationCrossWidth = trial.fixation_cross_width; //The width of the fixation cross in pixels
-    var fixationCrossHeight = trial.fixation_cross_height; //The height of the fixation cross in pixels
-    var fixationCrossColor = trial.fixation_cross_color; //The color of the fixation cross
-    var fixationCrossThickness = trial.fixation_cross_thickness; //The thickness of the fixation cross, must be positive number above 1
+    var fixationCross = fixation_cross; //To display or not to display the cross
+    var fixationCrossWidth = fixation_cross_width; //The width of the fixation cross in pixels
+    var fixationCrossHeight = fixation_cross_height; //The height of the fixation cross in pixels
+    var fixationCrossColor = fixation_cross_color; //The color of the fixation cross
+    var fixationCrossThickness = fixation_cross_thickness; //The thickness of the fixation cross, must be positive number above 1
 
     //Border Parameters
-    var border = trial.border; //To display or not to display the border
-    var borderThickness = trial.border_thickness; //The width of the border in pixels
-    var borderColor = trial.border_color; //The color of the border
+    var border = border; //To display or not to display the border
+    var borderThickness = border_thickness; //The width of the border in pixels
+    var borderColor = border_color; //The color of the border
 
     //--------------------------------------
     //----------SET PARAMETERS END----------
@@ -416,7 +417,44 @@ class RdkPlugin implements JsPsychPlugin<Info> {
     var borderThicknessArray;
     var borderColorArray;
 
-    currentSetArray = setParameter(0); //Always starts at zero
+    //Set up the variables for the apertures
+    const setUpMultipleApertures = () => {
+      nDotsArray = setParameter(nDots);
+      nSetsArray = setParameter(nSets);
+      coherentDirectionArray = setParameter(coherentDirection);
+      coherenceArray = setParameter(coherence);
+      oppositeCoherenceArray = setParameter(oppositeCoherence);
+      dotRadiusArray = setParameter(dotRadius);
+      dotLifeArray = setParameter(dotLife);
+      moveDistanceArray = setParameter(moveDistance);
+      apertureWidthArray = setParameter(apertureWidth);
+      apertureHeightArray = setParameter(apertureHeight);
+      dotColorArray = setParameter(dotColor);
+      apertureCenterXArray = setParameter(apertureCenterX);
+      apertureCenterYArray = setParameter(apertureCenterY);
+      RDKArray = setParameter(RDK);
+      apertureTypeArray = setParameter(apertureType);
+      reinsertTypeArray = setParameter(reinsertType);
+      fixationCrossArray = setParameter(fixationCross);
+      fixationCrossWidthArray = setParameter(fixationCrossWidth);
+      fixationCrossHeightArray = setParameter(fixationCrossHeight);
+      fixationCrossColorArray = setParameter(fixationCrossColor);
+      fixationCrossThicknessArray = setParameter(fixationCrossThickness);
+      borderArray = setParameter(border);
+      borderThicknessArray = setParameter(borderThickness);
+      borderColorArray = setParameter(borderColor);
+
+      currentSetArray = setParameter(0); //Always starts at zero
+
+      //Loop through the number of apertures to make the dots
+      for (currentApertureNumber = 0; currentApertureNumber < nApertures; currentApertureNumber++) {
+        //Initialize the parameters to make the 2d dot array (one for each aperture);
+        initializeCurrentApertureParameters(currentApertureNumber);
+
+        //Make each 2d array and push it into the 3d array
+        dotArray3d.push(makeDotArray2d());
+      }
+    };
 
     // Set up multiple apertures
     setUpMultipleApertures();
@@ -467,35 +505,24 @@ class RdkPlugin implements JsPsychPlugin<Info> {
     //variable to store how many frames were presented.
     var numberOfFrames = 0;
 
-    //This runs the dot motion simulation, updating it according to the frame refresh rate of the screen.
-    animateDotMotion();
-
-    //--------RDK variables and function calls end--------
-
-    //-------------------------------------
-    //-----------FUNCTIONS BEGIN-----------
-    //-------------------------------------
-
-    //----JsPsych Functions Begin----
-
     //Function to start the keyboard listener
-    function startKeyboardListener() {
+    const startKeyboardListener = () => {
       //Start the response listener if there are choices for keys
       // @ts-ignore - TO DO: this will always return true because choices should be an array. Should choices (KEYS) be string or string array?
-      if (trial.choices != "NO_KEYS") {
+      if (choices != "NO_KEYS") {
         //Create the keyboard listener to listen for subjects' key response
         keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
           callback_function: after_response, //Function to call once the subject presses a valid key
-          valid_responses: trial.choices, //The keys that will be considered a valid response and cause the callback function to be called
+          valid_responses: choices, //The keys that will be considered a valid response and cause the callback function to be called
           rt_method: "performance", //The type of method to record timing information.
           persist: false, //If set to false, keyboard listener will only trigger the first time a valid key is pressed. If set to true, it has to be explicitly cancelled by the cancelKeyboardResponse plugin API.
           allow_held_key: false, //Only register the key once, after this getKeyboardResponse function is called. (Check JsPsych docs for better info under 'jsPsych.pluginAPI.getKeyboardResponse').
         });
       }
-    }
+    };
 
     //Function to end the trial proper
-    function end_trial() {
+    const end_trial = () => {
       //Stop the dot motion animation
       stopDotMotion = true;
 
@@ -524,39 +551,39 @@ class RdkPlugin implements JsPsychPlugin<Info> {
         rt: response.rt, //The response time
         response: response.key, //The key that the subject pressed
         correct: correctOrNot(), //If the subject response was correct
-        choices: trial.choices, //The set of valid keys
-        correct_choice: trial.correct_choice, //The correct choice
-        trial_duration: trial.trial_duration, //The trial duration
-        response_ends_trial: trial.response_ends_trial, //If the response ends the trial
-        number_of_apertures: trial.number_of_apertures,
-        number_of_dots: trial.number_of_dots,
-        number_of_sets: trial.number_of_sets,
-        coherent_direction: trial.coherent_direction,
-        coherence: trial.coherence,
-        opposite_coherence: trial.opposite_coherence,
-        dot_radius: trial.dot_radius,
-        dot_life: trial.dot_life,
-        move_distance: trial.move_distance,
-        aperture_width: trial.aperture_width,
-        aperture_height: trial.aperture_height,
-        dot_color: trial.dot_color,
-        background_color: trial.background_color,
-        RDK_type: trial.RDK_type,
-        aperture_type: trial.aperture_type,
-        reinsert_type: trial.reinsert_type,
+        choices: choices, //The set of valid keys
+        correct_choice: correct_choice, //The correct choice
+        trial_duration: trial_duration, //The trial duration
+        response_ends_trial: response_ends_trial, //If the response ends the trial
+        number_of_apertures: number_of_apertures,
+        number_of_dots: number_of_dots,
+        number_of_sets: number_of_sets,
+        coherent_direction: coherent_direction,
+        coherence: coherence,
+        opposite_coherence: opposite_coherence,
+        dot_radius: dot_radius,
+        dot_life: dot_life,
+        move_distance: move_distance,
+        aperture_width: aperture_width,
+        aperture_height: aperture_height,
+        dot_color: dot_color,
+        background_color: background_color,
+        RDK_type: RDK_type,
+        aperture_type: aperture_type,
+        reinsert_type: reinsert_type,
         frame_rate: frameRate, //The average frame rate for the trial
         frame_rate_array: frameRateArray, //The array of ms per frame in this trial
         number_of_frames: numberOfFrames, //The number of frames in this trial
-        aperture_center_x: trial.aperture_center_x,
-        aperture_center_y: trial.aperture_center_y,
-        fixation_cross: trial.fixation_cross,
-        fixation_cross_width: trial.fixation_cross_width,
-        fixation_cross_height: trial.fixation_cross_height,
-        fixation_cross_color: trial.fixation_cross_color,
-        fixation_cross_thickness: trial.fixation_cross_thickness,
-        border: trial.border,
-        border_thickness: trial.border_thickness,
-        border_color: trial.border_color,
+        aperture_center_x: aperture_center_x,
+        aperture_center_y: aperture_center_y,
+        fixation_cross: fixation_cross,
+        fixation_cross_width: fixation_cross_width,
+        fixation_cross_height: fixation_cross_height,
+        fixation_cross_color: fixation_cross_color,
+        fixation_cross_thickness: fixation_cross_thickness,
+        border: border,
+        border_thickness: border_thickness,
+        border_color: border_color,
         canvas_width: canvasWidth,
         canvas_height: canvasHeight,
       };
@@ -571,7 +598,18 @@ class RdkPlugin implements JsPsychPlugin<Info> {
 
       //End this trial and move on to the next trial
       this.jsPsych.finishTrial(trial_data);
-    } //End of end_trial
+    }; //End of end_trial
+
+    //This runs the dot motion simulation, updating it according to the frame refresh rate of the screen.
+    animateDotMotion();
+
+    //--------RDK variables and function calls end--------
+
+    //-------------------------------------
+    //-----------FUNCTIONS BEGIN-----------
+    //-------------------------------------
+
+    //----JsPsych Functions Begin----
 
     //Function to record the first response by the subject
     function after_response(info) {
@@ -581,94 +619,60 @@ class RdkPlugin implements JsPsychPlugin<Info> {
       }
 
       //If the parameter is set such that the response ends the trial, then kill the timeout and end the trial
-      if (trial.response_ends_trial) {
+      if (response_ends_trial) {
         window.clearTimeout(timeoutID);
         end_trial();
       }
     } //End of after_response
 
     //Function that determines if the response is correct
-    function correctOrNot() {
+    const correctOrNot = () => {
       //Check that the correct_choice has been defined
-      if (typeof trial.correct_choice !== "undefined") {
+      if (typeof correct_choice !== "undefined") {
         //If the correct_choice variable holds an array
-        if (trial.correct_choice.constructor === Array) {
+        if (correct_choice.constructor === Array) {
           //If it is an array
           //If the elements are characters
-          if (
-            typeof trial.correct_choice[0] === "string" ||
-            trial.correct_choice[0] instanceof String
-          ) {
-            var key_in_choices = trial.correct_choice.every(function (x) {
+          if (typeof correct_choice[0] === "string" || correct_choice[0] instanceof String) {
+            var key_in_choices = correct_choice.every(function (x) {
               return this.jsPsych.pluginAPI.compareKeys(x, response.key);
             });
             return key_in_choices; //If the response is included in the correct_choice array, return true. Else, return false.
           }
           //Else if the elements are numbers (javascript character codes)
-          else if (typeof trial.correct_choice[0] === "number") {
+          else if (typeof correct_choice[0] === "number") {
             console.error("Error in RDK plugin: correct_choice value must be a string.");
+            return false; // added due to TS error: not all code paths return a value
+          } else {
+            return false; // added due to TS error: not all code paths return a value
           }
         }
         //Else compare the char with the response key
         else {
           //If the element is a character
-          if (typeof trial.correct_choice === "string" || trial.correct_choice instanceof String) {
+          if (typeof correct_choice === "string" || correct_choice instanceof String) {
             //Return true if the user's response matches the correct answer. Return false otherwise.
-            return this.jsPsych.pluginAPI.compareKeys(response.key, trial.correct_choice);
+            return this.jsPsych.pluginAPI.compareKeys(response.key, correct_choice);
           }
           //Else if the element is a number (javascript character codes)
-          else if (typeof trial.correct_choice === "number") {
+          else if (typeof correct_choice === "number") {
             console.error("Error in RDK plugin: correct_choice value must be a string.");
+            return false; // added due to TS error: not all code paths return a value
+          } else {
+            return false; // added due to TS error: not all code paths return a value
           }
         }
+      } else {
+        return false; // added due to TS error: not all code paths return a value
       }
-    }
+    };
 
     //----JsPsych Functions End----
 
     //----RDK Functions Begin----
 
-    //Set up the variables for the apertures
-    function setUpMultipleApertures() {
-      nDotsArray = setParameter(nDots);
-      nSetsArray = setParameter(nSets);
-      coherentDirectionArray = setParameter(coherentDirection);
-      coherenceArray = setParameter(coherence);
-      oppositeCoherenceArray = setParameter(oppositeCoherence);
-      dotRadiusArray = setParameter(dotRadius);
-      dotLifeArray = setParameter(dotLife);
-      moveDistanceArray = setParameter(moveDistance);
-      apertureWidthArray = setParameter(apertureWidth);
-      apertureHeightArray = setParameter(apertureHeight);
-      dotColorArray = setParameter(dotColor);
-      apertureCenterXArray = setParameter(apertureCenterX);
-      apertureCenterYArray = setParameter(apertureCenterY);
-      RDKArray = setParameter(RDK);
-      apertureTypeArray = setParameter(apertureType);
-      reinsertTypeArray = setParameter(reinsertType);
-      fixationCrossArray = setParameter(fixationCross);
-      fixationCrossWidthArray = setParameter(fixationCrossWidth);
-      fixationCrossHeightArray = setParameter(fixationCrossHeight);
-      fixationCrossColorArray = setParameter(fixationCrossColor);
-      fixationCrossThicknessArray = setParameter(fixationCrossThickness);
-      borderArray = setParameter(border);
-      borderThicknessArray = setParameter(borderThickness);
-      borderColorArray = setParameter(borderColor);
-
-      currentSetArray = setParameter(0); //Always starts at zero
-
-      //Loop through the number of apertures to make the dots
-      for (currentApertureNumber = 0; currentApertureNumber < nApertures; currentApertureNumber++) {
-        //Initialize the parameters to make the 2d dot array (one for each aperture);
-        initializeCurrentApertureParameters();
-
-        //Make each 2d array and push it into the 3d array
-        dotArray3d.push(makeDotArray2d());
-      }
-    }
-
     //Function to set the parameters of the array
-    // @ts-ignore
+    // @ts-ignore: not all code paths return a value
     function setParameter(originalVariable) {
       //Check if it is an array and its length matches the aperture then return the original array
       if (originalVariable.constructor === Array && originalVariable.length === nApertures) {
@@ -775,7 +779,6 @@ class RdkPlugin implements JsPsychPlugin<Info> {
       for (var i = 0; i < nSets; i++) {
         tempArray.push(makeDotArray()); //Make a dot array and push it into the 2d array
       }
-
       return tempArray;
     }
 
@@ -1371,10 +1374,10 @@ class RdkPlugin implements JsPsychPlugin<Info> {
           frameRequestID = window.requestAnimationFrame(animate); //Calls for another frame request
 
           //If the timer has not been started and it is set, then start the timer
-          if (!timerHasStarted && trial.trial_duration > 0) {
+          if (!timerHasStarted && trial_duration > 0) {
             //If the trial duration is set, then set a timer to count down and call the end_trial function when the time is up
             //(If the subject did not press a valid keyboard response within the trial duration, then this will end the trial)
-            timeoutID = window.setTimeout(end_trial, trial.trial_duration); //This timeoutID is then used to cancel the timeout should the subject press a valid key
+            timeoutID = window.setTimeout(end_trial, trial_duration); //This timeoutID is then used to cancel the timeout should the subject press a valid key
             //The timer has started, so we set the variable to true so it does not start more timers
             timerHasStarted = true;
           }
