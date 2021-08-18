@@ -1,0 +1,3203 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../../img/jspsych-favicon.png">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
+    
+    
+      
+        <title>jsPsych.data - jsPsych</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.f7f47774.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4cae4f">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+  
+
+
+  
+
+  
+
+
+  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+  <script async src="https://www.google-analytics.com/analytics.js"></script>
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="orange">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#jspsychdata" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="jsPsych" class="md-header__button md-logo" aria-label="jsPsych" data-md-component="logo">
+      
+  <img src="../../img/jspsych-logo-no-text-mono.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            jsPsych
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              jsPsych.data
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="jsPsych" class="md-nav__button md-logo" aria-label="jsPsych" data-md-component="logo">
+      
+  <img src="../../img/jspsych-logo-no-text-mono.svg" alt="logo">
+
+    </a>
+    jsPsych
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Tutorials
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/hello-world/" class="md-nav__link">
+        The Basics: Hello World
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/rt-task/" class="md-nav__link">
+        Demo Experiment: Simple Reaction Time Task
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/video-tutorials/" class="md-nav__link">
+        Video Tutorials
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Overview
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Overview" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Overview
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/timeline/" class="md-nav__link">
+        Creating an Experiment: The Timeline
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/plugins/" class="md-nav__link">
+        Plugins
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/dynamic-parameters/" class="md-nav__link">
+        Dynamic Parameters
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/style/" class="md-nav__link">
+        Controlling Visual Appearance
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/data/" class="md-nav__link">
+        Data Storage, Aggregation, and Manipulation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/running-experiments/" class="md-nav__link">
+        Running Experiments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/experiment-options/" class="md-nav__link">
+        Experiment Settings
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/callbacks/" class="md-nav__link">
+        Event-related Callback Functions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/record-browser-interactions/" class="md-nav__link">
+        Record Browser Interactions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/media-preloading/" class="md-nav__link">
+        Media Preloading
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/fullscreen/" class="md-nav__link">
+        Fullscreen Experiments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/eye-tracking/" class="md-nav__link">
+        Eye Tracking
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/exclude-browser/" class="md-nav__link">
+        Exclude Participants Based on Browser Features
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/progress-bar/" class="md-nav__link">
+        Automatic Progress Bar
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/prolific/" class="md-nav__link">
+        Integrating with Prolific
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/mturk/" class="md-nav__link">
+        Integrating with Mechanical Turk
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/browser-device-support/" class="md-nav__link">
+        Browser and Device Support
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      <label class="md-nav__link" for="__nav_4">
+        Reference
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-core/" class="md-nav__link">
+        jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          jsPsych.data
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        jsPsych.data
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdataaddproperties" class="md-nav__link">
+    jsPsych.data.addProperties
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.addProperties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#assigning-a-subject-id-and-condition-code" class="md-nav__link">
+    Assigning a subject ID and condition code
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdatadisplaydata" class="md-nav__link">
+    jsPsych.data.displayData
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.displayData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_1" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_1" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_1" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-the-on_finish-callback-function-to-show-data-at-the-end-of-the-experiment" class="md-nav__link">
+    Using the on_finish callback function to show data at the end of the experiment
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdataget" class="md-nav__link">
+    jsPsych.data.get
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.get">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_2" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_2" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_2" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdatagetdatabytimelinenode" class="md-nav__link">
+    jsPsych.data.getDataByTimelineNode
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.getDataByTimelineNode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_3" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_3" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_3" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdatagetinteractiondata" class="md-nav__link">
+    jsPsych.data.getInteractionData
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.getInteractionData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_4" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_4" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_4" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_2" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdatagetlasttimelinedata" class="md-nav__link">
+    jsPsych.data.getLastTimelineData
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.getLastTimelineData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#return-value_5" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_5" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_3" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdatagetlasttrialdata" class="md-nav__link">
+    jsPsych.data.getLastTrialData
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.getLastTrialData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#return-value_6" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_6" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_4" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdatageturlvariable" class="md-nav__link">
+    jsPsych.data.getURLVariable
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.getURLVariable">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_5" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_7" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_7" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_5" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdataurlvariables" class="md-nav__link">
+    jsPsych.data.urlVariables
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.urlVariables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#return-value_8" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_8" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_6" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdatawrite" class="md-nav__link">
+    jsPsych.data.write
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.write">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_6" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_9" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_9" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_7" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#datacollection" class="md-nav__link">
+    DataCollection
+  </a>
+  
+    <nav class="md-nav" aria-label="DataCollection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#addtoall" class="md-nav__link">
+    .addToAll()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addtolast" class="md-nav__link">
+    .addToLast()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#count" class="md-nav__link">
+    .count()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#csv" class="md-nav__link">
+    .csv()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter" class="md-nav__link">
+    .filter()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filtercustom" class="md-nav__link">
+    .filterCustom()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-last" class="md-nav__link">
+    .first() / .last()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ignore" class="md-nav__link">
+    .ignore()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#join" class="md-nav__link">
+    .join()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json" class="md-nav__link">
+    .json()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#localsave" class="md-nav__link">
+    .localSave()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#push" class="md-nav__link">
+    .push()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#readonly" class="md-nav__link">
+    .readOnly()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#select" class="md-nav__link">
+    .select()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uniquenames" class="md-nav__link">
+    .uniqueNames()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values" class="md-nav__link">
+    .values()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#datacolumn" class="md-nav__link">
+    DataColumn
+  </a>
+  
+    <nav class="md-nav" aria-label="DataColumn">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#all" class="md-nav__link">
+    .all()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#count_1" class="md-nav__link">
+    .count()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frequencies" class="md-nav__link">
+    .frequencies()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#max-min" class="md-nav__link">
+    .max() / .min()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mean" class="md-nav__link">
+    .mean()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#median" class="md-nav__link">
+    .median()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sd" class="md-nav__link">
+    .sd()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subset" class="md-nav__link">
+    .subset()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sum" class="md-nav__link">
+    .sum()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values_1" class="md-nav__link">
+    .values
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variance" class="md-nav__link">
+    .variance()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-randomization/" class="md-nav__link">
+        jsPsych.randomization
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-turk/" class="md-nav__link">
+        jsPsych.turk
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-pluginAPI/" class="md-nav__link">
+        jsPsych.pluginAPI
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Plugins
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Plugins" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Plugins
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/list-of-plugins/" class="md-nav__link">
+        List of Plugins
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-animation/" class="md-nav__link">
+        jspsych-animation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-audio-button-response/" class="md-nav__link">
+        jspsych-audio-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-audio-keyboard-response/" class="md-nav__link">
+        jspsych-audio-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-audio-slider-response/" class="md-nav__link">
+        jspsych-audio-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-canvas-button-response/" class="md-nav__link">
+        jspsych-canvas-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-canvas-keyboard-response/" class="md-nav__link">
+        jspsych-canvas-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-canvas-slider-response/" class="md-nav__link">
+        jspsych-canvas-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-call-function/" class="md-nav__link">
+        jspsych-call-function
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-categorize-animation/" class="md-nav__link">
+        jspsych-categorize-animation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-categorize-html/" class="md-nav__link">
+        jspsych-categorize-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-categorize-image/" class="md-nav__link">
+        jspsych-categorize-image
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-cloze/" class="md-nav__link">
+        jspsych-cloze
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-external-html/" class="md-nav__link">
+        jspsych-external-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-free-sort/" class="md-nav__link">
+        jspsych-free-sort
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-fullscreen/" class="md-nav__link">
+        jspsych-fullscreen
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-html-button-response/" class="md-nav__link">
+        jspsych-html-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-html-keyboard-response/" class="md-nav__link">
+        jspsych-html-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-html-slider-response/" class="md-nav__link">
+        jspsych-html-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-iat-html/" class="md-nav__link">
+        jspsych-iat-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-iat-image/" class="md-nav__link">
+        jspsych-iat-image
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-image-button-response/" class="md-nav__link">
+        jspsych-image-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-image-keyboard-response/" class="md-nav__link">
+        jspsych-image-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-image-slider-response/" class="md-nav__link">
+        jspsych-image-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-instructions/" class="md-nav__link">
+        jspsych-instructions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-maxdiff/" class="md-nav__link">
+        jspsych-maxdiff
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-preload/" class="md-nav__link">
+        jspsych-preload
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-rdk/" class="md-nav__link">
+        jspsych-rdk
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-reconstruction/" class="md-nav__link">
+        jspsych-reconstruction
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-resize/" class="md-nav__link">
+        jspsych-resize
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-same-different-html/" class="md-nav__link">
+        jspsych-same-different-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-same-different-image/" class="md-nav__link">
+        jspsych-same-different-image
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-serial-reaction-time/" class="md-nav__link">
+        jspsych-serial-reaction-time
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-serial-reaction-time-mouse/" class="md-nav__link">
+        jspsych-serial-reaction-time-mouse
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-survey-html-form/" class="md-nav__link">
+        jspsych-survey-html-form
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-survey-likert/" class="md-nav__link">
+        jspsych-survey-likert
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-survey-multi-choice/" class="md-nav__link">
+        jspsych-survey-multi-choice
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-survey-multi-select/" class="md-nav__link">
+        jspsych-survey-multi-select
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-survey-text/" class="md-nav__link">
+        jspsych-survey-text
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-video-button-response/" class="md-nav__link">
+        jspsych-video-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-video-keyboard-response/" class="md-nav__link">
+        jspsych-video-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-video-slider-response/" class="md-nav__link">
+        jspsych-video-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-virtual-chinrest/" class="md-nav__link">
+        jspsych-virtual-chinrest
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-visual-search-circle/" class="md-nav__link">
+        jspsych-visual-search-circle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-vsl-animate-occlusion/" class="md-nav__link">
+        jspsych-vsl-animate-occlusion
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-vsl-grid-scene/" class="md-nav__link">
+        jspsych-vsl-grid-scene
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-webgazer-calibrate/" class="md-nav__link">
+        jspsych-webgazer-calibrate
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-webgazer-init-camera/" class="md-nav__link">
+        jspsych-webgazer-init-camera
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-webgazer-validate/" class="md-nav__link">
+        jspsych-webgazer-validate
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
+        Extensions
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Extensions" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Extensions
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/extensions/" class="md-nav__link">
+        Extensions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/jspsych-ext-webgazer/" class="md-nav__link">
+        jspsych-ext-webgazer.js
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      <label class="md-nav__link" for="__nav_7">
+        About
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/about/" class="md-nav__link">
+        About jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/support/" class="md-nav__link">
+        Getting Help
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/contributing/" class="md-nav__link">
+        Contributing to jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdataaddproperties" class="md-nav__link">
+    jsPsych.data.addProperties
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.addProperties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#assigning-a-subject-id-and-condition-code" class="md-nav__link">
+    Assigning a subject ID and condition code
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdatadisplaydata" class="md-nav__link">
+    jsPsych.data.displayData
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.displayData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_1" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_1" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_1" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-the-on_finish-callback-function-to-show-data-at-the-end-of-the-experiment" class="md-nav__link">
+    Using the on_finish callback function to show data at the end of the experiment
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdataget" class="md-nav__link">
+    jsPsych.data.get
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.get">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_2" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_2" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_2" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdatagetdatabytimelinenode" class="md-nav__link">
+    jsPsych.data.getDataByTimelineNode
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.getDataByTimelineNode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_3" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_3" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_3" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdatagetinteractiondata" class="md-nav__link">
+    jsPsych.data.getInteractionData
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.getInteractionData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_4" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_4" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_4" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_2" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdatagetlasttimelinedata" class="md-nav__link">
+    jsPsych.data.getLastTimelineData
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.getLastTimelineData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#return-value_5" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_5" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_3" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdatagetlasttrialdata" class="md-nav__link">
+    jsPsych.data.getLastTrialData
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.getLastTrialData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#return-value_6" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_6" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_4" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdatageturlvariable" class="md-nav__link">
+    jsPsych.data.getURLVariable
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.getURLVariable">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_5" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_7" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_7" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_5" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdataurlvariables" class="md-nav__link">
+    jsPsych.data.urlVariables
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.urlVariables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#return-value_8" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_8" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_6" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychdatawrite" class="md-nav__link">
+    jsPsych.data.write
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.data.write">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_6" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_9" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_9" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_7" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#datacollection" class="md-nav__link">
+    DataCollection
+  </a>
+  
+    <nav class="md-nav" aria-label="DataCollection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#addtoall" class="md-nav__link">
+    .addToAll()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addtolast" class="md-nav__link">
+    .addToLast()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#count" class="md-nav__link">
+    .count()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#csv" class="md-nav__link">
+    .csv()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter" class="md-nav__link">
+    .filter()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filtercustom" class="md-nav__link">
+    .filterCustom()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-last" class="md-nav__link">
+    .first() / .last()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ignore" class="md-nav__link">
+    .ignore()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#join" class="md-nav__link">
+    .join()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json" class="md-nav__link">
+    .json()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#localsave" class="md-nav__link">
+    .localSave()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#push" class="md-nav__link">
+    .push()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#readonly" class="md-nav__link">
+    .readOnly()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#select" class="md-nav__link">
+    .select()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uniquenames" class="md-nav__link">
+    .uniqueNames()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values" class="md-nav__link">
+    .values()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#datacolumn" class="md-nav__link">
+    DataColumn
+  </a>
+  
+    <nav class="md-nav" aria-label="DataColumn">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#all" class="md-nav__link">
+    .all()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#count_1" class="md-nav__link">
+    .count()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frequencies" class="md-nav__link">
+    .frequencies()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#max-min" class="md-nav__link">
+    .max() / .min()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mean" class="md-nav__link">
+    .mean()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#median" class="md-nav__link">
+    .median()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sd" class="md-nav__link">
+    .sd()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subset" class="md-nav__link">
+    .subset()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sum" class="md-nav__link">
+    .sum()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values_1" class="md-nav__link">
+    .values
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variance" class="md-nav__link">
+    .variance()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/jspsych/jsPsych/edit/master/docs/core_library/jspsych-data.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="jspsychdata">jsPsych.data<a class="headerlink" href="#jspsychdata" title="Permanent link">&para;</a></h1>
+<p>The jsPsych.data module contains functions for interacting with the data generated by jsPsych plugins.</p>
+<hr />
+<h2 id="jspsychdataaddproperties">jsPsych.data.addProperties<a class="headerlink" href="#jspsychdataaddproperties" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">addProperties</span><span class="p">(</span><span class="nx">properties</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>properties</td>
+<td>object</td>
+<td>Object of key: value pairs to add to the data.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return-value">Return value<a class="headerlink" href="#return-value" title="Permanent link">&para;</a></h3>
+<p>Returns nothing.</p>
+<h3 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h3>
+<p>This method appends a set of properties to every trial in the data object, including trials that have already occurred and trials that have yet to occur. You can use this to record things like the subject ID or condition assignment.</p>
+<h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
+<h4 id="assigning-a-subject-id-and-condition-code">Assigning a subject ID and condition code<a class="headerlink" href="#assigning-a-subject-id-and-condition-code" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">addProperties</span><span class="p">({</span><span class="nx">subject</span><span class="o">:</span> <span class="mf">1</span><span class="p">,</span> <span class="nx">condition</span><span class="o">:</span> <span class="s1">&#39;control&#39;</span><span class="p">});</span>
+</code></pre></div>
+<hr />
+<h2 id="jspsychdatadisplaydata">jsPsych.data.displayData<a class="headerlink" href="#jspsychdatadisplaydata" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">displayData</span><span class="p">(</span><span class="nx">format</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="parameters_1">Parameters<a class="headerlink" href="#parameters_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>format</td>
+<td>string</td>
+<td>Specifies whether to display the data in <code>'csv'</code> or <code>'json'</code> format.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return-value_1">Return value<a class="headerlink" href="#return-value_1" title="Permanent link">&para;</a></h3>
+<p>Returns nothing.</p>
+<h3 id="description_1">Description<a class="headerlink" href="#description_1" title="Permanent link">&para;</a></h3>
+<p>Outputs all of the data collected in the experiment to the screen in either JSON or CSV format. This is a useful method for quick debugging when developing an experiment.</p>
+<h3 id="examples_1">Examples<a class="headerlink" href="#examples_1" title="Permanent link">&para;</a></h3>
+<h4 id="using-the-on_finish-callback-function-to-show-data-at-the-end-of-the-experiment">Using the on_finish callback function to show data at the end of the experiment<a class="headerlink" href="#using-the-on_finish-callback-function-to-show-data-at-the-end-of-the-experiment" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+    <span class="nx">experiment_structure</span><span class="o">:</span> <span class="nx">exp</span><span class="p">,</span>
+    <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">displayData</span><span class="p">(</span><span class="s1">&#39;csv&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></div>
+<hr />
+<h2 id="jspsychdataget">jsPsych.data.get<a class="headerlink" href="#jspsychdataget" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>jsPsych.data.get()
+</code></pre></div>
+<h3 id="parameters_2">Parameters<a class="headerlink" href="#parameters_2" title="Permanent link">&para;</a></h3>
+<p>None.</p>
+<h3 id="return-value_2">Return value<a class="headerlink" href="#return-value_2" title="Permanent link">&para;</a></h3>
+<p>Returns the data collection of all data generated by the experiment.</p>
+<h3 id="description_2">Description<a class="headerlink" href="#description_2" title="Permanent link">&para;</a></h3>
+<p>This function is the standard starting point for accessing the data generated by the experiment. It returns a DataCollection object, which has
+several methods that can be used to further filter, aggregate, and view the data. These methods are described under the DataCollection section
+on this page.</p>
+<h3 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1">// select all trials</span>
+<span class="kd">var</span> <span class="nx">all_data</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">();</span>
+
+<span class="c1">// get csv representation of data and log to console</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">all_data</span><span class="p">.</span><span class="nx">csv</span><span class="p">());</span>
+</code></pre></div>
+<hr />
+<h2 id="jspsychdatagetdatabytimelinenode">jsPsych.data.getDataByTimelineNode<a class="headerlink" href="#jspsychdatagetdatabytimelinenode" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">getDataByTimelineNode</span><span class="p">(</span><span class="nx">node_id</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="parameters_3">Parameters<a class="headerlink" href="#parameters_3" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>node_id</td>
+<td>string</td>
+<td>The id of the TimelineNodes to get data from.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return-value_3">Return value<a class="headerlink" href="#return-value_3" title="Permanent link">&para;</a></h3>
+<p>Returns a DataCollection of all of the data generated in a specified TimelineNode.</p>
+<h3 id="description_3">Description<a class="headerlink" href="#description_3" title="Permanent link">&para;</a></h3>
+<p>Get all the data generated by a specified Timeline.</p>
+<h3 id="example_1">Example<a class="headerlink" href="#example_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">current_node_id</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">currentTimelineNodeID</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">data_from_current_node</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">getDataByTimelineNode</span><span class="p">(</span><span class="nx">current_node_id</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h2 id="jspsychdatagetinteractiondata">jsPsych.data.getInteractionData<a class="headerlink" href="#jspsychdatagetinteractiondata" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">getInteractionData</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="parameters_4">Parameters<a class="headerlink" href="#parameters_4" title="Permanent link">&para;</a></h3>
+<p>None.</p>
+<h3 id="return-value_4">Return value<a class="headerlink" href="#return-value_4" title="Permanent link">&para;</a></h3>
+<p>Returns a DataCollection object with all of the interaction events.</p>
+<h3 id="description_4">Description<a class="headerlink" href="#description_4" title="Permanent link">&para;</a></h3>
+<p>jsPsych automatically records a few different kinds of user interaction events. <code>blur</code> events occur when the user clicks on another window or tab during the experiment, indicating that they are no longer interacting with the experiment. <code>focus</code> events occur when the user clicks on the experiment window after having clicked somewhere else first (i.e., generated a <code>blur</code> event). <code>fullscreenenter</code> and <code>fullscreenexit</code> events are triggered by the browser entering and exiting fullscreen mode. However, <code>fullscreenenter</code> events only occur when the script switches the browser to fullscreen mode, e.g., with the jspsych-fullscreen plugin. Manually entering fullscreen mode does not trigger this event. <code>fullscreenexit</code> events occur whether the user manually exits fullscreen mode or the script exits fullscreen mode. This method returns the DataCollection containing all interaction events. This is useful for tracking whether the participant completed the task without diverting attention to other windows. Events are in the form:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;focus&#39;</span> <span class="nx">or</span> <span class="s1">&#39;blur&#39;</span> <span class="nx">or</span> <span class="s1">&#39;fullscreenenter&#39;</span> <span class="nx">or</span> <span class="s1">&#39;fullscreenexit&#39;</span><span class="p">,</span>
+    <span class="nx">trial</span><span class="o">:</span> <span class="mf">10</span><span class="p">,</span> <span class="c1">// the trial number when the event happened</span>
+    <span class="nx">time</span><span class="o">:</span> <span class="mf">13042</span> <span class="c1">// total time elapsed since the start of the experiment</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="example_2">Example<a class="headerlink" href="#example_2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">interaction_data</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">getInteractionData</span><span class="p">();</span>
+<span class="c1">// log data to console in json format</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">interaction_data</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+</code></pre></div>
+<hr />
+<h2 id="jspsychdatagetlasttimelinedata">jsPsych.data.getLastTimelineData<a class="headerlink" href="#jspsychdatagetlasttimelinedata" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">getLastTimelineData</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="return-value_5">Return value<a class="headerlink" href="#return-value_5" title="Permanent link">&para;</a></h3>
+<p>Returns a DataCollection.</p>
+<h3 id="description_5">Description<a class="headerlink" href="#description_5" title="Permanent link">&para;</a></h3>
+<p>Gets all of the data generated in the same timeline as the last trial.</p>
+<h3 id="example_3">Example<a class="headerlink" href="#example_3" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">lasttimelinedata</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">getLastTimelineData</span><span class="p">();</span>
+</code></pre></div>
+<hr />
+<h2 id="jspsychdatagetlasttrialdata">jsPsych.data.getLastTrialData<a class="headerlink" href="#jspsychdatagetlasttrialdata" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">getLastTrialData</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="return-value_6">Return value<a class="headerlink" href="#return-value_6" title="Permanent link">&para;</a></h3>
+<p>Returns a DataCollection.</p>
+<h3 id="description_6">Description<a class="headerlink" href="#description_6" title="Permanent link">&para;</a></h3>
+<p>Gets the data collection containing all data generated by the last trial.</p>
+<h3 id="example_4">Example<a class="headerlink" href="#example_4" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">lasttrialdata</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">getLastTrialData</span><span class="p">();</span>
+</code></pre></div>
+<hr />
+<h2 id="jspsychdatageturlvariable">jsPsych.data.getURLVariable<a class="headerlink" href="#jspsychdatageturlvariable" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">getURLVariable</span><span class="p">(</span><span class="nx">var_name</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="parameters_5">Parameters<a class="headerlink" href="#parameters_5" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>var_name</td>
+<td>string</td>
+<td>Which variable to get the value of.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return-value_7">Return value<a class="headerlink" href="#return-value_7" title="Permanent link">&para;</a></h3>
+<p>Returns the value of a variable passed in through the query string.</p>
+<h3 id="description_7">Description<a class="headerlink" href="#description_7" title="Permanent link">&para;</a></h3>
+<p>For extracting a particular variable passed in through a URL query string.</p>
+<h3 id="example_5">Example<a class="headerlink" href="#example_5" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1">// if the URL of the page is: experiment.html?subject=1234&amp;condition=test</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">getURLVariable</span><span class="p">(</span><span class="s1">&#39;subject&#39;</span><span class="p">))</span> <span class="c1">// logs &quot;1234&quot;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">getURLVariable</span><span class="p">(</span><span class="s1">&#39;condition&#39;</span><span class="p">))</span> <span class="c1">// logs &quot;test&quot;</span>
+</code></pre></div>
+<hr />
+<h2 id="jspsychdataurlvariables">jsPsych.data.urlVariables<a class="headerlink" href="#jspsychdataurlvariables" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">urlVariables</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="return-value_8">Return value<a class="headerlink" href="#return-value_8" title="Permanent link">&para;</a></h3>
+<p>Returns an object (associative array) of the variables in the URL query string.</p>
+<h3 id="description_8">Description<a class="headerlink" href="#description_8" title="Permanent link">&para;</a></h3>
+<p>For extracting variables passed in through a URL query string.</p>
+<h3 id="example_6">Example<a class="headerlink" href="#example_6" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1">// if the URL of the page is: experiment.html?subject=1234&amp;condition=test</span>
+<span class="kd">var</span> <span class="nx">urlvar</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">urlVariables</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">urlvar</span><span class="p">.</span><span class="nx">subject</span><span class="p">)</span> <span class="c1">// logs &quot;1234&quot;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">urlvar</span><span class="p">.</span><span class="nx">condition</span><span class="p">)</span> <span class="c1">// logs &quot;test&quot;</span>
+</code></pre></div>
+<hr />
+<h2 id="jspsychdatawrite">jsPsych.data.write<a class="headerlink" href="#jspsychdatawrite" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">data_object</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="parameters_6">Parameters<a class="headerlink" href="#parameters_6" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data_object</td>
+<td>object</td>
+<td>Object of <code>key: value</code> pairs to store in jsPsych's data storage as a trial.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return-value_9">Return value<a class="headerlink" href="#return-value_9" title="Permanent link">&para;</a></h3>
+<p>Returns nothing.</p>
+<h3 id="description_9">Description<a class="headerlink" href="#description_9" title="Permanent link">&para;</a></h3>
+<p>This method is used by <code>jsPsych.finishTrial</code> for writing data. You should probably not use it to add data. Instead use <a href="#addProperties">jsPsych.data.addProperties</a>.</p>
+<h3 id="example_7">Example<a class="headerlink" href="#example_7" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1">// don&#39;t use this! data should only be written once per trial. use jsPsych.finishTrial to save data.</span>
+
+<span class="kd">var</span> <span class="nx">trial_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">correct</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">rt</span><span class="o">:</span> <span class="mf">487</span>
+<span class="p">}</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">trial_data</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h2 id="datacollection">DataCollection<a class="headerlink" href="#datacollection" title="Permanent link">&para;</a></h2>
+<p>All data is stored in the DataCollection object. Using methods like <code>jsPsych.data.get()</code> and <code>jsPsych.data.getLastTrialData()</code> return DataCollections containing the experiment data. This is a list of all of the methods that are available to call on a DataCollection object.</p>
+<h4 id="addtoall">.addToAll()<a class="headerlink" href="#addtoall" title="Permanent link">&para;</a></h4>
+<p>Adds a set of properties to all items in the DataCollection. Similar to <code>jsPsych.data.addProperties()</code>, except that it can be applied to a subset of the whole DataCollection by filtering down to a smaller DataCollection first.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">addToAll</span><span class="p">({</span><span class="nx">subject_id</span><span class="o">:</span> <span class="mf">123</span><span class="p">,</span> <span class="nx">condition</span><span class="o">:</span> <span class="s1">&#39;control&#39;</span><span class="p">});</span>
+</code></pre></div>
+<h4 id="addtolast">.addToLast()<a class="headerlink" href="#addtolast" title="Permanent link">&para;</a></h4>
+<p>Adds a set of properties to the last trial in the DataCollection.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">addToLast</span><span class="p">({</span><span class="nx">success</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+</code></pre></div>
+<h4 id="count">.count()<a class="headerlink" href="#count" title="Permanent link">&para;</a></h4>
+<p>Counts the number of trials in the DataCollection.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">count</span><span class="p">()</span>
+</code></pre></div>
+<h4 id="csv">.csv()<a class="headerlink" href="#csv" title="Permanent link">&para;</a></h4>
+<p>Generates a CSV string representing all of the data in the DataCollection.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">csv</span><span class="p">());</span>
+</code></pre></div>
+<h4 id="filter">.filter()<a class="headerlink" href="#filter" title="Permanent link">&para;</a></h4>
+<p>Returns a subset of the DataCollection based on the filter. The filter is an object, and trials are only kept in the returned DataCollection if they contain the key: value pair(s) in the filter object. For example, the code below selects all of the trials with a correct response.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">correct_trials</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filter</span><span class="p">({</span><span class="nx">correct</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+</code></pre></div>
+<p>The object can have multiple key: value pairs, and the trials must match all of them in order to be included in the returned collection.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// keep only correct trials from the practice phase</span>
+<span class="kd">var</span> <span class="nx">correct_practice_trials</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filter</span><span class="p">({</span><span class="nx">correct</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span> <span class="nx">phase</span><span class="o">:</span> <span class="s1">&#39;practice&#39;</span><span class="p">});</span>
+</code></pre></div>
+<p>The filter can also be an array of objects. In this case each object in the array acts as an OR filter. As long as the trial has all the key: value pairs of one of the objects in the array, it will appear in the returned collection.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// select trials from block 1 and block 5.</span>
+<span class="kd">var</span> <span class="nx">trials</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filter</span><span class="p">([{</span><span class="nx">block</span><span class="o">:</span> <span class="mf">1</span><span class="p">},</span> <span class="p">{</span><span class="nx">block</span><span class="o">:</span><span class="mf">5</span><span class="p">}]);</span>
+</code></pre></div>
+<p>The filter method returns a DataCollection object, so methods can be chained onto a single statement.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// count the number of correct trials in block 1</span>
+<span class="kd">var</span> <span class="nx">block_1_correct</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filter</span><span class="p">({</span><span class="nx">block</span><span class="o">:</span><span class="mf">1</span><span class="p">,</span> <span class="nx">correct</span><span class="o">:</span><span class="kc">true</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
+</code></pre></div>
+<h4 id="filtercustom">.filterCustom()<a class="headerlink" href="#filtercustom" title="Permanent link">&para;</a></h4>
+<p>This method is similar to the <code>.filter()</code> method, except that it accepts a function as the filter. The function is passed a single argument, containing the data for a trial. If the function returns <code>true</code> the trial is included in the returned DataCollection.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// count the number of trials with a response time greater than 2000ms.</span>
+<span class="kd">var</span> <span class="nx">too_long</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filterCustom</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">trial</span><span class="p">){</span>
+    <span class="k">return</span> <span class="nx">trial</span><span class="p">.</span><span class="nx">rt</span> <span class="o">&gt;</span> <span class="mf">2000</span><span class="p">;</span>
+<span class="p">}).</span><span class="nx">count</span><span class="p">()</span>
+</code></pre></div>
+<h4 id="first-last">.first() / .last()<a class="headerlink" href="#first-last" title="Permanent link">&para;</a></h4>
+<p>Returns a DataCollection containing the first/last <em>n</em> trials. If <em>n</em> is greater than the number of trials in the DataCollection, then these functions will return an array of length equal to the number of trials. If there are no trials in the DataCollection, then these functions will return an empty array. If the <em>n</em> argument is omitted, then the functions will use the default value of 1. If <em>n</em> is zero or a negative number, then these functions will throw an error.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">first_trial</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">first</span><span class="p">(</span><span class="mf">1</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">last_trial_with_correct_response</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filter</span><span class="p">({</span><span class="nx">correct</span><span class="o">:</span> <span class="kc">true</span><span class="p">}).</span><span class="nx">last</span><span class="p">(</span><span class="mf">1</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">last_10_trials</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">last</span><span class="p">(</span><span class="mf">10</span><span class="p">);</span>
+</code></pre></div>
+<h4 id="ignore">.ignore()<a class="headerlink" href="#ignore" title="Permanent link">&para;</a></h4>
+<p>Returns a DataCollection with all instances of a particular key removed from the dataset.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// log a csv file that does not contain the internal_node_id values for each trial</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">ignore</span><span class="p">(</span><span class="s1">&#39;internal_node_id&#39;</span><span class="p">).</span><span class="nx">csv</span><span class="p">());</span>
+</code></pre></div>
+<h4 id="join">.join()<a class="headerlink" href="#join" title="Permanent link">&para;</a></h4>
+<p>Appends one DataCollection onto another and returns the combined collection.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// get a DataCollection with all trials that are either correct or</span>
+<span class="c1">// have a response time greater than 200ms.</span>
+<span class="kd">var</span> <span class="nx">dc1</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filter</span><span class="p">({</span><span class="nx">correct</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+<span class="kd">var</span> <span class="nx">dc2</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filterCustom</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">trial</span><span class="p">){</span> <span class="k">return</span> <span class="nx">trial</span><span class="p">.</span><span class="nx">rt</span> <span class="o">&gt;</span> <span class="mf">200</span><span class="p">});</span>
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">dc1</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">dc2</span><span class="p">);</span>
+</code></pre></div>
+<h4 id="json">.json()<a class="headerlink" href="#json" title="Permanent link">&para;</a></h4>
+<p>Generates a JSON string representing all of the data in the DataCollection.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">json</span><span class="p">());</span>
+</code></pre></div>
+<h4 id="localsave">.localSave()<a class="headerlink" href="#localsave" title="Permanent link">&para;</a></h4>
+<p>Saves a CSV or JSON file on the computer running the experiment. If conducting an online experiment, this will download the file onto the subject's computer, and is therefore not a recommended data storage solution for online data collection.</p>
+<p><strong>Warning:</strong> This function may not behave correctly in older browsers. Upgrading to the latest version of any major web browser should solve the problem.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// first argument is the format, second is the filename.</span>
+<span class="c1">// the format can be either &#39;csv&#39; or &#39;json&#39;.</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">localSave</span><span class="p">(</span><span class="s1">&#39;csv&#39;</span><span class="p">,</span><span class="s1">&#39;mydata.csv&#39;</span><span class="p">);</span>
+</code></pre></div>
+<h4 id="push">.push()<a class="headerlink" href="#push" title="Permanent link">&para;</a></h4>
+<p>Add a new entry to the DataCollection. This method is mostly used internally, and you shouldn't need to call it under normal circumstances.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span><span class="nx">correct</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">rt</span><span class="o">:</span> <span class="mf">500</span><span class="p">}</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">push</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+</code></pre></div>
+<h4 id="readonly">.readOnly()<a class="headerlink" href="#readonly" title="Permanent link">&para;</a></h4>
+<p>Creates a copy of the DataCollection so that any modification of the values in the DataCollection will not affect the original.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// this line edits the rt property of the first trial</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">first</span><span class="p">(</span><span class="mf">1</span><span class="p">).</span><span class="nx">values</span><span class="p">()[</span><span class="mf">0</span><span class="p">].</span><span class="nx">rt</span> <span class="o">=</span> <span class="mf">100</span><span class="p">;</span>
+
+<span class="c1">// readOnly creates a copy that can be modified without affecting the original</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">first</span><span class="p">(</span><span class="mf">1</span><span class="p">).</span><span class="nx">values</span><span class="p">()[</span><span class="mf">0</span><span class="p">].</span><span class="nx">rt</span>
+<span class="c1">// outputs 100</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">readOnly</span><span class="p">().</span><span class="nx">first</span><span class="p">(</span><span class="mf">1</span><span class="p">).</span><span class="nx">values</span><span class="p">()[</span><span class="mf">0</span><span class="p">].</span><span class="nx">rt</span> <span class="o">=</span> <span class="mf">200</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">first</span><span class="p">(</span><span class="mf">1</span><span class="p">).</span><span class="nx">values</span><span class="p">()[</span><span class="mf">0</span><span class="p">].</span><span class="nx">rt</span>
+<span class="c1">// still outputs 100</span>
+</code></pre></div>
+<h4 id="select">.select()<a class="headerlink" href="#select" title="Permanent link">&para;</a></h4>
+<p>Returns a DataColumn object (see documentation below) of a single property from a DataCollection object.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">rt_data</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">);</span>
+<span class="nx">rt_data</span><span class="p">.</span><span class="nx">mean</span><span class="p">()</span>
+</code></pre></div>
+<h4 id="uniquenames">.uniqueNames()<a class="headerlink" href="#uniquenames" title="Permanent link">&para;</a></h4>
+<p>Generates an array of all the unique key names in the set of trials contained in the DataCollection. This is especially useful when setting up a relational database (e.g., MySQL) where the column names need to be specified in advance.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">uniqueNames</span><span class="p">());</span>
+</code></pre></div>
+<h4 id="values">.values()<a class="headerlink" href="#values" title="Permanent link">&para;</a></h4>
+<p>Returns the raw data array associated with the DataCollection. This array is modifiable, so changes to the array and values of objects in the array will change the DataCollection.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">raw_data</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">values</span><span class="p">();</span>
+
+<span class="c1">// was response in first trial correct?</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">raw_data</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">correct</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;correct!&#39;</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;incorrect.&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<hr />
+<h2 id="datacolumn">DataColumn<a class="headerlink" href="#datacolumn" title="Permanent link">&para;</a></h2>
+<p>DataColumn objects represent all the values of a single property in a DataCollection. They are generated by using the <code>.select()</code> method on a DataCollection. Once a DataColumn is generated, the following methods can be used.</p>
+<h4 id="all">.all()<a class="headerlink" href="#all" title="Permanent link">&para;</a></h4>
+<p>Checks if all values in the DataColumn return <code>true</code> when passed to a function. The function takes a single argument, which represents one value from the DataColumn.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// check if all the response times in the practice phase were under 1000ms</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filter</span><span class="p">({</span><span class="nx">phase</span><span class="o">:</span> <span class="s1">&#39;practice&#39;</span><span class="p">}).</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;correct&#39;</span><span class="p">).</span><span class="nx">all</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="mf">1000</span><span class="p">;</span> <span class="p">});</span>
+</code></pre></div>
+<h4 id="count_1">.count()<a class="headerlink" href="#count_1" title="Permanent link">&para;</a></h4>
+<p>Counts the number of values in the DataColumn.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// count how many response times there are</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">count</span><span class="p">();</span>
+</code></pre></div>
+<h4 id="frequencies">.frequencies()<a class="headerlink" href="#frequencies" title="Permanent link">&para;</a></h4>
+<p>Counts the number of occurrences of each unique value in the DataColumn. Returns this value as an object, where each key is a unique value and the value of each key is the number of occurrences of that key.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// get frequencies of correct and incorrect responses</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;correct&#39;</span><span class="p">).</span><span class="nx">frequencies</span><span class="p">();</span>
+</code></pre></div>
+<h4 id="max-min">.max() / .min()<a class="headerlink" href="#max-min" title="Permanent link">&para;</a></h4>
+<p>Returns the maximum or minimum value in a DataColumn.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">max</span><span class="p">();</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">min</span><span class="p">();</span>
+</code></pre></div>
+<h4 id="mean">.mean()<a class="headerlink" href="#mean" title="Permanent link">&para;</a></h4>
+<p>Returns the average of all the values in a DataColumn.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">mean</span><span class="p">();</span>
+</code></pre></div>
+<h4 id="median">.median()<a class="headerlink" href="#median" title="Permanent link">&para;</a></h4>
+<p>Returns the median of all the values in a DataColumn.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">median</span><span class="p">();</span>
+</code></pre></div>
+<h4 id="sd">.sd()<a class="headerlink" href="#sd" title="Permanent link">&para;</a></h4>
+<p>Returns the standard deviation of the values in a DataColumn.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">sd</span><span class="p">();</span>
+</code></pre></div>
+<h4 id="subset">.subset()<a class="headerlink" href="#subset" title="Permanent link">&para;</a></h4>
+<p>Filters the DataColumn to include only values that return <code>true</code> when passed through the specified function.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// below results will be less than 200.</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">subset</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span> <span class="k">return</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="mf">200</span><span class="p">;</span> <span class="p">}).</span><span class="nx">max</span><span class="p">();</span>
+</code></pre></div>
+<h4 id="sum">.sum()<a class="headerlink" href="#sum" title="Permanent link">&para;</a></h4>
+<p>Returns the sum of the values in a DataColumn.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">sum</span><span class="p">();</span>
+</code></pre></div>
+<h4 id="values_1">.values<a class="headerlink" href="#values_1" title="Permanent link">&para;</a></h4>
+<p>The raw array of values in the DataColumn.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// note that this is not a function call.</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">values</span><span class="p">;</span>
+</code></pre></div>
+<h4 id="variance">.variance()<a class="headerlink" href="#variance" title="Permanent link">&para;</a></h4>
+<p>Returns the variance of the values in a DataColumn.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">variance</span><span class="p">();</span>
+</code></pre></div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../jspsych-core/" class="md-footer__link md-footer__link--prev" aria-label="Previous: jsPsych" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              jsPsych
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../jspsych-randomization/" class="md-footer__link md-footer__link--next" aria-label="Next: jsPsych.randomization" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              jsPsych.randomization
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2012-2021 Josh de Leeuw
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.709b4209.min.js", "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.febc23d1.min.js"></script>
+      
+    
+  </body>
+</html>
