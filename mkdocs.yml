@@ -13,10 +13,12 @@ extra:
       link: 'https://github.com/jspsych'
     - icon: 'fontawesome/brands/twitter'
       link: 'https://twitter.com/joshdeleeuw'
+  version:
+    provider: mike
+  analytics:
+    provider: google
+    property: 'UA-50563838-1'
 copyright: 'Copyright &copy; 2012-2021 Josh de Leeuw'
-google_analytics:
-  - 'UA-50563838-1'
-  - 'auto'
 markdown_extensions:
   - admonition
   - codehilite:
