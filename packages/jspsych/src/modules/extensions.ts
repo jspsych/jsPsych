@@ -3,7 +3,6 @@ interface JsPsychExtensionInfo {
 }
 
 export interface JsPsychExtension {
-  info: JsPsychExtensionInfo;
   /**
    * Called once at the start of the experiment to initialize the extension
    */
