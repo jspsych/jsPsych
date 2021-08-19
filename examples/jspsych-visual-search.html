@@ -6,7 +6,7 @@
   <script src="js/snap.svg-min.js"></script>
   <script src="../jspsych.js"></script>
   <script src="../plugins/jspsych-html-keyboard-response.js"></script>
-  <script src="../plugins/jspsych-visual-search-circle.js"></script>
+  <script src="../plugins/jspsych-visual-search.js"></script>
   <script src="../plugins/jspsych-preload.js"></script>
   <link rel="stylesheet" href="../css/jspsych.css">
 </head>
@@ -44,17 +44,32 @@
     set_size: 3
   }
 
+  var trial_5 = {
+    usegrid: true,
+    target_present: false,
+    foil: ['img/1.gif', 'img/2.gif', 'img/3.gif'], // example of using multiple foils.
+    set_size: 3
+  }
 
-  var trials = {
-    type: 'visual-search-circle',
+  var trials_circle = {
+    type: 'visual-search',
     target: 'img/backwardN.gif',
     foil: 'img/normalN.gif',
     fixation_image: 'img/fixation.gif',
-    timeline: [trial_1, trial_2, trial_3, trial_4]
+    timeline: [trial_1, trial_2, trial_3, trial_4, trial_5]
+  };
+
+  var trials_grid = {
+    usegrid: true,
+    type: 'visual-search',
+    target: 'img/backwardN.gif',
+    foil: 'img/normalN.gif',
+    fixation_image: 'img/fixation.gif',
+    timeline: [trial_1, trial_2, trial_3, trial_4, trial_5]
   };
 
   jsPsych.init({
-    timeline: [preload_images, intro, trials],
+    timeline: [preload_images, intro, trials_circle, trials_grid],
     on_finish: function() {
       jsPsych.data.displayData();
     }
