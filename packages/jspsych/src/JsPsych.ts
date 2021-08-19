@@ -363,11 +363,20 @@ export class JsPsych {
 
   getTimelineDescription() {
     var trials = [];
-    if (typeof this.timeline.timeline_parameters !== "undefined") {
-      for (var i = 0; i < this.timeline.timeline_parameters.timeline.length; i++) {
-        trials.push(this.timeline.timeline_parameters.timeline[i].trial_parameters);
+    function getTrialsFromTimelineNodes(timeline_node) {
+      if (typeof timeline_node.timeline_parameters !== "undefined") {
+        for (var i = 0; i < timeline_node.timeline_parameters.timeline.length; i++) {
+          if (
+            typeof timeline_node.timeline_parameters.timeline[i].trial_parameters !== "undefined"
+          ) {
+            trials.push(timeline_node.timeline_parameters.timeline[i].trial_parameters);
+          } else {
+            getTrialsFromTimelineNodes(timeline_node.timeline_parameters.timeline[i]);
+          }
+        }
       }
     }
+    getTrialsFromTimelineNodes(this.timeline);
     return trials;
   }
 

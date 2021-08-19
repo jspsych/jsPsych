@@ -276,7 +276,6 @@ export class MediaAPI {
           }
         }
       }
-
       return trials;
     }
 
