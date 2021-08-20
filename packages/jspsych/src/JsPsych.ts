@@ -135,6 +135,11 @@ export class JsPsych {
     this.data = new JsPsychData(this);
     this.pluginAPI = createJointPluginAPIObject(this);
 
+    // create instances of extensions
+    for (const extension of options.extensions) {
+      this.extensions[extension.type.info.name] = new extension.type(this);
+    }
+
     // initialize audio context based on options and browser capabilities
     this.pluginAPI.initAudio();
   }
@@ -254,10 +259,8 @@ export class JsPsych {
     }
     // handle extension callbacks
     if (Array.isArray(current_trial.extensions)) {
-      for (var i = 0; i < current_trial.extensions.length; i++) {
-        var ext_data_values = this.extensions[current_trial.extensions[i].type].on_finish(
-          current_trial.extensions[i].params
-        );
+      for (const extension of current_trial.extensions) {
+        var ext_data_values = this.extensions[extension.type.info.name].on_finish(extension.params);
         Object.assign(trial_data_values, ext_data_values);
       }
     }
@@ -457,7 +460,7 @@ export class JsPsych {
     try {
       await Promise.all(
         extensions.map((extension) =>
-          this.extensions[extension.type].initialize(extension.params || {})
+          this.extensions[extension.type.info.name].initialize(extension.params || {})
         )
       );
     } catch (error_message) {
@@ -555,8 +558,8 @@ export class JsPsych {
 
     // call any on_start functions for extensions
     if (Array.isArray(trial.extensions)) {
-      for (var i = 0; i < trial.extensions.length; i++) {
-        this.extensions[trial.extensions[i].type].on_start(this.current_trial.extensions[i].params);
+      for (const extension of trial.extensions) {
+        this.extensions[extension.type.info.name].on_start(extension.params);
       }
     }
 
@@ -586,8 +589,8 @@ export class JsPsych {
 
     // call any on_load functions for extensions
     if (Array.isArray(trial.extensions)) {
-      for (var i = 0; i < trial.extensions.length; i++) {
-        this.extensions[trial.extensions[i].type].on_load(this.current_trial.extensions[i].params);
+      for (const extension of trial.extensions) {
+        this.extensions[extension.type.info.name].on_load(extension.params);
       }
     }
 

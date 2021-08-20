@@ -4,188 +4,224 @@ import { JsPsych, initJsPsych } from "../../src";
 import { pressKey } from "../utils";
 import testExtension from "./test-extension";
 
-let jsPsych: JsPsych;
-
 jest.useFakeTimers();
 
 // https://github.com/jspsych/jsPsych/projects/6#card-64825201
-describe.skip("jsPsych.extensions", () => {
-  beforeEach(() => {
-    jsPsych.extensions.test = testExtension;
-  });
-
-  test("initialize is called at start of experiment", () => {
-    var initFunc = jest.spyOn(jsPsych.extensions.test, "initialize");
-
-    var timeline = [{ type: htmlKeyboardResponse, stimulus: "foo" }];
-
-    jsPsych = initJsPsych({
-      timeline,
-      extensions: [{ type: "test" }],
+describe("jsPsych.extensions", () => {
+  test("initialize is called at start of experiment", async () => {
+    const jsPsych = initJsPsych({
+      extensions: [{ type: testExtension }],
     });
 
-    expect(initFunc).toHaveBeenCalled();
+    expect(typeof jsPsych.extensions.test.initialize).toBe("function");
+
+    const initFunc = jest.spyOn(jsPsych.extensions.test, "initialize");
+
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        on_load: () => {
+          pressKey("a");
+        },
+        on_start: () => {
+          expect(initFunc).toHaveBeenCalled();
+        },
+      },
+    ];
+
+    await jsPsych.run(timeline);
   });
 
-  test("initialize gets params", () => {
-    var initFunc = jest.spyOn(jsPsych.extensions.test, "initialize");
-
-    var timeline = [{ type: htmlKeyboardResponse, stimulus: "foo" }];
-
-    jsPsych = initJsPsych({
-      timeline,
-      extensions: [{ type: "test", params: { foo: 1 } }],
+  test("initialize gets params", async () => {
+    const jsPsych = initJsPsych({
+      extensions: [{ type: testExtension, params: { foo: 1 } }],
     });
 
-    expect(initFunc).toHaveBeenCalledWith({ foo: 1 });
+    expect(typeof jsPsych.extensions.test.initialize).toBe("function");
+
+    const initFunc = jest.spyOn(jsPsych.extensions.test, "initialize");
+
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        on_load: () => {
+          pressKey("a");
+        },
+        on_start: () => {
+          expect(initFunc).toHaveBeenCalledWith({ foo: 1 });
+        },
+      },
+    ];
+
+    await jsPsych.run(timeline);
   });
 
-  test("on_start is called before trial", () => {
+  test("on_start is called before trial", async () => {
+    const jsPsych = initJsPsych({
+      extensions: [{ type: testExtension }],
+    });
+
     var onStartFunc = jest.spyOn(jsPsych.extensions.test, "on_start");
 
     var trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
-      extensions: [{ type: "test" }],
+      extensions: [{ type: testExtension }],
       on_load: () => {
         expect(onStartFunc).toHaveBeenCalled();
+        pressKey("a");
       },
     };
 
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
-
-    pressKey("a");
+    await jsPsych.run([trial]);
   });
 
-  test("on_start gets params", () => {
+  test("on_start gets params", async () => {
+    const jsPsych = initJsPsych({
+      extensions: [{ type: testExtension }],
+    });
+
     var onStartFunc = jest.spyOn(jsPsych.extensions.test, "on_start");
 
     var trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
-      extensions: [{ type: "test", params: { foo: 1 } }],
+      extensions: [{ type: testExtension, params: { foo: 1 } }],
       on_load: () => {
         expect(onStartFunc).toHaveBeenCalledWith({ foo: 1 });
+        pressKey("a");
       },
     };
 
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
-
-    pressKey("a");
+    await jsPsych.run([trial]);
   });
 
-  test("on_load is called after load", () => {
-    var onLoadFunc = jest.spyOn(jsPsych.extensions.test, "on_load");
+  test("on_load is called after load", async () => {
+    const jsPsych = initJsPsych({
+      extensions: [{ type: testExtension }],
+    });
 
-    var trial = {
+    const onLoadFunc = jest.spyOn(jsPsych.extensions.test, "on_load");
+
+    const trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
-      extensions: [{ type: "test" }],
+      extensions: [{ type: testExtension }],
       on_load: () => {
         // trial load happens before extension load
         expect(onLoadFunc).not.toHaveBeenCalled();
+        pressKey("a");
       },
     };
 
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
+    await jsPsych.run([trial]);
 
     expect(onLoadFunc).toHaveBeenCalled();
-
-    pressKey("a");
   });
 
-  test("on_load gets params", () => {
-    var onLoadFunc = jest.spyOn(jsPsych.extensions.test, "on_load");
-
-    var trial = {
-      type: htmlKeyboardResponse,
-      stimulus: "foo",
-      extensions: [{ type: "test", params: { foo: 1 } }],
-    };
-
-    jsPsych = initJsPsych({
-      timeline: [trial],
+  test("on_load gets params", async () => {
+    const jsPsych = initJsPsych({
+      extensions: [{ type: testExtension }],
     });
 
-    expect(onLoadFunc).toHaveBeenCalledWith({ foo: 1 });
+    const onLoadFunc = jest.spyOn(jsPsych.extensions.test, "on_load");
 
-    pressKey("a");
+    const trial = {
+      type: htmlKeyboardResponse,
+      stimulus: "foo",
+      extensions: [{ type: testExtension, params: { foo: 1 } }],
+      on_load: () => {
+        pressKey("a");
+      },
+    };
+
+    await jsPsych.run([trial]);
+
+    expect(onLoadFunc).toHaveBeenCalledWith({ foo: 1 });
   });
 
-  test("on_finish called after trial", () => {
+  test("on_finish called after trial", async () => {
+    const jsPsych = initJsPsych({
+      extensions: [{ type: testExtension }],
+    });
+
     var onFinishFunc = jest.spyOn(jsPsych.extensions.test, "on_finish");
 
     var trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
-      extensions: [{ type: "test", params: { foo: 1 } }],
+      extensions: [{ type: testExtension }],
+      on_load: () => {
+        expect(onFinishFunc).not.toHaveBeenCalled();
+        pressKey("a");
+      },
     };
 
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
-
-    expect(onFinishFunc).not.toHaveBeenCalled();
-
-    pressKey("a");
+    await jsPsych.run([trial]);
 
     expect(onFinishFunc).toHaveBeenCalled();
   });
 
-  test("on_finish gets params", () => {
+  test("on_finish gets params", async () => {
+    const jsPsych = initJsPsych({
+      extensions: [{ type: testExtension }],
+    });
+
     var onFinishFunc = jest.spyOn(jsPsych.extensions.test, "on_finish");
 
     var trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
-      extensions: [{ type: "test", params: { foo: 1 } }],
+      extensions: [{ type: testExtension, params: { foo: 1 } }],
+      on_load: () => {
+        expect(onFinishFunc).not.toHaveBeenCalled();
+        pressKey("a");
+      },
     };
 
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
-
-    pressKey("a");
+    await jsPsych.run([trial]);
 
     expect(onFinishFunc).toHaveBeenCalledWith({ foo: 1 });
   });
 
-  test("on_finish adds trial data", () => {
+  test("on_finish adds trial data", async () => {
+    const jsPsych = initJsPsych({
+      extensions: [{ type: testExtension }],
+    });
+
     var trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
-      extensions: [{ type: "test", params: { foo: 1 } }],
+      extensions: [{ type: testExtension }],
+      on_load: () => {
+        pressKey("a");
+      },
     };
 
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
-
-    pressKey("a");
+    await jsPsych.run([trial]);
 
     expect(jsPsych.data.get().values()[0].extension_data).toBe(true);
   });
 
-  test("on_finish data is available in trial on_finish", () => {
+  test("on_finish data is available in trial on_finish", async () => {
+    const jsPsych = initJsPsych({
+      extensions: [{ type: testExtension }],
+    });
+
     var trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
-      extensions: [{ type: "test", params: { foo: 1 } }],
+      extensions: [{ type: testExtension }],
+      on_load: () => {
+        pressKey("a");
+      },
       on_finish: (data) => {
         expect(data.extension_data).toBe(true);
       },
     };
 
-    jsPsych = initJsPsych({
-      timeline: [trial],
-    });
-
-    pressKey("a");
+    await jsPsych.run([trial]);
   });
 });
