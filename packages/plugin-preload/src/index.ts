@@ -127,7 +127,8 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
     var video = [];
 
     if (trial.auto_preload) {
-      var auto_preload = this.jsPsych.pluginAPI.getAutoPreloadList();
+      var experiment_timeline = this.jsPsych.getTimelineDescription();
+      var auto_preload = this.jsPsych.pluginAPI.getAutoPreloadList(experiment_timeline);
       images = images.concat(auto_preload.images);
       audio = audio.concat(auto_preload.audio);
       video = video.concat(auto_preload.video);

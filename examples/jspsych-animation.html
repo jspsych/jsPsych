@@ -3,7 +3,7 @@
 <head>
   <script src="../packages/jspsych/dist/index.browser.js"></script>
   <script src="../packages/plugin-animation/dist/index.browser.js"></script>
-  <!-- <script src="../packages/plugin-preload/dist/index.browser.js"></script> -->
+  <script src="../packages/plugin-preload/dist/index.browser.js"></script>
   <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
 </head>
 <body></body>
@@ -11,10 +11,10 @@
 
   var jsPsych = initJsPsych();
 
-  // var preload_trial = {
-  //   type: jsPsychPreload,
-  //   auto_preload: true
-  // }
+  var preload_trial = {
+    type: jsPsychPreload,
+    auto_preload: true
+  }
 
   // If render_on_canvas is false, the images will be shown via an <img> rather than <canvas> element.
   // In some browsers, the first time the images are shown, the <img> method (render_on_canvas: false) will produce a brief 
@@ -28,7 +28,7 @@
     //render_on_canvas: false
   };
 
-  jsPsych.run([animation_trial]);  // TO DO: add preload trial, on_finish: jsPsych.data.displayData()
+  jsPsych.run([preload_trial, animation_trial]);  // TO DO: on_finish: jsPsych.data.displayData()
 
 </script>
 </html>

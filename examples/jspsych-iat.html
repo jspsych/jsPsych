@@ -6,7 +6,7 @@
   <script src="../packages/plugin-iat-html/dist/index.browser.js"></script>
   <script src="../packages/plugin-iat-image/dist/index.browser.js"></script>
   <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
-  <!-- <script src="../packages/plugin-preload/dist/index.browser.js"></script> -->
+  <script src="../packages/plugin-preload/dist/index.browser.js"></script>
   <link href="../packages/jspsych/css/jspsych.css" rel="stylesheet">
 </head>
 <body>
@@ -18,10 +18,11 @@ var jsPsych = initJsPsych();
 // manually preload images due to presenting them with timeline variables
 var images = ['img/age/of1.jpg','img/age/of2.jpg','img/age/of3.jpg','img/age/om1.jpg','img/age/om2.jpg','img/age/om3.jpg',
     'img/age/yf1.jpg','img/age/yf4.jpg','img/age/yf5.jpg','img/age/ym2.jpg','img/age/ym3.jpg','img/age/ym5.jpg'];
-// var preload = {
-//   type: jsPsychPreload,
-//   images: images
-// }
+
+var preload = {
+  type: jsPsychPreload,
+  images: images
+};
 
 var welcome_block = {
   type: jsPsychHtmlKeyboardResponse,
@@ -492,7 +493,7 @@ var trial_block7 = {
   };
 
   var timeline = [];
-  //timeline.push(preload);
+  timeline.push(preload);
   timeline.push(welcome_block);
   timeline.push(category_block);
   timeline.push(instructions_block);

@@ -1,0 +1,34 @@
+{
+  "name": "@jspsych/extension-webgazer",
+  "version": "1.0.0",
+  "description": "jsPsych extension for eye tracking using WebGazer.js",
+  "type": "module",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "unpkg": "dist/index.browser.min.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "source": "src/index.ts",
+  "scripts": {
+    "test": "jest --passWithNoTests",
+    "test:watch": "npm test -- --watch",
+    "tsc": "tsc",
+    "build": "rollup --config",
+    "build:watch": "npm run build -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jspsych/jsPsych.git"
+  },
+  "author": "Josh de Leeuw",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jspsych/jsPsych/issues"
+  },
+  "homepage": "https://github.com/jspsych/jsPsych#readme",
+  "peerDependencies": {
+    "jspsych": ">=7"
+  }
+}

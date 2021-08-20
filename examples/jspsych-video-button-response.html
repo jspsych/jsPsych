@@ -4,7 +4,7 @@
     <script src="../packages/jspsych/dist/index.browser.js"></script>
     <script src="../packages/plugin-video-button-response/dist/index.browser.js"></script>
     <script src="../packages/plugin-html-button-response/dist/index.browser.js"></script>
-    <!-- <script src="../packages/plugin-preload/dist/index.browser.js"></script> -->
+    <script src="../packages/plugin-preload/dist/index.browser.js"></script>
     <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body></body>
@@ -15,16 +15,16 @@
     // preloading videos only works when the file is running on a server
     // if you run this experiment by opening the file directly in the browser, 
     // then video preloading will be disabled to prevent CORS errors
-    // var preload = {
-    //   type: 'preload',
-    //   auto_preload: true
-    // }
+    var preload = {
+      type: jsPsychPreload,
+      auto_preload: true
+    };
 
     var pre_trial = {
       type: jsPsychHtmlButtonResponse,
       stimulus: '<div style="max-width:600px;"><p>Some browsers now require that a user interacts with a web page before video or audio content will autoplay. Clicking the button below satisfies that requirement.</p><p>Without this trial, the video will load but not play.</p></div>',
       choices: ['Continue']
-    }
+    };
 
     var trial_1 = {
       type: jsPsychVideoButtonResponse,
@@ -42,7 +42,7 @@
       rate: 1.5,
       //trial_duration: 2000,
       response_ends_trial: true
-    }
+    };
 
     var trial_2 = {
       type: jsPsychVideoButtonResponse,
@@ -56,9 +56,9 @@
       autoplay: true,
       response_ends_trial: true,
       response_allowed_while_playing: false
-    }
+    };
 
-    jsPsych.run([pre_trial, trial_1, trial_2]); // TO DO: add preload trial, display data
+    jsPsych.run([preload, pre_trial, trial_1, trial_2]); // TO DO: display data
 
   </script>
 </html>

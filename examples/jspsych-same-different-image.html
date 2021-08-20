@@ -3,7 +3,7 @@
   <head>
     <script src="../packages/jspsych/dist/index.browser.js"></script>
     <script src="../packages/plugin-same-different-image/dist/index.browser.js"></script>
-    <!-- <script src="../packages/plugin-preload/dist/index.browser.js"></script> -->
+    <script src="../packages/plugin-preload/dist/index.browser.js"></script>
     <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
     <style>
       img {
@@ -16,10 +16,10 @@
 
     var jsPsych = initJsPsych();
 
-    // var preload = {
-    //   type: jsPsychPreload,
-    //   auto_preload: true
-    // }
+    var preload = {
+      type: jsPsychPreload,
+      auto_preload: true
+    };
 
     var trial = {
       type: jsPsychSameDifferentImage,
@@ -28,9 +28,9 @@
       same_key: 's',
       different_key: 'd',
       answer: 'different'
-    }
+    };
 
-    jsPsych.run([trial]);  // TO DO: add preload
+    jsPsych.run([preload, trial]);  
 
   </script>
 </html>

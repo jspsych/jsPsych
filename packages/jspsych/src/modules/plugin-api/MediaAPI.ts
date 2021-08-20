@@ -27,7 +27,7 @@ export class MediaAPI {
   }
 
   getAudioBuffer(audioID) {
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
       // check whether audio file already preloaded
       if (
         typeof this.audio_buffers[audioID] == "undefined" ||
@@ -108,7 +108,7 @@ export class MediaAPI {
       this.preload_requests.push(request);
     };
 
-    function load_audio_file_html5audio(source, count = 1) {
+    const load_audio_file_html5audio = (source, count = 1) => {
       var audio = new Audio();
       const handleCanPlayThrough = () => {
         this.audio_buffers[source] = audio;
@@ -130,7 +130,7 @@ export class MediaAPI {
       });
       audio.src = source;
       this.preload_requests.push(audio);
-    }
+    };
 
     for (var i = 0; i < files.length; i++) {
       var bufferID = files[i];
@@ -276,7 +276,6 @@ export class MediaAPI {
           }
         }
       }
-
       return trials;
     }
 

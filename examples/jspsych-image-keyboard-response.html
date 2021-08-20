@@ -3,7 +3,7 @@
 <head>
   <script src="../packages/jspsych/dist/index.browser.js"></script>
   <script src="../packages/plugin-image-keyboard-response/dist/index.browser.js"></script>
-  <!-- <script src="../packages/plugin-preload/dist/index.browser.js"></script> -->
+  <script src="../packages/plugin-preload/dist/index.browser.js"></script>
   <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
 </head>
 <body></body>
@@ -13,10 +13,10 @@
 
   // all images are used in standard trials that can be automatically preloaded (as well as being used in trials 
   // that use timeline variables), so we can preload all image files with the auto_preload option
-  // var preload = {
-  //   type: jsPsychPreload,
-  //   auto_preload: true
-  // };
+  var preload = {
+    type: jsPsychPreload,
+    auto_preload: true
+  };
 
   // If render_on_canvas is false, the images will be shown via an <img> rather than <canvas> element.
   // In some browsers, the first time the images are shown, the <img> method (render_on_canvas: false) will produce a brief 
@@ -76,7 +76,7 @@
     prompt: '<p>Have you seen this face before? Press y or n.</p><p>(Stimulus_width set to a smaller value and maintain_aspect_ratio set to false.)</p>'
   }
 
-  jsPsych.run([trial_proc, trial_1, trial_2, trial_3, trial_4]); // TO DO: add preload trial, on_finish: display data
+  jsPsych.run([preload, trial_proc, trial_1, trial_2, trial_3, trial_4]); // TO DO: on_finish: display data
 
 </script>
 </html>
