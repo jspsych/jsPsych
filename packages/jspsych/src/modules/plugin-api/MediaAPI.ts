@@ -27,7 +27,7 @@ export class MediaAPI {
   }
 
   getAudioBuffer(audioID) {
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
       // check whether audio file already preloaded
       if (
         typeof this.audio_buffers[audioID] == "undefined" ||
