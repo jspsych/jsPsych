@@ -56,9 +56,11 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * webgazer-calibrate
- * @file jsPsych plugin for calibrating webcam eye gaze location estimation.
+ * **webgazer-calibrate**
+ *
+ * jsPsych plugin for calibrating webcam eye gaze location estimation.
  * Intended for use with the WebGazer eye-tracking extension, after the webcam has been initialized with the `webgazer-init-camera` plugin.
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-webgazer-calibrate/ webgazer-calibrate plugin} and
  * {@link https://www.jspsych.org/overview/eye-tracking/ eye-tracking overview} documentation on jspsych.org

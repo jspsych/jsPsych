@@ -189,8 +189,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * RDK
- * @file jsPsych plugin for showing a random-dot kinematogram stimulus and recording a keyboard response
+ * **RDK**
+ *
+ * jsPsych plugin for showing a random-dot kinematogram stimulus and recording a keyboard response
+ *
  * @author Sivananda Rajananda
  * @see {@link https://www.jspsych.org/plugins/jspsych-rdk/ RDK plugin documentation on jspsych.org}
  * @copyright

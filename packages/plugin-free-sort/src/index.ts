@@ -141,8 +141,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * free-sort
- * @file jsPsych plugin for drag-and-drop sorting of a collection of images
+ * **free-sort**
+ *
+ * jsPsych plugin for drag-and-drop sorting of a collection of images
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-free-sort/ free-sort plugin documentation on jspsych.org}
  */

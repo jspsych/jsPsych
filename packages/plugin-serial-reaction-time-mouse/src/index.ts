@@ -71,8 +71,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * serial-reaction-time-mouse
- * @file jsPsych plugin for running a serial reaction time task with mouse responses
+ * **serial-reaction-time-mouse**
+ *
+ * jsPsych plugin for running a serial reaction time task with mouse responses
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-serial-reaction-time-mouse/ serial-reaction-time-mouse plugin documentation on jspsych.org}
  */

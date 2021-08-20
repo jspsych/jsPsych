@@ -90,8 +90,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * iat-image
- * @file jsPsych plugin for running an IAT (Implicit Association Test) with an image stimulus
+ * **iat-image**
+ *
+ * jsPsych plugin for running an IAT (Implicit Association Test) with an image stimulus
+ *
  * @author Kristin Diep
  * @see {@link https://www.jspsych.org/plugins/jspsych-iat-image/ iat-image plugin documentation on jspsych.org}
  */

@@ -94,8 +94,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * video-keyboard-response
- * @file jsPsych plugin for playing a video file and getting a keyboard response
+ * **video-keyboard-response**
+ *
+ * jsPsych plugin for playing a video file and getting a keyboard response
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-video-keyboard-response/ video-keyboard-response plugin documentation on jspsych.org}
  */

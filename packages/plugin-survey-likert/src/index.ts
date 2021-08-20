@@ -72,8 +72,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * survey-likert
- * @file jsPsych plugin for gathering responses to questions on a likert scale
+ * **survey-likert**
+ *
+ * jsPsych plugin for gathering responses to questions on a likert scale
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-survey-likert/ survey-likert plugin documentation on jspsych.org}
  */

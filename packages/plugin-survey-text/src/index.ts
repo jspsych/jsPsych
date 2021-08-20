@@ -77,8 +77,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * survey-text
- * @file jsPsych plugin for free text response survey questions
+ * **survey-text**
+ *
+ * jsPsych plugin for free text response survey questions
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-survey-text/ survey-text plugin documentation on jspsych.org}
  */

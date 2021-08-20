@@ -96,8 +96,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * canvas-slider-response
- * @file jsPsych plugin for displaying a canvas stimulus and getting a slider response
+ * **canvas-slider-response**
+ *
+ * jsPsych plugin for displaying a canvas stimulus and getting a slider response
+ *
  * @author Chris Jungerius (modified from Josh de Leeuw)
  * @see {@link https://www.jspsych.org/plugins/jspsych-canvas-slider-response/ canvas-slider-response plugin documentation on jspsych.org}
  */

@@ -90,8 +90,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * iat-html
- * @file jsPsych plugin for running an IAT (Implicit Association Test) with an HTML-formatted stimulus
+ * **iat-html**
+ *
+ * jsPsych plugin for running an IAT (Implicit Association Test) with an HTML-formatted stimulus
+ *
  * @author Kristin Diep
  * @see {@link https://www.jspsych.org/plugins/jspsych-iat-html/ iat-html plugin documentation on jspsych.org}
  */

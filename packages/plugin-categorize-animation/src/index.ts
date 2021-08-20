@@ -85,8 +85,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * categorize-animation
- * @file jsPsych plugin for categorization trials with feedback and animated stimuli
+ * **categorize-animation**
+ *
+ * jsPsych plugin for categorization trials with feedback and animated stimuli
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-categorize-animation/ categorize-animation plugin documentation on jspsych.org}
  */

@@ -55,8 +55,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * animation
- * @file jsPsych plugin for showing animations and recording keyboard responses
+ * **animation**
+ *
+ * jsPsych plugin for showing animations and recording keyboard responses
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-animation/ animation plugin documentation on jspsych.org}
  */

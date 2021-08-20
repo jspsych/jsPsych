@@ -45,8 +45,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * resize
- * @file jsPsych plugin for controlling the real world size of the display
+ * **resize**
+ *
+ * jsPsych plugin for controlling the real world size of the display
+ *
  * @author Steve Chao
  * @see {@link https://www.jspsych.org/plugins/jspsych-resize/ resize plugin documentation on jspsych.org}
  */

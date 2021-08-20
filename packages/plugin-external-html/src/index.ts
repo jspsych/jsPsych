@@ -47,10 +47,12 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * external-html
- * @file jsPsych plugin to load and display an external html page. To proceed to the next trial, the
+ * **external-html**
+ *
+ * jsPsych plugin to load and display an external html page. To proceed to the next trial, the
  * user might either press a button on the page or a specific key. Afterwards, the page will be hidden and
  * the experiment will continue.
+ *
  * @author Erik Weitnauer
  * @see {@link https://www.jspsych.org/plugins/jspsych-external-html/ external-html plugin documentation on jspsych.org}
  */

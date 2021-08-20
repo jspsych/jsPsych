@@ -74,8 +74,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * audio-button-response
- * @file jsPsych plugin for playing an audio file and getting a button response
+ * **audio-button-response**
+ *
+ * jsPsych plugin for playing an audio file and getting a button response
+ *
  * @author Kristin Diep
  * @see {@link https://www.jspsych.org/plugins/jspsych-audio-button-response/ audio-button-response plugin documentation on jspsych.org}
  */

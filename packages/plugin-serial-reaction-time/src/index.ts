@@ -85,8 +85,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * serial-reaction-time
- * @file jsPsych plugin for running a serial reaction time task with keypress responses
+ * **serial-reaction-time**
+ *
+ * jsPsych plugin for running a serial reaction time task with keypress responses
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-serial-reaction-time/ serial-reaction-time plugin documentation on jspsych.org}
  */

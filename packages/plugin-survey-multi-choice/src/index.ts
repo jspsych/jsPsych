@@ -72,8 +72,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * survey-multi-choice
- * @file jsPsych plugin for presenting multiple choice survey questions
+ * **survey-multi-choice**
+ *
+ * jsPsych plugin for presenting multiple choice survey questions
+ *
  * @author Shane Martin
  * @see {@link https://www.jspsych.org/plugins/jspsych-survey-multi-choice/ survey-multi-choice plugin documentation on jspsych.org}
  */

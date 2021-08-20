@@ -92,8 +92,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * categorize-image
- * @file jsPsych plugin for image categorization trials with feedback
+ * **categorize-image**
+ *
+ * jsPsych plugin for image categorization trials with feedback
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-categorize-image/ categorize-image plugin documentation on jspsych.org}
  */

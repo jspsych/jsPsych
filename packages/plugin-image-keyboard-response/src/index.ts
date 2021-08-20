@@ -72,8 +72,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * image-keyboard-response
- * @file jsPsych plugin for displaying an image stimulus and getting a keyboard response
+ * **image-keyboard-response**
+ *
+ * jsPsych plugin for displaying an image stimulus and getting a keyboard response
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-image-keyboard-response/ image-keyboard-response plugin documentation on jspsych.org}
  */

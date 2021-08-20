@@ -116,8 +116,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * image-slider-response
- * @file jsPsych plugin for showing an image stimulus and getting a slider response
+ * **image-slider-response**
+ *
+ * jsPsych plugin for showing an image stimulus and getting a slider response
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-image-slider-response/ image-slider-response plugin documentation on jspsych.org}
  */

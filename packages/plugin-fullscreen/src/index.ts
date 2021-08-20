@@ -38,8 +38,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * fullscreen
- * @file jsPsych plugin for toggling fullscreen mode in the browser
+ * **fullscreen**
+ *
+ * jsPsych plugin for toggling fullscreen mode in the browser
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-fullscreen/ fullscreen plugin documentation on jspsych.org}
  */

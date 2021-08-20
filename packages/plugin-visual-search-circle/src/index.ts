@@ -83,10 +83,12 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * visual-search-circle
- * @file jsPsych plugin to display a set of objects, with or without a target, equidistant from fixation.
+ * **visual-search-circle**
+ *
+ * jsPsych plugin to display a set of objects, with or without a target, equidistant from fixation.
  * Subject responds with key press to whether or not the target is present.
  * Based on code written for psychtoolbox by Ben Motz.
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-visual-search-circle/ visual-search-circle plugin documentation on jspsych.org}
  **/

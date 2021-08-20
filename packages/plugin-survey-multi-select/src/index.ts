@@ -78,8 +78,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * survey-multi-select
- * @file  jsPsych plugin for presenting multiple choice survey questions with the ability to respond with more than one option
+ * **survey-multi-select**
+ *
+ * jsPsych plugin for presenting multiple choice survey questions with the ability to respond with more than one option
+ *
  * @see {@link https://www.jspsych.org/plugins/jspsych-survey-multi-select/ survey-multi-select plugin documentation on jspsych.org}
  */
 class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {

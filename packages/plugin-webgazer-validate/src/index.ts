@@ -67,10 +67,12 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * webgazer-validate
- * @file jsPsych plugin for measuring the accuracy and precision of eye gaze predictions.
+ * **webgazer-validate**
+ *
+ * jsPsych plugin for measuring the accuracy and precision of eye gaze predictions.
  * Intended for use with the Webgazer eye-tracking extension, after the webcam has been initialized with the
  * `webgazer-init-camera` plugin and calibrated with the `webgazer-calibrate` plugin.
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-webgazer-validate/ webgazer-validate plugin} and
  * {@link https://www.jspsych.org/overview/eye-tracking/ eye-tracking overview} documentation on jspsych.org

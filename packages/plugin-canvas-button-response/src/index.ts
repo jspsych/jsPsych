@@ -72,8 +72,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * canvas-button-response
- * @file jsPsych plugin for displaying a canvas stimulus and getting a button response
+ * **canvas-button-response**
+ *
+ * jsPsych plugin for displaying a canvas stimulus and getting a button response
+ *
  * @author Chris Jungerius (modified from Josh de Leeuw)
  * @see {@link https://www.jspsych.org/plugins/jspsych-canvas-button-response/ canvas-button-response plugin documentation on jspsych.org}
  */

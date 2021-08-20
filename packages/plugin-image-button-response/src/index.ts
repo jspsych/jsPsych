@@ -92,8 +92,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * image-button-response
- * @file jsPsych plugin for displaying an image stimulus and getting a button response
+ * **image-button-response**
+ *
+ * jsPsych plugin for displaying an image stimulus and getting a button response
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-image-button-response/ image-button-response plugin documentation on jspsych.org}
  */

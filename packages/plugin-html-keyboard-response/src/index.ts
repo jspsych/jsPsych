@@ -57,8 +57,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * html-keyboard-response
- * @file jsPsych plugin for displaying a stimulus and getting a keyboard response
+ * **html-keyboard-response**
+ *
+ * jsPsych plugin for displaying a stimulus and getting a keyboard response
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-html-keyboard-response/ html-keyboard-response plugin documentation on jspsych.org}
  */

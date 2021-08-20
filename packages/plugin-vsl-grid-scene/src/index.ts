@@ -29,11 +29,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * vsl-grid-scene
- * @file jsPsych plugin for showing scenes that mimic the experiments described in
+ * **vsl-grid-scene**
+ *
+ * jsPsych plugin for showing scenes that mimic the experiments described in
  * Fiser, J., & Aslin, R. N. (2001). Unsupervised statistical learning of
  * higher-order spatial structures from visual scenes. Psychological science,
  * 12(6), 499-504.
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-vsl-grid-scene/ vsl-grid-scene plugin documentation on jspsych.org}
  */

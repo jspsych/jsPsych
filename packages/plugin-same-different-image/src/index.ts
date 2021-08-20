@@ -59,8 +59,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * same-different-image
- * @file jsPsych plugin for showing two image stimuli sequentially and getting a same / different judgment via keypress
+ * **same-different-image**
+ *
+ * jsPsych plugin for showing two image stimuli sequentially and getting a same / different judgment via keypress
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-same-different-image/ same-different-image plugin documentation on jspsych.org}
  */

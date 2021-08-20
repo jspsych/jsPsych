@@ -23,9 +23,11 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * webgazer-init-camera
- * @file jsPsych plugin for initializing the webcam and helping the participant center their face in the camera view.
+ * **webgazer-init-camera**
+ *
+ * jsPsych plugin for initializing the webcam and helping the participant center their face in the camera view.
  * Intended for use with the WebGazer eye-tracking extension.
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-webgazer-init-camera/ webgazer-init-camera plugin} and
  * {@link https://www.jspsych.org/overview/eye-tracking/ eye-tracking overview} documentation on jspsych.org

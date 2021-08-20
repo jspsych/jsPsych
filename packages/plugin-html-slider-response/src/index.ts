@@ -89,8 +89,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * html-slider-response
- * @file jsPsych plugin for showing an HTML stimulus and collecting a slider response
+ * **html-slider-response**
+ *
+ * jsPsych plugin for showing an HTML stimulus and collecting a slider response
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-html-slider-response/ html-slider-response plugin documentation on jspsych.org}
  */

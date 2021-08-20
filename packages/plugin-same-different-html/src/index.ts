@@ -59,8 +59,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * same-different-html
- * @file jsPsych plugin for showing two HTML stimuli sequentially and getting a same / different judgment via keypress
+ * **same-different-html**
+ *
+ * jsPsych plugin for showing two HTML stimuli sequentially and getting a same / different judgment via keypress
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-same-different-html/ same-different-html plugin documentation on jspsych.org}
  */

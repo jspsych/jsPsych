@@ -137,8 +137,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * video-slider-response
- * @file jsPsych plugin for playing a video file and getting a slider response
+ * **video-slider-response**
+ *
+ * jsPsych plugin for playing a video file and getting a slider response
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-video-slider-response/ video-slider-response plugin documentation on jspsych.org}
  */

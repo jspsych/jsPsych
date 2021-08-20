@@ -136,8 +136,10 @@ declare global {
 }
 
 /**
- * virtual-chinrest
- * @file jsPsych plugin for estimating physical distance from monitor and optionally resizing experiment content, based on Qisheng Li 11/2019. /// https://github.com/QishengLi/virtual_chinrest
+ * **virtual-chinrest**
+ *
+ * jsPsych plugin for estimating physical distance from monitor and optionally resizing experiment content, based on Qisheng Li 11/2019. /// https://github.com/QishengLi/virtual_chinrest
+ *
  * @author Gustavo Juantorena
  * 08/2020 // https://github.com/GEJ1
  * Contributions from Peter J. Kohler: https://github.com/pjkohler

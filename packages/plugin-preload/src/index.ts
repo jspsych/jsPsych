@@ -9,7 +9,7 @@ const info = <const>{
       pretty_name: "Auto-preload",
       default: false,
     },
-    /** Array with a timeline of trials to automatically preload. If one or more trial objects is provided, then the plugin will attempt to preload the media files used in the trial(s). */
+    /** A timeline of trials to automatically preload. If one or more trial objects is provided in the timeline array, then the plugin will attempt to preload the media files used in the trial(s). */
     trials: {
       type: ParameterType.TIMELINE,
       pretty_name: "Trials",
@@ -113,8 +113,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * preload
- * @file jsPsych plugin for preloading image, audio, and video files
+ * **preload**
+ *
+ * jsPsych plugin for preloading image, audio, and video files
+ *
  * @author Becky Gilbert
  * @see {@link https://www.jspsych.org/plugins/jspsych-preload/ preload plugin documentation on jspsych.org}
  */

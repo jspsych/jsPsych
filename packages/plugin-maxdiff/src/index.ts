@@ -47,8 +47,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * maxdiff
- * @file jsPsych plugin for maxdiff/conjoint analysis designs
+ * **maxdiff**
+ *
+ * jsPsych plugin for maxdiff/conjoint analysis designs
+ *
  * @author Angus Hughes
  * @see {@link https://www.jspsych.org/plugins/jspsych-maxdiff/ maxdiff plugin documentation on jspsych.org}
  */

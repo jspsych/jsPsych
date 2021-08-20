@@ -114,8 +114,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * video-button-response
- * @file jsPsych plugin for playing a video file and getting a button response
+ * **video-button-response**
+ *
+ * jsPsych plugin for playing a video file and getting a button response
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-video-button-response/ video-button-response plugin documentation on jspsych.org}
  */

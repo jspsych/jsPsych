@@ -95,8 +95,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * audio-slider-response
- * @file jsPsych plugin for playing audio and getting a slider response
+ * **audio-slider-response**
+ *
+ * jsPsych plugin for playing audio and getting a slider response
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-audio-slider-response/ audio-slider-response plugin documentation on jspsych.org}
  */

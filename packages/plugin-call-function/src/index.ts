@@ -21,8 +21,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * call-function
- * @file jsPsych plugin for calling an arbitrary function during a jsPsych experiment
+ * **call-function**
+ *
+ * jsPsych plugin for calling an arbitrary function during a jsPsych experiment
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-call-function/ call-function plugin documentation on jspsych.org}
  */

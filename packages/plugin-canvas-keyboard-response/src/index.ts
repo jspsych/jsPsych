@@ -52,8 +52,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * canvas-keyboard-response
- * @file jsPsych plugin for displaying a canvas stimulus and getting a keyboard response
+ * **canvas-keyboard-response**
+ *
+ * jsPsych plugin for displaying a canvas stimulus and getting a keyboard response
+ *
  * @author Chris Jungerius (modified from Josh de Leeuw)
  * @see {@link https://www.jspsych.org/plugins/jspsych-canvas-keyboard-response/ canvas-keyboard-response plugin documentation on jspsych.org}
  */

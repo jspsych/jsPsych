@@ -93,8 +93,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * categorize-html
- * @file jsPsych plugin for categorization trials with feedback
+ * **categorize-html**
+ *
+ * jsPsych plugin for categorization trials with feedback
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-categorize-html/ categorize-html plugin documentation on jspsych.org}
  */

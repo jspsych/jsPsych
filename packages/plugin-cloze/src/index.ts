@@ -33,8 +33,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * cloze
- * @file jsPsych plugin for displaying a cloze test and checking participants answers against a correct solution
+ * **cloze**
+ *
+ * jsPsych plugin for displaying a cloze test and checking participants answers against a correct solution
+ *
  * @author Philipp Sprengholz
  * @see {@link https://www.jspsych.org/plugins/jspsych-cloze/ cloze plugin documentation on jspsych.org}
  */

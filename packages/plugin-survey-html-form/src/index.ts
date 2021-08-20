@@ -45,8 +45,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * survey-html-form
- * @file jsPsych plugin for free html forms
+ * **survey-html-form**
+ *
+ * jsPsych plugin for displaying free HTML forms and collecting responses from all input elements
+ *
  * @author Jan Simson
  * @see {@link https://www.jspsych.org/plugins/jspsych-survey-html-form/ survey-html-form plugin documentation on jspsych.org}
  */

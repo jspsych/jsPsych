@@ -51,8 +51,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * audio-keyboard-response
- * @file jsPsych plugin for playing an audio file and getting a keyboard response
+ * **audio-keyboard-response**
+ *
+ * jsPsych plugin for playing an audio file and getting a keyboard response
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-audio-keyboard-response/ audio-keyboard-response plugin documentation on jspsych.org}
  */

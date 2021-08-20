@@ -45,8 +45,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * reconstruction
- * @file jsPsych plugin for a reconstruction task where the subject recreates a stimulus from memory
+ * **reconstruction**
+ *
+ * jsPsych plugin for a reconstruction task where the subject recreates a stimulus from memory
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-reconstruction/ reconstruction plugin documentation on jspsych.org}
  */

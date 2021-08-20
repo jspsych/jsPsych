@@ -61,11 +61,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * vsl-animate-occlusion
- * @file jsPsych plugin for showing animations that mimic the experiment described in
+ * **vsl-animate-occlusion**
+ *
+ * jsPsych plugin for showing animations that mimic the experiment described in
  * Fiser, J., & Aslin, R. N. (2002). Statistical learning of higher-order
  * temporal structure from visual shape sequences. Journal of Experimental
  * Psychology: Learning, Memory, and Cognition, 28(3), 458.
+ *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-vsl-animate-occlusion/ vsl-animate-occlusion plugin documentation on jspsych.org}
  */

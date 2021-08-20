@@ -70,11 +70,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * instructions
- * @author Josh de Leeuw
- * @file jsPsych plugin to display text (including HTML-formatted strings) during the experiment.
+ * **instructions**
+ *
+ * jsPsych plugin to display text (including HTML-formatted strings) during the experiment.
  * Use it to show a set of pages that participants can move forward/backward through.
  * Page numbers can be displayed to help with navigation by setting show_page_number to true.
+ *
+ * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-instructions/ instructions plugin documentation on jspsych.org}
  */
 class InstructionsPlugin implements JsPsychPlugin<Info> {
