@@ -1,5 +1,6 @@
 ---
 "jspsych": major
+"@jspsych/extension-webgazer": major
 "@jspsych/plugin-animation": major
 "@jspsych/plugin-audio-button-response": major
 "@jspsych/plugin-audio-keyboard-response": major

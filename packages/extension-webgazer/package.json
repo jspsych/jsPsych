@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/extension-webgazer",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "jsPsych extension for eye tracking using WebGazer.js",
   "type": "module",
   "main": "dist/index.js",
