@@ -44,8 +44,7 @@ const info = <const>{
       pretty_name: "Item path",
       default: "img/card.png",
       // TO DO: I think the background image should be optional, in which case we don't want to try to auto-preload this parameter?
-      // also this flag produces a TS error, I think because ParameterInfo interface preload flag values are "image" | "video" | "audio" rather than boolean
-      //preload: false
+      preload: false,
     },
     /** The height of the item to be measured, in mm. */
     item_height_mm: {

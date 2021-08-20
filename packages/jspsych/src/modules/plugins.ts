@@ -56,7 +56,7 @@ export interface ParameterInfo {
   array?: boolean;
   pretty_name?: string;
   default?: any;
-  preload?: "image" | "video" | "audio";
+  preload?: boolean;
 }
 
 export interface ParameterInfos {
