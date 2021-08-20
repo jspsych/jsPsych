@@ -32,3 +32,4 @@ export {
   universalPluginParameters,
   UniversalPluginParameters,
 } from "./modules/plugins";
+export { JsPsychExtension, JsPsychExtensionInfo } from "./modules/extensions";
