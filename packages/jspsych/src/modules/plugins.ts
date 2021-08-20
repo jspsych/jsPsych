@@ -12,53 +12,58 @@ type SetRequired<BaseType, Keys extends keyof BaseType> = Simplify<
   Omit<BaseType, Keys> & Required<Pick<BaseType, Keys>>
 >;
 
-// enumerate possible parameter types for plugins
-export const parameterType = <const>{
-  BOOL: 0,
-  STRING: 1,
-  INT: 2,
-  FLOAT: 3,
-  FUNCTION: 4,
-  KEY: 5,
-  SELECT: 6,
-  HTML_STRING: 7,
-  IMAGE: 8,
-  AUDIO: 9,
-  VIDEO: 10,
-  OBJECT: 11,
-  COMPLEX: 12,
-  TIMELINE: 13,
-};
+/**
+ * Parameter types for plugins
+ */
+export enum ParameterType {
+  BOOL,
+  STRING,
+  INT,
+  FLOAT,
+  FUNCTION,
+  KEY,
+  KEYS,
+  SELECT,
+  HTML_STRING,
+  IMAGE,
+  AUDIO,
+  VIDEO,
+  OBJECT,
+  COMPLEX,
+  TIMELINE,
+}
 
 type ParameterTypeMap = {
-  0: boolean; // BOOL
-  1: string; // STRING
-  2: number; // INT
-  3: number; // FLOAT
-  4: (...args: any[]) => any; // FUNCTION
-  5: string; // KEY
-  6: any; // SELECT
-  7: string; // HTML_STRING
-  8: string; // IMAGE
-  9: string; // AUDIO
-  10: string; // VIDEO
-  11: object; // OBJECT
-  12: any; // COMPLEX
-  13: any; // TIMELINE
+  [ParameterType.BOOL]: boolean;
+  [ParameterType.STRING]: string;
+  [ParameterType.INT]: number;
+  [ParameterType.FLOAT]: number;
+  [ParameterType.FUNCTION]: (...args: any[]) => any;
+  [ParameterType.KEY]: string;
+  [ParameterType.KEYS]: string[] | "ALL_KEYS" | "NO_KEYS";
+  [ParameterType.SELECT]: any;
+  [ParameterType.HTML_STRING]: string;
+  [ParameterType.IMAGE]: string;
+  [ParameterType.AUDIO]: string;
+  [ParameterType.VIDEO]: string;
+  [ParameterType.OBJECT]: object;
+  [ParameterType.COMPLEX]: any;
+  [ParameterType.TIMELINE]: any;
 };
 
-interface ParameterInfo {
-  type: keyof ParameterTypeMap;
+export interface ParameterInfo {
+  type: ParameterType;
   array?: boolean;
   pretty_name?: string;
   default?: any;
+  preload?: "image" | "video" | "audio";
 }
 
-interface ParameterInfos {
+export interface ParameterInfos {
   [key: string]: ParameterInfo;
 }
 
-type ParameterType<I extends ParameterInfo> = I["array"] extends boolean // Hack to deal with type widening in parameter declarations inferred from JavaScript
+type InferredParameter<I extends ParameterInfo> = I["array"] extends true
   ? Array<ParameterTypeMap[I["type"]]>
   : ParameterTypeMap[I["type"]];
 
@@ -68,17 +73,17 @@ type RequiredParameterNames<I extends ParameterInfos> = {
 
 type InferredParameters<I extends ParameterInfos> = SetRequired<
   {
-    [Property in keyof I]?: ParameterType<I[Property]>;
+    [Property in keyof I]?: InferredParameter<I[Property]>;
   },
   RequiredParameterNames<I>
 >;
 
-export const universalPluginParameters: ParameterInfos = {
+export const universalPluginParameters = <const>{
   /**
    * Data to add to this trial (key-value pairs)
    */
   data: {
-    type: parameterType.OBJECT,
+    type: ParameterType.OBJECT,
     pretty_name: "Data",
     default: {},
   },
@@ -86,7 +91,7 @@ export const universalPluginParameters: ParameterInfos = {
    * Function to execute when trial begins
    */
   on_start: {
-    type: parameterType.FUNCTION,
+    type: ParameterType.FUNCTION,
     pretty_name: "On start",
     default: function () {
       return;
@@ -96,7 +101,7 @@ export const universalPluginParameters: ParameterInfos = {
    * Function to execute when trial is finished
    */
   on_finish: {
-    type: parameterType.FUNCTION,
+    type: ParameterType.FUNCTION,
     pretty_name: "On finish",
     default: function () {
       return;
@@ -106,7 +111,7 @@ export const universalPluginParameters: ParameterInfos = {
    * Function to execute after the trial has loaded
    */
   on_load: {
-    type: parameterType.FUNCTION,
+    type: ParameterType.FUNCTION,
     pretty_name: "On load",
     default: function () {
       return;
@@ -116,7 +121,7 @@ export const universalPluginParameters: ParameterInfos = {
    * Length of gap between the end of this trial and the start of the next trial
    */
   post_trial_gap: {
-    type: parameterType.INT,
+    type: ParameterType.INT,
     pretty_name: "Post trial gap",
     default: null,
   },
@@ -124,7 +129,7 @@ export const universalPluginParameters: ParameterInfos = {
    * A list of CSS classes to add to the jsPsych display element for the duration of this trial
    */
   css_classes: {
-    type: parameterType.STRING,
+    type: ParameterType.STRING,
     pretty_name: "Custom CSS classes",
     default: null,
   },
@@ -140,13 +145,10 @@ export interface PluginInfo {
 }
 
 export interface JsPsychPlugin<I extends PluginInfo> {
-  info: I;
   trial(display_element: HTMLElement, trial: TrialType<I>): void;
 }
 
 export type TrialType<I extends PluginInfo> = InferredParameters<I["parameters"]> &
   UniversalPluginParameters;
 
-export type PluginParameters<P extends JsPsychPlugin<any>> = InferredParameters<
-  P["info"]["parameters"]
->;
+export type PluginParameters<I extends PluginInfo> = InferredParameters<I["parameters"]>;

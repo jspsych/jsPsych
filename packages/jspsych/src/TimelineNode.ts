@@ -1,4 +1,5 @@
 import { JsPsych } from "./JsPsych";
+import { ParameterType } from "./modules/plugins";
 import {
   repeat,
   sampleWithReplacement,
@@ -532,5 +533,55 @@ export class TimelineNode {
         )
       );
     }
+  }
+
+  /**
+   * Extracts a map that, for each of the timeline's (nested) plugins, maps the plugin name to an
+   * object that maps media parameters to their corresponding `preload` type, if not prevented by a
+   * `preload: false` flag in a parameter's description.
+   */
+  extractPreloadParameters() {
+    type PreloadType = "audio" | "image" | "video";
+    const preloadMap = new Map<string, Record<string, PreloadType>>();
+
+    /** Maps parameter types to their corresponding preload type */
+    const parameterTypeMap = new Map<number, PreloadType>([
+      [ParameterType.AUDIO, "audio"],
+      [ParameterType.IMAGE, "image"],
+      [ParameterType.VIDEO, "video"],
+    ]);
+
+    function recurseTimeline(node: TimelineNode) {
+      const isTimeline = typeof node.timeline_parameters !== "undefined";
+
+      if (isTimeline) {
+        for (const childNode of node.timeline_parameters.timeline) {
+          recurseTimeline(childNode);
+        }
+      } else if (node.trial_parameters.type.info) {
+        // node is a trial with type.info set
+
+        // Get the plugin name and parameters object from the info object
+        const { name: pluginName, parameters } = node.trial_parameters.type.info;
+
+        if (!preloadMap.has(pluginName)) {
+          preloadMap.set(
+            pluginName,
+            Object.fromEntries(
+              Object.entries<any>(parameters)
+                // Filter out parameter entries with media types and a non-false `preload` option
+                .filter(
+                  ([_name, { type, preload }]) => parameterTypeMap.has(type) && (preload ?? true)
+                )
+                // Map each entry's value to its preload type
+                .map(([name, { type }]) => [name, parameterTypeMap.get(type)])
+            )
+          );
+        }
+      }
+    }
+
+    recurseTimeline(this);
+    return preloadMap;
   }
 }

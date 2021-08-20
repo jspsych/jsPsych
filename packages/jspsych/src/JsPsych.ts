@@ -3,7 +3,7 @@ import autoBind from "auto-bind";
 import { version } from "../package.json";
 import { JsPsychData } from "./modules/data";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
-import * as plugins from "./modules/plugins";
+import { ParameterType, universalPluginParameters } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
@@ -15,7 +15,6 @@ function delay(ms: number) {
 
 export class JsPsych {
   extensions = <any>{};
-  plugins = plugins;
   turk = turk;
   randomization = randomization;
   utils = utils;
@@ -136,13 +135,14 @@ export class JsPsych {
     this.data = new JsPsychData(this);
     this.pluginAPI = createJointPluginAPIObject(this);
 
+    // create instances of extensions
+    for (const extension of options.extensions) {
+      this.extensions[extension.type.info.name] = new extension.type(this);
+    }
+
     // initialize audio context based on options and browser capabilities
     this.pluginAPI.initAudio();
   }
-
-  // enumerated variables for special parameter types
-  readonly ALL_KEYS = "allkeys";
-  readonly NO_KEYS = "none";
 
   /**
    * Starts an experiment using the provided timeline and returns a promise that is resolved when
@@ -169,6 +169,13 @@ export class JsPsych {
     await this.loadExtensions(this.opts.extensions);
 
     document.documentElement.setAttribute("jspsych", "present");
+
+    // Register preloading for the plugins referenced in the timeline
+    for (const [pluginName, parameters] of this.timeline.extractPreloadParameters()) {
+      for (const [parameter, type] of Object.entries(parameters)) {
+        this.pluginAPI.registerPreload(pluginName, parameter, type);
+      }
+    }
 
     this.startExperiment();
     await this.finished;
@@ -252,10 +259,8 @@ export class JsPsych {
     }
     // handle extension callbacks
     if (Array.isArray(current_trial.extensions)) {
-      for (var i = 0; i < current_trial.extensions.length; i++) {
-        var ext_data_values = this.extensions[current_trial.extensions[i].type].on_finish(
-          current_trial.extensions[i].params
-        );
+      for (const extension of current_trial.extensions) {
+        var ext_data_values = this.extensions[extension.type.info.name].on_finish(extension.params);
         Object.assign(trial_data_values, ext_data_values);
       }
     }
@@ -436,7 +441,7 @@ export class JsPsych {
     try {
       await Promise.all(
         extensions.map((extension) =>
-          this.extensions[extension.type].initialize(extension.params || {})
+          this.extensions[extension.type.info.name].initialize(extension.params || {})
         )
       );
     } catch (error_message) {
@@ -504,12 +509,16 @@ export class JsPsych {
     this.current_trial = trial;
     this.current_trial_finished = false;
 
-    // instantiate the plugin for this trial
-    const info = trial.type.info;
-    trial.type = new trial.type(this);
-
     // process all timeline variables for this trial
     this.evaluateTimelineVariables(trial);
+
+    // instantiate the plugin for this trial
+    trial.type = {
+      // this is a hack to internally keep the old plugin object structure and prevent touching more
+      // of the core jspsych code
+      ...autoBind(new trial.type(this)),
+      info: trial.type.info,
+    };
 
     // evaluate variables that are functions
     this.evaluateFunctionParameters(trial);
@@ -530,8 +539,8 @@ export class JsPsych {
 
     // call any on_start functions for extensions
     if (Array.isArray(trial.extensions)) {
-      for (var i = 0; i < trial.extensions.length; i++) {
-        this.extensions[trial.extensions[i].type].on_start(this.current_trial.extensions[i].params);
+      for (const extension of trial.extensions) {
+        this.extensions[extension.type.info.name].on_start(extension.params);
       }
     }
 
@@ -561,8 +570,8 @@ export class JsPsych {
 
     // call any on_load functions for extensions
     if (Array.isArray(trial.extensions)) {
-      for (var i = 0; i < trial.extensions.length; i++) {
-        this.extensions[trial.extensions[i].type].on_load(this.current_trial.extensions[i].params);
+      for (const extension of trial.extensions) {
+        this.extensions[extension.type.info.name].on_load(extension.params);
       }
     }
 
@@ -603,14 +612,14 @@ export class JsPsych {
         // the first line checks if the parameter is defined in the universalPluginParameters set
         // the second line checks the plugin-specific parameters
         if (
-          typeof this.plugins.universalPluginParameters[key] !== "undefined" &&
-          this.plugins.universalPluginParameters[key].type !== this.plugins.parameterType.FUNCTION
+          typeof universalPluginParameters[key] !== "undefined" &&
+          universalPluginParameters[key].type !== ParameterType.FUNCTION
         ) {
           trial[key] = this.replaceFunctionsWithValues(trial[key], null);
         }
         if (
           typeof trial.type.info.parameters[key] !== "undefined" &&
-          trial.type.info.parameters[key].type !== this.plugins.parameterType.FUNCTION
+          trial.type.info.parameters[key].type !== ParameterType.FUNCTION
         ) {
           trial[key] = this.replaceFunctionsWithValues(trial[key], trial.type.info.parameters[key]);
         }
@@ -647,7 +656,7 @@ export class JsPsych {
         for (var i = 0; i < keys.length; i++) {
           if (
             typeof info.nested[keys[i]] == "object" &&
-            info.nested[keys[i]].type !== this.plugins.parameterType.FUNCTION
+            info.nested[keys[i]].type !== ParameterType.FUNCTION
           ) {
             obj[keys[i]] = this.replaceFunctionsWithValues(obj[keys[i]], info.nested[keys[i]]);
           }
@@ -662,7 +671,7 @@ export class JsPsych {
   private setDefaultValues(trial) {
     for (var param in trial.type.info.parameters) {
       // check if parameter is complex with nested defaults
-      if (trial.type.info.parameters[param].type == this.plugins.parameterType.COMPLEX) {
+      if (trial.type.info.parameters[param].type == ParameterType.COMPLEX) {
         if (trial.type.info.parameters[param].array == true) {
           // iterate over each entry in the array
           trial[param].forEach(function (ip, i) {

@@ -1,7 +1,7 @@
 {
-  "name": "@jspsych/plugin-categorize-animation",
-  "version": "0.1.0",
-  "description": "jspsych plugin for categorization trials with feedback and animated stimuli",
+  "name": "@jspsych/extension-webgazer",
+  "version": "1.0.0",
+  "description": "jsPsych extension for eye tracking using WebGazer.js",
   "type": "module",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -12,7 +12,7 @@
   ],
   "source": "src/index.ts",
   "scripts": {
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:watch": "npm test -- --watch",
     "tsc": "tsc",
     "build": "rollup --config",

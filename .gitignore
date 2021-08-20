@@ -9,3 +9,4 @@ dist/
 coverage/
 .vscode/
 dist.zip
+packages/jspsych/README.md
