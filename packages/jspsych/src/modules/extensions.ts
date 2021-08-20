@@ -1,4 +1,4 @@
-interface JsPsychExtensionInfo {
+export interface JsPsychExtensionInfo {
   name: string;
 }
 

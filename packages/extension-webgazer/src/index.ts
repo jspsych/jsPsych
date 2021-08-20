@@ -40,7 +40,7 @@ interface OnStartParameters {
 }
 
 class WebGazerExtension implements JsPsychExtension {
-  static info = {
+  static info: JsPsychExtensionInfo = {
     name: "webgazer",
   };
 
