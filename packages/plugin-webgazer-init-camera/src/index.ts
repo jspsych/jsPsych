@@ -1,11 +1,11 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "webgazer-init-camera",
   parameters: {
     /* Instruction text */
     instructions: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       default: `
             <p>Position your head so that the webcam has a good view of your eyes.</p>
             <p>Center your face in the box and look directly towards the camera.</p>
@@ -14,7 +14,7 @@ const info = <const>{
     },
     /* Text for the button that participants click to end the trial. */
     button_text: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       default: "Continue",
     },
   },

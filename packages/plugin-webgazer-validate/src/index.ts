@@ -1,4 +1,4 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 // TO DO: the parameters below don't match up with the docs: https://www.jspsych.org/plugins/jspsych-webgazer-validate/
 // docs contain 'repetiton_per_point', and some param descriptions in docs refer to calibration
@@ -8,7 +8,7 @@ const info = <const>{
   parameters: {
     /* Array of points in [x,y] coordinates */
     validation_points: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       default: [
         [10, 10],
         [10, 50],
@@ -24,37 +24,37 @@ const info = <const>{
     },
     /* Options are 'percent' and 'center-offset-pixels' */
     validation_point_coordinates: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       default: "percent", // options: 'percent', 'center-offset-pixels'
     },
     /* Tolerance around validation point in pixels */
     roi_radius: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       default: 200,
     },
     /* Whether or not to randomize the order of validation points */
     randomize_validation_order: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       default: false,
     },
     /* Delay before validating after showing a point */
     time_to_saccade: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       default: 1000,
     },
     /* Length of time to show each point */
     validation_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       default: 2000,
     },
     /* Validation point size in pixels */
     point_size: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       default: 20,
     },
     /* If true, then validation data will be shown on the screen after validation is complete */
     show_validation_data: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       default: false,
     },
   },
