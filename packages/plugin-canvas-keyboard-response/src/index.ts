@@ -3,44 +3,43 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "canvas-keyboard-response",
   parameters: {
-    /* The drawing function to apply to the canvas. Should take the canvas object as argument. */
+    /** The drawing function to apply to the canvas. Should take the canvas object as argument. */
     stimulus: {
       type: ParameterType.FUNCTION,
       pretty_name: "Stimulus",
       default: undefined,
     },
-    /* The keys the subject is allowed to press to respond to the stimulus. */
+    /** Array containing the key(s) the subject is allowed to press to respond to the stimulus. */
     choices: {
       type: ParameterType.KEYS,
-      array: true,
       pretty_name: "Choices",
       default: "ALL_KEYS",
     },
-    /* Any content here will be displayed below the stimulus. */
+    /** Any content here will be displayed below the stimulus. */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
-    /* How long to hide the stimulus. */
+    /** How long to show the stimulus. */
     stimulus_duration: {
       type: ParameterType.INT,
       pretty_name: "Stimulus duration",
       default: null,
     },
-    /* How long to show trial before it ends. */
+    /** How long to show trial before it ends. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
-    /* If true, trial will end when subject makes a response. */
+    /** If true, trial will end when subject makes a response. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
     },
-    /* Array containing the height (first value) and width (second value) of the canvas element. */
+    /** Array containing the height (first value) and width (second value) of the canvas element. */
     canvas_size: {
       type: ParameterType.INT,
       array: true,
@@ -53,14 +52,11 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-canvas-keyboard-response
- * Chris Jungerius (modified from Josh de Leeuw)
- *
- * a jsPsych plugin for displaying a canvas stimulus and getting a keyboard response
- *
- * documentation: docs.jspsych.org
- *
- **/
+ * canvas-keyboard-response
+ * @file jsPsych plugin for displaying a canvas stimulus and getting a keyboard response
+ * @author Chris Jungerius (modified from Josh de Leeuw)
+ * @see {@link https://www.jspsych.org/plugins/jspsych-canvas-keyboard-response/ canvas-keyboard-response plugin documentation on jspsych.org}
+ */
 class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
@@ -131,7 +127,6 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     // start the response listener
-    // @ts-ignore: TO DO - string array vs string error
     if (trial.choices != "NO_KEYS") {
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,

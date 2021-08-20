@@ -3,21 +3,21 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "vsl-grid-scene",
   parameters: {
+    /** An array of images that defines a grid. */
     stimuli: {
-      /* An array of images that defines a grid. */
       type: ParameterType.IMAGE,
       pretty_name: "Stimuli",
       array: true,
       default: undefined,
     },
-    /* Array specifying the width and height of the images to show. */
+    /** Array specifying the width and height of the images to show. */
     image_size: {
       type: ParameterType.INT,
       pretty_name: "Image size",
       array: true,
       default: [100, 100],
     },
-    /* How long to show the stimulus for in milliseconds. */
+    /** How long to show the stimulus for in milliseconds. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
@@ -29,16 +29,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jsPsych plugin for showing scenes that mimic the experiments described in
- *
+ * vsl-grid-scene
+ * @file jsPsych plugin for showing scenes that mimic the experiments described in
  * Fiser, J., & Aslin, R. N. (2001). Unsupervised statistical learning of
  * higher-order spatial structures from visual scenes. Psychological science,
  * 12(6), 499-504.
- *
- * Josh de Leeuw
- *
- * documentation: docs.jspsych.org
- *
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-vsl-grid-scene/ vsl-grid-scene plugin documentation on jspsych.org}
  */
 class VslGridScenePlugin implements JsPsychPlugin<Info> {
   static info = info;

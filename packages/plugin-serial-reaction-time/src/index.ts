@@ -3,78 +3,78 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "serial-reaction-time",
   parameters: {
-    /* This array represents the grid of boxes shown on the screen. */
+    /** This nested array represents the grid of boxes shown on the screen, where each inner array is a row, and each entry in the inner array is a column. */
     grid: {
-      type: ParameterType.BOOL,
+      type: ParameterType.BOOL, // TO DO: BOOL doesn't seem like the right type here. INT? Also, is this always a nested array?
       pretty_name: "Grid",
       array: true,
       default: [[1, 1, 1, 1]],
     },
-    /* The location of the target. The array should be the [row, column] of the target. */
+    /** The location of the target. The array should be the [row, column] of the target. */
     target: {
       type: ParameterType.INT,
       pretty_name: "Target",
       array: true,
       default: undefined,
     },
-    /* Each entry in this array is the key that should be pressed for that corresponding location in the grid. */
+    /** Nested array with dimensions that match the grid. Each entry in this array is the key that should be pressed for that corresponding location in the grid. */
     choices: {
-      type: ParameterType.KEYS,
+      type: ParameterType.KEYS, // TO DO: always a nested array, so I think ParameterType.KEYS and array: true is ok here?
       pretty_name: "Choices",
       array: true,
       default: [["3", "5", "7", "9"]],
     },
-    /* The width and height in pixels of each square in the grid. */
+    /** The width and height in pixels of each square in the grid. */
     grid_square_size: {
       type: ParameterType.INT,
       pretty_name: "Grid square size",
       default: 100,
     },
-    /* The color of the target square. */
+    /** The color of the target square. */
     target_color: {
       type: ParameterType.STRING,
       pretty_name: "Target color",
       default: "#999",
     },
-    /* If true, trial ends when user makes a response */
+    /** If true, trial ends when user makes a response */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
     },
-    /* The number of milliseconds to display the grid before the target changes color. */
+    /** The number of milliseconds to display the grid before the target changes color. */
     pre_target_duration: {
       type: ParameterType.INT,
       pretty_name: "Pre-target duration",
       default: 0,
     },
-    /* How long to show the trial. */
+    /** How long to show the trial. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
-    /* If true, show feedback indicating where the user responded and whether it was correct. */
+    /** If true, show feedback indicating where the user responded and whether it was correct. */
     show_response_feedback: {
       type: ParameterType.BOOL,
       pretty_name: "Show response feedback",
       default: false,
     },
-    /* The length of time in milliseconds to show the feedback. */
+    /** The length of time in milliseconds to show the feedback. */
     feedback_duration: {
       type: ParameterType.INT,
       pretty_name: "Feedback duration",
       default: 200,
     },
-    /* If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds. */
+    /** If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds. */
     fade_duration: {
       type: ParameterType.INT,
       pretty_name: "Fade duration",
       default: null,
     },
-    /* Any content here will be displayed below the stimulus. */
+    /** Any content here will be displayed below the stimulus. */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
       no_function: false,
@@ -85,14 +85,11 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-serial-reaction-time
- * Josh de Leeuw
- *
- * plugin for running a serial reaction time task
- *
- * documentation: docs.jspsych.org
- *
- **/
+ * serial-reaction-time
+ * @file jsPsych plugin for running a serial reaction time task with keypress responses
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-serial-reaction-time/ serial-reaction-time plugin documentation on jspsych.org}
+ */
 class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
   static info = info;
 

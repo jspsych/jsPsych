@@ -3,65 +3,65 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "serial-reaction-time-mouse",
   parameters: {
-    /* The location of the target. The array should be the [row, column] of the target. */
+    /** This array represents the grid of boxes shown on the screen. */
+    grid: {
+      type: ParameterType.BOOL, // TO DO: BOOL doesn't seem like the right type here. INT? Also, is this always a nested array?
+      pretty_name: "Grid",
+      array: true,
+      default: [[1, 1, 1, 1]],
+    },
+    /** The location of the target. The array should be the [row, column] of the target. */
     target: {
       type: ParameterType.INT,
       pretty_name: "Target",
       array: true,
       default: undefined,
     },
-    /* This array represents the grid of boxes shown on the screen. */
-    grid: {
-      type: ParameterType.BOOL,
-      pretty_name: "Grid",
-      array: true,
-      default: [[1, 1, 1, 1]],
-    },
-    /* The width and height in pixels of each square in the grid. */
+    /** The width and height in pixels of each square in the grid. */
     grid_square_size: {
       type: ParameterType.INT,
       pretty_name: "Grid square size",
       default: 100,
     },
-    /* The color of the target square. */
+    /** The color of the target square. */
     target_color: {
       type: ParameterType.STRING,
       pretty_name: "Target color",
       default: "#999",
     },
-    /* If true, the trial ends after a mouse click. */
+    /** If true, the trial ends after a mouse click. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
     },
-    /* The number of milliseconds to display the grid before the target changes color. */
+    /** The number of milliseconds to display the grid before the target changes color. */
     pre_target_duration: {
       type: ParameterType.INT,
       pretty_name: "Pre-target duration",
       default: 0,
     },
-    /* How long to show the trial */
+    /** How long to show the trial */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
-    /* If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds. */
+    /** If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds. */
     fade_duration: {
       type: ParameterType.INT,
       pretty_name: "Fade duration",
       default: null,
     },
-    /* If true, then user can make nontarget response. */
+    /** If true, then user can make nontarget response. */
     allow_nontarget_responses: {
       type: ParameterType.BOOL,
       pretty_name: "Allow nontarget response",
       default: false,
     },
-    /* Any content here will be displayed below the stimulus */
+    /** Any content here will be displayed below the stimulus */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
@@ -71,14 +71,11 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-serial-reaction-time
- * Josh de Leeuw
- *
- * plugin for running a serial reaction time task with mouse responses
- *
- * documentation: docs.jspsych.org
- *
- **/
+ * serial-reaction-time-mouse
+ * @file jsPsych plugin for running a serial reaction time task with mouse responses
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-serial-reaction-time-mouse/ serial-reaction-time-mouse plugin documentation on jspsych.org}
+ */
 class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
   static info = info;
 

@@ -3,57 +3,57 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "html-button-response",
   parameters: {
-    /* The HTML string to be displayed */
+    /** The HTML string to be displayed */
     stimulus: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Stimulus",
       default: undefined,
     },
-    /* The labels for the buttons. */
+    /** Array containing the label(s) for the button(s). */
     choices: {
       type: ParameterType.STRING,
       pretty_name: "Choices",
       default: undefined,
       array: true,
     },
-    /* The html of the button. Can create own style. */
+    /** The HTML for creating button. Can create own style. Use the "%choice%" string to indicate where the label from the choices parameter should be inserted. */
     button_html: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Button HTML",
       default: '<button class="jspsych-btn">%choice%</button>',
       array: true,
     },
-    /* Any content here will be displayed under the button. */
+    /** Any content here will be displayed under the button(s). */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
-    /* How long to show the stimulus. */
+    /** How long to show the stimulus. */
     stimulus_duration: {
       type: ParameterType.INT,
       pretty_name: "Stimulus duration",
       default: null,
     },
-    /* How long to show the trial. */
+    /** How long to show the trial. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
-    /* The vertical margin of the button. */
+    /** The vertical margin of the button. */
     margin_vertical: {
       type: ParameterType.STRING,
       pretty_name: "Margin vertical",
       default: "0px",
     },
-    /* The horizontal margin of the button. */
+    /** The horizontal margin of the button. */
     margin_horizontal: {
       type: ParameterType.STRING,
       pretty_name: "Margin horizontal",
       default: "8px",
     },
-    /* If true, then trial will end when user responds. */
+    /** If true, then trial will end when user responds. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
@@ -65,14 +65,11 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-html-button-response
- * Josh de Leeuw
- *
- * plugin for displaying a stimulus and getting a button response
- *
- * documentation: docs.jspsych.org
- *
- **/
+ * html-button-response
+ * jsPsych plugin for displaying a stimulus and getting a button response
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-html-button-response/ html-button-response plugin documentation on jspsych.org}
+ */
 class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 

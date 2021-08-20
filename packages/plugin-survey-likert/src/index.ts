@@ -3,32 +3,32 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "survey-likert",
   parameters: {
-    /* Array containing one or more objects with parameters for the question(s) that should be shown on the page. */
+    /** Array containing one or more objects with parameters for the question(s) that should be shown on the page. */
     questions: {
       type: ParameterType.COMPLEX,
       array: true,
       pretty_name: "Questions",
       nested: {
-        /* Question prompt. */
+        /** Question prompt. */
         prompt: {
-          type: ParameterType.STRING,
+          type: ParameterType.HTML_STRING,
           pretty_name: "Prompt",
           default: undefined,
         },
-        /* Array of likert labels to display for this question. */
+        /** Array of likert labels to display for this question. */
         labels: {
           type: ParameterType.STRING,
           array: true,
           pretty_name: "Labels",
           default: undefined,
         },
-        /* Whether or not a response to this question must be given in order to continue. */
+        /** Whether or not a response to this question must be given in order to continue. */
         required: {
           type: ParameterType.BOOL,
           pretty_name: "Required",
           default: false,
         },
-        /* Name of the question in the trial data. If no name is given, the questions are named Q0, Q1, etc. */
+        /** Name of the question in the trial data. If no name is given, the questions are named Q0, Q1, etc. */
         name: {
           type: ParameterType.STRING,
           pretty_name: "Question Name",
@@ -36,31 +36,31 @@ const info = <const>{
         },
       },
     },
-    /* If true, the order of the questions in the 'questions' array will be randomized. */
+    /** If true, the order of the questions in the 'questions' array will be randomized. */
     randomize_question_order: {
       type: ParameterType.BOOL,
       pretty_name: "Randomize Question Order",
       default: false,
     },
-    /* HTML-formatted string to display at top of the page above all of the questions. */
+    /** HTML-formatted string to display at top of the page above all of the questions. */
     preamble: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Preamble",
       default: null,
     },
-    /* Width of the likert scales in pixels. */
+    /** Width of the likert scales in pixels. */
     scale_width: {
       type: ParameterType.INT,
       pretty_name: "Scale width",
       default: null,
     },
-    /* Label of the button to submit responses. */
+    /** Label of the button to submit responses. */
     button_label: {
       type: ParameterType.STRING,
       pretty_name: "Button label",
       default: "Continue",
     },
-    /* Setting this to true will enable browser auto-complete or auto-fill for the form. */
+    /** Setting this to true will enable browser auto-complete or auto-fill for the form. */
     autocomplete: {
       type: ParameterType.BOOL,
       pretty_name: "Allow autocomplete",
@@ -72,13 +72,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-survey-likert
- * a jspsych plugin for measuring items on a likert scale
- *
- * Josh de Leeuw
- *
- * documentation: docs.jspsych.org
- *
+ * survey-likert
+ * @file jsPsych plugin for gathering responses to questions on a likert scale
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-survey-likert/ survey-likert plugin documentation on jspsych.org}
  */
 class SurveyLikertPlugin implements JsPsychPlugin<Info> {
   static info = info;

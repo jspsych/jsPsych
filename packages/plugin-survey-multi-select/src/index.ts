@@ -3,38 +3,38 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "survey-multi-select",
   parameters: {
-    /* Array containing one or more objects with parameters for the question(s) that should be shown on the page. */
+    /** Array containing one or more objects with parameters for the question(s) that should be shown on the page. */
     questions: {
       type: ParameterType.COMPLEX,
       array: true,
       pretty_name: "Questions",
       nested: {
-        /* Question prompt. */
+        /** Question prompt. */
         prompt: {
-          type: ParameterType.STRING,
+          type: ParameterType.HTML_STRING,
           pretty_name: "Prompt",
           default: undefined,
         },
-        /* Array of multiple select options for this question. */
+        /** Array of multiple select options for this question. */
         options: {
           type: ParameterType.STRING,
           pretty_name: "Options",
           array: true,
           default: undefined,
         },
-        /* If true, then the question will be centered and options will be displayed horizontally. */
+        /** If true, then the question will be centered and options will be displayed horizontally. */
         horizontal: {
           type: ParameterType.BOOL,
           pretty_name: "Horizontal",
           default: false,
         },
-        /* Whether or not a response to this question must be given in order to continue. */
+        /** Whether or not a response to this question must be given in order to continue. */
         required: {
           type: ParameterType.BOOL,
           pretty_name: "Required",
           default: false,
         },
-        /* Name of the question in the trial data. If no name is given, the questions are named Q0, Q1, etc. */
+        /** Name of the question in the trial data. If no name is given, the questions are named Q0, Q1, etc. */
         name: {
           type: ParameterType.STRING,
           pretty_name: "Question Name",
@@ -42,31 +42,31 @@ const info = <const>{
         },
       },
     },
-    /* If true, the order of the questions in the 'questions' array will be randomized. */
+    /** If true, the order of the questions in the 'questions' array will be randomized. */
     randomize_question_order: {
       type: ParameterType.BOOL,
       pretty_name: "Randomize Question Order",
       default: false,
     },
-    /* HTML-formatted string to display at top of the page above all of the questions. */
+    /** HTML-formatted string to display at top of the page above all of the questions. */
     preamble: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Preamble",
       default: null,
     },
-    /* Label of the button to submit responses. */
+    /** Label of the button to submit responses. */
     button_label: {
       type: ParameterType.STRING,
       pretty_name: "Button label",
       default: "Continue",
     },
-    /* Message that will be displayed if one or more required questions is not answered. */
+    /** Message that will be displayed if one or more required questions is not answered. */
     required_message: {
       type: ParameterType.STRING,
       pretty_name: "Required message",
       default: "You must choose at least one response for this question",
     },
-    /* Setting this to true will enable browser auto-complete or auto-fill for the form. */
+    /** Setting this to true will enable browser auto-complete or auto-fill for the form. */
     autocomplete: {
       type: ParameterType.BOOL,
       pretty_name: "Allow autocomplete",
@@ -78,11 +78,9 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-survey-multi-select
- * a jspsych plugin for multiple choice survey questions
- *
- * documentation: docs.jspsych.org
- *
+ * survey-multi-select
+ * @file  jsPsych plugin for presenting multiple choice survey questions with the ability to respond with more than one option
+ * @see {@link https://www.jspsych.org/plugins/jspsych-survey-multi-select/ survey-multi-select plugin documentation on jspsych.org}
  */
 class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
   static info = info;

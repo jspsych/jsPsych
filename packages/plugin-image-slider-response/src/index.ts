@@ -3,106 +3,108 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "image-slider-response",
   parameters: {
-    /* The image to be displayed */
+    /** The image to be displayed */
     stimulus: {
       type: ParameterType.IMAGE,
       pretty_name: "Stimulus",
       default: undefined,
     },
-    /* Set the image height in pixels */
+    /** Set the image height in pixels */
     stimulus_height: {
       type: ParameterType.INT,
       pretty_name: "Image height",
       default: null,
     },
-    /* Set the image width in pixels */
+    /** Set the image width in pixels */
     stimulus_width: {
       type: ParameterType.INT,
       pretty_name: "Image width",
       default: null,
     },
-    /* Maintain the aspect ratio after setting width or height */
+    /** Maintain the aspect ratio after setting width or height */
     maintain_aspect_ratio: {
       type: ParameterType.BOOL,
       pretty_name: "Maintain aspect ratio",
       default: true,
     },
-    /* Sets the minimum value of the slider. */
+    /** Sets the minimum value of the slider. */
     min: {
       type: ParameterType.INT,
       pretty_name: "Min slider",
       default: 0,
     },
-    /* Sets the maximum value of the slider */
+    /** Sets the maximum value of the slider */
     max: {
       type: ParameterType.INT,
       pretty_name: "Max slider",
       default: 100,
     },
-    /* Sets the starting value of the slider */
+    /** Sets the starting value of the slider */
     slider_start: {
       type: ParameterType.INT,
       pretty_name: "Slider starting value",
       default: 50,
     },
-    /* Sets the step of the slider */
+    /** Sets the step of the slider */
     step: {
       type: ParameterType.INT,
       pretty_name: "Step",
       default: 1,
     },
-    /* Labels of the slider. */
+    /** Array containing the labels for the slider. Labels will be displayed at equidistant locations along the slider. */
     labels: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Labels",
       default: [],
       array: true,
     },
-    /* Width of the slider in pixels. */
+    /** Width of the slider in pixels. */
     slider_width: {
       type: ParameterType.INT,
       pretty_name: "Slider width",
       default: null,
     },
-    /* Label of the button to advance. */
+    /** Label of the button to advance. */
     button_label: {
       type: ParameterType.STRING,
       pretty_name: "Button label",
       default: "Continue",
       array: false,
     },
-    /* If true, the participant will have to move the slider before continuing. */
+    /** If true, the participant will have to move the slider before continuing. */
     require_movement: {
       type: ParameterType.BOOL,
       pretty_name: "Require movement",
       default: false,
     },
-    /* Any content here will be displayed below the slider. */
+    /** Any content here will be displayed below the slider. */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
-    /* How long to hide the stimulus. */
+    /** How long to show the stimulus. */
     stimulus_duration: {
       type: ParameterType.INT,
       pretty_name: "Stimulus duration",
       default: null,
     },
-    /* How long to show the trial. */
+    /** How long to show the trial. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
-    /* If true, trial will end when user makes a response. */
+    /** If true, trial will end when user makes a response. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
     },
-    /* If true, the image will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
-    If false, the image will be shown via an img element. */
+    /**
+     * If true, the image will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
+     * If false, the image will be shown via an img element.
+     */
     render_on_canvas: {
       type: ParameterType.BOOL,
       pretty_name: "Render on canvas",
@@ -114,13 +116,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-image-slider-response
- * a jspsych plugin for showing an image stimulus and getting a slider response
- *
- * Josh de Leeuw
- *
- * documentation: docs.jspsych.org
- *
+ * image-slider-response
+ * @file jsPsych plugin for showing an image stimulus and getting a slider response
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-image-slider-response/ image-slider-response plugin documentation on jspsych.org}
  */
 class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -245,7 +244,6 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
       submit_btn.id = "jspsych-image-slider-response-next";
       submit_btn.classList.add("jspsych-btn");
       submit_btn.disabled = trial.require_movement ? true : false;
-      //@ts-ignore
       submit_btn.innerHTML = trial.button_label;
       display_element.insertBefore(submit_btn, display_element.nextElementSibling);
     } else {

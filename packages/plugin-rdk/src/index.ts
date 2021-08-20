@@ -3,183 +3,181 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "rdk",
   parameters: {
-    /* The valid keys that the subject can press to indicate a response. */
+    /** Array containing the valid key(s) that the subject can press to indicate a response. */
     choices: {
       type: ParameterType.KEYS,
       pretty_name: "Choices",
       default: "ALL_KEYS",
-      array: true,
     },
-    /* The correct keys for that trial. */
+    /** Array containing the correct key(s) for that trial. */
     correct_choice: {
       type: ParameterType.KEYS, // TO DO: docs says this can be array or string - need to allow both types here?
       pretty_name: "Correct choice",
       default: undefined,
-      array: true,
     },
-    /* The length of stimulus presentation. */
+    /** The length of stimulus presentation. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: 500,
     },
-    /* If true, then any valid key will end the trial. */
+    /** If true, then any valid key will end the trial. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
     },
-    /* The number of RDK apertures (If more than one, make sure to separate them by setting aperture_center_x and aperture_center_y for each RDK). */
+    /** The number of RDK apertures (If more than one, make sure to separate them by setting aperture_center_x and aperture_center_y for each RDK). */
     number_of_apertures: {
       type: ParameterType.INT,
       pretty_name: "Number of apertures",
       default: 1,
     },
-    /* The number of dots per set in the stimulus. */
+    /** The number of dots per set in the stimulus. */
     number_of_dots: {
       type: ParameterType.INT,
       pretty_name: "Number of dots",
       default: 300,
     },
-    /* The number of sets of dots to cycle through. */
+    /** The number of sets of dots to cycle through. */
     number_of_sets: {
       type: ParameterType.INT,
       pretty_name: "Number of sets",
       default: 1,
     },
-    /* The direction of coherent motion in degrees. */
+    /** The direction of coherent motion in degrees. */
     coherent_direction: {
       type: ParameterType.INT,
       pretty_name: "Coherent direction",
       default: 0,
     },
-    /* The percentage of dots moving in the coherent direction. */
+    /** The proportion of dots moving in the coherent direction. */
     coherence: {
       type: ParameterType.FLOAT,
       pretty_name: "Coherence",
       default: 0.5,
     },
-    /* The percentage of dots moving in the direction opposite of the coherent direction. */
+    /** The proportion of dots moving in the direction opposite of the coherent direction. */
     opposite_coherence: {
       type: ParameterType.FLOAT,
       pretty_name: "Opposite coherence",
       default: 0,
     },
-    /* The radius of the dots in pixels */
+    /** The radius of the dots in pixels */
     dot_radius: {
       type: ParameterType.INT,
       pretty_name: "Dot radius",
       default: 2,
     },
-    /* The number of frames that pass before each dot disappears and reappears somewhere else. */
+    /** The number of frames that pass before each dot disappears and reappears somewhere else. */
     dot_life: {
       type: ParameterType.INT,
       pretty_name: "Dot life",
       default: -1,
     },
-    /* The distance in pixels each dot moves per frame. */
+    /** The distance in pixels each dot moves per frame. */
     move_distance: {
       type: ParameterType.INT,
       pretty_name: "Move distance",
       default: 1,
     },
-    /* The width of the aperture in pixels. */
+    /** The width of the aperture in pixels. */
     aperture_width: {
       type: ParameterType.INT,
       pretty_name: "Aperture width",
       default: 600,
     },
-    /* The height of the aperture in pixels. */
+    /** The height of the aperture in pixels. */
     aperture_height: {
       type: ParameterType.INT,
       pretty_name: "Aperture height",
       default: 400,
     },
-    /* The color of the dots. */
+    /** The color of the dots. */
     dot_color: {
       type: ParameterType.STRING,
       pretty_name: "Dot color",
       default: "white",
     },
-    /* The background of the stimulus. */
+    /** The background color of the stimulus. */
     background_color: {
       type: ParameterType.STRING,
       pretty_name: "Background color",
       default: "gray",
     },
-    /* The Type of RDK (refer to documentation for details). */
+    /** The type of RDK (refer to documentation for details). */
     RDK_type: {
       type: ParameterType.INT,
       pretty_name: "RDK type",
       default: 3,
     },
-    /* The shape of the aperture. */
+    /** The shape of the aperture. */
     aperture_type: {
       type: ParameterType.INT,
       pretty_name: "Aperture Type",
       default: 2,
     },
-    /* The reinsertion rule for dots that move out of the aperture. */
+    /** The reinsertion rule for dots that move out of the aperture. */
     reinsert_type: {
       type: ParameterType.INT,
       pretty_name: "Reinsert type",
       default: 2,
     },
-    /* The x-coordinate of the center of the aperture. */
+    /** The x-coordinate of the center of the aperture. */
     aperture_center_x: {
       type: ParameterType.INT,
       pretty_name: "Aperture center X",
       default: window.innerWidth / 2,
     },
-    /* The y-coordinate of the center of the aperture. */
+    /** The y-coordinate of the center of the aperture. */
     aperture_center_y: {
       type: ParameterType.INT,
       pretty_name: "Aperture center Y",
       default: window.innerHeight / 2,
     },
-    /* If true, then a fixation cross will be present in the middle of the screen. */
+    /** If true, then a fixation cross will be present in the middle of the screen. */
     fixation_cross: {
       type: ParameterType.BOOL,
       pretty_name: "Fixation cross",
       default: false,
     },
-    /* The width of the fixation cross in pixels. */
+    /** The width of the fixation cross in pixels. */
     fixation_cross_width: {
       type: ParameterType.INT,
       pretty_name: "Fixation cross width",
       default: 20,
     },
-    /* The height of the fixation cross in pixels. */
+    /** The height of the fixation cross in pixels. */
     fixation_cross_height: {
       type: ParameterType.INT,
       pretty_name: "Fixation cross height",
       default: 20,
     },
-    /* The color of the fixation cross. */
+    /** The color of the fixation cross. */
     fixation_cross_color: {
       type: ParameterType.STRING,
       pretty_name: "Fixation cross color",
       default: "black",
     },
-    /* The thickness of the fixation cross. */
+    /** The thickness of the fixation cross. */
     fixation_cross_thickness: {
       type: ParameterType.INT,
       pretty_name: "Fixation cross thickness",
       default: 1,
     },
-    /* The presence of a border around the aperture. */
+    /** The presence of a border around the aperture. */
     border: {
       type: ParameterType.BOOL,
       pretty_name: "Border",
       default: false,
     },
-    /* The thickness of the border in pixels. */
+    /** The thickness of the border in pixels. */
     border_thickness: {
       type: ParameterType.INT,
       pretty_name: "Border width",
       default: 1,
     },
-    /* The color of the border. */
+    /** The color of the border. */
     border_color: {
       type: ParameterType.STRING,
       pretty_name: "Border Color",
@@ -191,8 +189,11 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * RDK plugin for JsPsych
- * ----------------------
+ * RDK
+ * @file jsPsych plugin for showing a random-dot kinematogram stimulus and recording a keyboard response
+ * @author Sivananda Rajananda
+ * @see {@link https://www.jspsych.org/plugins/jspsych-rdk/ RDK plugin documentation on jspsych.org}
+ * @copyright
  *
  * This code was created in the Consciousness and Metacognition Lab at UCLA,
  * under the supervision of Brian Odegaard and Hakwan Lau
@@ -283,7 +284,7 @@ class RdkPlugin implements JsPsychPlugin<Info> {
     var apertureCenterX = aperture_center_x; // The x-coordinate of center of the aperture on the screen, in pixels
     var apertureCenterY = aperture_center_y; // The y-coordinate of center of the aperture on the screen, in pixels
 
-    /* RDK type parameter
+    /** RDK type parameter
       ** See Fig. 1 in Scase, Braddick, and Raymond (1996) for a visual depiction of these different signal selection rules and noise types
 
       -------------------
@@ -309,7 +310,7 @@ class RdkPlugin implements JsPsychPlugin<Info> {
 
     var RDK = RDK_type;
 
-    /* 
+    /** 
       Shape of aperture
       1 - Circle
       2 - Ellipse
@@ -508,7 +509,6 @@ class RdkPlugin implements JsPsychPlugin<Info> {
     //Function to start the keyboard listener
     const startKeyboardListener = () => {
       //Start the response listener if there are choices for keys
-      // @ts-ignore - TO DO: this will always return true because choices should be an array. Should choices (KEYS) be string or string array?
       if (choices != "NO_KEYS") {
         //Create the keyboard listener to listen for subjects' key response
         keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
@@ -672,7 +672,7 @@ class RdkPlugin implements JsPsychPlugin<Info> {
     //----RDK Functions Begin----
 
     //Function to set the parameters of the array
-    // @ts-ignore: not all code paths return a value
+    // @ts-expect-error: not all code paths return a value
     function setParameter(originalVariable) {
       //Check if it is an array and its length matches the aperture then return the original array
       if (originalVariable.constructor === Array && originalVariable.length === nApertures) {
@@ -1106,7 +1106,7 @@ class RdkPlugin implements JsPsychPlugin<Info> {
     }
 
     //Function to check if dot is out of bounds
-    // @ts-ignore
+    // @ts-expect-error
     function outOfBounds(dot) {
       //For circle and ellipse
       if (apertureType == 1 || apertureType == 2) {
@@ -1216,7 +1216,7 @@ class RdkPlugin implements JsPsychPlugin<Info> {
 
       //If it is a square or rectangle, re-insert on one of the opposite edges
       if (apertureType == 3 || apertureType == 4) {
-        /* The formula for calculating whether a dot appears from the vertical edge (left or right edges) is dependent on the direction of the dot and the ratio of the vertical and horizontal edge lengths.
+        /** The formula for calculating whether a dot appears from the vertical edge (left or right edges) is dependent on the direction of the dot and the ratio of the vertical and horizontal edge lengths.
           E.g.  
           Aperture is 100 px high and 200px wide
           Dot is moving 3 px in x direction and 4px in y direction

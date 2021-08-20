@@ -9,37 +9,37 @@ const info = <const>{
       pretty_name: "Questions",
       default: undefined,
       nested: {
-        /* Question prompt. */
+        /** Question prompt. */
         prompt: {
-          type: ParameterType.STRING,
+          type: ParameterType.HTML_STRING,
           pretty_name: "Prompt",
           default: undefined,
         },
-        /* Placeholder text in the response text box. */
+        /** Placeholder text in the response text box. */
         placeholder: {
           type: ParameterType.STRING,
           pretty_name: "Placeholder",
           default: "",
         },
-        /* The number of rows for the response text box. */
+        /** The number of rows for the response text box. */
         rows: {
           type: ParameterType.INT,
           pretty_name: "Rows",
           default: 1,
         },
-        /* The number of columns for the response text box. */
+        /** The number of columns for the response text box. */
         columns: {
           type: ParameterType.INT,
           pretty_name: "Columns",
           default: 40,
         },
-        /* Whether or not a response to this question must be given in order to continue. */
+        /** Whether or not a response to this question must be given in order to continue. */
         required: {
           type: ParameterType.BOOL,
           pretty_name: "Required",
           default: false,
         },
-        /* Name of the question in the trial data. If no name is given, the questions are named Q0, Q1, etc. */
+        /** Name of the question in the trial data. If no name is given, the questions are named Q0, Q1, etc. */
         name: {
           type: ParameterType.STRING,
           pretty_name: "Question Name",
@@ -47,25 +47,25 @@ const info = <const>{
         },
       },
     },
-    /* If true, the order of the questions in the 'questions' array will be randomized. */
+    /** If true, the order of the questions in the 'questions' array will be randomized. */
     randomize_question_order: {
       type: ParameterType.BOOL,
       pretty_name: "Randomize Question Order",
       default: false,
     },
-    /* HTML-formatted string to display at top of the page above all of the questions. */
+    /** HTML-formatted string to display at top of the page above all of the questions. */
     preamble: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Preamble",
       default: null,
     },
-    /* Label of the button to submit responses. */
+    /** Label of the button to submit responses. */
     button_label: {
       type: ParameterType.STRING,
       pretty_name: "Button label",
       default: "Continue",
     },
-    /* Setting this to true will enable browser auto-complete or auto-fill for the form. */
+    /** Setting this to true will enable browser auto-complete or auto-fill for the form. */
     autocomplete: {
       type: ParameterType.BOOL,
       pretty_name: "Allow autocomplete",
@@ -77,13 +77,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-survey-text
- * a jspsych plugin for free response survey questions
- *
- * Josh de Leeuw
- *
- * documentation: docs.jspsych.org
- *
+ * survey-text
+ * @file jsPsych plugin for free text response survey questions
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-survey-text/ survey-text plugin documentation on jspsych.org}
  */
 class SurveyTextPlugin implements JsPsychPlugin<Info> {
   static info = info;

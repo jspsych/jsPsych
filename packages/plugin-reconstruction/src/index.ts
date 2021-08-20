@@ -3,37 +3,37 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "reconstruction",
   parameters: {
-    /* A function with a single parameter that returns an HTML-formatted string representing the stimulus. */
+    /** A function with a single parameter that returns an HTML-formatted string representing the stimulus. */
     stim_function: {
       type: ParameterType.FUNCTION,
       pretty_name: "Stimulus function",
       default: undefined,
     },
-    /* The starting value of the stimulus parameter. */
+    /** The starting value of the stimulus parameter. */
     starting_value: {
       type: ParameterType.FLOAT,
       pretty_name: "Starting value",
       default: 0.5,
     },
-    /* The change in the stimulus parameter caused by pressing one of the modification keys. */
+    /** The change in the stimulus parameter caused by pressing one of the modification keys. */
     step_size: {
       type: ParameterType.FLOAT,
       pretty_name: "Step size",
       default: 0.05,
     },
-    /* The key to press for increasing the parameter value. */
+    /** The key to press for increasing the parameter value. */
     key_increase: {
       type: ParameterType.KEY,
       pretty_name: "Key increase",
       default: "h",
     },
-    /* The key to press for decreasing the parameter value. */
+    /** The key to press for decreasing the parameter value. */
     key_decrease: {
       type: ParameterType.KEY,
       pretty_name: "Key decrease",
       default: "g",
     },
-    /* The text that appears on the button to finish the trial. */
+    /** The text that appears on the button to finish the trial. */
     button_label: {
       type: ParameterType.STRING,
       pretty_name: "Button label",
@@ -45,14 +45,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-reconstruction
- * a jspsych plugin for a reconstruction task where the subject recreates
- * a stimulus from memory
- *
- * Josh de Leeuw
- *
- * documentation: docs.jspsych.org
- *
+ * reconstruction
+ * @file jsPsych plugin for a reconstruction task where the subject recreates a stimulus from memory
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-reconstruction/ reconstruction plugin documentation on jspsych.org}
  */
 class ReconstructionPlugin implements JsPsychPlugin<Info> {
   static info = info;

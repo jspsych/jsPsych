@@ -3,9 +3,9 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "webgazer-calibrate",
   parameters: {
-    /* An array of calibration points, where each element is an array cointaining the coordinates for one calibration point: [x,y] */
+    /** An array of calibration points, where each element is an array cointaining the coordinates for one calibration point: [x,y] */
     calibration_points: {
-      type: ParameterType.INT,
+      type: ParameterType.INT, // TO DO: nested array, so different type?
       default: [
         [10, 10],
         [10, 50],
@@ -17,33 +17,35 @@ const info = <const>{
         [90, 50],
         [90, 90],
       ],
+      array: true,
     },
-    /* Options are 'click' and 'view' */
+    /** What should the subject do in response to the calibration point presentation? Options are 'click' and 'view'. */
     calibration_mode: {
-      type: ParameterType.STRING,
-      default: "click", // options: 'click', 'view'
+      type: ParameterType.SELECT,
+      options: ["click", "view"],
+      default: "click",
     },
-    /* Size of the calibration points, in pixels */
+    /** Size of the calibration points, in pixels */
     point_size: {
       type: ParameterType.INT,
       default: 20,
     },
-    /* Number of repetitions per calibration point */
+    /** Number of repetitions per calibration point */
     repetitions_per_point: {
       type: ParameterType.INT,
       default: 1,
     },
-    /* Whether or not to randomize the calibration point order */
+    /** Whether or not to randomize the calibration point order */
     randomize_calibration_order: {
       type: ParameterType.BOOL,
       default: false,
     },
-    /* If calibration_mode is view, then this is the delay before calibration after the point is shown */
+    /** If calibration_mode is view, then this is the delay before calibration after the point is shown */
     time_to_saccade: {
       type: ParameterType.INT,
       default: 1000,
     },
-    /* If calibration_mode is view, then this is the length of time to show the point while calibrating */
+    /** If calibration_mode is view, then this is the length of time to show the point while calibrating */
     time_per_point: {
       type: ParameterType.INT,
       default: 1000,
@@ -54,9 +56,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-webgazer-calibrate
- * Josh de Leeuw
- **/
+ * webgazer-calibrate
+ * @file jsPsych plugin for calibrating webcam eye gaze location estimation.
+ * Intended for use with the WebGazer eye-tracking extension, after the webcam has been initialized with the `webgazer-init-camera` plugin.
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-webgazer-calibrate/ webgazer-calibrate plugin} and
+ * {@link https://www.jspsych.org/overview/eye-tracking/ eye-tracking overview} documentation on jspsych.org
+ */
 class WebgazerCalibratePlugin implements JsPsychPlugin<Info> {
   static info = info;
 

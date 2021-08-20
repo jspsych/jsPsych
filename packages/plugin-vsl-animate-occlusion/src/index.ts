@@ -3,54 +3,53 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "vsl-animate-occlusion",
   parameters: {
-    /* A stimulus is a path to an image file. */
+    /** Array containing path(s) to image file(s). */
     stimuli: {
       type: ParameterType.IMAGE,
       pretty_name: "Stimuli",
       default: undefined,
       array: true,
     },
-    /* This array contains the keys that the subject is allowed to press in order to respond to the stimulus. */
+    /** Array containing the key(s) that the subject is allowed to press in order to respond to the stimulus. */
     choices: {
       type: ParameterType.KEYS,
       pretty_name: "Choices",
-      array: true,
       default: "ALL_KEYS",
     },
-    /* Array specifying the width and height of the area that the animation will display in. */
+    /** Array specifying the width and height of the area that the animation will display in. */
     canvas_size: {
       type: ParameterType.INT,
       pretty_name: "Canvas size",
       array: true,
       default: [400, 400],
     },
-    /* Array specifying the width and height of the images to show. */
+    /** Array specifying the width and height of the images to show. */
     image_size: {
       type: ParameterType.INT,
       pretty_name: "Image size",
       array: true,
       default: [100, 100],
     },
-    /* Which direction the stimulus should move first. */
+    /** Which direction the stimulus should move first. */
     initial_direction: {
       type: ParameterType.SELECT,
       pretty_name: "Initial direction",
       choices: ["left", "right"],
       default: "left",
     },
-    /* If true, display a rectangle in the center of the screen that is just wide enough to occlude the image completely as it passes behind. */
+    /** If true, display a rectangle in the center of the screen that is just wide enough to occlude the image completely as it passes behind. */
     occlude_center: {
       type: ParameterType.BOOL,
       pretty_name: "Occlude center",
       default: true,
     },
-    /* How long it takes for a stimulus in the sequence to make a complete cycle. */
+    /** How long it takes for a stimulus in the sequence to make a complete cycle. */
     cycle_duration: {
       type: ParameterType.INT,
       pretty_name: "Cycle duration",
       default: 1000,
     },
-    /* How long to wait before the stimuli starts moving from behind the center rectangle. */
+    /** How long to wait before the stimuli starts moving from behind the center rectangle. */
     pre_movement_duration: {
       type: ParameterType.INT,
       pretty_name: "Pre movement duration",
@@ -62,16 +61,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jsPsych plugin for showing animations that mimic the experiment described in
- *
+ * vsl-animate-occlusion
+ * @file jsPsych plugin for showing animations that mimic the experiment described in
  * Fiser, J., & Aslin, R. N. (2002). Statistical learning of higher-order
  * temporal structure from visual shape sequences. Journal of Experimental
  * Psychology: Learning, Memory, and Cognition, 28(3), 458.
- *
- * Josh de Leeuw
- *
- * documentation: docs.jspsych.org
- *
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-vsl-animate-occlusion/ vsl-animate-occlusion plugin documentation on jspsych.org}
  */
 class VslAnimateOcclusionPlugin implements JsPsychPlugin<Info> {
   static info = info;

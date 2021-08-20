@@ -3,13 +3,13 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "call-function",
   parameters: {
-    /* Function to call */
+    /** Function to call */
     func: {
       type: ParameterType.FUNCTION,
       pretty_name: "Function",
       default: undefined,
     },
-    /* Is the function call asynchronous? */
+    /** Is the function call asynchronous? */
     async: {
       type: ParameterType.BOOL,
       pretty_name: "Asynchronous",
@@ -21,14 +21,11 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-call-function
- * plugin for calling an arbitrary function during a jspsych experiment
- * Josh de Leeuw
- *
- * documentation: docs.jspsych.org
- *
- **/
-
+ * call-function
+ * @file jsPsych plugin for calling an arbitrary function during a jsPsych experiment
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-call-function/ call-function plugin documentation on jspsych.org}
+ */
 class CallFunctionPlugin implements JsPsychPlugin<Info> {
   static info = info;
 

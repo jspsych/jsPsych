@@ -3,53 +3,53 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "same-different-html",
   parameters: {
-    /* The HTML content to be displayed. */
+    /** Array containing the HTML content to be displayed. */
     stimuli: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Stimuli",
       default: undefined,
       array: true,
     },
-    /* Either "same" or "different". */
+    /** Correct answer: either "same" or "different". */
     answer: {
       type: ParameterType.SELECT,
       pretty_name: "Answer",
       options: ["same", "different"],
       default: undefined,
     },
-    /* The key that subjects should press to indicate that the two stimuli are the same. */
+    /** The key that subjects should press to indicate that the two stimuli are the same. */
     same_key: {
       type: ParameterType.KEY,
       pretty_name: "Same key",
       default: "q",
     },
-    /* The key that subjects should press to indicate that the two stimuli are different. */
+    /** The key that subjects should press to indicate that the two stimuli are different. */
     different_key: {
       type: ParameterType.KEY,
       pretty_name: "Different key",
       default: "p",
     },
-    /* How long to show the first stimulus for in milliseconds. If null, then the stimulus will remain on the screen until any keypress is made. */
+    /** How long to show the first stimulus for in milliseconds. If null, then the stimulus will remain on the screen until any keypress is made. */
     first_stim_duration: {
       type: ParameterType.INT,
       pretty_name: "First stimulus duration",
       default: 1000,
     },
-    /* How long to show a blank screen in between the two stimuli. */
+    /** How long to show a blank screen in between the two stimuli. */
     gap_duration: {
       type: ParameterType.INT,
       pretty_name: "Gap duration",
       default: 500,
     },
-    /* How long to show the second stimulus for in milliseconds. If null, then the stimulus will remain on the screen until a valid response is made. */
+    /** How long to show the second stimulus for in milliseconds. If null, then the stimulus will remain on the screen until a valid response is made. */
     second_stim_duration: {
       type: ParameterType.INT,
       pretty_name: "Second stimulus duration",
       default: 1000,
     },
-    /* Any content here will be displayed below the stimulus. */
+    /** Any content here will be displayed below the stimulus. */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
@@ -59,13 +59,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-same-different-html
- * Josh de Leeuw
- *
- * plugin for showing two HTML stimuli sequentially and getting a same / different judgment
- *
- * documentation: docs.jspsych.org
- *
+ * same-different-html
+ * @file jsPsych plugin for showing two HTML stimuli sequentially and getting a same / different judgment via keypress
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-same-different-html/ same-different-html plugin documentation on jspsych.org}
  */
 class SameDifferentHtmlPlugin implements JsPsychPlugin<Info> {
   static info = info;

@@ -3,44 +3,43 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "audio-keyboard-response",
   parameters: {
-    /* The audio to be played. */
+    /** The audio file to be played. */
     stimulus: {
       type: ParameterType.AUDIO,
       pretty_name: "Stimulus",
       default: undefined,
     },
-    /* The keys the subject is allowed to press to respond to the stimulus. */
+    /** Array containing the key(s) the subject is allowed to press to respond to the stimulus. */
     choices: {
       type: ParameterType.KEYS,
       pretty_name: "Choices",
-      array: true,
       default: "ALL_KEYS",
     },
-    /* Any content here will be displayed below the stimulus. */
+    /** Any content here will be displayed below the stimulus. */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
-    /* The maximum duration to wait for a response. */
+    /** The maximum duration to wait for a response. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
-    /* If true, the trial will end when user makes a response. */
+    /** If true, the trial will end when user makes a response. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
     },
-    /* If true, then the trial will end as soon as the audio file finishes playing. */
+    /** If true, then the trial will end as soon as the audio file finishes playing. */
     trial_ends_after_audio: {
       type: ParameterType.BOOL,
       pretty_name: "Trial ends after audio",
       default: false,
     },
-    /* If true, then responses are allowed while the audio is playing. If false, then the audio must finish playing before a response is accepted. */
+    /** If true, then responses are allowed while the audio is playing. If false, then the audio must finish playing before a response is accepted. */
     response_allowed_while_playing: {
       type: ParameterType.BOOL,
       pretty_name: "Response allowed while playing",
@@ -52,15 +51,11 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-audio-keyboard-response
- * Josh de Leeuw
- *
- * plugin for playing an audio file and getting a keyboard response
- *
- * documentation: docs.jspsych.org
- *
- **/
-
+ * audio-keyboard-response
+ * @file jsPsych plugin for playing an audio file and getting a keyboard response
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-audio-keyboard-response/ audio-keyboard-response plugin documentation on jspsych.org}
+ */
 class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 

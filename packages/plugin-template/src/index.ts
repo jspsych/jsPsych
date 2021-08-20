@@ -16,7 +16,12 @@ const info = <const>{
 
 type Info = typeof info;
 
-/* Plugin description and author */
+/**
+ * <PLUGIN-NAME>
+ * @file <SHORT PLUGIN DESCRIPTION>
+ * @author <YOUR NAME>
+ * @see {@link <DOCUMENTATION_URL> <DOCUMENTATION LINK TEXT>}
+ */
 class PluginNamePlugin implements JsPsychPlugin<Info> {
   static info = info;
 

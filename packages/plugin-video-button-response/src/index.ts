@@ -3,106 +3,106 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "video-button-response",
   parameters: {
-    /* Array of the video file(s) to play. Video can be provided in multiple file formats for better cross-browser support. */
+    /** Array of the video file(s) to play. Video can be provided in multiple file formats for better cross-browser support. */
     stimulus: {
       type: ParameterType.VIDEO,
       pretty_name: "Video",
       default: undefined,
       array: true,
     },
-    /* The labels for the buttons. */
+    /** Array containing the label(s) for the button(s). */
     choices: {
       type: ParameterType.STRING,
       pretty_name: "Choices",
       default: undefined,
       array: true,
     },
-    /* The html of the button. Can create own style. */
+    /** The HTML for creating button. Can create own style. Use the "%choice%" string to indicate where the label from the choices parameter should be inserted. */
     button_html: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Button HTML",
       default: '<button class="jspsych-btn">%choice%</button>',
       array: true,
     },
-    /* Any content here will be displayed below the buttons. */
+    /** Any content here will be displayed below the buttons. */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
-    /* The width of the video in pixels. */
+    /** The width of the video in pixels. */
     width: {
       type: ParameterType.INT,
       pretty_name: "Width",
       default: "",
     },
-    /* The height of the video display in pixels. */
+    /** The height of the video display in pixels. */
     height: {
       type: ParameterType.INT,
       pretty_name: "Height",
       default: "",
     },
-    /* If true, the video will begin playing as soon as it has loaded. */
+    /** If true, the video will begin playing as soon as it has loaded. */
     autoplay: {
       type: ParameterType.BOOL,
       pretty_name: "Autoplay",
       default: true,
     },
-    /* If true, the subject will be able to pause the video or move the playback to any point in the video. */
+    /** If true, the subject will be able to pause the video or move the playback to any point in the video. */
     controls: {
       type: ParameterType.BOOL,
       pretty_name: "Controls",
       default: false,
     },
-    /* Time to start the clip. If null (default), video will start at the beginning of the file. */
+    /** Time to start the clip. If null (default), video will start at the beginning of the file. */
     start: {
       type: ParameterType.FLOAT,
       pretty_name: "Start",
       default: null,
     },
-    /* Time to stop the clip. If null (default), video will stop at the end of the file. */
+    /** Time to stop the clip. If null (default), video will stop at the end of the file. */
     stop: {
       type: ParameterType.FLOAT,
       pretty_name: "Stop",
       default: null,
     },
-    /* The playback rate of the video. 1 is normal, <1 is slower, >1 is faster. */
+    /** The playback rate of the video. 1 is normal, <1 is slower, >1 is faster. */
     rate: {
       type: ParameterType.FLOAT,
       pretty_name: "Rate",
       default: 1,
     },
-    /* If true, the trial will end immediately after the video finishes playing. */
+    /** If true, the trial will end immediately after the video finishes playing. */
     trial_ends_after_video: {
       type: ParameterType.BOOL,
       pretty_name: "End trial after video finishes",
       default: false,
     },
-    /* How long to show trial before it ends. */
+    /** How long to show trial before it ends. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
-    /* The vertical margin of the button. */
+    /** The vertical margin of the button. */
     margin_vertical: {
       type: ParameterType.STRING,
       pretty_name: "Margin vertical",
       default: "0px",
     },
-    /* The horizontal margin of the button. */
+    /** The horizontal margin of the button. */
     margin_horizontal: {
       type: ParameterType.STRING,
       pretty_name: "Margin horizontal",
       default: "8px",
     },
-    /* If true, the trial will end when subject makes a response. */
+    /** If true, the trial will end when subject makes a response. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
     },
-    /* If true, then responses are allowed while the video is playing. If false, then the video must finish playing before a response is accepted. */
+    /** If true, then responses are allowed while the video is playing. If false, then the video must finish playing before a response is accepted. */
     response_allowed_while_playing: {
       type: ParameterType.BOOL,
       pretty_name: "Response allowed while playing",
@@ -114,14 +114,11 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-video-button-response
- * Josh de Leeuw
- *
- * plugin for playing a video file and getting a button response
- *
- * documentation: docs.jspsych.org
- *
- **/
+ * video-button-response
+ * @file jsPsych plugin for playing a video file and getting a button response
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-video-button-response/ video-button-response plugin documentation on jspsych.org}
+ */
 class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 

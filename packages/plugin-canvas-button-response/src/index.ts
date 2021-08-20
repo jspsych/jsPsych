@@ -3,63 +3,63 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "canvas-button-response",
   parameters: {
-    /* The drawing function to apply to the canvas. Should take the canvas object as argument. */
+    /** The drawing function to apply to the canvas. Should take the canvas object as argument. */
     stimulus: {
       type: ParameterType.FUNCTION,
       pretty_name: "Stimulus",
       default: undefined,
     },
-    /* The labels for the buttons */
+    /** Array containing the label(s) for the button(s). */
     choices: {
       type: ParameterType.STRING,
       pretty_name: "Choices",
       default: undefined,
       array: true,
     },
-    /* The html of the button. Can create own style. */
+    /** The html of the button. Can create own style. */
     button_html: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Button HTML",
       default: '<button class="jspsych-btn">%choice%</button>',
       array: true,
     },
-    /* Any content here will be displayed under the button. */
+    /** Any content here will be displayed under the button. */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
-    /* How long to hide the stimulus. */
+    /** How long to hide the stimulus. */
     stimulus_duration: {
       type: ParameterType.INT,
       pretty_name: "Stimulus duration",
       default: null,
     },
-    /* How long to show the trial. */
+    /** How long to show the trial. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
-    /* The vertical margin of the button. */
+    /** The vertical margin of the button. */
     margin_vertical: {
       type: ParameterType.STRING,
       pretty_name: "Margin vertical",
       default: "0px",
     },
-    /* The horizontal margin of the button. */
+    /** The horizontal margin of the button. */
     margin_horizontal: {
       type: ParameterType.STRING,
       pretty_name: "Margin horizontal",
       default: "8px",
     },
-    /* If true, then trial will end when user responds. */
+    /** If true, then trial will end when user responds. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
     },
-    /* Array containing the height (first value) and width (second value) of the canvas element. */
+    /** Array containing the height (first value) and width (second value) of the canvas element. */
     canvas_size: {
       type: ParameterType.INT,
       array: true,
@@ -72,14 +72,11 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-canvas-button-response
- * Chris Jungerius (modified from Josh de Leeuw)
- *
- * a jsPsych plugin for displaying a canvas stimulus and getting a button response
- *
- * documentation: docs.jspsych.org
- *
- **/
+ * canvas-button-response
+ * @file jsPsych plugin for displaying a canvas stimulus and getting a button response
+ * @author Chris Jungerius (modified from Josh de Leeuw)
+ * @see {@link https://www.jspsych.org/plugins/jspsych-canvas-button-response/ canvas-button-response plugin documentation on jspsych.org}
+ */
 class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 

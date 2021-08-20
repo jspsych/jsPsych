@@ -3,62 +3,62 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "instructions",
   parameters: {
-    /* Each element of the array is the content for a single page. */
+    /** Each element of the array is the HTML-formatted content for a single page. */
     pages: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Pages",
       default: undefined,
       array: true,
     },
-    /* The key the subject can press in order to advance to the next page. */
+    /** The key the subject can press in order to advance to the next page. */
     key_forward: {
       type: ParameterType.KEY,
       pretty_name: "Key forward",
       default: "ArrowRight",
     },
-    /* The key that the subject can press to return to the previous page. */
+    /** The key that the subject can press to return to the previous page. */
     key_backward: {
       type: ParameterType.KEY,
       pretty_name: "Key backward",
       default: "ArrowLeft",
     },
-    /* If true, the subject can return to the previous page of the instructions. */
+    /** If true, the subject can return to the previous page of the instructions. */
     allow_backward: {
       type: ParameterType.BOOL,
       pretty_name: "Allow backward",
       default: true,
     },
-    /* If true, the subject can use keyboard keys to navigate the pages. */
+    /** If true, the subject can use keyboard keys to navigate the pages. */
     allow_keys: {
       type: ParameterType.BOOL,
       pretty_name: "Allow keys",
       default: true,
     },
-    /* If true, then a "Previous" and "Next" button will be displayed beneath the instructions. */
+    /** If true, then a "Previous" and "Next" button will be displayed beneath the instructions. */
     show_clickable_nav: {
       type: ParameterType.BOOL,
       pretty_name: "Show clickable nav",
       default: false,
     },
-    /* If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons. */
+    /** If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons. */
     show_page_number: {
       type: ParameterType.BOOL,
       pretty_name: "Show page number",
       default: false,
     },
-    /* The text that appears before x/y (current/total) pages displayed with show_page_number. */
+    /** The text that appears before x/y (current/total) pages displayed with show_page_number. */
     page_label: {
       type: ParameterType.STRING,
       pretty_name: "Page label",
       default: "Page",
     },
-    /* The text that appears on the button to go backwards. */
+    /** The text that appears on the button to go backwards. */
     button_label_previous: {
       type: ParameterType.STRING,
       pretty_name: "Button label previous",
       default: "Previous",
     },
-    /* The text that appears on the button to go forwards. */
+    /** The text that appears on the button to go forwards. */
     button_label_next: {
       type: ParameterType.STRING,
       pretty_name: "Button label next",
@@ -69,17 +69,13 @@ const info = <const>{
 
 type Info = typeof info;
 
-/* jspsych-instructions.js
- * Josh de Leeuw
- *
- * This plugin displays text (including HTML formatted strings) during the experiment.
- * Use it to show instructions, provide performance feedback, etc...
- *
- * Page numbers can be displayed to help with navigation by setting show_page_number
- * to true.
- *
- * documentation: docs.jspsych.org
- *
+/**
+ * instructions
+ * @author Josh de Leeuw
+ * @file jsPsych plugin to display text (including HTML-formatted strings) during the experiment.
+ * Use it to show a set of pages that participants can move forward/backward through.
+ * Page numbers can be displayed to help with navigation by setting show_page_number to true.
+ * @see {@link https://www.jspsych.org/plugins/jspsych-instructions/ instructions plugin documentation on jspsych.org}
  */
 class InstructionsPlugin implements JsPsychPlugin<Info> {
   static info = info;
