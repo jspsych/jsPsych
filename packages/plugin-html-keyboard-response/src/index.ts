@@ -1,4 +1,4 @@
-import { JsPsych, JsPsychPlugin, TrialType, parameterType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "html-keyboard-response",
@@ -7,7 +7,7 @@ const info = <const>{
      * The HTML string to be displayed
      */
     stimulus: {
-      type: parameterType.HTML_STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Stimulus",
       default: undefined,
     },
@@ -15,16 +15,16 @@ const info = <const>{
      * The keys the subject is allowed to press to respond to the stimulus.
      */
     choices: {
-      type: parameterType.KEY,
+      type: ParameterType.KEY,
       array: true,
       pretty_name: "Choices",
-      default: "allkeys", // cannot access jsPsych.ALL_KEYS here – ideally, it would be static
+      default: "ALL_KEYS",
     },
     /**
      * Any content here will be displayed below the stimulus.
      */
     prompt: {
-      type: parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Prompt",
       default: null,
     },
@@ -32,7 +32,7 @@ const info = <const>{
      * How long to hide the stimulus.
      */
     stimulus_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Stimulus duration",
       default: null,
     },
@@ -40,7 +40,7 @@ const info = <const>{
      * How long to show trial before it ends.
      */
     trial_duration: {
-      type: parameterType.INT,
+      type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
@@ -48,7 +48,7 @@ const info = <const>{
      * If true, trial will end when subject makes a response.
      */
     response_ends_trial: {
-      type: parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
     },
