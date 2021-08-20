@@ -133,7 +133,7 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
     }
 
     // show animation
-    var animate_interval = setInterval(function () {
+    var animate_interval = setInterval(() => {
       if (!trial.render_on_canvas) {
         display_element.innerHTML = ""; // clear everything
       }
