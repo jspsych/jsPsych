@@ -282,18 +282,18 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
     }
 
     // helper functions and callbacks
-    const update_loading_progress_bar = () => {
+    function update_loading_progress_bar() {
       loaded++;
       if (trial.show_progress_bar) {
         var percent_loaded = (loaded / total_n) * 100;
-        var preload_progress_bar = this.jsPsych
-          .getDisplayElement()
-          .querySelector<HTMLElement>("#jspsych-loading-progress-bar");
+        var preload_progress_bar = display_element.querySelector<HTMLElement>(
+          "#jspsych-loading-progress-bar"
+        );
         if (preload_progress_bar !== null) {
           preload_progress_bar.style.width = percent_loaded + "%";
         }
       }
-    };
+    }
 
     // called when a single file loading fails
     function file_loading_error(e) {
