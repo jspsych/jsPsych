@@ -7,7 +7,7 @@ jest.useFakeTimers();
 
 describe("reconstruction", () => {
   test("default starting value renders correctly", async () => {
-    let timeline = [
+    const timeline = [
       {
         type: reconstruction,
         stim_function: function (val) {
@@ -22,7 +22,7 @@ describe("reconstruction", () => {
   });
 
   test("custom starting value renders correctly", async () => {
-    let timeline = [
+    const timeline = [
       {
         type: reconstruction,
         stim_function: function (val) {
@@ -38,7 +38,7 @@ describe("reconstruction", () => {
   });
 
   test("default increment key works", async () => {
-    let timeline = [
+    const timeline = [
       {
         type: reconstruction,
         stim_function: function (val) {
@@ -57,7 +57,7 @@ describe("reconstruction", () => {
   });
 
   test("default decrement key works", async () => {
-    let timeline = [
+    const timeline = [
       {
         type: reconstruction,
         stim_function: function (val) {
@@ -76,7 +76,7 @@ describe("reconstruction", () => {
   });
 
   test("custom increment key works", async () => {
-    let timeline = [
+    const timeline = [
       {
         type: reconstruction,
         stim_function: function (val) {
@@ -98,7 +98,7 @@ describe("reconstruction", () => {
   });
 
   test("custom decrement key works", async () => {
-    let timeline = [
+    const timeline = [
       {
         type: reconstruction,
         stim_function: function (val) {
@@ -120,7 +120,7 @@ describe("reconstruction", () => {
   });
 
   test("custom button label works", async () => {
-    let timeline = [
+    const timeline = [
       {
         type: reconstruction,
         stim_function: function (val) {
@@ -136,7 +136,7 @@ describe("reconstruction", () => {
   });
 
   test("clicking button ends trial", async () => {
-    let timeline = [
+    const timeline = [
       {
         type: reconstruction,
         stim_function: function (val) {
@@ -150,11 +150,11 @@ describe("reconstruction", () => {
 
     clickTarget(jsPsych.getDisplayElement().querySelector("button"));
 
-    expectFinished();
+    await expectFinished();
   });
 
   test("data contains accurate final value", async () => {
-    let timeline = [
+    const timeline = [
       {
         type: reconstruction,
         stim_function: function (val) {
