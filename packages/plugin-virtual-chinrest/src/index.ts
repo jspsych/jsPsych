@@ -3,13 +3,14 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "virtual-chinrest",
   parameters: {
-    /* What units to resize to? ["none"/"cm"/"inch"/"deg"]. If "none", no resizing will be done to the jsPsych content after this trial. */
+    /** What units to resize to? ["none"/"cm"/"inch"/"deg"]. If "none", no resizing will be done to the jsPsych content after this trial. */
     resize_units: {
-      type: ParameterType.STRING,
+      type: ParameterType.SELECT,
       pretty_name: "Resize units",
+      options: ["none", "cm", "inch", "deg"],
       default: "none",
     },
-    /* After the scaling factor is applied, this many pixels will equal one unit of measurement. */
+    /** After the scaling factor is applied, this many pixels will equal one unit of measurement. */
     pixels_per_unit: {
       type: ParameterType.INT,
       pretty_name: "Pixels per unit",
@@ -20,7 +21,7 @@ const info = <const>{
     //   pretty_name: "Adjust Using Mouse?",
     //   default: true,
     // },
-    /* Any content here will be displayed above the card stimulus. */
+    /** Any content here will be displayed above the card stimulus. */
     adjustment_prompt: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Adjustment prompt",
@@ -31,43 +32,45 @@ const info = <const>{
           <p>If you do not have access to a real card you can use a ruler to measure the image width to 3.37 inches or 85.6 mm.</p>
           </div>`,
     },
-    /* Content of the button displayed below the card stimulus. */
+    /** Content of the button displayed below the card stimulus. */
     adjustment_button_prompt: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Adjustment button prompt",
       default: "Click here when the image is the correct size",
     },
-    /* Path to an image to be shown in the resizable item div. */
+    /** Path to an image to be shown in the resizable item div. */
     item_path: {
-      type: ParameterType.STRING,
+      type: ParameterType.IMAGE,
       pretty_name: "Item path",
       default: "img/card.png",
+      // TO DO: I think the background image should be optional, in which case we don't want to try to auto-preload this parameter?
+      preload: false,
     },
-    /* The height of the item to be measured, in mm. */
+    /** The height of the item to be measured, in mm. */
     item_height_mm: {
       type: ParameterType.FLOAT,
       pretty_name: "Item height (mm)",
       default: 53.98,
     },
-    /* The width of the item to be measured, in mm. */
+    /** The width of the item to be measured, in mm. */
     item_width_mm: {
       type: ParameterType.FLOAT,
       pretty_name: "Item width (mm)",
       default: 85.6,
     },
-    /* The initial size of the card, in pixels, along the largest dimension. */
+    /** The initial size of the card, in pixels, along the largest dimension. */
     item_init_size: {
       type: ParameterType.INT,
       pretty_name: "Initial Size",
       default: 250,
     },
-    /* How many times to measure the blindspot location? If 0, blindspot will not be detected, and viewing distance and degree data not computed. */
+    /** How many times to measure the blindspot location? If 0, blindspot will not be detected, and viewing distance and degree data not computed. */
     blindspot_reps: {
       type: ParameterType.INT,
       pretty_name: "Blindspot measurement repetitions",
       default: 5,
     },
-    /* HTML-formatted prompt to be shown on the screen during blindspot estimates. */
+    /** HTML-formatted prompt to be shown on the screen during blindspot estimates. */
     blindspot_prompt: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Blindspot prompt",
@@ -84,32 +87,32 @@ const info = <const>{
           <p>Press the space bar when you are ready to begin.</p>
           `,
     },
-    /* Content of the start button for the blindspot tasks. */
+    /** Content of the start button for the blindspot tasks. */
     // blindspot_start_prompt: {
     //   type: ParameterType.HTML_STRING,
     //   pretty_name: "Blindspot start prompt",
     //   default: "Start"
     // },
-    /* Text accompanying the remaining measurements counter. */
+    /** Text accompanying the remaining measurements counter. */
     blindspot_measurements_prompt: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Blindspot measurements prompt",
       default: "Remaining measurements: ",
     },
-    /* HTML-formatted string for reporting the distance estimage. It can contain a span with ID 'distance-estimate', which will be replaced with the distance estimate. If "none" is given, viewing distance will not be reported to the participant. */
+    /** HTML-formatted string for reporting the distance estimate. It can contain a span with ID 'distance-estimate', which will be replaced with the distance estimate. If "none" is given, viewing distance will not be reported to the participant. */
     viewing_distance_report: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Viewing distance report",
       default:
         "<p>Based on your responses, you are sitting about <span id='distance-estimate' style='font-weight: bold;'></span> from the screen.</p><p>Does that seem about right?</p>",
     },
-    /* Label for the button that can be clicked on the viewing distance report screen to re-do the blindspot estimate(s). */
+    /** Label for the button that can be clicked on the viewing distance report screen to re-do the blindspot estimate(s). */
     redo_measurement_button_label: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Re-do measurement button label",
       default: "No, that is not close. Try again.",
     },
-    /* Label for the button that can be clicked on the viewing distance report screen to accept the viewing distance estimate. */
+    /** Label for the button that can be clicked on the viewing distance report screen to accept the viewing distance estimate. */
     blindspot_done_prompt: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Blindspot done prompt",
@@ -131,12 +134,15 @@ declare global {
   }
 }
 
-/*
- *  virtual chinrest plugin for jsPsych, based on Qisheng Li 11/2019. /// https://github.com/QishengLi/virtual_chinrest
-    
-    Modified by Gustavo Juantorena 08/2020 // https://github.com/GEJ1
-
-    Contributions from Peter J. Kohler: https://github.com/pjkohler
+/**
+ * **virtual-chinrest**
+ *
+ * jsPsych plugin for estimating physical distance from monitor and optionally resizing experiment content, based on Qisheng Li 11/2019. /// https://github.com/QishengLi/virtual_chinrest
+ *
+ * @author Gustavo Juantorena
+ * 08/2020 // https://github.com/GEJ1
+ * Contributions from Peter J. Kohler: https://github.com/pjkohler
+ * @see {@link https://www.jspsych.org/plugins/jspsych-virtual-chinrest/ virtual-chinrest plugin documentation on jspsych.org}
  */
 class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -144,7 +150,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    /* check parameter compatibility */
+    /** check parameter compatibility */
     if (
       !(trial.blindspot_reps > 0) &&
       (trial.resize_units == "deg" || trial.resize_units == "degrees")
@@ -155,7 +161,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
       return;
     }
 
-    /* some additional parameter configuration */
+    /** some additional parameter configuration */
     let trial_data = <any>{
       item_width_mm: trial.item_width_mm,
       item_height_mm: trial.item_height_mm, //card dimension: 85.60 × 53.98 mm (3.370 × 2.125 in)
@@ -174,7 +180,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
       aspect_ratio < 1 ? Math.round(trial.item_init_size * aspect_ratio) : trial.item_init_size;
     const adjust_size = Math.round(start_div_width * 0.1);
 
-    /* create content for first screen, resizing card */
+    /** create content for first screen, resizing card */
     let pagesize_content = `
         <div id="page-size">
           <div id="item" style="border: none; height: ${start_div_height}px; width: ${start_div_width}px; margin: 5px auto; background-color: none; position: relative; background-image: url(${trial.item_path}); background-size: 100% auto; background-repeat: no-repeat;">
@@ -188,7 +194,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
         </div>
       `;
 
-    /* create content for second screen, blind spot */
+    /** create content for second screen, blind spot */
     let blindspot_content = `
         <div id="blind-spot">
           ${trial.blindspot_prompt}
@@ -200,7 +206,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
           <div id="click" style="display:inline; color: red"> ${trial.blindspot_reps} </div>
         </div>`;
 
-    /* create content for final report screen */
+    /** create content for final report screen */
     let report_content = `
         <div id="distance-report">
           <div id="info-h">

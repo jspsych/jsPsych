@@ -3,37 +3,37 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "resize",
   parameters: {
-    /* The height of the item to be measured. */
+    /** The height of the item to be measured. */
     item_height: {
       type: ParameterType.INT,
       pretty_name: "Item height",
       default: 1,
     },
-    /* The width of the item to be measured. */
+    /** The width of the item to be measured. */
     item_width: {
       type: ParameterType.INT,
       pretty_name: "Item width",
       default: 1,
     },
-    /* The content displayed below the resizable box and above the button. */
+    /** The content displayed below the resizable box and above the button. */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
-    /* After the scaling factor is applied, this many pixels will equal one unit of measurement. */
+    /** After the scaling factor is applied, this many pixels will equal one unit of measurement. */
     pixels_per_unit: {
       type: ParameterType.INT,
       pretty_name: "Pixels per unit",
       default: 100,
     },
-    /* The initial size of the box, in pixels, along the larget dimension. */
+    /** The initial size of the box, in pixels, along the larget dimension. */
     starting_size: {
       type: ParameterType.INT,
       pretty_name: "Starting size",
       default: 100,
     },
-    /* Label to display on the button to complete calibration. */
+    /** Label to display on the button to complete calibration. */
     button_label: {
       type: ParameterType.STRING,
       pretty_name: "Button label",
@@ -45,14 +45,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-resize
- * Steve Chao
+ * **resize**
  *
- * plugin for controlling the real world size of the display
+ * jsPsych plugin for controlling the real world size of the display
  *
- * documentation: docs.jspsych.org
- *
- **/
+ * @author Steve Chao
+ * @see {@link https://www.jspsych.org/plugins/jspsych-resize/ resize plugin documentation on jspsych.org}
+ */
 class ResizePlugin implements JsPsychPlugin<Info> {
   static info = info;
 

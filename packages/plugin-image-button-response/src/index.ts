@@ -3,82 +3,84 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "image-button-response",
   parameters: {
-    /* The image to be displayed */
+    /** The image to be displayed */
     stimulus: {
       type: ParameterType.IMAGE,
       pretty_name: "Stimulus",
       default: undefined,
     },
-    /* Set the image height in pixels */
+    /** Set the image height in pixels */
     stimulus_height: {
       type: ParameterType.INT,
       pretty_name: "Image height",
       default: null,
     },
-    /* Set the image width in pixels */
+    /** Set the image width in pixels */
     stimulus_width: {
       type: ParameterType.INT,
       pretty_name: "Image width",
       default: null,
     },
-    /* Maintain the aspect ratio after setting width or height */
+    /** Maintain the aspect ratio after setting width or height */
     maintain_aspect_ratio: {
       type: ParameterType.BOOL,
       pretty_name: "Maintain aspect ratio",
       default: true,
     },
-    /* The labels for the buttons. */
+    /** Array containing the label(s) for the button(s). */
     choices: {
       type: ParameterType.STRING,
       pretty_name: "Choices",
       default: undefined,
       array: true,
     },
-    /* The html of the button. Can create own style. */
+    /** The HTML for creating button. Can create own style. Use the "%choice%" string to indicate where the label from the choices parameter should be inserted. */
     button_html: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Button HTML",
       default: '<button class="jspsych-btn">%choice%</button>',
       array: true,
     },
-    /* Any content here will be displayed under the button. */
+    /** Any content here will be displayed under the button. */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
-    /* How long to show the stimulus. */
+    /** How long to show the stimulus. */
     stimulus_duration: {
       type: ParameterType.INT,
       pretty_name: "Stimulus duration",
       default: null,
     },
-    /* How long to show the trial. */
+    /** How long to show the trial. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
-    /* The vertical margin of the button. */
+    /** The vertical margin of the button. */
     margin_vertical: {
       type: ParameterType.STRING,
       pretty_name: "Margin vertical",
       default: "0px",
     },
-    /* The horizontal margin of the button. */
+    /** The horizontal margin of the button. */
     margin_horizontal: {
       type: ParameterType.STRING,
       pretty_name: "Margin horizontal",
       default: "8px",
     },
-    /* If true, then trial will end when user responds. */
+    /** If true, then trial will end when user responds. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
     },
-    /* If true, the image will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
-    If false, the image will be shown via an img element. */
+    /**
+     * If true, the image will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
+     * If false, the image will be shown via an img element.
+     */
     render_on_canvas: {
       type: ParameterType.BOOL,
       pretty_name: "Render on canvas",
@@ -90,14 +92,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-image-button-response
- * Josh de Leeuw
+ * **image-button-response**
  *
- * plugin for displaying an image stimulus and getting a button response
+ * jsPsych plugin for displaying an image stimulus and getting a button response
  *
- * documentation: docs.jspsych.org
- *
- **/
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-image-button-response/ image-button-response plugin documentation on jspsych.org}
+ */
 class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 

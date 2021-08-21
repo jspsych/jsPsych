@@ -3,63 +3,64 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "image-keyboard-response",
   parameters: {
-    /* The image to be displayed */
+    /** The image to be displayed */
     stimulus: {
       type: ParameterType.IMAGE,
       pretty_name: "Stimulus",
       default: undefined,
     },
-    /* Set the image height in pixels */
+    /** Set the image height in pixels */
     stimulus_height: {
       type: ParameterType.INT,
       pretty_name: "Image height",
       default: null,
     },
-    /* Set the image width in pixels */
+    /** Set the image width in pixels */
     stimulus_width: {
       type: ParameterType.INT,
       pretty_name: "Image width",
       default: null,
     },
-    /* Maintain the aspect ratio after setting width or height */
+    /** Maintain the aspect ratio after setting width or height */
     maintain_aspect_ratio: {
       type: ParameterType.BOOL,
       pretty_name: "Maintain aspect ratio",
       default: true,
     },
-    /* The keys the subject is allowed to press to respond to the stimulus. */
+    /** Array containing the key(s) the subject is allowed to press to respond to the stimulus. */
     choices: {
       type: ParameterType.KEYS,
-      array: true,
       pretty_name: "Choices",
       default: "ALL_KEYS",
     },
-    /* Any content here will be displayed below the stimulus. */
+    /** Any content here will be displayed below the stimulus. */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
-    /* How long to hide the stimulus. */
+    /** How long to show the stimulus. */
     stimulus_duration: {
       type: ParameterType.INT,
       pretty_name: "Stimulus duration",
       default: null,
     },
-    /* How long to show trial before it ends */
+    /** How long to show trial before it ends */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
-    /* If true, trial will end when subject makes a response. */
+    /** If true, trial will end when subject makes a response. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
     },
-    /* If true, the image will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
-    If false, the image will be shown via an img element. */
+    /**
+     * If true, the image will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
+     * If false, the image will be shown via an img element.
+     */
     render_on_canvas: {
       type: ParameterType.BOOL,
       pretty_name: "Render on canvas",
@@ -71,14 +72,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-image-keyboard-response
- * Josh de Leeuw
+ * **image-keyboard-response**
  *
- * plugin for displaying an image stimulus and getting a keyboard response
+ * jsPsych plugin for displaying an image stimulus and getting a keyboard response
  *
- * documentation: docs.jspsych.org
- *
- **/
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-image-keyboard-response/ image-keyboard-response plugin documentation on jspsych.org}
+ */
 class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
@@ -230,7 +230,6 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     // start the response listener
-    // @ts-ignore: TO DO: this will always return 'true' because choices is an array. Should choices (KEYS) be a string or array?
     if (trial.choices != "NO_KEYS") {
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,

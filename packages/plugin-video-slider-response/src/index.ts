@@ -3,128 +3,129 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "video-slider-response",
   parameters: {
-    /* Array of the video file(s) to play. Video can be provided in multiple file formats for better cross-browser support. */
+    /** Array of the video file(s) to play. Video can be provided in multiple file formats for better cross-browser support. */
     stimulus: {
       type: ParameterType.VIDEO,
       pretty_name: "Video",
       default: undefined,
+      array: true,
     },
-    /* Any content here will be displayed below the stimulus. */
+    /** Any content here will be displayed below the stimulus. */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
-    /* The width of the video in pixels. */
+    /** The width of the video in pixels. */
     width: {
       type: ParameterType.INT,
       pretty_name: "Width",
       default: "",
     },
-    /* The height of the video display in pixels. */
+    /** The height of the video display in pixels. */
     height: {
       type: ParameterType.INT,
       pretty_name: "Height",
       default: "",
     },
-    /* If true, the video will begin playing as soon as it has loaded. */
+    /** If true, the video will begin playing as soon as it has loaded. */
     autoplay: {
       type: ParameterType.BOOL,
       pretty_name: "Autoplay",
       default: true,
     },
-    /* If true, the subject will be able to pause the video or move the playback to any point in the video. */
+    /** If true, the subject will be able to pause the video or move the playback to any point in the video. */
     controls: {
       type: ParameterType.BOOL,
       pretty_name: "Controls",
       default: false,
     },
-    /* Time to start the clip. If null (default), video will start at the beginning of the file. */
+    /** Time to start the clip. If null (default), video will start at the beginning of the file. */
     start: {
       type: ParameterType.FLOAT,
       pretty_name: "Start",
       default: null,
     },
-    /* Time to stop the clip. If null (default), video will stop at the end of the file. */
+    /** Time to stop the clip. If null (default), video will stop at the end of the file. */
     stop: {
       type: ParameterType.FLOAT,
       pretty_name: "Stop",
       default: null,
     },
-    /* The playback rate of the video. 1 is normal, <1 is slower, >1 is faster. */
+    /** The playback rate of the video. 1 is normal, <1 is slower, >1 is faster. */
     rate: {
       type: ParameterType.FLOAT,
       pretty_name: "Rate",
       default: 1,
     },
-    /* Sets the minimum value of the slider. */
+    /** Sets the minimum value of the slider. */
     min: {
       type: ParameterType.INT,
       pretty_name: "Min slider",
       default: 0,
     },
-    /* Sets the maximum value of the slider. */
+    /** Sets the maximum value of the slider. */
     max: {
       type: ParameterType.INT,
       pretty_name: "Max slider",
       default: 100,
     },
-    /* Sets the starting value of the slider. */
+    /** Sets the starting value of the slider. */
     slider_start: {
       type: ParameterType.INT,
       pretty_name: "Slider starting value",
       default: 50,
     },
-    /* Sets the step of the slider. */
+    /** Sets the step of the slider. */
     step: {
       type: ParameterType.INT,
       pretty_name: "Step",
       default: 1,
     },
-    /* Labels of the slider. */
+    /** Array containing the labels for the slider. Labels will be displayed at equidistant locations along the slider. */
     labels: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Labels",
       default: [],
       array: true,
     },
-    /* Width of the slider in pixels. */
+    /** Width of the slider in pixels. */
     slider_width: {
       type: ParameterType.INT,
       pretty_name: "Slider width",
       default: null,
     },
-    /* Label of the button to advance. */
+    /** Label of the button to advance. */
     button_label: {
       type: ParameterType.STRING,
       pretty_name: "Button label",
       default: "Continue",
     },
-    /* If true, the participant will have to move the slider before continuing. */
+    /** If true, the participant will have to move the slider before continuing. */
     require_movement: {
       type: ParameterType.BOOL,
       pretty_name: "Require movement",
       default: false,
     },
-    /* If true, the trial will end immediately after the video finishes playing. */
+    /** If true, the trial will end immediately after the video finishes playing. */
     trial_ends_after_video: {
       type: ParameterType.BOOL,
       pretty_name: "End trial after video finishes",
       default: false,
     },
-    /* How long to show trial before it ends. */
+    /** How long to show trial before it ends. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
-    /* If true, the trial will end when subject makes a response. */
+    /** If true, the trial will end when subject makes a response. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
     },
-    /* If true, then responses are allowed while the video is playing. If false, then the video must finish playing before a response is accepted. */
+    /** If true, then responses are allowed while the video is playing. If false, then the video must finish playing before a response is accepted. */
     response_allowed_while_playing: {
       type: ParameterType.BOOL,
       pretty_name: "Response allowed while playing",
@@ -136,14 +137,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-video-slider-response
- * Josh de Leeuw
+ * **video-slider-response**
  *
- * plugin for playing a video file and getting a slider response
+ * jsPsych plugin for playing a video file and getting a slider response
  *
- * documentation: docs.jspsych.org
- *
- **/
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-video-slider-response/ video-slider-response plugin documentation on jspsych.org}
+ */
 class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 

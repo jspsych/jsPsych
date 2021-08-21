@@ -3,46 +3,47 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "animation",
   parameters: {
-    /* The images to be displayed */
+    /** Array containing the image(s) to be displayed. */
     stimuli: {
       type: ParameterType.IMAGE,
       pretty_name: "Stimuli",
       default: undefined,
       array: true,
     },
-    /* Duration to display each image. */
+    /** Duration to display each image. */
     frame_time: {
       type: ParameterType.INT,
       pretty_name: "Frame time",
       default: 250,
     },
-    /* Length of gap to be shown between each image. */
+    /** Length of gap to be shown between each image. */
     frame_isi: {
       type: ParameterType.INT,
       pretty_name: "Frame gap",
       default: 0,
     },
-    /* Number of times to show entire sequence */
+    /** Number of times to show entire sequence */
     sequence_reps: {
       type: ParameterType.INT,
       pretty_name: "Sequence repetitions",
       default: 1,
     },
-    /* Keys subject uses to respond to stimuli. */
+    /** Array containing the key(s) the subject is allowed to press to respond to the stimuli. */
     choices: {
       type: ParameterType.KEYS,
       pretty_name: "Choices",
       default: "ALL_KEYS",
-      array: true,
     },
-    /* Any content here will be displayed below stimulus. */
+    /** Any content here will be displayed below stimulus. */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
-    /* If true, the images will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
-    If false, the image will be shown via an img element. */
+    /**
+     * If true, the images will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
+     * If false, the image will be shown via an img element.
+     */
     render_on_canvas: {
       type: ParameterType.BOOL,
       pretty_name: "Render on canvas",
@@ -54,10 +55,12 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jsPsych plugin for showing animations and recording keyboard responses
- * Josh de Leeuw
+ * **animation**
  *
- * documentation: docs.jspsych.org
+ * jsPsych plugin for showing animations and recording keyboard responses
+ *
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-animation/ animation plugin documentation on jspsych.org}
  */
 class AnimationPlugin implements JsPsychPlugin<Info> {
   static info = info;

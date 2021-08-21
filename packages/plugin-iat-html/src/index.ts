@@ -3,83 +3,82 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "iat-html",
   parameters: {
-    /* The HTML string to be displayed. */
+    /** The HTML string to be displayed. */
     stimulus: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Stimulus",
       default: undefined,
     },
-    /* Key press that is associated with the left category label.*/
+    /** Key press that is associated with the left category label.*/
     left_category_key: {
       type: ParameterType.KEY,
       pretty_name: "Left category key",
       default: "e",
     },
-    /* Key press that is associated with the right category label. */
+    /** Key press that is associated with the right category label. */
     right_category_key: {
       type: ParameterType.KEY,
       pretty_name: "Right category key",
       default: "i",
     },
-    /* The label that is associated with the stimulus. Aligned to the left side of page */
+    /** The label that is associated with the stimulus. Aligned to the left side of page */
     left_category_label: {
       type: ParameterType.STRING,
       pretty_name: "Left category label",
       array: true,
       default: ["left"],
     },
-    /* The label that is associated with the stimulus. Aligned to the right side of the page. */
+    /** The label that is associated with the stimulus. Aligned to the right side of the page. */
     right_category_label: {
       type: ParameterType.STRING,
       pretty_name: "Right category label",
       array: true,
       default: ["right"],
     },
-    /* The keys that allow the user to advance to the next trial if their key press was incorrect. */
+    /** Array containing the key(s) that allow the user to advance to the next trial if their key press was incorrect. */
     key_to_move_forward: {
       type: ParameterType.KEYS,
       pretty_name: "Key to move forward",
-      array: true,
       default: "ALL_KEYS",
     },
-    /* If true, then html when wrong will be displayed when user makes an incorrect key press. */
+    /** If true, then html when wrong will be displayed when user makes an incorrect key press. */
     display_feedback: {
       type: ParameterType.BOOL,
       pretty_name: "Display feedback",
       default: false,
     },
-    /* The HTML to display when a user presses the wrong key. */
+    /** The HTML to display when a user presses the wrong key. */
     html_when_wrong: {
       type: ParameterType.HTML_STRING,
       pretty_name: "HTML when wrong",
       default: '<span style="color: red; font-size: 80px">X</span>',
     },
-    /* Instructions shown at the bottom of the page. */
+    /** Instructions shown at the bottom of the page. */
     bottom_instructions: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Bottom instructions",
       default: "<p>If you press the wrong key, a red X will appear. Press any key to continue.</p>",
     },
-    /* If true, in order to advance to the next trial after a wrong key press the user will be forced to press the correct key. */
+    /** If true, in order to advance to the next trial after a wrong key press the user will be forced to press the correct key. */
     force_correct_key_press: {
       type: ParameterType.BOOL,
       pretty_name: "Force correct key press",
       default: false,
     },
-    /* Stimulus will be associated with either "left" or "right". */
+    /** Stimulus will be associated with either "left" or "right". */
     stim_key_association: {
-      type: ParameterType.HTML_STRING,
+      type: ParameterType.SELECT,
       pretty_name: "Stimulus key association",
       options: ["left", "right"],
       default: undefined,
     },
-    /* If true, trial will end when user makes a response. */
+    /** If true, trial will end when user makes a response. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
     },
-    /* How long to show the trial. */
+    /** How long to show the trial. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
@@ -91,14 +90,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-iat
- * Kristin Diep
+ * **iat-html**
  *
- * plugin for running an IAT (Implicit Association Test) with an HTML-formatted stimulus
+ * jsPsych plugin for running an IAT (Implicit Association Test) with an HTML-formatted stimulus
  *
- * documentation: docs.jspsych.org
- *
- **/
+ * @author Kristin Diep
+ * @see {@link https://www.jspsych.org/plugins/jspsych-iat-html/ iat-html plugin documentation on jspsych.org}
+ */
 class IatHtmlPlugin implements JsPsychPlugin<Info> {
   static info = info;
 

@@ -3,25 +3,25 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "cloze",
   parameters: {
-    /* The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. %solution%). */
+    /** The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. %solution%). */
     text: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Cloze text",
       default: undefined,
     },
-    /* Text of the button participants have to press for finishing the cloze test. */
+    /** Text of the button participants have to press for finishing the cloze test. */
     button_text: {
       type: ParameterType.STRING,
       pretty_name: "Button text",
       default: "OK",
     },
-    /* Boolean value indicating if the answers given by participants should be compared against a correct solution given in the text (between % signs) after the button was clicked. */
+    /** Boolean value indicating if the answers given by participants should be compared against a correct solution given in the text (between % signs) after the button was clicked. */
     check_answers: {
       type: ParameterType.BOOL,
       pretty_name: "Check answers",
       default: false,
     },
-    /* Function called if check_answers is set to TRUE and there is a difference between the participants answers and the correct solution provided in the text. */
+    /** Function called if check_answers is set to TRUE and there is a difference between the participants answers and the correct solution provided in the text. */
     mistake_fn: {
       type: ParameterType.FUNCTION,
       pretty_name: "Mistake function",
@@ -33,13 +33,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-cloze
- * Philipp Sprengholz
+ * **cloze**
  *
- * Plugin for displaying a cloze test and checking participants answers against a correct solution.
+ * jsPsych plugin for displaying a cloze test and checking participants answers against a correct solution
  *
- * documentation: docs.jspsych.org
- **/
+ * @author Philipp Sprengholz
+ * @see {@link https://www.jspsych.org/plugins/jspsych-cloze/ cloze plugin documentation on jspsych.org}
+ */
 class ClozePlugin implements JsPsychPlugin<Info> {
   static info = info;
 

@@ -3,75 +3,75 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "visual-search-circle",
   parameters: {
-    /* The image to be displayed. */
+    /** The target image to be displayed. */
     target: {
       type: ParameterType.IMAGE,
       pretty_name: "Target",
       default: undefined,
     },
-    /* Path to image file that is the foil/distractor. */
+    /** Path to image file(s) that is/are the foils/distractors. */
     foil: {
-      type: ParameterType.IMAGE,
+      type: ParameterType.IMAGE, // TO DO: another parameter that can either be an image path string or an array of image path strings. Require this to always be an array?
       pretty_name: "Foil",
       default: undefined,
     },
-    /* Path to image file that is a fixation target. */
+    /** Path to image file that is a fixation target. */
     fixation_image: {
       type: ParameterType.IMAGE,
       pretty_name: "Fixation image",
       default: undefined,
     },
-    /* How many items should be displayed? */
+    /** How many items should be displayed? */
     set_size: {
       type: ParameterType.INT,
       pretty_name: "Set size",
       default: undefined,
     },
-    /* Is the target present? */
+    /** Is the target present? */
     target_present: {
       type: ParameterType.BOOL,
       pretty_name: "Target present",
       default: true,
     },
-    /* Two element array indicating the height and width of the search array element images. */
+    /** Two element array indicating the height and width of the search array element images. */
     target_size: {
       type: ParameterType.INT,
       pretty_name: "Target size",
       array: true,
       default: [50, 50],
     },
-    /* Two element array indicating the height and width of the fixation image. */
+    /** Two element array indicating the height and width of the fixation image. */
     fixation_size: {
       type: ParameterType.INT,
       pretty_name: "Fixation size",
       array: true,
       default: [16, 16],
     },
-    /* The diameter of the search array circle in pixels. */
+    /** The diameter of the search array circle in pixels. */
     circle_diameter: {
       type: ParameterType.INT,
       pretty_name: "Circle diameter",
       default: 250,
     },
-    /* The key to press if the target is present in the search array. */
+    /** The key to press if the target is present in the search array. */
     target_present_key: {
       type: ParameterType.KEY,
       pretty_name: "Target present key",
       default: "j",
     },
-    /* The key to press if the target is not present in the search array. */
+    /** The key to press if the target is not present in the search array. */
     target_absent_key: {
       type: ParameterType.KEY,
       pretty_name: "Target absent key",
       default: "f",
     },
-    /* The maximum duration to wait for a response. */
+    /** The maximum duration to wait for a response. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
-    /* How long to show the fixation image for before the search array (in milliseconds). */
+    /** How long to show the fixation image for before the search array (in milliseconds). */
     fixation_duration: {
       type: ParameterType.INT,
       pretty_name: "Fixation duration",
@@ -83,17 +83,14 @@ const info = <const>{
 type Info = typeof info;
 
 /**
+ * **visual-search-circle**
  *
- * jspsych-visual-search-circle
- * Josh de Leeuw
+ * jsPsych plugin to display a set of objects, with or without a target, equidistant from fixation.
+ * Subject responds with key press to whether or not the target is present.
+ * Based on code written for psychtoolbox by Ben Motz.
  *
- * display a set of objects, with or without a target, equidistant from fixation
- * subject responds to whether or not the target is present
- *
- * based on code written for psychtoolbox by Ben Motz
- *
- * documentation: docs.jspsych.org
- *
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-visual-search-circle/ visual-search-circle plugin documentation on jspsych.org}
  **/
 class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
   static info = info;

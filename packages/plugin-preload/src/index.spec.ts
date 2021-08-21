@@ -1,22 +1,22 @@
-// @ts-nocheck TODO remove this once pluginAPI provides the correct types for the spies
-
-import { jest } from "@jest/globals";
 import audioKeyboardResponse from "@jspsych/plugin-audio-keyboard-response";
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 import videoKeyboardResponse from "@jspsych/plugin-video-keyboard-response";
-import jsPsych from "jspsych";
+import { JsPsych, initJsPsych } from "jspsych";
+import { startTimeline } from "jspsych/tests/utils";
 
 import preloadPlugin from ".";
 
-const pluginAPI = jsPsych.pluginAPI;
+describe("preload plugin", () => {
+  let jsPsych: JsPsych;
+  let pluginAPI: JsPsych["pluginAPI"];
 
-describe("preload plugin", function () {
-  afterEach(function () {
-    jest.clearAllMocks();
+  beforeEach(() => {
+    jsPsych = initJsPsych();
+    pluginAPI = jsPsych.pluginAPI;
   });
 
-  describe("auto_preload", function () {
-    test("auto_preload method works with simple timeline and image stimulus", function () {
+  describe("auto_preload", async () => {
+    test("auto_preload method works with simple timeline and image stimulus", async () => {
       const spy = jest.spyOn(pluginAPI, "preloadImages").mockImplementation((x, cb) => {
         cb();
       });
@@ -26,11 +26,13 @@ describe("preload plugin", function () {
         auto_preload: true,
       };
 
-      var trial = {
-        type: require("@jspsych/plugin-image-keyboard-response").default,
-        stimulus: "img/foo.png",
-        render_on_canvas: false,
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: require("@jspsych/plugin-image-keyboard-response").default,
+          stimulus: "img/foo.png",
+          render_on_canvas: false,
+        },
+      ]);
 
       jsPsych.init({
         timeline: [preload, trial],
@@ -39,7 +41,7 @@ describe("preload plugin", function () {
       expect(spy.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
 
-    test("auto_preload method works with simple timeline and audio stimulus", function () {
+    test("auto_preload method works with simple timeline and audio stimulus", async () => {
       const spy = jest.spyOn(pluginAPI, "preloadAudio").mockImplementation((x, cb) => {
         cb();
       });
@@ -49,10 +51,12 @@ describe("preload plugin", function () {
         auto_preload: true,
       };
 
-      var trial = {
-        type: audioKeyboardResponse,
-        stimulus: "sound/foo.mp3",
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: audioKeyboardResponse,
+          stimulus: "sound/foo.mp3",
+        },
+      ]);
 
       jsPsych.init({
         timeline: [preload, trial],
@@ -61,7 +65,7 @@ describe("preload plugin", function () {
       expect(spy.mock.calls[0][0]).toStrictEqual(["sound/foo.mp3"]);
     });
 
-    test("auto_preload method works with simple timeline and video stimulus", function () {
+    test("auto_preload method works with simple timeline and video stimulus", async () => {
       const spy = jest.spyOn(pluginAPI, "preloadVideo").mockImplementation((x, cb) => {
         cb();
       });
@@ -71,10 +75,12 @@ describe("preload plugin", function () {
         auto_preload: true,
       };
 
-      var trial = {
-        type: videoKeyboardResponse,
-        stimulus: "video/foo.mp4",
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: videoKeyboardResponse,
+          stimulus: "video/foo.mp4",
+        },
+      ]);
 
       jsPsych.init({
         timeline: [preload, trial],
@@ -83,7 +89,7 @@ describe("preload plugin", function () {
       expect(spy.mock.calls[0][0]).toStrictEqual(["video/foo.mp4"]);
     });
 
-    test("auto_preload method works with nested timeline", function () {
+    test("auto_preload method works with nested timeline", async () => {
       const spy = jest.spyOn(pluginAPI, "preloadImages").mockImplementation((x, cb) => {
         cb();
       });
@@ -93,11 +99,13 @@ describe("preload plugin", function () {
         auto_preload: true,
       };
 
-      var trial = {
-        type: imageKeyboardResponse,
-        render_on_canvas: false,
-        timeline: [{ stimulus: "img/foo.png" }],
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: imageKeyboardResponse,
+          render_on_canvas: false,
+          timeline: [{ stimulus: "img/foo.png" }],
+        },
+      ]);
 
       jsPsych.init({
         timeline: [preload, trial],
@@ -106,7 +114,7 @@ describe("preload plugin", function () {
       expect(spy.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
 
-    test("auto_preload method works with looping timeline", function () {
+    test("auto_preload method works with looping timeline", async () => {
       const spy = jest.spyOn(pluginAPI, "preloadImages").mockImplementation((x, cb) => {
         cb();
       });
@@ -116,11 +124,13 @@ describe("preload plugin", function () {
         auto_preload: true,
       };
 
-      var trial = {
-        type: imageKeyboardResponse,
-        stimulus: "img/foo.png",
-        render_on_canvas: false,
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: imageKeyboardResponse,
+          stimulus: "img/foo.png",
+          render_on_canvas: false,
+        },
+      ]);
 
       var count = 0;
       var loop = {
@@ -141,7 +151,7 @@ describe("preload plugin", function () {
       expect(spy.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
 
-    test("auto_preload method works with conditional timeline", function () {
+    test("auto_preload method works with conditional timeline", async () => {
       const spy = jest.spyOn(pluginAPI, "preloadImages").mockImplementation((x, cb) => {
         cb();
       });
@@ -151,11 +161,13 @@ describe("preload plugin", function () {
         auto_preload: true,
       };
 
-      var trial = {
-        type: imageKeyboardResponse,
-        stimulus: "img/foo.png",
-        render_on_canvas: false,
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: imageKeyboardResponse,
+          stimulus: "img/foo.png",
+          render_on_canvas: false,
+        },
+      ]);
 
       var count = 0;
       var conditional = {
@@ -176,7 +188,7 @@ describe("preload plugin", function () {
       expect(spy.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
 
-    test("auto_preload method works with timeline variables when stim is statically defined in trial object", function () {
+    test("auto_preload method works with timeline variables when stim is statically defined in trial object", async () => {
       const spy = jest.spyOn(pluginAPI, "preloadImages").mockImplementation((x, cb) => {
         cb();
       });
@@ -186,12 +198,14 @@ describe("preload plugin", function () {
         auto_preload: true,
       };
 
-      var trial = {
-        type: imageKeyboardResponse,
-        stimulus: "img/foo.png",
-        render_on_canvas: false,
-        data: jsPsych.timelineVariable("data"),
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: imageKeyboardResponse,
+          stimulus: "img/foo.png",
+          render_on_canvas: false,
+          data: jsPsych.timelineVariable("data"),
+        },
+      ]);
 
       var trial_procedure = {
         timeline: [trial],
@@ -210,17 +224,19 @@ describe("preload plugin", function () {
     });
   });
 
-  describe("trials parameter", function () {
-    test("trials parameter works with simple timeline", function () {
+  describe("trials parameter", async () => {
+    test("trials parameter works with simple timeline", async () => {
       const spy = jest.spyOn(pluginAPI, "preloadImages").mockImplementation((x, cb) => {
         cb();
       });
 
-      var trial = {
-        type: imageKeyboardResponse,
-        stimulus: "img/foo.png",
-        render_on_canvas: false,
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: imageKeyboardResponse,
+          stimulus: "img/foo.png",
+          render_on_canvas: false,
+        },
+      ]);
 
       var preload = {
         type: preloadPlugin,
@@ -234,16 +250,18 @@ describe("preload plugin", function () {
       expect(spy.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
 
-    test("trials parameter works with looping timeline", function () {
+    test("trials parameter works with looping timeline", async () => {
       const spy = jest.spyOn(pluginAPI, "preloadImages").mockImplementation((x, cb) => {
         cb();
       });
 
-      var trial = {
-        type: imageKeyboardResponse,
-        stimulus: "img/foo.png",
-        render_on_canvas: false,
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: imageKeyboardResponse,
+          stimulus: "img/foo.png",
+          render_on_canvas: false,
+        },
+      ]);
 
       var count = 0;
       var loop = {
@@ -269,16 +287,18 @@ describe("preload plugin", function () {
       expect(spy.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
 
-    test("trials parameter works with conditional timeline", function () {
+    test("trials parameter works with conditional timeline", async () => {
       const spy = jest.spyOn(pluginAPI, "preloadImages").mockImplementation((x, cb) => {
         cb();
       });
 
-      var trial = {
-        type: imageKeyboardResponse,
-        stimulus: "img/foo.png",
-        render_on_canvas: false,
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: imageKeyboardResponse,
+          stimulus: "img/foo.png",
+          render_on_canvas: false,
+        },
+      ]);
 
       var count = 0;
       var conditional = {
@@ -304,17 +324,19 @@ describe("preload plugin", function () {
       expect(spy.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
 
-    test("trials parameter works with timeline variables when stim is statically defined in trial object", function () {
+    test("trials parameter works with timeline variables when stim is statically defined in trial object", async () => {
       const spy = jest.spyOn(pluginAPI, "preloadImages").mockImplementation((x, cb) => {
         cb();
       });
 
-      var trial = {
-        type: imageKeyboardResponse,
-        stimulus: "img/foo.png",
-        render_on_canvas: false,
-        data: jsPsych.timelineVariable("data"),
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: imageKeyboardResponse,
+          stimulus: "img/foo.png",
+          render_on_canvas: false,
+          data: jsPsych.timelineVariable("data"),
+        },
+      ]);
 
       var trial_procedure = {
         timeline: [trial],
@@ -338,8 +360,8 @@ describe("preload plugin", function () {
     });
   });
 
-  describe("calls to pluginAPI preload functions", function () {
-    test("auto_preload, trials, and manual preload array parameters can be used together", function () {
+  describe("calls to pluginAPI preload functions", async () => {
+    test("auto_preload, trials, and manual preload array parameters can be used together", async () => {
       const spy = jest.spyOn(pluginAPI, "preloadImages").mockImplementation((x, cb) => {
         cb();
       });
@@ -374,7 +396,7 @@ describe("preload plugin", function () {
       expect(spy.mock.calls[0][0]).toContain("img/fizz.png");
     });
 
-    test("plugin only attempts to load duplicate files once", function () {
+    test("plugin only attempts to load duplicate files once", async () => {
       const spy = jest.spyOn(pluginAPI, "preloadImages").mockImplementation((x, cb) => {
         cb();
       });
@@ -406,8 +428,8 @@ describe("preload plugin", function () {
     });
   });
 
-  describe("continue_after_error and error messages", function () {
-    test("experiment continues when image loads successfully", function () {
+  describe("continue_after_error and error messages", async () => {
+    test("experiment continues when image loads successfully", async () => {
       jest
         .spyOn(pluginAPI, "preloadImages")
         .mockImplementation((x, cb_complete, cb_load, cb_error) => {
@@ -422,22 +444,24 @@ describe("preload plugin", function () {
         max_load_time: 100,
       };
 
-      var trial = {
-        type: imageKeyboardResponse,
-        stimulus: "image.png",
-        render_on_canvas: false,
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: imageKeyboardResponse,
+          stimulus: "image.png",
+          render_on_canvas: false,
+        },
+      ]);
 
       jsPsych.init({
         timeline: [preload, trial],
       });
 
-      expect(jsPsych.getDisplayElement().innerHTML).toMatch(
+      expect(getHTML()).toMatch(
         '<img src="image.png" id="jspsych-image-keyboard-response-stimulus"'
       );
     });
 
-    test("error_message is shown when continue_after_error is false and files fail", function () {
+    test("error_message is shown when continue_after_error is false and files fail", async () => {
       jest
         .spyOn(pluginAPI, "preloadImages")
         .mockImplementation((x, cb_complete, cb_load, cb_error) => {
@@ -457,20 +481,22 @@ describe("preload plugin", function () {
         },
       };
 
-      var trial = {
-        type: imageKeyboardResponse,
-        stimulus: "img/bar.png",
-        render_on_canvas: false,
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: imageKeyboardResponse,
+          stimulus: "img/bar.png",
+          render_on_canvas: false,
+        },
+      ]);
 
       jsPsych.init({
         timeline: [preload, trial],
       });
 
-      expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
+      expect(getHTML()).toMatch("foo");
     });
 
-    test("error_message is shown when continue_after_error is false and loading times out", function () {
+    test("error_message is shown when continue_after_error is false and loading times out", async () => {
       jest.useFakeTimers();
 
       var mock_fn = jest.fn(function (x) {
@@ -493,11 +519,13 @@ describe("preload plugin", function () {
         },
       };
 
-      var trial = {
-        type: imageKeyboardResponse,
-        stimulus: "blue.png",
-        render_on_canvas: false,
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: imageKeyboardResponse,
+          stimulus: "blue.png",
+          render_on_canvas: false,
+        },
+      ]);
 
       jsPsych.init({
         timeline: [preload, trial],
@@ -506,10 +534,10 @@ describe("preload plugin", function () {
       jest.advanceTimersByTime(101);
 
       expect(mock_fn).toHaveBeenCalledWith("timeout");
-      expect(jsPsych.getDisplayElement().innerHTML).toMatch("foo");
+      expect(getHTML()).toMatch("foo");
     });
 
-    test("experiment continues when continue_after_error is true and files fail", function () {
+    test("experiment continues when continue_after_error is true and files fail", async () => {
       var mock_fn = jest.fn(function (x) {
         return x;
       });
@@ -533,23 +561,25 @@ describe("preload plugin", function () {
         },
       };
 
-      var trial = {
-        type: imageKeyboardResponse,
-        stimulus: "blue.png",
-        render_on_canvas: false,
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: imageKeyboardResponse,
+          stimulus: "blue.png",
+          render_on_canvas: false,
+        },
+      ]);
 
       jsPsych.init({
         timeline: [preload, trial],
       });
 
       expect(mock_fn).toHaveBeenCalledWith("loading failed");
-      expect(jsPsych.getDisplayElement().innerHTML).toMatch(
+      expect(getHTML()).toMatch(
         '<img src="blue.png" id="jspsych-image-keyboard-response-stimulus"'
       );
     });
 
-    test("experiment continues when continue_after_error is true and loading times out", function () {
+    test("experiment continues when continue_after_error is true and loading times out", async () => {
       jest.useFakeTimers();
 
       var mock_fn = jest.fn(function (x) {
@@ -572,11 +602,13 @@ describe("preload plugin", function () {
         },
       };
 
-      var trial = {
-        type: imageKeyboardResponse,
-        stimulus: "../media/blue.png",
-        render_on_canvas: false,
-      };
+      const { getHTML } = await startTimeline([
+        {
+          type: imageKeyboardResponse,
+          stimulus: "../media/blue.png",
+          render_on_canvas: false,
+        },
+      ]);
 
       jsPsych.init({
         timeline: [preload, trial],
@@ -585,12 +617,12 @@ describe("preload plugin", function () {
       jest.advanceTimersByTime(101);
 
       expect(mock_fn).toHaveBeenCalledWith("timeout");
-      expect(jsPsych.getDisplayElement().innerHTML).toMatch(
+      expect(getHTML()).toMatch(
         '<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus"'
       );
     });
 
-    test("detailed error message is shown when continue_after_error is false and show_detailed_errors is true", function () {
+    test("detailed error message is shown when continue_after_error is false and show_detailed_errors is true", async () => {
       var mock_fn = jest.fn(function (x) {
         return x;
       });
@@ -618,12 +650,12 @@ describe("preload plugin", function () {
       });
 
       expect(mock_fn).toHaveBeenCalledWith("loading failed");
-      expect(jsPsych.getDisplayElement().innerHTML).toMatch("Error details");
+      expect(getHTML()).toMatch("Error details");
     });
   });
 
-  describe("display while loading", function () {
-    test("custom loading message is shown above progress bar if specified", function () {
+  describe("display while loading", async () => {
+    test("custom loading message is shown above progress bar if specified", async () => {
       var preload = {
         type: preloadPlugin,
         images: ["img/foo.png"],
@@ -635,13 +667,11 @@ describe("preload plugin", function () {
         timeline: [preload],
       });
 
-      expect(jsPsych.getDisplayElement().innerHTML).toMatch("bar");
-      expect(jsPsych.getDisplayElement().innerHTML).toMatch(
-        '<div id="jspsych-loading-progress-bar-container'
-      );
+      expect(getHTML()).toMatch("bar");
+      expect(getHTML()).toMatch('<div id="jspsych-loading-progress-bar-container');
     });
 
-    test("progress bar is shown without message by default", function () {
+    test("progress bar is shown without message by default", async () => {
       var preload = {
         type: preloadPlugin,
         images: ["img/foo.png"],
@@ -652,12 +682,10 @@ describe("preload plugin", function () {
         timeline: [preload],
       });
 
-      expect(jsPsych.getDisplayElement().innerHTML).toMatch(
-        '<div id="jspsych-loading-progress-bar-container'
-      );
+      expect(getHTML()).toMatch('<div id="jspsych-loading-progress-bar-container');
     });
 
-    test("progress bar is not shown if show_progress_bar is false", function () {
+    test("progress bar is not shown if show_progress_bar is false", async () => {
       var preload = {
         type: preloadPlugin,
         images: ["img/foo.png"],
@@ -669,15 +697,13 @@ describe("preload plugin", function () {
         timeline: [preload],
       });
 
-      expect(jsPsych.getDisplayElement().innerHTML).not.toMatch(
-        '<div id="jspsych-loading-progress-bar-container'
-      );
-      expect(jsPsych.getDisplayElement().innerHTML).toMatch("");
+      expect(getHTML()).not.toMatch('<div id="jspsych-loading-progress-bar-container');
+      expect(getHTML()).toMatch("");
     });
   });
 
-  describe("on_success and on_error parameters", function () {
-    test("on_error/on_success callbacks are called during preload trial after each loading success/error", function () {
+  describe("on_success and on_error parameters", async () => {
+    test("on_error/on_success callbacks are called during preload trial after each loading success/error", async () => {
       var mock_fn = jest.fn(function (x) {
         return x;
       });
@@ -747,7 +773,7 @@ describe("preload plugin", function () {
       expect(mock_fn.mock.calls[3][0]).toBe("loading succeeded");
     });
 
-    test("on_error/on_success callbacks are not called after loading times out", function () {
+    test("on_error/on_success callbacks are not called after loading times out", async () => {
       var mock_fn = jest.fn(function (x) {
         return x;
       });
@@ -799,7 +825,7 @@ describe("preload plugin", function () {
       expect(cancel_preload_spy).toHaveBeenCalled();
     });
 
-    test("experiment stops with default error_message and on_error/on_success callbacks are not called after preload trial ends with error", function () {
+    test("experiment stops with default error_message and on_error/on_success callbacks are not called after preload trial ends with error", async () => {
       var mock_fn = jest.fn(function (x) {
         return x;
       });
@@ -859,7 +885,7 @@ describe("preload plugin", function () {
 
       expect(mock_fn).toHaveBeenCalledWith("timeout");
       expect(mock_fn).toHaveBeenLastCalledWith("timeout");
-      expect(jsPsych.getDisplayElement().innerHTML).toMatch("The experiment failed to load.");
+      expect(getHTML()).toMatch("The experiment failed to load.");
       expect(cancel_preload_spy).toHaveBeenCalled();
     });
   });

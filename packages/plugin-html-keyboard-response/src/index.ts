@@ -4,7 +4,7 @@ const info = <const>{
   name: "html-keyboard-response",
   parameters: {
     /**
-     * The HTML string to be displayed
+     * The HTML string to be displayed.
      */
     stimulus: {
       type: ParameterType.HTML_STRING,
@@ -12,11 +12,10 @@ const info = <const>{
       default: undefined,
     },
     /**
-     * The keys the subject is allowed to press to respond to the stimulus.
+     * Array containing the key(s) the subject is allowed to press to respond to the stimulus.
      */
     choices: {
       type: ParameterType.KEYS,
-      array: true,
       pretty_name: "Choices",
       default: "ALL_KEYS",
     },
@@ -24,12 +23,12 @@ const info = <const>{
      * Any content here will be displayed below the stimulus.
      */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
     /**
-     * How long to hide the stimulus.
+     * How long to show the stimulus.
      */
     stimulus_duration: {
       type: ParameterType.INT,
@@ -58,14 +57,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-html-keyboard-response
- * Josh de Leeuw
+ * **html-keyboard-response**
  *
- * plugin for displaying a stimulus and getting a keyboard response
+ * jsPsych plugin for displaying a stimulus and getting a keyboard response
  *
- * documentation: docs.jspsych.org
- *
- **/
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-html-keyboard-response/ html-keyboard-response plugin documentation on jspsych.org}
+ */
 class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
@@ -130,7 +128,6 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     // start the response listener
-    // @ts-ignore: TO DO - string array vs string error
     if (trial.choices != "NO_KEYS") {
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,

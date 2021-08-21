@@ -3,25 +3,25 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "external-html",
   parameters: {
-    /* The url of the external html page */
+    /** The url of the external html page */
     url: {
       type: ParameterType.STRING,
       pretty_name: "URL",
       default: undefined,
     },
-    /* The key to continue to the next page. */
+    /** The key to continue to the next page. */
     cont_key: {
       type: ParameterType.KEY,
       pretty_name: "Continue key",
       default: null,
     },
-    /* The button to continue to the next page. */
+    /** The button to continue to the next page. */
     cont_btn: {
       type: ParameterType.STRING,
       pretty_name: "Continue button",
       default: null,
     },
-    /* Function to check whether user is allowed to continue after clicking cont_key or clicking cont_btn */
+    /** Function to check whether user is allowed to continue after clicking cont_key or clicking cont_btn */
     check_fn: {
       type: ParameterType.FUNCTION,
       pretty_name: "Check function",
@@ -29,13 +29,13 @@ const info = <const>{
         return true;
       },
     },
-    /* Whether or not to force a page refresh. */
+    /** Whether or not to force a page refresh. */
     force_refresh: {
       type: ParameterType.BOOL,
       pretty_name: "Force refresh",
       default: false,
     },
-    /* If execute_Script == true, then all JavasScript code on the external page will be executed. */
+    /** If execute_Script == true, then all JavasScript code on the external page will be executed. */
     execute_script: {
       type: ParameterType.BOOL,
       pretty_name: "Execute scripts",
@@ -47,12 +47,14 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * (July 2012, Erik Weitnauer)
- * The html-plugin will load and display an external html pages. To proceed to the next, the
- * user might either press a button on the page or a specific key. Afterwards, the page get hidden and
- * the plugin will wait of a specified time before it proceeds.
+ * **external-html**
  *
- * documentation: docs.jspsych.org
+ * jsPsych plugin to load and display an external html page. To proceed to the next trial, the
+ * user might either press a button on the page or a specific key. Afterwards, the page will be hidden and
+ * the experiment will continue.
+ *
+ * @author Erik Weitnauer
+ * @see {@link https://www.jspsych.org/plugins/jspsych-external-html/ external-html plugin documentation on jspsych.org}
  */
 class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
   static info = info;

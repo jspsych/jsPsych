@@ -3,81 +3,81 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "html-slider-response",
   parameters: {
-    /* The HTML string to be displayed */
+    /** The HTML string to be displayed */
     stimulus: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Stimulus",
       default: undefined,
     },
-    /* Sets the minimum value of the slider. */
+    /** Sets the minimum value of the slider. */
     min: {
       type: ParameterType.INT,
       pretty_name: "Min slider",
       default: 0,
     },
-    /* Sets the maximum value of the slider */
+    /** Sets the maximum value of the slider */
     max: {
       type: ParameterType.INT,
       pretty_name: "Max slider",
       default: 100,
     },
-    /* Sets the starting value of the slider */
+    /** Sets the starting value of the slider */
     slider_start: {
       type: ParameterType.INT,
       pretty_name: "Slider starting value",
       default: 50,
     },
-    /* Sets the step of the slider */
+    /** Sets the step of the slider */
     step: {
       type: ParameterType.INT,
       pretty_name: "Step",
       default: 1,
     },
-    /* Labels of the slider. */
+    /** Array containing the labels for the slider. Labels will be displayed at equidistant locations along the slider. */
     labels: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Labels",
       default: [],
       array: true,
     },
-    /* Width of the slider in pixels. */
+    /** Width of the slider in pixels. */
     slider_width: {
       type: ParameterType.INT,
       pretty_name: "Slider width",
       default: null,
     },
-    /* Label of the button to advance. */
+    /** Label of the button to advance. */
     button_label: {
       type: ParameterType.STRING,
       pretty_name: "Button label",
       default: "Continue",
       array: false,
     },
-    /* If true, the participant will have to move the slider before continuing. */
+    /** If true, the participant will have to move the slider before continuing. */
     require_movement: {
       type: ParameterType.BOOL,
       pretty_name: "Require movement",
       default: false,
     },
-    /* Any content here will be displayed below the slider. */
+    /** Any content here will be displayed below the slider. */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
-    /* How long to hide the stimulus. */
+    /** How long to show the stimulus. */
     stimulus_duration: {
       type: ParameterType.INT,
       pretty_name: "Stimulus duration",
       default: null,
     },
-    /* How long to show the trial. */
+    /** How long to show the trial. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
-    /* If true, trial will end when user makes a response. */
+    /** If true, trial will end when user makes a response. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
@@ -89,13 +89,12 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-html-slider-response
- * a jspsych plugin for showing an HTML stimulus and collecting a slider response
+ * **html-slider-response**
  *
- * Josh de Leeuw
+ * jsPsych plugin for showing an HTML stimulus and collecting a slider response
  *
- * documentation: docs.jspsych.org
- *
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-html-slider-response/ html-slider-response plugin documentation on jspsych.org}
  */
 class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;

@@ -38,6 +38,7 @@ export class JsPsych {
    * experiment timeline
    */
   private timeline: TimelineNode;
+  private timelineDescription: any[];
 
   // flow control
   private global_trial_index = 0;
@@ -162,6 +163,7 @@ export class JsPsych {
     }
 
     // create experiment timeline
+    this.timelineDescription = timeline;
     this.timeline = new TimelineNode(this, { timeline });
 
     await this.prepareDom();
@@ -364,23 +366,8 @@ export class JsPsych {
     return this.file_protocol;
   }
 
-  getTimelineDescription() {
-    var trials = [];
-    function getTrialsFromTimelineNodes(timeline_node) {
-      if (typeof timeline_node.timeline_parameters !== "undefined") {
-        for (var i = 0; i < timeline_node.timeline_parameters.timeline.length; i++) {
-          if (
-            typeof timeline_node.timeline_parameters.timeline[i].trial_parameters !== "undefined"
-          ) {
-            trials.push(timeline_node.timeline_parameters.timeline[i].trial_parameters);
-          } else {
-            getTrialsFromTimelineNodes(timeline_node.timeline_parameters.timeline[i]);
-          }
-        }
-      }
-    }
-    getTrialsFromTimelineNodes(this.timeline);
-    return trials;
+  getTimeline() {
+    return this.timelineDescription;
   }
 
   private async prepareDom() {

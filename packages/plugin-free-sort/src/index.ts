@@ -3,121 +3,133 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "free-sort",
   parameters: {
-    /* items to be displayed. */
+    /** Array of images to be displayed and sorted. */
     stimuli: {
       type: ParameterType.IMAGE,
       pretty_name: "Stimuli",
       default: undefined,
       array: true,
     },
-    /* Height of items in pixels. */
+    /** Height of items in pixels. */
     stim_height: {
       type: ParameterType.INT,
       pretty_name: "Stimulus height",
       default: 100,
     },
-    /* Width of items in pixels */
+    /** Width of items in pixels */
     stim_width: {
       type: ParameterType.INT,
       pretty_name: "Stimulus width",
       default: 100,
     },
-    /* How much larger to make the stimulus while moving (1 = no scaling) */
+    /** How much larger to make the stimulus while moving (1 = no scaling) */
     scale_factor: {
       type: ParameterType.FLOAT,
       pretty_name: "Stimulus scaling factor",
       default: 1.5,
     },
-    /* The height in pixels of the container that subjects can move the stimuli in. */
+    /** The height in pixels of the container that subjects can move the stimuli in. */
     sort_area_height: {
       type: ParameterType.INT,
       pretty_name: "Sort area height",
       default: 700,
     },
-    /* The width in pixels of the container that subjects can move the stimuli in. */
+    /** The width in pixels of the container that subjects can move the stimuli in. */
     sort_area_width: {
       type: ParameterType.INT,
       pretty_name: "Sort area width",
       default: 700,
     },
-    /* The shape of the sorting area */
+    /** The shape of the sorting area */
     sort_area_shape: {
-      type: ParameterType.STRING,
+      type: ParameterType.SELECT,
       pretty_name: "Sort area shape",
       options: ["square", "ellipse"],
       default: "ellipse",
     },
-    /* HTML to display above/below the sort area. It can be used to provide a reminder about the action the subject is supposed to take. */
+    /** HTML to display above/below the sort area. It can be used to provide a reminder about the action the subject is supposed to take. */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: "",
     },
-    /* Indicates whether to show prompt "above" or "below" the sorting area. */
+    /** Indicates whether to show prompt "above" or "below" the sorting area. */
     prompt_location: {
       type: ParameterType.SELECT,
       pretty_name: "Prompt location",
       options: ["above", "below"],
       default: "above",
     },
-    /* The text that appears on the button to continue to the next trial. */
+    /** The text that appears on the button to continue to the next trial. */
     button_label: {
       type: ParameterType.STRING,
       pretty_name: "Button label",
       default: "Continue",
     },
-    /* If true, the sort area border color will change while items are being moved in and out of the sort area, 
-    and the background color will change once all items have been moved into the sort area. 
-    If false, the border will remain black and the background will remain white throughout the trial. */
+    /**
+     * If true, the sort area border color will change while items are being moved in and out of the sort area,
+     * and the background color will change once all items have been moved into the sort area.
+     * If false, the border will remain black and the background will remain white throughout the trial.
+     */
     change_border_background_color: {
       type: ParameterType.BOOL,
       pretty_name: "Change border background color",
       default: true,
     },
-    /* If change_border_background_color is true, the sort area border will change to this color 
-    when an item is being moved into the sort area, and the background will change to this color 
-    when all of the items have been moved into the sort area. */
+    /**
+     * If change_border_background_color is true, the sort area border will change to this color
+     * when an item is being moved into the sort area, and the background will change to this color
+     * when all of the items have been moved into the sort area.
+     */
     border_color_in: {
       type: ParameterType.STRING,
       pretty_name: "Border color - in",
       default: "#a1d99b",
     },
-    /* If change_border_background_color is true, this will be the color of the sort area border 
-    when there are one or more items that still need to be moved into the sort area. */
+    /**
+     * If change_border_background_color is true, this will be the color of the sort area border
+     * when there are one or more items that still need to be moved into the sort area.
+     */
     border_color_out: {
       type: ParameterType.STRING,
       pretty_name: "Border color - out",
       default: "#fc9272",
     },
-    /* The width in pixels of the border around the sort area. If null, the border width defaults to 3% of the sort area height. */
+    /** The width in pixels of the border around the sort area. If null, the border width defaults to 3% of the sort area height. */
     border_width: {
       type: ParameterType.INT,
       pretty_name: "Border width",
       default: null,
     },
-    /* Text to display when there are one or more items that still need to be placed in the sort area. 
-    If "%n%" is included in the string, it will be replaced with the number of items that still need to be moved inside. 
-    If "%s%" is included in the string, a "s" will be included when the number of items remaining is greater than one. */
+    /**
+     * Text to display when there are one or more items that still need to be placed in the sort area.
+     * If "%n%" is included in the string, it will be replaced with the number of items that still need to be moved inside.
+     * If "%s%" is included in the string, a "s" will be included when the number of items remaining is greater than one.
+     * */
     counter_text_unfinished: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Counter text unfinished",
       default: "You still need to place %n% item%s% inside the sort area.",
     },
-    /* Text that will take the place of the counter_text_unfinished text when all items have been moved inside the sort area. */
+    /** Text that will take the place of the counter_text_unfinished text when all items have been moved inside the sort area. */
     counter_text_finished: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Counter text finished",
       default: "All items placed. Feel free to reposition items if necessary.",
     },
-    /* If false, the images will be positioned to the left and right of the sort area when the trial loads.
-    If true, the images will be positioned at random locations inside the sort area when the trial loads. */
+    /**
+     * If false, the images will be positioned to the left and right of the sort area when the trial loads.
+     * If true, the images will be positioned at random locations inside the sort area when the trial loads.
+     */
     stim_starts_inside: {
       type: ParameterType.BOOL,
       pretty_name: "Stim starts inside",
       default: false,
     },
-    /* When the images appear outside the sort area, this determines the x-axis spread of the image columns. 
-    Default value is 1. Values less than 1 will compress the image columns along the x-axis, and values greater than 1 will spread them farther apart. */
+    /**
+     * When the images appear outside the sort area, this determines the x-axis spread of the image columns.
+     * Default value is 1. Values less than 1 will compress the image columns along the x-axis, and values greater than 1 will spread them farther apart.
+     */
     column_spread_factor: {
       type: ParameterType.FLOAT,
       pretty_name: "column spread factor",
@@ -129,11 +141,12 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-free-sort
- * plugin for drag-and-drop sorting of a collection of images
- * Josh de Leeuw
+ * **free-sort**
  *
- * documentation: docs.jspsych.org
+ * jsPsych plugin for drag-and-drop sorting of a collection of images
+ *
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-free-sort/ free-sort plugin documentation on jspsych.org}
  */
 class FreeSortPlugin implements JsPsychPlugin<Info> {
   static info = info;

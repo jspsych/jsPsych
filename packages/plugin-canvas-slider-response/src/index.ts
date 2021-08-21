@@ -3,87 +3,87 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "canvas-slider-response",
   parameters: {
-    /* The drawing function to apply to the canvas. Should take the canvas object as argument. */
+    /** The drawing function to apply to the canvas. Should take the canvas object as argument. */
     stimulus: {
       type: ParameterType.FUNCTION,
       pretty_name: "Stimulus",
       default: undefined,
     },
-    /* Sets the minimum value of the slider. */
+    /** Sets the minimum value of the slider. */
     min: {
       type: ParameterType.INT,
       pretty_name: "Min slider",
       default: 0,
     },
-    /* Sets the maximum value of the slider */
+    /** Sets the maximum value of the slider */
     max: {
       type: ParameterType.INT,
       pretty_name: "Max slider",
       default: 100,
     },
-    /* Sets the starting value of the slider */
+    /** Sets the starting value of the slider */
     slider_start: {
       type: ParameterType.INT,
       pretty_name: "Slider starting value",
       default: 50,
     },
-    /* Sets the step of the slider */
+    /** Sets the step of the slider */
     step: {
       type: ParameterType.INT,
       pretty_name: "Step",
       default: 1,
     },
-    /* Labels of the slider. */
+    /** Array containing the labels for the slider. Labels will be displayed at equidistant locations along the slider. */
     labels: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Labels",
       default: [],
       array: true,
     },
-    /* Width of the slider in pixels. */
+    /** Width of the slider in pixels. */
     slider_width: {
       type: ParameterType.INT,
       pretty_name: "Slider width",
       default: null,
     },
-    /* Label of the button to advance. */
+    /** Label of the button to advance. */
     button_label: {
       type: ParameterType.STRING,
       pretty_name: "Button label",
       default: "Continue",
       array: false,
     },
-    /* If true, the participant will have to move the slider before continuing. */
+    /** If true, the participant will have to move the slider before continuing. */
     require_movement: {
       type: ParameterType.BOOL,
       pretty_name: "Require movement",
       default: false,
     },
-    /* "Any content here will be displayed below the slider */
+    /** Any content here will be displayed below the slider */
     prompt: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
-    /* How long to hide the stimulus. */
+    /** How long to show the stimulus. */
     stimulus_duration: {
       type: ParameterType.INT,
       pretty_name: "Stimulus duration",
       default: null,
     },
-    /* How long to show the trial. */
+    /** How long to show the trial. */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
-    /* If true, trial will end when user makes a response. */
+    /** If true, trial will end when user makes a response. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       pretty_name: "Response ends trial",
       default: true,
     },
-    /* Array containing the height (first value) and width (second value) of the canvas element. */
+    /** Array containing the height (first value) and width (second value) of the canvas element. */
     canvas_size: {
       type: ParameterType.INT,
       array: true,
@@ -96,13 +96,12 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-canvas-slider-response
- * Chris Jungerius (modified from Josh de Leeuw)
+ * **canvas-slider-response**
  *
- * a jsPsych plugin for displaying a canvas stimulus and getting a slider response
+ * jsPsych plugin for displaying a canvas stimulus and getting a slider response
  *
- * documentation: docs.jspsych.org
- *
+ * @author Chris Jungerius (modified from Josh de Leeuw)
+ * @see {@link https://www.jspsych.org/plugins/jspsych-canvas-slider-response/ canvas-slider-response plugin documentation on jspsych.org}
  */
 class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;

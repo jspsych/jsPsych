@@ -3,29 +3,29 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "fullscreen",
   parameters: {
-    /* If true, experiment will enter fullscreen mode. If false, the browser will exit fullscreen mode. */
+    /** If true, experiment will enter fullscreen mode. If false, the browser will exit fullscreen mode. */
     fullscreen_mode: {
       type: ParameterType.BOOL,
       pretty_name: "Fullscreen mode",
       default: true,
       array: false,
     },
-    /* HTML content to display above the button to enter fullscreen mode */
+    /** HTML content to display above the button to enter fullscreen mode */
     message: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Message",
       default:
         "<p>The experiment will switch to full screen mode when you press the button below</p>",
       array: false,
     },
-    /* The text that appears on the button to enter fullscreen */
+    /** The text that appears on the button to enter fullscreen */
     button_label: {
       type: ParameterType.STRING,
       pretty_name: "Button label",
       default: "Continue",
       array: false,
     },
-    /* The length of time to delay after entering fullscreen mode before ending the trial. */
+    /** The length of time to delay after entering fullscreen mode before ending the trial. */
     delay_after: {
       type: ParameterType.INT,
       pretty_name: "Delay after",
@@ -37,11 +37,13 @@ const info = <const>{
 
 type Info = typeof info;
 
-/* jspsych-fullscreen.js
- * Josh de Leeuw
+/**
+ * **fullscreen**
  *
- * toggle fullscreen mode in the browser
+ * jsPsych plugin for toggling fullscreen mode in the browser
  *
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-fullscreen/ fullscreen plugin documentation on jspsych.org}
  */
 class FullscreenPlugin implements JsPsychPlugin<Info> {
   static info = info;

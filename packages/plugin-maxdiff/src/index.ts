@@ -3,39 +3,39 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "maxdiff",
   parameters: {
-    /* Alternatives presented in the maxdiff table. */
+    /** Array containing the alternatives to be presented in the maxdiff table. */
     alternatives: {
       type: ParameterType.STRING,
       pretty_name: "Alternatives",
       array: true,
       default: undefined,
     },
-    /* Labels to display for left and right response columns. */
+    /** Array containing the labels to display for left and right response columns. */
     labels: {
       type: ParameterType.STRING,
       array: true,
       pretty_name: "Labels",
       default: undefined,
     },
-    /* If true, the order of the alternatives will be randomized. */
+    /** If true, the order of the alternatives will be randomized. */
     randomize_alternative_order: {
       type: ParameterType.BOOL,
       pretty_name: "Randomize Alternative Order",
       default: false,
     },
-    /* String to display at top of the page. */
+    /** String to display at top of the page. */
     preamble: {
-      type: ParameterType.STRING,
+      type: ParameterType.HTML_STRING,
       pretty_name: "Preamble",
       default: "",
     },
-    /* Label of the button. */
+    /** Label of the button to submit response. */
     button_label: {
       type: ParameterType.STRING,
       pretty_name: "Button Label",
       default: "Continue",
     },
-    /* Makes answering the alternative required. */
+    /** Makes answering the alternative required. */
     required: {
       type: ParameterType.BOOL,
       pretty_name: "Required",
@@ -47,11 +47,12 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-maxdiff
- * Angus Hughes
+ * **maxdiff**
  *
- * a jspsych plugin for maxdiff/conjoint analysis designs
+ * jsPsych plugin for maxdiff/conjoint analysis designs
  *
+ * @author Angus Hughes
+ * @see {@link https://www.jspsych.org/plugins/jspsych-maxdiff/ maxdiff plugin documentation on jspsych.org}
  */
 class MaxdiffPlugin implements JsPsychPlugin<Info> {
   static info = info;
