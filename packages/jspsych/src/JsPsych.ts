@@ -170,13 +170,6 @@ export class JsPsych {
 
     document.documentElement.setAttribute("jspsych", "present");
 
-    // Register preloading for the plugins referenced in the timeline
-    for (const [pluginName, parameters] of this.timeline.extractPreloadParameters()) {
-      for (const [parameter, type] of Object.entries(parameters)) {
-        this.pluginAPI.registerPreload(pluginName, parameter, type);
-      }
-    }
-
     this.startExperiment();
     await this.finished;
   }
