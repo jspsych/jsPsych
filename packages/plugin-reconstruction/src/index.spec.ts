@@ -1,4 +1,3 @@
-import { jest } from "@jest/globals";
 import { clickTarget, pressKey, startTimeline } from "jspsych/tests/utils";
 
 import reconstruction from ".";
@@ -130,9 +129,9 @@ describe("reconstruction", () => {
       },
     ];
 
-    const { jsPsych } = await startTimeline(timeline);
+    const { displayElement } = await startTimeline(timeline);
 
-    expect(jsPsych.getDisplayElement().querySelector("button").innerHTML).toContain("foo");
+    expect(displayElement.querySelector("button").innerHTML).toContain("foo");
   });
 
   test("clicking button ends trial", async () => {
@@ -146,9 +145,9 @@ describe("reconstruction", () => {
       },
     ];
 
-    const { jsPsych, expectFinished } = await startTimeline(timeline);
+    const { displayElement, expectFinished } = await startTimeline(timeline);
 
-    clickTarget(jsPsych.getDisplayElement().querySelector("button"));
+    clickTarget(displayElement.querySelector("button"));
 
     await expectFinished();
   });
@@ -164,11 +163,11 @@ describe("reconstruction", () => {
       },
     ];
 
-    const { jsPsych, getData } = await startTimeline(timeline);
+    const { displayElement, getData } = await startTimeline(timeline);
 
     pressKey("h");
 
-    clickTarget(jsPsych.getDisplayElement().querySelector("button"));
+    clickTarget(displayElement.querySelector("button"));
 
     expect(getData().values()[0].final_value).toEqual(0.55);
   });

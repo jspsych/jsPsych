@@ -12,7 +12,7 @@
   ],
   "source": "src/index.ts",
   "scripts": {
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:watch": "npm test -- --watch",
     "tsc": "tsc",
     "build": "rollup --config",

@@ -1,6 +1,4 @@
-import { jest } from "@jest/globals";
-import jsPsych from "jspsych";
-import { clickTarget } from "jspsych/tests/utils";
+import { clickTarget, startTimeline } from "jspsych/tests/utils";
 
 import surveyMultiSelect from ".";
 
@@ -11,53 +9,53 @@ const getInputElement = (selectId: number, value: string) =>
     `#jspsych-survey-multi-select-${selectId} input[value="${value}"]`
   ) as HTMLInputElement;
 
-describe("survey-multi-select plugin", function () {
-  test("quoted values for options work", function () {
-    var trial = {
-      type: surveyMultiSelect,
-      questions: [
-        {
-          prompt: "foo",
-          options: ['Hello "boo"', "yes, 'bar'"],
-        },
-      ],
-    };
-
-    jsPsych.init({
-      timeline: [trial],
-    });
+describe("survey-multi-select plugin", () => {
+  test("quoted values for options work", async () => {
+    const { displayElement, expectFinished } = await startTimeline([
+      {
+        type: surveyMultiSelect,
+        questions: [
+          {
+            prompt: "foo",
+            options: ['Hello "boo"', "yes, 'bar'"],
+          },
+        ],
+      },
+    ]);
 
     expect(
-      jsPsych.getDisplayElement().querySelector("#jspsych-survey-multi-select-option-0-0 input")
-        .value
+      displayElement.querySelector<HTMLInputElement>(
+        "#jspsych-survey-multi-select-option-0-0 input"
+      ).value
     ).toBe('Hello "boo"');
     expect(
-      jsPsych.getDisplayElement().querySelector("#jspsych-survey-multi-select-option-0-1 input")
-        .value
+      displayElement.querySelector<HTMLInputElement>(
+        "#jspsych-survey-multi-select-option-0-1 input"
+      ).value
     ).toBe("yes, 'bar'");
 
-    jsPsych
-      .getDisplayElement()
+    displayElement
       .querySelector("#jspsych-survey-multi-select-form")
       .dispatchEvent(new Event("submit"));
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+    await expectFinished();
   });
 
-  test("data are logged with the right question when randomize order is true", function () {
-    var scale = ["a", "b", "c", "d", "e"];
-    var t = {
-      type: surveyMultiSelect,
-      questions: [
-        { prompt: "Q0", options: scale },
-        { prompt: "Q1", options: scale },
-        { prompt: "Q2", options: scale },
-        { prompt: "Q3", options: scale },
-        { prompt: "Q4", options: scale },
-      ],
-      randomize_question_order: true,
-    };
-    jsPsych.init({ timeline: [t] });
+  test("data are logged with the right question when randomize order is true", async () => {
+    const scale = ["a", "b", "c", "d", "e"];
+    const { expectFinished, getData } = await startTimeline([
+      {
+        type: surveyMultiSelect,
+        questions: [
+          { prompt: "Q0", options: scale },
+          { prompt: "Q1", options: scale },
+          { prompt: "Q2", options: scale },
+          { prompt: "Q3", options: scale },
+          { prompt: "Q4", options: scale },
+        ],
+        randomize_question_order: true,
+      },
+    ]);
 
     getInputElement(0, "a").checked = true;
     getInputElement(1, "b").checked = true;
@@ -67,11 +65,13 @@ describe("survey-multi-select plugin", function () {
 
     clickTarget(document.querySelector("#jspsych-survey-multi-select-next"));
 
-    var survey_data = jsPsych.data.get().values()[0].response;
-    expect(survey_data.Q0[0]).toBe("a");
-    expect(survey_data.Q1[0]).toBe("b");
-    expect(survey_data.Q2[0]).toBe("c");
-    expect(survey_data.Q3[0]).toBe("d");
-    expect(survey_data.Q4[0]).toBe("e");
+    await expectFinished();
+
+    const surveyData = getData().values()[0].response;
+    expect(surveyData.Q0[0]).toBe("a");
+    expect(surveyData.Q1[0]).toBe("b");
+    expect(surveyData.Q2[0]).toBe("c");
+    expect(surveyData.Q3[0]).toBe("d");
+    expect(surveyData.Q4[0]).toBe("e");
   });
 });
