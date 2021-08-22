@@ -237,15 +237,6 @@ describe("#cancelAllKeyboardResponses", () => {
 });
 
 describe("#compareKeys", () => {
-  test("should compare keys regardless of type (old key-keyCode functionality)", () => {
-    expect(jsPsych.pluginAPI.compareKeys("q", 81)).toBe(true);
-    expect(jsPsych.pluginAPI.compareKeys(81, 81)).toBe(true);
-    expect(jsPsych.pluginAPI.compareKeys("q", "Q")).toBe(true);
-    expect(jsPsych.pluginAPI.compareKeys(80, 81)).toBe(false);
-    expect(jsPsych.pluginAPI.compareKeys("q", "1")).toBe(false);
-    expect(jsPsych.pluginAPI.compareKeys("q", 80)).toBe(false);
-  });
-
   test("should be case sensitive when case_sensitive_responses is true", () => {
     var t = {
       type: htmlKeyboardResponse,
@@ -272,10 +263,10 @@ describe("#compareKeys", () => {
     expect(jsPsych.pluginAPI.compareKeys("q", "q")).toBe(true);
   });
 
-  test("should accept null as argument, and return true if both arguments are null, and return false if one argument is null and other is string or numeric", () => {
+  test("should accept null as argument, and return true if both arguments are null, and return false if one argument is null and other is string", () => {
     const spy = jest.spyOn(console, "error").mockImplementation(() => {});
     expect(jsPsych.pluginAPI.compareKeys(null, "Q")).toBe(false);
-    expect(jsPsych.pluginAPI.compareKeys(80, null)).toBe(false);
+    expect(jsPsych.pluginAPI.compareKeys("Q", null)).toBe(false);
     expect(jsPsych.pluginAPI.compareKeys(null, null)).toBe(true);
     expect(console.error).not.toHaveBeenCalled();
     spy.mockRestore();
@@ -283,6 +274,7 @@ describe("#compareKeys", () => {
 
   test("should return undefined and produce a console warning if either/both arguments are not a string, integer, or null", () => {
     const spy = jest.spyOn(console, "error").mockImplementation(() => {});
+
     // @ts-expect-error The compareKeys types forbid this
     expect(jsPsych.pluginAPI.compareKeys({}, "Q")).toBeUndefined();
     // @ts-expect-error The compareKeys types forbid this
@@ -291,36 +283,14 @@ describe("#compareKeys", () => {
     expect(jsPsych.pluginAPI.compareKeys(null, ["Q"])).toBeUndefined();
 
     expect(console.error).toHaveBeenCalledTimes(3);
-    expect(spy.mock.calls).toEqual([
-      [
-        "Error in jsPsych.pluginAPI.compareKeys: arguments must be numeric key codes, key strings, or null.",
-      ],
-      [
-        "Error in jsPsych.pluginAPI.compareKeys: arguments must be numeric key codes, key strings, or null.",
-      ],
-      [
-        "Error in jsPsych.pluginAPI.compareKeys: arguments must be numeric key codes, key strings, or null.",
-      ],
-    ]);
+    for (let i = 1; i < 4; i++) {
+      expect(spy).toHaveBeenNthCalledWith(
+        i,
+        "Error in jsPsych.pluginAPI.compareKeys: arguments must be key strings or null."
+      );
+    }
+
     spy.mockRestore();
-  });
-});
-
-describe("#convertKeyCharacterToKeyCode", () => {
-  test("should return the keyCode for a particular character", () => {
-    expect(jsPsych.pluginAPI.convertKeyCharacterToKeyCode("q")).toBe(81);
-    expect(jsPsych.pluginAPI.convertKeyCharacterToKeyCode("1")).toBe(49);
-    expect(jsPsych.pluginAPI.convertKeyCharacterToKeyCode("space")).toBe(32);
-    expect(jsPsych.pluginAPI.convertKeyCharacterToKeyCode("enter")).toBe(13);
-  });
-});
-
-describe("#convertKeyCodeToKeyCharacter", () => {
-  test("should return the keyCode for a particular character", () => {
-    expect(jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(81)).toBe("q");
-    expect(jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(49)).toBe("1");
-    expect(jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(32)).toBe("space");
-    expect(jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(13)).toBe("enter");
   });
 });
 

@@ -125,152 +125,24 @@ export class KeyboardListenerAPI {
     this.listeners.clear();
   }
 
-  convertKeyCharacterToKeyCode(character: string) {
-    console.warn(
-      "Warning: The jsPsych.pluginAPI.convertKeyCharacterToKeyCode function will be removed in future jsPsych releases. " +
-        "We recommend removing this function and using strings to identify/compare keys."
-    );
-    return KeyboardListenerAPI.keylookup[character.toLowerCase()];
-  }
-
-  convertKeyCodeToKeyCharacter(code: number) {
-    console.warn(
-      "Warning: The jsPsych.pluginAPI.convertKeyCodeToKeyCharacter function will be removed in future jsPsych releases. " +
-        "We recommend removing this function and using strings to identify/compare keys."
-    );
-    for (var i in Object.keys(KeyboardListenerAPI.keylookup)) {
-      if (KeyboardListenerAPI.keylookup[Object.keys(KeyboardListenerAPI.keylookup)[i]] == code) {
-        return Object.keys(KeyboardListenerAPI.keylookup)[i];
-      }
-    }
-    return undefined;
-  }
-
-  compareKeys(key1: string | number | null, key2: string | number | null) {
-    if (Number.isFinite(key1) || Number.isFinite(key2)) {
-      // if either value is a numeric keyCode, then convert both to numeric keyCode values and compare (maintained for backwards compatibility)
-      if (typeof key1 == "string") {
-        key1 = this.convertKeyCharacterToKeyCode(key1);
-      }
-      if (typeof key2 == "string") {
-        key2 = this.convertKeyCharacterToKeyCode(key2);
-      }
-      return key1 == key2;
-    } else if (typeof key1 === "string" && typeof key2 === "string") {
-      // if both values are strings, then check whether or not letter case should be converted before comparing (case_sensitive_responses in jsPsych.init)
-      if (this.areResponsesCaseSensitive) {
-        return key1 === key2;
-      } else {
-        return key1.toLowerCase() === key2.toLowerCase();
-      }
-    } else if (
-      (key1 === null && (typeof key2 === "string" || Number.isFinite(key2))) ||
-      (key2 === null && (typeof key1 === "string" || Number.isFinite(key1)))
+  compareKeys(key1: string | null, key2: string | null) {
+    if (
+      (typeof key1 !== "string" && key1 !== null) ||
+      (typeof key2 !== "string" && key2 !== null)
     ) {
-      return false;
-    } else if (key1 === null && key2 === null) {
-      return true;
-    } else {
       console.error(
-        "Error in jsPsych.pluginAPI.compareKeys: arguments must be numeric key codes, key strings, or null."
+        "Error in jsPsych.pluginAPI.compareKeys: arguments must be key strings or null."
       );
       return undefined;
     }
-  }
 
-  static keylookup = {
-    backspace: 8,
-    tab: 9,
-    enter: 13,
-    shift: 16,
-    ctrl: 17,
-    alt: 18,
-    pause: 19,
-    capslock: 20,
-    esc: 27,
-    space: 32,
-    spacebar: 32,
-    " ": 32,
-    pageup: 33,
-    pagedown: 34,
-    end: 35,
-    home: 36,
-    leftarrow: 37,
-    uparrow: 38,
-    rightarrow: 39,
-    downarrow: 40,
-    insert: 45,
-    delete: 46,
-    0: 48,
-    1: 49,
-    2: 50,
-    3: 51,
-    4: 52,
-    5: 53,
-    6: 54,
-    7: 55,
-    8: 56,
-    9: 57,
-    a: 65,
-    b: 66,
-    c: 67,
-    d: 68,
-    e: 69,
-    f: 70,
-    g: 71,
-    h: 72,
-    i: 73,
-    j: 74,
-    k: 75,
-    l: 76,
-    m: 77,
-    n: 78,
-    o: 79,
-    p: 80,
-    q: 81,
-    r: 82,
-    s: 83,
-    t: 84,
-    u: 85,
-    v: 86,
-    w: 87,
-    x: 88,
-    y: 89,
-    z: 90,
-    "0numpad": 96,
-    "1numpad": 97,
-    "2numpad": 98,
-    "3numpad": 99,
-    "4numpad": 100,
-    "5numpad": 101,
-    "6numpad": 102,
-    "7numpad": 103,
-    "8numpad": 104,
-    "9numpad": 105,
-    multiply: 106,
-    plus: 107,
-    minus: 109,
-    decimal: 110,
-    divide: 111,
-    f1: 112,
-    f2: 113,
-    f3: 114,
-    f4: 115,
-    f5: 116,
-    f6: 117,
-    f7: 118,
-    f8: 119,
-    f9: 120,
-    f10: 121,
-    f11: 122,
-    f12: 123,
-    "=": 187,
-    ",": 188,
-    ".": 190,
-    "/": 191,
-    "`": 192,
-    "[": 219,
-    "\\": 220,
-    "]": 221,
-  };
+    if (typeof key1 === "string" && typeof key2 === "string") {
+      // if both values are strings, then check whether or not letter case should be converted before comparing (case_sensitive_responses in jsPsych.init)
+      return this.areResponsesCaseSensitive
+        ? key1 === key2
+        : key1.toLowerCase() === key2.toLowerCase();
+    }
+
+    return key1 === null && key2 === null;
+  }
 }
