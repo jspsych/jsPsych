@@ -1,7 +1,4 @@
-export type KeyboardListener = {
-  type: "keydown";
-  fn: (e: KeyboardEvent) => void;
-};
+export type KeyboardListener = (e: KeyboardEvent) => void;
 
 export type ValidResponses = string[] | "ALL_KEYS" | "NO_KEYS";
 
@@ -13,10 +10,6 @@ export interface GetKeyboardResponseOptions {
   audio_context?: AudioContext;
   audio_context_start_time?: number;
   allow_held_key?: boolean;
-  /**
-   * overiding via parameters for testing purposes.
-   * TODO (bjoluc): Why exactly?
-   */
   minimum_valid_rt?: number;
 }
 
@@ -30,7 +23,7 @@ export class KeyboardListenerAPI {
     // Iterate over a static copy of the listeners set because listeners might add other listeners
     // that we do not want to be included in the loop
     for (const listener of Array.from(this.listeners)) {
-      listener.fn(e);
+      listener(e);
     }
     this.heldKeys.add(this.toLowerCaseIfInsensitive(e.key));
   }
@@ -95,31 +88,28 @@ export class KeyboardListenerAPI {
       valid_responses = valid_responses.map((r) => r.toLowerCase());
     }
 
-    const listener: KeyboardListener = {
-      type: "keydown",
-      fn: (e: KeyboardEvent) => {
-        const rt =
-          (rt_method == "performance" ? performance.now() : audio_context.currentTime * 1000) -
-          startTime;
-        if (rt < minimum_valid_rt) {
-          return;
+    const listener: KeyboardListener = (e) => {
+      const rt =
+        (rt_method == "performance" ? performance.now() : audio_context.currentTime * 1000) -
+        startTime;
+      if (rt < minimum_valid_rt) {
+        return;
+      }
+
+      const key = this.toLowerCaseIfInsensitive(e.key);
+
+      if (this.isResponseValid(valid_responses, allow_held_key, key)) {
+        // if this is a valid response, then we don't want the key event to trigger other actions
+        // like scrolling via the spacebar.
+        e.preventDefault();
+
+        if (!persist) {
+          // remove keyboard listener if it exists
+          this.cancelKeyboardResponse(listener);
         }
 
-        const key = this.toLowerCaseIfInsensitive(e.key);
-
-        if (this.isResponseValid(valid_responses, allow_held_key, key)) {
-          // if this is a valid response, then we don't want the key event to trigger other actions
-          // like scrolling via the spacebar.
-          e.preventDefault();
-
-          if (!persist) {
-            // remove keyboard listener if it exists
-            this.cancelKeyboardResponse(listener);
-          }
-
-          callback_function({ key, rt });
-        }
-      },
+        callback_function({ key, rt });
+      }
     };
 
     this.listeners.add(listener);
