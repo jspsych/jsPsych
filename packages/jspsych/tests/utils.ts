@@ -3,7 +3,7 @@ import { setImmediate as flushMicroTasks } from "timers";
 import { JsPsych } from "../src";
 
 export function dispatchEvent(event: Event) {
-  document.querySelector(".jspsych-display-element").dispatchEvent(event);
+  document.body.dispatchEvent(event);
 }
 
 export function keyDown(key: string) {

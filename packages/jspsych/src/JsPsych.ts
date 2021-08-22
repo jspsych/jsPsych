@@ -109,7 +109,7 @@ export class JsPsych {
     };
     this.opts = options;
 
-    autoBind(this); // just in case people do weird things with JsPsych methods
+    autoBind(this); // so we can pass JsPsych methods as callbacks and `this` remains the JsPsych instance
 
     this.webaudio_context =
       typeof window !== "undefined" && typeof window.AudioContext !== "undefined"
@@ -419,11 +419,6 @@ export class JsPsych {
     }
     this.DOM_target.className += "jspsych-content";
 
-    // below code resets event listeners that may have lingered from
-    // a previous incomplete experiment loaded in same DOM.
-    this.pluginAPI.reset(options.display_element);
-    // create keyboard event listeners
-    this.pluginAPI.createKeyboardEventListeners(options.display_element);
     // create listeners for user browser interaction
     this.data.createInteractionListeners();
 

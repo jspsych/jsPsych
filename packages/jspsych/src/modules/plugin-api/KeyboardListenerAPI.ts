@@ -1,3 +1,5 @@
+import autoBind from "auto-bind";
+
 export type KeyboardListener = (e: KeyboardEvent) => void;
 
 export type ValidResponses = string[] | "ALL_KEYS" | "NO_KEYS";
@@ -14,10 +16,34 @@ export interface GetKeyboardResponseOptions {
 }
 
 export class KeyboardListenerAPI {
-  constructor(private areResponsesCaseSensitive: boolean = false, private minimumValidRt = 0) {}
+  constructor(
+    private getRootElement: () => Element | undefined,
+    private areResponsesCaseSensitive: boolean = false,
+    private minimumValidRt = 0
+  ) {
+    autoBind(this);
+    this.registerRootListeners();
+  }
 
   private listeners = new Set<KeyboardListener>();
   private heldKeys = new Set<string>();
+
+  private areRootListenersRegistered = false;
+
+  /**
+   * If not previously done and `this.getRootElement()` returns an element, adds the root key
+   * listeners to that element.
+   */
+  private registerRootListeners() {
+    if (!this.areRootListenersRegistered) {
+      const rootElement = this.getRootElement();
+      if (rootElement) {
+        rootElement.addEventListener("keydown", this.rootKeydownListener);
+        rootElement.addEventListener("keyup", this.rootKeyupListener);
+        this.areRootListenersRegistered = true;
+      }
+    }
+  }
 
   private rootKeydownListener(e: KeyboardEvent) {
     // Iterate over a static copy of the listeners set because listeners might add other listeners
@@ -52,18 +78,6 @@ export class KeyboardListenerAPI {
     return validResponses.includes(key);
   }
 
-  reset(root_element: Element) {
-    this.listeners.clear();
-    this.heldKeys.clear();
-    root_element.removeEventListener("keydown", this.rootKeydownListener);
-    root_element.removeEventListener("keyup", this.rootKeyupListener);
-  }
-
-  createKeyboardEventListeners(root_element: Element) {
-    root_element.addEventListener("keydown", this.rootKeydownListener);
-    root_element.addEventListener("keyup", this.rootKeyupListener);
-  }
-
   getKeyboardResponse({
     callback_function,
     valid_responses = "ALL_KEYS",
@@ -83,6 +97,8 @@ export class KeyboardListenerAPI {
 
     const usePerformanceRt = rt_method === "performance";
     const startTime = usePerformanceRt ? performance.now() : audio_context_start_time * 1000;
+
+    this.registerRootListeners();
 
     if (!this.areResponsesCaseSensitive && typeof valid_responses !== "string") {
       valid_responses = valid_responses.map((r) => r.toLowerCase());
