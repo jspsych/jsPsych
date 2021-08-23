@@ -2,14 +2,14 @@ export class TimeoutAPI {
   private timeout_handlers = [];
 
   setTimeout(callback, delay) {
-    var handle = window.setTimeout(callback, delay);
+    const handle = window.setTimeout(callback, delay);
     this.timeout_handlers.push(handle);
     return handle;
   }
 
   clearAllTimeouts() {
-    for (var i = 0; i < this.timeout_handlers.length; i++) {
-      clearTimeout(this.timeout_handlers[i]);
+    for (const handler of this.timeout_handlers) {
+      clearTimeout(handler);
     }
     this.timeout_handlers = [];
   }
