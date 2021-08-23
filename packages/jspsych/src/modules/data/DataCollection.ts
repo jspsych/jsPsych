@@ -43,7 +43,7 @@ export class DataCollection {
       throw `You must query with a positive nonzero integer. Please use a
                different value for n.`;
     }
-    if (this.trials.length == 0) return new DataCollection();
+    if (this.trials.length === 0) return new DataCollection();
     if (n > this.trials.length) n = this.trials.length;
     return new DataCollection(this.trials.slice(0, n));
   }
@@ -64,7 +64,7 @@ export class DataCollection {
       throw `You must query with a positive nonzero integer. Please use a
                different value for n.`;
     }
-    if (this.trials.length == 0) return new DataCollection();
+    if (this.trials.length === 0) return new DataCollection();
     if (n > this.trials.length) n = this.trials.length;
     return new DataCollection(this.trials.slice(this.trials.length - n, this.trials.length));
   }
@@ -82,7 +82,7 @@ export class DataCollection {
   }
 
   addToAll(properties) {
-    for (let trial of this.trials) {
+    for (const trial of this.trials) {
       Object.assign(trial, properties);
     }
     return this;
@@ -105,13 +105,13 @@ export class DataCollection {
       f = deepCopy(filters);
     }
 
-    let filtered_data = [];
+    const filtered_data = [];
     for (const trial of this.trials) {
       let keep = false;
       for (const filter of f) {
         let match = true;
         for (const key of Object.keys(filter)) {
-          if (typeof trial[key] !== "undefined" && trial[key] == filter[key]) {
+          if (typeof trial[key] !== "undefined" && trial[key] === filter[key]) {
             // matches on this key!
           } else {
             match = false;
@@ -131,17 +131,11 @@ export class DataCollection {
   }
 
   filterCustom(fn) {
-    let included = [];
-    for (const trial of this.trials) {
-      if (fn(trial)) {
-        included.push(trial);
-      }
-    }
-    return new DataCollection(included);
+    return new DataCollection(this.trials.filter(fn));
   }
 
   select(column) {
-    let values = [];
+    const values = [];
     for (const trial of this.trials) {
       if (typeof trial[column] !== "undefined") {
         values.push(trial[column]);
@@ -189,14 +183,14 @@ export class DataCollection {
   }
 
   localSave(format, filename) {
+    format = format.toLowerCase();
     let data_string;
-
-    if (format === "JSON" || format === "json") {
+    if (format === "json") {
       data_string = this.json();
-    } else if (format == "CSV" || format == "csv") {
+    } else if (format === "csv") {
       data_string = this.csv();
     } else {
-      throw new Error('Invalid format specified for localSave. Must be "JSON" or "CSV".');
+      throw new Error('Invalid format specified for localSave. Must be "json" or "csv".');
     }
 
     saveTextToFile(data_string, filename);

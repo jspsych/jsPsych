@@ -14,7 +14,7 @@ export class DataColumn {
   }
 
   median() {
-    if (this.values.length == 0) {
+    if (this.values.length === 0) {
       return undefined;
     }
     const numbers = this.values.slice(0).sort(function (a, b) {
@@ -54,9 +54,9 @@ export class DataColumn {
   }
 
   frequencies() {
-    let unique = {};
+    const unique = {};
     for (const x of this.values) {
-      if (typeof unique[x] == "undefined") {
+      if (typeof unique[x] === "undefined") {
         unique[x] = 1;
       } else {
         unique[x]++;
@@ -75,7 +75,7 @@ export class DataColumn {
   }
 
   subset(eval_fn) {
-    let out = [];
+    const out = [];
     for (const x of this.values) {
       if (eval_fn(x)) {
         out.push(x);

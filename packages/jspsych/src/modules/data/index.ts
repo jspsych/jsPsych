@@ -66,11 +66,9 @@ export class JsPsychData {
   }
 
   getDataByTimelineNode(node_id) {
-    const data = this.allData.filterCustom((x) => {
-      return x.internal_node_id.slice(0, node_id.length) === node_id;
-    });
-
-    return data;
+    return this.allData.filterCustom(
+      (x) => x.internal_node_id.slice(0, node_id.length) === node_id
+    );
   }
 
   getLastTrialData() {
@@ -96,13 +94,7 @@ export class JsPsychData {
       format = "json";
     }
 
-    let data_string;
-
-    if (format == "json") {
-      data_string = this.allData.json(true); // true = pretty print with tabs
-    } else {
-      data_string = this.allData.csv();
-    }
+    const data_string = format === "json" ? this.allData.json(true) : this.allData.csv();
 
     const display_element = this.jsPsych.getDisplayElement();
 
