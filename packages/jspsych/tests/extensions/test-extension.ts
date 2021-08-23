@@ -1,4 +1,4 @@
-import { JsPsych, JsPsychExtension, JsPsychExtensionParameters } from "jspsych";
+import { JsPsych, JsPsychExtension } from "jspsych";
 
 class TestExtension implements JsPsychExtension {
   static info = {
