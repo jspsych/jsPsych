@@ -181,7 +181,7 @@ export class JsPsych {
     await this.finished;
   }
 
-  progress() {
+  getProgress() {
     return {
       total_trials: typeof this.timeline === "undefined" ? undefined : this.timeline.length(),
       current_trial_global: this.global_trial_index,
@@ -189,11 +189,11 @@ export class JsPsych {
     };
   }
 
-  startTime() {
+  getStartTime() {
     return this.exp_start_time;
   }
 
-  totalTime() {
+  getTotalTime() {
     if (typeof this.exp_start_time == "undefined") {
       return 0;
     }
@@ -315,15 +315,15 @@ export class JsPsych {
     this.timeline.endActiveNode();
   }
 
-  currentTrial() {
+  getCurrentTrial() {
     return this.current_trial;
   }
 
-  initSettings() {
+  getInitSettings() {
     return this.opts;
   }
 
-  currentTimelineNodeID() {
+  getCurrentTimelineNodeID() {
     return this.timeline.activeID();
   }
 
@@ -335,7 +335,7 @@ export class JsPsych {
     }
   }
 
-  allTimelineVariables() {
+  getAllTimelineVariables() {
     return this.timeline.allTimelineVariables();
   }
 
@@ -772,7 +772,7 @@ export class JsPsych {
   }
 
   private updateProgressBar() {
-    var progress = this.progress().percent_complete;
+    var progress = this.getProgress().percent_complete;
     this.setProgressBar(progress / 100);
   }
 

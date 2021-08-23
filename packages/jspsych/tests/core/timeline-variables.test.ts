@@ -365,7 +365,7 @@ describe("timeline variables are correctly evaluated", () => {
   });
 });
 
-describe("jsPsych.allTimelineVariables()", () => {
+describe("jsPsych.getAllTimelineVariables()", () => {
   test("gets all timeline variables for a simple timeline", async () => {
     const jsPsych = initJsPsych();
     await startTimeline(
@@ -376,7 +376,7 @@ describe("jsPsych.allTimelineVariables()", () => {
               type: htmlKeyboardResponse,
               stimulus: "foo",
               on_finish: (data) => {
-                var all_tvs = jsPsych.allTimelineVariables();
+                var all_tvs = jsPsych.getAllTimelineVariables();
                 Object.assign(data, all_tvs);
               },
             },
@@ -411,7 +411,7 @@ describe("jsPsych.allTimelineVariables()", () => {
                   type: htmlKeyboardResponse,
                   stimulus: "foo",
                   on_finish: (data) => {
-                    var all_tvs = jsPsych.allTimelineVariables();
+                    var all_tvs = jsPsych.getAllTimelineVariables();
                     Object.assign(data, all_tvs);
                   },
                 },
@@ -458,7 +458,7 @@ describe("jsPsych.allTimelineVariables()", () => {
             { a: 2, b: 3 },
           ],
           conditional_function: () => {
-            var all_tvs = jsPsych.allTimelineVariables();
+            var all_tvs = jsPsych.getAllTimelineVariables();
             a = all_tvs.a;
             b = all_tvs.b;
             return true;

@@ -7,7 +7,7 @@ import { MediaAPI } from "./MediaAPI";
 import { TimeoutAPI } from "./TimeoutAPI";
 
 export function createJointPluginAPIObject(jsPsych: JsPsych) {
-  const settings = jsPsych.initSettings();
+  const settings = jsPsych.getInitSettings();
   return Object.assign(
     {},
     ...[
