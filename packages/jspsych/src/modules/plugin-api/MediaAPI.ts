@@ -9,7 +9,7 @@ const preloadParameterTypes = <const>[
 type PreloadType = typeof preloadParameterTypes[number];
 
 export class MediaAPI {
-  constructor(private useWebaudio: boolean = false, private webaudioContext?: AudioContext) {}
+  constructor(private useWebaudio: boolean, private webaudioContext?: AudioContext) {}
 
   // video //
   private video_buffers = {};

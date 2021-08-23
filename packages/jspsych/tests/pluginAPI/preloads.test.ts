@@ -3,7 +3,7 @@ import { MediaAPI } from "../../src/modules/plugin-api/MediaAPI";
 
 describe("getAutoPreloadList()", () => {
   it("works for a single trial", () => {
-    const preloads = new MediaAPI().getAutoPreloadList([
+    const preloads = new MediaAPI(false).getAutoPreloadList([
       {
         type: {
           info: {
@@ -40,7 +40,7 @@ describe("getAutoPreloadList()", () => {
   });
 
   it("works for a nested timeline", () => {
-    const preloads = new MediaAPI().getAutoPreloadList([
+    const preloads = new MediaAPI(false).getAutoPreloadList([
       {
         timeline: [
           {
@@ -100,7 +100,7 @@ describe("getAutoPreloadList()", () => {
   });
 
   it("ignores trials with a function type", () => {
-    const preloads = new MediaAPI().getAutoPreloadList([
+    const preloads = new MediaAPI(false).getAutoPreloadList([
       {
         type: () => ({ info: { name: "my-dynamic-trial-type" } }),
       },
