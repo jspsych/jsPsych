@@ -87,7 +87,7 @@ export function shuffle(array: Array<any>) {
   return copy_array;
 }
 
-export function shuffleNoRepeats(arr: Array<any>, equalityTest: Function) {
+export function shuffleNoRepeats(arr: Array<any>, equalityTest: (a: any, b: any) => boolean) {
   if (!Array.isArray(arr)) {
     console.error("First argument to shuffleNoRepeats() must be an array.");
   }
@@ -118,7 +118,7 @@ export function shuffleNoRepeats(arr: Array<any>, equalityTest: Function) {
       ) {
         random_pick = Math.floor(Math.random() * (random_shuffle.length - 2)) + 1;
       }
-      let new_neighbor = random_shuffle[random_pick];
+      const new_neighbor = random_shuffle[random_pick];
       random_shuffle[random_pick] = random_shuffle[i + 1];
       random_shuffle[i + 1] = new_neighbor;
     }
@@ -137,7 +137,7 @@ export function shuffleAlternateGroups(arr_groups, random_group_order = false) {
   }
 
   let group_order = [];
-  for (var i = 0; i < n_groups; i++) {
+  for (let i = 0; i < n_groups; i++) {
     group_order.push(i);
   }
   if (random_group_order) {
