@@ -24,7 +24,7 @@ export class HardwareAPI {
     //since Chrome extension content-scripts do not share the javascript environment with the page
     //script that loaded jspsych, we will need to use hacky methods like communicating through DOM
     //events.
-    var jspsychEvt = new CustomEvent("jspsych", { detail: mess });
+    const jspsychEvt = new CustomEvent("jspsych", { detail: mess });
     document.dispatchEvent(jspsychEvt);
     //And voila! it will be the job of the content script injected by the extension to listen for
     //the event and do the appropriate actions.
