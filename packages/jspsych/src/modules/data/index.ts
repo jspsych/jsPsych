@@ -33,12 +33,12 @@ export class JsPsychData {
   }
 
   write(data_object) {
-    var progress = this.jsPsych.progress();
-    var trial = this.jsPsych.currentTrial();
+    const progress = this.jsPsych.progress();
+    const trial = this.jsPsych.currentTrial();
 
     //var trial_opt_data = typeof trial.data == 'function' ? trial.data() : trial.data;
 
-    var default_data = {
+    const default_data = {
       trial_type: trial.type.info.name,
       trial_index: progress.current_trial_global,
       time_elapsed: this.jsPsych.totalTime(),
@@ -66,7 +66,7 @@ export class JsPsychData {
   }
 
   getDataByTimelineNode(node_id) {
-    var data = this.allData.filterCustom(function (x) {
+    const data = this.allData.filterCustom((x) => {
       return x.internal_node_id.slice(0, node_id.length) === node_id;
     });
 
@@ -78,25 +78,25 @@ export class JsPsychData {
   }
 
   getLastTimelineData() {
-    var lasttrial = this.getLastTrialData();
-    var node_id = lasttrial.select("internal_node_id").values[0];
+    const lasttrial = this.getLastTrialData();
+    const node_id = lasttrial.select("internal_node_id").values[0];
     if (typeof node_id === "undefined") {
       return new DataCollection();
     } else {
-      var parent_node_id = node_id.substr(0, node_id.lastIndexOf("-"));
-      var lastnodedata = this.getDataByTimelineNode(parent_node_id);
+      const parent_node_id = node_id.substr(0, node_id.lastIndexOf("-"));
+      const lastnodedata = this.getDataByTimelineNode(parent_node_id);
       return lastnodedata;
     }
   }
 
-  displayData(format) {
-    format = typeof format === "undefined" ? "json" : format.toLowerCase();
+  displayData(format = "json") {
+    format = format.toLowerCase();
     if (format != "json" && format != "csv") {
       console.log("Invalid format declared for displayData function. Using json as default.");
       format = "json";
     }
 
-    var data_string;
+    let data_string;
 
     if (format == "json") {
       data_string = this.allData.json(true); // true = pretty print with tabs
@@ -104,7 +104,7 @@ export class JsPsychData {
       data_string = this.allData.csv();
     }
 
-    var display_element = this.jsPsych.getDisplayElement();
+    const display_element = this.jsPsych.getDisplayElement();
 
     display_element.innerHTML = '<pre id="jspsych-data-display"></pre>';
 
@@ -125,7 +125,7 @@ export class JsPsychData {
   createInteractionListeners() {
     // blur event capture
     window.addEventListener("blur", () => {
-      var data = {
+      const data = {
         event: "blur",
         trial: this.jsPsych.progress().current_trial_global,
         time: this.jsPsych.totalTime(),
@@ -136,7 +136,7 @@ export class JsPsychData {
 
     // focus event capture
     window.addEventListener("focus", () => {
-      var data = {
+      const data = {
         event: "focus",
         trial: this.jsPsych.progress().current_trial_global,
         time: this.jsPsych.totalTime(),
