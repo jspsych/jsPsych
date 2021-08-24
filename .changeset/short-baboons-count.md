@@ -1,7 +1,5 @@
 ---
 "jspsych": major
-
-author: @jodeleeuw
 ---
 
 Renamed all getter-type functions to have `get` prefix to make it clearer what the role of these functions are. The following were affected:
@@ -12,3 +10,5 @@ Renamed all getter-type functions to have `get` prefix to make it clearer what t
 - `currentTrial` -> `getCurrentTrial`
 - `initSettings` -> `getInitSettings`
 - `allTimelineVariables` -> `getAllTimelineVariables`
+
+author: @jodeleeuw 
