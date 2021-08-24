@@ -1,5 +1,3 @@
-// methods used in multiple modules //
-
 /**
  * Finds all of the unique items in an array.
  * @param arr The array to extract unique values from
