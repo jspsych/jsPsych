@@ -11,4 +11,4 @@ Renamed all getter-type functions to have `get` prefix to make it clearer what t
 - `initSettings` -> `getInitSettings`
 - `allTimelineVariables` -> `getAllTimelineVariables`
 
-author: @jodeleeuw 
+pr: 2100
