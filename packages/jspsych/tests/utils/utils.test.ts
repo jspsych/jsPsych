@@ -1,4 +1,4 @@
-import { deepCopy, flatten, unique } from "../../src/modules/utils";
+import { deepCopy, unique } from "../../src/modules/utils";
 
 describe("unique", () => {
   test("generates unique array when there are duplicates", () => {
@@ -12,20 +12,6 @@ describe("unique", () => {
     var arr = [1, 2, 3];
     var out = unique(arr);
     expect(out).toEqual(arr);
-  });
-});
-
-describe("flatten", () => {
-  test("generates flat array from flat input", () => {
-    var arr = [1, 1, 2, 2, 3, 3];
-    var out = flatten(arr);
-    expect(out).toEqual(arr);
-  });
-
-  test("generates flat array from nested input", () => {
-    var arr = [1, [1, 2, 2], [3], 3];
-    var out = flatten(arr);
-    expect(out).toEqual([1, 1, 2, 2, 3, 3]);
   });
 });
 

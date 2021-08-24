@@ -1,4 +1,4 @@
-import { flatten, unique } from "../utils";
+import { unique } from "../utils";
 
 export class MediaAPI {
   constructor(private useWebaudio: boolean, private webaudioContext: AudioContext) {}
@@ -59,8 +59,7 @@ export class MediaAPI {
   private img_cache = {};
 
   preloadAudio(files, callback_complete, callback_load, callback_error) {
-    files = flatten(files);
-    files = unique(files);
+    files = unique(files.flat());
 
     var n_loaded = 0;
     var loadfn = typeof callback_load === "undefined" ? function () {} : callback_load;
@@ -153,8 +152,7 @@ export class MediaAPI {
 
   preloadImages(images, callback_complete, callback_load, callback_error) {
     // flatten the images array
-    images = flatten(images);
-    images = unique(images);
+    images = unique(images.flat());
 
     var n_loaded = 0;
     var finishfn = typeof callback_complete === "undefined" ? function () {} : callback_complete;
@@ -190,8 +188,7 @@ export class MediaAPI {
 
   preloadVideo(video, callback_complete, callback_load, callback_error) {
     // flatten the video array
-    video = flatten(video);
-    video = unique(video);
+    video = unique(video.flat());
 
     var n_loaded = 0;
     var finishfn = !callback_complete ? function () {} : callback_complete;
@@ -298,19 +295,19 @@ export class MediaAPI {
           console.warn("no parameter called " + param + " in plugin " + type);
         } else if (typeof trials[j][param] !== "function") {
           if (media === "image") {
-            images = images.concat(flatten([trials[j][param]]));
+            images = images.concat([trials[j][param]].flat());
           } else if (media === "audio") {
-            audio = audio.concat(flatten([trials[j][param]]));
+            audio = audio.concat([trials[j][param]].flat());
           } else if (media === "video") {
-            video = video.concat(flatten([trials[j][param]]));
+            video = video.concat([trials[j][param]].flat());
           }
         }
       }
     }
 
-    images = unique(flatten(images));
-    audio = unique(flatten(audio));
-    video = unique(flatten(video));
+    images = unique(images.flat());
+    audio = unique(audio.flat());
+    video = unique(video.flat());
 
     // remove any nulls false values
     images = images.filter(function (x) {
