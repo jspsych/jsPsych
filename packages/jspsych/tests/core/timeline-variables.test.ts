@@ -78,7 +78,7 @@ describe("sampling", () => {
 
     const result1 = [];
     const result2 = [];
-    for (var i = 0; i < reps / 2; i++) {
+    for (let i = 0; i < reps / 2; i++) {
       result1.push(getHTML());
       pressKey("a");
       result2.push(getHTML());

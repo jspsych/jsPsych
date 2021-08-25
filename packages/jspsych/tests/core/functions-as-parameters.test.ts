@@ -21,7 +21,7 @@ describe("standard use of function as parameter", () => {
   });
 
   test.skip("parameters can be protected from early evaluation using ParameterType.FUNCTION", async () => {
-    var mock = jest.fn();
+    const mock = jest.fn();
 
     await startTimeline([
       {
