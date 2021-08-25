@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "jsPsych plugin for running an IAT (Implicit Association Test) with an HTML-formatted stimulus",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
   "typings": "dist/index.d.ts",
   "unpkg": "dist/index.browser.min.js",
   "files": [
