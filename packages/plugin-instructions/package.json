@@ -34,5 +34,8 @@
   "homepage": "https://github.com/jspsych/jsPsych#readme",
   "peerDependencies": {
     "jspsych": ">=7"
+  },
+  "devDependencies": {
+    "@jspsych/config": "^0.1.0"
   }
 }
