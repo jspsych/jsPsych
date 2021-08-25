@@ -270,7 +270,7 @@ describe("conditional function", () => {
   });
 
   test("executes only once even when repetitions is > 1", async () => {
-    var conditional_count = 0;
+    let conditional_count = 0;
 
     await startTimeline([
       {
