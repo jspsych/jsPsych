@@ -26,38 +26,81 @@ question_order | array | An array with the order of questions. For example `[2,0
 
 ## Examples
 
-### Basic example
+???+ example "Single question and response"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'survey-text',
+          questions: [
+            {prompt: 'How old are you?'}
+          ]
+        }
+        ```
+    
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-survey-text-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var survey_trial = {
-  type: 'survey-text',
-  questions: [
-    {prompt: "How old are you?"}, 
-    {prompt: "Where were you born?", placeholder: "City, State/Province, Country"}
-  ],
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-survey-text-demo1.html">Open demo in new tab</a>
 
-### Custom number of rows and columns
+???+ example "Multiple questions, with an optional placeholder and a required question"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'survey-text',
+          questions: [
+            {prompt: 'What is your date of birth?', placeholder: 'mm/dd/yyyy', required: true},
+            {prompt: 'What country do you currently live in?'}
+          ]
+        }
+        ```
+    
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-survey-text-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var survey_trial = {
-  type: 'survey-text',
-  questions: [
-    {prompt: "How old are you?", rows: 5, columns: 40}, 
-    {prompt: "Where were you born?", rows: 3, columns: 50}
-  ],
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-survey-text-demo2.html">Open demo in new tab</a>
 
-### Defining the name of questions
+???+ example "Naming questions to improve readability of the stored data"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'survey-text',
+          questions: [
+            {prompt: 'What did you eat for breakfast?', name: 'Breakfast'},
+            {prompt: 'What did you eat for lunch?', name: 'Lunch'}
+          ]
+        }
+        ```
+    
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-survey-text-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var survey_trial = {
-  type: 'survey-text',
-  questions: [
-    {prompt: "How old are you?", name: 'Age'}, 
-    {prompt: "Where were you born?", name: 'BirthLocation'}
-  ],
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-survey-text-demo3.html">Open demo in new tab</a>
+
+    
+???+ example "Using the preamble and a longer textbox response"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'survey-text',
+          preamble: `<img src="img/navarro_burst_03.jpg" style="width:400px;"></img>`,
+          questions: [
+            {prompt: 'Describe your reaction to the image above', rows: 5}
+          ]
+        }
+        ```
+
+        *The artwork in this demo is by [Danielle Navarro](https://art.djnavarro.net/)*
+    
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-survey-text-demo4.html" width="90%;" height="800px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-survey-text-demo4.html">Open demo in new tab</a>
+
