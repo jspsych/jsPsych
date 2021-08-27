@@ -36,13 +36,19 @@ stimulus | string | The path of the image that was displayed.
 
 ## Examples
 
-#### Displaying question until subject gives a response
+???+ example "Displaying question until subject gives a response"
+    === "Code"
+        ```javascript
+        var trial = {
+            type: 'image-button-response',
+            stimulus: 'img/happy_face_1.png',
+            choices: ['Happy', 'Sad'],
+            prompt: "<p>Is this person happy or sad?</p>"
+        };
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="./demos/jspsych-image-button-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var trial = {
-	type: 'image-button-response',
-	stimulus: 'img/happy_face_1.png',
-	choices: ['Happy', 'Sad'],
-	prompt: "<p>Is this person happy or sad?</p>"
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="./demos/jspsych-image-button-response-demo1.html">Open demo in new tab</a>
