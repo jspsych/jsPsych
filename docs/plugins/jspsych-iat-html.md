@@ -35,30 +35,28 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ## Examples
 
-```javascript
-var trial_block = {
-  type: 'iat-html',
-  stimulus: 'Golf',
-  stim_key_association: 'left',
-  html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
-  bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
-  force_correct_key_press: true,
-  display_feedback: true,
-  trial_duration: 3000, //Only if display_feedback is false
-  left_category_key: 'e',
-  right_category_key: 'i',
-  left_category_label: ['OLD'],
-  right_category_label: ['YOUNG'],
-  response_ends_trial: true
-}
+???+ example "Displaying IAT question using html"
+    === "Code"
+        ```javascript
+        var trial = {
+            type: 'iat-html',
+            stimulus: 'Golf',
+            stim_key_association: 'left',
+            html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+            bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+            force_correct_key_press: true,
+            display_feedback: true,
+            trial_duration: 3000, //Only if display_feedback is false
+            left_category_key: 'e',
+            right_category_key: 'i',
+            left_category_label: ['OLD'],
+            right_category_label: ['YOUNG'],
+            response_ends_trial: true
+        }
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="./demos/jspsych-iat-html-demo1.html" width="90%;" height="650px;" frameBorder="0"></iframe>
+        </div>
 
-var timeline = [];
-timeline.push(trial_block);
-
-jsPsych.init({
-  timeline: timeline,
-  on_finish: function() {
-    jsPsych.data.displayData();
-  }
-});
-```
+    <a target="_blank" rel="noopener noreferrer" href="./demos/jspsych-iat-html-demo1.html">Open demo in new tab</a>
