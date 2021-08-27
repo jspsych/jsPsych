@@ -41,14 +41,25 @@ stimulus | array | The `stimulus` array. This will be encoded as a JSON string w
 
 ## Example
 
-```javascript
-var trial = {
-	type: 'video-button-response',
-	stimulus: [
-		'video/sample_video.mp4',
-		'video/sample_video.ogg'
-	],
-	choices: ['Happy','Sad','Angry','Peaceful'],
-	prompt: '<p>Which emotion the best descriptor of the main character\'s feelings?</p>'
-}
-```
+???+ example "Responses disabled until the video is complete"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'video-button-response',
+          stimulus: [
+            'video/fish.mp4'
+          ],
+          choices: ['0-5', '6-10','11-15','16-20','21-25','25+'],
+          prompt: "<p>How many different fish are shown in the video?</p>",
+          response_allowed_while_playing: false
+        };
+        ```
+
+        *[Stock Footage](https://www.pond5.com/stock-footage/item/721819-school-yellowtail-snappers) provided by rjt98, from [Pond5](https://www.pond5.com/)*
+    
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-video-button-response-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-video-button-response-demo1.html">Open demo in new tab</a>

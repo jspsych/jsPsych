@@ -47,14 +47,25 @@ start | numeric | The start time of the video clip.
 
 ## Example
 
-```javascript
-var trial = {
-	type: 'video-slider-response',
-	stimulus: [
-		'video/sample_video.mp4',
-		'video/sample_video.ogg'
-	],
-	labels: ["Did not like", "Liked"],
-	prompt: "<p>Please rate your enjoyment of the video clip.</p>"
-}
-```
+???+ example "Rate enjoyment of a video clip"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'video-slider-response',
+          stimulus: [
+            'video/fish.mp4'
+          ],
+          labels: ["Hated it", "Loved it"],
+          prompt: '<p>Please rate your enjoyment of the video clip.</p>'
+        };
+        ```
+
+        *[Stock Footage](https://www.pond5.com/stock-footage/item/721819-school-yellowtail-snappers) provided by rjt98, from [Pond5](https://www.pond5.com/)*
+    
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-video-slider-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-video-slider-response-demo1.html">Open demo in new tab</a>
+

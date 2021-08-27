@@ -35,16 +35,26 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 | rt        | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response. |
 stimulus | array | The `stimulus` array. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 
-## Example
+## Examples
 
-```javascript
-var trial = {
-	type: 'video-keyboard-response',
-	stimulus: [
-		'video/sample_video.mp4',
-		'video/sample_video.ogg'
-	],
-	choices: ['y','n'],
-	width: 640
-}
-```
+???+ example "Show a video and advance to next trial automatically"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'video-keyboard-response',
+          stimulus: [
+            'video/fish.mp4'
+          ],
+          choices: jsPsych.NO_KEYS,
+          trial_ends_after_video: true
+        };
+        ```
+
+        *[Stock Footage](https://www.pond5.com/stock-footage/item/721819-school-yellowtail-snappers) provided by rjt98, from [Pond5](https://www.pond5.com/)*
+    
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-video-keyboard-response-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-video-keyboard-response-demo1.html">Open demo in new tab</a>
