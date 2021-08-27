@@ -35,23 +35,112 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ## Examples
 
-#### Basic example with four squares in a single row
-```javascript
-var trial = {
-  type: 'serial-reaction-time',
-  grid: [[1,1,1,1]],
-  target: [0,1]
-}
-```
+???+ example "A classic SRT"
+    === "Code"
+        ```javascript
+        var instructions = {
+          type: 'html-button-response',
+          stimulus: '<p>Use the S, F, H, and K keys to respond.</p>',
+          choices: ['Continue']
+        }
 
-#### 2x2 grid, Showing feedback for 500ms
-```javascript
-var trial = {
-  type: 'serial-reaction-time',
-  grid: [[1,1],[1,1]],
-  choices: [['r','t'],['f','g']],
-  target: [1,0],
-  show_response_feedback: true,
-  feedback_duration: 500
-}
-```
+        var grid = [
+          [1,1,1,1]
+        ]
+
+        var response_map = [
+          ['s','f','h','k']
+        ]
+
+        var trial_1 = {
+          type: 'serial-reaction-time',
+          grid: grid,
+          choices: response_map,
+          target: [0,0]
+        }
+        var trial_2 = {
+          type: 'serial-reaction-time',
+          grid: grid,
+          choices: response_map,
+          target: [0,1]
+        }
+        var trial_3 = {
+          type: 'serial-reaction-time',
+          grid: grid,
+          choices: response_map,
+          target: [0,2]
+        }
+        var trial_4 = {
+          type: 'serial-reaction-time',
+          grid: grid,
+          choices: response_map,
+          target: [0,3]
+        }
+        ```
+
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-serial-reaction-time-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-serial-reaction-time-demo1.html">Open demo in new tab</a>
+
+???+ example "2x2 grid with feedback"
+    === "Code"
+        ```javascript
+        var instructions = {
+          type: 'html-button-response',
+          stimulus: '<p>Use the R, I, V, and M keys to respond.</p>',
+          choices: ['Continue']
+        }
+
+        var grid = [
+          [1,1],
+          [1,1]
+        ]
+
+        var response_map = [
+          ['r','i'],
+          ['v','m']
+        ]
+
+        var trial_1 = {
+          type: 'serial-reaction-time',
+          grid: grid,
+          choices: response_map,
+          target: [0,0],
+          show_response_feedback: true,
+          feedback_duration: 500
+        }
+        var trial_2 = {
+          type: 'serial-reaction-time',
+          grid: grid,
+          choices: response_map,
+          target: [0,1],
+          show_response_feedback: true,
+          feedback_duration: 500
+        }
+        var trial_3 = {
+          type: 'serial-reaction-time',
+          grid: grid,
+          choices: response_map,
+          target: [1,1],
+          show_response_feedback: true,
+          feedback_duration: 500
+        }
+        var trial_4 = {
+          type: 'serial-reaction-time',
+          grid: grid,
+          choices: response_map,
+          target: [1,0],
+          show_response_feedback: true,
+          feedback_duration: 500
+        }
+        ```
+
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-serial-reaction-time-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-serial-reaction-time-demo2.html">Open demo in new tab</a>
