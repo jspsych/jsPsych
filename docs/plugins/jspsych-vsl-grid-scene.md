@@ -45,18 +45,25 @@ var grid_stimulus = jsPsych.plugins['vsl-grid-scene'].generate_stimulus(pattern,
 
 ## Example
 
-#### Basic example
+???+ example "Displaying a scene"
+    === "Code"
+        ```javascript
+        var scene = [
+          ["img/1.gif", "img/2.gif", 0],
+          [ 0, "img/3.gif", 0],
+          ["img/5.gif", "img/4.gif", 0]
+        ]
 
-```javascript
-var scene = [
-  ["img/1.gif", "img/2.gif", 0],
-  [ 0, "img/3.gif", 0],
-  ["img/5.gif", "img/4.gif", 0]
-]
+        var trial = {
+            type: 'vsl-grid-scene',
+            stimuli: scene,
+            trial_duration: 1500
+        };
+        ```
 
-var trial = {
-    type: 'vsl-grid-scene',
-    stimuli: scene
-};
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-vsl-grid-scene-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-```
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-vsl-grid-scene-demo1.html">Open demo in new tab</a>

@@ -34,22 +34,23 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ## Examples
 
-#### Displaying a simple sequence.
+???+ example "Displaying a short sequence with default options"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'vsl-animate-occlusion',
+          stimuli: [
+            "img/1.gif",
+            "img/2.gif",
+            "img/3.gif",
+            "img/4.gif"
+          ]
+        }
+        ```
 
-```javascript
-var trial = {
-  type: 'vsl-animate-occlusion',
-  stimuli: [
-    "img/1.gif",
-    "img/2.gif",
-    "img/3.gif",
-    "img/4.gif",
-    "img/5.gif",
-    "img/6.gif",
-    "img/7.gif",
-    "img/8.gif",
-    "img/9.gif",
-    "img/10.gif"
-  ]
-}
-```
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-vsl-animate-occlusion-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-vsl-animate-occlusion-demo1.html">Open demo in new tab</a>
