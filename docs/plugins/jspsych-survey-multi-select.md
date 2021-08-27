@@ -27,27 +27,34 @@ question_order | array | An array with the order of questions. For example `[2,0
 
 ## Examples
 
-#### Basic example with multiple questions on a page.
+???+ example "Multiple Questions on a Page"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'survey-multi-select',
+          questions: [
+            {
+              prompt: "Which of these colors do you like?", 
+              options: ["Red", "Yellow", "Green", "Blue", "Black"], 
+              horizontal: true,
+              required: true,
+              name: 'Colors'
+            }, 
+            {
+              prompt: "Which of these foods do you like?", 
+              options: ["Apples", "Bananas", "Carrots", "Donuts", "Eggplant"], 
+              horizontal: true,
+              required: true,
+              name: 'Foods'
+            }
+          ], 
+          randomize_question_order: true
+        };
+        ```
 
-```javascript
-var multi_select_block = {
-    type: 'survey-multi-select',
-    questions: [
-      {
-        prompt: "Which of these colors do you like?", 
-        options: ["Red", "Yellow", "Green", "Blue", "Black"], 
-        horizontal: true,
-        required: true,
-        name: 'Colors'
-      }, 
-      {
-        prompt: "Which of these foods do you like?", 
-        options: ["Apples", "Bananas", "Carrots", "Donuts", "Eggplant"], 
-        horizontal: true,
-        required: true,
-        name: 'Foods'
-      }
-    ], 
-    randomize_question_order: true
-};
-```
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-multi-select-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-multi-select-demo1.html">Open demo in new tab</a>

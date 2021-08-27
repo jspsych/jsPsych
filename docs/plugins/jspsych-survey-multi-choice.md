@@ -26,23 +26,62 @@ question_order | array | An array with the order of questions. For example `[2,0
 
 ## Examples
 
-```javascript
-var page_1_options = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
-var page_2_options = ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neutral", "Somewhat Agree", "Agree", "Strongly Agree"];
+???+ example "Vertical Question Alignment"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'survey-multi-choice',
+          questions: [
+            {
+              prompt: "Which of the following do you like the most?", 
+              name: 'VegetablesLike', 
+              options: ['Tomato', 'Cucumber', 'Eggplant', 'Corn', 'Peas'], 
+              required: true
+            }, 
+            {
+              prompt: "Which of the following do you like the least?", 
+              name: 'FruitDislike', 
+              options: ['Apple', 'Banana', 'Orange', 'Grape', 'Strawberry'], 
+              required: false
+            }
+          ],
+        };
+        ```
 
-var multi_choice_block = {
-  type: 'survey-multi-choice',
-  questions: [
-    {prompt: "I like vegetables", name: 'Vegetables', options: page_1_options, required:true}, 
-    {prompt: "I like fruit", name: 'Fruit', options: page_2_options, required: false}
-  ],
-};
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-multi-choice-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-var multi_choice_block_horizontal = {
-  type: 'survey-multi-choice',
-  questions: [
-    {prompt: "I like vegetables", options: page_1_options, required: true, horizontal: true,}, 
-    {prompt: "I like fruit", options: page_2_options, required: false, horizontal: true}
-  ],
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-multi-choice-demo1.html">Open demo in new tab</a>
+
+???+ example "Horizontal Question Alignment"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'survey-multi-choice',
+          questions: [
+            {
+              prompt: "Which of the following do you like the most?", 
+              name: 'VegetablesLike', 
+              options: ['Tomato', 'Cucumber', 'Eggplant', 'Corn', 'Peas'], 
+              required: true,
+              horizontal: true
+            }, 
+            {
+              prompt: "Which of the following do you like the least?", 
+              name: 'FruitDislike', 
+              options: ['Apple', 'Banana', 'Orange', 'Grape', 'Strawberry'], 
+              required: false,
+              horizontal: true
+            }
+          ],
+        };
+        ```
+
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-multi-choice-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-multi-choice-demo2.html">Open demo in new tab</a>
