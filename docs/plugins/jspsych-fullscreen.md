@@ -2,7 +2,8 @@
 
 The fullscreen plugin allows the experiment to enter or exit fullscreen mode. For security reasons, all browsers require that entry into fullscreen mode is triggered by a user action. To enter fullscreen mode, this plugin has the user click a button. Exiting fullscreen mode can be done without user input.
 
-Safari does not support keyboard input when the browser is in fullscreen mode. Therefore, the function will not launch fullscreen mode on Safari. The experiment will ignore any trials using the fullscreen plugin in Safari.
+!!! warning
+    Safari does not support keyboard input when the browser is in fullscreen mode. Therefore, the function will not launch fullscreen mode on Safari. The experiment will ignore any trials using the fullscreen plugin in Safari.
 
 ## Parameters
 
@@ -42,7 +43,8 @@ success | boolean | true if the browser supports fullscreen mode (i.e., is not S
 
         var exit_fullscreen = {
           type: 'fullscreen',
-          fullscreen_mode: false
+          fullscreen_mode: false,
+          delay_after: 0
         }
 
         var trial_after_fullscreen = {
