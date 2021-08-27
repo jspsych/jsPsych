@@ -26,25 +26,38 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
 
 ## Examples
 
-### Basic example
+???+ example "Fill in the blanks"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'survey-html-form',
+          preamble: '<p>How are you feeling <b>right now?</b></p>',
+          html: '<p> I am feeling <input name="first" type="text" />, <input name="second" type="text" />, and <input name="third" type="text" />.</p>'
+        };
+        ```
 
-```javascript
-var form_trial = {
-  type: 'survey-html-form',
-  preamble: '<p> How are you feeling <b>right now?</b> </p>',
-  html: '<p> I am feeling <input name="first" type="text" />, <input name="second" type="text" />, and <input name="third" type="text" />.</p>'
-};
-```
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-survey-html-form-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-### Example using the autofocus parameter
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-survey-html-form-demo1.html">Open demo in new tab</a>
 
-In this example, the browser will focus on the element with the ID `test-resp-box` when the trial loads. For `<input type="text">` elements, this means that the cursor will appear inside the text box.
+???+ example "Using the autofocus parameter"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'survey-html-form',
+          preamble: '<p>What is your favorite bird?</p>',
+          html: '<p>My favorite bird is <input type="text" id="test-resp-box" name="response" size="10" /></p>',
+          autofocus: 'test-resp-box'
+        };
+        ```
+        In this example, the browser will focus on the element with the ID `test-resp-box` when the trial loads. For `<input type="text">` elements, this means that the cursor will appear inside the text box.
 
-```javascript
-var autofocus_trial = {
-  type: 'survey-html-form',
-  preamble: '<p> What is your favorite bird?</p>',
-  html: '<p>My favorite bird is <input type="text" id="test-resp-box" name="response" size="10" /></p>',
-  autofocus: 'test-resp-box'
-};
-```
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-survey-html-form-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-survey-html-form-demo2.html">Open demo in new tab</a>
