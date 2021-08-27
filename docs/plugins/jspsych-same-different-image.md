@@ -1,6 +1,6 @@
-# jspsych-same-different plugin
+# jspsych-same-different-image plugin
 
-The same-different plugin displays two stimuli sequentially. Stimuli are image objects. The subject responds using the keyboard, and indicates whether the stimuli were the same or different. Same does not necessarily mean identical; a category judgment could be made, for example.
+The same-different-image plugin displays two stimuli sequentially. Stimuli are images. The subject responds using the keyboard, and indicates whether the stimuli were the same or different. Same does not necessarily mean identical; a category judgment could be made, for example.
 
 ## Parameters
 
@@ -39,28 +39,27 @@ Additionally, if `first_stim_duration` is  null, then the following data is also
 
 ## Examples
 
-#### Presenting two different emotional expressions
+???+ example "Identifying emotional expressions"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'same-different-image',
+          stimuli: [
+            'img/happy_face_1.jpg', 
+            'img/sad_face_3.jpg'
+          ],
+          prompt: `<p>Press s if the faces had the same emotional expression.</p>
+            <p>Press d if the faces had different emotional expressions.</p>`,
+          same_key: 's',
+          different_key: 'd',
+          first_stim_duration: 800,
+          answer: 'different'
+        }
+        ```
 
-```javascript
-var block = {
-  type: 'same-different-image',
-  stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
-  prompt: "<p>Press s if the faces had the same emotional expression. Press d if the faces had different emotional expressions.</p>",
-  same_key: 's',
-  different_key: 'd',
-  answer: 'different'
-}
-```
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-same-different-image-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-#### Presenting the same emotional expression
-
-```javascript
-var block = {
-  type: 'same-different-image',
-  stimuli: ['img/happy_face_1.jpg', 'img/happy_face_3.jpg'],
-  prompt: "<p>Press s if the faces had the same emotional expression. Press d if the faces had different emotional expressions.</p>",
-  same_key: 's',
-  different_key: 'd',
-  answer: 'same'
-}
-```
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-same-different-image-demo1.html">Open demo in new tab</a>

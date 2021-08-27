@@ -39,15 +39,27 @@ Additionally, if `first_stim_duration` is  null, then the following data is also
 
 ## Examples
 
-#### Basic example
+???+ example "Two text choices"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'same-different-html',
+          stimuli: [
+            '<p style="font-size:30px;">Climbing</p>', 
+            '<p style="font-size:30px;">Walking</p>'
+          ],
+          prompt: `<p>Press 's' if the activities require the same amount of physical exertion.</p>
+            <p>Press 'd' if the activities require different amount of physical exertion.</p>`,
+          same_key: 's',
+          different_key: 'd',
+          first_stim_duration: 800,
+          answer: 'different'
+        }
+        ```
 
-```javascript
-  var trial = {
-    type: 'same-different-html',
-    stimuli: ['<p>Climbing</p>', '<p>Walking</p>'],
-    prompt: "<p>Press 's' if the texts imply the same amount of physical exertion. Press 'd' if the texts imply different amount of physical exertion.</p>",
-    same_key: 's',
-    different_key: 'd',
-    answer: 'different'
-  }
-```
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../demos/jspsych-same-different-html-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-same-different-html-demo1.html">Open demo in new tab</a>
