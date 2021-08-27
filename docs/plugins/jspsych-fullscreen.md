@@ -56,7 +56,7 @@ success | boolean | true if the browser supports fullscreen mode (i.e., is not S
 
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="../demos/jspsych-fullscreen-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="/demos/jspsych-fullscreen-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-fullscreen-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-fullscreen-demo1.html">Open demo in new tab</a>

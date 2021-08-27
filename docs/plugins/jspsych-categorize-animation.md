@@ -52,10 +52,10 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
         ```
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="../demos/jspsych-categorize-animation-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+            <iframe src="/demos/jspsych-categorize-animation-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-categorize-animation-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-categorize-animation-demo1.html">Open demo in new tab</a>
 
 ???+ example "Giving feedback with `%ANS%` string"
     === "Code"
@@ -80,7 +80,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
         ```
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="../demos/jspsych-categorize-animation-demo2.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+            <iframe src="/demos/jspsych-categorize-animation-demo2.html" width="90%;" height="600px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-categorize-animation-demo2.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-categorize-animation-demo2.html">Open demo in new tab</a>

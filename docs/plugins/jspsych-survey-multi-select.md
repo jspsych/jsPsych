@@ -54,7 +54,7 @@ question_order | array | An array with the order of questions. For example `[2,0
 
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="../demos/jspsych-survey-multi-select-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="/demos/jspsych-survey-multi-select-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-survey-multi-select-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-survey-multi-select-demo1.html">Open demo in new tab</a>

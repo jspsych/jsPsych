@@ -49,10 +49,10 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 	=== "Demo"
 		<div style="text-align:center;">
-			<iframe src="../demos/jspsych-audio-button-response-demo-1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+			<iframe src="/demos/jspsych-audio-button-response-demo-1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
 		</div>
 
-	<a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-audio-button-response-demo-1.html">Open demo in new tab</a>
+	<a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-audio-button-response-demo-1.html">Open demo in new tab</a>
 
 ???+ example "Using custom button HTML to use images as buttons"
 	=== "Code"
@@ -68,7 +68,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 	=== "Demo"
 		<div style="text-align:center;">
-			<iframe src="../demos/jspsych-audio-button-response-demo-2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+			<iframe src="/demos/jspsych-audio-button-response-demo-2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
 		</div>
 
-	<a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-audio-button-response-demo-2.html">Open demo in new tab</a>
+	<a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-audio-button-response-demo-2.html">Open demo in new tab</a>

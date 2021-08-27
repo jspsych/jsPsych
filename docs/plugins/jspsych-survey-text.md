@@ -39,10 +39,10 @@ question_order | array | An array with the order of questions. For example `[2,0
     
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="../demos/jspsych-survey-text-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="/demos/jspsych-survey-text-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-survey-text-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-survey-text-demo1.html">Open demo in new tab</a>
 
 ???+ example "Multiple questions, with an optional placeholder and a required question"
     === "Code"
@@ -58,10 +58,10 @@ question_order | array | An array with the order of questions. For example `[2,0
     
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="../demos/jspsych-survey-text-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="/demos/jspsych-survey-text-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-survey-text-demo2.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-survey-text-demo2.html">Open demo in new tab</a>
 
 ???+ example "Naming questions to improve readability of the stored data"
     === "Code"
@@ -77,10 +77,10 @@ question_order | array | An array with the order of questions. For example `[2,0
     
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="../demos/jspsych-survey-text-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="/demos/jspsych-survey-text-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-survey-text-demo3.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-survey-text-demo3.html">Open demo in new tab</a>
 
     
 ???+ example "Using the preamble and a longer textbox response"
@@ -99,8 +99,8 @@ question_order | array | An array with the order of questions. For example `[2,0
     
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="../demos/jspsych-survey-text-demo4.html" width="90%;" height="800px;" frameBorder="0"></iframe>
+          <iframe src="/demos/jspsych-survey-text-demo4.html" width="90%;" height="800px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-survey-text-demo4.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-survey-text-demo4.html">Open demo in new tab</a>
 
