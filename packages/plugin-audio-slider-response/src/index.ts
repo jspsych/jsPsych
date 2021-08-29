@@ -142,7 +142,7 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
         console.error(err);
       });
 
-    function setupTrial() {
+    const setupTrial = () => {
       // set up end event if trial needs it
       if (trial.trial_ends_after_audio) {
         audio.addEventListener("ended", end_trial);
@@ -280,7 +280,7 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
           end_trial();
         }, trial.trial_duration);
       }
-    }
+    };
 
     // function to enable slider after audio ends
     function enable_slider() {
@@ -292,7 +292,7 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
       }
     }
 
-    function end_trial() {
+    const end_trial = () => {
       // kill any remaining setTimeout handlers
       this.jsPsych.pluginAPI.clearAllTimeouts();
 
@@ -319,7 +319,7 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
 
       // next trial
       this.jsPsych.finishTrial(trialdata);
-    }
+    };
   }
 }
 

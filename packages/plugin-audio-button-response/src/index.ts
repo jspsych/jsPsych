@@ -121,7 +121,7 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
         console.error(err);
       });
 
-    function setupTrial() {
+    const setupTrial = () => {
       // set up end event if trial needs it
       if (trial.trial_ends_after_audio) {
         audio.addEventListener("ended", end_trial);
@@ -196,7 +196,7 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
           end_trial();
         }, trial.trial_duration);
       }
-    }
+    };
 
     // function to handle responses by the subject
     function after_response(choice) {
@@ -219,7 +219,7 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
     }
 
     // function to end trial when it is time
-    function end_trial() {
+    const end_trial = () => {
       // kill any remaining setTimeout handlers
       this.jsPsych.pluginAPI.clearAllTimeouts();
 
@@ -246,7 +246,7 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     function button_response(e) {
       var choice = e.currentTarget.getAttribute("data-choice"); // don't use dataset for jsdom compatibility

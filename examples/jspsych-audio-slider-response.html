@@ -4,16 +4,18 @@
   <script src="../packages/jspsych/dist/index.browser.js"></script>
   <script src="../packages/plugin-audio-slider-response/dist/index.browser.js"></script>
   <script src="../packages/plugin-html-button-response/dist/index.browser.js"></script>
-  <!-- <script src="../packages/plugin-preload/dist/index.browser.js"></script> -->
+  <script src="../packages/plugin-preload/dist/index.browser.js"></script>
   <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
 </head>
 <body></body>
 <script>
 
-  // var preload = {
-  //   type: jsPsychPreload,
-  //   auto_preload: true
-  // }
+  var jsPsych = initJsPsych();
+
+  var preload = {
+    type: jsPsychPreload,
+    auto_preload: true
+  };
 
   var pre_audio = {
     type: jsPsychHtmlButtonResponse,
@@ -34,7 +36,7 @@
   var trial_2 = {
     type: jsPsychAudioSliderResponse,
     stimulus: 'sound/speech_red.mp3',
-    labels: ['Hate it', 'It&quot;s OK', 'Love it'],
+    labels: ['Hate it', 'It&#39;s OK', 'Love it'],
     slider_width: 500,
     prompt: '<p>How much do you like this color?</p><p>Slider movement is required, so you must interact with (click) the slider before you can continue.</p>',
     require_movement: true
@@ -49,7 +51,7 @@
     response_allowed_while_playing: false
   }
 
-  jsPsych.run([pre_audio, trial_1, trial_2, trial_3]);  // TO DO: default_iti: 250, add preload trial, on_finish: display data
+  jsPsych.run([preload, pre_audio, trial_1, trial_2, trial_3]);  // TO DO: default_iti: 250, on_finish: display data
 
 </script>
 </html>

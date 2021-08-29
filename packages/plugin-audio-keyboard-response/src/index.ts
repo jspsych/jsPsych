@@ -98,7 +98,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         console.error(err);
       });
 
-    function setupTrial() {
+    const setupTrial = () => {
       // set up end event if trial needs it
       if (trial.trial_ends_after_audio) {
         audio.addEventListener("ended", end_trial);
@@ -130,10 +130,10 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
           end_trial();
         }, trial.trial_duration);
       }
-    }
+    };
 
     // function to end trial when it is time
-    function end_trial() {
+    const end_trial = () => {
       // kill any remaining setTimeout handlers
       this.jsPsych.pluginAPI.clearAllTimeouts();
 
@@ -163,7 +163,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
-    }
+    };
 
     // function to handle responses by the subject
     function after_response(info) {
@@ -177,7 +177,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       }
     }
 
-    function setup_keyboard_listener() {
+    const setup_keyboard_listener = () => {
       // start the response listener
       if (context !== null) {
         this.jsPsych.pluginAPI.getKeyboardResponse({
@@ -198,7 +198,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
           allow_held_key: false,
         });
       }
-    }
+    };
   }
 }
 

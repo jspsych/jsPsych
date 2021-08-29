@@ -4,16 +4,18 @@
   <script src="../packages/jspsych/dist/index.browser.js"></script>
   <script src="../packages/plugin-audio-keyboard-response/dist/index.browser.js"></script>
   <script src="../packages/plugin-html-button-response/dist/index.browser.js"></script>
-  <!-- <script src="../packages/plugin-preload/dist/index.browser.js"></script> -->
+  <script src="../packages/plugin-preload/dist/index.browser.js"></script>
   <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
 </head>
 <body></body>
 <script>
 
-  // var preload = {
-  //   type: jsPsychPreload,
-  //   auto_preload: true
-  // }
+  var jsPsych = initJsPsych();
+
+  var preload = {
+    type: jsPsychPreload,
+    auto_preload: true
+  };
 
   var pre_audio = {
     type: jsPsychHtmlButtonResponse,
@@ -56,7 +58,7 @@
     response_allowed_while_playing: false
   }
 
-  jsPsych.run([pre_audio, trial_1, trial_2, trial_3, trial_4]);  // TO DO: add preload trial, default_iti: 250, on_finish: jsPsych.data.displayData()
+  jsPsych.run([preload, pre_audio, trial_1, trial_2, trial_3, trial_4]);  // TO DO: default_iti: 250, on_finish: jsPsych.data.displayData()
   
 </script>
 </html>

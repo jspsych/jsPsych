@@ -185,6 +185,19 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
 
     display_element.innerHTML = html;
 
+    const update_loading_progress_bar = () => {
+      loaded++;
+      if (trial.show_progress_bar) {
+        var percent_loaded = (loaded / total_n) * 100;
+        var preload_progress_bar = display_element.querySelector<HTMLElement>(
+          "#jspsych-loading-progress-bar"
+        );
+        if (preload_progress_bar !== null) {
+          preload_progress_bar.style.width = percent_loaded + "%";
+        }
+      }
+    };
+
     // called if all files load successfully
     const on_success = () => {
       if (typeof timeout !== "undefined" && timeout === false) {
@@ -282,18 +295,6 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
     }
 
     // helper functions and callbacks
-    function update_loading_progress_bar() {
-      loaded++;
-      if (trial.show_progress_bar) {
-        var percent_loaded = (loaded / total_n) * 100;
-        var preload_progress_bar = display_element.querySelector<HTMLElement>(
-          "#jspsych-loading-progress-bar"
-        );
-        if (preload_progress_bar !== null) {
-          preload_progress_bar.style.width = percent_loaded + "%";
-        }
-      }
-    }
 
     // called when a single file loading fails
     function file_loading_error(e) {
