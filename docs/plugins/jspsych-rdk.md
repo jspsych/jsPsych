@@ -74,46 +74,60 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ## Example
 
-#### Setting the correct_choice parameter by linking it to the coherent_direction parameter:
+???+ example "Setting the correct_choice parameter by linking it to the coherent_direction parameter"
+    === "Code"
+        ```javascript
+        var trial = {
+            type: "rdk", 
+            coherent_direction: 0,
+            correct_choice: "p"
+        };
+        ```    
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../demos/jspsych-rdk-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var trial_right = {
-	coherent_direction: 0,
-	correct_choice: "p"
-};
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-rdk-demo1.html">Open demo in new tab</a>
 
-var trial_left = {
-	coherent_direction: 180,
-	correct_choice: "q"
-};
-```
+???+ example "Displaying a trial with 2 choices and 1 correct choice"
+    === "Code"
+        ```javascript
+        var trial = {
+            type: "rdk", 
+            post_trial_gap: 0,
+            number_of_dots: 200,
+            RDK_type: 3,
+            choices: ["a", "l"],
+            correct_choice: "a",
+            coherent_direction: 180,
+            trial_duration: 1000
+        };
+        ```    
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../demos/jspsych-rdk-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-#### Displaying a trial with 2 choices and 1 correct choice
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-rdk-demo2.html">Open demo in new tab</a>
 
-```javascript
-var test_block = {
-	type: "rdk", 
-	post_trial_gap: 0,
-	number_of_dots: 200,
-	RDK_type: 3,
-	choices: ["a", "l"],
-	correct_choice: "a",
-	coherent_direction: 180,
-	trial_duration: 1000
-};
-```
+???+ example "Displaying a trial with multiple apertures"
+    === "Code"
+        ```javascript
+          var trial = {
+            type: "rdk", 
+            number_of_apertures: 3, //This needs to be set if more than one aperture
+            trial_duration: 10000,
+            correct_choice: "a",
+            RDK_type: 3, //Applied to all apertures if only one value
+            aperture_width: 200, //Applied to all apertures if only one value
+            number_of_dots: [50, 200, 100], //Different parameter for each aperture. Array length must equal number_of_apertures
+            aperture_center_x: [(window.innerWidth/2)-300,window.innerWidth/2,(window.innerWidth/2)+300] //Separate the apertures on the screen (window.innerWidth/2 is the middle of the screen)
+        };
+        ```    
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../demos/jspsych-rdk-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-#### Displaying a trial with multiple apertures
-
-```javascript
-var test_block = {
-    type: "rdk", 
-    number_of_apertures: 3, //This needs to be set if more than one aperture
-    trial_duration: 10000,
-    RDK_type: 3, //Applied to all apertures if only one value
-    aperture_width: 200, //Applied to all apertures if only one value
-    number_of_dots: [50, 200, 100], //Different parameter for each aperture. Array length must equal number_of_apertures
-    aperture_center_x: [(window.innerWidth/2)-300,window.innerWidth/2,(window.innerWidth/2)+300] //Separate the apertures on the screen (window.innerWidth/2 is the middle of the screen)
-};
-```
-
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-rdk-demo3.html">Open demo in new tab</a>
