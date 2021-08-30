@@ -2,8 +2,10 @@
 
 This plugin displays a Random Dot Kinematogram (RDK) and allows the subject to report the primary direction of motion by pressing a key on the keyboard. The stimulus can be displayed until a keyboard response is given or until a certain duration of time has passed. The RDK is fully customizable (see documentation below) and can display multiple apertures at the same time, each with its own parameters.
 
-We would appreciate it if you cited this paper when you use the RDK: 
-<b>Rajananda, S., Lau, H. & Odegaard, B., (2018). A Random-Dot Kinematogram for Web-Based Vision Research. Journal of Open Research Software. 6(1), p.6. DOI: [http://doi.org/10.5334/jors.194]</b>
+!!! citation
+    We would appreciate it if you cited this paper when you use the RDK plugin
+
+    Rajananda, S., Lau, H. & Odegaard, B., (2018). A Random-Dot Kinematogram for Web-Based Vision Research. *Journal of Open Research Software. 6*(1), p.6. doi:[10.5334/jors.194](http://doi.org/10.5334/jors.194)
 
 For optimal performance, fullscreen mode should be manually triggered by the user (e.g. F11 key in Chrome for Windows). Usage of the default Fullscreen trigger from the jsPsych API library with this plugin might result in the stimuli being displayed incorrectly.
 
@@ -45,16 +47,16 @@ In addition to the [parameters available in all plugins](/overview/plugins#param
 | border_color             | string           | "black"              | The color of the border.<br>             |
 
 ### RDK type parameter
-** See Fig. 1 in Scase, Braddick, and Raymond (1996) for a visual depiction of these different signal selection rules and noise types.
+*See Fig. 1 in [Scase, Braddick, and Raymond (1996)](https://doi.org/10.1016/0042-6989(95)00325-8) for a visual depiction of these different signal selection rules and noise types.*
 
 #### Signal Selection rule:
--**Same**: Each dot is designated to be either a coherent dot (signal) or incoherent dot (noise) and will remain so throughout all frames in the display. Coherent dots will always move in the direction of coherent motion in all frames.
--**Different**: Each dot can be either a coherent dot (signal) or incoherent dot (noise) and will be designated randomly (weighted based on the coherence level) at each frame. Only the dots that are designated to be coherent dots will move in the direction of coherent motion, but only in that frame. In the next frame, each dot will be designated randomly again on whether it is a coherent or incoherent dot.
+- **Same**: Each dot is designated to be either a coherent dot (signal) or incoherent dot (noise) and will remain so throughout all frames in the display. Coherent dots will always move in the direction of coherent motion in all frames.
+- **Different**: Each dot can be either a coherent dot (signal) or incoherent dot (noise) and will be designated randomly (weighted based on the coherence level) at each frame. Only the dots that are designated to be coherent dots will move in the direction of coherent motion, but only in that frame. In the next frame, each dot will be designated randomly again on whether it is a coherent or incoherent dot.
 
 #### Noise Type:
--**Random position**: The incoherent dots appear in a random location in the aperture in each frame.<br/>
--**Random walk**: The incoherent dots will move in a random direction (designated randomly in each frame) in each frame.<br/>
--**Random direction**: Each incoherent dot has its own alternative direction of motion (designated randomly at the beginning of the trial), and moves in that direction in each frame.<br/>
+- **Random position**: The incoherent dots appear in a random location in the aperture in each frame.<br/>
+- **Random walk**: The incoherent dots will move in a random direction (designated randomly in each frame) in each frame.<br/>
+- **Random direction**: Each incoherent dot has its own alternative direction of motion (designated randomly at the beginning of the trial), and moves in that direction in each frame.<br/>
 
 
 ## Data Generated
@@ -84,9 +86,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
         };
         ```    
     === "Demo"
-        <div style="text-align:center;">
-            <iframe src="/demos/jspsych-rdk-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
-        </div>
+        This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo1.html">open the demo in a new tab</a>
 
     <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo1.html">Open demo in new tab</a>
 
@@ -105,9 +105,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
         };
         ```    
     === "Demo"
-        <div style="text-align:center;">
-            <iframe src="/demos/jspsych-rdk-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
-        </div>
+        This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo2.html">open the demo in a new tab</a>
 
     <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo2.html">Open demo in new tab</a>
 
@@ -126,8 +124,6 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
         };
         ```    
     === "Demo"
-        <div style="text-align:center;">
-            <iframe src="/demos/jspsych-rdk-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
-        </div>
+        This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo3.html">open the demo in a new tab</a>
 
     <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo3.html">Open demo in new tab</a>
