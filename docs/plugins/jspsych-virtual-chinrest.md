@@ -13,7 +13,11 @@ The plugin works in two phases.
 
 ## Dependency
 
-This plugin requires the SVG.js library, available at [https://svgjs.com](https://svgjs.com/docs/3.0/). You must include the library in the `<head>` section of your experiment page.
+This plugin requires the SVG.js library, available at [https://svgjs.com](https://svgjs.com/docs/3.0/) or via the CDN link below. You must include the library in the `<head>` section of your experiment page.
+
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.3/svg.min.js"></script>
+```
 
 ## Parameters
 
@@ -59,47 +63,64 @@ _Note: The deg data are **only** returned if viewing distance is estimated with 
 
 ## Example
 
-```javascript
-// two blindspot measurements
-// measure px2mm, viewing distance and px2deg
-// do not resize the jsPsych content after this trial
-// note: pixels_per_unit will be ignored since there is no resizing (resize_units: "none")
-let no_resize = {
-  type: "virtual-chinrest",
-  blindspot_reps: 3,
-  resize_units: "none",
-  pixels_per_unit: 50,
-};
+???+ example "Measure distance to screen and pixel ratio; no resizing"
+    === "Code"
+        ```javascript
+        var trial = {
+            type: 'virtual-chinrest',
+            blindspot_reps: 3,
+            resize_units: "none"
+        };
+        ```
+    === "Demo"
+        This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-virtual-chinrest-demo1.html">open the demo in a new tab</a>
 
-// no blindspot task
-// resize to cm (50 pixels per unit)
-// measure px2mm, but not viewing distance and px2deg (because blindspot_reps is 0)
-// note: you may still choose to estimate viewing distance even if resizing to cm or inches
-let cm_resize = {
-  type: "virtual-chinrest",
-  blindspot_reps: 0,
-  resize_units: "cm",
-  pixels_per_unit: 50,
-};
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-virtual-chinrest-demo1.html">Open demo in new tab</a>
 
-// three blindspot measurements
-// measure px2mm, viewing distance and px2deg
-// resize to degrees of visual angle (50 pixels per unit)
-// don't report viewing distance to subject
-let deg_resize = {
-  type: "virtual-chinrest",
-  blindspot_reps: 3,
-  resize_units: "deg",
-  pixels_per_unit: 50,
-  viewing_distance_report: "none",
-};
+???+ example "Resizing based on centimeters per pixel"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'virtual-chinrest',
+          blindspot_reps: 3,
+          resize_units: "cm",
+          pixels_per_unit: 50
+        };
 
-// resizing to degrees with no blindspot measurment is not possible
-// this trial will throw an error
-let error_trial = {
-  type: "virtual-chinrest",
-  blindspot_reps: 0,
-  resize_units: "deg",
-  pixels_per_unit: 50,
-};
-```
+        var resized_stimulus = {
+          type: 'html-button-response',
+          stimulus: `
+            <p>If the measurements were done correctly, the square below should be 10 cm x 10 cm.</p>
+            <div style="background-color: black; width: 500px; height: 500px; margin: 20px auto;"></div>
+          `,
+          choices: ['Continue']
+        }
+        ```
+    === "Demo"
+        This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-virtual-chinrest-demo2.html">open the demo in a new tab</a>
+
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-virtual-chinrest-demo2.html">Open demo in new tab</a>
+
+???+ example "Resizing based on degrees of visual angle per pixel"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'virtual-chinrest',
+          blindspot_reps: 3,
+          resize_units: "deg",
+          pixels_per_unit: 50
+        };
+
+        var resized_stimulus = {
+          type: 'html-button-response',
+          stimulus: `
+            <p>If the measurements were done correctly, the square below should take up about 10 degrees of visual angle.</p>
+            <div style="background-color: black; width: 500px; height: 500px; margin: 20px auto;"></div>
+          `,
+          choices: ['Continue']
+        }
+        ```
+    === "Demo"
+        This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-virtual-chinrest-demo3.html">open the demo in a new tab</a>
+
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-virtual-chinrest-demo3.html">Open demo in new tab</a>
