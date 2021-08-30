@@ -29,20 +29,26 @@ rt | numeric | The length of time, in milliseconds, that the trial lasted.
 
 ## Examples
 
-#### Make a block larger and smaller
+???+ example "Make a block larger and smaller"
+    === "Code"
+        ```javascript
+        var sample_function = function(param){
+            var size = 50 + Math.floor(param*250);
+            var html = '<div style="display: block; margin: auto; height: 300px;">'+
+            '<div style="display: block; margin: auto; background-color: #000000; '+
+            'width: '+size+'px; height: '+size+'px;"></div></div>';
+            return html;
+        }
 
-```javascript
-var sample_function = function(param){
-	var size = 50 + Math.floor(param*250);
-	var html = '<div style="display: block; margin: auto; height: 300px;">'+
-	'<div style="display: block; margin: auto; background-color: #000000; '+
-	'width: '+size+'px; height: '+size+'px;"></div></div>';
-	return html;
-}
+        var trial = {
+            type: 'reconstruction',
+            stim_function: sample_function,
+            starting_value: 0.25
+        }
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../demos/jspsych-reconstruction-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-var trial = {
-	type: 'reconstruction',
-	stim_function: sample_function,
-	starting_value: 0.25
-}
-```
+    <a target="_blank" rel="noopener noreferrer" href="../demos/jspsych-reconstruction-demo1.html">Open demo in new tab</a>
