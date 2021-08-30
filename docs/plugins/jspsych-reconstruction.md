@@ -48,7 +48,7 @@ rt | numeric | The length of time, in milliseconds, that the trial lasted.
         ```
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="./demos/jspsych-reconstruction-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+            <iframe src="/demos/jspsych-reconstruction-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="./demos/jspsych-reconstruction-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-reconstruction-demo1.html">Open demo in new tab</a>
