@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-image-button-response.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css"
+    />
+    <style>
+      .jspsych-btn {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body></body>
+  <script>
+
+      var start = {
+        type: 'html-button-response',
+        stimulus: '',
+        choices: ['Run demo']
+      };
+
+      var show_data = {
+        type: 'html-button-response',
+        stimulus: function() {
+          var trial_data = jsPsych.data.get().filter({trial_type: 'preload'}).last(2).values();
+          var trial_json = JSON.stringify(trial_data, null, 2);
+          return `<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>
+            <pre style="margin-top:0px;text-align:left;">${trial_json}</pre>`;
+        },
+        choices: ['Repeat demo']
+      };
+
+      
+
+      var trial_1 = {
+        type: 'image-button-response',
+        stimulus: 'img/happy_face_1.jpg',
+        choices: ['Next']
+      }
+
+      var trial_2 = {
+        type: 'image-button-response',
+        stimulus: 'img/happy_face_2.jpg',
+        choices: ['Next']
+      }
+
+      var trial_3 = {
+        type: 'image-button-response',
+        stimulus: 'img/happy_face_3.jpg',
+        choices: ['Next']
+      }
+
+      var block_1 = {
+        timeline: [trial_1, trial_2, trial_3]
+      }
+
+      var trial_4 = {
+        type: 'image-button-response',
+        stimulus: 'img/sad_face_1.jpg',
+        choices: ['Next']
+      }
+
+      var trial_5 = {
+        type: 'image-button-response',
+        stimulus: 'img/sad_face_2.jpg',
+        choices: ['Next']
+      }
+
+      var trial_6 = {
+        type: 'image-button-response',
+        stimulus: 'img/sad_face_3.jpg',
+        choices: ['Next']
+      }
+
+      var block_2 = {
+        timeline: [trial_4, trial_5, trial_6]
+      }
+
+      var preload_block_1 = {
+        type: 'preload',
+        trials: [block_1]
+      }
+
+      var preload_block_2 = {
+        type: 'preload',
+        trials: [block_2]
+      }
+      
+      var trial_loop = {
+        timeline: [preload_block_1, block_1, preload_block_2, block_2, show_data],
+        loop_function: function() {
+          return true;
+        }
+      };
+
+      if (typeof jsPsych !== "undefined") {
+        jsPsych.init({
+          timeline: [start, trial_loop]
+        });
+      } else {
+        document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+      }
+  </script>
+</html>
