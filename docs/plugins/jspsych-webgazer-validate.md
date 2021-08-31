@@ -32,13 +32,4 @@ validation_points | array | The list of validation points, in the order that the
 
 ## Example
 
-#### 4 point validation using center offset mode
-
-```javascript
-var validation = {
-  type: 'webgazer-validate',
-  validation_points: [[-200,-200], [-200,200], [200,-200], [200,200]],
-  validation_point_coordinates: 'center-offset-pixels',
-  show_validation_data: true
-}
-```
+Because the eye tracking plugins need to be used in conjunction with each other, please see the [example on the eye tracking overview page](/overview/eye-tracking/#example) for an integrated example. 

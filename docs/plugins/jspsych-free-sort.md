@@ -40,17 +40,23 @@ rt | numeric | The response time in milliseconds for the participant to finish a
 
 ## Examples
 
-#### Basic example
+???+ example "Basic example"
+    === "Code"
+        ```javascript
+        var sort_trial = {
+            type: 'free-sort',
+            stimuli: sorting_stimuli,
+            stim_width: 80,
+            stim_height: 60,
+            sort_area_width: 500,
+            sort_area_height: 500,
+            prompt: "<p>Click and drag the images below to sort them so that similar items are close together.</p>"
+        };
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../plugins/demos/jspsych-free-sort-demo1.html" width="90%;" height="700px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var sorting_stimuli = [];
-for (var i = 1; i <= 12; i++) {
-    sorting_stimuli.push("img/cell_img_" + i + ".jpg");
-}
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-free-sort-demo1.html">Open demo in new tab</a>
 
-var sort_trial = {
-    type: 'free-sort',
-    stimuli: sorting_stimuli,
-    prompt: "<p>Click and drag the images below to sort them so that similar items are close together.</p>"
-};
-```

@@ -41,88 +41,153 @@ In addition to the [default data collected by all plugins](/overview/plugins/#da
 
 ## Examples
 
-#### Loading files automatically based on the main timeline
+???+ example "Automatically preloading based on other trials"
+    === "Code"
+        ```javascript
+        var preload = {
+            type: 'preload',
+            auto_preload: true
+        }
 
-```javascript
-var preload = {
-	type: 'preload',
-	auto_preload: true // automatically load all files based on the main timeline
-};
+        var trial_1 = {
+            type: 'image-button-response',
+            stimulus: 'img/happy_face_1.jpg',
+            choices: ['Next']
+        }
 
-// define other trials to add to the timeline...
+        var trial_2 = {
+            type: 'image-button-response',
+            stimulus: 'img/happy_face_2.jpg',
+            choices: ['Next']
+        }
 
-jsPsych.init({
-    timeline: [preload, trial1, trial2, trial3]
-});
-```
+        var trial_3 = {
+            type: 'image-button-response',
+            stimulus: 'img/happy_face_3.jpg',
+            choices: ['Next']
+        }
+        ```
+        The `stimulus` parameter from the `image-button-response` trials will be automatically preloaded.
 
-#### Loading files manually
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="/demos/jspsych-preload-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var preload = {
-	type: 'preload',
-	images: ['file1.png']
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-preload-demo1.html">Open demo in new tab</a>
 
-#### Combining automatic and manual methods
+???+ example "Manually preloading an image"
+    === "Code"
+        ```javascript
+        var preload = {
+            type: 'preload',
+            images: ['img/sad_face_1.jpg']
+        }
 
-```javascript
-// automatically load stimuli from the main timeline,
-// and manually add any other stimuli files that can't be loaded automatically
-var preload = {
-	type: 'preload',
-	auto_preload: true,  
-    images: ['image1.png','image2.png']
-};
+        var trial_1 = {
+            type: 'html-button-response',
+            stimulus: `
+                <p>Study this face</p>
+                <img src="img/sad_face_1.jpg"></img>
+            `,
+            choices: ['Next']
+        }
+        ```
+        Because the image is embedded inside HTML from the `html-button-response` plugin, it will not be automatically preloaded. Instead we can preload manually.
 
-// define other trials to add to the timeline...
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="/demos/jspsych-preload-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-jsPsych.init({
-    timeline: [preload, trial1, trial2, trial3]
-});
-```
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-preload-demo2.html">Open demo in new tab</a>
 
-#### Loading files in batches
+???+ example "Loading files in batches"
+    === "Code"
+        ```javascript
+        var trial_1 = {
+            type: 'image-button-response',
+            stimulus: 'img/happy_face_1.jpg',
+            choices: ['Next']
+        }
 
-```javascript
-var block_1 = {
-    timeline: [...]
-}
+        var trial_2 = {
+            type: 'image-button-response',
+            stimulus: 'img/happy_face_2.jpg',
+            choices: ['Next']
+        }
 
-var block_2 = {
-    timeline: [...]
-}
+        var trial_3 = {
+            type: 'image-button-response',
+            stimulus: 'img/happy_face_3.jpg',
+            choices: ['Next']
+        }
 
-var preload_1 = {
-	type: 'preload',
-	trials: block_1 // automatically load block_1 stimuli
-};
+        var block_1 = {
+            timeline: [trial_1, trial_2, trial_3]
+        }
 
-var preload_2 = {
-	type: 'preload',
-	trials: block_2 // automatically load block_2 stimuli
-};
+        var trial_4 = {
+            type: 'image-button-response',
+            stimulus: 'img/sad_face_1.jpg',
+            choices: ['Next']
+        }
 
-jsPsych.init(
-    // add each preload trial to the timeline before the appropriate trial block
-    timeline: [preload_1, block_1, preload_2, block_2]
-)
-```
+        var trial_5 = {
+            type: 'image-button-response',
+            stimulus: 'img/sad_face_2.jpg',
+            choices: ['Next']
+        }
 
-#### Using the on_success and on_error functions
+        var trial_6 = {
+            type: 'image-button-response',
+            stimulus: 'img/sad_face_3.jpg',
+            choices: ['Next']
+        }
 
-```javascript
-var preload = {
-	type: 'preload',
-    audio: ['sound.mp3'],
-	on_success: function(file) {
-        console.log('File loaded: ',file);
-    },
-    on_error: function(file) {
-        console.log('Error loading file: ',file);
-    }
-};
-```
+        var block_2 = {
+            timeline: [trial_4, trial_5, trial_6]
+        }
 
-For more examples, see the jspsych-preload.html file in the jsPsych examples folder and the [Media Preloading](/overview/media-preloading) documentation page.
+        var preload_block_1 = {
+            type: 'preload',
+            trials: [block_1]
+        }
+
+        var preload_block_2 = {
+            type: 'preload',
+            trials: [block_2]
+        }
+
+        jsPsych.init({
+            timeline: [preload_block_1, block_1, preload_block_2, block_2]
+        })
+        ```
+        You can put trials using the `preload` plugin throughout your experiment to distribute when files are loaded. In the example above, there are two blocks of trials and the images for each are preloaded just before the corresponding block.
+
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="/demos/jspsych-preload-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-preload-demo3.html">Open demo in new tab</a>
+
+???+ example "Showing a detailed error message for debugging loading issues"
+    === "Code"
+        ```javascript
+        var preload = {
+            type: 'preload',
+            images: ['img/bad_file_path.png'],
+            show_detailed_errors: true
+        }
+        ```
+
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="/demos/jspsych-preload-demo4.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-preload-demo4.html">Open demo in new tab</a>
+
+
+For more examples, see the `jspsych-preload.html` file in the `/examples` folder of the release and the [Media Preloading](/overview/media-preloading) documentation page.

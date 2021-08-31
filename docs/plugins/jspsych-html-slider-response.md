@@ -35,11 +35,20 @@ slider_start | numeric | The starting value of the slider.
 
 ## Examples
 
-```javascript
-var trial = {
-	type: 'html-slider-response',
-	stimulus: '<p>Running</p>',
-	labels: ['healthy', 'unhealthy'],
-	prompt: "<p>How healthy/unhealthy is this activity?</p>"
-};
-```
+???+ example "Displaying question until subject move the slider"
+    === "Code"
+        ```javascript
+        var trial = {
+            type: 'html-slider-response',
+            stimulus: '<p>Running</p>',
+            require_movement: true,
+            labels: ['healthy', 'unhealthy'],
+            prompt: "<p>How healthy/unhealthy is this activity?</p>"
+        };
+        ```
+	=== "Demo"
+        <div style="text-align:center;">
+            <iframe src="../plugins/demos/jspsych-html-slider-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-html-slider-response-demo1.html">Open demo in new tab</a>

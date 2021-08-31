@@ -41,13 +41,40 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ## Examples
 
-#### A simple rating scale
+???+ example "A simple rating scale"
+	=== "Code"
+		```javascript
+		var trial = {
+			type: 'audio-slider-response',
+			stimulus: 'sound/speech_joke.mp3',
+			labels: ['Not Funny', 'Funny'],
+			prompt: '<p>How funny is the joke?</p>'
+		}
+		```
 
-```javascript
-var trial_1 = {
-	type: 'audio-slider-response',
-	stimulus: 'sound/speech_joke.mp3',
-	labels: ['Not Funny', 'Funny'],
-	prompt: '<p>How funny is the joke?</p>'
-}
-```
+	=== "Demo"
+		<div style="text-align:center;">
+			<iframe src="/demos/jspsych-audio-slider-response-demo-1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+		</div>
+
+	<a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-audio-slider-response-demo-1.html">Open demo in new tab</a>
+
+???+ example "No response allowed until audio finishes; subject must interact with slider to continue"
+	=== "Code"
+		```javascript
+		var trial = {
+			type: 'audio-slider-response',
+			stimulus: 'sound/speech_joke.mp3',
+			labels: ['Not Funny', 'Funny'],
+			prompt: '<p>How funny is the joke?</p>',
+			response_allowed_while_playing: false,
+			require_movement: true
+		}
+		```
+
+	=== "Demo"
+		<div style="text-align:center;">
+			<iframe src="/demos/jspsych-audio-slider-response-demo-2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+		</div>
+
+	<a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-audio-slider-response-demo-2.html">Open demo in new tab</a>
