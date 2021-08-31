@@ -1,52 +1,54 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="../jspsych.js"></script>
-  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
-  <script src="../plugins/jspsych-image-keyboard-response.js"></script>
-  <script src="../plugins/jspsych-preload.js"></script>
-  <link rel="stylesheet" href="../css/jspsych.css">
-</head>
-<body></body>
-<script>
-  var images = ["img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif", "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif", "img/9.gif", "img/10.gif"];
+  <head>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-image-keyboard-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-preload/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
 
-  var trials = [];
-  for (var i = 0; i < images.length; i++) {
-    trials.push({
-      stimulus: images[i]
-    });
-  }
-
-  var preload = {
-    type: 'preload',
-    auto_preload: true
-  }
-
-  var block = {
-    type: 'image-keyboard-response',
-    choices: ['y','n'],
-    stimulus_width: 300,
-    prompt: '<p>Press "y" to continue. Press "n" to end this node of the experiment.</p>',
-    on_finish: function(data) {
-      if (jsPsych.pluginAPI.compareKeys(data.response, "n")) {
-        jsPsych.endCurrentTimeline();
+    var jsPsych = initJsPsych({
+      on_finish: function () {
+        jsPsych.data.displayData();
       }
-    },
-    timeline: trials
-  }
+    });
 
-  var after_block = {
-    type: 'html-keyboard-response',
-    stimulus: '<p>The next node.</p>',
-  }
+    var images = ["img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif", "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif", "img/9.gif", "img/10.gif"];
 
-  jsPsych.init({
-    timeline: [preload, block, after_block],
-    on_finish: function() {
-      jsPsych.data.displayData();
+    var trials = [];
+    for (var i = 0; i < images.length; i++) {
+      trials.push({
+        stimulus: images[i]
+      });
     }
-  });
-</script>
 
+    var preload = {
+      type: jsPsychPreload,
+      auto_preload: true
+    };
+
+    var block = {
+      type: jsPsychImageKeyboardResponse,
+      choices: ['y','n'],
+      stimulus_width: 300,
+      prompt: '<p>Press "y" to continue. Press "n" to end this node of the experiment.</p>',
+      on_finish: function(data) {
+        if (jsPsych.pluginAPI.compareKeys(data.response, "n")) {
+          jsPsych.endCurrentTimeline();
+        }
+      },
+      timeline: trials
+    };
+
+    var after_block = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p>The next node.</p>',
+    };
+
+    jsPsych.run([preload, block, after_block]);
+
+  </script>
 </html>

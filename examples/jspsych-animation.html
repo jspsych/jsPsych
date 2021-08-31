@@ -9,7 +9,11 @@
 <body></body>
 <script>
 
-  var jsPsych = initJsPsych();
+  var jsPsych = initJsPsych({
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
 
   var preload_trial = {
     type: jsPsychPreload,

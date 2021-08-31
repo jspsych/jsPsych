@@ -1,64 +1,67 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css">
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body></body>
   <script>
 
-  var trial = {
-    type: 'html-keyboard-response',
-    stimulus: 'Hello. This is in a loop. Press "r" to repeat this trial, or "c" to continue.',
-    choices: ['r','c']
-  }
+    var jsPsych = initJsPsych({
+      default_iti: 200,
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
-  var loop_node = {
-    timeline: [trial],
-    loop_function: function(data){
-      var key_response = data.values()[0].response;
-      if(jsPsych.pluginAPI.compareKeys(key_response,'r')){
-        return true;
-      } else {
-        return false;
+    var trial = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: 'Hello. This is in a loop. Press "r" to repeat this trial, or "c" to continue.',
+      choices: ['r','c']
+    }
+
+    var loop_node = {
+      timeline: [trial],
+      loop_function: function(data){
+        var key_response = data.values()[0].response;
+        if(jsPsych.pluginAPI.compareKeys(key_response,'r')){
+          return true;
+        } else {
+          return false;
+        }
       }
     }
-  }
 
-  var pre_if_trial = {
-    type: 'html-keyboard-response',
-    stimulus: 'The next trial is in a conditional statement. Press "s" to skip it, or "v" to view it.',
-    choices: ['s','v']
-  }
+    var pre_if_trial = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: 'The next trial is in a conditional statement. Press "s" to skip it, or "v" to view it.',
+      choices: ['s','v']
+    }
 
-  var if_trial = {
-    type: 'html-keyboard-response',
-    stimulus: 'You chose to view the trial. Press any key to continue.'
-  }
+    var if_trial = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: 'You chose to view the trial. Press any key to continue.'
+    }
 
-  var if_node = {
-    timeline: [if_trial],
-    conditional_function: function(){
-      var data = jsPsych.data.get().last(1).values()[0];
-      if(jsPsych.pluginAPI.compareKeys(data.response, 's')){
-        return false;
-      } else {
-        return true;
+    var if_node = {
+      timeline: [if_trial],
+      conditional_function: function(){
+        var data = jsPsych.data.get().last(1).values()[0];
+        if(jsPsych.pluginAPI.compareKeys(data.response, 's')){
+          return false;
+        } else {
+          return true;
+        }
       }
     }
-  }
 
-  var after_if_trial = {
-    type: 'html-keyboard-response',
-    stimulus: 'This is the trial after the conditional.'
-  }
+    var after_if_trial = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: 'This is the trial after the conditional.'
+    }
 
-  jsPsych.init({
-    timeline: [loop_node, pre_if_trial, if_node, after_if_trial],
-    on_finish: function(){ jsPsych.data.displayData(); },
-    default_iti: 200
-  });
+    jsPsych.run([loop_node, pre_if_trial, if_node, after_if_trial]); 
 
   </script>
 </html>
