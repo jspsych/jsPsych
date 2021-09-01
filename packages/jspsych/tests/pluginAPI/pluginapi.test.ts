@@ -172,6 +172,35 @@ describe("#getKeyboardResponse", () => {
       keyUp("A");
     });
   });
+
+  test("handles two listeners on the same key correctly #2104/#2105", () => {
+    const callback_1 = jest.fn();
+    const callback_2 = jest.fn();
+    const api = new KeyboardListenerAPI(getRootElement);
+    const listener_1 = api.getKeyboardResponse({
+      callback_function: callback_1,
+      valid_responses: ["a"],
+      persist: true,
+    });
+    const listener_2 = api.getKeyboardResponse({
+      callback_function: callback_2,
+      persist: false,
+    });
+
+    keyDown("a");
+
+    expect(callback_1).toHaveBeenCalledTimes(1);
+    expect(callback_2).toHaveBeenCalledTimes(1);
+
+    keyUp("a");
+
+    keyDown("a");
+
+    expect(callback_1).toHaveBeenCalledTimes(2);
+    expect(callback_2).toHaveBeenCalledTimes(1);
+
+    keyUp("a");
+  });
 });
 
 describe("#cancelKeyboardResponse", () => {
