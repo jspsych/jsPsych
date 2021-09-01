@@ -7,13 +7,12 @@ import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
 import ts from "typescript";
 
-export const makeRollupConfig = (outputOptions, globalOptions = {}) => {
+const makeConfig = (outputOptions, globalOptions = {}, iifeOutputOptions = {}) => {
   const source = "src/index";
   const destination = "dist/index";
 
   outputOptions = {
     sourcemap: true,
-    exports: "default", // for iife outputs
     ...outputOptions,
   };
 
@@ -30,7 +29,7 @@ export const makeRollupConfig = (outputOptions, globalOptions = {}) => {
           compilerOptions: {
             rootDir: "./src",
             outDir: "./dist",
-            paths: {}, // Do not include files referenced via paths
+            paths: {}, // Do not include files referenced via `paths`
           },
         },
       }),
@@ -52,10 +51,17 @@ export const makeRollupConfig = (outputOptions, globalOptions = {}) => {
           ...outputOptions,
         },
         {
+          // Build commonjs module (for tools that do not fully support ES6 modules)
+          file: `${destination}.cjs`,
+          format: "cjs",
+          ...outputOptions,
+        },
+        {
           // Build file to be used for tinkering in modern browsers
           file: `${destination}.browser.js`,
           format: "iife",
           ...outputOptions,
+          ...iifeOutputOptions,
         },
       ],
     },
@@ -65,7 +71,7 @@ export const makeRollupConfig = (outputOptions, globalOptions = {}) => {
       plugins: commonConfig.plugins.concat(
         babel({
           babelHelpers: "bundled",
-          extends: "@jspsych/config/babel.config.js",
+          extends: "@jspsych/config/babel",
         })
       ),
       output: [
@@ -75,17 +81,39 @@ export const makeRollupConfig = (outputOptions, globalOptions = {}) => {
           format: "iife",
           plugins: [terser()],
           ...outputOptions,
+          ...iifeOutputOptions,
         },
       ],
     },
   ]);
 };
 
-export const makeRollupConfigForPlugin = (iifeName) =>
-  makeRollupConfig(
+/**
+ * Returns a Rollup configuration object for a JsPsych plugin or extension that is written in
+ * TypeScript
+ *
+ * @param {string} iifeName The variable name that will identify the plugin or extension in the
+ * global scope in browser builds
+ */
+export const makeRollupConfig = (iifeName) =>
+  makeConfig(
     {
-      name: iifeName,
+      exports: "default",
       globals: { jspsych: "jsPsychModule" },
     },
-    { external: ["jspsych"] }
+    { external: ["jspsych"] },
+    { name: iifeName }
+  );
+
+/**
+ * Returns the rollup configuration for the core `jspsych` package.
+ */
+export const makeCoreRollupConfig = () =>
+  makeConfig(
+    {
+      exports: "named",
+      name: "jsPsychModule",
+    },
+    {},
+    { footer: "var initJsPsych = jsPsychModule.initJsPsych;" }
   );

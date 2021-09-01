@@ -110,7 +110,7 @@ export class JsPsych {
     };
     this.opts = options;
 
-    autoBind(this); // just in case people do weird things with JsPsych methods
+    autoBind(this); // so we can pass JsPsych methods as callbacks and `this` remains the JsPsych instance
 
     this.webaudio_context =
       typeof window !== "undefined" && typeof window.AudioContext !== "undefined"
@@ -172,18 +172,11 @@ export class JsPsych {
 
     document.documentElement.setAttribute("jspsych", "present");
 
-    // Register preloading for the plugins referenced in the timeline
-    for (const [pluginName, parameters] of this.timeline.extractPreloadParameters()) {
-      for (const [parameter, type] of Object.entries(parameters)) {
-        this.pluginAPI.registerPreload(pluginName, parameter, type);
-      }
-    }
-
     this.startExperiment();
     await this.finished;
   }
 
-  progress() {
+  getProgress() {
     return {
       total_trials: typeof this.timeline === "undefined" ? undefined : this.timeline.length(),
       current_trial_global: this.global_trial_index,
@@ -191,11 +184,11 @@ export class JsPsych {
     };
   }
 
-  startTime() {
+  getStartTime() {
     return this.exp_start_time;
   }
 
-  totalTime() {
+  getTotalTime() {
     if (typeof this.exp_start_time == "undefined") {
       return 0;
     }
@@ -317,15 +310,15 @@ export class JsPsych {
     this.timeline.endActiveNode();
   }
 
-  currentTrial() {
+  getCurrentTrial() {
     return this.current_trial;
   }
 
-  initSettings() {
+  getInitSettings() {
     return this.opts;
   }
 
-  currentTimelineNodeID() {
+  getCurrentTimelineNodeID() {
     return this.timeline.activeID();
   }
 
@@ -337,7 +330,7 @@ export class JsPsych {
     }
   }
 
-  allTimelineVariables() {
+  getAllTimelineVariables() {
     return this.timeline.allTimelineVariables();
   }
 
@@ -428,11 +421,6 @@ export class JsPsych {
     }
     this.DOM_target.className += "jspsych-content";
 
-    // below code resets event listeners that may have lingered from
-    // a previous incomplete experiment loaded in same DOM.
-    this.pluginAPI.reset(options.display_element);
-    // create keyboard event listeners
-    this.pluginAPI.createKeyboardEventListeners(options.display_element);
     // create listeners for user browser interaction
     this.data.createInteractionListeners();
 
@@ -778,7 +766,7 @@ export class JsPsych {
   }
 
   private updateProgressBar() {
-    var progress = this.progress().percent_complete;
+    var progress = this.getProgress().percent_complete;
     this.setProgressBar(progress / 100);
   }
 

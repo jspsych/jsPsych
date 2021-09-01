@@ -33,16 +33,16 @@ export class JsPsychData {
   }
 
   write(data_object) {
-    var progress = this.jsPsych.progress();
-    var trial = this.jsPsych.currentTrial();
+    var progress = this.jsPsych.getProgress();
+    var trial = this.jsPsych.getCurrentTrial();
 
     //var trial_opt_data = typeof trial.data == 'function' ? trial.data() : trial.data;
 
     var default_data = {
       trial_type: trial.type.info.name,
       trial_index: progress.current_trial_global,
-      time_elapsed: this.jsPsych.totalTime(),
-      internal_node_id: this.jsPsych.currentTimelineNodeID(),
+      time_elapsed: this.jsPsych.getTotalTime(),
+      internal_node_id: this.jsPsych.getCurrentTimelineNodeID(),
     };
 
     this.allData.push({
@@ -127,22 +127,22 @@ export class JsPsychData {
     window.addEventListener("blur", () => {
       var data = {
         event: "blur",
-        trial: this.jsPsych.progress().current_trial_global,
-        time: this.jsPsych.totalTime(),
+        trial: this.jsPsych.getProgress().current_trial_global,
+        time: this.jsPsych.getTotalTime(),
       };
       this.interactionData.push(data);
-      this.jsPsych.initSettings().on_interaction_data_update(data);
+      this.jsPsych.getInitSettings().on_interaction_data_update(data);
     });
 
     // focus event capture
     window.addEventListener("focus", () => {
       var data = {
         event: "focus",
-        trial: this.jsPsych.progress().current_trial_global,
-        time: this.jsPsych.totalTime(),
+        trial: this.jsPsych.getProgress().current_trial_global,
+        time: this.jsPsych.getTotalTime(),
       };
       this.interactionData.push(data);
-      this.jsPsych.initSettings().on_interaction_data_update(data);
+      this.jsPsych.getInitSettings().on_interaction_data_update(data);
     });
 
     // fullscreen change capture
@@ -158,11 +158,11 @@ export class JsPsychData {
           document.fullscreenElement
             ? "fullscreenenter"
             : "fullscreenexit",
-        trial: this.jsPsych.progress().current_trial_global,
-        time: this.jsPsych.totalTime(),
+        trial: this.jsPsych.getProgress().current_trial_global,
+        time: this.jsPsych.getTotalTime(),
       };
       this.interactionData.push(data);
-      this.jsPsych.initSettings().on_interaction_data_update(data);
+      this.jsPsych.getInitSettings().on_interaction_data_update(data);
     };
 
     document.addEventListener("fullscreenchange", fullscreenchange);

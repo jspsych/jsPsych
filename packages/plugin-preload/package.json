@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
   "typings": "dist/index.d.ts",
   "unpkg": "dist/index.browser.min.js",
   "files": [
@@ -32,6 +36,7 @@
     "jspsych": ">=7"
   },
   "devDependencies": {
+    "@jspsych/config": "^0.1.0",
     "@jspsych/plugin-audio-keyboard-response": "*",
     "@jspsych/plugin-image-keyboard-response": "*",
     "@jspsych/plugin-video-keyboard-response": "*"
