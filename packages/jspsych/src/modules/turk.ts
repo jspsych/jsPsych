@@ -32,23 +32,28 @@ export function turkInfo() {
 
 // core.submitToTurk will submit a MechanicalTurk ExternalHIT type
 export function submitToTurk(data) {
-  var turkInfo = turkInfo();
-  var assignmentId = turkInfo.assignmentId;
-  var turkSubmitTo = turkInfo.turkSubmitTo;
+  const turkInfo = module.exports.turkInfo();
+  const assignmentId = turkInfo.assignmentId;
+  const turkSubmitTo = turkInfo.turkSubmitTo;
 
   if (!assignmentId || !turkSubmitTo) return;
 
-  var dataString = [];
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = turkSubmitTo + "/mturk/externalSubmit?assignmentId=" + assignmentId;
 
-  for (var key in data) {
+  for (const key in data) {
     if (data.hasOwnProperty(key)) {
-      dataString.push(key + "=" + escape(data[key]));
+      const hiddenField = document.createElement("input");
+      hiddenField.type = "hidden";
+      hiddenField.name = key;
+      hiddenField.id = key;
+      hiddenField.value = data[key];
+
+      form.appendChild(hiddenField);
     }
   }
 
-  dataString.push("assignmentId=" + assignmentId);
-
-  var url = turkSubmitTo + "/mturk/externalSubmit?" + dataString.join("&");
-
-  window.location.href = url;
+  document.body.appendChild(form);
+  form.submit();
 }
