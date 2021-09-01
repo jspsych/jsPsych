@@ -1,7 +1,15 @@
+import { ParameterType } from "../../modules/plugins";
 import { flatten, unique } from "../utils";
 
+const preloadParameterTypes = <const>[
+  ParameterType.AUDIO,
+  ParameterType.IMAGE,
+  ParameterType.VIDEO,
+];
+type PreloadType = typeof preloadParameterTypes[number];
+
 export class MediaAPI {
-  constructor(private useWebaudio: boolean, private webaudioContext: AudioContext) {}
+  constructor(private useWebaudio: boolean, private webaudioContext?: AudioContext) {}
 
   // video //
   private video_buffers = {};
@@ -52,8 +60,6 @@ export class MediaAPI {
   }
 
   // preloading stimuli //
-
-  private preloads = [];
   private preload_requests = [];
 
   private img_cache = {};
@@ -238,95 +244,71 @@ export class MediaAPI {
     }
   }
 
-  registerPreload(plugin_name, parameter, media_type) {
-    if (["audio", "image", "video"].indexOf(media_type) === -1) {
-      console.error(
-        "Invalid media_type parameter for jsPsych.pluginAPI.registerPreload. Please check the plugin file."
-      );
-    }
-
-    var preload = {
-      plugin: plugin_name,
-      parameter: parameter,
-      media_type: media_type,
-    };
-
-    this.preloads.push(preload);
-  }
+  private preloadMap = new Map<string, Record<string, PreloadType>>();
 
   getAutoPreloadList(timeline_description: any[]) {
-    function getTrialsOfTypeFromTimelineDescription(td, target_type, inherited_type?) {
-      var trials = [];
+    /** Map each preload parameter type to a set of paths to be preloaded */
+    const preloadPaths = Object.fromEntries(
+      preloadParameterTypes.map((type) => [type, new Set<string>()])
+    );
 
-      for (var i = 0; i < td.length; i++) {
-        var node = td[i];
-        if (Array.isArray(node.timeline)) {
-          if (typeof node.type !== "undefined") {
-            inherited_type = node.type;
-          }
-          trials = trials.concat(
-            getTrialsOfTypeFromTimelineDescription(node.timeline, target_type, inherited_type)
+    const traverseTimeline = (node, inheritedTrialType?) => {
+      const isTimeline = typeof node.timeline !== "undefined";
+
+      if (isTimeline) {
+        for (const childNode of node.timeline) {
+          traverseTimeline(childNode, node.type ?? inheritedTrialType);
+        }
+      } else if ((node.type ?? inheritedTrialType)?.info) {
+        // node is a trial with type.info set
+
+        // Get the plugin name and parameters object from the info object
+        const { name: pluginName, parameters } = (node.type ?? inheritedTrialType).info;
+
+        // Extract parameters to be preloaded and their types from parameter info if this has not
+        // yet been done for `pluginName`
+        if (!this.preloadMap.has(pluginName)) {
+          this.preloadMap.set(
+            pluginName,
+            Object.fromEntries(
+              Object.entries<any>(parameters)
+                // Filter out parameter entries with media types and a non-false `preload` option
+                .filter(
+                  ([_name, { type, preload }]) =>
+                    preloadParameterTypes.includes(type) && (preload ?? true)
+                )
+                // Map each entry's value to its parameter type
+                .map(([name, { type }]) => [name, type])
+            )
           );
-        } else {
-          if (typeof node.type !== "undefined" && node.type.info.name == target_type) {
-            trials.push(node);
-          }
-          if (typeof node.type == "undefined" && inherited_type.info.name == target_type) {
-            trials.push(Object.assign({}, { type: target_type }, node));
+        }
+
+        // Add preload paths from this trial
+        for (const [parameterName, parameterType] of Object.entries(
+          this.preloadMap.get(pluginName)
+        )) {
+          const parameterValue = node[parameterName];
+          const elements = preloadPaths[parameterType];
+
+          if (typeof parameterValue === "string") {
+            elements.add(parameterValue);
+          } else if (Array.isArray(parameterValue)) {
+            for (const element of flatten(parameterValue)) {
+              if (typeof element === "string") {
+                elements.add(element);
+              }
+            }
           }
         }
       }
+    };
 
-      return trials;
-    }
-
-    // list of items to preload
-    var images = [];
-    var audio = [];
-    var video = [];
-
-    // construct list
-    for (var i = 0; i < this.preloads.length; i++) {
-      var type = this.preloads[i].plugin;
-      var param = this.preloads[i].parameter;
-      var media = this.preloads[i].media_type;
-
-      var trials = getTrialsOfTypeFromTimelineDescription(timeline_description, type);
-      for (var j = 0; j < trials.length; j++) {
-        if (typeof trials[j][param] == "undefined") {
-          console.warn("jsPsych failed to auto preload one or more files:");
-          console.warn("no parameter called " + param + " in plugin " + type);
-        } else if (typeof trials[j][param] !== "function") {
-          if (media === "image") {
-            images = images.concat(flatten([trials[j][param]]));
-          } else if (media === "audio") {
-            audio = audio.concat(flatten([trials[j][param]]));
-          } else if (media === "video") {
-            video = video.concat(flatten([trials[j][param]]));
-          }
-        }
-      }
-    }
-
-    images = unique(flatten(images));
-    audio = unique(flatten(audio));
-    video = unique(flatten(video));
-
-    // remove any nulls false values
-    images = images.filter(function (x) {
-      return x != false && x != null;
-    });
-    audio = audio.filter(function (x) {
-      return x != false && x != null;
-    });
-    video = video.filter(function (x) {
-      return x != false && x != null;
-    });
+    traverseTimeline({ timeline: timeline_description });
 
     return {
-      images,
-      audio,
-      video,
+      images: [...preloadPaths[ParameterType.IMAGE]],
+      audio: [...preloadPaths[ParameterType.AUDIO]],
+      video: [...preloadPaths[ParameterType.VIDEO]],
     };
   }
 
