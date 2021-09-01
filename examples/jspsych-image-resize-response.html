@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../js/jspsych.js"></script>
+    <script src="../plugins/jspsych-image-resize-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
+
+var stimresize = {
+  type: 'image-resize-response',
+  stimulus: 'img/blue_circle.svg',
+  stim_width: 250,
+  stim_height: 250,
+  prompt: "<p>Resize the stimulus as preferred.</p>",
+  fixed_aspectratio: false
+};
+      
+var stimresize1 = {
+  type: 'image-resize-response',
+  example: 'img/purple_circle.svg',
+  stimulus: 'img/blue_circle.svg',
+  example_width: 200,
+  example_height: 300,
+  stim_width: 250,
+  stim_height: 250,
+  prompt: "<p>Resize the stimulus on the right to match the size of the example on the left.</p>",
+  reset_label: 'Reset',
+  fixed_aspectratio: false
+};
+      
+      
+var stimresize2 = {
+  type: 'image-resize-response',
+  example: 'img/green_circle.svg',
+  stimulus: 'img/blue_circle.svg',
+  example_width: 200,
+  example_height: 300,
+  stim_width: 250,
+  stim_height: 250,
+  prompt: "<p>Resize the stimulus on the right to match the height of the example on the left.</p>",
+  reset_label: 'Reset',
+  fixed_aspectratio: true
+};
+
+
+  jsPsych.init({
+    timeline: [stimresize, stimresize1, stimresize2],
+    on_finish: function(){jsPsych.data.displayData();}
+  });
+
+
+  </script>
+</html>
