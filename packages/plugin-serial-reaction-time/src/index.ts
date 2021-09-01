@@ -104,7 +104,7 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
       flat_choices.splice(flat_choices.indexOf(""), 1);
     }
 
-    var keyboardListener = {};
+    var keyboardListener: any;
 
     var response = <any>{
       rt: null,
@@ -117,9 +117,7 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
       this.jsPsych.pluginAPI.clearAllTimeouts();
 
       // kill keyboard listeners
-      if (typeof keyboardListener !== "undefined") {
-        this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
-      }
+      this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
 
       // gather the data to store for the trial
       var trial_data = {
