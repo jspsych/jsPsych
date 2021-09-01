@@ -298,7 +298,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
         callback_function: startBall,
         valid_responses: [" "],
         rt_method: "performance",
-        allow_held_keys: false,
+        allow_held_key: false,
         persist: false,
       });
     };
@@ -308,7 +308,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
         callback_function: recordPosition,
         valid_responses: [" "],
         rt_method: "performance",
-        allow_held_keys: false,
+        allow_held_key: false,
         persist: true,
       });
       animateBall();
