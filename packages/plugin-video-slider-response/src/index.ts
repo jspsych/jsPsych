@@ -355,7 +355,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
       .addEventListener("click", function () {
         // measure response time
         var endTime = performance.now();
-        response.rt = endTime - startTime;
+        response.rt = Math.round(endTime - startTime);
         response.response = display_element.querySelector<HTMLInputElement>(
           "#jspsych-video-slider-response-response"
         ).valueAsNumber;

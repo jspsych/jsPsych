@@ -64,7 +64,7 @@ class ReconstructionPlugin implements JsPsychPlugin<Info> {
     const endTrial = () => {
       // measure response time
       var endTime = performance.now();
-      var response_time = endTime - startTime;
+      var response_time = Math.round(endTime - startTime);
 
       // clear keyboard response
       this.jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);

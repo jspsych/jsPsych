@@ -202,7 +202,7 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
     function after_response(choice) {
       // measure rt
       var endTime = performance.now();
-      var rt = endTime - startTime;
+      var rt = Math.round(endTime - startTime);
       if (context !== null) {
         endTime = context.currentTime;
         rt = Math.round((endTime - startTime) * 1000);

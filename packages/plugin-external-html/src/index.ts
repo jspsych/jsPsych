@@ -91,7 +91,7 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
           display_element.removeEventListener("keydown", key_listener);
         }
         var trial_data = {
-          rt: performance.now() - t0,
+          rt: Math.round(performance.now() - t0),
           url: trial.url,
         };
         display_element.innerHTML = "";
