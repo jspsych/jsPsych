@@ -493,7 +493,7 @@ class RdkPlugin implements JsPsychPlugin<Info> {
     //Initialize object to store the response data. Default values of -1 are used if the trial times out and the subject has not pressed a valid key
     var response = {
       rt: -1,
-      key: -1,
+      key: "",
     };
 
     //Declare a global timeout ID to be initialized below in animateDotMotion function and to be used in after_response function
@@ -616,7 +616,7 @@ class RdkPlugin implements JsPsychPlugin<Info> {
     //Function to record the first response by the subject
     function after_response(info) {
       //If the response has not been recorded, record it
-      if (response.key == -1) {
+      if (response.key == "") {
         response = info; //Replace the response object created above
       }
 
@@ -631,38 +631,22 @@ class RdkPlugin implements JsPsychPlugin<Info> {
     const correctOrNot = () => {
       //Check that the correct_choice has been defined
       if (typeof correct_choice !== "undefined") {
-        //If the correct_choice variable holds an array
-        if (correct_choice.constructor === Array) {
-          //If it is an array
-          //If the elements are characters
-          if (typeof correct_choice[0] === "string" || correct_choice[0] instanceof String) {
-            var key_in_choices = correct_choice.every(function (x) {
-              return this.jsPsych.pluginAPI.compareKeys(x, response.key);
-            });
-            return key_in_choices; //If the response is included in the correct_choice array, return true. Else, return false.
-          }
-          //Else if the elements are numbers (javascript character codes)
-          else if (typeof correct_choice[0] === "number") {
-            console.error("Error in RDK plugin: correct_choice value must be a string.");
-            return false; // added due to TS error: not all code paths return a value
-          } else {
-            return false; // added due to TS error: not all code paths return a value
-          }
+        // if single character, convert to array for simplicity
+        if (!Array.isArray(correct_choice)) {
+          correct_choice = [correct_choice];
         }
-        //Else compare the char with the response key
-        else {
-          //If the element is a character
-          if (typeof correct_choice === "string" || correct_choice instanceof String) {
-            //Return true if the user's response matches the correct answer. Return false otherwise.
-            return this.jsPsych.pluginAPI.compareKeys(response.key, correct_choice);
-          }
-          //Else if the element is a number (javascript character codes)
-          else if (typeof correct_choice === "number") {
-            console.error("Error in RDK plugin: correct_choice value must be a string.");
-            return false; // added due to TS error: not all code paths return a value
-          } else {
-            return false; // added due to TS error: not all code paths return a value
-          }
+        if (typeof correct_choice[0] === "string" || correct_choice[0] instanceof String) {
+          var key_in_choices = correct_choice.every((x: string) => {
+            return this.jsPsych.pluginAPI.compareKeys(x, response.key);
+          });
+          return key_in_choices; //If the response is included in the correct_choice array, return true. Else, return false.
+        }
+        //Else if the elements are numbers (javascript character codes)
+        else if (typeof correct_choice[0] === "number") {
+          console.error("Error in RDK plugin: correct_choice value must be a string.");
+          return false; // added due to TS error: not all code paths return a value
+        } else {
+          return false; // added due to TS error: not all code paths return a value
         }
       } else {
         return false; // added due to TS error: not all code paths return a value
