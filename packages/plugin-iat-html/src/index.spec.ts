@@ -75,7 +75,7 @@ describe("iat-html plugin", () => {
         left_category_label: ["FRIENDLY"],
         right_category_label: ["UNFRIENDLY"],
         stim_key_association: "right",
-        key_to_move_forward: ["ALL_KEYS"],
+        key_to_move_forward: "ALL_KEYS",
       },
     ]);
 
@@ -139,7 +139,7 @@ describe("iat-html plugin", () => {
         left_category_label: ["FRIENDLY"],
         right_category_label: ["UNFRIENDLY"],
         stim_key_association: "left",
-        key_to_move_forward: ["ALL_KEYS"],
+        key_to_move_forward: "ALL_KEYS",
         response_ends_trial: true,
       },
     ]);
@@ -237,7 +237,7 @@ describe("iat-html plugin", () => {
         left_category_label: () => ["FRIENDLY"],
         right_category_label: () => ["UNFRIENDLY"],
         stim_key_association: () => "left",
-        key_to_move_forward: () => ["ALL_KEYS"],
+        key_to_move_forward: () => "ALL_KEYS",
         trial_duration: () => 1000,
         response_ends_trial: () => true,
       },

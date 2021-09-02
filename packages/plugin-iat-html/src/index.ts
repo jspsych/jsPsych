@@ -247,7 +247,7 @@ class IatHtmlPlugin implements JsPsychPlugin<Info> {
           } else if (trial.response_ends_trial && trial.display_feedback != true) {
             var keyListener = this.jsPsych.pluginAPI.getKeyboardResponse({
               callback_function: end_trial,
-              valid_responses: ["ALL_KEYS"],
+              valid_responses: "ALL_KEYS",
             });
           } else if (!trial.response_ends_trial && trial.display_feedback != true) {
           }
@@ -279,7 +279,7 @@ class IatHtmlPlugin implements JsPsychPlugin<Info> {
           } else if (trial.response_ends_trial && trial.display_feedback != true) {
             var keyListener = this.jsPsych.pluginAPI.getKeyboardResponse({
               callback_function: end_trial,
-              valid_responses: ["ALL_KEYS"],
+              valid_responses: "ALL_KEYS",
             });
           } else if (!trial.response_ends_trial && trial.display_feedback != true) {
           }

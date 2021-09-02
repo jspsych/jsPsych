@@ -75,7 +75,7 @@ describe("iat-image plugin", () => {
         left_category_label: ["FRIENDLY"],
         right_category_label: ["UNFRIENDLY"],
         stim_key_association: "right",
-        key_to_move_forward: ["ALL_KEYS"],
+        key_to_move_forward: "ALL_KEYS",
       },
     ]);
 
@@ -143,7 +143,7 @@ describe("iat-image plugin", () => {
         left_category_label: ["FRIENDLY"],
         right_category_label: ["UNFRIENDLY"],
         stim_key_association: "left",
-        key_to_move_forward: ["ALL_KEYS"],
+        key_to_move_forward: "ALL_KEYS",
         response_ends_trial: true,
       },
     ]);
@@ -279,7 +279,7 @@ describe("iat-image plugin", () => {
           return "left";
         },
         key_to_move_forward: function () {
-          return ["ALL_KEYS"];
+          return "ALL_KEYS";
         },
         trial_duration: function () {
           return 1000;
