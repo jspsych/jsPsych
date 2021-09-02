@@ -26,7 +26,6 @@ describe("html-keyboard-response", () => {
         choices: ["f", "j"],
       },
     ]);
-    console.log(getHTML());
     expect(getHTML()).toContain(
       '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
     );
