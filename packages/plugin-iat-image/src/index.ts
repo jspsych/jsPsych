@@ -245,10 +245,7 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
               });
             }
           } else if (trial.response_ends_trial && trial.display_feedback != true) {
-            var keyListener = this.jsPsych.pluginAPI.getKeyboardResponse({
-              callback_function: end_trial,
-              valid_responses: "ALL_KEYS",
-            });
+            end_trial();
           } else if (!trial.response_ends_trial && trial.display_feedback != true) {
           }
         }
@@ -277,10 +274,7 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
               });
             }
           } else if (trial.response_ends_trial && trial.display_feedback != true) {
-            var keyListener = this.jsPsych.pluginAPI.getKeyboardResponse({
-              callback_function: end_trial,
-              valid_responses: "ALL_KEYS",
-            });
+            end_trial();
           } else if (!trial.response_ends_trial && trial.display_feedback != true) {
           }
         }

@@ -65,7 +65,7 @@ describe("iat-html plugin", () => {
     await expectFinished();
   });
 
-  test("display should clear when any key is pressed", async () => {
+  test("feedback display should clear when any key is pressed", async () => {
     const { getHTML, expectFinished } = await startTimeline([
       {
         type: iatHtml,
@@ -76,6 +76,7 @@ describe("iat-html plugin", () => {
         right_category_label: ["UNFRIENDLY"],
         stim_key_association: "right",
         key_to_move_forward: "ALL_KEYS",
+        display_feedback: true,
       },
     ]);
 
@@ -86,7 +87,7 @@ describe("iat-html plugin", () => {
     await expectFinished();
   });
 
-  test('display should clear only when "other key" is pressed', async () => {
+  test("feedback display should clear only when key_to_move_forward is pressed", async () => {
     const { getHTML, expectFinished } = await startTimeline([
       {
         type: iatHtml,
@@ -96,14 +97,15 @@ describe("iat-html plugin", () => {
         left_category_label: ["FRIENDLY"],
         right_category_label: ["UNFRIENDLY"],
         stim_key_association: "left",
-        key_to_move_forward: ["other key"],
+        key_to_move_forward: ["x"],
+        display_feedback: true,
       },
     ]);
 
     pressKey("j");
     expect(getHTML()).toContain('<p id="jspsych-iat-stim" class=" responded"></p><p>hello</p>');
 
-    pressKey("f");
+    pressKey("x");
     await expectFinished();
   });
 
@@ -253,6 +255,29 @@ describe("iat-html plugin", () => {
 
     jest.advanceTimersByTime(500);
     pressKey("e");
+    await expectFinished();
+  });
+
+  test("response not required after wrong answer (tests #1898)", async () => {
+    const { getHTML, expectFinished } = await startTimeline([
+      {
+        type: iatHtml,
+        stimulus: "<p>dogs</p>",
+        response_ends_trial: true,
+        display_feedback: false,
+        left_category_key: "f",
+        right_category_key: "j",
+        left_category_label: ["FRIENDLY"],
+        right_category_label: ["UNFRIENDLY"],
+        stim_key_association: "left",
+        force_correct_key_press: false,
+        trial_duration: 3000,
+      },
+    ]);
+
+    expect(getHTML()).toContain('<p id="jspsych-iat-stim"></p><p>dogs</p><p></p>');
+    pressKey("j");
+
     await expectFinished();
   });
 });

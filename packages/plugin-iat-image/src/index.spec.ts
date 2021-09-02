@@ -76,6 +76,7 @@ describe("iat-image plugin", () => {
         right_category_label: ["UNFRIENDLY"],
         stim_key_association: "right",
         key_to_move_forward: "ALL_KEYS",
+        display_feedback: true,
       },
     ]);
 
@@ -88,7 +89,7 @@ describe("iat-image plugin", () => {
     await expectFinished();
   });
 
-  test('display should clear only when "other key" is pressed', async () => {
+  test("display should clear only when key_to_move_forward is pressed", async () => {
     const { getHTML, expectFinished } = await startTimeline([
       {
         type: iatImage,
@@ -98,7 +99,8 @@ describe("iat-image plugin", () => {
         left_category_label: ["FRIENDLY"],
         right_category_label: ["UNFRIENDLY"],
         stim_key_association: "left",
-        key_to_move_forward: ["other key"],
+        display_feedback: true,
+        key_to_move_forward: ["x"],
       },
     ]);
 
@@ -107,7 +109,7 @@ describe("iat-image plugin", () => {
       '<img src="../media/blue.png" id="jspsych-iat-stim" class=" responded">'
     );
 
-    pressKey("f");
+    pressKey("x");
     await expectFinished();
   });
 
@@ -306,6 +308,29 @@ describe("iat-image plugin", () => {
     jest.advanceTimersByTime(500);
 
     pressKey("a");
+    await expectFinished();
+  });
+
+  test("response not required after wrong answer (tests #1898)", async () => {
+    const { getHTML, expectFinished } = await startTimeline([
+      {
+        type: iatImage,
+        stimulus: "../media/blue.png",
+        response_ends_trial: true,
+        display_feedback: false,
+        left_category_key: "f",
+        right_category_key: "j",
+        left_category_label: ["FRIENDLY"],
+        right_category_label: ["UNFRIENDLY"],
+        stim_key_association: "left",
+        force_correct_key_press: false,
+        trial_duration: 3000,
+      },
+    ]);
+
+    expect(getHTML()).toContain("blue.png");
+    pressKey("j");
+
     await expectFinished();
   });
 });
