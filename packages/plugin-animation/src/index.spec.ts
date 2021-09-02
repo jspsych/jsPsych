@@ -5,7 +5,7 @@ import animation from ".";
 jest.useFakeTimers();
 
 describe("animation plugin", () => {
-  test("displays stimuli", async () => {
+  test("no delay before first frame (#1885)", async () => {
     const { getHTML, expectFinished } = await startTimeline([
       {
         type: animation,
@@ -13,9 +13,6 @@ describe("animation plugin", () => {
         render_on_canvas: false,
       },
     ]);
-
-    // TODO (bjoluc) Is it intended to wait before showing the first frame?
-    jest.advanceTimersByTime(250);
 
     expect(getHTML()).toBe('<img src="img/face_1.jpg" id="jspsych-animation-image">');
     jest.advanceTimersByTime(250);

@@ -15,7 +15,25 @@ describe("categorize-animation plugin", () => {
       },
     ]);
 
+    expect(getHTML()).toEqual(
+      '<img src="img/happy_face_1.jpg" class="jspsych-categorize-animation-stimulus">'
+    );
     jest.advanceTimersByTime(500);
+    expect(getHTML()).toEqual(
+      '<img src="img/sad_face_1.jpg" class="jspsych-categorize-animation-stimulus">'
+    );
+  });
+
+  test("no delay before first image (tests #1885)", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: categorizeAnimation,
+        stimuli: ["img/happy_face_1.jpg", "img/sad_face_1.jpg"],
+        key_answer: "d",
+        render_on_canvas: false,
+      },
+    ]);
+
     expect(getHTML()).toEqual(
       '<img src="img/happy_face_1.jpg" class="jspsych-categorize-animation-stimulus">'
     );
@@ -37,7 +55,7 @@ describe("categorize-animation plugin", () => {
       },
     ]);
 
-    jest.advanceTimersByTime(1500);
+    jest.advanceTimersByTime(1000);
     expect(getHTML()).toEqual(
       "<p>Press d if the faces had different emotional expressions. Press S if the faces had the same emotional expression.</p>"
     );
@@ -56,7 +74,7 @@ describe("categorize-animation plugin", () => {
       },
     ]);
 
-    jest.advanceTimersByTime(1500);
+    jest.advanceTimersByTime(1000);
     pressKey("d");
     jest.advanceTimersByTime(1000);
     expect(getHTML()).toBe("Correct.");
@@ -75,7 +93,7 @@ describe("categorize-animation plugin", () => {
       },
     ]);
 
-    jest.advanceTimersByTime(1500);
+    jest.advanceTimersByTime(1000);
     pressKey("s");
     jest.advanceTimersByTime(1000);
     expect(getHTML()).toBe("Wrong.");
@@ -97,7 +115,7 @@ describe("categorize-animation plugin", () => {
       },
     ]);
 
-    jest.advanceTimersByTime(1500);
+    jest.advanceTimersByTime(1000);
     pressKey("d");
     jest.advanceTimersByTime(1000);
     expect(getHTML()).toBe("<p>Correct. The faces had different expressions.</p>");
@@ -118,7 +136,7 @@ describe("categorize-animation plugin", () => {
       },
     ]);
 
-    jest.advanceTimersByTime(1500);
+    jest.advanceTimersByTime(1000);
     pressKey("d");
     jest.advanceTimersByTime(1000);
     expect(getHTML()).toBe("<p>You pressed the correct key</p>");
@@ -161,7 +179,6 @@ describe("categorize-animation plugin", () => {
       },
     ]);
 
-    jest.advanceTimersByTime(1000);
     expect(getHTML()).toEqual(
       '<img src="img/happy_face_1.jpg" class="jspsych-categorize-animation-stimulus">'
     );
@@ -193,7 +210,6 @@ describe("categorize-animation plugin", () => {
     ]);
 
     for (let i = 0; i < 2; i++) {
-      jest.advanceTimersByTime(1000);
       expect(getHTML()).toEqual(
         '<img src="img/happy_face_1.jpg" class="jspsych-categorize-animation-stimulus">'
       );
@@ -201,6 +217,7 @@ describe("categorize-animation plugin", () => {
       expect(getHTML()).toEqual(
         '<img src="img/sad_face_1.jpg" class="jspsych-categorize-animation-stimulus">'
       );
+      jest.advanceTimersByTime(1000);
     }
   });
 
@@ -222,9 +239,9 @@ describe("categorize-animation plugin", () => {
       },
     ]);
 
-    jest.advanceTimersByTime(1500);
-    pressKey("d");
     jest.advanceTimersByTime(500);
+    pressKey("d");
+    jest.advanceTimersByTime(1000);
     expect(getHTML()).toEqual(
       '<img src="img/sad_face_1.jpg" class="jspsych-categorize-animation-stimulus"><p>You pressed the correct key</p>'
     );
@@ -247,7 +264,7 @@ describe("categorize-animation plugin", () => {
       },
     ]);
 
-    jest.advanceTimersByTime(1500);
+    jest.advanceTimersByTime(1000);
     pressKey("d");
     jest.advanceTimersByTime(500);
     expect(getHTML()).toBe("<p>You pressed the correct key</p>");

@@ -98,7 +98,7 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    var animate_frame = -1;
+    var animate_frame = 0;
     var reps = 0;
 
     var showAnimation = true;
@@ -132,22 +132,7 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
       display_element.insertBefore(feedback_div, display_element.nextElementSibling);
     }
 
-    // show animation
-    var animate_interval = setInterval(() => {
-      if (!trial.render_on_canvas) {
-        display_element.innerHTML = ""; // clear everything
-      }
-      animate_frame++;
-      if (animate_frame == trial.stimuli.length) {
-        animate_frame = 0;
-        reps++;
-        // check if reps complete //
-        if (trial.sequence_reps != -1 && reps >= trial.sequence_reps) {
-          // done with animation
-          showAnimation = false;
-        }
-      }
-
+    const update_display = () => {
       if (showAnimation) {
         if (trial.render_on_canvas) {
           display_element.querySelector<HTMLElement>(
@@ -217,12 +202,33 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
         // set timeout to clear feedback
         if (!timeoutSet) {
           timeoutSet = true;
-          this.jsPsych.pluginAPI.setTimeout(function () {
+          this.jsPsych.pluginAPI.setTimeout(() => {
             endTrial();
           }, trial.feedback_duration);
         }
       }
+    };
+
+    // show animation
+    var animate_interval = setInterval(() => {
+      if (!trial.render_on_canvas) {
+        display_element.innerHTML = ""; // clear everything
+      }
+      animate_frame++;
+      if (animate_frame == trial.stimuli.length) {
+        animate_frame = 0;
+        reps++;
+        // check if reps complete //
+        if (trial.sequence_reps != -1 && reps >= trial.sequence_reps) {
+          // done with animation
+          showAnimation = false;
+        }
+      }
+
+      update_display();
     }, trial.frame_time);
+
+    update_display();
 
     const endTrial = () => {
       clearInterval(animate_interval); // stop animation!

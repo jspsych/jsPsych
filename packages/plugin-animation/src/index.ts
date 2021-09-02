@@ -69,7 +69,7 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var interval_time = trial.frame_time + trial.frame_isi;
-    var animate_frame = -1;
+    var animate_frame = 0;
     var reps = 0;
     var startTime = performance.now();
     var animation_sequence = [];
@@ -122,6 +122,9 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
         show_next_frame();
       }
     }, interval_time);
+
+    // show the first frame immediately
+    show_next_frame();
 
     function show_next_frame() {
       if (trial.render_on_canvas) {
