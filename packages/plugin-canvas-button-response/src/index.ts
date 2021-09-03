@@ -180,7 +180,7 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
     function after_response(choice) {
       // measure rt
       var end_time = performance.now();
-      var rt = Math.round(end_time - start_time);
+      var rt = end_time - start_time;
       response.button = parseInt(choice);
       response.rt = rt;
 

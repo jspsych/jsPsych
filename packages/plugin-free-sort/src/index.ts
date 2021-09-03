@@ -465,7 +465,7 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
     display_element.querySelector("#jspsych-free-sort-done-btn").addEventListener("click", () => {
       if (inside.every(Boolean)) {
         const end_time = performance.now();
-        const rt = Math.round(end_time - start_time);
+        const rt = end_time - start_time;
         // gather data
         const items = display_element.querySelectorAll<HTMLElement>(".jspsych-free-sort-draggable");
         // get final position of all items

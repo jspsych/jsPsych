@@ -199,7 +199,7 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
       event.preventDefault();
       // measure response time
       var endTime = performance.now();
-      var response_time = Math.round(endTime - startTime);
+      var response_time = endTime - startTime;
 
       // create object to hold responses
       var question_data = {};

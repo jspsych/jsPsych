@@ -105,10 +105,9 @@ export class KeyboardListenerAPI {
     }
 
     const listener: KeyboardListener = (e) => {
-      const rt = Math.round(
+      const rt =
         (rt_method == "performance" ? performance.now() : audio_context.currentTime * 1000) -
-          startTime
-      );
+        startTime;
       if (rt < minimum_valid_rt) {
         return;
       }

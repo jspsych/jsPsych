@@ -385,7 +385,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
 
     const endTrial = () => {
       // finish trial
-      trial_data.rt = Math.round(performance.now() - start_time);
+      trial_data.rt = performance.now() - start_time;
 
       // remove lingering event listeners, just in case
       this.jsPsych.pluginAPI.cancelAllKeyboardResponses();

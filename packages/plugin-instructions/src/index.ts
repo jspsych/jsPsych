@@ -182,7 +182,7 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
     function add_current_page_to_view_history() {
       var current_time = performance.now();
 
-      var page_view_time = Math.round(current_time - last_page_update_time);
+      var page_view_time = current_time - last_page_update_time;
 
       view_history.push({
         page_index: current_page,
@@ -201,7 +201,7 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
 
       var trial_data = {
         view_history: view_history,
-        rt: Math.round(performance.now() - start_time),
+        rt: performance.now() - start_time,
       };
 
       this.jsPsych.finishTrial(trial_data);

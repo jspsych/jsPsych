@@ -106,7 +106,7 @@ class SurveyHtmlFormPlugin implements JsPsychPlugin<Info> {
 
         // measure response time
         var endTime = performance.now();
-        var response_time = Math.round(endTime - startTime);
+        var response_time = endTime - startTime;
 
         var this_form = display_element.querySelector("#jspsych-survey-html-form");
         var question_data = serializeArray(this_form);

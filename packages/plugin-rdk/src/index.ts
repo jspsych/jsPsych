@@ -1377,7 +1377,7 @@ class RdkPlugin implements JsPsychPlugin<Info> {
           //Else calculate the time and push it into the array
           else {
             var currentTimeStamp = performance.now(); //Variable to hold current timestamp
-            (frameRate as number[]).push(Math.round(currentTimeStamp - previousTimestamp)); //Push the interval into the frameRate array
+            (frameRate as number[]).push(currentTimeStamp - previousTimestamp); //Push the interval into the frameRate array
             previousTimestamp = currentTimeStamp; //Reset the timestamp
           }
         }

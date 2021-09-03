@@ -151,7 +151,7 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
       // record when image was shown
       animation_sequence.push({
         stimulus: trial.stimuli[animate_frame],
-        time: Math.round(performance.now() - startTime),
+        time: performance.now() - startTime,
       });
 
       if (trial.frame_isi > 0) {
@@ -162,7 +162,7 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
           // record when blank image was shown
           animation_sequence.push({
             stimulus: "blank",
-            time: Math.round(performance.now() - startTime),
+            time: performance.now() - startTime,
           });
         }, trial.frame_time);
       }

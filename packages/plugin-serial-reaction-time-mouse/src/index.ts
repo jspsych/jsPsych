@@ -112,7 +112,7 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
             var info = <any>{};
             info.row = e.currentTarget.getAttribute("data-row");
             info.column = e.currentTarget.getAttribute("data-column");
-            info.rt = Math.round(performance.now() - startTime);
+            info.rt = performance.now() - startTime;
             after_response(info);
           }
         });

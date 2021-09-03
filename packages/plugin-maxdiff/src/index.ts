@@ -175,7 +175,7 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
 
       // measure response time
       var endTime = performance.now();
-      var response_time = Math.round(endTime - startTime);
+      var response_time = endTime - startTime;
 
       // get the alternative by the data-name attribute, allowing a null response if unchecked
       function get_response(side) {
