@@ -27,13 +27,13 @@
     var trial_2 = {
       type: jsPsychExternalHtml,
       url: 'external_html/simple_consent.html',
-      cont_button: 'start',
+      cont_btn: 'start',
       check_fn: function() {
-          if (document.getElementById('consent_checkbox').checked) {
-              return true;
-          } else {
-              alert('You must tick the checkbox to continue with the study.')
-          }
+        if (document.getElementById('consent_checkbox').checked) {
+          return true;
+        } else {
+          alert('You must tick the checkbox to continue with the study.')
+        }
       }
     };
 
