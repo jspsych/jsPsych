@@ -41,8 +41,7 @@
     var trial_2 = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: function() {
-        const vsl_grid_scene = new jsPsychVslGridScene();
-        return vsl_grid_scene.generate_stimulus(scene, [100,100]);
+        return jsPsychVslGridScene.generate_stimulus(scene, [100,100]);
       }
     };
 
