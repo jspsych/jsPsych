@@ -5,19 +5,21 @@
     <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body>
-    <p>The URL variable should be logged to the console</p>
+    <p>The URL variables should be logged to the console</p>
   </body>
   <script>
 
+    // even though there's no jsPsych experiment that runs in this example,
+    // we still need to initialize jsPsych so that we can access the jsPsych.data functions
     var jsPsych = initJsPsych();
 
     if (typeof jsPsych.data.getURLVariable('v1') == 'undefined') {
       window.location = window.location + '?v1=abc&v2=def';
     }
 
-    console.log(JSON.stringify(jsPsych.data.urlVariables()));
+    console.log('All URL variables: ', JSON.stringify(jsPsych.data.urlVariables()));
 
-    console.log(jsPsych.data.getURLVariable('v1'));
+    console.log('The value of v1 is: ', jsPsych.data.getURLVariable('v1'));
 
   </script>
 </html>

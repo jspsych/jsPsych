@@ -7,9 +7,14 @@
     <script src="../packages/plugin-preload/dist/index.browser.js"></script>
     <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
+  <body></body>
   <script>
 
-    var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
     var images = ["img/1.gif","img/2.gif","img/3.gif","img/4.gif","img/5.gif","img/6.gif","img/7.gif","img/8.gif","img/9.gif","img/10.gif"];
 
@@ -25,8 +30,7 @@
         [ 0, "img/3.gif", 0, 0, 0],
         ["img/5.gif", "img/4.gif", 0, 0, 0],
         [0,0,0,0,0]
-      ]
-    ;
+      ];
 
     var trial = {
       type: jsPsychVslGridScene,
@@ -34,12 +38,15 @@
       image_size: [50,50]
     };
 
-    // var trial_2 = {
-    //   type: jsPsychHtmlKeyboardResponse,
-    //   stimulus: jsPsychVslGridScene.generate_stimulus(scene, [100,100])  // TO DO: how do I call a function from the jsPsychVslGridScene class?
-    // };
+    var trial_2 = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function() {
+        const vsl_grid_scene = new jsPsychVslGridScene();
+        return vsl_grid_scene.generate_stimulus(scene, [100,100]);
+      }
+    };
 
-    jsPsych.run([preload, trial]); // TO DO: display data
+    jsPsych.run([preload, trial, trial_2]);
 
   </script>
 </html>

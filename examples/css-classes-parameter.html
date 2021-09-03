@@ -2,7 +2,7 @@
 <html>
   <head>
     <script src="../packages/jspsych/dist/index.browser.js"></script>
-    <script src="../packages/plugin-image-keboard-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-image-keyboard-response/dist/index.browser.js"></script>
     <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
     <script src="../packages/plugin-preload/dist/index.browser.js"></script>
     <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
@@ -80,7 +80,7 @@
     var preload = {
       type: jsPsychPreload,
       auto_preload: true
-    }
+    };
 
     var trial_procedure_1 = {
       timeline: [{
@@ -89,13 +89,14 @@
         css_classes: jsPsych.timelineVariable('css_class'),
         prompt: 'This is the prompt.<br>In this set of trials, the CSS styles are applied to the parent element<br>'+
         'and passed on to all other jsPsych content through inheritance,<br>'+
-        'which is why they also affect both the stimulus and prompt text.<br>Press any key to continue.'
+        'which is why they also affect both the stimulus and prompt text.<br>Press any key to continue.',
+        save_trial_parameters: {css_classes: true}
       }],
       timeline_variables: [
         {css_class: ['condition1'], stim: '<p>This is a Condition 1 stimulus.</p>'},
         {css_class: ['condition2'], stim: '<p>This is a Condition 2 stimulus.</p>'}
       ]
-    }
+    };
 
     var trial_procedure_2 = {
       timeline: [{
@@ -103,7 +104,8 @@
         stimulus: '<p>This is the stimulus.</p>',
         css_classes: jsPsych.timelineVariable('css_classes'),
         prompt: 'In this set of trials, the CSS rules are applied more selectively<br>so that they only affect the stimulus text, not the prompt text<br>'+
-        '(see the comments in the HTML file for more information).<br>Press any key to continue.'
+        '(see the comments in the HTML file for more information).<br>Press any key to continue.',
+        save_trial_parameters: {css_classes: true}
       }],
       timeline_variables: [
         {css_classes: ['teal','left-align','black-border','large-text']},
@@ -111,7 +113,7 @@
         {css_classes: ['purple','left-align','large-text']},
         {css_classes: ['purple','right-align','large-text']}
       ]
-    }
+    };
 
     var trial_procedure_3 = {
       timeline: [
@@ -129,14 +131,16 @@
           prompt: '<p>Press <strong>f</strong> if the image is on the <strong>left</strong>.</p>'+
           '<p>Press <strong>j</strong> if the image is on the <strong>right</strong>.</p>',
           choices: ['f','j'],
-          render_on_canvas: false
+          render_on_canvas: false,
+          save_trial_parameters: {css_classes: true},
+          data: {correct_response: jsPsych.timelineVariable('correct_response')}
         }
       ],
       timeline_variables: [
         {image_side: ['img-left'], correct_response: 'f'},
         {image_side: ['img-right'], correct_response: 'j'}
       ]
-    }
+    };
 
     jsPsych.run([preload, trial_procedure_1, trial_procedure_2, trial_procedure_3]);
 

@@ -8,7 +8,11 @@
   <body></body>
   <script>
 
-    var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
     var scale = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
 

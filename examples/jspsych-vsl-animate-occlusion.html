@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="js/snap.svg-min.js"></script>
-  <script src="../packages/jspsych/dist/index.browser.js"></script>
-  <script src="../packages/plugin-vsl-animate-occlusion/dist/index.browser.js"></script>
-  <script src="../packages/plugin-preload/dist/index.browser.js"></script>
-  <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
-</head>
-<body></body>
-<script>
+  <head>
+    <script src="js/snap.svg-min.js"></script>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-vsl-animate-occlusion/dist/index.browser.js"></script>
+    <script src="../packages/plugin-preload/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
 
-  var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
-  var images = ["img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif", "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif", "img/9.gif", "img/10.gif"];
+    var images = ["img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif", "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif", "img/9.gif", "img/10.gif"];
 
-  var preload = {
-    type: jsPsychPreload,
-    auto_preload: true
-  };
+    var preload = {
+      type: jsPsychPreload,
+      auto_preload: true
+    };
 
-  // create vsl block for jspsych
-  var block = {
-    type: jsPsychVslAnimateOcclusion,
-    stimuli: images
-  };
+    var block = {
+      type: jsPsychVslAnimateOcclusion,
+      stimuli: images
+    };
 
-  jsPsych.run([preload, block]); // TO DO: display data
+    jsPsych.run([preload, block]);
 
-</script>
+  </script>
 </html>

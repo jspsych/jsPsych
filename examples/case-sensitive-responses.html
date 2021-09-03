@@ -22,7 +22,7 @@
       '<p>To continue, you must press the letter "a" (lowercase).</p>'+
       '<p>The trial will not end if you respond with "A" (uppercase), either by holding down the Shift key or turning CapsLock on.</p>',
       choices: ['a']
-    }
+    };
 
     var trial_2 = {
       type: jsPsychHtmlKeyboardResponse,
@@ -30,7 +30,7 @@
       '<p>To continue, now you must press the letter "A" (uppercase).</p>'+
       '<p>The trial will not end if you respond with "a" (lowercase).</p>',
       choices: ['A']
-    }
+    };
 
     var trial_3 = {
       type: jsPsychHtmlKeyboardResponse,
@@ -40,7 +40,7 @@
       '<p>If you change "case_sensitive_responses" to "false" in jsPsych.init and reload this expeirment<br>'+
       'you will find that both "a" or "A" responses are valid responses for the first two trials,<br>'+
       'and your response will always be recorded as "a" (lowercase) in the data.</p>'
-    }
+    };
 
     jsPsych.run([trial_1, trial_2, trial_3]);
 

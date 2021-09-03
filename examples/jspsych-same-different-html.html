@@ -8,7 +8,11 @@
   <body></body>
   <script>
 
-    var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
     var trial = {
       type: jsPsychSameDifferentHtml,
@@ -17,8 +21,9 @@
       same_key: 's',
       different_key: 'd',
       answer: 'same'
-    }
+    };
 
     jsPsych.run([trial]);
+
   </script>
 </html>

@@ -11,7 +11,11 @@
   </head>
   <script>
 
-    var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
     // two blindspot estimates
     // measure px2mm, px2deg, viewing distance 
@@ -53,13 +57,13 @@
       blindspot_reps: 0, 
       resize_units: "deg",
       pixels_per_unit: 50
-    }
+    };
 
     let validation_trial = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: '<div style="margin: auto; width: 200px; height: 200px; background-color: black;"></div>',
       prompt: '<p>The stimulus above should be 4cm x 4cm if resizing worked properly.</p>'
-    }
+    };
 
     jsPsych.run([no_resize, validation_trial]); // deg_resize, no_resize, error_trial
 

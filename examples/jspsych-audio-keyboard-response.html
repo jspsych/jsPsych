@@ -10,7 +10,12 @@
 <body></body>
 <script>
 
-  var jsPsych = initJsPsych();
+  var jsPsych = initJsPsych({
+    default_iti: 250, 
+    on_finish: function() {
+      jsPsych.data.displayData()
+    }
+  });
 
   var preload = {
     type: jsPsychPreload,
@@ -58,7 +63,7 @@
     response_allowed_while_playing: false
   }
 
-  jsPsych.run([preload, pre_audio, trial_1, trial_2, trial_3, trial_4]);  // TO DO: default_iti: 250, on_finish: jsPsych.data.displayData()
+  jsPsych.run([preload, pre_audio, trial_1, trial_2, trial_3, trial_4]);  
   
 </script>
 </html>

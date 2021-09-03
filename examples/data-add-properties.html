@@ -11,10 +11,11 @@
 
     var jsPsych = initJsPsych({
       on_finish: function() {
+        // add completed field to every trial in the data
         jsPsych.data.addProperties({
           completed: true
         });
-        // data should have a subject and completed field for each trial.
+        // when data is displayed, you should see a subject and completed field for each trial
         jsPsych.data.displayData();
       }
     });
@@ -22,7 +23,7 @@
     var preload = {
       type: jsPsychPreload,
       auto_preload: true
-    }
+    };
 
     var block_1 = {
       type: jsPsychImageKeyboardResponse,
@@ -31,8 +32,9 @@
       render_on_canvas: false,
       stimulus_width: 300,
       prompt: '<p>The data displayed on the next page should have a subject and completed property. Press "y" or "n".</p>'
-    }
+    };
 
+    // add the subject number to every trial in the data
     jsPsych.data.addProperties({
       subject: 1
     });

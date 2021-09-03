@@ -5,9 +5,14 @@
     <script src="../packages/plugin-serial-reaction-time/dist/index.browser.js"></script>
     <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
   </head>
+  <body></body>
   <script>
 
-    var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
     var locations = [
       [0,0],
@@ -41,7 +46,7 @@
       ],
       randomize_order: true,
       repetitions: 10
-    }
+    };
 
     jsPsych.run([timeline]);
 

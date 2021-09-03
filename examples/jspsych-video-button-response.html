@@ -10,7 +10,11 @@
   <body></body>
   <script>
 
-    var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
     // preloading videos only works when the file is running on a server
     // if you run this experiment by opening the file directly in the browser, 
@@ -58,7 +62,7 @@
       response_allowed_while_playing: false
     };
 
-    jsPsych.run([preload, pre_trial, trial_1, trial_2]); // TO DO: display data
+    jsPsych.run([preload, pre_trial, trial_1, trial_2]);
 
   </script>
 </html>

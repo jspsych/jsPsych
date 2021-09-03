@@ -9,7 +9,11 @@
   <body></body>
   <script>
 
-    var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
     var inputs = {
     	type: jsPsychResize,
@@ -23,7 +27,7 @@
     	type: jsPsychImageKeyboardResponse,
     	stimulus: 'img/happy_face_4.jpg',
     	prompt: '<p>If scaling worked, then the image above should be 4 inches wide.</p>',
-    }
+    };
 
     jsPsych.run([inputs, image_display]);
 

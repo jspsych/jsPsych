@@ -46,7 +46,7 @@
     // If the parameter is dynamic or a timeline variable, 
     // then the value that is returned from the function or timeline variables will be saved to the data.
     var trial_3 = {
-      type: 'html-button-response',
+      type: jsPsychHtmlButtonResponse,
       stimulus: '<p style="color: orange; font-size: 48px; font-weight: bold;">BLUE</p>',
       choices: function() {
         // randomly shuffle the yes/no button order on each trial
@@ -74,7 +74,7 @@
     // This includes parameters like the 'stimulus' function in canvas-* plugins,
     // and event-related callback functions, like 'on_start' and 'on_finish'.
     var trial_4 = {
-      type: 'canvas-keyboard-response',
+      type: jsPsychCanvasKeyboardResponse,
       stimulus: function (c) {
         var ctx = c.getContext('2d');
         ctx.beginPath();

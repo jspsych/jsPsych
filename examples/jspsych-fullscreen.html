@@ -1,40 +1,44 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="../packages/jspsych/dist/index.browser.js"></script>
-  <script src="../packages/plugin-fullscreen/dist/index.browser.js"></script>
-  <script src="../packages/plugin-image-keyboard-response/dist/index.browser.js"></script>
-  <script src="../packages/plugin-preload/dist/index.browser.js"></script>
-  <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
-</head>
-<body></body>
-<script>
+  <head>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-fullscreen/dist/index.browser.js"></script>
+    <script src="../packages/plugin-image-keyboard-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-preload/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
 
-  var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
-  var fullscreen_trial = {
-    type: jsPsychFullscreen,
-    fullscreen_mode: true
-  }
+    var fullscreen_trial = {
+      type: jsPsychFullscreen,
+      fullscreen_mode: true
+    };
 
-  var preload = {
-    type: jsPsychPreload,
-    auto_preload: true
-  };
+    var preload = {
+      type: jsPsychPreload,
+      auto_preload: true
+    };
 
-  var trial_1 = {
-    type: jsPsychImageKeyboardResponse,
-    stimulus: 'img/happy_face_1.jpg',
-    choices: ['y','n'], 
-    prompt: '<p>Have you seen this face before? Press "y" or "n".</p>'
-  }
+    var trial_1 = {
+      type: jsPsychImageKeyboardResponse,
+      stimulus: 'img/happy_face_1.jpg',
+      choices: ['y','n'], 
+      prompt: '<p>Have you seen this face before? Press "y" or "n".</p>'
+    };
 
-  var fullscreen_trial_exit = {
-    type: jsPsychFullscreen,
-    fullscreen_mode: false
-  }
+    var fullscreen_trial_exit = {
+      type: jsPsychFullscreen,
+      fullscreen_mode: false
+    };
 
-  jsPsych.run([fullscreen_trial, preload, trial_1, fullscreen_trial_exit]);
+    jsPsych.run([fullscreen_trial, preload, trial_1, fullscreen_trial_exit]);
 
-</script>
+  </script>
 </html>

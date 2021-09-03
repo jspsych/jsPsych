@@ -8,7 +8,11 @@
   <body></body>
   <script>
 
-    var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
     var survey_page1 = {
       type: jsPsychSurveyText,
@@ -24,7 +28,7 @@
       questions: [
         {prompt: 'Tell me about your day', placeholder: 'How did it start?', rows:10, columns: 50}
       ]
-    }
+    };
 
     jsPsych.run([survey_page1, survey_page2]);
 

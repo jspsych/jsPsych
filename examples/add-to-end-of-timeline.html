@@ -19,21 +19,22 @@
     var preload = {
       type: jsPsychPreload,
       images: ['img/happy_face_4.jpg']
-    }
+    };
 
     var first = {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: 'first trial; new trial added when on_finish is called',
+      stimulus: 'First trial; new trial added when on_finish is called.',
       on_finish: function(){
         jsPsych.addNodeToEndOfTimeline({
           timeline: [{
             type: jsPsychImageKeyboardResponse,
             stimulus: 'img/happy_face_4.jpg',
-            stimulus_width: 300
+            stimulus_width: 300,
+            prompt: '<p>New trial.</p>'
           }]
-        })
+        });
       }
-    }
+    };
 
     jsPsych.run([preload, first]);
 

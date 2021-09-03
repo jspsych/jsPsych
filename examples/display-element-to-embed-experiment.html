@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
     <style>
       p { line-height: 1.5em; font-size: 18px; }
-      #jspsych-experiment { width: 600px; height: 400px; float: right; overflow: hidden; margin: 25px; border: 1px solid #999;}
+      #jspsych-experiment { width: 600px; height: 400px; float: right; margin: 25px; border: 1px solid #999;}
     </style>
   </head>
   <body>
@@ -56,8 +56,8 @@
     var trial_3 = {
       type: jsPsychHtmlKeyboardResponse,
       choices: "NO_KEYS", 
-      trial_duration: 5000,
-      prompt: '<p>No response allowed. 5s wait.</p>',
+      trial_duration: 2000,
+      prompt: '<p>No response allowed. 2s wait.</p>',
       stimulus: '<p>:)</p>'
     };
 
@@ -65,7 +65,7 @@
       timeline: [preload_trial, trial_1, trial_2, trial_3],
     };
 
-    jsPsych.run(node);
+    jsPsych.run([node]);
 
   </script>
 </html>

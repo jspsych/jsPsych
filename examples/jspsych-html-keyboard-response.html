@@ -8,14 +8,19 @@
 <body></body>
 <script>
 
-  var jsPsych = initJsPsych();
+  var jsPsych = initJsPsych({
+    default_ITI: 250, 
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
 
   var trial_1 = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
     choices: ['y', 'n'],
     prompt: '<p>Does the color match the word? (y or n)</p>'
-  }
+  };
 
   var trial_2 = {
     type: jsPsychHtmlKeyboardResponse,
@@ -23,7 +28,7 @@
     choices: ['y', 'n'],
     trial_duration: 5000,
     prompt: '<p>Does the color match the word? (y or n; 5s time limit)</p>'
-  }
+  };
 
   var trial_3 = {
     type: jsPsychHtmlKeyboardResponse,
@@ -31,8 +36,9 @@
     choices: "NO_KEYS",
     trial_duration: 2000,
     prompt: '<p>No response allowed. 2s wait.</p>'
-  }
+  };
 
-  jsPsych.run([trial_1, trial_2, trial_3]);  // TO DO: default ITI: 250, on_finish: jsPsych.data.displayData()
+  jsPsych.run([trial_1, trial_2, trial_3]);
+
 </script>
 </html>

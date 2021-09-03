@@ -8,7 +8,11 @@
   <body></body>
   <script>
 
-    var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
     var grid_rows = 8;
     var grid_cols = 8;
@@ -83,7 +87,7 @@
         }
       ],
       repetitions: 6,
-    }
+    };
 
     jsPsych.run([timeline_2]);
 

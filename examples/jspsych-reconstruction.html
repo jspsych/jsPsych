@@ -9,16 +9,20 @@
   <body></body>
   <script>
 
-    var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
-    var sample_function = function(param){
+    var sample_function = function(param) {
       var size = 50 + Math.floor(param*250);
       var html = '<div style="display: block; margin: auto; height: 300px; width: 300px; position: relative;">'+
         '<div style="display: block; position: absolute; top: '+(150 - size/2)+'px; left:'+(150 - size/2)+'px; background-color: #000000; '+
         'width: '+size+'px; height: '+size+'px;"></div></div><p>Press "h" to make the square larger. Press "g" to make the square smaller.</p>'+
         '<p>When the square is the same size as the previous one, click Next.</p>';
       return html;
-    }
+    };
 
     var pre_test = {
       type: jsPsychHtmlKeyboardResponse,
@@ -28,13 +32,13 @@
       choices: ['c'],
       post_trial_gap: 1250,
       prompt: '<p>Study the size of this square carefully. On the next screen you will have to recreate it. When you are ready, press "c".</p>'
-    }
+    };
 
     var test = {
       type: jsPsychReconstruction,
       stim_function: sample_function,
       starting_value: 0.5,
-    }
+    };
 
     jsPsych.run([pre_test, test]);
 

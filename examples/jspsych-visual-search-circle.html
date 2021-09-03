@@ -1,58 +1,62 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="js/snap.svg-min.js"></script>
-  <script src="../packages/jspsych/dist/index.browser.js"></script>
-  <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
-  <script src="../packages/plugin-visual-search-circle/dist/index.browser.js"></script>
-  <script src="../packages/plugin-preload/dist/index.browser.js"></script>
-  <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
-</head>
-<body></body>
-<script>
+  <head>
+    <script src="js/snap.svg-min.js"></script>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-visual-search-circle/dist/index.browser.js"></script>
+    <script src="../packages/plugin-preload/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
 
-  var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
-  var preload_images = {
-    type: jsPsychPreload,
-    images: ['img/1.gif', 'img/2.gif', 'img/3.gif', 'img/backwardN.gif', 'img/normalN.gif', 'img/fixation.gif']
-  };
+    var preload_images = {
+      type: jsPsychPreload,
+      images: ['img/1.gif', 'img/2.gif', 'img/3.gif', 'img/backwardN.gif', 'img/normalN.gif', 'img/fixation.gif']
+    };
 
-  var intro = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: '<p>You will see a set of Ns on the following screens. Press j if there is a backwards N. If there is no backwards N press f.</p><p>Press any key to begin.</p>'
-  };
+    var intro = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p>You will see a set of Ns on the following screens. Press j if there is a backwards N. If there is no backwards N press f.</p><p>Press any key to begin.</p>'
+    };
 
-  var trial_1 = {
-    target_present: true,
-    set_size: 4
-  };
+    var trial_1 = {
+      target_present: true,
+      set_size: 4
+    };
 
-  var trial_2 = {
-    target_present: true,
-    set_size: 3
-  };
+    var trial_2 = {
+      target_present: true,
+      set_size: 3
+    };
 
-  var trial_3 = {
-    target_present: false,
-    set_size: 6
-  };
+    var trial_3 = {
+      target_present: false,
+      set_size: 6
+    };
 
-  var trial_4 = {
-    target_present: false,
-    foil: ['img/1.gif', 'img/2.gif', 'img/3.gif'], // example of using multiple foils.
-    set_size: 3
-  };
+    var trial_4 = {
+      target_present: false,
+      foil: ['img/1.gif', 'img/2.gif', 'img/3.gif'], // example of using multiple foils.
+      set_size: 3
+    };
 
-  var trials = {
-    type: jsPsychVisualSearchCircle,
-    target: 'img/backwardN.gif',
-    foil: 'img/normalN.gif',
-    fixation_image: 'img/fixation.gif',
-    timeline: [trial_1, trial_2, trial_3, trial_4]
-  };
+    var trials = {
+      type: jsPsychVisualSearchCircle,
+      target: 'img/backwardN.gif',
+      foil: 'img/normalN.gif',
+      fixation_image: 'img/fixation.gif',
+      timeline: [trial_1, trial_2, trial_3, trial_4]
+    };
 
-  jsPsych.run([preload_images, intro, trials]);  // TO DO: display data
+    jsPsych.run([preload_images, intro, trials]);
 
-</script>
+  </script>
 </html>

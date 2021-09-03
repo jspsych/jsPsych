@@ -4,20 +4,24 @@
     <script src="../packages/jspsych/dist/index.browser.js"></script>
     <script src="../packages/plugin-audio-button-response/dist/index.browser.js"></script>
     <script src="../packages/plugin-html-button-response/dist/index.browser.js"></script>
-    <!-- <script src="../packages/plugin-preload/dist/index.browser.js"></script> -->
+    <script src="../packages/plugin-preload/dist/index.browser.js"></script>
     <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body></body>
   <script>
 
-  var jsPsych = initJsPsych();
+  var jsPsych = initJsPsych({
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
 
   var timeline = [];
 
-  // timeline.push({
-  //   type: jsPsychPreload,
-  //   auto_preload: true
-  // });
+  timeline.push({
+    type: jsPsychPreload,
+    auto_preload: true
+  });
 
   timeline.push({
     type: jsPsychHtmlButtonResponse,
@@ -51,7 +55,7 @@
     response_allowed_while_playing: false
   })
 
-  jsPsych.run(timeline); // TO DO: add preload trial, on_finish: jsPsych.data.displayData()
+  jsPsych.run(timeline); 
 
   </script>
 </html>

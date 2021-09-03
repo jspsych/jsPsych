@@ -24,7 +24,7 @@
     var preload = {
       type: jsPsychPreload,
       images: ['img/blue.png', 'img/orange.png']
-    }
+    };
     timeline.push(preload);
 
     /* define welcome message trial */
@@ -71,7 +71,7 @@
       data: {
         task: 'fixation'
       }
-    }
+    };
 
     var test = {
       type: jsPsychImageKeyboardResponse,
@@ -84,14 +84,14 @@
       on_finish: function (data) {
         data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
       }
-    }
+    };
 
     var test_procedure = {
       timeline: [fixation, test],
       timeline_variables: test_stimuli,
       repetitions: 5,
       randomize_order: true
-    }
+    };
     timeline.push(test_procedure);
 
     /* define debrief */

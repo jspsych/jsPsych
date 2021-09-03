@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="../packages/jspsych/dist/index.browser.js"></script>
-  <script src="../packages/plugin-animation/dist/index.browser.js"></script>
-  <script src="../packages/plugin-preload/dist/index.browser.js"></script>
-  <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
-</head>
-<body></body>
-<script>
+  <head>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-animation/dist/index.browser.js"></script>
+    <script src="../packages/plugin-preload/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
 
-  var jsPsych = initJsPsych({
-    on_finish: function() {
-      jsPsych.data.displayData();
-    }
-  });
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
-  var preload_trial = {
-    type: jsPsychPreload,
-    auto_preload: true
-  }
+    var preload_trial = {
+      type: jsPsychPreload,
+      auto_preload: true
+    };
 
-  // If render_on_canvas is false, the images will be shown via an <img> rather than <canvas> element.
-  // In some browsers, the first time the images are shown, the <img> method (render_on_canvas: false) will produce a brief 
-  // blank screen (white flash) between images when frame_isi is 0.
-  var animation_trial = {
-    type: jsPsychAnimation,
-    stimuli: ['img/happy_face_1.jpg', 'img/happy_face_2.jpg', 'img/happy_face_3.jpg', 'img/happy_face_4.jpg'],
-    sequence_reps: 3,
-    frame_time: 300,
-    prompt: '<p>Watch the faces.</p>',
-    //render_on_canvas: false
-  };
+    // If render_on_canvas is false, the images will be shown via an <img> rather than <canvas> element.
+    // In some browsers, the first time the images are shown, the <img> method (render_on_canvas: false) will produce a brief 
+    // blank screen (white flash) between images when frame_isi is 0.
+    var animation_trial = {
+      type: jsPsychAnimation,
+      stimuli: ['img/happy_face_1.jpg', 'img/happy_face_2.jpg', 'img/happy_face_3.jpg', 'img/happy_face_4.jpg'],
+      sequence_reps: 3,
+      frame_time: 300,
+      prompt: '<p>Watch the faces.</p>',
+      //render_on_canvas: false
+    };
 
-  jsPsych.run([preload_trial, animation_trial]);  // TO DO: on_finish: jsPsych.data.displayData()
+    jsPsych.run([preload_trial, animation_trial]);  
 
-</script>
+  </script>
 </html>

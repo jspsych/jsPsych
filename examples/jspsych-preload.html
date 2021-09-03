@@ -11,7 +11,11 @@
   <body></body>
   <script>
 
-    var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
     // all preload files will print information to the console about file loading success/failure
     // through the on_error and on_success trial parameters
@@ -131,8 +135,8 @@
     };
 
     jsPsych.run([auto_preload_trial, start, image_trial, audio_trial,
-        start_fail_example_1, preload_fail_example_1, after_fail_example_1, 
-        start_fail_example_2, preload_fail_example_2, after_fail_example_2]);
+      start_fail_example_1, preload_fail_example_1, after_fail_example_1, 
+      start_fail_example_2, preload_fail_example_2, after_fail_example_2]);
 
   </script>
 </html>

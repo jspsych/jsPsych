@@ -19,25 +19,26 @@
     var preload = {
       type: jsPsychPreload,
       auto_preload: true
-    }
+    };
 
     var trial_1 = {
       stimulus: 'img/happy_face_4.jpg',
-    }
+    };
 
     var trial_2 = {
       stimulus: 'img/sad_face_4.jpg',
-    }
+    };
 
     var trial_3 = {
       stimulus: 'img/sad_face_3.jpg',
-    }
+    };
 
     var node = {
       type: jsPsychImageKeyboardResponse,
       timeline: [trial_1, trial_2, trial_3],
       choices: ['y','n'], 
-      prompt: '<p>Have you seen this face before? Press "y" or "n".</p>',
+      prompt: '<p>Have you seen this face before? Press "y" or "n".</p>'+
+      '<p>(After each trial, all of the data from this timeline will be printed to the console.)</p>',
       stimulus_width: 300,
       data: {
         node_data: true
@@ -45,7 +46,7 @@
       on_finish: function(){
         console.log(jsPsych.data.getLastTimelineData().json());
       }
-    }
+    };
 
     jsPsych.run([preload, node]);
 
