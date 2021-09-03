@@ -11,9 +11,10 @@ const info = <const>{
     },
     /** Path to image file(s) that is/are the foils/distractors. */
     foil: {
-      type: ParameterType.IMAGE, // TO DO: another parameter that can either be an image path string or an array of image path strings. Require this to always be an array?
+      type: ParameterType.IMAGE,
       pretty_name: "Foil",
       default: undefined,
+      array: true,
     },
     /** Path to image file that is a fixation target. */
     fixation_image: {
@@ -139,16 +140,22 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
       'px"></div>';
     var paper = display_element.querySelector("#jspsych-visual-search-circle-container");
 
-    // check distractors - array?
+    // check distractors - single image to be repeated up to set_size?
     var foil_arr = [];
-    if (!Array.isArray(trial.foil)) {
-      const fa = [];
-      for (var i = 0; i < trial.set_size; i++) {
-        fa.push(trial.foil);
+    if (Array.isArray(trial.foil)) {
+      if (trial.foil.length == 1 && trial.set_size > 1) {
+        const fa = [];
+        for (var i = 0; i < trial.set_size; i++) {
+          fa.push(trial.foil[0]);
+        }
+        foil_arr = fa;
+      } else {
+        foil_arr = trial.foil;
       }
-      foil_arr = fa;
     } else {
-      foil_arr = trial.foil;
+      console.error(
+        "Error in visual-search-circle plugin: foil parameter must be an array containing one or more image file paths (strings)."
+      );
     }
 
     const show_fixation = () => {

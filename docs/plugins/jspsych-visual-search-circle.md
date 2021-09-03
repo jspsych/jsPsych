@@ -13,7 +13,7 @@ In addition to the [parameters available in all plugins](/overview/plugins#param
 | target_present     | boolean         | *undefined*   | Is the target present?                   |
 | set_size           | numeric         | *undefined*   | How many items should be displayed?      |
 | target             | string          | *undefined*   | Path to image file that is the search target. |
-| foil               | string or array | *undefined*   | Path to image file that is the foil/distractor. Can specify an array of distractors if the distractors are all different images. |
+| foil               | array           | *undefined*   | Array containing one or more paths to image files that make up the foils/distractors. If the foil array contains only one image and the set_size is greater than 1, then this image will be repeated for all distractors up to the set_size. If the foil array contains more than one image, then each image in the array will be used as one distractor. |
 | fixation_image     | string          | *undefined*   | Path to image file that is a fixation target. |
 | target_size        | array           | `[50, 50]`    | Two element array indicating the height and width of the search array element images. |
 | fixation_size      | array           | `[16, 16]`    | Two element array indicating the height and width of the fixation image. |
@@ -77,13 +77,11 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
         var trial = {
           type: 'visual-search-circle',
-          target: 'img/elephant.png',
-          foil: ['img/lion.png', 'img/monkey.png'],
+          stimuli: ['img/elephant.png', 'img/lion.png', 'img/monkey.png'],
           fixation_image: 'img/fixation.gif',
           target_present_key: 'e',
           target_absent_key: 'n',
-          target_present: true,
-          set_size: 3
+          target_present: true
         }
         ```
 
