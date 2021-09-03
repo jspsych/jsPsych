@@ -1,8 +1,5 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-// TO DO: the parameters below don't match up with the docs: https://www.jspsych.org/plugins/jspsych-webgazer-validate/
-// docs contain 'repetiton_per_point', and some param descriptions in docs refer to calibration
-
 const info = <const>{
   name: "webgazer-validate",
   parameters: {
