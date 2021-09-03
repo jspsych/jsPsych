@@ -10,7 +10,7 @@ describe("rdk plugin", () => {
         number_of_dots: 200,
         RDK_type: 3,
         choices: ["a", "l"],
-        correct_choice: "l",
+        correct_choice: ["l"],
         coherent_direction: 0,
       },
     ]);
@@ -27,7 +27,7 @@ describe("rdk plugin", () => {
       number_of_dots: 200,
       RDK_type: 3,
       choices: ["a", "l"],
-      correct_choice: "l",
+      correct_choice: ["l"],
       coherent_direction: 0,
     };
 
