@@ -298,7 +298,7 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
     function after_response(choice: string) {
       // measure rt
       var end_time = performance.now();
-      var rt = end_time - start_time;
+      var rt = Math.round(end_time - start_time);
       response.button = parseInt(choice);
       response.rt = rt;
 
