@@ -61,7 +61,10 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
 
   constructor(private jsPsych: JsPsych) {}
 
-  trial(display_element: HTMLElement, trial: TrialType<Info>) {
+  trial(display_element: HTMLElement, trial: TrialType<Info>, on_load: () => void) {
+    // hold the .resolve() function from the Promise that ends the trial
+    let trial_complete;
+
     var url = trial.url;
     if (trial.force_refresh) {
       url = trial.url + "?t=" + performance.now();
@@ -82,6 +85,7 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
     };
 
     load(display_element, url, function () {
+      on_load();
       var t0 = performance.now();
       var finish = function () {
         if (trial.check_fn && !trial.check_fn(display_element)) {
@@ -96,6 +100,7 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
         };
         display_element.innerHTML = "";
         this.jsPsych.finishTrial(trial_data);
+        trial_complete();
       };
 
       // by default, scripts on the external page are not executed with XMLHttpRequest().
@@ -121,6 +126,10 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
         };
         display_element.addEventListener("keydown", key_listener);
       }
+    });
+
+    return new Promise((resolve) => {
+      trial_complete = resolve;
     });
   }
 }

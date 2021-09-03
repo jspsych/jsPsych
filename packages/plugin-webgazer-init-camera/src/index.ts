@@ -37,7 +37,7 @@ class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
 
   constructor(private jsPsych: JsPsych) {}
 
-  trial(display_element: HTMLElement, trial: TrialType<Info>) {
+  trial(display_element: HTMLElement, trial: TrialType<Info>, on_load: () => void) {
     var start_time = performance.now();
     var load_time: number;
 
@@ -64,6 +64,8 @@ class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
     };
 
     const showTrial = () => {
+      on_load();
+
       load_time = Math.round(performance.now() - start_time);
 
       var style = `

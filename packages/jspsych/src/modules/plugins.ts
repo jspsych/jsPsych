@@ -145,7 +145,11 @@ export interface PluginInfo {
 }
 
 export interface JsPsychPlugin<I extends PluginInfo> {
-  trial(display_element: HTMLElement, trial: TrialType<I>): void;
+  trial(
+    display_element: HTMLElement,
+    trial: TrialType<I>,
+    on_load?: () => void
+  ): void | Promise<any>;
 }
 
 export type TrialType<I extends PluginInfo> = InferredParameters<I["parameters"]> &
