@@ -11,7 +11,7 @@ const info = <const>{
     },
     /** Array containing the correct key(s) for that trial. */
     correct_choice: {
-      type: ParameterType.KEYS, // TO DO: docs says this can be array or string - need to allow both types here?
+      type: ParameterType.KEYS,
       pretty_name: "Correct choice",
       default: undefined,
     },
@@ -554,7 +554,7 @@ class RdkPlugin implements JsPsychPlugin<Info> {
         response: response.key, //The key that the subject pressed
         correct: correctOrNot(), //If the subject response was correct
         choices: choices, //The set of valid keys
-        correct_choice: correct_choice, //The correct choice
+        correct_choice: correct_choice, //The correct choice(s)
         trial_duration: trial_duration, //The trial duration
         response_ends_trial: response_ends_trial, //If the response ends the trial
         number_of_apertures: number_of_apertures,
@@ -629,26 +629,29 @@ class RdkPlugin implements JsPsychPlugin<Info> {
 
     //Function that determines if the response is correct
     const correctOrNot = () => {
-      //Check that the correct_choice has been defined
-      if (typeof correct_choice !== "undefined") {
-        // if single character, convert to array for simplicity
-        if (!Array.isArray(correct_choice)) {
-          correct_choice = [correct_choice];
-        }
+      //Check that the correct_choice has been defined and that it is an array
+      if (typeof correct_choice !== "undefined" && correct_choice.constructor === Array) {
         if (typeof correct_choice[0] === "string" || correct_choice[0] instanceof String) {
           var key_in_choices = correct_choice.every((x: string) => {
             return this.jsPsych.pluginAPI.compareKeys(x, response.key);
           });
           return key_in_choices; //If the response is included in the correct_choice array, return true. Else, return false.
-        }
-        //Else if the elements are numbers (javascript character codes)
-        else if (typeof correct_choice[0] === "number") {
-          console.error("Error in RDK plugin: correct_choice value must be a string.");
+        } else if (typeof correct_choice[0] === "number") {
+          // the elements are numbers (javascript character codes)
+          console.error(
+            "Error in RDK plugin: elements in the correct_choice array must be key characters (strings)."
+          );
           return false; // added due to TS error: not all code paths return a value
         } else {
+          console.error(
+            "Error in RDK plugin: elements in the correct_choice array must be key characters (strings)."
+          );
           return false; // added due to TS error: not all code paths return a value
         }
       } else {
+        console.error(
+          "Error in RDK plugin: you must specify an array of key characters for the correct_choice parameter."
+        );
         return false; // added due to TS error: not all code paths return a value
       }
     };
