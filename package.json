@@ -9,7 +9,7 @@
     "test:watch": "npm test -- --watch",
     "build": "npm run build -ws",
     "build:archive": "gulp createCoreDistArchive",
-    "prepare": "husky install && npm run build",
+    "prepare": "husky install && npm run build --workspace jspsych && npm run build",
     "tsc": "npm run tsc -ws"
   },
   "engines": {

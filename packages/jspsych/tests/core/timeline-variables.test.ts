@@ -1,5 +1,5 @@
-// import callFunction from "@jspsych/plugin-call-function";
-// import htmlButtonResponse from "@jspsych/plugin-html-button-response";
+import callFunction from "@jspsych/plugin-call-function";
+import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
 import { initJsPsych } from "../../src";
@@ -90,7 +90,7 @@ describe("sampling", () => {
 });
 
 describe("timeline variables are correctly evaluated", () => {
-  test.skip("when used as trial type parameter", async () => {
+  test("when used as trial type parameter", async () => {
     const jsPsych = initJsPsych();
 
     const { getHTML } = await startTimeline(
@@ -103,7 +103,6 @@ describe("timeline variables are correctly evaluated", () => {
               choices: ["a", "b"],
             },
           ],
-          // @ts-ignore TODO update once htmlButtonResponse is a class
           timeline_variables: [{ type: htmlKeyboardResponse }, { type: htmlButtonResponse }],
         },
       ],
@@ -115,7 +114,7 @@ describe("timeline variables are correctly evaluated", () => {
     expect(getHTML()).toMatch("button");
   });
 
-  test.skip("when used with a plugin that has a FUNCTION parameter type", async () => {
+  test("when used with a plugin that has a FUNCTION parameter type", async () => {
     const jsPsych = initJsPsych();
 
     const mockFn = jest.fn();
@@ -125,7 +124,6 @@ describe("timeline variables are correctly evaluated", () => {
         {
           timeline: [
             {
-              // @ts-ignore TODO update once callFunction is a class
               type: callFunction,
               func: jsPsych.timelineVariable("fn"),
             },

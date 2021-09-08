@@ -1,24 +1,18 @@
-import { jest } from "@jest/globals";
-import jsPsych from "jspsych";
-import { mouseDownMouseUpTarget } from "jspsych/tests/utils";
+import { mouseDownMouseUpTarget, startTimeline } from "jspsych/tests/utils";
 
 import serialReactionTimeMouse from ".";
-
-jest.useFakeTimers();
 
 const getCellElement = (cellId: string) =>
   document.querySelector(`#jspsych-serial-reaction-time-stimulus-cell-${cellId}`) as HTMLElement;
 
-describe("serial-reaction-time-mouse plugin", function () {
-  test("default behavior", function () {
-    var trial = {
-      type: serialReactionTimeMouse,
-      target: [0, 0],
-    };
-
-    jsPsych.init({
-      timeline: [trial],
-    });
+describe("serial-reaction-time-mouse plugin", () => {
+  test("default behavior", async () => {
+    const { getHTML, expectFinished } = await startTimeline([
+      {
+        type: serialReactionTimeMouse,
+        target: [0, 0],
+      },
+    ]);
 
     expect(getCellElement("0-0").style.backgroundColor).toBe("rgb(153, 153, 153)");
     expect(getCellElement("0-1").style.backgroundColor).toBe("");
@@ -27,10 +21,10 @@ describe("serial-reaction-time-mouse plugin", function () {
 
     mouseDownMouseUpTarget(getCellElement("0-1"));
 
-    expect(jsPsych.getDisplayElement().innerHTML).not.toBe("");
+    expect(getHTML()).not.toBe("");
 
     mouseDownMouseUpTarget(getCellElement("0-0"));
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+    await expectFinished();
   });
 });

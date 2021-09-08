@@ -1,63 +1,66 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-video-slider-response.js"></script>
-    <script src="../plugins/jspsych-html-button-response.js"></script>
-    <script src="../plugins/jspsych-preload.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css">
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-video-slider-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-button-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-preload/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body></body>
   <script>
 
-  // preloading videos only works when the file is running on a server
-  // if you run this experiment by opening the file directly in the browser, 
-  // then video preloading will be disabled to prevent CORS errors
-  var preload = {
-    type: 'preload',
-    auto_preload: true
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
-  }
-  var pre_trial = {
-    type: 'html-button-response',
-    stimulus: '<div style="max-width:600px;"><p>Some browsers now require that a user interacts with a web page before video or audio content will autoplay. Clicking the button below satisfies that requirement.</p><p>Without this trial, the video will load but not play.</p></div>',
-    choices: ['Continue']
-  }
+    // preloading videos only works when the file is running on a server
+    // if you run this experiment by opening the file directly in the browser, 
+    // then video preloading will be disabled to prevent CORS errors
+    var preload = {
+      type: jsPsychPreload,
+      auto_preload: true
+    };
 
-  var trial_1 = {
-    type: 'video-slider-response',
-    stimulus: ['video/sample_video.mp4'],
-    labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
-    min: 1,
-    max: 5,
-    step: 1,
-    slider_start: 1,
-    prompt: '<p>Rate this video clip.</p><p>Slider movement is required, so you must interact with (click) the slider cursor to continue.</p>',
-    require_movement: true,
-    width: 600,
-    autoplay: true,
-    rate: 1.5,
-    response_ends_trial: true
-  }
+    var pre_trial = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: '<div style="max-width:600px;"><p>Some browsers now require that a user interacts with a web page before video or audio content will autoplay. Clicking the button below satisfies that requirement.</p><p>Without this trial, the video will load but not play.</p></div>',
+      choices: ['Continue']
+    };
 
-  var trial_2 = {
-    type: 'video-slider-response',
-    stimulus: ['video/sample_video.mp4'],
-    labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
-    min: 1,
-    max: 5,
-    step: 1,
-    slider_start: 3,
-    prompt: '<p>Rate this video clip after the video finishes playing.</p><p>The slider will be enabled after the video ends.</p>',
-    width: 600,
-    autoplay: true,
-    response_allowed_while_playing: false
-  }
+    var trial_1 = {
+      type: jsPsychVideoSliderResponse,
+      stimulus: ['video/sample_video.mp4'],
+      labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+      min: 1,
+      max: 5,
+      step: 1,
+      slider_start: 1,
+      prompt: '<p>Rate this video clip.</p><p>Slider movement is required, so you must interact with (click) the slider cursor to continue.</p>',
+      require_movement: true,
+      width: 600,
+      autoplay: true,
+      rate: 1.5,
+      response_ends_trial: true
+    };
 
-  jsPsych.init({
-    timeline: [preload, pre_trial, trial_1, trial_2],
-    on_finish: function() { jsPsych.data.displayData(); }
-  });
+    var trial_2 = {
+      type: jsPsychVideoSliderResponse,
+      stimulus: ['video/sample_video.mp4'],
+      labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+      min: 1,
+      max: 5,
+      step: 1,
+      slider_start: 3,
+      prompt: '<p>Rate this video clip after the video finishes playing.</p><p>The slider will be enabled after the video ends.</p>',
+      width: 600,
+      autoplay: true,
+      response_allowed_while_playing: false
+    };
+
+    jsPsych.run([preload, pre_trial, trial_1, trial_2]);
 
   </script>
 </html>

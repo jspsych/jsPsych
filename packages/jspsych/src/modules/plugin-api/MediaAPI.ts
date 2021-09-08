@@ -114,7 +114,7 @@ export class MediaAPI {
       this.preload_requests.push(request);
     };
 
-    function load_audio_file_html5audio(source, count = 1) {
+    const load_audio_file_html5audio = (source, count = 1) => {
       var audio = new Audio();
       const handleCanPlayThrough = () => {
         this.audio_buffers[source] = audio;
@@ -136,7 +136,7 @@ export class MediaAPI {
       });
       audio.src = source;
       this.preload_requests.push(audio);
-    }
+    };
 
     for (var i = 0; i < files.length; i++) {
       var bufferID = files[i];

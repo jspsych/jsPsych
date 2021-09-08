@@ -38,6 +38,7 @@ export class JsPsych {
    * experiment timeline
    */
   private timeline: TimelineNode;
+  private timelineDescription: any[];
 
   // flow control
   private global_trial_index = 0;
@@ -162,6 +163,7 @@ export class JsPsych {
     }
 
     // create experiment timeline
+    this.timelineDescription = timeline;
     this.timeline = new TimelineNode(this, { timeline });
 
     await this.prepareDom();
@@ -324,7 +326,10 @@ export class JsPsych {
     if (this.internal.call_immediate || immediate === true) {
       return this.timeline.timelineVariable(varname);
     } else {
-      return () => this.timeline.timelineVariable(varname);
+      return {
+        timelineVariablePlaceholder: true,
+        timelineVariableFunction: () => this.timeline.timelineVariable(varname),
+      };
     }
   }
 
@@ -355,6 +360,10 @@ export class JsPsych {
 
   getSafeModeStatus() {
     return this.file_protocol;
+  }
+
+  getTimeline() {
+    return this.timelineDescription;
   }
 
   private async prepareDom() {
@@ -571,15 +580,17 @@ export class JsPsych {
     for (const key of Object.keys(trial)) {
       if (key === "type") {
         // skip the `type` parameter as it contains a plugin
-        continue;
+        //continue;
       }
       // timeline variables on the root level
       if (
-        typeof trial[key] == "function" &&
-        trial[key].toString().replace(/\s/g, "") ==
-          "function(){returntimeline.timelineVariable(varname);}"
+        typeof trial[key] === "object" &&
+        trial[key] !== null &&
+        typeof trial[key].timelineVariablePlaceholder !== "undefined"
       ) {
-        trial[key] = trial[key].call();
+        /*trial[key].toString().replace(/\s/g, "") ==
+          "function(){returntimeline.timelineVariable(varname);}"
+      )*/ trial[key] = trial[key].timelineVariableFunction();
       }
       // timeline variables that are nested in objects
       if (typeof trial[key] == "object" && trial[key] !== null) {

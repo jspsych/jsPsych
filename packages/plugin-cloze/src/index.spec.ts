@@ -1,6 +1,4 @@
-import { jest } from "@jest/globals";
-import jsPsych from "jspsych";
-import { clickTarget } from "jspsych/tests/utils";
+import { clickTarget, startTimeline } from "jspsych/tests/utils";
 
 import cloze from ".";
 
@@ -8,157 +6,134 @@ jest.useFakeTimers();
 
 const getIntpuElementById = (id: string) => document.getElementById(id) as HTMLInputElement;
 
-describe("cloze", function () {
-  test("displays cloze", function () {
-    var trial = {
-      type: cloze,
-      text: "This is a %cloze% text.",
-    };
+describe("cloze", () => {
+  test("displays cloze", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze% text.",
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
+    expect(getHTML()).toContain(
       '<div class="cloze">This is a <input type="text" id="input0" value=""> text.</div>'
     );
   });
 
-  test("displays default button text", function () {
-    var trial = {
-      type: cloze,
-      text: "This is a %cloze% text.",
-    };
+  test("displays default button text", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze% text.",
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
-      new RegExp(
-        '<button class="jspsych-html-button-response-button" type="button" id="finish_cloze_button">OK</button>'
-      )
+    expect(getHTML()).toContain(
+      '<button class="jspsych-html-button-response-button" type="button" id="finish_cloze_button">OK</button>'
     );
   });
 
-  test("displays custom button text", function () {
-    var trial = {
-      type: cloze,
-      text: "This is a %cloze% text.",
-      button_text: "Next",
-    };
+  test("displays custom button text", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze% text.",
+        button_text: "Next",
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
-      new RegExp(
-        '<button class="jspsych-html-button-response-button" type="button" id="finish_cloze_button">Next</button>'
-      )
+    expect(getHTML()).toContain(
+      '<button class="jspsych-html-button-response-button" type="button" id="finish_cloze_button">Next</button>'
     );
   });
 
-  test("ends trial on button click when using default settings, i.e. answers are not checked", function () {
-    var trial = {
-      type: cloze,
-      text: "This is a %cloze% text.",
-    };
-
-    jsPsych.init({
-      timeline: [trial],
-    });
+  test("ends trial on button click when using default settings, i.e. answers are not checked", async () => {
+    const { expectFinished } = await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze% text.",
+      },
+    ]);
 
     clickTarget(document.querySelector("#finish_cloze_button"));
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+    await expectFinished();
   });
 
-  test("ends trial on button click when answers are checked and correct", function () {
-    var trial = {
-      type: cloze,
-      text: "This is a %cloze% text.",
-      check_answers: true,
-    };
-
-    jsPsych.init({
-      timeline: [trial],
-    });
+  test("ends trial on button click when answers are checked and correct", async () => {
+    const { expectFinished } = await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze% text.",
+        check_answers: true,
+      },
+    ]);
 
     getIntpuElementById("input0").value = "cloze";
     clickTarget(document.querySelector("#finish_cloze_button"));
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+    await expectFinished();
   });
 
-  test("does not end trial on button click when answers are checked and not correct", function () {
-    var trial = {
-      type: cloze,
-      text: "This is a %cloze% text.",
-      check_answers: true,
-    };
-
-    jsPsych.init({
-      timeline: [trial],
-    });
+  test("does not end trial on button click when answers are checked and not correct", async () => {
+    const { expectRunning } = await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze% text.",
+        check_answers: true,
+      },
+    ]);
 
     getIntpuElementById("input0").value = "some wrong answer";
     clickTarget(document.querySelector("#finish_cloze_button"));
-    expect(jsPsych.getDisplayElement().innerHTML).not.toBe("");
+    await expectRunning();
   });
 
-  test("does not call mistake function on button click when answers are checked and correct", function () {
-    var trial = {
-      type: cloze,
-      text: "This is a %cloze% text.",
-      check_answers: true,
-      mistake_fn: function () {
-        called = true;
+  test("does not call mistake function on button click when answers are checked and correct", async () => {
+    const mistakeFn = jest.fn();
+
+    await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze% text.",
+        check_answers: true,
+        mistake_fn: mistakeFn,
       },
-    };
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    var called = false;
     getIntpuElementById("input0").value = "cloze";
     clickTarget(document.querySelector("#finish_cloze_button"));
-    expect(called).not.toBeTruthy();
+    expect(mistakeFn).not.toHaveBeenCalled();
   });
 
-  test("calls mistake function on button click when answers are checked and not correct", function () {
-    var trial = {
-      type: cloze,
-      text: "This is a %cloze% text.",
-      check_answers: true,
-      mistake_fn: function () {
-        called = true;
+  test("calls mistake function on button click when answers are checked and not correct", async () => {
+    const mistakeFn = jest.fn();
+
+    await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze% text.",
+        check_answers: true,
+        mistake_fn: mistakeFn,
       },
-    };
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    var called = false;
     getIntpuElementById("input0").value = "some wrong answer";
     clickTarget(document.querySelector("#finish_cloze_button"));
-    expect(called).toBeTruthy();
+    expect(mistakeFn).toHaveBeenCalled();
   });
 
-  test("response data is stored as an array", function () {
-    var trial = {
-      type: cloze,
-      text: "This is a %cloze% text. Here is another cloze response box %%.",
-    };
-
-    jsPsych.init({
-      timeline: [trial],
-    });
+  test("response data is stored as an array", async () => {
+    const { getData } = await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze% text. Here is another cloze response box %%.",
+      },
+    ]);
 
     getIntpuElementById("input0").value = "cloze1";
     getIntpuElementById("input1").value = "cloze2";
     clickTarget(document.querySelector("#finish_cloze_button"));
-    var data = jsPsych.data.get().values()[0].response;
+
+    const data = getData().values()[0].response;
     expect(data.length).toBe(2);
     expect(data[0]).toBe("cloze1");
     expect(data[1]).toBe("cloze2");

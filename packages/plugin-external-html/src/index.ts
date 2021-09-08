@@ -1,120 +1,133 @@
-/**
- * (July 2012, Erik Weitnauer)
- * The html-plugin will load and display an external html pages. To proceed to the next, the
- * user might either press a button on the page or a specific key. Afterwards, the page get hidden and
- * the plugin will wait of a specified time before it proceeds.
- *
- * documentation: docs.jspsych.org
- */
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import jsPsych from "jspsych";
-
-const plugin = <any>{};
-
-plugin.info = {
+const info = <const>{
   name: "external-html",
-  description: "",
   parameters: {
+    /** The url of the external html page */
     url: {
-      type: jsPsych.plugins.parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "URL",
       default: undefined,
-      description: "The url of the external html page",
     },
+    /** The key to continue to the next page. */
     cont_key: {
-      type: jsPsych.plugins.parameterType.KEY,
+      type: ParameterType.KEY,
       pretty_name: "Continue key",
       default: null,
-      description: "The key to continue to the next page.",
     },
+    /** The button to continue to the next page. */
     cont_btn: {
-      type: jsPsych.plugins.parameterType.STRING,
+      type: ParameterType.STRING,
       pretty_name: "Continue button",
       default: null,
-      description: "The button to continue to the next page.",
     },
+    /** Function to check whether user is allowed to continue after clicking cont_key or clicking cont_btn */
     check_fn: {
-      type: jsPsych.plugins.parameterType.FUNCTION,
+      type: ParameterType.FUNCTION,
       pretty_name: "Check function",
       default: function () {
         return true;
       },
-      description: "",
     },
+    /** Whether or not to force a page refresh. */
     force_refresh: {
-      type: jsPsych.plugins.parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Force refresh",
       default: false,
-      description: "Refresh page.",
     },
-    // if execute_Script == true, then all javascript code on the external page
-    // will be executed in the plugin site within your jsPsych test
+    /** If execute_Script == true, then all JavasScript code on the external page will be executed. */
     execute_script: {
-      type: jsPsych.plugins.parameterType.BOOL,
+      type: ParameterType.BOOL,
       pretty_name: "Execute scripts",
       default: false,
-      description: "If true, JS scripts on the external html file will be executed.",
     },
   },
 };
 
-plugin.trial = function (display_element, trial) {
-  var url = trial.url;
-  if (trial.force_refresh) {
-    url = trial.url + "?t=" + performance.now();
-  }
+type Info = typeof info;
 
-  load(display_element, url, function () {
-    var t0 = performance.now();
-    var finish = function () {
-      if (trial.check_fn && !trial.check_fn(display_element)) {
-        return;
-      }
-      if (trial.cont_key) {
-        display_element.removeEventListener("keydown", key_listener);
-      }
-      var trial_data = {
-        rt: performance.now() - t0,
-        url: trial.url,
+/**
+ * **external-html**
+ *
+ * jsPsych plugin to load and display an external html page. To proceed to the next trial, the
+ * user might either press a button on the page or a specific key. Afterwards, the page will be hidden and
+ * the experiment will continue.
+ *
+ * @author Erik Weitnauer
+ * @see {@link https://www.jspsych.org/plugins/jspsych-external-html/ external-html plugin documentation on jspsych.org}
+ */
+class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
+  static info = info;
+
+  constructor(private jsPsych: JsPsych) {}
+
+  trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    var url = trial.url;
+    if (trial.force_refresh) {
+      url = trial.url + "?t=" + performance.now();
+    }
+
+    // helper to load via XMLHttpRequest
+    const load = (element, file, callback) => {
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.open("GET", file, true);
+      xmlhttp.onload = function () {
+        if (xmlhttp.status == 200 || xmlhttp.status == 0) {
+          //Check if loaded
+          element.innerHTML = xmlhttp.responseText;
+          callback();
+        }
       };
-      display_element.innerHTML = "";
-      jsPsych.finishTrial(trial_data);
+      xmlhttp.send();
     };
 
-    // by default, scripts on the external page are not executed with XMLHttpRequest().
-    // To activate their content through DOM manipulation, we need to relocate all script tags
-    if (trial.execute_script) {
-      for (const scriptElement of display_element.getElementsByTagName("script")) {
-        const relocatedScript = document.createElement("script");
-        relocatedScript.text = scriptElement.text;
-        scriptElement.parentNode.replaceChild(relocatedScript, scriptElement);
-      }
-    }
+    load(display_element, url, () => {
+      var t0 = performance.now();
 
-    if (trial.cont_btn) {
-      display_element.querySelector("#" + trial.cont_btn).addEventListener("click", finish);
-    }
-    if (trial.cont_key) {
-      var key_listener = function (e) {
-        if (jsPsych.pluginAPI.compareKeys(e.key, trial.cont_key)) finish();
+      const key_listener = (e) => {
+        if (this.jsPsych.pluginAPI.compareKeys(e.key, trial.cont_key)) {
+          finish();
+        }
       };
-      display_element.addEventListener("keydown", key_listener);
-    }
-  });
-};
 
-// helper to load via XMLHttpRequest
-function load(element, file, callback) {
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.open("GET", file, true);
-  xmlhttp.onload = function () {
-    if (xmlhttp.status == 200 || xmlhttp.status == 0) {
-      //Check if loaded
-      element.innerHTML = xmlhttp.responseText;
-      callback();
-    }
-  };
-  xmlhttp.send();
+      const finish = () => {
+        if (trial.check_fn && !trial.check_fn(display_element)) {
+          return;
+        }
+        if (trial.cont_key) {
+          display_element.removeEventListener("keydown", key_listener);
+        }
+        var trial_data = {
+          rt: performance.now() - t0,
+          url: trial.url,
+        };
+        display_element.innerHTML = "";
+        this.jsPsych.finishTrial(trial_data);
+      };
+
+      // by default, scripts on the external page are not executed with XMLHttpRequest().
+      // To activate their content through DOM manipulation, we need to relocate all script tags
+      if (trial.execute_script) {
+        // changed for..of getElementsByTagName("script") here to for i loop due to TS error:
+        // Type 'HTMLCollectionOf<HTMLScriptElement>' must have a '[Symbol.iterator]()' method that returns an iterator.ts(2488)
+        var all_scripts = display_element.getElementsByTagName("script");
+        for (var i = 0; i < all_scripts.length; i++) {
+          const relocatedScript = document.createElement("script");
+          const curr_script = all_scripts[i];
+          relocatedScript.text = curr_script.text;
+          curr_script.parentNode.replaceChild(relocatedScript, curr_script);
+        }
+      }
+
+      if (trial.cont_btn) {
+        display_element.querySelector("#" + trial.cont_btn).addEventListener("click", finish);
+      }
+
+      if (trial.cont_key) {
+        display_element.addEventListener("keydown", key_listener);
+      }
+    });
+  }
 }
 
-export default plugin;
+export default ExternalHtmlPlugin;
