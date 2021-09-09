@@ -63,7 +63,10 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
   constructor(private jsPsych: JsPsych) {}
 
-  trial(display_element: HTMLElement, trial: TrialType<Info>) {
+  trial(display_element: HTMLElement, trial: TrialType<Info>, on_load: () => void) {
+    // hold the .resolve() function from the Promise that ends the trial
+    let trial_complete;
+
     // setup stimulus
     var context = this.jsPsych.pluginAPI.audioContext();
     var audio;
@@ -130,6 +133,8 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
           end_trial();
         }, trial.trial_duration);
       }
+
+      on_load();
     };
 
     // function to end trial when it is time
@@ -163,6 +168,8 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
+
+      trial_complete();
     };
 
     // function to handle responses by the subject
@@ -199,6 +206,10 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         });
       }
     };
+
+    return new Promise((resolve) => {
+      trial_complete = resolve;
+    });
   }
 }
 

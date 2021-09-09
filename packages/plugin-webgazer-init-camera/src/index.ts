@@ -37,7 +37,9 @@ class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
 
   constructor(private jsPsych: JsPsych) {}
 
-  trial(display_element: HTMLElement, trial: TrialType<Info>) {
+  trial(display_element: HTMLElement, trial: TrialType<Info>, on_load: () => void) {
+    let trial_complete;
+
     var start_time = performance.now();
     var load_time: number;
 
@@ -61,9 +63,13 @@ class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
+
+      trial_complete();
     };
 
     const showTrial = () => {
+      on_load();
+
       load_time = Math.round(performance.now() - start_time);
 
       var style = `
@@ -151,6 +157,10 @@ class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
         }
       }
     }
+
+    return new Promise((resolve) => {
+      trial_complete = resolve;
+    });
   }
 }
 
