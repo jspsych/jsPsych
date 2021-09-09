@@ -15,7 +15,6 @@ describe.skip("audio-button-response", () => {
         prompt: "foo",
         choices: ["choice1"],
         on_load: () => {
-          console.log(getHTML());
           expect(getHTML()).toContain("ffgfgoo");
 
           clickTarget(displayElement.querySelector("button"));
