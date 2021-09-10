@@ -303,13 +303,19 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
     }
 
     if (trial.require_movement) {
+      const enable_button = () => {
+        display_element.querySelector<HTMLInputElement>(
+          "#jspsych-video-slider-response-next"
+        ).disabled = false;
+      };
+
       display_element
         .querySelector("#jspsych-video-slider-response-response")
-        .addEventListener("click", function () {
-          display_element.querySelector<HTMLButtonElement>(
-            "#jspsych-video-slider-response-next"
-          ).disabled = false;
-        });
+        .addEventListener("mousedown", enable_button);
+
+      display_element
+        .querySelector("#jspsych-video-slider-response-response")
+        .addEventListener("touchstart", enable_button);
     }
 
     var startTime = performance.now();

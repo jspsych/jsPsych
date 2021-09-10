@@ -235,13 +235,19 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
       }
 
       if (trial.require_movement) {
+        const enable_button = () => {
+          display_element.querySelector<HTMLInputElement>(
+            "#jspsych-audio-slider-response-next"
+          ).disabled = false;
+        };
+
         display_element
           .querySelector("#jspsych-audio-slider-response-response")
-          .addEventListener("click", function () {
-            display_element.querySelector<HTMLInputElement>(
-              "#jspsych-audio-slider-response-next"
-            ).disabled = false;
-          });
+          .addEventListener("mousedown", enable_button);
+
+        display_element
+          .querySelector("#jspsych-audio-slider-response-response")
+          .addEventListener("touchstart", enable_button);
       }
 
       display_element

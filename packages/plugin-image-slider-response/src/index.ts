@@ -352,13 +352,19 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     if (trial.require_movement) {
+      const enable_button = () => {
+        display_element.querySelector<HTMLInputElement>(
+          "#jspsych-image-slider-response-next"
+        ).disabled = false;
+      };
+
       display_element
         .querySelector("#jspsych-image-slider-response-response")
-        .addEventListener("click", function () {
-          display_element.querySelector<HTMLButtonElement>(
-            "#jspsych-image-slider-response-next"
-          ).disabled = false;
-        });
+        .addEventListener("mousedown", enable_button);
+
+      display_element
+        .querySelector("#jspsych-image-slider-response-response")
+        .addEventListener("touchstart", enable_button);
     }
 
     const end_trial = () => {
