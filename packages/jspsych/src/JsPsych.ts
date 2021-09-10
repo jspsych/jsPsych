@@ -466,13 +466,20 @@ export class JsPsych {
   }
 
   private finishExperiment() {
-    if (typeof this.timeline.end_message !== "undefined") {
-      this.DOM_target.innerHTML = this.timeline.end_message;
+    const finish_result = this.opts.on_finish(this.data.get());
+
+    const done_handler = () => {
+      if (typeof this.timeline.end_message !== "undefined") {
+        this.DOM_target.innerHTML = this.timeline.end_message;
+      }
+      this.resolveFinishedPromise();
+    };
+
+    if (finish_result) {
+      Promise.resolve(finish_result).then(done_handler);
+    } else {
+      done_handler();
     }
-
-    this.opts.on_finish(this.data.get());
-
-    this.resolveFinishedPromise();
   }
 
   private nextTrial() {
