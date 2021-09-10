@@ -1,4 +1,4 @@
-# The jsPsych core library
+# jsPsych
 
 ---
 ## jsPsych.addNodeToEndOfTimeline
@@ -117,7 +117,7 @@ None.
 
 ### Description
 
-Ends the experiment, skipping all remaining trials.
+Ends the experiment, skipping all remaining trials. If the `on_finish` event handler for `jsPsych` returns a `Promise` then the `end_message` will not be displayed until the promise is resolved.
 
 ### Example
 
