@@ -3,36 +3,47 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "visual-search-circle",
   parameters: {
-    /** The target image to be displayed. */
+    /** The target image to be displayed. This must specified when using the target, foil and set_size parameters to define the stimuli set, rather than the stimuli parameter. */
     target: {
       type: ParameterType.IMAGE,
       pretty_name: "Target",
-      default: undefined,
+      default: null,
     },
-    /** Path to image file(s) that is/are the foils/distractors. */
+    /** The image to use as the foil/distractor. This must specified when using the target, foil and set_size parameters to define the stimuli set, rather than the stimuli parameter. */
     foil: {
       type: ParameterType.IMAGE,
       pretty_name: "Foil",
-      default: undefined,
+      default: null,
+    },
+    /** How many items should be displayed, including the target when target_present is true? This must specified when using the target, foil and set_size parameters to define the stimuli set, rather than the stimuli parameter. */
+    set_size: {
+      type: ParameterType.INT,
+      pretty_name: "Set size",
+      default: null,
+    },
+    /** Array containing one or more image files to be displayed. This only needs to be specified when NOT using the target, foil, and set_size parameters to define the stimuli set. */
+    stimuli: {
+      type: ParameterType.IMAGE,
+      pretty_name: "Stimuli",
+      default: null,
       array: true,
+    },
+    /**
+     * Is the target present?
+     * When using the target, foil and set_size parameters, false means that the foil image will be repeated up to the set_size,
+     * and if true, then the target will be presented along with the foil image repeated up to set_size - 1.
+     * When using the stimuli parameter, this parameter is only used to determine the response accuracy.
+     */
+    target_present: {
+      type: ParameterType.BOOL,
+      pretty_name: "Target present",
+      default: undefined,
     },
     /** Path to image file that is a fixation target. */
     fixation_image: {
       type: ParameterType.IMAGE,
       pretty_name: "Fixation image",
       default: undefined,
-    },
-    /** How many items should be displayed? */
-    set_size: {
-      type: ParameterType.INT,
-      pretty_name: "Set size",
-      default: undefined,
-    },
-    /** Is the target present? */
-    target_present: {
-      type: ParameterType.BOOL,
-      pretty_name: "Target present",
-      default: true,
     },
     /** Two element array indicating the height and width of the search array element images. */
     target_size: {
@@ -116,9 +127,32 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
       Math.floor(paper_size / 2 - trial.fixation_size[1] / 2),
     ];
 
+    // check for correct combination of parameters and create stimuli set
+    var possible_display_locs: number;
+    var to_present = [];
+    if (trial.target !== null && trial.foil !== null && trial.set_size !== null) {
+      possible_display_locs = trial.set_size;
+      if (trial.target_present) {
+        for (var i = 0; i < trial.set_size - 1; i++) {
+          to_present.push(trial.foil);
+        }
+        to_present.push(trial.target);
+      } else {
+        for (var i = 0; i < trial.set_size; i++) {
+          to_present.push(trial.foil);
+        }
+      }
+    } else if (trial.stimuli !== null) {
+      possible_display_locs = trial.stimuli.length;
+      to_present = trial.stimuli;
+    } else {
+      console.error(
+        "Error in visual-search-circle plugin: you must specify an array of images via the stimuli parameter OR specify the target, foil and set_size parameters."
+      );
+    }
+
     // possible stimulus locations on the circle
     var display_locs = [];
-    var possible_display_locs = trial.set_size;
     var random_offset = Math.floor(Math.random() * 360);
     for (var i = 0; i < possible_display_locs; i++) {
       display_locs.push([
@@ -139,24 +173,6 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
       paper_size +
       'px"></div>';
     var paper = display_element.querySelector("#jspsych-visual-search-circle-container");
-
-    // check distractors - single image to be repeated up to set_size?
-    var foil_arr = [];
-    if (Array.isArray(trial.foil)) {
-      if (trial.foil.length == 1 && trial.set_size > 1) {
-        const fa = [];
-        for (var i = 0; i < trial.set_size; i++) {
-          fa.push(trial.foil[0]);
-        }
-        foil_arr = fa;
-      } else {
-        foil_arr = trial.foil;
-      }
-    } else {
-      console.error(
-        "Error in visual-search-circle plugin: foil parameter must be an array containing one or more image file paths (strings)."
-      );
-    }
 
     const show_fixation = () => {
       // show fixation
@@ -199,14 +215,6 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
     show_fixation();
 
     const show_search_array = () => {
-      var search_array_images = [];
-
-      var to_present = [];
-      if (trial.target_present) {
-        to_present.push(trial.target);
-      }
-      to_present = to_present.concat(foil_arr);
-
       for (var i = 0; i < display_locs.length; i++) {
         paper.innerHTML +=
           "<img src='" +
