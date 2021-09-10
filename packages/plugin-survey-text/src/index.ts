@@ -196,7 +196,7 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
       e.preventDefault();
       // measure response time
       var endTime = performance.now();
-      var response_time = endTime - startTime;
+      var response_time = Math.round(endTime - startTime);
 
       // create object to hold responses
       var question_data = {};

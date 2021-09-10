@@ -249,7 +249,7 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
         .addEventListener("click", function () {
           // measure response time
           var endTime = performance.now();
-          var rt = endTime - startTime;
+          var rt = Math.round(endTime - startTime);
           if (context !== null) {
             endTime = context.currentTime;
             rt = Math.round((endTime - startTime) * 1000);
