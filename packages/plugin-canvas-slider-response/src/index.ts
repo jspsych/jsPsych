@@ -193,13 +193,19 @@ class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     if (trial.require_movement) {
+      const enable_button = () => {
+        display_element.querySelector<HTMLInputElement>(
+          "#jspsych-canvas-slider-response-next"
+        ).disabled = false;
+      };
+
       display_element
-        .querySelector<HTMLElement>("#jspsych-canvas-slider-response-response")
-        .addEventListener("click", function () {
-          display_element.querySelector<HTMLButtonElement>(
-            "#jspsych-canvas-slider-response-next"
-          ).disabled = false;
-        });
+        .querySelector("#jspsych-canvas-slider-response-response")
+        .addEventListener("mousedown", enable_button);
+
+      display_element
+        .querySelector("#jspsych-canvas-slider-response-response")
+        .addEventListener("touchstart", enable_button);
     }
 
     display_element
