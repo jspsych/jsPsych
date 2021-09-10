@@ -326,7 +326,10 @@ export class JsPsych {
     if (this.internal.call_immediate || immediate === true) {
       return this.timeline.timelineVariable(varname);
     } else {
-      return () => this.timeline.timelineVariable(varname);
+      return {
+        timelineVariablePlaceholder: true,
+        timelineVariableFunction: () => this.timeline.timelineVariable(varname),
+      };
     }
   }
 
@@ -554,19 +557,26 @@ export class JsPsych {
       }
     }
 
-    // execute trial method
-    trial.type.trial(this.DOM_target, trial);
-
-    // call trial specific loaded callback if it exists
-    if (typeof trial.on_load == "function") {
-      trial.on_load();
-    }
-
-    // call any on_load functions for extensions
-    if (Array.isArray(trial.extensions)) {
-      for (const extension of trial.extensions) {
-        this.extensions[extension.type.info.name].on_load(extension.params);
+    // setup on_load event callback
+    const load_callback = () => {
+      if (typeof trial.on_load == "function") {
+        trial.on_load();
       }
+
+      // call any on_load functions for extensions
+      if (Array.isArray(trial.extensions)) {
+        for (const extension of trial.extensions) {
+          this.extensions[extension.type.info.name].on_load(extension.params);
+        }
+      }
+    };
+
+    const trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
+    // see if trial_complete is a Promise by looking for .then() function
+    const is_promise = trial_complete && typeof trial_complete.then == "function";
+
+    if (!is_promise) {
+      load_callback();
     }
 
     // done with callbacks
@@ -577,15 +587,17 @@ export class JsPsych {
     for (const key of Object.keys(trial)) {
       if (key === "type") {
         // skip the `type` parameter as it contains a plugin
-        continue;
+        //continue;
       }
       // timeline variables on the root level
       if (
-        typeof trial[key] == "function" &&
-        trial[key].toString().replace(/\s/g, "") ==
-          "function(){returntimeline.timelineVariable(varname);}"
+        typeof trial[key] === "object" &&
+        trial[key] !== null &&
+        typeof trial[key].timelineVariablePlaceholder !== "undefined"
       ) {
-        trial[key] = trial[key].call();
+        /*trial[key].toString().replace(/\s/g, "") ==
+          "function(){returntimeline.timelineVariable(varname);}"
+      )*/ trial[key] = trial[key].timelineVariableFunction();
       }
       // timeline variables that are nested in objects
       if (typeof trial[key] == "object" && trial[key] !== null) {

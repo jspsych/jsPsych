@@ -107,7 +107,10 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
 
   constructor(private jsPsych: JsPsych) {}
 
-  trial(display_element: HTMLElement, trial: TrialType<Info>) {
+  trial(display_element: HTMLElement, trial: TrialType<Info>, on_load: () => void) {
+    // hold the .resolve() function from the Promise that ends the trial
+    let trial_complete;
+
     // half of the thumb width value from jspsych.css, used to adjust the label positions
     var half_thumb_width = 7.5;
 
@@ -280,6 +283,8 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
           end_trial();
         }, trial.trial_duration);
       }
+
+      on_load();
     };
 
     // function to enable slider after audio ends
@@ -319,7 +324,13 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
 
       // next trial
       this.jsPsych.finishTrial(trialdata);
+
+      trial_complete();
     };
+
+    return new Promise((resolve) => {
+      trial_complete = resolve;
+    });
   }
 }
 

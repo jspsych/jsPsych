@@ -86,7 +86,10 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
 
   constructor(private jsPsych: JsPsych) {}
 
-  trial(display_element: HTMLElement, trial: TrialType<Info>) {
+  trial(display_element: HTMLElement, trial: TrialType<Info>, on_load: () => void) {
+    // hold the .resolve() function from the Promise that ends the trial
+    let trial_complete;
+
     // setup stimulus
     var context = this.jsPsych.pluginAPI.audioContext();
     var audio;
@@ -196,6 +199,8 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
           end_trial();
         }, trial.trial_duration);
       }
+
+      on_load();
     };
 
     // function to handle responses by the subject
@@ -246,6 +251,8 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
+
+      trial_complete();
     };
 
     function button_response(e) {
@@ -274,6 +281,10 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
         btns[i].addEventListener("click", button_response);
       }
     }
+
+    return new Promise((resolve) => {
+      trial_complete = resolve;
+    });
   }
 }
 

@@ -45,7 +45,10 @@ class VslGridScenePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    display_element.innerHTML = this.generate_stimulus(trial.stimuli, trial.image_size);
+    display_element.innerHTML = VslGridScenePlugin.generate_stimulus(
+      trial.stimuli,
+      trial.image_size
+    );
 
     this.jsPsych.pluginAPI.setTimeout(function () {
       endTrial();
@@ -62,7 +65,7 @@ class VslGridScenePlugin implements JsPsychPlugin<Info> {
     };
   }
 
-  generate_stimulus(pattern, image_size: number[]) {
+  static generate_stimulus(pattern, image_size: number[]) {
     var nrows = pattern.length;
     var ncols = pattern[0].length;
 

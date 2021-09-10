@@ -87,7 +87,7 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
       alternative_order.push(i);
     }
     if (trial.randomize_alternative_order) {
-      alternative_order = this.jsPsych.randomization.shuffle(alternative_order); // TO DO: is randomization still in jsPsych core?
+      alternative_order = this.jsPsych.randomization.shuffle(alternative_order);
     }
 
     // Start with column headings
