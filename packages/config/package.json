@@ -31,6 +31,7 @@
     "tsc": ""
   },
   "dependencies": {
+    "@babel/cli": "^7.15.4",
     "@babel/core": "^7.14.6",
     "@babel/preset-env": "^7.14.7",
     "@rollup/plugin-babel": "^5.3.0",
@@ -39,6 +40,7 @@
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@types/gulp": "^4.0.9",
     "@types/jest": "^26.0.23",
+    "babel-preset-minify": "^0.5.1",
     "canvas": "^2.8.0",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
