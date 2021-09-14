@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <script src="../packages/jspsych/dist/index.browser.js"></script>
     <script src="../packages/plugin-preload/dist/index.browser.js"></script>
     <script src="../packages/plugin-audio-keyboard-response/dist/index.browser.js"></script>
@@ -12,80 +12,80 @@
     <script src="../packages/extension-webgazer/dist/index.browser.js"></script>
     <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
     <style>
-      .jspsych-content { max-width: 100%;}
+      .jspsych-content { max-width: 100%; }
     </style>
-</head>
-<body></body>
-<script>
+  </head>
+  <body></body>
+  <script>
 
-var jsPsych = initJsPsych({
-  extensions: [
-    {type: jsPsychExtensionWebgazer}
-  ],
-  on_finish: function() {
-    jsPsych.data.displayData();
-  }
-})
+    var jsPsych = initJsPsych({
+      extensions: [
+        {type: jsPsychExtensionWebgazer}
+      ],
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
-var preload = {
-  type: jsPsychPreload,
-  images: ['img/blue.png', 'img/orange.png'],
-  audio: ['sound/speech_blue.mp3']
-}
+    var preload = {
+      type: jsPsychPreload,
+      images: ['img/blue.png', 'img/orange.png'],
+      audio: ['sound/speech_blue.mp3']
+    };
 
-var init_camera = {
-  type: jsPsychWebgazerInitCamera
-}
+    var init_camera = {
+      type: jsPsychWebgazerInitCamera
+    };
 
-var start_cal = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: '<p>As each dot appears, look at it and then click on it.</p><p>Press a key to start.</p>'
-}
+    var start_cal = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p>As each dot appears, look at it and then click on it.</p><p>Press a key to start.</p>'
+    };
 
-var calibration = {
-  type: jsPsychWebgazerCalibrate,
-  calibration_points: [
-    [25,25],[25,75],[50,50],[75,75],[75,25]
-  ]
-}
+    var calibration = {
+      type: jsPsychWebgazerCalibrate,
+      calibration_points: [
+        [25,25],[25,75],[50,50],[75,75],[75,25]
+      ]
+    };
 
-var start_val = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: '<p>As each dot appears, look at it.</p><p>Press a key to start.</p>'
-}
+    var start_val = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p>As each dot appears, look at it.</p><p>Press a key to start.</p>'
+    };
 
-var validation = {
-  type: jsPsychWebgazerValidate,
-  validation_points: [
-    [25,50],[75,50]
-  ]
-}
+    var validation = {
+      type: jsPsychWebgazerValidate,
+      validation_points: [
+        [25,50],[75,50]
+      ]
+    };
 
-var start = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: 'Look at the spoken color. Press a key to start.'
-}
+    var start = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: 'Look at the spoken color. Press a key to start.'
+    };
 
-var trial = {
-  type: jsPsychAudioKeyboardResponse,
-  stimulus: 'sound/speech_blue.mp3',
-  prompt: `
-    <div style="width:100vw; height:300px;">
-      <img id="blue-target" style="float:left;" src="img/blue.png"></img>
-      <img id="orange-target" style="float:right;" src="img/orange.png"></img>
-    </div>
-  `,
-  choices: jsPsych.NO_KEYS,
-  trial_duration: 2000,
-  extensions: [
-    {
-      type: jsPsychExtensionWebgazer, 
-      params: {targets: ['#blue-target', '#orange-target']}
-    }
-  ]
-}
+    var trial = {
+      type: jsPsychAudioKeyboardResponse,
+      stimulus: 'sound/speech_blue.mp3',
+      prompt: `
+        <div style="width:100vw; height:300px;">
+          <img id="blue-target" style="float:left;" src="img/blue.png"></img>
+          <img id="orange-target" style="float:right;" src="img/orange.png"></img>
+        </div>
+      `,
+      choices: "NO_KEYS",
+      trial_duration: 2000,
+      extensions: [
+        {
+          type: jsPsychExtensionWebgazer, 
+          params: {targets: ['#blue-target', '#orange-target']}
+        }
+      ]
+    };
 
-jsPsych.run([preload, init_camera, start_cal, calibration, start_val, validation, start, trial])
+    jsPsych.run([preload, init_camera, start_cal, calibration, start_val, validation, start, trial]);
 
-</script>
+  </script>
 </html>

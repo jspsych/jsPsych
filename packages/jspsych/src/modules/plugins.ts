@@ -56,7 +56,7 @@ export interface ParameterInfo {
   array?: boolean;
   pretty_name?: string;
   default?: any;
-  preload?: "image" | "video" | "audio";
+  preload?: boolean;
 }
 
 export interface ParameterInfos {
@@ -145,7 +145,11 @@ export interface PluginInfo {
 }
 
 export interface JsPsychPlugin<I extends PluginInfo> {
-  trial(display_element: HTMLElement, trial: TrialType<I>): void;
+  trial(
+    display_element: HTMLElement,
+    trial: TrialType<I>,
+    on_load?: () => void
+  ): void | Promise<any>;
 }
 
 export type TrialType<I extends PluginInfo> = InferredParameters<I["parameters"]> &

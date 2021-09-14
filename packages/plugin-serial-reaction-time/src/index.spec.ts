@@ -1,6 +1,4 @@
-import { jest } from "@jest/globals";
-import jsPsych from "jspsych";
-import { pressKey } from "jspsych/tests/utils";
+import { pressKey, startTimeline } from "jspsych/tests/utils";
 
 import serialReactionTime from ".";
 
@@ -9,16 +7,14 @@ jest.useFakeTimers();
 const getCellElement = (cellId: string) =>
   document.querySelector(`#jspsych-serial-reaction-time-stimulus-cell-${cellId}`) as HTMLElement;
 
-describe("serial-reaction-time plugin", function () {
-  test("default behavior", function () {
-    var trial = {
-      type: serialReactionTime,
-      target: [0, 0],
-    };
-
-    jsPsych.init({
-      timeline: [trial],
-    });
+describe("serial-reaction-time plugin", () => {
+  test("default behavior", async () => {
+    const { expectFinished, getData } = await startTimeline([
+      {
+        type: serialReactionTime,
+        target: [0, 0],
+      },
+    ]);
 
     expect(getCellElement("0-0").style.backgroundColor).toBe("rgb(153, 153, 153)");
     expect(getCellElement("0-1").style.backgroundColor).toBe("");
@@ -27,21 +23,19 @@ describe("serial-reaction-time plugin", function () {
 
     pressKey("3");
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
-    expect(jsPsych.data.get().last(1).values()[0].correct).toBe(true);
+    await expectFinished();
+    expect(getData().last(1).values()[0].correct).toBe(true);
   });
 
-  test("response ends trial is false", function () {
-    var trial = {
-      type: serialReactionTime,
-      target: [0, 0],
-      response_ends_trial: false,
-      trial_duration: 1000,
-    };
-
-    jsPsych.init({
-      timeline: [trial],
-    });
+  test("response ends trial is false", async () => {
+    const { getHTML, expectFinished, getData } = await startTimeline([
+      {
+        type: serialReactionTime,
+        target: [0, 0],
+        response_ends_trial: false,
+        trial_duration: 1000,
+      },
+    ]);
 
     expect(getCellElement("0-0").style.backgroundColor).toBe("rgb(153, 153, 153)");
     expect(getCellElement("0-1").style.backgroundColor).toBe("");
@@ -50,28 +44,25 @@ describe("serial-reaction-time plugin", function () {
 
     pressKey("3");
 
-    expect(jsPsych.getDisplayElement().innerHTML).not.toBe("");
+    expect(getHTML()).not.toBe("");
 
     jest.advanceTimersByTime(1000);
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
-    expect(jsPsych.data.get().last(1).values()[0].correct).toBe(true);
+    await expectFinished();
+    expect(getData().last(1).values()[0].correct).toBe(true);
   });
 
-  test("responses are scored correctly", function () {
-    var trial1 = {
-      type: serialReactionTime,
-      target: [0, 0],
-    };
-
-    var trial2 = {
-      type: serialReactionTime,
-      target: [0, 1],
-    };
-
-    jsPsych.init({
-      timeline: [trial1, trial2],
-    });
+  test("responses are scored correctly", async () => {
+    const { getHTML, expectFinished, getData } = await startTimeline([
+      {
+        type: serialReactionTime,
+        target: [0, 0],
+      },
+      {
+        type: serialReactionTime,
+        target: [0, 1],
+      },
+    ]);
 
     expect(getCellElement("0-0").style.backgroundColor).toBe("rgb(153, 153, 153)");
     expect(getCellElement("0-1").style.backgroundColor).toBe("");
@@ -89,9 +80,9 @@ describe("serial-reaction-time plugin", function () {
 
     pressKey("3");
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+    await expectFinished();
 
-    var trial_data = jsPsych.data.get().last(2).values();
+    var trial_data = getData().last(2).values();
     expect(trial_data[0].correct).toBe(true);
     expect(trial_data[1].correct).toBe(false);
   });

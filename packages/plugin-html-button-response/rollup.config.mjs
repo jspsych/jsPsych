@@ -1,3 +1,3 @@
-import { makeRollupConfigForPlugin } from "@jspsych/config/rollup.mjs";
+import { makeRollupConfig } from "@jspsych/config/rollup";
 
-export default makeRollupConfigForPlugin("jsPsychHtmlButtonResponse");
+export default makeRollupConfig("jsPsychHtmlButtonResponse");

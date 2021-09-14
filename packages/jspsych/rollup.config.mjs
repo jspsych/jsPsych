@@ -1,7 +1,3 @@
-import { makeRollupConfig } from "@jspsych/config/rollup.mjs";
+import { makeCoreRollupConfig } from "@jspsych/config/rollup";
 
-export default makeRollupConfig({
-  exports: "named",
-  name: "jsPsychModule",
-  footer: "var initJsPsych = jsPsychModule.initJsPsych;",
-});
+export default makeCoreRollupConfig();

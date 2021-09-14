@@ -1,7 +1,6 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 
-import { ParameterType, initJsPsych } from "../../src";
-import { TimelineNode } from "../../src/TimelineNode";
+import { initJsPsych } from "../../src";
 import { pressKey, startTimeline } from "../utils";
 
 describe("loop function", () => {
@@ -507,91 +506,5 @@ describe("add node to end of timeline", () => {
     pressKey("a");
     expect(getHTML()).toMatch("bar");
     pressKey("a");
-  });
-});
-
-describe("TimelineNode", () => {
-  const createTimelineNode = (parameters) => new TimelineNode(initJsPsych(), parameters);
-
-  describe("extractPreloadParameters", () => {
-    it("works for a single trial", () => {
-      const preloadMap = createTimelineNode({
-        type: {
-          info: {
-            name: "my-plugin",
-            parameters: {
-              one: { type: ParameterType.IMAGE },
-              two: { type: ParameterType.VIDEO },
-              three: { type: ParameterType.AUDIO },
-              four: { type: ParameterType.IMAGE, preload: true },
-              five: { type: ParameterType.IMAGE, preload: false },
-              six: {
-                type: ParameterType.STRING,
-                // This is illegal! But it should still not be added
-                preload: true,
-              },
-              seven: {},
-            },
-          },
-        },
-      }).extractPreloadParameters();
-
-      expect(preloadMap.get("my-plugin")).toEqual({
-        one: "image",
-        two: "video",
-        three: "audio",
-        four: "image",
-      });
-    });
-
-    it("works for a nested timeline", () => {
-      const preloadMap = createTimelineNode({
-        timeline: [
-          {
-            type: {
-              info: {
-                name: "plugin1",
-                parameters: { one: { type: ParameterType.STRING } },
-              },
-            },
-          },
-          {
-            type: {
-              info: {
-                name: "plugin2",
-                parameters: { one: { type: ParameterType.AUDIO } },
-              },
-            },
-          },
-          {
-            timeline: [
-              {
-                type: {
-                  info: {
-                    name: "plugin3",
-                    parameters: {
-                      one: { type: ParameterType.VIDEO },
-                      two: { type: ParameterType.IMAGE },
-                    },
-                  },
-                },
-              },
-            ],
-          },
-        ],
-      }).extractPreloadParameters();
-
-      expect(preloadMap.get("plugin1")).toEqual({});
-      expect(preloadMap.get("plugin2")).toEqual({ one: "audio" });
-      expect(preloadMap.get("plugin3")).toEqual({ one: "video", two: "image" });
-    });
-
-    it("ignores trials with a function type", () => {
-      const preloadMap = createTimelineNode({
-        type: () => ({ info: { name: "my-dynamic-trial-type" } }),
-      }).extractPreloadParameters();
-
-      expect(preloadMap.size).toEqual(0);
-    });
   });
 });

@@ -1,5 +1,5 @@
 {
-  "extends": "@jspsych/config/tsconfig.json",
+  "extends": "@jspsych/config/tsconfig.core.json",
   "compilerOptions": {
     "resolveJsonModule": false // using https://stackoverflow.com/a/61426303 instead
   },
