@@ -6,5 +6,5 @@
   "access": "public",
   "baseBranch": "changeset-setup",
   "updateInternalDependencies": "patch",
-  "ignore": ["@jspsych/config"]
+  "ignore": []
 }
