@@ -27,35 +27,5 @@ No data currently added by this plugin. Use the [webgazer-validate](/plugins/jsp
 
 ## Example
 
-#### Click-based calibration with 5 points
+Because the eye tracking plugins need to be used in conjunction with each other, please see the [example on the eye tracking overview page](/overview/eye-tracking/#example) for an integrated example. 
 
-```javascript
-var calibration = {
-    type: 'webgazer-calibrate',
-    calibration_points: [[50,50], [25,25], [25,75], [75,25], [75,75]],
-    repetitions_per_point: 2,
-    randomize_calibration_order: true
-  }
-```
-
-### View-based calibration with 33 points, concentrated in the center
-
-```javascript
- var calibration = {
-  type: 'webgazer-calibrate',
-  calibration_points: [
-    [10,10],[10,50],[10,90],
-    [30,10],[30,50],[30,90],
-    [40,10],[40,30],[40,40],[40,45],[40,50],[40,55],[40,60],[40,70],[40,90],
-    [50,10],[50,30],[50,40],[50,45],[50,50],[50,55],[50,60],[50,70],[50,90],
-    [60,10],[60,30],[60,40],[60,45],[60,50],[60,55],[60,60],[60,70],[60,90],
-    [70,10],[70,50],[70,90],
-    [90,10],[90,50],[90,90]
-  ],
-  repetitions_per_point: 1,
-  randomize_calibration_order: true,
-  calibration_mode: 'view',
-  time_per_point: 500,
-  time_to_saccade: 1000
-}
-```

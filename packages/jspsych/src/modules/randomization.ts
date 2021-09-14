@@ -1,4 +1,4 @@
-export function repeat(array, repetitions, unpack) {
+export function repeat(array, repetitions, unpack?) {
   var arr_isArray = Array.isArray(array);
   var rep_isArray = Array.isArray(repetitions);
 

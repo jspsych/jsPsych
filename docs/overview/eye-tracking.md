@@ -43,10 +43,6 @@ jsPsych.init({
 })
 ```
 
-
-!!! tip 
-    Example experiments using WebGazer are available in the **/examples** folder of the jsPsych release. See `webgazer.html`, `webgazer_image.html`, and `webgazer_audio.html`.
-
 ### Initialize the camera
 
 To help the participant position their face correctly for eye tracking you can use the [jspsych-webgazer-init-camera plugin](/plugins/jspsych-webgazer-init-camera.ms). This will show the participant what the camera sees, including facial feature landmarks, and prevent the participant from continuing until their face is in good position for eye tracking. This plugin will also trigger the experiment to request permission to access the user's webcam if it hasn't already been granted.
@@ -155,117 +151,234 @@ If you have tips based on your own experience please consider sharing them on ou
 
 ## Example
 
-The code below shows a basic example of what it looks like when you put all of these things together in your experiment's HTML file.
+!!! tip 
+    Additional example experiments using WebGazer are available in the **/examples** folder of the jsPsych release. See `webgazer.html`, `webgazer_image.html`, and `webgazer_audio.html`. 
 
-```html
-<html>
-<head>
-    <script src="jspsych/jspsych.js"></script>
-    <script src="jspsych/plugins/jspsych-preload.js"></script>
-    <script src="jspsych/plugins/jspsych-image-keyboard-response.js"></script>
-    <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
-    <script src="jspsych/plugins/jspsych-webgazer-init-camera.js"></script>
-    <script src="jspsych/plugins/jspsych-webgazer-calibrate.js"></script>
-    <script src="jspsych/plugins/jspsych-webgazer-validation.js"></script>
-    <script src="js/webgazer/webgazer.js"></script>
-    <script src="jspsych/extensions/jspsych-ext-webgazer.js"></script>
-    <link rel="stylesheet" href="jspsych/css/jspsych.css">
-</head>
-<body></body>
-<script>
+!!! example
+    Here's an example of putting all of the pieces above together. This example also shows how to use data from the validation to decide whether or not to recalibrate. You can <a href="/demos/eye-tracking-with-webgazer.html" target="_blank">try this experiment here (opens in new tab)</a>.
 
-var preload = {
-  type: 'preload',
-  images: ['img/blue.png']
-}
+    ```html
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-image-keyboard-response.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-webgazer-init-camera.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-webgazer-calibrate.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-webgazer-validate.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/js/webgazer/webgazer.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/extensions/jspsych-ext-webgazer.js"></script>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css"
+        />
+        <style>
+          .jspsych-btn {
+            margin-bottom: 10px;
+          }
+        </style>
+      </head>
+      <body></body>
+      <script>
 
-var init_camera = {
-  type: 'webgazer-init-camera'
-}
+          var preload = {
+            type: 'preload',
+            images: ['img/blue.png']
+          }
 
-var calibration = {
-  type: 'webgazer-calibrate'
-}
+          var camera_instructions = {
+            type: 'html-button-response',
+            stimulus: `
+              <p>In order to participate you must allow the experiment to use your camera.</p>
+              <p>You will be prompted to do this on the next screen.</p>
+              <p>If you do not wish to allow use of your camera, you cannot participate in this experiment.<p>
+              <p>It may take up to 30 seconds for the camera to initialize after you give permission.</p>
+            `,
+            choices: ['Got it'],
+          }
 
-var validation = {
-  type: 'webgazer-validate'
-}
+          var init_camera = {
+            type: 'webgazer-init-camera'
+          }
 
-var start = {
-  type: 'html-keyboard-response',
-  stimulus: 'Press any key to start.'
-}
+          var calibration_instructions = {
+            type: 'html-button-response',
+            stimulus: `
+              <p>Now you'll calibrate the eye tracking, so that the software can use the image of your eyes to predict where you are looking.</p>
+              <p>You'll see a series of dots appear on the screen. Look at each dot and click on it.</p>
+            `,
+            choices: ['Got it'],
+          }
 
-var trial = {
-  type: 'image-keyboard-response',
-  stimulus: 'img/blue.png',
-  choices: jsPsych.NO_KEYS,
-  trial_duration: 1000,
-  extensions: [
+          var calibration = {
+            type: 'webgazer-calibrate',
+            calibration_points: [
+              [25,25],[75,25],[50,50],[25,75],[75,75]
+            ],
+            repetitions_per_point: 2,
+            randomize_calibration_order: true
+          }
+
+          var validation_instructions = {
+            type: 'html-button-response',
+            stimulus: `
+              <p>Now we'll measure the accuracy of the calibration.</p>
+              <p>Look at each dot as it appears on the screen.</p>
+              <p style="font-weight: bold;">You do not need to click on the dots this time.</p>
+            `,
+            choices: ['Got it'],
+            post_trial_gap: 1000
+          }
+
+          var validation = {
+            type: 'webgazer-validate',
+            validation_points: [
+              [25,25],[75,25],[50,50],[25,75],[75,75]
+            ],
+            roi_radius: 200,
+            time_to_saccade: 1000,
+            validation_duration: 2000,
+            data: {
+              task: 'validate'
+            }
+          }
+
+          var recalibrate_instructions = {
+            type: 'html-button-response',
+            stimulus: `
+              <p>The accuracy of the calibration is a little lower than we'd like.</p>
+              <p>Let's try calibrating one more time.</p>
+              <p>On the next screen, look at the dots and click on them.<p>
+            `,
+            choices: ['OK'],
+          }
+
+          var recalibrate = {
+            timeline: [recalibrate_instructions, calibration, validation_instructions, validation],
+            conditional_function: function(){
+              var validation_data = jsPsych.data.get().filter({task: 'validate'}).values()[0];
+              return validation_data.percent_in_roi.some(function(x){
+                var minimum_percent_acceptable = 50;
+                return x < minimum_percent_acceptable;
+              });
+            },
+            data: {
+              phase: 'recalibration'
+            }
+          }
+
+          var calibration_done = {
+            type: 'html-button-response',
+            stimulus: `
+              <p>Great, we're done with calibration!</p>
+            `,
+            choices: ['OK']
+          }
+
+          var begin = {
+            type: 'html-keyboard-response',
+            stimulus: `<p>The next screen will show an image to demonstrate adding the webgazer extension to a trial.</p>
+              <p>Just look at the image while eye tracking data is collected. The trial will end automatically.</p>
+              <p>Press any key to start.</p>
+            `
+          }
+
+          var trial = {
+            type: 'image-keyboard-response',
+            stimulus: 'img/blue.png',
+            choices: jsPsych.NO_KEYS,
+            trial_duration: 2000,
+            extensions: [
+              {
+                type: 'webgazer', 
+                params: {targets: ['#jspsych-image-keyboard-response-stimulus']}
+              }
+            ]
+          }
+
+          var show_data = {
+            type: 'html-keyboard-response',
+            stimulus: function() {
+              var trial_data = jsPsych.data.getLastTrialData().values();
+              var trial_json = JSON.stringify(trial_data, null, 2);
+              return `<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>
+                <pre style="margin-top:0px;text-align:left;">${trial_json}</pre>`;
+            },
+            choices: jsPsych.NO_KEYS
+          };
+          
+          jsPsych.init({
+            timeline: [
+              preload, 
+              camera_instructions, 
+              init_camera, 
+              calibration_instructions, 
+              calibration, 
+              validation_instructions, 
+              validation, 
+              recalibrate,
+              calibration_done,
+              begin, 
+              trial, 
+              show_data
+            ],
+            extensions: [
+              {type: 'webgazer'}
+            ]
+          });
+          
+      </script>
+    </html>
+    ```
+
+    Below is example data from the image-keyboard-response trial taken from the experiment above. In addition to the standard data that is collected for this plugin, you can see the additional `webgazer_data` and `webgazer_targets` arrays. The `webgazer_data` shows 21 gaze location estimates during the 1-second image presentation. The `webgazer_targets` array shows that there was one target, the image-keyboard-response stimulus, and tells you the x- and y-coordinate boundaries for the target (image) rectangle. By comparing each of the x/y locations from the `webgazer_data` locations array with the target boundaries in `webgazer_targets`, you can determine if/when the estimated gaze location was inside the target area.
+
+    ```js
     {
-      type: 'webgazer', 
-      params: {targets: ['#jspsych-image-keyboard-response-stimulus']}
+      "rt": null,
+      "stimulus": "img/blue.png",
+      "response": null,
+      "trial_type": "image-keyboard-response",
+      "trial_index": 4,
+      "time_elapsed": 30701,
+      "internal_node_id": "0.0-4.0",
+      "webgazer_data": [
+        { "x": 1065, "y": 437, "t": 39},
+        { "x": 943, "y": 377, "t": 79},
+        { "x": 835, "y": 332, "t": 110},
+        { "x": 731, "y": 299, "t": 146},
+        { "x": 660, "y": 271, "t": 189},
+        { "x": 606, "y": 251, "t": 238},
+        { "x": 582, "y": 213, "t": 288},
+        { "x": 551, "y": 200, "t": 335},
+        { "x": 538, "y": 183, "t": 394},
+        { "x": 514, "y": 177, "t": 436},
+        { "x": 500, "y": 171, "t": 493},
+        { "x": 525, "y": 178, "t": 542},
+        { "x": 537, "y": 182, "t": 592},
+        { "x": 543, "y": 178, "t": 633},
+        { "x": 547, "y": 177, "t": 691},
+        { "x": 558, "y": 174, "t": 739},
+        { "x": 574, "y": 183, "t": 789},
+        { "x": 577, "y": 197, "t": 838},
+        { "x": 584, "y": 214, "t": 889},
+        { "x": 603, "y": 218, "t": 937},
+        { "x": 606, "y": 221, "t": 987}
+      ],
+      "webgazer_targets": [
+        "#jspsych-image-keyboard-response-stimulus": {
+          "x": 490,
+          "y": 135,
+          "height": 300,
+          "width": 300,
+          "top": 135,
+          "bottom": 435,
+          "left": 490,
+          "right": 790
+        }
+      ]
     }
-  ]
-}
-
-jsPsych.init({
-  timeline: [init_camera, calibration, validation, start, trial],
-  preload_images: ['img/blue.png'],
-  extensions: [
-    {type: 'webgazer'}
-  ]
-})
-
-</script>
-</html>
-```
-
-Below is example data from the image-keyboard-response trial taken from the experiment above. In addition to the standard data that is collected for this plugin, you can see the additional `webgazer_data` and `webgazer_targets` arrays. The `webgazer_data` shows 21 gaze location estimates during the 1-second image presentation. The `webgazer_targets` array shows that there was one target, the image-keyboard-response stimulus, and tells you the x- and y-coordinate boundaries for the target (image) rectangle. By comparing each of the x/y locations from the `webgazer_data` locations array with the target boundaries in `webgazer_targets`, you can determine if/when the estimated gaze location was inside the target area.
-
-```js
-{
-  "rt": null,
-  "stimulus": "img/blue.png",
-  "response": null,
-  "trial_type": "image-keyboard-response",
-  "trial_index": 4,
-  "time_elapsed": 30701,
-  "internal_node_id": "0.0-4.0",
-  "webgazer_data": [
-    { "x": 1065, "y": 437, "t": 39},
-    { "x": 943, "y": 377, "t": 79},
-    { "x": 835, "y": 332, "t": 110},
-    { "x": 731, "y": 299, "t": 146},
-    { "x": 660, "y": 271, "t": 189},
-    { "x": 606, "y": 251, "t": 238},
-    { "x": 582, "y": 213, "t": 288},
-    { "x": 551, "y": 200, "t": 335},
-    { "x": 538, "y": 183, "t": 394},
-    { "x": 514, "y": 177, "t": 436},
-    { "x": 500, "y": 171, "t": 493},
-    { "x": 525, "y": 178, "t": 542},
-    { "x": 537, "y": 182, "t": 592},
-    { "x": 543, "y": 178, "t": 633},
-    { "x": 547, "y": 177, "t": 691},
-    { "x": 558, "y": 174, "t": 739},
-    { "x": 574, "y": 183, "t": 789},
-    { "x": 577, "y": 197, "t": 838},
-    { "x": 584, "y": 214, "t": 889},
-    { "x": 603, "y": 218, "t": 937},
-    { "x": 606, "y": 221, "t": 987}
-  ],
-  "webgazer_targets": [
-    "#jspsych-image-keyboard-response-stimulus": {
-      "x": 490,
-      "y": 135,
-      "height": 300,
-      "width": 300,
-      "top": 135,
-      "bottom": 435,
-      "left": 490,
-      "right": 790
-    }
-  ]
-}
-```
+    ```

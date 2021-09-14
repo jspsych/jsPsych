@@ -29,20 +29,37 @@ rt | numeric | The length of time, in milliseconds, that the trial lasted.
 
 ## Examples
 
-#### Make a block larger and smaller
+???+ example "Make a block larger and smaller"
+    === "Code"
+        ```javascript
+        var sample_function = function(param){
+            var size = 50 + Math.floor(param*250);
+            var html = '<div style="display: block; margin: auto; height: 300px; width: 300px; position: relative;">'+
+            '<div style="display: block; position: absolute; top: '+(150 - size/2)+'px; left:'+(150 - size/2)+'px; background-color: #000000; '+
+            'width: '+size+'px; height: '+size+'px;"></div></div><p>Press "h" to make the square larger. Press "g" to make the square smaller.</p>'+
+            '<p>When the square is the same size as the previous one, click Continue.</p>';
+            return html;
+        }
 
-```javascript
-var sample_function = function(param){
-	var size = 50 + Math.floor(param*250);
-	var html = '<div style="display: block; margin: auto; height: 300px;">'+
-	'<div style="display: block; margin: auto; background-color: #000000; '+
-	'width: '+size+'px; height: '+size+'px;"></div></div>';
-	return html;
-}
+        var match_item = {
+            type: 'html-keyboard-response',
+            stimulus: '<div style="display: block; margin: auto; height: 300px; width: 300px; position: relative;">'+
+            '<div style="display: block; position: absolute; top: '+(150 - 210/2)+'px; left:'+(150 - 210/2)+'px; background-color: #000000; '+
+            'width: 210px; height: 210px;"></div></div>',
+            choices: ['c'],
+            post_trial_gap: 1250,
+            prompt: '<p>Study the size of this square carefully. On the next screen you will have to recreate it. When you are ready, press "c".</p>'
+        }
 
-var trial = {
-	type: 'reconstruction',
-	stim_function: sample_function,
-	starting_value: 0.25
-}
-```
+        var reconstruction = {
+            type: 'reconstruction',
+            stim_function: sample_function,
+            starting_value: 0.5,
+        }
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="/demos/jspsych-reconstruction-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-reconstruction-demo1.html">Open demo in new tab</a>

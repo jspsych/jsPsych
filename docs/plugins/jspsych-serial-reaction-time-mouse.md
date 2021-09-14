@@ -33,20 +33,80 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ## Examples
 
-#### Basic example with four squares in a single row
-```javascript
-var trial = {
-  type: 'serial-reaction-time-mouse',
-  grid: [[1,1,1,1]],
-  target: [0,1]
-}
-```
+???+ example "A classic version of the SRT"
+    === "Code"
+        ```javascript
+        var grid = [
+          [1,1,1,1]
+        ]
 
-#### 2x2 grid with extra space in the middle
-```javascript
-var trial = {
-  type: 'serial-reaction-time-mouse',
-  grid: [[1,0,1],[0,0,0],[1,0,1]],
-  target: [0,2]
-}
-```
+        var trial_1 = {
+          type: 'serial-reaction-time-mouse',
+          grid: grid,
+          target: [0,0]
+        }
+        var trial_2 = {
+          type: 'serial-reaction-time-mouse',
+          grid: grid,
+          target: [0,1]
+        }
+        var trial_3 = {
+          type: 'serial-reaction-time-mouse',
+          grid: grid,
+          target: [0,2]
+        }
+        var trial_4 = {
+          type: 'serial-reaction-time-mouse',
+          grid: grid,
+          target: [0,3]
+        }
+        ```
+
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="/demos/jspsych-serial-reaction-time-mouse-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-serial-reaction-time-mouse-demo1.html">Open demo in new tab</a>
+
+???+ example "A 2x2 grid with extra space and different colors"
+    === "Code"
+        ```javascript
+        var grid = [
+          [1,0,1],
+          [0,0,0],
+          [1,0,1]
+        ]
+
+        var trial_1 = {
+          type: 'serial-reaction-time-mouse',
+          grid: grid,
+          target: [0,0],
+          target_color: '#006738'
+        }
+        var trial_2 = {
+          type: 'serial-reaction-time-mouse',
+          grid: grid,
+          target: [0,2],
+          target_color: '#F78F1E'
+        }
+        var trial_3 = {
+          type: 'serial-reaction-time-mouse',
+          grid: grid,
+          target: [2,2],
+          target_color: '#13B24B'
+        }
+        var trial_4 = {
+          type: 'serial-reaction-time-mouse',
+          grid: grid,
+          target: [2,0],
+          target_color: '#E74921'
+        }
+        ```
+
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="/demos/jspsych-serial-reaction-time-mouse-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-serial-reaction-time-mouse-demo2.html">Open demo in new tab</a>

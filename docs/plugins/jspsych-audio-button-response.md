@@ -36,25 +36,39 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ## Examples
 
-#### Displaying question until subject gives a response
+???+ example "Displaying question until subject gives a response"
+	=== "Code"
+		```javascript
+		var trial = {
+			type: 'audio-button-response',
+			stimulus: 'sound/tone.mp3',
+			choices: ['Low', 'High'],
+			prompt: "<p>Is the pitch high or low?</p>"
+		};
+		```
 
-```javascript
-var trial = {
-	type: 'audio-button-response',
-	stimulus: 'sound/tone.mp3',
-	choices: ['Low', 'High'],
-	prompt: "<p>Is the pitch high or low?</p>"
-};
-```
+	=== "Demo"
+		<div style="text-align:center;">
+			<iframe src="/demos/jspsych-audio-button-response-demo-1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+		</div>
 
-#### Using custom button HTML to use images as buttons
+	<a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-audio-button-response-demo-1.html">Open demo in new tab</a>
 
-```javascript
-var trial = {
-	type: 'audio-button-response',
-	stimulus: 'sound/roar.mp3',
-	choices: ['lion.png', 'elephant.png', 'monkey.png'],
-	prompt: "<p>Which animal made the sound?</p>",
-	button_html: '<img src="%choice%" />'
-};
-```
+???+ example "Using custom button HTML to use images as buttons"
+	=== "Code"
+		```javascript
+		var trial = {
+			type: 'audio-button-response',
+			stimulus: 'sound/roar.mp3',
+			choices: ['lion.png', 'elephant.png', 'monkey.png'],
+			prompt: "<p>Which animal made the sound?</p>",
+			button_html: '<img src="%choice%" />'
+		};
+		```
+
+	=== "Demo"
+		<div style="text-align:center;">
+			<iframe src="/demos/jspsych-audio-button-response-demo-2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+		</div>
+
+	<a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-audio-button-response-demo-2.html">Open demo in new tab</a>

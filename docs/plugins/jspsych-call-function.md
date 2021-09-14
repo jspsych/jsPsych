@@ -24,58 +24,100 @@ value | any | The return value of the called function.
 
 ## Examples
 
-#### Calling a simple function
+???+ example "Calling a simple function"
+    === "Code"
+        ```javascript
+		var myfunc = function() {
+			return 'you called?';
+		}
 
-```javascript
+		var trial = {
+			type: 'call-function',
+			func: myfunc
+		}
+		```
 
-var myfunc = function() {
-	return 'you called?';
-}
+	=== "Demo"
+        <div style="text-align:center;">
+            <iframe src="/demos/jspsych-call-function-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-var trial = {
-	type: 'call-function',
-	func: myfunc
-}
-```
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-call-function-demo1.html">Open demo in new tab</a>
+    
 
-#### Using an anonymous function to pass variables
+???+ example "Using an anonymous function to pass variables"
+    === "Code"
+        ```javascript
+		var myfunc = function(data){
+			// data contains all the experiment data so far,
+			// so this function could implement code to write
+			// the data to a database.
+			console.log(data.values())
+		}
 
-```javascript
+		var trial = {
+			type: 'call-function',
+			func: function(){ myfunc(jsPsych.data.get()) }
+		}
+		```
 
-var myfunc = function(data){
-	// data contains all the experiment data so far,
-	// so this function could implement code to write
-	// the data to a database.
-}
+	=== "Demo"
+        <div style="text-align:center;">
+            <iframe src="/demos/jspsych-call-function-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-var trial = {
-	type: 'call-function',
-	func: function(){ myfunc(jsPsych.data.get())}
-}
-```
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-call-function-demo2.html">Open demo in new tab</a>
 
-#### Async function call
+???+ example "Async function call: wait for data to be saved to a server"
+	=== "Code"
+	There's no demo for this code, because it requires a server to communicate with.
+		```javascript
+		var trial = {
+			type: 'call-function',
+			async: true,
+			func: function(done){
+				// can perform async operations here like
+				// creating an XMLHttpRequest to communicate
+				// with a server
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						var response_data = xhttp.responseText;
+						// line below is what causes jsPsych to 
+						// continue to next trial. response_data
+						// will be stored in jsPsych data object.
+						done(response_data);
+					}
+				};
+				xhttp.open("GET", "path_to_server_script.php", true);
+				xhttp.send();
+			}
+		}
+		```
 
-```javascript
-var trial = {
-	type: 'call-function',
-	async: true,
-	func: function(done){
-		// can perform async operations here like
-		// creating an XMLHttpRequest to communicate
-		// with a server
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				var response_data = xhttp.responseText;
-				// line below is what causes jsPsych to 
-				// continue to next trial. response_data
-				// will be stored in jsPsych data object.
-				done(response_data);
+???+ example "Async function call: simulate waiting for an event to finish"
+	=== "Code"
+        ```javascript
+		var trial = {
+			type: 'call-function',
+			async: true,
+			func: function(done){
+				// generate a delay between 1500 and 3000 milliseconds to simulate  
+				// waiting for an event to finish after an unknown duration,
+				// then move on with the experiment
+				var rand_delay = (Math.floor(Math.random() * (3000 - 1500 + 1) + 1500));
+				jsPsych.pluginAPI.setTimeout(function() {
+					// end the trial and save the delay duration to the data
+					done(rand_delay.toString()+"ms");
+				}, rand_delay)
 			}
 		};
-		xhttp.open("GET", "path_to_server_script.php", true);
-		xhttp.send();
-	}
-}
-```
+  		```
+	=== "Demo"
+        <div style="text-align:center;">
+            <iframe src="/demos/jspsych-call-function-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-call-function-demo3.html">Open demo in new tab</a>
+
+

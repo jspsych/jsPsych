@@ -29,13 +29,20 @@ response | object | An object with two keys, `left` and `right`, containing the 
 
 ## Examples
 
-#### Basic example
+???+ example "Basic example"
+    === "Code"
+        ```javascript
+        var maxdiff_page = {
+            type: 'maxdiff',
+            alternatives: ['apple', 'orange', 'pear', 'banana'],
+            labels: ['Most Preferred', 'Least Preferred'],
+            preamble: '<p> Please select your <b>most preferred</b> and <b>least preferred</b> fruits. </p>'
+        };
+        ```    
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="/demos/jspsych-maxdiff-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var maxdiff_page = {
-  type: 'maxdiff',
-  alternatives: ['apple', 'orange', 'pear', 'banana'],
-  labels: ['Most Preferred', 'Least Preferred'],
-  preamble: '<p> Please select your <b>most preferred</b> and <b>least preferred</b> fruits. </p>'
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-maxdiff-demo1.html">Open demo in new tab</a>
+
