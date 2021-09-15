@@ -216,23 +216,19 @@ export function sampleWithReplacement(arr, size, weights) {
   return samp;
 }
 
-export function factorial(factors, repetitions = 1, unpack = false) {
+export function factorial(factors: Record<string, any>, repetitions = 1, unpack = false) {
   let design = [{}];
-  for (const factor of Object.keys(factors)) {
-    let new_design = [];
-    for (const level of factors[factor]) {
+  for (const [factorName, factor] of Object.entries(factors)) {
+    const new_design = [];
+    for (const level of factor) {
       for (const cell of design) {
-        let n = {};
-        n[factor] = level;
-        new_design.push(Object.assign({}, cell, n));
+        new_design.push({ ...cell, [factorName]: level });
       }
     }
     design = new_design;
   }
 
-  const with_repetitions = repeat(design, repetitions, unpack);
-
-  return with_repetitions;
+  return repeat(design, repetitions, unpack);
 }
 
 export function randomID(length = 32) {
