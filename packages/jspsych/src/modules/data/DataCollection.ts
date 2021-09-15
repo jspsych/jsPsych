@@ -43,7 +43,7 @@ export class DataCollection {
       throw `You must query with a positive nonzero integer. Please use a
                different value for n.`;
     }
-    if (this.trials.length == 0) return new DataCollection();
+    if (this.trials.length === 0) return new DataCollection();
     if (n > this.trials.length) n = this.trials.length;
     return new DataCollection(this.trials.slice(0, n));
   }
@@ -64,7 +64,7 @@ export class DataCollection {
       throw `You must query with a positive nonzero integer. Please use a
                different value for n.`;
     }
-    if (this.trials.length == 0) return new DataCollection();
+    if (this.trials.length === 0) return new DataCollection();
     if (n > this.trials.length) n = this.trials.length;
     return new DataCollection(this.trials.slice(this.trials.length - n, this.trials.length));
   }
@@ -82,19 +82,15 @@ export class DataCollection {
   }
 
   addToAll(properties) {
-    for (var i = 0; i < this.trials.length; i++) {
-      for (var key in properties) {
-        this.trials[i][key] = properties[key];
-      }
+    for (const trial of this.trials) {
+      Object.assign(trial, properties);
     }
     return this;
   }
 
   addToLast(properties) {
     if (this.trials.length != 0) {
-      for (var key in properties) {
-        this.trials[this.trials.length - 1][key] = properties[key];
-      }
+      Object.assign(this.trials[this.trials.length - 1], properties);
     }
     return this;
   }
@@ -102,23 +98,20 @@ export class DataCollection {
   filter(filters) {
     // [{p1: v1, p2:v2}, {p1:v2}]
     // {p1: v1}
+    let f;
     if (!Array.isArray(filters)) {
-      var f = deepCopy([filters]);
+      f = deepCopy([filters]);
     } else {
-      var f = deepCopy(filters);
+      f = deepCopy(filters);
     }
 
-    var filtered_data = [];
-    for (var x = 0; x < this.trials.length; x++) {
-      var keep = false;
-      for (var i = 0; i < f.length; i++) {
-        var match = true;
-        var keys = Object.keys(f[i]);
-        for (var k = 0; k < keys.length; k++) {
-          if (
-            typeof this.trials[x][keys[k]] !== "undefined" &&
-            this.trials[x][keys[k]] == f[i][keys[k]]
-          ) {
+    const filtered_data = [];
+    for (const trial of this.trials) {
+      let keep = false;
+      for (const filter of f) {
+        let match = true;
+        for (const key of Object.keys(filter)) {
+          if (typeof trial[key] !== "undefined" && trial[key] === filter[key]) {
             // matches on this key!
           } else {
             match = false;
@@ -130,7 +123,7 @@ export class DataCollection {
         } // can break because each filter is OR.
       }
       if (keep) {
-        filtered_data.push(this.trials[x]);
+        filtered_data.push(trial);
       }
     }
 
@@ -138,20 +131,14 @@ export class DataCollection {
   }
 
   filterCustom(fn) {
-    var included = [];
-    for (var i = 0; i < this.trials.length; i++) {
-      if (fn(this.trials[i])) {
-        included.push(this.trials[i]);
-      }
-    }
-    return new DataCollection(included);
+    return new DataCollection(this.trials.filter(fn));
   }
 
   select(column) {
-    var values = [];
-    for (var i = 0; i < this.trials.length; i++) {
-      if (typeof this.trials[i][column] !== "undefined") {
-        values.push(this.trials[i][column]);
+    const values = [];
+    for (const trial of this.trials) {
+      if (typeof trial[column] !== "undefined") {
+        values.push(trial[column]);
       }
     }
     return new DataColumn(values);
@@ -161,23 +148,22 @@ export class DataCollection {
     if (!Array.isArray(columns)) {
       columns = [columns];
     }
-    var o = deepCopy(this.trials);
-    for (var i = 0; i < o.length; i++) {
-      for (var j in columns) {
-        delete o[i][columns[j]];
+    const o = deepCopy(this.trials);
+    for (const trial of o) {
+      for (const delete_key of columns) {
+        delete trial[delete_key];
       }
     }
     return new DataCollection(o);
   }
 
   uniqueNames() {
-    var names = [];
+    const names = [];
 
-    for (var i = 0; i < this.trials.length; i++) {
-      var keys = Object.keys(this.trials[i]);
-      for (var j = 0; j < keys.length; j++) {
-        if (!names.includes(keys[j])) {
-          names.push(keys[j]);
+    for (const trial of this.trials) {
+      for (const key of Object.keys(trial)) {
+        if (!names.includes(key)) {
+          names.push(key);
         }
       }
     }
@@ -197,14 +183,14 @@ export class DataCollection {
   }
 
   localSave(format, filename) {
-    var data_string;
-
-    if (format === "JSON" || format === "json") {
+    format = format.toLowerCase();
+    let data_string;
+    if (format === "json") {
       data_string = this.json();
-    } else if (format == "CSV" || format == "csv") {
+    } else if (format === "csv") {
       data_string = this.csv();
     } else {
-      throw new Error('Invalid format specified for localSave. Must be "JSON" or "CSV".');
+      throw new Error('Invalid format specified for localSave. Must be "json" or "csv".');
     }
 
     saveTextToFile(data_string, filename);

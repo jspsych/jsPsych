@@ -41,7 +41,7 @@ describe("Data recording", () => {
 
 describe("on_interaction_data_update", () => {
   test("fires for blur", async () => {
-    var updateFunction = jest.fn();
+    const updateFunction = jest.fn();
     const jsPsych = initJsPsych({
       on_interaction_data_update: updateFunction,
     });
@@ -56,7 +56,7 @@ describe("on_interaction_data_update", () => {
   });
 
   test("fires for focus", async () => {
-    var updateFunction = jest.fn();
+    const updateFunction = jest.fn();
 
     const jsPsych = initJsPsych({
       on_interaction_data_update: updateFunction,

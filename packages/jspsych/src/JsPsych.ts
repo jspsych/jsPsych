@@ -120,7 +120,7 @@ export class JsPsych {
     // detect whether page is running in browser as a local file, and if so, disable web audio and video preloading to prevent CORS issues
     if (
       window.location.protocol == "file:" &&
-      (options.override_safe_mode === false || typeof options.override_safe_mode == "undefined")
+      (options.override_safe_mode === false || typeof options.override_safe_mode === "undefined")
     ) {
       options.use_webaudio = false;
       this.file_protocol = true;
@@ -156,7 +156,7 @@ export class JsPsych {
       console.error("No timeline declared in jsPsych.run. Cannot start experiment.");
     }
 
-    if (timeline.length == 0) {
+    if (timeline.length === 0) {
       console.error(
         "No trials have been added to the timeline (the timeline is an empty array). Cannot start experiment."
       );
@@ -189,7 +189,7 @@ export class JsPsych {
   }
 
   getTotalTime() {
-    if (typeof this.exp_start_time == "undefined") {
+    if (typeof this.exp_start_time === "undefined") {
       return 0;
     }
     return new Date().getTime() - this.exp_start_time.getTime();
@@ -221,33 +221,32 @@ export class JsPsych {
     this.data.write(data);
 
     // get back the data with all of the defaults in
-    var trial_data = this.data.get().filter({ trial_index: this.global_trial_index });
+    const trial_data = this.data.get().filter({ trial_index: this.global_trial_index });
 
     // for trial-level callbacks, we just want to pass in a reference to the values
     // of the DataCollection, for easy access and editing.
-    var trial_data_values = trial_data.values()[0];
+    const trial_data_values = trial_data.values()[0];
 
     const current_trial = this.current_trial;
 
-    if (typeof current_trial.save_trial_parameters == "object") {
-      var keys = Object.keys(current_trial.save_trial_parameters);
-      for (var i = 0; i < keys.length; i++) {
-        var key_val = current_trial.save_trial_parameters[keys[i]];
+    if (typeof current_trial.save_trial_parameters === "object") {
+      for (const key of Object.keys(current_trial.save_trial_parameters)) {
+        const key_val = current_trial.save_trial_parameters[key];
         if (key_val === true) {
-          if (typeof current_trial[keys[i]] == "undefined") {
+          if (typeof current_trial[key] === "undefined") {
             console.warn(
-              `Invalid parameter specified in save_trial_parameters. Trial has no property called "${keys[i]}".`
+              `Invalid parameter specified in save_trial_parameters. Trial has no property called "${key}".`
             );
-          } else if (typeof current_trial[keys[i]] == "function") {
-            trial_data_values[keys[i]] = current_trial[keys[i]].toString();
+          } else if (typeof current_trial[key] === "function") {
+            trial_data_values[key] = current_trial[key].toString();
           } else {
-            trial_data_values[keys[i]] = current_trial[keys[i]];
+            trial_data_values[key] = current_trial[key];
           }
         }
         if (key_val === false) {
           // we don't allow internal_node_id or trial_index to be deleted because it would break other things
-          if (keys[i] !== "internal_node_id" && keys[i] !== "trial_index") {
-            delete trial_data_values[keys[i]];
+          if (key !== "internal_node_id" && key !== "trial_index") {
+            delete trial_data_values[key];
           }
         }
       }
@@ -255,7 +254,9 @@ export class JsPsych {
     // handle extension callbacks
     if (Array.isArray(current_trial.extensions)) {
       for (const extension of current_trial.extensions) {
-        var ext_data_values = this.extensions[extension.type.info.name].on_finish(extension.params);
+        const ext_data_values = this.extensions[extension.type.info.name].on_finish(
+          extension.params
+        );
         Object.assign(trial_data_values, ext_data_values);
       }
     }
@@ -380,7 +381,7 @@ export class JsPsych {
     // if undefined, then jsPsych will use the <body> tag and the entire page
     if (typeof options.display_element === "undefined") {
       // check if there is a body element on the page
-      var body = document.querySelector("body");
+      const body = document.querySelector("body");
       if (body === null) {
         document.documentElement.appendChild(document.createElement("body"));
       }
@@ -419,7 +420,7 @@ export class JsPsych {
     options.display_element.tabIndex = 0;
 
     // add CSS class to DOM_target
-    if (options.display_element.className.indexOf("jspsych-display-element") == -1) {
+    if (options.display_element.className.indexOf("jspsych-display-element") === -1) {
       options.display_element.className += " jspsych-display-element";
     }
     this.DOM_target.className += "jspsych-content";
@@ -493,10 +494,10 @@ export class JsPsych {
 
     // advance timeline
     this.timeline.markCurrentTrialComplete();
-    var complete = this.timeline.advance();
+    const complete = this.timeline.advance();
 
     // update progress bar if shown
-    if (this.opts.show_progress_bar === true && this.opts.auto_update_progress_bar == true) {
+    if (this.opts.show_progress_bar === true && this.opts.auto_update_progress_bar === true) {
       this.updateProgressBar();
     }
 
@@ -537,7 +538,7 @@ export class JsPsych {
     this.opts.on_trial_start(trial);
 
     // call trial specific callback if it exists
-    if (typeof trial.on_start == "function") {
+    if (typeof trial.on_start === "function") {
       trial.on_start(trial);
     }
 
@@ -556,7 +557,7 @@ export class JsPsych {
 
     // add CSS classes to the DOM_target if they exist in trial.css_classes
     if (typeof trial.css_classes !== "undefined") {
-      if (!Array.isArray(trial.css_classes) && typeof trial.css_classes == "string") {
+      if (!Array.isArray(trial.css_classes) && typeof trial.css_classes === "string") {
         trial.css_classes = [trial.css_classes];
       }
       if (Array.isArray(trial.css_classes)) {
@@ -566,7 +567,7 @@ export class JsPsych {
 
     // setup on_load event callback
     const load_callback = () => {
-      if (typeof trial.on_load == "function") {
+      if (typeof trial.on_load === "function") {
         trial.on_load();
       }
 
@@ -607,7 +608,7 @@ export class JsPsych {
       )*/ trial[key] = trial[key].timelineVariableFunction();
       }
       // timeline variables that are nested in objects
-      if (typeof trial[key] == "object" && trial[key] !== null) {
+      if (typeof trial[key] === "object" && trial[key] !== null) {
         this.evaluateTimelineVariables(trial[key]);
       }
     }
@@ -649,29 +650,28 @@ export class JsPsych {
     }
     // arrays
     else if (Array.isArray(obj)) {
-      for (var i = 0; i < obj.length; i++) {
+      for (let i = 0; i < obj.length; i++) {
         obj[i] = this.replaceFunctionsWithValues(obj[i], info);
       }
     }
     // objects
     else if (typeof obj === "object") {
-      var keys = Object.keys(obj);
-      if (info == null || !info.nested) {
-        for (var i = 0; i < keys.length; i++) {
-          if (keys[i] === "type") {
+      if (info === null || !info.nested) {
+        for (const key of Object.keys(obj)) {
+          if (key === "type") {
             // Ignore the object's `type` field because it contains a plugin and we do not want to
             // call plugin functions
             continue;
           }
-          obj[keys[i]] = this.replaceFunctionsWithValues(obj[keys[i]], null);
+          obj[key] = this.replaceFunctionsWithValues(obj[key], null);
         }
       } else {
-        for (var i = 0; i < keys.length; i++) {
+        for (const key of Object.keys(obj)) {
           if (
-            typeof info.nested[keys[i]] == "object" &&
-            info.nested[keys[i]].type !== ParameterType.FUNCTION
+            typeof info.nested[key] === "object" &&
+            info.nested[key].type !== ParameterType.FUNCTION
           ) {
-            obj[keys[i]] = this.replaceFunctionsWithValues(obj[keys[i]], info.nested[keys[i]]);
+            obj[key] = this.replaceFunctionsWithValues(obj[key], info.nested[key]);
           }
         }
       }
@@ -682,16 +682,16 @@ export class JsPsych {
   }
 
   private setDefaultValues(trial) {
-    for (var param in trial.type.info.parameters) {
+    for (const param in trial.type.info.parameters) {
       // check if parameter is complex with nested defaults
-      if (trial.type.info.parameters[param].type == ParameterType.COMPLEX) {
-        if (trial.type.info.parameters[param].array == true) {
+      if (trial.type.info.parameters[param].type === ParameterType.COMPLEX) {
+        if (trial.type.info.parameters[param].array === true) {
           // iterate over each entry in the array
           trial[param].forEach(function (ip, i) {
             // check each parameter in the plugin description
-            for (var p in trial.type.info.parameters[param].nested) {
-              if (typeof trial[param][i][p] == "undefined" || trial[param][i][p] === null) {
-                if (typeof trial.type.info.parameters[param].nested[p].default == "undefined") {
+            for (const p in trial.type.info.parameters[param].nested) {
+              if (typeof trial[param][i][p] === "undefined" || trial[param][i][p] === null) {
+                if (typeof trial.type.info.parameters[param].nested[p].default === "undefined") {
                   console.error(
                     "You must specify a value for the " +
                       p +
@@ -710,8 +710,8 @@ export class JsPsych {
         }
       }
       // if it's not nested, checking is much easier and do that here:
-      else if (typeof trial[param] == "undefined" || trial[param] === null) {
-        if (typeof trial.type.info.parameters[param].default == "undefined") {
+      else if (typeof trial[param] === "undefined" || trial[param] === null) {
+        if (typeof trial.type.info.parameters[param].default === "undefined") {
           console.error(
             "You must specify a value for the " +
               param +
@@ -785,8 +785,7 @@ export class JsPsych {
   }
 
   private updateProgressBar() {
-    var progress = this.getProgress().percent_complete;
-    this.setProgressBar(progress / 100);
+    this.setProgressBar(this.getProgress().percent_complete / 100);
   }
 
   private progress_bar_amount = 0;

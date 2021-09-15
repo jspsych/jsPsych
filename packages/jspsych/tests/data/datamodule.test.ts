@@ -91,7 +91,7 @@ describe("#getLastTimelineData", () => {
     ]);
 
     // click through all four trials
-    for (var i = 0; i < 4; i++) {
+    for (let i = 0; i < 4; i++) {
       pressKey("a");
     }
     // check data structure
@@ -110,7 +110,7 @@ describe("#displayData", () => {
     // click through first trial
     pressKey("a");
     // overwrite data with custom data
-    var data = [
+    const data = [
       { col1: 1, col2: 2 },
       { col1: 3, col2: 4 },
     ];
@@ -130,7 +130,7 @@ describe("#displayData", () => {
     // click through first trial
     pressKey("a");
     // overwrite data with custom data
-    var data = [
+    const data = [
       { col1: 1, col2: 2 },
       { col1: 3, col2: 4 },
     ];

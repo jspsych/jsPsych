@@ -280,7 +280,7 @@ describe("on_trial_start", () => {
 
 describe("on_timeline_finish", () => {
   test("should fire once when timeline is complete", async () => {
-    var onFinishFunction = jest.fn();
+    const onFinishFunction = jest.fn();
 
     await startTimeline([
       {
@@ -311,7 +311,7 @@ describe("on_timeline_finish", () => {
   });
 
   test("should fire once even with timeline variables", async () => {
-    var onFinishFunction = jest.fn();
+    const onFinishFunction = jest.fn();
 
     await startTimeline([
       {
@@ -332,7 +332,7 @@ describe("on_timeline_finish", () => {
   });
 
   test("should fire on every repetition", async () => {
-    var onFinishFunction = jest.fn();
+    const onFinishFunction = jest.fn();
 
     await startTimeline([
       {
@@ -391,7 +391,7 @@ describe("on_timeline_finish", () => {
 
 describe("on_timeline_start", () => {
   test("should fire once when timeline starts", async () => {
-    var onStartFunction = jest.fn();
+    const onStartFunction = jest.fn();
 
     await startTimeline([
       {
@@ -421,7 +421,7 @@ describe("on_timeline_start", () => {
   });
 
   test("should fire once even with timeline variables", async () => {
-    var onStartFunction = jest.fn();
+    const onStartFunction = jest.fn();
 
     await startTimeline([
       {
@@ -443,7 +443,7 @@ describe("on_timeline_start", () => {
   });
 
   test("should fire on every repetition", async () => {
-    var onStartFunction = jest.fn();
+    const onStartFunction = jest.fn();
 
     await startTimeline([
       {
@@ -465,7 +465,7 @@ describe("on_timeline_start", () => {
   });
 
   test("should fire after a conditional function", async () => {
-    var callback = jest.fn().mockImplementation((str) => str);
+    const callback = jest.fn().mockImplementation((str) => str);
 
     await startTimeline([
       {

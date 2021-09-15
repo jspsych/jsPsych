@@ -102,8 +102,8 @@ describe("Trial parameters in the data", () => {
 
   test("Function-based parameters are stored as string representations ", async () => {
     const sample_function = (param) => {
-      var size = 50 + Math.floor(param * 250);
-      var html =
+      const size = 50 + Math.floor(param * 250);
+      const html =
         '<div style="display: block; margin: auto; height: 300px;">' +
         '<div style="display: block; margin: auto; background-color: #000000; ' +
         "width: " +

@@ -1,5 +1,5 @@
 import { ParameterType } from "../../modules/plugins";
-import { flatten, unique } from "../utils";
+import { unique } from "../utils";
 
 const preloadParameterTypes = <const>[
   ParameterType.AUDIO,
@@ -64,22 +64,23 @@ export class MediaAPI {
 
   private img_cache = {};
 
-  preloadAudio(files, callback_complete, callback_load, callback_error) {
-    files = flatten(files);
-    files = unique(files);
+  preloadAudio(
+    files,
+    callback_complete = () => {},
+    callback_load = (filepath) => {},
+    callback_error = (error_msg) => {}
+  ) {
+    files = unique(files.flat());
 
-    var n_loaded = 0;
-    var loadfn = typeof callback_load === "undefined" ? function () {} : callback_load;
-    var finishfn = typeof callback_complete === "undefined" ? function () {} : callback_complete;
-    var errorfn = typeof callback_error === "undefined" ? function () {} : callback_error;
+    let n_loaded = 0;
 
     if (files.length == 0) {
-      finishfn();
+      callback_complete();
       return;
     }
 
     const load_audio_file_webaudio = (source, count = 1) => {
-      var request = new XMLHttpRequest();
+      const request = new XMLHttpRequest();
       request.open("GET", source, true);
       request.responseType = "arraybuffer";
       request.onload = () => {
@@ -88,26 +89,26 @@ export class MediaAPI {
           (buffer) => {
             this.audio_buffers[source] = buffer;
             n_loaded++;
-            loadfn(source);
+            callback_load(source);
             if (n_loaded == files.length) {
-              finishfn();
+              callback_complete();
             }
           },
           (e) => {
-            errorfn({ source: source, error: e });
+            callback_error({ source: source, error: e });
           }
         );
       };
       request.onerror = function (e) {
-        var err: ProgressEvent | string = e;
+        let err: ProgressEvent | string = e;
         if (this.status == 404) {
           err = "404";
         }
-        errorfn({ source: source, error: err });
+        callback_error({ source: source, error: err });
       };
       request.onloadend = function (e) {
         if (this.status == 404) {
-          errorfn({ source: source, error: "404" });
+          callback_error({ source: source, error: "404" });
         }
       };
       request.send();
@@ -115,60 +116,60 @@ export class MediaAPI {
     };
 
     const load_audio_file_html5audio = (source, count = 1) => {
-      var audio = new Audio();
+      const audio = new Audio();
       const handleCanPlayThrough = () => {
         this.audio_buffers[source] = audio;
         n_loaded++;
-        loadfn(source);
+        callback_load(source);
         if (n_loaded == files.length) {
-          finishfn();
+          callback_complete();
         }
         audio.removeEventListener("canplaythrough", handleCanPlayThrough);
       };
       audio.addEventListener("canplaythrough", handleCanPlayThrough);
       audio.addEventListener("error", function handleError(e) {
-        errorfn({ source: audio.src, error: e });
+        callback_error({ source: audio.src, error: e });
         audio.removeEventListener("error", handleError);
       });
       audio.addEventListener("abort", function handleAbort(e) {
-        errorfn({ source: audio.src, error: e });
+        callback_error({ source: audio.src, error: e });
         audio.removeEventListener("abort", handleAbort);
       });
       audio.src = source;
       this.preload_requests.push(audio);
     };
 
-    for (var i = 0; i < files.length; i++) {
-      var bufferID = files[i];
-      if (typeof this.audio_buffers[bufferID] !== "undefined") {
+    for (const file of files) {
+      if (typeof this.audio_buffers[file] !== "undefined") {
         n_loaded++;
-        loadfn(bufferID);
+        callback_load(file);
         if (n_loaded == files.length) {
-          finishfn();
+          callback_complete();
         }
       } else {
-        this.audio_buffers[bufferID] = "tmp";
+        this.audio_buffers[file] = "tmp";
         if (this.audioContext() !== null) {
-          load_audio_file_webaudio(bufferID);
+          load_audio_file_webaudio(file);
         } else {
-          load_audio_file_html5audio(bufferID);
+          load_audio_file_html5audio(file);
         }
       }
     }
   }
 
-  preloadImages(images, callback_complete, callback_load, callback_error) {
+  preloadImages(
+    images,
+    callback_complete = () => {},
+    callback_load = (filepath) => {},
+    callback_error = (error_msg) => {}
+  ) {
     // flatten the images array
-    images = flatten(images);
-    images = unique(images);
+    images = unique(images.flat());
 
     var n_loaded = 0;
-    var finishfn = typeof callback_complete === "undefined" ? function () {} : callback_complete;
-    var loadfn = typeof callback_load === "undefined" ? function () {} : callback_load;
-    var errorfn = typeof callback_error === "undefined" ? function () {} : callback_error;
 
     if (images.length === 0) {
-      finishfn();
+      callback_complete();
       return;
     }
 
@@ -177,14 +178,14 @@ export class MediaAPI {
 
       img.onload = function () {
         n_loaded++;
-        loadfn(img.src);
+        callback_load(img.src);
         if (n_loaded === images.length) {
-          finishfn();
+          callback_complete();
         }
       };
 
       img.onerror = function (e) {
-        errorfn({ source: img.src, error: e });
+        callback_error({ source: img.src, error: e });
       };
 
       img.src = images[i];
@@ -194,49 +195,50 @@ export class MediaAPI {
     }
   }
 
-  preloadVideo(video, callback_complete, callback_load, callback_error) {
+  preloadVideo(
+    videos,
+    callback_complete = () => {},
+    callback_load = (filepath) => {},
+    callback_error = (error_msg) => {}
+  ) {
     // flatten the video array
-    video = flatten(video);
-    video = unique(video);
+    videos = unique(videos.flat());
 
-    var n_loaded = 0;
-    var finishfn = !callback_complete ? function () {} : callback_complete;
-    var loadfn = !callback_load ? function () {} : callback_load;
-    var errorfn = typeof callback_error === "undefined" ? function () {} : callback_error;
+    let n_loaded = 0;
 
-    if (video.length === 0) {
-      finishfn();
+    if (videos.length === 0) {
+      callback_complete();
       return;
     }
 
-    for (var i = 0; i < video.length; i++) {
+    for (const video of videos) {
       const video_buffers = this.video_buffers;
 
       //based on option 4 here: http://dinbror.dk/blog/how-to-preload-entire-html5-video-before-play-solved/
-      var request = new XMLHttpRequest();
-      request.open("GET", video[i], true);
+      const request = new XMLHttpRequest();
+      request.open("GET", video, true);
       request.responseType = "blob";
       request.onload = function () {
         if (this.status === 200 || this.status === 0) {
-          var videoBlob = this.response;
-          video_buffers[video[i]] = URL.createObjectURL(videoBlob); // IE10+
+          const videoBlob = this.response;
+          video_buffers[video] = URL.createObjectURL(videoBlob); // IE10+
           n_loaded++;
-          loadfn(video[i]);
-          if (n_loaded === video.length) {
-            finishfn();
+          callback_load(video);
+          if (n_loaded === videos.length) {
+            callback_complete();
           }
         }
       };
       request.onerror = function (e) {
-        var err: ProgressEvent | string = e;
+        let err: ProgressEvent | string = e;
         if (this.status == 404) {
           err = "404";
         }
-        errorfn({ source: video[i], error: err });
+        callback_error({ source: video, error: err });
       };
       request.onloadend = function (e) {
         if (this.status == 404) {
-          errorfn({ source: video[i], error: "404" });
+          callback_error({ source: video, error: "404" });
         }
       };
       request.send();
@@ -293,7 +295,7 @@ export class MediaAPI {
           if (typeof parameterValue === "string") {
             elements.add(parameterValue);
           } else if (Array.isArray(parameterValue)) {
-            for (const element of flatten(parameterValue)) {
+            for (const element of parameterValue.flat()) {
               if (typeof element === "string") {
                 elements.add(element);
               }
@@ -313,11 +315,11 @@ export class MediaAPI {
   }
 
   cancelPreloads() {
-    for (var i = 0; i < this.preload_requests.length; i++) {
-      this.preload_requests[i].onload = function () {};
-      this.preload_requests[i].onerror = function () {};
-      this.preload_requests[i].oncanplaythrough = function () {};
-      this.preload_requests[i].onabort = function () {};
+    for (const request of this.preload_requests) {
+      request.onload = () => {};
+      request.onerror = () => {};
+      request.oncanplaythrough = () => {};
+      request.onabort = () => {};
     }
     this.preload_requests = [];
   }

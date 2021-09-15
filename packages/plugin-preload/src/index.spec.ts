@@ -381,8 +381,10 @@ describe("preload plugin", () => {
       jest
         .spyOn(pluginAPI, "preloadImages")
         .mockImplementation((x, cb_complete, cb_load, cb_error) => {
-          cb_load();
-          cb_complete();
+          if (x.includes("image.png")) {
+            cb_load("image.png");
+            cb_complete();
+          }
         });
 
       const { getHTML } = await startTimeline(
@@ -623,7 +625,7 @@ describe("preload plugin", () => {
         .spyOn(pluginAPI, "preloadImages")
         .mockImplementation((x, cb_complete, cb_load, cb_error) => {
           if (x.includes("blue.png")) {
-            cb_load();
+            cb_load("blue.png");
             cb_complete();
           } else {
             cb_error({
@@ -734,7 +736,7 @@ describe("preload plugin", () => {
         .spyOn(pluginAPI, "preloadImages")
         .mockImplementation((x, cb_complete, cb_load, cb_error) => {
           if (x.includes("blue.png")) {
-            cb_load();
+            cb_load("blue.png");
             cb_complete();
           }
         });

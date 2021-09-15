@@ -47,12 +47,12 @@ describe("DataCollection", () => {
     expect(dataCollection.values()[4].lastonly).toBe(true);
   });
   test("#readOnly", () => {
-    var d = dataCollection.readOnly().values();
+    const d = dataCollection.readOnly().values();
     d[0].rt = 0;
     expect(dataCollection.values()[0].rt).toBe(100);
   });
   test("not #readOnly", () => {
-    var d = dataCollection.values();
+    const d = dataCollection.values();
     d[0].rt = 0;
     expect(dataCollection.values()[0].rt).toBe(0);
   });
@@ -78,8 +78,8 @@ describe("DataCollection", () => {
       dataCollection.first(0);
     }).toThrow();
     expect(dataCollection.filter({ foo: "bar" }).first(1).count()).toBe(0);
-    var n = dataCollection.count();
-    var too_many = n + 1;
+    const n = dataCollection.count();
+    const too_many = n + 1;
     expect(dataCollection.first(too_many).count()).toBe(n);
   });
   test("#last", () => {
@@ -93,8 +93,8 @@ describe("DataCollection", () => {
       dataCollection.last(0);
     }).toThrow();
     expect(dataCollection.filter({ foo: "bar" }).last(1).count()).toBe(0);
-    var n = dataCollection.count();
-    var too_many = n + 1;
+    const n = dataCollection.count();
+    const too_many = n + 1;
     expect(dataCollection.last(too_many).count()).toBe(n);
   });
   test("#join", () => {

@@ -159,9 +159,9 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
     audio = audio.concat(trial.audio);
     video = video.concat(trial.video);
 
-    images = this.jsPsych.utils.unique(this.jsPsych.utils.flatten(images));
-    audio = this.jsPsych.utils.unique(this.jsPsych.utils.flatten(audio));
-    video = this.jsPsych.utils.unique(this.jsPsych.utils.flatten(video));
+    images = this.jsPsych.utils.unique(images.flat());
+    audio = this.jsPsych.utils.unique(audio.flat());
+    video = this.jsPsych.utils.unique(video.flat());
 
     if (in_safe_mode) {
       // don't preload video if in safe mode (experiment is running via file protocol)
