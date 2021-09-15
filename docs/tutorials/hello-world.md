@@ -1,6 +1,16 @@
 # jsPsych "Hello world" experiment
 
-In the long tradition of **"Hello world!"** examples, this tutorial creates an experiment that outputs the phrase "Hello world!" to the browser. Though useless as an actual experiment, the process is helpful for learning the basics of using the jsPsych library. This tutorial will assume that you know very little about how to set up a web page.
+In the long tradition of **"Hello world!"** examples, this tutorial creates an experiment that outputs the phrase "Hello world!" to the browser. Though useless as an actual experiment, the process is helpful for learning the basics of using the jsPsych library. 
+
+## Step 1: Choose your own (setup) adventure
+
+With the release of version 7.0 of jsPsych there are now three different ways that you can add jsPsych to your project. Which approach you choose will depend on what your goals are.
+
+* **I want the simplest possible setup**. This approach involves using scripts that are hosted on a CDN. You do not need to download or install anything to start using jsPsych. The limitation is that you cannot customize the library. For most experiments, this approach will be sufficient.
+
+* **I want to be able to do some customization, but have a simple setup.**. This approach involves downloading a bundle of scripts that make up jsPsych. *If you used jsPsych prior to version 7.0, this will feel like the most familiar approach*. Having your own copy of the scripts means that you can make modifications to the library such as tweaking plugin behavior.
+
+* **I want to use modern JavaScript tooling, like `npm` and `import` statements.** Great! You can install jsPsych, plugins for jsPsych, and extensions for jsPsych from npm. This approach allows you to integrate jsPsych into your favorite JavaScript frameworks and get the benefits of 
 
 !!! info
     If you would like to use modern web development tools (e.g. ES6 modules, Node/NPM, webpack, Babel), you may want to check out the [jsPsych Builder](https://github.com/bjoluc/jspsych-builder) CLI utility. jsPsych Builder allows you to automate the experiment setup, spin up a development server, and transpile and bundle scripts and styles. Using jsPsych Builder will automate some of the steps in this tutorial, so if you prefer that option, you may want to switch to the getting started instructions on the jsPsych Builder GitHub page.
