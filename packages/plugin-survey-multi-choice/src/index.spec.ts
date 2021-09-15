@@ -1,31 +1,28 @@
-import { jest } from "@jest/globals";
-import jsPsych from "jspsych";
-import { clickTarget } from "jspsych/tests/utils";
+import { clickTarget, startTimeline } from "jspsych/tests/utils";
 
 import surveyMultiChoice from ".";
-
-jest.useFakeTimers();
 
 const getInputElement = (choiceId: number, value: string) =>
   document.querySelector(
     `#jspsych-survey-multi-choice-${choiceId} input[value="${value}"]`
   ) as HTMLInputElement;
 
-describe("survey-multi-choice plugin", function () {
-  test("data are logged with the right question when randomize order is true", function () {
+describe("survey-multi-choice plugin", () => {
+  test("data are logged with the right question when randomize order is true", async () => {
     var scale = ["a", "b", "c", "d", "e"];
-    var t = {
-      type: surveyMultiChoice,
-      questions: [
-        { prompt: "Q0", options: scale },
-        { prompt: "Q1", options: scale },
-        { prompt: "Q2", options: scale },
-        { prompt: "Q3", options: scale },
-        { prompt: "Q4", options: scale },
-      ],
-      randomize_question_order: true,
-    };
-    jsPsych.init({ timeline: [t] });
+    const { getData, expectFinished } = await startTimeline([
+      {
+        type: surveyMultiChoice,
+        questions: [
+          { prompt: "Q0", options: scale },
+          { prompt: "Q1", options: scale },
+          { prompt: "Q2", options: scale },
+          { prompt: "Q3", options: scale },
+          { prompt: "Q4", options: scale },
+        ],
+        randomize_question_order: true,
+      },
+    ]);
 
     getInputElement(0, "a").checked = true;
     getInputElement(1, "b").checked = true;
@@ -35,11 +32,13 @@ describe("survey-multi-choice plugin", function () {
 
     clickTarget(document.querySelector("#jspsych-survey-multi-choice-next"));
 
-    var survey_data = jsPsych.data.get().values()[0].response;
-    expect(survey_data.Q0).toBe("a");
-    expect(survey_data.Q1).toBe("b");
-    expect(survey_data.Q2).toBe("c");
-    expect(survey_data.Q3).toBe("d");
-    expect(survey_data.Q4).toBe("e");
+    await expectFinished();
+
+    const surveyData = getData().values()[0].response;
+    expect(surveyData.Q0).toBe("a");
+    expect(surveyData.Q1).toBe("b");
+    expect(surveyData.Q2).toBe("c");
+    expect(surveyData.Q3).toBe("d");
+    expect(surveyData.Q4).toBe("e");
   });
 });

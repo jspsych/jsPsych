@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "virtual chinrest plugin for jsPsych",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
   "typings": "dist/index.d.ts",
   "unpkg": "dist/index.browser.min.js",
   "files": [
@@ -30,5 +34,8 @@
   "homepage": "https://github.com/jspsych/jsPsych#readme",
   "peerDependencies": {
     "jspsych": ">=7"
+  },
+  "devDependencies": {
+    "@jspsych/config": "^0.1.0"
   }
 }

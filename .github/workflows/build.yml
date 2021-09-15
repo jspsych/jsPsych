@@ -28,9 +28,6 @@ jobs:
       - name: Install dependencies and build packages
         run: npm ci
 
-      - name: Check types
-        run: npm run tsc
-
       # TODO setup linting
       # - name: Lint
       #   run: npm run lint

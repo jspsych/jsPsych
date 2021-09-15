@@ -2,7 +2,8 @@
 
 The fullscreen plugin allows the experiment to enter or exit fullscreen mode. For security reasons, all browsers require that entry into fullscreen mode is triggered by a user action. To enter fullscreen mode, this plugin has the user click a button. Exiting fullscreen mode can be done without user input.
 
-Safari does not support keyboard input when the browser is in fullscreen mode. Therefore, the function will not launch fullscreen mode on Safari. The experiment will ignore any trials using the fullscreen plugin in Safari.
+!!! warning
+    Safari does not support keyboard input when the browser is in fullscreen mode. Therefore, the function will not launch fullscreen mode on Safari. The experiment will ignore any trials using the fullscreen plugin in Safari.
 
 ## Parameters
 
@@ -25,33 +26,37 @@ success | boolean | true if the browser supports fullscreen mode (i.e., is not S
 
 ## Examples
 
-#### Entering and exiting fullscreen
 
-```javascript
-var timeline = [];
+???+ example "Entering and exiting fullscreen"
+    === "Code"
+        ```javascript
+        var enter_fullscreen = {
+          type: 'fullscreen',
+          fullscreen_mode: true
+        }
 
-timeline.push({
-  type: 'fullscreen',
-  fullscreen_mode: true
-});
+        var trial_in_fullscreen = {
+          type: 'html-button-response',
+          stimulus: 'This trial will be in fullscreen mode.',
+          choices: ['Continue']
+        }
 
-timeline.push({
-  type: 'html-keyboard-response',
-  stimulus: 'This trial will be in fullscreen mode.'
-});
+        var exit_fullscreen = {
+          type: 'fullscreen',
+          fullscreen_mode: false,
+          delay_after: 0
+        }
 
-// exit fullscreen mode
-timeline.push({
-  type: 'fullscreen',
-  fullscreen_mode: false
-});
+        var trial_after_fullscreen = {
+          type: 'html-button-response',
+          stimulus: 'This trial will NOT be in fullscreen mode.',
+          choices: ['Continue']
+        }
+        ```
 
-timeline.push({
-  type: 'html-keyboard-response',
-  stimulus: 'This trial will NOT be in fullscreen mode.'
-});
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="/demos/jspsych-fullscreen-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-jsPsych.init({
-  timeline: timeline
-});
-```
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-fullscreen-demo1.html">Open demo in new tab</a>

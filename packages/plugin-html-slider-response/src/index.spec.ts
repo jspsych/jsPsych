@@ -1,173 +1,144 @@
-import { jest } from "@jest/globals";
-import jsPsych from "jspsych";
-import { clickTarget } from "jspsych/tests/utils";
+import { clickTarget, startTimeline } from "jspsych/tests/utils";
 
 import htmlSliderResponse from ".";
 
-const root = "../../";
-
 jest.useFakeTimers();
 
-describe("html-slider-response", function () {
-  test("displays html stimulus", function () {
-    var trial = {
-      type: htmlSliderResponse,
-      stimulus: "this is html",
-      labels: ["left", "right"],
-      button_label: "button",
-    };
+describe("html-slider-response", () => {
+  test("displays html stimulus", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: htmlSliderResponse,
+        stimulus: "this is html",
+        labels: ["left", "right"],
+        button_label: "button",
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
+    expect(getHTML()).toContain(
       '<div id="jspsych-html-slider-response-stimulus">this is html</div>'
     );
   });
 
-  test("displays labels", function () {
-    var trial = {
-      type: htmlSliderResponse,
-      stimulus: "this is html",
-      labels: ["left", "right"],
-      button_label: "button",
-    };
+  test("displays labels", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: htmlSliderResponse,
+        stimulus: "this is html",
+        labels: ["left", "right"],
+        button_label: "button",
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
-      '<span style="text-align: center; font-size: 80%;">left</span>'
-    );
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
-      '<span style="text-align: center; font-size: 80%;">right</span>'
-    );
+    expect(getHTML()).toContain('<span style="text-align: center; font-size: 80%;">left</span>');
+    expect(getHTML()).toContain('<span style="text-align: center; font-size: 80%;">right</span>');
   });
 
-  test("displays button label", function () {
-    var trial = {
-      type: htmlSliderResponse,
-      stimulus: "this is html",
-      labels: ["left", "right"],
-      button_label: "button",
-    };
+  test("displays button label", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: htmlSliderResponse,
+        stimulus: "this is html",
+        labels: ["left", "right"],
+        button_label: "button",
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
+    expect(getHTML()).toContain(
       '<button id="jspsych-html-slider-response-next" class="jspsych-btn">button</button>'
     );
   });
 
-  test("should set min, max and step", function () {
-    var trial = {
-      type: htmlSliderResponse,
-      stimulus: "this is html",
-      labels: ["left", "right"],
-      min: 2,
-      max: 10,
-      step: 2,
-      button_label: "button",
-    };
+  test("should set min, max and step", async () => {
+    const { displayElement } = await startTimeline([
+      {
+        type: htmlSliderResponse,
+        stimulus: "this is html",
+        labels: ["left", "right"],
+        min: 2,
+        max: 10,
+        step: 2,
+        button_label: "button",
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(
-      jsPsych.getDisplayElement().querySelector("#jspsych-html-slider-response-response").min
-    ).toBe("2");
-    expect(
-      jsPsych.getDisplayElement().querySelector("#jspsych-html-slider-response-response").max
-    ).toBe("10");
-    expect(
-      jsPsych.getDisplayElement().querySelector("#jspsych-html-slider-response-response").step
-    ).toBe("2");
+    const responseElement = displayElement.querySelector<HTMLInputElement>(
+      "#jspsych-html-slider-response-response"
+    );
+    expect(responseElement.min).toBe("2");
+    expect(responseElement.max).toBe("10");
+    expect(responseElement.step).toBe("2");
   });
 
-  test("should append to bottom on stimulus", function () {
-    var trial = {
-      type: htmlSliderResponse,
-      stimulus: "this is html",
-      labels: ["left", "right"],
-      button_label: "button",
-      prompt: "<p>This is a prompt</p>",
-    };
+  test("should append to bottom on stimulus", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: htmlSliderResponse,
+        stimulus: "this is html",
+        labels: ["left", "right"],
+        button_label: "button",
+        prompt: "<p>This is a prompt</p>",
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch("<p>This is a prompt</p>");
+    expect(getHTML()).toContain("<p>This is a prompt</p>");
   });
 
-  test("should hide stimulus if stimulus_duration is set", function () {
-    var trial = {
-      type: htmlSliderResponse,
-      stimulus: "this is html",
-      labels: ["left", "right"],
-      button_label: "button",
-      stimulus_duration: 500,
-    };
+  test("should hide stimulus if stimulus_duration is set", async () => {
+    const { displayElement } = await startTimeline([
+      {
+        type: htmlSliderResponse,
+        stimulus: "this is html",
+        labels: ["left", "right"],
+        button_label: "button",
+        stimulus_duration: 500,
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
+    const stimulusElement = displayElement.querySelector<HTMLElement>(
+      "#jspsych-html-slider-response-stimulus"
+    );
 
-    expect(
-      jsPsych.getDisplayElement().querySelector("#jspsych-html-slider-response-stimulus").style
-        .visibility
-    ).toMatch("");
+    expect(stimulusElement.style.visibility).toBe("");
     jest.advanceTimersByTime(500);
-    expect(
-      jsPsych.getDisplayElement().querySelector("#jspsych-html-slider-response-stimulus").style
-        .visibility
-    ).toMatch("hidden");
+    expect(stimulusElement.style.visibility).toBe("hidden");
   });
 
-  test("should end trial when trial duration is reached", function () {
-    var trial = {
-      type: htmlSliderResponse,
-      stimulus: "this is html",
-      labels: ["left", "right"],
-      button_label: "button",
-      trial_duration: 500,
-    };
+  test("should end trial when trial duration is reached", async () => {
+    const { getHTML, expectFinished } = await startTimeline([
+      {
+        type: htmlSliderResponse,
+        stimulus: "this is html",
+        labels: ["left", "right"],
+        button_label: "button",
+        trial_duration: 500,
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
+    expect(getHTML()).toContain(
       '<div id="jspsych-html-slider-response-stimulus">this is html</div>'
     );
     jest.advanceTimersByTime(500);
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+    await expectFinished();
   });
 
-  test("should end trial when button is clicked", function () {
-    var trial = {
-      type: htmlSliderResponse,
-      stimulus: "this is html",
-      labels: ["left", "right"],
-      button_label: "button",
-      response_ends_trial: true,
-    };
+  test("should end trial when button is clicked", async () => {
+    const { getHTML, expectFinished } = await startTimeline([
+      {
+        type: htmlSliderResponse,
+        stimulus: "this is html",
+        labels: ["left", "right"],
+        button_label: "button",
+        response_ends_trial: true,
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
+    expect(getHTML()).toContain(
       '<div id="jspsych-html-slider-response-stimulus">this is html</div>'
     );
 
     clickTarget(document.querySelector("#jspsych-html-slider-response-next"));
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+    await expectFinished();
   });
 });

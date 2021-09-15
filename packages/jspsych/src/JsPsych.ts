@@ -38,6 +38,7 @@ export class JsPsych {
    * experiment timeline
    */
   private timeline: TimelineNode;
+  private timelineDescription: any[];
 
   // flow control
   private global_trial_index = 0;
@@ -109,7 +110,7 @@ export class JsPsych {
     };
     this.opts = options;
 
-    autoBind(this); // just in case people do weird things with JsPsych methods
+    autoBind(this); // so we can pass JsPsych methods as callbacks and `this` remains the JsPsych instance
 
     this.webaudio_context =
       typeof window !== "undefined" && typeof window.AudioContext !== "undefined"
@@ -162,6 +163,7 @@ export class JsPsych {
     }
 
     // create experiment timeline
+    this.timelineDescription = timeline;
     this.timeline = new TimelineNode(this, { timeline });
 
     await this.prepareDom();
@@ -170,18 +172,11 @@ export class JsPsych {
 
     document.documentElement.setAttribute("jspsych", "present");
 
-    // Register preloading for the plugins referenced in the timeline
-    for (const [pluginName, parameters] of this.timeline.extractPreloadParameters()) {
-      for (const [parameter, type] of Object.entries(parameters)) {
-        this.pluginAPI.registerPreload(pluginName, parameter, type);
-      }
-    }
-
     this.startExperiment();
     await this.finished;
   }
 
-  progress() {
+  getProgress() {
     return {
       total_trials: typeof this.timeline === "undefined" ? undefined : this.timeline.length(),
       current_trial_global: this.global_trial_index,
@@ -189,11 +184,11 @@ export class JsPsych {
     };
   }
 
-  startTime() {
+  getStartTime() {
     return this.exp_start_time;
   }
 
-  totalTime() {
+  getTotalTime() {
     if (typeof this.exp_start_time === "undefined") {
       return 0;
     }
@@ -316,15 +311,15 @@ export class JsPsych {
     this.timeline.endActiveNode();
   }
 
-  currentTrial() {
+  getCurrentTrial() {
     return this.current_trial;
   }
 
-  initSettings() {
+  getInitSettings() {
     return this.opts;
   }
 
-  currentTimelineNodeID() {
+  getCurrentTimelineNodeID() {
     return this.timeline.activeID();
   }
 
@@ -332,11 +327,14 @@ export class JsPsych {
     if (this.internal.call_immediate || immediate === true) {
       return this.timeline.timelineVariable(varname);
     } else {
-      return () => this.timeline.timelineVariable(varname);
+      return {
+        timelineVariablePlaceholder: true,
+        timelineVariableFunction: () => this.timeline.timelineVariable(varname),
+      };
     }
   }
 
-  allTimelineVariables() {
+  getAllTimelineVariables() {
     return this.timeline.allTimelineVariables();
   }
 
@@ -363,6 +361,10 @@ export class JsPsych {
 
   getSafeModeStatus() {
     return this.file_protocol;
+  }
+
+  getTimeline() {
+    return this.timelineDescription;
   }
 
   private async prepareDom() {
@@ -423,11 +425,6 @@ export class JsPsych {
     }
     this.DOM_target.className += "jspsych-content";
 
-    // below code resets event listeners that may have lingered from
-    // a previous incomplete experiment loaded in same DOM.
-    this.pluginAPI.reset(options.display_element);
-    // create keyboard event listeners
-    this.pluginAPI.createKeyboardEventListeners(options.display_element);
     // create listeners for user browser interaction
     this.data.createInteractionListeners();
 
@@ -470,13 +467,20 @@ export class JsPsych {
   }
 
   private finishExperiment() {
-    if (typeof this.timeline.end_message !== "undefined") {
-      this.DOM_target.innerHTML = this.timeline.end_message;
+    const finish_result = this.opts.on_finish(this.data.get());
+
+    const done_handler = () => {
+      if (typeof this.timeline.end_message !== "undefined") {
+        this.DOM_target.innerHTML = this.timeline.end_message;
+      }
+      this.resolveFinishedPromise();
+    };
+
+    if (finish_result) {
+      Promise.resolve(finish_result).then(done_handler);
+    } else {
+      done_handler();
     }
-
-    this.opts.on_finish(this.data.get());
-
-    this.resolveFinishedPromise();
   }
 
   private nextTrial() {
@@ -561,19 +565,26 @@ export class JsPsych {
       }
     }
 
-    // execute trial method
-    trial.type.trial(this.DOM_target, trial);
-
-    // call trial specific loaded callback if it exists
-    if (typeof trial.on_load === "function") {
-      trial.on_load();
-    }
-
-    // call any on_load functions for extensions
-    if (Array.isArray(trial.extensions)) {
-      for (const extension of trial.extensions) {
-        this.extensions[extension.type.info.name].on_load(extension.params);
+    // setup on_load event callback
+    const load_callback = () => {
+      if (typeof trial.on_load === "function") {
+        trial.on_load();
       }
+
+      // call any on_load functions for extensions
+      if (Array.isArray(trial.extensions)) {
+        for (const extension of trial.extensions) {
+          this.extensions[extension.type.info.name].on_load(extension.params);
+        }
+      }
+    };
+
+    const trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
+    // see if trial_complete is a Promise by looking for .then() function
+    const is_promise = trial_complete && typeof trial_complete.then == "function";
+
+    if (!is_promise) {
+      load_callback();
     }
 
     // done with callbacks
@@ -584,15 +595,17 @@ export class JsPsych {
     for (const key of Object.keys(trial)) {
       if (key === "type") {
         // skip the `type` parameter as it contains a plugin
-        continue;
+        //continue;
       }
       // timeline variables on the root level
       if (
-        typeof trial[key] === "function" &&
-        trial[key].toString().replace(/\s/g, "") ===
-          "function(){returntimeline.timelineVariable(varname);}"
+        typeof trial[key] === "object" &&
+        trial[key] !== null &&
+        typeof trial[key].timelineVariablePlaceholder !== "undefined"
       ) {
-        trial[key] = trial[key].call();
+        /*trial[key].toString().replace(/\s/g, "") ==
+          "function(){returntimeline.timelineVariable(varname);}"
+      )*/ trial[key] = trial[key].timelineVariableFunction();
       }
       // timeline variables that are nested in objects
       if (typeof trial[key] === "object" && trial[key] !== null) {
@@ -772,8 +785,7 @@ export class JsPsych {
   }
 
   private updateProgressBar() {
-    const progress = this.progress().percent_complete;
-    this.setProgressBar(progress / 100);
+    this.setProgressBar(this.getProgress().percent_complete / 100);
   }
 
   private progress_bar_amount = 0;

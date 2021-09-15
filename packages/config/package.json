@@ -1,8 +1,60 @@
 {
-  "private": true,
   "name": "@jspsych/config",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    "./babel": {
+      "import": null,
+      "require": "./babel.cjs"
+    },
+    "./gulp": {
+      "import": "./gulp.js",
+      "require": null
+    },
+    "./jest": {
+      "import": null,
+      "require": "./jest.cjs"
+    },
+    "./rollup": {
+      "import": "./rollup.js",
+      "require": null
+    },
+    "./tsconfig.json": "./tsconfig.json",
+    "./tsconfig.core.json": "./tsconfig.core.json",
+    "./tsconfig.contrib.json": "./tsconfig.contrib.json"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "build": "",
     "tsc": ""
+  },
+  "dependencies": {
+    "@babel/cli": "^7.15.4",
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@types/gulp": "^4.0.9",
+    "@types/jest": "^26.0.23",
+    "babel-preset-minify": "^0.5.1",
+    "canvas": "^2.8.0",
+    "gulp": "^4.0.2",
+    "gulp-cli": "^2.3.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-replace": "^1.1.3",
+    "gulp-zip": "^5.1.0",
+    "jest": "^27.0.6",
+    "jest-environment-jsdom": "^27.0.6",
+    "merge-stream": "^2.0.0",
+    "rollup": "^2.52.7",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "ts-jest": "^27.0.3",
+    "tslib": "^2.3.0",
+    "typescript": "^4.3.5"
   }
 }

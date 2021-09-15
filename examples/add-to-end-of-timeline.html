@@ -1,38 +1,42 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
-    <script src="../plugins/jspsych-image-keyboard-response.js"></script>
-    <script src="../plugins/jspsych-preload.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css">
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-image-keyboard-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-preload/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body></body>
   <script>
 
-  var preload = {
-    type: 'preload',
-    images: ['img/happy_face_4.jpg']
-  }
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
-  var first = {
-    type: 'html-keyboard-response',
-    stimulus: 'first trial; new trial added when on_finish is called',
-    on_finish: function(){
-      jsPsych.addNodeToEndOfTimeline({
-        timeline: [{
-          type: 'image-keyboard-response',
-          stimulus: 'img/happy_face_4.jpg',
-          stimulus_width: 300
-        }]
-      })
-    }
-  }
+    var preload = {
+      type: jsPsychPreload,
+      images: ['img/happy_face_4.jpg']
+    };
 
-  jsPsych.init({
-    timeline: [preload, first],
-    on_finish: function(){jsPsych.data.displayData(); }
-  });
+    var first = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: 'First trial; new trial added when on_finish is called.',
+      on_finish: function(){
+        jsPsych.addNodeToEndOfTimeline({
+          timeline: [{
+            type: jsPsychImageKeyboardResponse,
+            stimulus: 'img/happy_face_4.jpg',
+            stimulus_width: 300,
+            prompt: '<p>New trial.</p>'
+          }]
+        });
+      }
+    };
+
+    jsPsych.run([preload, first]);
 
   </script>
 </html>

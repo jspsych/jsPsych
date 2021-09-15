@@ -1,20 +1,58 @@
-// core.turkInfo gets information relevant to mechanical turk experiments. returns an object
-// containing the workerID, assignmentID, and hitID, and whether or not the HIT is in
-// preview mode, meaning that they haven't accepted the HIT yet.
-export function turkInfo() {
-  var turk = <any>{};
+interface turkInformation {
+  /**
+   * Is the experiment being loaded in preview mode on Mechanical Turk?
+   */
+  previewMode: boolean;
+  /**
+   * Is the experiment being loaded outside of the Mechanical Turk environment?
+   */
+  outsideTurk: boolean;
+  /**
+   * The HIT ID.
+   */
+  hitId: string;
+  /**
+   * The Assignment ID.
+   */
+  assignmentId: string;
+  /**
+   * The worker ID.
+   */
+  workerId: string;
+  /**
+   * URL for submission of the HIT.
+   */
+  turkSubmitTo: string;
+}
 
-  var param = function (url, name) {
+/**
+ * Gets information about the Mechanical Turk Environment, HIT, Assignment, and Worker
+ * by parsing the URL variables that Mechanical Turk generates.
+ * @returns An object containing information about the Mechanical Turk Environment, HIT, Assignment, and Worker.
+ */
+export function turkInfo(): turkInformation {
+  const turk: turkInformation = {
+    previewMode: false,
+    outsideTurk: false,
+    hitId: "INVALID_URL_PARAMETER",
+    assignmentId: "INVALID_URL_PARAMETER",
+    workerId: "INVALID_URL_PARAMETER",
+    turkSubmitTo: "INVALID_URL_PARAMETER",
+  };
+
+  const param = function (url, name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regexS = "[\\?&]" + name + "=([^&#]*)";
-    var regex = new RegExp(regexS);
-    var results = regex.exec(url);
+    const regexS = "[\\?&]" + name + "=([^&#]*)";
+    const regex = new RegExp(regexS);
+    const results = regex.exec(url);
     return results == null ? "" : results[1];
   };
 
-  var src = param(window.location.href, "assignmentId") ? window.location.href : document.referrer;
+  const src = param(window.location.href, "assignmentId")
+    ? window.location.href
+    : document.referrer;
 
-  var keys = ["assignmentId", "hitId", "workerId", "turkSubmitTo"];
+  const keys = ["assignmentId", "hitId", "workerId", "turkSubmitTo"];
   keys.map(function (key) {
     turk[key] = unescape(param(src, key));
   });
@@ -24,31 +62,38 @@ export function turkInfo() {
   turk.outsideTurk =
     !turk.previewMode && turk.hitId === "" && turk.assignmentId == "" && turk.workerId == "";
 
-  // TODO Was this intended to set a global variable?
-  // turk_info = turk;
-
   return turk;
 }
 
-// core.submitToTurk will submit a MechanicalTurk ExternalHIT type
+/**
+ * Send data to Mechnical Turk for storage.
+ * @param data An object containing `key:value` pairs to send to Mechanical Turk. Values
+ * cannot contain nested objects, arrays, or functions.
+ * @returns Nothing
+ */
 export function submitToTurk(data) {
-  var turkInfo = turkInfo();
-  var assignmentId = turkInfo.assignmentId;
-  var turkSubmitTo = turkInfo.turkSubmitTo;
+  const turk = turkInfo();
+  const assignmentId = turk.assignmentId;
+  const turkSubmitTo = turk.turkSubmitTo;
 
   if (!assignmentId || !turkSubmitTo) return;
 
-  var dataString = [];
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = turkSubmitTo + "/mturk/externalSubmit?assignmentId=" + assignmentId;
 
-  for (var key in data) {
+  for (const key in data) {
     if (data.hasOwnProperty(key)) {
-      dataString.push(key + "=" + escape(data[key]));
+      const hiddenField = document.createElement("input");
+      hiddenField.type = "hidden";
+      hiddenField.name = key;
+      hiddenField.id = key;
+      hiddenField.value = data[key];
+
+      form.appendChild(hiddenField);
     }
   }
 
-  dataString.push("assignmentId=" + assignmentId);
-
-  var url = turkSubmitTo + "/mturk/externalSubmit?" + dataString.join("&");
-
-  window.location.href = url;
+  document.body.appendChild(form);
+  form.submit();
 }

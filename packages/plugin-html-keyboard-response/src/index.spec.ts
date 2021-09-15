@@ -1,13 +1,12 @@
-import { jest } from "@jest/globals";
 import { pressKey, startTimeline } from "jspsych/tests/utils";
 
 import htmlKeyboardResponse from ".";
 
 jest.useFakeTimers();
 
-describe("html-keyboard-response", function () {
+describe("html-keyboard-response", () => {
   test("displays html stimulus", async () => {
-    const { getHTML } = await startTimeline([
+    const { getHTML, expectFinished } = await startTimeline([
       {
         type: htmlKeyboardResponse,
         stimulus: "this is html",
@@ -16,6 +15,7 @@ describe("html-keyboard-response", function () {
 
     expect(getHTML()).toBe('<div id="jspsych-html-keyboard-response-stimulus">this is html</div>');
     pressKey("a");
+    await expectFinished();
   });
 
   test("display clears after key press", async () => {
@@ -26,11 +26,8 @@ describe("html-keyboard-response", function () {
         choices: ["f", "j"],
       },
     ]);
-    console.log(getHTML());
-    expect(getHTML()).toEqual(
-      expect.stringContaining(
-        '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
-      )
+    expect(getHTML()).toContain(
+      '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
     );
 
     pressKey("f");
@@ -47,10 +44,8 @@ describe("html-keyboard-response", function () {
       },
     ]);
 
-    expect(getHTML()).toEqual(
-      expect.stringContaining(
-        '<div id="jspsych-html-keyboard-response-stimulus">this is html</div><div id="foo">this is a prompt</div>'
-      )
+    expect(getHTML()).toContain(
+      '<div id="jspsych-html-keyboard-response-stimulus">this is html</div><div id="foo">this is a prompt</div>'
     );
 
     pressKey("f");
@@ -77,7 +72,7 @@ describe("html-keyboard-response", function () {
     expect(
       displayElement.querySelector<HTMLElement>("#jspsych-html-keyboard-response-stimulus").style
         .visibility
-    ).toMatch("hidden");
+    ).toBe("hidden");
 
     pressKey("f");
     await expectFinished();
@@ -93,9 +88,7 @@ describe("html-keyboard-response", function () {
       },
     ]);
 
-    expect(getHTML()).toMatch(
-      '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
-    );
+    expect(getHTML()).toBe('<div id="jspsych-html-keyboard-response-stimulus">this is html</div>');
     jest.advanceTimersByTime(500);
     await expectFinished();
   });
@@ -110,10 +103,8 @@ describe("html-keyboard-response", function () {
       },
     ]);
 
-    expect(getHTML()).toEqual(
-      expect.stringContaining(
-        '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
-      )
+    expect(getHTML()).toContain(
+      '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
     );
 
     pressKey("f");
@@ -130,10 +121,8 @@ describe("html-keyboard-response", function () {
       },
     ]);
 
-    expect(getHTML()).toEqual(
-      expect.stringContaining(
-        '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
-      )
+    expect(getHTML()).toContain(
+      '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
     );
 
     pressKey("f");

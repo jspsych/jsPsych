@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="../jspsych.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css">
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body>
-    <p>The URL variable should be logged to the console</p>
+    <p>The URL variables should be logged to the console</p>
   </body>
   <script>
 
-  if(typeof jsPsych.data.getURLVariable('v1') == 'undefined'){
-    window.location = window.location + '?v1=abc&v2=def';
-  }
+    // even though there's no jsPsych experiment that runs in this example,
+    // we still need to initialize jsPsych so that we can access the jsPsych.data functions
+    var jsPsych = initJsPsych();
 
-  console.log(JSON.stringify(jsPsych.data.urlVariables()));
+    if (typeof jsPsych.data.getURLVariable('v1') == 'undefined') {
+      window.location = window.location + '?v1=abc&v2=def';
+    }
 
-  console.log(jsPsych.data.getURLVariable('v1'));
+    console.log('All URL variables: ', JSON.stringify(jsPsych.data.urlVariables()));
+
+    console.log('The value of v1 is: ', jsPsych.data.getURLVariable('v1'));
 
   </script>
 </html>

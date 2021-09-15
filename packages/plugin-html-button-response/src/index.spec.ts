@@ -1,177 +1,153 @@
-import { jest } from "@jest/globals";
-import jsPsych from "jspsych";
-import { clickTarget } from "jspsych/tests/utils";
+import { clickTarget, startTimeline } from "jspsych/tests/utils";
 
 import htmlButtonResponse from ".";
 
 jest.useFakeTimers();
 
-describe("html-button-response", function () {
-  test("displays html stimulus", function () {
-    var trial = {
-      type: htmlButtonResponse,
-      stimulus: "this is html",
-      choices: ["button-choice"],
-    };
+describe("html-button-response", () => {
+  test("displays html stimulus", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: htmlButtonResponse,
+        stimulus: "this is html",
+        choices: ["button-choice"],
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
+    expect(getHTML()).toContain(
       '<div id="jspsych-html-button-response-stimulus">this is html</div>'
     );
   });
 
-  test("display button labels", function () {
-    var trial = {
-      type: htmlButtonResponse,
-      stimulus: "this is html",
-      choices: ["button-choice1", "button-choice2"],
-    };
+  test("display button labels", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: htmlButtonResponse,
+        stimulus: "this is html",
+        choices: ["button-choice1", "button-choice2"],
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
-      new RegExp('<button class="jspsych-btn">button-choice1</button>')
-    );
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
-      new RegExp('<button class="jspsych-btn">button-choice2</button>')
-    );
+    expect(getHTML()).toContain('<button class="jspsych-btn">button-choice1</button>');
+    expect(getHTML()).toContain('<button class="jspsych-btn">button-choice2</button>');
   });
 
-  test("display button html", function () {
-    var trial = {
-      type: htmlButtonResponse,
-      stimulus: "this is html",
-      choices: ["buttonChoice"],
-      button_html: '<button class="jspsych-custom-button">%choice%</button>',
-    };
+  test("display button html", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: htmlButtonResponse,
+        stimulus: "this is html",
+        choices: ["buttonChoice"],
+        button_html: '<button class="jspsych-custom-button">%choice%</button>',
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
-      new RegExp('<button class="jspsych-custom-button">buttonChoice</button>')
-    );
+    expect(getHTML()).toContain('<button class="jspsych-custom-button">buttonChoice</button>');
   });
 
-  test("display should clear after button click", function () {
-    var trial = {
-      type: htmlButtonResponse,
-      stimulus: "this is html",
-      choices: ["button-choice"],
-    };
+  test("display should clear after button click", async () => {
+    const { getHTML, expectFinished } = await startTimeline([
+      {
+        type: htmlButtonResponse,
+        stimulus: "this is html",
+        choices: ["button-choice"],
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
-      new RegExp('<div id="jspsych-html-button-response-stimulus">this is html</div>')
+    expect(getHTML()).toContain(
+      '<div id="jspsych-html-button-response-stimulus">this is html</div>'
     );
 
     clickTarget(document.querySelector("#jspsych-html-button-response-button-0"));
 
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+    await expectFinished();
   });
 
-  test("prompt should append below button", function () {
-    var trial = {
-      type: htmlButtonResponse,
-      stimulus: "this is html",
-      choices: ["button-choice"],
-      prompt: "<p>this is a prompt</p>",
-    };
+  test("prompt should append below button", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: htmlButtonResponse,
+        stimulus: "this is html",
+        choices: ["button-choice"],
+        prompt: "<p>this is a prompt</p>",
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
+    expect(getHTML()).toContain(
       '<button class="jspsych-btn">button-choice</button></div></div><p>this is a prompt</p>'
     );
   });
 
-  test("should hide stimulus if stimulus-duration is set", function () {
-    var trial = {
-      type: htmlButtonResponse,
-      stimulus: "this is html",
-      choices: ["button-choice"],
-      stimulus_duration: 500,
-    };
+  test("should hide stimulus if stimulus-duration is set", async () => {
+    const { displayElement } = await startTimeline([
+      {
+        type: htmlButtonResponse,
+        stimulus: "this is html",
+        choices: ["button-choice"],
+        stimulus_duration: 500,
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
+    const stimulusElement = displayElement.querySelector<HTMLElement>(
+      "#jspsych-html-button-response-stimulus"
+    );
 
-    expect(
-      jsPsych.getDisplayElement().querySelector("#jspsych-html-button-response-stimulus").style
-        .visibility
-    ).toMatch("");
+    expect(stimulusElement.style.visibility).toBe("");
+
     jest.advanceTimersByTime(500);
-    expect(
-      jsPsych.getDisplayElement().querySelector("#jspsych-html-button-response-stimulus").style
-        .visibility
-    ).toMatch("hidden");
+    expect(stimulusElement.style.visibility).toBe("hidden");
   });
 
-  test("should end trial when trial duration is reached", function () {
-    var trial = {
-      type: htmlButtonResponse,
-      stimulus: "this is html",
-      choices: ["button-choice"],
-      trial_duration: 500,
-    };
+  test("should end trial when trial duration is reached", async () => {
+    const { getHTML, expectFinished } = await startTimeline([
+      {
+        type: htmlButtonResponse,
+        stimulus: "this is html",
+        choices: ["button-choice"],
+        trial_duration: 500,
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
+    expect(getHTML()).toContain(
       '<div id="jspsych-html-button-response-stimulus">this is html</div>'
     );
+
     jest.advanceTimersByTime(500);
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+    await expectFinished();
   });
 
-  test("should end trial when button is clicked", function () {
-    var trial = {
-      type: htmlButtonResponse,
-      stimulus: "this is html",
-      choices: ["button-choice"],
-      response_ends_trial: true,
-    };
+  test("should end trial when button is clicked", async () => {
+    const { getHTML, expectFinished } = await startTimeline([
+      {
+        type: htmlButtonResponse,
+        stimulus: "this is html",
+        choices: ["button-choice"],
+        response_ends_trial: true,
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
+    expect(getHTML()).toContain(
       '<div id="jspsych-html-button-response-stimulus">this is html</div>'
     );
+
     clickTarget(document.querySelector("#jspsych-html-button-response-button-0"));
-    expect(jsPsych.getDisplayElement().innerHTML).toBe("");
+    await expectFinished();
   });
 
-  test("class should have responded when button is clicked", function () {
-    var trial = {
-      type: htmlButtonResponse,
-      stimulus: "this is html",
-      choices: ["button-choice"],
-      response_ends_trial: false,
-    };
+  test("class should have responded when button is clicked", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: htmlButtonResponse,
+        stimulus: "this is html",
+        choices: ["button-choice"],
+        response_ends_trial: false,
+      },
+    ]);
 
-    jsPsych.init({
-      timeline: [trial],
-    });
-
-    expect(jsPsych.getDisplayElement().innerHTML).toMatch(
+    expect(getHTML()).toContain(
       '<div id="jspsych-html-button-response-stimulus">this is html</div>'
     );
+
     clickTarget(document.querySelector("#jspsych-html-button-response-button-0"));
     expect(document.querySelector("#jspsych-html-button-response-stimulus").className).toBe(
       " responded"

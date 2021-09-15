@@ -1,49 +1,48 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-categorize-animation/dist/index.browser.js"></script>
+    <script src="../packages/plugin-preload/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+    <style>
+      #jspsych-categorize-animation-stimulus {
+        width: 300px;
+        height: 225px;
+      }
+    </style>
+  </head>
+  <body></body>
+  <script>
 
-<head>
-  <script src="../jspsych.js"></script>
-  <script src="../plugins/jspsych-categorize-animation.js"></script>
-  <script src="../plugins/jspsych-preload.js"></script>
-  <link rel="stylesheet" href="../css/jspsych.css">
-  <style>
-    #jspsych-categorize-animation-stimulus {
-      width: 300px;
-      height: 225px;
-    }
-  </style>
-</head>
-<body></body>
-<script>
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
-  var preload = {
-    type: 'preload',
-    auto_preload: true
-  }
-  
-  // If render_on_canvas is false, the images will be shown via an <img> rather than <canvas> element.
-  // In some browsers, the first time the images are shown, the <img> method (render_on_canvas: false) will produce a brief 
-  // blank screen (white flash) between images.
-  var trials = {
-    type: 'categorize-animation',
-    stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
-    key_answer: 'd',
-    choices: ['d', 's'],
-    text_answer: 'different',
-    feedback_duration: 1000,
-    correct_text: "<p>Correct. The faces had %ANS% expressions.</p>",
-    incorrect_text: "<p>Incorrect. The faces had %ANS% expressions.</p>",
-    prompt: "<p>Press &quot;d&quot; if the faces had different emotional expressions. Press &quot;s&quot; if the faces had the same emotional expression.</p>",
-    //render_on_canvas: false
-  };
+    var preload = {
+      type: jsPsychPreload,
+      auto_preload: true
+    };
+    
+    // If render_on_canvas is false, the images will be shown via an <img> rather than <canvas> element.
+    // In some browsers, the first time the images are shown, the <img> method (render_on_canvas: false) will produce a brief 
+    // blank screen (white flash) between images.
+    var trials = {
+      type: jsPsychCategorizeAnimation,
+      stimuli: ['img/happy_face_1.jpg', 'img/sad_face_3.jpg'],
+      key_answer: 'd',
+      choices: ['d', 's'],
+      text_answer: 'different',
+      feedback_duration: 1000,
+      correct_text: "<p>Correct. The faces had %ANS% expressions.</p>",
+      incorrect_text: "<p>Incorrect. The faces had %ANS% expressions.</p>",
+      prompt: "<p>Press &quot;d&quot; if the faces had different emotional expressions. Press &quot;s&quot; if the faces had the same emotional expression.</p>",
+      //render_on_canvas: false
+    };
 
-  jsPsych.init({
-    timeline: [preload, trials],
-    on_finish: function() {
-      jsPsych.data.displayData();
-    }
-  });
+    jsPsych.run([preload, trials]);
 
-</script>
-
+  </script>
 </html>

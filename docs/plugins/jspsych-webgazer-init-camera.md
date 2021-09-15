@@ -21,10 +21,4 @@ load_time | numeric | The time it took for webgazer to initialize. This can be a
 
 ## Example
 
-#### Parameterless use
-
-```javascript
-var init_camera = {
-  type: 'webgazer-init-camera'
-}
-```
+Because the eye tracking plugins need to be used in conjunction with each other, please see the [example on the eye tracking overview page](/overview/eye-tracking/#example) for an integrated example. 

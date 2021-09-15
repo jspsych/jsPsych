@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-maxdiff.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css">
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-maxdiff/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body></body>
   <script>
 
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
+
     var maxdiff_trial = {
-        type: 'maxdiff',
-        alternatives: ['apple', 'orange', 'pear', 'banana'],
-        labels: ['Most Preferred', 'Least Preferred'],
-        preamble: '<p> Please select your <b>most preferred</b> and <b>least preferred</b> fruits. </p>'
+      type: jsPsychMaxdiff,
+      alternatives: ['apple', 'orange', 'pear', 'banana'],
+      labels: ['Most Preferred', 'Least Preferred'],
+      preamble: '<p> Please select your <b>most preferred</b> and <b>least preferred</b> fruits. </p>'
     };
 
     var maxdiff_trial_random_required = {
-        type: 'maxdiff',
-        alternatives: ['strawberry', 'watermelon', 'kiwi', 'grapefruit'],
-        labels: ['Most Preferred', 'Least Preferred'],
-        preamble: '<p> Please select your <b>most preferred</b> and <b>least preferred</b> fruits. </p>',
-        randomize_alternative_order: true,
-        required: true
-    }
+      type: jsPsychMaxdiff,
+      alternatives: ['strawberry', 'watermelon', 'kiwi', 'grapefruit'],
+      labels: ['Most Preferred', 'Least Preferred'],
+      preamble: '<p> Please select your <b>most preferred</b> and <b>least preferred</b> fruits. </p>',
+      randomize_alternative_order: true,
+      required: true
+    };
 
-  jsPsych.init({
-    timeline: [maxdiff_trial, maxdiff_trial_random_required],
-    on_finish: function() { jsPsych.data.displayData(); }
-  });
+    jsPsych.run([maxdiff_trial, maxdiff_trial_random_required]);
 
   </script>
 </html>

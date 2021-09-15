@@ -1,9 +1,8 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import reconstruction from "@jspsych/plugin-reconstruction";
+import surveyText from "@jspsych/plugin-survey-text";
 
 import { clickTarget, pressKey, startTimeline } from "../utils";
-
-// import reconstruction from "@jspsych/plugin-reconstruction";
-// import surveyText from "@jspsych/plugin-survey-text";
 
 describe("Trial parameters in the data", () => {
   test("Can be added by specifying the parameter with a value of true in save_trial_parameters", async () => {
@@ -81,12 +80,11 @@ describe("Trial parameters in the data", () => {
     spy.mockRestore();
   });
 
-  test.skip("Arrayed objects work with save_trial_parameters ", async () => {
+  test("Arrayed objects work with save_trial_parameters ", async () => {
     const questions = [{ prompt: "foo" }, { prompt: "bar" }];
 
     const { getData } = await startTimeline([
       {
-        // @ts-ignore TODO enable this test once surveyText is a class
         type: surveyText,
         questions,
         save_trial_parameters: {
@@ -102,7 +100,7 @@ describe("Trial parameters in the data", () => {
     expect(data.questions[1].prompt).toBe(questions[1].prompt);
   });
 
-  test.skip("Function-based parameters are stored as string representations ", async () => {
+  test("Function-based parameters are stored as string representations ", async () => {
     const sample_function = (param) => {
       const size = 50 + Math.floor(param * 250);
       const html =
@@ -118,7 +116,6 @@ describe("Trial parameters in the data", () => {
 
     const { getData } = await startTimeline([
       {
-        // @ts-ignore TODO enable this test once reconstruction is a class
         type: reconstruction,
         stim_function: sample_function,
         starting_value: 0.25,

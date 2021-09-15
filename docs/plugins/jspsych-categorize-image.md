@@ -37,17 +37,23 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ## Examples
 
-#### Categorizing an image
+???+ example "Categorizing an image"
+    === "Code"
+        ```javascript
+        var categorization_trial = {
+            type: 'categorize-image',
+            stimulus: 'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/blue.png',
+            key_answer: 'b',
+            text_answer: 'Blue',
+            choices: ['r', 'g', 'b'],
+            correct_text: "<p class='prompt'>Correct! The color is %ANS%.</p>",
+            incorrect_text: "<p class='prompt'>Incorrect. The color is %ANS%.</p>",
+            prompt: "<p>Is the color of this circle (R)ed, (G)reen, or (B)lue?</p>"
+        };
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../plugins/demos/jspsych-categorize-image-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var categorization_trial = {
-    type: 'categorize-image',
-    stimulus: 'img/harrypotter.png',
-    key_answer: 'g',
-    text_answer: 'Gryffindor',
-    choices: ['g', 'h', 'r', 's'],
-    correct_text: "<p class='prompt'>Correct! This person is a %ANS%.</p>",
-    incorrect_text: "<p class='prompt'>Incorrect. This person is a %ANS%.</p>",
-    prompt: "<p>Is this person a (G)ryffindor, (H)ufflepuff, (R)avenclaw, or (S)lytherin?</p>"
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-categorize-image-demo1.html">Open demo in new tab</a>

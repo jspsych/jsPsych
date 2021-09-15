@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-visual-search-circle.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css"
+    />
+    <style>
+      .jspsych-btn {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body></body>
+  <script>
+
+      var preload = {
+        type: 'preload',
+        images: ['img/elephant.png', 'img/lion.png', 'img/monkey.png']
+      }
+
+      var start = {
+        type: 'html-button-response',
+        stimulus: '',
+        choices: ['Run demo']
+      };
+
+      var show_data = {
+        type: 'html-button-response',
+        stimulus: function() {
+          var trial_data = jsPsych.data.getLastTrialData().values();
+          var trial_json = JSON.stringify(trial_data, null, 2);
+          return `<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>
+            <pre style="margin-top:0px;text-align:left;">${trial_json}</pre>`;
+        },
+        choices: ['Repeat demo']
+      };
+
+      var instructions = {
+        type: 'html-button-response',
+        stimulus: `<p>Press E if there is an elephant in the group.</p>
+          <p>Press N if there is no elephant in the group.</p>`,
+        choices: ['Continue']
+      }
+
+      var trial = {
+        type: 'visual-search-circle',
+        target: 'img/elephant.png',
+        foil: ['img/lion.png', 'img/monkey.png'],
+        fixation_image: 'img/fixation.gif',
+        target_present_key: 'e',
+        target_absent_key: 'n',
+        target_present: true,
+        set_size: 3
+      }
+
+      var trial_loop = {
+        timeline: [instructions, trial, show_data],
+        loop_function: function() {
+          return true;
+        }
+      };
+
+      if (typeof jsPsych !== "undefined") {
+        jsPsych.init({
+          timeline: [preload, start, trial_loop]
+        });
+      } else {
+        document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+      }
+  </script>
+</html>

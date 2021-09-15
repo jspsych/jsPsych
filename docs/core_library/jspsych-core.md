@@ -1,4 +1,4 @@
-# The jsPsych core library
+# jsPsych
 
 ---
 ## jsPsych.addNodeToEndOfTimeline
@@ -34,111 +34,6 @@ var new_timeline = {
 }
 
 jsPsych.addNodeToEndOfTimeline(new_timeline)
-```
-
----
-## jsPsych.allTimelineVariables
-
-```javascript
-jsPsych.allTimelineVariables()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-Returns an object with all available timeline variables at this moment in the experiment, represented as `key: value` pairs.
-
-### Description
-
-This function can be used to get all the timeline variables at a particular moment in the experiment. Can be useful for annotating
-data, such as in the example below.
-
-### Example
-
-```javascript
-var trial = {
-  type: 'html-keyboard-response',
-  stimulus: 'Just a demo',
-  on_finish: function(data){
-    // merge all timeline variables available at this trial into the data for this trial
-    Object.assign(data, jsPsych.allTimelineVariables())
-  }
-}
-```
-
----
-## jsPsych.currentTimelineNodeID
-
-```javascript
-jsPsych.currentTimelineNodeID()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-Returns the ID of the TimelineNode that is currently active.
-
-### Description
-
-Gets the ID of the active TimelineNode. The ID is a string that follows a specific format:
-
-* `"0.0"` is the ID of the first top-level TimelineNode
-* `"1.0"` is the ID of the second top-level TimelineNode
-* `"2.0"` is the ID of the third top-level TimelineNode, and so on...
-
-If a TimelineNode iterates multiple times (using the loop function, for example), then the iterations are indicated in the second number:
-
-* `"0.0"` is the ID of the first top-level TimelineNode during the first iteration
-* `"0.1"` is the ID of the first top-level TimelineNode during the second iteration
-* `"0.2"` is the ID of the first top-level TimelineNode during the third iteration, and so on...
-
-If TimelineNodes are nested in other TimelineNodes, then the hierarchical structure is shown with `"."`:
-
-* `"0.0-1.0"` is the ID of the second TimelineNode on the timeline of the first top-level TimelineNode.
-* `"0.0-2.0"` is the ID of the third TimelineNode on the timeline of the first top-level TimelineNode, and so on...
-
-The rules about iterations apply throughout the hierarchical ID:
-
-* `"0.2-1.3"` is the ID of the second TimelineNode, executing for the fourth time, on the timeline of the first top-level TimelineNode, executing for the third time.
-
-
-### Example
-
-```javascript
-var id = jsPsych.currentTimelineNodeID();
-console.log('The current TimelineNode ID is '+id);
-```
-
----
-## jsPsych.currentTrial
-
-```javascript
-jsPsych.currentTrial()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-Returns the object describing the current trial. The object will contain all of the parameters associated with the current trial.
-
-### Description
-
-Get a description of the current trial
-
-### Example
-
-```javascript
-var trial = jsPsych.currentTrial();
-console.log('The current trial is using the '+trial.type+' plugin');
 ```
 
 ---
@@ -222,7 +117,7 @@ None.
 
 ### Description
 
-Ends the experiment, skipping all remaining trials.
+Ends the experiment, skipping all remaining trials. If the `on_finish` event handler for `jsPsych` returns a `Promise` then the `end_message` will not be displayed until the promise is resolved.
 
 ### Example
 
@@ -279,6 +174,112 @@ jsPsych.finishTrial({correct_response: true});
 ```
 
 ---
+## jsPsych.getAllTimelineVariables
+
+```javascript
+jsPsych.getAllTimelineVariables()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+Returns an object with all available timeline variables at this moment in the experiment, represented as `key: value` pairs.
+
+### Description
+
+This function can be used to get all the timeline variables at a particular moment in the experiment. Can be useful for annotating
+data, such as in the example below.
+
+### Example
+
+```javascript
+var trial = {
+  type: 'html-keyboard-response',
+  stimulus: 'Just a demo',
+  on_finish: function(data){
+    // merge all timeline variables available at this trial into the data for this trial
+    Object.assign(data, jsPsych.getAllTimelineVariables())
+  }
+}
+```
+
+---
+## jsPsych.getCurrentTimelineNodeID
+
+```javascript
+jsPsych.getCurrentTimelineNodeID()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+Returns the ID of the TimelineNode that is currently active.
+
+### Description
+
+Gets the ID of the active TimelineNode. The ID is a string that follows a specific format:
+
+* `"0.0"` is the ID of the first top-level TimelineNode
+* `"1.0"` is the ID of the second top-level TimelineNode
+* `"2.0"` is the ID of the third top-level TimelineNode, and so on...
+
+If a TimelineNode iterates multiple times (using the loop function, for example), then the iterations are indicated in the second number:
+
+* `"0.0"` is the ID of the first top-level TimelineNode during the first iteration
+* `"0.1"` is the ID of the first top-level TimelineNode during the second iteration
+* `"0.2"` is the ID of the first top-level TimelineNode during the third iteration, and so on...
+
+If TimelineNodes are nested in other TimelineNodes, then the hierarchical structure is shown with `"."`:
+
+* `"0.0-1.0"` is the ID of the second TimelineNode on the timeline of the first top-level TimelineNode.
+* `"0.0-2.0"` is the ID of the third TimelineNode on the timeline of the first top-level TimelineNode, and so on...
+
+The rules about iterations apply throughout the hierarchical ID:
+
+* `"0.2-1.3"` is the ID of the second TimelineNode, executing for the fourth time, on the timeline of the first top-level TimelineNode, executing for the third time.
+
+
+### Example
+
+```javascript
+var id = jsPsych.getCurrentTimelineNodeID();
+console.log('The current TimelineNode ID is '+id);
+```
+
+---
+## jsPsych.getCurrentTrial
+
+```javascript
+jsPsych.getCurrentTrial()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+Returns the object describing the current trial. The object will contain all of the parameters associated with the current trial.
+
+### Description
+
+Get a description of the current trial
+
+### Example
+
+```javascript
+var trial = jsPsych.getCurrentTrial();
+console.log('The current trial is using the '+trial.type+' plugin');
+```
+
+
+---
 ## jsPsych.getDisplayElement
 
 ```javascript
@@ -305,6 +306,70 @@ var el = jsPsych.getDisplayElement();
 // hide the jsPsych display
 el.style.visibility = 'hidden';
 ```
+---
+
+## jsPsych.getInitSettings
+
+```javascript
+jsPsych.getInitSettings()
+```
+
+### Parameters
+
+None
+
+### Return value
+
+Returns the settings object used to initialize the experiment.
+
+### Description
+
+Gets the object containing the settings for the current experiment.
+
+### Example
+
+```javascript
+var settings = jsPsych.getInitSettings();
+
+// check the experiment structure
+console.log(JSON.stringify(settings.timeline));
+```
+
+
+---
+
+## jsPsych.getProgress
+
+```javascript
+jsPsych.getProgress()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+Returns an object with the following properties:
+
+| Property             | Type    | Description                              |
+| -------------------- | ------- | ---------------------------------------- |
+| total_trials         | numeric | Indicates the number of trials in the experiment. Note that this does not count possible loops or skipped trials due to conditional statements. |
+| current_trial_global | numeric | Returns the trial index of the current trial in a global scope. Every trial will increase this count by 1. |
+| percent_complete     | numeric | Estimates the percent of the experiment that is complete. Works as expected for experiments without conditional or looping timelines. For complex timelines, the percent is an approximation. |
+
+
+### Description
+
+This method returns information about the length of the experiment and the subject's current location in the experiment timeline.
+
+### Example
+
+```javascript
+var progress = jsPsych.getProgress();
+alert('You have completed approximately '+progress.percent_complete+'% of the experiment');
+```
+
 
 ---
 ## jsPsych.getProgressBarCompleted
@@ -330,6 +395,60 @@ Used to get the current value of the progress bar. Works for automated and manua
 ```javascript
 var progress_bar_amount = jsPsych.getProgressBarCompleted();
 ```
+
+---
+
+## jsPsych.getStartTime
+
+```javascript
+jsPsych.getStartTime()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+Returns a `Date` object indicating when the experiment began.
+
+### Description
+
+Get the time that the experiment began.
+
+### Example
+
+```javascript
+var start_time = jsPsych.getStartTime();
+```
+
+---
+
+## jsPsych.getTotalTime
+
+```javascript
+jsPsych.getTotalTime()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+Returns a numeric value indicating the number of milliseconds since `jsPsych.init` was called.
+
+### Description
+
+Gets the total time the subject has been in the experiment.
+
+### Example
+
+```javascript
+var time = jsPsych.getTotalTime();
+console.log(time);
+```
+
 
 ---
 ## jsPsych.init
@@ -388,34 +507,6 @@ This method configures and starts the experiment.
 
 See any of the plugin examples in the [examples folder](https://github.com/jodeleeuw/jsPsych/tree/master/examples) in the GitHub repository.
 
----
-
-## jsPsych.initSettings
-
-```javascript
-jsPsych.initSettings()
-```
-
-### Parameters
-
-None
-
-### Return value
-
-Returns the settings object used to initialize the experiment.
-
-### Description
-
-Gets the object containing the settings for the current experiment.
-
-### Example
-
-```javascript
-var settings = jsPsych.initSettings();
-
-// check the experiment structure
-console.log(JSON.stringify(settings.timeline));
-```
 
 ---
 
@@ -451,40 +542,6 @@ var trial = {
     }
   }
 }
-```
-
----
-
-## jsPsych.progress
-
-```javascript
-jsPsych.progress()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-Returns an object with the following properties:
-
-| Property             | Type    | Description                              |
-| -------------------- | ------- | ---------------------------------------- |
-| total_trials         | numeric | Indicates the number of trials in the experiment. Note that this does not count possible loops or skipped trials due to conditional statements. |
-| current_trial_global | numeric | Returns the trial index of the current trial in a global scope. Every trial will increase this count by 1. |
-| percent_complete     | numeric | Estimates the percent of the experiment that is complete. Works as expected for experiments without conditional or looping timelines. For complex timelines, the percent is an approximation. |
-
-
-### Description
-
-This method returns information about the length of the experiment and the subject's current location in the experiment timeline.
-
-### Example
-
-```javascript
-var progress = jsPsych.progress();
-alert('You have completed approximately '+progress.percent_complete+'% of the experiment');
 ```
 
 ---
@@ -550,32 +607,6 @@ Set the progress bar to a custom amount. Proportion must be between 0 and 1. Val
 
 ```javascript
 jsPsych.setProgressBar(0.85);
-```
-
----
-
-## jsPsych.startTime
-
-```javascript
-jsPsych.startTime()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-Returns a `Date` object indicating when the experiment began.
-
-### Description
-
-Get the time that the experiment began.
-
-### Example
-
-```javascript
-var start_time = jsPsych.startTime();
 ```
 
 ---
@@ -664,32 +695,6 @@ var procedure = {
 }
 ```
 
----
-
-## jsPsych.totalTime
-
-```javascript
-jsPsych.totalTime()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-Returns a numeric value indicating the number of milliseconds since `jsPsych.init` was called.
-
-### Description
-
-Gets the total time the subject has been in the experiment.
-
-### Example
-
-```javascript
-var time = jsPsych.totalTime();
-console.log(time);
-```
 
 ---
 

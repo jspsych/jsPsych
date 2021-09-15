@@ -1,14 +1,11 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-// TO DO: the parameters below don't match up with the docs: https://www.jspsych.org/plugins/jspsych-webgazer-validate/
-// docs contain 'repetiton_per_point', and some param descriptions in docs refer to calibration
-
 const info = <const>{
   name: "webgazer-validate",
   parameters: {
-    /* Array of points in [x,y] coordinates */
+    /** Array of points in [x,y] coordinates */
     validation_points: {
-      type: ParameterType.INT,
+      type: ParameterType.INT, // TO DO: nested array, so different type?
       default: [
         [10, 10],
         [10, 50],
@@ -22,37 +19,41 @@ const info = <const>{
       ],
       array: true,
     },
-    /* Options are 'percent' and 'center-offset-pixels' */
+    /**
+     * Are the validation_points specified as percentages of screen width and height, or the distance in pixels from the center of the screen?
+     * Options are 'percent' and 'center-offset-pixels'
+     */
     validation_point_coordinates: {
-      type: ParameterType.STRING,
-      default: "percent", // options: 'percent', 'center-offset-pixels'
+      type: ParameterType.SELECT,
+      default: "percent",
+      options: ["percent", "center-offset-pixels"],
     },
-    /* Tolerance around validation point in pixels */
+    /** Tolerance around validation point in pixels */
     roi_radius: {
       type: ParameterType.INT,
       default: 200,
     },
-    /* Whether or not to randomize the order of validation points */
+    /** Whether or not to randomize the order of validation points */
     randomize_validation_order: {
       type: ParameterType.BOOL,
       default: false,
     },
-    /* Delay before validating after showing a point */
+    /** Delay before validating after showing a point */
     time_to_saccade: {
       type: ParameterType.INT,
       default: 1000,
     },
-    /* Length of time to show each point */
+    /** Length of time to show each point */
     validation_duration: {
       type: ParameterType.INT,
       default: 2000,
     },
-    /* Validation point size in pixels */
+    /** Validation point size in pixels */
     point_size: {
       type: ParameterType.INT,
       default: 20,
     },
-    /* If true, then validation data will be shown on the screen after validation is complete */
+    /** If true, then validation data will be shown on the screen after validation is complete */
     show_validation_data: {
       type: ParameterType.BOOL,
       default: false,
@@ -63,9 +64,16 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-webgazer-validate
- * Josh de Leeuw
- **/
+ * **webgazer-validate**
+ *
+ * jsPsych plugin for measuring the accuracy and precision of eye gaze predictions.
+ * Intended for use with the Webgazer eye-tracking extension, after the webcam has been initialized with the
+ * `webgazer-init-camera` plugin and calibrated with the `webgazer-calibrate` plugin.
+ *
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-webgazer-validate/ webgazer-validate plugin} and
+ * {@link https://www.jspsych.org/overview/eye-tracking/ eye-tracking overview} documentation on jspsych.org
+ */
 class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
@@ -354,6 +362,9 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
 
     function calculateSampleRate(gazeData) {
       var mean_diff = [];
+      if (gazeData.length == 0) {
+        return 0;
+      }
       for (var i = 0; i < gazeData.length; i++) {
         if (gazeData[i].length > 1) {
           var t_diff = [];

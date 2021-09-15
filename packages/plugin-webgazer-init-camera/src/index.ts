@@ -3,7 +3,7 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "webgazer-init-camera",
   parameters: {
-    /* Instruction text */
+    /** Instruction text */
     instructions: {
       type: ParameterType.HTML_STRING,
       default: `
@@ -12,7 +12,7 @@ const info = <const>{
             <p>It is important that you try and keep your head reasonably still throughout the experiment, so please take a moment to adjust your setup to be comfortable.</p>
             <p>When your face is centered in the box and the box is green, you can click to continue.</p>`,
     },
-    /* Text for the button that participants click to end the trial. */
+    /** Text for the button that participants click to end the trial. */
     button_text: {
       type: ParameterType.STRING,
       default: "Continue",
@@ -23,15 +23,23 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * jspsych-webgazer-init-camera
- * Josh de Leeuw
- **/
+ * **webgazer-init-camera**
+ *
+ * jsPsych plugin for initializing the webcam and helping the participant center their face in the camera view.
+ * Intended for use with the WebGazer eye-tracking extension.
+ *
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-webgazer-init-camera/ webgazer-init-camera plugin} and
+ * {@link https://www.jspsych.org/overview/eye-tracking/ eye-tracking overview} documentation on jspsych.org
+ */
 class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
   static info = info;
 
   constructor(private jsPsych: JsPsych) {}
 
-  trial(display_element: HTMLElement, trial: TrialType<Info>) {
+  trial(display_element: HTMLElement, trial: TrialType<Info>, on_load: () => void) {
+    let trial_complete;
+
     var start_time = performance.now();
     var load_time: number;
 
@@ -55,9 +63,13 @@ class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
+
+      trial_complete();
     };
 
     const showTrial = () => {
+      on_load();
+
       load_time = Math.round(performance.now() - start_time);
 
       var style = `
@@ -145,6 +157,10 @@ class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
         }
       }
     }
+
+    return new Promise((resolve) => {
+      trial_complete = resolve;
+    });
   }
 }
 

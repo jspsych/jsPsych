@@ -1,11 +1,10 @@
-// import cloze from "@jspsych/plugin-cloze";
+import cloze from "@jspsych/plugin-cloze";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import surveyMultiChoice from "@jspsych/plugin-survey-multi-choice";
+import surveyText from "@jspsych/plugin-survey-text";
 
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "../../src";
 import { clickTarget, pressKey, startTimeline } from "../utils";
-
-// import surveyMultiChoice from "@jspsych/plugin-survey-multi-choice";
-// import surveyText from "@jspsych/plugin-survey-text";
 
 describe("standard use of function as parameter", () => {
   test("function value is used as parameter", async () => {
@@ -20,12 +19,11 @@ describe("standard use of function as parameter", () => {
     pressKey("a");
   });
 
-  test.skip("parameters can be protected from early evaluation using ParameterType.FUNCTION", async () => {
+  test("parameters can be protected from early evaluation using ParameterType.FUNCTION", async () => {
     const mock = jest.fn();
 
     await startTimeline([
       {
-        // @ts-ignore TODO enable this test once the plugin is a class
         type: cloze,
         text: "%foo%",
         check_answers: true,
@@ -70,10 +68,9 @@ describe("data as function", () => {
 });
 
 describe("nested parameters as functions", () => {
-  test.skip("entire parameter can be a function", async () => {
+  test("entire parameter can be a function", async () => {
     const { displayElement, expectFinished } = await startTimeline([
       {
-        // @ts-ignore TODO enable this test once the plugin is a class
         type: surveyText,
         questions: () => [{ prompt: "How old are you?" }, { prompt: "Where were you born?" }],
       },
@@ -84,10 +81,9 @@ describe("nested parameters as functions", () => {
     await expectFinished();
   });
 
-  test.skip("nested parameter can be a function", async () => {
+  test("nested parameter can be a function", async () => {
     const { expectFinished } = await startTimeline([
       {
-        // @ts-ignore TODO enable this test once the plugin is a class
         type: surveyText,
         questions: [
           {
@@ -110,10 +106,9 @@ describe("nested parameters as functions", () => {
     await expectFinished();
   });
 
-  test.skip("multiple nested parameters can be functions", async () => {
+  test("multiple nested parameters can be functions", async () => {
     const { expectFinished } = await startTimeline([
       {
-        // @ts-ignore TODO enable this test once the plugin is a class
         type: surveyMultiChoice,
         questions: [
           {

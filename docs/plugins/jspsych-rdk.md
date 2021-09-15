@@ -2,8 +2,10 @@
 
 This plugin displays a Random Dot Kinematogram (RDK) and allows the subject to report the primary direction of motion by pressing a key on the keyboard. The stimulus can be displayed until a keyboard response is given or until a certain duration of time has passed. The RDK is fully customizable (see documentation below) and can display multiple apertures at the same time, each with its own parameters.
 
-We would appreciate it if you cited this paper when you use the RDK: 
-<b>Rajananda, S., Lau, H. & Odegaard, B., (2018). A Random-Dot Kinematogram for Web-Based Vision Research. Journal of Open Research Software. 6(1), p.6. DOI: [http://doi.org/10.5334/jors.194]</b>
+!!! citation
+    We would appreciate it if you cited this paper when you use the RDK plugin
+
+    Rajananda, S., Lau, H. & Odegaard, B., (2018). A Random-Dot Kinematogram for Web-Based Vision Research. *Journal of Open Research Software. 6*(1), p.6. doi:[10.5334/jors.194](http://doi.org/10.5334/jors.194)
 
 For optimal performance, fullscreen mode should be manually triggered by the user (e.g. F11 key in Chrome for Windows). Usage of the default Fullscreen trigger from the jsPsych API library with this plugin might result in the stimuli being displayed incorrectly.
 
@@ -45,16 +47,16 @@ In addition to the [parameters available in all plugins](/overview/plugins#param
 | border_color             | string           | "black"              | The color of the border.<br>             |
 
 ### RDK type parameter
-** See Fig. 1 in Scase, Braddick, and Raymond (1996) for a visual depiction of these different signal selection rules and noise types.
+*See Fig. 1 in [Scase, Braddick, and Raymond (1996)](https://doi.org/10.1016/0042-6989(95)00325-8) for a visual depiction of these different signal selection rules and noise types.*
 
 #### Signal Selection rule:
--**Same**: Each dot is designated to be either a coherent dot (signal) or incoherent dot (noise) and will remain so throughout all frames in the display. Coherent dots will always move in the direction of coherent motion in all frames.
--**Different**: Each dot can be either a coherent dot (signal) or incoherent dot (noise) and will be designated randomly (weighted based on the coherence level) at each frame. Only the dots that are designated to be coherent dots will move in the direction of coherent motion, but only in that frame. In the next frame, each dot will be designated randomly again on whether it is a coherent or incoherent dot.
+- **Same**: Each dot is designated to be either a coherent dot (signal) or incoherent dot (noise) and will remain so throughout all frames in the display. Coherent dots will always move in the direction of coherent motion in all frames.
+- **Different**: Each dot can be either a coherent dot (signal) or incoherent dot (noise) and will be designated randomly (weighted based on the coherence level) at each frame. Only the dots that are designated to be coherent dots will move in the direction of coherent motion, but only in that frame. In the next frame, each dot will be designated randomly again on whether it is a coherent or incoherent dot.
 
 #### Noise Type:
--**Random position**: The incoherent dots appear in a random location in the aperture in each frame.<br/>
--**Random walk**: The incoherent dots will move in a random direction (designated randomly in each frame) in each frame.<br/>
--**Random direction**: Each incoherent dot has its own alternative direction of motion (designated randomly at the beginning of the trial), and moves in that direction in each frame.<br/>
+- **Random position**: The incoherent dots appear in a random location in the aperture in each frame.<br/>
+- **Random walk**: The incoherent dots will move in a random direction (designated randomly in each frame) in each frame.<br/>
+- **Random direction**: Each incoherent dot has its own alternative direction of motion (designated randomly at the beginning of the trial), and moves in that direction in each frame.<br/>
 
 
 ## Data Generated
@@ -74,46 +76,54 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ## Example
 
-#### Setting the correct_choice parameter by linking it to the coherent_direction parameter:
+???+ example "Setting the correct_choice parameter by linking it to the coherent_direction parameter"
+    === "Code"
+        ```javascript
+        var trial = {
+            type: "rdk", 
+            coherent_direction: 0,
+            correct_choice: "p"
+        };
+        ```    
+    === "Demo"
+        This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo1.html">open the demo in a new tab</a>
 
-```javascript
-var trial_right = {
-	coherent_direction: 0,
-	correct_choice: "p"
-};
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo1.html">Open demo in new tab</a>
 
-var trial_left = {
-	coherent_direction: 180,
-	correct_choice: "q"
-};
-```
+???+ example "Displaying a trial with 2 choices and 1 correct choice"
+    === "Code"
+        ```javascript
+        var trial = {
+            type: "rdk", 
+            post_trial_gap: 0,
+            number_of_dots: 200,
+            RDK_type: 3,
+            choices: ["a", "l"],
+            correct_choice: "a",
+            coherent_direction: 180,
+            trial_duration: 1000
+        };
+        ```    
+    === "Demo"
+        This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo2.html">open the demo in a new tab</a>
 
-#### Displaying a trial with 2 choices and 1 correct choice
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo2.html">Open demo in new tab</a>
 
-```javascript
-var test_block = {
-	type: "rdk", 
-	post_trial_gap: 0,
-	number_of_dots: 200,
-	RDK_type: 3,
-	choices: ["a", "l"],
-	correct_choice: "a",
-	coherent_direction: 180,
-	trial_duration: 1000
-};
-```
+???+ example "Displaying a trial with multiple apertures"
+    === "Code"
+        ```javascript
+          var trial = {
+            type: "rdk", 
+            number_of_apertures: 3, //This needs to be set if more than one aperture
+            trial_duration: 10000,
+            correct_choice: "a",
+            RDK_type: 3, //Applied to all apertures if only one value
+            aperture_width: 200, //Applied to all apertures if only one value
+            number_of_dots: [50, 200, 100], //Different parameter for each aperture. Array length must equal number_of_apertures
+            aperture_center_x: [(window.innerWidth/2)-300,window.innerWidth/2,(window.innerWidth/2)+300] //Separate the apertures on the screen (window.innerWidth/2 is the middle of the screen)
+        };
+        ```    
+    === "Demo"
+        This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo3.html">open the demo in a new tab</a>
 
-#### Displaying a trial with multiple apertures
-
-```javascript
-var test_block = {
-    type: "rdk", 
-    number_of_apertures: 3, //This needs to be set if more than one aperture
-    trial_duration: 10000,
-    RDK_type: 3, //Applied to all apertures if only one value
-    aperture_width: 200, //Applied to all apertures if only one value
-    number_of_dots: [50, 200, 100], //Different parameter for each aperture. Array length must equal number_of_apertures
-    aperture_center_x: [(window.innerWidth/2)-300,window.innerWidth/2,(window.innerWidth/2)+300] //Separate the apertures on the screen (window.innerWidth/2 is the middle of the screen)
-};
-```
-
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo3.html">Open demo in new tab</a>

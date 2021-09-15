@@ -27,44 +27,60 @@ question_order | array | An array with the order of questions. For example `[2,0
 
 ## Examples
 
-#### Basic example
+???+ example "Single Question"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: 'survey-likert',
+          questions: [
+            {
+              prompt: "I like vegetables.", 
+              labels: [
+                "Strongly Disagree", 
+                "Disagree", 
+                "Neutral", 
+                "Agree", 
+                "Strongly Agree"
+              ]
+            }
+          ]
+        };
+        ```
 
-```javascript
-var scale_1 = [
-  "Strongly Disagree", 
-  "Disagree", 
-  "Neutral", 
-  "Agree", 
-  "Strongly Agree"
-];
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="/demos/jspsych-survey-likert-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-var likert_page = {
-  type: 'survey-likert',
-  questions: [
-    {prompt: "I like vegetables.", labels: scale_1}
-  ]
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-survey-likert-demo1.html">Open demo in new tab</a>
 
-#### Multiple questions in a random order
+???+ example "Multiple questions in a random order"
+    === "Code"
+        ```javascript
+        var likert_scale = [
+          "Strongly Disagree", 
+          "Disagree", 
+          "Neutral", 
+          "Agree", 
+          "Strongly Agree"
+        ];
 
-```javascript
-var scale_1 = [
-  "Strongly Disagree", 
-  "Disagree", 
-  "Neutral", 
-  "Agree", 
-  "Strongly Agree"
-];
+        var trial = {
+          type: 'survey-likert',
+          questions: [
+            {prompt: "I like vegetables.", name: 'Vegetables', labels: likert_scale},
+            {prompt: "I like fruit.", name: 'Fruit', labels: likert_scale},
+            {prompt: "I like meat.", name: 'Meat', labels: likert_scale},
+          ],
+          randomize_question_order: true
+        };
+        ```
 
-var likert_page = {
-  type: 'survey-likert',
-  questions: [
-    {prompt: "I like vegetables.", name: 'Vegetables', labels: scale_1},
-    {prompt: "I like fruit.", name: 'Fruit', labels: scale_1},
-    {prompt: "I like meat.", name: 'Meat', labels: scale_1},
-    {prompt: "I like dairy.", name: 'Dairy', labels: scale_1}
-  ],
-  randomize_question_order: true
-};
-```
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="/demos/jspsych-survey-likert-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-survey-likert-demo2.html">Open demo in new tab</a>
+
+    
