@@ -56,11 +56,11 @@ nav:
   - 'Integrating with Mechanical Turk': 'overview/mturk.md'
   - 'Browser and Device Support': 'overview/browser-device-support.md'
 - Reference:
-  - 'jsPsych': 'core_library/jspsych-core.md'
-  - 'jsPsych.data': 'core_library/jspsych-data.md'
-  - 'jsPsych.randomization': 'core_library/jspsych-randomization.md'
-  - 'jsPsych.turk': 'core_library/jspsych-turk.md'
-  - 'jsPsych.pluginAPI': 'core_library/jspsych-pluginAPI.md'
+  - 'jsPsych': 'reference/jspsych.md'
+  - 'jsPsych.data': 'reference/jspsych-data.md'
+  - 'jsPsych.randomization': 'reference/jspsych-randomization.md'
+  - 'jsPsych.turk': 'reference/jspsych-turk.md'
+  - 'jsPsych.pluginAPI': 'reference/jspsych-pluginAPI.md'
 - Plugins:
   - 'List of Plugins': 'plugins/list-of-plugins.md'
   - 'jspsych-animation': 'plugins/jspsych-animation.md'
