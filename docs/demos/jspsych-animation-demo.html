@@ -17,18 +17,18 @@
   var jsPsych = initJsPsych();
 
   var preload_trial = {
-    type: 'preload',
+    type: jsPsychPreload,
     auto_preload: true
   }
 
   var start = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: '',
     choices: ['Run demo']
   };
 
   var animation_trial = {
-    type: 'animation',
+    type: jsPsychAnimation,
     stimuli: [
       'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_1.jpg', 
       'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_2.jpg', 
@@ -41,7 +41,7 @@
   };
 
   var show_data = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
       var trial_data = jsPsych.data.getLastTrialData().values();
       var trial_json = JSON.stringify(trial_data, null, 2);

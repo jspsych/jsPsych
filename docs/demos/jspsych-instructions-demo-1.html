@@ -16,18 +16,18 @@
   var jsPsych = initJsPsych();
 
   var preload_trial = {
-    type: 'preload',
+    type: jsPsychPreload,
     auto_preload: true
   }
 
   var start = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: '',
     choices: ['Run demo']
   };
 
   var demo_trial = {
-      type: 'instructions',
+      type: jsPsychInstructions,
       pages: [
         'Welcome to the experiment. Click next to begin.',
         'This is the second page of instructions.',
@@ -37,7 +37,7 @@
     }
 
   var show_data = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
       var trial_data = jsPsych.data.getLastTrialData().values();
       var trial_json = JSON.stringify(trial_data, null, 2);

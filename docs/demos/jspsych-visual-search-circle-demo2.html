@@ -21,18 +21,18 @@
     var jsPsych = initJsPsych();
 
       var preload = {
-        type: 'preload',
+        type: jsPsychPreload,
         images: ['img/elephant.png', 'img/lion.png', 'img/monkey.png']
       }
 
       var start = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: '',
         choices: ['Run demo']
       };
 
       var show_data = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: function() {
           var trial_data = jsPsych.data.getLastTrialData().values();
           var trial_json = JSON.stringify(trial_data, null, 2);
@@ -43,14 +43,14 @@
       };
 
       var instructions = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: `<p>Press E if there is an elephant in the group.</p>
           <p>Press N if there is no elephant in the group.</p>`,
         choices: ['Continue']
       }
 
       var trial = {
-        type: 'visual-search-circle',
+        type: jsPsychVisualSearchCircle,
         target: 'img/elephant.png',
         foil: ['img/lion.png', 'img/monkey.png'],
         fixation_image: 'img/fixation.gif',

@@ -19,13 +19,13 @@
   var images = ['img/lion.png', 'img/elephant.png', 'img/monkey.png']
 
   timeline.push({
-    type: 'preload',
+    type: jsPsychPreload,
     auto_preload: true,
     images: images
   });
 
   timeline.push({
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: '<div style="max-width:600px;"><p>Some browsers now require the user to interact with a page before it can play audio. '+
     'Clicking the button below counts as an interaction.</p><p>Be aware of this when planning audio experiments if '+
     'you want the first trial to include audio.</p></div>',
@@ -33,7 +33,7 @@
   });
 
   var trial = {
-			type: 'audio-button-response',
+			type: jsPsychAudioButtonResponse,
 			stimulus: 'sound/roar.mp3',
 			choices: images,
 			prompt: "<p>Which animal made the sound?</p>",
@@ -41,7 +41,7 @@
 		};
 
   var show_data = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
       var trial_data = jsPsych.data.getLastTrialData().values();
       var trial_json = JSON.stringify(trial_data, null, 2);

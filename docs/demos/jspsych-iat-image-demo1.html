@@ -16,18 +16,18 @@
   var jsPsych = initJsPsych();
 
   var preload_trial = {
-    type: 'preload',
+    type: jsPsychPreloadeload,
     auto_preload: true
   }
 
   var start = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: '',
     choices: ['Run demo']
   };
 
   var show_data = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
       var trial_data = jsPsych.data.getLastTrialData().values();
       var trial_json = JSON.stringify(trial_data, null, 2);
@@ -39,7 +39,7 @@
 
   
   var trial = {
-    type: 'iat-image',
+    type: jsPsychIatImage,
     stimulus: 'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/blue.png',
     stim_key_association: 'left',
     html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',

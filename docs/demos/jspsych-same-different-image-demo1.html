@@ -21,7 +21,7 @@
     var jsPsych = initJsPsych();
     
       var preload = {
-        type: 'preload',
+        type: jsPsychPreload,
         images: [
           'img/happy_face_1.jpg', 
           'img/sad_face_3.jpg'
@@ -29,13 +29,13 @@
       }
 
       var start = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: '',
         choices: ['Run demo']
       };
 
       var show_data = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: function() {
           var trial_data = jsPsych.data.getLastTrialData().values();
           var trial_json = JSON.stringify(trial_data, null, 2);
@@ -46,7 +46,7 @@
       };
 
       var trial = {
-        type: 'same-different-image',
+        type: jsPsychSameDifferentImage,
         stimuli: [
           'img/happy_face_1.jpg', 
           'img/sad_face_3.jpg'

@@ -15,13 +15,13 @@
   var jsPsych = initJsPsych();
 
   var start = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: '',
     choices: ['Run demo']
   };
 
   var show_data = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
       var trial_data = jsPsych.data.getLastTrialData().values();
       var trial_json = JSON.stringify(trial_data, null, 2);
@@ -34,7 +34,7 @@
   // write the canvas stimulus drawing function without using a named function
   // the anonymous function must take the canvas as an argument
   var lines = {
-    type: 'canvas-button-response',
+    type: jsPsychCanvasButtonResponse,
     stimulus: function(c) {
       var ctx = c.getContext("2d");
       // first line

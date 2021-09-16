@@ -21,13 +21,13 @@
     var jsPsych = initJsPsych();
 
       var start = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: '',
         choices: ['Run demo']
       };
 
       var show_data = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: function() {
           var trial_data = jsPsych.data.get().filter({trial_type: 'preload'}).last(1).values();
           var trial_json = JSON.stringify(trial_data, null, 2);
@@ -38,12 +38,12 @@
       };
 
       var preload = {
-        type: 'preload',
+        type: jsPsychPreload,
         images: ['img/sad_face_1.jpg']
       }
 
       var trial_1 = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: `
           <p>Study this face</p>
           <img src="img/sad_face_1.jpg"></img>

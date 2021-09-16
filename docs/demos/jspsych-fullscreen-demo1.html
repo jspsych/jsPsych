@@ -2,7 +2,6 @@
 <html>
   <head>
     <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-fullscreen.js"></script>
     <link
@@ -22,13 +21,13 @@
     var jsPsych = initJsPsych();
     
       var start = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: '',
         choices: ['Run demo']
       };
 
       var show_data = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: function() {
           var trial_data = jsPsych.data.getLastTrialData().values();
           var trial_json = JSON.stringify(trial_data, null, 2);
@@ -39,24 +38,24 @@
       };
 
       var enter_fullscreen = {
-        type: 'fullscreen',
+        type: jsPsychFullscreen,
         fullscreen_mode: true
       }
 
       var trial_in_fullscreen = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: 'This trial will be in fullscreen mode.',
         choices: ['Continue']
       }
 
       var exit_fullscreen = {
-        type: 'fullscreen',
+        type: jsPsychFullscreen,
         fullscreen_mode: false,
         delay_after: 0
       }
 
       var trial_after_fullscreen = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: 'This trial will NOT be in fullscreen mode.',
         choices: ['Continue']
       }

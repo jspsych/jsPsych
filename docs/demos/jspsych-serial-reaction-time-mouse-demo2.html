@@ -2,7 +2,6 @@
 <html>
   <head>
     <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-serial-reaction-time-mouse.js"></script>
     <link
@@ -21,13 +20,13 @@
     var jsPsych = initJsPsych();
     
       var start = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: '',
         choices: ['Run demo']
       };
 
       var show_data = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: function() {
           var trial_data = jsPsych.data.get().last(4).values();
           var trial_json = JSON.stringify(trial_data, null, 2);
@@ -44,25 +43,25 @@
       ]
 
       var trial_1 = {
-        type: 'serial-reaction-time-mouse',
+        type: jsPsychSerialReactionTimeMouse,
         grid: grid,
         target: [0,0],
         target_color: '#006738'
       }
       var trial_2 = {
-        type: 'serial-reaction-time-mouse',
+        type: jsPsychSerialReactionTimeMouse,
         grid: grid,
         target: [0,2],
         target_color: '#F78F1E'
       }
       var trial_3 = {
-        type: 'serial-reaction-time-mouse',
+        type: jsPsychSerialReactionTimeMouse,
         grid: grid,
         target: [2,2],
         target_color: '#13B24B'
       }
       var trial_4 = {
-        type: 'serial-reaction-time-mouse',
+        type: jsPsychSerialReactionTimeMouse,
         grid: grid,
         target: [2,0],
         target_color: '#E74921'

@@ -21,18 +21,18 @@
     var jsPsych = initJsPsych();
 
       var preload = {
-        type: 'preload',
+        type: jsPsychPreload,
         images: ['img/backwardN.gif', 'img/normalN.gif', 'img/fixation.gif']
       }
 
       var start = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: '',
         choices: ['Run demo']
       };
 
       var show_data = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: function() {
           var trial_data = jsPsych.data.getLastTrialData().values();
           var trial_json = JSON.stringify(trial_data, null, 2);
@@ -43,14 +43,14 @@
       };
 
       var instructions = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: `<p>Press J if there is a backwards N.</p>
           <p>Press F if all the Ns are in the normal orientation.</p>`,
         choices: ['Continue']
       }
 
       var trial = {
-        type: 'visual-search-circle',
+        type: jsPsychVisualSearchCircle,
         target: 'img/backwardN.gif',
         foil: 'img/normalN.gif',
         fixation_image: 'img/fixation.gif',

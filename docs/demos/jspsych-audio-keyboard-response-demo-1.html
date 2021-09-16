@@ -13,12 +13,12 @@
   var jsPsych = initJsPsych();
 
   var preload = {
-    type: 'preload',
+    type: jsPsychPreload,
     auto_preload: true
   }
 
   var pre_audio = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: '<div style="max-width:600px;"><p>Some browsers now require the user to interact with a page before it can play audio. '+
     'Clicking the button below counts as an interaction.</p><p>Be aware of this when planning audio experiments if '+
     'you want the first trial to include audio.</p></div>',
@@ -26,7 +26,7 @@
   }
 
   var trial = {
-    type: 'audio-keyboard-response',
+    type: jsPsychAudioKeyboardResponse,
     stimulus: 'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/sound/tone.mp3',
     choices: ['e', 'i'],
     prompt: "<p>Is the pitch high or low? Press 'e' for low and 'i' for high.</p>",
@@ -34,7 +34,7 @@
   };
 
   var show_data = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
       var trial_data = jsPsych.data.getLastTrialData().values();
       var trial_json = JSON.stringify(trial_data, null, 2);

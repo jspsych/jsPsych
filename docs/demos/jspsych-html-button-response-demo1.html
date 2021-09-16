@@ -2,7 +2,6 @@
 <html>
 <head>
   <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
   <style>
@@ -15,13 +14,13 @@
   var jsPsych = initJsPsych();
 
   var start = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: '',
     choices: ['Run demo']
   };
 
   var show_data = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
       var trial_data = jsPsych.data.getLastTrialData().values();
       var trial_json = JSON.stringify(trial_data, null, 2);
@@ -32,7 +31,7 @@
   };
 
   var trial = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: '<p>Running</p>',
     choices: ['Healthy', 'Unhealthy'],
     prompt: "<p>Is this activity healthy or unhealthy?</p>"

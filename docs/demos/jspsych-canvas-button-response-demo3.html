@@ -15,13 +15,13 @@
   var jsPsych = initJsPsych();
 
   var start = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: '',
     choices: ['Run demo']
   };
 
   var show_data = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
       var all_trial_data = jsPsych.data.get().filter({trial_type: 'canvas-button-response'});
       var last_three_data = all_trial_data.last(3).values(); // One block consists of three canvas-button-response trials
@@ -45,7 +45,7 @@
   // In addition, this code demonstrates how to check whether participants' answers were correct or not.
   var circle_procedure = {
     timeline: [{
-      type: 'canvas-button-response',
+      type: jsPsychCanvasButtonResponse,
       stimulus: function(c) {
           filledCirc(c, jsPsych.timelineVariable('radius'), jsPsych.timelineVariable('color'));
       },

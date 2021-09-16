@@ -15,13 +15,13 @@
   var jsPsych = initJsPsych();
 
   var start = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: '',
     choices: ['Run demo']
   };
 
   var show_data = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
       var all_trial_data = jsPsych.data.get().filter({trial_type: 'canvas-button-response'});
       var last_two_data = all_trial_data.last(2).values(); // One block consists of two canvas-button-response trials
@@ -44,7 +44,7 @@
   }
 
   var circle_1 = {
-    type: 'canvas-button-response',
+    type: jsPsychCanvasButtonResponse,
     stimulus: function(c) {
       filledCirc(c, 100, 'blue');
     },
@@ -55,7 +55,7 @@
   };
 
   var circle_2 = {
-    type: 'canvas-button-response',
+    type: jsPsychCanvasButtonResponse,
     stimulus: function(c) {
       filledCirc(c, 150, 'green');
     },

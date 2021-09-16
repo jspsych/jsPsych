@@ -20,13 +20,13 @@
     var jsPsych = initJsPsych();
     
       var start = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: '',
         choices: ['Run demo']
       };
 
       var show_data = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: function() {
           var trial_data = jsPsych.data.getLastTrialData().values();
           var trial_json = JSON.stringify(trial_data, null, 2);
@@ -37,7 +37,7 @@
       };
 
       var trial = {
-        type: 'survey-html-form',
+        type: jsPsychSurveyHtmlForm,
         preamble: '<p>How are you feeling <b>right now?</b></p>',
         html: '<p> I am feeling <input name="first" type="text" />, <input name="second" type="text" />, and <input name="third" type="text" />.</p>'
       };

@@ -2,7 +2,6 @@
 <html>
 <head>
   <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-reconstruction.js"></script>
@@ -17,13 +16,13 @@
   var jsPsych = initJsPsych();
 
   var start = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: '',
     choices: ['Run demo']
   };
 
   var show_data = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
       var trial_data = jsPsych.data.getLastTrialData().values();
       var trial_json = JSON.stringify(trial_data, null, 2);
@@ -43,7 +42,7 @@
   }
 
   var match_item = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmKeyboardResponse,
     stimulus: '<div style="display: block; margin: auto; height: 300px; width: 300px; position: relative;">'+
       '<div style="display: block; position: absolute; top: '+(150 - 210/2)+'px; left:'+(150 - 210/2)+'px; background-color: #000000; '+
       'width: 210px; height: 210px;"></div></div>',
@@ -53,7 +52,7 @@
   }
 
   var reconstruction = {
-    type: 'reconstruction',
+    type: jsPsychReconstruction,
     stim_function: sample_function,
     starting_value: 0.5,
   }

@@ -16,13 +16,13 @@
   var jsPsych = initJsPsych();
 
   var start = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: '',
     choices: ['Run demo']
   };
 
   var show_data = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
       var trial_data = jsPsych.data.getLastTrialData().values();
       var trial_json = JSON.stringify(trial_data, null, 2);
@@ -40,12 +40,12 @@
   ]
 
   var preload_trial = {
-    type: 'preload',
+    type: jsPsychPreload,
     images: sorting_stimuli
   }
 
   var sort_trial = {
-    type: 'free-sort',
+    type: jsPsychFreeSort,
     stimuli: sorting_stimuli,
     stim_width: 80,
     stim_height: 60,

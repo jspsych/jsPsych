@@ -17,13 +17,13 @@
   var jsPsych = initJsPsych();
 
   var start = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: '',
     choices: ['Run demo']
   };
 
   var show_data = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
       var trial_data = jsPsych.data.getLastTrialData().values();
       var trial_json = JSON.stringify(trial_data, null, 2);
@@ -34,7 +34,7 @@
   };
 
   var preload_trial = {
-    type: 'preload',
+    type: jsPsychPreload,
     auto_preload: true
   }
 
@@ -46,7 +46,7 @@
   ];
 
   var animation_trial = {
-    type: 'categorize-animation',
+    type: jsPsychCategorizeAnimation,
     stimuli: images,
     choices: ['p', 'q'],
     prompt: `Press the P or Q key.`,

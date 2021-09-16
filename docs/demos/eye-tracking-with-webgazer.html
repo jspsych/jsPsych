@@ -26,17 +26,17 @@
 
       var jsPsych = initJsPsych({
         extensions: [
-            {type: 'webgazer'}
+            {type: jsPsychExtensionWebgazer}
         ]
       });
 
       var preload = {
-        type: 'preload',
+        type: jsPsychPreload,
         images: ['img/blue.png']
       }
 
       var camera_instructions = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: `
           <p>In order to participate you must allow the experiment to use your camera.</p>
           <p>You will be prompted to do this on the next screen.</p>
@@ -47,11 +47,11 @@
       }
 
       var init_camera = {
-        type: 'webgazer-init-camera'
+        type: jsPsychWebgazerInitCamera
       }
 
       var calibration_instructions = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: `
           <p>Now you'll calibrate the eye tracking, so that the software can use the image of your eyes to predict where you are looking.</p>
           <p>You'll see a series of dots appear on the screen. Look at each dot and click on it.</p>
@@ -60,7 +60,7 @@
       }
 
       var calibration = {
-        type: 'webgazer-calibrate',
+        type: jsPsychWebgazerCalibrate,
         calibration_points: [
           [25,25],[75,25],[50,50],[25,75],[75,75]
         ],
@@ -69,7 +69,7 @@
       }
 
       var validation_instructions = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: `
           <p>Now we'll measure the accuracy of the calibration.</p>
           <p>Look at each dot as it appears on the screen.</p>
@@ -80,7 +80,7 @@
       }
 
       var validation = {
-        type: 'webgazer-validate',
+        type: jsPsychWebgazerValidate,
         validation_points: [
           [25,25],[75,25],[50,50],[25,75],[75,75]
         ],
@@ -93,7 +93,7 @@
       }
 
       var recalibrate_instructions = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: `
           <p>The accuracy of the calibration is a little lower than we'd like.</p>
           <p>Let's try calibrating one more time.</p>
@@ -117,7 +117,7 @@
       }
 
       var calibration_done = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: `
           <p>Great, we're done with calibration!</p>
         `,
@@ -125,7 +125,7 @@
       }
 
       var begin = {
-        type: 'html-keyboard-response',
+        type: jsPsychHtmKeyboardResponse,
         stimulus: `<p>The next screen will show an image to demonstrate adding the webgazer extension to a trial.</p>
           <p>Just look at the image while eye tracking data is collected. The trial will end automatically.</p>
           <p>Press any key to start.</p>
@@ -133,20 +133,20 @@
       }
 
       var trial = {
-        type: 'image-keyboard-response',
+        type: jsPsychImageKeyboardResponse,
         stimulus: 'img/blue.png',
         choices: jsPsych.NO_KEYS,
         trial_duration: 2000,
         extensions: [
           {
-            type: 'webgazer', 
+            type: jsPsychExtensionWebgazer, 
             params: {targets: ['#jspsych-image-keyboard-response-stimulus']}
           }
         ]
       }
 
       var show_data = {
-        type: 'html-keyboard-response',
+        type: jsPsychHtmKeyboardResponse,
         stimulus: function() {
           var trial_data = jsPsych.data.getLastTrialData().values();
           var trial_json = JSON.stringify(trial_data, null, 2);
