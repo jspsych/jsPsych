@@ -2,7 +2,7 @@
 
 ## Requirements for a plugin
 
-Plugins are implemented as [JavaScript Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes). A plugin must implement:
+As of version 7.0, plugins are [JavaScript Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes). A plugin must implement:
 
 * A `constructor()` that accepts an instance of jsPsych.
 * A `trial()` method that accepts an `HTMLElement` as its first argument and an object of trial parameters as its second argument. There is an optional third argument to [handle the `on_load` event]() in certain cirumstances. The `trial()` method should invoke `jsPsych.finishTrial()` to [end the trial and save data]() at the appropriate moment.
@@ -14,15 +14,31 @@ Plugins can be written in either plain JavaScript or in TypeScript. Template fil
 
 ### .constructor()
 
+The plugin's `constructor()` will be passed a reference to the instance of the `JsPsych` class that is running the experiment. The constructor should store this reference so that the plugin can access functionality from the core library and its modules.
 
+```js
+constructor(jsPsych){
+  this.jsPsych = jsPsych;
+}
+```
+
+```js
+constructor(private jsPsych: JsPsych) {}
+```
 
 ### .trial()
 
-The plugin's `trial` property is a function that runs a single trial. There are two parameters that are passed into the trial method. The first, `display_element`, is the DOM element where jsPsych content is being rendered. This parameter will be an `HTMLElement`. Generally, you don't need to worry about this parameter being in the correct format, and can assume that it is an `HMTLElement` and use methods of that class. The second, `trial`, is an object containing all of the parameters specified in the corresponding TimelineNode. If you have specified all of your parameters in `plugin.info`, along with default values for each one, then the `trial` object will contain the default values for any parameters that were not specified in the trial's definition.
+The plugin's `trial()` method is responsible for running a single trial. When the jsPsych timeline reaches a trial using the plugin it will invoke the `trial()` method for the plugin.
+
+There are three parameters that are passed into the trial method. 
+
+* `display_element` is the DOM element where jsPsych content is being rendered. This parameter will be an `HTMLElement`, and you can use it to modify the portion of the document that jsPsych controls.
+* `trial` is an object containing all of the parameters specified in the corresponding [TimelineNode](). 
+* `on_load` is an optional parameter that contains a callback function to invoke when `trial()` has completed its initial loading. See [handling the on_load event]().
 
 The only requirement for the `trial` method is that it calls `jsPsych.finishTrial()` when it is done. This is how jsPsych knows to advance to the next trial in the experiment (or end the experiment if it is the last trial). The plugin can do whatever it needs to do before that point.
 
-### .info
+### static .info
 
 The plugin's `info` property is an object that contains all of the available parameters for the plugin. Each parameter name is a property, and the value is an object that includes a description of the parameter, the value's type (string, integer, etc.), and the default value. See some of the plugin files in the jsPsych plugins folder for examples.
 
@@ -55,6 +71,8 @@ display_element.innerHTML = '';
 
 
 ### Responding to keyboard events
+
+### Asynchronous Loading
 
 ### Writing data
 
