@@ -1,6 +1,10 @@
 # List of Plugins
 
-These are the plugins that are included in the jsPsych release. If you don't see a plugin that will work for your needs, you can post on [GitHub Discussions](https://github.com/jspsych/jsPsych/discussions) to see if anyone else in the community has an unofficial plugin to share or to get help creating a new plugin. You can also view the [documentation on creating a new plugin](/overview/plugins/#creating-a-new-plugin) or [watch a video tutorial on creating a new plugin](https://www.youtube.com/watch?v=XQcsFwAmbiw&list=PLnfo1lBY1P2Mf_o6rV5wiqqn92Mw3UTGh&index=4).
+These are the plugins that are included in the jsPsych release. 
+
+Additional plugins may be available in the [community contributions repository](https://github.com/jspsych/jspsych-contrib). 
+
+For an overview of what plugins are and how they work, see our [plugins overview](/overview/plugins.md).
 
 Plugin | Description
 ------ | -----------

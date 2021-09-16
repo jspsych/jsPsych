@@ -367,7 +367,7 @@ This installs the core jsPsych package. Plugins and extensions are installed sep
 
 ### Step 2: Import the JsPsych class and create a new instance
 
-We create a new instance of `JsPsych`. The instance can be configured via [a variety of options](/core_library/jspsych-core/#jspsychinit), passed as an object to the constructor.
+We create a new instance of `JsPsych`. The instance can be configured via [a variety of options](/reference/jspsych.md#jspsychinit), passed as an object to the constructor.
 
 ```js
 import {JsPsych} from 'jspsych';

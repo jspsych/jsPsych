@@ -30,7 +30,7 @@ To prevent these errors, jsPsych uses a 'safe mode' when it detects that the HTM
 * **Web Audio is disabled** (even if `use_webaudio` is set to `true` in `jsPsych.init`). The WebAudio API option is used by default because it allows more precise measurement of response times relative to the onset of the audio. But because WebAudio doesn't work offline, audio will be played using HTML5 audio instead. This is equivalent to setting  `use_webaudio`  to `false` in `jsPsych.init`.
 * **Video preloading is disabled** (both automatic and manual preloading via the `preload` plugin). Videos will still play when you run your experiment offline, but they will load _during_ the experiment, which might cause noticeable delays before video playback starts.
 
-This safe mode feature is controlled by the `override_safe_mode` parameter in [`jsPsych.init`](../core_library/jspsych-core.md#jspsychinit), which defaults to `false`. If you leave this setting as the default, then you won't need to worry about CORS errors while running your experiment offline, or remembering to change your `jsPsych.init` settings when you move the experiment online.
+This safe mode feature is controlled by the `override_safe_mode` parameter in [`jsPsych.init`](/reference/jspsych.md#jspsychinit), which defaults to `false`. If you leave this setting as the default, then you won't need to worry about CORS errors while running your experiment offline, or remembering to change your `jsPsych.init` settings when you move the experiment online.
 
 It's possible to override jsPsych's safe mode by setting `override_safe_mode` to `true` in `jsPsych.init`. One reason you might do this is if you've disabled web security features in your browser (see [here](https://alfilatov.com/posts/run-chrome-without-cors/) and [here](https://stackoverflow.com/questions/4819060/allow-google-chrome-to-use-xmlhttprequest-to-load-a-url-from-a-local-file) for instructions in Chrome), which is safe to do if you know what you're doing. If your experiment does not use Web Audio or preloaded videos, then jsPsych's safe mode feature will not have any effect. 
 
@@ -44,18 +44,18 @@ It is important to test your experiment to ensure that any media files are prelo
 
 ### Permanent data storage
 
-As explained in the [Data Storage, Aggregation, and Manipulation](data.md#data-in-jspsych-permanent-and-non-permanent-data) page, jsPsych stores information in the participant's browser. While running an experiment offline, you won't be able to send the data to a database. However you can still see the data that jsPsych collects by saving it as a local file (using [`jsPsych.data.get().localSave`](../core_library/jspsych-data.md#localsave)), displaying it in the webpage at the end of the experiment (using [`jsPsych.data.displayData`](../core_library/jspsych-data.md#jspsychdatadisplaydata)), or printing it to the browser's console (using [`console.log`](https://www.w3schools.com/jsref/met_console_log.asp)). 
+As explained in the [Data Storage, Aggregation, and Manipulation](data.md#data-in-jspsych-permanent-and-non-permanent-data) page, jsPsych stores information in the participant's browser. While running an experiment offline, you won't be able to send the data to a database. However you can still see the data that jsPsych collects by saving it as a local file (using [`jsPsych.data.get().localSave`](/reference/jspsych-data.md#localsave)), displaying it in the webpage at the end of the experiment (using [`jsPsych.data.displayData`](/reference/jspsych-data.md#jspsychdatadisplaydata)), or printing it to the browser's console (using [`console.log`](https://www.w3schools.com/jsref/met_console_log.asp)). 
 
 Permanent data storage is also necessary when the code that runs the experiment depends on information that can't be known in advance, and that changes throughout data collection. Some common examples of this in cognitive behavioral research are **version counterbalancing**, where the experiment code needs to access and update the history of version assignment in order to determine which version should be assigned, and **multi-session/training studies**, where the experiment might need to access and update information about each participant like their current session number, task difficulty level, etc. 
 
-Doing these things in an automated way requires the use of a server. While developing and testing your experiment offline, you might choose to simulate some of these things and then implement them properly once you move your experiment online. For instance, you could [randomize](../core_library/jspsych-randomization.md#jspsychrandomizationsamplewithoutreplacement) instead of counterbalancing version assignment:
+Doing these things in an automated way requires the use of a server. While developing and testing your experiment offline, you might choose to simulate some of these things and then implement them properly once you move your experiment online. For instance, you could [randomize](/reference/jspsych-randomization.md#jspsychrandomizationsamplewithoutreplacement) instead of counterbalancing version assignment:
 
 ```js
 var versions = [1,2];
 var random_version = jsPsych.randomization.sampleWithoutReplacement(versions,1)[0];
 ```
 
-And use [URL query parameters](../core_library/jspsych-data.md#jspsychdatageturlvariable) to pass in variables like session number and difficulty level:
+And use [URL query parameters](/reference/jspsych-data.md#jspsychdatageturlvariable) to pass in variables like session number and difficulty level:
 
 ```js
 // add the variables onto the end of the URL that appears in the browser when you open the file 
@@ -88,11 +88,11 @@ Some options for running your jsPsych experiment online include:
 
 ### Recruiting Participants
 
-Once your experiment is running online, you could recruit participants in the same way that you would for lab-based studies. For instance, if your institution uses SONA, you can advertise your web-based study link on SONA. SONA allows you to automactically embed a unique ID in online study URLs, which you can then save in your data using [jsPsych's URL query parameters function](../core_library/jspsych-data.md#jspsychdatageturlvariable). SONA will also generate a completion URL that you can redirect participants to at the end of the study, and this will mark them as having completed the study in SONA.
+Once your experiment is running online, you could recruit participants in the same way that you would for lab-based studies. For instance, if your institution uses SONA, you can advertise your web-based study link on SONA. SONA allows you to automactically embed a unique ID in online study URLs, which you can then save in your data using [jsPsych's URL query parameters function](/reference/jspsych-data.md#jspsychdatageturlvariable). SONA will also generate a completion URL that you can redirect participants to at the end of the study, and this will mark them as having completed the study in SONA.
 
 To take full advantage of hosting an experiment online, many researchers advertise their experiments more widely. Social media and other media outlets provide one option for reaching a large number of potential participants. There are also some commercial platforms that you can use to advertise your study and pay anonymous online participants. These recruitment platforms charge a fee for use. The advantages of these platforms are that they handle the participant payments and allow you to specify pre-screening criteria. The most commonly used recruitment platforms in online behavioral research are:
 
 * [Prolific](https://www.prolific.co/): An online labor market designed specifically for web-based research. 
 * [Amazon Mechanical Turk (MTurk)](https://www.mturk.com/): An online labor market designed for advertising paid 'human intelligence tasks'. This service was designed for use by commercial businesses but has been used by behavioral researchers for many years.
 
-Like SONA, Prolific and MTurk use URL query parameters to get participant information, and redirection to specific URLs to mark participants as having finished the study. jsPsych includes [convenience functions for interacting with MTurk participants](../core_library/jspsych-turk.md). Information about integrating with Prolific can be found in the researcher support section of their website.
+Like SONA, Prolific and MTurk use URL query parameters to get participant information, and redirection to specific URLs to mark participants as having finished the study. jsPsych includes [convenience functions for interacting with MTurk participants](/reference/jspsych-turk.md). Information about integrating with Prolific can be found in the researcher support section of their website.
