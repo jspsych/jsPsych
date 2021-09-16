@@ -14,6 +14,8 @@
 <body></body>
 <script>
 
+  var jsPsych = initJsPsych();
+
   var start = {
     type: 'html-button-response',
     stimulus: '',
@@ -45,9 +47,7 @@
   };
 
   if (typeof jsPsych !== "undefined") {
-    jsPsych.init({
-      timeline: [start, trial_loop]
-    });
+    jsPsych.run([start, trial_loop]);
   } else {
     document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
   }

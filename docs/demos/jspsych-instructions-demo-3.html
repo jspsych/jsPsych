@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Required for each demo -->
   <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-instructions.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
   <style>
     .jspsych-btn {margin-bottom: 10px;}
   </style>
-  <!-- UPDATE depending on current demo -->
-  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-instructions.js"></script>
 </head>
 <body></body>
 <script>
+
+  var jsPsych = initJsPsych();
 
   var preload_trial = {
     type: 'preload',
@@ -57,9 +57,7 @@
   };
 
   if (typeof jsPsych !== "undefined") {
-    jsPsych.init({
-      timeline: [preload_trial, start, demo_loop]
-    });
+    jsPsych.run([preload_trial, start, demo_loop]);
   } else {
     document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
   }

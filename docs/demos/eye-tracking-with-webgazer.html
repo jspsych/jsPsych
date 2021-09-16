@@ -24,6 +24,12 @@
   <body></body>
   <script>
 
+      var jsPsych = initJsPsych({
+        extensions: [
+            {type: 'webgazer'}
+        ]
+      });
+
       var preload = {
         type: 'preload',
         images: ['img/blue.png']
@@ -150,8 +156,7 @@
         choices: jsPsych.NO_KEYS
       };
       
-      jsPsych.init({
-        timeline: [
+      jsPsych.run([
           preload, 
           camera_instructions, 
           init_camera, 
@@ -164,11 +169,7 @@
           begin, 
           trial, 
           show_data
-        ],
-        extensions: [
-          {type: 'webgazer'}
-        ]
-      });
+        ]);
       
   </script>
 </html>
