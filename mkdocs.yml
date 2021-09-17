@@ -29,6 +29,9 @@ markdown_extensions:
   - pymdownx.tabbed
   - pymdownx.details
   - pymdownx.snippets
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
 repo_url: 'https://github.com/jspsych/jsPsych'
 repo_name: 'jspsych/jspsych'
 docs_dir: docs
@@ -57,6 +60,7 @@ nav:
   - 'Integrating with Prolific': 'overview/prolific.md'
   - 'Integrating with Mechanical Turk': 'overview/mturk.md'
   - 'Browser and Device Support': 'overview/browser-device-support.md'
+  - 'Timing Accuracy': 'overview/timing-accuracy.md'
 - Reference:
   - 'jsPsych': 'reference/jspsych.md'
   - 'jsPsych.data': 'reference/jspsych-data.md'

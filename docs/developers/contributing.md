@@ -1,6 +1,6 @@
 # Contributing to jsPsych
 
-jsPsych is open source project with [numerous contributors](https://github.com/jspsych/jsPsych/graphs/contributors). The project is currently managed by the core team of Josh de Leeuw ([@jodeleeuw](https://github.com/jodeleeuw)), Becky Gilbert ([@becky-gilbert](https://github.com/becky-gilbert)), and Björn Luchterhandt ([@bjoluc](https://github.com/bjoluc)). We welcome contributions of all kinds, including changes to the core codebase, the development of new plugins and extensions, and improvements to the documentation. 
+We welcome contributions of all kinds, including changes to the core codebase, the development of new plugins and extensions, and improvements to the documentation. 
 
 The project is managed entirely through the [GitHub repository](https://github.com/jspsych/jsPsych). There you can:
 
