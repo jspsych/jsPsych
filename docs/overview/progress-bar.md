@@ -4,11 +4,10 @@ jsPsych can show a progress bar at the top of the experiment page indicating the
 
 ![Progressbar Screenshot](/img/progress_bar.png)
 
-To show the progress bar, set the `show_progress_bar` option in `jsPsych.init` to `true`:
+To show the progress bar, set the `show_progress_bar` option in `initJsPsych` to `true`:
 
 ```javascript
-jsPsych.init({
-	timeline: exp,
+var jsPsych = initJsPsych({
 	show_progress_bar: true
 });
 ```
@@ -35,19 +34,23 @@ You can also get the current value of the progress bar with `jsPsych.getProgress
 var proportion_complete = jsPsych.getProgressBarCompleted();
 ```
 
-If you are going to use manual progress bar control, you may want to disable the automatic progress bar updates by setting the `auto_update_progress_bar` property in `jsPsych.init()` to `false`.
+If you are going to use manual progress bar control, you may want to disable the automatic progress bar updates by setting the `auto_update_progress_bar` property in `initJsPsych()` to `false`.
 
 ```js
-jsPsych.init({
-	timeline: exp,
+var jsPsych = initJsPsych({
 	show_progress_bar: true,
 	auto_update_progress_bar: false
 });
 ```
 
-Here's a complete example showing how to use these functions and `jsPsych.init()` settings to manually update the progress bar:
+Here's a complete example showing how to use these functions and `initJsPsych()` settings to manually update the progress bar:
 
 ```js
+var jsPsych = initJsPsych({
+    show_progress_bar: true,
+    auto_update_progress_bar: false
+});
+
 var n_trials = 5;
 
 var start = {
@@ -80,21 +83,16 @@ var done = {
     stimulus: 'Done!'
 };
 
-jsPsych.init({
-    timeline: [start, trials, done],
-    show_progress_bar: true,
-    auto_update_progress_bar: false
-});
+jsPsych.run([start, trials, done]);
 ```
 
 ## Custom Text
 
-By default, jsPsych adds the text "Completion Progress" to the left of the progress bar. You can specify custom text using the `message_progress_bar` parameter in `jsPsych.init`.
+By default, jsPsych adds the text "Completion Progress" to the left of the progress bar. You can specify custom text using the `message_progress_bar` parameter in `initJsPsych`.
 
 ```js
 // support for different spoken languages
-jsPsych.init({
-    timeline: [...],
+var jsPsych = initJsPsych({
     show_progress_bar: true,
     message_progress_bar: 'Porcentaje completo'
 });
@@ -102,8 +100,7 @@ jsPsych.init({
 
 ```js
 // no message
-jsPsych.init({
-    timeline: [...],
+var jsPsych = initJsPsych({
     show_progress_bar: true,
     message_progress_bar: ''
 });

@@ -6,10 +6,10 @@ This extension supports eye tracking through the [WebGazer](https://webgazer.cs.
 
 ### Initialization Parameters
 
-Initialization parameters can be set when calling `jsPsych.init()`
+Initialization parameters can be set when calling `initJsPsych()`
 
 ```js
-jsPsych.init({
+initJsPsych({
   extensions: [
     {type: 'webgazer', params: {...}}
   ]

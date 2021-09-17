@@ -14,6 +14,8 @@ We can capture these variables with jsPsych, and add them to jsPsych's data. Thi
 
 ```html
 <script>
+  var jsPsych = initJsPsych();
+
   // capture info from Prolific
   var subject_id = jsPsych.data.getURLVariable('PROLIFIC_PID');
   var study_id = jsPsych.data.getURLVariable('STUDY_ID');
@@ -28,9 +30,7 @@ We can capture these variables with jsPsych, and add them to jsPsych's data. Thi
   // create the rest of the experiment
   var timeline = [...]
 
-  jsPsych.init({
-    timeline: timeline
-  })
+  jsPsych.run(timeline)
 </script>
 ```
 
@@ -67,8 +67,7 @@ A second option is to automatically redirect the participant to the completion U
 Here's an example using the `on_finish` event for the entire experiment.
 
 ```js
-jsPsych.init({
-  timeline: [...],
+var jsPsych = initJsPsych({
   on_finish: function(){
     window.location = "https://app.prolific.co/submissions/complete?cc=XXXXXXX"
   }

@@ -12,10 +12,10 @@ Each time the user leaves the experiment window, returns to the experiment windo
 }
 ```
 
-You can specify a custom function, in the jsPsych.init() method, that is called whenever one of these events occurs
+You can specify a custom function, in the initJsPsych() method, that is called whenever one of these events occurs
 
 ```javascript
-jsPsych.init({
+initJsPsych({
   on_interaction_data_update: function(data) {
     console.log(JSON.stringify(data))
   }

@@ -4,7 +4,7 @@ Extensions are jsPsych modules that can interface with any plugin to extend the 
 
 ## Using an Extension
 
-To use an extension in an experiment, you'll load the extension file via a `<script>` tag (just like adding a plugin) and then initialize the extension in the parameters of `jsPsych.init()`.
+To use an extension in an experiment, you'll load the extension file via a `<script>` tag (just like adding a plugin) and then initialize the extension in the parameters of `initJsPsych()`.
 
 ```html
 <head>
@@ -14,8 +14,7 @@ To use an extension in an experiment, you'll load the extension file via a `<scr
 ```
 
 ```js
-jsPsych.init({
-  timeline: [...],
+initJsPsych({
   extensions: [
     {type: 'some-extension', params: {...} }
   ]

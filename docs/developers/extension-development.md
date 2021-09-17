@@ -8,7 +8,7 @@ jsPsych.extensions['new-extension'] = (function () {
   var extension = {};
 
   extension.initialize = function(params){
-    // params are passed from the extensions parameter in jsPsych.init
+    // params are passed from the extensions parameter in initJsPsych
   }
   
   extension.on_start = function(params){
@@ -32,7 +32,7 @@ jsPsych.extensions['new-extension'] = (function () {
 
 The four events that an extension must support are shown in the sample code.
 
-`extension.initialize` is called with `jsPsych.init()`. This is where setup code for the extension can happen. This event will happen once per experiment, unlike the other events which occur with each trial. The `params` object can include whatever parameters are necessary to configure the extension. The `params` object is passed from the call to `jsPsych.init()` to the `extension.initialize` method. `extension.initialize` must return a `Promise` that resolves when the extension is finished initializing. 
+`extension.initialize` is called with `initJsPsych()`. This is where setup code for the extension can happen. This event will happen once per experiment, unlike the other events which occur with each trial. The `params` object can include whatever parameters are necessary to configure the extension. The `params` object is passed from the call to `initJsPsych()` to the `extension.initialize` method. `extension.initialize` must return a `Promise` that resolves when the extension is finished initializing. 
 
 `extension.on_start` is called at the start of the plugin execution, prior to calling `plugin.trial`. This is where trial-specific initialization can happen, such as creating empty containers to hold data or resetting internal state. The `params` object is passed from the declaration of the extension in the trial object. You can use `params` to customize the behavior of the extension for each trial.
 

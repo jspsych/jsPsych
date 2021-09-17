@@ -4,7 +4,7 @@ To create an experiment using jsPsych, you need to specify a timeline that descr
 
 ## A single trial
 
-To create a trial, you need to create an object that describes the trial. The most important feature of this object is the `type` parameter. This tells jsPsych which plugin file to use to run the trial. For example, if you want to use the text plugin to display a short message, the trial object would look like this:
+To create a trial, you need to create an object that describes the trial. The most important feature of this object is the `type` parameter. This tells jsPsych which plugin to use to run the trial. For example, if you want to use the text plugin to display a short message, the trial object would look like this:
 
 ```javascript
 var trial = {
@@ -20,9 +20,7 @@ To create a timeline with the single trial and run the experiment, just embed th
 ```javascript
 var timeline = [trial];
 
-jsPsych.init({
-	timeline: timeline
-});
+jsPsych.run(timeline);
 ```
 
 To actually create and run this simple example, complete the [hello world tutorial](../tutorials/hello-world.md).
@@ -366,6 +364,8 @@ var loop_node = {
 A timeline can be skipped based on the evaluation of a function using the `conditional_function` option. If the conditional function evaluates to `true`, the timeline will execute normally. If the conditional function evaluates to `false`, then the timeline will be skipped. The conditional function is evaluated whenever the timeline is about to run the first trial.
 
 ```javascript
+var jsPsych = initJsPsych();
+
 var pre_if_trial = {
 	type: 'html-keyboard-response',
 	stimulus: 'The next trial is in a conditional statement. Press S to skip it, or V to view it.'
@@ -395,10 +395,7 @@ var after_if_trial = {
 	stimulus: 'This is the trial after the conditional.'
 }
 
-jsPsych.init({
-	timeline: [pre_if_trial, if_node, after_if_trial],
-	on_finish: function(){jsPsych.data.displayData(); }
-});
+jsPsych.run([pre_if_trial, if_node, after_if_trial]);
 ```
 
 ## Timeline start and finish functions

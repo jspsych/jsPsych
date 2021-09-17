@@ -6,11 +6,10 @@ jsPsych offers the ability to call arbitrary functions in response to certain ev
 
 ## on_close
 
-The `on_close` callback can be declared in the `jsPsych.init` method. The callback triggers when the user leaves the page, but before any content on the page is removed from the browser's memory. This can be used, for example, to save data as the user is leaving the page.
+The `on_close` callback can be declared in the `initJsPsych` method. The callback triggers when the user leaves the page, but before any content on the page is removed from the browser's memory. This can be used, for example, to save data as the user is leaving the page.
 
 ```javascript
-jsPsych.init({
-  timeline: exp,
+initJsPsych({
   on_close: function(){
     var data = jsPsych.data.get().json();
     save_data_to_server(data);
@@ -22,11 +21,10 @@ jsPsych.init({
 
 ## on_data_update
 
-The `on_data_update` callback can be declared in the `jsPsych.init` method. The callback triggers at the end of a data update cycle. This happens after every trial, after the on_finish (trial) and on_trial_finish events execute, allowing you to modify the data in those callbacks, and then use this callback to store the data. The function will be passed a single argument, which contains the data that was written.
+The `on_data_update` callback can be declared in the `initJsPsych` method. The callback triggers at the end of a data update cycle. This happens after every trial, after the on_finish (trial) and on_trial_finish events execute, allowing you to modify the data in those callbacks, and then use this callback to store the data. The function will be passed a single argument, which contains the data that was written.
 
 ```javascript
-jsPsych.init({
-  timeline: exp,
+initJsPsych({
   on_data_update: function(data) {
     console.log('Just added new data. The contents of the data are: '+JSON.stringify(data));
   }
@@ -57,11 +55,10 @@ var trial = {
 
 ## on_finish (experiment)
 
-The `on_finish` callback can be declared in the `jsPsych.init` method. The callback will trigger once all trials in the experiment have been run. The method will be passed a single argument, containing all of the data generated in the experiment.
+The `on_finish` callback can be declared in the `initJsPsych` method. The callback will trigger once all trials in the experiment have been run. The method will be passed a single argument, containing all of the data generated in the experiment.
 
 ```javascript
-jsPsych.init({
-  timeline: exp,
+initJsPsych({
   on_finish: function(data) {
     console.log('The experiment is over! Here is all the data: '+JSON.stringify(data));
   }
@@ -149,11 +146,10 @@ var procedure = {
 
 ## on_trial_finish
 
-The `on_trial_finish` callback can be declared in the `jsPsych.init` method. The callback will trigger at the end of every trial in the experiment. If you want a callback to trigger only for the end of certain trials, use the [`on_finish`](#onfinishtrial) callback on the trial object. The callback function will be passed a single argument, containing the data object from the trial.
+The `on_trial_finish` callback can be declared in the `initJsPsych` method. The callback will trigger at the end of every trial in the experiment. If you want a callback to trigger only for the end of certain trials, use the [`on_finish`](#onfinishtrial) callback on the trial object. The callback function will be passed a single argument, containing the data object from the trial.
 
 ```javascript
-jsPsych.init({
-  timeline: exp,
+initJsPsych({
   on_trial_finish: function(data) {
     console.log('A trial just ended.');
     console.log(JSON.stringify(data));
@@ -165,13 +161,12 @@ jsPsych.init({
 
 ## on_trial_start
 
-The `on_trial_start` callback can be declared in the `jsPsych.init` method. The callback will trigger at the start of every trial in the experiment. The function receives a single argument: a modifiable copy of the trial object that will be used to run the next trial. Changes can be made to this object to alter the parameters of the upcoming trial.
+The `on_trial_start` callback can be declared in the `initJsPsych` method. The callback will trigger at the start of every trial in the experiment. The function receives a single argument: a modifiable copy of the trial object that will be used to run the next trial. Changes can be made to this object to alter the parameters of the upcoming trial.
 
 ```javascript
 var current_score = 0; // a variable that is updated throughout the experiment to keep track of the current score.
 
-jsPsych.init({
-  timeline: exp,
+initJsPsych({
   on_trial_start: function(trial) {
     trial.data.score_at_start_of_trial = current_score;
     console.log('A trial just started.');

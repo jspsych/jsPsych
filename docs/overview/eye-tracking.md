@@ -32,11 +32,10 @@ The [webgazer extension](/extensions/jspsych-ext-webgazer.md) adds functionality
 </head>
 ```
 
-To use the WebGazer extension in an experiment, include it in the list of extensions passed to `jsPsych.init()`
+To use the WebGazer extension in an experiment, include it in the list of extensions passed to `initJsPsych()`
 
 ```js
-jsPsych.init({
-  timeline: [...],
+initJsPsych({
   extensions: [
     {type: 'webgazer'}
   ]
@@ -184,6 +183,12 @@ If you have tips based on your own experience please consider sharing them on ou
       <body></body>
       <script>
 
+          var jsPsych = initJsPsych({
+            extensions: [
+              {type: 'webgazer'}
+            ]
+          });
+
           var preload = {
             type: 'preload',
             images: ['img/blue.png']
@@ -310,25 +315,20 @@ If you have tips based on your own experience please consider sharing them on ou
             choices: jsPsych.NO_KEYS
           };
           
-          jsPsych.init({
-            timeline: [
-              preload, 
-              camera_instructions, 
-              init_camera, 
-              calibration_instructions, 
-              calibration, 
-              validation_instructions, 
-              validation, 
-              recalibrate,
-              calibration_done,
-              begin, 
-              trial, 
-              show_data
-            ],
-            extensions: [
-              {type: 'webgazer'}
-            ]
-          });
+          jsPsych.run([
+            preload, 
+            camera_instructions, 
+            init_camera, 
+            calibration_instructions, 
+            calibration, 
+            validation_instructions, 
+            validation, 
+            recalibrate,
+            calibration_done,
+            begin, 
+            trial, 
+            show_data
+          ]);
           
       </script>
     </html>

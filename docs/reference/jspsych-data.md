@@ -59,8 +59,7 @@ Outputs all of the data collected in the experiment to the screen in either JSON
 #### Using the on_finish callback function to show data at the end of the experiment
 
 ```javascript
-jsPsych.init({
-	experiment_structure: exp,
+var jsPsych = initJsPsych({
 	on_finish: function() {
 		jsPsych.data.displayData('csv');
 	}

@@ -109,7 +109,7 @@ Returns true if keycodes or strings refer to the same key, regardless of type. R
 
 Compares two keys to see if they are the same, ignoring differences in representational type, and using the appropriate case sensitivity based on the experiment's settings. 
 
-If `case_sensitive_responses` is set to `false` in `jsPsych.init` (the default), then the string key comparison will not be case-sensitive, e.g., "a" and "A" will match, and this function will return `true`. If `case_sensitive_responses` is set to `true` in `jsPsych.init`, then the string key comparison will not be case-sensitive, e.g., "a" and "A" will not match, and this function will return `false`. 
+If `case_sensitive_responses` is set to `false` in `initJsPsych` (the default), then the string key comparison will not be case-sensitive, e.g., "a" and "A" will match, and this function will return `true`. If `case_sensitive_responses` is set to `true` in `initJsPsych`, then the string key comparison will not be case-sensitive, e.g., "a" and "A" will not match, and this function will return `false`. 
 
 We recommend using this function to compare keys in all plugin and experiment code, rather than using something like `if (response == 'j')...`. This is because the response key returned by the `jsPsych.pluginAPI.getKeyboardResponse` function will be converted to lowercase when `case_sensitive_responses` is `false`, and it will match the exact key press representation when `case_sensitive_responses` is `true`. Using this `compareKeys` function will ensure that your key comparisons work appropriately based on the experiment's `case_sensitive_responses` setting, and that you do not need to remember to check key responses against different case versions of the comparison key (e.g. `if (response == 'ArrowLeft' || response == 'arrowleft')...`). 
 
@@ -119,10 +119,10 @@ We recommend using this function to compare keys in all plugin and experiment co
 
 ```javascript
 jsPsych.pluginAPI.compareKeys('a', 'A');
-// returns true when case_sensitive_responses is false in jsPsych.init
+// returns true when case_sensitive_responses is false in initJsPsych
 
 jsPsych.pluginAPI.compareKeys('a', 'A');
-// returns false when case_sensitive_responses is true in jsPsych.init
+// returns false when case_sensitive_responses is true in initJsPsych
 
 // also works with numeric key codes (but note that numeric keyCode values are now deprecated)
 jsPsych.pluginAPI.compareKeys('a', 65);
@@ -297,11 +297,11 @@ Return an object that uniquely identifies the keyboard listener. This object can
 
 Gets a keyboard response from the subject, recording the response time from when the function is first called until a valid response is generated.
 
-The keyboard event listener will be bound to the `display_element` declared in `jsPsych.init()` (or the `<body>` element if no `display_element` is specified). This allows jsPsych experiments to be embedded in websites with other content without disrupting the functionality of other UI elements.
+The keyboard event listener will be bound to the `display_element` declared in `initJsPsych()` (or the `<body>` element if no `display_element` is specified). This allows jsPsych experiments to be embedded in websites with other content without disrupting the functionality of other UI elements.
 
 A valid response triggers the `callback_function` specified in the parameters. A single argument is passed to the callback function. The argument contains an object with the properties `key` and `rt`. `key` contains the string representation of the response key, and `rt` contains the response time. 
 
-This function uses the `.key` value of the keyboard event, which is _case sensitive_. When `case_sensitive_responses` is `false` in `jsPsych.init` (the default), this function will convert both the `valid_responses` strings and the response key to lowercase before comparing them, and it will pass the lowercase version of the response key to the `callback_function`. For example, if `valid_responses` is `['a']`, then both 'A' and 'a' will be considered valid key presses, and 'a' will be returned as the response key. When `case_sensitive_responses` is `true` in `jsPsych.init`, this function will not convert the case when comparing the `valid_responses` and response key, and it will not convert the case of the response key that is passed to the `callback_function`. For example, if `valid_responses` is `['a']`, then 'a' will be the only valid key press, and 'A' (i.e. 'a' with CapsLock on or Shift held down) will not be accepted. Also, if `valid_responses` includes multiple letter case options (e.g. `jsPsych.ALL_KEYS`), then you may need to check the response key against both letter cases when scoring etc., e.g. `if (response == 'ArrowLeft' || response =='arrowleft') ...`.
+This function uses the `.key` value of the keyboard event, which is _case sensitive_. When `case_sensitive_responses` is `false` in `initJsPsych` (the default), this function will convert both the `valid_responses` strings and the response key to lowercase before comparing them, and it will pass the lowercase version of the response key to the `callback_function`. For example, if `valid_responses` is `['a']`, then both 'A' and 'a' will be considered valid key presses, and 'a' will be returned as the response key. When `case_sensitive_responses` is `true` in `initJsPsych`, this function will not convert the case when comparing the `valid_responses` and response key, and it will not convert the case of the response key that is passed to the `callback_function`. For example, if `valid_responses` is `['a']`, then 'a' will be the only valid key press, and 'A' (i.e. 'a' with CapsLock on or Shift held down) will not be accepted. Also, if `valid_responses` includes multiple letter case options (e.g. `jsPsych.ALL_KEYS`), then you may need to check the response key against both letter cases when scoring etc., e.g. `if (response == 'ArrowLeft' || response =='arrowleft') ...`.
 
 ### Examples
 

@@ -77,9 +77,9 @@ Note the use of the data parameter to add a property `stimulus_type` with the va
 
 ### The post_trial_gap (ITI) parameter
 
-The default inter-trial interval (ITI) in jsPsych is 0 ms. This can be adjusted at the experiment-wide level by changing the `default_iti` parameter in `jsPsych.init()`.
+The default inter-trial interval (ITI) in jsPsych is 0 ms. This can be adjusted at the experiment-wide level by changing the `default_iti` parameter in `initJsPsych()`.
 
-The ITI can also be controlled at the trial level through the `post_trial_gap` parameter. Setting this parameter to a positive integer *x* will cause a blank screen to display after the trial for *x* milliseconds. Setting this parameter for a trial will override the `default_iti` value set in `jsPsych.init`.
+The ITI can also be controlled at the trial level through the `post_trial_gap` parameter. Setting this parameter to a positive integer *x* will cause a blank screen to display after the trial for *x* milliseconds. Setting this parameter for a trial will override the `default_iti` value set in `initJsPsych`.
 
 ```javascript
 var trial = {
