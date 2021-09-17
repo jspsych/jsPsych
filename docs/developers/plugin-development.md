@@ -24,10 +24,6 @@ constructor(jsPsych){
 }
 ```
 
-```js
-constructor(private jsPsych: JsPsych) {}
-```
-
 ### .trial()
 
 The plugin's `trial()` method is responsible for running a single trial. When the jsPsych timeline reaches a trial using the plugin it will invoke the `trial()` method for the plugin.
