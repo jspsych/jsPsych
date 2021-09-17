@@ -69,11 +69,21 @@ If the `default` value is `undefined` then a user must specify a value for this 
 
 jsPsych allows most [plugin parameters to be dynamic](/overview/dynamic-parameters.md), which means that the parameter value can be a function that will be evaluated right before the trial starts. However, if you want your plugin to have a parameter that is a function that _shouldn't_ be evaluated before the trial starts, then you should make sure that the parameter type is `'FUNCTION'`. This tells jsPsych not to evaluate the function as it normally does for dynamic parameters. See the `canvas-*` plugins for examples.
 
-The `info` object should be a `static` member of the class.
+The `info` object should be a `static` member of the class, as shown below.
 
 ```js
 const info = {
-  ...
+  name: 'my-awesome-plugin',
+  parameters: { 
+    image: {
+      type: jspsych.ParameterType.IMAGE,
+      default: undefined
+    },
+    image_duration: {
+      type: jspsych.ParameterType.INT,
+      default: 500
+    }
+  }
 }
 
 class MyAwesomePlugin {
