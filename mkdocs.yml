@@ -47,7 +47,7 @@ nav:
   - 'Data Storage, Aggregation, and Manipulation': 'overview/data.md'
   - 'Running Experiments': 'overview/running-experiments.md'
   - 'Experiment Settings': 'overview/experiment-options.md'
-  - 'Event-related Callback Functions': 'overview/callbacks.md'
+  - 'Events': 'overview/events.md'
   - 'Record Browser Interactions': 'overview/record-browser-interactions.md'
   - 'Media Preloading': 'overview/media-preloading.md'
   - 'Fullscreen Experiments': 'overview/fullscreen.md'
