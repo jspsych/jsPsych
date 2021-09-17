@@ -31,7 +31,13 @@ This will be our starting point for building the rest of the experiment.
 
 ## Part 2: Display welcome message
 
-All jsPsych experiments are defined by a timeline. The timeline is an array that contains the set of trials we want to run in the experiment. We can start by defining the timeline array.
+First we have to initialize jsPsych. We can do this using the [`initJsPsych()` function](/reference/jspsych.md#initjspsych), and saving the result to a variable called `jsPsych`.
+
+```javascript
+var jsPsych = initJsPsych();
+```
+
+All jsPsych experiments are defined by a timeline. The timeline is an array that contains the set of trials we want to run in the experiment. We can start by defining an empty timeline array.
 
 ```javascript
 var timeline = [];
@@ -54,12 +60,10 @@ Next, we push the welcome trial to the timeline, which adds it to the end of the
 timeline.push(welcome);
 ```
 
-Finally, we tell jsPsych to run the experiment by calling the [jsPsych.init() function](/reference/jspsych.md#jspsychinit) and passing in the array that defines the experiment timeline.
+Finally, we tell jsPsych to run the experiment by calling the [jsPsych.run() function](/reference/jspsych.md#jspsychrun) and passing in the array that defines the experiment timeline.
 
 ```javascript
-jsPsych.init({
-  timeline: timeline
-});
+jsPsych.run(timeline);
 ```
 After each step in the tutorial you can view the complete code up to that point by clicking on the expandable box below.
 
@@ -75,6 +79,9 @@ After each step in the tutorial you can view the complete code up to that point 
       </head>
       <body></body>
       <script>
+        
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych();
 
         /* create timeline */
         var timeline = [];
@@ -87,9 +94,8 @@ After each step in the tutorial you can view the complete code up to that point 
         timeline.push(welcome);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline
-        });
+        jsPsych.run(timeline);
+
       </script>
     </html>
     ```
@@ -136,6 +142,7 @@ timeline.push(instructions);
 ```
 
 ??? example "The complete code so far"
+
     ```html
     <!DOCTYPE html>
     <html>
@@ -147,6 +154,9 @@ timeline.push(instructions);
       </head>
       <body></body>
       <script>
+
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych();
 
         /* create timeline */
         var timeline = [];
@@ -180,9 +190,8 @@ timeline.push(instructions);
         timeline.push(instructions);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline
-        });
+        jsPsych.run(timeline);
+
       </script>
     </html>
     ```
@@ -238,6 +247,9 @@ timeline.push(blue_trial, orange_trial);
       <body></body>
       <script>
 
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych();
+
         /* create timeline */
         var timeline = [];
 
@@ -285,11 +297,10 @@ timeline.push(blue_trial, orange_trial);
         timeline.push(blue_trial, orange_trial);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline
-        });
+        jsPsych.run(timeline);
+
       </script>
-      </html>
+    </html>
     ```
 
 ## Part 5: Preloading media
@@ -342,6 +353,9 @@ timeline.push(preload);
       </head>
       <body></body>
       <script>
+
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych();
 
         /* create timeline */
         var timeline = [];
@@ -397,11 +411,10 @@ timeline.push(preload);
         timeline.push(blue_trial, orange_trial);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline
-        });
+        jsPsych.run(timeline);
+
       </script>
-      </html>
+    </html>
     ```
 
 ## Part 6: Timeline variables
@@ -473,6 +486,9 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
       <body></body>
       <script>
 
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych();
+
         /* create timeline */
         var timeline = [];
 
@@ -538,11 +554,10 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
         timeline.push(test_procedure);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline
-        });
+        jsPsych.run(timeline);
+
       </script>
-      </html>
+    </html>
     ```
 
 
@@ -583,6 +598,9 @@ var test_procedure = {
       </head>
       <body></body>
       <script>
+
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych();
 
         /* create timeline */
         var timeline = [];
@@ -651,11 +669,10 @@ var test_procedure = {
         timeline.push(test_procedure);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline
-        });
+        jsPsych.run(timeline);
+
       </script>
-      </html>
+    </html>
     ```
 
 ## Part 8: Using functions to generate parameters
@@ -693,6 +710,9 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
       <body></body>
       <script>
 
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych();
+
         /* create timeline */
         var timeline = [];
 
@@ -762,22 +782,20 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
         timeline.push(test_procedure);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline
-        });
+        jsPsych.run(timeline);
+
       </script>
-      </html>
+    </html>
     ```
 
 ## Part 10: Displaying the data
 
 We have created a complete, if simple, experiment at this point, so let's take a look at the data being generated. jsPsych has a built-in [function called `jsPsych.data.displayData()`](/reference/jspsych-data.md#jspsychdatadisplaydata) that is useful for debugging your experiment. It will remove all of the information on the screen and replace it with the raw data collected so far. This isn't terribly useful when you are actually running an experiment, but it's nice for checking the data during development.
 
-We need the `displayData` function to execute when the experiment ends. One way to do this is to use the [`on_finish` callback function](/overview/callbacks.md#on_finish-experiment). This function will automatically execute once all the trials in the experiment are finished. We can specify a function to call in the `init` method.
+We need the `displayData` function to execute when the experiment ends. One way to do this is to use the [`on_finish` callback function](/overview/callbacks.md#on_finish-experiment). This function will automatically execute once all the trials in the experiment are finished. We can specify this function in the experiment settings when we initialize jsPsych with the `initJsPsych` method.
 
 ```javascript
-jsPsych.init({
-  timeline: timeline,
+var jsPsych = initJsPsych({
   on_finish: function() {
     jsPsych.data.displayData();
   }
@@ -800,6 +818,13 @@ jsPsych.init({
       <body></body>
       <script>
 
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych({
+          on_finish: function() {
+            jsPsych.data.displayData();
+          }
+        });
+
         /* create timeline */
         var timeline = [];
 
@@ -869,14 +894,10 @@ jsPsych.init({
         timeline.push(test_procedure);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline,
-          on_finish: function() {
-            jsPsych.data.displayData();
-          }
-        });
+        jsPsych.run(timeline);
+
       </script>
-      </html>
+    </html>
     ```
 
 ## Part 11: Tagging trials with additional data
@@ -952,6 +973,13 @@ var fixation = {
       </head>
       <body></body>
       <script>
+
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych({
+          on_finish: function() {
+            jsPsych.data.displayData();
+          }
+        });
 
         /* create timeline */
         var timeline = [];
@@ -1029,12 +1057,8 @@ var fixation = {
         timeline.push(test_procedure);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline,
-          on_finish: function() {
-            jsPsych.data.displayData();
-          }
-        });
+        jsPsych.run(timeline);
+
       </script>
       </html>
     ```
@@ -1081,6 +1105,13 @@ The `data.response` value is a string representation of the key the subject pres
       </head>
       <body></body>
       <script>
+
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych({
+          on_finish: function() {
+            jsPsych.data.displayData();
+          }
+        });
 
         /* create timeline */
         var timeline = [];
@@ -1161,14 +1192,10 @@ The `data.response` value is a string representation of the key the subject pres
         timeline.push(test_procedure);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline,
-          on_finish: function() {
-            jsPsych.data.displayData();
-          }
-        });
+        jsPsych.run(timeline);
+
       </script>
-      </html>
+    </html>
     ```
 
 
@@ -1225,6 +1252,13 @@ This code is available in the `/examples` folder in the jsPsych release download
   </head>
   <body></body>
   <script>
+
+    /* initialize jsPsych */
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
     /* create timeline */
     var timeline = [];
@@ -1323,12 +1357,8 @@ This code is available in the `/examples` folder in the jsPsych release download
     timeline.push(debrief_block);
 
     /* start the experiment */
-    jsPsych.init({
-      timeline: timeline,
-      on_finish: function() {
-        jsPsych.data.displayData();
-      }
-    });
+    jsPsych.run(timeline);
+    
   </script>
 </html>
 ```

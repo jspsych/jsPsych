@@ -1,6 +1,72 @@
 # jsPsych
 
 ---
+## initJsPsych
+
+```javascript
+var jsPsych = initJsPsych(settings);
+```
+
+### Parameters
+
+| Parameter | Type   | Description                              |
+| --------- | ------ | ---------------------------------------- |
+| settings  | object | The settings object for initializing jsPsych. See table below. |
+
+The settings object can contain several parameters. None of the parameters are required.
+
+| Parameter                  | Type     | Description                              |
+| -------------------------- | -------- | ---------------------------------------- |
+| display_element            | string   | The ID of an HTML element to display the experiment in. If left blank, jsPsych will use the `<body>` element to display content. All keyboard event listeners are bound to this element. In order for a keyboard event to be detected, this element must have focus (be the last thing that the subject clicked on). |
+| on_finish                  | function | Function to execute when the experiment ends. |
+| on_trial_start             | function | Function to execute when a new trial begins. |
+| on_trial_finish            | function | Function to execute when a trial ends.   |
+| on_data_update             | function | Function to execute every time data is stored using the `jsPsych.data.write` method. All plugins use this method to save data (via a call to `jsPsych.finishTrial`, so this function runs every time a plugin stores new data. |
+| on_interaction_data_update | function | Function to execute every time a new interaction event occurs. Interaction events include clicking on a different window (blur), returning to the experiment window (focus), entering full screen mode (fullscreenenter), and exiting full screen mode (fullscreenexit). |
+| on_close                   | function | Function to execute when the user leaves the page. Can be used, for example, to save data before the page is closed. |
+| exclusions                 | object   | Specifies restrictions on the browser the subject can use to complete the experiment. See list of options below. |
+| show_progress_bar          | boolean  | If `true`, then [a progress bar](../overview/progress-bar.md) is shown at the top of the page. Default is `false`. |
+| message_progress_bar       | string   | Message to display next to the progress bar. The default is 'Completion Progress'. |
+| auto_update_progress_bar   | boolean  | If true, then the progress bar at the top of the page will automatically update as every top-level timeline or trial is completed. |
+| use_webaudio               | boolean  | If false, then jsPsych will not attempt to use the WebAudio API for audio playback. Instead, HTML5 Audio objects will be used. The WebAudio API offers more precise control over the timing of audio events, and should be used when possible. The default value is `true`. |
+| default_iti                | numeric  | The default inter-trial interval in ms. The default value if none is specified is 0ms. |
+| experiment_width           | numeric  | The desired width of the jsPsych container in pixels. If left undefined, the width will be 100% of the display element. Usually this is the `<body>` element, and the width will be 100% of the screen size. |
+| minimum_valid_rt           | numeric  | The minimum valid response time for key presses during the experiment. Any key press response time that is less than this value will be treated as invalid and ignored. Note that this parameter only applies to _keyboard responses_, and not to other response types such as buttons and sliders. The default value is 0. |
+| override_safe_mode         | boolean  | Running a jsPsych experiment directly in a web browser (e.g., by double clicking on a local HTML file) will load the page using the `file://` protocol. Some features of jsPsych don't work with this protocol. By default, when jsPsych detects that it's running on a page loaded via the `file://` protocol, it runs in _safe mode_, which automatically disables features that don't work in this context. Specifically, the use of Web Audio is disabled (audio will be played using HTML5 audio instead, even if `use_webaudio` is `true`) and video preloading is disabled. The `override_safe_mode` parameter defaults to `false`, but you can set it to `true` to force these features to operate under the `file://` protocol. In order for this to work, you will need to disable web security (CORS) features in your browser - this is safe to do if you know what you are doing. Note that this parameter has no effect when you are running the experiment on a web server, because the page will be loaded via the `http://` or `https://` protocol. |
+| case_sensitive_responses   | boolean  | If `true`, then jsPsych will make a distinction between uppercase and lowercase keys when evaluating keyboard responses, e.g. "A" (uppercase) will not be recognized as a valid response if the trial only accepts "a" (lowercase). If false, then jsPsych will not make a distinction between uppercase and lowercase keyboard responses, e.g. both "a" and "A" responses will be valid when the trial's key choice parameter is "a". Setting this parameter to false is useful if you want key responses to be treated the same way when CapsLock is turned on or the Shift key is held down. The default value is `false`. |
+extensions | array | Array containing information about one or more jsPsych extensions that are used during the experiment. Each extension should be specified as an object with `type` (required), which is the name of the extension, and `params` (optional), which is an object containing any parameter-value pairs to be passed to the extension's `initialize` function. Default value is an empty array. |
+
+Possible values for the exclusions parameter above.
+
+| Parameter  | Type    | Description                              |
+| ---------- | ------- | ---------------------------------------- |
+| min_width  | numeric | The minimum width of the browser window. If the width is below this value, a message will be displayed to the subject asking them to maximize their browser window. The experiment will sit on this page until the browser window is large enough. |
+| min_height | numeric | Same as above, but with height.          |
+| audio      | boolean | Set to true to require support for the WebAudio API (used by plugins that play audio files). |
+
+### Return value
+
+Returns a jsPsych instance, which all jsPsych methods on this page are called on. Therefore it is not possible to call any of the jsPsych methods listed on this page until this `initJsPsych` function is called and a jsPsych instance is created.
+
+### Description
+
+This function initializes jsPsych with the specified experiment settings.
+
+### Example
+
+```javascript
+var jsPsych = initJsPsych({
+  on_finish: function() {
+    jsPsych.data.displayData();
+  }, 
+  show_progress_bar: true,
+  default_iti: 500
+});
+```
+
+For more examples, see the HTML files in the [examples folder](https://github.com/jspsych/jsPsych/tree/main/examples).
+
+---
 ## jsPsych.addNodeToEndOfTimeline
 
 ```javascript
@@ -60,6 +126,12 @@ Ends the current timeline. If timelines are nested, then only the timeline that 
 #### End timeline if a particular key is pressed
 
 ```javascript
+var jsPsych = initJsPsych({
+  on_finish: function() {
+    jsPsych.data.displayData();
+  }
+});
+
 var images = [
   "img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif",
   "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif",
@@ -90,12 +162,7 @@ var after_block = {
   stimulus: '<p>The next node</p>'
 }
 
-jsPsych.init({
-  timeline: [block, after_block],
-  on_finish: function() {
-    jsPsych.data.displayData();
-  }
-});
+jsPsych.run([block, after_block]);
 ```
 
 ---
@@ -436,7 +503,7 @@ None.
 
 ### Return value
 
-Returns a numeric value indicating the number of milliseconds since `jsPsych.init` was called.
+Returns a numeric value indicating the number of milliseconds since `jsPsych.run` was called.
 
 ### Description
 
@@ -449,67 +516,7 @@ var time = jsPsych.getTotalTime();
 console.log(time);
 ```
 
-
 ---
-## jsPsych.init
-
-```javascript
-jsPsych.init(settings)
-```
-
-### Parameters
-
-| Parameter | Type   | Description                              |
-| --------- | ------ | ---------------------------------------- |
-| settings  | object | The settings object for initializing jsPsych. See table below. |
-
-The settings object can contain several parameters. The only *required* parameter is `timeline`.
-
-| Parameter                  | Type     | Description                              |
-| -------------------------- | -------- | ---------------------------------------- |
-| timeline                   | array    | An array containing the objects that describe the experiment timeline. See [Creating an Experiment: The Timeline](../overview/timeline.md). |
-| display_element            | string   | The ID of an HTML element to display the experiment in. If left blank, jsPsych will use the `<body>` element to display content. All keyboard event listeners are bound to this element. In order for a keyboard event to be detected, this element must have focus (be the last thing that the subject clicked on). |
-| on_finish                  | function | Function to execute when the experiment ends. |
-| on_trial_start             | function | Function to execute when a new trial begins. |
-| on_trial_finish            | function | Function to execute when a trial ends.   |
-| on_data_update             | function | Function to execute every time data is stored using the `jsPsych.data.write` method. All plugins use this method to save data (via a call to `jsPsych.finishTrial`, so this function runs every time a plugin stores new data. |
-| on_interaction_data_update | function | Function to execute every time a new interaction event occurs. Interaction events include clicking on a different window (blur), returning to the experiment window (focus), entering full screen mode (fullscreenenter), and exiting full screen mode (fullscreenexit). |
-| on_close                   | function | Function to execute when the user leaves the page. Can be used, for example, to save data before the page is closed. |
-| exclusions                 | object   | Specifies restrictions on the browser the subject can use to complete the experiment. See list of options below. |
-| show_progress_bar          | boolean  | If true, then [a progress bar](../overview/progress-bar.md) is shown at the top of the page. |
-| message_progress_bar       | string   | Message to display next to the progress bar. The default is 'Completion Progress'. |
-| auto_update_progress_bar   | boolean  | If true, then the progress bar at the top of the page will automatically update as every top-level timeline or trial is completed. |
-| use_webaudio               | boolean  | If false, then jsPsych will not attempt to use the WebAudio API for audio playback. Instead, HTML5 Audio objects will be used. The WebAudio API offers more precise control over the timing of audio events, and should be used when possible. The default value is true. |
-| default_iti                | numeric  | The default inter-trial interval in ms. The default value if none is specified is 0ms. |
-| experiment_width           | numeric  | The desired width of the jsPsych container in pixels. If left undefined, the width will be 100% of the display element. Usually this is the `<body>` element, and the width will be 100% of the screen size. |
-| minimum_valid_rt           | numeric  | The minimum valid response time for key presses during the experiment. Any key press response time that is less than this value will be treated as invalid and ignored. Note that this parameter only applies to _keyboard responses_, and not to other response types such as buttons and sliders. The default value is 0. |
-| override_safe_mode         | boolean  | Running a jsPsych experiment directly in a web browser (e.g., by double clicking on a local HTML file) will load the page using the `file://` protocol. Some features of jsPsych don't work with this protocol. By default, when jsPsych detects that it's running on a page loaded via the `file://` protocol, it runs in _safe mode_, which automatically disables features that don't work in this context. Specifically, the use of Web Audio is disabled (audio will be played using HTML5 audio instead, even if `use_webaudio` is `true`) and video preloading is disabled. The `override_safe_mode` parameter defaults to `false`, but you can set it to `true` to force these features to operate under the `file://` protocol. In order for this to work, you will need to disable web security (CORS) features in your browser - this is safe to do if you know what you are doing. Note that this parameter has no effect when you are running the experiment on a web server, because the page will be loaded via the `http://` or `https://` protocol. |
-| case_sensitive_responses   | boolean  | If true, then jsPsych will make a distinction between uppercase and lowercase keys when evaluating keyboard responses, e.g. "A" (uppercase) will not be recognized as a valid response if the trial only accepts "a" (lowercase). If false, then jsPsych will not make a distinction between uppercase and lowercase keyboard responses, e.g. both "a" and "A" responses will be valid when the trial's key choice parameter is "a". Setting this parameter to false is useful if you want key responses to be treated the same way when CapsLock is turned on or the Shift key is held down. The default value is false. |
-extensions | array | Array containing information about one or more jsPsych extensions that are used during the experiment. Each extension should be specified as an object with `type` (required), which is the name of the extension, and `params` (optional), which is an object containing any parameter-value pairs to be passed to the extension's `initialize` function. Default value is an empty array. |
-
-Possible values for the exclusions parameter above.
-
-| Parameter  | Type    | Description                              |
-| ---------- | ------- | ---------------------------------------- |
-| min_width  | numeric | The minimum width of the browser window. If the width is below this value, a message will be displayed to the subject asking them to maximize their browser window. The experiment will sit on this page until the browser window is large enough. |
-| min_height | numeric | Same as above, but with height.          |
-| audio      | boolean | Set to true to require support for the WebAudio API (used by plugins that play audio files). |
-
-### Return value
-
-Returns nothing.
-
-### Description
-
-This method configures and starts the experiment.
-
-### Example
-
-See any of the plugin examples in the [examples folder](https://github.com/jodeleeuw/jsPsych/tree/master/examples) in the GitHub repository.
-
-
----
-
 ## jsPsych.pauseExperiment
 
 ```javascript
@@ -578,6 +585,36 @@ var trial = {
     }
   }
 }
+```
+
+---
+
+## jsPsych.run
+
+```javascript
+jsPsych.run(timeline)
+```
+
+### Parameters
+
+| Parameter | Type    | Description                              |
+| --------- | ------- | ---------------------------------------- |
+| timeline  | array   | An array containing the objects that describe the experiment timeline. See [Creating an Experiment: The Timeline](../overview/timeline.md). |
+
+### Return value
+
+None.
+
+### Description
+
+Start the jsPsych experiment with the specified timeline.
+
+### Example
+
+```javascript
+var timeline = [trial1, trial2, trial3];
+
+jsPsych.run(timeline);
 ```
 
 ---

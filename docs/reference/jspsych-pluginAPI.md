@@ -240,7 +240,7 @@ An object with properties for each media type: `images`, `audio`, and `video`. E
 
 ### Description
 
-This method is used to automatically generate lists of unique image, audio, and video files from a timeline. It is used by the `preload` plugin to generate a list of to-be-preloaded files based on the trials passed to the `trials` parameter and/or the experiment timeline passed to `jsPsych.init` (when `auto_preload` is true). It can be used in custom plugins and experiment code to generate a list of audio/image/video files, based on a timeline. 
+This method is used to automatically generate lists of unique image, audio, and video files from a timeline. It is used by the `preload` plugin to generate a list of to-be-preloaded files based on the trials passed to the `trials` parameter and/or the experiment timeline passed to `jsPsych.run` (when `auto_preload` is true). It can be used in custom plugins and experiment code to generate a list of audio/image/video files, based on a timeline. 
 
 This function will only return files from plugins that have used the `registerPreload` method to define the media types of their parameters, and only when the trial's parameter value is not a function. When a file path is returned to the trial parameter from a function (including by  `jsPsych.timelineVariable` function), or when the file path is embedded in an HTML string, that file will not be detected by the `getAutoPreloadList` method. In these cases, the file should be preloaded manually. See [Media Preloading](../overview/media-preloading.md) for more information.
 
@@ -384,9 +384,7 @@ jsPsych.pluginAPI.preloadAudio(sounds,
 );
 
 function startExperiment(){
-    jsPsych.init({
-        timeline: exp
-    });
+    jsPsych.run(exp);
 }
 ```
 
@@ -408,9 +406,7 @@ function updateLoadedCount(file){
 }
 
 function startExperiment(){
-  jsPsych.init({
-    timeline: exp
-  });
+  jsPsych.run(exp);
 }
 ```
 
@@ -457,9 +453,7 @@ jsPsych.pluginAPI.preloadImages(images,
 );
 
 function startExperiment(){
-    jsPsych.init({
-        timeline: exp
-    });
+    jsPsych.run(exp);
 }
 ```
 
@@ -481,9 +475,7 @@ function updateLoadedCount(file){
 }
 
 function startExperiment(){
-  jsPsych.init({
-    timeline: exp
-  });
+  jsPsych.run(exp);
 }
 ```
 
@@ -530,9 +522,7 @@ jsPsych.pluginAPI.preloadVideo(videos,
 );
 
 function startExperiment(){
-  jsPsych.init({
-    timeline: exp
-  });
+  jsPsych.run(exp);
 }
 ```
 
@@ -554,9 +544,7 @@ function updateLoadedCount(file){
 }
 
 function startExperiment(){
-  jsPsych.init({
-    timeline: exp
-  });
+  jsPsych.run(exp);
 }
 ```
 

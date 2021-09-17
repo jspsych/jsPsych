@@ -7,11 +7,11 @@ If an experiment uses image, audio, or video files as stimuli, it is a good idea
 
 ## Automatic Preloading
 
-jsPsych can automatically preload audio, video, and image files that are used as parameters for the standard set of plugins, based on the timeline that is passed to `jsPsych.init`. You must initiate this preloading using a `preload` trial. You should add this `preload` trial into your timeline when you want the preloading to occur, and set the `auto_preload` parameter to `true`.
+jsPsych can automatically preload audio, video, and image files that are used as parameters for the standard set of plugins, based on the timeline that is passed to `jsPsych.run`. You must initiate this preloading using a `preload` trial. You should add this `preload` trial into your timeline when you want the preloading to occur, and set the `auto_preload` parameter to `true`.
 
 ```javascript
 // the "auto_preload: true" setting tells the plugin to automatically find 
-// stimuli to preload based the main experiment timeline (used in jsPsych.init)
+// stimuli to preload based the main experiment timeline (used in jsPsych.run)
 var preload = {
 	type: 'preload',
 	auto_preload: true 
@@ -36,9 +36,7 @@ var video_trial = {
 	stimulus: ['video/sample_video.mp4']
 }
 
-jsPsych.init({
-	timeline: [preload, image_trial, sound_trial, video_trial]
-});
+jsPsych.run([preload, image_trial, sound_trial, video_trial]);
 ```
 
 ## Manual preloading
@@ -90,9 +88,7 @@ var preload = {
 	video: video
 }
 
-jsPsych.init({
-	timeline: [preload, image_trial, sound_trial, video_trials],
-});
+jsPsych.run([preload, image_trial, sound_trial, video_trials]);
 
 ```
 
@@ -135,9 +131,7 @@ var preload = {
 	video: video // manually preload the videos used with timeline variables
 }
 
-jsPsych.init({
-	timeline: [preload, image_trial, sound_trial, video_trials],
-});
+jsPsych.run([preload, image_trial, sound_trial, video_trials]);
 
 ```
 
@@ -185,10 +179,10 @@ var preload_2 = {
 	trials: block_2 // automatically preload just the images from block_2 trials
 }
 
-jsPsych.init({
+jsPsych.run(
 	// add each preload trial onto the timeline before the appropriate trial block
-	timeline: [preload_1, block_1, preload_2, block_2],
-});
+	[preload_1, block_1, preload_2, block_2]
+);
 ```
 
 Below is an example with trials where the stimuli files cannot be preloaded automatically, because the stimuli files are passed to the trials via `jsPsych.timelineVariable`. In this case, we create separate arrays for each batch of files, and then pass those arrays to the each preload trial.
@@ -227,10 +221,10 @@ var preload_2 = {
 	images: images_block_2
 }
 
-jsPsych.init({
+jsPsych.run(
 	// add each preload trial to the timeline before the appropriate trial block
-	timeline: [preload_1, block_1, preload_2, block_2], 
-});
+	[preload_1, block_1, preload_2, block_2]
+);
 
 ```
 
@@ -340,9 +334,7 @@ var if_loading_fails = {
 
 // ... rest of experiment
 
-jsPsych.init({
-	timeline: [preload_trial, if_loading_fails, ... ]
-})
+jsPsych.run([preload_trial, if_loading_fails, ... ])
 
 ```
 
