@@ -14,7 +14,7 @@ Plugins can be written in either plain JavaScript or in TypeScript. Template fil
 
 ## Plugin components
 
-### .constructor()
+### constructor()
 
 The plugin's `constructor()` will be passed a reference to the instance of the `JsPsych` class that is running the experiment. The constructor should store this reference so that the plugin can access functionality from the core library and its modules.
 
@@ -24,7 +24,7 @@ constructor(jsPsych){
 }
 ```
 
-### .trial()
+### trial()
 
 The plugin's `trial()` method is responsible for running a single trial. When the jsPsych timeline reaches a trial using the plugin it will invoke the `trial()` method for the plugin.
 
@@ -36,7 +36,7 @@ There are three parameters that are passed into the trial method.
 
 The only requirement for the `trial` method is that it calls `jsPsych.finishTrial()` when it is done. This is how jsPsych knows to advance to the next trial in the experiment (or end the experiment if it is the last trial). The plugin can do whatever it needs to do before that point.
 
-### static .info
+### static info
 
 The plugin's `info` property is an object with a `name` and `parameters` property. 
 
