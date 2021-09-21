@@ -68,7 +68,7 @@ You may also want to import the jsPsych stylesheet, which applies a basic set of
 
 ### Step 3: Create a script element and initialize jsPsych
 
-To add JavaScript code directly to the webpage we need to add a set of `<script>` tags after the `<body>` tags.
+To add JavaScript code directly to the webpage we need to add a pair of `<script>` tags after the `<body>` tags.
 
 ```html hl_lines="9 10"
 <!DOCTYPE html>
@@ -116,12 +116,12 @@ For this demo we want to show some text on the screen. This is exactly what the 
   </head>
   <body></body>
   <script>
-    const jspsych = initJsPsych();
+    const jsPsych = initJsPsych();
   </script>
 </html>
 ```
 
-Once the plugin is loaded we can create a trial using the plugin. To declare a trial that uses the `html-keyboard-response` plugin, we create an object with the property `type` equal to `htmlKeyboardResponse`. We can specify the other parameters of the plugin in the same object. Here we use the `stimulus` parameter to include a message. You can see the full set of parameters for each plugin on its [documentation page](/plugins/jspsych-html-keyboard-response).
+Once the plugin is loaded we can create a trial using the plugin. To declare a trial that uses the `html-keyboard-response` plugin, we create an object with the property `type` equal to `jsPsychHtmlKeyboardResponse`. We can specify the other parameters of the plugin in the same object. Here we use the `stimulus` parameter to include a message. You can see the full set of parameters for each plugin on its [documentation page](/plugins/jspsych-html-keyboard-response).
 
 ```html hl_lines="13 14 15 16"
 <!DOCTYPE html>
@@ -137,7 +137,7 @@ Once the plugin is loaded we can create a trial using the plugin. To declare a t
     const jsPsych = initJsPsych();
 
     const hello_trial = {
-      type: htmlKeyboardResponse,
+      type: jsPsychHtmlKeyboardResponse,
       stimulus: 'Hello world!'
     }
   </script>
@@ -162,7 +162,7 @@ Now that we have the trial defined we need to tell jsPsych to run an experiment 
     const jsPsych = initJsPsych();
 
     const hello_trial = {
-      type: htmlKeyboardResponse,
+      type: jsPsychHtmlKeyboardResponse,
       stimulus: 'Hello world!'
     }
 
@@ -250,7 +250,7 @@ You may also want to import the jsPsych stylesheet, which applies a basic set of
 
 ### Step 5: Create a script element and initialize jsPsych
 
-To add JavaScript code directly to the webpage we need to add a set of `<script>` tags after the `<body>` tags.
+To add JavaScript code directly to the webpage we need to add a pair of `<script>` tags after the `<body>` tags.
 
 ```html hl_lines="9 10"
 <!DOCTYPE html>
@@ -298,12 +298,12 @@ For this demo we want to show some text on the screen. This is exactly what the 
   </head>
   <body></body>
   <script>
-    const jspsych = initJsPsych();
+    const jsPsych = initJsPsych();
   </script>
 </html>
 ```
 
-Once the plugin is loaded we can create a trial using the plugin. To declare a trial that uses the `html-keyboard-response` plugin, we create an object with the property `type` equal to `htmlKeyboardResponse`. We can specify the other parameters of the plugin in the same object. Here we use the `stimulus` parameter to include a message. You can see the full set of parameters for each plugin on its [documentation page](/plugins/jspsych-html-keyboard-response).
+Once the plugin is loaded we can create a trial using the plugin. To declare a trial that uses the `html-keyboard-response` plugin, we create an object with the property `type` equal to `jsPsychHtmlKeyboardResponse`. We can specify the other parameters of the plugin in the same object. Here we use the `stimulus` parameter to include a message. You can see the full set of parameters for each plugin on its [documentation page](/plugins/jspsych-html-keyboard-response).
 
 ```html hl_lines="13 14 15 16"
 <!DOCTYPE html>
@@ -319,7 +319,7 @@ Once the plugin is loaded we can create a trial using the plugin. To declare a t
     const jsPsych = initJsPsych();
 
     const hello_trial = {
-      type: htmlKeyboardResponse,
+      type: jsPsychHtmlKeyboardResponse,
       stimulus: 'Hello world!'
     }
   </script>
@@ -344,7 +344,7 @@ Now that we have the trial defined we need to tell jsPsych to run an experiment 
     const jsPsych = initJsPsych();
 
     const hello_trial = {
-      type: htmlKeyboardResponse,
+      type: jsPsychHtmlKeyboardResponse,
       stimulus: 'Hello world!'
     }
 
@@ -383,11 +383,11 @@ Install the `html-keyboard-response` plugin with:
 
 `npm install @jspsych/plugin-html-keyboard-response`
 
-Then import the `htmlKeyboardResponse` class.
+Then import the `htmlKeyboardResponse` plugin class.
 
 ```js
 import {JsPsych} from 'jspsych';
-import {htmlKeyboardResponse} from '@jspsych/plugin-html-keyboard-response';
+import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
 const jsPsych = new JsPsych();
 ```
@@ -398,7 +398,7 @@ Once the plugin is imported we can create a trial using the plugin. To declare a
 
 ```js
 import {JsPsych} from 'jspsych';
-import {htmlKeyboardResponse} from '@jspsych/plugin-html-keyboard-response';
+import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
 const jsPsych = new JsPsych();
 
@@ -414,7 +414,7 @@ Now that we have the trial defined we need to tell jsPsych to run an experiment 
 
 ```js
 import {JsPsych} from 'jspsych';
-import {htmlKeyboardResponse} from '@jspsych/plugin-html-keyboard-response';
+import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
 const jsPsych = new JsPsych();
 
