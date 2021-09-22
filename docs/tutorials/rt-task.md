@@ -112,7 +112,7 @@ var instructions = {
     <div style='width: 700px;'>
     <div style='float: left;'><img src='img/blue.png'></img>
     <p class='small'><strong>Press the F key</strong></p></div>
-    <div class='float: right;'><img src='img/orange.png'></img>
+    <div style='float: right;'><img src='img/orange.png'></img>
     <p class='small'><strong>Press the J key</strong></p></div>
     </div>
     <p>Press any key to begin.</p>
