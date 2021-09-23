@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-audio-slider-response.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
+  <script src="https://unpkg.com/jspsych@7.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-audio-slider-response@1.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css">
 </head>
 <body></body>
 <script>
@@ -27,7 +27,7 @@
 
   var trial = {
     type: jsPsychAudioSliderResponse,
-    stimulus: 'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/sound/speech_joke.mp3',
+    stimulus: 'https://unpkg.com/jspsych@7.0.0/examples/sound/speech_joke.mp3',
     labels: ['Not Funny', 'Funny'],
     prompt: '<p>How funny is the joke?</p>'
   };

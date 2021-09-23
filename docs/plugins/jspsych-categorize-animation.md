@@ -40,10 +40,10 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
         var animation_trial = {
             type: jsPsychCategorizeAnimation,
             stimuli: [
-                'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_1.jpg', 
-                'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_2.jpg', 
-                'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_3.jpg', 
-                'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_4.jpg'
+                'img/happy_face_1.jpg', 
+                'img/happy_face_2.jpg', 
+                'img/happy_face_3.jpg', 
+                'img/happy_face_4.jpg'
             ],
             prompt: `Press the P or Q key.`,
             choices: ['p', 'q'],
@@ -61,10 +61,10 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
     === "Code"
         ```javascript
         var images = [
-            'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_1.jpg', 
-            'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_2.jpg', 
-            'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_3.jpg', 
-            'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_4.jpg'
+            'img/happy_face_1.jpg', 
+            'img/happy_face_2.jpg', 
+            'img/happy_face_3.jpg', 
+            'img/happy_face_4.jpg'
         ];
 
         var animation_trial = {
