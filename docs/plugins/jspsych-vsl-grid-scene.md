@@ -36,10 +36,10 @@ var pattern = [
 
 var image_size = 100; // pixels
 
-var grid_stimulus = jsPsych.plugins['vsl-grid-scene'].generate_stimulus(pattern, image_size);
+var grid_stimulus = jsPsychVslGridScene.generate_stimulus(pattern, image_size);
 
 // grid_stimulus will now contain a string (NOT an HTML DOM object) that you can
-// pass into other plugins that accept HTML stimuli as input, such as jspsych-html-keyboard-response.
+// pass into other plugins that accept HTML stimuli as input, such as html-keyboard-response.
 
 ```
 
