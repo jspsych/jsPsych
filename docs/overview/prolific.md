@@ -53,7 +53,7 @@ Here's an example trial that could be used. Note that `choices` is set to `jsPsy
 
 ```js
 var final_trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: `<p>You've finished the last task. Thanks for participating!</p>
     <p><a href="https://app.prolific.co/submissions/complete?cc=XXXXXXX">Click here to return to Prolific and complete the study</a>.</p>`,
   choices: jsPsych.NO_KEYS

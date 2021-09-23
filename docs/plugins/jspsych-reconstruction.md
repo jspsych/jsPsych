@@ -31,6 +31,7 @@ rt | numeric | The length of time, in milliseconds, that the trial lasted.
 
 ???+ example "Make a block larger and smaller"
     === "Code"
+
         ```javascript
         var sample_function = function(param){
             var size = 50 + Math.floor(param*250);
@@ -42,7 +43,7 @@ rt | numeric | The length of time, in milliseconds, that the trial lasted.
         }
 
         var match_item = {
-            type: 'html-keyboard-response',
+            type: jsPsychHtmlKeyboardResponse,
             stimulus: '<div style="display: block; margin: auto; height: 300px; width: 300px; position: relative;">'+
             '<div style="display: block; position: absolute; top: '+(150 - 210/2)+'px; left:'+(150 - 210/2)+'px; background-color: #000000; '+
             'width: 210px; height: 210px;"></div></div>',
@@ -52,11 +53,12 @@ rt | numeric | The length of time, in milliseconds, that the trial lasted.
         }
 
         var reconstruction = {
-            type: 'reconstruction',
+            type: jsPsychReconstruction,
             stim_function: sample_function,
             starting_value: 0.5,
         }
         ```
+
     === "Demo"
         <div style="text-align:center;">
             <iframe src="/demos/jspsych-reconstruction-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>

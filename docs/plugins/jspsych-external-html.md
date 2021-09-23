@@ -62,7 +62,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
         // declare the block.
         var trial = {
-            type:'external-html',
+            type: jsPsychExternalHtml,
             url: "external_page.html",
             cont_btn: "start",
             check_fn: check_consent

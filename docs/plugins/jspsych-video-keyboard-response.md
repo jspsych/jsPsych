@@ -39,9 +39,10 @@ stimulus | array | The `stimulus` array. This will be encoded as a JSON string w
 
 ???+ example "Show a video and advance to next trial automatically"
     === "Code"
+    
         ```javascript
         var trial = {
-          type: 'video-keyboard-response',
+          type: jsPsychVideoKeyboardResponse,
           stimulus: [
             'video/fish.mp4'
           ],

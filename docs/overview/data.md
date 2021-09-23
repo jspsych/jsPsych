@@ -35,7 +35,7 @@ Data can be added to a particular trial by setting the `data` parameter for the 
 
 ```js
 var trial = {
-  type: 'image-keyboard-response',
+  type: jsPsychImageKeyboardResponse,
   stimulus: 'imgA.jpg',
   data: { image_type: 'A' }
 }
@@ -45,7 +45,7 @@ Data declared in this way is also saved in the trials on any nested timelines:
 
 ```js
 var block = {
-  type: 'image-keyboard-response',
+  type: jsPsychImageKeyboardResponse,
   data: { image_type: 'A' },
   timeline: [
     {stimulus: 'imgA1.jpg'},
@@ -58,7 +58,7 @@ The data object for a trial can also be updated in the `on_finish` event handler
 
 ```js
 var trial = {
-  type: 'image-keyboard-response',
+  type: jsPsychImageKeyboardResponse,
   stimulus: 'imgA.jpg',
   on_finish: function(data){
     if(jsPsych.pluginAPI.compareKeys(data.response, 'j')){
@@ -276,7 +276,7 @@ It's important that the `XMLHttpRequest` is able to complete before the experime
 
 ```javascript
 var trial = {
-  type: 'call-function',
+  type: jsPsychCallFunction,
   async: true,
   func: function(done){
     var xhr = new XMLHttpRequest();

@@ -29,9 +29,10 @@ question_order | array | An array with the order of questions. For example `[2,0
 
 ???+ example "Single Question"
     === "Code"
+
         ```javascript
         var trial = {
-          type: 'survey-likert',
+          type: jsPsychSurveyLikert,
           questions: [
             {
               prompt: "I like vegetables.", 
@@ -56,6 +57,7 @@ question_order | array | An array with the order of questions. For example `[2,0
 
 ???+ example "Multiple questions in a random order"
     === "Code"
+
         ```javascript
         var likert_scale = [
           "Strongly Disagree", 
@@ -66,7 +68,7 @@ question_order | array | An array with the order of questions. For example `[2,0
         ];
 
         var trial = {
-          type: 'survey-likert',
+          type: jsPsychSurveyLikert,
           questions: [
             {prompt: "I like vegetables.", name: 'Vegetables', labels: likert_scale},
             {prompt: "I like fruit.", name: 'Fruit', labels: likert_scale},

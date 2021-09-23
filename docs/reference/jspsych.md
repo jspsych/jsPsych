@@ -91,7 +91,7 @@ Adds the timeline to the end of the experiment.
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: 'This is a new trial.'
 }
 
@@ -146,7 +146,7 @@ for (var i = 0; i < images.length; i++) {
 }
 
 var block = {
-  type: 'image-keyboard-response',
+  type: jsPsychImageKeyboardResponse,
   choices: ['y', 'n'], 
   prompt: '<p>Press "y" to Continue. Press "n" to end this node of the experiment.</p>',
   on_finish: function(data) {
@@ -158,7 +158,7 @@ var block = {
 }
 
 var after_block = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: '<p>The next node</p>'
 }
 
@@ -192,7 +192,7 @@ Ends the experiment, skipping all remaining trials. If the `on_finish` event han
 
 ```javascript
 var trial = {
-  type: 'image-keyboard-response',
+  type: jsPsychImageKeyboardResponse,
   stimulus: 'image1.jpg',
   choices: ['y', 'n']
   prompt: '<p>Press "y" to Continue. Press "n" to end the experiment</p>',
@@ -264,7 +264,7 @@ data, such as in the example below.
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: 'Just a demo',
   on_finish: function(data){
     // merge all timeline variables available at this trial into the data for this trial
@@ -539,7 +539,7 @@ Pauses the experiment. The experiment will finish the current trial, but will no
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: 'Press p to take a 30 second break. Otherwise, press c to continue immediately.',
   choices: ['p','c'],
   on_finish: function(data){
@@ -575,7 +575,7 @@ Resumes the experiment after a call to `jsPsych.pauseExperiment()`. If the post 
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: 'Press p to take a 30 second break. Otherwise, press c to continue immediately.',
   choices: ['p','c'],
   on_finish: function(data){
@@ -675,7 +675,7 @@ Either a function that returns the value of the timeline variable, or the value 
 
 ```javascript
 var trial = {
-  type: 'image-keyboard-response',
+  type: jsPsychImageKeyboardResponse,
   stimulus: jsPsych.timelineVariable('image')
 }
 
@@ -694,7 +694,7 @@ var procedure = {
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: function(){
     return "<img style='width:100px; height:100px;' src='"+jsPsych.timelineVariable('image')+"'></img>";
   }
@@ -715,7 +715,7 @@ Prior to jsPsych v6.3.0, the `call_immediate` parameter must be set to `true` wh
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: function(){
     return "<img style='width:100px; height:100px;' src='"+jsPsych.timelineVariable('image', true)+"'></img>";
   }

@@ -32,7 +32,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
     === "Code"
         ```javascript
         var trial = {
-            type: 'html-keyboard-response',
+            type: jsPsychHtmlKeyboardResponse,
             stimulus: '<p>Running</p>',
             choices: ['e', 'i'],
             prompt: "<p>Is this activity healthy or unhealthy?</p><p>Press 'e' for healthy and 'i' for unhealthy.</p>"
@@ -49,7 +49,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
     === "Code"
         ```javascript
         var trial = {
-            type: 'html-keyboard-response',
+            type: jsPsychHtmlKeyboardResponse,
             stimulus: '<p style="font-size: 48px;">+</p>',
             choices: jsPsych.NO_KEYS,
             trial_duration: 1000,

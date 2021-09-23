@@ -32,7 +32,7 @@ value | any | The return value of the called function.
 		}
 
 		var trial = {
-			type: 'call-function',
+			type: jsPsychCallFunction,
 			func: myfunc
 		}
 		```
@@ -56,7 +56,7 @@ value | any | The return value of the called function.
 		}
 
 		var trial = {
-			type: 'call-function',
+			type: jsPsychCallFunction,
 			func: function(){ myfunc(jsPsych.data.get()) }
 		}
 		```
@@ -73,7 +73,7 @@ value | any | The return value of the called function.
 	There's no demo for this code, because it requires a server to communicate with.
 		```javascript
 		var trial = {
-			type: 'call-function',
+			type: jsPsychCallFunction,
 			async: true,
 			func: function(done){
 				// can perform async operations here like
@@ -99,7 +99,7 @@ value | any | The return value of the called function.
 	=== "Code"
         ```javascript
 		var trial = {
-			type: 'call-function',
+			type: jsPsychCallFunction,
 			async: true,
 			func: function(done){
 				// generate a delay between 1500 and 3000 milliseconds to simulate  

@@ -37,7 +37,7 @@ To use the WebGazer extension in an experiment, include it in the list of extens
 ```js
 initJsPsych({
   extensions: [
-    {type: 'webgazer'}
+    {type: jsPsychExtensionWebgazer}
   ]
 })
 ```
@@ -49,7 +49,7 @@ To help the participant position their face correctly for eye tracking you can u
 
 ```js
 var init_camera_trial = {
-  type: 'webgazer-init-camera'
+  type: jsPsychWebgazerInitCamera
 }
 ```
 
@@ -62,7 +62,7 @@ Note that instructions are not included in the calibration plugin, so you'll lik
 
 ```js
 var calibration_trial = {
-  type: 'webgazer-calibrate',
+  type: jsPsychWebgazerCalibrate,
   calibration_points: [[25,50], [50,50], [75,50], [50,25], [50,75]],
   calibration_mode: 'click'
 }
@@ -76,7 +76,7 @@ To measure the accuracy and precision of the calibration, you can use the [jspsy
 
 ```js
 var validation_trial = {
-  type: 'webgazer-validate',
+  type: jsPsychWebgazerValidate,
   validation_points: [[-200,200], [200,200],[-200,-200],[200,-200]],
   validation_point_coordinates: 'center-offset-pixels',
   roi_radius: 100
@@ -102,11 +102,11 @@ To enable eye tracking for a trial in your experiment, you can simply add the We
 
 ```js
 var trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: '<img id="scene" src="my-scene.png"></img>',
   extensions: [
     {
-      type: 'webgazer', 
+      type: jsPsychExtensionWebgazer, 
       params: { 
         targets: ['#scene']
       }
@@ -185,17 +185,17 @@ If you have tips based on your own experience please consider sharing them on ou
 
           var jsPsych = initJsPsych({
             extensions: [
-              {type: 'webgazer'}
+              {type: jsPsychExtensionWebgazer}
             ]
           });
 
           var preload = {
-            type: 'preload',
+            type: jsPsychPreload,
             images: ['img/blue.png']
           }
 
           var camera_instructions = {
-            type: 'html-button-response',
+            type: jsPsychHtmlButtonResponse,
             stimulus: `
               <p>In order to participate you must allow the experiment to use your camera.</p>
               <p>You will be prompted to do this on the next screen.</p>
@@ -206,11 +206,11 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var init_camera = {
-            type: 'webgazer-init-camera'
+            type: jsPsychWebgazerInitCamera
           }
 
           var calibration_instructions = {
-            type: 'html-button-response',
+            type: jsPsychHtmlButtonResponse,
             stimulus: `
               <p>Now you'll calibrate the eye tracking, so that the software can use the image of your eyes to predict where you are looking.</p>
               <p>You'll see a series of dots appear on the screen. Look at each dot and click on it.</p>
@@ -219,7 +219,7 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var calibration = {
-            type: 'webgazer-calibrate',
+            type: jsPsychWebgazerCalibrate,
             calibration_points: [
               [25,25],[75,25],[50,50],[25,75],[75,75]
             ],
@@ -228,7 +228,7 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var validation_instructions = {
-            type: 'html-button-response',
+            type: jsPsychHtmlButtonResponse,
             stimulus: `
               <p>Now we'll measure the accuracy of the calibration.</p>
               <p>Look at each dot as it appears on the screen.</p>
@@ -239,7 +239,7 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var validation = {
-            type: 'webgazer-validate',
+            type: jsPsychWebgazerValidate,
             validation_points: [
               [25,25],[75,25],[50,50],[25,75],[75,75]
             ],
@@ -252,7 +252,7 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var recalibrate_instructions = {
-            type: 'html-button-response',
+            type: jsPsychHtmlButtonResponse,
             stimulus: `
               <p>The accuracy of the calibration is a little lower than we'd like.</p>
               <p>Let's try calibrating one more time.</p>
@@ -276,7 +276,7 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var calibration_done = {
-            type: 'html-button-response',
+            type: jsPsychHtmlButtonResponse,
             stimulus: `
               <p>Great, we're done with calibration!</p>
             `,
@@ -284,7 +284,7 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var begin = {
-            type: 'html-keyboard-response',
+            type: jsPsychHtmlKeyboardResponse,
             stimulus: `<p>The next screen will show an image to demonstrate adding the webgazer extension to a trial.</p>
               <p>Just look at the image while eye tracking data is collected. The trial will end automatically.</p>
               <p>Press any key to start.</p>
@@ -292,20 +292,20 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var trial = {
-            type: 'image-keyboard-response',
+            type: jsPsychImageKeyboardResponse,
             stimulus: 'img/blue.png',
             choices: jsPsych.NO_KEYS,
             trial_duration: 2000,
             extensions: [
               {
-                type: 'webgazer', 
+                type: jsPsychExtensionWebgazer, 
                 params: {targets: ['#jspsych-image-keyboard-response-stimulus']}
               }
             ]
           }
 
           var show_data = {
-            type: 'html-keyboard-response',
+            type: jsPsychHtmlKeyboardResponse,
             stimulus: function() {
               var trial_data = jsPsych.data.getLastTrialData().values();
               var trial_json = JSON.stringify(trial_data, null, 2);

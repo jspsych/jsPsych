@@ -32,9 +32,10 @@ stimulus | string | The HTML content that was displayed on the screen.
 
 ???+ example "Displaying question until subject gives a response"
     === "Code"
+
         ```javascript
 		var trial = {
-			type: 'html-button-response',
+			type: jsPsychHtmlButtonResponse,
 			stimulus: '<p>Running</p>',
 			choices: ['Healthy', 'Unhealthy'],
 			prompt: "<p>Is this activity healthy or unhealthy?</p>"

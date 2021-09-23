@@ -27,7 +27,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
     === "Code"
         ```javascript
             var cloze_trial = {
-                type: 'cloze',
+                type: jsPsychCloze,
                 text: 'The %% is the largest terrestrial mammal. It lives in both %% and %%.'
             };
         ```
@@ -43,7 +43,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
     === "Code"
         ```javascript
             var cloze_trial = {
-                type: 'cloze',
+                type: jsPsychCloze,
                 text: 'A rectangle has % 4 % corners and a triangle has % 3 %.',
                 check_answers: true,
                 button_text: 'Next',

@@ -31,24 +31,24 @@ success | boolean | true if the browser supports fullscreen mode (i.e., is not S
     === "Code"
         ```javascript
         var enter_fullscreen = {
-          type: 'fullscreen',
+          type: jsPsychFullscreen,
           fullscreen_mode: true
         }
 
         var trial_in_fullscreen = {
-          type: 'html-button-response',
+          type: jsPsychHtmlButtonResponse,
           stimulus: 'This trial will be in fullscreen mode.',
           choices: ['Continue']
         }
 
         var exit_fullscreen = {
-          type: 'fullscreen',
+          type: jsPsychFullscreen,
           fullscreen_mode: false,
           delay_after: 0
         }
 
         var trial_after_fullscreen = {
-          type: 'html-button-response',
+          type: jsPsychHtmlButtonResponse,
           stimulus: 'This trial will NOT be in fullscreen mode.',
           choices: ['Continue']
         }

@@ -50,7 +50,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
         }
 
         var trial = {
-            type: 'canvas-slider-response',
+            type: jsPsychCanvasSliderResponse,
             stimulus: twoSquares,
             labels: ['0','10'],
             canvas_size: [150, 500],
@@ -81,7 +81,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
         }
 
         var trial = {
-            type: 'canvas-slider-response',
+            type: jsPsychCanvasSliderResponse,
             stimulus: function(c) {
                 colors = ['darkred', 'cyan'];
                 twoSquares(c, colors);

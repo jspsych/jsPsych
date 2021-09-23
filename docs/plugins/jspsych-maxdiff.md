@@ -31,9 +31,10 @@ response | object | An object with two keys, `left` and `right`, containing the 
 
 ???+ example "Basic example"
     === "Code"
+
         ```javascript
         var maxdiff_page = {
-            type: 'maxdiff',
+            type: jsPsychMaxdiff,
             alternatives: ['apple', 'orange', 'pear', 'banana'],
             labels: ['Most Preferred', 'Least Preferred'],
             preamble: '<p> Please select your <b>most preferred</b> and <b>least preferred</b> fruits. </p>'

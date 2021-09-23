@@ -40,16 +40,17 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ???+ example "Identical distractors"
     === "Code"
+
         ```javascript
         var instructions = {
-          type: 'html-button-response',
+          type: jsPsychHtmlButtonResponse,
           stimulus: `<p>Press J if there is a backwards N.</p>
             <p>Press F if all the Ns are in the normal orientation.</p>`,
           choices: ['Continue']
         }
 
         var trial = {
-          type: 'visual-search-circle',
+          type: jsPsychVisualSearchCircle,
           target: 'img/backwardN.gif',
           foil: 'img/normalN.gif',
           fixation_image: 'img/fixation.gif',
@@ -67,16 +68,17 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ???+ example "Variety of different distractors"
     === "Code"
+
         ```javascript
         var instructions = {
-          type: 'html-button-response',
+          type: jsPsychHtmlButtonResponse,
           stimulus: `<p>Press E if there is an elephant in the group.</p>
             <p>Press N if there is no elephant in the group.</p>`,
           choices: ['Continue']
         }
 
         var trial = {
-          type: 'visual-search-circle',
+          type: jsPsychVisualSearchCircle,
           target: 'img/elephant.png',
           foil: ['img/lion.png', 'img/monkey.png'],
           fixation_image: 'img/fixation.gif',

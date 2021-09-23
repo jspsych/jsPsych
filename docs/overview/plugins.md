@@ -15,13 +15,19 @@ To use a plugin, you'll need to load the plugin's JavaScript file in your experi
 </head>
 ```
 
-Once a plugin is loaded, you can use JavaScript to define a trial that uses that plugin. All jsPsych trials have a `type`, which tells jsPsych what plugin to use to run the trial. The trial's `type` is the plugin name, which usually the same as the plugin file name, but with the "jspsych-" prefix removed.
+Once a plugin is loaded, you can use JavaScript to define a trial that uses that plugin. All jsPsych trials need a `type` parameter, which tells jsPsych what plugin to use to run the trial. The trial's `type` is similar to the plugin name, but it always starts with "jsPsych" and is written in _camel case_ rather than with dashes between the words. The trial's `type` parameter should NOT be a string (i.e. no quotes around the `type` value). Here are some examples of plugin names and types:
+
+| Plugin name                  | Type                         |
+| ---------------------------- | ---------------------------- |
+| image-keyboard-response      | jsPsychImageKeyboardResponse |
+| fullscreen                   | jsPsychFullscreen            |
+| webgazer-init-camera         | jsPsychWebgazerInitCamera    |
 
 The following JavaScript code defines a trial using the `image-keyboard-response` plugin to display an image file. This trial uses the default values for valid keys, stimulus duration, trial duration, and other parameters. 
 
 ```javascript
 var image_trial = {
-	type: 'image-keyboard-response', 
+	type: jsPsychImageKeyboardResponse, 
 	stimulus: 'images/happy_face.jpg'
 }
 ```
@@ -30,7 +36,7 @@ You can override any default parameter values by adding them into your trial obj
 
 ```javascript
 var image_trial = {
-  type: 'image-keyboard-response',
+  type: jsPsychImageKeyboardResponse,
   stimulus: 'images/happy_face.jpg',
   trial_duration: 3000,
   post_trial_gap: 2000
@@ -63,7 +69,7 @@ A trial for the Flanker Task written with jsPsych might look like this:
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: '<<<<<',
   choices: ['f','j'],
   data: {
@@ -83,7 +89,7 @@ The ITI can also be controlled at the trial level through the `post_trial_gap` p
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: 'There will be a 1.5 second blank screen after this trial.',
   post_trial_gap: 1500
 }
@@ -97,7 +103,7 @@ Immediately before a trial runs, there is an opportunity to run an arbitrary fun
 // when this trial runs, the on_start function will change the trial's stimulus and data parameters,
 // so the trial will display an incongruent Flanker stimulus with a right-facing central arrow
 var trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: '<<<<<',
   choices: ['f','j'],
   data: {
@@ -124,7 +130,7 @@ The `on_finish` function can be useful to calculate new data properties that wer
 // which is either 'true' or 'false'
 // depending on the response that was made
 var trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: '<<<<<',
   choices: ['f','j'],
   data: {
@@ -148,7 +154,7 @@ The `on_load` callback function will trigger once the trial has completed loadin
 
 ```javascript
 var trial = {
-  type: 'image-keyboard-response',
+  type: jsPsychImageKeyboardResponse,
   stimulus: 'imgA.png',
   on_load: function() {
     // this will change the src attribute of the image after 500ms
@@ -177,13 +183,13 @@ The `css_classes` parameter allows you to add an array of CSS class names to the
 </style>
 <script>
   var fixation_trial = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     choices: jsPsych.NO_KEYS,
     stimulus: '+',
     css_classes: ['fixation']
   };
   var flanker_trial = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     choices: ["ArrowLeft", "ArrowRight"],
     stimulus: '>>>>>',
     prompt: '<span id="prompt">Press the left or right arrow key.</span>',
@@ -198,7 +204,7 @@ The `save_trial_parameters` parameter allows you to tell jsPsych what parameters
 
 ```javascript
 var trial = {
-  type: 'html-button-response',
+  type: jsPsychHtmlButtonResponse,
   stimulus: '<p style="color: orange; font-size: 48px; font-weight: bold;">BLUE</p>',
   choices: function() {
     return jsPsych.randomization.shuffle(['Yes','No']);

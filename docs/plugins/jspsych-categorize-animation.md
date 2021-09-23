@@ -38,7 +38,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
     === "Code"
         ```javascript
         var animation_trial = {
-            type: 'categorize-animation',
+            type: jsPsychCategorizeAnimation,
             stimuli: [
                 'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_1.jpg', 
                 'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/happy_face_2.jpg', 
@@ -68,7 +68,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
         ];
 
         var animation_trial = {
-            type: 'categorize-animation',
+            type: jsPsychCategorizeAnimation,
             stimuli: images,
             choices: ['p', 'q'],
             prompt: `Press the P or Q key.`,

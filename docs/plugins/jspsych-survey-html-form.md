@@ -28,9 +28,10 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
 
 ???+ example "Fill in the blanks"
     === "Code"
+
         ```javascript
         var trial = {
-          type: 'survey-html-form',
+          type: jsPsychSurveyHtmlForm,
           preamble: '<p>How are you feeling <b>right now?</b></p>',
           html: '<p> I am feeling <input name="first" type="text" />, <input name="second" type="text" />, and <input name="third" type="text" />.</p>'
         };
@@ -47,7 +48,7 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
     === "Code"
         ```javascript
         var trial = {
-          type: 'survey-html-form',
+          type: jsPsychSurveyHtmlForm,
           preamble: '<p>What is your favorite bird?</p>',
           html: '<p>My favorite bird is <input type="text" id="test-resp-box" name="response" size="10" /></p>',
           autofocus: 'test-resp-box'

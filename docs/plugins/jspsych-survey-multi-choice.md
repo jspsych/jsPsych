@@ -28,9 +28,10 @@ question_order | array | An array with the order of questions. For example `[2,0
 
 ???+ example "Vertical Question Alignment"
     === "Code"
+
         ```javascript
         var trial = {
-          type: 'survey-multi-choice',
+          type: jsPsychSurveyMultiChoice,
           questions: [
             {
               prompt: "Which of the following do you like the most?", 
@@ -57,9 +58,10 @@ question_order | array | An array with the order of questions. For example `[2,0
 
 ???+ example "Horizontal Question Alignment"
     === "Code"
+
         ```javascript
         var trial = {
-          type: 'survey-multi-choice',
+          type: jsPsychSurveyMultiChoice,
           questions: [
             {
               prompt: "Which of the following do you like the most?", 

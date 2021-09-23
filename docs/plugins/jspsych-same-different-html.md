@@ -41,9 +41,10 @@ Additionally, if `first_stim_duration` is  null, then the following data is also
 
 ???+ example "Two text choices"
     === "Code"
+  
         ```javascript
         var trial = {
-          type: 'same-different-html',
+          type: jsPsychSameDifferentHtml,
           stimuli: [
             '<p style="font-size:30px;">Climbing</p>', 
             '<p style="font-size:30px;">Walking</p>'

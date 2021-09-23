@@ -35,9 +35,10 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ???+ example "Displaying trial until subject gives a response"
     === "Code"
+
         ```javascript
         var trial = {
-            type: 'image-keyboard-response',
+            type: jsPsychImageKeyboardResponse,
             stimulus: 'img/happy_face_1.png',
             choices: ['e', 'i'],
             prompt: "<p>Is this person happy or sad? Press 'e' for happy and 'i' for sad.</p>",
@@ -52,9 +53,10 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ???+ example "Displaying image for a fixed duration; no response allowed"
     === "Code"
+
         ```javascript
         var trial = {
-            type: 'image-keyboard-response',
+            type: jsPsychImageKeyboardResponse,
             stimulus: 'img/happy_face_1.png',
             choices: jsPsych.NO_KEYS,
             prompt: "<p>Study this face for 5 seconds.</p>",

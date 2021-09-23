@@ -45,7 +45,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 	=== "Code"
 		```javascript
 		var trial = {
-			type: 'audio-slider-response',
+			type: jsPsychAudioSliderResponse,
 			stimulus: 'sound/speech_joke.mp3',
 			labels: ['Not Funny', 'Funny'],
 			prompt: '<p>How funny is the joke?</p>'
@@ -63,7 +63,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 	=== "Code"
 		```javascript
 		var trial = {
-			type: 'audio-slider-response',
+			type: jsPsychAudioSliderResponse,
 			stimulus: 'sound/speech_joke.mp3',
 			labels: ['Not Funny', 'Funny'],
 			prompt: '<p>How funny is the joke?</p>',

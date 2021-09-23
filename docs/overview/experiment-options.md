@@ -135,7 +135,7 @@ Extensions are jsPsych modules that can run throughout the experiment and interf
 ```js
 initJsPsych({
     extensions: [
-        {type: 'webgazer'}
+        {type: jsPsychExtensionWebgazer}
     ]
 });
 ```

@@ -29,9 +29,10 @@ question_order | array | An array with the order of questions. For example `[2,0
 
 ???+ example "Multiple Questions on a Page"
     === "Code"
+
         ```javascript
         var trial = {
-          type: 'survey-multi-select',
+          type: jsPsychSurveyMultiSelect,
           questions: [
             {
               prompt: "Which of these colors do you like?", 

@@ -11,7 +11,7 @@ Initialization parameters can be set when calling `initJsPsych()`
 ```js
 initJsPsych({
   extensions: [
-    {type: 'webgazer', params: {...}}
+    {type: jsPsychExtensionWebgazer, params: {...}}
   ]
 })
 ```
@@ -29,9 +29,9 @@ Trial parameters can be set when adding the extension to a trial object.
 
 ```js
 var trial = {
-  type: '...',
+  type: jsPsych...,
   extensions: [
-    {type: 'webgazer', params: {...}}
+    {type: jsPsychExtensionWebgazer, params: {...}}
   ]
 }
 ```

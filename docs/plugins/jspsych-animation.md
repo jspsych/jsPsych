@@ -33,7 +33,7 @@ response | array | An array, where each element is an object representing a resp
         var animation_sequence = ["img/happy_face_1.jpg", "img/happy_face_2.jpg", "img/happy_face_3.jpg", "img/happy_face_4.jpg"];
 
         var animation_trial = {
-            type: 'animation',
+            type: jsPsychAnimation,
             stimuli: animation_sequence,
             sequence_reps: 3,
             frame_time: 300,

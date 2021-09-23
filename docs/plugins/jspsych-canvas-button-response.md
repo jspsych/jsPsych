@@ -44,7 +44,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
         }
 
         var circle_1 = {
-            type: 'canvas-button-response',
+            type: jsPsychCanvasButtonResponse,
             stimulus: function(c) {
                 filledCirc(c, 100, 'blue');
             },
@@ -55,7 +55,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
         };
 
         var circle_2 = {
-            type: 'canvas-button-response',
+            type: jsPsychCanvasButtonResponse,
             stimulus: function(c) {
                 filledCirc(c, 150, 'green');
             },
@@ -79,7 +79,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
     === "Code"
         ```javascript
         var lines = {
-            type: 'canvas-button-response',
+            type: jsPsychCanvasButtonResponse,
             stimulus: function(c) {
                 var ctx = c.getContext("2d");
                 // first line
@@ -126,7 +126,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
         var circle_procedure = {
             timeline: [
                 {
-                    type: 'canvas-button-response',
+                    type: jsPsychCanvasButtonResponse,
                     stimulus: function(c) {
                         filledCirc(c, jsPsych.timelineVariable('radius'), jsPsych.timelineVariable('color'));
                     },

@@ -8,23 +8,23 @@ var jsPsych = initJsPsych();
 var timeline = [];
 
 timeline.push({
-  type: 'fullscreen',
+  type: jsPsychFullscreen,
   fullscreen_mode: true
 });
 
 timeline.push({
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: 'This trial will be in fullscreen mode.'
 });
 
 // exit fullscreen mode
 timeline.push({
-  type: 'fullscreen',
+  type: jsPsychFullscreen,
   fullscreen_mode: false
 });
 
 timeline.push({
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: 'This trial will NOT be in fullscreen mode.'
 });
 

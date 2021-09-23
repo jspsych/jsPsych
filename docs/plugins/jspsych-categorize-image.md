@@ -41,8 +41,8 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
     === "Code"
         ```javascript
         var categorization_trial = {
-            type: 'categorize-image',
-            stimulus: 'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/blue.png',
+            type: jsPsychCategorizeImage,
+            stimulus: 'img/blue.png',
             key_answer: 'b',
             text_answer: 'Blue',
             choices: ['r', 'g', 'b'],

@@ -78,9 +78,10 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ???+ example "Setting the correct_choice parameter by linking it to the coherent_direction parameter"
     === "Code"
+
         ```javascript
         var trial = {
-            type: "rdk", 
+            type: jsPsychRdk, 
             coherent_direction: 0,
             correct_choice: "p"
         };
@@ -92,9 +93,10 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ???+ example "Displaying a trial with 2 choices and 1 correct choice"
     === "Code"
+
         ```javascript
         var trial = {
-            type: "rdk", 
+            type: jsPsychRdk, 
             post_trial_gap: 0,
             number_of_dots: 200,
             RDK_type: 3,
@@ -111,9 +113,10 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ???+ example "Displaying a trial with multiple apertures"
     === "Code"
+
         ```javascript
           var trial = {
-            type: "rdk", 
+            type: jsPsychRdk, 
             number_of_apertures: 3, //This needs to be set if more than one aperture
             trial_duration: 10000,
             correct_choice: "a",

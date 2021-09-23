@@ -40,7 +40,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
         }
 
         var trial = {
-            type: 'canvas-keyboard-response',
+            type: jsPsychCanvasKeyboardResponse,
             canvas_size: [300, 300],
             stimulus: drawRect,
             choices: ['e','i'],
@@ -66,7 +66,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
         }
 
         var trial = {
-            type: 'canvas-keyboard-response',
+            type: jsPsychCanvasKeyboardResponse,
             canvas_size: [300, 300],
             stimulus: drawCirc,
             prompt: '<p>No key response is allowed.</p><p>The stimulus disappears after 3 seconds.</p>',

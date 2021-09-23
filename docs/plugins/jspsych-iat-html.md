@@ -39,7 +39,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
     === "Code"
         ```javascript
         var trial = {
-            type: 'iat-html',
+            type: jsPsychIatHtml,
             stimulus: 'Golf',
             stim_key_association: 'left',
             html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',

@@ -37,9 +37,10 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ???+ example "A classic SRT"
     === "Code"
+
         ```javascript
         var instructions = {
-          type: 'html-button-response',
+          type: jsPsychHtmlButtonResponse,
           stimulus: '<p>Use the S, F, H, and K keys to respond.</p>',
           choices: ['Continue']
         }
@@ -53,25 +54,25 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
         ]
 
         var trial_1 = {
-          type: 'serial-reaction-time',
+          type: jsPsychSerialReactionTime,
           grid: grid,
           choices: response_map,
           target: [0,0]
         }
         var trial_2 = {
-          type: 'serial-reaction-time',
+          type: jsPsychSerialReactionTime,
           grid: grid,
           choices: response_map,
           target: [0,1]
         }
         var trial_3 = {
-          type: 'serial-reaction-time',
+          type: jsPsychSerialReactionTime,
           grid: grid,
           choices: response_map,
           target: [0,2]
         }
         var trial_4 = {
-          type: 'serial-reaction-time',
+          type: jsPsychSerialReactionTime,
           grid: grid,
           choices: response_map,
           target: [0,3]
@@ -87,9 +88,10 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ???+ example "2x2 grid with feedback"
     === "Code"
+
         ```javascript
         var instructions = {
-          type: 'html-button-response',
+          type: jsPsychHtmlButtonResponse,
           stimulus: '<p>Use the R, I, V, and M keys to respond.</p>',
           choices: ['Continue']
         }
@@ -105,7 +107,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
         ]
 
         var trial_1 = {
-          type: 'serial-reaction-time',
+          type: jsPsychSerialReactionTime,
           grid: grid,
           choices: response_map,
           target: [0,0],
@@ -113,7 +115,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
           feedback_duration: 500
         }
         var trial_2 = {
-          type: 'serial-reaction-time',
+          type: jsPsychSerialReactionTime,
           grid: grid,
           choices: response_map,
           target: [0,1],
@@ -121,7 +123,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
           feedback_duration: 500
         }
         var trial_3 = {
-          type: 'serial-reaction-time',
+          type: jsPsychSerialReactionTime,
           grid: grid,
           choices: response_map,
           target: [1,1],
@@ -129,7 +131,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
           feedback_duration: 500
         }
         var trial_4 = {
-          type: 'serial-reaction-time',
+          type: jsPsychSerialReactionTime,
           grid: grid,
           choices: response_map,
           target: [1,0],

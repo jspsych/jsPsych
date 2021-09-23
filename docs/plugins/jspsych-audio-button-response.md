@@ -40,7 +40,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 	=== "Code"
 		```javascript
 		var trial = {
-			type: 'audio-button-response',
+			type: jsPsychAudioButtonResponse,
 			stimulus: 'sound/tone.mp3',
 			choices: ['Low', 'High'],
 			prompt: "<p>Is the pitch high or low?</p>"
@@ -58,7 +58,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 	=== "Code"
 		```javascript
 		var trial = {
-			type: 'audio-button-response',
+			type: jsPsychAudioButtonResponse,
 			stimulus: 'sound/roar.mp3',
 			choices: ['lion.png', 'elephant.png', 'monkey.png'],
 			prompt: "<p>Which animal made the sound?</p>",

@@ -147,7 +147,7 @@ var after_response = function(info) {
 
 ```javascript
 var trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: '<<<<<',
   choices: ['f','j'],
   prompt: 'Press f for left. Press j for right.',
@@ -248,17 +248,17 @@ This function will only return files from plugins that have used the `registerPr
 
 ```javascript
 var audio_trial = {
-    type: 'audio-keyboard-response'
+    type: jsPsychAudioKeyboardResponse
     stimulus: 'file.mp3'
 }
 
 var image_trial = {
-    type: 'image-keyboard-response'
+    type: jsPsychImageKeyboardResponse
     stimulus: 'file.png'
 }
 
 var video_trial = {
-    type: 'video-keyboard-response'
+    type: jsPsychVideoKeyboardResponse
     stimulus: 'file.mp4'
 }
 

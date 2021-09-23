@@ -44,7 +44,7 @@ rt | numeric | The response time in milliseconds for the participant to finish a
     === "Code"
         ```javascript
         var sort_trial = {
-            type: 'free-sort',
+            type: jsPsychFreeSort,
             stimuli: sorting_stimuli,
             stim_width: 80,
             stim_height: 60,

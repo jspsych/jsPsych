@@ -41,9 +41,10 @@ Additionally, if `first_stim_duration` is  null, then the following data is also
 
 ???+ example "Identifying emotional expressions"
     === "Code"
+
         ```javascript
         var trial = {
-          type: 'same-different-image',
+          type: jsPsychSameDifferentImage,
           stimuli: [
             'img/happy_face_1.jpg', 
             'img/sad_face_3.jpg'

@@ -35,28 +35,29 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ???+ example "A classic version of the SRT"
     === "Code"
+
         ```javascript
         var grid = [
           [1,1,1,1]
         ]
 
         var trial_1 = {
-          type: 'serial-reaction-time-mouse',
+          type: jsPsychSerialReactionTimeMouse,
           grid: grid,
           target: [0,0]
         }
         var trial_2 = {
-          type: 'serial-reaction-time-mouse',
+          type: jsPsychSerialReactionTimeMouse,
           grid: grid,
           target: [0,1]
         }
         var trial_3 = {
-          type: 'serial-reaction-time-mouse',
+          type: jsPsychSerialReactionTimeMouse,
           grid: grid,
           target: [0,2]
         }
         var trial_4 = {
-          type: 'serial-reaction-time-mouse',
+          type: jsPsychSerialReactionTimeMouse,
           grid: grid,
           target: [0,3]
         }
@@ -71,6 +72,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ???+ example "A 2x2 grid with extra space and different colors"
     === "Code"
+
         ```javascript
         var grid = [
           [1,0,1],
@@ -79,25 +81,25 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
         ]
 
         var trial_1 = {
-          type: 'serial-reaction-time-mouse',
+          type: jsPsychSerialReactionTimeMouse,
           grid: grid,
           target: [0,0],
           target_color: '#006738'
         }
         var trial_2 = {
-          type: 'serial-reaction-time-mouse',
+          type: jsPsychSerialReactionTimeMouse,
           grid: grid,
           target: [0,2],
           target_color: '#F78F1E'
         }
         var trial_3 = {
-          type: 'serial-reaction-time-mouse',
+          type: jsPsychSerialReactionTimeMouse,
           grid: grid,
           target: [2,2],
           target_color: '#13B24B'
         }
         var trial_4 = {
-          type: 'serial-reaction-time-mouse',
+          type: jsPsychSerialReactionTimeMouse,
           grid: grid,
           target: [2,0],
           target_color: '#E74921'

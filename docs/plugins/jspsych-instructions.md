@@ -34,9 +34,10 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ???+ example "Showing simple text instructions"
     === "Code"
+
         ```javascript
         var trial = {
-            type: 'instructions',
+            type: jsPsychInstructions,
             pages: [
             'Welcome to the experiment. Click next to begin.',
             'This is the second page of instructions.',
@@ -57,9 +58,10 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ???+ example "Including Images"
     === "Code"
+
         ```javascript
         var trial = {
-            type: 'instructions',
+            type: jsPsychInstructions,
             pages: [
             'Welcome to the experiment. Click next to begin.',
             'You will be looking at images of arrows: ' +
@@ -81,9 +83,10 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ???+ example "Changing Button Text"
     === "Code"
+
         ```javascript
         var trial = {
-            type: 'instructions',
+            type: jsPsychInstructions,
             pages: [
             'Welcome to the experiment. Click next to begin.',
             'This is the second page of instructions.',

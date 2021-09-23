@@ -43,13 +43,13 @@ All jsPsych experiments are defined by a timeline. The timeline is an array that
 var timeline = [];
 ```
 
-Let's greet the subject with a simple welcome message using the [jspsych-html-keyboard-response](/plugins/jspsych-html-keyboard-response.md) plugin.
+Let's greet the subject with a simple welcome message using the [html-keyboard-response](/plugins/jspsych-html-keyboard-response.md) plugin.
 
-First, we create a trial that uses the `jspsych-html-keyboard-response` plugin and contains a simple string to show the subject.
+First, we create a trial that uses the `html-keyboard-response` plugin and contains a simple string to show the subject.
 
 ```javascript
 var welcome = {
-  type: "html-keyboard-response",
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: "Welcome to the experiment. Press any key to begin."
 };
 ```
@@ -88,7 +88,7 @@ After each step in the tutorial you can view the complete code up to that point 
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
@@ -108,7 +108,7 @@ The trial definition looks like this:
 
 ```javascript
 var instructions = {
-  type: "html-keyboard-response",
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: `
     <p>In this experiment, a circle will appear in the center 
     of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -163,14 +163,14 @@ timeline.push(instructions);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -214,13 +214,13 @@ For now, we will just show each image once. The path to the image file should be
 
 ```javascript
 var blue_trial = {
-  type: 'image-keyboard-response',
+  type: jsPsychImageKeyboardResponse,
   stimulus: 'img/blue.png',
   choices: ['f', 'j']
 };
 
 var orange_trial = {
-  type: 'image-keyboard-response',
+  type: jsPsychImageKeyboardResponse,
   stimulus: 'img/orange.png',
   choices: ['f', 'j']
 }
@@ -255,14 +255,14 @@ timeline.push(blue_trial, orange_trial);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -283,13 +283,13 @@ timeline.push(blue_trial, orange_trial);
 
         /* test trials */
         var blue_trial = {
-          type: 'image-keyboard-response',
+          type: jsPsychImageKeyboardResponse,
           stimulus: 'img/blue.png',
           choices: ['f', 'j']
         };
 
         var orange_trial = {
-          type: 'image-keyboard-response',
+          type: jsPsychImageKeyboardResponse,
           stimulus: 'img/orange.png',
           choices: ['f', 'j']
         }
@@ -327,7 +327,7 @@ We'll put this trial at the very start of the experiment, so add this code befor
 
 ```js
 var preload = {
-  type: 'preload',
+  type: jsPsychPreload,
   images: ['img/blue.png', 'img/orange.png']
 }
 ```
@@ -362,21 +362,21 @@ timeline.push(preload);
 
         /* preload images */
         var preload = {
-          type: 'preload',
+          type: jsPsychPreload,
           images: ['img/blue.png', 'img/orange.png']
         }
         timeline.push(preload);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -397,13 +397,13 @@ timeline.push(preload);
 
         /* test trials */
         var blue_trial = {
-          type: 'image-keyboard-response',
+          type: jsPsychImageKeyboardResponse,
           stimulus: 'img/blue.png',
           choices: ['f', 'j']
         };
 
         var orange_trial = {
-          type: 'image-keyboard-response',
+          type: jsPsychImageKeyboardResponse,
           stimulus: 'img/orange.png',
           choices: ['f', 'j']
         }
@@ -436,18 +436,18 @@ Instead of just showing the blue and orange circles, let's also set up the exper
 
 ```javascript
 var fixation = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: '<div style="font-size:60px;">+</div>',
   choices: jsPsych.NO_KEYS,
   trial_duration: 1000,
 }
 ```
 
-To show the circles, we'll set up another trial with the html-keyboard-response plugin, but we'll use the function `jsPsych.timelineVariable()` to indicate that we want jsPsych to substitute the value of the parameter in from the timeline variables.
+To show the circles, we'll set up another trial with the image-keyboard-response plugin, but we'll use the function `jsPsych.timelineVariable()` to indicate that we want jsPsych to substitute the value of the parameter in from the timeline variables.
 
 ```javascript
 var test = {
-  type: "image-keyboard-response",
+  type: jsPsychImageKeyboardResponse,
   stimulus: jsPsych.timelineVariable('stimulus'),
   choices: ['f', 'j']
 }
@@ -494,21 +494,21 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
 
         /* preload images */
         var preload = {
-          type: 'preload',
+          type: jsPsychPreload,
           images: ['img/blue.png', 'img/orange.png']
         }
         timeline.push(preload);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -534,14 +534,14 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
         ];
 
         var fixation = {
-          type: 'html-keyboard-response',
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
           choices: jsPsych.NO_KEYS,
           trial_duration: 1000,
         }
 
         var test = {
-          type: "image-keyboard-response",
+          type: jsPsychImageKeyboardResponse,
           stimulus: jsPsych.timelineVariable('stimulus'),
           choices: ['f', 'j']
         }
@@ -607,21 +607,21 @@ var test_procedure = {
 
         /* preload images */
         var preload = {
-          type: 'preload',
+          type: jsPsychPreload,
           images: ['img/blue.png', 'img/orange.png']
         }
         timeline.push(preload);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -647,14 +647,14 @@ var test_procedure = {
         ];
 
         var fixation = {
-          type: 'html-keyboard-response',
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
           choices: jsPsych.NO_KEYS,
           trial_duration: 1000,
         }
 
         var test = {
-          type: "image-keyboard-response",
+          type: jsPsychImageKeyboardResponse,
           stimulus: jsPsych.timelineVariable('stimulus'),
           choices: ['f', 'j']
         }
@@ -683,7 +683,7 @@ To do that here, we'll use one of the built-in randomization methods in [jsPsych
 
 ```javascript
 var fixation = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: '<div style="font-size:60px;">+</div>',
   choices: jsPsych.NO_KEYS,
   trial_duration: function(){
@@ -718,21 +718,21 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
 
         /* preload images */
         var preload = {
-          type: 'preload',
+          type: jsPsychPreload,
           images: ['img/blue.png', 'img/orange.png']
         }
         timeline.push(preload);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -758,7 +758,7 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
         ];
 
         var fixation = {
-          type: 'html-keyboard-response',
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
           choices: jsPsych.NO_KEYS,
           trial_duration: function(){
@@ -767,7 +767,7 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
         }
 
         var test = {
-          type: "image-keyboard-response",
+          type: jsPsychImageKeyboardResponse,
           stimulus: jsPsych.timelineVariable('stimulus'),
           choices: ['f', 'j']
         }
@@ -830,21 +830,21 @@ var jsPsych = initJsPsych({
 
         /* preload images */
         var preload = {
-          type: 'preload',
+          type: jsPsychPreload,
           images: ['img/blue.png', 'img/orange.png']
         }
         timeline.push(preload);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -870,7 +870,7 @@ var jsPsych = initJsPsych({
         ];
 
         var fixation = {
-          type: 'html-keyboard-response',
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
           choices: jsPsych.NO_KEYS,
           trial_duration: function(){
@@ -879,7 +879,7 @@ var jsPsych = initJsPsych({
         }
 
         var test = {
-          type: "image-keyboard-response",
+          type: jsPsychImageKeyboardResponse,
           stimulus: jsPsych.timelineVariable('stimulus'),
           choices: ['f', 'j']
         }
@@ -908,7 +908,7 @@ When might you use this feature? In this experiment, it would be nice to tag eac
 
 ```javascript
 var test = {
-  type: "image-keyboard-response",
+  type: jsPsychImageKeyboardResponse,
   stimulus: jsPsych.timelineVariable('stimulus'),
   choices: ['f', 'j'],
   data: {
@@ -932,7 +932,7 @@ Now we can use `timelineVariable()` in the `data` parameter of the `test` trial.
 
 ```javascript
 var test = {
-  type: "image-keyboard-response",
+  type: jsPsychImageKeyboardResponse,
   stimulus: jsPsych.timelineVariable('stimulus'),
   choices: ['f', 'j'],
   data: {
@@ -946,7 +946,7 @@ Another kind of tagging that would be useful is to mark each fixation trial as s
 
 ```js
 var fixation = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: '<div style="font-size:60px;">+</div>',
   choices: jsPsych.NO_KEYS,
   trial_duration: function(){
@@ -986,21 +986,21 @@ var fixation = {
 
         /* preload images */
         var preload = {
-          type: 'preload',
+          type: jsPsychPreload,
           images: ['img/blue.png', 'img/orange.png']
         }
         timeline.push(preload);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -1026,7 +1026,7 @@ var fixation = {
         ];
 
         var fixation = {
-          type: 'html-keyboard-response',
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
           choices: jsPsych.NO_KEYS,
           trial_duration: function(){
@@ -1038,7 +1038,7 @@ var fixation = {
         }
 
         var test = {
-          type: "image-keyboard-response",
+          type: jsPsychImageKeyboardResponse,
           stimulus: jsPsych.timelineVariable('stimulus'),
           choices: ['f', 'j'],
           data: {
@@ -1075,7 +1075,7 @@ For this example, we'll calculate whether the subject responded correctly, and a
 
 ```javascript
 var test = {
-  type: "image-keyboard-response",
+  type: jsPsychImageKeyboardResponse,
   stimulus: jsPsych.timelineVariable('stimulus'),
   choices: ['f', 'j'],
   data: {
@@ -1118,21 +1118,21 @@ The `data.response` value is a string representation of the key the subject pres
 
         /* preload images */
         var preload = {
-          type: 'preload',
+          type: jsPsychPreload,
           images: ['img/blue.png', 'img/orange.png']
         }
         timeline.push(preload);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -1158,7 +1158,7 @@ The `data.response` value is a string representation of the key the subject pres
         ];
 
         var fixation = {
-          type: 'html-keyboard-response',
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
           choices: jsPsych.NO_KEYS,
           trial_duration: function(){
@@ -1170,7 +1170,7 @@ The `data.response` value is a string representation of the key the subject pres
         }
 
         var test = {
-          type: "image-keyboard-response",
+          type: jsPsychImageKeyboardResponse,
           stimulus: jsPsych.timelineVariable('stimulus'),
           choices: ['f', 'j'],
           data: {
@@ -1209,7 +1209,7 @@ Here's what the code looks like, and a description follows below.
 
 ```js
 var debrief_block = {
-  type: "html-keyboard-response",
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: function() {
 
     var trials = jsPsych.data.get().filter({task: 'response'});
@@ -1265,21 +1265,21 @@ This code is available in the `/examples` folder in the jsPsych release download
 
     /* preload images */
     var preload = {
-      type: 'preload',
+      type: jsPsychPreload,
       images: ['img/blue.png', 'img/orange.png']
     }
     timeline.push(preload);
 
     /* define welcome message trial */
     var welcome = {
-      type: "html-keyboard-response",
+      type: jsPsychHtmlKeyboardResponse,
       stimulus: "Welcome to the experiment. Press any key to begin."
     };
     timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
-      type: "html-keyboard-response",
+      type: jsPsychHtmlKeyboardResponse,
       stimulus: `
         <p>In this experiment, a circle will appear in the center 
         of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -1305,7 +1305,7 @@ This code is available in the `/examples` folder in the jsPsych release download
     ];
 
     var fixation = {
-      type: 'html-keyboard-response',
+      type: jsPsychHtmlKeyboardResponse,
       stimulus: '<div style="font-size:60px;">+</div>',
       choices: jsPsych.NO_KEYS,
       trial_duration: function(){
@@ -1317,7 +1317,7 @@ This code is available in the `/examples` folder in the jsPsych release download
     }
 
     var test = {
-      type: "image-keyboard-response",
+      type: jsPsychImageKeyboardResponse,
       stimulus: jsPsych.timelineVariable('stimulus'),
       choices: ['f', 'j'],
       data: {
@@ -1340,7 +1340,7 @@ This code is available in the `/examples` folder in the jsPsych release download
     /* define debrief */
 
     var debrief_block = {
-      type: "html-keyboard-response",
+      type: jsPsychHtmlKeyboardResponse,
       stimulus: function() {
 
         var trials = jsPsych.data.get().filter({task: 'response'});

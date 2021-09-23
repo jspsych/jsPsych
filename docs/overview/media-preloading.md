@@ -13,26 +13,26 @@ jsPsych can automatically preload audio, video, and image files that are used as
 // the "auto_preload: true" setting tells the plugin to automatically find 
 // stimuli to preload based the main experiment timeline (used in jsPsych.run)
 var preload = {
-	type: 'preload',
+	type: jsPsychPreload,
 	auto_preload: true 
 }
 
 // this image file can be automatically preloaded 
 var image_trial = {
-	type: 'image-keyboard-response',
+	type: jsPsychImageKeyboardResponse,
 	stimulus: 'img/file1.png'
 }
 
 // the sound file can be automatically preloaded 
 var sound_trial = {
-	type: 'audio-keyboard-response',
+	type: jsPsychAudioKeyboardResponse,
 	stimulus: 'audio/hello.mp3'
 }
 
 // the video file can be automatically preloaded (as long as the experiment 
 // is running on a server)
 var video_trial = {
-	type: 'video',
+	type: jsPsychVideoKeyboardResponse,
 	stimulus: ['video/sample_video.mp4']
 }
 
@@ -47,14 +47,14 @@ If you are using media files in your experiment but they are not being passed di
 // this image file cannot be automatically preloaded because it is embedded in 
 // an HTML string
 var image_trial = {
-	type: 'html-keyboard-response',
+	type: jsPsychHtmlKeyboardResponse,
 	stimulus: '<img src="img/file1.png"></img>',
 }
 
 // this audio file cannot be automatically preloaded because it is returned 
 // from a function
 var sound_trial = {
-	type: 'audio-keyboard-response',
+	type: jsPsychAudioKeyboardResponse,
 	stimulus: function() { return 'audio/sound1.mp3' }
 }
 
@@ -63,7 +63,7 @@ var sound_trial = {
 var video_trials = {
 	timeline: [
 		{
-			type: 'video',
+			type: jsPsychVideoKeyboardResponse,
 			stimulus: jsPsych.timelineVariable('video')
 		}
 	],
@@ -82,7 +82,7 @@ var video = ['video/1.mp4', 'video/2.mp4'];
 // these array can be passed into the preload plugin using the images, audio 
 // and video parameters
 var preload = {
-	type: 'preload',
+	type: jsPsychPreload,
 	images: images,
 	audio: audio,
 	video: video
@@ -99,13 +99,13 @@ It's possible to combine automatic and manual preloading. For instance, you may 
 ```javascript
 // this file can be preloaded automatically
 var image_trial = {
-	type: 'image-keyboard-response',
+	type: jsPsychImageKeyboardResponse,
 	stimulus: 'img/file1.png'
 }
 
 // this file can be preloaded automatically
 var sound_trial = {
-	type: 'audio-keyboard-response',
+	type: jsPsychAudioKeyboardResponse,
 	stimulus: 'audio/hello.mp3'
 }
 
@@ -113,7 +113,7 @@ var sound_trial = {
 var video_trials = {
 	timeline: [
 		{
-			type: 'video',
+			type: jsPsychVideoKeyboardResponse,
 			stimulus: jsPsych.timelineVariable('video')
 		}
 	],
@@ -126,7 +126,7 @@ var video_trials = {
 var video = ['video/1.mp4', 'video/2.mp4'];
 
 var preload = {
-	type: 'preload',
+	type: jsPsychPreload,
 	auto_preload: true, // automatically preload the image and audio files
 	video: video // manually preload the videos used with timeline variables
 }
@@ -146,11 +146,11 @@ Here is an example with trials where the stimuli files can be preloaded automati
 var block_1 = {
 	timeline: [
 		{
-			type: 'image-keyboard-response',
+			type: jsPsychImageKeyboardResponse,
 			stimulus: 'img/file1.png'
 		},
 		{
-			type: 'image-keyboard-response',
+			type: jsPsychImageKeyboardResponse,
 			stimulus: 'img/file2.png'
 		}
 	]
@@ -159,23 +159,23 @@ var block_1 = {
 var block_2 = {
 	timeline: [
 		{
-			type: 'image-keyboard-response',
+			type: jsPsychImageKeyboardResponse,
 			stimulus: 'img/file3.png'
 		},
 		{
-			type: 'image-keyboard-response',
+			type: jsPsychImageKeyboardResponse,
 			stimulus: 'img/file4.png'
 		}
 	]
 }
 
 var preload_1 = {
-	type: 'preload',
+	type: jsPsychPreload,
 	trials: block_1 // automatically preload just the images from block_1 trials
 }
 
 var preload_2 = {
-	type: 'preload',
+	type: jsPsychPreload,
 	trials: block_2 // automatically preload just the images from block_2 trials
 }
 
@@ -211,13 +211,13 @@ var images_block_2 = ['file3.png', 'file4.png'];
 
 // preload trial for preloading the block 1 stimuli
 var preload_1 = {
-	type: 'preload',
+	type: jsPsychPreload,
 	images: images_block_1
 }
 
 // preload trial for preloading the block 2 stimuli
 var preload_2 = {
-	type: 'preload',
+	type: jsPsychPreload,
 	images: images_block_2
 }
 
@@ -234,7 +234,7 @@ By default, the `preload` plugin will display a progress bar while files are bei
 
 ```javascript
 var preload_trial = {
-	type: 'preload',
+	type: jsPsychPreload,
 	auto_preload: true
 	show_progress_bar: false // hide progress bar
 }
@@ -246,7 +246,7 @@ It's usually a good idea to set a time limit for file loading, to ensure that pa
 
 ```javascript
 var preload_trial = {
-	type: 'preload',
+	type: jsPsychPreload,
 	auto_preload: true
 	max_load_time: 60000 // 1 minute
 }
@@ -258,7 +258,7 @@ It's possible to specify custom messages to be shown on the page while the media
 
 ```javascript
 var preload_trial = {
-	type: 'preload',
+	type: jsPsychPreload,
 	auto_preload: true
 	message: 'Please wait while the experiment loads. This may take a few minutes.',
 }
@@ -268,7 +268,7 @@ A preloading error will occur when either (a) one or more files produces a loadi
 
 ```javascript
 var preload_trial = {
-	type: 'preload',
+	type: jsPsychPreload,
 	auto_preload: true,
 	error_message: 'The experiment failed to load. Please contact the researcher.'
 }
@@ -280,7 +280,7 @@ Detailed error messages can be useful when testing and debugging your experiment
 
 ```javascript
 var preload_trial = {
-	type: 'preload',
+	type: jsPsychPreload,
 	auto_preload: true,
 	// show details of any file loading errors and/or loading time out
 	show_detailed_errors: true 
@@ -293,7 +293,7 @@ If `continue_after_error` is `true`, then the experiment _will not stop_ if one 
 
 ```javascript
 var preload_trial = {
-	type: 'preload',
+	type: jsPsychPreload,
 	auto_preload: true,
 	message: 'Please wait while the experiment loads...',
 	// don't stop the experiment if there are file loading errors or if loading times out
@@ -301,7 +301,7 @@ var preload_trial = {
 }
 
 var save_data = {
-    type: 'call-function',
+    type: jsPsychCallFunction,
     async: true,
     func: function(done){
 		var data = jsPsych.data.get().json();
@@ -311,7 +311,7 @@ var save_data = {
 
 // the experiment will stop here, since there are no valid key choices or trial duration 
 var fail_message = {
-	type: 'html-keyboard-response',
+	type: jsPsychHtmlKeyboardResponse,
 	stimulus: 'The experiment failed to load. Please contact the researcher.',
 	choices: jsPsych.NO_KEYS,
 	trial_duration: null 
@@ -345,7 +345,7 @@ var file_load_count = 0;
 var file_error_count = 0;
 
 var preload_trial = {
-    type: 'preload',
+    type: jsPsychPreload,
     auto_preload: true,
     on_error: function(file) {
 		file_error_count++;

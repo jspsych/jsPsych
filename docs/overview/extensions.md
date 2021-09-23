@@ -9,14 +9,14 @@ To use an extension in an experiment, you'll load the extension file via a `<scr
 ```html
 <head>
   <script src="jspsych/jspsych.js"></script>
-  <script src="jspsych/extensions/some-extension.js"></script>
+  <script src="jspsych/extensions/example.js"></script>
 </head>
 ```
 
 ```js
 initJsPsych({
   extensions: [
-    {type: 'some-extension', params: {...} }
+    {type: jsPsychExtensionExample, params: {...} }
   ]
 })
 ```
@@ -26,7 +26,7 @@ To enable an extension during a trial, add the extension to the `extensions` lis
 ```js
 var trial = {
   extensions: [
-    {type: 'some-extension', params: {...} }
+    {type: jsPsychExtensionExample, params: {...} }
   ]
 }
 ```

@@ -12,7 +12,7 @@ In the example below, the stimulus font size is set to 30px and the text color i
 
 ```javascript
 var trial = {
-	type: 'html-keyboard-response',
+	type: jsPsychHtmlKeyboardResponse,
 	stimulus: '<p style="font-size:30px;color:red;">hello world!</p>'
 }
 ```
@@ -21,7 +21,7 @@ You can also use a [dynamic parameter](/overview/dynamic-parameters) to combine 
 
 ```javascript
 var trial = {
-	type: 'html-keyboard-response',
+	type: jsPsychHtmlKeyboardResponse,
 	stimulus: function() {
         var stim = '<p style="font-size:30px;font-weight:bold;">'+jsPsych.timelineVariable('text')+'</p>';
         return stim;
@@ -147,7 +147,7 @@ You can use a static `css_classes` parameter value if you always want to apply t
 </head>
 <script>
 var fixation = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: '+',
     choices: jsPsych.NO_KEYS,
     trial_duration: 500,
@@ -187,7 +187,7 @@ In the example below, the CSS selector `.left-align #stimulus` selects the eleme
 <script>
 var trial_procedure = {
     timeline: [{
-        type: 'html-keyboard-response',
+        type: jsPsychHtmlKeyboardResponse,
         stimulus: '<p id="stimulus">This is the stimulus.</p>',
         prompt: '<p>This text will not be affected by the CSS classes '+
             'because it does not have the "stimulus" ID.</p>',
@@ -219,7 +219,7 @@ It's also possible to pass multiple class names to the `css_classes` parameter. 
 <script>
 var trial_procedure = {
     timeline: [{
-        type: 'html-keyboard-response',
+        type: jsPsychHtmlKeyboardResponse,
         stimulus: '<p id="stimulus">This is the stimulus.</p>',
         prompt: '<p>This text will not be affected by the CSS classes '+
             'because it does not have the "stimulus" ID.</p>',

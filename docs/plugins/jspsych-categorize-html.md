@@ -40,7 +40,7 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
     === "Code"
         ```javascript
             var categorization_trial = {
-                type: 'categorize-html',
+                type: jsPsychCategorizeHtml,
                 stimulus: '<p>B</p>',
                 key_answer: 'p',
                 text_answer: 'letter',

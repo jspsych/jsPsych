@@ -65,9 +65,10 @@ _Note: The deg data are **only** returned if viewing distance is estimated with 
 
 ???+ example "Measure distance to screen and pixel ratio; no resizing"
     === "Code"
+
         ```javascript
         var trial = {
-            type: 'virtual-chinrest',
+            type: jsPsychVirtualChinrest,
             blindspot_reps: 3,
             resize_units: "none"
         };
@@ -79,16 +80,17 @@ _Note: The deg data are **only** returned if viewing distance is estimated with 
 
 ???+ example "Resizing based on centimeters per pixel"
     === "Code"
+
         ```javascript
         var trial = {
-          type: 'virtual-chinrest',
+          type: jsPsychVirtualChinrest,
           blindspot_reps: 3,
           resize_units: "cm",
           pixels_per_unit: 50
         };
 
         var resized_stimulus = {
-          type: 'html-button-response',
+          type: jsPsychHtmlButtonResponse,
           stimulus: `
             <p>If the measurements were done correctly, the square below should be 10 cm x 10 cm.</p>
             <div style="background-color: black; width: 500px; height: 500px; margin: 20px auto;"></div>
@@ -103,16 +105,17 @@ _Note: The deg data are **only** returned if viewing distance is estimated with 
 
 ???+ example "Resizing based on degrees of visual angle per pixel"
     === "Code"
+
         ```javascript
         var trial = {
-          type: 'virtual-chinrest',
+          type: jsPsychVirtualChinrest,
           blindspot_reps: 3,
           resize_units: "deg",
           pixels_per_unit: 50
         };
 
         var resized_stimulus = {
-          type: 'html-button-response',
+          type: jsPsychHtmlButtonResponse,
           stimulus: `
             <p>If the measurements were done correctly, the square below should take up about 10 degrees of visual angle.</p>
             <div style="background-color: black; width: 500px; height: 500px; margin: 20px auto;"></div>

@@ -37,15 +37,17 @@ slider_start | numeric | The starting value of the slider.
 
 ???+ example "Displaying question until subject move the slider"
     === "Code"
+
         ```javascript
         var trial = {
-            type: 'html-slider-response',
+            type: jsPsychHtmlSliderResponse,
             stimulus: '<p>Running</p>',
             require_movement: true,
             labels: ['healthy', 'unhealthy'],
             prompt: "<p>How healthy/unhealthy is this activity?</p>"
         };
         ```
+
 	=== "Demo"
         <div style="text-align:center;">
             <iframe src="../plugins/demos/jspsych-html-slider-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>

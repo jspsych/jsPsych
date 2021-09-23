@@ -47,6 +47,7 @@ var grid_stimulus = jsPsych.plugins['vsl-grid-scene'].generate_stimulus(pattern,
 
 ???+ example "Displaying a scene"
     === "Code"
+
         ```javascript
         var scene = [
           ["img/1.gif", "img/2.gif", 0],
@@ -55,7 +56,7 @@ var grid_stimulus = jsPsych.plugins['vsl-grid-scene'].generate_stimulus(pattern,
         ]
 
         var trial = {
-            type: 'vsl-grid-scene',
+            type: jsPsychVslGridScene,
             stimuli: scene,
             trial_duration: 1500
         };

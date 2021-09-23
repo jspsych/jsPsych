@@ -49,9 +49,10 @@ start | numeric | The start time of the video clip.
 
 ???+ example "Rate enjoyment of a video clip"
     === "Code"
+    
         ```javascript
         var trial = {
-          type: 'video-slider-response',
+          type: jsPsychVideoSliderResponse,
           stimulus: [
             'video/fish.mp4'
           ],

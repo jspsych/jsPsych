@@ -36,9 +36,10 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ???+ example "Displaying a short sequence with default options"
     === "Code"
+
         ```javascript
         var trial = {
-          type: 'vsl-animate-occlusion',
+          type: jsPsychVslAnimateOcclusion,
           stimuli: [
             "img/1.gif",
             "img/2.gif",

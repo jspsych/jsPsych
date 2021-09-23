@@ -43,9 +43,10 @@ stimulus | array | The `stimulus` array. This will be encoded as a JSON string w
 
 ???+ example "Responses disabled until the video is complete"
     === "Code"
+
         ```javascript
         var trial = {
-          type: 'video-button-response',
+          type: jsPsychVideoButtonResponse,
           stimulus: [
             'video/fish.mp4'
           ],

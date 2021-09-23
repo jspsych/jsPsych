@@ -43,26 +43,27 @@ In addition to the [default data collected by all plugins](/overview/plugins/#da
 
 ???+ example "Automatically preloading based on other trials"
     === "Code"
+
         ```javascript
         var preload = {
-            type: 'preload',
+            type: jsPsychPreload,
             auto_preload: true
         }
 
         var trial_1 = {
-            type: 'image-button-response',
+            type: jsPsychImageButtonResponse,
             stimulus: 'img/happy_face_1.jpg',
             choices: ['Next']
         }
 
         var trial_2 = {
-            type: 'image-button-response',
+            type: jsPsychImageButtonResponse,
             stimulus: 'img/happy_face_2.jpg',
             choices: ['Next']
         }
 
         var trial_3 = {
-            type: 'image-button-response',
+            type: jsPsychImageButtonResponse,
             stimulus: 'img/happy_face_3.jpg',
             choices: ['Next']
         }
@@ -78,14 +79,15 @@ In addition to the [default data collected by all plugins](/overview/plugins/#da
 
 ???+ example "Manually preloading an image"
     === "Code"
+
         ```javascript
         var preload = {
-            type: 'preload',
+            type: jsPsychPreload,
             images: ['img/sad_face_1.jpg']
         }
 
         var trial_1 = {
-            type: 'html-button-response',
+            type: jsPsychHtmlButtonResponse,
             stimulus: `
                 <p>Study this face</p>
                 <img src="img/sad_face_1.jpg"></img>
@@ -104,23 +106,24 @@ In addition to the [default data collected by all plugins](/overview/plugins/#da
 
 ???+ example "Loading files in batches"
     === "Code"
+
         ```javascript
         var jsPsych = initJsPsych();
 
         var trial_1 = {
-            type: 'image-button-response',
+            type: jsPsychImageButtonResponse,
             stimulus: 'img/happy_face_1.jpg',
             choices: ['Next']
         }
 
         var trial_2 = {
-            type: 'image-button-response',
+            type: jsPsychImageButtonResponse,
             stimulus: 'img/happy_face_2.jpg',
             choices: ['Next']
         }
 
         var trial_3 = {
-            type: 'image-button-response',
+            type: jsPsychImageButtonResponse,
             stimulus: 'img/happy_face_3.jpg',
             choices: ['Next']
         }
@@ -130,19 +133,19 @@ In addition to the [default data collected by all plugins](/overview/plugins/#da
         }
 
         var trial_4 = {
-            type: 'image-button-response',
+            type: jsPsychImageButtonResponse,
             stimulus: 'img/sad_face_1.jpg',
             choices: ['Next']
         }
 
         var trial_5 = {
-            type: 'image-button-response',
+            type: jsPsychImageButtonResponse,
             stimulus: 'img/sad_face_2.jpg',
             choices: ['Next']
         }
 
         var trial_6 = {
-            type: 'image-button-response',
+            type: jsPsychImageButtonResponse,
             stimulus: 'img/sad_face_3.jpg',
             choices: ['Next']
         }
@@ -152,12 +155,12 @@ In addition to the [default data collected by all plugins](/overview/plugins/#da
         }
 
         var preload_block_1 = {
-            type: 'preload',
+            type: jsPsychPreload,
             trials: [block_1]
         }
 
         var preload_block_2 = {
-            type: 'preload',
+            type: jsPsychPreload,
             trials: [block_2]
         }
 
@@ -174,9 +177,10 @@ In addition to the [default data collected by all plugins](/overview/plugins/#da
 
 ???+ example "Showing a detailed error message for debugging loading issues"
     === "Code"
+
         ```javascript
         var preload = {
-            type: 'preload',
+            type: jsPsychPreload,
             images: ['img/bad_file_path.png'],
             show_detailed_errors: true
         }

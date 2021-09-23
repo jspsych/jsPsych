@@ -43,14 +43,16 @@ slider_start | numeric | The starting value of the slider.
 
 ???+ example "Displaying trial until subject gives a response"
     === "Code"
+
         ```javascript
         var trial = {
-            type: 'image-slider-response',
+            type: jsPsychImageSliderResponse,
             stimulus: 'img/happy_face_1.png',
             labels: ['happy', 'sad'],
             prompt: "<p>How happy/sad is this person?</p>",
         };
         ```
+        
     === "Demo"
         <div style="text-align:center;">
             <iframe src="/demos/jspsych-image-slider-response-demo1.html" width="90%;" height="850px;" frameBorder="0"></iframe>

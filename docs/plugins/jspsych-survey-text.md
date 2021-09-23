@@ -28,9 +28,10 @@ question_order | array | An array with the order of questions. For example `[2,0
 
 ???+ example "Single question and response"
     === "Code"
+
         ```javascript
         var trial = {
-          type: 'survey-text',
+          type: jsPsychSurveyText,
           questions: [
             {prompt: 'How old are you?'}
           ]
@@ -46,9 +47,10 @@ question_order | array | An array with the order of questions. For example `[2,0
 
 ???+ example "Multiple questions, with an optional placeholder and a required question"
     === "Code"
+
         ```javascript
         var trial = {
-          type: 'survey-text',
+          type: jsPsychSurveyText,
           questions: [
             {prompt: 'What is your date of birth?', placeholder: 'mm/dd/yyyy', required: true},
             {prompt: 'What country do you currently live in?'}
@@ -65,9 +67,10 @@ question_order | array | An array with the order of questions. For example `[2,0
 
 ???+ example "Naming questions to improve readability of the stored data"
     === "Code"
+
         ```javascript
         var trial = {
-          type: 'survey-text',
+          type: jsPsychSurveyText,
           questions: [
             {prompt: 'What did you eat for breakfast?', name: 'Breakfast'},
             {prompt: 'What did you eat for lunch?', name: 'Lunch'}
@@ -85,9 +88,10 @@ question_order | array | An array with the order of questions. For example `[2,0
     
 ???+ example "Using the preamble and a longer textbox response"
     === "Code"
+
         ```javascript
         var trial = {
-          type: 'survey-text',
+          type: jsPsychSurveyText,
           preamble: `<img src="img/navarro_burst_03.jpg" style="width:400px;"></img>`,
           questions: [
             {prompt: 'Describe your reaction to the image above', rows: 5}
