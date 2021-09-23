@@ -118,7 +118,7 @@ var instructions = {
     <div style='width: 700px;'>
     <div style='float: left;'><img src='img/blue.png'></img>
     <p class='small'><strong>Press the F key</strong></p></div>
-    <div class='float: right;'><img src='img/orange.png'></img>
+    <div style='float: right;'><img src='img/orange.png'></img>
     <p class='small'><strong>Press the J key</strong></p></div>
     </div>
     <p>Press any key to begin.</p>
@@ -180,7 +180,7 @@ timeline.push(instructions);
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
             <p class='small'><strong>Press the F key</strong></p></div>
-            <div class='float: right;'><img src='img/orange.png'></img>
+            <div style='float: right;'><img src='img/orange.png'></img>
             <p class='small'><strong>Press the J key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
@@ -272,7 +272,7 @@ timeline.push(blue_trial, orange_trial);
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
             <p class='small'><strong>Press the F key</strong></p></div>
-            <div class='float: right;'><img src='img/orange.png'></img>
+            <div style='float: right;'><img src='img/orange.png'></img>
             <p class='small'><strong>Press the J key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
@@ -386,7 +386,7 @@ timeline.push(preload);
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
             <p class='small'><strong>Press the F key</strong></p></div>
-            <div class='float: right;'><img src='img/orange.png'></img>
+            <div style='float: right;'><img src='img/orange.png'></img>
             <p class='small'><strong>Press the J key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
@@ -518,7 +518,7 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
             <p class='small'><strong>Press the F key</strong></p></div>
-            <div class='float: right;'><img src='img/orange.png'></img>
+            <div style='float: right;'><img src='img/orange.png'></img>
             <p class='small'><strong>Press the J key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
@@ -631,7 +631,7 @@ var test_procedure = {
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
             <p class='small'><strong>Press the F key</strong></p></div>
-            <div class='float: right;'><img src='img/orange.png'></img>
+            <div style='float: right;'><img src='img/orange.png'></img>
             <p class='small'><strong>Press the J key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
@@ -742,7 +742,7 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
             <p class='small'><strong>Press the F key</strong></p></div>
-            <div class='float: right;'><img src='img/orange.png'></img>
+            <div style='float: right;'><img src='img/orange.png'></img>
             <p class='small'><strong>Press the J key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
@@ -854,7 +854,7 @@ var jsPsych = initJsPsych({
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
             <p class='small'><strong>Press the F key</strong></p></div>
-            <div class='float: right;'><img src='img/orange.png'></img>
+            <div style='float: right;'><img src='img/orange.png'></img>
             <p class='small'><strong>Press the J key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
@@ -1010,7 +1010,7 @@ var fixation = {
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
             <p class='small'><strong>Press the F key</strong></p></div>
-            <div class='float: right;'><img src='img/orange.png'></img>
+            <div style='float: right;'><img src='img/orange.png'></img>
             <p class='small'><strong>Press the J key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
@@ -1142,7 +1142,7 @@ The `data.response` value is a string representation of the key the subject pres
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
             <p class='small'><strong>Press the F key</strong></p></div>
-            <div class='float: right;'><img src='img/orange.png'></img>
+            <div style='float: right;'><img src='img/orange.png'></img>
             <p class='small'><strong>Press the J key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
@@ -1289,7 +1289,7 @@ This code is available in the `/examples` folder in the jsPsych release download
         <div style='width: 700px;'>
         <div style='float: left;'><img src='img/blue.png'></img>
         <p class='small'><strong>Press the F key</strong></p></div>
-        <div class='float: right;'><img src='img/orange.png'></img>
+        <div style='float: right;'><img src='img/orange.png'></img>
         <p class='small'><strong>Press the J key</strong></p></div>
         </div>
         <p>Press any key to begin.</p>
