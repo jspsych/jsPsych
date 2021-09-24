@@ -242,7 +242,10 @@ An object with properties for each media type: `images`, `audio`, and `video`. E
 
 This method is used to automatically generate lists of unique image, audio, and video files from a timeline. It is used by the `preload` plugin to generate a list of to-be-preloaded files based on the trials passed to the `trials` parameter and/or the experiment timeline passed to `jsPsych.run` (when `auto_preload` is true). It can be used in custom plugins and experiment code to generate a list of audio/image/video files, based on a timeline. 
 
-This function will only return files from plugins that have used the `registerPreload` method to define the media types of their parameters, and only when the trial's parameter value is not a function. When a file path is returned to the trial parameter from a function (including by  `jsPsych.timelineVariable` function), or when the file path is embedded in an HTML string, that file will not be detected by the `getAutoPreloadList` method. In these cases, the file should be preloaded manually. See [Media Preloading](../overview/media-preloading.md) for more information.
+This function will only return files from plugin parameters that are marked as parameter type `AUDIO`/`IMAGE`/`VIDEO`, and only when the `preload` flag of the corresponding parameter definition has not been set to `false`, and the trial's parameter value is not a function.
+When a file path is returned to the trial parameter from a function (including the `jsPsych.timelineVariable` function), or when the file path is embedded in an HTML string, that file will not be detected by the `getAutoPreloadList` method.
+In these cases, the file should be preloaded manually.
+See [Media Preloading](../overview/media-preloading.md) for more information.
 
 ### Example
 
@@ -547,34 +550,6 @@ function startExperiment(){
   jsPsych.run(exp);
 }
 ```
-
----
-
-## jsPsych.pluginAPI.registerPreload
-
-```javascript
-jsPsych.pluginAPI.registerPreload(plugin_name, parameter, media_type)
-```
-
-### Parameters
-
-Parameter | Type | Description
-----------|------|------------
-plugin_name | string | The name of the plugin. e.g., 'image-keyboard-response'.
-parameter | string | The name of the parameter that is a media file. e.g., 'stimulus'
-media_type | string | The type of media, either 'image', 'audio' or 'video'.
-
-### Return value
-
-Nothing.
-
-### Description
-
-Use this method in a plugin file to mark a parameter as containing an element that should be preloaded. The method should be called in the plugin file such that it gets called when the file is loaded.
-
-### Example
-
-For an example, see the [image-keyboard-response](https://github.com/jspsych/jsPsych/blob/master/plugins/jspsych-image-keyboard-response.js) and [audio-keyboard-response](https://github.com/jspsych/jsPsych/blob/master/plugins/jspsych-audio-keyboard-response.js) plugins.
 
 ---
 
