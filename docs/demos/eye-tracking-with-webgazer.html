@@ -9,8 +9,8 @@
     <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@1.0.0"></script>
-    <script src="https://unpkg.com/jspsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
-    <script src="https://unpkg.com/@jspsych/extensions/jspsych-ext-webgazer@1.0.0"></script>
+    <script src="js/webgazer/webgazer.js"></script>
+    <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.0"></script>
     <link
       rel="stylesheet"
       href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css"
@@ -32,7 +32,7 @@
 
       var preload = {
         type: jsPsychPreload,
-        images: ['https://unpkg.com/jspsych@7.0.0/examples/img/blue.png']
+        images: ['img/blue.png']
       }
 
       var camera_instructions = {
@@ -134,7 +134,7 @@
 
       var trial = {
         type: jsPsychImageKeyboardResponse,
-        stimulus: 'https://unpkg.com/jspsych@7.0.0/examples/img/blue.png',
+        stimulus: 'img/blue.png',
         choices: jsPsych.NO_KEYS,
         trial_duration: 2000,
         extensions: [
