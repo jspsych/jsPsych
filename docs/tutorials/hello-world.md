@@ -10,7 +10,7 @@ With the release of version 7.0 of jsPsych there are now three different ways th
 
 - [**I want to be able to do some customization, but have a simple setup.**](#option-2-download-and-host-jspsych). This approach involves downloading a bundle of scripts that make up jsPsych. _If you used jsPsych prior to version 7.0, this will feel like the most familiar approach_. Having your own copy of the scripts means that you can make modifications to the library such as tweaking plugin behavior.
 
-- [**I want to use modern JavaScript tooling, like `npm` and `import` statements.**](#option-3-using-npm) You can install jsPsych, plugins for jsPsych, and extensions for jsPsych from npm. This approach allows you to integrate jsPsych into your favorite JavaScript frameworks and get the benefits of TypeScript, bundlers, and more.
+- [**I want to use modern JavaScript tooling, like `npm` and `import` statements.**](#option-3-using-npm) You can install jsPsych, plugins for jsPsych, and extensions for jsPsych from NPM. This approach allows you to integrate jsPsych into your favorite JavaScript frameworks and get the benefits of TypeScript, bundlers, and more.
 
 ## Option 1: Using CDN-hosted scripts
 
@@ -355,27 +355,38 @@ Now that we have the trial defined we need to tell jsPsych to run an experiment 
 
 Once you've saved the file, open it in a browser. You should see "Hello world!" printed on the screen, and if you press a key on the keyboard, the text should disappear (ending the trial).
 
-## Option 3: Using npm
+## Option 3: Using NPM
 
 If you are electing to use `npm` to install jsPsych we will assume that you already are familiar with Node.js and generally know what you are doing with web development.
+We will also assume that you are using a [webpack](https://webpack.js.org/) or a similar bundler.
+
+!!! info
+  You may want to check out the [jsPsych Builder](https://github.com/bjoluc/jspsych-builder) CLI utility.
+  jsPsych Builder allows you to automate the experiment setup, spin up a development server, and transpile and bundle scripts and styles using webpack.
+  Using jsPsych Builder will automate some of the steps in this tutorial, so if you prefer that option, you may want to switch to the getting started instructions on the jsPsych Builder GitHub page.
 
 ### Step 1: Install jspsych
 
-Run `npm install jspsych`. 
+Run `npm install jspsych`.
 
-This installs the core jsPsych package. Plugins and extensions are installed separately.
+This installs the core jsPsych package.
+Plugins and extensions are installed separately.
 
-### Step 2: Import the JsPsych class and create a new instance
+### Step 2: Import the `initJsPsych` function and create a new `JsPsych` instance
 
-We create a new instance of `JsPsych`. The instance can be configured via [a variety of options](/reference/jspsych.md#initjspsych), passed as an object to the constructor.
+We create a new instance of the `JsPsych` class by calling `initJsPsych`.
+The instance can optionally be configured via [a variety of options](../reference/jspsych.md#initjspsych), passed as an object to `initJsPsych`.
 
 ```js
-import {JsPsych} from 'jspsych';
+import {initJsPsych} from 'jspsych';
 
-const jsPsych = new JsPsych();
+const jsPsych = initJsPsych();
 ```
 
-### Step 3: stylesheet??
+### Step 3: Static markup and CSS
+
+jsPsych requires nothing but a body element in your HTML document.
+For the jsPsych stylesheet, depending on your bundler setup, you can either directly `import 'jspsych/css/jspsych.css'` into your JavaScript file or add a link tag (like `<link href="path/to/jspsych.css" rel="stylesheet" type="text/css" />`) to your HTML document's head.
 
 ### Step 4: Install and import a plugin
 
@@ -386,25 +397,29 @@ Install the `html-keyboard-response` plugin with:
 Then import the `htmlKeyboardResponse` plugin class.
 
 ```js
-import {JsPsych} from 'jspsych';
+import {initJsPsych} from 'jspsych';
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
-const jsPsych = new JsPsych();
+const jsPsych = initJsPsych();
 ```
 
 ### Step 5: Create a trial
 
-Once the plugin is imported we can create a trial using the plugin. To declare a trial that uses the `html-keyboard-response` plugin, we create an object with the property `type` equal to `htmlKeyboardResponse`. We can specify the other parameters of the plugin in the same object. Here we use the `stimulus` parameter to include a message. You can see the full set of parameters for each plugin on its [documentation page](/plugins/jspsych-html-keyboard-response).
+Once the plugin is imported we can create a trial using the plugin.
+To declare a trial that uses the `html-keyboard-response` plugin, we create an object with the property `type` equal to `htmlKeyboardResponse`.
+We can specify the other parameters of the plugin in the same object.
+Here we use the `stimulus` parameter to include a message.
+You can see the full set of parameters for each plugin on its [documentation page](/plugins/jspsych-html-keyboard-response).
 
 ```js
-import {JsPsych} from 'jspsych';
+import {initJsPsych} from 'jspsych';
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
-const jsPsych = new JsPsych();
+const jsPsych = initJsPsych();
 
 const trial = {
   type: htmlKeyboardResponse,
-  stimulus: 'Hello world!'
+  stimulus: 'Hello world!',
 }
 ```
 
@@ -413,17 +428,15 @@ const trial = {
 Now that we have the trial defined we need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.run` function and passing in a [timeline](/overview/timeline). For a simple experiment like this one, the timeline is just an array containing the list of trials to run.
 
 ```js
-import {JsPsych} from 'jspsych';
+import {initJsPsych} from 'jspsych';
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
-const jsPsych = new JsPsych();
+const jsPsych = initJsPsych();
 
 const trial = {
   type: htmlKeyboardResponse,
-  stimulus: 'Hello world!'
+  stimulus: 'Hello world!',
 }
 
 jsPsych.run([trial]);
 ```
-
-
