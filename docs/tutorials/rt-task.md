@@ -821,7 +821,7 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
 
 We have created a complete, if simple, experiment at this point, so let's take a look at the data being generated. jsPsych has a built-in [function called `jsPsych.data.displayData()`](/reference/jspsych-data.md#jspsychdatadisplaydata) that is useful for debugging your experiment. It will remove all of the information on the screen and replace it with the raw data collected so far. This isn't terribly useful when you are actually running an experiment, but it's nice for checking the data during development.
 
-We need the `displayData` function to execute when the experiment ends. One way to do this is to use the [`on_finish` callback function](/overview/callbacks.md#on_finish-experiment). This function will automatically execute once all the trials in the experiment are finished. We can specify this function in the experiment settings when we initialize jsPsych with the `initJsPsych` method.
+We need the `displayData` function to execute when the experiment ends. One way to do this is to use the [`on_finish` callback function](/overview/events.md#on_finish-experiment). This function will automatically execute once all the trials in the experiment are finished. We can specify this function in the experiment settings when we initialize jsPsych with the `initJsPsych` method.
 
 ```javascript
 var jsPsych = initJsPsych({
