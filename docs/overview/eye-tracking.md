@@ -8,27 +8,34 @@ jsPsych supports eye tracking through the [WebGazer](https://webgazer.cs.brown.e
 
 The [official version of WebGazer](https://webgazer.cs.brown.edu/#download) is currently **not** supported by jsPsych. Our [fork of the library](https://github.com/jspsych/WebGazer) contains some minor improvements aimed at the kind of experiments that jsPsych is typically used for, e.g., situations in which the timing of display screens needs to be accurate. 
 
-A copy of our fork is included in the jsPsych release, in the `/examples/js/webgazer` folder. You will need to copy this folder into your project directory. This guide will assume that the folder is located at `/js/webgazer`, but you can change the path as you'd like. 
-
-Include the `webgazer.js` file in your experiment via a `<script>` tag. 
+You must include the `webgazer.js` file in your experiment via a `<script>` tag. 
+However, the `webgazer.js` file is not part of any of the jsPsych NPM packages and is therefore not available via the unpkg.com CDN. 
+Instead, it can be found on the jsdelivr.net CDN at: "https://cdn.jsdelivr.net/gh/jspsych/jsPsych@7.0.0/examples/js/webgazer/webgazer.js".
 
 ```html
 <head>
-  <script src="jspsych/jspsych.js"></script>
-  <script src="js/webgazer/webgazer.js"></script>
+  <script src="https://unpkg.com/jspsych@7.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
 </head>
 ```
+
+!!! note 
+  A copy of our forked `webgazer.js` file is also included in the jsPsych release, in the `/examples/js/webgazer` folder. 
+  So if you prefer to download and host all of your jsPsych files (i.e. [set-up option 2](/tutorials/hello-world/#option-2-download-and-host-jspsych) in the Hello World tutorial), then another option is to load that file rather than using the jsdelivr link above. 
+  Assuming you downloaded the release and copied the `webgazer.js` file into a folder called `js/webgazer` in your root project directory, then you would load the file like this:
+  ```html
+  <script src="js/webgazer/webgazer.js"></script>
+  ```
 
 ### Load the jsPsych webgazer extension
 
 The [webgazer extension](/extensions/jspsych-ext-webgazer.md) adds functionality to jsPsych for interacting with webgazer. Load it like you would a plugin file.
 
-
 ```html
 <head>
-  <script src="jspsych/jspsych.js"></script>
-  <script src="webgazer.js"></script>
-  <script src="jspsych/extensions/jspsych-ext-webgazer.js"></script>
+  <script src="https://unpkg.com/jspsych@7.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
+  <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.0"></script>
 </head>
 ```
 
@@ -168,7 +175,7 @@ If you have tips based on your own experience please consider sharing them on ou
         <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@1.0.0"></script>
-        <script src="https://unpkg.com/jspsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
         <script src="https://unpkg.com/@jspsych/extensions/jspsych-ext-webgazer@1.0.0"></script>
         <link
           rel="stylesheet"
