@@ -127,6 +127,7 @@ nav:
   - 'Extension Development': 'developers/extension-development.md'
 - Support:
   - 'Getting Help': 'support/support.md'
+  - 'Migrating from 6.x to 7.x': 'support/migration-v7.md'
 - About:
   - 'About jsPsych': 'about/about.md'
   - 'License': 'about/license.md'
