@@ -1,8 +1,11 @@
 # Plugins
 
-In jsPsych, plugins define the kinds of trials or events that should occur during the experiment. Some plugins define very general events, like displaying a set of instructions pages, displaying an image and recording a keyboard response, or playing a sound file and recording a button response. Other plugins are more specific, like those that display particular kinds of stimuli (e.g. Random-Dot Kinematogram, visual search circle), or run a specific version of particular kind of task (e.g. the Implicit Association Test). Creating an experiment with jsPsych involves figuring out which plugins are needed to create the tasks you want your participants to perform.
+In jsPsych, plugins define the kinds of trials or events that should occur during the experiment. 
+Some plugins define very general events, like [displaying a set of instructions pages](/plugins/jspsych-instructions/), [displaying an image and recording a keyboard response](/plugins/jspsych-image-keyboard-response/), or [playing a sound file and recording a button response](/plugins/audio-button-response/). 
+Other plugins are more specific, like those that display particular kinds of stimuli (e.g., a [circular visual search array](/plugins/jspsych-visual-search-circle/)), or run a specific version of particular kind of task (e.g., the [Implicit Association Test](/plugins/jspsych-iat-image/)).
+Part of creating an experiment with jsPsych involves figuring out which plugins are needed to create the tasks you want your participants to perform.
 
-Plugins provide a structure for a particular trial or task, but often allow for significant customization and flexibility. For example, the `image-keyboard-response` plugin defines a simple structure for showing an image and collecting a keyboard response. You can specify the what the stimulus is, what keys the subject is allowed to press, and how long the stimulus should be on the screen, how long the subject has to respond, and so on. Many of these options have reasonable default values; even though the image plugin has many different parameters, you only *need* to specify the image stimulus in order to use it. Each plugin has its own documentation page, which describes what the plugin does, what options are available, and what kind of data it collects.
+Plugins provide a structure for a particular trial or task, but often allow for significant customization and flexibility. For example, the [image-keyboard-response plugin](/plugins/jspsych-image-keyboard-response/) defines a simple structure for showing an image and collecting a keyboard response. You can specify the what the stimulus is, what keys the subject is allowed to press, how long the stimulus should be on the screen, how long the subject has to respond, and so on. Many of these options have reasonable default values; even though the image plugin has many different parameters, you only *need* to specify the image stimulus in order to use it. Each plugin has its own documentation page, which describes what the plugin does, what options are available, and what kind of data it collects.
 
 ## Using a plugin
 
@@ -15,7 +18,7 @@ To use a plugin, you'll need to load the plugin's JavaScript file in your experi
 </head>
 ```
 
-Once a plugin is loaded, you can use JavaScript to define a trial that uses that plugin. All jsPsych trials need a `type` parameter, which tells jsPsych what plugin to use to run the trial. The trial's `type` is similar to the plugin name, but it always starts with "jsPsych" and is written in _camel case_ rather than with dashes between the words. The trial's `type` parameter should NOT be a string (i.e. no quotes around the `type` value). Here are some examples of plugin names and types:
+Once a plugin is loaded, you can use JavaScript to define a trial that uses that plugin. All jsPsych trials need a `type` parameter, which tells jsPsych what plugin to use to run the trial. The trial's `type` is similar to the plugin name, but it always starts with "jsPsych" and is written in _camel case_ rather than with dashes between the words. The trial's `type` parameter should NOT be a string (i.e., no quotes around the `type` value). Here are some examples of plugin names and types:
 
 | Plugin name                  | Type                         |
 | ---------------------------- | ---------------------------- |
@@ -57,11 +60,11 @@ There is also a set of parameters that can be specified for any plugin:
 | on_finish      | function | `function(){ return; }` | A callback function to execute when the trial finishes, and before the next trial begins. See [the Event-Related Callbacks page](../overview/events.md) for more details. |
 | on_load        | function | `function(){ return; }` | A callback function to execute when the trial has loaded, which typically happens after the initial display of the plugin has loaded. See [the Event-Related Callbacks page](../overview/events.md) for more details. |
 | css_classes    | string   | null                    | A list of CSS classes to add to the jsPsych display element for the duration of this trial. This allows you to create custom formatting rules (CSS classes) that are only applied to specific trials. For more information and examples, see the [Controlling Visual Appearance page](../overview/style.md) and the "css-classes-parameter.html" file in the jsPsych examples folder. |
-| save_trial_parameters | object | `{}` | An object containing any trial parameters that should or should not be saved to the trial data. Each key is the name of a trial parameter, and its value should be `true` or `false`, depending on whether or not its value should be saved to the data. If the parameter is a function that returns the parameter value, then the value that is returned will be saved to the data. If the parameter is always expected to be a function (e.g. an event-related callback function), then the function itself will be saved as a string. For more examples, see the "save-trial-parameters.html" file in the jsPsych examples folder. |
+| save_trial_parameters | object | `{}` | An object containing any trial parameters that should or should not be saved to the trial data. Each key is the name of a trial parameter, and its value should be `true` or `false`, depending on whether or not its value should be saved to the data. If the parameter is a function that returns the parameter value, then the value that is returned will be saved to the data. If the parameter is always expected to be a function (e.g., an event-related callback function), then the function itself will be saved as a string. For more examples, see the "save-trial-parameters.html" file in the jsPsych examples folder. |
 
 ### The data parameter
 
-The `data` parameter allows you to add additional properties to the trial data. This can be useful for storing properties of the trial that are not directly apparent from the values that the plugin records. The `data` parameter value should be an object that contains key-value pairs.
+The `data` parameter allows you to add additional properties to the trial data. This can be useful for storing properties of the trial that are not directly apparent from the values that the plugin records. The `data` parameter value must be an object that contains key-value pairs.
 
 A simple example is the [Flanker Task](https://en.wikipedia.org/wiki/Eriksen_flanker_task). In this experiment, participants respond to the direction of a central arrow by pressing a key to the left for a left-pointing arrow (<) and a key to the right for a right-pointing arrow (>). The arrow appears in the center of *flankers*, or arrows that the participant should ignore. Those flankers can be congruent (>>>>>) or incongruent (<<><<).
 
@@ -150,7 +153,9 @@ var trial = {
 
 ### The on_load parameter
 
-The `on_load` callback function will trigger once the trial has completed loading. For most plugins, this will occur once the display has been initially updated but before any user interactions or timed events (e.g., animations) have occurred. This can be useful for changing various aspects of the page elements and their properties that would otherwise require modifying the plugin file.
+The `on_load` callback function will trigger once the trial has completed loading. 
+For most plugins, this will occur once the display has been initially updated but before any user interactions or timed events (e.g., animations) have occurred. 
+This can be useful for changing various aspects of the page elements and their properties that would otherwise require modifying the plugin file.
 
 ```javascript
 var trial = {
@@ -167,7 +172,9 @@ var trial = {
 
 ### The css_classes parameter
 
-The `css_classes` parameter allows you to add an array of CSS class names to the jsPsych display element on that specific trial. This allows you to create custom style and formatting rules that are only applied to specific trials. If you want CSS rules that only apply to specific elements during a trial, you can use additional CSS selectors.
+The `css_classes` parameter allows you to add an array of CSS class names to the jsPsych display element on that specific trial. 
+This allows you to create custom style and formatting rules that are only applied to specific trials. 
+If you want CSS rules that only apply to specific elements during a trial, you can use additional CSS selectors.
 
 ```html
 <style>
