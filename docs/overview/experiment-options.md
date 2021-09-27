@@ -35,7 +35,7 @@ This option is useful if the experiment needs to be rendered on a page with othe
 
 ## Experiment events
 
-Several experiment-wide events can trigger functions. This is documented in more detail on the [event-related callback functions page](callbacks.md). The events that trigger functions are:
+Several experiment-wide events can trigger functions. This is documented in more detail on the [event-related callback functions page](events.md). The events that trigger functions are:
 
 * `on_finish`: Called at the end of the experiment.
 * `on_trial_start`: Called at the beginning of every trial.

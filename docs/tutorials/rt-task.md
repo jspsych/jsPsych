@@ -14,11 +14,11 @@ Despite this simple task, the tutorial covers many of the key features of jsPsyc
 
 ## Part 1: Creating a blank experiment
 
-Start by downloading jsPsych and setting up a folder to contain your experiment files. 
-If you are unsure how to do this, follow steps 1-6 in the section "Option 2: Download and host jsPsych" of the [Hello World tutorial](hello-world.md). 
-At the end of step 6, you should have an experiment page that initializes jsPsych and defines a `hello_trial`. 
-You can delete the initialization and trial code (i.e. everything inside the `<script>` and `</script>` tags after the `<body>` section), so that you just have a blank experiment template. 
-Your HTML file should look like this:
+Start by setting up a new HTML file with jsPsych, the html-keyboard-response plugin, and the jspsych.css file loaded. If you are unsure how to do this, follow the [Hello World tutorial](hello-world.md). You should have an HTML document that looks like this:
+
+!!! info
+    This tutorial assumes that you are using the [CDN-based method of loading jsPsych](/tutorials/hello-world/#option-1-using-cdn-hosted-scripts). 
+    If you are using another method then everything is the same except for how jsPsych is loaded.
 
 ```html
 <!DOCTYPE html>
@@ -82,7 +82,7 @@ jsPsych.run(timeline);
 After each step in the tutorial you can view the complete code up to that point by clicking on the expandable box below.
 
 ??? example "The complete code so far"
-    ``` html
+    ```html
     <!DOCTYPE html>
     <html>
       <head>
