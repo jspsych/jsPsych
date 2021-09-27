@@ -68,7 +68,7 @@ jsPsych.run(timeline);
 After each step in the tutorial you can view the complete code up to that point by clicking on the expandable box below.
 
 ??? example "The complete code so far"
-    ``` html
+    ```html
     <!DOCTYPE html>
     <html>
       <head>
