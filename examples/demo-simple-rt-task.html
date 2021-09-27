@@ -11,6 +11,7 @@
   <body></body>
   <script>
 
+    /* initialize jsPsych */
     var jsPsych = initJsPsych({
       on_finish: function () {
         jsPsych.data.displayData();
@@ -55,12 +56,13 @@
     };
     timeline.push(instructions);
 
-    /* test trials */
+    /* define trial stimuli array for timeline variables */
     var test_stimuli = [
       { stimulus: "img/blue.png", correct_response: 'f' },
       { stimulus: "img/orange.png", correct_response: 'j' }
     ];
 
+    /* define fixation and test trials */
     var fixation = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: '<div style="font-size:60px;">+</div>',
@@ -86,6 +88,7 @@
       }
     };
 
+    /* define test procedure */
     var test_procedure = {
       timeline: [fixation, test],
       timeline_variables: test_stimuli,
