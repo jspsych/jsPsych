@@ -12,7 +12,11 @@ This tutorial will work through the creation of a simple response time task. The
 
 ## Part 1: Creating a blank experiment
 
-Start by downloading jsPsych and setting up a folder to contain your experiment files. If you are unsure how to do this, follow steps 1-5 in the [Hello World tutorial](hello-world.md). At the end of step 5 in the Hello World tutorial, you should have an experiment page that looks like this:
+Start by setting up a new HTML file with jsPsych, the html-keyboard-response plugin, and the jspsych.css file loaded. If you are unsure how to do this, follow the [Hello World tutorial](hello-world.md). You should have an HTML document that looks like this:
+
+!!! info
+    This tutorial assumes that you are using the [CDN-based method of loading jsPsych](/tutorials/hello-world/#option-1-using-cdn-hosted-scripts). 
+    If you are using another method then everything is the same except for how jsPsych is loaded.
 
 ```html
 <!DOCTYPE html>
