@@ -16,7 +16,8 @@
   "files": [
     "src",
     "dist",
-    "css"
+    "css",
+    "tests/utils.ts"
   ],
   "source": "src/index.ts",
   "directories": {
