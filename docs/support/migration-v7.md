@@ -19,7 +19,7 @@ The biggest difference from what you are used to is that the directory structure
 
 We've removed `jsPsych.init()` and split the features into two different functions. 
 
-At the start of your experiment script, you'll now call `initJsPsych()` to get a new instance of jsPsych. 
+At the start of your experiment script, you'll now call `initJsPsych()` to get a new instance of jsPsych and store it in a variable called `jsPsych`. 
 This is where you will pass in the variety of parameters that used to go into `jsPsych.init()`, with the exception of the `timeline` parameter.
 
 ```js
@@ -31,7 +31,9 @@ var jsPsych = initJsPsych({
 });
 ```
 
-Once you've created your timeline, then you'll launch the experiment by calling `jsPsych.run()`, passing in the timeline as the only argument.
+Once you've created your timeline, then you'll launch the experiment by calling `jsPsych.run()`, passing in the timeline as the only argument. 
+This is the point in your script where you've used the `jsPsych.init` function in jsPsych v6.x. 
+Because the `jsPsych.run` function only needs the experiment timeline, this argument should be an _array_ (rather than an object like `{timeline: timeline}` in jsPsych v6.x).
 
 ```js
 var timeline = [...]
@@ -58,6 +60,8 @@ For example, if you load the `html-keyboard-response` plugin from the CDN...
 ... then a global variable defining the plugin's class called `jsPsychHtmlKeyboardResponse` is available.
 
 To create a trial using the plugin, pass this class as the `type` parameter. 
+The plugin classes are named starting with `jsPsych`, followed by the plugin name written in camel case (rather than with dashes between words).
+See the ["Using a plugin" section](/overview/plugins.md#using-a-plugin) of the Plugins overview page for more examples.
 Note that the value is *not a string*.
 
 ```js
@@ -69,7 +73,9 @@ var trial = {
 
 ## Using extensions
 
-Like plugins, extensions are now also referenced by their class. Extensions are initiliazed in `initJsPsych()` instead of `jsPsych.init()`.
+Like plugins, extensions are now also referenced by their class. 
+Extensions are initiliazed in `initJsPsych()` instead of `jsPsych.init()`.
+Extension classes are named similarly to plugins, except that they start with `jsPsychExtension`.
 
 ```js
 var jsPsych = initJsPsych({
@@ -101,10 +107,24 @@ The new template implements plugins as a class, but the core components are esse
 * Anything in `plugin.trial` from a v6.x plugin should be moved into the `trial` method inside the class. 
 * The new template has a `constructor()` function that accepts an instance of jsPsych. You do not need to adjust this portion of the plugin.
 
-There are a few changes to be aware of that may affect your code.
+There are a few changes to be aware of that may affect your plugin code.
 
 * We removed the `registerPreload` function and we now auto-detect media to preload via the `type` argument specified in the `info` object. If a parameter is listed as `IMAGE`, `AUDIO`, or `VIDEO`, it will be automatically preloaded. If you wish to disable preloading you can set the `preload` flag to `false` for the parameter.
-* If you invoke any functions from jsPsych, like `jsPsych.finishTrial()`, note that `jsPsych` is no longer a global variable and you must use the reference to jsPsych that is passed to the constructor. To do this, simple prefix all `jsPsych` references with `this.`, e.g., `jsPsych.finishTrial()` becomes `this.jsPsych.finishTrial()`.
+* If you invoke any functions from jsPsych, like `jsPsych.finishTrial()`, note that `jsPsych` is no longer a global variable and you must use the reference to jsPsych that is passed to the constructor. To do this, simply prefix all `jsPsych` references with `this.`, e.g., `jsPsych.finishTrial()` becomes `this.jsPsych.finishTrial()`. If your reference to a jsPsych function is inside of another function, then in order for the `this` keyword to appropriately reference the jsPsych instance, you must also use a JavaScript [arrow function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions) for the outer function. 
+    For example, this:
+    ```js
+    function end_trial() {
+      // ...
+      jsPsych.finishTrial(data);
+    }
+    ```
+    Would be re-written as:
+    ```js
+    const end_trial = () => {
+      // ...
+      this.jsPsych.finishTrial(data);
+    }
+    ```
 
 ## Need help?
 
