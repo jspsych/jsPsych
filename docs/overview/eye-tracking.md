@@ -176,7 +176,7 @@ If you have tips based on your own experience please consider sharing them on ou
         <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@1.0.0"></script>
         <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
-        <script src="https://unpkg.com/@jspsych/extensions/jspsych-ext-webgazer@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.0"></script>
         <link
           rel="stylesheet"
           href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css"
