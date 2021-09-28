@@ -1,5 +1,5 @@
+import { clickTarget, startTimeline } from "@jspsych/test-utils";
 import { initJsPsych } from "jspsych";
-import { clickTarget, startTimeline } from "jspsych/tests/utils";
 
 import audioButtonResponse from ".";
 

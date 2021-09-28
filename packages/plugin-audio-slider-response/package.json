@@ -36,6 +36,7 @@
     "jspsych": ">=7"
   },
   "devDependencies": {
-    "@jspsych/config": "^0.1.0"
+    "@jspsych/config": "^0.1.0",
+    "@jspsych/test-utils": "^0.1.0"
   }
 }

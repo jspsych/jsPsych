@@ -5,7 +5,6 @@
     // map package imports directly to their source files
     "paths": {
       "jspsych": ["../jspsych/src"],
-      "jspsych/tests/utils": ["../jspsych/tests/utils"],
       "@jspsych/*": ["../*/src"]
     },
     // allow resolving json modules in tests (needed for transitive imports of jspsych in tests;

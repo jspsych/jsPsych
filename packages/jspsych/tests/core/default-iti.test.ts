@@ -1,7 +1,6 @@
 import { jest } from "@jest/globals";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-
-import { pressKey, startTimeline } from "../utils";
+import { pressKey, startTimeline } from "@jspsych/test-utils";
 
 jest.useFakeTimers();
 

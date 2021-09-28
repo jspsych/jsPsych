@@ -2,9 +2,9 @@ import cloze from "@jspsych/plugin-cloze";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import surveyMultiChoice from "@jspsych/plugin-survey-multi-choice";
 import surveyText from "@jspsych/plugin-survey-text";
+import { clickTarget, pressKey, startTimeline } from "@jspsych/test-utils";
 
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "../../src";
-import { clickTarget, pressKey, startTimeline } from "../utils";
 
 describe("standard use of function as parameter", () => {
   test("function value is used as parameter", async () => {

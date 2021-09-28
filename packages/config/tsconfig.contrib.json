@@ -4,8 +4,7 @@
   "compilerOptions": {
     "paths": {
       // map jspsych-contrib package imports directly to their source files
-      "@jspsych-contrib/*": ["../*/src"],
-      "jspsych/tests/utils": ["../../node_modules/jspsych/tests/utils"]
+      "@jspsych-contrib/*": ["../*/src"]
     }
   }
 }

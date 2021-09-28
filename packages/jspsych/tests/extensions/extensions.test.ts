@@ -1,7 +1,7 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import { pressKey } from "@jspsych/test-utils";
 
 import { initJsPsych } from "../../src";
-import { pressKey } from "../utils";
 import testExtension from "./test-extension";
 
 jest.useFakeTimers();

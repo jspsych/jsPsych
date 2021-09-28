@@ -1,9 +1,9 @@
 import callFunction from "@jspsych/plugin-call-function";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import { pressKey, startTimeline } from "@jspsych/test-utils";
 
 import { initJsPsych } from "../../src";
-import { pressKey, startTimeline } from "../utils";
 
 describe("randomize order", () => {});
 

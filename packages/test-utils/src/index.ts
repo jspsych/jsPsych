@@ -1,7 +1,5 @@
 import { setImmediate as flushMicroTasks } from "timers";
 
-// This import must not be relative because utils.ts is also used in external tests (where jspsych
-// should be regularly loaded from the `dist` directory, not from the source files)
 import { JsPsych } from "jspsych";
 
 export function dispatchEvent(event: Event) {
