@@ -1776,7 +1776,7 @@
 <p>There are three parameters that are passed into the trial method. </p>
 <ul>
 <li><code>display_element</code> is the DOM element where jsPsych content is being rendered. This parameter will be an <code>HTMLElement</code>, and you can use it to modify the portion of the document that jsPsych controls.</li>
-<li><code>trial</code> is an object containing all of the parameters specified in the corresponding <a href="/overview/timeline">TimelineNode</a>. </li>
+<li><code>trial</code> is an object containing all of the parameters specified in the corresponding <a href="../overview/timeline">TimelineNode</a>. </li>
 <li><code>on_load</code> is an optional parameter that contains a callback function to invoke when <code>trial()</code> has completed its initial loading. See <a href="#asynchronous-loading">handling the on_load event</a>.</li>
 </ul>
 <p>The only requirement for the <code>trial</code> method is that it calls <code>jsPsych.finishTrial()</code> when it is done. This is how jsPsych knows to advance to the next trial in the experiment (or end the experiment if it is the last trial). The plugin can do whatever it needs to do before that point.</p>
@@ -1803,7 +1803,7 @@
 <span class="p">}</span>
 </code></pre></div>
 <p>If the <code>default</code> value is <code>undefined</code> then a user must specify a value for this parameter when creating a trial using the plugin on the timeline. If they do not, then an error will be generated and shown in the console. If a <code>default</code> value is specified in <code>info</code> then that value will be used by the plugin unless the user overrides it by specifying that property.</p>
-<p>jsPsych allows most <a href="/overview/dynamic-parameters.md">plugin parameters to be dynamic</a>, which means that the parameter value can be a function that will be evaluated right before the trial starts. However, if you want your plugin to have a parameter that is a function that <em>shouldn't</em> be evaluated before the trial starts, then you should make sure that the parameter type is <code>'FUNCTION'</code>. This tells jsPsych not to evaluate the function as it normally does for dynamic parameters. See the <code>canvas-*</code> plugins for examples.</p>
+<p>jsPsych allows most <a href="../../overview/dynamic-parameters/">plugin parameters to be dynamic</a>, which means that the parameter value can be a function that will be evaluated right before the trial starts. However, if you want your plugin to have a parameter that is a function that <em>shouldn't</em> be evaluated before the trial starts, then you should make sure that the parameter type is <code>'FUNCTION'</code>. This tells jsPsych not to evaluate the function as it normally does for dynamic parameters. See the <code>canvas-*</code> plugins for examples.</p>
 <p>The <code>info</code> object should be a <code>static</code> member of the class, as shown below.</p>
 <div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">info</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;my-awesome-plugin&#39;</span><span class="p">,</span>
@@ -1853,8 +1853,8 @@
 <span class="p">}</span>
 </code></pre></div>
 <h3 id="responding-to-keyboard-events">Responding to keyboard events<a class="headerlink" href="#responding-to-keyboard-events" title="Permanent link">&para;</a></h3>
-<p>While the plugin framework allows you to set up any events that you would like to, including normal handling of <code>keyup</code> or <code>keydown</code> events, the <code>jsPsych.pluginAPI</code> module contains the <a href="/reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse"><code>getKeyboardResponse</code> function</a>, which implements some additional helpful functionality for key responses in an experiment.</p>
-<p>Here's a basic example. See the <a href="/reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse"><code>getKeyboardResponse</code> docs</a> for additional examples.</p>
+<p>While the plugin framework allows you to set up any events that you would like to, including normal handling of <code>keyup</code> or <code>keydown</code> events, the <code>jsPsych.pluginAPI</code> module contains the <a href="../reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse"><code>getKeyboardResponse</code> function</a>, which implements some additional helpful functionality for key responses in an experiment.</p>
+<p>Here's a basic example. See the <a href="../reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse"><code>getKeyboardResponse</code> docs</a> for additional examples.</p>
 <div class="highlight"><pre><span></span><code><span class="nx">trial</span><span class="p">(</span><span class="nx">display_element</span><span class="p">,</span> <span class="nx">trial</span><span class="p">){</span>
   <span class="c1">// show image</span>
   <span class="nx">display_element</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="sb">`&lt;img src=&quot;</span><span class="si">${</span><span class="nx">trial</span><span class="p">.</span><span class="nx">image</span><span class="si">}</span><span class="sb">&quot;&gt;&lt;/img&gt;`</span><span class="p">;</span>
@@ -1881,7 +1881,7 @@
 <span class="p">}</span>
 </code></pre></div>
 <h3 id="asynchronous-loading">Asynchronous loading<a class="headerlink" href="#asynchronous-loading" title="Permanent link">&para;</a></h3>
-<p>One of the <a href="/overview/events">trial events</a> is <code>on_load</code>, which is normally triggered automatically when the <code>.trial()</code> method returns. In most cases, this return happens after the plugin has done its initial setup of the DOM (e.g., rendering an image, setting up event listeners and timers, etc.). However, in some cases a plugin may implement an asynchronous operation that needs to complete before the initial loading of the plugin is considered done. An example of this is the <code>audio-keyboard-response</code> plugin, in which the check to see if the audio file is loaded is asynchronous and the <code>.trial()</code> method returns before the audio file has been initialized and the display updated. </p>
+<p>One of the <a href="../overview/events">trial events</a> is <code>on_load</code>, which is normally triggered automatically when the <code>.trial()</code> method returns. In most cases, this return happens after the plugin has done its initial setup of the DOM (e.g., rendering an image, setting up event listeners and timers, etc.). However, in some cases a plugin may implement an asynchronous operation that needs to complete before the initial loading of the plugin is considered done. An example of this is the <code>audio-keyboard-response</code> plugin, in which the check to see if the audio file is loaded is asynchronous and the <code>.trial()</code> method returns before the audio file has been initialized and the display updated. </p>
 <p>If you would like to manually trigger the <code>on_load</code> event for a plugin, the <code>.trial()</code> method accepts an optional third parameter that is a callback function to invoke when loading is complete. </p>
 <p>In order to tell jsPsych to <em>not</em> invoke the regular callback when the <code>.trial()</code> method returns, you need to explicitly return a <code>Promise</code>. As of version <code>7.0</code> this Promise only serves as a flag to tell jsPsych that the <code>on_load</code> event should not be triggered. In future versions we may make the <code>Promise</code> functional so that the <code>trial</code> operation can be an <code>async</code> function.</p>
 <p>Here's a sketch of how the <code>on_load</code> event can be utilized in a plugin. Note that this example is only a sketch and leaves out all the stuff that happens between loading and finishing the trial. See the source for the <code>audio-keyboard-response</code> plugin for a complete exampe.</p>
@@ -1903,7 +1903,7 @@
 <span class="p">}</span>
 </code></pre></div>
 <h3 id="save-data">Save data<a class="headerlink" href="#save-data" title="Permanent link">&para;</a></h3>
-<p>To write data to <a href="/reference/jspsych-data/#datacollection">jsPsych's data collection</a> pass an object of data as the parameter to <code>jsPsych.finishTrial()</code>.</p>
+<p>To write data to <a href="../reference/jspsych-data/#datacollection">jsPsych's data collection</a> pass an object of data as the parameter to <code>jsPsych.finishTrial()</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="nx">constructor</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">){</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1917,9 +1917,9 @@
   <span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">finishTrial</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>The data recorded will be that <code>correct</code> is <code>true</code> and that <code>rt</code> is <code>350</code>. <a href="/overview/plugins/#data-collected-by-all-plugins">Additional data for the trial</a> will also be collected automatically.</p>
+<p>The data recorded will be that <code>correct</code> is <code>true</code> and that <code>rt</code> is <code>350</code>. <a href="../overview/plugins/#data-collected-by-all-plugins">Additional data for the trial</a> will also be collected automatically.</p>
 <h2 id="advice-for-writing-plugins">Advice for writing plugins<a class="headerlink" href="#advice-for-writing-plugins" title="Permanent link">&para;</a></h2>
-<p>If you are developing a plugin with the aim of including it in the main jsPsych repository we encourage you to follow the <a href="/developers/contributing/#contributing-to-the-codebase">contribution guidelines</a>. </p>
+<p>If you are developing a plugin with the aim of including it in the main jsPsych repository we encourage you to follow the <a href="contributing/#contributing-to-the-codebase">contribution guidelines</a>. </p>
 <p>We also recommend that you make your plugin <em>as general as possible</em>. Consider using parameters to give the user of the plugin as many options for customization as possible. For example, if you have any text that displays in the plugin including things like button labels, implement the text as a parameter. This allows users running experiments in other languages to replace text values as needed.</p>
                 
               

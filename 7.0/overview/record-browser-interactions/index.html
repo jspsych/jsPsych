@@ -1506,7 +1506,7 @@
                 
                 
                 <h1 id="record-browser-interactions">Record browser interactions<a class="headerlink" href="#record-browser-interactions" title="Permanent link">&para;</a></h1>
-<p>Participants in an online experiment have the freedom to multitask while performing an experiment. jsPsych automatically records information about when the user clicks on a window that is not the experiment, and about when the user exits full screen mode if the experiment is running in full screen mode. This data is stored separately from the main experiment data, and can be accessed with <a href="/reference/jspsych-data.md#jspsychdatagetinteractiondata">jsPsych.data.getInteractionData()</a>.</p>
+<p>Participants in an online experiment have the freedom to multitask while performing an experiment. jsPsych automatically records information about when the user clicks on a window that is not the experiment, and about when the user exits full screen mode if the experiment is running in full screen mode. This data is stored separately from the main experiment data, and can be accessed with <a href="../../reference/jspsych-data/#jspsychdatagetinteractiondata">jsPsych.data.getInteractionData()</a>.</p>
 <p>Each time the user leaves the experiment window, returns to the experiment window, exits full screen mode, or enters full screen mode, the event is recorded in the interaction data. Each event has the following structure.</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
   <span class="nx">event</span><span class="o">:</span> <span class="s1">&#39;focus&#39;</span><span class="p">,</span> <span class="c1">// &#39;focus&#39; or &#39;blur&#39; or &#39;fullscreenenter&#39; or &#39;fullscreenexit&#39;</span>

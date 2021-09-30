@@ -1629,8 +1629,8 @@ However, we did have to change a few critical things.
 This guide is aimed at users who are familiar with v6.x of jsPsych and would like to understand what's changed in v7.x.</p>
 <h2 id="loading-jspsych">Loading jsPsych<a class="headerlink" href="#loading-jspsych" title="Permanent link">&para;</a></h2>
 <p>There are now three different ways you can load jsPsych into your HTML file. 
-We've updated the <a href="/tutorials/hello-world.md">hello world tutorial</a> to walk through each of the three options. 
-If you are looking for the option that is most similar to the version 6.x experience, check out <a href="/tutorials/hello-world/#option-2-download-and-host-jspsych">option 2</a>. 
+We've updated the <a href="../../tutorials/hello-world/">hello world tutorial</a> to walk through each of the three options. 
+If you are looking for the option that is most similar to the version 6.x experience, check out <a href="../tutorials/hello-world/#option-2-download-and-host-jspsych">option 2</a>. 
 The biggest difference from what you are used to is that the directory structure of the downloaded library is slightly different and plugin files are named a little bit differently.</p>
 <h2 id="initializing-and-running-jspsych">Initializing and running jsPsych<a class="headerlink" href="#initializing-and-running-jspsych" title="Permanent link">&para;</a></h2>
 <p>We've removed <code>jsPsych.init()</code> and split the features into two different functions. </p>
@@ -1661,7 +1661,7 @@ Because the <code>jsPsych.run</code> function only needs the experiment timeline
 <p>... then a global variable defining the plugin's class called <code>jsPsychHtmlKeyboardResponse</code> is available.</p>
 <p>To create a trial using the plugin, pass this class as the <code>type</code> parameter. 
 The plugin classes are named starting with <code>jsPsych</code>, followed by the plugin name written in camel case (rather than with dashes between words).
-See the <a href="/overview/plugins.md#using-a-plugin">"Using a plugin" section</a> of the Plugins overview page for more examples.
+See the <a href="../../overview/plugins/#using-a-plugin">"Using a plugin" section</a> of the Plugins overview page for more examples.
 Note that the value is <em>not a string</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>

@@ -1704,10 +1704,10 @@
                 
                 <h1 id="plugins">Plugins<a class="headerlink" href="#plugins" title="Permanent link">&para;</a></h1>
 <p>In jsPsych, plugins define the kinds of trials or events that should occur during the experiment. 
-Some plugins define very general events, like <a href="/plugins/jspsych-instructions/">displaying a set of instructions pages</a>, <a href="/plugins/jspsych-image-keyboard-response/">displaying an image and recording a keyboard response</a>, or <a href="/plugins/audio-button-response/">playing a sound file and recording a button response</a>. 
-Other plugins are more specific, like those that display particular kinds of stimuli (e.g., a <a href="/plugins/jspsych-visual-search-circle/">circular visual search array</a>), or run a specific version of particular kind of task (e.g., the <a href="/plugins/jspsych-iat-image/">Implicit Association Test</a>).
+Some plugins define very general events, like <a href="../plugins/jspsych-instructions/">displaying a set of instructions pages</a>, <a href="../plugins/jspsych-image-keyboard-response/">displaying an image and recording a keyboard response</a>, or <a href="../plugins/audio-button-response/">playing a sound file and recording a button response</a>. 
+Other plugins are more specific, like those that display particular kinds of stimuli (e.g., a <a href="../plugins/jspsych-visual-search-circle/">circular visual search array</a>), or run a specific version of particular kind of task (e.g., the <a href="../plugins/jspsych-iat-image/">Implicit Association Test</a>).
 Part of creating an experiment with jsPsych involves figuring out which plugins are needed to create the tasks you want your participants to perform.</p>
-<p>Plugins provide a structure for a particular trial or task, but often allow for significant customization and flexibility. For example, the <a href="/plugins/jspsych-image-keyboard-response/">image-keyboard-response plugin</a> defines a simple structure for showing an image and collecting a keyboard response. You can specify the what the stimulus is, what keys the subject is allowed to press, how long the stimulus should be on the screen, how long the subject has to respond, and so on. Many of these options have reasonable default values; even though the image plugin has many different parameters, you only <em>need</em> to specify the image stimulus in order to use it. Each plugin has its own documentation page, which describes what the plugin does, what options are available, and what kind of data it collects.</p>
+<p>Plugins provide a structure for a particular trial or task, but often allow for significant customization and flexibility. For example, the <a href="../plugins/jspsych-image-keyboard-response/">image-keyboard-response plugin</a> defines a simple structure for showing an image and collecting a keyboard response. You can specify the what the stimulus is, what keys the subject is allowed to press, how long the stimulus should be on the screen, how long the subject has to respond, and so on. Many of these options have reasonable default values; even though the image plugin has many different parameters, you only <em>need</em> to specify the image stimulus in order to use it. Each plugin has its own documentation page, which describes what the plugin does, what options are available, and what kind of data it collects.</p>
 <h2 id="using-a-plugin">Using a plugin<a class="headerlink" href="#using-a-plugin" title="Permanent link">&para;</a></h2>
 <p>To use a plugin, you'll need to load the plugin's JavaScript file in your experiment's HTML page. All jsPsych experiments also need to load the "jsPsych.js" file.</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -1982,7 +1982,7 @@ If you want CSS rules that only apply to specific elements during a trial, you c
 </tbody>
 </table>
 <h2 id="creating-a-new-plugin">Creating a new plugin<a class="headerlink" href="#creating-a-new-plugin" title="Permanent link">&para;</a></h2>
-<p>See our <a href="/developers/plugin-development.md">developer's guide for plugins</a> for information about how to create a new plugin.</p>
+<p>See our <a href="../../developers/plugin-development/">developer's guide for plugins</a> for information about how to create a new plugin.</p>
                 
               
               
