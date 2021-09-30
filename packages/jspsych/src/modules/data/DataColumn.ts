@@ -2,9 +2,9 @@ export class DataColumn {
   constructor(public values = []) {}
 
   sum() {
-    var s = 0;
-    for (var i = 0; i < this.values.length; i++) {
-      s += this.values[i];
+    let s = 0;
+    for (const v of this.values) {
+      s += v;
     }
     return s;
   }
@@ -14,14 +14,14 @@ export class DataColumn {
   }
 
   median() {
-    if (this.values.length == 0) {
+    if (this.values.length === 0) {
       return undefined;
     }
-    var numbers = this.values.slice(0).sort(function (a, b) {
+    const numbers = this.values.slice(0).sort(function (a, b) {
       return a - b;
     });
-    var middle = Math.floor(numbers.length / 2);
-    var isEven = numbers.length % 2 === 0;
+    const middle = Math.floor(numbers.length / 2);
+    const isEven = numbers.length % 2 === 0;
     return isEven ? (numbers[middle] + numbers[middle - 1]) / 2 : numbers[middle];
   }
 
@@ -38,37 +38,36 @@ export class DataColumn {
   }
 
   variance() {
-    var mean = this.mean();
-    var sum_square_error = 0;
-    for (var i = 0; i < this.values.length; i++) {
-      sum_square_error += Math.pow(this.values[i] - mean, 2);
+    const mean = this.mean();
+    let sum_square_error = 0;
+    for (const x of this.values) {
+      sum_square_error += Math.pow(x - mean, 2);
     }
-    var mse = sum_square_error / (this.values.length - 1);
+    const mse = sum_square_error / (this.values.length - 1);
     return mse;
   }
 
   sd() {
-    var mse = this.variance();
-    var rmse = Math.sqrt(mse);
+    const mse = this.variance();
+    const rmse = Math.sqrt(mse);
     return rmse;
   }
 
   frequencies() {
-    var unique = {};
-    for (var i = 0; i < this.values.length; i++) {
-      var v = this.values[i];
-      if (typeof unique[v] == "undefined") {
-        unique[v] = 1;
+    const unique = {};
+    for (const x of this.values) {
+      if (typeof unique[x] === "undefined") {
+        unique[x] = 1;
       } else {
-        unique[v]++;
+        unique[x]++;
       }
     }
     return unique;
   }
 
   all(eval_fn) {
-    for (var i = 0; i < this.values.length; i++) {
-      if (!eval_fn(this.values[i])) {
+    for (const x of this.values) {
+      if (!eval_fn(x)) {
         return false;
       }
     }
@@ -76,10 +75,10 @@ export class DataColumn {
   }
 
   subset(eval_fn) {
-    var out = [];
-    for (var i = 0; i < this.values.length; i++) {
-      if (eval_fn(this.values[i])) {
-        out.push(this.values[i]);
+    const out = [];
+    for (const x of this.values) {
+      if (eval_fn(x)) {
+        out.push(x);
       }
     }
     return new DataColumn(out);

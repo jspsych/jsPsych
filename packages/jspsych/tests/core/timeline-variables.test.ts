@@ -1,9 +1,9 @@
 import callFunction from "@jspsych/plugin-call-function";
 import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import { pressKey, startTimeline } from "@jspsych/test-utils";
 
 import { initJsPsych } from "../../src";
-import { pressKey, startTimeline } from "../utils";
 
 describe("randomize order", () => {});
 
@@ -78,7 +78,7 @@ describe("sampling", () => {
 
     const result1 = [];
     const result2 = [];
-    for (var i = 0; i < reps / 2; i++) {
+    for (let i = 0; i < reps / 2; i++) {
       result1.push(getHTML());
       pressKey("a");
       result2.push(getHTML());

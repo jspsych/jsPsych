@@ -99,7 +99,7 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // create a flattened version of the choices array
-    var flat_choices = this.jsPsych.utils.flatten(trial.choices);
+    var flat_choices = trial.choices.flat();
     while (flat_choices.indexOf("") > -1) {
       flat_choices.splice(flat_choices.indexOf(""), 1);
     }

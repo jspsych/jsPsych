@@ -33,26 +33,37 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ## Examples
 
-#### Displaying trial until subject gives a response
+???+ example "Displaying trial until subject gives a response"
+    === "Code"
+        ```javascript
+        var trial = {
+            type: 'image-keyboard-response',
+            stimulus: 'img/happy_face_1.png',
+            choices: ['e', 'i'],
+            prompt: "<p>Is this person happy or sad? Press 'e' for happy and 'i' for sad.</p>",
+        };
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="/demos/jspsych-image-keyboard-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var trial = {
-	type: 'image-keyboard-response',
-	stimulus: 'img/happy_face_1.png',
-	choices: ['e', 'i'],
-	prompt: "<p>Is this person happy or sad? Press 'e' for happy and 'i' for sad.</p>",
-	response_ends_trial: false
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-image-keyboard-response-demo1.html">Open demo in new tab</a>
 
-#### Displaying image for a fixed duration; no response allowed
+???+ example "Displaying image for a fixed duration; no response allowed"
+    === "Code"
+        ```javascript
+        var trial = {
+            type: 'image-keyboard-response',
+            stimulus: 'img/happy_face_1.png',
+            choices: jsPsych.NO_KEYS,
+            prompt: "<p>Study this face for 5 seconds.</p>",
+            trial_duration: 5000
+        };
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="/demos/jspsych-image-keyboard-response-demo2.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var trial = {
-	type: 'image-button-response',
-	stimulus: 'img/happy_face_1.png',
-	choices: jsPsych.NO_KEYS,
-	prompt: "<p>Study this face for 5 seconds.</p>",
-	trial_duration: 5000
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-image-keyboard-response-demo2.html">Open demo in new tab</a>

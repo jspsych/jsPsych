@@ -362,6 +362,9 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
 
     function calculateSampleRate(gazeData) {
       var mean_diff = [];
+      if (gazeData.length == 0) {
+        return 0;
+      }
       for (var i = 0; i < gazeData.length; i++) {
         if (gazeData[i].length > 1) {
           var t_diff = [];

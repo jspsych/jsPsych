@@ -13,7 +13,7 @@ Parameter | Type | Default Value | Description
 stimulus | string | undefined | The path of the image file to be displayed.
 stimulus_height | integer | null | Set the height of the image in pixels. If left null (no value specified), then the image will display at its natural height.
 stimulus_width | integer | null | Set the width of the image in pixels. If left null (no value specified), then the image will display at its natural width.
-maintain_aspect_ration | boolean | true | If setting *only* the width or *only* the height and this parameter is true, then the other dimension will be scaled to maintain the image's aspect ratio. 
+maintain_aspect_ratio | boolean | true | If setting *only* the width or *only* the height and this parameter is true, then the other dimension will be scaled to maintain the image's aspect ratio. 
 choices | array of strings | [] | Labels for the buttons. Each different string in the array will generate a different button.
 button_html | HTML string | `'<button class="jspsych-btn">%choice%</button>'` | A template of HTML for generating the button elements. You can override this to create customized buttons of various kinds. The string `%choice%` will be changed to the corresponding element of the `choices` array. You may also specify an array of strings, if you need different HTML to render for each button. If you do specify an array, the `choices` array and this array must have the same length. The HTML from position 0 in the `button_html` array will be used to create the button for element 0 in the `choices` array, and so on.
 prompt | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
@@ -36,13 +36,19 @@ stimulus | string | The path of the image that was displayed.
 
 ## Examples
 
-#### Displaying question until subject gives a response
+???+ example "Displaying question until subject gives a response"
+    === "Code"
+        ```javascript
+        var trial = {
+            type: 'image-button-response',
+            stimulus: 'img/happy_face_1.png',
+            choices: ['Happy', 'Sad'],
+            prompt: "<p>Is this person happy or sad?</p>"
+        };
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="/demos/jspsych-image-button-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var trial = {
-	type: 'image-button-response',
-	stimulus: 'img/happy_face_1.png',
-	choices: ['Happy', 'Sad'],
-	prompt: "<p>Is this person happy or sad?</p>"
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-image-button-response-demo1.html">Open demo in new tab</a>

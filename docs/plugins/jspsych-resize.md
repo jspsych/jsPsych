@@ -26,14 +26,20 @@ scale_factor | numeric | Scaling factor that will be applied to the div containi
 
 ## Examples
 
-#### Measuring a credit card and resizing the display to have 150 pixels equal an inch.
+???+ example "Measuring a credit card and resizing the display to have 150 pixels equal an inch."
+    === "Code"
+        ```javascript
+        var inputs = {
+            type: 'resize',
+            item_width: 3 + 3/8,
+            item_height: 2 + 1/8,
+            prompt: "<p>Click and drag the lower right corner of the box until the box is the same size as a credit card held up to the screen.</p>",
+            pixels_per_unit: 150
+        };
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="/demos/jspsych-resize-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-```javascript
-var inputs = {
-  type: 'resize',
-  item_width: 3 + 3/8,
-  item_height: 2 + 1/8,
-  prompt: "<p>Click and drag the lower right corner of the box until the box is the same size as a credit card held up to the screen.</p>",
-  pixels_per_unit: 150
-};
-```
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-resize-demo1.html">Open demo in new tab</a>

@@ -1,12 +1,10 @@
-// import surveyText from "@jspsych/plugin-survey-text";
-
-import { startTimeline } from "../utils";
+import surveyText from "@jspsych/plugin-survey-text";
+import { startTimeline } from "@jspsych/test-utils";
 
 describe("nested defaults", () => {
-  test.skip("work in basic situation", async () => {
+  test("work in basic situation", async () => {
     const { displayElement } = await startTimeline([
       {
-        // @ts-ignore TODO enable this test once the plugin is a class
         type: surveyText,
         questions: [
           {
@@ -23,14 +21,13 @@ describe("nested defaults", () => {
     expect(displayElement.querySelector("input").size).toBe(40);
   });
 
-  test.skip("safe against extending the array.prototype (issue #989)", async () => {
+  test("safe against extending the array.prototype (issue #989)", async () => {
     // @ts-expect-error
     Array.prototype.qq = jest.fn();
     const spy = jest.spyOn(console, "error").mockImplementation();
 
     const { displayElement } = await startTimeline([
       {
-        // @ts-ignore TODO enable this test once the plugin is a class
         type: surveyText,
         questions: [
           {

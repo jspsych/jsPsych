@@ -1,6 +1,7 @@
+import { keyDown, keyUp, pressKey } from "@jspsych/test-utils";
+
 import { KeyboardListenerAPI } from "../../src/modules/plugin-api/KeyboardListenerAPI";
 import { TimeoutAPI } from "../../src/modules/plugin-api/TimeoutAPI";
-import { keyDown, keyUp, pressKey } from "../utils";
 
 jest.useFakeTimers();
 

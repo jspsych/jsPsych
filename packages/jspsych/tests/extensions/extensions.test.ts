@@ -1,12 +1,11 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import { pressKey } from "@jspsych/test-utils";
 
-import { JsPsych, initJsPsych } from "../../src";
-import { pressKey } from "../utils";
+import { initJsPsych } from "../../src";
 import testExtension from "./test-extension";
 
 jest.useFakeTimers();
 
-// https://github.com/jspsych/jsPsych/projects/6#card-64825201
 describe("jsPsych.extensions", () => {
   test("initialize is called at start of experiment", async () => {
     const jsPsych = initJsPsych({
@@ -63,9 +62,9 @@ describe("jsPsych.extensions", () => {
       extensions: [{ type: testExtension }],
     });
 
-    var onStartFunc = jest.spyOn(jsPsych.extensions.test, "on_start");
+    const onStartFunc = jest.spyOn(jsPsych.extensions.test, "on_start");
 
-    var trial = {
+    const trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
       extensions: [{ type: testExtension }],
@@ -83,9 +82,9 @@ describe("jsPsych.extensions", () => {
       extensions: [{ type: testExtension }],
     });
 
-    var onStartFunc = jest.spyOn(jsPsych.extensions.test, "on_start");
+    const onStartFunc = jest.spyOn(jsPsych.extensions.test, "on_start");
 
-    var trial = {
+    const trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
       extensions: [{ type: testExtension, params: { foo: 1 } }],
@@ -147,9 +146,9 @@ describe("jsPsych.extensions", () => {
       extensions: [{ type: testExtension }],
     });
 
-    var onFinishFunc = jest.spyOn(jsPsych.extensions.test, "on_finish");
+    const onFinishFunc = jest.spyOn(jsPsych.extensions.test, "on_finish");
 
-    var trial = {
+    const trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
       extensions: [{ type: testExtension }],
@@ -169,9 +168,9 @@ describe("jsPsych.extensions", () => {
       extensions: [{ type: testExtension }],
     });
 
-    var onFinishFunc = jest.spyOn(jsPsych.extensions.test, "on_finish");
+    const onFinishFunc = jest.spyOn(jsPsych.extensions.test, "on_finish");
 
-    var trial = {
+    const trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
       extensions: [{ type: testExtension, params: { foo: 1 } }],
@@ -191,7 +190,7 @@ describe("jsPsych.extensions", () => {
       extensions: [{ type: testExtension }],
     });
 
-    var trial = {
+    const trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
       extensions: [{ type: testExtension }],
@@ -210,7 +209,7 @@ describe("jsPsych.extensions", () => {
       extensions: [{ type: testExtension }],
     });
 
-    var trial = {
+    const trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
       extensions: [{ type: testExtension }],

@@ -1,7 +1,7 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import { pressKey, startTimeline } from "@jspsych/test-utils";
 
 import { initJsPsych } from "../../src";
-import { pressKey, startTimeline } from "../utils";
 
 describe("loop function", () => {
   test("repeats a timeline when returns true", async () => {
@@ -269,7 +269,7 @@ describe("conditional function", () => {
   });
 
   test("executes only once even when repetitions is > 1", async () => {
-    var conditional_count = 0;
+    let conditional_count = 0;
 
     await startTimeline([
       {

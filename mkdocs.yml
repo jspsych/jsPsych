@@ -13,10 +13,12 @@ extra:
       link: 'https://github.com/jspsych'
     - icon: 'fontawesome/brands/twitter'
       link: 'https://twitter.com/joshdeleeuw'
+  version:
+    provider: mike
+  analytics:
+    provider: google
+    property: 'UA-50563838-1'
 copyright: 'Copyright &copy; 2012-2021 Josh de Leeuw'
-google_analytics:
-  - 'UA-50563838-1'
-  - 'auto'
 markdown_extensions:
   - admonition
   - codehilite:
@@ -24,6 +26,7 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.superfences
+  - pymdownx.tabbed
   - pymdownx.details
 repo_url: 'https://github.com/jspsych/jsPsych'
 repo_name: 'jspsych/jspsych'
@@ -64,10 +67,10 @@ nav:
   - 'jspsych-audio-button-response': 'plugins/jspsych-audio-button-response.md'
   - 'jspsych-audio-keyboard-response': 'plugins/jspsych-audio-keyboard-response.md'
   - 'jspsych-audio-slider-response': 'plugins/jspsych-audio-slider-response.md'
+  - 'jspsych-call-function': 'plugins/jspsych-call-function.md'
   - 'jspsych-canvas-button-response': 'plugins/jspsych-canvas-button-response.md'
   - 'jspsych-canvas-keyboard-response': 'plugins/jspsych-canvas-keyboard-response.md'
   - 'jspsych-canvas-slider-response': 'plugins/jspsych-canvas-slider-response.md'
-  - 'jspsych-call-function': 'plugins/jspsych-call-function.md'
   - 'jspsych-categorize-animation': 'plugins/jspsych-categorize-animation.md'
   - 'jspsych-categorize-html': 'plugins/jspsych-categorize-html.md'
   - 'jspsych-categorize-image': 'plugins/jspsych-categorize-image.md'

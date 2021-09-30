@@ -1,16 +1,14 @@
-// import sameDifferentHtml from "@jspsych/plugin-same-different-html";
-// import surveyMultiSelect from "@jspsych/plugin-survey-multi-select";
-// import surveyText from "@jspsych/plugin-survey-text";
-
-import { clickTarget, pressKey, startTimeline } from "../utils";
+import sameDifferentHtml from "@jspsych/plugin-same-different-html";
+import surveyMultiSelect from "@jspsych/plugin-survey-multi-select";
+import surveyText from "@jspsych/plugin-survey-text";
+import { clickTarget, pressKey, startTimeline } from "@jspsych/test-utils";
 
 jest.useFakeTimers();
 
 describe("data conversion to csv", () => {
-  test.skip("survey-text data response object is correctly converted", async () => {
+  test("survey-text data response object is correctly converted", async () => {
     const { getData } = await startTimeline([
       {
-        // @ts-ignore TODO enable this test once the plugin is a class
         type: surveyText,
         questions: [{ prompt: "Q1" }, { prompt: "Q2" }],
       },
@@ -26,10 +24,9 @@ describe("data conversion to csv", () => {
     );
   });
 
-  test.skip("same-different-html stimulus array is correctly converted", async () => {
+  test("same-different-html stimulus array is correctly converted", async () => {
     const { getHTML, getData } = await startTimeline([
       {
-        // @ts-ignore TODO enable this test once the plugin is a class
         type: sameDifferentHtml,
         stimuli: ["<p>Climbing</p>", "<p>Walking</p>"],
         answer: "different",
@@ -61,10 +58,9 @@ describe("data conversion to csv", () => {
     );
   });
 
-  test.skip("survey-multi-select response array is correctly converted", async () => {
+  test("survey-multi-select response array is correctly converted", async () => {
     const { getHTML, getData } = await startTimeline([
       {
-        // @ts-ignore TODO enable this test once the plugin is a class
         type: surveyMultiSelect,
         questions: [{ prompt: "foo", options: ["fuzz", "bizz", "bar"], name: "q" }],
       },

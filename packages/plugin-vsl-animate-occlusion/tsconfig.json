@@ -1,4 +1,0 @@
-{
-  "extends": "@jspsych/config/tsconfig.core.json",
-  "include": ["src"]
-}

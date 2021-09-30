@@ -4,7 +4,6 @@
   "compilerOptions": {
     // map package imports directly to their source files
     "paths": {
-      "jspsych/tests": ["../jspsych/tests"],
       "jspsych": ["../jspsych/src"],
       "@jspsych/*": ["../*/src"]
     },

@@ -1,39 +1,24 @@
-// methods used in multiple modules //
-
-export function flatten(arr, out?) {
-  out = typeof out === "undefined" ? [] : out;
-  for (var i = 0; i < arr.length; i++) {
-    if (Array.isArray(arr[i])) {
-      flatten(arr[i], out);
-    } else {
-      out.push(arr[i]);
-    }
-  }
-  return out;
-}
-
-export function unique(arr) {
-  var out = [];
-  for (var i = 0; i < arr.length; i++) {
-    if (arr.indexOf(arr[i]) == i) {
-      out.push(arr[i]);
-    }
-  }
-  return out;
+/**
+ * Finds all of the unique items in an array.
+ * @param arr The array to extract unique values from
+ * @returns An array with one copy of each unique item in `arr`
+ */
+export function unique(arr: Array<any>) {
+  return [...new Set(arr)];
 }
 
 export function deepCopy(obj) {
   if (!obj) return obj;
-  var out;
+  let out;
   if (Array.isArray(obj)) {
     out = [];
-    for (var i = 0; i < obj.length; i++) {
-      out.push(deepCopy(obj[i]));
+    for (const x of obj) {
+      out.push(deepCopy(x));
     }
     return out;
-  } else if (typeof obj === "object") {
+  } else if (typeof obj === "object" && obj !== null) {
     out = {};
-    for (var key in obj) {
+    for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
         out[key] = deepCopy(obj[key]);
       }

@@ -1,4 +1,4 @@
-import { clickTarget, startTimeline } from "jspsych/tests/utils";
+import { clickTarget, startTimeline } from "@jspsych/test-utils";
 
 import imageSliderResponse from ".";
 

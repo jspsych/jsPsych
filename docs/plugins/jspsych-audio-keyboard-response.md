@@ -34,25 +34,40 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 
 ## Examples
 
-#### Displaying trial until subject gives a response
+???+ example "Trial continues until subject gives a response"
+	=== "Code"
+		```javascript
+		var trial = {
+			type: 'audio-keyboard-response',
+			stimulus: 'sound/tone.mp3',
+			choices: ['e', 'i'],
+			prompt: "<p>Is the pitch high or low? Press 'e' for low and 'i' for high.</p>",
+			response_ends_trial: true
+		};
+		```
+	
+	=== "Demo"
+		<div style="text-align:center;">
+			<iframe src="/demos/jspsych-audio-keyboard-response-demo-1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+		</div>
 
-```javascript
-var trial = {
-	type: 'audio-keyboard-response',
-	stimulus: 'sound/tone.mp3',
-	choices: ['e', 'i'],
-	prompt: "<p>Is the pitch high or low? Press 'e' for low and 'i' for high.</p>",
-    response_ends_trial: false
-};
-```
+	<a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-audio-keyboard-response-demo-1.html">Open demo in new tab</a>
 
-#### Play a sound with no user response; trial ends after sound plays
 
-```javascript
-var trial = {
-	type: 'audio-keyboard-response',
-	stimulus: 'sound/tone.mp3',
-	choices: jsPsych.NO_KEYS,
-	trial_ends_after_audio: true
-};
-```
+???+ example "Play a sound with no user response; trial ends after sound plays"
+	=== "Code"
+		```javascript
+		var trial = {
+			type: 'audio-keyboard-response',
+			stimulus: 'sound/tone.mp3',
+			choices: jsPsych.NO_KEYS,
+			trial_ends_after_audio: true
+		};
+		```
+
+	=== "Demo"
+		<div style="text-align:center;">
+			<iframe src="/demos/jspsych-audio-keyboard-response-demo-2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+		</div>
+
+	<a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-audio-keyboard-response-demo-2.html">Open demo in new tab</a>

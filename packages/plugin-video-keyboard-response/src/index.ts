@@ -198,11 +198,18 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       };
     }
 
+    let stopped = false;
     if (trial.stop !== null) {
       video_element.addEventListener("timeupdate", function (e) {
         var currenttime = video_element.currentTime;
         if (currenttime >= trial.stop) {
           video_element.pause();
+          if (trial.trial_ends_after_video && !stopped) {
+            // this is to prevent end_trial from being called twice, because the timeupdate event
+            // can fire in quick succession
+            stopped = true;
+            end_trial();
+          }
         }
       });
     }

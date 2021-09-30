@@ -36,17 +36,60 @@ In addition to the [default data collected by all plugins](/overview/plugins#dat
 | target_present | boolean     | True if the target is present in the search array |
 | locations      | array       | Array where each element is the pixel value of the center of an image in the search array. If the target is present, then the first element will represent the location of the target. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 
-## Example
+## Examples
 
-#### Search for the backward N
+???+ example "Identical distractors"
+    === "Code"
+        ```javascript
+        var instructions = {
+          type: 'html-button-response',
+          stimulus: `<p>Press J if there is a backwards N.</p>
+            <p>Press F if all the Ns are in the normal orientation.</p>`,
+          choices: ['Continue']
+        }
 
-```javascript
-var trial_1 = {
-  type: 'visual-search-circle',
-  target: 'img/backwardN.gif',
-  foil: 'img/normalN.gif',
-  fixation_image: 'img/fixation.gif',
-  target_present: true,
-  set_size: 4
-}
-```
+        var trial = {
+          type: 'visual-search-circle',
+          target: 'img/backwardN.gif',
+          foil: 'img/normalN.gif',
+          fixation_image: 'img/fixation.gif',
+          target_present: true,
+          set_size: 4
+        }
+        ```
+    
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="/demos/jspsych-visual-search-circle-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-visual-search-circle-demo1.html">Open demo in new tab</a>
+
+???+ example "Variety of different distractors"
+    === "Code"
+        ```javascript
+        var instructions = {
+          type: 'html-button-response',
+          stimulus: `<p>Press E if there is an elephant in the group.</p>
+            <p>Press N if there is no elephant in the group.</p>`,
+          choices: ['Continue']
+        }
+
+        var trial = {
+          type: 'visual-search-circle',
+          target: 'img/elephant.png',
+          foil: ['img/lion.png', 'img/monkey.png'],
+          fixation_image: 'img/fixation.gif',
+          target_present_key: 'e',
+          target_absent_key: 'n',
+          target_present: true,
+          set_size: 3
+        }
+        ```
+
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="/demos/jspsych-visual-search-circle-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-visual-search-circle-demo2.html">Open demo in new tab</a>
