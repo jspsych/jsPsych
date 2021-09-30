@@ -11,7 +11,7 @@ Start by downloading the jsPsych library. The most recent version can always be 
 
 *Note: the image below shows version 4.2, but the process is the same for the most recent version.*
  
-![releasespage](/img/githubreleases.jpg)
+![releasespage](../img/githubreleases.jpg)
 
 !!! warning
 		We strongly recommend downloading the latest release of the code rather than downloading the zip file of the code via the *Big Green Button* on the GitHub site. Downloading the code via the *Big Green Button* may give you a copy of the library that is in development and contains bugs.

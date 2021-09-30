@@ -4,9 +4,9 @@
 
 ## Capturing the Participant ID, Study ID, and Session ID
 
-When creating a study on Prolific you must provide the URL to your study. You can host your jsPsych experiment however you'd like - some options are discussed in the [Running Experiments](/overview/running-experiments/#hosting-the-experiment-and-saving-the-data) documentation page. Once you've got a URL to your experiment, you can enter that in the *study link* section of Prolific. Then, click the option to record Prolific IDs via URL parameters.
+When creating a study on Prolific you must provide the URL to your study. You can host your jsPsych experiment however you'd like - some options are discussed in the [Running Experiments](running-experiments.md#hosting-the-experiment-and-saving-the-data) documentation page. Once you've got a URL to your experiment, you can enter that in the *study link* section of Prolific. Then, click the option to record Prolific IDs via URL parameters.
 
-![Prolific screenshot](/img/prolific-study-link.png)
+![Prolific screenshot](../img/prolific-study-link.png)
 
 This will append information about the participant's prolific ID (`PROLIFIC_PID`), the study's ID (`STUDY_ID`), and the session ID (`SESSION_ID`) to the URL that participants use to access your experiment. 
 
@@ -38,12 +38,12 @@ We can capture these variables with jsPsych, and add them to jsPsych's data. Thi
 
 When the experiment is complete, Prolific requires that you send the participant to a specific URL that marks the session as complete on Prolific's server. The link is provided to you by Prolific in the *study completion* section of the setup.
 
-![Prolific Study Completion Screenshot](/img/prolific-study-completion.png)
+![Prolific Study Completion Screenshot](../img/prolific-study-completion.png)
 
 You can accomplish this in a couple different ways.
 
 !!! warning
-    It's important that you've saved all the data from your experiment before the participant returns to Prolific. Make sure that any server communication has completed prior to redirecting the participant. One way to do this is by using the async features of the `call-function` plugin ([example](/plugins/jspsych-call-function/#async-function-call)).
+    It's important that you've saved all the data from your experiment before the participant returns to Prolific. Make sure that any server communication has completed prior to redirecting the participant. One way to do this is by using the async features of the `call-function` plugin ([example](../plugins/jspsych-call-function.md#async-function-call)).
 
 ### Participant clicks a link
 
