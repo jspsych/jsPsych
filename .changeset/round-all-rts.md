@@ -13,7 +13,6 @@
 "@jspsych/plugin-image-slider-response": minor
 "@jspsych/plugin-instructions": minor
 "@jspsych/plugin-maxdiff": minor
-"@jspsych/plugin-rdk": minor
 "@jspsych/plugin-reconstruction": minor
 "@jspsych/plugin-serial-reaction-time-mouse": minor
 "@jspsych/plugin-survey-html-form": minor
