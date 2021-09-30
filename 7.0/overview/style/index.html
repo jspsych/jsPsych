@@ -1643,7 +1643,7 @@
     <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;p style=&quot;font-size:30px;color:red;&quot;&gt;hello world!&lt;/p&gt;&#39;</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>You can also use a <a href="dynamic-parameters">dynamic parameter</a> to combine inline CSS and trial-specific variables. This allows you to easily apply the same inline CSS to multiple trials. Here's an example using a dynamic stimulus parameter and [timeline variables]timeline/#timeline-variables):</p>
+<p>You can also use a <a href="dynamic-parameters">dynamic parameter</a> to combine inline CSS and trial-specific variables. This allows you to easily apply the same inline CSS to multiple trials. Here's an example using a dynamic stimulus parameter and <a href="../timeline/#timeline-variables">timeline variables</a>:</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
     <span class="nx">stimulus</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -1749,7 +1749,7 @@
 <span class="c1">// ...</span>
 <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 </code></pre></div>
-<p>You may want the  <code>css_classes</code> parameter to vary across trials. If so, you can turn it into a <a href="dynamic-parameters">dynamic parameter</a> or use <a href="timeline/#timeline-variables">timeline variables</a> (see examples below). </p>
+<p>You may want the  <code>css_classes</code> parameter to vary across trials. If so, you can turn it into a <a href="dynamic-parameters">dynamic parameter</a> or use <a href="../timeline/#timeline-variables">timeline variables</a> (see examples below). </p>
 <p>One thing to note about the <code>css_classes</code> parameter is that it only adds the class(es) to the jspsych-content &lt;div&gt; element, which is the "parent" element that contains all of the experiment content. Often you'll want your CSS rules to be applied to other elements <em>inside</em> of this jspsych-content div. Sometimes your CSS rules will be "inherited" by all of the other jsPsych content inside of this parent &lt;div&gt;. For instance, in the <code>fixation</code> example above, the CSS rules that change the font size, weight and color are applied to the parent &lt;div&gt; and automatically passed on to the stimulus text through inheritance.</p>
 <p>There are two reasons why a CSS rule like the one above for <code>fixation</code> may not work the way you expect:</p>
 <ol>

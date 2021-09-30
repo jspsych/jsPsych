@@ -1853,8 +1853,8 @@
 <span class="p">}</span>
 </code></pre></div>
 <h3 id="responding-to-keyboard-events">Responding to keyboard events<a class="headerlink" href="#responding-to-keyboard-events" title="Permanent link">&para;</a></h3>
-<p>While the plugin framework allows you to set up any events that you would like to, including normal handling of <code>keyup</code> or <code>keydown</code> events, the <code>jsPsych.pluginAPI</code> module contains the <a href="../reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse"><code>getKeyboardResponse</code> function</a>, which implements some additional helpful functionality for key responses in an experiment.</p>
-<p>Here's a basic example. See the <a href="../reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse"><code>getKeyboardResponse</code> docs</a> for additional examples.</p>
+<p>While the plugin framework allows you to set up any events that you would like to, including normal handling of <code>keyup</code> or <code>keydown</code> events, the <code>jsPsych.pluginAPI</code> module contains the <a href="../../reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse"><code>getKeyboardResponse</code> function</a>, which implements some additional helpful functionality for key responses in an experiment.</p>
+<p>Here's a basic example. See the <a href="../../reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse"><code>getKeyboardResponse</code> docs</a> for additional examples.</p>
 <div class="highlight"><pre><span></span><code><span class="nx">trial</span><span class="p">(</span><span class="nx">display_element</span><span class="p">,</span> <span class="nx">trial</span><span class="p">){</span>
   <span class="c1">// show image</span>
   <span class="nx">display_element</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="sb">`&lt;img src=&quot;</span><span class="si">${</span><span class="nx">trial</span><span class="p">.</span><span class="nx">image</span><span class="si">}</span><span class="sb">&quot;&gt;&lt;/img&gt;`</span><span class="p">;</span>
@@ -1903,7 +1903,7 @@
 <span class="p">}</span>
 </code></pre></div>
 <h3 id="save-data">Save data<a class="headerlink" href="#save-data" title="Permanent link">&para;</a></h3>
-<p>To write data to <a href="../reference/jspsych-data/#datacollection">jsPsych's data collection</a> pass an object of data as the parameter to <code>jsPsych.finishTrial()</code>.</p>
+<p>To write data to <a href="../../reference/jspsych-data/#datacollection">jsPsych's data collection</a> pass an object of data as the parameter to <code>jsPsych.finishTrial()</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="nx">constructor</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">){</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1917,9 +1917,9 @@
   <span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">finishTrial</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>The data recorded will be that <code>correct</code> is <code>true</code> and that <code>rt</code> is <code>350</code>. <a href="../overview/plugins/#data-collected-by-all-plugins">Additional data for the trial</a> will also be collected automatically.</p>
+<p>The data recorded will be that <code>correct</code> is <code>true</code> and that <code>rt</code> is <code>350</code>. <a href="../../overview/plugins/#data-collected-by-all-plugins">Additional data for the trial</a> will also be collected automatically.</p>
 <h2 id="advice-for-writing-plugins">Advice for writing plugins<a class="headerlink" href="#advice-for-writing-plugins" title="Permanent link">&para;</a></h2>
-<p>If you are developing a plugin with the aim of including it in the main jsPsych repository we encourage you to follow the <a href="contributing/#contributing-to-the-codebase">contribution guidelines</a>. </p>
+<p>If you are developing a plugin with the aim of including it in the main jsPsych repository we encourage you to follow the <a href="../contributing/#contributing-to-the-codebase">contribution guidelines</a>. </p>
 <p>We also recommend that you make your plugin <em>as general as possible</em>. Consider using parameters to give the user of the plugin as many options for customization as possible. For example, if you have any text that displays in the plugin including things like button labels, implement the text as a parameter. This allows users running experiments in other languages to replace text values as needed.</p>
                 
               
