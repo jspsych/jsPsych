@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-serial-reaction-time",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "jsPsych plugin for running a serial reaction time task",
   "type": "module",
   "main": "dist/index.cjs",
@@ -33,10 +33,10 @@
   },
   "homepage": "https://github.com/jspsych/jsPsych#readme",
   "peerDependencies": {
-    "jspsych": ">=6"
+    "jspsych": ">=7.0.0"
   },
   "devDependencies": {
     "@jspsych/config": "^0.1.0",
-    "@jspsych/test-utils": "^0.1.0"
+    "@jspsych/test-utils": "^1.0.0"
   }
 }

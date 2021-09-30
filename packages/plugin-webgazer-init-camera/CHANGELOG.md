@@ -1,0 +1,22 @@
+# @jspsych/plugin-webgazer-init-camera
+
+## 1.0.0
+### Major Changes
+
+
+
+- [#2183](https://github.com/jspsych/jsPsych/pull/2183) Thanks [@jodeleeuw](https://github.com/jodeleeuw), [@becky-gilbert](https://github.com/becky-gilbert), [@bjoluc](https://github.com/bjoluc)! - **jsPsych is now fully modular, with individual NPM packages for the core library, plugins, and extensions.**
+  
+  To support this change, we've made a number of breaking changes. We've added [a guide for migrating from version 6.x to 7.x](https://www.jspsych.org/support/migration-v7/) to the documentation, and updated the [hello world tutorial](https://www.jspsych.org/tutorials/hello-world/) with instructions for configuring jsPsych in three different ways. In addition to enabling package management, some of the benefits that this change provides include an improved developer experience with IntelliSense code hints, proper encapsulation of jsPsych so that multiple instances can be run on the same page, and easier integration with modern JavaScript tools like bundlers.
+
+### Minor Changes
+
+
+
+- [#2130](https://github.com/jspsych/jsPsych/pull/2130) [`2802430`](https://github.com/jspsych/jsPsych/commit/28024309995fe0102b53d4dde2b98393da9ff91f) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Added the option for plugins to return a `Promise` and delay the execution of the `on_load` event handler for the trial until the plugin manually invokes it. This allows for plugins that have asynchronous components to finish loading before triggering the `on_load` event. Added this functionality to all plugins that currently require it.
+
+
+### Patch Changes
+
+- Updated dependencies [[`918a50b1`](https://github.com/jspsych/jsPsych/commit/918a50b17d9e125b5fd2ec8e17aee7a307bd68f7), [`2096ea8c`](https://github.com/jspsych/jsPsych/commit/2096ea8c3e8b3d25f001d431eca63647358cc776), [`6b5d411e`](https://github.com/jspsych/jsPsych/commit/6b5d411e9c220d67f800238310df40accbee0c6c), [`cab29416`](https://github.com/jspsych/jsPsych/commit/cab2941619fb0c7798f222f90c224ee5383c3582), [`f7028a3d`](https://github.com/jspsych/jsPsych/commit/f7028a3d64668a657cee04df3994c9f197f1658d), [`14e62a77`](https://github.com/jspsych/jsPsych/commit/14e62a77cbcd528d6ffe6f695118c52b60972939)]:
+  - jspsych@7.0.0
