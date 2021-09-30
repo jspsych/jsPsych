@@ -27,7 +27,7 @@ The [webgazer extension](/extensions/jspsych-ext-webgazer.md) adds functionality
 ```html
 <head>
   <script src="jspsych/jspsych.js"></script>
-  <script src="webgazer.js"></script>
+  <script src="js/webgazer/webgazer.js"></script>
   <script src="jspsych/extensions/jspsych-ext-webgazer.js"></script>
 </head>
 ```

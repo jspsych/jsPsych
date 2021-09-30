@@ -65,7 +65,7 @@ var sound_trial = {
 var video_trials = {
 	timeline: [
 		{
-			type: 'video',
+			type: 'video-keyboard-response',
 			stimulus: jsPsych.timelineVariable('video')
 		}
 	],
@@ -117,7 +117,7 @@ var sound_trial = {
 var video_trials = {
 	timeline: [
 		{
-			type: 'video',
+			type: 'video-keyboard-response',
 			stimulus: jsPsych.timelineVariable('video')
 		}
 	],
