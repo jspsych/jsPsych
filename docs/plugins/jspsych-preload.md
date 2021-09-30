@@ -1,19 +1,19 @@
 # jspsych-preload
 
-This plugin loads images, audio, and video files. It is used for loading files into the browser's memory before they are needed in the experiment, in order to improve stimulus and response timing, and avoid disruption to the experiment flow. We recommend using this plugin anytime you are loading media files, and especially when your experiment requires large and/or many media files. See the [Media Preloading page](/overview/media-preloading/) for more information.
+This plugin loads images, audio, and video files. It is used for loading files into the browser's memory before they are needed in the experiment, in order to improve stimulus and response timing, and avoid disruption to the experiment flow. We recommend using this plugin anytime you are loading media files, and especially when your experiment requires large and/or many media files. See the [Media Preloading page](../overview/media-preloading/) for more information.
 
 The preload trial will end as soon as all files have loaded successfully. The trial will end or stop with an error message when one of these two scenarios occurs (whichever comes first): (a) all files have not finished loading when the `max_load_time` duration is reached, or (b) all file requests have responded with either a load or fail event, and one or more files has failed to load. The `continue_after_error` parameter determines whether the trial will stop with an error message or end (allowing the experiment to continue) when preloading is not successful.
 
 ## Parameters
 
-In addition to the [parameters available in all plugins](/overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. While there are no specific parameters that are required, the plugin expects to be given a set of files to load through one or more of the following parameters: `auto_preload` or `trials` (for automatic loading), and/or `images`, `audio`, `video` (for manual loading). To automatically load files based on a timeline of trials, either set the `auto_preload` parameter is `true` (to load files based on the main timeline passed to `jsPsych.run`) or use the `trials` parameter to load files based on a specific subset of trials. To manually load a set of files, use the `images`, `audio`, and `video` parameters. You can combine automatic and manual loading methods in a single preload trial.
+In addition to the [parameters available in all plugins](../overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. While there are no specific parameters that are required, the plugin expects to be given a set of files to load through one or more of the following parameters: `auto_preload` or `trials` (for automatic loading), and/or `images`, `audio`, `video` (for manual loading). To automatically load files based on a timeline of trials, either set the `auto_preload` parameter is `true` (to load files based on the main timeline passed to `jsPsych.run`) or use the `trials` parameter to load files based on a specific subset of trials. To manually load a set of files, use the `images`, `audio`, and `video` parameters. You can combine automatic and manual loading methods in a single preload trial.
 
 All other parameters can be left unspecified if the default value is acceptable.
 
 | Parameter             | Type           | Default Value                    | Description                              |
 | --------------------- | -------------- | -------------------------------- | ---------------------------------------- |
 | auto_preload          | boolean        | false                            | If `true`, the plugin will preload any files that can be automatically preloaded based on the main experiment timeline that is passed to `jsPsych.run`. If `false`, any file(s) to be preloaded should be specified by passing a timeline array to the `trials` parameter and/or an array of file paths to the `images`, `audio`, and/or `video` parameters. Setting this parameter to `false` is useful when you plan to preload your files in smaller batches throughout the experiment. |
-| trials                | timeline array | []                               | An array containing one or more jsPsych trial or timeline objects. This parameter is useful when you want to automatically preload stimuli files from a specific subset of the experiment. See [Creating an Experiment: The Timeline](/overview/timeline) for information on constructing timelines. |
+| trials                | timeline array | []                               | An array containing one or more jsPsych trial or timeline objects. This parameter is useful when you want to automatically preload stimuli files from a specific subset of the experiment. See [Creating an Experiment: The Timeline](../overview/timeline) for information on constructing timelines. |
 | images                | array          | []                               | Array containing file paths for one or more image files to preload. This option is typically used for image files that can't be automatically preloaded from the timeline. |
 | audio                 | array          | []                               | Array containing file paths for one or more audio files to preload. This option is typically used for audio files that can't be automatically preloaded from the timeline. |
 | video                 | array          | []                               | Array containing file paths for one or more video files to preload. This option is typically used for video files that can't be automatically preloaded from the timeline. |
@@ -28,7 +28,7 @@ All other parameters can be left unspecified if the default value is acceptable.
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](/overview/plugins/#data-collected-by-all-plugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](../overview/plugins/#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
 | Name           | Type    | Value                                    |
 | -------------- | ------- | ---------------------------------------- |
@@ -194,4 +194,4 @@ In addition to the [default data collected by all plugins](/overview/plugins/#da
     <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-preload-demo4.html">Open demo in new tab</a>
 
 
-For more examples, see the `jspsych-preload.html` file in the `/examples` folder of the release and the [Media Preloading](/overview/media-preloading) documentation page.
+For more examples, see the `jspsych-preload.html` file in the `/examples` folder of the release and the [Media Preloading](../overview/media-preloading) documentation page.

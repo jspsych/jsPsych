@@ -2,7 +2,7 @@
 
 jsPsych can show a progress bar at the top of the experiment page indicating the subject's overall completion progress. The progress bar is rendered outside the jsPsych display element, and it requires the `jspsych.css` file to be loaded on the page. As of version 6.0, the progress bar looks like this:
 
-![Progressbar Screenshot](/img/progress_bar.png)
+![Progressbar Screenshot](../img/progress_bar.png)
 
 To show the progress bar, set the `show_progress_bar` option in `initJsPsych` to `true`:
 

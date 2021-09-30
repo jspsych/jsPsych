@@ -39,4 +39,4 @@ Extension | Description
 
 ## Writing an Extension
 
-See our [developer's guide for extensions](/developers/extension-development.md) for information about how to create a new extension.
+See our [developer's guide for extensions](../developers/extension-development.md) for information about how to create a new extension.

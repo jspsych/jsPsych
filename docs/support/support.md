@@ -4,6 +4,6 @@ For questions about jsPsych the preferred method of support is [GitHub Discussio
 
 If you have identified a problem with jsPsych, such as a bug in the code or an error in the documentation, please [open a new issue](https://github.com/jspsych/jsPsych/issues/new) on GitHub. 
 
-If you have a suggestion for fixing the problem, feel free to [contribute to the project](/developers/contributing.md)!
+If you have a suggestion for fixing the problem, feel free to [contribute to the project](../developers/contributing.md)!
 
 Inquiries for paid consultation to develop experiments using jsPsych or to create new custom jsPsych features can be sent to [josh.deleeuw@gmail.com](mailto:josh.deleeuw@gmail.com).

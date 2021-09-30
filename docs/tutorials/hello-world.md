@@ -121,7 +121,7 @@ For this demo we want to show some text on the screen. This is exactly what the 
 </html>
 ```
 
-Once the plugin is loaded we can create a trial using the plugin. To declare a trial that uses the `html-keyboard-response` plugin, we create an object with the property `type` equal to `jsPsychHtmlKeyboardResponse`. We can specify the other parameters of the plugin in the same object. Here we use the `stimulus` parameter to include a message. You can see the full set of parameters for each plugin on its [documentation page](/plugins/jspsych-html-keyboard-response).
+Once the plugin is loaded we can create a trial using the plugin. To declare a trial that uses the `html-keyboard-response` plugin, we create an object with the property `type` equal to `jsPsychHtmlKeyboardResponse`. We can specify the other parameters of the plugin in the same object. Here we use the `stimulus` parameter to include a message. You can see the full set of parameters for each plugin on its [documentation page](../plugins/jspsych-html-keyboard-response).
 
 ```html hl_lines="13 14 15 16"
 <!DOCTYPE html>
@@ -146,7 +146,7 @@ Once the plugin is loaded we can create a trial using the plugin. To declare a t
 
 ### Step 5: Run the experiment
 
-Now that we have the trial defined we need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.run` function and passing in a [timeline](/overview/timeline). For a simple experiment like this one, the timeline is just an array containing the list of trials to run.
+Now that we have the trial defined we need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.run` function and passing in a [timeline](../overview/timeline). For a simple experiment like this one, the timeline is just an array containing the list of trials to run.
 
 ```html hl_lines="18"
 <!DOCTYPE html>
@@ -303,7 +303,7 @@ For this demo we want to show some text on the screen. This is exactly what the 
 </html>
 ```
 
-Once the plugin is loaded we can create a trial using the plugin. To declare a trial that uses the `html-keyboard-response` plugin, we create an object with the property `type` equal to `jsPsychHtmlKeyboardResponse`. We can specify the other parameters of the plugin in the same object. Here we use the `stimulus` parameter to include a message. You can see the full set of parameters for each plugin on its [documentation page](/plugins/jspsych-html-keyboard-response).
+Once the plugin is loaded we can create a trial using the plugin. To declare a trial that uses the `html-keyboard-response` plugin, we create an object with the property `type` equal to `jsPsychHtmlKeyboardResponse`. We can specify the other parameters of the plugin in the same object. Here we use the `stimulus` parameter to include a message. You can see the full set of parameters for each plugin on its [documentation page](../plugins/jspsych-html-keyboard-response).
 
 ```html hl_lines="13 14 15 16"
 <!DOCTYPE html>
@@ -328,7 +328,7 @@ Once the plugin is loaded we can create a trial using the plugin. To declare a t
 
 ### Step 7: Run the experiment
 
-Now that we have the trial defined we need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.run` function and passing in a [timeline](/overview/timeline). For a simple experiment like this one, the timeline is just an array containing the list of trials to run.
+Now that we have the trial defined we need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.run` function and passing in a [timeline](../overview/timeline). For a simple experiment like this one, the timeline is just an array containing the list of trials to run.
 
 ```html hl_lines="18"
 <!DOCTYPE html>
@@ -409,7 +409,7 @@ Once the plugin is imported we can create a trial using the plugin.
 To declare a trial that uses the `html-keyboard-response` plugin, we create an object with the property `type` equal to `htmlKeyboardResponse`.
 We can specify the other parameters of the plugin in the same object.
 Here we use the `stimulus` parameter to include a message.
-You can see the full set of parameters for each plugin on its [documentation page](/plugins/jspsych-html-keyboard-response).
+You can see the full set of parameters for each plugin on its [documentation page](../plugins/jspsych-html-keyboard-response).
 
 ```js
 import {initJsPsych} from 'jspsych';
@@ -425,7 +425,7 @@ const trial = {
 
 ### Step 6: Run
 
-Now that we have the trial defined we need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.run` function and passing in a [timeline](/overview/timeline). For a simple experiment like this one, the timeline is just an array containing the list of trials to run.
+Now that we have the trial defined we need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.run` function and passing in a [timeline](../overview/timeline). For a simple experiment like this one, the timeline is just an array containing the list of trials to run.
 
 ```js
 import {initJsPsych} from 'jspsych';

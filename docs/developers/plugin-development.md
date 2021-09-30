@@ -31,7 +31,7 @@ The plugin's `trial()` method is responsible for running a single trial. When th
 There are three parameters that are passed into the trial method. 
 
 * `display_element` is the DOM element where jsPsych content is being rendered. This parameter will be an `HTMLElement`, and you can use it to modify the portion of the document that jsPsych controls.
-* `trial` is an object containing all of the parameters specified in the corresponding [TimelineNode](/overview/timeline). 
+* `trial` is an object containing all of the parameters specified in the corresponding [TimelineNode](../overview/timeline). 
 * `on_load` is an optional parameter that contains a callback function to invoke when `trial()` has completed its initial loading. See [handling the on_load event](#asynchronous-loading).
 
 The only requirement for the `trial` method is that it calls `jsPsych.finishTrial()` when it is done. This is how jsPsych knows to advance to the next trial in the experiment (or end the experiment if it is the last trial). The plugin can do whatever it needs to do before that point.
@@ -67,7 +67,7 @@ const info = {
 
 If the `default` value is `undefined` then a user must specify a value for this parameter when creating a trial using the plugin on the timeline. If they do not, then an error will be generated and shown in the console. If a `default` value is specified in `info` then that value will be used by the plugin unless the user overrides it by specifying that property.
 
-jsPsych allows most [plugin parameters to be dynamic](/overview/dynamic-parameters.md), which means that the parameter value can be a function that will be evaluated right before the trial starts. However, if you want your plugin to have a parameter that is a function that _shouldn't_ be evaluated before the trial starts, then you should make sure that the parameter type is `'FUNCTION'`. This tells jsPsych not to evaluate the function as it normally does for dynamic parameters. See the `canvas-*` plugins for examples.
+jsPsych allows most [plugin parameters to be dynamic](../overview/dynamic-parameters.md), which means that the parameter value can be a function that will be evaluated right before the trial starts. However, if you want your plugin to have a parameter that is a function that _shouldn't_ be evaluated before the trial starts, then you should make sure that the parameter type is `'FUNCTION'`. This tells jsPsych not to evaluate the function as it normally does for dynamic parameters. See the `canvas-*` plugins for examples.
 
 The `info` object should be a `static` member of the class, as shown below.
 
@@ -135,9 +135,9 @@ trial(display_element, trial){
 
 ### Responding to keyboard events
 
-While the plugin framework allows you to set up any events that you would like to, including normal handling of `keyup` or `keydown` events, the `jsPsych.pluginAPI` module contains the [`getKeyboardResponse` function](/reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse), which implements some additional helpful functionality for key responses in an experiment.
+While the plugin framework allows you to set up any events that you would like to, including normal handling of `keyup` or `keydown` events, the `jsPsych.pluginAPI` module contains the [`getKeyboardResponse` function](../reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse), which implements some additional helpful functionality for key responses in an experiment.
 
-Here's a basic example. See the [`getKeyboardResponse` docs](/reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse) for additional examples.
+Here's a basic example. See the [`getKeyboardResponse` docs](../reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse) for additional examples.
 
 ```js
 trial(display_element, trial){
@@ -168,7 +168,7 @@ trial(display_element, trial){
 
 ### Asynchronous loading
 
-One of the [trial events](/overview/events) is `on_load`, which is normally triggered automatically when the `.trial()` method returns. In most cases, this return happens after the plugin has done its initial setup of the DOM (e.g., rendering an image, setting up event listeners and timers, etc.). However, in some cases a plugin may implement an asynchronous operation that needs to complete before the initial loading of the plugin is considered done. An example of this is the `audio-keyboard-response` plugin, in which the check to see if the audio file is loaded is asynchronous and the `.trial()` method returns before the audio file has been initialized and the display updated. 
+One of the [trial events](../overview/events) is `on_load`, which is normally triggered automatically when the `.trial()` method returns. In most cases, this return happens after the plugin has done its initial setup of the DOM (e.g., rendering an image, setting up event listeners and timers, etc.). However, in some cases a plugin may implement an asynchronous operation that needs to complete before the initial loading of the plugin is considered done. An example of this is the `audio-keyboard-response` plugin, in which the check to see if the audio file is loaded is asynchronous and the `.trial()` method returns before the audio file has been initialized and the display updated. 
 
 If you would like to manually trigger the `on_load` event for a plugin, the `.trial()` method accepts an optional third parameter that is a callback function to invoke when loading is complete. 
 
@@ -197,7 +197,7 @@ trial(display_element, trial, on_load){
 
 ### Save data
 
-To write data to [jsPsych's data collection](/reference/jspsych-data/#datacollection) pass an object of data as the parameter to `jsPsych.finishTrial()`.
+To write data to [jsPsych's data collection](../reference/jspsych-data/#datacollection) pass an object of data as the parameter to `jsPsych.finishTrial()`.
 
 ```javascript
 constructor(jsPsych){
@@ -214,11 +214,11 @@ trial(display_element, trial){
 }
 ```
 
-The data recorded will be that `correct` is `true` and that `rt` is `350`. [Additional data for the trial](/overview/plugins/#data-collected-by-all-plugins) will also be collected automatically.
+The data recorded will be that `correct` is `true` and that `rt` is `350`. [Additional data for the trial](../overview/plugins/#data-collected-by-all-plugins) will also be collected automatically.
 
 ## Advice for writing plugins
 
-If you are developing a plugin with the aim of including it in the main jsPsych repository we encourage you to follow the [contribution guidelines](/developers/contributing/#contributing-to-the-codebase). 
+If you are developing a plugin with the aim of including it in the main jsPsych repository we encourage you to follow the [contribution guidelines](contributing/#contributing-to-the-codebase). 
 
 We also recommend that you make your plugin *as general as possible*. Consider using parameters to give the user of the plugin as many options for customization as possible. For example, if you have any text that displays in the plugin including things like button labels, implement the text as a parameter. This allows users running experiments in other languages to replace text values as needed.
 

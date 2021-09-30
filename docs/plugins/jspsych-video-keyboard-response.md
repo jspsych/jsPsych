@@ -2,11 +2,11 @@
 
 This plugin plays a video file and records a keyboard response. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically when the subject responds, when the video file has finished playing, or if the subject has failed to respond within a fixed length of time. You can also prevent a keyboard response from being recorded before the video has finished playing.
 
-Video files can be automatically preloaded by jsPsych using the [`preload` plugin](jspsych-preload.md). However, if you are using timeline variables or another dynamic method to specify the video stimulus, you will need to [manually preload](/overview/media-preloading/#manual-preloading) the videos. Also note that video preloading is disabled when the experiment is running as a file (i.e. opened directly in the browser, rather than through a server), in order to prevent CORS errors - see the section on [Running Experiments](/overview/running-experiments.md) for more information.
+Video files can be automatically preloaded by jsPsych using the [`preload` plugin](jspsych-preload.md). However, if you are using timeline variables or another dynamic method to specify the video stimulus, you will need to [manually preload](../overview/media-preloading/#manual-preloading) the videos. Also note that video preloading is disabled when the experiment is running as a file (i.e. opened directly in the browser, rather than through a server), in order to prevent CORS errors - see the section on [Running Experiments](../overview/running-experiments.md) for more information.
 
 ## Parameters
 
-In addition to the [parameters available in all plugins](/overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+In addition to the [parameters available in all plugins](../overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
 
 | Parameter                      | Type             | Default Value           | Description                              |
 | ------------------------------ | ---------------- | ----------------------- | ---------------------------------------- |
@@ -27,7 +27,7 @@ In addition to the [parameters available in all plugins](/overview/plugins#param
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](/overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](../overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
 | Name      | Type    | Value                                    |
 | --------- | ------- | ---------------------------------------- |

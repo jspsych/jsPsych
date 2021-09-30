@@ -72,7 +72,7 @@ var trial = {
 
 ## Aggregating and manipulating jsPsych data
 
-When accessing the data with `jsPsych.data.get()` the returned object is a special data collection object that exposes a number of methods for aggregating and manipulating the data. The full list of methods is detailed in the [data module documentation](/reference/jspsych-data.md).
+When accessing the data with `jsPsych.data.get()` the returned object is a special data collection object that exposes a number of methods for aggregating and manipulating the data. The full list of methods is detailed in the [data module documentation](../reference/jspsych-data.md).
 
 Here are some examples of data collection manipulation.
 

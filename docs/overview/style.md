@@ -17,7 +17,7 @@ var trial = {
 }
 ```
 
-You can also use a [dynamic parameter](/overview/dynamic-parameters) to combine inline CSS and trial-specific variables. This allows you to easily apply the same inline CSS to multiple trials. Here's an example using a dynamic stimulus parameter and [timeline variables](/overview/timeline/#timeline-variables):
+You can also use a [dynamic parameter](dynamic-parameters) to combine inline CSS and trial-specific variables. This allows you to easily apply the same inline CSS to multiple trials. Here's an example using a dynamic stimulus parameter and [timeline variables]timeline/#timeline-variables):
 
 ```javascript
 var trial = {
@@ -157,7 +157,7 @@ var fixation = {
 </script>
 ```
 
-You may want the  `css_classes` parameter to vary across trials. If so, you can turn it into a [dynamic parameter](/overview/dynamic-parameters) or use [timeline variables](/overview/timeline/#timeline-variables) (see examples below). 
+You may want the  `css_classes` parameter to vary across trials. If so, you can turn it into a [dynamic parameter](dynamic-parameters) or use [timeline variables](timeline/#timeline-variables) (see examples below). 
 
 One thing to note about the `css_classes` parameter is that it only adds the class(es) to the jspsych-content &lt;div> element, which is the "parent" element that contains all of the experiment content. Often you'll want your CSS rules to be applied to other elements _inside_ of this jspsych-content div. Sometimes your CSS rules will be "inherited" by all of the other jsPsych content inside of this parent &lt;div>. For instance, in the `fixation` example above, the CSS rules that change the font size, weight and color are applied to the parent &lt;div> and automatically passed on to the stimulus text through inheritance.
 
