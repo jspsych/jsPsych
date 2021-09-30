@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-audio-button-response.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
+
+  var timeline = [];
+
+  // sound source: https://www.videvo.net/sound-effect/lion-growl-angry-gene-pe931902/249942/
+  // images source: http://clipart-library.com/cartoon-animal-clipart.html
+  var images = ['img/lion.png', 'img/elephant.png', 'img/monkey.png']
+
+  timeline.push({
+    type: 'preload',
+    auto_preload: true,
+    images: images
+  });
+
+  timeline.push({
+    type: 'html-button-response',
+    stimulus: '<div style="max-width:600px;"><p>Some browsers now require the user to interact with a page before it can play audio. '+
+    'Clicking the button below counts as an interaction.</p><p>Be aware of this when planning audio experiments if '+
+    'you want the first trial to include audio.</p></div>',
+    choices: ['Run demo']
+  });
+
+  var trial = {
+			type: 'audio-button-response',
+			stimulus: 'sound/roar.mp3',
+			choices: images,
+			prompt: "<p>Which animal made the sound?</p>",
+			button_html: '<img src="%choice%" />'
+		};
+
+  var show_data = {
+    type: 'html-button-response',
+    stimulus: function() {
+      var trial_data = jsPsych.data.getLastTrialData().values();
+      var trial_json = JSON.stringify(trial_data, null, 2);
+      return '<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>'+
+      '<pre style="margin-top:0px;text-align:left;">'+trial_json+'</pre>';
+    },
+    choices: ['Repeat demo']
+  };
+
+  timeline.push({
+    timeline: [trial, show_data],
+    loop_function: function() {
+      return true;
+    }
+  });
+
+  if (typeof jsPsych !== "undefined") {
+    jsPsych.init({
+      timeline: timeline
+    });
+  } else {
+    document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+  }
+
+  </script>
+</html>

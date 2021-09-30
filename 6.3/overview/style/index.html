@@ -1,0 +1,1866 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../../img/jspsych-favicon.png">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
+    
+    
+      
+        <title>Controlling Visual Appearance - jsPsych</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.f7f47774.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4cae4f">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+  
+
+
+  
+
+  
+
+
+  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+  <script async src="https://www.google-analytics.com/analytics.js"></script>
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="orange">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#controlling-visual-appearance" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="jsPsych" class="md-header__button md-logo" aria-label="jsPsych" data-md-component="logo">
+      
+  <img src="../../img/jspsych-logo-no-text-mono.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            jsPsych
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Controlling Visual Appearance
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="jsPsych" class="md-nav__button md-logo" aria-label="jsPsych" data-md-component="logo">
+      
+  <img src="../../img/jspsych-logo-no-text-mono.svg" alt="logo">
+
+    </a>
+    jsPsych
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Tutorials
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/hello-world/" class="md-nav__link">
+        The Basics: Hello World
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/rt-task/" class="md-nav__link">
+        Demo Experiment: Simple Reaction Time Task
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/video-tutorials/" class="md-nav__link">
+        Video Tutorials
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      <label class="md-nav__link" for="__nav_3">
+        Overview
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Overview" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Overview
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../timeline/" class="md-nav__link">
+        Creating an Experiment: The Timeline
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plugins/" class="md-nav__link">
+        Plugins
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dynamic-parameters/" class="md-nav__link">
+        Dynamic Parameters
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Controlling Visual Appearance
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Controlling Visual Appearance
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#inline-css" class="md-nav__link">
+    Inline CSS
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-css-rules" class="md-nav__link">
+    Adding CSS rules
+  </a>
+  
+    <nav class="md-nav" aria-label="Adding CSS rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#with-style-tags" class="md-nav__link">
+    With style tags
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#with-a-stylesheet" class="md-nav__link">
+    With a stylesheet
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-the-css_classes-trial-parameter" class="md-nav__link">
+    Using the css_classes trial parameter
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tips-for-working-with-css" class="md-nav__link">
+    Tips for working with CSS
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data/" class="md-nav__link">
+        Data Storage, Aggregation, and Manipulation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../running-experiments/" class="md-nav__link">
+        Running Experiments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../experiment-options/" class="md-nav__link">
+        Experiment Settings
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../callbacks/" class="md-nav__link">
+        Event-related Callback Functions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../record-browser-interactions/" class="md-nav__link">
+        Record Browser Interactions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../media-preloading/" class="md-nav__link">
+        Media Preloading
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fullscreen/" class="md-nav__link">
+        Fullscreen Experiments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../eye-tracking/" class="md-nav__link">
+        Eye Tracking
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exclude-browser/" class="md-nav__link">
+        Exclude Participants Based on Browser Features
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../progress-bar/" class="md-nav__link">
+        Automatic Progress Bar
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prolific/" class="md-nav__link">
+        Integrating with Prolific
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mturk/" class="md-nav__link">
+        Integrating with Mechanical Turk
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../browser-device-support/" class="md-nav__link">
+        Browser and Device Support
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        Reference
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core_library/jspsych-core/" class="md-nav__link">
+        jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core_library/jspsych-data/" class="md-nav__link">
+        jsPsych.data
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core_library/jspsych-randomization/" class="md-nav__link">
+        jsPsych.randomization
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core_library/jspsych-turk/" class="md-nav__link">
+        jsPsych.turk
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core_library/jspsych-pluginAPI/" class="md-nav__link">
+        jsPsych.pluginAPI
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Plugins
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Plugins" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Plugins
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/list-of-plugins/" class="md-nav__link">
+        List of Plugins
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-animation/" class="md-nav__link">
+        jspsych-animation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-audio-button-response/" class="md-nav__link">
+        jspsych-audio-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-audio-keyboard-response/" class="md-nav__link">
+        jspsych-audio-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-audio-slider-response/" class="md-nav__link">
+        jspsych-audio-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-call-function/" class="md-nav__link">
+        jspsych-call-function
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-canvas-button-response/" class="md-nav__link">
+        jspsych-canvas-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-canvas-keyboard-response/" class="md-nav__link">
+        jspsych-canvas-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-canvas-slider-response/" class="md-nav__link">
+        jspsych-canvas-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-categorize-animation/" class="md-nav__link">
+        jspsych-categorize-animation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-categorize-html/" class="md-nav__link">
+        jspsych-categorize-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-categorize-image/" class="md-nav__link">
+        jspsych-categorize-image
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-cloze/" class="md-nav__link">
+        jspsych-cloze
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-external-html/" class="md-nav__link">
+        jspsych-external-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-free-sort/" class="md-nav__link">
+        jspsych-free-sort
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-fullscreen/" class="md-nav__link">
+        jspsych-fullscreen
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-html-button-response/" class="md-nav__link">
+        jspsych-html-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-html-keyboard-response/" class="md-nav__link">
+        jspsych-html-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-html-slider-response/" class="md-nav__link">
+        jspsych-html-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-iat-html/" class="md-nav__link">
+        jspsych-iat-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-iat-image/" class="md-nav__link">
+        jspsych-iat-image
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-image-button-response/" class="md-nav__link">
+        jspsych-image-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-image-keyboard-response/" class="md-nav__link">
+        jspsych-image-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-image-slider-response/" class="md-nav__link">
+        jspsych-image-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-instructions/" class="md-nav__link">
+        jspsych-instructions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-maxdiff/" class="md-nav__link">
+        jspsych-maxdiff
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-preload/" class="md-nav__link">
+        jspsych-preload
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-rdk/" class="md-nav__link">
+        jspsych-rdk
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-reconstruction/" class="md-nav__link">
+        jspsych-reconstruction
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-resize/" class="md-nav__link">
+        jspsych-resize
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-same-different-html/" class="md-nav__link">
+        jspsych-same-different-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-same-different-image/" class="md-nav__link">
+        jspsych-same-different-image
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-serial-reaction-time/" class="md-nav__link">
+        jspsych-serial-reaction-time
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-serial-reaction-time-mouse/" class="md-nav__link">
+        jspsych-serial-reaction-time-mouse
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-survey-html-form/" class="md-nav__link">
+        jspsych-survey-html-form
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-survey-likert/" class="md-nav__link">
+        jspsych-survey-likert
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-survey-multi-choice/" class="md-nav__link">
+        jspsych-survey-multi-choice
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-survey-multi-select/" class="md-nav__link">
+        jspsych-survey-multi-select
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-survey-text/" class="md-nav__link">
+        jspsych-survey-text
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-video-button-response/" class="md-nav__link">
+        jspsych-video-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-video-keyboard-response/" class="md-nav__link">
+        jspsych-video-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-video-slider-response/" class="md-nav__link">
+        jspsych-video-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-virtual-chinrest/" class="md-nav__link">
+        jspsych-virtual-chinrest
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-visual-search-circle/" class="md-nav__link">
+        jspsych-visual-search-circle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-vsl-animate-occlusion/" class="md-nav__link">
+        jspsych-vsl-animate-occlusion
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-vsl-grid-scene/" class="md-nav__link">
+        jspsych-vsl-grid-scene
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-webgazer-calibrate/" class="md-nav__link">
+        jspsych-webgazer-calibrate
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-webgazer-init-camera/" class="md-nav__link">
+        jspsych-webgazer-init-camera
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-webgazer-validate/" class="md-nav__link">
+        jspsych-webgazer-validate
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
+        Extensions
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Extensions" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Extensions
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/extensions/" class="md-nav__link">
+        Extensions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/jspsych-ext-webgazer/" class="md-nav__link">
+        jspsych-ext-webgazer.js
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      <label class="md-nav__link" for="__nav_7">
+        About
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/about/" class="md-nav__link">
+        About jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/support/" class="md-nav__link">
+        Getting Help
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/contributing/" class="md-nav__link">
+        Contributing to jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#inline-css" class="md-nav__link">
+    Inline CSS
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-css-rules" class="md-nav__link">
+    Adding CSS rules
+  </a>
+  
+    <nav class="md-nav" aria-label="Adding CSS rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#with-style-tags" class="md-nav__link">
+    With style tags
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#with-a-stylesheet" class="md-nav__link">
+    With a stylesheet
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-the-css_classes-trial-parameter" class="md-nav__link">
+    Using the css_classes trial parameter
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tips-for-working-with-css" class="md-nav__link">
+    Tips for working with CSS
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/jspsych/jsPsych/edit/master/docs/overview/style.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="controlling-visual-appearance">Controlling Visual Appearance<a class="headerlink" href="#controlling-visual-appearance" title="Permanent link">&para;</a></h1>
+<p>Your experiment's style and formatting comes from the CSS (cascading style sheet) rules that are stored in the jspsych.css file, and the browser's defaults. There are a few ways to change the style and formatting in your experiment. The method that you choose is partly a matter of personal preference. It might also depend on whether you want the style/formatting change(s) to apply to <em>specific trials</em>, to <em>the whole experiment</em> (HTML page), or across <em>different experiments</em>. This section discusses the different ways of incorporating CSS into your jsPsych experiment. You can also see <a href="https://www.w3schools.com/html/html_css.asp">this page about adding CSS to web pages</a> to learn more.</p>
+<h2 id="inline-css">Inline CSS<a class="headerlink" href="#inline-css" title="Permanent link">&para;</a></h2>
+<p>Whenever you're using a parameter that accepts an HTML-formatted string, you have the option to include inline CSS. Inline CSS is a way of adding style and formatting directly into a specific HTML element using its <a href="https://www.w3schools.com/tags/att_style.asp">"style" attribute</a>. This is a good option for when you want to make few and/or simple style changes to an HTML trial parameter.</p>
+<p>To change an element's style using inline CSS, you can set the element's "style" attribute to a string that contains the CSS parameters that you want to change, along with the values that you want to use. The syntax is " &lt;parameter-name&gt; : &lt;parameter-value&gt; ;". </p>
+<p>In the example below, the stimulus font size is set to 30px and the text color is set to red. These changes will <em>only</em> be applied to this stimulus text in this specific trial.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;p style=&quot;font-size:30px;color:red;&quot;&gt;hello world!&lt;/p&gt;&#39;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>You can also use a <a href="/overview/dynamic-parameters">dynamic parameter</a> to combine inline CSS and trial-specific variables. This allows you to easily apply the same inline CSS to multiple trials. Here's an example using a dynamic stimulus parameter and <a href="/overview/timeline/#timeline-variables">timeline variables</a>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">stim</span> <span class="o">=</span> <span class="s1">&#39;&lt;p style=&quot;font-size:30px;font-weight:bold;&quot;&gt;&#39;</span><span class="o">+</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nx">stim</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">trial_procedure</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">trial</span><span class="p">],</span>
+    <span class="nx">timeline_variables</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;Welcome&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;to&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;the&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;experiment!&#39;</span><span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="adding-css-rules">Adding CSS rules<a class="headerlink" href="#adding-css-rules" title="Permanent link">&para;</a></h2>
+<p>You may want to add a lot of different CSS changes to your experiment, re-use the same change(s) across lots of different trials, and/or separate the style/formatting from the HTML string. In these cases, you might find it useful to create CSS rules rather than using inline CSS. </p>
+<p>Creating CSS rules is a lot like using inline CSS, except that you also need to use a <a href="https://www.w3schools.com/css/css_selectors.asp">CSS selector</a>. This is because your CSS rules aren't attached to any specific HTML element (unlike inline CSS), so you need to tell the browser which element(s) the style rules should apply to. The syntax is "css-selector { &lt;parameter-name&gt; : &lt;parameter-value&gt; ; }". </p>
+<p>In the example below, the CSS selector "p" tells the browser to apply the font size change to any text that is inside of a &lt;p&gt; element.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">p</span> <span class="p">{</span>
+  <span class="k">font-size</span><span class="p">:</span> <span class="mi">30</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>You can make more specific changes using CSS rules. The specificity will depend on the CSS selectors that are used. In addition to using the <a href="https://www.w3schools.com/cssref/sel_element.asp">tag name</a> (e.g. "p"), other common CSS selectors include the element's <a href="https://www.w3schools.com/html/html_id.asp">ID</a> or <a href="https://www.w3schools.com/html/html_classes.asp">class</a>. If you are selecting an element using it's ID, then the CSS selector needs to have a # in front of the ID, e.g. "#stimulus". If you are selecting elements based on their class, then you need to include a . in front of the class, e.g. ".large-text".</p>
+<p>In the example below, the "#stimulus" CSS selector means that the width change will only affect elements with the "stimulus" ID, and the ".large-text" CSS selector means that the font size change will only affect elements that have the "large-text" class.</p>
+<div class="highlight"><pre><span></span><code><span class="p">#</span><span class="nn">stimulus</span> 
+    <span class="nt">width</span><span class="o">:</span> <span class="nt">300px</span><span class="o">;</span>
+<span class="err">}</span>
+<span class="p">.</span><span class="nc">large-text</span> <span class="p">{</span>
+    <span class="k">font-size</span><span class="p">:</span> <span class="mi">200</span><span class="kt">%</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>It is possible to create even more specific CSS selectors, for instance by combining tags, IDs, and/or classes. For example, let's say that you are showing feedback text to participants, and that this text is inside of a &lt;p&gt; tag. You could add the ID "correct" to the &lt;p&gt; element for correct response feedback, and the ID "incorrect" to the &lt;p&gt; element for incorrect response feedback. Then you can define separate styles for correct and incorrect feedback text like this:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">p</span><span class="p">#</span><span class="nn">incorrect</span> <span class="p">{</span>
+  <span class="k">color</span><span class="p">:</span> <span class="kc">red</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">p</span><span class="p">#</span><span class="nn">correct</span> <span class="p">{</span>
+  <span class="k">color</span><span class="p">:</span> <span class="kc">green</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>See <a href="https://www.w3schools.com/cssref/css_selectors.asp">this page about CSS selectors</a> for a complete reference of CSS selector patterns and their meanings.</p>
+<h3 id="with-style-tags">With style tags<a class="headerlink" href="#with-style-tags" title="Permanent link">&para;</a></h3>
+<p>You can add CSS rules to your HTML page by putting them inside of &lt;style&gt; tags. These rules will be applied to your <em>whole experiment</em>. This method can be useful for making general changes to the way that your experiment looks. </p>
+<p>In the example below, the default font size is set to 25px throughout the experiment. This will overrule the default font size of 18px that is set in the jspsych.css file.</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jsPsych/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jsPsych/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jsPsych/css/jspsych.css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span> 
+    <span class="p">.</span><span class="nc">jspsych-display-element</span> <span class="p">{</span>
+      <span class="k">font-size</span><span class="p">:</span> <span class="mi">25</span><span class="kt">px</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</code></pre></div>
+<h3 id="with-a-stylesheet">With a stylesheet<a class="headerlink" href="#with-a-stylesheet" title="Permanent link">&para;</a></h3>
+<p>CSS rules can also be applied to your experiment with a link to an external CSS file. This is the same method that is usually used to apply the style from jspsych.css to an experiment. These rules will be applied to your <em>whole experiment</em>. You may find it useful to use a custom stylesheet when you want to re-use the same CSS rules across <em>multiple experiments</em> (HTML files).</p>
+<p>This example shows how to add a custom CSS file in addition to the styles provided in jspsych.css:</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jsPsych/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jsPsych/plugins/jspsych-image-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jsPsych/css/jspsych.css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;my_experiment_style.css&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</code></pre></div>
+<p>Below are the some example contents of an external CSS file, like the "my_experiment_style.css" from the example above. This CSS will (1) change the page background color to black, (2) change the default font to 25px and white, and (3) limit the width of the page content so that it can only take up to 80% of its normal width. </p>
+<div class="highlight"><pre><span></span><code><span class="nt">body</span> <span class="p">{</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="kc">black</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">jspsych-display-element</span> <span class="p">{</span>
+  <span class="k">font-size</span><span class="p">:</span> <span class="mi">25</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">color</span><span class="p">:</span> <span class="kc">white</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">jspsych-content</span> <span class="p">{</span>
+  <span class="k">max-width</span><span class="p">:</span> <span class="mi">80</span><span class="kt">%</span><span class="p">;</span> 
+<span class="p">}</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>&lt;style&gt; tags are not used inside of an external CSS file.</p>
+</div>
+<h3 id="using-the-css_classes-trial-parameter">Using the css_classes trial parameter<a class="headerlink" href="#using-the-css_classes-trial-parameter" title="Permanent link">&para;</a></h3>
+<p>CSS rules can also be applied in a trial-specific way using the <code>css_classes</code> parameter. This parameter will apply one or more class to the &lt;div&gt; element that holds all of the jsPsych page content during that specific trial. This way you can treat CSS styles just like any other trial parameter. </p>
+<p>You can use a static <code>css_classes</code> parameter value if you always want to apply the same CSS rules to the trial. In the 'fixation' example below, separating the style rules from the <code>stimulus</code> string makes the code a little bit 'cleaner', and this makes it easier to re-use the same style rules in other parts of the experiment.</p>
+<div class="highlight"><pre><span></span><code> <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jsPsych/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jsPsych/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jsPsych/css/jspsych.css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span> 
+    <span class="p">.</span><span class="nc">fixation</span> <span class="p">{</span><span class="k">font-size</span><span class="p">:</span> <span class="mi">90</span><span class="kt">px</span><span class="p">;</span> <span class="k">font-weight</span><span class="p">:</span> <span class="kc">bold</span><span class="p">;</span> <span class="k">color</span><span class="p">:</span> <span class="kc">gray</span><span class="p">;}</span>
+  <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="kd">var</span> <span class="nx">fixation</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span>
+    <span class="nx">choices</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">NO_KEYS</span><span class="p">,</span>
+    <span class="nx">trial_duration</span><span class="o">:</span> <span class="mf">500</span><span class="p">,</span>
+    <span class="nx">css_classes</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;fixation&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="c1">// ...</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+<p>You may want the  <code>css_classes</code> parameter to vary across trials. If so, you can turn it into a <a href="/overview/dynamic-parameters">dynamic parameter</a> or use <a href="/overview/timeline/#timeline-variables">timeline variables</a> (see examples below). </p>
+<p>One thing to note about the <code>css_classes</code> parameter is that it only adds the class(es) to the jspsych-content &lt;div&gt; element, which is the "parent" element that contains all of the experiment content. Often you'll want your CSS rules to be applied to other elements <em>inside</em> of this jspsych-content div. Sometimes your CSS rules will be "inherited" by all of the other jsPsych content inside of this parent &lt;div&gt;. For instance, in the <code>fixation</code> example above, the CSS rules that change the font size, weight and color are applied to the parent &lt;div&gt; and automatically passed on to the stimulus text through inheritance.</p>
+<p>There are two reasons why a CSS rule like the one above for <code>fixation</code> may not work the way you expect:</p>
+<ol>
+<li>
+<p>Not all CSS properties are inherited from the parent element.</p>
+</li>
+<li>
+<p>When a CSS property is inherited from the parent element, it will affect <em>all</em> elements in a given trial. </p>
+</li>
+</ol>
+<p>In these cases, you can change your CSS selector to make it more specific: add a space after class name, then add <em>more CSS selectors</em> to select the specific element(s) that you want to change. </p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To find out this more specific CSS selector, you can right-click on the element and select <em>Inspect</em>. In the inspector window, right-click on the property corresponding to the element and copy the selector. You might need to increase the trial's <code>trial_duration</code> to give yourself enough time to inspect the elements on the page. See more <a href="#tips-for-working-with-css">tips for working with CSS</a> below.</p>
+</div>
+<p>In the example below, the CSS selector <code>.left-align #stimulus</code> selects the element with the ID "stimulus" that is <em>inside</em> of an element with the class "left-align".</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jsPsych/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jsPsych/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jsPsych/css/jspsych.css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span> 
+    <span class="p">.</span><span class="nc">left-align</span> <span class="p">#</span><span class="nn">stimulus</span> <span class="p">{</span><span class="k">text-align</span><span class="p">:</span> <span class="kc">left</span><span class="p">;</span> <span class="k">width</span><span class="p">:</span> <span class="mi">600</span><span class="kt">px</span><span class="p">;}</span>
+    <span class="p">.</span><span class="nc">right-align</span> <span class="p">#</span><span class="nn">stimulus</span> <span class="p">{</span><span class="k">text-align</span><span class="p">:</span> <span class="kc">right</span><span class="p">;</span> <span class="k">width</span><span class="p">:</span> <span class="mi">600</span><span class="kt">px</span><span class="p">;}</span>
+  <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="kd">var</span> <span class="nx">trial_procedure</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">timeline</span><span class="o">:</span> <span class="p">[{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+        <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;p id=&quot;stimulus&quot;&gt;This is the stimulus.&lt;/p&gt;&#39;</span><span class="p">,</span>
+        <span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39;&lt;p&gt;This text will not be affected by the CSS classes &#39;</span><span class="o">+</span>
+            <span class="s1">&#39;because it does not have the &quot;stimulus&quot; ID.&lt;/p&gt;&#39;</span><span class="p">,</span>
+        <span class="nx">css_classes</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;css_classes&#39;</span><span class="p">)</span>
+    <span class="p">}],</span>
+    <span class="nx">timeline_variables</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="nx">css_classes</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;left-align&#39;</span><span class="p">]},</span>
+        <span class="p">{</span><span class="nx">css_classes</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;right-align&#39;</span><span class="p">]}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+<span class="c1">// ...</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+<p>It's also possible to pass multiple class names to the <code>css_classes</code> parameter. This can be useful for creating conditions that involve crossing different style-related factors. This example shows you to combine two text alignment and two text color factors to produce four different stimulus conditions:</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jsPsych/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jsPsych/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jsPsych/css/jspsych.css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span> 
+    <span class="p">.</span><span class="nc">left-align</span> <span class="p">#</span><span class="nn">stimulus</span> <span class="p">{</span><span class="k">text-align</span><span class="p">:</span> <span class="kc">left</span><span class="p">;</span> <span class="k">width</span><span class="p">:</span> <span class="mi">600</span><span class="kt">px</span><span class="p">;}</span>
+    <span class="p">.</span><span class="nc">right-align</span> <span class="p">#</span><span class="nn">stimulus</span> <span class="p">{</span><span class="k">text-align</span><span class="p">:</span> <span class="kc">right</span><span class="p">;</span> <span class="k">width</span><span class="p">:</span> <span class="mi">600</span><span class="kt">px</span><span class="p">;}</span>
+    <span class="p">.</span><span class="nc">teal</span> <span class="p">#</span><span class="nn">stimulus</span> <span class="p">{</span><span class="k">color</span><span class="p">:</span> <span class="kc">teal</span><span class="p">;}</span>
+    <span class="p">.</span><span class="nc">purple</span> <span class="p">#</span><span class="nn">stimulus</span> <span class="p">{</span><span class="k">color</span><span class="p">:</span> <span class="kc">purple</span><span class="p">;}</span>
+  <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="kd">var</span> <span class="nx">trial_procedure</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">timeline</span><span class="o">:</span> <span class="p">[{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+        <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;p id=&quot;stimulus&quot;&gt;This is the stimulus.&lt;/p&gt;&#39;</span><span class="p">,</span>
+        <span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39;&lt;p&gt;This text will not be affected by the CSS classes &#39;</span><span class="o">+</span>
+            <span class="s1">&#39;because it does not have the &quot;stimulus&quot; ID.&lt;/p&gt;&#39;</span><span class="p">,</span>
+        <span class="nx">css_classes</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;css_classes&#39;</span><span class="p">),</span>
+        <span class="nx">data</span><span class="o">:</span> <span class="p">{</span><span class="nx">condition</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;condition&#39;</span><span class="p">)}</span>
+    <span class="p">}],</span>
+    <span class="nx">timeline_variables</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="nx">css_classes</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;left-align&#39;</span><span class="p">,</span><span class="s1">&#39;teal&#39;</span><span class="p">],</span> <span class="nx">condition</span><span class="o">:</span> <span class="s1">&#39;left-teal&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">css_classes</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;right-align&#39;</span><span class="p">,</span><span class="s1">&#39;teal&#39;</span><span class="p">],</span> <span class="nx">condition</span><span class="o">:</span> <span class="s1">&#39;right-teal&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">css_classes</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;left-align&#39;</span><span class="p">,</span><span class="s1">&#39;purple&#39;</span><span class="p">],</span> <span class="nx">condition</span><span class="o">:</span> <span class="s1">&#39;left-purple&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">css_classes</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;right-align&#39;</span><span class="p">,</span><span class="s1">&#39;purple&#39;</span><span class="p">],</span> <span class="nx">condition</span><span class="o">:</span> <span class="s1">&#39;right-purple&#39;</span><span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+<span class="c1">// ...</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+<p>See the "css-classes-parameter.html" file in jsPsych's examples subfolder for more explanation and examples.</p>
+<h2 id="tips-for-working-with-css">Tips for working with CSS<a class="headerlink" href="#tips-for-working-with-css" title="Permanent link">&para;</a></h2>
+<p>Your browser's developer tools contain very useful features for exploring and debugging your experiment's style and formatting. Open your browser's developer tools and click on the Element Inspector button or go to the Elements tab. Once you have selected an element on the page, you can see all of the information that can be used to select it, including:</p>
+<ol>
+<li>tag name, e.g., "div", "p", "img", "button"</li>
+<li>ID, if it has one</li>
+<li>class(es), if it has any</li>
+</ol>
+<p>You can then use this information to create a CSS selector to modify that element's style.</p>
+<p><img alt="devtools-element-inspector" src="../../img/devtools-inspect-element.png" /></p>
+<p>As you can see, jsPsych adds its own IDs and classes to many elements. You can use the developer tools to determine what IDs and classes already exist for the elements that you want to modify, as you may can often just use these instead of adding your own. For instance, in the "html-keyboard-response" plugin, the stimulus will always be shown in a &lt;div&gt; with the ID "jspsych-html-keyboard-response-stimulus". So you can create a CSS rule that is applied to all "html-keyboard-response" stimuli like this:</p>
+<div class="highlight"><pre><span></span><code><span class="p">#</span><span class="nn">jspsych-html-keyboard-response-stimulus</span> <span class="p">{</span>
+  <span class="k">color</span><span class="p">:</span> <span class="kc">white</span><span class="p">;</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="kc">blue</span><span class="p">;</span>
+  <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">border</span><span class="p">:</span> <span class="mi">4</span><span class="kt">px</span> <span class="kc">solid</span> <span class="kc">black</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>As another example, most jsPsych buttons have the class "jspsych-btn", so you can use this class to change the default button styling:</p>
+<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="nc">jspsych-btn</span> <span class="p">{</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">font-size</span><span class="p">:</span> <span class="mi">25</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">border-color</span><span class="p">:</span> <span class="kc">black</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>You can also use the developer tools to change an element's CSS and immediately see the effect that the changes will have on the page. These changes are just temporary, so you will still need to use one of methods described above to add the CSS changes to your experiment. However, making changes in the developer tools is very useful for figuring out which CSS properties to change and which values to use. This area of the developer tools also shows what styles are currently applied to the element and where those style rules are coming from. </p>
+<p><img alt="devtools-change-css" src="../../img/devtools-change-css.png" /></p>
+<p>There are a few things to be aware of while debugging problems with CSS. </p>
+<ol>
+<li>When there are conflicting CSS rules, <em>some CSS rules will take precedence over others</em>. For instance, inline CSS usually takes precedence over other CSS rules, and more specific CSS selectors usually take precedence over less specific ones. </li>
+<li>When there are conflicting CSS rules that have the same level of precedence, <em>the last rule will override any earlier rules</em>. For that reason it's important to add your own custom stylesheet <em>after</em> the default jspsych.css stylesheet. See <a href="https://www.w3schools.com/css/css_specificity.asp">this page about CSS precedence</a> for more information.</li>
+</ol>
+<p>If one CSS style rule is overridden by another one, the rule that is overridden will appear in <s>strikethrough text</s> in the element's "Styles" section. Also, if you are using an incorrect CSS property name or an invalid value, then that will show up here as an error, indicated by both <s>strikethrough text</s> and a little yellow warning symbol.</p>
+<p><img alt="devtools-css-error" src="../../img/devtools-css-errors.png" /></p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../dynamic-parameters/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Dynamic Parameters" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Dynamic Parameters
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../data/" class="md-footer__link md-footer__link--next" aria-label="Next: Data Storage, Aggregation, and Manipulation" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Data Storage, Aggregation, and Manipulation
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2012-2021 Josh de Leeuw
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.709b4209.min.js", "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.febc23d1.min.js"></script>
+      
+    
+  </body>
+</html>

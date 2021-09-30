@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-canvas-slider-response.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
+  <style>
+      .jspsych-btn {margin-bottom: 10px;}
+  </style>
+</head>
+<body></body>
+<script>
+
+  var start = {
+    type: 'html-button-response',
+    stimulus: '',
+    choices: ['Run demo']
+  };
+
+  var show_data = {
+    type: 'html-button-response',
+    stimulus: function() {
+      var trial_data = jsPsych.data.getLastTrialData().values();
+      var trial_json = JSON.stringify(trial_data, null, 2);
+      return `<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>
+        <pre style="margin-top:0px;text-align:left;">${trial_json}</pre>`;
+    },
+    choices: ['Repeat demo']
+  };
+
+  // Draw two squares with additional parameters
+
+  var colors;
+
+  function twoSquares(c, colors) {
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = colors[0];
+    ctx.fillRect(200, 70, 40, 40);
+    ctx.fillStyle = colors[1];
+    ctx.fillRect(260, 70, 40, 40);
+  }
+
+  var trial = {
+    type: 'canvas-slider-response',
+    stimulus: function(c) {
+        colors = ['darkred', 'cyan'];
+        twoSquares(c, colors);
+    },
+    labels: ['Exactly<br>the same','Totally<br>different'],
+    canvas_size: [200, 500],
+    prompt: '<p>How different would you say the colors of these two squares are?</p>',
+    on_finish: function(data) {
+        data.color1 = colors[0];
+        data.color2 = colors[1];
+    }
+  };
+  
+  var canvas_data_loop = {
+    timeline: [trial, show_data],
+    loop_function: function() {
+      return true;
+    }
+  };
+
+  if (typeof jsPsych !== "undefined") {
+    jsPsych.init({
+      timeline: [start, canvas_data_loop]
+    });
+  } else {
+    document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+  }
+
+</script>
+
+</html>
