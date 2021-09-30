@@ -667,7 +667,7 @@ Either a function that returns the value of the timeline variable, or the value 
 
 ### Description
 
-[Timeline variables](../overview/timeline/#timeline-variables) are a powerful technique for generating experiments with repetitive procedures but different parameter values. This function fetches the current value of a particular timeline variable. It must be used in conjunction with a timeline that has timeline variables. See the [timeline variable section](../overview/timeline/#timeline-variables) for details.
+[Timeline variables](../overview/timeline.md#timeline-variables) are a powerful technique for generating experiments with repetitive procedures but different parameter values. This function fetches the current value of a particular timeline variable. It must be used in conjunction with a timeline that has timeline variables. See the [timeline variable section](../overview/timeline.md#timeline-variables) for details.
 
 ### Examples
 

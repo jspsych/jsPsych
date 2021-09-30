@@ -6,7 +6,7 @@ The preload trial will end as soon as all files have loaded successfully. The tr
 
 ## Parameters
 
-In addition to the [parameters available in all plugins](../overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. While there are no specific parameters that are required, the plugin expects to be given a set of files to load through one or more of the following parameters: `auto_preload` or `trials` (for automatic loading), and/or `images`, `audio`, `video` (for manual loading). To automatically load files based on a timeline of trials, either set the `auto_preload` parameter is `true` (to load files based on the main timeline passed to `jsPsych.run`) or use the `trials` parameter to load files based on a specific subset of trials. To manually load a set of files, use the `images`, `audio`, and `video` parameters. You can combine automatic and manual loading methods in a single preload trial.
+In addition to the [parameters available in all plugins](../overview/plugins.md#parameters-available-in-all-plugins), this plugin accepts the following parameters. While there are no specific parameters that are required, the plugin expects to be given a set of files to load through one or more of the following parameters: `auto_preload` or `trials` (for automatic loading), and/or `images`, `audio`, `video` (for manual loading). To automatically load files based on a timeline of trials, either set the `auto_preload` parameter is `true` (to load files based on the main timeline passed to `jsPsych.run`) or use the `trials` parameter to load files based on a specific subset of trials. To manually load a set of files, use the `images`, `audio`, and `video` parameters. You can combine automatic and manual loading methods in a single preload trial.
 
 All other parameters can be left unspecified if the default value is acceptable.
 
@@ -28,7 +28,7 @@ All other parameters can be left unspecified if the default value is acceptable.
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](../overview/plugins/#data-collected-by-all-plugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](../overview/plugins.md#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
 | Name           | Type    | Value                                    |
 | -------------- | ------- | ---------------------------------------- |

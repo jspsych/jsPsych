@@ -4,7 +4,7 @@ This plugin can be used to measure the accuracy and precision of gaze prediction
 
 ## Parameters
 
-In addition to the [parameters available in all plugins](../overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+In addition to the [parameters available in all plugins](../overview/plugins.md#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
@@ -19,7 +19,7 @@ show_validation_data | bool | false | If `true` then a visualization of the vali
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](../overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](../overview/plugins.md#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
@@ -31,4 +31,4 @@ validation_points | array | The list of validation points, in the order that the
 
 ## Example
 
-Because the eye tracking plugins need to be used in conjunction with each other, please see the [example on the eye tracking overview page](../overview/eye-tracking/#example) for an integrated example. 
+Because the eye tracking plugins need to be used in conjunction with each other, please see the [example on the eye tracking overview page](../overview/eye-tracking.md#example) for an integrated example. 

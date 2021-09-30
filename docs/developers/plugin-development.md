@@ -135,9 +135,9 @@ trial(display_element, trial){
 
 ### Responding to keyboard events
 
-While the plugin framework allows you to set up any events that you would like to, including normal handling of `keyup` or `keydown` events, the `jsPsych.pluginAPI` module contains the [`getKeyboardResponse` function](../reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse), which implements some additional helpful functionality for key responses in an experiment.
+While the plugin framework allows you to set up any events that you would like to, including normal handling of `keyup` or `keydown` events, the `jsPsych.pluginAPI` module contains the [`getKeyboardResponse` function](../reference/jspsych-pluginAPI.md#jspsychpluginapigetkeyboardresponse), which implements some additional helpful functionality for key responses in an experiment.
 
-Here's a basic example. See the [`getKeyboardResponse` docs](../reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse) for additional examples.
+Here's a basic example. See the [`getKeyboardResponse` docs](../reference/jspsych-pluginAPI.md#jspsychpluginapigetkeyboardresponse) for additional examples.
 
 ```js
 trial(display_element, trial){
@@ -197,7 +197,7 @@ trial(display_element, trial, on_load){
 
 ### Save data
 
-To write data to [jsPsych's data collection](../reference/jspsych-data/#datacollection) pass an object of data as the parameter to `jsPsych.finishTrial()`.
+To write data to [jsPsych's data collection](../reference/jspsych-data.md#datacollection) pass an object of data as the parameter to `jsPsych.finishTrial()`.
 
 ```javascript
 constructor(jsPsych){
@@ -214,11 +214,11 @@ trial(display_element, trial){
 }
 ```
 
-The data recorded will be that `correct` is `true` and that `rt` is `350`. [Additional data for the trial](../overview/plugins/#data-collected-by-all-plugins) will also be collected automatically.
+The data recorded will be that `correct` is `true` and that `rt` is `350`. [Additional data for the trial](../overview/plugins.md#data-collected-by-all-plugins) will also be collected automatically.
 
 ## Advice for writing plugins
 
-If you are developing a plugin with the aim of including it in the main jsPsych repository we encourage you to follow the [contribution guidelines](contributing/#contributing-to-the-codebase). 
+If you are developing a plugin with the aim of including it in the main jsPsych repository we encourage you to follow the [contribution guidelines](contributing.md#contributing-to-the-codebase). 
 
 We also recommend that you make your plugin *as general as possible*. Consider using parameters to give the user of the plugin as many options for customization as possible. For example, if you have any text that displays in the plugin including things like button labels, implement the text as a parameter. This allows users running experiments in other languages to replace text values as needed.
 

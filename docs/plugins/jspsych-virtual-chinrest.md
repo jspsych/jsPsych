@@ -42,7 +42,7 @@ Parameters can be left unspecified if the default value is acceptable.
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](overview#datacollectedbyplugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](overview.md#datacollectedbyplugins), this plugin collects the following data for each trial.
 
 _Note: The deg data are **only** returned if viewing distance is estimated with the blindspot method (px2deg, win_height_deg, win_width_deg, item_width_deg)._
 

@@ -21,7 +21,7 @@ Instead, it can be found on the jsdelivr.net CDN at: "https://cdn.jsdelivr.net/g
 
 !!! note 
   A copy of our forked `webgazer.js` file is also included in the jsPsych release, in the `/examples/js/webgazer` folder. 
-  So if you prefer to download and host all of your jsPsych files (i.e. [set-up option 2](../tutorials/hello-world/#option-2-download-and-host-jspsych) in the Hello World tutorial), then another option is to load that file rather than using the jsdelivr link above. 
+  So if you prefer to download and host all of your jsPsych files (i.e. [set-up option 2](../tutorials/hello-world.md#option-2-download-and-host-jspsych) in the Hello World tutorial), then another option is to load that file rather than using the jsdelivr link above. 
   Assuming you downloaded the release and copied the `webgazer.js` file into a folder called `js/webgazer` in your root project directory, then you would load the file like this:
   ```html
   <script src="js/webgazer/webgazer.js"></script>

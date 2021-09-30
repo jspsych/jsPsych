@@ -12,7 +12,7 @@ This guide is aimed at users who are familiar with v6.x of jsPsych and would lik
 
 There are now three different ways you can load jsPsych into your HTML file. 
 We've updated the [hello world tutorial](../tutorials/hello-world.md) to walk through each of the three options. 
-If you are looking for the option that is most similar to the version 6.x experience, check out [option 2](../tutorials/hello-world/#option-2-download-and-host-jspsych). 
+If you are looking for the option that is most similar to the version 6.x experience, check out [option 2](../tutorials/hello-world.md#option-2-download-and-host-jspsych). 
 The biggest difference from what you are used to is that the directory structure of the downloaded library is slightly different and plugin files are named a little bit differently.
 
 ## Initializing and running jsPsych

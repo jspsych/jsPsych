@@ -400,7 +400,7 @@ var face_name_procedure = {
 
 Any timeline can be looped using the `loop_function` option. 
 The loop function must be a function that evaluates to `true` if the timeline should repeat, and `false` if the timeline should end. It receives a single parameter, named `data` by convention. 
-This parameter will be the [DataCollection object](../reference/jspsych-data/#datacollection) with all of the data from the trials executed in the last iteration of the timeline. 
+This parameter will be the [DataCollection object](../reference/jspsych-data.md#datacollection) with all of the data from the trials executed in the last iteration of the timeline. 
 The loop function will be evaluated after the timeline is completed.
 
 ```javascript

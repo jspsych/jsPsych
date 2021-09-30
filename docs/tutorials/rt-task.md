@@ -17,7 +17,7 @@ Despite this simple task, the tutorial covers many of the key features of jsPsyc
 Start by setting up a new HTML file with jsPsych, the html-keyboard-response plugin, and the jspsych.css file loaded. If you are unsure how to do this, follow the [Hello World tutorial](hello-world.md). You should have an HTML document that looks like this:
 
 !!! info
-    This tutorial assumes that you are using the [CDN-based method of loading jsPsych](hello-world/#option-1-using-cdn-hosted-scripts). 
+    This tutorial assumes that you are using the [CDN-based method of loading jsPsych](hello-world.md#option-1-using-cdn-hosted-scripts). 
     If you are using another method then everything is the same except for how jsPsych is loaded.
 
 ```html

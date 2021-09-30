@@ -4,7 +4,7 @@ This plugin can be used to calibrate the [WebGazer extension](../extensions/jsps
 
 ## Parameters
 
-In addition to the [parameters available in all plugins](../overview/plugins#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+In addition to the [parameters available in all plugins](../overview/plugins.md#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
@@ -18,7 +18,7 @@ time_per_point | numeric | 1000 | If `calibration_mode` is set to `view`, then t
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](../overview/plugins#data-collected-by-all-plugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](../overview/plugins.md#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
 Name | Type | Value
 -----|------|------
@@ -27,5 +27,5 @@ No data currently added by this plugin. Use the [webgazer-validate](jspsych-webg
 
 ## Example
 
-Because the eye tracking plugins need to be used in conjunction with each other, please see the [example on the eye tracking overview page](../overview/eye-tracking/#example) for an integrated example. 
+Because the eye tracking plugins need to be used in conjunction with each other, please see the [example on the eye tracking overview page](../overview/eye-tracking.md#example) for an integrated example. 
 
