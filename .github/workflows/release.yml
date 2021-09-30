@@ -1,0 +1,80 @@
+name: release
+
+env:
+  HUSKY: 0
+
+on:
+  push:
+    branches:
+      - changeset-setup
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
+          fetch-depth: 0
+
+      - name: Setup Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      - name: Install dependencies and build packages
+        run: npm ci --ignore-scripts
+
+      - name: Create Release Pull Request
+        uses: changesets/action@master
+        with:
+          publish: npm run release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Assets
+        uses: actions/github-script@v4
+        if: steps.changesets.outputs.published == 'true'
+        with:
+          script: |
+            const fs = require("fs");
+
+            const publishedPackages = ${{ steps.changesets.outputs.publishedPackages }};
+            const { owner, repo } = context.repo;
+            const distFile = "dist.zip";
+
+            let errorMessage;
+            for (const { name: tag, version } of publishedPackages) {
+              try {
+                // https://docs.github.com/en/rest/reference/repos#get-a-release-by-tag-name
+                const releaseId = (
+                  await github.request("GET /repos/{owner}/{repo}/releases/tags/{tag}", {
+                    owner,
+                    repo,
+                    tag,
+                  })
+                ).data.id;
+
+                // https://octokit.github.io/rest.js/v18#repos-upload-release-asset
+                await github.repos.uploadReleaseAsset({
+                  owner,
+                  repo,
+                  release_id: releaseId,
+                  name: `${tag.replace(/@jspsych(.*)\//g, "jspsych$1-").replace("@", "-")}-dist.zip`,
+                  label: "Dist archive (zip)",
+                  headers: {
+                    "content-type": "application/zip",
+                    "content-length": fs.statSync(distFile).size,
+                  },
+                  data: fs.readFileSync(distFile),
+                });
+              } catch (error) {
+                console.log(error);
+                errorMessage = error.message;
+              }
+            }
+
+            if (errorMessage) {
+              core.setFailed(errorMessage);
+            }
