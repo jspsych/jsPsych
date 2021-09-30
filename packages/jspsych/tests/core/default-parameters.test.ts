@@ -1,6 +1,5 @@
 import surveyText from "@jspsych/plugin-survey-text";
-
-import { startTimeline } from "../utils";
+import { startTimeline } from "@jspsych/test-utils";
 
 describe("nested defaults", () => {
   test("work in basic situation", async () => {

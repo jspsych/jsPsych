@@ -1,4 +1,4 @@
-import { mouseDownMouseUpTarget, startTimeline } from "jspsych/tests/utils";
+import { mouseDownMouseUpTarget, startTimeline } from "@jspsych/test-utils";
 
 import serialReactionTimeMouse from ".";
 

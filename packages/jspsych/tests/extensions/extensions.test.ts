@@ -1,12 +1,11 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import { pressKey } from "@jspsych/test-utils";
 
-import { JsPsych, initJsPsych } from "../../src";
-import { pressKey } from "../utils";
+import { initJsPsych } from "../../src";
 import testExtension from "./test-extension";
 
 jest.useFakeTimers();
 
-// https://github.com/jspsych/jsPsych/projects/6#card-64825201
 describe("jsPsych.extensions", () => {
   test("initialize is called at start of experiment", async () => {
     const jsPsych = initJsPsych({

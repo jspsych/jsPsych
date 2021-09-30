@@ -1,8 +1,8 @@
 import audioKeyboardResponse from "@jspsych/plugin-audio-keyboard-response";
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 import videoKeyboardResponse from "@jspsych/plugin-video-keyboard-response";
+import { startTimeline } from "@jspsych/test-utils";
 import { JsPsych, initJsPsych } from "jspsych";
-import { startTimeline } from "jspsych/tests/utils";
 
 import preloadPlugin from ".";
 

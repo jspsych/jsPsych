@@ -1,6 +1,5 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-
-import { pressKey, startTimeline } from "../utils";
+import { pressKey, startTimeline } from "@jspsych/test-utils";
 
 describe("case_sensitive_responses parameter", () => {
   test("has a default value of false", async () => {

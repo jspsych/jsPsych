@@ -1,7 +1,7 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import { flushPromises, pressKey, startTimeline } from "@jspsych/test-utils";
 
 import { initJsPsych } from "../../src";
-import { flushPromises, pressKey, startTimeline } from "../utils";
 
 test("works on basic timeline", async () => {
   const jsPsych = initJsPsych();

@@ -1,6 +1,6 @@
 import { setImmediate as flushMicroTasks } from "timers";
 
-import { JsPsych } from "../src";
+import { JsPsych } from "jspsych";
 
 export function dispatchEvent(event: Event) {
   document.body.dispatchEvent(event);
