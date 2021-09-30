@@ -34,6 +34,7 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
 repo_url: 'https://github.com/jspsych/jsPsych'
 repo_name: 'jspsych/jspsych'
+site_url: 'https://www.jspsych.org/'
 docs_dir: docs
 nav:
 - Introduction: 'index.md'
