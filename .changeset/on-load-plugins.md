@@ -1,5 +1,5 @@
 ---
-"jspsych": minor
+"jspsych": major
 "@jspsych/plugin-audio-button-response": minor
 "@jspsych/plugin-audio-keyboard-response": minor
 "@jspsych/plugin-audio-slider-response": minor
