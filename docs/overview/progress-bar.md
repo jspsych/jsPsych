@@ -2,13 +2,12 @@
 
 jsPsych can show a progress bar at the top of the experiment page indicating the subject's overall completion progress. The progress bar is rendered outside the jsPsych display element, and it requires the `jspsych.css` file to be loaded on the page. As of version 6.0, the progress bar looks like this:
 
-![Progressbar Screenshot](/img/progress_bar.png)
+![Progressbar Screenshot](../img/progress_bar.png)
 
-To show the progress bar, set the `show_progress_bar` option in `jsPsych.init` to `true`:
+To show the progress bar, set the `show_progress_bar` option in `initJsPsych` to `true`:
 
 ```javascript
-jsPsych.init({
-	timeline: exp,
+var jsPsych = initJsPsych({
 	show_progress_bar: true
 });
 ```
@@ -21,7 +20,7 @@ The progress bar can also be manually controlled using the function `jsPsych.set
 
 ```js
 var trial = {
-	type: 'html-keyboard-response',
+	type: jsPsychHtmlKeyboardResponse,
 	stimulus: 'Almost done...',
 	on_finish: function(){
 		jsPsych.setProgressBar(0.85); // set progress bar to 85% full.
@@ -35,23 +34,27 @@ You can also get the current value of the progress bar with `jsPsych.getProgress
 var proportion_complete = jsPsych.getProgressBarCompleted();
 ```
 
-If you are going to use manual progress bar control, you may want to disable the automatic progress bar updates by setting the `auto_update_progress_bar` property in `jsPsych.init()` to `false`.
+If you are going to use manual progress bar control, you may want to disable the automatic progress bar updates by setting the `auto_update_progress_bar` property in `initJsPsych()` to `false`.
 
 ```js
-jsPsych.init({
-	timeline: exp,
+var jsPsych = initJsPsych({
 	show_progress_bar: true,
 	auto_update_progress_bar: false
 });
 ```
 
-Here's a complete example showing how to use these functions and `jsPsych.init()` settings to manually update the progress bar:
+Here's a complete example showing how to use these functions and `initJsPsych()` settings to manually update the progress bar:
 
 ```js
+var jsPsych = initJsPsych({
+    show_progress_bar: true,
+    auto_update_progress_bar: false
+});
+
 var n_trials = 5;
 
 var start = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: 'Press any key to start!',
     on_start: function() {
         // set progress bar to 0 at the start of experiment
@@ -60,7 +63,7 @@ var start = {
 };
 
 var trial = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: 'This is a trial!',
     on_finish: function() {
         // at the end of each trial, update the progress bar
@@ -76,25 +79,20 @@ var trials = {
 };
 
 var done = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: 'Done!'
 };
 
-jsPsych.init({
-    timeline: [start, trials, done],
-    show_progress_bar: true,
-    auto_update_progress_bar: false
-});
+jsPsych.run([start, trials, done]);
 ```
 
 ## Custom Text
 
-By default, jsPsych adds the text "Completion Progress" to the left of the progress bar. You can specify custom text using the `message_progress_bar` parameter in `jsPsych.init`.
+By default, jsPsych adds the text "Completion Progress" to the left of the progress bar. You can specify custom text using the `message_progress_bar` parameter in `initJsPsych`.
 
 ```js
 // support for different spoken languages
-jsPsych.init({
-    timeline: [...],
+var jsPsych = initJsPsych({
     show_progress_bar: true,
     message_progress_bar: 'Porcentaje completo'
 });
@@ -102,8 +100,7 @@ jsPsych.init({
 
 ```js
 // no message
-jsPsych.init({
-    timeline: [...],
+var jsPsych = initJsPsych({
     show_progress_bar: true,
     message_progress_bar: ''
 });

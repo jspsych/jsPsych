@@ -4,7 +4,7 @@ A common use of jsPsych is to build an online experiment and find subjects using
 
 ## The jsPsych.turk module
 
-The [jsPsych.turk](../core_library/jspsych-turk.md) module contains functions that are relevant for experiments running on Mechanical Turk.
+The [jsPsych.turk](../reference/jspsych-turk.md) module contains functions that are relevant for experiments running on Mechanical Turk.
 
 ## Creating an advertisement page
 

@@ -35,7 +35,7 @@ Data can be added to a particular trial by setting the `data` parameter for the 
 
 ```js
 var trial = {
-  type: 'image-keyboard-response',
+  type: jsPsychImageKeyboardResponse,
   stimulus: 'imgA.jpg',
   data: { image_type: 'A' }
 }
@@ -45,7 +45,7 @@ Data declared in this way is also saved in the trials on any nested timelines:
 
 ```js
 var block = {
-  type: 'image-keyboard-response',
+  type: jsPsychImageKeyboardResponse,
   data: { image_type: 'A' },
   timeline: [
     {stimulus: 'imgA1.jpg'},
@@ -58,7 +58,7 @@ The data object for a trial can also be updated in the `on_finish` event handler
 
 ```js
 var trial = {
-  type: 'image-keyboard-response',
+  type: jsPsychImageKeyboardResponse,
   stimulus: 'imgA.jpg',
   on_finish: function(data){
     if(jsPsych.pluginAPI.compareKeys(data.response, 'j')){
@@ -72,7 +72,7 @@ var trial = {
 
 ## Aggregating and manipulating jsPsych data
 
-When accessing the data with `jsPsych.data.get()` the returned object is a special data collection object that exposes a number of methods for aggregating and manipulating the data. The full list of methods is detailed in the [data module documentation](../core_library/jspsych-data.md).
+When accessing the data with `jsPsych.data.get()` the returned object is a special data collection object that exposes a number of methods for aggregating and manipulating the data. The full list of methods is detailed in the [data module documentation](../reference/jspsych-data.md).
 
 Here are some examples of data collection manipulation.
 
@@ -170,8 +170,7 @@ function saveData(name, data){
 }
 
 // call the saveData function after the experiment is over
-jsPsych.init({
-   // code to define the experiment structure would go here...
+initJsPsych({
    on_finish: function(){ saveData(jsPsych.data.get().csv()); }
 });
 ```
@@ -277,7 +276,7 @@ It's important that the `XMLHttpRequest` is able to complete before the experime
 
 ```javascript
 var trial = {
-  type: 'call-function',
+  type: jsPsychCallFunction,
   async: true,
   func: function(done){
     var xhr = new XMLHttpRequest();

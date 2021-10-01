@@ -8,62 +8,68 @@ jsPsych supports eye tracking through the [WebGazer](https://webgazer.cs.brown.e
 
 The [official version of WebGazer](https://webgazer.cs.brown.edu/#download) is currently **not** supported by jsPsych. Our [fork of the library](https://github.com/jspsych/WebGazer) contains some minor improvements aimed at the kind of experiments that jsPsych is typically used for, e.g., situations in which the timing of display screens needs to be accurate. 
 
-A copy of our fork is included in the jsPsych release, in the `/examples/js/webgazer` folder. You will need to copy this folder into your project directory. This guide will assume that the folder is located at `/js/webgazer`, but you can change the path as you'd like. 
-
-Include the `webgazer.js` file in your experiment via a `<script>` tag. 
+You must include the `webgazer.js` file in your experiment via a `<script>` tag. 
+However, the `webgazer.js` file is not part of any of the jsPsych NPM packages and is therefore not available via the unpkg.com CDN. 
+Instead, it can be found on the jsdelivr.net CDN at: "https://cdn.jsdelivr.net/gh/jspsych/jsPsych@7.0.0/examples/js/webgazer/webgazer.js".
 
 ```html
 <head>
-  <script src="jspsych/jspsych.js"></script>
-  <script src="js/webgazer/webgazer.js"></script>
+  <script src="https://unpkg.com/jspsych@7.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
 </head>
 ```
+
+!!! note 
+  A copy of our forked `webgazer.js` file is also included in the jsPsych release, in the `/examples/js/webgazer` folder. 
+  So if you prefer to download and host all of your jsPsych files (i.e. [set-up option 2](../tutorials/hello-world.md#option-2-download-and-host-jspsych) in the Hello World tutorial), then another option is to load that file rather than using the jsdelivr link above. 
+  Assuming you downloaded the release and copied the `webgazer.js` file into a folder called `js/webgazer` in your root project directory, then you would load the file like this:
+  ```html
+  <script src="js/webgazer/webgazer.js"></script>
+  ```
 
 ### Load the jsPsych webgazer extension
 
-The [webgazer extension](/extensions/jspsych-ext-webgazer.md) adds functionality to jsPsych for interacting with webgazer. Load it like you would a plugin file.
-
+The [webgazer extension](../extensions/webgazer.md) adds functionality to jsPsych for interacting with webgazer. Load it like you would a plugin file.
 
 ```html
 <head>
-  <script src="jspsych/jspsych.js"></script>
-  <script src="js/webgazer/webgazer.js"></script>
-  <script src="jspsych/extensions/jspsych-ext-webgazer.js"></script>
+  <script src="https://unpkg.com/jspsych@7.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
+  <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.0"></script>
 </head>
 ```
 
-To use the WebGazer extension in an experiment, include it in the list of extensions passed to `jsPsych.init()`
+To use the WebGazer extension in an experiment, include it in the list of extensions passed to `initJsPsych()`
 
 ```js
-jsPsych.init({
-  timeline: [...],
+initJsPsych({
   extensions: [
-    {type: 'webgazer'}
+    {type: jsPsychExtensionWebgazer}
   ]
 })
 ```
 
 ### Initialize the camera
 
-To help the participant position their face correctly for eye tracking you can use the [jspsych-webgazer-init-camera plugin](/plugins/jspsych-webgazer-init-camera.ms). This will show the participant what the camera sees, including facial feature landmarks, and prevent the participant from continuing until their face is in good position for eye tracking. This plugin will also trigger the experiment to request permission to access the user's webcam if it hasn't already been granted.
+To help the participant position their face correctly for eye tracking you can use the [webgazer-init-camera plugin](../plugins/webgazer-init-camera.md). This will show the participant what the camera sees, including facial feature landmarks, and prevent the participant from continuing until their face is in good position for eye tracking. This plugin will also trigger the experiment to request permission to access the user's webcam if it hasn't already been granted.
 
 
 ```js
 var init_camera_trial = {
-  type: 'webgazer-init-camera'
+  type: jsPsychWebgazerInitCamera
 }
 ```
 
 
 ### Calibration
 
-To calibrate WebGazer, you can use the [jspsych-webgazer-calibrate plugin](/plugins/jspsych-webgazer-calibrate.md). This plugin allows you to specify a set of points on the screen for calibration and to choose the method for calibrating -- either clicking on each point or simply fixating on each point. The location of calibration points is specified in percentages, e.g., `[25,50]` will result in a point that is 25% of the width of the screen from the left edge and 50% of the height of the screen from the top edge. Options for controlling other details of the calibration are explained in the [documentation for the plugin](/plugins/jspsych-webgazer-calibrate.md).
+To calibrate WebGazer, you can use the [webgazer-calibrate plugin](../plugins/webgazer-calibrate.md). This plugin allows you to specify a set of points on the screen for calibration and to choose the method for calibrating -- either clicking on each point or simply fixating on each point. The location of calibration points is specified in percentages, e.g., `[25,50]` will result in a point that is 25% of the width of the screen from the left edge and 50% of the height of the screen from the top edge. Options for controlling other details of the calibration are explained in the [documentation for the plugin](../plugins/webgazer-calibrate.md).
 
 Note that instructions are not included in the calibration plugin, so you'll likely want to use a different plugin (e.g., `html-button-response`) to display instructions prior to running the calibration. 
 
 ```js
 var calibration_trial = {
-  type: 'webgazer-calibrate',
+  type: jsPsychWebgazerCalibrate,
   calibration_points: [[25,50], [50,50], [75,50], [50,25], [50,75]],
   calibration_mode: 'click'
 }
@@ -72,12 +78,12 @@ var calibration_trial = {
 
 ### Validation
 
-To measure the accuracy and precision of the calibration, you can use the [jspsych-webgazer-vaidate plugin](/plugins/jspsych-webgazer-validate.md). Like the calibration plugin, you can specify a list of points to perform validation on. Here you can specify the points as either percentages or in terms of the distance from the center of the screen in pixels. Which mode you use will probably depend on how you are defining your stimuli throughout the experiment. You can also specify the radius of tolerance around each point, and the plugin will calculate the percentage of measured gaze samples within that radius. This is a potentially useful heuristic for deciding whether or not to calibrate again. Options for controlling other details of the validation are explained in the [documentation for the plugin](/plugins/jspsych-webgazer-validate.md).
+To measure the accuracy and precision of the calibration, you can use the [webgazer-vaidate plugin](../plugins/webgazer-validate.md). Like the calibration plugin, you can specify a list of points to perform validation on. Here you can specify the points as either percentages or in terms of the distance from the center of the screen in pixels. Which mode you use will probably depend on how you are defining your stimuli throughout the experiment. You can also specify the radius of tolerance around each point, and the plugin will calculate the percentage of measured gaze samples within that radius. This is a potentially useful heuristic for deciding whether or not to calibrate again. Options for controlling other details of the validation are explained in the [documentation for the plugin](../plugins/webgazer-validate.md).
 
 
 ```js
 var validation_trial = {
-  type: 'webgazer-validate',
+  type: jsPsychWebgazerValidate,
   validation_points: [[-200,200], [200,200],[-200,-200],[200,-200]],
   validation_point_coordinates: 'center-offset-pixels',
   roi_radius: 100
@@ -103,11 +109,11 @@ To enable eye tracking for a trial in your experiment, you can simply add the We
 
 ```js
 var trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: '<img id="scene" src="my-scene.png"></img>',
   extensions: [
     {
-      type: 'webgazer', 
+      type: jsPsychExtensionWebgazer, 
       params: { 
         targets: ['#scene']
       }
@@ -161,19 +167,19 @@ If you have tips based on your own experience please consider sharing them on ou
     <!DOCTYPE html>
     <html>
       <head>
-        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-image-keyboard-response.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-webgazer-init-camera.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-webgazer-calibrate.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-webgazer-validate.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/js/webgazer/webgazer.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/extensions/jspsych-ext-webgazer.js"></script>
+        <script src="https://unpkg.com/jspsych@7.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@1.0.0"></script>
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
+        <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.0"></script>
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css"
+          href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css"
         />
         <style>
           .jspsych-btn {
@@ -184,13 +190,19 @@ If you have tips based on your own experience please consider sharing them on ou
       <body></body>
       <script>
 
+          var jsPsych = initJsPsych({
+            extensions: [
+              {type: jsPsychExtensionWebgazer}
+            ]
+          });
+
           var preload = {
-            type: 'preload',
+            type: jsPsychPreload,
             images: ['img/blue.png']
           }
 
           var camera_instructions = {
-            type: 'html-button-response',
+            type: jsPsychHtmlButtonResponse,
             stimulus: `
               <p>In order to participate you must allow the experiment to use your camera.</p>
               <p>You will be prompted to do this on the next screen.</p>
@@ -201,11 +213,11 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var init_camera = {
-            type: 'webgazer-init-camera'
+            type: jsPsychWebgazerInitCamera
           }
 
           var calibration_instructions = {
-            type: 'html-button-response',
+            type: jsPsychHtmlButtonResponse,
             stimulus: `
               <p>Now you'll calibrate the eye tracking, so that the software can use the image of your eyes to predict where you are looking.</p>
               <p>You'll see a series of dots appear on the screen. Look at each dot and click on it.</p>
@@ -214,7 +226,7 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var calibration = {
-            type: 'webgazer-calibrate',
+            type: jsPsychWebgazerCalibrate,
             calibration_points: [
               [25,25],[75,25],[50,50],[25,75],[75,75]
             ],
@@ -223,7 +235,7 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var validation_instructions = {
-            type: 'html-button-response',
+            type: jsPsychHtmlButtonResponse,
             stimulus: `
               <p>Now we'll measure the accuracy of the calibration.</p>
               <p>Look at each dot as it appears on the screen.</p>
@@ -234,7 +246,7 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var validation = {
-            type: 'webgazer-validate',
+            type: jsPsychWebgazerValidate,
             validation_points: [
               [25,25],[75,25],[50,50],[25,75],[75,75]
             ],
@@ -247,7 +259,7 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var recalibrate_instructions = {
-            type: 'html-button-response',
+            type: jsPsychHtmlButtonResponse,
             stimulus: `
               <p>The accuracy of the calibration is a little lower than we'd like.</p>
               <p>Let's try calibrating one more time.</p>
@@ -271,7 +283,7 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var calibration_done = {
-            type: 'html-button-response',
+            type: jsPsychHtmlButtonResponse,
             stimulus: `
               <p>Great, we're done with calibration!</p>
             `,
@@ -279,7 +291,7 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var begin = {
-            type: 'html-keyboard-response',
+            type: jsPsychHtmlKeyboardResponse,
             stimulus: `<p>The next screen will show an image to demonstrate adding the webgazer extension to a trial.</p>
               <p>Just look at the image while eye tracking data is collected. The trial will end automatically.</p>
               <p>Press any key to start.</p>
@@ -287,20 +299,20 @@ If you have tips based on your own experience please consider sharing them on ou
           }
 
           var trial = {
-            type: 'image-keyboard-response',
+            type: jsPsychImageKeyboardResponse,
             stimulus: 'img/blue.png',
             choices: jsPsych.NO_KEYS,
             trial_duration: 2000,
             extensions: [
               {
-                type: 'webgazer', 
+                type: jsPsychExtensionWebgazer, 
                 params: {targets: ['#jspsych-image-keyboard-response-stimulus']}
               }
             ]
           }
 
           var show_data = {
-            type: 'html-keyboard-response',
+            type: jsPsychHtmlKeyboardResponse,
             stimulus: function() {
               var trial_data = jsPsych.data.getLastTrialData().values();
               var trial_json = JSON.stringify(trial_data, null, 2);
@@ -310,25 +322,20 @@ If you have tips based on your own experience please consider sharing them on ou
             choices: jsPsych.NO_KEYS
           };
           
-          jsPsych.init({
-            timeline: [
-              preload, 
-              camera_instructions, 
-              init_camera, 
-              calibration_instructions, 
-              calibration, 
-              validation_instructions, 
-              validation, 
-              recalibrate,
-              calibration_done,
-              begin, 
-              trial, 
-              show_data
-            ],
-            extensions: [
-              {type: 'webgazer'}
-            ]
-          });
+          jsPsych.run([
+            preload, 
+            camera_instructions, 
+            init_camera, 
+            calibration_instructions, 
+            calibration, 
+            validation_instructions, 
+            validation, 
+            recalibrate,
+            calibration_done,
+            begin, 
+            trial, 
+            show_data
+          ]);
           
       </script>
     </html>

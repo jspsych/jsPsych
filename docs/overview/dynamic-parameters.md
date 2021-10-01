@@ -13,7 +13,7 @@ Here is a sketch of how this functionality could be used to display feedback to 
 var timeline = [];
 
 var trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: '<<<<<',
   choices: ['f','j'],
   data: {
@@ -31,7 +31,7 @@ var trial = {
 }
 
 var feedback = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: function(){
     // The feedback stimulus is a dynamic parameter because we can't know in advance whether
     // the stimulus should be 'correct' or 'incorrect'.
@@ -61,7 +61,7 @@ var random_duration = function() {
 }
 
 var trial = {
-    type: 'html-keyboard-response'
+    type: jsPsychHtmlKeyboardResponse
     stimulus: '+',
     post_trial_gap: random_duration  // if you use a named function for a dynamic parameter, then just use the function name (without parentheses after it)
 }
@@ -75,7 +75,7 @@ The trial's `data` parameter can be also function, which is useful for when you 
 var current_difficulty; // value changes during the experiment
 
 var trial = {
-  type: 'survey-text',
+  type: jsPsychSurveyText,
   questions: [{prompt: "Please enter your response."}]
   data: function() { 
     return {difficulty: current_difficulty}; 
@@ -87,7 +87,7 @@ It's also possible to use a function for any of the _individual properties_ in t
 
 ```js
 var trial = {
-  type: 'survey-text',
+  type: jsPsychSurveyText,
   questions: [{prompt: "Please enter your response."}]
   data: {
     difficulty: function() { 
@@ -107,7 +107,7 @@ Dyanmic parameters work the same way with nested parameters, which are parameter
 var subject_id; // value is set during the experiment
 
 var trial = {
-  type: 'survey-text',
+  type: jsPsychSurveyText,
   questions: function(){
     var questions_array = [ 
         {prompt: "Hi "+subject_id+"! What's your favorite city?", required: true, name: 'fav_city'},
@@ -122,7 +122,7 @@ You can also use a function for any of the _individual parameters_ inside of a n
 
 ```js
 var trial = {
-  type: 'survey-text',
+  type: jsPsychSurveyText,
   questions: [
     { 
       prompt: function() {  

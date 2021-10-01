@@ -1,6 +1,8 @@
 # Summary of Tutorial Content
 
-This tutorial will work through the creation of a simple response time task. The task is to press one key for a blue colored circle and another key for an orange colored circle. Despite this simple task, the tutorial covers many of the key features of jsPsych, including:
+This tutorial will work through the creation of a simple response time task. 
+The task is to press one key for a blue colored circle and another key for an orange colored circle. 
+Despite this simple task, the tutorial covers many of the key features of jsPsych, including:
 
 * Using a plugin to create a standard trial.
 * Combining plugins together to create new kinds of trials.
@@ -12,18 +14,24 @@ This tutorial will work through the creation of a simple response time task. The
 
 ## Part 1: Creating a blank experiment
 
-Start by downloading jsPsych and setting up a folder to contain your experiment files. If you are unsure how to do this, follow steps 1-5 in the [Hello World tutorial](hello-world.md). At the end of step 5 in the Hello World tutorial, you should have an experiment page that looks like this:
+Start by setting up a new HTML file with jsPsych, the html-keyboard-response plugin, and the jspsych.css file loaded. If you are unsure how to do this, follow the [Hello World tutorial](hello-world.md). You should have an HTML document that looks like this:
+
+!!! info
+    This tutorial assumes that you are using the [CDN-based method of loading jsPsych](hello-world.md#option-1-using-cdn-hosted-scripts). 
+    If you are using another method then everything is the same except for how jsPsych is loaded.
 
 ```html
 <!DOCTYPE html>
 <html>
   <head>
     <title>My experiment</title>
-    <script src="jspsych-6.3.0/jspsych.js"></script>
-    <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-    <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+    <script src="https://unpkg.com/jspsych@7.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+    <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
+  <script>
+  </script>
 </html>
 ```
 
@@ -31,19 +39,31 @@ This will be our starting point for building the rest of the experiment.
 
 ## Part 2: Display welcome message
 
-All jsPsych experiments are defined by a timeline. The timeline is an array that contains the set of trials we want to run in the experiment. We can start by defining the timeline array.
+First we have to initialize jsPsych. We can do this using the [`initJsPsych()` function](../reference/jspsych.md#initjspsych), and saving the result to a variable called `jsPsych`.
+
+```javascript
+var jsPsych = initJsPsych();
+```
+
+All jsPsych experiments are defined by a timeline. 
+The timeline is an array that contains the set of trials we want to run in the experiment. 
+We can start by defining an empty timeline array. 
+We'll add trials to this array as we create them.
 
 ```javascript
 var timeline = [];
 ```
 
-Let's greet the subject with a simple welcome message using the [jspsych-html-keyboard-response](/plugins/jspsych-html-keyboard-response.md) plugin.
+Let's greet the subject with a simple welcome message using the [html-keyboard-response](../plugins/html-keyboard-response.md) plugin.
 
-First, we create a trial that uses the `jspsych-html-keyboard-response` plugin and contains a simple string to show the subject.
+First, we create a trial that uses the `html-keyboard-response` plugin and contains a simple string to show the subject. 
+As explained on the [plugins documentation page](../overview/plugins.md), the trial object must have a `type` parameter that tells jsPsych which plugin to use. 
+The value of `type` is similar to the plugin name, but starts with `jsPsych` and is written in camel case rather than with dashes. 
+So to use the `html-keyboard-response` plugin, we need to write `jsPsychHtmlKeyboardResponse` as the trial type.
 
 ```javascript
 var welcome = {
-  type: "html-keyboard-response",
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: "Welcome to the experiment. Press any key to begin."
 };
 ```
@@ -54,55 +74,56 @@ Next, we push the welcome trial to the timeline, which adds it to the end of the
 timeline.push(welcome);
 ```
 
-Finally, we tell jsPsych to run the experiment by calling the [jsPsych.init() function](../core_library/jspsych-core.md#jspsychinit) and passing in the array that defines the experiment timeline.
+Finally, we tell jsPsych to run the experiment by calling the [jsPsych.run() function](../reference/jspsych.md#jspsychrun) and passing in the array that defines the experiment timeline.
 
 ```javascript
-jsPsych.init({
-  timeline: timeline
-});
+jsPsych.run(timeline);
 ```
 After each step in the tutorial you can view the complete code up to that point by clicking on the expandable box below.
 
 ??? example "The complete code so far"
-    ``` html
+    ```html
     <!DOCTYPE html>
     <html>
       <head>
         <title>My experiment</title>
-        <script src="jspsych-6.3.0/jspsych.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-        <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+        <script src="https://unpkg.com/jspsych@7.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
+        
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych();
 
         /* create timeline */
         var timeline = [];
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline
-        });
+        jsPsych.run(timeline);
+
       </script>
     </html>
     ```
 
 ## Part 3: Show instructions
 
-We can use the same basic structure from part 2 to create a new trial that shows instructions to the subject. The only difference in this trial is that we will use HTML formatting to control how the instructions display and we will add a two second gap after the trial using the `post_trial_gap` parameter.
+We can use the same basic structure from part 2 to create a new `html-keyboard-response` trial that shows instructions to the subject. 
+The only difference in this trial is that we will use HTML formatting to control how the instructions display and we will add a two second gap after the trial using the `post_trial_gap` parameter.
 
 The trial definition looks like this:
 
 ```javascript
 var instructions = {
-  type: "html-keyboard-response",
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: `
     <p>In this experiment, a circle will appear in the center 
     of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -124,7 +145,10 @@ var instructions = {
 !!! tip
     In JavaScript there are three different ways to define a `string`. You can use single quotes `'`, double quotes `"`, or backticks `` ` ``. Using backticks has two advantages over the other approaches, especially when you are creating long strings with HTML. You can extend the `string` across multiple lines and you can use [template strings](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) to easily incorporate variables.
 
-Notice that the HTML includes `<img>` tags to display the images that the subject will be responding to. You'll need to download these image files. Right-click on each image below and select *Save image as...*. Put the images in a folder called `img` in the experiment folder you created in part 1.
+Notice that the HTML includes `<img>` tags to display the images that the subject will be responding to. 
+You'll need to download these image files. 
+Right-click on each image below and select *Save image as...*. 
+Put the images in a folder called `img` in the experiment folder you created in part 1.
 
 ![blue circle](../img/blue.png)
 ![orange circle](../img/orange.png)
@@ -136,31 +160,35 @@ timeline.push(instructions);
 ```
 
 ??? example "The complete code so far"
+
     ```html
     <!DOCTYPE html>
     <html>
       <head>
         <title>My experiment</title>
-        <script src="jspsych-6.3.0/jspsych.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-        <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+        <script src="https://unpkg.com/jspsych@7.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
+
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych();
 
         /* create timeline */
         var timeline = [];
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -180,41 +208,44 @@ timeline.push(instructions);
         timeline.push(instructions);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline
-        });
+        jsPsych.run(timeline);
+
       </script>
     </html>
     ```
 
 ## Part 4: Displaying stimuli and getting responses
 
-Creating trials to show the stimuli is conceptually the same as creating a trial to show instructions, except that now we are displaying an image instead of text or html. This means we need to use a different plugin: jspsych-image-keyboard-response. We need to start by loading this plugin by adding a `<script>` tag to the document.
+Creating trials to show the stimuli is conceptually the same as creating a trial to show instructions, except that now we are displaying an image instead of text or html. 
+This means we need to use a different plugin: `image-keyboard-response`. 
+We need to start by loading this plugin by adding a `<script>` tag to the document.
 
 ```html hl_lines="5"
 <head>
   <title>My experiment</title>
-  <script src="jspsych-6.3.0/jspsych.js"></script>
-  <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-  <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
-  <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+  <script src="https://unpkg.com/jspsych@7.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+  <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
 </head>
 ```
 
-For now, we will just show each image once. The path to the image file should be set as the `stimulus` parameter. We will also set the option for which keys the subject is allowed to use to respond (`choices`) so that only the 'f' and 'j' keys are valid responses.
+For now, we will just show each image once. 
+The path to the image file should be set as the `stimulus` parameter. 
+We will also set the option for which keys the subject is allowed to use to respond (`choices`) so that only the 'f' and 'j' keys are valid responses.
 
 ```javascript
 var blue_trial = {
-  type: 'image-keyboard-response',
+  type: jsPsychImageKeyboardResponse,
   stimulus: 'img/blue.png',
   choices: ['f', 'j']
 };
 
 var orange_trial = {
-  type: 'image-keyboard-response',
+  type: jsPsychImageKeyboardResponse,
   stimulus: 'img/orange.png',
   choices: ['f', 'j']
-}
+};
 ```
 
 As usual, we need to add the trials to the timeline.
@@ -230,27 +261,30 @@ timeline.push(blue_trial, orange_trial);
     <html>
       <head>
         <title>My experiment</title>
-        <script src="jspsych-6.3.0/jspsych.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
-        <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+        <script src="https://unpkg.com/jspsych@7.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
+
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych();
 
         /* create timeline */
         var timeline = [];
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -269,45 +303,47 @@ timeline.push(blue_trial, orange_trial);
         };
         timeline.push(instructions);
 
-        /* test trials */
+        /* define test trials */
         var blue_trial = {
-          type: 'image-keyboard-response',
+          type: jsPsychImageKeyboardResponse,
           stimulus: 'img/blue.png',
           choices: ['f', 'j']
         };
 
         var orange_trial = {
-          type: 'image-keyboard-response',
+          type: jsPsychImageKeyboardResponse,
           stimulus: 'img/orange.png',
           choices: ['f', 'j']
-        }
+        };
 
         timeline.push(blue_trial, orange_trial);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline
-        });
+        jsPsych.run(timeline);
+
       </script>
-      </html>
+    </html>
     ```
 
 ## Part 5: Preloading media
 
-Whenever we use media elements (images, audio, or video) in an experiment it is a good idea to preload them prior to needing them for a trial. By preloading media we ask the participant's browser to download the media ahead of needing it, so that when we do need to display or play it there is no lag from needing to download it. 
+Whenever we use media elements (images, audio, or video) in an experiment it is a good idea to preload them prior to needing them for a trial.
+By preloading media we ask the participant's browser to download the media ahead of needing it, so that when we do need to display or play it there is no lag from needing to download it. 
 
-We are going to use the [jspsych-preload plugin](/plugins/jspsych-preload.md) to preload the two images. The [media preloading section](/overview/media-preloading.md) goes into a lot of detail about various options for preloading and different ways that you can use this plugin. Here we are simply going to give the plugin a list of the files that we want to be preloaded.
+We are going to use the [preload plugin](../plugins/preload.md) to preload the two images. 
+The [media preloading section](../overview/media-preloading.md) goes into a lot of detail about various options for preloading and different ways that you can use this plugin. 
+Here we are simply going to give the plugin a list of the files that we want to be preloaded.
 
 First we need to add the preload plugin to our `<head>` section.
 
 ```html hl_lines="6"
 <head>
   <title>My experiment</title>
-  <script src="jspsych-6.3.0/jspsych.js"></script>
-  <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-  <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
-  <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
-  <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+  <script src="https://unpkg.com/jspsych@7.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+  <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
 </head>
 ```
 
@@ -316,9 +352,9 @@ We'll put this trial at the very start of the experiment, so add this code befor
 
 ```js
 var preload = {
-  type: 'preload',
+  type: jsPsychPreload,
   images: ['img/blue.png', 'img/orange.png']
-}
+};
 ```
 
 As always, add the trial to the timeline.
@@ -334,35 +370,38 @@ timeline.push(preload);
     <html>
       <head>
         <title>My experiment</title>
-        <script src="jspsych-6.3.0/jspsych.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
-        <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+        <script src="https://unpkg.com/jspsych@7.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
+
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych();
 
         /* create timeline */
         var timeline = [];
 
         /* preload images */
         var preload = {
-          type: 'preload',
+          type: jsPsychPreload,
           images: ['img/blue.png', 'img/orange.png']
-        }
+        };
         timeline.push(preload);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -381,34 +420,34 @@ timeline.push(preload);
         };
         timeline.push(instructions);
 
-        /* test trials */
+        /* define test trials */
         var blue_trial = {
-          type: 'image-keyboard-response',
+          type: jsPsychImageKeyboardResponse,
           stimulus: 'img/blue.png',
           choices: ['f', 'j']
         };
 
         var orange_trial = {
-          type: 'image-keyboard-response',
+          type: jsPsychImageKeyboardResponse,
           stimulus: 'img/orange.png',
           choices: ['f', 'j']
-        }
-
+        };
         timeline.push(blue_trial, orange_trial);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline
-        });
+        jsPsych.run(timeline);
+
       </script>
-      </html>
+    </html>
     ```
 
 ## Part 6: Timeline variables
 
-In the full experiment, we will want more than two trials. One way we could do this is to create many more objects that define trials and push them all onto the timeline, but there is a more efficient way: using timeline variables.
+In the full experiment, we will want more than two trials. 
+One way we could do this is to create many more objects that define trials and push them all onto the timeline, but there is a more efficient way: using timeline variables.
 
-The parameters for showing the blue and orange circle are very similar. The only difference is which image is displayed. Timeline variables allow us to define the procedure for showing the stimulus once, and then repeatedly use it with different variables. We'll see how, even in this relatively simple case, this can save us a lot of lines of code.
+The parameters for showing the blue and orange circle are very similar. 
+The only difference is which image is displayed. Timeline variables allow us to define the procedure for showing the stimulus once, and then repeatedly use it with different variables. We'll see how, even in this relatively simple case, this can save us a lot of lines of code.
 
 To start, let's make an array that contains all the different trials we want to run in the test phase. There are only two for the experiment: blue trials and orange trials.
 
@@ -423,18 +462,18 @@ Instead of just showing the blue and orange circles, let's also set up the exper
 
 ```javascript
 var fixation = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: '<div style="font-size:60px;">+</div>',
   choices: jsPsych.NO_KEYS,
   trial_duration: 1000,
-}
+};
 ```
 
-To show the circles, we'll set up another trial with the html-keyboard-response plugin, but we'll use the function `jsPsych.timelineVariable()` to indicate that we want jsPsych to substitute the value of the parameter in from the timeline variables.
+To show the circles, we'll set up another trial with the image-keyboard-response plugin, but we'll use the function `jsPsych.timelineVariable()` to indicate that we want jsPsych to substitute the value of the parameter in from the timeline variables.
 
 ```javascript
 var test = {
-  type: "image-keyboard-response",
+  type: jsPsychImageKeyboardResponse,
   stimulus: jsPsych.timelineVariable('stimulus'),
   choices: ['f', 'j']
 }
@@ -464,35 +503,38 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
     <html>
       <head>
         <title>My experiment</title>
-        <script src="jspsych-6.3.0/jspsych.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
-        <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+        <script src="https://unpkg.com/jspsych@7.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
+
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych();
 
         /* create timeline */
         var timeline = [];
 
         /* preload images */
         var preload = {
-          type: 'preload',
+          type: jsPsychPreload,
           images: ['img/blue.png', 'img/orange.png']
         }
         timeline.push(preload);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -511,38 +553,38 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
         };
         timeline.push(instructions);
 
-        /* test trials */
+        /* define trial stimuli array for timeline variables */
         var test_stimuli = [
           { stimulus: "img/blue.png"},
           { stimulus: "img/orange.png"}
         ];
 
+        /* define fixation and test trials */
         var fixation = {
-          type: 'html-keyboard-response',
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
           choices: jsPsych.NO_KEYS,
           trial_duration: 1000,
-        }
+        };
 
         var test = {
-          type: "image-keyboard-response",
+          type: jsPsychImageKeyboardResponse,
           stimulus: jsPsych.timelineVariable('stimulus'),
           choices: ['f', 'j']
-        }
+        };
 
+        /* define test procedure */
         var test_procedure = {
           timeline: [fixation, test],
           timeline_variables: test_stimuli
-        }
-
+        };
         timeline.push(test_procedure);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline
-        });
+        jsPsych.run(timeline);
+
       </script>
-      </html>
+    </html>
     ```
 
 
@@ -555,7 +597,7 @@ var test_procedure = {
   timeline: [fixation, test],
   timeline_variables: test_stimuli,
   randomize_order: true
-}
+};
 ```
 
 We can also easily make the test phase longer by setting the `repetitions` parameter. This parameter controls how many times the experiment will loop through all of the entries in the timeline_variables array. For example, if we set `repetitions: 5`, then the experiment will loop through the two entries in the timeline_variables 5 times, for a total of 10 test trials.
@@ -566,7 +608,7 @@ var test_procedure = {
   timeline_variables: test_stimuli,
   randomize_order: true,
   repetitions: 5
-}
+};
 ```
 ??? example "The complete code so far"
 
@@ -575,35 +617,38 @@ var test_procedure = {
     <html>
       <head>
         <title>My experiment</title>
-        <script src="jspsych-6.3.0/jspsych.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
-        <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+        <script src="https://unpkg.com/jspsych@7.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
+
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych();
 
         /* create timeline */
         var timeline = [];
 
         /* preload images */
         var preload = {
-          type: 'preload',
+          type: jsPsychPreload,
           images: ['img/blue.png', 'img/orange.png']
-        }
+        };
         timeline.push(preload);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -622,51 +667,51 @@ var test_procedure = {
         };
         timeline.push(instructions);
 
-        /* test trials */
+        /* define trial stimuli array for timeline variables */
         var test_stimuli = [
           { stimulus: "img/blue.png"},
           { stimulus: "img/orange.png"}
         ];
 
+        /* define fixation and test trials */
         var fixation = {
-          type: 'html-keyboard-response',
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
           choices: jsPsych.NO_KEYS,
           trial_duration: 1000,
-        }
+        };
 
         var test = {
-          type: "image-keyboard-response",
+          type: jsPsychImageKeyboardResponse,
           stimulus: jsPsych.timelineVariable('stimulus'),
           choices: ['f', 'j']
-        }
+        };
 
+        /* define test procedure */
         var test_procedure = {
           timeline: [fixation, test],
           timeline_variables: test_stimuli,
           randomize_order: true,
           repetitions: 5
-        }
-
+        };
         timeline.push(test_procedure);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline
-        });
+        jsPsych.run(timeline);
+
       </script>
-      </html>
+    </html>
     ```
 
 ## Part 8: Using functions to generate parameters
 
 One aspect of the experiment that could be improved is the duration of the fixation cross. As the experiment stands right now, the timing of the circles appearing is very predictable. We can change that by using a different value for the `trial_duration` parameter in the `fixation` trial for each trial. But how can we do that and keep the simple code structure we have now where we only have to define the fixation trial once? One option would be to add another timeline variable, like `"fixation_duration"` and use that to control the timing. But another option is to specify the `trial_duration` parameter as a function. If a parameter is a function, jsPsych will execute the function every time the trial runs. That means that if the function returns different results probabilistically, we can get a different parameter value every time the trial runs.
 
-To do that here, we'll use one of the built-in randomization methods in [jsPsych's randomization module](/core_library/jspsych-randomization.md). `jsPsych.randomization.sampleWithoutReplacement()` takes an array of items to sample from and generates a new array of length *N* by sampling without replacement.
+To do that here, we'll use one of the built-in randomization methods in [jsPsych's randomization module](../reference/jspsych-randomization.md). `jsPsych.randomization.sampleWithoutReplacement()` takes an array of items to sample from and generates a new array of length *N* by sampling without replacement.
 
 ```javascript
 var fixation = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: '<div style="font-size:60px;">+</div>',
   choices: jsPsych.NO_KEYS,
   trial_duration: function(){
@@ -693,26 +738,29 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
       <body></body>
       <script>
 
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych();
+
         /* create timeline */
         var timeline = [];
 
         /* preload images */
         var preload = {
-          type: 'preload',
+          type: jsPsychPreload,
           images: ['img/blue.png', 'img/orange.png']
         }
         timeline.push(preload);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -731,53 +779,52 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
         };
         timeline.push(instructions);
 
-        /* test trials */
+        /* define trial stimuli array for timeline variables */
         var test_stimuli = [
           { stimulus: "img/blue.png"},
           { stimulus: "img/orange.png"}
         ];
 
+        /* define fixation and test trials */
         var fixation = {
-          type: 'html-keyboard-response',
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
           choices: jsPsych.NO_KEYS,
           trial_duration: function(){
             return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
           }
-        }
+        };
 
         var test = {
-          type: "image-keyboard-response",
+          type: jsPsychImageKeyboardResponse,
           stimulus: jsPsych.timelineVariable('stimulus'),
           choices: ['f', 'j']
-        }
+        };
 
+        /* define test procedure */
         var test_procedure = {
           timeline: [fixation, test],
           timeline_variables: test_stimuli,
           randomize_order: true,
           repetitions: 5
-        }
-
+        };
         timeline.push(test_procedure);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline
-        });
+        jsPsych.run(timeline);
+
       </script>
-      </html>
+    </html>
     ```
 
 ## Part 10: Displaying the data
 
-We have created a complete, if simple, experiment at this point, so let's take a look at the data being generated. jsPsych has a built-in [function called `jsPsych.data.displayData()`](/core_library/jspsych-data.md#jspsychdatadisplaydata) that is useful for debugging your experiment. It will remove all of the information on the screen and replace it with the raw data collected so far. This isn't terribly useful when you are actually running an experiment, but it's nice for checking the data during development.
+We have created a complete, if simple, experiment at this point, so let's take a look at the data being generated. jsPsych has a built-in [function called `jsPsych.data.displayData()`](../reference/jspsych-data.md#jspsychdatadisplaydata) that is useful for debugging your experiment. It will remove all of the information on the screen and replace it with the raw data collected so far. This isn't terribly useful when you are actually running an experiment, but it's nice for checking the data during development.
 
-We need the `displayData` function to execute when the experiment ends. One way to do this is to use the [`on_finish` callback function](/overview/callbacks.md#on_finish-experiment). This function will automatically execute once all the trials in the experiment are finished. We can specify a function to call in the `init` method.
+We need the `displayData` function to execute when the experiment ends. One way to do this is to use the [`on_finish` callback function](../overview/events.md#on_finish-experiment). This function will automatically execute once all the trials in the experiment are finished. We can specify this function in the experiment settings when we initialize jsPsych with the `initJsPsych` method.
 
 ```javascript
-jsPsych.init({
-  timeline: timeline,
+var jsPsych = initJsPsych({
   on_finish: function() {
     jsPsych.data.displayData();
   }
@@ -791,35 +838,42 @@ jsPsych.init({
     <html>
       <head>
         <title>My experiment</title>
-        <script src="jspsych-6.3.0/jspsych.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
-        <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+        <script src="https://unpkg.com/jspsych@7.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
+
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych({
+          on_finish: function() {
+            jsPsych.data.displayData();
+          }
+        });
 
         /* create timeline */
         var timeline = [];
 
         /* preload images */
         var preload = {
-          type: 'preload',
+          type: jsPsychPreload,
           images: ['img/blue.png', 'img/orange.png']
-        }
+        };
         timeline.push(preload);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -838,45 +892,42 @@ jsPsych.init({
         };
         timeline.push(instructions);
 
-        /* test trials */
+        /* define trial stimuli array for timeline variables */
         var test_stimuli = [
           { stimulus: "img/blue.png"},
           { stimulus: "img/orange.png"}
         ];
 
+        /* define fixation and test trials */
         var fixation = {
-          type: 'html-keyboard-response',
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
           choices: jsPsych.NO_KEYS,
           trial_duration: function(){
             return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
           }
-        }
+        };
 
         var test = {
-          type: "image-keyboard-response",
+          type: jsPsychImageKeyboardResponse,
           stimulus: jsPsych.timelineVariable('stimulus'),
           choices: ['f', 'j']
-        }
+        };
 
+        /* define test procedure */
         var test_procedure = {
           timeline: [fixation, test],
           timeline_variables: test_stimuli,
           randomize_order: true,
           repetitions: 5
-        }
-
+        };
         timeline.push(test_procedure);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline,
-          on_finish: function() {
-            jsPsych.data.displayData();
-          }
-        });
+        jsPsych.run(timeline);
+
       </script>
-      </html>
+    </html>
     ```
 
 ## Part 11: Tagging trials with additional data
@@ -887,18 +938,18 @@ When might you use this feature? In this experiment, it would be nice to tag eac
 
 ```javascript
 var test = {
-  type: "image-keyboard-response",
+  type: jsPsychImageKeyboardResponse,
   stimulus: jsPsych.timelineVariable('stimulus'),
   choices: ['f', 'j'],
   data: {
     task: 'response'
   }
-}
+};
 ```
 
 We also could tag the test trials with a property that indicates what the correct response should be (F for the blue circles, J for the orange). In our current code, we are using the timeline variables feature of jsPsych to choose which circle gets presented on a trial. Since we want to tag the trials differently based on which circle is presented, we need to add the tagging data to the `test_stimuli` array, and then use the `jsPsych.timelineVariable()` function to get the value and assign it to a property in the `data` of the trial.
 
-We start by modifying `test_stimuli`:
+We start by adding a "correct_response" property and value to each object in the `test_stimuli`:
 
 ```javascript
 var test_stimuli = [
@@ -907,25 +958,25 @@ var test_stimuli = [
 ];
 ```
 
-Now we can use `timelineVariable()` in the `data` parameter of the `test` trial.
+Now we can use `timelineVariable()` in the `data` parameter of the `test` trial to get the appropriate "correct_response" value for each trial.
 
 ```javascript
 var test = {
-  type: "image-keyboard-response",
+  type: jsPsychImageKeyboardResponse,
   stimulus: jsPsych.timelineVariable('stimulus'),
   choices: ['f', 'j'],
   data: {
     task: 'response',
     correct_response: jsPsych.timelineVariable('correct_response')
   }
-}
+};
 ```
 
 Another kind of tagging that would be useful is to mark each fixation trial as such, to make removing the data from fixation trials easier. 
 
 ```js
 var fixation = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: '<div style="font-size:60px;">+</div>',
   choices: jsPsych.NO_KEYS,
   trial_duration: function(){
@@ -934,7 +985,7 @@ var fixation = {
   data: {
     task: 'fixation'
   }
-}
+};
 ```
 
 ??? example "The complete code so far"
@@ -944,35 +995,42 @@ var fixation = {
     <html>
       <head>
         <title>My experiment</title>
-        <script src="jspsych-6.3.0/jspsych.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
-        <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+        <script src="https://unpkg.com/jspsych@7.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
+
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych({
+          on_finish: function() {
+            jsPsych.data.displayData();
+          }
+        });
 
         /* create timeline */
         var timeline = [];
 
         /* preload images */
         var preload = {
-          type: 'preload',
+          type: jsPsychPreload,
           images: ['img/blue.png', 'img/orange.png']
-        }
+        };
         timeline.push(preload);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -991,14 +1049,15 @@ var fixation = {
         };
         timeline.push(instructions);
 
-        /* test trials */
+        /* define trial stimuli array for timeline variables */
         var test_stimuli = [
           { stimulus: "img/blue.png",  correct_response: 'f'},
           { stimulus: "img/orange.png",  correct_response: 'j'}
         ];
 
+        /* define fixation and test trials */
         var fixation = {
-          type: 'html-keyboard-response',
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
           choices: jsPsych.NO_KEYS,
           trial_duration: function(){
@@ -1007,34 +1066,30 @@ var fixation = {
           data: {
             task: 'fixation'
           }
-        }
+        };
 
         var test = {
-          type: "image-keyboard-response",
+          type: jsPsychImageKeyboardResponse,
           stimulus: jsPsych.timelineVariable('stimulus'),
           choices: ['f', 'j'],
           data: {
             task: 'response',
             correct_response: jsPsych.timelineVariable('correct_response')
           }
-        }
+        };
 
+        /* define test procedure */
         var test_procedure = {
           timeline: [fixation, test],
           timeline_variables: test_stimuli,
           randomize_order: true,
           repetitions: 5
-        }
-
+        };
         timeline.push(test_procedure);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline,
-          on_finish: function() {
-            jsPsych.data.displayData();
-          }
-        });
+        jsPsych.run(timeline);
+
       </script>
       </html>
     ```
@@ -1047,11 +1102,11 @@ But, we can also do this in jsPsych as the experiment runs to save time later an
 
 To do this, we'll use the `on_finish` event of the test trial. We can assign a function to `on_finish`, and that function will receive an object containing the data generated by the trial. This object can be manipulated inside the function, and any changes made to the object will be stored in jsPsych's internal representation of the data.
 
-For this example, we'll calculate whether the subject responded correctly, and add a new `correct` property to the data object.
+For this example, we'll determine whether the subject responded correctly, and add a new `correct` property to the data object.
 
 ```javascript
 var test = {
-  type: "image-keyboard-response",
+  type: jsPsychImageKeyboardResponse,
   stimulus: jsPsych.timelineVariable('stimulus'),
   choices: ['f', 'j'],
   data: {
@@ -1061,10 +1116,16 @@ var test = {
   on_finish: function(data){
     data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
   }
-}
+};
 ```
 
 The `data.response` value is a string representation of the key the subject pressed. We can compare this with the `data.correct_response` value, and assign this computed value to a new property `data.correct`.
+
+!!! info
+  Here we are comparing the values of `data.response` and `data.correct_response` using a jsPsych function called [jsPsych.pluginAPI.compareKeys](../reference/jspsych-pluginAPI.md#jspsychpluginapicomparekeys). We're using this function because it allows us to compare keys in either a _case sensitive_ or _case insensitive_ way, depending on the [experiment settings](../overview/experiment-options.md). The participant's key response will be recorded in a case-sensitive way in the data (e.g. 'f' or 'F'), but in most cases, we don't care if their response corresponds to an upper or lower case letter (which is why the `case_sensitive` experiment setting is `false` by default). Using the `jsPsych.pluginAPI.commpareKeys` function here means that the response will be scored correctly, even if the participant holds down Shift or has Caps Lock on. This function is only relevant for keyboard responses; for other kinds of responses, such as button presses, you can simply compare the response and correct response values directly, e.g.
+  ```js
+  data.correct = data.response === data.correct_response;
+  ```
 
 ??? example "The complete code so far"
 
@@ -1073,35 +1134,42 @@ The `data.response` value is a string representation of the key the subject pres
     <html>
       <head>
         <title>My experiment</title>
-        <script src="jspsych-6.3.0/jspsych.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
-        <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+        <script src="https://unpkg.com/jspsych@7.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
+
+        /* initialize jsPsych */
+        var jsPsych = initJsPsych({
+          on_finish: function() {
+            jsPsych.data.displayData();
+          }
+        });
 
         /* create timeline */
         var timeline = [];
 
         /* preload images */
         var preload = {
-          type: 'preload',
+          type: jsPsychPreload,
           images: ['img/blue.png', 'img/orange.png']
-        }
+        };
         timeline.push(preload);
 
         /* define welcome message trial */
         var welcome = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: "Welcome to the experiment. Press any key to begin."
         };
         timeline.push(welcome);
 
         /* define instructions trial */
         var instructions = {
-          type: "html-keyboard-response",
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -1120,14 +1188,15 @@ The `data.response` value is a string representation of the key the subject pres
         };
         timeline.push(instructions);
 
-        /* test trials */
+        /* define trial stimuli array for timeline variables */
         var test_stimuli = [
           { stimulus: "img/blue.png",  correct_response: 'f'},
           { stimulus: "img/orange.png",  correct_response: 'j'}
         ];
 
+        /* define fixation and test trials */
         var fixation = {
-          type: 'html-keyboard-response',
+          type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
           choices: jsPsych.NO_KEYS,
           trial_duration: function(){
@@ -1136,10 +1205,10 @@ The `data.response` value is a string representation of the key the subject pres
           data: {
             task: 'fixation'
           }
-        }
+        };
 
         var test = {
-          type: "image-keyboard-response",
+          type: jsPsychImageKeyboardResponse,
           stimulus: jsPsych.timelineVariable('stimulus'),
           choices: ['f', 'j'],
           data: {
@@ -1149,26 +1218,22 @@ The `data.response` value is a string representation of the key the subject pres
           on_finish: function(data){
             data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
           }
-        }
+        };
 
+        /* define test procedure */
         var test_procedure = {
           timeline: [fixation, test],
           timeline_variables: test_stimuli,
           randomize_order: true,
           repetitions: 5
-        }
-
+        };
         timeline.push(test_procedure);
 
         /* start the experiment */
-        jsPsych.init({
-          timeline: timeline,
-          on_finish: function() {
-            jsPsych.data.displayData();
-          }
-        });
+        jsPsych.run(timeline);
+
       </script>
-      </html>
+    </html>
     ```
 
 
@@ -1178,11 +1243,14 @@ jsPsych provides a limited set of analysis functions to allow you to calculate t
 
 We'll use the `html-keyboard-response` plugin. Because the text that we want to display changes based on the subject's performance in the experiment, we need to use a function for the `stimulus` parameter and return the desired text.
 
+!!! info
+  Using a function as the value of a 'normal' parameter (i.e. a parameter that isn't usually a function) provides lots of flexibility in jsPsych experiments, because it allows you to dynamically change the parameter's value based on the participant's earlier responses, and any other information that you don't know before the experiment has started. For more information and examples, see the [dynamic parameter documentation page](../overview/dynamic-parameters.md).
+
 Here's what the code looks like, and a description follows below.
 
 ```js
 var debrief_block = {
-  type: "html-keyboard-response",
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: function() {
 
     var trials = jsPsych.data.get().filter({task: 'response'});
@@ -1196,7 +1264,6 @@ var debrief_block = {
 
   }
 };
-
 timeline.push(debrief_block);
 ```
 
@@ -1217,35 +1284,42 @@ This code is available in the `/examples` folder in the jsPsych release download
 <html>
   <head>
     <title>My experiment</title>
-    <script src="jspsych-6.3.0/jspsych.js"></script>
-    <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-    <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
-    <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
-    <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+    <script src="https://unpkg.com/jspsych@7.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+    <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
+
+    /* initialize jsPsych */
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
     /* create timeline */
     var timeline = [];
 
     /* preload images */
     var preload = {
-      type: 'preload',
+      type: jsPsychPreload,
       images: ['img/blue.png', 'img/orange.png']
-    }
+    };
     timeline.push(preload);
 
     /* define welcome message trial */
     var welcome = {
-      type: "html-keyboard-response",
+      type: jsPsychHtmlKeyboardResponse,
       stimulus: "Welcome to the experiment. Press any key to begin."
     };
     timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
-      type: "html-keyboard-response",
+      type: jsPsychHtmlKeyboardResponse,
       stimulus: `
         <p>In this experiment, a circle will appear in the center 
         of the screen.</p><p>If the circle is <strong>blue</strong>, 
@@ -1264,14 +1338,15 @@ This code is available in the `/examples` folder in the jsPsych release download
     };
     timeline.push(instructions);
 
-    /* test trials */
+    /* define trial stimuli array for timeline variables */
     var test_stimuli = [
       { stimulus: "img/blue.png",  correct_response: 'f'},
       { stimulus: "img/orange.png",  correct_response: 'j'}
     ];
 
+    /* define fixation and test trials */
     var fixation = {
-      type: 'html-keyboard-response',
+      type: jsPsychHtmlKeyboardResponse,
       stimulus: '<div style="font-size:60px;">+</div>',
       choices: jsPsych.NO_KEYS,
       trial_duration: function(){
@@ -1280,10 +1355,10 @@ This code is available in the `/examples` folder in the jsPsych release download
       data: {
         task: 'fixation'
       }
-    }
+    };
 
     var test = {
-      type: "image-keyboard-response",
+      type: jsPsychImageKeyboardResponse,
       stimulus: jsPsych.timelineVariable('stimulus'),
       choices: ['f', 'j'],
       data: {
@@ -1293,20 +1368,20 @@ This code is available in the `/examples` folder in the jsPsych release download
       on_finish: function(data){
         data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
       }
-    }
+    };
 
+    /* define test procedure */
     var test_procedure = {
       timeline: [fixation, test],
       timeline_variables: test_stimuli,
       repetitions: 5,
       randomize_order: true
-    }
+    };
     timeline.push(test_procedure);
 
     /* define debrief */
-
     var debrief_block = {
-      type: "html-keyboard-response",
+      type: jsPsychHtmlKeyboardResponse,
       stimulus: function() {
 
         var trials = jsPsych.data.get().filter({task: 'response'});
@@ -1323,12 +1398,8 @@ This code is available in the `/examples` folder in the jsPsych release download
     timeline.push(debrief_block);
 
     /* start the experiment */
-    jsPsych.init({
-      timeline: timeline,
-      on_finish: function() {
-        jsPsych.data.displayData();
-      }
-    });
+    jsPsych.run(timeline);
+    
   </script>
 </html>
 ```
