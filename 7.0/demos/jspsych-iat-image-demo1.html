@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://unpkg.com/jspsych@7.0.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-iat-image@1.0.0"></script>
-  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css">
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-iat-image.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
   <style>
     .jspsych-btn {margin-bottom: 10px;}
   </style>
@@ -13,21 +13,19 @@
 <body></body>
 <script>
 
-  var jsPsych = initJsPsych();
-
   var preload_trial = {
-    type: jsPsychPreloadeload,
+    type: 'preload',
     auto_preload: true
   }
 
   var start = {
-    type: jsPsychHtmlButtonResponse,
+    type: 'html-button-response',
     stimulus: '',
     choices: ['Run demo']
   };
 
   var show_data = {
-    type: jsPsychHtmlButtonResponse,
+    type: 'html-button-response',
     stimulus: function() {
       var trial_data = jsPsych.data.getLastTrialData().values();
       var trial_json = JSON.stringify(trial_data, null, 2);
@@ -39,8 +37,8 @@
 
   
   var trial = {
-    type: jsPsychIatImage,
-    stimulus: 'img/blue.png',
+    type: 'iat-image',
+    stimulus: 'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/img/blue.png',
     stim_key_association: 'left',
     html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
     bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
@@ -62,7 +60,9 @@
   };
 
   if (typeof jsPsych !== "undefined") {
-    jsPsych.run([preload_trial, start, trial_loop]);
+    jsPsych.init({
+      timeline: [preload_trial, start, trial_loop]
+    });
   } else {
     document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
   }

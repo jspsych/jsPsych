@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://unpkg.com/jspsych@7.0.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-audio-button-response@1.0.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
-    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css">
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-audio-button-response.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
   </head>
   <body></body>
   <script>
 
-  var jsPsych = initJsPsych();
-
   var timeline = [];
 
   timeline.push({
-    type: jsPsychPreload,
+    type: 'preload',
     auto_preload: true
   });
 
   timeline.push({
-    type: jsPsychHtmlButtonResponse,
+    type: 'html-button-response',
     stimulus: '<div style="max-width:600px;"><p>Some browsers now require the user to interact with a page before it can play audio. '+
     'Clicking the button below counts as an interaction.</p><p>Be aware of this when planning audio experiments if '+
     'you want the first trial to include audio.</p></div>',
@@ -28,14 +26,14 @@
   });
 
   var trial = {
-    type: jsPsychAudioButtonResponse,
-    stimulus: 'sound/tone.mp3',
+    type: 'audio-button-response',
+    stimulus: 'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/sound/tone.mp3',
     choices: ['Low', 'High'],
     prompt: "<p>Is the pitch high or low?</p>"
   };
 
   var show_data = {
-    type: jsPsychHtmlButtonResponse,
+    type: 'html-button-response',
     stimulus: function() {
       var trial_data = jsPsych.data.getLastTrialData().values();
       var trial_json = JSON.stringify(trial_data, null, 2);
@@ -53,7 +51,9 @@
   });
 
   if (typeof jsPsych !== "undefined") {
-    jsPsych.run(timeline);
+    jsPsych.init({
+      timeline: timeline
+    });
   } else {
     document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
   }

@@ -9,8 +9,6 @@
       
       
       
-        <link rel="canonical" href="https://www.jspsych.org/7.0/overview/plugins/">
-      
       <link rel="icon" href="../../img/jspsych-favicon.png">
       <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
     
@@ -445,24 +443,66 @@
     Creating a new plugin
   </a>
   
+    <nav class="md-nav" aria-label="Creating a new plugin">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whats-in-a-plugin-file" class="md-nav__link">
+    What's in a plugin file?
+  </a>
+  
+    <nav class="md-nav" aria-label="What's in a plugin file?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugininfo" class="md-nav__link">
+    plugin.info
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugintrial" class="md-nav__link">
+    plugin.trial
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changing-the-content-of-the-display" class="md-nav__link">
+    Changing the content of the display
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#writing-data" class="md-nav__link">
+    Writing data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-plugin-template" class="md-nav__link">
+    The plugin template
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
   
 </nav>
       
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../extensions/" class="md-nav__link">
-        Extensions
-      </a>
     </li>
   
 
@@ -532,8 +572,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../events/" class="md-nav__link">
-        Events
+      <a href="../callbacks/" class="md-nav__link">
+        Event-related Callback Functions
       </a>
     </li>
   
@@ -647,18 +687,6 @@
   
 
           
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../timing-accuracy/" class="md-nav__link">
-        Timing Accuracy
-      </a>
-    </li>
-  
-
-          
         </ul>
       </nav>
     </li>
@@ -694,7 +722,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/jspsych/" class="md-nav__link">
+      <a href="../../core_library/jspsych-core/" class="md-nav__link">
         jsPsych
       </a>
     </li>
@@ -706,7 +734,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/jspsych-data/" class="md-nav__link">
+      <a href="../../core_library/jspsych-data/" class="md-nav__link">
         jsPsych.data
       </a>
     </li>
@@ -718,7 +746,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/jspsych-randomization/" class="md-nav__link">
+      <a href="../../core_library/jspsych-randomization/" class="md-nav__link">
         jsPsych.randomization
       </a>
     </li>
@@ -730,7 +758,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/jspsych-turk/" class="md-nav__link">
+      <a href="../../core_library/jspsych-turk/" class="md-nav__link">
         jsPsych.turk
       </a>
     </li>
@@ -742,7 +770,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/jspsych-pluginAPI/" class="md-nav__link">
+      <a href="../../core_library/jspsych-pluginAPI/" class="md-nav__link">
         jsPsych.pluginAPI
       </a>
     </li>
@@ -796,8 +824,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/animation/" class="md-nav__link">
-        animation
+      <a href="../../plugins/jspsych-animation/" class="md-nav__link">
+        jspsych-animation
       </a>
     </li>
   
@@ -808,8 +836,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/audio-button-response/" class="md-nav__link">
-        audio-button-response
+      <a href="../../plugins/jspsych-audio-button-response/" class="md-nav__link">
+        jspsych-audio-button-response
       </a>
     </li>
   
@@ -820,8 +848,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/audio-keyboard-response/" class="md-nav__link">
-        audio-keyboard-response
+      <a href="../../plugins/jspsych-audio-keyboard-response/" class="md-nav__link">
+        jspsych-audio-keyboard-response
       </a>
     </li>
   
@@ -832,8 +860,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/audio-slider-response/" class="md-nav__link">
-        audio-slider-response
+      <a href="../../plugins/jspsych-audio-slider-response/" class="md-nav__link">
+        jspsych-audio-slider-response
       </a>
     </li>
   
@@ -844,8 +872,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/call-function/" class="md-nav__link">
-        call-function
+      <a href="../../plugins/jspsych-call-function/" class="md-nav__link">
+        jspsych-call-function
       </a>
     </li>
   
@@ -856,8 +884,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/canvas-button-response/" class="md-nav__link">
-        canvas-button-response
+      <a href="../../plugins/jspsych-canvas-button-response/" class="md-nav__link">
+        jspsych-canvas-button-response
       </a>
     </li>
   
@@ -868,8 +896,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/canvas-keyboard-response/" class="md-nav__link">
-        canvas-keyboard-response
+      <a href="../../plugins/jspsych-canvas-keyboard-response/" class="md-nav__link">
+        jspsych-canvas-keyboard-response
       </a>
     </li>
   
@@ -880,8 +908,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/canvas-slider-response/" class="md-nav__link">
-        canvas-slider-response
+      <a href="../../plugins/jspsych-canvas-slider-response/" class="md-nav__link">
+        jspsych-canvas-slider-response
       </a>
     </li>
   
@@ -892,8 +920,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/categorize-animation/" class="md-nav__link">
-        categorize-animation
+      <a href="../../plugins/jspsych-categorize-animation/" class="md-nav__link">
+        jspsych-categorize-animation
       </a>
     </li>
   
@@ -904,8 +932,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/categorize-html/" class="md-nav__link">
-        categorize-html
+      <a href="../../plugins/jspsych-categorize-html/" class="md-nav__link">
+        jspsych-categorize-html
       </a>
     </li>
   
@@ -916,8 +944,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/categorize-image/" class="md-nav__link">
-        categorize-image
+      <a href="../../plugins/jspsych-categorize-image/" class="md-nav__link">
+        jspsych-categorize-image
       </a>
     </li>
   
@@ -928,8 +956,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/cloze/" class="md-nav__link">
-        cloze
+      <a href="../../plugins/jspsych-cloze/" class="md-nav__link">
+        jspsych-cloze
       </a>
     </li>
   
@@ -940,8 +968,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/external-html/" class="md-nav__link">
-        external-html
+      <a href="../../plugins/jspsych-external-html/" class="md-nav__link">
+        jspsych-external-html
       </a>
     </li>
   
@@ -952,8 +980,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/free-sort/" class="md-nav__link">
-        free-sort
+      <a href="../../plugins/jspsych-free-sort/" class="md-nav__link">
+        jspsych-free-sort
       </a>
     </li>
   
@@ -964,8 +992,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/fullscreen/" class="md-nav__link">
-        fullscreen
+      <a href="../../plugins/jspsych-fullscreen/" class="md-nav__link">
+        jspsych-fullscreen
       </a>
     </li>
   
@@ -976,8 +1004,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/html-button-response/" class="md-nav__link">
-        html-button-response
+      <a href="../../plugins/jspsych-html-button-response/" class="md-nav__link">
+        jspsych-html-button-response
       </a>
     </li>
   
@@ -988,8 +1016,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/html-keyboard-response/" class="md-nav__link">
-        html-keyboard-response
+      <a href="../../plugins/jspsych-html-keyboard-response/" class="md-nav__link">
+        jspsych-html-keyboard-response
       </a>
     </li>
   
@@ -1000,8 +1028,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/html-slider-response/" class="md-nav__link">
-        html-slider-response
+      <a href="../../plugins/jspsych-html-slider-response/" class="md-nav__link">
+        jspsych-html-slider-response
       </a>
     </li>
   
@@ -1012,8 +1040,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/iat-html/" class="md-nav__link">
-        iat-html
+      <a href="../../plugins/jspsych-iat-html/" class="md-nav__link">
+        jspsych-iat-html
       </a>
     </li>
   
@@ -1024,8 +1052,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/iat-image/" class="md-nav__link">
-        iat-image
+      <a href="../../plugins/jspsych-iat-image/" class="md-nav__link">
+        jspsych-iat-image
       </a>
     </li>
   
@@ -1036,8 +1064,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/image-button-response/" class="md-nav__link">
-        image-button-response
+      <a href="../../plugins/jspsych-image-button-response/" class="md-nav__link">
+        jspsych-image-button-response
       </a>
     </li>
   
@@ -1048,8 +1076,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/image-keyboard-response/" class="md-nav__link">
-        image-keyboard-response
+      <a href="../../plugins/jspsych-image-keyboard-response/" class="md-nav__link">
+        jspsych-image-keyboard-response
       </a>
     </li>
   
@@ -1060,8 +1088,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/image-slider-response/" class="md-nav__link">
-        image-slider-response
+      <a href="../../plugins/jspsych-image-slider-response/" class="md-nav__link">
+        jspsych-image-slider-response
       </a>
     </li>
   
@@ -1072,8 +1100,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/instructions/" class="md-nav__link">
-        instructions
+      <a href="../../plugins/jspsych-instructions/" class="md-nav__link">
+        jspsych-instructions
       </a>
     </li>
   
@@ -1084,8 +1112,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/maxdiff/" class="md-nav__link">
-        maxdiff
+      <a href="../../plugins/jspsych-maxdiff/" class="md-nav__link">
+        jspsych-maxdiff
       </a>
     </li>
   
@@ -1096,8 +1124,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/preload/" class="md-nav__link">
-        preload
+      <a href="../../plugins/jspsych-preload/" class="md-nav__link">
+        jspsych-preload
       </a>
     </li>
   
@@ -1108,8 +1136,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/reconstruction/" class="md-nav__link">
-        reconstruction
+      <a href="../../plugins/jspsych-rdk/" class="md-nav__link">
+        jspsych-rdk
       </a>
     </li>
   
@@ -1120,8 +1148,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/resize/" class="md-nav__link">
-        resize
+      <a href="../../plugins/jspsych-reconstruction/" class="md-nav__link">
+        jspsych-reconstruction
       </a>
     </li>
   
@@ -1132,8 +1160,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/same-different-html/" class="md-nav__link">
-        same-different-html
+      <a href="../../plugins/jspsych-resize/" class="md-nav__link">
+        jspsych-resize
       </a>
     </li>
   
@@ -1144,8 +1172,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/same-different-image/" class="md-nav__link">
-        same-different-image
+      <a href="../../plugins/jspsych-same-different-html/" class="md-nav__link">
+        jspsych-same-different-html
       </a>
     </li>
   
@@ -1156,8 +1184,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/serial-reaction-time/" class="md-nav__link">
-        serial-reaction-time
+      <a href="../../plugins/jspsych-same-different-image/" class="md-nav__link">
+        jspsych-same-different-image
       </a>
     </li>
   
@@ -1168,8 +1196,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/serial-reaction-time-mouse/" class="md-nav__link">
-        serial-reaction-time-mouse
+      <a href="../../plugins/jspsych-serial-reaction-time/" class="md-nav__link">
+        jspsych-serial-reaction-time
       </a>
     </li>
   
@@ -1180,8 +1208,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/survey-html-form/" class="md-nav__link">
-        survey-html-form
+      <a href="../../plugins/jspsych-serial-reaction-time-mouse/" class="md-nav__link">
+        jspsych-serial-reaction-time-mouse
       </a>
     </li>
   
@@ -1192,8 +1220,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/survey-likert/" class="md-nav__link">
-        survey-likert
+      <a href="../../plugins/jspsych-survey-html-form/" class="md-nav__link">
+        jspsych-survey-html-form
       </a>
     </li>
   
@@ -1204,8 +1232,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/survey-multi-choice/" class="md-nav__link">
-        survey-multi-choice
+      <a href="../../plugins/jspsych-survey-likert/" class="md-nav__link">
+        jspsych-survey-likert
       </a>
     </li>
   
@@ -1216,8 +1244,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/survey-multi-select/" class="md-nav__link">
-        survey-multi-select
+      <a href="../../plugins/jspsych-survey-multi-choice/" class="md-nav__link">
+        jspsych-survey-multi-choice
       </a>
     </li>
   
@@ -1228,8 +1256,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/survey-text/" class="md-nav__link">
-        survey-text
+      <a href="../../plugins/jspsych-survey-multi-select/" class="md-nav__link">
+        jspsych-survey-multi-select
       </a>
     </li>
   
@@ -1240,8 +1268,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/video-button-response/" class="md-nav__link">
-        video-button-response
+      <a href="../../plugins/jspsych-survey-text/" class="md-nav__link">
+        jspsych-survey-text
       </a>
     </li>
   
@@ -1252,8 +1280,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/video-keyboard-response/" class="md-nav__link">
-        video-keyboard-response
+      <a href="../../plugins/jspsych-video-button-response/" class="md-nav__link">
+        jspsych-video-button-response
       </a>
     </li>
   
@@ -1264,8 +1292,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/video-slider-response/" class="md-nav__link">
-        video-slider-response
+      <a href="../../plugins/jspsych-video-keyboard-response/" class="md-nav__link">
+        jspsych-video-keyboard-response
       </a>
     </li>
   
@@ -1276,8 +1304,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/virtual-chinrest/" class="md-nav__link">
-        virtual-chinrest
+      <a href="../../plugins/jspsych-video-slider-response/" class="md-nav__link">
+        jspsych-video-slider-response
       </a>
     </li>
   
@@ -1288,8 +1316,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/visual-search-circle/" class="md-nav__link">
-        visual-search-circle
+      <a href="../../plugins/jspsych-virtual-chinrest/" class="md-nav__link">
+        jspsych-virtual-chinrest
       </a>
     </li>
   
@@ -1300,8 +1328,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/webgazer-calibrate/" class="md-nav__link">
-        webgazer-calibrate
+      <a href="../../plugins/jspsych-visual-search-circle/" class="md-nav__link">
+        jspsych-visual-search-circle
       </a>
     </li>
   
@@ -1312,8 +1340,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/webgazer-init-camera/" class="md-nav__link">
-        webgazer-init-camera
+      <a href="../../plugins/jspsych-vsl-animate-occlusion/" class="md-nav__link">
+        jspsych-vsl-animate-occlusion
       </a>
     </li>
   
@@ -1324,8 +1352,44 @@
   
   
     <li class="md-nav__item">
-      <a href="../../plugins/webgazer-validate/" class="md-nav__link">
-        webgazer-validate
+      <a href="../../plugins/jspsych-vsl-grid-scene/" class="md-nav__link">
+        jspsych-vsl-grid-scene
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-webgazer-calibrate/" class="md-nav__link">
+        jspsych-webgazer-calibrate
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-webgazer-init-camera/" class="md-nav__link">
+        jspsych-webgazer-init-camera
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-webgazer-validate/" class="md-nav__link">
+        jspsych-webgazer-validate
       </a>
     </li>
   
@@ -1366,8 +1430,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/list-of-extensions/" class="md-nav__link">
-        List of Extensions
+      <a href="../../extensions/extensions/" class="md-nav__link">
+        Extensions
       </a>
     </li>
   
@@ -1378,8 +1442,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/webgazer/" class="md-nav__link">
-        webgazer
+      <a href="../../extensions/jspsych-ext-webgazer/" class="md-nav__link">
+        jspsych-ext-webgazer.js
       </a>
     </li>
   
@@ -1405,143 +1469,11 @@
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
       
       <label class="md-nav__link" for="__nav_7">
-        Developers
-        <span class="md-nav__icon md-icon"></span>
-      </label>
-      <nav class="md-nav" aria-label="Developers" data-md-level="1">
-        <label class="md-nav__title" for="__nav_7">
-          <span class="md-nav__icon md-icon"></span>
-          Developers
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../developers/configuration/" class="md-nav__link">
-        Configuration
-      </a>
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../developers/contributing/" class="md-nav__link">
-        Contributing to jsPsych
-      </a>
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../developers/plugin-development/" class="md-nav__link">
-        Plugin Development
-      </a>
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../developers/extension-development/" class="md-nav__link">
-        Extension Development
-      </a>
-    </li>
-  
-
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
-      
-      <label class="md-nav__link" for="__nav_8">
-        Support
-        <span class="md-nav__icon md-icon"></span>
-      </label>
-      <nav class="md-nav" aria-label="Support" data-md-level="1">
-        <label class="md-nav__title" for="__nav_8">
-          <span class="md-nav__icon md-icon"></span>
-          Support
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../support/support/" class="md-nav__link">
-        Getting Help
-      </a>
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../support/migration-v7/" class="md-nav__link">
-        Migrating from 6.x to 7.x
-      </a>
-    </li>
-  
-
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
-      
-      <label class="md-nav__link" for="__nav_9">
         About
         <span class="md-nav__icon md-icon"></span>
       </label>
       <nav class="md-nav" aria-label="About" data-md-level="1">
-        <label class="md-nav__title" for="__nav_9">
+        <label class="md-nav__title" for="__nav_7">
           <span class="md-nav__icon md-icon"></span>
           About
         </label>
@@ -1554,6 +1486,30 @@
     <li class="md-nav__item">
       <a href="../../about/about/" class="md-nav__link">
         About jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/support/" class="md-nav__link">
+        Getting Help
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/contributing/" class="md-nav__link">
+        Contributing to jsPsych
       </a>
     </li>
   
@@ -1683,6 +1639,60 @@
     Creating a new plugin
   </a>
   
+    <nav class="md-nav" aria-label="Creating a new plugin">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whats-in-a-plugin-file" class="md-nav__link">
+    What's in a plugin file?
+  </a>
+  
+    <nav class="md-nav" aria-label="What's in a plugin file?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugininfo" class="md-nav__link">
+    plugin.info
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugintrial" class="md-nav__link">
+    plugin.trial
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changing-the-content-of-the-display" class="md-nav__link">
+    Changing the content of the display
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#writing-data" class="md-nav__link">
+    Writing data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-plugin-template" class="md-nav__link">
+    The plugin template
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -1703,50 +1713,25 @@
                 
                 
                 <h1 id="plugins">Plugins<a class="headerlink" href="#plugins" title="Permanent link">&para;</a></h1>
-<p>In jsPsych, plugins define the kinds of trials or events that should occur during the experiment. 
-Some plugins define very general events, like <a href="../plugins/instructions/">displaying a set of instructions pages</a>, <a href="../plugins/image-keyboard-response/">displaying an image and recording a keyboard response</a>, or <a href="../plugins/audio-button-response/">playing a sound file and recording a button response</a>. 
-Other plugins are more specific, like those that display particular kinds of stimuli (e.g., a <a href="../plugins/visual-search-circle/">circular visual search array</a>), or run a specific version of particular kind of task (e.g., the <a href="../plugins/iat-image/">Implicit Association Test</a>).
-Part of creating an experiment with jsPsych involves figuring out which plugins are needed to create the tasks you want your participants to perform.</p>
-<p>Plugins provide a structure for a particular trial or task, but often allow for significant customization and flexibility. For example, the <a href="../plugins/image-keyboard-response/">image-keyboard-response plugin</a> defines a simple structure for showing an image and collecting a keyboard response. You can specify the what the stimulus is, what keys the subject is allowed to press, how long the stimulus should be on the screen, how long the subject has to respond, and so on. Many of these options have reasonable default values; even though the image plugin has many different parameters, you only <em>need</em> to specify the image stimulus in order to use it. Each plugin has its own documentation page, which describes what the plugin does, what options are available, and what kind of data it collects.</p>
+<p>In jsPsych, plugins define the kinds of trials or events that should occur during the experiment. Some plugins define very general events, like displaying a set of instructions pages, displaying an image and recording a keyboard response, or playing a sound file and recording a button response. Other plugins are more specific, like those that display particular kinds of stimuli (e.g. Random-Dot Kinematogram, visual search circle), or run a specific version of particular kind of task (e.g. the Implicit Association Test). Creating an experiment with jsPsych involves figuring out which plugins are needed to create the tasks you want your participants to perform.</p>
+<p>Plugins provide a structure for a particular trial or task, but often allow for significant customization and flexibility. For example, the <code>image-keyboard-response</code> plugin defines a simple structure for showing an image and collecting a keyboard response. You can specify the what the stimulus is, what keys the subject is allowed to press, and how long the stimulus should be on the screen, how long the subject has to respond, and so on. Many of these options have reasonable default values; even though the image plugin has many different parameters, you only <em>need</em> to specify the image stimulus in order to use it. Each plugin has its own documentation page, which describes what the plugin does, what options are available, and what kind of data it collects.</p>
 <h2 id="using-a-plugin">Using a plugin<a class="headerlink" href="#using-a-plugin" title="Permanent link">&para;</a></h2>
 <p>To use a plugin, you'll need to load the plugin's JavaScript file in your experiment's HTML page. All jsPsych experiments also need to load the "jsPsych.js" file.</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/jspsych@7.0.0&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jsPsych/jspsych.js&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jsPsych/plugins/jspsych-image-keyboard-response.js&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
 </code></pre></div>
-<p>Once a plugin is loaded, you can use JavaScript to define a trial that uses that plugin. All jsPsych trials need a <code>type</code> parameter, which tells jsPsych what plugin to use to run the trial. The trial's <code>type</code> is similar to the plugin name, but it always starts with "jsPsych" and is written in <em>camel case</em> rather than with dashes between the words. The trial's <code>type</code> parameter should NOT be a string (i.e., no quotes around the <code>type</code> value). Here are some examples of plugin names and types:</p>
-<table>
-<thead>
-<tr>
-<th>Plugin name</th>
-<th>Type</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>image-keyboard-response</td>
-<td>jsPsychImageKeyboardResponse</td>
-</tr>
-<tr>
-<td>fullscreen</td>
-<td>jsPsychFullscreen</td>
-</tr>
-<tr>
-<td>webgazer-init-camera</td>
-<td>jsPsychWebgazerInitCamera</td>
-</tr>
-</tbody>
-</table>
+<p>Once a plugin is loaded, you can use JavaScript to define a trial that uses that plugin. All jsPsych trials have a <code>type</code>, which tells jsPsych what plugin to use to run the trial. The trial's <code>type</code> is the plugin name, which usually the same as the plugin file name, but with the "jspsych-" prefix removed.</p>
 <p>The following JavaScript code defines a trial using the <code>image-keyboard-response</code> plugin to display an image file. This trial uses the default values for valid keys, stimulus duration, trial duration, and other parameters. </p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">image_trial</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span> 
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">,</span> 
     <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;images/happy_face.jpg&#39;</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>You can override any default parameter values by adding them into your trial object. Here's an exampe of overriding the default values for <code>trial_duration</code> and <code>post_trial_gap</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">image_trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">,</span>
   <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;images/happy_face.jpg&#39;</span><span class="p">,</span>
   <span class="nx">trial_duration</span><span class="o">:</span> <span class="mf">3000</span><span class="p">,</span>
   <span class="nx">post_trial_gap</span><span class="o">:</span> <span class="mf">2000</span>
@@ -1781,19 +1766,19 @@ Part of creating an experiment with jsPsych involves figuring out which plugins 
 <td>on_start</td>
 <td>function</td>
 <td><code>function(){ return; }</code></td>
-<td>A callback function to execute when the trial begins, before any loading has occurred. See <a href="../events/">the Event-Related Callbacks page</a> for more details.</td>
+<td>A callback function to execute when the trial begins, before any loading has occurred. See <a href="../callbacks/">the Event-Related Callbacks page</a> for more details.</td>
 </tr>
 <tr>
 <td>on_finish</td>
 <td>function</td>
 <td><code>function(){ return; }</code></td>
-<td>A callback function to execute when the trial finishes, and before the next trial begins. See <a href="../events/">the Event-Related Callbacks page</a> for more details.</td>
+<td>A callback function to execute when the trial finishes, and before the next trial begins. See <a href="../callbacks/">the Event-Related Callbacks page</a> for more details.</td>
 </tr>
 <tr>
 <td>on_load</td>
 <td>function</td>
 <td><code>function(){ return; }</code></td>
-<td>A callback function to execute when the trial has loaded, which typically happens after the initial display of the plugin has loaded. See <a href="../events/">the Event-Related Callbacks page</a> for more details.</td>
+<td>A callback function to execute when the trial has loaded, which typically happens after the initial display of the plugin has loaded. See <a href="../callbacks/">the Event-Related Callbacks page</a> for more details.</td>
 </tr>
 <tr>
 <td>css_classes</td>
@@ -1805,16 +1790,16 @@ Part of creating an experiment with jsPsych involves figuring out which plugins 
 <td>save_trial_parameters</td>
 <td>object</td>
 <td><code>{}</code></td>
-<td>An object containing any trial parameters that should or should not be saved to the trial data. Each key is the name of a trial parameter, and its value should be <code>true</code> or <code>false</code>, depending on whether or not its value should be saved to the data. If the parameter is a function that returns the parameter value, then the value that is returned will be saved to the data. If the parameter is always expected to be a function (e.g., an event-related callback function), then the function itself will be saved as a string. For more examples, see the "save-trial-parameters.html" file in the jsPsych examples folder.</td>
+<td>An object containing any trial parameters that should or should not be saved to the trial data. Each key is the name of a trial parameter, and its value should be <code>true</code> or <code>false</code>, depending on whether or not its value should be saved to the data. If the parameter is a function that returns the parameter value, then the value that is returned will be saved to the data. If the parameter is always expected to be a function (e.g. an event-related callback function), then the function itself will be saved as a string. For more examples, see the "save-trial-parameters.html" file in the jsPsych examples folder.</td>
 </tr>
 </tbody>
 </table>
 <h3 id="the-data-parameter">The data parameter<a class="headerlink" href="#the-data-parameter" title="Permanent link">&para;</a></h3>
-<p>The <code>data</code> parameter allows you to add additional properties to the trial data. This can be useful for storing properties of the trial that are not directly apparent from the values that the plugin records. The <code>data</code> parameter value must be an object that contains key-value pairs.</p>
+<p>The <code>data</code> parameter allows you to add additional properties to the trial data. This can be useful for storing properties of the trial that are not directly apparent from the values that the plugin records. The <code>data</code> parameter value should be an object that contains key-value pairs.</p>
 <p>A simple example is the <a href="https://en.wikipedia.org/wiki/Eriksen_flanker_task">Flanker Task</a>. In this experiment, participants respond to the direction of a central arrow by pressing a key to the left for a left-pointing arrow (&lt;) and a key to the right for a right-pointing arrow (&gt;). The arrow appears in the center of <em>flankers</em>, or arrows that the participant should ignore. Those flankers can be congruent (&gt;&gt;&gt;&gt;&gt;) or incongruent (&lt;&lt;&gt;&lt;&lt;).</p>
 <p>A trial for the Flanker Task written with jsPsych might look like this:</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
   <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;&lt;&lt;&lt;&lt;&#39;</span><span class="p">,</span>
   <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;j&#39;</span><span class="p">],</span>
   <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
@@ -1825,10 +1810,10 @@ Part of creating an experiment with jsPsych involves figuring out which plugins 
 </code></pre></div>
 <p>Note the use of the data parameter to add a property <code>stimulus_type</code> with the value <code>congruent</code> and a property <code>target_direction</code> with the value <code>left</code>. Having these properties recorded directly in the data simplifies data analysis, making it easy to aggregate data by <code>stimulus_type</code> and/or <code>target_direction</code>.</p>
 <h3 id="the-post_trial_gap-iti-parameter">The post_trial_gap (ITI) parameter<a class="headerlink" href="#the-post_trial_gap-iti-parameter" title="Permanent link">&para;</a></h3>
-<p>The default inter-trial interval (ITI) in jsPsych is 0 ms. This can be adjusted at the experiment-wide level by changing the <code>default_iti</code> parameter in <code>initJsPsych()</code>.</p>
-<p>The ITI can also be controlled at the trial level through the <code>post_trial_gap</code> parameter. Setting this parameter to a positive integer <em>x</em> will cause a blank screen to display after the trial for <em>x</em> milliseconds. Setting this parameter for a trial will override the <code>default_iti</code> value set in <code>initJsPsych</code>.</p>
+<p>The default inter-trial interval (ITI) in jsPsych is 0 ms. This can be adjusted at the experiment-wide level by changing the <code>default_iti</code> parameter in <code>jsPsych.init()</code>.</p>
+<p>The ITI can also be controlled at the trial level through the <code>post_trial_gap</code> parameter. Setting this parameter to a positive integer <em>x</em> will cause a blank screen to display after the trial for <em>x</em> milliseconds. Setting this parameter for a trial will override the <code>default_iti</code> value set in <code>jsPsych.init</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
   <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;There will be a 1.5 second blank screen after this trial.&#39;</span><span class="p">,</span>
   <span class="nx">post_trial_gap</span><span class="o">:</span> <span class="mf">1500</span>
 <span class="p">}</span>
@@ -1838,7 +1823,7 @@ Part of creating an experiment with jsPsych involves figuring out which plugins 
 <div class="highlight"><pre><span></span><code><span class="c1">// when this trial runs, the on_start function will change the trial&#39;s stimulus and data parameters,</span>
 <span class="c1">// so the trial will display an incongruent Flanker stimulus with a right-facing central arrow</span>
 <span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
   <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;&lt;&lt;&lt;&lt;&#39;</span><span class="p">,</span>
   <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;j&#39;</span><span class="p">],</span>
   <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
@@ -1860,7 +1845,7 @@ Part of creating an experiment with jsPsych involves figuring out which plugins 
 <span class="c1">// which is either &#39;true&#39; or &#39;false&#39;</span>
 <span class="c1">// depending on the response that was made</span>
 <span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
   <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;&lt;&lt;&lt;&lt;&#39;</span><span class="p">,</span>
   <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;j&#39;</span><span class="p">],</span>
   <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
@@ -1878,11 +1863,9 @@ Part of creating an experiment with jsPsych involves figuring out which plugins 
 <span class="p">}</span>
 </code></pre></div>
 <h3 id="the-on_load-parameter">The on_load parameter<a class="headerlink" href="#the-on_load-parameter" title="Permanent link">&para;</a></h3>
-<p>The <code>on_load</code> callback function will trigger once the trial has completed loading. 
-For most plugins, this will occur once the display has been initially updated but before any user interactions or timed events (e.g., animations) have occurred. 
-This can be useful for changing various aspects of the page elements and their properties that would otherwise require modifying the plugin file.</p>
+<p>The <code>on_load</code> callback function will trigger once the trial has completed loading. For most plugins, this will occur once the display has been initially updated but before any user interactions or timed events (e.g., animations) have occurred. This can be useful for changing various aspects of the page elements and their properties that would otherwise require modifying the plugin file.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">,</span>
   <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;imgA.png&#39;</span><span class="p">,</span>
   <span class="nx">on_load</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// this will change the src attribute of the image after 500ms</span>
@@ -1893,9 +1876,7 @@ This can be useful for changing various aspects of the page elements and their p
 <span class="p">};</span>
 </code></pre></div>
 <h3 id="the-css_classes-parameter">The css_classes parameter<a class="headerlink" href="#the-css_classes-parameter" title="Permanent link">&para;</a></h3>
-<p>The <code>css_classes</code> parameter allows you to add an array of CSS class names to the jsPsych display element on that specific trial. 
-This allows you to create custom style and formatting rules that are only applied to specific trials. 
-If you want CSS rules that only apply to specific elements during a trial, you can use additional CSS selectors.</p>
+<p>The <code>css_classes</code> parameter allows you to add an array of CSS class names to the jsPsych display element on that specific trial. This allows you to create custom style and formatting rules that are only applied to specific trials. If you want CSS rules that only apply to specific elements during a trial, you can use additional CSS selectors.</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
   <span class="p">.</span><span class="nc">flanker-stimulus</span> <span class="p">{</span>
     <span class="k">font-size</span><span class="p">:</span> <span class="mi">500</span><span class="kt">%</span><span class="p">;</span>
@@ -1909,13 +1890,13 @@ If you want CSS rules that only apply to specific elements during a trial, you c
 <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
   <span class="kd">var</span> <span class="nx">fixation_trial</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
     <span class="nx">choices</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">NO_KEYS</span><span class="p">,</span>
     <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span>
     <span class="nx">css_classes</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;fixation&#39;</span><span class="p">]</span>
   <span class="p">};</span>
   <span class="kd">var</span> <span class="nx">flanker_trial</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
     <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;ArrowLeft&quot;</span><span class="p">,</span> <span class="s2">&quot;ArrowRight&quot;</span><span class="p">],</span>
     <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&gt;&gt;&gt;&gt;&gt;&#39;</span><span class="p">,</span>
     <span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39;&lt;span id=&quot;prompt&quot;&gt;Press the left or right arrow key.&lt;/span&gt;&#39;</span><span class="p">,</span>
@@ -1926,7 +1907,7 @@ If you want CSS rules that only apply to specific elements during a trial, you c
 <h3 id="the-save_trial_parameters-parameter">The save_trial_parameters parameter<a class="headerlink" href="#the-save_trial_parameters-parameter" title="Permanent link">&para;</a></h3>
 <p>The <code>save_trial_parameters</code> parameter allows you to tell jsPsych what parameters you want to be saved to the data. This can be used to override the parameter values that the plugin saves by default. You can add more parameter values to the data that are not normally saved, or remove parameter values that normally are saved. This can be especially useful when the parameter value is dynamic (i.e. a function) and you want to record the value that was used during the trial.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlButtonResponse</span><span class="p">,</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-button-response&#39;</span><span class="p">,</span>
   <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;p style=&quot;color: orange; font-size: 48px; font-weight: bold;&quot;&gt;BLUE&lt;/p&gt;&#39;</span><span class="p">,</span>
   <span class="nx">choices</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">([</span><span class="s1">&#39;Yes&#39;</span><span class="p">,</span><span class="s1">&#39;No&#39;</span><span class="p">]);</span>
@@ -1982,7 +1963,61 @@ If you want CSS rules that only apply to specific elements during a trial, you c
 </tbody>
 </table>
 <h2 id="creating-a-new-plugin">Creating a new plugin<a class="headerlink" href="#creating-a-new-plugin" title="Permanent link">&para;</a></h2>
-<p>See our <a href="../../developers/plugin-development/">developer's guide for plugins</a> for information about how to create a new plugin.</p>
+<p>You can add new kinds of tasks to jsPsych by creating new plugins, or modifying existing plugins. A task can be virtually any kind of activity. If it can be implemented in JavaScript, then it almost certainly can be turned into a jsPsych plugin.</p>
+<h3 id="whats-in-a-plugin-file">What's in a plugin file?<a class="headerlink" href="#whats-in-a-plugin-file" title="Permanent link">&para;</a></h3>
+<p>Plugin files follow a specific template. Adherence to the template is what allows jsPsych to run a plugin without knowing anything about what the plugin is doing. What makes plugins so flexible is that the template imposes very few requirements on the code. Here's what an empty plugin template looks like:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">plugins</span><span class="p">[</span><span class="s1">&#39;plugin-name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+
+  <span class="kd">var</span> <span class="nx">plugin</span> <span class="o">=</span> <span class="p">{};</span>
+
+  <span class="nx">plugin</span><span class="p">.</span><span class="nx">info</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;plugin-name&#39;</span><span class="p">,</span>
+    <span class="nx">parameters</span><span class="o">:</span> <span class="p">{</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">plugin</span><span class="p">.</span><span class="nx">trial</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">display_element</span><span class="p">,</span> <span class="nx">trial</span><span class="p">){</span>
+    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">finishTrial</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="nx">plugin</span><span class="p">;</span>
+
+<span class="p">})();</span>
+</code></pre></div>
+<p>This plugin will work! It defines a plugin called 'plugin-name', and it does absolutely nothing. However, it won't break the experiment, and jsPsych will understand that this is a valid plugin.</p>
+<p>Let's examine it in more detail.</p>
+<p>The overall structure of the plugin is defined using a module JavaScript design pattern. This pattern uses a technique called an anonymous closure. This is why the first line has <code>(function(){</code> and the last line is <code>})();</code>. The details aren't important, but if you want to learn more about it, <a href="http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html">this is a nice overview</a>. The reason this pattern is useful is because it allows for persistent state and private scope. In other words, the plugin is isolated and can't be altered by other plugins.</p>
+<p>The module, created by the <code>(function(){</code>  <code>})();</code> expressions, contains an object called <code>plugin</code>. The <code>plugin</code> object has two properties: <code>info</code> and <code>trial</code>. The <code>plugin</code> object is returned at the end of the module, which is what assigns the defined properties of <code>plugin</code> to <code>jsPsych['plugin-name']</code>.</p>
+<h4 id="plugininfo">plugin.info<a class="headerlink" href="#plugininfo" title="Permanent link">&para;</a></h4>
+<p>The plugin's <code>info</code> property is an object that contains all of the available parameters for the plugin. Each parameter name is a property, and the value is an object that includes a description of the parameter, the value's type (string, integer, etc.), and the default value. See some of the plugin files in the jsPsych plugins folder for examples.</p>
+<p>jsPsych allows most <a href="../dynamic-parameters/">plugin parameters to be dynamic</a>, which means that the parameter value can be a function that will be evaluated right before the trial starts. However, if you want your plugin to have a parameter that is a function that <em>shouldn't</em> be evaluated before the trial starts, then you should make sure that the parameter type is <code>'FUNCTION'</code>. This tells jsPsych not to evaluate the function as it normally does for dynamic parameters. See the <code>canvas-*</code> plugins for examples.</p>
+<h4 id="plugintrial">plugin.trial<a class="headerlink" href="#plugintrial" title="Permanent link">&para;</a></h4>
+<p>The plugin's <code>trial</code> property is a function that runs a single trial. There are two parameters that are passed into the trial method. The first, <code>display_element</code>, is the DOM element where jsPsych content is being rendered. This parameter will be an <code>HTMLElement</code>. Generally, you don't need to worry about this parameter being in the correct format, and can assume that it is an <code>HMTLElement</code> and use methods of that class. The second, <code>trial</code>, is an object containing all of the parameters specified in the corresponding TimelineNode. If you have specified all of your parameters in <code>plugin.info</code>, along with default values for each one, then the <code>trial</code> object will contain the default values for any parameters that were not specified in the trial's definition.</p>
+<p>The only requirement for the <code>trial</code> method is that it calls <code>jsPsych.finishTrial()</code> when it is done. This is how jsPsych knows to advance to the next trial in the experiment (or end the experiment if it is the last trial). The plugin can do whatever it needs to do before that point.</p>
+<p>Of course, there are other things that you will probably want the plugin to do inside the <code>plugin.trial</code> function, besides just end. Here are some examples:</p>
+<h3 id="changing-the-content-of-the-display">Changing the content of the display<a class="headerlink" href="#changing-the-content-of-the-display" title="Permanent link">&para;</a></h3>
+<p>There are a few ways to change the content of the display. The <code>display_element</code> parameter of the trial method contains the DOM element for displaying content, so you can use various JavaScript methods for interaction with the display element. A common one is to change the <code>innerHTML</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">html_content</span> <span class="o">=</span> <span class="s1">&#39;&lt;p&gt;This is the first paragraph&lt;/p&gt;&#39;</span><span class="p">;</span>
+<span class="nx">html_content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;p&gt;This is the second paragraph&lt;/p&gt;&#39;</span><span class="p">;</span>
+
+<span class="nx">display_element</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">html_content</span><span class="p">;</span>
+</code></pre></div>
+<p>jsPsych doesn't clear the display before or after each trial, so it is often appropriate to use <code>innerHTML</code> to clear the display at the end of a trial:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// clear the display</span>
+<span class="nx">display_element</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="writing-data">Writing data<a class="headerlink" href="#writing-data" title="Permanent link">&para;</a></h3>
+<p>Plugins exist to collect data, so saving data is obviously a crucial thing to do. You can pass an object of data as the parameter to <code>jsPsych.finishTrial()</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">correct</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="nx">rt</span><span class="o">:</span> <span class="mf">350</span>
+<span class="p">}</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">finishTrial</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+</code></pre></div>
+<p>The data recorded will be that <code>correct</code> is <code>true</code> and that <code>rt</code> is <code>350</code>. Additional data for the trial will also be collected automatically by the jsPsych library.</p>
+<h3 id="the-plugin-template">The plugin template<a class="headerlink" href="#the-plugin-template" title="Permanent link">&para;</a></h3>
+<p>An empty plugin template is included in the <code>plugins/template</code> folder.</p>
                 
               
               
@@ -2018,13 +2053,13 @@ If you want CSS rules that only apply to specific elements during a trial, you c
       
       
         
-        <a href="../extensions/" class="md-footer__link md-footer__link--next" aria-label="Next: Extensions" rel="next">
+        <a href="../dynamic-parameters/" class="md-footer__link md-footer__link--next" aria-label="Next: Dynamic Parameters" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Extensions
+              Dynamic Parameters
             </div>
           </div>
           <div class="md-footer__button md-icon">

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://unpkg.com/jspsych@7.0.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-reconstruction@1.0.0"></script>
-  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css">
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-reconstruction.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
   <style>
     .jspsych-btn {margin-bottom: 10px;}
   </style>
@@ -13,16 +14,14 @@
 <body></body>
 <script>
 
-  var jsPsych = initJsPsych();
-
   var start = {
-    type: jsPsychHtmlButtonResponse,
+    type: 'html-button-response',
     stimulus: '',
     choices: ['Run demo']
   };
 
   var show_data = {
-    type: jsPsychHtmlButtonResponse,
+    type: 'html-button-response',
     stimulus: function() {
       var trial_data = jsPsych.data.getLastTrialData().values();
       var trial_json = JSON.stringify(trial_data, null, 2);
@@ -42,7 +41,7 @@
   }
 
   var match_item = {
-    type: jsPsychHtmKeyboardResponse,
+    type: 'html-keyboard-response',
     stimulus: '<div style="display: block; margin: auto; height: 300px; width: 300px; position: relative;">'+
       '<div style="display: block; position: absolute; top: '+(150 - 210/2)+'px; left:'+(150 - 210/2)+'px; background-color: #000000; '+
       'width: 210px; height: 210px;"></div></div>',
@@ -52,7 +51,7 @@
   }
 
   var reconstruction = {
-    type: jsPsychReconstruction,
+    type: 'reconstruction',
     stim_function: sample_function,
     starting_value: 0.5,
   }
@@ -65,7 +64,9 @@
   };
 
   if (typeof jsPsych !== "undefined") {
-    jsPsych.run([start, trial_loop]);
+    jsPsych.init({
+      timeline: [start, trial_loop]
+    });
   } else {
     document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
   }
