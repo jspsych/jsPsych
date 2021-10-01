@@ -18,23 +18,26 @@ If you are bound to Node.js v14, make sure to install NPM v7 manually (via `npm 
 Clone either the jsPsych repository or the jspsych-contrib repository by running
 
 ```sh
-git clone https://github.com/jspsych/jsPsych.git
+git clone https://github.com/jspsych/jsPsych.git && cd jsPsych
 ```
 
 or
 
 ```sh
-git clone https://github.com/jspsych/jspsych-contrib.git
+git clone https://github.com/jspsych/jspsych-contrib.git && cd jspsych-contrib
 ```
-
 in a terminal.
-Then navigate into the repository's directory via `cd jsPsych` or `cs jspsych-contrib`.
-Finally, run `npm install`.
+
+Then run `npm install`.
 This will create a `node_modules` directory and install all the dependencies into it that are required to build and test jsPsych.
-Afterwards, it will run the build chain for all packages in the jsPsych repository.
+
+!!! attention
+    It is important that `npm install` is only run in the root directory of the repository (due to the NPM workspaces feature).
+    If you accidentally ran `npm install` anywhere else, remove the `node_modules` directory and the `package-lock.json` file that were created at that location and run `npm install` in the root directory again.
 
 !!! info
-    The build step will take a few minutes.
+    If you are running `npm install` in the core jsPsych repository, this will also execute the build chain for all packages in the jsPsych repository.
+    This step may take a few minutes.
     If you would like to use that time efficiently, consider reading the following two sections to know what's happening.
 
 ## Repository structure
