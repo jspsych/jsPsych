@@ -1,4 +1,4 @@
-![jspsych logo](http://www.jspsych.org/latest/img/jspsych-logo.jpg)
+![jspsych logo](http://www.jspsych.org/7.0/img/jspsych-logo.jpg)
 
 jsPsych is a JavaScript framework for creating behavioral experiments that run in a web browser. 
 
