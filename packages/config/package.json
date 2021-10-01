@@ -1,6 +1,7 @@
 {
   "name": "@jspsych/config",
   "version": "0.1.0",
+  "description": "Shared (build) configuration for jsPsych packages",
   "type": "module",
   "exports": {
     "./babel": {
@@ -30,6 +31,16 @@
     "build": "",
     "tsc": ""
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jspsych/jsPsych.git"
+  },
+  "author": "bjoluc <mail@bjoluc.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jspsych/jsPsych/issues"
+  },
+  "homepage": "https://www.jspsych.org/latest/developers/configuration",
   "dependencies": {
     "@babel/cli": "^7.15.4",
     "@babel/core": "^7.14.6",
