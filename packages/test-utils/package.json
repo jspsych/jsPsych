@@ -1,7 +1,7 @@
 {
-  "name": "@jspsych/plugin-vsl-animate-occlusion",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@jspsych/test-utils",
+  "version": "0.1.0",
+  "description": "Test utility functions for jsPsych-related test cases",
   "type": "module",
   "main": "dist/index.cjs",
   "exports": {
@@ -9,15 +9,12 @@
     "require": "./dist/index.cjs"
   },
   "typings": "dist/index.d.ts",
-  "unpkg": "dist/index.browser.min.js",
   "files": [
     "src",
     "dist"
   ],
   "source": "src/index.ts",
   "scripts": {
-    "test": "jest  --passWithNoTests",
-    "test:watch": "npm test -- --watch",
     "tsc": "tsc",
     "build": "rollup --config",
     "build:watch": "npm run build -- --watch"
@@ -26,7 +23,7 @@
     "type": "git",
     "url": "git+https://github.com/jspsych/jsPsych.git"
   },
-  "author": "Josh de Leeuw",
+  "author": "bjoluc <mail@bjoluc.de>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jspsych/jsPsych/issues"
@@ -36,6 +33,7 @@
     "jspsych": ">=7"
   },
   "devDependencies": {
-    "@jspsych/config": "^0.1.0"
+    "@jspsych/config": "^0.1.0",
+    "@jspsych/test-utils": "^0.1.0"
   }
 }

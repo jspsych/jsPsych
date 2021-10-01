@@ -7,7 +7,12 @@ import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
 import ts from "typescript";
 
-const makeConfig = (outputOptions, globalOptions = {}, iifeOutputOptions = {}) => {
+const makeConfig = ({
+  outputOptions = {},
+  globalOptions = {},
+  iifeOutputOptions = {},
+  nodeOnly = false,
+}) => {
   const source = "src/index";
   const destination = "dist/index";
 
@@ -39,34 +44,38 @@ const makeConfig = (outputOptions, globalOptions = {}, iifeOutputOptions = {}) =
     ...globalOptions,
   });
 
-  return defineConfig([
+  /** @type {import("rollup").OutputOptions} */
+  const output = [
     {
-      // Non-babel builds
-      ...commonConfig,
-      output: [
-        {
-          // Build file to be used as an ES import
-          file: `${destination}.js`,
-          format: "esm",
-          ...outputOptions,
-        },
-        {
-          // Build commonjs module (for tools that do not fully support ES6 modules)
-          file: `${destination}.cjs`,
-          format: "cjs",
-          ...outputOptions,
-        },
-        {
-          // Build file to be used for tinkering in modern browsers
-          file: `${destination}.browser.js`,
-          format: "iife",
-          ...outputOptions,
-          ...iifeOutputOptions,
-        },
-      ],
+      // Build file to be used as an ES import
+      file: `${destination}.js`,
+      format: "esm",
+      ...outputOptions,
     },
     {
-      // Babel build
+      // Build commonjs module (for tools that do not fully support ES6 modules)
+      file: `${destination}.cjs`,
+      format: "cjs",
+      ...outputOptions,
+    },
+  ];
+
+  if (!nodeOnly) {
+    output.push({
+      // Build file to be used for tinkering in modern browsers
+      file: `${destination}.browser.js`,
+      format: "iife",
+      ...outputOptions,
+      ...iifeOutputOptions,
+    });
+  }
+
+  // Non-babel builds
+  const config = defineConfig([{ ...commonConfig, output }]);
+
+  if (!nodeOnly) {
+    // Babel build
+    config.push({
       ...commonConfig,
       plugins: commonConfig.plugins.concat(
         babel({
@@ -84,8 +93,10 @@ const makeConfig = (outputOptions, globalOptions = {}, iifeOutputOptions = {}) =
           ...iifeOutputOptions,
         },
       ],
-    },
-  ]);
+    });
+  }
+
+  return config;
 };
 
 /**
@@ -96,24 +107,32 @@ const makeConfig = (outputOptions, globalOptions = {}, iifeOutputOptions = {}) =
  * global scope in browser builds
  */
 export const makeRollupConfig = (iifeName) =>
-  makeConfig(
-    {
+  makeConfig({
+    outputOptions: {
       exports: "default",
       globals: { jspsych: "jsPsychModule" },
     },
-    { external: ["jspsych"] },
-    { name: iifeName }
-  );
+    globalOptions: { external: ["jspsych"] },
+    iifeOutputOptions: { name: iifeName },
+  });
 
 /**
  * Returns the rollup configuration for the core `jspsych` package.
  */
 export const makeCoreRollupConfig = () =>
-  makeConfig(
-    {
+  makeConfig({
+    outputOptions: {
       exports: "named",
       name: "jsPsychModule",
     },
-    {},
-    { footer: "var initJsPsych = jsPsychModule.initJsPsych;" }
-  );
+    iifeOutputOptions: { footer: "var initJsPsych = jsPsychModule.initJsPsych;" },
+  });
+
+/**
+ * Returns the rollup configuration for Node.js-only packages
+ */
+export const makeNodeRollupConfig = () =>
+  makeConfig({
+    globalOptions: { external: ["jspsych"] },
+    nodeOnly: true,
+  });

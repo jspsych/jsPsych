@@ -1,4 +1,4 @@
-import { clickTarget, pressKey, startTimeline } from "jspsych/tests/utils";
+import { clickTarget, pressKey, startTimeline } from "@jspsych/test-utils";
 
 import reconstruction from ".";
 

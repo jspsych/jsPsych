@@ -1,8 +1,8 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import htmlSliderResponse from "@jspsych/plugin-html-slider-response";
+import { pressKey, startTimeline } from "@jspsych/test-utils";
 
 import { initJsPsych } from "../../src";
-import { pressKey, startTimeline } from "../utils";
 
 jest.useFakeTimers();
 

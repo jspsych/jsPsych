@@ -1,4 +1,4 @@
-import { pressKey, startTimeline } from "jspsych/tests/utils";
+import { pressKey, startTimeline } from "@jspsych/test-utils";
 
 import serialReactionTime from ".";
 

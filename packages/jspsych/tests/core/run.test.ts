@@ -1,6 +1,5 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-
-import { flushPromises, startTimeline } from "../utils";
+import { flushPromises, startTimeline } from "@jspsych/test-utils";
 
 describe("jsPsych.run()", () => {
   beforeEach(() => {

@@ -1,8 +1,7 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import reconstruction from "@jspsych/plugin-reconstruction";
 import surveyText from "@jspsych/plugin-survey-text";
-
-import { clickTarget, pressKey, startTimeline } from "../utils";
+import { clickTarget, pressKey, startTimeline } from "@jspsych/test-utils";
 
 describe("Trial parameters in the data", () => {
   test("Can be added by specifying the parameter with a value of true in save_trial_parameters", async () => {

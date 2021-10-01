@@ -1,8 +1,7 @@
 import sameDifferentHtml from "@jspsych/plugin-same-different-html";
 import surveyMultiSelect from "@jspsych/plugin-survey-multi-select";
 import surveyText from "@jspsych/plugin-survey-text";
-
-import { clickTarget, pressKey, startTimeline } from "../utils";
+import { clickTarget, pressKey, startTimeline } from "@jspsych/test-utils";
 
 jest.useFakeTimers();
 

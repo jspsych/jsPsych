@@ -1,4 +1,4 @@
-import { startTimeline } from "jspsych/tests/utils";
+import { startTimeline } from "@jspsych/test-utils";
 
 import callFunction from ".";
 

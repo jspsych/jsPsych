@@ -1,3 +1,5 @@
+import { sep as pathSeparator } from "path";
+
 import gulp from "gulp";
 import rename from "gulp-rename";
 import replace from "gulp-replace";
@@ -13,7 +15,7 @@ export const createCoreDistArchive = () =>
       // Rename dist files
       .pipe(
         rename((path) => {
-          const packageName = path.dirname.split("/")[0];
+          const packageName = path.dirname.split(pathSeparator)[0];
 
           path.dirname = "/dist";
           path.basename = packageName;
