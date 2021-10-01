@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-canvas-keyboard-response.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
+  <style>
+      .jspsych-btn {margin-bottom: 10px;}
+  </style>
+</head>
+<body></body>
+<script>
+
+  var start = {
+    type: 'html-button-response',
+    stimulus: '',
+    choices: ['Run demo']
+  };
+
+  var show_data = {
+    type: 'html-button-response',
+    stimulus: function() {
+      var trial_data = jsPsych.data.getLastTrialData().values();
+      var trial_json = JSON.stringify(trial_data, null, 2);
+      return `<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>
+        <pre style="margin-top:0px;text-align:left;">${trial_json}</pre>`;
+    },
+    choices: ['Repeat demo']
+  };
+
+
+  function drawRect(c){
+    var ctx = c.getContext('2d');
+    ctx.beginPath();
+    ctx.rect(30, 30, 200, 50);
+    ctx.stroke();
+  }
+
+  var trial = {
+    type: 'canvas-keyboard-response',
+    canvas_size: [300, 300],
+    stimulus: drawRect,
+    choices: ['e','i'],
+    prompt: '<p>Is this a circle or a rectangle? Press "e" for circle and "i" for rectangle.</p>',
+    data: {shape: 'rectangle'}
+  }
+
+
+  var canvas_data_loop = {
+    timeline: [trial, show_data],
+    loop_function: function() {
+      return true;
+    }
+  };
+
+  if (typeof jsPsych !== "undefined") {
+    jsPsych.init({
+      timeline: [start, canvas_data_loop]
+    });
+  } else {
+    document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+  }
+
+</script>
+
+</html>

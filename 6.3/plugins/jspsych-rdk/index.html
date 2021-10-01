@@ -1,0 +1,1973 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../../img/jspsych-favicon.png">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
+    
+    
+      
+        <title>jspsych-rdk - jsPsych</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.f7f47774.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4cae4f">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+  
+
+
+  
+
+  
+
+
+  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+  <script async src="https://www.google-analytics.com/analytics.js"></script>
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="orange">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#jspsych-rdk-plugin" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="jsPsych" class="md-header__button md-logo" aria-label="jsPsych" data-md-component="logo">
+      
+  <img src="../../img/jspsych-logo-no-text-mono.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            jsPsych
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              jspsych-rdk
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="jsPsych" class="md-nav__button md-logo" aria-label="jsPsych" data-md-component="logo">
+      
+  <img src="../../img/jspsych-logo-no-text-mono.svg" alt="logo">
+
+    </a>
+    jsPsych
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Tutorials
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/hello-world/" class="md-nav__link">
+        The Basics: Hello World
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/rt-task/" class="md-nav__link">
+        Demo Experiment: Simple Reaction Time Task
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/video-tutorials/" class="md-nav__link">
+        Video Tutorials
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Overview
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Overview" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Overview
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/timeline/" class="md-nav__link">
+        Creating an Experiment: The Timeline
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/plugins/" class="md-nav__link">
+        Plugins
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/dynamic-parameters/" class="md-nav__link">
+        Dynamic Parameters
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/style/" class="md-nav__link">
+        Controlling Visual Appearance
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/data/" class="md-nav__link">
+        Data Storage, Aggregation, and Manipulation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/running-experiments/" class="md-nav__link">
+        Running Experiments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/experiment-options/" class="md-nav__link">
+        Experiment Settings
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/callbacks/" class="md-nav__link">
+        Event-related Callback Functions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/record-browser-interactions/" class="md-nav__link">
+        Record Browser Interactions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/media-preloading/" class="md-nav__link">
+        Media Preloading
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/fullscreen/" class="md-nav__link">
+        Fullscreen Experiments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/eye-tracking/" class="md-nav__link">
+        Eye Tracking
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/exclude-browser/" class="md-nav__link">
+        Exclude Participants Based on Browser Features
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/progress-bar/" class="md-nav__link">
+        Automatic Progress Bar
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/prolific/" class="md-nav__link">
+        Integrating with Prolific
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/mturk/" class="md-nav__link">
+        Integrating with Mechanical Turk
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/browser-device-support/" class="md-nav__link">
+        Browser and Device Support
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        Reference
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core_library/jspsych-core/" class="md-nav__link">
+        jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core_library/jspsych-data/" class="md-nav__link">
+        jsPsych.data
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core_library/jspsych-randomization/" class="md-nav__link">
+        jsPsych.randomization
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core_library/jspsych-turk/" class="md-nav__link">
+        jsPsych.turk
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core_library/jspsych-pluginAPI/" class="md-nav__link">
+        jsPsych.pluginAPI
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      <label class="md-nav__link" for="__nav_5">
+        Plugins
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Plugins" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Plugins
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../list-of-plugins/" class="md-nav__link">
+        List of Plugins
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-animation/" class="md-nav__link">
+        jspsych-animation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-audio-button-response/" class="md-nav__link">
+        jspsych-audio-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-audio-keyboard-response/" class="md-nav__link">
+        jspsych-audio-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-audio-slider-response/" class="md-nav__link">
+        jspsych-audio-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-call-function/" class="md-nav__link">
+        jspsych-call-function
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-canvas-button-response/" class="md-nav__link">
+        jspsych-canvas-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-canvas-keyboard-response/" class="md-nav__link">
+        jspsych-canvas-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-canvas-slider-response/" class="md-nav__link">
+        jspsych-canvas-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-categorize-animation/" class="md-nav__link">
+        jspsych-categorize-animation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-categorize-html/" class="md-nav__link">
+        jspsych-categorize-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-categorize-image/" class="md-nav__link">
+        jspsych-categorize-image
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-cloze/" class="md-nav__link">
+        jspsych-cloze
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-external-html/" class="md-nav__link">
+        jspsych-external-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-free-sort/" class="md-nav__link">
+        jspsych-free-sort
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-fullscreen/" class="md-nav__link">
+        jspsych-fullscreen
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-html-button-response/" class="md-nav__link">
+        jspsych-html-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-html-keyboard-response/" class="md-nav__link">
+        jspsych-html-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-html-slider-response/" class="md-nav__link">
+        jspsych-html-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-iat-html/" class="md-nav__link">
+        jspsych-iat-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-iat-image/" class="md-nav__link">
+        jspsych-iat-image
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-image-button-response/" class="md-nav__link">
+        jspsych-image-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-image-keyboard-response/" class="md-nav__link">
+        jspsych-image-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-image-slider-response/" class="md-nav__link">
+        jspsych-image-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-instructions/" class="md-nav__link">
+        jspsych-instructions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-maxdiff/" class="md-nav__link">
+        jspsych-maxdiff
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-preload/" class="md-nav__link">
+        jspsych-preload
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          jspsych-rdk
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        jspsych-rdk
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rdk-type-parameter" class="md-nav__link">
+    RDK type parameter
+  </a>
+  
+    <nav class="md-nav" aria-label="RDK type parameter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#signal-selection-rule" class="md-nav__link">
+    Signal Selection rule:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noise-type" class="md-nav__link">
+    Noise Type:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-generated" class="md-nav__link">
+    Data Generated
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-reconstruction/" class="md-nav__link">
+        jspsych-reconstruction
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-resize/" class="md-nav__link">
+        jspsych-resize
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-same-different-html/" class="md-nav__link">
+        jspsych-same-different-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-same-different-image/" class="md-nav__link">
+        jspsych-same-different-image
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-serial-reaction-time/" class="md-nav__link">
+        jspsych-serial-reaction-time
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-serial-reaction-time-mouse/" class="md-nav__link">
+        jspsych-serial-reaction-time-mouse
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-survey-html-form/" class="md-nav__link">
+        jspsych-survey-html-form
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-survey-likert/" class="md-nav__link">
+        jspsych-survey-likert
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-survey-multi-choice/" class="md-nav__link">
+        jspsych-survey-multi-choice
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-survey-multi-select/" class="md-nav__link">
+        jspsych-survey-multi-select
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-survey-text/" class="md-nav__link">
+        jspsych-survey-text
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-video-button-response/" class="md-nav__link">
+        jspsych-video-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-video-keyboard-response/" class="md-nav__link">
+        jspsych-video-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-video-slider-response/" class="md-nav__link">
+        jspsych-video-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-virtual-chinrest/" class="md-nav__link">
+        jspsych-virtual-chinrest
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-visual-search-circle/" class="md-nav__link">
+        jspsych-visual-search-circle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-vsl-animate-occlusion/" class="md-nav__link">
+        jspsych-vsl-animate-occlusion
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-vsl-grid-scene/" class="md-nav__link">
+        jspsych-vsl-grid-scene
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-webgazer-calibrate/" class="md-nav__link">
+        jspsych-webgazer-calibrate
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-webgazer-init-camera/" class="md-nav__link">
+        jspsych-webgazer-init-camera
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-webgazer-validate/" class="md-nav__link">
+        jspsych-webgazer-validate
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
+        Extensions
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Extensions" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Extensions
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/extensions/" class="md-nav__link">
+        Extensions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/jspsych-ext-webgazer/" class="md-nav__link">
+        jspsych-ext-webgazer.js
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      <label class="md-nav__link" for="__nav_7">
+        About
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/about/" class="md-nav__link">
+        About jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/support/" class="md-nav__link">
+        Getting Help
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/contributing/" class="md-nav__link">
+        Contributing to jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rdk-type-parameter" class="md-nav__link">
+    RDK type parameter
+  </a>
+  
+    <nav class="md-nav" aria-label="RDK type parameter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#signal-selection-rule" class="md-nav__link">
+    Signal Selection rule:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noise-type" class="md-nav__link">
+    Noise Type:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-generated" class="md-nav__link">
+    Data Generated
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/jspsych/jsPsych/edit/master/docs/plugins/jspsych-rdk.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="jspsych-rdk-plugin">jspsych-rdk plugin<a class="headerlink" href="#jspsych-rdk-plugin" title="Permanent link">&para;</a></h1>
+<p>This plugin displays a Random Dot Kinematogram (RDK) and allows the subject to report the primary direction of motion by pressing a key on the keyboard. The stimulus can be displayed until a keyboard response is given or until a certain duration of time has passed. The RDK is fully customizable (see documentation below) and can display multiple apertures at the same time, each with its own parameters.</p>
+<div class="admonition citation">
+<p class="admonition-title">Citation</p>
+<p>We would appreciate it if you cited this paper when you use the RDK plugin</p>
+<p>Rajananda, S., Lau, H. &amp; Odegaard, B., (2018). A Random-Dot Kinematogram for Web-Based Vision Research. <em>Journal of Open Research Software. 6</em>(1), p.6. doi:<a href="http://doi.org/10.5334/jors.194">10.5334/jors.194</a></p>
+</div>
+<p>For optimal performance, fullscreen mode should be manually triggered by the user (e.g. F11 key in Chrome for Windows). Usage of the default Fullscreen trigger from the jsPsych API library with this plugin might result in the stimuli being displayed incorrectly.</p>
+<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
+<p>In addition to the <a href="../../overview/plugins/#parameters-available-in-all-plugins">parameters available in all plugins</a>, this plugin accepts the following parameters. Parameters with a default value of <em>undefined</em> must be specified. Parameters can be left unspecified if the default value is acceptable.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Descripton</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>choices</td>
+<td>array of strings</td>
+<td>jsPsych.ALL_KEYS</td>
+<td>The valid keys that the subject can press as a response. Must be an array of strings. If left unspecified, any key is a valid key.</td>
+</tr>
+<tr>
+<td>correct_choice</td>
+<td>array or string</td>
+<td><em>undefined</em></td>
+<td>The keys that are considered the correct response for that particular trial. Can be a single string or an array of strings. This needs to be linked with the <code>coherent_direction</code> parameter (see Examples section below for an illustration). This is used to determine whether the subject chose the correct response. The boolean indicating whether or not the subject chose the correct response is returned in the <code>correct</code> key of the data object.</td>
+</tr>
+<tr>
+<td>trial_duration</td>
+<td>numeric</td>
+<td>500</td>
+<td>The amount of time that the stimulus is displayed on the screen in ms. If -1, the stimulus will be displayed until the subject keys in a valid response. (<code>choices</code> parameter must contain valid keys or else the stimuli will run indefinitely).</td>
+</tr>
+<tr>
+<td>response_ends_trial</td>
+<td>boolean</td>
+<td>true</td>
+<td>If <code>true</code>, then the subject's response will end the trial. If <code>false</code>, the stimuli will be presented for the full <code>trial_duration</code> (the response will be recorded as long as the subject responds within the trial duration).</td>
+</tr>
+<tr>
+<td>number_of_apertures</td>
+<td>numeric</td>
+<td>1</td>
+<td>The number of apertures or RDKs on the screen. If set to more than one, remember to set the location (i.e., aperture_center_x and aperture_center_y) parameters to separate them. <br>In addition, each aperture can be customized individually by passing in an array of values as the parameter (see example below). If a single value (not an array) is passed as the parameter, then all apertures will have the same parameter.</td>
+</tr>
+<tr>
+<td>number_of_dots</td>
+<td>numeric</td>
+<td>300</td>
+<td>Number of dots per set. Equivalent to number of dots per frame.</td>
+</tr>
+<tr>
+<td>number_of_sets</td>
+<td>numeric</td>
+<td>1</td>
+<td>Number of sets to cycle through. Each frame displays one set of dots. (E.g. If 2 sets of dots, frame 1 will display dots from set 1, frame 2 will display dots from set 2, frame 3 will display sets from set 1, etc.)</td>
+</tr>
+<tr>
+<td>coherent_direction</td>
+<td>numeric</td>
+<td>0</td>
+<td>The direction of movement for coherent dots in degrees. 0 degrees is in the 3 o'clock direction, and increasing this number moves counterclockwise. (E.g. 12 o'clock is 90, 9 o'clock is 180, etc.) Range is 0 - 360.</td>
+</tr>
+<tr>
+<td>coherence</td>
+<td>numeric</td>
+<td>0.5</td>
+<td>The proportion of dots that move together in the coherent direction. Range is 0 to 1.</td>
+</tr>
+<tr>
+<td>opposite_coherence</td>
+<td>numeric</td>
+<td>0</td>
+<td>The proportion of moving in the direction opposite of the coherent direction. Range is 0 to (1-coherence).</td>
+</tr>
+<tr>
+<td>dot_radius</td>
+<td>numeric</td>
+<td>2</td>
+<td>The radius of each individual dot in pixels.</td>
+</tr>
+<tr>
+<td>dot_life</td>
+<td>numeric</td>
+<td>-1</td>
+<td>The number of frames that pass before a dot disappears and reappears in a new frame. -1 denotes that the dot life is infinite (i.e., a dot will only disappear and reappear if it moves out of the aperture).</td>
+</tr>
+<tr>
+<td>move_distance</td>
+<td>numeric</td>
+<td>1</td>
+<td>The number of pixel lengths the dot will move in each frame (analogous to speed of dots).</td>
+</tr>
+<tr>
+<td>aperture_width</td>
+<td>numeric</td>
+<td>600</td>
+<td>The width of the aperture in pixels. For a square aperture, this will determine both the width and height. For circular aperture, this will determine the diameter.</td>
+</tr>
+<tr>
+<td>aperture_height</td>
+<td>numeric</td>
+<td>400</td>
+<td>The height of the aperture in pixels. For square and circle apertures, this will be ignored.</td>
+</tr>
+<tr>
+<td>dot_color</td>
+<td>string</td>
+<td>"white"</td>
+<td>The color of the dots.</td>
+</tr>
+<tr>
+<td>background_color</td>
+<td>string</td>
+<td>"gray"</td>
+<td>The color of the background.</td>
+</tr>
+<tr>
+<td>RDK_type</td>
+<td>numeric</td>
+<td>3</td>
+<td>The Signal Selection Rule (Same/Different) and Noise Type (Random Position/Walk/Direction):<br><br>1 - Same &amp;&amp; Random Position<br>2 - Same &amp;&amp; Random Walk<br>3 - Same &amp;&amp; Random Direction<br>4 - Different &amp;&amp; Random Position<br>5 - Different &amp;&amp; Random Walk<br>6 - Different &amp;&amp; Random Direction<br><br>(See 'RDK parameter' below for more detailed information)<br></td>
+</tr>
+<tr>
+<td>aperture_type</td>
+<td>numeric</td>
+<td>2</td>
+<td>The shape of the aperture.<br><br>1 - Circle<br>2 - Ellipse<br>3 - Square<br>4 - Rectangle<br></td>
+</tr>
+<tr>
+<td>reinsert_type</td>
+<td>numeric</td>
+<td>2</td>
+<td>The type of reinsertion of a dot that has gone out of bounds<br><br>1 - Randomly appear anywhere in the aperture<br>2 - Appear on the opposite edge of the aperture. For squares and rectangles, a random point on the opposite edge is chosen as the reinsertion point. For circles and ellipses, the exit point is reflected about center to become the reinsertion point.<br></td>
+</tr>
+<tr>
+<td>aperture_center_x</td>
+<td>numeric</td>
+<td>window.innerWidth/2</td>
+<td>The x-coordinate of the center of the aperture, in pixels.<br></td>
+</tr>
+<tr>
+<td>aperture_center_y</td>
+<td>numeric</td>
+<td>window.innerHeight/2</td>
+<td>The y-coordinate of the center of the aperture, in pixels.<br></td>
+</tr>
+<tr>
+<td>fixation_cross</td>
+<td>boolean</td>
+<td>false</td>
+<td>Whether or not a fixation cross is presented in the middle of the screen.<br></td>
+</tr>
+<tr>
+<td>fixation_cross_width</td>
+<td>numeric</td>
+<td>20</td>
+<td>The width of the fixation cross in pixels.<br></td>
+</tr>
+<tr>
+<td>fixation_cross_height</td>
+<td>numeric</td>
+<td>20</td>
+<td>The height of the fixation cross in pixels.<br></td>
+</tr>
+<tr>
+<td>fixation_cross_color</td>
+<td>string</td>
+<td>"black"</td>
+<td>The color of the fixation cross.<br></td>
+</tr>
+<tr>
+<td>fixation_cross_thickness</td>
+<td>numeric</td>
+<td>1</td>
+<td>The thickness of the fixation cross in pixels.<br></td>
+</tr>
+<tr>
+<td>border</td>
+<td>boolean</td>
+<td>false</td>
+<td>The presence of a border around the aperture.<br></td>
+</tr>
+<tr>
+<td>border_thickness</td>
+<td>numeric</td>
+<td>1</td>
+<td>The thickness of the border in pixels.<br></td>
+</tr>
+<tr>
+<td>border_color</td>
+<td>string</td>
+<td>"black"</td>
+<td>The color of the border.<br></td>
+</tr>
+</tbody>
+</table>
+<h3 id="rdk-type-parameter">RDK type parameter<a class="headerlink" href="#rdk-type-parameter" title="Permanent link">&para;</a></h3>
+<p><em>See Fig. 1 in <a href="https://doi.org/10.1016/0042-6989(95)00325-8">Scase, Braddick, and Raymond (1996)</a> for a visual depiction of these different signal selection rules and noise types.</em></p>
+<h4 id="signal-selection-rule">Signal Selection rule:<a class="headerlink" href="#signal-selection-rule" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Same</strong>: Each dot is designated to be either a coherent dot (signal) or incoherent dot (noise) and will remain so throughout all frames in the display. Coherent dots will always move in the direction of coherent motion in all frames.</li>
+<li><strong>Different</strong>: Each dot can be either a coherent dot (signal) or incoherent dot (noise) and will be designated randomly (weighted based on the coherence level) at each frame. Only the dots that are designated to be coherent dots will move in the direction of coherent motion, but only in that frame. In the next frame, each dot will be designated randomly again on whether it is a coherent or incoherent dot.</li>
+</ul>
+<h4 id="noise-type">Noise Type:<a class="headerlink" href="#noise-type" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Random position</strong>: The incoherent dots appear in a random location in the aperture in each frame.<br/></li>
+<li><strong>Random walk</strong>: The incoherent dots will move in a random direction (designated randomly in each frame) in each frame.<br/></li>
+<li><strong>Random direction</strong>: Each incoherent dot has its own alternative direction of motion (designated randomly at the beginning of the trial), and moves in that direction in each frame.<br/></li>
+</ul>
+<h2 id="data-generated">Data Generated<a class="headerlink" href="#data-generated" title="Permanent link">&para;</a></h2>
+<p>In addition to the <a href="../../overview/plugins/#data-collected-by-all-plugins">default data collected by all plugins</a>, this plugin collects all parameter data described above and the following data for each trial.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rt</td>
+<td>numeric</td>
+<td>The response time in ms for the subject to make a response.</td>
+</tr>
+<tr>
+<td>response</td>
+<td>string</td>
+<td>The key that the subject pressed.</td>
+</tr>
+<tr>
+<td>correct</td>
+<td>boolean</td>
+<td>Whether or not the subject's key press corresponded to those provided in correct_choice.</td>
+</tr>
+<tr>
+<td>frame_rate</td>
+<td>numeric</td>
+<td>The average frame rate for the trial. 0 denotes that the subject responded before the appearance of the second frame.</td>
+</tr>
+<tr>
+<td>number_of_frames</td>
+<td>numeric</td>
+<td>The number of frames that was shown in this trial.</td>
+</tr>
+<tr>
+<td>frame_rate_array</td>
+<td>array</td>
+<td>The array that holds the number of miliseconds for each frame in this trial. This will be encoded as a JSON string when data is saved using the <code>.json()</code> or <code>.csv()</code> functions.</td>
+</tr>
+<tr>
+<td>canvas_width</td>
+<td>numeric</td>
+<td>The width of the canvas in pixels.</td>
+</tr>
+<tr>
+<td>canvas_height</td>
+<td>numeric</td>
+<td>The height of the canvas in pixels.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
+<details class="example" open="open"><summary>Setting the correct_choice parameter by linking it to the coherent_direction parameter</summary><div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Code</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;rdk&quot;</span><span class="p">,</span> 
+    <span class="nx">coherent_direction</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+    <span class="nx">correct_choice</span><span class="o">:</span> <span class="s2">&quot;p&quot;</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Demo</label><div class="tabbed-content">
+<p>This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo1.html">open the demo in a new tab</a></p>
+</div>
+</div>
+<p><a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo1.html">Open demo in new tab</a></p>
+</details>
+<details class="example" open="open"><summary>Displaying a trial with 2 choices and 1 correct choice</summary><div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Code</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;rdk&quot;</span><span class="p">,</span> 
+    <span class="nx">post_trial_gap</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+    <span class="nx">number_of_dots</span><span class="o">:</span> <span class="mf">200</span><span class="p">,</span>
+    <span class="nx">RDK_type</span><span class="o">:</span> <span class="mf">3</span><span class="p">,</span>
+    <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">],</span>
+    <span class="nx">correct_choice</span><span class="o">:</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span>
+    <span class="nx">coherent_direction</span><span class="o">:</span> <span class="mf">180</span><span class="p">,</span>
+    <span class="nx">trial_duration</span><span class="o">:</span> <span class="mf">1000</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">Demo</label><div class="tabbed-content">
+<p>This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo2.html">open the demo in a new tab</a></p>
+</div>
+</div>
+<p><a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo2.html">Open demo in new tab</a></p>
+</details>
+<details class="example" open="open"><summary>Displaying a trial with multiple apertures</summary><div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Code</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code>  <span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;rdk&quot;</span><span class="p">,</span> 
+    <span class="nx">number_of_apertures</span><span class="o">:</span> <span class="mf">3</span><span class="p">,</span> <span class="c1">//This needs to be set if more than one aperture</span>
+    <span class="nx">trial_duration</span><span class="o">:</span> <span class="mf">10000</span><span class="p">,</span>
+    <span class="nx">correct_choice</span><span class="o">:</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span>
+    <span class="nx">RDK_type</span><span class="o">:</span> <span class="mf">3</span><span class="p">,</span> <span class="c1">//Applied to all apertures if only one value</span>
+    <span class="nx">aperture_width</span><span class="o">:</span> <span class="mf">200</span><span class="p">,</span> <span class="c1">//Applied to all apertures if only one value</span>
+    <span class="nx">number_of_dots</span><span class="o">:</span> <span class="p">[</span><span class="mf">50</span><span class="p">,</span> <span class="mf">200</span><span class="p">,</span> <span class="mf">100</span><span class="p">],</span> <span class="c1">//Different parameter for each aperture. Array length must equal number_of_apertures</span>
+    <span class="nx">aperture_center_x</span><span class="o">:</span> <span class="p">[(</span><span class="nb">window</span><span class="p">.</span><span class="nx">innerWidth</span><span class="o">/</span><span class="mf">2</span><span class="p">)</span><span class="o">-</span><span class="mf">300</span><span class="p">,</span><span class="nb">window</span><span class="p">.</span><span class="nx">innerWidth</span><span class="o">/</span><span class="mf">2</span><span class="p">,(</span><span class="nb">window</span><span class="p">.</span><span class="nx">innerWidth</span><span class="o">/</span><span class="mf">2</span><span class="p">)</span><span class="o">+</span><span class="mf">300</span><span class="p">]</span> <span class="c1">//Separate the apertures on the screen (window.innerWidth/2 is the middle of the screen)</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">Demo</label><div class="tabbed-content">
+<p>This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo3.html">open the demo in a new tab</a></p>
+</div>
+</div>
+<p><a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-rdk-demo3.html">Open demo in new tab</a></p>
+</details>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../jspsych-preload/" class="md-footer__link md-footer__link--prev" aria-label="Previous: jspsych-preload" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              jspsych-preload
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../jspsych-reconstruction/" class="md-footer__link md-footer__link--next" aria-label="Next: jspsych-reconstruction" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              jspsych-reconstruction
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2012-2021 Josh de Leeuw
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.709b4209.min.js", "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.febc23d1.min.js"></script>
+      
+    
+  </body>
+</html>

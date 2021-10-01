@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-reconstruction.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
+  <style>
+    .jspsych-btn {margin-bottom: 10px;}
+  </style>
+</head>
+<body></body>
+<script>
+
+  var start = {
+    type: 'html-button-response',
+    stimulus: '',
+    choices: ['Run demo']
+  };
+
+  var show_data = {
+    type: 'html-button-response',
+    stimulus: function() {
+      var trial_data = jsPsych.data.getLastTrialData().values();
+      var trial_json = JSON.stringify(trial_data, null, 2);
+      return `<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>
+        <pre style="margin-top:0px;text-align:left;">${trial_json}</pre>`;
+    },
+    choices: ['Repeat demo']
+  };
+  
+  var sample_function = function(param){
+    var size = 50 + Math.floor(param*250);
+    var html = '<div style="display: block; margin: auto; height: 300px; width: 300px; position: relative;">'+
+      '<div style="display: block; position: absolute; top: '+(150 - size/2)+'px; left:'+(150 - size/2)+'px; background-color: #000000; '+
+      'width: '+size+'px; height: '+size+'px;"></div></div><p>Press "h" to make the square larger. Press "g" to make the square smaller.</p>'+
+      '<p>When the square is the same size as the previous one, click Continue.</p>';
+    return html;
+  }
+
+  var match_item = {
+    type: 'html-keyboard-response',
+    stimulus: '<div style="display: block; margin: auto; height: 300px; width: 300px; position: relative;">'+
+      '<div style="display: block; position: absolute; top: '+(150 - 210/2)+'px; left:'+(150 - 210/2)+'px; background-color: #000000; '+
+      'width: 210px; height: 210px;"></div></div>',
+    choices: ['c'],
+    post_trial_gap: 1250,
+    prompt: '<p>Study the size of this square carefully. On the next screen you will have to recreate it. When you are ready, press "c".</p>'
+  }
+
+  var reconstruction = {
+    type: 'reconstruction',
+    stim_function: sample_function,
+    starting_value: 0.5,
+  }
+
+  var trial_loop = {
+    timeline: [match_item, reconstruction, show_data],
+    loop_function: function() {
+      return true;
+    }
+  };
+
+  if (typeof jsPsych !== "undefined") {
+    jsPsych.init({
+      timeline: [start, trial_loop]
+    });
+  } else {
+    document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+  }
+
+</script>
+
+</html>

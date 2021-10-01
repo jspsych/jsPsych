@@ -1,0 +1,2899 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../../img/jspsych-favicon.png">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
+    
+    
+      
+        <title>Demo Experiment: Simple Reaction Time Task - jsPsych</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.f7f47774.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4cae4f">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+  
+
+
+  
+
+  
+
+
+  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+  <script async src="https://www.google-analytics.com/analytics.js"></script>
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="orange">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#summary-of-tutorial-content" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="jsPsych" class="md-header__button md-logo" aria-label="jsPsych" data-md-component="logo">
+      
+  <img src="../../img/jspsych-logo-no-text-mono.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            jsPsych
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Demo Experiment: Simple Reaction Time Task
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="jsPsych" class="md-nav__button md-logo" aria-label="jsPsych" data-md-component="logo">
+      
+  <img src="../../img/jspsych-logo-no-text-mono.svg" alt="logo">
+
+    </a>
+    jsPsych
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      <label class="md-nav__link" for="__nav_2">
+        Tutorials
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hello-world/" class="md-nav__link">
+        The Basics: Hello World
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Demo Experiment: Simple Reaction Time Task
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Demo Experiment: Simple Reaction Time Task
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#part-1-creating-a-blank-experiment" class="md-nav__link">
+    Part 1: Creating a blank experiment
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-2-display-welcome-message" class="md-nav__link">
+    Part 2: Display welcome message
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-3-show-instructions" class="md-nav__link">
+    Part 3: Show instructions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-4-displaying-stimuli-and-getting-responses" class="md-nav__link">
+    Part 4: Displaying stimuli and getting responses
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-5-preloading-media" class="md-nav__link">
+    Part 5: Preloading media
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-6-timeline-variables" class="md-nav__link">
+    Part 6: Timeline variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-7-parameters-for-timelines-with-timeline-variables" class="md-nav__link">
+    Part 7: Parameters for timelines with timeline variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-8-using-functions-to-generate-parameters" class="md-nav__link">
+    Part 8: Using functions to generate parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-10-displaying-the-data" class="md-nav__link">
+    Part 10: Displaying the data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-11-tagging-trials-with-additional-data" class="md-nav__link">
+    Part 11: Tagging trials with additional data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-12-manipulating-data-during-the-experiment" class="md-nav__link">
+    Part 12: Manipulating data during the experiment
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-13-data-aggregation" class="md-nav__link">
+    Part 13: Data aggregation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-final-code" class="md-nav__link">
+    The final code
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../video-tutorials/" class="md-nav__link">
+        Video Tutorials
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Overview
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Overview" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Overview
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/timeline/" class="md-nav__link">
+        Creating an Experiment: The Timeline
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/plugins/" class="md-nav__link">
+        Plugins
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/dynamic-parameters/" class="md-nav__link">
+        Dynamic Parameters
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/style/" class="md-nav__link">
+        Controlling Visual Appearance
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/data/" class="md-nav__link">
+        Data Storage, Aggregation, and Manipulation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/running-experiments/" class="md-nav__link">
+        Running Experiments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/experiment-options/" class="md-nav__link">
+        Experiment Settings
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/callbacks/" class="md-nav__link">
+        Event-related Callback Functions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/record-browser-interactions/" class="md-nav__link">
+        Record Browser Interactions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/media-preloading/" class="md-nav__link">
+        Media Preloading
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/fullscreen/" class="md-nav__link">
+        Fullscreen Experiments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/eye-tracking/" class="md-nav__link">
+        Eye Tracking
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/exclude-browser/" class="md-nav__link">
+        Exclude Participants Based on Browser Features
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/progress-bar/" class="md-nav__link">
+        Automatic Progress Bar
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/prolific/" class="md-nav__link">
+        Integrating with Prolific
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/mturk/" class="md-nav__link">
+        Integrating with Mechanical Turk
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/browser-device-support/" class="md-nav__link">
+        Browser and Device Support
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        Reference
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core_library/jspsych-core/" class="md-nav__link">
+        jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core_library/jspsych-data/" class="md-nav__link">
+        jsPsych.data
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core_library/jspsych-randomization/" class="md-nav__link">
+        jsPsych.randomization
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core_library/jspsych-turk/" class="md-nav__link">
+        jsPsych.turk
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core_library/jspsych-pluginAPI/" class="md-nav__link">
+        jsPsych.pluginAPI
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Plugins
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Plugins" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Plugins
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/list-of-plugins/" class="md-nav__link">
+        List of Plugins
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-animation/" class="md-nav__link">
+        jspsych-animation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-audio-button-response/" class="md-nav__link">
+        jspsych-audio-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-audio-keyboard-response/" class="md-nav__link">
+        jspsych-audio-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-audio-slider-response/" class="md-nav__link">
+        jspsych-audio-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-call-function/" class="md-nav__link">
+        jspsych-call-function
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-canvas-button-response/" class="md-nav__link">
+        jspsych-canvas-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-canvas-keyboard-response/" class="md-nav__link">
+        jspsych-canvas-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-canvas-slider-response/" class="md-nav__link">
+        jspsych-canvas-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-categorize-animation/" class="md-nav__link">
+        jspsych-categorize-animation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-categorize-html/" class="md-nav__link">
+        jspsych-categorize-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-categorize-image/" class="md-nav__link">
+        jspsych-categorize-image
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-cloze/" class="md-nav__link">
+        jspsych-cloze
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-external-html/" class="md-nav__link">
+        jspsych-external-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-free-sort/" class="md-nav__link">
+        jspsych-free-sort
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-fullscreen/" class="md-nav__link">
+        jspsych-fullscreen
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-html-button-response/" class="md-nav__link">
+        jspsych-html-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-html-keyboard-response/" class="md-nav__link">
+        jspsych-html-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-html-slider-response/" class="md-nav__link">
+        jspsych-html-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-iat-html/" class="md-nav__link">
+        jspsych-iat-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-iat-image/" class="md-nav__link">
+        jspsych-iat-image
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-image-button-response/" class="md-nav__link">
+        jspsych-image-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-image-keyboard-response/" class="md-nav__link">
+        jspsych-image-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-image-slider-response/" class="md-nav__link">
+        jspsych-image-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-instructions/" class="md-nav__link">
+        jspsych-instructions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-maxdiff/" class="md-nav__link">
+        jspsych-maxdiff
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-preload/" class="md-nav__link">
+        jspsych-preload
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-rdk/" class="md-nav__link">
+        jspsych-rdk
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-reconstruction/" class="md-nav__link">
+        jspsych-reconstruction
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-resize/" class="md-nav__link">
+        jspsych-resize
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-same-different-html/" class="md-nav__link">
+        jspsych-same-different-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-same-different-image/" class="md-nav__link">
+        jspsych-same-different-image
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-serial-reaction-time/" class="md-nav__link">
+        jspsych-serial-reaction-time
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-serial-reaction-time-mouse/" class="md-nav__link">
+        jspsych-serial-reaction-time-mouse
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-survey-html-form/" class="md-nav__link">
+        jspsych-survey-html-form
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-survey-likert/" class="md-nav__link">
+        jspsych-survey-likert
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-survey-multi-choice/" class="md-nav__link">
+        jspsych-survey-multi-choice
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-survey-multi-select/" class="md-nav__link">
+        jspsych-survey-multi-select
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-survey-text/" class="md-nav__link">
+        jspsych-survey-text
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-video-button-response/" class="md-nav__link">
+        jspsych-video-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-video-keyboard-response/" class="md-nav__link">
+        jspsych-video-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-video-slider-response/" class="md-nav__link">
+        jspsych-video-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-virtual-chinrest/" class="md-nav__link">
+        jspsych-virtual-chinrest
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-visual-search-circle/" class="md-nav__link">
+        jspsych-visual-search-circle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-vsl-animate-occlusion/" class="md-nav__link">
+        jspsych-vsl-animate-occlusion
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-vsl-grid-scene/" class="md-nav__link">
+        jspsych-vsl-grid-scene
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-webgazer-calibrate/" class="md-nav__link">
+        jspsych-webgazer-calibrate
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-webgazer-init-camera/" class="md-nav__link">
+        jspsych-webgazer-init-camera
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/jspsych-webgazer-validate/" class="md-nav__link">
+        jspsych-webgazer-validate
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
+        Extensions
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Extensions" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Extensions
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/extensions/" class="md-nav__link">
+        Extensions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/jspsych-ext-webgazer/" class="md-nav__link">
+        jspsych-ext-webgazer.js
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      <label class="md-nav__link" for="__nav_7">
+        About
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/about/" class="md-nav__link">
+        About jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/support/" class="md-nav__link">
+        Getting Help
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/contributing/" class="md-nav__link">
+        Contributing to jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#part-1-creating-a-blank-experiment" class="md-nav__link">
+    Part 1: Creating a blank experiment
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-2-display-welcome-message" class="md-nav__link">
+    Part 2: Display welcome message
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-3-show-instructions" class="md-nav__link">
+    Part 3: Show instructions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-4-displaying-stimuli-and-getting-responses" class="md-nav__link">
+    Part 4: Displaying stimuli and getting responses
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-5-preloading-media" class="md-nav__link">
+    Part 5: Preloading media
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-6-timeline-variables" class="md-nav__link">
+    Part 6: Timeline variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-7-parameters-for-timelines-with-timeline-variables" class="md-nav__link">
+    Part 7: Parameters for timelines with timeline variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-8-using-functions-to-generate-parameters" class="md-nav__link">
+    Part 8: Using functions to generate parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-10-displaying-the-data" class="md-nav__link">
+    Part 10: Displaying the data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-11-tagging-trials-with-additional-data" class="md-nav__link">
+    Part 11: Tagging trials with additional data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-12-manipulating-data-during-the-experiment" class="md-nav__link">
+    Part 12: Manipulating data during the experiment
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-13-data-aggregation" class="md-nav__link">
+    Part 13: Data aggregation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-final-code" class="md-nav__link">
+    The final code
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/jspsych/jsPsych/edit/master/docs/tutorials/rt-task.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="summary-of-tutorial-content">Summary of Tutorial Content<a class="headerlink" href="#summary-of-tutorial-content" title="Permanent link">&para;</a></h1>
+<p>This tutorial will work through the creation of a simple response time task. The task is to press one key for a blue colored circle and another key for an orange colored circle. Despite this simple task, the tutorial covers many of the key features of jsPsych, including:</p>
+<ul>
+<li>Using a plugin to create a standard trial.</li>
+<li>Combining plugins together to create new kinds of trials.</li>
+<li>Using timeline variables to maximize code reuse.</li>
+<li>Preloading media</li>
+<li>Randomizing presentation order.</li>
+<li>Manipulating, filtering, and aggregating data.</li>
+<li>Using dynamic content to change the experiment parameters based on the subject's responses.</li>
+</ul>
+<h2 id="part-1-creating-a-blank-experiment">Part 1: Creating a blank experiment<a class="headerlink" href="#part-1-creating-a-blank-experiment" title="Permanent link">&para;</a></h2>
+<p>Start by downloading jsPsych and setting up a folder to contain your experiment files. If you are unsure how to do this, follow steps 1-5 in the <a href="../hello-world/">Hello World tutorial</a>. At the end of step 5 in the Hello World tutorial, you should have an experiment page that looks like this:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>My experiment<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/css/jspsych.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+<p>This will be our starting point for building the rest of the experiment.</p>
+<h2 id="part-2-display-welcome-message">Part 2: Display welcome message<a class="headerlink" href="#part-2-display-welcome-message" title="Permanent link">&para;</a></h2>
+<p>All jsPsych experiments are defined by a timeline. The timeline is an array that contains the set of trials we want to run in the experiment. We can start by defining the timeline array.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[];</span>
+</code></pre></div>
+<p>Let's greet the subject with a simple welcome message using the <a href="../../plugins/jspsych-html-keyboard-response/">jspsych-html-keyboard-response</a> plugin.</p>
+<p>First, we create a trial that uses the <code>jspsych-html-keyboard-response</code> plugin and contains a simple string to show the subject.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">welcome</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;Welcome to the experiment. Press any key to begin.&quot;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>Next, we push the welcome trial to the timeline, which adds it to the end of the array.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">welcome</span><span class="p">);</span>
+</code></pre></div>
+<p>Finally, we tell jsPsych to run the experiment by calling the <a href="../../core_library/jspsych-core/#jspsychinit">jsPsych.init() function</a> and passing in the array that defines the experiment timeline.</p>
+<p><div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span>
+<span class="p">});</span>
+</code></pre></div>
+After each step in the tutorial you can view the complete code up to that point by clicking on the expandable box below.</p>
+<details class="example"><summary>The complete code so far</summary><div class="highlight"><pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>My experiment<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/css/jspsych.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+
+    <span class="cm">/* create timeline */</span>
+    <span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="cm">/* define welcome message trial */</span>
+    <span class="kd">var</span> <span class="nx">welcome</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;Welcome to the experiment. Press any key to begin.&quot;</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">welcome</span><span class="p">);</span>
+
+    <span class="cm">/* start the experiment */</span>
+    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span>
+    <span class="p">});</span>
+  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+</details>
+<h2 id="part-3-show-instructions">Part 3: Show instructions<a class="headerlink" href="#part-3-show-instructions" title="Permanent link">&para;</a></h2>
+<p>We can use the same basic structure from part 2 to create a new trial that shows instructions to the subject. The only difference in this trial is that we will use HTML formatting to control how the instructions display and we will add a two second gap after the trial using the <code>post_trial_gap</code> parameter.</p>
+<p>The trial definition looks like this:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">instructions</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="sb">`</span>
+<span class="sb">    &lt;p&gt;In this experiment, a circle will appear in the center </span>
+<span class="sb">    of the screen.&lt;/p&gt;&lt;p&gt;If the circle is &lt;strong&gt;blue&lt;/strong&gt;, </span>
+<span class="sb">    press the letter F on the keyboard as fast as you can.&lt;/p&gt;</span>
+<span class="sb">    &lt;p&gt;If the circle is &lt;strong&gt;orange&lt;/strong&gt;, press the letter J </span>
+<span class="sb">    as fast as you can.&lt;/p&gt;</span>
+<span class="sb">    &lt;div style=&#39;width: 700px;&#39;&gt;</span>
+<span class="sb">    &lt;div style=&#39;float: left;&#39;&gt;&lt;img src=&#39;img/blue.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">    &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the F key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">    &lt;div style=&#39;float: right;&#39;&gt;&lt;img src=&#39;img/orange.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">    &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the J key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">    &lt;/div&gt;</span>
+<span class="sb">    &lt;p&gt;Press any key to begin.&lt;/p&gt;</span>
+<span class="sb">  `</span><span class="p">,</span>
+  <span class="nx">post_trial_gap</span><span class="o">:</span> <span class="mf">2000</span>
+<span class="p">};</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In JavaScript there are three different ways to define a <code>string</code>. You can use single quotes <code>'</code>, double quotes <code>"</code>, or backticks <code>`</code>. Using backticks has two advantages over the other approaches, especially when you are creating long strings with HTML. You can extend the <code>string</code> across multiple lines and you can use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals">template strings</a> to easily incorporate variables.</p>
+</div>
+<p>Notice that the HTML includes <code>&lt;img&gt;</code> tags to display the images that the subject will be responding to. You'll need to download these image files. Right-click on each image below and select <em>Save image as...</em>. Put the images in a folder called <code>img</code> in the experiment folder you created in part 1.</p>
+<p><img alt="blue circle" src="../../img/blue.png" />
+<img alt="orange circle" src="../../img/orange.png" /></p>
+<p>Don't forget to add the trial to the timeline:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instructions</span><span class="p">);</span>
+</code></pre></div>
+<details class="example"><summary>The complete code so far</summary><div class="highlight"><pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>My experiment<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/css/jspsych.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+
+    <span class="cm">/* create timeline */</span>
+    <span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="cm">/* define welcome message trial */</span>
+    <span class="kd">var</span> <span class="nx">welcome</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;Welcome to the experiment. Press any key to begin.&quot;</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">welcome</span><span class="p">);</span>
+
+    <span class="cm">/* define instructions trial */</span>
+    <span class="kd">var</span> <span class="nx">instructions</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="sb">`</span>
+<span class="sb">        &lt;p&gt;In this experiment, a circle will appear in the center </span>
+<span class="sb">        of the screen.&lt;/p&gt;&lt;p&gt;If the circle is &lt;strong&gt;blue&lt;/strong&gt;, </span>
+<span class="sb">        press the letter F on the keyboard as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;p&gt;If the circle is &lt;strong&gt;orange&lt;/strong&gt;, press the letter J </span>
+<span class="sb">        as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;div style=&#39;width: 700px;&#39;&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: left;&#39;&gt;&lt;img src=&#39;img/blue.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the F key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: right;&#39;&gt;&lt;img src=&#39;img/orange.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the J key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;/div&gt;</span>
+<span class="sb">        &lt;p&gt;Press any key to begin.&lt;/p&gt;</span>
+<span class="sb">      `</span><span class="p">,</span>
+      <span class="nx">post_trial_gap</span><span class="o">:</span> <span class="mf">2000</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instructions</span><span class="p">);</span>
+
+    <span class="cm">/* start the experiment */</span>
+    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span>
+    <span class="p">});</span>
+  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+</details>
+<h2 id="part-4-displaying-stimuli-and-getting-responses">Part 4: Displaying stimuli and getting responses<a class="headerlink" href="#part-4-displaying-stimuli-and-getting-responses" title="Permanent link">&para;</a></h2>
+<p>Creating trials to show the stimuli is conceptually the same as creating a trial to show instructions, except that now we are displaying an image instead of text or html. This means we need to use a different plugin: jspsych-image-keyboard-response. We need to start by loading this plugin by adding a <code>&lt;script&gt;</code> tag to the document.</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>My experiment<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="hll">  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span>  <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/css/jspsych.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</code></pre></div>
+<p>For now, we will just show each image once. The path to the image file should be set as the <code>stimulus</code> parameter. We will also set the option for which keys the subject is allowed to use to respond (<code>choices</code>) so that only the 'f' and 'j' keys are valid responses.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">blue_trial</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/blue.png&#39;</span><span class="p">,</span>
+  <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">]</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">orange_trial</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/orange.png&#39;</span><span class="p">,</span>
+  <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>As usual, we need to add the trials to the timeline.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">blue_trial</span><span class="p">,</span> <span class="nx">orange_trial</span><span class="p">);</span>
+</code></pre></div>
+<details class="example"><summary>The complete code so far</summary><div class="highlight"><pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>My experiment<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/css/jspsych.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+
+    <span class="cm">/* create timeline */</span>
+    <span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="cm">/* define welcome message trial */</span>
+    <span class="kd">var</span> <span class="nx">welcome</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;Welcome to the experiment. Press any key to begin.&quot;</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">welcome</span><span class="p">);</span>
+
+    <span class="cm">/* define instructions trial */</span>
+    <span class="kd">var</span> <span class="nx">instructions</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="sb">`</span>
+<span class="sb">        &lt;p&gt;In this experiment, a circle will appear in the center </span>
+<span class="sb">        of the screen.&lt;/p&gt;&lt;p&gt;If the circle is &lt;strong&gt;blue&lt;/strong&gt;, </span>
+<span class="sb">        press the letter F on the keyboard as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;p&gt;If the circle is &lt;strong&gt;orange&lt;/strong&gt;, press the letter J </span>
+<span class="sb">        as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;div style=&#39;width: 700px;&#39;&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: left;&#39;&gt;&lt;img src=&#39;img/blue.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the F key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: right;&#39;&gt;&lt;img src=&#39;img/orange.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the J key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;/div&gt;</span>
+<span class="sb">        &lt;p&gt;Press any key to begin.&lt;/p&gt;</span>
+<span class="sb">      `</span><span class="p">,</span>
+      <span class="nx">post_trial_gap</span><span class="o">:</span> <span class="mf">2000</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instructions</span><span class="p">);</span>
+
+    <span class="cm">/* test trials */</span>
+    <span class="kd">var</span> <span class="nx">blue_trial</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/blue.png&#39;</span><span class="p">,</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">]</span>
+    <span class="p">};</span>
+
+    <span class="kd">var</span> <span class="nx">orange_trial</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/orange.png&#39;</span><span class="p">,</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">blue_trial</span><span class="p">,</span> <span class="nx">orange_trial</span><span class="p">);</span>
+
+    <span class="cm">/* start the experiment */</span>
+    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span>
+    <span class="p">});</span>
+  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+</details>
+<h2 id="part-5-preloading-media">Part 5: Preloading media<a class="headerlink" href="#part-5-preloading-media" title="Permanent link">&para;</a></h2>
+<p>Whenever we use media elements (images, audio, or video) in an experiment it is a good idea to preload them prior to needing them for a trial. By preloading media we ask the participant's browser to download the media ahead of needing it, so that when we do need to display or play it there is no lag from needing to download it. </p>
+<p>We are going to use the <a href="../../plugins/jspsych-preload/">jspsych-preload plugin</a> to preload the two images. The <a href="../../overview/media-preloading/">media preloading section</a> goes into a lot of detail about various options for preloading and different ways that you can use this plugin. Here we are simply going to give the plugin a list of the files that we want to be preloaded.</p>
+<p>First we need to add the preload plugin to our <code>&lt;head&gt;</code> section.</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>My experiment<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="hll">  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-preload.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span>  <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/css/jspsych.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</code></pre></div>
+<p>We'll put this trial at the very start of the experiment, so add this code before the <code>welcome</code> trial.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">preload</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;preload&#39;</span><span class="p">,</span>
+  <span class="nx">images</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;img/blue.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/orange.png&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>As always, add the trial to the timeline.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">preload</span><span class="p">);</span>
+</code></pre></div>
+<details class="example"><summary>The complete code so far</summary><div class="highlight"><pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>My experiment<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-preload.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/css/jspsych.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+
+    <span class="cm">/* create timeline */</span>
+    <span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="cm">/* preload images */</span>
+    <span class="kd">var</span> <span class="nx">preload</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;preload&#39;</span><span class="p">,</span>
+      <span class="nx">images</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;img/blue.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/orange.png&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">preload</span><span class="p">);</span>
+
+    <span class="cm">/* define welcome message trial */</span>
+    <span class="kd">var</span> <span class="nx">welcome</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;Welcome to the experiment. Press any key to begin.&quot;</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">welcome</span><span class="p">);</span>
+
+    <span class="cm">/* define instructions trial */</span>
+    <span class="kd">var</span> <span class="nx">instructions</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="sb">`</span>
+<span class="sb">        &lt;p&gt;In this experiment, a circle will appear in the center </span>
+<span class="sb">        of the screen.&lt;/p&gt;&lt;p&gt;If the circle is &lt;strong&gt;blue&lt;/strong&gt;, </span>
+<span class="sb">        press the letter F on the keyboard as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;p&gt;If the circle is &lt;strong&gt;orange&lt;/strong&gt;, press the letter J </span>
+<span class="sb">        as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;div style=&#39;width: 700px;&#39;&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: left;&#39;&gt;&lt;img src=&#39;img/blue.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the F key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: right;&#39;&gt;&lt;img src=&#39;img/orange.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the J key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;/div&gt;</span>
+<span class="sb">        &lt;p&gt;Press any key to begin.&lt;/p&gt;</span>
+<span class="sb">      `</span><span class="p">,</span>
+      <span class="nx">post_trial_gap</span><span class="o">:</span> <span class="mf">2000</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instructions</span><span class="p">);</span>
+
+    <span class="cm">/* test trials */</span>
+    <span class="kd">var</span> <span class="nx">blue_trial</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/blue.png&#39;</span><span class="p">,</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">]</span>
+    <span class="p">};</span>
+
+    <span class="kd">var</span> <span class="nx">orange_trial</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image-keyboard-response&#39;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/orange.png&#39;</span><span class="p">,</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">blue_trial</span><span class="p">,</span> <span class="nx">orange_trial</span><span class="p">);</span>
+
+    <span class="cm">/* start the experiment */</span>
+    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span>
+    <span class="p">});</span>
+  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+</details>
+<h2 id="part-6-timeline-variables">Part 6: Timeline variables<a class="headerlink" href="#part-6-timeline-variables" title="Permanent link">&para;</a></h2>
+<p>In the full experiment, we will want more than two trials. One way we could do this is to create many more objects that define trials and push them all onto the timeline, but there is a more efficient way: using timeline variables.</p>
+<p>The parameters for showing the blue and orange circle are very similar. The only difference is which image is displayed. Timeline variables allow us to define the procedure for showing the stimulus once, and then repeatedly use it with different variables. We'll see how, even in this relatively simple case, this can save us a lot of lines of code.</p>
+<p>To start, let's make an array that contains all the different trials we want to run in the test phase. There are only two for the experiment: blue trials and orange trials.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">test_stimuli</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/blue.png&quot;</span><span class="p">},</span>
+  <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/orange.png&quot;</span><span class="p">}</span>
+<span class="p">];</span>
+</code></pre></div>
+<p>Instead of just showing the blue and orange circles, let's also set up the experiment to show a fixation cross (+) in between trials. We can define a trial to show the fixation cross for a fixed amount of time by using the <code>trial_duration</code> parameter of the html-keyboard-response plugin and setting the <code>choices</code> parameter to the special value <code>jsPsych.NO_KEYS</code>, which means that no responses will be accepted as a valid response and the trial will last however long the <code>trial_duration</code> parameter specifies.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">fixation</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;div style=&quot;font-size:60px;&quot;&gt;+&lt;/div&gt;&#39;</span><span class="p">,</span>
+  <span class="nx">choices</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">NO_KEYS</span><span class="p">,</span>
+  <span class="nx">trial_duration</span><span class="o">:</span> <span class="mf">1000</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>To show the circles, we'll set up another trial with the html-keyboard-response plugin, but we'll use the function <code>jsPsych.timelineVariable()</code> to indicate that we want jsPsych to substitute the value of the parameter in from the timeline variables.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;image-keyboard-response&quot;</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;stimulus&#39;</span><span class="p">),</span>
+  <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>To link the variables that we declared in the <code>test_stimuli</code> array with the call to <code>jsPsych.timelineVariable()</code> we need to create a new timeline and set the <code>timeline_variables</code> property:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">test_procedure</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">fixation</span><span class="p">,</span> <span class="nx">test</span><span class="p">],</span>
+  <span class="nx">timeline_variables</span><span class="o">:</span> <span class="nx">test_stimuli</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>We have to add the <code>test_procedure</code> to the main <code>timeline</code> array, but the <code>fixation</code> and <code>test</code> trial do not need to be added to <code>timeline</code> because they already exist on the <code>test_procedure</code> timeline.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">test_procedure</span><span class="p">);</span>
+</code></pre></div>
+<p>What happens when the experiment reaches the test procedure? jsPsych will run the <code>test_procedure</code> timeline one time for each entry in the <code>test_stimuli</code> array (two times total, in this case). The first time through, jsPsych will substitute the timeline variables from the first array entry (blue image), and the second time through the second array entry will be used (orange image). Notice that the fixation trial occurs before both the orange and the blue circles, because the entire timeline of the <code>test_procedure</code> is repeated for each entry in the <code>timeline_variables</code> array.</p>
+<details class="example"><summary>The complete code so far</summary><div class="highlight"><pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>My experiment<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-preload.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/css/jspsych.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+
+    <span class="cm">/* create timeline */</span>
+    <span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="cm">/* preload images */</span>
+    <span class="kd">var</span> <span class="nx">preload</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;preload&#39;</span><span class="p">,</span>
+      <span class="nx">images</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;img/blue.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/orange.png&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">preload</span><span class="p">);</span>
+
+    <span class="cm">/* define welcome message trial */</span>
+    <span class="kd">var</span> <span class="nx">welcome</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;Welcome to the experiment. Press any key to begin.&quot;</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">welcome</span><span class="p">);</span>
+
+    <span class="cm">/* define instructions trial */</span>
+    <span class="kd">var</span> <span class="nx">instructions</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="sb">`</span>
+<span class="sb">        &lt;p&gt;In this experiment, a circle will appear in the center </span>
+<span class="sb">        of the screen.&lt;/p&gt;&lt;p&gt;If the circle is &lt;strong&gt;blue&lt;/strong&gt;, </span>
+<span class="sb">        press the letter F on the keyboard as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;p&gt;If the circle is &lt;strong&gt;orange&lt;/strong&gt;, press the letter J </span>
+<span class="sb">        as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;div style=&#39;width: 700px;&#39;&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: left;&#39;&gt;&lt;img src=&#39;img/blue.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the F key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: right;&#39;&gt;&lt;img src=&#39;img/orange.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the J key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;/div&gt;</span>
+<span class="sb">        &lt;p&gt;Press any key to begin.&lt;/p&gt;</span>
+<span class="sb">      `</span><span class="p">,</span>
+      <span class="nx">post_trial_gap</span><span class="o">:</span> <span class="mf">2000</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instructions</span><span class="p">);</span>
+
+    <span class="cm">/* test trials */</span>
+    <span class="kd">var</span> <span class="nx">test_stimuli</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/blue.png&quot;</span><span class="p">},</span>
+      <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/orange.png&quot;</span><span class="p">}</span>
+    <span class="p">];</span>
+
+    <span class="kd">var</span> <span class="nx">fixation</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;div style=&quot;font-size:60px;&quot;&gt;+&lt;/div&gt;&#39;</span><span class="p">,</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">NO_KEYS</span><span class="p">,</span>
+      <span class="nx">trial_duration</span><span class="o">:</span> <span class="mf">1000</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;image-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;stimulus&#39;</span><span class="p">),</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">test_procedure</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">fixation</span><span class="p">,</span> <span class="nx">test</span><span class="p">],</span>
+      <span class="nx">timeline_variables</span><span class="o">:</span> <span class="nx">test_stimuli</span>
+    <span class="p">}</span>
+
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">test_procedure</span><span class="p">);</span>
+
+    <span class="cm">/* start the experiment */</span>
+    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span>
+    <span class="p">});</span>
+  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+</details>
+<h2 id="part-7-parameters-for-timelines-with-timeline-variables">Part 7: Parameters for timelines with timeline variables<a class="headerlink" href="#part-7-parameters-for-timelines-with-timeline-variables" title="Permanent link">&para;</a></h2>
+<p>Right now our experiment is a measly two trials long. Even worse is that the order of the stimuli is the same every time! When we use timeline variables, we get access to some methods to randomize the order and repeat the trials. To randomize the order, simply set <code>randomize_order: true</code> on the object with the <code>timeline_variables</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">test_procedure</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">fixation</span><span class="p">,</span> <span class="nx">test</span><span class="p">],</span>
+  <span class="nx">timeline_variables</span><span class="o">:</span> <span class="nx">test_stimuli</span><span class="p">,</span>
+  <span class="nx">randomize_order</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>We can also easily make the test phase longer by setting the <code>repetitions</code> parameter. This parameter controls how many times the experiment will loop through all of the entries in the timeline_variables array. For example, if we set <code>repetitions: 5</code>, then the experiment will loop through the two entries in the timeline_variables 5 times, for a total of 10 test trials.</p>
+<details class="example"><summary>The complete code so far</summary><div class="highlight"><pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>My experiment<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-preload.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/css/jspsych.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+
+    <span class="cm">/* create timeline */</span>
+    <span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="cm">/* preload images */</span>
+    <span class="kd">var</span> <span class="nx">preload</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;preload&#39;</span><span class="p">,</span>
+      <span class="nx">images</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;img/blue.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/orange.png&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">preload</span><span class="p">);</span>
+
+    <span class="cm">/* define welcome message trial */</span>
+    <span class="kd">var</span> <span class="nx">welcome</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;Welcome to the experiment. Press any key to begin.&quot;</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">welcome</span><span class="p">);</span>
+
+    <span class="cm">/* define instructions trial */</span>
+    <span class="kd">var</span> <span class="nx">instructions</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="sb">`</span>
+<span class="sb">        &lt;p&gt;In this experiment, a circle will appear in the center </span>
+<span class="sb">        of the screen.&lt;/p&gt;&lt;p&gt;If the circle is &lt;strong&gt;blue&lt;/strong&gt;, </span>
+<span class="sb">        press the letter F on the keyboard as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;p&gt;If the circle is &lt;strong&gt;orange&lt;/strong&gt;, press the letter J </span>
+<span class="sb">        as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;div style=&#39;width: 700px;&#39;&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: left;&#39;&gt;&lt;img src=&#39;img/blue.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the F key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: right;&#39;&gt;&lt;img src=&#39;img/orange.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the J key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;/div&gt;</span>
+<span class="sb">        &lt;p&gt;Press any key to begin.&lt;/p&gt;</span>
+<span class="sb">      `</span><span class="p">,</span>
+      <span class="nx">post_trial_gap</span><span class="o">:</span> <span class="mf">2000</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instructions</span><span class="p">);</span>
+
+    <span class="cm">/* test trials */</span>
+    <span class="kd">var</span> <span class="nx">test_stimuli</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/blue.png&quot;</span><span class="p">},</span>
+      <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/orange.png&quot;</span><span class="p">}</span>
+    <span class="p">];</span>
+
+    <span class="kd">var</span> <span class="nx">fixation</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;div style=&quot;font-size:60px;&quot;&gt;+&lt;/div&gt;&#39;</span><span class="p">,</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">NO_KEYS</span><span class="p">,</span>
+      <span class="nx">trial_duration</span><span class="o">:</span> <span class="mf">1000</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;image-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;stimulus&#39;</span><span class="p">),</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">test_procedure</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">fixation</span><span class="p">,</span> <span class="nx">test</span><span class="p">],</span>
+      <span class="nx">timeline_variables</span><span class="o">:</span> <span class="nx">test_stimuli</span><span class="p">,</span>
+      <span class="nx">randomize_order</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="nx">repetitions</span><span class="o">:</span> <span class="mf">5</span>
+    <span class="p">}</span>
+
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">test_procedure</span><span class="p">);</span>
+
+    <span class="cm">/* start the experiment */</span>
+    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span>
+    <span class="p">});</span>
+  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+</details>
+<h2 id="part-8-using-functions-to-generate-parameters">Part 8: Using functions to generate parameters<a class="headerlink" href="#part-8-using-functions-to-generate-parameters" title="Permanent link">&para;</a></h2>
+<p>One aspect of the experiment that could be improved is the duration of the fixation cross. As the experiment stands right now, the timing of the circles appearing is very predictable. We can change that by using a different value for the <code>trial_duration</code> parameter in the <code>fixation</code> trial for each trial. But how can we do that and keep the simple code structure we have now where we only have to define the fixation trial once? One option would be to add another timeline variable, like <code>"fixation_duration"</code> and use that to control the timing. But another option is to specify the <code>trial_duration</code> parameter as a function. If a parameter is a function, jsPsych will execute the function every time the trial runs. That means that if the function returns different results probabilistically, we can get a different parameter value every time the trial runs.</p>
+<p>To do that here, we'll use one of the built-in randomization methods in <a href="../../core_library/jspsych-randomization/">jsPsych's randomization module</a>. <code>jsPsych.randomization.sampleWithoutReplacement()</code> takes an array of items to sample from and generates a new array of length <em>N</em> by sampling without replacement.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">fixation</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;div style=&quot;font-size:60px;&quot;&gt;+&lt;/div&gt;&#39;</span><span class="p">,</span>
+  <span class="nx">choices</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">NO_KEYS</span><span class="p">,</span>
+  <span class="nx">trial_duration</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="k">return</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">([</span><span class="mf">250</span><span class="p">,</span> <span class="mf">500</span><span class="p">,</span> <span class="mf">750</span><span class="p">,</span> <span class="mf">1000</span><span class="p">,</span> <span class="mf">1250</span><span class="p">,</span> <span class="mf">1500</span><span class="p">,</span> <span class="mf">1750</span><span class="p">,</span> <span class="mf">2000</span><span class="p">],</span> <span class="mf">1</span><span class="p">)[</span><span class="mf">0</span><span class="p">];</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>In the code above, we replaced the <code>trial_duration: 1000</code> parameter in <code>fixation</code> with a function. Inside the function, we take a sample from the array <code>[250, 500, 750, 1000, 1250, 1500, 1750, 2000]</code> of size 1 (second parameter to <code>jsPsych.randomization.sampleWithoutReplacement</code>). The return value from calling <code>jsPsych.randomization.sampleWithoutReplacement</code> is an array of length 1, so we add the <code>[0]</code> selection at the end to get the value out of the array.</p>
+<details class="example"><summary>The complete code so far</summary><div class="highlight"><pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>My experiment<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-preload.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/css/jspsych.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+
+    <span class="cm">/* create timeline */</span>
+    <span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="cm">/* preload images */</span>
+    <span class="kd">var</span> <span class="nx">preload</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;preload&#39;</span><span class="p">,</span>
+      <span class="nx">images</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;img/blue.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/orange.png&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">preload</span><span class="p">);</span>
+
+    <span class="cm">/* define welcome message trial */</span>
+    <span class="kd">var</span> <span class="nx">welcome</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;Welcome to the experiment. Press any key to begin.&quot;</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">welcome</span><span class="p">);</span>
+
+    <span class="cm">/* define instructions trial */</span>
+    <span class="kd">var</span> <span class="nx">instructions</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="sb">`</span>
+<span class="sb">        &lt;p&gt;In this experiment, a circle will appear in the center </span>
+<span class="sb">        of the screen.&lt;/p&gt;&lt;p&gt;If the circle is &lt;strong&gt;blue&lt;/strong&gt;, </span>
+<span class="sb">        press the letter F on the keyboard as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;p&gt;If the circle is &lt;strong&gt;orange&lt;/strong&gt;, press the letter J </span>
+<span class="sb">        as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;div style=&#39;width: 700px;&#39;&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: left;&#39;&gt;&lt;img src=&#39;img/blue.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the F key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: right;&#39;&gt;&lt;img src=&#39;img/orange.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the J key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;/div&gt;</span>
+<span class="sb">        &lt;p&gt;Press any key to begin.&lt;/p&gt;</span>
+<span class="sb">      `</span><span class="p">,</span>
+      <span class="nx">post_trial_gap</span><span class="o">:</span> <span class="mf">2000</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instructions</span><span class="p">);</span>
+
+    <span class="cm">/* test trials */</span>
+    <span class="kd">var</span> <span class="nx">test_stimuli</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/blue.png&quot;</span><span class="p">},</span>
+      <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/orange.png&quot;</span><span class="p">}</span>
+    <span class="p">];</span>
+
+    <span class="kd">var</span> <span class="nx">fixation</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;div style=&quot;font-size:60px;&quot;&gt;+&lt;/div&gt;&#39;</span><span class="p">,</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">NO_KEYS</span><span class="p">,</span>
+      <span class="nx">trial_duration</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">([</span><span class="mf">250</span><span class="p">,</span> <span class="mf">500</span><span class="p">,</span> <span class="mf">750</span><span class="p">,</span> <span class="mf">1000</span><span class="p">,</span> <span class="mf">1250</span><span class="p">,</span> <span class="mf">1500</span><span class="p">,</span> <span class="mf">1750</span><span class="p">,</span> <span class="mf">2000</span><span class="p">],</span> <span class="mf">1</span><span class="p">)[</span><span class="mf">0</span><span class="p">];</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;image-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;stimulus&#39;</span><span class="p">),</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">test_procedure</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">fixation</span><span class="p">,</span> <span class="nx">test</span><span class="p">],</span>
+      <span class="nx">timeline_variables</span><span class="o">:</span> <span class="nx">test_stimuli</span><span class="p">,</span>
+      <span class="nx">randomize_order</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="nx">repetitions</span><span class="o">:</span> <span class="mf">5</span>
+    <span class="p">}</span>
+
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">test_procedure</span><span class="p">);</span>
+
+    <span class="cm">/* start the experiment */</span>
+    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span>
+    <span class="p">});</span>
+  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+</details>
+<h2 id="part-10-displaying-the-data">Part 10: Displaying the data<a class="headerlink" href="#part-10-displaying-the-data" title="Permanent link">&para;</a></h2>
+<p>We have created a complete, if simple, experiment at this point, so let's take a look at the data being generated. jsPsych has a built-in <a href="../../core_library/jspsych-data/#jspsychdatadisplaydata">function called <code>jsPsych.data.displayData()</code></a> that is useful for debugging your experiment. It will remove all of the information on the screen and replace it with the raw data collected so far. This isn't terribly useful when you are actually running an experiment, but it's nice for checking the data during development.</p>
+<p>We need the <code>displayData</code> function to execute when the experiment ends. One way to do this is to use the <a href="../../overview/callbacks/#on_finish-experiment"><code>on_finish</code> callback function</a>. This function will automatically execute once all the trials in the experiment are finished. We can specify a function to call in the <code>init</code> method.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span><span class="p">,</span>
+  <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">displayData</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+<details class="example"><summary>The complete code so far</summary><div class="highlight"><pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>My experiment<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-preload.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/css/jspsych.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+
+    <span class="cm">/* create timeline */</span>
+    <span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="cm">/* preload images */</span>
+    <span class="kd">var</span> <span class="nx">preload</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;preload&#39;</span><span class="p">,</span>
+      <span class="nx">images</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;img/blue.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/orange.png&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">preload</span><span class="p">);</span>
+
+    <span class="cm">/* define welcome message trial */</span>
+    <span class="kd">var</span> <span class="nx">welcome</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;Welcome to the experiment. Press any key to begin.&quot;</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">welcome</span><span class="p">);</span>
+
+    <span class="cm">/* define instructions trial */</span>
+    <span class="kd">var</span> <span class="nx">instructions</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="sb">`</span>
+<span class="sb">        &lt;p&gt;In this experiment, a circle will appear in the center </span>
+<span class="sb">        of the screen.&lt;/p&gt;&lt;p&gt;If the circle is &lt;strong&gt;blue&lt;/strong&gt;, </span>
+<span class="sb">        press the letter F on the keyboard as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;p&gt;If the circle is &lt;strong&gt;orange&lt;/strong&gt;, press the letter J </span>
+<span class="sb">        as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;div style=&#39;width: 700px;&#39;&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: left;&#39;&gt;&lt;img src=&#39;img/blue.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the F key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: right;&#39;&gt;&lt;img src=&#39;img/orange.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the J key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;/div&gt;</span>
+<span class="sb">        &lt;p&gt;Press any key to begin.&lt;/p&gt;</span>
+<span class="sb">      `</span><span class="p">,</span>
+      <span class="nx">post_trial_gap</span><span class="o">:</span> <span class="mf">2000</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instructions</span><span class="p">);</span>
+
+    <span class="cm">/* test trials */</span>
+    <span class="kd">var</span> <span class="nx">test_stimuli</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/blue.png&quot;</span><span class="p">},</span>
+      <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/orange.png&quot;</span><span class="p">}</span>
+    <span class="p">];</span>
+
+    <span class="kd">var</span> <span class="nx">fixation</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;div style=&quot;font-size:60px;&quot;&gt;+&lt;/div&gt;&#39;</span><span class="p">,</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">NO_KEYS</span><span class="p">,</span>
+      <span class="nx">trial_duration</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">([</span><span class="mf">250</span><span class="p">,</span> <span class="mf">500</span><span class="p">,</span> <span class="mf">750</span><span class="p">,</span> <span class="mf">1000</span><span class="p">,</span> <span class="mf">1250</span><span class="p">,</span> <span class="mf">1500</span><span class="p">,</span> <span class="mf">1750</span><span class="p">,</span> <span class="mf">2000</span><span class="p">],</span> <span class="mf">1</span><span class="p">)[</span><span class="mf">0</span><span class="p">];</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;image-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;stimulus&#39;</span><span class="p">),</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">test_procedure</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">fixation</span><span class="p">,</span> <span class="nx">test</span><span class="p">],</span>
+      <span class="nx">timeline_variables</span><span class="o">:</span> <span class="nx">test_stimuli</span><span class="p">,</span>
+      <span class="nx">randomize_order</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="nx">repetitions</span><span class="o">:</span> <span class="mf">5</span>
+    <span class="p">}</span>
+
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">test_procedure</span><span class="p">);</span>
+
+    <span class="cm">/* start the experiment */</span>
+    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span><span class="p">,</span>
+      <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">displayData</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+</details>
+<h2 id="part-11-tagging-trials-with-additional-data">Part 11: Tagging trials with additional data<a class="headerlink" href="#part-11-tagging-trials-with-additional-data" title="Permanent link">&para;</a></h2>
+<p>All trials in jsPsych can be tagged with additional arbitrary data. This data will get stored alongside the data that the plugin normally generates, which allows experimenters to record properties of a trial along with the data from the trial.</p>
+<p>When might you use this feature? In this experiment, it would be nice to tag each trial with a circle as a <code>response</code> trial, so that the resulting data can be easily filtered to look at only the critical trials. We can do that like this.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;image-keyboard-response&quot;</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;stimulus&#39;</span><span class="p">),</span>
+  <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">],</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">task</span><span class="o">:</span> <span class="s1">&#39;response&#39;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>We also could tag the test trials with a property that indicates what the correct response should be (F for the blue circles, J for the orange). In our current code, we are using the timeline variables feature of jsPsych to choose which circle gets presented on a trial. Since we want to tag the trials differently based on which circle is presented, we need to add the tagging data to the <code>test_stimuli</code> array, and then use the <code>jsPsych.timelineVariable()</code> function to get the value and assign it to a property in the <code>data</code> of the trial.</p>
+<p>We start by modifying <code>test_stimuli</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">test_stimuli</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/blue.png&quot;</span><span class="p">,</span>  <span class="nx">correct_response</span><span class="o">:</span> <span class="s1">&#39;f&#39;</span><span class="p">},</span>
+  <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/orange.png&quot;</span><span class="p">,</span>  <span class="nx">correct_response</span><span class="o">:</span> <span class="s1">&#39;j&#39;</span><span class="p">}</span>
+<span class="p">];</span>
+</code></pre></div>
+<p>Now we can use <code>timelineVariable()</code> in the <code>data</code> parameter of the <code>test</code> trial.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;image-keyboard-response&quot;</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;stimulus&#39;</span><span class="p">),</span>
+  <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">],</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">task</span><span class="o">:</span> <span class="s1">&#39;response&#39;</span><span class="p">,</span>
+    <span class="nx">correct_response</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;correct_response&#39;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Another kind of tagging that would be useful is to mark each fixation trial as such, to make removing the data from fixation trials easier. </p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">fixation</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;div style=&quot;font-size:60px;&quot;&gt;+&lt;/div&gt;&#39;</span><span class="p">,</span>
+  <span class="nx">choices</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">NO_KEYS</span><span class="p">,</span>
+  <span class="nx">trial_duration</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="k">return</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">([</span><span class="mf">250</span><span class="p">,</span> <span class="mf">500</span><span class="p">,</span> <span class="mf">750</span><span class="p">,</span> <span class="mf">1000</span><span class="p">,</span> <span class="mf">1250</span><span class="p">,</span> <span class="mf">1500</span><span class="p">,</span> <span class="mf">1750</span><span class="p">,</span> <span class="mf">2000</span><span class="p">],</span> <span class="mf">1</span><span class="p">)[</span><span class="mf">0</span><span class="p">];</span>
+  <span class="p">},</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">task</span><span class="o">:</span> <span class="s1">&#39;fixation&#39;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<details class="example"><summary>The complete code so far</summary><div class="highlight"><pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>My experiment<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-preload.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/css/jspsych.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+
+    <span class="cm">/* create timeline */</span>
+    <span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="cm">/* preload images */</span>
+    <span class="kd">var</span> <span class="nx">preload</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;preload&#39;</span><span class="p">,</span>
+      <span class="nx">images</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;img/blue.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/orange.png&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">preload</span><span class="p">);</span>
+
+    <span class="cm">/* define welcome message trial */</span>
+    <span class="kd">var</span> <span class="nx">welcome</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;Welcome to the experiment. Press any key to begin.&quot;</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">welcome</span><span class="p">);</span>
+
+    <span class="cm">/* define instructions trial */</span>
+    <span class="kd">var</span> <span class="nx">instructions</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="sb">`</span>
+<span class="sb">        &lt;p&gt;In this experiment, a circle will appear in the center </span>
+<span class="sb">        of the screen.&lt;/p&gt;&lt;p&gt;If the circle is &lt;strong&gt;blue&lt;/strong&gt;, </span>
+<span class="sb">        press the letter F on the keyboard as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;p&gt;If the circle is &lt;strong&gt;orange&lt;/strong&gt;, press the letter J </span>
+<span class="sb">        as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;div style=&#39;width: 700px;&#39;&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: left;&#39;&gt;&lt;img src=&#39;img/blue.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the F key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: right;&#39;&gt;&lt;img src=&#39;img/orange.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the J key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;/div&gt;</span>
+<span class="sb">        &lt;p&gt;Press any key to begin.&lt;/p&gt;</span>
+<span class="sb">      `</span><span class="p">,</span>
+      <span class="nx">post_trial_gap</span><span class="o">:</span> <span class="mf">2000</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instructions</span><span class="p">);</span>
+
+    <span class="cm">/* test trials */</span>
+    <span class="kd">var</span> <span class="nx">test_stimuli</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/blue.png&quot;</span><span class="p">,</span>  <span class="nx">correct_response</span><span class="o">:</span> <span class="s1">&#39;f&#39;</span><span class="p">},</span>
+      <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/orange.png&quot;</span><span class="p">,</span>  <span class="nx">correct_response</span><span class="o">:</span> <span class="s1">&#39;j&#39;</span><span class="p">}</span>
+    <span class="p">];</span>
+
+    <span class="kd">var</span> <span class="nx">fixation</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;div style=&quot;font-size:60px;&quot;&gt;+&lt;/div&gt;&#39;</span><span class="p">,</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">NO_KEYS</span><span class="p">,</span>
+      <span class="nx">trial_duration</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">([</span><span class="mf">250</span><span class="p">,</span> <span class="mf">500</span><span class="p">,</span> <span class="mf">750</span><span class="p">,</span> <span class="mf">1000</span><span class="p">,</span> <span class="mf">1250</span><span class="p">,</span> <span class="mf">1500</span><span class="p">,</span> <span class="mf">1750</span><span class="p">,</span> <span class="mf">2000</span><span class="p">],</span> <span class="mf">1</span><span class="p">)[</span><span class="mf">0</span><span class="p">];</span>
+      <span class="p">},</span>
+      <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">task</span><span class="o">:</span> <span class="s1">&#39;fixation&#39;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;image-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;stimulus&#39;</span><span class="p">),</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">],</span>
+      <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">task</span><span class="o">:</span> <span class="s1">&#39;response&#39;</span><span class="p">,</span>
+        <span class="nx">correct_response</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;correct_response&#39;</span><span class="p">)</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">test_procedure</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">fixation</span><span class="p">,</span> <span class="nx">test</span><span class="p">],</span>
+      <span class="nx">timeline_variables</span><span class="o">:</span> <span class="nx">test_stimuli</span><span class="p">,</span>
+      <span class="nx">randomize_order</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="nx">repetitions</span><span class="o">:</span> <span class="mf">5</span>
+    <span class="p">}</span>
+
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">test_procedure</span><span class="p">);</span>
+
+    <span class="cm">/* start the experiment */</span>
+    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span><span class="p">,</span>
+      <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">displayData</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+</details>
+<h2 id="part-12-manipulating-data-during-the-experiment">Part 12: Manipulating data during the experiment<a class="headerlink" href="#part-12-manipulating-data-during-the-experiment" title="Permanent link">&para;</a></h2>
+<p>Now that the data from the test trials has a tag that describes the correct response, it would be easy to analyze the data after the fact and calculate whether the participant responded correctly.</p>
+<p>But, we can also do this in jsPsych as the experiment runs to save time later and enable a limited set of data analysis directly in the experiment code.</p>
+<p>To do this, we'll use the <code>on_finish</code> event of the test trial. We can assign a function to <code>on_finish</code>, and that function will receive an object containing the data generated by the trial. This object can be manipulated inside the function, and any changes made to the object will be stored in jsPsych's internal representation of the data.</p>
+<p>For this example, we'll calculate whether the subject responded correctly, and add a new <code>correct</code> property to the data object.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;image-keyboard-response&quot;</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;stimulus&#39;</span><span class="p">),</span>
+  <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">],</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">task</span><span class="o">:</span> <span class="s1">&#39;response&#39;</span><span class="p">,</span>
+    <span class="nx">correct_response</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;correct_response&#39;</span><span class="p">)</span>
+  <span class="p">},</span>
+  <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">correct</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">correct_response</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The <code>data.response</code> value is a string representation of the key the subject pressed. We can compare this with the <code>data.correct_response</code> value, and assign this computed value to a new property <code>data.correct</code>.</p>
+<details class="example"><summary>The complete code so far</summary><div class="highlight"><pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>My experiment<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-preload.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/css/jspsych.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+
+    <span class="cm">/* create timeline */</span>
+    <span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="cm">/* preload images */</span>
+    <span class="kd">var</span> <span class="nx">preload</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;preload&#39;</span><span class="p">,</span>
+      <span class="nx">images</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;img/blue.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/orange.png&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">preload</span><span class="p">);</span>
+
+    <span class="cm">/* define welcome message trial */</span>
+    <span class="kd">var</span> <span class="nx">welcome</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;Welcome to the experiment. Press any key to begin.&quot;</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">welcome</span><span class="p">);</span>
+
+    <span class="cm">/* define instructions trial */</span>
+    <span class="kd">var</span> <span class="nx">instructions</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="sb">`</span>
+<span class="sb">        &lt;p&gt;In this experiment, a circle will appear in the center </span>
+<span class="sb">        of the screen.&lt;/p&gt;&lt;p&gt;If the circle is &lt;strong&gt;blue&lt;/strong&gt;, </span>
+<span class="sb">        press the letter F on the keyboard as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;p&gt;If the circle is &lt;strong&gt;orange&lt;/strong&gt;, press the letter J </span>
+<span class="sb">        as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;div style=&#39;width: 700px;&#39;&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: left;&#39;&gt;&lt;img src=&#39;img/blue.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the F key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: right;&#39;&gt;&lt;img src=&#39;img/orange.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the J key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;/div&gt;</span>
+<span class="sb">        &lt;p&gt;Press any key to begin.&lt;/p&gt;</span>
+<span class="sb">      `</span><span class="p">,</span>
+      <span class="nx">post_trial_gap</span><span class="o">:</span> <span class="mf">2000</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instructions</span><span class="p">);</span>
+
+    <span class="cm">/* test trials */</span>
+    <span class="kd">var</span> <span class="nx">test_stimuli</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/blue.png&quot;</span><span class="p">,</span>  <span class="nx">correct_response</span><span class="o">:</span> <span class="s1">&#39;f&#39;</span><span class="p">},</span>
+      <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/orange.png&quot;</span><span class="p">,</span>  <span class="nx">correct_response</span><span class="o">:</span> <span class="s1">&#39;j&#39;</span><span class="p">}</span>
+    <span class="p">];</span>
+
+    <span class="kd">var</span> <span class="nx">fixation</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;div style=&quot;font-size:60px;&quot;&gt;+&lt;/div&gt;&#39;</span><span class="p">,</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">NO_KEYS</span><span class="p">,</span>
+      <span class="nx">trial_duration</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">([</span><span class="mf">250</span><span class="p">,</span> <span class="mf">500</span><span class="p">,</span> <span class="mf">750</span><span class="p">,</span> <span class="mf">1000</span><span class="p">,</span> <span class="mf">1250</span><span class="p">,</span> <span class="mf">1500</span><span class="p">,</span> <span class="mf">1750</span><span class="p">,</span> <span class="mf">2000</span><span class="p">],</span> <span class="mf">1</span><span class="p">)[</span><span class="mf">0</span><span class="p">];</span>
+      <span class="p">},</span>
+      <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">task</span><span class="o">:</span> <span class="s1">&#39;fixation&#39;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;image-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;stimulus&#39;</span><span class="p">),</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">],</span>
+      <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">task</span><span class="o">:</span> <span class="s1">&#39;response&#39;</span><span class="p">,</span>
+        <span class="nx">correct_response</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;correct_response&#39;</span><span class="p">)</span>
+      <span class="p">},</span>
+      <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+        <span class="nx">data</span><span class="p">.</span><span class="nx">correct</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">correct_response</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">test_procedure</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">fixation</span><span class="p">,</span> <span class="nx">test</span><span class="p">],</span>
+      <span class="nx">timeline_variables</span><span class="o">:</span> <span class="nx">test_stimuli</span><span class="p">,</span>
+      <span class="nx">randomize_order</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="nx">repetitions</span><span class="o">:</span> <span class="mf">5</span>
+    <span class="p">}</span>
+
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">test_procedure</span><span class="p">);</span>
+
+    <span class="cm">/* start the experiment */</span>
+    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span><span class="p">,</span>
+      <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">displayData</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+</details>
+<h2 id="part-13-data-aggregation">Part 13: Data aggregation<a class="headerlink" href="#part-13-data-aggregation" title="Permanent link">&para;</a></h2>
+<p>jsPsych provides a limited set of analysis functions to allow you to calculate things like mean response times for a selected set of trials. In this part, we'll use these functions to add a final trial to the experiment that tells the subject their accuracy and their mean response time for correct responses.</p>
+<p>We'll use the <code>html-keyboard-response</code> plugin. Because the text that we want to display changes based on the subject's performance in the experiment, we need to use a function for the <code>stimulus</code> parameter and return the desired text.</p>
+<p>Here's what the code looks like, and a description follows below.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">debrief_block</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="kd">var</span> <span class="nx">trials</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filter</span><span class="p">({</span><span class="nx">task</span><span class="o">:</span> <span class="s1">&#39;response&#39;</span><span class="p">});</span>
+    <span class="kd">var</span> <span class="nx">correct_trials</span> <span class="o">=</span> <span class="nx">trials</span><span class="p">.</span><span class="nx">filter</span><span class="p">({</span><span class="nx">correct</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+    <span class="kd">var</span> <span class="nx">accuracy</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">correct_trials</span><span class="p">.</span><span class="nx">count</span><span class="p">()</span> <span class="o">/</span> <span class="nx">trials</span><span class="p">.</span><span class="nx">count</span><span class="p">()</span> <span class="o">*</span> <span class="mf">100</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">rt</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">correct_trials</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">mean</span><span class="p">());</span>
+
+    <span class="k">return</span> <span class="sb">`&lt;p&gt;You responded correctly on </span><span class="si">${</span><span class="nx">accuracy</span><span class="si">}</span><span class="sb">% of the trials.&lt;/p&gt;</span>
+<span class="sb">      &lt;p&gt;Your average response time was </span><span class="si">${</span><span class="nx">rt</span><span class="si">}</span><span class="sb">ms.&lt;/p&gt;</span>
+<span class="sb">      &lt;p&gt;Press any key to complete the experiment. Thank you!&lt;/p&gt;`</span><span class="p">;</span>
+
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">debrief_block</span><span class="p">);</span>
+</code></pre></div>
+<p>To create the variable <code>trials</code>, we use <code>jsPsych.data.get()</code> which returns a jsPsych data collection containing all of the data from the experiment. We can then use <code>.filter</code> to select only the trials where <code>task</code> is <code>'response'</code> (a benefit of tagging the trials in part 11). <code>trials</code> contains all of the data from the trials where a circle was shown.</p>
+<p>To get only the correct trials, we can use <code>.filter()</code> again to select only the trials from the <code>trials</code> data collection where the property <code>correct</code> is <code>true</code>.</p>
+<p>To calculate accuracy, we can use the <code>.count()</code> method to determine how many trials were correct and how many trials there were total. We also use <code>Math.round()</code> to avoid extra digits after the decimal.</p>
+<p>Finally, to calculate the mean response time on correct trials, we use the <code>.select</code> method on the <code>correct_trials</code> data collection to select only the <code>'rt'</code> property of those trials. We can then use the <code>.mean()</code> method to find the mean of all the RT values.</p>
+<h2 id="the-final-code">The final code<a class="headerlink" href="#the-final-code" title="Permanent link">&para;</a></h2>
+<p>This code is available in the <code>/examples</code> folder in the jsPsych release download. It is called <code>demo-simple-rt-task.html</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>My experiment<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/jspsych.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/plugins/jspsych-preload.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;jspsych-6.3.0/css/jspsych.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+
+    <span class="cm">/* create timeline */</span>
+    <span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="cm">/* preload images */</span>
+    <span class="kd">var</span> <span class="nx">preload</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;preload&#39;</span><span class="p">,</span>
+      <span class="nx">images</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;img/blue.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/orange.png&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">preload</span><span class="p">);</span>
+
+    <span class="cm">/* define welcome message trial */</span>
+    <span class="kd">var</span> <span class="nx">welcome</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;Welcome to the experiment. Press any key to begin.&quot;</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">welcome</span><span class="p">);</span>
+
+    <span class="cm">/* define instructions trial */</span>
+    <span class="kd">var</span> <span class="nx">instructions</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="sb">`</span>
+<span class="sb">        &lt;p&gt;In this experiment, a circle will appear in the center </span>
+<span class="sb">        of the screen.&lt;/p&gt;&lt;p&gt;If the circle is &lt;strong&gt;blue&lt;/strong&gt;, </span>
+<span class="sb">        press the letter F on the keyboard as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;p&gt;If the circle is &lt;strong&gt;orange&lt;/strong&gt;, press the letter J </span>
+<span class="sb">        as fast as you can.&lt;/p&gt;</span>
+<span class="sb">        &lt;div style=&#39;width: 700px;&#39;&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: left;&#39;&gt;&lt;img src=&#39;img/blue.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the F key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;div style=&#39;float: right;&#39;&gt;&lt;img src=&#39;img/orange.png&#39;&gt;&lt;/img&gt;</span>
+<span class="sb">        &lt;p class=&#39;small&#39;&gt;&lt;strong&gt;Press the J key&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</span>
+<span class="sb">        &lt;/div&gt;</span>
+<span class="sb">        &lt;p&gt;Press any key to begin.&lt;/p&gt;</span>
+<span class="sb">      `</span><span class="p">,</span>
+      <span class="nx">post_trial_gap</span><span class="o">:</span> <span class="mf">2000</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instructions</span><span class="p">);</span>
+
+    <span class="cm">/* test trials */</span>
+    <span class="kd">var</span> <span class="nx">test_stimuli</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/blue.png&quot;</span><span class="p">,</span>  <span class="nx">correct_response</span><span class="o">:</span> <span class="s1">&#39;f&#39;</span><span class="p">},</span>
+      <span class="p">{</span> <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;img/orange.png&quot;</span><span class="p">,</span>  <span class="nx">correct_response</span><span class="o">:</span> <span class="s1">&#39;j&#39;</span><span class="p">}</span>
+    <span class="p">];</span>
+
+    <span class="kd">var</span> <span class="nx">fixation</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html-keyboard-response&#39;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;div style=&quot;font-size:60px;&quot;&gt;+&lt;/div&gt;&#39;</span><span class="p">,</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">NO_KEYS</span><span class="p">,</span>
+      <span class="nx">trial_duration</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">([</span><span class="mf">250</span><span class="p">,</span> <span class="mf">500</span><span class="p">,</span> <span class="mf">750</span><span class="p">,</span> <span class="mf">1000</span><span class="p">,</span> <span class="mf">1250</span><span class="p">,</span> <span class="mf">1500</span><span class="p">,</span> <span class="mf">1750</span><span class="p">,</span> <span class="mf">2000</span><span class="p">],</span> <span class="mf">1</span><span class="p">)[</span><span class="mf">0</span><span class="p">];</span>
+      <span class="p">},</span>
+      <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">task</span><span class="o">:</span> <span class="s1">&#39;fixation&#39;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;image-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;stimulus&#39;</span><span class="p">),</span>
+      <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;j&#39;</span><span class="p">],</span>
+      <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">task</span><span class="o">:</span> <span class="s1">&#39;response&#39;</span><span class="p">,</span>
+        <span class="nx">correct_response</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;correct_response&#39;</span><span class="p">)</span>
+      <span class="p">},</span>
+      <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+        <span class="nx">data</span><span class="p">.</span><span class="nx">correct</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">correct_response</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">test_procedure</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">fixation</span><span class="p">,</span> <span class="nx">test</span><span class="p">],</span>
+      <span class="nx">timeline_variables</span><span class="o">:</span> <span class="nx">test_stimuli</span><span class="p">,</span>
+      <span class="nx">repetitions</span><span class="o">:</span> <span class="mf">5</span><span class="p">,</span>
+      <span class="nx">randomize_order</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">}</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">test_procedure</span><span class="p">);</span>
+
+    <span class="cm">/* define debrief */</span>
+
+    <span class="kd">var</span> <span class="nx">debrief_block</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;html-keyboard-response&quot;</span><span class="p">,</span>
+      <span class="nx">stimulus</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+        <span class="kd">var</span> <span class="nx">trials</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">filter</span><span class="p">({</span><span class="nx">task</span><span class="o">:</span> <span class="s1">&#39;response&#39;</span><span class="p">});</span>
+        <span class="kd">var</span> <span class="nx">correct_trials</span> <span class="o">=</span> <span class="nx">trials</span><span class="p">.</span><span class="nx">filter</span><span class="p">({</span><span class="nx">correct</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+        <span class="kd">var</span> <span class="nx">accuracy</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">correct_trials</span><span class="p">.</span><span class="nx">count</span><span class="p">()</span> <span class="o">/</span> <span class="nx">trials</span><span class="p">.</span><span class="nx">count</span><span class="p">()</span> <span class="o">*</span> <span class="mf">100</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">rt</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">correct_trials</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;rt&#39;</span><span class="p">).</span><span class="nx">mean</span><span class="p">());</span>
+
+        <span class="k">return</span> <span class="sb">`&lt;p&gt;You responded correctly on </span><span class="si">${</span><span class="nx">accuracy</span><span class="si">}</span><span class="sb">% of the trials.&lt;/p&gt;</span>
+<span class="sb">          &lt;p&gt;Your average response time was </span><span class="si">${</span><span class="nx">rt</span><span class="si">}</span><span class="sb">ms.&lt;/p&gt;</span>
+<span class="sb">          &lt;p&gt;Press any key to complete the experiment. Thank you!&lt;/p&gt;`</span><span class="p">;</span>
+
+      <span class="p">}</span>
+    <span class="p">};</span>
+    <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">debrief_block</span><span class="p">);</span>
+
+    <span class="cm">/* start the experiment */</span>
+    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+      <span class="nx">timeline</span><span class="o">:</span> <span class="nx">timeline</span><span class="p">,</span>
+      <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">displayData</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../hello-world/" class="md-footer__link md-footer__link--prev" aria-label="Previous: The Basics: Hello World" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              The Basics: Hello World
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../video-tutorials/" class="md-footer__link md-footer__link--next" aria-label="Next: Video Tutorials" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Video Tutorials
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2012-2021 Josh de Leeuw
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.709b4209.min.js", "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.febc23d1.min.js"></script>
+      
+    
+  </body>
+</html>

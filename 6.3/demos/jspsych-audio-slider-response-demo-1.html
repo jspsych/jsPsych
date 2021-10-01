@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-audio-slider-response.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+  var preload = {
+    type: 'preload',
+    auto_preload: true
+  };
+
+  var pre_audio = {
+    type: 'html-button-response',
+    stimulus: '<div style="max-width:600px;"><p>Some browsers now require the user to interact with a page before it can play audio. '+
+    'Clicking the button below counts as an interaction.</p><p>Be aware of this when planning audio experiments if '+
+    'you want the first trial to include audio.</p></div>',
+    choices: ['Run demo']
+  };
+
+  var trial = {
+    type: 'audio-slider-response',
+    stimulus: 'https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/examples/sound/speech_joke.mp3',
+    labels: ['Not Funny', 'Funny'],
+    prompt: '<p>How funny is the joke?</p>'
+  };
+
+  var show_data = {
+    type: 'html-button-response',
+    stimulus: function() {
+      var trial_data = jsPsych.data.getLastTrialData().values();
+      var trial_json = JSON.stringify(trial_data, null, 2);
+      return '<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>'+
+      '<pre style="margin-top:0px;text-align:left;">'+trial_json+'</pre>';
+    },
+    choices: ['Repeat demo']
+  };
+
+  var trial_data_loop = {
+    timeline: [trial, show_data],
+    loop_function: function() {
+      return true;
+    }
+  };
+  
+  if (typeof jsPsych !== "undefined") {
+    jsPsych.init({
+      timeline: [preload, pre_audio, trial_data_loop]
+    });
+  } else {
+    document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+  }
+</script>
+
+</html>
