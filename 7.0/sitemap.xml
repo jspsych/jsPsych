@@ -2,422 +2,422 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://www.jspsych.org/7.0/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/about/about/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/about/license/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/developers/configuration/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/developers/contributing/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/developers/extension-development/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/developers/plugin-development/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/extensions/jspsych-ext-webgazer/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/extensions/list-of-extensions/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/extensions/webgazer/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/browser-device-support/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/data/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/dynamic-parameters/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/events/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/exclude-browser/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/experiment-options/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/extensions/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/eye-tracking/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/fullscreen/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/media-preloading/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/mturk/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/plugins/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/progress-bar/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/prolific/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/record-browser-interactions/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/running-experiments/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/style/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/timeline/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/overview/timing-accuracy/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-animation/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/animation/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-audio-button-response/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/audio-button-response/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-audio-keyboard-response/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/audio-keyboard-response/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-audio-slider-response/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/audio-slider-response/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-call-function/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/call-function/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-canvas-button-response/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/canvas-button-response/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-canvas-keyboard-response/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/canvas-keyboard-response/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-canvas-slider-response/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/canvas-slider-response/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-categorize-animation/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/categorize-animation/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-categorize-html/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/categorize-html/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-categorize-image/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/categorize-image/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-cloze/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/cloze/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-external-html/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/external-html/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-free-sort/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/free-sort/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-fullscreen/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/fullscreen/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-html-button-response/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/html-button-response/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-html-keyboard-response/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/html-keyboard-response/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-html-slider-response/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/html-slider-response/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-iat-html/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/iat-html/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-iat-image/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/iat-image/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-image-button-response/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/image-button-response/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-image-keyboard-response/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/image-keyboard-response/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-image-slider-response/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/image-slider-response/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-instructions/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-maxdiff/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-preload/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-reconstruction/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-resize/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-same-different-html/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-same-different-image/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-serial-reaction-time-mouse/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-serial-reaction-time/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-survey-html-form/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-survey-likert/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-survey-multi-choice/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-survey-multi-select/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-survey-text/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-video-button-response/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-video-keyboard-response/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-video-slider-response/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-virtual-chinrest/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-visual-search-circle/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-webgazer-calibrate/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-webgazer-init-camera/</loc>
-         <lastmod>2021-09-30</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://www.jspsych.org/7.0/plugins/jspsych-webgazer-validate/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <loc>https://www.jspsych.org/7.0/plugins/instructions/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/plugins/list-of-plugins/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/maxdiff/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/preload/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/reconstruction/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/resize/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/same-different-html/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/same-different-image/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/serial-reaction-time-mouse/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/serial-reaction-time/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/survey-html-form/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/survey-likert/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/survey-multi-choice/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/survey-multi-select/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/survey-text/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/video-button-response/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/video-keyboard-response/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/video-slider-response/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/virtual-chinrest/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/visual-search-circle/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/webgazer-calibrate/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/webgazer-init-camera/</loc>
+         <lastmod>2021-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://www.jspsych.org/7.0/plugins/webgazer-validate/</loc>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/reference/jspsych-data/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/reference/jspsych-pluginAPI/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/reference/jspsych-randomization/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/reference/jspsych-turk/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/reference/jspsych/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/support/migration-v7/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/support/support/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/tutorials/hello-world/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/tutorials/rt-task/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.0/tutorials/video-tutorials/</loc>
-         <lastmod>2021-09-30</lastmod>
+         <lastmod>2021-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
