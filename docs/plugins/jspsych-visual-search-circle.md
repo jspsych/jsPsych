@@ -6,15 +6,23 @@ This plugin presents a customizable visual-search task modelled after [Wang, Cav
 
 ## Parameters
 
-In addition to the [parameters available in all plugins](../overview/plugins.md#parameters-available-in-all-plugins), this plugin accepts the following parameters. Parameters with a default value of *undefined* must be specified. Other parameters can be left unspecified if the default value is acceptable.
+In addition to the [parameters available in all plugins](../overview/plugins.md#parameters-available-in-all-plugins), this plugin accepts the following parameters. The set of images to display must be defined in one of two ways:
+
+* The `target`, `foil` and `set_size` parameters: the combination of these parameters can be used to construct a 'classic' visual search task, where there is a single foil/distractor image that makes up all of the images in the set, with the exception of the target image if it is present.
+OR
+* The `stimuli` parameter: this array that can be used to present any arbitrary set of image files, with or without the target image, with any number of different foils/distractors, and with any number of repeated images.
+
+The `target_present` and `fixation_image` parameters must always be specified. Other parameters can be left unspecified if the default value is acceptable.
+
 
 | Parameter          | Type            | Default Value | Description                              |
 | ------------------ | --------------- | ------------- | ---------------------------------------- |
-| target_present     | boolean         | *undefined*   | Is the target present?                   |
-| set_size           | numeric         | *undefined*   | How many items should be displayed?      |
-| target             | string          | *undefined*   | Path to image file that is the search target. |
-| foil               | string or array | *undefined*   | Path to image file that is the foil/distractor. Can specify an array of distractors if the distractors are all different images. |
-| fixation_image     | string          | *undefined*   | Path to image file that is a fixation target. |
+| target             | string          | null          | Path to image file that is the search target. This parameter must specified when the stimuli set is defined using the `target`, `foil` and `set_size` parameters, but should NOT be specified when using the `stimuli` parameter. |
+| foil               | string          | null          | Path to image file that is the foil/distractor. This image will be repeated for all distractors up to the `set_size` value. This parameter must specified when the stimuli set is defined using the `target`, `foil` and `set_size` parameters, but should NOT be specified when using the `stimuli` parameter. |
+| set_size           | numeric         | null          | How many items should be displayed, including the target when `target_present` is `true`? The foil image will be repeated up to this value when `target_present` is `false`, or up to `set_size - 1` when `target_present` is `true`. This parameter must specified when using the `target`, `foil` and `set_size` parameters to define the stimuli set, but should NOT be specified when using the `stimuli` parameter.  |
+| stimuli            | array of images | null          | Array containing all of the image files to be displayed. This parameter must be specified when NOT using the `target`, `foil`, and `set_size` parameters to define the stimuli set. |
+| target_present     | boolean         | *undefined*   | Is the target present? This parameter must always be specified. When using the `target`, `foil` and `set_size` parameters, `false` means that the foil image will be repeated up to the set_size, and `true` means that the target will be presented along with the foil image repeated up to set_size - 1. When using the `stimuli` parameter, this parameter is only used to determine the response accuracy. |
+| fixation_image     | string          | *undefined*   | Path to image file that is a fixation target. This parameter must always be specified. |
 | target_size        | array           | `[50, 50]`    | Two element array indicating the height and width of the search array element images. |
 | fixation_size      | array           | `[16, 16]`    | Two element array indicating the height and width of the fixation image. |
 | circle_diameter    | numeric         | 250           | The diameter of the search array circle in pixels. |
@@ -84,8 +92,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
           fixation_image: 'img/fixation.gif',
           target_present_key: 'e',
           target_absent_key: 'n',
-          target_present: true,
-          set_size: 3
+          target_present: true
         }
         ```
 

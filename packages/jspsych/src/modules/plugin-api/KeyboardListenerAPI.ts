@@ -154,7 +154,7 @@ export class KeyboardListenerAPI {
     }
 
     if (typeof key1 === "string" && typeof key2 === "string") {
-      // if both values are strings, then check whether or not letter case should be converted before comparing (case_sensitive_responses in jsPsych.init)
+      // if both values are strings, then check whether or not letter case should be converted before comparing (case_sensitive_responses in initJsPsych)
       return this.areResponsesCaseSensitive
         ? key1 === key2
         : key1.toLowerCase() === key2.toLowerCase();

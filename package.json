@@ -10,13 +10,17 @@
     "build": "npm run build -ws",
     "build:archive": "gulp createCoreDistArchive",
     "prepare": "husky install && npm run build --workspace jspsych && npm run build",
-    "tsc": "npm run tsc -ws"
+    "tsc": "npm run tsc -ws",
+    "changeset": "changeset",
+    "release": "npm run build && changeset publish"
   },
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=7.0.0"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.4.0",
+    "@changesets/cli": "^2.16.0",
     "husky": "^7.0.1",
     "import-sort-style-module": "^6.0.0",
     "lint-staged": "^11.1.2",
