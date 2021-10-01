@@ -1,32 +1,42 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-call-function.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css">
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-call-function/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body></body>
   <script>
 
-  var trial = {
-    type: 'call-function',
-    func: function(){ return Date.now(); }
-  };
-
-  // this is to check if the plugin specific default for post_trial_gap works.
-  // if it does, then the return values should be nearly identical.
-  var next_trial = {
-    type: 'call-function',
-    func: function(){ return Date.now(); }
-  };
-
-
-  jsPsych.init({
-    timeline: [trial, next_trial],
-    on_finish: function(){ jsPsych.data.displayData(); },
-    default_iti: 1000
+  var jsPsych = initJsPsych({
+    default_iti: 1000, 
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
   });
 
+  var trial = {
+    type: jsPsychCallFunction,
+    post_trial_gap: 0,
+    func: function(){ 
+      var timestamp = Date.now();
+      console.log('trial 1: ', timestamp);
+      return timestamp;
+    }
+  };
+
+  // This is to check if the plugin-specific default for post_trial_gap works.
+  // If it does, then the return values for the two trials should be nearly identical.
+  var next_trial = {
+    type: jsPsychCallFunction,
+    func: function(){ 
+      var timestamp = Date.now();
+      console.log('trial 2: ', timestamp);
+      return timestamp;
+    }
+  };
+
+  jsPsych.run([trial, next_trial]);
 
   </script>
 </html>

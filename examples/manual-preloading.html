@@ -1,59 +1,59 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="../jspsych.js"></script>
-  <script src="../plugins/jspsych-preload.js"></script>
-  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
-  <script src="../plugins/jspsych-image-keyboard-response.js"></script>
-  <link rel="stylesheet" href="../css/jspsych.css">
-  </style>
-</head>
-<body></body>
-<script>
+  <head>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-preload/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-image-keyboard-response/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
 
-  // create the list of images that should be preloaded
-  var images_to_preload = [
-    'img/happy_face_1.jpg',
-    'img/happy_face_2.jpg',
-    'img/happy_face_3.jpg',
-    'img/happy_face_4.jpg',
-    'img/sad_face_1.jpg',
-    'img/sad_face_2.jpg',
-    'img/sad_face_3.jpg',
-    'img/sad_face_4.jpg'
-  ];
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
-  var preload_trial = {
-    type: 'preload',
-    images: images_to_preload // preload the list of images
-  }
+    // create the list of images that should be preloaded
+    var images_to_preload = [
+      'img/happy_face_1.jpg',
+      'img/happy_face_2.jpg',
+      'img/happy_face_3.jpg',
+      'img/happy_face_4.jpg',
+      'img/sad_face_1.jpg',
+      'img/sad_face_2.jpg',
+      'img/sad_face_3.jpg',
+      'img/sad_face_4.jpg'
+    ];
 
-  var pre_trial = {
-    type: 'html-keyboard-response',
-    stimulus: '<p>If you check the Network tab in your browser&rsquo;s developer tools,<br>you should see that 8 images have been loaded into memory.</p>'+
-      '<p>The next trial uses the image-keyboard-response plugin.<br>This plugin automatically preloads the image when an image file name is used for the stimulus parameter.</p>'+
-      '<p>However, in this case the stimulus parameter is a <em>function</em> that randomly selects an image to display.<br>'+
-      'We therefore need to manually preload the images.</p>'+
-      '<p>The image that is randomly selected and displayed in the next trial should not load again in the Network tab when the trial starts.</p>'+
-      '<p>Press any key to continue.</p>'
-  }
+    var preload_trial = {
+      type: jsPsychPreload,
+      images: images_to_preload // preload the list of images
+    };
 
-  var trial = {
-    type: 'image-keyboard-response',
-    stimulus: function(){
-      return jsPsych.randomization.sampleWithoutReplacement(images_to_preload, 1)[0];
-    },
-    choices: ['y','n'],
-    prompt: '<p>Have you seen this face before? Press y or n.</p>',
-    stimulus_width: 300
-  }
-  
-  jsPsych.init({
-    timeline: [preload_trial, pre_trial, trial],
-    on_finish: function() {
-      jsPsych.data.displayData();
-    }
-  });
-</script>
+    var pre_trial = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p>If you check the Network tab in your browser&rsquo;s developer tools,<br>you should see that 8 images have been loaded into memory.</p>'+
+        '<p>The next trial uses the image-keyboard-response plugin.<br>This plugin automatically preloads the image when an image file name is used for the stimulus parameter.</p>'+
+        '<p>However, in this case the stimulus parameter is a <em>function</em> that randomly selects an image to display.<br>'+
+        'We therefore need to manually preload the images.</p>'+
+        '<p>The image that is randomly selected and displayed in the next trial should not load again in the Network tab when the trial starts.</p>'+
+        '<p>Press any key to continue.</p>'
+    };
 
+    var trial = {
+      type: jsPsychImageKeyboardResponse,
+      stimulus: function() {
+        return jsPsych.randomization.sampleWithoutReplacement(images_to_preload, 1)[0];
+      },
+      choices: ['y','n'],
+      prompt: '<p>Have you seen this face before? Press y or n.</p>',
+      stimulus_width: 300
+    };
+    
+    jsPsych.run([preload_trial, pre_trial, trial]);
+
+  </script>
 </html>

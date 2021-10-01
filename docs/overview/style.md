@@ -12,7 +12,7 @@ In the example below, the stimulus font size is set to 30px and the text color i
 
 ```javascript
 var trial = {
-	type: 'html-keyboard-response',
+	type: jsPsychHtmlKeyboardResponse,
 	stimulus: '<p style="font-size:30px;color:red;">hello world!</p>'
 }
 ```
@@ -21,7 +21,7 @@ You can also use a [dynamic parameter](dynamic-parameters) to combine inline CSS
 
 ```javascript
 var trial = {
-	type: 'html-keyboard-response',
+	type: jsPsychHtmlKeyboardResponse,
 	stimulus: function() {
         var stim = '<p style="font-size:30px;font-weight:bold;">'+jsPsych.timelineVariable('text')+'</p>';
         return stim;
@@ -86,9 +86,9 @@ In the example below, the default font size is set to 25px throughout the experi
 
 ```html
 <head>
-  <script src="jsPsych/jspsych.js"></script>
-  <script src="jsPsych/plugins/jspsych-html-keyboard-response.js"></script>
-  <link rel="stylesheet" href="jsPsych/css/jspsych.css">
+  <script src="https://unpkg.com/jspsych@7.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css">
   <style> 
     .jspsych-display-element {
       font-size: 25px;
@@ -101,13 +101,13 @@ In the example below, the default font size is set to 25px throughout the experi
 
 CSS rules can also be applied to your experiment with a link to an external CSS file. This is the same method that is usually used to apply the style from jspsych.css to an experiment. These rules will be applied to your _whole experiment_. You may find it useful to use a custom stylesheet when you want to re-use the same CSS rules across _multiple experiments_ (HTML files).
 
-This example shows how to add a custom CSS file in addition to the styles provided in jspsych.css:
+This example shows how to add a custom CSS file in addition to the styles provided in jspsych.css. In this example, the custom CSS file is called "my_experiment_style.css" and it is located in the same directory as your HTML file.
 
 ```html
 <head>
-  <script src="jsPsych/jspsych.js"></script>
-  <script src="jsPsych/plugins/jspsych-image-keyboard-response.js"></script>
-  <link rel="stylesheet" href="jsPsych/css/jspsych.css">
+  <script src="https://unpkg.com/jspsych@7.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css">
   <link rel="stylesheet" href="my_experiment_style.css">
 </head>
 ```
@@ -138,16 +138,16 @@ You can use a static `css_classes` parameter value if you always want to apply t
 
 ```html
  <head>
-  <script src="jsPsych/jspsych.js"></script>
-  <script src="jsPsych/plugins/jspsych-html-keyboard-response.js"></script>
-  <link rel="stylesheet" href="jsPsych/css/jspsych.css">
+  <script src="https://unpkg.com/jspsych@7.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css">
   <style> 
     .fixation {font-size: 90px; font-weight: bold; color: gray;}
   </style>
 </head>
 <script>
 var fixation = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: '+',
     choices: jsPsych.NO_KEYS,
     trial_duration: 500,
@@ -176,9 +176,9 @@ In the example below, the CSS selector `.left-align #stimulus` selects the eleme
 
 ```html
 <head>
-  <script src="jsPsych/jspsych.js"></script>
-  <script src="jsPsych/plugins/jspsych-html-keyboard-response.js"></script>
-  <link rel="stylesheet" href="jsPsych/css/jspsych.css">
+  <script src="https://unpkg.com/jspsych@7.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css">
   <style> 
     .left-align #stimulus {text-align: left; width: 600px;}
     .right-align #stimulus {text-align: right; width: 600px;}
@@ -187,7 +187,7 @@ In the example below, the CSS selector `.left-align #stimulus` selects the eleme
 <script>
 var trial_procedure = {
     timeline: [{
-        type: 'html-keyboard-response',
+        type: jsPsychHtmlKeyboardResponse,
         stimulus: '<p id="stimulus">This is the stimulus.</p>',
         prompt: '<p>This text will not be affected by the CSS classes '+
             'because it does not have the "stimulus" ID.</p>',
@@ -206,9 +206,9 @@ It's also possible to pass multiple class names to the `css_classes` parameter. 
 
 ```html
 <head>
-  <script src="jsPsych/jspsych.js"></script>
-  <script src="jsPsych/plugins/jspsych-html-keyboard-response.js"></script>
-  <link rel="stylesheet" href="jsPsych/css/jspsych.css">
+  <script src="https://unpkg.com/jspsych@7.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css">
   <style> 
     .left-align #stimulus {text-align: left; width: 600px;}
     .right-align #stimulus {text-align: right; width: 600px;}
@@ -219,7 +219,7 @@ It's also possible to pass multiple class names to the `css_classes` parameter. 
 <script>
 var trial_procedure = {
     timeline: [{
-        type: 'html-keyboard-response',
+        type: jsPsychHtmlKeyboardResponse,
         stimulus: '<p id="stimulus">This is the stimulus.</p>',
         prompt: '<p>This text will not be affected by the CSS classes '+
             'because it does not have the "stimulus" ID.</p>',

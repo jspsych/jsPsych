@@ -14,6 +14,8 @@ We can capture these variables with jsPsych, and add them to jsPsych's data. Thi
 
 ```html
 <script>
+  var jsPsych = initJsPsych();
+
   // capture info from Prolific
   var subject_id = jsPsych.data.getURLVariable('PROLIFIC_PID');
   var study_id = jsPsych.data.getURLVariable('STUDY_ID');
@@ -28,9 +30,7 @@ We can capture these variables with jsPsych, and add them to jsPsych's data. Thi
   // create the rest of the experiment
   var timeline = [...]
 
-  jsPsych.init({
-    timeline: timeline
-  })
+  jsPsych.run(timeline)
 </script>
 ```
 
@@ -43,7 +43,7 @@ When the experiment is complete, Prolific requires that you send the participant
 You can accomplish this in a couple different ways.
 
 !!! warning
-    It's important that you've saved all the data from your experiment before the participant returns to Prolific. Make sure that any server communication has completed prior to redirecting the participant. One way to do this is by using the async features of the `call-function` plugin ([example](../plugins/jspsych-call-function.md#async-function-call)).
+    It's important that you've saved all the data from your experiment before the participant returns to Prolific. Make sure that any server communication has completed prior to redirecting the participant. One way to do this is by using the async features of the `call-function` plugin ([example](../plugins/call-function.md#async-function-call)).
 
 ### Participant clicks a link
 
@@ -53,7 +53,7 @@ Here's an example trial that could be used. Note that `choices` is set to `jsPsy
 
 ```js
 var final_trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: `<p>You've finished the last task. Thanks for participating!</p>
     <p><a href="https://app.prolific.co/submissions/complete?cc=XXXXXXX">Click here to return to Prolific and complete the study</a>.</p>`,
   choices: jsPsych.NO_KEYS
@@ -67,8 +67,7 @@ A second option is to automatically redirect the participant to the completion U
 Here's an example using the `on_finish` event for the entire experiment.
 
 ```js
-jsPsych.init({
-  timeline: [...],
+var jsPsych = initJsPsych({
   on_finish: function(){
     window.location = "https://app.prolific.co/submissions/complete?cc=XXXXXXX"
   }

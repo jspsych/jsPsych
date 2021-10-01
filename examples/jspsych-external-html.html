@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-external-html/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
+
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData()
+      }
+    });
+
+    var trial_1 = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p>This is a normal jsPsych trial.</p>'+
+      '<p>Note that this example will NOT work if you opened the HTML file directly in the browser<br>'+
+      '(e.g. by double-clicking on it) because the external HTML page will be blocked by CORS policy.</p>'+
+      '<p>If you are hosting the files on a server, then the next trial will display an external HTML page.</p>'+
+      '<p>Press any key to continue.</p>'
+    };
+
+    var trial_2 = {
+      type: jsPsychExternalHtml,
+      url: 'external_html/simple_consent.html',
+      cont_btn: 'start',
+      check_fn: function() {
+        if (document.getElementById('consent_checkbox').checked) {
+          return true;
+        } else {
+          alert('You must tick the checkbox to continue with the study.')
+        }
+      }
+    };
+
+    var trial_3 = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: 'This is another normal jsPsych trial.'
+    };
+
+    jsPsych.run([trial_1, trial_2, trial_3]);
+    
+  </script>
+</html>

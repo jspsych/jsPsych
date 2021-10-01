@@ -1,91 +1,94 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="../jspsych.js"></script>
-    <script src="../plugins/jspsych-image-button-response.js"></script>
-    <script src="../plugins/jspsych-preload.js"></script>
-    <link rel="stylesheet" href="../css/jspsych.css">
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-image-button-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-preload/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body></body>
   <script>
 
-  var timeline = [];
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
 
-  // all images are used in standard trials that can be automatically preloaded (as well as being used in trials 
-  // that use timeline variables), so we can preload all image files with the auto_preload option
-  timeline.push({
-    type: 'preload',
-    auto_preload: true
-  });
+    var timeline = [];
 
-  // If render_on_canvas is false, the images will be shown via an <img> rather than <canvas> element.
-  // In some browsers, the first time the images are shown, the <img> method (render_on_canvas: false) will produce a brief 
-  // blank screen (white flash) between images that are presented consecutively with no post_trial_gap between them.
-  var trial = {
-    type: 'image-button-response',
-    stimulus: jsPsych.timelineVariable('stim'),
-    trial_duration: 1000,
-    choices: ['Happy', 'Sad'],
-    prompt: '<p>What emotion is this person showing?</p><p>(1s duration, consecutive images with no post_trial_gap)</p>',
-    stimulus_width: 400, 
-    maintain_aspect_ratio: true,
-    post_trial_gap: 0,
-    //render_on_canvas: false 
-  }
+    // all images are used in standard trials that can be automatically preloaded (as well as being used in trials 
+    // that use timeline variables), so we can preload all image files with the auto_preload option
+    timeline.push({
+      type: jsPsychPreload,
+      auto_preload: true
+    });
 
-  timeline.push({
-    timeline: [trial],
-    timeline_variables: [ 
-      {stim: 'img/happy_face_1.jpg'},
-      {stim: 'img/happy_face_2.jpg'},
-      {stim: 'img/happy_face_3.jpg'},
-      {stim: 'img/happy_face_4.jpg'}
-    ]
-  });
+    // If render_on_canvas is false, the images will be shown via an <img> rather than <canvas> element.
+    // In some browsers, the first time the images are shown, the <img> method (render_on_canvas: false) will produce a brief 
+    // blank screen (white flash) between images that are presented consecutively with no post_trial_gap between them.
+    var trial = {
+      type: jsPsychImageButtonResponse,
+      stimulus: jsPsych.timelineVariable('stim'),
+      trial_duration: 1000,
+      choices: ['Happy', 'Sad'],
+      prompt: '<p>What emotion is this person showing?</p><p>(1s duration, consecutive images with no post_trial_gap)</p>',
+      stimulus_width: 400, 
+      maintain_aspect_ratio: true,
+      post_trial_gap: 0,
+      //render_on_canvas: false 
+    }
 
-  timeline.push({
-    type: 'image-button-response',
-    stimulus: 'img/happy_face_1.jpg',
-    choices: ['Happy', 'Sad'],
-    prompt: "<p>What emotion is this person showing?</p><p>(Wait for response)</p>",
-    post_trial_gap: 500
-  });
+    timeline.push({
+      timeline: [trial],
+      timeline_variables: [ 
+        {stim: 'img/happy_face_1.jpg'},
+        {stim: 'img/happy_face_2.jpg'},
+        {stim: 'img/happy_face_3.jpg'},
+        {stim: 'img/happy_face_4.jpg'}
+      ]
+    });
 
-  timeline.push({
-    type: 'image-button-response',
-    stimulus: 'img/happy_face_2.jpg',
-    stimulus_height: 400,
-    choices: ['Happy', 'Sad'],
-    stimulus_duration: 1000,
-    prompt: "<p>What emotion is this person showing? (image disappears after 1s)</p>",
-    post_trial_gap: 500
-  });
+    timeline.push({
+      type: jsPsychImageButtonResponse,
+      stimulus: 'img/happy_face_1.jpg',
+      choices: ['Happy', 'Sad'],
+      prompt: "<p>What emotion is this person showing?</p><p>(Wait for response)</p>",
+      post_trial_gap: 500
+    });
 
-  timeline.push({
-    type: 'image-button-response',
-    stimulus: 'img/happy_face_3.jpg',
-    stimulus_width: 600,
-    choices: ['Happy', 'Sad'],
-    trial_duration: 2000,
-    response_ends_trial: false,
-    prompt: "<p>What emotion is this person showing? (trial ends after 2s)</p>",
-    post_trial_gap: 500
-  });
+    timeline.push({
+      type: jsPsychImageButtonResponse,
+      stimulus: 'img/happy_face_2.jpg',
+      stimulus_height: 400,
+      choices: ['Happy', 'Sad'],
+      stimulus_duration: 1000,
+      prompt: "<p>What emotion is this person showing? (image disappears after 1s)</p>",
+      post_trial_gap: 500
+    });
 
-  timeline.push({
-    type: 'image-button-response',
-    stimulus: 'img/happy_face_4.jpg',
-    choices: ['Happy', 'Sad'],
-    stimulus_width: 400,
-    maintain_aspect_ratio: false,
-    prompt: '<p>What emotion is this person showing?</p><p>(Stimulus_width set to a smaller value and maintain_aspect_ratio set to false.)</p>',
-    post_trial_gap: 500
-  });
+    timeline.push({
+      type: jsPsychImageButtonResponse,
+      stimulus: 'img/happy_face_3.jpg',
+      stimulus_width: 600,
+      choices: ['Happy', 'Sad'],
+      trial_duration: 2000,
+      response_ends_trial: false,
+      prompt: "<p>What emotion is this person showing? (trial ends after 2s)</p>",
+      post_trial_gap: 500
+    });
 
-  jsPsych.init({
-    timeline: timeline,
-    on_finish: function(){jsPsych.data.displayData();}
-  });
+    timeline.push({
+      type: jsPsychImageButtonResponse,
+      stimulus: 'img/happy_face_4.jpg',
+      choices: ['Happy', 'Sad'],
+      stimulus_width: 400,
+      maintain_aspect_ratio: false,
+      prompt: '<p>What emotion is this person showing?</p><p>(Stimulus_width set to a smaller value and maintain_aspect_ratio set to false.)</p>',
+      post_trial_gap: 500
+    });
+
+    jsPsych.run(timeline);
 
   </script>
 </html>

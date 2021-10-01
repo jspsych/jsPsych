@@ -1,0 +1,43 @@
+{
+  "name": "@jspsych/plugin-audio-slider-response",
+  "version": "0.1.0",
+  "description": "",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
+  "typings": "dist/index.d.ts",
+  "unpkg": "dist/index.browser.min.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "source": "src/index.ts",
+  "scripts": {
+    "test": "jest  --passWithNoTests",
+    "test:watch": "npm test -- --watch",
+    "tsc": "tsc",
+    "build": "rollup --config",
+    "build:watch": "npm run build -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jspsych/jsPsych.git",
+    "directory": "packages/plugin-audio-slider-response"
+  },
+  "author": "Josh de Leeuw",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jspsych/jsPsych/issues"
+  },
+  "homepage": "https://www.jspsych.org/latest/plugins/audio-slider-response",
+  "peerDependencies": {
+    "jspsych": ">=6"
+  },
+  "devDependencies": {
+    "@jspsych/config": "^0.1.0",
+    "@jspsych/test-utils": "^0.1.0"
+  }
+}

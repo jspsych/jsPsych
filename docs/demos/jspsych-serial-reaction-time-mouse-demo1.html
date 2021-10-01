@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/jspsych.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-preload.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-html-button-response.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/plugins/jspsych-serial-reaction-time-mouse.js"></script>
+    <script src="https://unpkg.com/jspsych@7.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-serial-reaction-time-mouse@1.0.0"></script>
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@6.3.1/css/jspsych.css"
+      href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css"
     />
     <style>
       .jspsych-btn {
@@ -17,14 +16,17 @@
   </head>
   <body></body>
   <script>
+
+    var jsPsych = initJsPsych();
+    
       var start = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: '',
         choices: ['Run demo']
       };
 
       var show_data = {
-        type: 'html-button-response',
+        type: jsPsychHtmlButtonResponse,
         stimulus: function() {
           var trial_data = jsPsych.data.get().last(4).values();
           var trial_json = JSON.stringify(trial_data, null, 2);
@@ -39,22 +41,22 @@
       ]
 
       var trial_1 = {
-        type: 'serial-reaction-time-mouse',
+        type: jsPsychSerialReactionTimeMouse,
         grid: grid,
         target: [0,0]
       }
       var trial_2 = {
-        type: 'serial-reaction-time-mouse',
+        type: jsPsychSerialReactionTimeMouse,
         grid: grid,
         target: [0,1]
       }
       var trial_3 = {
-        type: 'serial-reaction-time-mouse',
+        type: jsPsychSerialReactionTimeMouse,
         grid: grid,
         target: [0,2]
       }
       var trial_4 = {
-        type: 'serial-reaction-time-mouse',
+        type: jsPsychSerialReactionTimeMouse,
         grid: grid,
         target: [0,3]
       }
@@ -67,9 +69,7 @@
       };
 
       if (typeof jsPsych !== "undefined") {
-        jsPsych.init({
-          timeline: [start, trial_loop]
-        });
+        jsPsych.run([start, trial_loop]);
       } else {
         document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
       }

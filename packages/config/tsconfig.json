@@ -1,0 +1,33 @@
+{
+  // shared base tsconfig for all jsPsych packages
+  // based on https://github.com/formium/tsdx/blob/462af2d002987f985695b98400e0344b8f2754b7/templates/basic/tsconfig.json
+  // see https://www.typescriptlang.org/tsconfig to better understand tsconfigs
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "lib": ["dom", "esnext"],
+    "importHelpers": true,
+    // output .d.ts declaration files for consumers
+    "declaration": true,
+    // output .js.map sourcemap files for consumers
+    "sourceMap": true,
+    // stricter type-checking for stronger correctness. Recommended by TS
+    "strict": false, // should be enabled one lucky day
+    // linter checks for common issues
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    // noUnused* overlap with @typescript-eslint/no-unused-vars, can disable if duplicative
+    "noUnusedLocals": false, // should be enabled one lucky day
+    "noUnusedParameters": false, // should be enabled one lucky day
+    // use Node's module resolution algorithm, instead of the legacy TS one
+    "moduleResolution": "node",
+    // interop between ESM and CJS modules. Recommended by TS
+    "esModuleInterop": true,
+    // significant perf increase by skipping checking .d.ts files, particularly those in node_modules. Recommended by TS
+    "skipLibCheck": true,
+    // error out if import and file system have a casing mismatch. Recommended by TS
+    "forceConsistentCasingInFileNames": true,
+    // do not emit build output when running `tsc`
+    "noEmit": true
+  }
+}

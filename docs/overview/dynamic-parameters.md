@@ -13,7 +13,7 @@ Here is a sketch of how this functionality could be used to display feedback to 
 var timeline = [];
 
 var trial = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: '<<<<<',
   choices: ['f','j'],
   data: {
@@ -31,7 +31,7 @@ var trial = {
 }
 
 var feedback = {
-  type: 'html-keyboard-response',
+  type: jsPsychHtmlKeyboardResponse,
   stimulus: function(){
     // The feedback stimulus is a dynamic parameter because we can't know in advance whether
     // the stimulus should be 'correct' or 'incorrect'.
@@ -61,7 +61,7 @@ var random_duration = function() {
 }
 
 var trial = {
-    type: 'html-keyboard-response'
+    type: jsPsychHtmlKeyboardResponse
     stimulus: '+',
     post_trial_gap: random_duration  // if you use a named function for a dynamic parameter, then just use the function name (without parentheses after it)
 }
@@ -75,7 +75,7 @@ The trial's `data` parameter can be also function, which is useful for when you 
 var current_difficulty; // value changes during the experiment
 
 var trial = {
-  type: 'survey-text',
+  type: jsPsychSurveyText,
   questions: [{prompt: "Please enter your response."}]
   data: function() { 
     return {difficulty: current_difficulty}; 
@@ -87,7 +87,7 @@ It's also possible to use a function for any of the _individual properties_ in t
 
 ```js
 var trial = {
-  type: 'survey-text',
+  type: jsPsychSurveyText,
   questions: [{prompt: "Please enter your response."}]
   data: {
     difficulty: function() { 
@@ -107,7 +107,7 @@ Dyanmic parameters work the same way with nested parameters, which are parameter
 var subject_id; // value is set during the experiment
 
 var trial = {
-  type: 'survey-text',
+  type: jsPsychSurveyText,
   questions: function(){
     var questions_array = [ 
         {prompt: "Hi "+subject_id+"! What's your favorite city?", required: true, name: 'fav_city'},
@@ -122,7 +122,7 @@ You can also use a function for any of the _individual parameters_ inside of a n
 
 ```js
 var trial = {
-  type: 'survey-text',
+  type: jsPsychSurveyText,
   questions: [
     { 
       prompt: function() {  
@@ -142,6 +142,6 @@ var trial = {
 ```
 ## When dynamic parameters can't be used
 
-Note that if the plugin *expects* the value of a given parameter to be a function, then this function *will not* be evaluated at the start of the trial. This is because some plugins allow the researcher to specify functions that should be called at some point during the trial. Some examples of this include the `stimulus` parameter in the canvas-* plugins, the `mistake_fn` parameter in the cloze plugin, and the `stim_function` parameter in the reconstruction plugin. If you want to check whether this is the case for a particular plugin and parameter, then the parameter's `type` in the `plugin.info` section of the plugin file. If the parameter type is `jsPsych.plugins.parameterType.FUNCTION`, then this parameter must be a function and it will not be executed before the trial starts. 
+Note that if the plugin *expects* the value of a given parameter to be a function, then this function *will not* be evaluated at the start of the trial. This is because some plugins allow the researcher to specify functions that should be called at some point during the trial. Some examples of this include the `stimulus` parameter in the canvas-* plugins, the `mistake_fn` parameter in the cloze plugin, and the `stim_function` parameter in the reconstruction plugin. If you want to check whether this is the case for a particular plugin and parameter, then the parameter's `type` in the `plugin.info` section of the plugin file. If the parameter type is `ParameterType.FUNCTION`, then this parameter must be a function and it will not be executed before the trial starts. 
 
 Even though function evaluation doesn't work the same way with these parameters, the fact that the parameters are functions means that you can get the same dynamic functionality. These functions are typically evaluated at some point during the trial, so you still get updates to values within the function during the trial.

@@ -1,0 +1,14 @@
+{
+  // tsconfig for the jsPsych monorepo
+  "extends": "@jspsych/config/tsconfig.json",
+  "compilerOptions": {
+    // map package imports directly to their source files
+    "paths": {
+      "jspsych": ["../jspsych/src"],
+      "@jspsych/*": ["../*/src"]
+    },
+    // allow resolving json modules in tests (needed for transitive imports of jspsych in tests;
+    // the jspsych package itself uses https://stackoverflow.com/a/61426303 instead)
+    "resolveJsonModule": true
+  }
+}

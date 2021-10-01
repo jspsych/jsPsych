@@ -1,5 +1,8 @@
 # Video tutorials
 
+!!! warning
+    Most of these videos are using version `6.x` of jsPsych. Using version `7.x` requires a few changes that are not covered in these videos. We recommend starting with the tutorials on this website to understand how to work with `7.x` and then watching these videos for additional information. Much of the content covered in the videos still applies to `7.x`, but you'll need a solid understanding of how to use `7.x` in order to make use of the examples in the videos.
+
 ## YouTube Channel
 
 A variety of video tutorials are available on [Josh de Leeuw's YouTube channel](https://www.youtube.com/playlist?list=PLnfo1lBY1P2Mf_o6rV5wiqqn92Mw3UTGh). Some tutorials walk through creating a basic version of an entire experiment, like the tutorial on creating a [dichotic listening experiment](https://www.youtube.com/playlist?list=PLnfo1lBY1P2Mf_o6rV5wiqqn92Mw3UTGh) aimed at new users. Others focus on specific features of jsPsych, like how to use [functions as parameters](https://www.youtube.com/watch?v=8-j2aAZ_iOk&list=PLnfo1lBY1P2Mf_o6rV5wiqqn92Mw3UTGh&index=5) to create experiments that change in response to participant input or how to [create a new plugin](https://www.youtube.com/watch?v=XQcsFwAmbiw&list=PLnfo1lBY1P2Mf_o6rV5wiqqn92Mw3UTGh&index=4).

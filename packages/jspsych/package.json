@@ -1,0 +1,48 @@
+{
+  "name": "jspsych",
+  "version": "6.3.1",
+  "description": "Behavioral experiments in a browser",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./css/*": "./css/*"
+  },
+  "typings": "dist/index.d.ts",
+  "unpkg": "dist/index.browser.min.js",
+  "files": [
+    "src",
+    "dist",
+    "css"
+  ],
+  "source": "src/index.ts",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "npm test -- --watch",
+    "tsc": "tsc",
+    "build": "rollup --config",
+    "build:watch": "npm run build -- --watch",
+    "prepack": "cp ../../README.md ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jspsych/jsPsych.git",
+    "directory": "packages/jspsych"
+  },
+  "author": "Josh de Leeuw",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jspsych/jsPsych/issues"
+  },
+  "homepage": "https://www.jspsych.org",
+  "dependencies": {
+    "auto-bind": "^4.0.0"
+  },
+  "devDependencies": {
+    "@jspsych/config": "^0.1.0",
+    "@jspsych/test-utils": "^0.1.0"
+  }
+}
