@@ -37,7 +37,7 @@
   "bugs": {
     "url": "https://github.com/jspsych/jsPsych/issues"
   },
-  "homepage": "https://github.com/jspsych/jsPsych#readme",
+  "homepage": "https://www.jspsych.org",
   "dependencies": {
     "auto-bind": "^4.0.0"
   },

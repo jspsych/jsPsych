@@ -29,7 +29,6 @@
   "bugs": {
     "url": "https://github.com/jspsych/jsPsych/issues"
   },
-  "homepage": "https://github.com/jspsych/jsPsych#readme",
   "peerDependencies": {
     "jspsych": ">=6"
   },
