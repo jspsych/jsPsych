@@ -25,7 +25,7 @@ You can learn more about setting up a project by following the [hello world tuto
 
 Once you've got a project set up, the [reaction time task tutorial](https://www.jspsych.org/latest/tutorials/rt-task/) is a great next step, since it covers many core topics and features. 
 
-There are also a number of [video tutorials](https://www.jspsych.org/tutorials/video-tutorials) available on the website.
+There are also a number of [video tutorials](https://www.jspsych.org/latest/tutorials/video-tutorials) available on the website.
 
 ## Examples
 
