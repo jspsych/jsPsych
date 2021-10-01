@@ -1,29 +1,29 @@
-![jspsych logo](http://www.jspsych.org/img/jspsych-logo.jpg)
+![jspsych logo](http://www.jspsych.org/latest/img/jspsych-logo.jpg)
 
 jsPsych is a JavaScript framework for creating behavioral experiments that run in a web browser. 
 
-Experiments in jsPsych are created using [plugins](https://www.jspsych.org/overview/plugins). 
+Experiments in jsPsych are created using [plugins](https://www.jspsych.org/latest/overview/plugins). 
 Each plugin defines different kinds of events, like showing an image on the screen, and collects different kinds of data, like recording which key was pressed at which time. 
-By assembling different plugins together into [a timeline](https://www.jspsych.org/overview/timeline), it is possible to create a wide range of online experiments. 
+By assembling different plugins together into [a timeline](https://www.jspsych.org/latest/overview/timeline), it is possible to create a wide range of online experiments. 
 
 ## What can I do with jsPsych?
 
 jsPsych comes with a number of plugins that you can use create tasks and collect data. 
 Some plugins do general things, like present a stimulus (text, image, audio, video) and record a key press or button response along with a response time. 
 Other plugins do more specific things, like show a set of instructions pages, run a drag-and-drop image sorting task, or calibrate the WebGazer eye-tracking extension. 
-See the [list of all plugins](https://www.jspsych.org/plugins/list-of-plugins/) to see what each plugin can do.
+See the [list of all plugins](https://www.jspsych.org/latest/plugins/list-of-plugins/) to see what each plugin can do.
 
 Often people can create their experiment by combining these plugins together. 
-But if that's not possible for your experiment, you can also modify a plugin file or [create your own plugin](https://www.jspsych.org/developers/plugin-development). 
+But if that's not possible for your experiment, you can also modify a plugin file or [create your own plugin](https://www.jspsych.org/latest/developers/plugin-development). 
 This gives you the flexibility to do exactly what you want, while still taking advantage of jsPsych's general experiment-building framework. 
 The plugin template is *extremely* flexible. If a task is possible to do in a web browser, you can almost certainly implement it as a plugin.
 
 ## Getting started
 
 jsPsych can be loaded into a project in a variety of ways, including via CDNs and through NPM. 
-You can learn more about setting up a project by following the [hello world tutorial](https://www.jspsych.org/tutorials/hello-world/) on the jsPsych website. 
+You can learn more about setting up a project by following the [hello world tutorial](https://www.jspsych.org/latest/tutorials/hello-world/) on the jsPsych website. 
 
-Once you've got a project set up, the [reaction time task tutorial](https://www.jspsych.org/tutorials/rt-task/) is a great next step, since it covers many core topics and features. 
+Once you've got a project set up, the [reaction time task tutorial](https://www.jspsych.org/latest/tutorials/rt-task/) is a great next step, since it covers many core topics and features. 
 
 There are also a number of [video tutorials](https://www.jspsych.org/tutorials/video-tutorials) available on the website.
 
@@ -44,7 +44,7 @@ You can also browse through the history of Q&A on the forum to find related ques
 ## Contributing
 
 We :heart: contributions! 
-See the [contributing to jsPsych](https://www.jspsych.org/developers/contributing/) documentation page for more information about how you can help.
+See the [contributing to jsPsych](https://www.jspsych.org/latest/developers/contributing/) documentation page for more information about how you can help.
 
 ## Citation
 
