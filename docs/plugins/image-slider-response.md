@@ -1,8 +1,8 @@
-# jspsych-image-slider-response
+# image-slider-response
 
 This plugin displays and image and allows the subject to respond by dragging a slider.
 
-Image files can be automatically preloaded by jsPsych using the [`preload` plugin](jspsych-preload.md). However, if you are using timeline variables or another dynamic method to specify the image stimulus, you will need to [manually preload](../overview/media-preloading.md#manual-preloading) the images.
+Image files can be automatically preloaded by jsPsych using the [`preload` plugin](preload.md). However, if you are using timeline variables or another dynamic method to specify the image stimulus, you will need to [manually preload](../overview/media-preloading.md#manual-preloading) the images.
 
 ## Parameters
 

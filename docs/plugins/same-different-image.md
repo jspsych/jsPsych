@@ -1,4 +1,4 @@
-# jspsych-same-different-image plugin
+# same-different-image plugin
 
 The same-different-image plugin displays two stimuli sequentially. Stimuli are images. The subject responds using the keyboard, and indicates whether the stimuli were the same or different. Same does not necessarily mean identical; a category judgment could be made, for example.
 

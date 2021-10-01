@@ -158,7 +158,7 @@ MyAwesomeExtension.info = {
 
 ### Optional methods
 
-The extension can also include any additional methods that are necessary for interacting with it. See the [webgazer extension](../extensions/jspsych-ext-webgazer.md) for an example.
+The extension can also include any additional methods that are necessary for interacting with it. See the [webgazer extension](../extensions/webgazer.md) for an example.
 
 ## Advice for writing extensions 
 

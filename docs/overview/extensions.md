@@ -35,7 +35,7 @@ var trial = {
 
 Extension | Description
 ------ | -----------
-[jspsych&#8209;ext&#8209;webgazer.js](../extensions/jspsych-ext-webgazer.md) | Enables eye tracking using the [WebGazer](https://webgazer.cs.brown.edu/) library.
+[jspsych&#8209;ext&#8209;webgazer.js](../extensions/webgazer.md) | Enables eye tracking using the [WebGazer](https://webgazer.cs.brown.edu/) library.
 
 ## Writing an Extension
 

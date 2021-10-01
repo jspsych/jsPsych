@@ -1,10 +1,10 @@
-# jspsych-audio-button-response
+# audio-button-response
 
 This plugin plays audio files and records responses generated with a button click.
 
 If the browser supports it, audio files are played using the WebAudio API. This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. 
 
-Audio files can be automatically preloaded by jsPsych using the [`preload` plugin](jspsych-preload.md). However, if you are using timeline variables or another dynamic method to specify the audio stimulus, you will need to [manually preload](../overview/media-preloading.md#manual-preloading) the audio.
+Audio files can be automatically preloaded by jsPsych using the [`preload` plugin](preload.md). However, if you are using timeline variables or another dynamic method to specify the audio stimulus, you will need to [manually preload](../overview/media-preloading.md#manual-preloading) the audio.
 
 The trial can end when the subject responds, when the audio file has finished playing, or if the subject has failed to respond within a fixed length of time. You can also prevent a button response from being made before the audio has finished playing.
 

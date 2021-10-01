@@ -1,4 +1,4 @@
-# jspsych-external-html plugin
+# external-html plugin
 
 The HTML plugin displays an external HTML document (often a consent form). Either a keyboard response or a button press can be used to continue to the next trial. It allows the experimenter to check if conditions are met (such as indicating informed consent) before continuing.
 

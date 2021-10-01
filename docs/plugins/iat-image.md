@@ -1,4 +1,4 @@
-jspsych-iat-image plugin
+# iat-image
 
 This plugin runs a single trial of the [implicit association test (IAT)](https://implicit.harvard.edu/implicit/iatdetails.html), using an image as the stimulus.
 

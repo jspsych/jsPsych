@@ -1,6 +1,6 @@
-# jspsych-webgazer-calibrate
+# webgazer-calibrate
 
-This plugin can be used to calibrate the [WebGazer extension](../extensions/jspsych-ext-webgazer). For a narrative description of eye tracking with jsPsych, see the [eye tracking overview](../overview/eye-tracking). 
+This plugin can be used to calibrate the [WebGazer extension](../extensions/webgazer). For a narrative description of eye tracking with jsPsych, see the [eye tracking overview](../overview/eye-tracking). 
 
 ## Parameters
 

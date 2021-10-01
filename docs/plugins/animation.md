@@ -1,4 +1,4 @@
-# jspsych-animation
+# animation
 
 This plugin displays a sequence of images at a fixed frame rate. The sequence can be looped a specified number of times. The subject is free to respond at any point during the animation, and the time of the response is recorded.
 

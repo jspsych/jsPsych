@@ -1,4 +1,4 @@
-# *jspsych-cloze
+# cloze
 
 This plugin displays a text with certain words removed. Participants are asked to replace the missing items. Responses are recorded when clicking a button. Optionally, responses are evaluated and a function is called in case of differences, making it possible to inform participants about mistakes.
 

@@ -1,4 +1,4 @@
-# jspsych-iat-html plugin
+# iat-html plugin
 
 This plugin runs a single trial of the [implicit association test (IAT)](https://implicit.harvard.edu/implicit/iatdetails.html), using HTML content as the stimulus.
 

@@ -1,4 +1,4 @@
-# jspsych-html-slider-response
+# html-slider-response
 
 This plugin displays HTML content and allows the subject to respond by dragging a slider.
 

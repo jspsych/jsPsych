@@ -1,4 +1,4 @@
-# jspsych-survey-likert plugin
+# survey-likert plugin
 
 The survey-likert plugin displays a set of questions with Likert scale responses. The subject responds by selecting a radio button.
 

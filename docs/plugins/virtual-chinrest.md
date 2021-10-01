@@ -1,4 +1,4 @@
-# jspsych-virtual-chinrest
+# virtual-chinrest
 
 This plugin provides a "virtual chinrest" that can measure the distance between the participant and the screen. It can also standardize the jsPsych page content to a known physical dimension (e.g., ensuring that a 200px wide stimulus is 2.2cm wide on the participant's monitor). This is based on the work of [Li, Joo, Yeatman, and Reinecke (2020)](https://doi.org/10.1038/s41598-019-57204-1), and the plugin code is a modified version of [their implementation](https://github.com/QishengLi/virtual_chinrest). We recommend citing their work in any paper that makes use of this plugin.
 

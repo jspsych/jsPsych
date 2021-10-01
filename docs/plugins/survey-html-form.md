@@ -1,4 +1,4 @@
-# jspsych-survey-html-form plugin
+# survey-html-form plugin
 
 The survey-html-form plugin displays a set of `<inputs>` from a HTML string. The type of input can be freely chosen, for a list of possible input types see the [MDN page on inputs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input). The subject provides answers to the input fields.
 

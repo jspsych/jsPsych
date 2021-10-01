@@ -1,4 +1,4 @@
-# jspsych-reconstruction plugin
+# reconstruction plugin
 
 This plugin allows a subject to interact with a stimulus by modifying a parameter of the stimulus and observing the change in the stimulus in real-time.
 

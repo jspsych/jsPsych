@@ -1,4 +1,4 @@
-# jspsych-categorize-animation
+# categorize-animation
 
 The categorize animation plugin shows a sequence of images at a specified frame rate. The subject responds by pressing a key. Feedback indicating the correctness of the response is given.
 

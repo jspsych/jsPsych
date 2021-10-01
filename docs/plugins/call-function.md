@@ -1,4 +1,4 @@
-# jspsych-call-function
+# call-function
 
 This plugin executes a specified function. This allows the experimenter to run arbitrary code at any point during the experiment.
 

@@ -1,4 +1,4 @@
-# jspsych-fullscreen plugin
+# fullscreen plugin
 
 The fullscreen plugin allows the experiment to enter or exit fullscreen mode. For security reasons, all browsers require that entry into fullscreen mode is triggered by a user action. To enter fullscreen mode, this plugin has the user click a button. Exiting fullscreen mode can be done without user input.
 

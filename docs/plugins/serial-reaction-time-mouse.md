@@ -1,4 +1,4 @@
-# jspsych-serial-reaction-time-mouse plugin
+# serial-reaction-time-mouse plugin
 
 The serial reaction time mouse plugin implements a generalized version of the SRT task [(Nissen & Bullmer, 1987)](https://doi.org/10.1016%2F0010-0285%2887%2990002-8). Squares are displayed in a grid-based system on the screen, and one square changes color. The participant must click on the square that changes color.
 

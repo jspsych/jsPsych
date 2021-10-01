@@ -9,4 +9,4 @@ For an overview of what extensions are and how they work, see our [extensions ov
 
 Extension | Description
 ------ | -----------
-[jspsych&#8209;ext&#8209;webgazer](../extensions/jspsych-ext-webgazer.md) | Enables eye tracking using the [WebGazer](https://webgazer.cs.brown.edu/) library.
+[jspsych&#8209;ext&#8209;webgazer](../extensions/webgazer.md) | Enables eye tracking using the [WebGazer](https://webgazer.cs.brown.edu/) library.

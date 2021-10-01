@@ -54,7 +54,7 @@ We'll add trials to this array as we create them.
 var timeline = [];
 ```
 
-Let's greet the subject with a simple welcome message using the [html-keyboard-response](../plugins/jspsych-html-keyboard-response.md) plugin.
+Let's greet the subject with a simple welcome message using the [html-keyboard-response](../plugins/html-keyboard-response.md) plugin.
 
 First, we create a trial that uses the `html-keyboard-response` plugin and contains a simple string to show the subject. 
 As explained on the [plugins documentation page](../overview/plugins.md), the trial object must have a `type` parameter that tells jsPsych which plugin to use. 
@@ -330,7 +330,7 @@ timeline.push(blue_trial, orange_trial);
 Whenever we use media elements (images, audio, or video) in an experiment it is a good idea to preload them prior to needing them for a trial.
 By preloading media we ask the participant's browser to download the media ahead of needing it, so that when we do need to display or play it there is no lag from needing to download it. 
 
-We are going to use the [preload plugin](../plugins/jspsych-preload.md) to preload the two images. 
+We are going to use the [preload plugin](../plugins/preload.md) to preload the two images. 
 The [media preloading section](../overview/media-preloading.md) goes into a lot of detail about various options for preloading and different ways that you can use this plugin. 
 Here we are simply going to give the plugin a list of the files that we want to be preloaded.
 

@@ -1,4 +1,4 @@
-# jspsych-survey-multi-choice plugin
+# survey-multi-choice plugin
 
 The survey-multi-choice plugin displays a set of questions with multiple choice response fields. The subject selects a single answer.
 
