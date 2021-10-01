@@ -83,7 +83,7 @@ class WebGazerExtension implements JsPsychExtension {
         } else {
           reject(
             new Error(
-              "Webgazer extension failed to initialize. webgazer.js not loaded. Load webgazer.js before calling jsPsych.init()"
+              "Webgazer extension failed to initialize. webgazer.js not loaded. Load webgazer.js before calling initJsPsych()"
             )
           );
         }
@@ -171,7 +171,7 @@ class WebGazerExtension implements JsPsychExtension {
     return new Promise<void>((resolve, reject) => {
       if (typeof this.webgazer == "undefined") {
         const error =
-          "Failed to start webgazer. Things to check: Is webgazer.js loaded? Is the webgazer extension included in jsPsych.init?";
+          "Failed to start webgazer. Things to check: Is webgazer.js loaded? Is the webgazer extension included in initJsPsych?";
         console.error(error);
         reject(error);
       }

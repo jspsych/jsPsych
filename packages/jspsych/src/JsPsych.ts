@@ -127,7 +127,7 @@ export class JsPsych {
       console.warn(
         "jsPsych detected that it is running via the file:// protocol and not on a web server. " +
           "To prevent issues with cross-origin requests, Web Audio and video preloading have been disabled. " +
-          "If you would like to override this setting, you can set 'override_safe_mode' to 'true' in jsPsych.init. " +
+          "If you would like to override this setting, you can set 'override_safe_mode' to 'true' in initJsPsych. " +
           "For more information, see: https://www.jspsych.org/overview/running-experiments"
       );
     }
@@ -400,7 +400,7 @@ export class JsPsych {
           ? options.display_element
           : document.querySelector("#" + options.display_element);
       if (display === null) {
-        console.error("The display_element specified in jsPsych.init() does not exist in the DOM.");
+        console.error("The display_element specified in initJsPsych() does not exist in the DOM.");
       } else {
         options.display_element = display;
       }
