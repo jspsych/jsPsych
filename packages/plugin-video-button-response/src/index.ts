@@ -236,13 +236,24 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
     // before showing and playing, so that the video doesn't automatically show the first frame
     if (trial.start !== null) {
       video_element.pause();
-      video_element.currentTime = trial.start;
       video_element.onseeked = function () {
         video_element.style.visibility = "visible";
+        video_element.muted = false;
         if (trial.autoplay) {
           video_element.play();
+        } else {
+          video_element.pause();
         }
+        video_element.onseeked = function () {};
       };
+      video_element.onplaying = function () {
+        video_element.currentTime = trial.start;
+        video_element.onplaying = function () {};
+      };
+      // fix for iOS/MacOS browsers: videos aren't seekable until they start playing, so need to hide/mute, play,
+      // change current time, then show/unmute
+      video_element.muted = true;
+      video_element.play();
     }
 
     let stopped = false;
