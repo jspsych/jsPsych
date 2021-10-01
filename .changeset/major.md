@@ -38,7 +38,6 @@
 "@jspsych/plugin-survey-multi-choice": major
 "@jspsych/plugin-survey-multi-select": major
 "@jspsych/plugin-survey-text": major
-"@jspsych/plugin-template": major
 "@jspsych/plugin-video-button-response": major
 "@jspsych/plugin-video-keyboard-response": major
 "@jspsych/plugin-video-slider-response": major
