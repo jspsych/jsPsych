@@ -19,9 +19,6 @@
     "css"
   ],
   "source": "src/index.ts",
-  "directories": {
-    "test": "tests"
-  },
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
@@ -32,7 +29,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jspsych/jsPsych.git"
+    "url": "git+https://github.com/jspsych/jsPsych.git",
+    "directory": "packages/jspsych"
   },
   "author": "Josh de Leeuw",
   "license": "MIT",

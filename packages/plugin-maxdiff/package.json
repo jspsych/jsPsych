@@ -24,7 +24,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jspsych/jsPsych.git"
+    "url": "git+https://github.com/jspsych/jsPsych.git",
+    "directory": "packages/plugin-maxdiff"
   },
   "author": "Angus Hughes",
   "license": "MIT",

@@ -24,7 +24,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jspsych/jsPsych.git"
+    "url": "git+https://github.com/jspsych/jsPsych.git",
+    "directory": "packages/plugin-virtual-chinrest"
   },
   "author": "Qisheng Li, Gustavo Juantorena",
   "license": "MIT",
