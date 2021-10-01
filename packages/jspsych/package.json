@@ -19,9 +19,6 @@
     "css"
   ],
   "source": "src/index.ts",
-  "directories": {
-    "test": "tests"
-  },
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
@@ -32,14 +29,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jspsych/jsPsych.git"
+    "url": "git+https://github.com/jspsych/jsPsych.git",
+    "directory": "packages/jspsych"
   },
   "author": "Josh de Leeuw",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jspsych/jsPsych/issues"
   },
-  "homepage": "https://github.com/jspsych/jsPsych#readme",
+  "homepage": "https://www.jspsych.org",
   "dependencies": {
     "auto-bind": "^4.0.0"
   },

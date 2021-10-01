@@ -1,7 +1,0 @@
-{
-  "extends": "@jspsych/config/tsconfig.core.json",
-  "compilerOptions": {
-    "baseUrl": "."
-  },
-  "include": ["src"]
-}

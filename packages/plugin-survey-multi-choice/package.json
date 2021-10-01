@@ -24,14 +24,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jspsych/jsPsych.git"
+    "url": "git+https://github.com/jspsych/jsPsych.git",
+    "directory": "packages/plugin-survey-multi-choice"
   },
   "author": "Shane Martin",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jspsych/jsPsych/issues"
   },
-  "homepage": "https://github.com/jspsych/jsPsych#readme",
+  "homepage": "https://www.jspsych.org/latest/plugins/survey-multi-choice",
   "peerDependencies": {
     "jspsych": ">=6"
   },

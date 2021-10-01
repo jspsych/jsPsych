@@ -24,14 +24,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jspsych/jsPsych.git"
+    "url": "git+https://github.com/jspsych/jsPsych.git",
+    "directory": "packages/plugin-survey-likert"
   },
   "author": "Josh de Leeuw",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jspsych/jsPsych/issues"
   },
-  "homepage": "https://github.com/jspsych/jsPsych#readme",
+  "homepage": "https://www.jspsych.org/latest/plugins/survey-likert",
   "peerDependencies": {
     "jspsych": ">=6"
   },
