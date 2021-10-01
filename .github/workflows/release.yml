@@ -5,8 +5,11 @@ env:
 
 on:
   push:
+    paths:
+      - ".changeset/**"
+      - "packages/**"
     branches:
-      - changeset-setup
+      - main
 
 jobs:
   release:
@@ -23,14 +26,16 @@ jobs:
         with:
           node-version: 16.x
 
-      - name: Install dependencies and build packages
+      - name: Install dependencies
         run: npm ci --ignore-scripts
 
       - name: Create Release Pull Request
         uses: changesets/action@master
         with:
           publish: npm run release
+          commit: "chore(release): version packages"
         env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Release Assets
@@ -46,32 +51,44 @@ jobs:
 
             let errorMessage;
             for (const { name: tag, version } of publishedPackages) {
-              try {
-                // https://docs.github.com/en/rest/reference/repos#get-a-release-by-tag-name
-                const releaseId = (
-                  await github.request("GET /repos/{owner}/{repo}/releases/tags/{tag}", {
+              // Only upload the dist archive for the chore package, plugins, and extensions
+              if (tag.startsWith("jspsych@") || tag.includes("/plugin-") || tag.includes("/extension-")) {
+                try {
+                  // https://docs.github.com/en/rest/reference/repos#get-a-release-by-tag-name
+                  const releaseId = (
+                    await github.request("GET /repos/{owner}/{repo}/releases/tags/{tag}", {
+                      owner,
+                      repo,
+                      tag,
+                    })
+                  ).data.id;
+
+                  // https://octokit.github.io/rest.js/v18#repos-upload-release-asset
+                  await github.repos.uploadReleaseAsset({
                     owner,
                     repo,
-                    tag,
-                  })
-                ).data.id;
+                    release_id: releaseId,
 
-                // https://octokit.github.io/rest.js/v18#repos-upload-release-asset
-                await github.repos.uploadReleaseAsset({
-                  owner,
-                  repo,
-                  release_id: releaseId,
-                  name: `${tag.replace(/@jspsych(.*)\//g, "jspsych$1-").replace("@", "-")}-dist.zip`,
-                  label: "Dist archive (zip)",
-                  headers: {
-                    "content-type": "application/zip",
-                    "content-length": fs.statSync(distFile).size,
-                  },
-                  data: fs.readFileSync(distFile),
-                });
-              } catch (error) {
-                console.log(error);
-                errorMessage = error.message;
+                    // Tag to filename transformation:
+                    // * jspsych@1.2.3 => jspsych-1.2.3-dist.zip
+                    // * @jspsych/plugin-test@1.2.3 => jspsych-plugin-test-1.2.3-dist.zip
+                    // * @jspsych-contrib/plugin-test@1.2.3 => jspsych-contrib-plugin-test-1.2.3-dist.zip
+                    name: `${tag
+                      .replace("@jspsych/", "jspsych-")
+                      .replace("@jspsych-contrib/", "jspsych-contrib-")
+                      .replace("@", "-")}-dist.zip`,
+
+                    label: "Dist archive (zip)",
+                    headers: {
+                      "content-type": "application/zip",
+                      "content-length": fs.statSync(distFile).size,
+                    },
+                    data: fs.readFileSync(distFile),
+                  });
+                } catch (error) {
+                  console.log(error);
+                  errorMessage = error.message;
+                }
               }
             }
 
