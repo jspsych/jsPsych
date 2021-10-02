@@ -7,12 +7,12 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
-    "build": "npm run build -ws",
+    "build": "npm run build -w jspsych && npm run build -ws",
     "build:archive": "gulp createCoreDistArchive",
-    "prepare": "husky install && npm run build --workspace jspsych && npm run build",
+    "prepare": "husky install && npm run build",
     "tsc": "npm run tsc -ws",
     "changeset": "changeset",
-    "release": "npm run build && changeset publish"
+    "release": "npm run build && npm test && changeset publish"
   },
   "engines": {
     "node": ">=14.0.0",
