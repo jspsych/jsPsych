@@ -12,7 +12,7 @@
     "prepare": "husky install && npm run build",
     "tsc": "npm run tsc -ws",
     "changeset": "changeset",
-    "release": "npm install && npm test && changeset publish"
+    "release": "changeset publish"
   },
   "engines": {
     "node": ">=14.0.0",
