@@ -19,7 +19,10 @@ describe("preload plugin", () => {
 
   function spyOnPreload(preloadType: "Audio" | "Video" | "Images") {
     return jest
-      .spyOn(pluginAPI, `preload${preloadType}`)
+      .spyOn(
+        pluginAPI,
+        `preload${preloadType}` as "preloadAudio" | "preloadVideo" | "preloadImages"
+      )
       .mockImplementation((files, callback_complete, callback_load, callback_error) => {
         callback_complete();
       });
@@ -694,7 +697,7 @@ describe("preload plugin", () => {
     test("on_error/on_success callbacks are not called after loading times out", async () => {
       for (const type of <const>["Images", "Video", "Audio"]) {
         jest
-          .spyOn(pluginAPI, `preload${type}`)
+          .spyOn(pluginAPI, `preload${type}` as "preloadAudio" | "preloadVideo" | "preloadImages")
           .mockImplementation((x, cb_complete, cb_load, cb_error) => {
             // empty to simulate timeout
           });
