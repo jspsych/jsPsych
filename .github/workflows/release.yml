@@ -9,6 +9,7 @@ on:
       - ".changeset/**"
       - ".github/**"
       - "packages/**"
+      - "package.json"
     branches:
       - main
 
