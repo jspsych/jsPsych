@@ -19,9 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
-          fetch-depth: 0
 
       - name: Setup Node.js 16.x
         uses: actions/setup-node@v2
@@ -36,7 +33,8 @@ jobs:
         env:
           NODE_OPTIONS: "--max-old-space-size=4096" # Increase heap size for jest
 
-      - name: Create Release Pull Request
+      - name: Create Release Pull Request or Publish Packages
+        id: changesets
         uses: changesets/action@master
         with:
           publish: npm run release
@@ -60,6 +58,7 @@ jobs:
             for (const { name: tag, version } of publishedPackages) {
               // Only upload the dist archive for the chore package, plugins, and extensions
               if (tag.startsWith("jspsych@") || tag.includes("/plugin-") || tag.includes("/extension-")) {
+                console.log(`Uploading dist archive release asset for ${tag}`);
                 try {
                   // https://docs.github.com/en/rest/reference/repos#get-a-release-by-tag-name
                   const releaseId = (
@@ -79,11 +78,7 @@ jobs:
                     // Tag to filename transformation:
                     // * jspsych@1.2.3 => jspsych-1.2.3-dist.zip
                     // * @jspsych/plugin-test@1.2.3 => jspsych-plugin-test-1.2.3-dist.zip
-                    // * @jspsych-contrib/plugin-test@1.2.3 => jspsych-contrib-plugin-test-1.2.3-dist.zip
-                    name: `${tag
-                      .replace("@jspsych/", "jspsych-")
-                      .replace("@jspsych-contrib/", "jspsych-contrib-")
-                      .replace("@", "-")}-dist.zip`,
+                    name: `${tag.replace("@jspsych/", "jspsych-").replace("@", "-")}-dist.zip`,
 
                     label: "Dist archive (zip)",
                     headers: {
@@ -101,4 +96,6 @@ jobs:
 
             if (errorMessage) {
               core.setFailed(errorMessage);
+            } else {
+              console.log(`Release assets successfully uploaded`);
             }
