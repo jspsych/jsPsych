@@ -37,8 +37,9 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
             choices: ['r', 'g', 'b'],
             prompt: "<p>Is the ink color (r)ed, (g)reen, or (b)lue?</p>"
         };
-		```
-	=== "Demo"
+        ```
+        
+    === "Demo"
         <div style="text-align:center;">
             <iframe src="../../demos/jspsych-html-keyboard-response-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>

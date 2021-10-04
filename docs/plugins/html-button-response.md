@@ -40,7 +40,8 @@ stimulus | string | The HTML content that was displayed on the screen.
           prompt: "<p>What color is the ink?</p>"
         };
         ```
-		=== "Demo"
+
+    === "Demo"
         <div style="text-align:center;">
             <iframe src="../../demos/jspsych-html-button-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
         </div>
