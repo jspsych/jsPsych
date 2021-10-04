@@ -1709,10 +1709,19 @@
 <details class="example" open="open"><summary>Displaying question until subject move the slider</summary><div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Code</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlSliderResponse</span><span class="p">,</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;p&gt;Running&lt;/p&gt;&#39;</span><span class="p">,</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="sb">`&lt;div style=&quot;width:500px;&quot;&gt;</span>
+<span class="sb">        &lt;p&gt;How likely is it that team A will win this match?&lt;/p&gt;</span>
+<span class="sb">        &lt;div style=&quot;width:240px; float: left;&quot;&gt;</span>
+<span class="sb">            &lt;p&gt;TEAM A&lt;/p&gt;</span>
+<span class="sb">            &lt;p&gt;10 wins, 5 losses, 6 draws&lt;/p&gt;</span>
+<span class="sb">        &lt;/div&gt;</span>
+<span class="sb">        &lt;div style=&quot;width:240px; float: right;&quot;&gt;</span>
+<span class="sb">            &lt;p&gt;TEAM B&lt;/p&gt;</span>
+<span class="sb">            &lt;p&gt;6 wins, 4 losses, 11 draws&lt;/p&gt;</span>
+<span class="sb">        &lt;/div&gt;</span>
+<span class="sb">        &lt;/div&gt;`</span><span class="p">,</span>
     <span class="nx">require_movement</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nx">labels</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;healthy&#39;</span><span class="p">,</span> <span class="s1">&#39;unhealthy&#39;</span><span class="p">],</span>
-    <span class="nx">prompt</span><span class="o">:</span> <span class="s2">&quot;&lt;p&gt;How healthy/unhealthy is this activity?&lt;/p&gt;&quot;</span>
+    <span class="nx">labels</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;100% chance that team A wins&#39;</span><span class="p">,</span> <span class="s1">&#39;50% chance that team A wins&#39;</span><span class="p">,</span> <span class="s1">&#39;0% chance that team A wins&#39;</span><span class="p">]</span>
 <span class="p">};</span>
 </code></pre></div>
 </div>
