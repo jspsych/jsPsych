@@ -1654,7 +1654,16 @@
 </tbody>
 </table>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
-<details class="example" open="open"><summary>Measuring a credit card and resizing the display to have 150 pixels equal an inch.</summary><div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Code</label><div class="tabbed-content"></div>
+<details class="example" open="open"><summary>Measuring a credit card and resizing the display to have 150 pixels equal an inch.</summary><div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Code</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">inputs</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychResize</span><span class="p">,</span>
+    <span class="nx">item_width</span><span class="o">:</span> <span class="mf">3</span> <span class="o">+</span> <span class="mf">3</span><span class="o">/</span><span class="mf">8</span><span class="p">,</span>
+    <span class="nx">item_height</span><span class="o">:</span> <span class="mf">2</span> <span class="o">+</span> <span class="mf">1</span><span class="o">/</span><span class="mf">8</span><span class="p">,</span>
+    <span class="nx">prompt</span><span class="o">:</span> <span class="s2">&quot;&lt;p&gt;Click and drag the lower right corner of the box until the box is the same size as a credit card held up to the screen.&lt;/p&gt;&quot;</span><span class="p">,</span>
+    <span class="nx">pixels_per_unit</span><span class="o">:</span> <span class="mf">150</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Demo</label><div class="tabbed-content">
 <p><div style="text-align:center;">
     <iframe src="../../demos/jspsych-resize-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
