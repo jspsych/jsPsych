@@ -361,9 +361,9 @@ If you are electing to use `npm` to install jsPsych we will assume that you alre
 We will also assume that you are using a [webpack](https://webpack.js.org/) or a similar bundler.
 
 !!! info
-  You may want to check out the [jsPsych Builder](https://github.com/bjoluc/jspsych-builder) CLI utility.
-  jsPsych Builder allows you to automate the experiment setup, spin up a development server, and transpile and bundle scripts and styles using webpack.
-  Using jsPsych Builder will automate some of the steps in this tutorial, so if you prefer that option, you may want to switch to the getting started instructions on the jsPsych Builder GitHub page.
+    You may want to check out the [jsPsych Builder](https://github.com/bjoluc/jspsych-builder) CLI utility.
+    jsPsych Builder allows you to automate the experiment setup, spin up a development server, and transpile and bundle scripts and styles using webpack.
+    Using jsPsych Builder will automate some of the steps in this tutorial, so if you prefer that option, you may want to switch to the getting started instructions on the jsPsych Builder GitHub page.
 
 ### Step 1: Install jspsych
 
