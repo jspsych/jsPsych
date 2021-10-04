@@ -41,10 +41,19 @@ slider_start | numeric | The starting value of the slider.
         ```javascript
         var trial = {
             type: jsPsychHtmlSliderResponse,
-            stimulus: '<p>Running</p>',
+            stimulus: `<div style="width:500px;">
+                <p>How likely is it that team A will win this match?</p>
+                <div style="width:240px; float: left;">
+                    <p>TEAM A</p>
+                    <p>10 wins, 5 losses, 6 draws</p>
+                </div>
+                <div style="width:240px; float: right;">
+                    <p>TEAM B</p>
+                    <p>6 wins, 4 losses, 11 draws</p>
+                </div>
+                </div>`,
             require_movement: true,
-            labels: ['healthy', 'unhealthy'],
-            prompt: "<p>How healthy/unhealthy is this activity?</p>"
+            labels: ['100% chance that team A wins', '50% chance that team A wins', '0% chance that team A wins']
         };
         ```
 

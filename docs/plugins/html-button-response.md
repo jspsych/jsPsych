@@ -32,16 +32,14 @@ stimulus | string | The HTML content that was displayed on the screen.
 
 ???+ example "Displaying question until subject gives a response"
     === "Code"
-
         ```javascript
         var trial = {
           type: jsPsychHtmlButtonResponse,
-          stimulus: '<p>Running</p>',
-          choices: ['Healthy', 'Unhealthy'],
-          prompt: "<p>Is this activity healthy or unhealthy?</p>"
+          stimulus: '<p style="font-size:48px; color:red;">GREEN</p>',
+          choices: ['Red', 'Green', 'Blue'],
+          prompt: "<p>What color is the ink?</p>"
         };
         ```
-        
 		=== "Demo"
         <div style="text-align:center;">
             <iframe src="../../demos/jspsych-html-button-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>

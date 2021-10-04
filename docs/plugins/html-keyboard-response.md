@@ -33,9 +33,9 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
         ```javascript
         var trial = {
             type: jsPsychHtmlKeyboardResponse,
-            stimulus: '<p>Running</p>',
-            choices: ['e', 'i'],
-            prompt: "<p>Is this activity healthy or unhealthy?</p><p>Press 'e' for healthy and 'i' for unhealthy.</p>"
+            stimulus: '<p style="font-size:48px; color:green;">BLUE</p>',
+            choices: ['r', 'g', 'b'],
+            prompt: "<p>Is the ink color (r)ed, (g)reen, or (b)lue?</p>"
         };
 		```
 	=== "Demo"
