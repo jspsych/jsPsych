@@ -40,7 +40,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
         ```javascript
         var trial_block = {
           type: jsPsychIatImage,
-          stimulus: 'img/blue.png',
+          stimulus: 'img/iat_old_face.jpg',
           stim_key_association: 'left',
           html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
           bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
@@ -49,14 +49,14 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
           trial_duration: 3000, //Only if display_feedback is false
           left_category_key: 'e',
           right_category_key: 'i',
-          left_category_label: ['OLD'],
-          right_category_label: ['YOUNG'],
+          left_category_label: ['OLD','GOOD'],
+          right_category_label: ['YOUNG','BAD'],
           response_ends_trial: true
         }
         ```
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="/demos/jspsych-iat-image-demo1.html" width="90%;" height="650px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-iat-image-demo1.html" width="90%;" height="650px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-iat-image-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-iat-image-demo1.html">Open demo in new tab</a>

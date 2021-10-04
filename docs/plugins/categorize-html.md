@@ -52,7 +52,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
         ```
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="../plugins/demos/jspsych-categorize-html-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-categorize-html-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-categorize-html-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-categorize-html-demo1.html">Open demo in new tab</a>

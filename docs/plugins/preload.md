@@ -72,10 +72,10 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="/demos/jspsych-preload-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="../../demos/jspsych-preload-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-preload-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-preload-demo1.html">Open demo in new tab</a>
 
 ???+ example "Manually preloading an image"
     === "Code"
@@ -99,10 +99,10 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="/demos/jspsych-preload-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="../../demos/jspsych-preload-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-preload-demo2.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-preload-demo2.html">Open demo in new tab</a>
 
 ???+ example "Loading files in batches"
     === "Code"
@@ -170,10 +170,10 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="/demos/jspsych-preload-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="../../demos/jspsych-preload-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-preload-demo3.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-preload-demo3.html">Open demo in new tab</a>
 
 ???+ example "Showing a detailed error message for debugging loading issues"
     === "Code"
@@ -188,10 +188,10 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="/demos/jspsych-preload-demo4.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="../../demos/jspsych-preload-demo4.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-preload-demo4.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-preload-demo4.html">Open demo in new tab</a>
 
 
 For more examples, see the `jspsych-preload.html` file in the `/examples` folder of the release and the [Media Preloading](../overview/media-preloading) documentation page.

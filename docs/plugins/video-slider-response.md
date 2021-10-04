@@ -65,8 +65,8 @@ start | numeric | The start time of the video clip.
     
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="/demos/jspsych-video-slider-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+          <iframe src="../../demos/jspsych-video-slider-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-video-slider-response-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-video-slider-response-demo1.html">Open demo in new tab</a>
 

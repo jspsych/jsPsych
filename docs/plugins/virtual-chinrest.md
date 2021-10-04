@@ -65,7 +65,6 @@ _Note: The deg data are **only** returned if viewing distance is estimated with 
 
 ???+ example "Measure distance to screen and pixel ratio; no resizing"
     === "Code"
-
         ```javascript
         var trial = {
             type: jsPsychVirtualChinrest,
@@ -74,13 +73,12 @@ _Note: The deg data are **only** returned if viewing distance is estimated with 
         };
         ```
     === "Demo"
-        This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-virtual-chinrest-demo1.html">open the demo in a new tab</a>
+        This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-virtual-chinrest-demo1.html">open the demo in a new tab</a>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-virtual-chinrest-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-virtual-chinrest-demo1.html">Open demo in new tab</a>
 
 ???+ example "Resizing based on centimeters per pixel"
     === "Code"
-
         ```javascript
         var trial = {
           type: jsPsychVirtualChinrest,
@@ -99,13 +97,12 @@ _Note: The deg data are **only** returned if viewing distance is estimated with 
         }
         ```
     === "Demo"
-        This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-virtual-chinrest-demo2.html">open the demo in a new tab</a>
+        This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-virtual-chinrest-demo2.html">open the demo in a new tab</a>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-virtual-chinrest-demo2.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-virtual-chinrest-demo2.html">Open demo in new tab</a>
 
 ???+ example "Resizing based on degrees of visual angle per pixel"
     === "Code"
-
         ```javascript
         var trial = {
           type: jsPsychVirtualChinrest,
@@ -124,6 +121,6 @@ _Note: The deg data are **only** returned if viewing distance is estimated with 
         }
         ```
     === "Demo"
-        This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-virtual-chinrest-demo3.html">open the demo in a new tab</a>
+        This demo requires a larger viewing area to complete. Please <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-virtual-chinrest-demo3.html">open the demo in a new tab</a>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-virtual-chinrest-demo3.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-virtual-chinrest-demo3.html">Open demo in new tab</a>

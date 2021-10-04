@@ -35,7 +35,6 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
 ???+ example "Displaying trial until subject gives a response"
     === "Code"
-
         ```javascript
         var trial = {
             type: jsPsychImageKeyboardResponse,
@@ -46,14 +45,13 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
         ```
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="/demos/jspsych-image-keyboard-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-image-keyboard-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-image-keyboard-response-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-image-keyboard-response-demo1.html">Open demo in new tab</a>
 
 ???+ example "Displaying image for a fixed duration; no response allowed"
     === "Code"
-
         ```javascript
         var trial = {
             type: jsPsychImageKeyboardResponse,
@@ -65,7 +63,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
         ```
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="/demos/jspsych-image-keyboard-response-demo2.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-image-keyboard-response-demo2.html" width="90%;" height="600px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-image-keyboard-response-demo2.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-image-keyboard-response-demo2.html">Open demo in new tab</a>

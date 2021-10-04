@@ -50,7 +50,7 @@ slider_start | numeric | The starting value of the slider.
 
 	=== "Demo"
         <div style="text-align:center;">
-            <iframe src="../plugins/demos/jspsych-html-slider-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-html-slider-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-html-slider-response-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-html-slider-response-demo1.html">Open demo in new tab</a>

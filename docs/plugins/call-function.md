@@ -39,10 +39,10 @@ value | any | The return value of the called function.
 
 	=== "Demo"
         <div style="text-align:center;">
-            <iframe src="/demos/jspsych-call-function-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-call-function-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-call-function-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-call-function-demo1.html">Open demo in new tab</a>
     
 
 ???+ example "Using an anonymous function to pass variables"
@@ -63,10 +63,10 @@ value | any | The return value of the called function.
 
 	=== "Demo"
         <div style="text-align:center;">
-            <iframe src="/demos/jspsych-call-function-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-call-function-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-call-function-demo2.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-call-function-demo2.html">Open demo in new tab</a>
 
 ???+ example "Async function call: wait for data to be saved to a server"
 	=== "Code"
@@ -115,9 +115,9 @@ value | any | The return value of the called function.
   		```
 	=== "Demo"
         <div style="text-align:center;">
-            <iframe src="/demos/jspsych-call-function-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-call-function-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-call-function-demo3.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-call-function-demo3.html">Open demo in new tab</a>
 
 

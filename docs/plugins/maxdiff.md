@@ -31,7 +31,6 @@ response | object | An object with two keys, `left` and `right`, containing the 
 
 ???+ example "Basic example"
     === "Code"
-
         ```javascript
         var maxdiff_page = {
             type: jsPsychMaxdiff,
@@ -42,8 +41,8 @@ response | object | An object with two keys, `left` and `right`, containing the 
         ```    
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="/demos/jspsych-maxdiff-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-maxdiff-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-maxdiff-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-maxdiff-demo1.html">Open demo in new tab</a>
 

@@ -61,10 +61,10 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
 
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="/demos/jspsych-canvas-slider-response-demo1.html" width="90%;" height="550px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-canvas-slider-response-demo1.html" width="90%;" height="550px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-canvas-slider-response-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-canvas-slider-response-demo1.html">Open demo in new tab</a>
 
 
 ???+ example "Draw two squares with additional parameters"
@@ -99,9 +99,9 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
 
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="/demos/jspsych-canvas-slider-response-demo2.html" width="90%;" height="550px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-canvas-slider-response-demo2.html" width="90%;" height="550px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-canvas-slider-response-demo2.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-canvas-slider-response-demo2.html">Open demo in new tab</a>
 
 

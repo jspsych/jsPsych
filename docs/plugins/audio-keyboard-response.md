@@ -48,10 +48,10 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 	
 	=== "Demo"
 		<div style="text-align:center;">
-			<iframe src="/demos/jspsych-audio-keyboard-response-demo-1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+			<iframe src="../../demos/jspsych-audio-keyboard-response-demo-1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
 		</div>
 
-	<a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-audio-keyboard-response-demo-1.html">Open demo in new tab</a>
+	<a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-audio-keyboard-response-demo-1.html">Open demo in new tab</a>
 
 
 ???+ example "Play a sound with no user response; trial ends after sound plays"
@@ -67,7 +67,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
 	=== "Demo"
 		<div style="text-align:center;">
-			<iframe src="/demos/jspsych-audio-keyboard-response-demo-2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+			<iframe src="../../demos/jspsych-audio-keyboard-response-demo-2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
 		</div>
 
-	<a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-audio-keyboard-response-demo-2.html">Open demo in new tab</a>
+	<a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-audio-keyboard-response-demo-2.html">Open demo in new tab</a>

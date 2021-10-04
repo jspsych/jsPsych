@@ -60,7 +60,7 @@ stimulus | array | The `stimulus` array. This will be encoded as a JSON string w
     
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="/demos/jspsych-video-button-response-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="../../demos/jspsych-video-button-response-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-video-button-response-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-video-button-response-demo1.html">Open demo in new tab</a>

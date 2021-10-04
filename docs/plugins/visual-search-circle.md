@@ -69,10 +69,10 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
     
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="/demos/jspsych-visual-search-circle-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="../../demos/jspsych-visual-search-circle-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-visual-search-circle-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-visual-search-circle-demo1.html">Open demo in new tab</a>
 
 ???+ example "Variety of different distractors"
     === "Code"
@@ -87,8 +87,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
         var trial = {
           type: jsPsychVisualSearchCircle,
-          target: 'img/elephant.png',
-          foil: ['img/lion.png', 'img/monkey.png'],
+          stimuli: ['img/elephant.png', 'img/lion.png', 'img/monkey.png'],
           fixation_image: 'img/fixation.gif',
           target_present_key: 'e',
           target_absent_key: 'n',
@@ -98,7 +97,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="/demos/jspsych-visual-search-circle-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="../../demos/jspsych-visual-search-circle-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="/demos/jspsych-visual-search-circle-demo2.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-visual-search-circle-demo2.html">Open demo in new tab</a>

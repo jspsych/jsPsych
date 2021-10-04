@@ -33,10 +33,10 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
         ```
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="../plugins/demos/jspsych-cloze-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-cloze-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-cloze-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-cloze-demo1.html">Open demo in new tab</a>
 
 
 ???+ example "More elaborate example (with check against correct solution, custom error handling and modified button text)"
@@ -52,7 +52,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
         ```
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="../plugins/demos/jspsych-cloze-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-cloze-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../plugins/demos/jspsych-cloze-demo2.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-cloze-demo2.html">Open demo in new tab</a>
