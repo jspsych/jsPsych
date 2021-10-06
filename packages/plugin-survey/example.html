@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych/dist/index.browser.js"></script>
+    <script src="./dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../jspsych/css/jspsych.css"></script>
+  </head>
+  <body></body>
+  <script type="text/javascript">
+
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
+
+    jsPsych.run([{
+      type: jsPsychSurvey,
+    }]);
+
+  </script>
+</html>
