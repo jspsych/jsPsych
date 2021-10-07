@@ -25,9 +25,7 @@ const info = <const>{
     check_fn: {
       type: ParameterType.FUNCTION,
       pretty_name: "Check function",
-      default: function () {
-        return true;
-      },
+      default: () => true,
     },
     /** Whether or not to force a page refresh. */
     force_refresh: {
@@ -74,7 +72,7 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
     const load = (element, file, callback) => {
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.open("GET", file, true);
-      xmlhttp.onload = function () {
+      xmlhttp.onload = () => {
         if (xmlhttp.status == 200 || xmlhttp.status == 0) {
           //Check if loaded
           element.innerHTML = xmlhttp.responseText;

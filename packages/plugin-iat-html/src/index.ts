@@ -294,7 +294,7 @@ class IatHtmlPlugin implements JsPsychPlugin<Info> {
 
     // end trial if time limit is set
     if (trial.trial_duration !== null && trial.response_ends_trial != true) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         end_trial();
       }, trial.trial_duration);
     }

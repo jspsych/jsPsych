@@ -270,7 +270,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
       video_element.src = video_preload_blob;
     }
 
-    video_element.onended = function () {
+    video_element.onended = () => {
       if (trial.trial_ends_after_video) {
         end_trial();
       } else if (!trial.response_allowed_while_playing) {
@@ -284,7 +284,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
     // before showing and playing, so that the video doesn't automatically show the first frame
     if (trial.start !== null) {
       video_element.pause();
-      video_element.onseeked = function () {
+      video_element.onseeked = () => {
         video_element.style.visibility = "visible";
         video_element.muted = false;
         if (trial.autoplay) {
@@ -292,11 +292,11 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
         } else {
           video_element.pause();
         }
-        video_element.onseeked = function () {};
+        video_element.onseeked = () => {};
       };
-      video_element.onplaying = function () {
+      video_element.onplaying = () => {
         video_element.currentTime = trial.start;
-        video_element.onplaying = function () {};
+        video_element.onplaying = () => {};
       };
       // fix for iOS/MacOS browsers: videos aren't seekable until they start playing, so need to hide/mute, play,
       // change current time, then show/unmute
@@ -306,7 +306,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     let stopped = false;
     if (trial.stop !== null) {
-      video_element.addEventListener("timeupdate", function (e) {
+      video_element.addEventListener("timeupdate", (e) => {
         var currenttime = video_element.currentTime;
         if (currenttime >= trial.stop) {
           video_element.pause();
@@ -356,7 +356,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
         .pause();
       display_element.querySelector<HTMLVideoElement>(
         "#jspsych-video-slider-response-stimulus-video"
-      ).onended = function () {};
+      ).onended = () => {};
 
       // gather the data to store for the trial
       var trial_data = {
@@ -376,7 +376,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     display_element
       .querySelector("#jspsych-video-slider-response-next")
-      .addEventListener("click", function () {
+      .addEventListener("click", () => {
         // measure response time
         var endTime = performance.now();
         response.rt = Math.round(endTime - startTime);
@@ -407,9 +407,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     // end trial if time limit is set
     if (trial.trial_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
-        end_trial();
-      }, trial.trial_duration);
+      this.jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
     }
   }
 }

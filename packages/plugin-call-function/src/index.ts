@@ -46,7 +46,7 @@ class CallFunctionPlugin implements JsPsychPlugin<Info> {
     };
 
     if (trial.async) {
-      var done = function (data) {
+      var done = (data) => {
         return_val = data;
         end_trial();
       };

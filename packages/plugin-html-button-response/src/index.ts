@@ -125,7 +125,7 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
     for (var i = 0; i < trial.choices.length; i++) {
       display_element
         .querySelector("#jspsych-html-button-response-button-" + i)
-        .addEventListener("click", function (e) {
+        .addEventListener("click", (e) => {
           var btn_el = e.currentTarget as HTMLButtonElement;
           var choice = btn_el.getAttribute("data-choice"); // don't use dataset for jsdom compatibility
           after_response(choice);
@@ -184,7 +184,7 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // hide image if timing is set
     if (trial.stimulus_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector<HTMLElement>(
           "#jspsych-html-button-response-stimulus"
         ).style.visibility = "hidden";
@@ -193,9 +193,7 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // end trial if time limit is set
     if (trial.trial_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
-        end_trial();
-      }, trial.trial_duration);
+      this.jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
     }
   }
 }

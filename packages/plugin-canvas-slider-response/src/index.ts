@@ -210,7 +210,7 @@ class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     display_element
       .querySelector("#jspsych-canvas-slider-response-next")
-      .addEventListener("click", function () {
+      .addEventListener("click", () => {
         // measure response time
         var endTime = performance.now();
         response.rt = Math.round(endTime - startTime);
@@ -228,7 +228,7 @@ class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
       });
 
     if (trial.stimulus_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector<HTMLElement>(
           "#jspsych-canvas-slider-response-stimulus"
         ).style.visibility = "hidden";
@@ -237,9 +237,7 @@ class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     // end trial if trial_duration is set
     if (trial.trial_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
-        end_trial();
-      }, trial.trial_duration);
+      this.jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
     }
 
     var startTime = performance.now();

@@ -103,7 +103,7 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
       this.jsPsych.finishTrial(trial_data);
     };
 
-    var animate_interval = setInterval(function () {
+    var animate_interval = setInterval(() => {
       var showImage = true;
       if (!trial.render_on_canvas) {
         display_element.innerHTML = ""; // clear everything
@@ -155,7 +155,7 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
       });
 
       if (trial.frame_isi > 0) {
-        this.jsPsych.pluginAPI.setTimeout(function () {
+        this.jsPsych.pluginAPI.setTimeout(() => {
           display_element.querySelector<HTMLElement>("#jspsych-animation-image").style.visibility =
             "hidden";
           current_stim = "blank";
@@ -168,7 +168,7 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
       }
     }
 
-    var after_response = function (info) {
+    var after_response = (info) => {
       responses.push({
         key_press: info.key,
         rt: info.rt,

@@ -356,7 +356,7 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
     }
 
     for (let i = 0; i < draggables.length; i++) {
-      draggables[i].addEventListener(start_event_name, function (event: MouseEvent | TouchEvent) {
+      draggables[i].addEventListener(start_event_name, (event: MouseEvent | TouchEvent) => {
         let pageX: number;
         let pageY: number;
         if (event instanceof MouseEvent) {
@@ -377,7 +377,7 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
         let y = pageY - elem.offsetTop - window.scrollY;
         elem.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
 
-        let move_event = function (e) {
+        let move_event = (e) => {
           let clientX = e.clientX;
           let clientY = e.clientY;
           if (typeof document.ontouchend !== "undefined") {
@@ -439,7 +439,7 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
         };
         document.addEventListener(move_event_name, move_event);
 
-        var end_event = function (e) {
+        var end_event = (e) => {
           document.removeEventListener(move_event_name, move_event);
           elem.style.transform = "scale(1, 1)";
           if (trial.change_border_background_color) {
