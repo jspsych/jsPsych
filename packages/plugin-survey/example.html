@@ -14,9 +14,26 @@
       }
     });
 
-    jsPsych.run([{
+    var survey_trial = {
       type: jsPsychSurvey,
-    }]);
+      pages: [
+        [
+          {type: 'html', prompt: '<p>Here is some arbitrary text via an "html" question type.<br>Similar to preamble but can be inserted anywhere in the question set.</p>'},
+          {type: 'text', prompt: 'Page 1, question 1.'},
+          {type: 'text', prompt: 'Page 1, question 2.'},
+        ],
+        [
+          {type: 'text', prompt: 'Page 2, question 1.'},
+          {type: 'html', prompt: '<p>Don&#39;t forget to answer the next question!</p>'},
+          {type: 'text', prompt: 'Page 2, question 2.'},
+        ]
+      ],
+      button_label_next: "Next >",
+      button_label_back: "< Back",
+      button_label_finish: "Finish!",
+    };
+
+    jsPsych.run([survey_trial]);
 
   </script>
 </html>
