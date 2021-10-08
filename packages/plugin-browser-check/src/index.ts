@@ -1,3 +1,4 @@
+import { detect } from "detect-browser";
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
@@ -10,15 +11,32 @@ const info = <const>{
       type: ParameterType.STRING,
       array: true,
       default: [
-        "window_width",
-        "window_height",
+        "width",
+        "height",
         "webaudio",
         "browser",
         "browser_version",
         "mobile",
         "os",
         "fullscreen",
+        "vsync_rate",
       ],
+    },
+    /**
+     * Any features listed here will be skipped, even if they appear in `features`. Useful for
+     * when you want to run most of the defaults.
+     */
+    skip_features: {
+      type: ParameterType.STRING,
+      array: true,
+      default: [],
+    },
+    /**
+     * The number of animation frames to sample when calculating vsync_rate
+     */
+    vsync_frame_count: {
+      type: ParameterType.INT,
+      default: 60,
     },
     /**
      * List of inclusion criteria
@@ -45,51 +63,115 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
 
   constructor(private jsPsych: JsPsych) {}
 
-  private featureCheckFunctionsMap = new Map<string, () => any>(
-    Object.entries({
-      window_width: () => {
-        return window.innerWidth;
-      },
-      window_height: () => {
-        return window.innerHeight;
-      },
-      webaudio: () => {
-        // @ts-ignore
-        return (
-          window.AudioContext ||
-          window.webkitAudioContext ||
-          window.mozAudioContext ||
-          window.oAudioContext ||
-          window.msAudioContext
-        );
-      },
-      browser: () => {
-        return "TODO";
-      },
-      browser_version: () => {
-        return "TODO";
-      },
-      mobile: () => {
-        return "TODO";
-      },
-      os: () => {
-        return "TODO";
-      },
-      fullscreen: () => {
-        return "TODO";
-      },
-    })
-  );
-
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    const featureCheckFunctionsMap = new Map<string, () => any>(
+      Object.entries({
+        width: () => {
+          return window.innerWidth;
+        },
+        height: () => {
+          return window.innerHeight;
+        },
+        webaudio: () => {
+          return (
+            window.AudioContext ||
+            // @ts-ignore
+            window.webkitAudioContext ||
+            // @ts-ignore
+            window.mozAudioContext ||
+            // @ts-ignore
+            window.oAudioContext ||
+            // @ts-ignore
+            window.msAudioContext
+          );
+        },
+        browser: () => {
+          return detect().name;
+        },
+        browser_version: () => {
+          return detect().version;
+        },
+        mobile: () => {
+          return /Mobi/i.test(window.navigator.userAgent);
+        },
+        os: () => {
+          return detect().os;
+        },
+        fullscreen: () => {
+          return (
+            document.exitFullscreen ||
+            // @ts-expect-error
+            document.webkitExitFullscreen ||
+            // @ts-expect-error
+            document.msExitFullscreen
+          );
+        },
+        vsync_rate: () => {
+          return new Promise((resolve) => {
+            let t0 = performance.now();
+            let deltas = [];
+            let framesToRun = trial.vsync_frame_count;
+            const finish = () => {
+              let sum = 0;
+              for (const v of deltas) {
+                sum += v;
+              }
+              resolve(1000.0 / (sum / deltas.length));
+            };
+            const nextFrame = () => {
+              let t1 = performance.now();
+              deltas.push(t1 - t0);
+              t0 = t1;
+              framesToRun--;
+              if (framesToRun > 0) {
+                requestAnimationFrame(nextFrame);
+              } else {
+                finish();
+              }
+            };
+            const start = () => {
+              t0 = performance.now();
+              requestAnimationFrame(nextFrame);
+            };
+            requestAnimationFrame(start);
+          });
+        },
+      })
+    );
+
     const feature_data = new Map<string, any>();
-    for (const feature of trial.features) {
-      feature_data.set(feature, this.featureCheckFunctionsMap.get(feature)());
+    const feature_checks: Promise<void>[] = [];
+    const features_to_check = trial.features.filter((x) => !trial.skip_features.includes(x));
+
+    for (const feature of features_to_check) {
+      // this allows for feature check functions to be sync or async
+      feature_checks.push(
+        Promise.resolve(featureCheckFunctionsMap.get(feature)())
+        // Promise.resolve(featureCheckFunctionsMap.get(feature)())
+        //   .then((feature_val)=>{
+        //     feature_data.set(feature, feature_val);
+        //     return;
+        //   })
+      );
     }
 
-    const trial_data = { ...Object.fromEntries(feature_data) };
+    Promise.allSettled(feature_checks).then((results) => {
+      for (let i = 0; i < features_to_check.length; i++) {
+        if (results[i].status === "fulfilled") {
+          // @ts-expect-error
+          feature_data.set(features_to_check[i], results[i].value);
+        } else {
+          feature_data.set(features_to_check[i], null);
+        }
+      }
+      end_trial();
+    });
 
-    this.jsPsych.finishTrial(trial_data);
+    var end_trial = () => {
+      const trial_data = { ...Object.fromEntries(feature_data) };
+
+      this.jsPsych.finishTrial(trial_data);
+    };
   }
 
   // MINIMUM SIZE
