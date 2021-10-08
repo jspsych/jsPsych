@@ -39,11 +39,28 @@ const info = <const>{
       default: 60,
     },
     /**
+     * If `true`, show a message when window size is too small to allow the user
+     * to adjust if their screen allows for it.
+     */
+    allow_window_resize: {
+      type: ParameterType.BOOL,
+      default: true,
+    },
+    /**
      * List of inclusion criteria
      */
-    inclusion_criteria: {
-      type: ParameterType.COMPLEX,
-      default: [],
+    inclusion_function: {
+      type: ParameterType.FUNCTION,
+      default: () => {
+        return true;
+      },
+    },
+    /**
+     * The message to display if `inclusion_function` returns `false`
+     */
+    exclusion_message: {
+      type: ParameterType.HTML_STRING,
+      default: `<p>You shall not pass.</p>`,
     },
   },
 };
@@ -75,13 +92,13 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
         webaudio: () => {
           return (
             window.AudioContext ||
-            // @ts-ignore
+            // @ts-ignore because prefixed not in document type
             window.webkitAudioContext ||
-            // @ts-ignore
+            // @ts-ignore because prefixed not in document type
             window.mozAudioContext ||
-            // @ts-ignore
+            // @ts-ignore because prefixed not in document type
             window.oAudioContext ||
-            // @ts-ignore
+            // @ts-ignore because prefixed not in document type
             window.msAudioContext
           );
         },
@@ -100,9 +117,9 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
         fullscreen: () => {
           return (
             document.exitFullscreen ||
-            // @ts-expect-error
+            // @ts-ignore because prefixed not in document type
             document.webkitExitFullscreen ||
-            // @ts-expect-error
+            // @ts-ignore because prefixed not in document type
             document.msExitFullscreen
           );
         },
@@ -145,27 +162,28 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
 
     for (const feature of features_to_check) {
       // this allows for feature check functions to be sync or async
-      feature_checks.push(
-        Promise.resolve(featureCheckFunctionsMap.get(feature)())
-        // Promise.resolve(featureCheckFunctionsMap.get(feature)())
-        //   .then((feature_val)=>{
-        //     feature_data.set(feature, feature_val);
-        //     return;
-        //   })
-      );
+      feature_checks.push(Promise.resolve(featureCheckFunctionsMap.get(feature)()));
     }
 
     Promise.allSettled(feature_checks).then((results) => {
       for (let i = 0; i < features_to_check.length; i++) {
         if (results[i].status === "fulfilled") {
-          // @ts-expect-error
+          // @ts-expect-error because .value isn't recognized for some reason
           feature_data.set(features_to_check[i], results[i].value);
         } else {
           feature_data.set(features_to_check[i], null);
         }
       }
-      end_trial();
+      inclusion_check();
     });
+
+    var inclusion_check = () => {
+      if (trial.inclusion_function(Object.fromEntries(feature_data))) {
+        end_trial();
+      } else {
+        this.jsPsych.endExperiment(trial.exclusion_message);
+      }
+    };
 
     var end_trial = () => {
       const trial_data = { ...Object.fromEntries(feature_data) };
