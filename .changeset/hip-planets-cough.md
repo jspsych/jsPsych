@@ -39,4 +39,4 @@
 "@jspsych/plugin-webgazer-validate": patch
 ---
 
-Replace plain functions with arrow functions to avoid masking of `this`
+Consistently replace anonymous functions with arrow functions to avoid masking of `this`
