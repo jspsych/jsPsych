@@ -71,6 +71,21 @@ var trial = {
 }
 ```
 
+## The `choices` parameter for keyboard response trials
+
+The `choices` parameter for keyboard response trials no longer supports `jsPsych.NO_KEYS` and `jsPsych.ALL_KEYS`, and they have been replaced by the strings `"NO_KEYS"` and `"ALL_KEYS"` respectively.
+
+For example, if you load the `audio-keyboard-response` plugin, you can prevent any user input like...
+
+```js
+var trial = {
+  type: jsPsychAudioKeyboardResponse,
+  choices: "NO_KEYS",
+  stimulus: 'example.ogg',
+  trial_ends_after_audio: true
+}
+```
+
 ## Using extensions
 
 Like plugins, extensions are now also referenced by their class. 
