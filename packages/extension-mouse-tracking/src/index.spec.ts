@@ -227,4 +227,50 @@ describe("Mouse Tracking Extension", () => {
     expect(getData().values()[0].mouse_tracking_targets["#target"]).toEqual(targetRect);
     expect(getData().values()[0].mouse_tracking_targets["#target2"]).toEqual(target2Rect);
   });
+
+  test("ignores mousemove events that are faster than minimum_sample_time", async () => {
+    const jsPsych = initJsPsych({
+      extensions: [{ type: MouseTrackingExtension, params: { minimum_sample_time: 100 } }],
+    });
+
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "<div id='target' style='width:500px; height: 500px;'></div>",
+        extensions: [{ type: MouseTrackingExtension }],
+      },
+    ];
+
+    const { displayElement, getHTML, getData, expectFinished } = await startTimeline(
+      timeline,
+      jsPsych
+    );
+
+    const targetRect = displayElement.querySelector("#target").getBoundingClientRect();
+
+    mouseMove(50, 50, displayElement.querySelector("#target"));
+    jest.advanceTimersByTime(50);
+
+    // this one should be ignored
+    mouseMove(55, 50, displayElement.querySelector("#target"));
+    jest.advanceTimersByTime(50);
+
+    // this one should register
+    mouseMove(60, 50, displayElement.querySelector("#target"));
+
+    pressKey("a");
+
+    await expectFinished();
+
+    expect(getData().values()[0].mouse_tracking_data[0]).toMatchObject({
+      x: targetRect.x + 50,
+      y: targetRect.y + 50,
+      event: "mousemove",
+    });
+    expect(getData().values()[0].mouse_tracking_data[1]).toMatchObject({
+      x: targetRect.x + 60,
+      y: targetRect.y + 50,
+      event: "mousemove",
+    });
+  });
 });
