@@ -20,7 +20,7 @@ initJsPsych({
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-minimum_sample_time | number | 0 | The minimum time between samples for `mousemove` events. If `mousemove` events occur more rapidly than this limit, they will not be recorded. Use this if you want to keep the data files smaller and don't need high resolution tracking data. The default value of 0 means that all events will be recorded.
+minimum_sample_time | number | 0 | The minimum time between samples for `mousemove` events in milliseconds. If `mousemove` events occur more rapidly than this limit, they will not be recorded. Use this if you want to keep the data files smaller and don't need high resolution tracking data. The default value of 0 means that all events will be recorded.
 
 ### Trial Parameters
 

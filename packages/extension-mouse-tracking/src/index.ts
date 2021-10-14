@@ -2,8 +2,9 @@ import { JsPsych, JsPsychExtension, JsPsychExtensionInfo } from "jspsych";
 
 interface InitializeParameters {
   /**
-   * The minimum time between mouse samples. If mouse events occur more rapidly than this limit, they will
-   * not be recorded. Use this if you want to keep the data files smaller and don't need high resolution
+   * The minimum time between samples for `mousemove` events in milliseconds.
+   * If `mousemove` events occur more rapidly than this limit, they will not be recorded.
+   * Use this if you want to keep the data files smaller and don't need high resolution
    * tracking data. The default value of 0 means that all events will be recorded.
    * @default 0
    */
