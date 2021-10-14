@@ -2,4 +2,4 @@
 "@jspsych/test-utils": minor
 ---
 
-Added mouseMove utility function to dispatch "mousemove" events with location relative to a target element.
+Added `mouseMove()`, `mouseDown()`, and `mouseUp()` utility functions to dispatch mouse events with location relative to a target element.
