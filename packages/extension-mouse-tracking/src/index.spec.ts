@@ -73,7 +73,7 @@ describe("Mouse Tracking Extension", () => {
     );
 
     const targetRect = displayElement.querySelector("#target").getBoundingClientRect();
-    const target2Rect = displayElement.querySelector("target2").getBoundingClientRect();
+    const target2Rect = displayElement.querySelector("#target2").getBoundingClientRect();
 
     pressKey("a");
 
