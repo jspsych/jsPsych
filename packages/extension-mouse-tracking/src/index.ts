@@ -92,9 +92,9 @@ class MouseTrackingExtension implements JsPsychExtension {
     };
   };
 
-  private mouseMoveEventHandler = (e) => {
-    const x = e.clientX;
-    const y = e.clientY;
+  private mouseMoveEventHandler = ({ clientX, clientY }: MouseEvent) => {
+    const x = clientX;
+    const y = clientY;
 
     const event_time = performance.now();
     const t = Math.round(event_time - this.currentTrialStartTime);
@@ -108,9 +108,9 @@ class MouseTrackingExtension implements JsPsychExtension {
     }
   };
 
-  private mouseUpEventHandler = (e) => {
-    const x = e.clientX;
-    const y = e.clientY;
+  private mouseUpEventHandler = ({ clientX, clientY }: MouseEvent) => {
+    const x = clientX;
+    const y = clientY;
 
     const event_time = performance.now();
     const t = Math.round(event_time - this.currentTrialStartTime);
@@ -118,9 +118,9 @@ class MouseTrackingExtension implements JsPsychExtension {
     this.currentTrialData.push({ x, y, t, event: "mouseup" });
   };
 
-  private mouseDownEventHandler = (e) => {
-    const x = e.clientX;
-    const y = e.clientY;
+  private mouseDownEventHandler = ({ clientX, clientY }: MouseEvent) => {
+    const x = clientX;
+    const y = clientY;
 
     const event_time = performance.now();
     const t = Math.round(event_time - this.currentTrialStartTime);
