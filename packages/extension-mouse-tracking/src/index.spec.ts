@@ -80,5 +80,6 @@ describe("Mouse Tracking Extension", () => {
     await expectFinished();
 
     expect(getData().values()[0].mouse_tracking_targets["#target"]).toEqual(targetRect);
+    expect(getData().values()[0].mouse_tracking_targets["#target2"]).toEqual(target2Rect);
   });
 });
