@@ -15,7 +15,12 @@ interface OnStartParameters {
    * An array of string selectors. The selectors should identify one unique element on the page.
    * The DOMRect of the element will be stored in the data.
    */
-  targets: Array<string>;
+  targets?: Array<string>;
+  /**
+   * An array of mouse events to track. Can include `"mousemove"`, `"mousedown"`, and `"mouseup"`.
+   * @default ['mousemove']
+   */
+  events?: Array<string>;
 }
 
 class MouseTrackingExtension implements JsPsychExtension {
@@ -32,6 +37,7 @@ class MouseTrackingExtension implements JsPsychExtension {
   private currentTrialStartTime: number;
   private minimumSampleTime: number;
   private lastSampleTime: number;
+  private eventsToTrack: Array<string>;
 
   initialize = ({ minimum_sample_time = 0 }: InitializeParameters): Promise<void> => {
     this.domObserver = new MutationObserver(this.mutationObserverCallback);
@@ -43,10 +49,13 @@ class MouseTrackingExtension implements JsPsychExtension {
   };
 
   on_start = (params: OnStartParameters): void => {
+    params = params || {};
+
     this.currentTrialData = [];
     this.currentTrialTargets = new Map();
-    this.currentTrialSelectors = typeof params !== "undefined" ? params.targets : [];
+    this.currentTrialSelectors = params.targets || [];
     this.lastSampleTime = null;
+    this.eventsToTrack = params.events || ["mousemove"];
 
     this.domObserver.observe(this.jsPsych.getDisplayElement(), { childList: true });
   };
@@ -56,13 +65,29 @@ class MouseTrackingExtension implements JsPsychExtension {
     this.currentTrialStartTime = performance.now();
 
     // start data collection
-    window.addEventListener("mousemove", this.mouseEventHandler);
+    if (this.eventsToTrack.includes("mousemove")) {
+      window.addEventListener("mousemove", this.mouseMoveEventHandler);
+    }
+    if (this.eventsToTrack.includes("mousedown")) {
+      window.addEventListener("mousedown", this.mouseDownEventHandler);
+    }
+    if (this.eventsToTrack.includes("mouseup")) {
+      window.addEventListener("mouseup", this.mouseUpEventHandler);
+    }
   };
 
   on_finish = () => {
     this.domObserver.disconnect();
 
-    window.removeEventListener("mousemove", this.mouseEventHandler);
+    if (this.eventsToTrack.includes("mousemove")) {
+      window.removeEventListener("mousemove", this.mouseMoveEventHandler);
+    }
+    if (this.eventsToTrack.includes("mousedown")) {
+      window.removeEventListener("mousedown", this.mouseDownEventHandler);
+    }
+    if (this.eventsToTrack.includes("mouseup")) {
+      window.removeEventListener("mouseup", this.mouseUpEventHandler);
+    }
 
     return {
       mouse_tracking_data: this.currentTrialData,
@@ -70,7 +95,7 @@ class MouseTrackingExtension implements JsPsychExtension {
     };
   };
 
-  private mouseEventHandler = (e) => {
+  private mouseMoveEventHandler = (e) => {
     const x = e.clientX;
     const y = e.clientY;
 
@@ -82,8 +107,28 @@ class MouseTrackingExtension implements JsPsychExtension {
       event_time - this.lastSampleTime >= this.minimumSampleTime
     ) {
       this.lastSampleTime = event_time;
-      this.currentTrialData.push({ x, y, t });
+      this.currentTrialData.push({ x, y, t, event: "mousemove" });
     }
+  };
+
+  private mouseUpEventHandler = (e) => {
+    const x = e.clientX;
+    const y = e.clientY;
+
+    const event_time = performance.now();
+    const t = Math.round(event_time - this.currentTrialStartTime);
+
+    this.currentTrialData.push({ x, y, t, event: "mouseup" });
+  };
+
+  private mouseDownEventHandler = (e) => {
+    const x = e.clientX;
+    const y = e.clientY;
+
+    const event_time = performance.now();
+    const t = Math.round(event_time - this.currentTrialStartTime);
+
+    this.currentTrialData.push({ x, y, t, event: "mousedown" });
   };
 
   private mutationObserverCallback = (mutationsList, observer) => {

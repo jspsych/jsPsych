@@ -1,7 +1,7 @@
 # mouse-tracking
 
 This extension supports mouse tracking. 
-Specifically, it can record the `x` `y` coordinates and time of [mousemove events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event). 
+Specifically, it can record the `x` `y` coordinates and time of [mousemove events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event), [mousedown events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mousedown_event), and [mouseup events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mouseup_event).
 It also allows recording of the [bounding rectangle](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) of elements on the screen to support the calculation of mouse events relative to different elements.
 
 ## Parameters
@@ -20,7 +20,7 @@ initJsPsych({
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-minimum_sample_time | number | 0 | The minimum time between mouse samples. If mouse events occur more rapidly than this limit, they will not be recorded. Use this if you want to keep the data files smaller and don't need high resolution tracking data. The default value of 0 means that all events will be recorded.
+minimum_sample_time | number | 0 | The minimum time between samples for `mousemove` events. If `mousemove` events occur more rapidly than this limit, they will not be recorded. Use this if you want to keep the data files smaller and don't need high resolution tracking data. The default value of 0 means that all events will be recorded.
 
 ### Trial Parameters
 
@@ -38,12 +38,13 @@ var trial = {
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 targets | array | [] | A list of elements on the page that you would like to record the coordinates of for comparison with the WebGazer data. Each entry in the array should be a valid [CSS selector string](https://www.w3schools.com/cssref/css_selectors.asp) that identifies the element. The selector string should be valid for exactly one element on the page. If the selector is valid for more than one element then only the first matching element will be recorded.
+events | array | ['mousemove'] | A list of events to track. Can include 'mousemove', 'mousedown', and 'mouseup'. 
 
 ## Data Generated
 
 Name | Type | Value
 -----|------|------
-mouse_tracking_data | array | An array of objects containing mouse movement data for the trial. Each object has an `x`, a `y`, and a `t` property. The `x` and `y` properties specify the mouse coordinates in pixels relative to the top left corner of the viewport and `t` specifies the time in milliseconds since the start of the trial.
+mouse_tracking_data | array | An array of objects containing mouse movement data for the trial. Each object has an `x`, a `y`,  a `t`, and an `event` property. The `x` and `y` properties specify the mouse coordinates in pixels relative to the top left corner of the viewport and `t` specifies the time in milliseconds since the start of the trial. The `event` will be either 'mousemove', 'mousedown', or 'mouseup' depending on which event was generated.
 mouse_tracking_targets | object | An object contain the pixel coordinates of elements on the screen specified by the `.targets` parameter. Each key in this object will be a `selector` property, containing the CSS selector string used to find the element. The object corresponding to each key will contain `x` and `y` properties specifying the top-left corner of the object, `width` and `height` values, plus `top`, `bottom`, `left`, and `right` parameters which specify the [bounding rectangle](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) of the element. 
 
 ## Examples
