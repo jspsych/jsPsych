@@ -29,6 +29,24 @@ export function clickTarget(target: Element) {
 }
 
 /**
+ * Dispatch a `mousemove` event, with x and y defined relative to the container element.
+ * @param x The x location of the event, relative to the x location of `container`.
+ * @param y The y location of the event, relative to the y location of `container`.
+ * @param container The DOM element for relative location of the event.
+ */
+export function mouseMove(x: number, y: number, container: Element) {
+  const containerRect = container.getBoundingClientRect();
+
+  const eventInit = {
+    clientX: containerRect.x + x,
+    clientY: containerRect.y + y,
+    bubbles: true,
+  };
+
+  container.dispatchEvent(new MouseEvent("mousemove", eventInit));
+}
+
+/**
  * https://github.com/facebook/jest/issues/2157#issuecomment-279171856
  */
 export function flushPromises() {
