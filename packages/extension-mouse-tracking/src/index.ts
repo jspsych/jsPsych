@@ -88,7 +88,7 @@ class MouseTrackingExtension implements JsPsychExtension {
 
     return {
       mouse_tracking_data: this.currentTrialData,
-      mouse_tracking_targets: this.currentTrialTargets,
+      mouse_tracking_targets: Object.fromEntries(this.currentTrialTargets.entries()),
     };
   };
 
@@ -130,11 +130,10 @@ class MouseTrackingExtension implements JsPsychExtension {
 
   private mutationObserverCallback = (mutationsList, observer) => {
     for (const selector of this.currentTrialSelectors) {
-      if (!this.currentTrialTargets[selector]) {
+      if (!this.currentTrialTargets.has(selector)) {
         const target = this.jsPsych.getDisplayElement().querySelector(selector);
         if (target) {
           this.currentTrialTargets.set(selector, target.getBoundingClientRect());
-        }
         }
       }
     }
