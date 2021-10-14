@@ -9,5 +9,5 @@ For an overview of what extensions are and how they work, see our [extensions ov
 
 Extension | Description
 ------ | -----------
-[mouse&#8209;tracking](../extensions/mouse-tracking.md) | Enables tracking of mouse movements and recording location of objects on screen.
+[mouse&#8209;tracking](../extensions/mouse-tracking.md) | Enables tracking of mouse events and recording location of objects on screen.
 [webgazer](../extensions/webgazer.md) | Enables eye tracking using the [WebGazer](https://webgazer.cs.brown.edu/) library.
