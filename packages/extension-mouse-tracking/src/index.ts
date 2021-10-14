@@ -39,13 +39,9 @@ class MouseTrackingExtension implements JsPsychExtension {
   private lastSampleTime: number;
   private eventsToTrack: Array<string>;
 
-  initialize = ({ minimum_sample_time = 0 }: InitializeParameters): Promise<void> => {
+  initialize = async ({ minimum_sample_time = 0 }: InitializeParameters) => {
     this.domObserver = new MutationObserver(this.mutationObserverCallback);
     this.minimumSampleTime = minimum_sample_time;
-
-    return new Promise((resolve, reject) => {
-      resolve();
-    });
   };
 
   on_start = (params: OnStartParameters): void => {
@@ -134,12 +130,10 @@ class MouseTrackingExtension implements JsPsychExtension {
   private mutationObserverCallback = (mutationsList, observer) => {
     for (const selector of this.currentTrialSelectors) {
       if (!this.currentTrialTargets[selector]) {
-        if (this.jsPsych.getDisplayElement().querySelector(selector)) {
-          var coords = this.jsPsych
-            .getDisplayElement()
-            .querySelector(selector)
-            .getBoundingClientRect();
-          this.currentTrialTargets[selector] = coords;
+        const target = this.jsPsych.getDisplayElement().querySelector(selector);
+        if (target) {
+          this.currentTrialTargets.set(selector, target.getBoundingClientRect());
+        }
         }
       }
     }
