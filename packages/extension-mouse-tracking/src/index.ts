@@ -45,7 +45,7 @@ class MouseTrackingExtension implements JsPsychExtension {
   on_start = (params: OnStartParameters): void => {
     this.currentTrialData = [];
     this.currentTrialTargets = new Map();
-    this.currentTrialSelectors = params.targets;
+    this.currentTrialSelectors = typeof params !== "undefined" ? params.targets : [];
     this.lastSampleTime = null;
 
     this.domObserver.observe(this.jsPsych.getDisplayElement(), { childList: true });
@@ -71,8 +71,8 @@ class MouseTrackingExtension implements JsPsychExtension {
   };
 
   private mouseEventHandler = (e) => {
-    const x = e.x;
-    const y = e.y;
+    const x = e.clientX;
+    const y = e.clientY;
 
     const event_time = performance.now();
     const t = Math.round(event_time - this.currentTrialStartTime);
