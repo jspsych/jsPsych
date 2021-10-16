@@ -73,7 +73,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
 	<a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-audio-button-response-demo-2.html">Open demo in new tab</a>
 
-	Note: if you want the images to look more like jsPsych buttons, i.e. with borders and different styles for hover/active/disabled states, then you can also embed the image element inside the default `button_html` string, like this:
+	**Note**: if you want the images to look more like jsPsych buttons, i.e. with borders and different styles for hover/active/disabled states, then you can also embed the image element inside the default `button_html` string:
 	```js
 	button_html: '<button class="jspsych-btn"><img src="%choice%" /></button>'
 	```
