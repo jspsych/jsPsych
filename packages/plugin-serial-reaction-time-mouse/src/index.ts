@@ -105,7 +105,7 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
         );
       }
       for (var i = 0; i < resp_targets.length; i++) {
-        resp_targets[i].addEventListener("mousedown", function (e) {
+        resp_targets[i].addEventListener("mousedown", (e) => {
           if (startTime == -1) {
             return;
           } else {
@@ -145,9 +145,7 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
     if (trial.pre_target_duration <= 0) {
       showTarget();
     } else {
-      this.jsPsych.pluginAPI.setTimeout(function () {
-        showTarget();
-      }, trial.pre_target_duration);
+      this.jsPsych.pluginAPI.setTimeout(showTarget, trial.pre_target_duration);
     }
 
     //show prompt if there is one

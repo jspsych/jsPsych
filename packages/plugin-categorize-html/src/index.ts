@@ -113,7 +113,7 @@ class CategorizeHtmlPlugin implements JsPsychPlugin<Info> {
 
     // hide image after time if the timing parameter is set
     if (trial.stimulus_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector<HTMLElement>(
           "#jspsych-categorize-html-stimulus"
         ).style.visibility = "hidden";
@@ -163,7 +163,7 @@ class CategorizeHtmlPlugin implements JsPsychPlugin<Info> {
     });
 
     if (trial.trial_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         after_response({
           key: null,
           rt: null,
@@ -205,7 +205,7 @@ class CategorizeHtmlPlugin implements JsPsychPlugin<Info> {
         correct === false &&
         ((timeout && trial.show_feedback_on_timeout) || !timeout)
       ) {
-        var after_forced_response = function (info) {
+        var after_forced_response = (info) => {
           endTrial();
         };
 
@@ -217,9 +217,7 @@ class CategorizeHtmlPlugin implements JsPsychPlugin<Info> {
           allow_held_key: false,
         });
       } else {
-        this.jsPsych.pluginAPI.setTimeout(function () {
-          endTrial();
-        }, trial.feedback_duration);
+        this.jsPsych.pluginAPI.setTimeout(endTrial, trial.feedback_duration);
       }
     };
   }

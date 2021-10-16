@@ -102,7 +102,7 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       canvas.style.padding = "0";
       var ctx = canvas.getContext("2d");
       var img = new Image();
-      img.onload = function () {
+      img.onload = () => {
         // if image wasn't preloaded, then it will need to be drawn whenever it finishes loading
         if (!image_drawn) {
           getHeightWidth(); // only possible to get width/height after image loads
@@ -213,7 +213,7 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     // function to handle responses by the subject
-    var after_response = function (info) {
+    var after_response = (info) => {
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
       display_element.querySelector("#jspsych-image-keyboard-response-stimulus").className +=
@@ -242,7 +242,7 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
     // hide stimulus if stimulus_duration is set
     if (trial.stimulus_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector<HTMLElement>(
           "#jspsych-image-keyboard-response-stimulus"
         ).style.visibility = "hidden";
@@ -251,7 +251,7 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
     // end trial if trial_duration is set
     if (trial.trial_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         end_trial();
       }, trial.trial_duration);
     } else if (trial.response_ends_trial === false) {

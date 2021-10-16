@@ -54,7 +54,7 @@ class FullscreenPlugin implements JsPsychPlugin<Info> {
     const endTrial = () => {
       display_element.innerHTML = "";
 
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         var trial_data = {
           success: !keyboardNotAllowed,
         };
@@ -78,7 +78,7 @@ class FullscreenPlugin implements JsPsychPlugin<Info> {
           "</button>";
         var listener = display_element
           .querySelector("#jspsych-fullscreen-btn")
-          .addEventListener("click", function () {
+          .addEventListener("click", () => {
             var element = document.documentElement;
             if (element.requestFullscreen) {
               element.requestFullscreen();

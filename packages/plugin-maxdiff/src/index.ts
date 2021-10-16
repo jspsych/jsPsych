@@ -136,10 +136,10 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
     // first checks that the same alternative cannot be endorsed in the left and right columns simultaneously.
     // then enables the submit button if the trial is required.
     const left_right = ["left", "right"];
-    left_right.forEach(function (p) {
+    left_right.forEach((p) => {
       // Get all elements either 'left' or 'right'
-      document.getElementsByName(p).forEach(function (alt) {
-        alt.addEventListener("click", function () {
+      document.getElementsByName(p).forEach((alt) => {
+        alt.addEventListener("click", () => {
           // Find the opposite (if left, then right & vice versa) identified by the class (jspsych-maxdiff-alt-1, 2, etc)
           var op = alt["name"] == "left" ? "right" : "left";
           var n = document.getElementsByClassName(alt.className).namedItem(op);

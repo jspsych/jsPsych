@@ -108,7 +108,7 @@ class ResizePlugin implements JsPsychPlugin<Info> {
     };
 
     // listens for the click
-    document.getElementById("jspsych-resize-btn").addEventListener("click", function () {
+    document.getElementById("jspsych-resize-btn").addEventListener("click", () => {
       scale();
       end_trial();
     });
@@ -117,7 +117,7 @@ class ResizePlugin implements JsPsychPlugin<Info> {
     var origin_x, origin_y;
     var cx, cy;
 
-    var mousedownevent = function (e) {
+    var mousedownevent = (e) => {
       e.preventDefault();
       dragging = true;
       origin_x = e.pageX;
@@ -130,7 +130,7 @@ class ResizePlugin implements JsPsychPlugin<Info> {
       .querySelector("#jspsych-resize-handle")
       .addEventListener("mousedown", mousedownevent);
 
-    var mouseupevent = function (e) {
+    var mouseupevent = (e) => {
       dragging = false;
     };
 
@@ -138,7 +138,7 @@ class ResizePlugin implements JsPsychPlugin<Info> {
 
     var scale_div: HTMLDivElement = display_element.querySelector("#jspsych-resize-div");
 
-    var resizeevent = function (e) {
+    var resizeevent = (e) => {
       if (dragging) {
         var dx = e.pageX - origin_x;
         var dy = e.pageY - origin_y;
