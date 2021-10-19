@@ -47,6 +47,22 @@ const info = <const>{
       default: true,
     },
     /**
+     * When `allow_window_resize` is `true`, this is the minimum width (px) that the window
+     * needs to be before the experiment will continue.
+     */
+    minimum_width: {
+      type: ParameterType.INT,
+      default: 0,
+    },
+    /**
+     * When `allow_window_resize` is `true`, this is the minimum height (px) that the window
+     * needs to be before the experiment will continue.
+     */
+    minimum_height: {
+      type: ParameterType.INT,
+      default: 0,
+    },
+    /**
      * List of inclusion criteria
      */
     inclusion_function: {
@@ -77,8 +93,13 @@ type Info = typeof info;
  */
 class BrowserCheckPlugin implements JsPsychPlugin<Info> {
   static info = info;
+  private end_flag = false;
 
   constructor(private jsPsych: JsPsych) {}
+
+  private delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     const featureCheckFunctionsMap = new Map<string, () => any>(
@@ -177,7 +198,9 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
       inclusion_check();
     });
 
-    var inclusion_check = () => {
+    const inclusion_check = async () => {
+      await check_allow_resize();
+
       if (trial.inclusion_function(Object.fromEntries(feature_data))) {
         end_trial();
       } else {
@@ -185,59 +208,60 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
       }
     };
 
-    var end_trial = () => {
+    const check_allow_resize = async () => {
+      const w = feature_data.get("width");
+      const h = feature_data.get("height");
+
+      if (
+        trial.allow_window_resize &&
+        (w || h) &&
+        (trial.minimum_width > 0 || trial.minimum_height > 0)
+      ) {
+        display_element.innerHTML = `
+          <p>Your browser window is too small to complete this experiment. Please maximize the size of your browser window. 
+          If your browser window is already maximized, you will not be able to complete this experiment.</p>
+          <p>The minimum window width is <span id="browser-check-min-width></span> px.</p>
+          <p>Your current window width is <span id="browser-check-actual-width></span> px.</p>
+          <p>The minimum window height is <span id="browser-check-min-height></span> px.</p>
+          <p>Your current window height is <span id="browser-check-actual-height></span> px.</p>
+          <button id="browser-check-max-size-btn" class="jspsych-btn">I cannot make the window any larger</button>.`;
+
+        display_element
+          .querySelector("#browser-check-max-size-btn")
+          .addEventListener("click", end_experiment);
+
+        while (
+          !this.end_flag &&
+          (window.innerWidth < trial.minimum_width || window.innerHeight < trial.minimum_height)
+        ) {
+          display_element.querySelector("#browser-check-min-width").innerHTML =
+            trial.minimum_width.toString();
+          display_element.querySelector("#browser-check-min-height").innerHTML =
+            trial.minimum_height.toString();
+          display_element.querySelector("#browser-check-actual-width").innerHTML =
+            window.innerWidth.toString();
+          display_element.querySelector("#browser-check-actual-height").innerHTML =
+            window.innerHeight.toString();
+
+          await this.delay(100);
+        }
+      }
+    };
+
+    const end_trial = () => {
       const trial_data = { ...Object.fromEntries(feature_data) };
 
       this.jsPsych.finishTrial(trial_data);
     };
 
     var end_experiment = () => {
+      this.end_flag = true;
+
       const trial_data = { ...Object.fromEntries(feature_data) };
 
       this.jsPsych.endExperiment(trial.exclusion_message, trial_data);
     };
   }
-
-  // MINIMUM SIZE
-  // if (exclusions.min_width || exclusions.min_height) {
-  //   const mw = exclusions.min_width || 0;
-  //   const mh = exclusions.min_height || 0;
-
-  //   if (window.innerWidth < mw || window.innerHeight < mh) {
-  //     this.getDisplayElement().innerHTML =
-  //       "<p>Your browser window is too small to complete this experiment. " +
-  //       "Please maximize the size of your browser window. If your browser window is already maximized, " +
-  //       "you will not be able to complete this experiment.</p>" +
-  //       "<p>The minimum width is " +
-  //       mw +
-  //       "px. Your current width is " +
-  //       window.innerWidth +
-  //       "px.</p>" +
-  //       "<p>The minimum height is " +
-  //       mh +
-  //       "px. Your current height is " +
-  //       window.innerHeight +
-  //       "px.</p>";
-
-  //     // Wait for window size to increase
-  //     while (window.innerWidth < mw || window.innerHeight < mh) {
-  //       await delay(100);
-  //     }
-
-  //     this.getDisplayElement().innerHTML = "";
-  //   }
-  // }
-
-  // // WEB AUDIO API
-  // if (typeof exclusions.audio !== "undefined" && exclusions.audio) {
-  //   if (!window.hasOwnProperty("AudioContext") && !window.hasOwnProperty("webkitAudioContext")) {
-  //     this.getDisplayElement().innerHTML =
-  //       "<p>Your browser does not support the WebAudio API, which means that you will not " +
-  //       "be able to complete the experiment.</p><p>Browsers that support the WebAudio API include " +
-  //       "Chrome, Firefox, Safari, and Edge.</p>";
-  //     throw new Error();
-  //   }
-  // }
 }
 
 export default BrowserCheckPlugin;
