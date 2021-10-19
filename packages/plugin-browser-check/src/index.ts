@@ -32,7 +32,7 @@ const info = <const>{
       default: [],
     },
     /**
-     * The number of animation frames to sample when calculating vsync_rate
+     * The number of animation frames to sample when calculating vsync_rate.
      */
     vsync_frame_count: {
       type: ParameterType.INT,
@@ -61,6 +61,22 @@ const info = <const>{
     minimum_height: {
       type: ParameterType.INT,
       default: 0,
+    },
+    /**
+     * Message to display during interactive window resizing.
+     */
+    window_resize_message: {
+      type: ParameterType.HTML_STRING,
+      default: `<p>Your browser window is too small to complete this experiment. Please maximize the size of your browser window. 
+        If your browser window is already maximized, you will not be able to complete this experiment.</p>
+        <p>The minimum window width is <span id="browser-check-min-width"></span> px.</p>
+        <p>Your current window width is <span id="browser-check-actual-width"></span> px.</p>
+        <p>The minimum window height is <span id="browser-check-min-height"></span> px.</p>
+        <p>Your current window height is <span id="browser-check-actual-height"></span> px.</p>`,
+    },
+    resize_fail_button_text: {
+      type: ParameterType.STRING,
+      default: "I cannot make the window any larger",
     },
     /**
      * List of inclusion criteria
@@ -201,7 +217,7 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
     const inclusion_check = async () => {
       await check_allow_resize();
 
-      if (trial.inclusion_function(Object.fromEntries(feature_data))) {
+      if (!this.end_flag && trial.inclusion_function(Object.fromEntries(feature_data))) {
         end_trial();
       } else {
         end_experiment();
@@ -217,18 +233,16 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
         (w || h) &&
         (trial.minimum_width > 0 || trial.minimum_height > 0)
       ) {
-        display_element.innerHTML = `
-          <p>Your browser window is too small to complete this experiment. Please maximize the size of your browser window. 
-          If your browser window is already maximized, you will not be able to complete this experiment.</p>
-          <p>The minimum window width is <span id="browser-check-min-width></span> px.</p>
-          <p>Your current window width is <span id="browser-check-actual-width></span> px.</p>
-          <p>The minimum window height is <span id="browser-check-min-height></span> px.</p>
-          <p>Your current window height is <span id="browser-check-actual-height></span> px.</p>
-          <button id="browser-check-max-size-btn" class="jspsych-btn">I cannot make the window any larger</button>.`;
+        display_element.innerHTML =
+          trial.window_resize_message +
+          `<p><button id="browser-check-max-size-btn" class="jspsych-btn">${trial.resize_fail_button_text}</button></p>`;
 
         display_element
           .querySelector("#browser-check-max-size-btn")
-          .addEventListener("click", end_experiment);
+          .addEventListener("click", () => {
+            display_element.innerHTML = "";
+            this.end_flag = true;
+          });
 
         while (
           !this.end_flag &&
@@ -249,13 +263,15 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
     };
 
     const end_trial = () => {
+      display_element.innerHTML = "";
+
       const trial_data = { ...Object.fromEntries(feature_data) };
 
       this.jsPsych.finishTrial(trial_data);
     };
 
     var end_experiment = () => {
-      this.end_flag = true;
+      display_element.innerHTML = "";
 
       const trial_data = { ...Object.fromEntries(feature_data) };
 
