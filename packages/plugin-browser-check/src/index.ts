@@ -181,7 +181,7 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
       if (trial.inclusion_function(Object.fromEntries(feature_data))) {
         end_trial();
       } else {
-        this.jsPsych.endExperiment(trial.exclusion_message);
+        end_experiment();
       }
     };
 
@@ -189,6 +189,12 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
       const trial_data = { ...Object.fromEntries(feature_data) };
 
       this.jsPsych.finishTrial(trial_data);
+    };
+
+    var end_experiment = () => {
+      const trial_data = { ...Object.fromEntries(feature_data) };
+
+      this.jsPsych.endExperiment(trial.exclusion_message, trial_data);
     };
   }
 
