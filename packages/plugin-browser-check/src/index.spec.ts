@@ -1,4 +1,4 @@
-import { pressKey, startTimeline } from "@jspsych/test-utils";
+import { clickTarget, pressKey, startTimeline } from "@jspsych/test-utils";
 
 import browserCheck from ".";
 
@@ -105,5 +105,109 @@ describe("browser-check", () => {
     ]);
 
     await expectFinished();
+  });
+
+  test("resize message is displayed when allowed", async () => {
+    jest
+      .spyOn(navigator, "userAgent", "get")
+      .mockReturnValue(
+        "Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19"
+      );
+
+    const { expectFinished, getHTML, displayElement } = await startTimeline([
+      {
+        type: browserCheck,
+        skip_features: ["vsync_rate"],
+        minimum_width: 1200,
+        minimum_height: 1000,
+      },
+    ]);
+
+    expect(getHTML()).toMatch("1200");
+    expect(getHTML()).toMatch("1000");
+
+    clickTarget(displayElement.querySelector("button"));
+
+    jest.runAllTimers();
+
+    await expectFinished();
+  });
+
+  test("can change button text on interactive resize", async () => {
+    jest
+      .spyOn(navigator, "userAgent", "get")
+      .mockReturnValue(
+        "Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19"
+      );
+
+    const { expectFinished, getHTML, displayElement } = await startTimeline([
+      {
+        type: browserCheck,
+        skip_features: ["vsync_rate"],
+        minimum_width: 1200,
+        minimum_height: 1000,
+        resize_fail_button_text: "foo",
+      },
+    ]);
+
+    expect(displayElement.querySelector("button").innerHTML).toMatch("foo");
+
+    clickTarget(displayElement.querySelector("button"));
+
+    jest.runAllTimers();
+
+    await expectFinished();
+  });
+
+  test("resizing to meet minimum vals will finish trial", async () => {
+    jest
+      .spyOn(navigator, "userAgent", "get")
+      .mockReturnValue(
+        "Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19"
+      );
+
+    const { expectFinished, expectRunning } = await startTimeline([
+      {
+        type: browserCheck,
+        skip_features: ["vsync_rate"],
+        minimum_width: 1200,
+        minimum_height: 1000,
+        resize_fail_button_text: "foo",
+      },
+    ]);
+
+    await expectRunning();
+
+    // @ts-ignore jsdom window innerWidth is settable
+    window.innerWidth = 2000;
+    // @ts-ignore jsdom window innerHeight is settable
+    window.innerHeight = 2000;
+
+    jest.runAllTimers();
+
+    await expectFinished();
+  });
+
+  test("vsync rate", async () => {
+    jest
+      .spyOn(navigator, "userAgent", "get")
+      .mockReturnValue(
+        "Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19"
+      );
+
+    const { expectFinished, expectRunning, getData } = await startTimeline([
+      {
+        type: browserCheck,
+        features: ["vsync_rate"],
+      },
+    ]);
+
+    // this will simulate the requestAnimationFrame() calls that are needed for vsync_rate.
+    // each one will fake execute 16ms after the previous.
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    expect(getData().values()[0].vsync_rate).toBe(1000 / 16);
   });
 });
