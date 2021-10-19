@@ -299,12 +299,12 @@ export class JsPsych {
     }
   }
 
-  endExperiment(end_message: string) {
+  endExperiment(end_message = "", data = {}) {
     this.timeline.end_message = end_message;
     this.timeline.end();
     this.pluginAPI.cancelAllKeyboardResponses();
     this.pluginAPI.clearAllTimeouts();
-    this.finishTrial();
+    this.finishTrial(data);
   }
 
   endCurrentTimeline() {
