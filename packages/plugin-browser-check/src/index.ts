@@ -92,7 +92,7 @@ const info = <const>{
      */
     exclusion_message: {
       type: ParameterType.HTML_STRING,
-      default: `<p>You shall not pass.</p>`,
+      default: `<p>Your browser does not meet the requirements to participate in this experiment.</p>`,
     },
   },
 };
@@ -127,7 +127,7 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
           return window.innerHeight;
         },
         webaudio: () => {
-          return (
+          if (
             window.AudioContext ||
             // @ts-ignore because prefixed not in document type
             window.webkitAudioContext ||
@@ -137,7 +137,11 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
             window.oAudioContext ||
             // @ts-ignore because prefixed not in document type
             window.msAudioContext
-          );
+          ) {
+            return true;
+          } else {
+            return false;
+          }
         },
         browser: () => {
           return detect().name;
@@ -152,13 +156,17 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
           return detect().os;
         },
         fullscreen: () => {
-          return (
+          if (
             document.exitFullscreen ||
             // @ts-ignore because prefixed not in document type
             document.webkitExitFullscreen ||
             // @ts-ignore because prefixed not in document type
             document.msExitFullscreen
-          );
+          ) {
+            return true;
+          } else {
+            return false;
+          }
         },
         vsync_rate: () => {
           return new Promise((resolve) => {
@@ -258,6 +266,9 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
             window.innerHeight.toString();
 
           await this.delay(100);
+
+          feature_data.set("width", window.innerWidth);
+          feature_data.set("height", window.innerHeight);
         }
       }
     };
