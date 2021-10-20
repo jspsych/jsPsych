@@ -13,10 +13,10 @@ The plugin currently can record the following features:
 * The display refresh rate in frames per second.
 
 !!! warning
-		Features with an * are recorded by parsing the [user agent string](https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent). 
-		This method is accurate most of the time, but is not guaranteed to be correct. 
-		The plugin uses the [detect-browser package](https://github.com/DamonOehlman/detect-browser) to perform user agent parsing. 
-		You can find a list of supported browsers and OSes in the [source file](https://github.com/DamonOehlman/detect-browser/blob/master/src/index.ts).
+    Features with an * are recorded by parsing the [user agent string](https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent). 
+    This method is accurate most of the time, but is not guaranteed to be correct. 
+    The plugin uses the [detect-browser package](https://github.com/DamonOehlman/detect-browser) to perform user agent parsing. 
+    You can find a list of supported browsers and OSes in the [source file](https://github.com/DamonOehlman/detect-browser/blob/master/src/index.ts).
 
 The plugin begins by measuring the set of features requested. 
 An inclusion function is evaluated to see if the paricipant passes the inclusion criteria. 
@@ -63,53 +63,53 @@ Note that all of these values are only recorded when the corresponding key is in
 ## Examples
 
 ???+ example "Recording all of the available features, no interactive resize"
-	=== "Code"
-		```javascript
-		var trial = {
-			type: jsPsychBrowserCheck,
-			allow_resize: false
-		};
-		```
+    === "Code"
+        ```javascript
+        var trial = {
+          type: jsPsychBrowserCheck,
+          allow_resize: false
+        };
+        ```
 
-	=== "Demo"
-		<div style="text-align:center;">
-			<iframe src="../../demos/jspsych-browser-check-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
-		</div>
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../../demos/jspsych-browser-check-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-	<a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-browser-check-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-browser-check-demo1.html">Open demo in new tab</a>
 
 ???+ example "Using the inclusion function to mandate the use of Chrome or Firefox as the browser"
-	=== "Code"
-		```javascript
-		var trial = {
-      type: jsPsychBrowserCheck,
-      inclusion_function: (data) => {
-        return ['chrome', 'firefox'].contains(data.browser);
-      },
-      exclusion_message: `<p>You must use Chrome or Firefox to complete this experiment.</p>`
-    };
-		```
+    === "Code"
+        ```javascript
+        var trial = {
+          type: jsPsychBrowserCheck,
+          inclusion_function: (data) => {
+            return ['chrome', 'firefox'].contains(data.browser);
+          },
+          exclusion_message: `<p>You must use Chrome or Firefox to complete this experiment.</p>`
+        };
+        ``` 
 
-	=== "Demo"
-		<div style="text-align:center;">
-			<iframe src="../../demos/jspsych-browser-check-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
-		</div>
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../../demos/jspsych-browser-check-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
 
-	<a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-browser-check-demo2.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-browser-check-demo2.html">Open demo in new tab</a>
 
 ???+ example "Interactive resize"
-	=== "Code"
-		```javascript
-		var trial = {
-      type: jsPsychBrowserCheck,
-      minimum_width: 1000,
-      minimum_height: 600
-    };
-		```
+    === "Code"
+        ```javascript
+        var trial = {
+          type: jsPsychBrowserCheck,
+          minimum_width: 1000,
+          minimum_height: 600
+        };
+        ```
 
-	=== "Demo"
-		<div style="text-align:center;">
-			<p>This demo only works in a resizable window. Please <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-browser-check-demo3.html"> open it in new tab</a>
-		</div>
+    === "Demo"
+        <div style="text-align:center;">
+          <p>This demo only works in a resizable window. Please <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-browser-check-demo3.html"> open it in new tab</a>
+        </div>
 
-	<a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-browser-check-demo3.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-browser-check-demo3.html">Open demo in new tab</a>
