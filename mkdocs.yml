@@ -74,6 +74,7 @@ nav:
   - 'audio-button-response': 'plugins/audio-button-response.md'
   - 'audio-keyboard-response': 'plugins/audio-keyboard-response.md'
   - 'audio-slider-response': 'plugins/audio-slider-response.md'
+  - 'browser-check': 'plugins/browser-check.md'
   - 'call-function': 'plugins/call-function.md'
   - 'canvas-button-response': 'plugins/canvas-button-response.md'
   - 'canvas-keyboard-response': 'plugins/canvas-keyboard-response.md'
