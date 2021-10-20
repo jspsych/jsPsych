@@ -74,12 +74,21 @@ const info = <const>{
         <p>The minimum window height is <span id="browser-check-min-height"></span> px.</p>
         <p>Your current window height is <span id="browser-check-actual-height"></span> px.</p>`,
     },
+    /**
+     * During the interactive resize, a button with this text will be displayed below the
+     * `window_resize_message` for the participant to click if the window cannot meet the
+     * minimum size needed. When the button is clicked, the experiment will end and
+     * `exclusion_message` will be displayed.
+     */
     resize_fail_button_text: {
       type: ParameterType.STRING,
       default: "I cannot make the window any larger",
     },
     /**
-     * List of inclusion criteria
+     * A function that evaluates to `true` if the browser meets all of the inclusion criteria
+     * for the experiment, and `false` otherwise. The first argument to the function will be
+     * an object containing key value pairs with the measured features of the browser. The
+     * keys will be the same as those listed in `features`.
      */
     inclusion_function: {
       type: ParameterType.FUNCTION,
@@ -254,18 +263,30 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
             this.end_flag = true;
           });
 
+        const min_width_el = display_element.querySelector("#browser-check-min-width");
+        const min_height_el = display_element.querySelector("#browser-check-min-height");
+        const actual_height_el = display_element.querySelector("#browser-check-actual-height");
+        const actual_width_el = display_element.querySelector("#browser-check-actual-width");
+
         while (
           !this.end_flag &&
           (window.innerWidth < trial.minimum_width || window.innerHeight < trial.minimum_height)
         ) {
-          display_element.querySelector("#browser-check-min-width").innerHTML =
-            trial.minimum_width.toString();
-          display_element.querySelector("#browser-check-min-height").innerHTML =
-            trial.minimum_height.toString();
-          display_element.querySelector("#browser-check-actual-width").innerHTML =
-            window.innerWidth.toString();
-          display_element.querySelector("#browser-check-actual-height").innerHTML =
-            window.innerHeight.toString();
+          if (min_width_el) {
+            min_width_el.innerHTML = trial.minimum_width.toString();
+          }
+
+          if (min_height_el) {
+            min_height_el.innerHTML = trial.minimum_height.toString();
+          }
+
+          if (actual_height_el) {
+            actual_height_el.innerHTML = window.innerHeight.toString();
+          }
+
+          if (actual_width_el) {
+            actual_width_el.innerHTML = window.innerWidth.toString();
+          }
 
           await this.delay(100);
 
