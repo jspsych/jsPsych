@@ -178,7 +178,9 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
               for (const v of deltas) {
                 sum += v;
               }
-              resolve(1000.0 / (sum / deltas.length));
+              const frame_rate = 1000.0 / (sum / deltas.length);
+              const frame_rate_two_sig_dig = Math.round(frame_rate * 100) / 100;
+              resolve(frame_rate_two_sig_dig);
             };
             const nextFrame = () => {
               let t1 = performance.now();
