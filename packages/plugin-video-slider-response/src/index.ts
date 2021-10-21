@@ -131,12 +131,6 @@ const info = <const>{
       pretty_name: "Response allowed while playing",
       default: true,
     },
-    /** If true  the slider is enabled when the 'stop' point is reached, if false the slider remained disabled if response_allowed_while_playing is false and response_ends_trial is true  */
-    slider_enabled_after_stop: {
-      type: ParameterType.BOOL,
-      pretty_name: "Slider enabled after stop",
-      default: false,
-    }
   },
 };
 
@@ -323,7 +317,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
             end_trial();
           }
 
-          if (trial.slider_enabled_after_stop){
+          if (!trial.response_allowed_while_playing){
             enable_slider();
           }
         }
