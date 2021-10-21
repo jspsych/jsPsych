@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-sketchpad/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
+
+    var jsPsych = initJsPsych();
+
+    var sketchpad_trial = {
+      type: jsPsychSketchpad,
+      canvas_border_width: 2,
+      canvas_shape: 'circle'
+    }
+    
+    jsPsych.run([sketchpad_trial]);
+
+  </script>
+</html>
