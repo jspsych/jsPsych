@@ -20,6 +20,8 @@ const info = <const>{
         "os",
         "fullscreen",
         "vsync_rate",
+        "webcam",
+        "microphone",
       ],
     },
     /**
@@ -207,6 +209,40 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
               requestAnimationFrame(nextFrame);
             };
             requestAnimationFrame(start);
+          });
+        },
+        webcam: () => {
+          return new Promise((resolve, reject) => {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+              resolve(false);
+            }
+            navigator.mediaDevices.enumerateDevices().then((devices) => {
+              const webcams = devices.filter((d) => {
+                return d.kind == "videoinput";
+              });
+              if (webcams.length > 0) {
+                resolve(true);
+              } else {
+                resolve(false);
+              }
+            });
+          });
+        },
+        microphone: () => {
+          return new Promise((resolve, reject) => {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+              resolve(false);
+            }
+            navigator.mediaDevices.enumerateDevices().then((devices) => {
+              const microphones = devices.filter((d) => {
+                return d.kind == "audioinput";
+              });
+              if (microphones.length > 0) {
+                resolve(true);
+              } else {
+                resolve(false);
+              }
+            });
           });
         },
       })
