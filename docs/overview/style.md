@@ -149,7 +149,7 @@ You can use a static `css_classes` parameter value if you always want to apply t
 var fixation = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '+',
-    choices: jsPsych.NO_KEYS,
+    choices: "NO_KEYS",
     trial_duration: 500,
     css_classes: ['fixation']
 }

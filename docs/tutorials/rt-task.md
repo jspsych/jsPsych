@@ -458,13 +458,13 @@ var test_stimuli = [
 ];
 ```
 
-Instead of just showing the blue and orange circles, let's also set up the experiment to show a fixation cross (+) in between trials. We can define a trial to show the fixation cross for a fixed amount of time by using the `trial_duration` parameter of the html-keyboard-response plugin and setting the `choices` parameter to the special value `jsPsych.NO_KEYS`, which means that no responses will be accepted as a valid response and the trial will last however long the `trial_duration` parameter specifies.
+Instead of just showing the blue and orange circles, let's also set up the experiment to show a fixation cross (+) in between trials. We can define a trial to show the fixation cross for a fixed amount of time by using the `trial_duration` parameter of the html-keyboard-response plugin and setting the `choices` parameter to the special value `"NO_KEYS"`, which means that no responses will be accepted as a valid response and the trial will last however long the `trial_duration` parameter specifies.
 
 ```javascript
 var fixation = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: '<div style="font-size:60px;">+</div>',
-  choices: jsPsych.NO_KEYS,
+  choices: "NO_KEYS",
   trial_duration: 1000,
 };
 ```
@@ -563,7 +563,7 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
         var fixation = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
-          choices: jsPsych.NO_KEYS,
+          choices: "NO_KEYS",
           trial_duration: 1000,
         };
 
@@ -677,7 +677,7 @@ var test_procedure = {
         var fixation = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
-          choices: jsPsych.NO_KEYS,
+          choices: "NO_KEYS",
           trial_duration: 1000,
         };
 
@@ -713,7 +713,7 @@ To do that here, we'll use one of the built-in randomization methods in [jsPsych
 var fixation = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: '<div style="font-size:60px;">+</div>',
-  choices: jsPsych.NO_KEYS,
+  choices: "NO_KEYS",
   trial_duration: function(){
     return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
   }
@@ -789,7 +789,7 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
         var fixation = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
-          choices: jsPsych.NO_KEYS,
+          choices: "NO_KEYS",
           trial_duration: function(){
             return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
           }
@@ -902,7 +902,7 @@ var jsPsych = initJsPsych({
         var fixation = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
-          choices: jsPsych.NO_KEYS,
+          choices: "NO_KEYS",
           trial_duration: function(){
             return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
           }
@@ -978,7 +978,7 @@ Another kind of tagging that would be useful is to mark each fixation trial as s
 var fixation = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: '<div style="font-size:60px;">+</div>',
-  choices: jsPsych.NO_KEYS,
+  choices: "NO_KEYS",
   trial_duration: function(){
     return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
   },
@@ -1059,7 +1059,7 @@ var fixation = {
         var fixation = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
-          choices: jsPsych.NO_KEYS,
+          choices: "NO_KEYS",
           trial_duration: function(){
             return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
           },
@@ -1198,7 +1198,7 @@ The `data.response` value is a string representation of the key the subject pres
         var fixation = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
-          choices: jsPsych.NO_KEYS,
+          choices: "NO_KEYS",
           trial_duration: function(){
             return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
           },
@@ -1348,7 +1348,7 @@ This code is available in the `/examples` folder in the jsPsych release download
     var fixation = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: '<div style="font-size:60px;">+</div>',
-      choices: jsPsych.NO_KEYS,
+      choices: "NO_KEYS",
       trial_duration: function(){
         return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
       },

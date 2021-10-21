@@ -25,7 +25,7 @@ const info = <const>{
     mistake_fn: {
       type: ParameterType.FUNCTION,
       pretty_name: "Mistake function",
-      default: function () {},
+      default: () => {},
     },
   },
 };

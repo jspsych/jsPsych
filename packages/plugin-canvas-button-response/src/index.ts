@@ -145,7 +145,7 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
     for (var i = 0; i < trial.choices.length; i++) {
       display_element
         .querySelector<HTMLButtonElement>("#jspsych-canvas-button-response-button-" + i)
-        .addEventListener("click", function (e: MouseEvent) {
+        .addEventListener("click", (e: MouseEvent) => {
           var choice = e.currentTarget as Element;
           choice.getAttribute("data-choice"); // don't use dataset for jsdom compatibility
           after_response(choice);
@@ -203,7 +203,7 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // hide image if timing is set
     if (trial.stimulus_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector<HTMLElement>(
           "#jspsych-canvas-button-response-stimulus"
         ).style.visibility = "hidden";
@@ -212,7 +212,7 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // end trial if time limit is set
     if (trial.trial_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         end_trial();
       }, trial.trial_duration);
     }

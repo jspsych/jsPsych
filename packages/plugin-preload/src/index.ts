@@ -240,7 +240,7 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
       // show detailed errors, if necessary
       if (trial.show_detailed_errors) {
         display_element.innerHTML += "<p><strong>Error details:</strong></p>";
-        detailed_errors.forEach(function (e) {
+        detailed_errors.forEach((e) => {
           display_element.innerHTML += e;
         });
       }
@@ -284,13 +284,13 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
         this.jsPsych.pluginAPI.preloadImages(images, cb, file_loading_success, file_loading_error);
       };
       if (video.length > 0) {
-        load_video(function () {});
+        load_video(() => {});
       }
       if (audio.length > 0) {
-        load_audio(function () {});
+        load_audio(() => {});
       }
       if (images.length > 0) {
-        load_images(function () {});
+        load_images(() => {});
       }
     }
 

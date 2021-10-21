@@ -153,7 +153,7 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
       canvas.style.padding = "0";
       var ctx = canvas.getContext("2d");
       var img = new Image();
-      img.onload = function () {
+      img.onload = () => {
         // if image wasn't preloaded, then it will need to be drawn whenever it finishes loading
         if (!image_drawn) {
           getHeightWidth(); // only possible to get width/height after image loads
@@ -386,7 +386,7 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     display_element
       .querySelector("#jspsych-image-slider-response-next")
-      .addEventListener("click", function () {
+      .addEventListener("click", () => {
         // measure response time
         var endTime = performance.now();
         response.rt = Math.round(endTime - startTime);
@@ -404,7 +404,7 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
       });
 
     if (trial.stimulus_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector<HTMLElement>(
           "#jspsych-image-slider-response-stimulus"
         ).style.visibility = "hidden";
@@ -413,7 +413,7 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     // end trial if trial_duration is set
     if (trial.trial_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         end_trial();
       }, trial.trial_duration);
     }

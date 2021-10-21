@@ -191,7 +191,7 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
         "px;'></img>";
 
       // wait
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         // after wait is over
         show_search_array();
       }, trial.fixation_duration);
@@ -262,7 +262,7 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
       });
 
       if (trial.trial_duration !== null) {
-        this.jsPsych.pluginAPI.setTimeout(function () {
+        this.jsPsych.pluginAPI.setTimeout(() => {
           if (!trial_over) {
             this.jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
 

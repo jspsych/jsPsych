@@ -421,14 +421,14 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
     function animateBall() {
       window.ball
         .animate(7000)
-        .during(function (pos) {
+        .during((pos) => {
           let moveX = -pos * blindspot_config_data["ballX"];
           window.moveX = moveX;
           let moveY = 0;
           window.ball.attr({ transform: "translate(" + moveX + "," + moveY + ")" }); //jqueryToVanilla: el.getAttribute('');
         })
         .loop(true, false)
-        .after(function () {
+        .after(() => {
           animateBall();
         });
     }

@@ -304,7 +304,7 @@ The keyboard event listener will be bound to the `display_element` declared in `
 
 A valid response triggers the `callback_function` specified in the parameters. A single argument is passed to the callback function. The argument contains an object with the properties `key` and `rt`. `key` contains the string representation of the response key, and `rt` contains the response time. 
 
-This function uses the `.key` value of the keyboard event, which is _case sensitive_. When `case_sensitive_responses` is `false` in `initJsPsych` (the default), this function will convert both the `valid_responses` strings and the response key to lowercase before comparing them, and it will pass the lowercase version of the response key to the `callback_function`. For example, if `valid_responses` is `['a']`, then both 'A' and 'a' will be considered valid key presses, and 'a' will be returned as the response key. When `case_sensitive_responses` is `true` in `initJsPsych`, this function will not convert the case when comparing the `valid_responses` and response key, and it will not convert the case of the response key that is passed to the `callback_function`. For example, if `valid_responses` is `['a']`, then 'a' will be the only valid key press, and 'A' (i.e. 'a' with CapsLock on or Shift held down) will not be accepted. Also, if `valid_responses` includes multiple letter case options (e.g. `jsPsych.ALL_KEYS`), then you may need to check the response key against both letter cases when scoring etc., e.g. `if (response == 'ArrowLeft' || response =='arrowleft') ...`.
+This function uses the `.key` value of the keyboard event, which is _case sensitive_. When `case_sensitive_responses` is `false` in `initJsPsych` (the default), this function will convert both the `valid_responses` strings and the response key to lowercase before comparing them, and it will pass the lowercase version of the response key to the `callback_function`. For example, if `valid_responses` is `['a']`, then both 'A' and 'a' will be considered valid key presses, and 'a' will be returned as the response key. When `case_sensitive_responses` is `true` in `initJsPsych`, this function will not convert the case when comparing the `valid_responses` and response key, and it will not convert the case of the response key that is passed to the `callback_function`. For example, if `valid_responses` is `['a']`, then 'a' will be the only valid key press, and 'A' (i.e. 'a' with CapsLock on or Shift held down) will not be accepted. Also, if `valid_responses` includes multiple letter case options (e.g. `"ALL_KEYS"`), then you may need to check the response key against both letter cases when scoring etc., e.g. `if (response == 'ArrowLeft' || response =='arrowleft') ...`.
 
 ### Examples
 
@@ -318,7 +318,7 @@ var after_response = function(info){
 
 jsPsych.pluginAPI.getKeyboardResponse({
   callback_function:after_response,
-  valid_responses: jsPsych.ALL_KEYS,
+  valid_responses: "ALL_KEYS",
   rt_method: 'performance',
   persist: false
 });
@@ -338,7 +338,7 @@ var after_response = function(info){
 
 var listener = jsPsych.pluginAPI.getKeyboardResponse({
   callback_function:after_response,
-  valid_responses: jsPsych.ALL_KEYS,
+  valid_responses: "ALL_KEYS",
   rt_method: 'performance',
   persist: true
 });

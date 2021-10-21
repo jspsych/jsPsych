@@ -83,7 +83,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     // load audio file
     this.jsPsych.pluginAPI
       .getAudioBuffer(trial.stimulus)
-      .then(function (buffer) {
+      .then((buffer) => {
         if (context !== null) {
           audio = context.createBufferSource();
           audio.buffer = buffer;
@@ -94,7 +94,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         }
         setupTrial();
       })
-      .catch(function (err) {
+      .catch((err) => {
         console.error(
           `Failed to load audio file "${trial.stimulus}". Try checking the file path. We recommend using the preload plugin to load audio files.`
         );
@@ -129,7 +129,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
       // end trial if time limit is set
       if (trial.trial_duration !== null) {
-        this.jsPsych.pluginAPI.setTimeout(function () {
+        this.jsPsych.pluginAPI.setTimeout(() => {
           end_trial();
         }, trial.trial_duration);
       }

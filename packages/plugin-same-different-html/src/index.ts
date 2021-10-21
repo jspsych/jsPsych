@@ -77,7 +77,7 @@ class SameDifferentHtmlPlugin implements JsPsychPlugin<Info> {
 
     var first_stim_info: { key: string; rt: number };
     if (trial.first_stim_duration > 0) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         showBlankScreen();
       }, trial.first_stim_duration);
     } else {
@@ -97,9 +97,7 @@ class SameDifferentHtmlPlugin implements JsPsychPlugin<Info> {
     const showBlankScreen = () => {
       display_element.innerHTML = "";
 
-      this.jsPsych.pluginAPI.setTimeout(function () {
-        showSecondStim();
-      }, trial.gap_duration);
+      this.jsPsych.pluginAPI.setTimeout(showSecondStim, trial.gap_duration);
     };
 
     const showSecondStim = () => {
@@ -111,7 +109,7 @@ class SameDifferentHtmlPlugin implements JsPsychPlugin<Info> {
       display_element.innerHTML = html;
 
       if (trial.second_stim_duration > 0) {
-        this.jsPsych.pluginAPI.setTimeout(function () {
+        this.jsPsych.pluginAPI.setTimeout(() => {
           display_element.querySelector<HTMLElement>(
             ".jspsych-same-different-stimulus"
           ).style.visibility = "hidden";

@@ -301,7 +301,7 @@ If you have tips based on your own experience please consider sharing them on ou
           var trial = {
             type: jsPsychImageKeyboardResponse,
             stimulus: 'img/blue.png',
-            choices: jsPsych.NO_KEYS,
+            choices: "NO_KEYS",
             trial_duration: 2000,
             extensions: [
               {
@@ -319,7 +319,7 @@ If you have tips based on your own experience please consider sharing them on ou
               return `<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>
                 <pre style="margin-top:0px;text-align:left;">${trial_json}</pre>`;
             },
-            choices: jsPsych.NO_KEYS
+            choices: "NO_KEYS"
           };
           
           jsPsych.run([

@@ -124,7 +124,7 @@ class WebgazerCalibratePlugin implements JsPsychPlugin<Info> {
 
       if (trial.calibration_mode == "click") {
         pt_dom.style.cursor = "pointer";
-        pt_dom.addEventListener("click", function () {
+        pt_dom.addEventListener("click", () => {
           next_calibration_point();
         });
       }

@@ -189,7 +189,7 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     // before showing and playing, so that the video doesn't automatically show the first frame
     if (trial.start !== null) {
       video_element.pause();
-      video_element.onseeked = function () {
+      video_element.onseeked = () => {
         video_element.style.visibility = "visible";
         video_element.muted = false;
         if (trial.autoplay) {
@@ -197,11 +197,11 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         } else {
           video_element.pause();
         }
-        video_element.onseeked = function () {};
+        video_element.onseeked = () => {};
       };
-      video_element.onplaying = function () {
+      video_element.onplaying = () => {
         video_element.currentTime = trial.start;
-        video_element.onplaying = function () {};
+        video_element.onplaying = () => {};
       };
       // fix for iOS/MacOS browsers: videos aren't seekable until they start playing, so need to hide/mute, play,
       // change current time, then show/unmute
@@ -211,7 +211,7 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
     let stopped = false;
     if (trial.stop !== null) {
-      video_element.addEventListener("timeupdate", function (e) {
+      video_element.addEventListener("timeupdate", (e) => {
         var currenttime = video_element.currentTime;
         if (currenttime >= trial.stop) {
           video_element.pause();
@@ -246,7 +246,7 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         .pause();
       display_element.querySelector<HTMLVideoElement>(
         "#jspsych-video-keyboard-response-stimulus"
-      ).onended = function () {};
+      ).onended = () => {};
 
       // gather the data to store for the trial
       var trial_data = {
@@ -263,7 +263,7 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     // function to handle responses by the subject
-    var after_response = function (info) {
+    var after_response = (info) => {
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
       display_element.querySelector("#jspsych-video-keyboard-response-stimulus").className +=
@@ -292,9 +292,7 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
     // end trial if time limit is set
     if (trial.trial_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
-        end_trial();
-      }, trial.trial_duration);
+      this.jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
     }
   }
 }

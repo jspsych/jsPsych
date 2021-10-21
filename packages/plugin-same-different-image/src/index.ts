@@ -72,14 +72,18 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    const showBlankScreen = () => {
+      display_element.innerHTML = "";
+
+      this.jsPsych.pluginAPI.setTimeout(showSecondStim(), trial.gap_duration);
+    };
+
     display_element.innerHTML =
       '<img class="jspsych-same-different-stimulus" src="' + trial.stimuli[0] + '"></img>';
 
     var first_stim_info: { key: string; rt: number };
     if (trial.first_stim_duration > 0) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
-        showBlankScreen();
-      }, trial.first_stim_duration);
+      this.jsPsych.pluginAPI.setTimeout(showBlankScreen, trial.first_stim_duration);
     } else {
       const afterKeyboardResponse = (info: { key: string; rt: number }) => {
         first_stim_info = info;
@@ -94,14 +98,6 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
       });
     }
 
-    const showBlankScreen = () => {
-      display_element.innerHTML = "";
-
-      this.jsPsych.pluginAPI.setTimeout(function () {
-        showSecondStim();
-      }, trial.gap_duration);
-    };
-
     const showSecondStim = () => {
       var html =
         '<img class="jspsych-same-different-stimulus" src="' + trial.stimuli[1] + '"></img>';
@@ -113,7 +109,7 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
       display_element.innerHTML = html;
 
       if (trial.second_stim_duration > 0) {
-        this.jsPsych.pluginAPI.setTimeout(function () {
+        this.jsPsych.pluginAPI.setTimeout(() => {
           display_element.querySelector<HTMLElement>(
             ".jspsych-same-different-stimulus"
           ).style.visibility = "hidden";

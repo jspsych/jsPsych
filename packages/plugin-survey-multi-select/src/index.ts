@@ -92,9 +92,7 @@ class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var plugin_id_name = "jspsych-survey-multi-select";
     var plugin_id_selector = "#" + plugin_id_name;
-    const _join = function (...args: Array<string | number>) {
-      return args.join("-");
-    };
+    const _join = (...args: Array<string | number>) => args.join("-");
 
     // inject CSS for trial
     var cssstr =
@@ -206,7 +204,7 @@ class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
     // then submit the form
     display_element
       .querySelector("#jspsych-survey-multi-select-next")
-      .addEventListener("click", function () {
+      .addEventListener("click", () => {
         for (var i = 0; i < trial.questions.length; i++) {
           if (trial.questions[i].required) {
             if (

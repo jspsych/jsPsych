@@ -191,7 +191,7 @@ If you want CSS rules that only apply to specific elements during a trial, you c
 <script>
   var fixation_trial = {
     type: jsPsychHtmlKeyboardResponse,
-    choices: jsPsych.NO_KEYS,
+    choices: "NO_KEYS",
     stimulus: '+',
     css_classes: ['fixation']
   };

@@ -123,7 +123,7 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
       canvas.style.padding = "0";
       var ctx = canvas.getContext("2d");
       var img = new Image();
-      img.onload = function () {
+      img.onload = () => {
         // if image wasn't preloaded, then it will need to be drawn whenever it finishes loading
         if (!image_drawn) {
           getHeightWidth(); // only possible to get width/height after image loads
@@ -278,7 +278,7 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
     for (var i = 0; i < trial.choices.length; i++) {
       display_element
         .querySelector("#jspsych-image-button-response-button-" + i)
-        .addEventListener("click", function (e) {
+        .addEventListener("click", (e) => {
           var btn_el = e.currentTarget as HTMLButtonElement;
           var choice = btn_el.getAttribute("data-choice"); // don't use dataset for jsdom compatibility
           after_response(choice);
@@ -337,7 +337,7 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // hide image if timing is set
     if (trial.stimulus_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector<HTMLElement>(
           "#jspsych-image-button-response-stimulus"
         ).style.visibility = "hidden";
@@ -346,7 +346,7 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // end trial if time limit is set
     if (trial.trial_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         end_trial();
       }, trial.trial_duration);
     } else if (trial.response_ends_trial === false) {

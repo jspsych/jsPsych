@@ -107,13 +107,13 @@ var face_name_procedure = {
 		{
 			type: jsPsychHtmlKeyboardResponse,
 			stimulus: '+',
-			choices: jsPsych.NO_KEYS,
+			choices: "NO_KEYS",
 			trial_duration: 500
 		},
 		{
 			type: jsPsychImageKeyboardResponse,
 			stimulus: jsPsych.timelineVariable('face'),
-			choices: jsPsych.NO_KEYS,
+			choices: "NO_KEYS",
 			trial_duration: 2500
 		}
 	],
@@ -136,19 +136,19 @@ var face_name_procedure = {
 		{
 			type: jsPsychHtmlKeyboardResponse,
 			stimulus: '+',
-			choices: jsPsych.NO_KEYS,
+			choices: "NO_KEYS",
 			trial_duration: 500
 		},
 		{
 			type: jsPsychHtmlKeyboardResponse,
 			stimulus: jsPsych.timelineVariable('name'),
 			trial_duration: 1000,
-			choices: jsPsych.NO_KEYS
+			choices: "NO_KEYS"
 		},
 		{
 			type: jsPsychImageKeyboardResponse,
 			stimulus: jsPsych.timelineVariable('face'),			
-			choices: jsPsych.NO_KEYS,
+			choices: "NO_KEYS",
 			trial_duration: 1000
 		}
 	],
@@ -173,14 +173,14 @@ var face_name_procedure = {
 		{
 			type: jsPsychHtmlKeyboardResponse,
 			stimulus: '+',
-			choices: jsPsych.NO_KEYS,
+			choices: "NO_KEYS",
 			trial_duration: 500
 		},
 		{
 			type: jsPsychHtmlKeyboardResponse,
 			stimulus: jsPsych.timelineVariable('name'),
 			trial_duration: 1000,
-			choices: jsPsych.NO_KEYS
+			choices: "NO_KEYS"
 		},
 		{
 			type: jsPsychHtmlKeyboardResponse,
@@ -190,7 +190,7 @@ var face_name_procedure = {
 					<p>${jsPsych.timelineVariable('name')}</p>`;
 				return html;
 			},			
-			choices: jsPsych.NO_KEYS,
+			choices: "NO_KEYS",
 			trial_duration: 2500
 		}
 	],

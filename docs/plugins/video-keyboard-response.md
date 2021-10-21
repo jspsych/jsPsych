@@ -19,7 +19,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | start                          | numeric          | null                    | If given a value, the video will start at this time point in seconds. |
 | stop                           | numeric          | null                    | If given a value, the video will stop at this time point in seconds. |
 | rate                           | numeric          | null                    | The playback rate of the video. 1 is normal, <1 is slower, >1 is faster. |
-| choices                        | array of strings | `jsPsych.ALL_KEYS`      | This array contains the key(s) that the subject is allowed to press in order to respond to the stimulus. Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) - see [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) and [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/) for more examples. Any key presses that are not listed in the array will be ignored. The default value of `jsPsych.ALL_KEYS` means that all keys will be accepted as valid responses. Specifying `jsPsych.NO_KEYS` will mean that no responses are allowed. |
+| choices                        | array of strings | `"ALL_KEYS"`      | This array contains the key(s) that the subject is allowed to press in order to respond to the stimulus. Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) - see [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) and [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/) for more examples. Any key presses that are not listed in the array will be ignored. The default value of `"ALL_KEYS"` means that all keys will be accepted as valid responses. Specifying `"NO_KEYS"` will mean that no responses are allowed. |
 | trial_ends_after_video         | bool             | false                   | If true, then the trial will end as soon as the video file finishes playing. |
 | trial_duration                 | numeric          | null                    | How long to wait for the subject to make a response before ending the trial in milliseconds. If the subject fails to make a response before this timer is reached, the subject's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely. |
 | response_ends_trial            | boolean          | true                    | If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the subject to view a stimulus for a fixed amount of time, even if they respond before the time is complete. |
@@ -46,7 +46,7 @@ stimulus | array | The `stimulus` array. This will be encoded as a JSON string w
           stimulus: [
             'video/fish.mp4'
           ],
-          choices: jsPsych.NO_KEYS,
+          choices: "NO_KEYS",
           trial_ends_after_video: true
         };
         ```

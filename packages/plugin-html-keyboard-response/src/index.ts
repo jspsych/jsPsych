@@ -111,7 +111,7 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     // function to handle responses by the subject
-    var after_response = function (info) {
+    var after_response = (info) => {
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
       display_element.querySelector("#jspsych-html-keyboard-response-stimulus").className +=
@@ -140,7 +140,7 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
     // hide stimulus if stimulus_duration is set
     if (trial.stimulus_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector<HTMLElement>(
           "#jspsych-html-keyboard-response-stimulus"
         ).style.visibility = "hidden";
@@ -149,9 +149,7 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
     // end trial if trial_duration is set
     if (trial.trial_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
-        end_trial();
-      }, trial.trial_duration);
+      this.jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
     }
   }
 }
