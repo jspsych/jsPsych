@@ -169,14 +169,15 @@ jsPsych.run([block, after_block]);
 ## jsPsych.endExperiment
 
 ```javascript
-jsPsych.endExperiment(end_message)
+jsPsych.endExperiment(end_message, data)
 ```
 
 ### Parameters
 
 | Parameter   | Type   | Description                              |
 | ----------- | ------ | ---------------------------------------- |
-| end_message | string | A message to display on the screen after the experiment is over. |
+| end_message | string | A message to display on the screen after the experiment is over. Can include HTML formatting. |
+| data | object | An optional object of key-value pairs to store as data in the final trial of the experiment. 
 
 ### Return value
 
