@@ -88,6 +88,28 @@ const info = <const>{
       type: ParameterType.STRING,
       default: "abovecanvas",
     },
+    /**
+     * Whether to save the final image in the data as dataURL
+     */
+    save_final_image: {
+      type: ParameterType.BOOL,
+      default: true,
+    },
+    /**
+     * Whether to save the set of strokes that generated the image
+     */
+    save_strokes: {
+      type: ParameterType.BOOL,
+      default: true,
+    },
+    /**
+     * If this key is held down then it is like the mouse button being clicked for controlling
+     * the flow of the "ink".
+     */
+    key_to_draw: {
+      type: ParameterType.KEY,
+      default: null,
+    },
   },
 };
 
@@ -115,6 +137,8 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
   private undo_history = [];
   private current_stroke_color;
   private start_time;
+  private mouse_position = { x: 0, y: 0 };
+  private draw_key_held = false;
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -215,12 +239,52 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
   }
 
   private setup_event_listeners() {
+    document.addEventListener("mousemove", (e) => {
+      this.mouse_position = { x: e.clientX, y: e.clientY };
+    });
+
     this.display.querySelector("#sketchpad-end").addEventListener("click", this.end_trial);
 
     this.sketchpad.addEventListener("mousedown", this.start_draw);
     this.sketchpad.addEventListener("mousemove", this.move_draw);
     this.sketchpad.addEventListener("mouseup", this.end_draw);
     this.sketchpad.addEventListener("mouseleave", this.end_draw);
+
+    if (this.params.key_to_draw !== null) {
+      document.addEventListener("keydown", (e) => {
+        if (e.key == this.params.key_to_draw && !this.is_drawing && !this.draw_key_held) {
+          this.draw_key_held = true;
+          if (
+            document.elementFromPoint(this.mouse_position.x, this.mouse_position.y) ==
+            this.sketchpad
+          ) {
+            this.sketchpad.dispatchEvent(
+              new MouseEvent("mousedown", {
+                clientX: this.mouse_position.x,
+                clientY: this.mouse_position.y,
+              })
+            );
+          }
+        }
+      });
+
+      document.addEventListener("keyup", (e) => {
+        if (e.key == this.params.key_to_draw) {
+          this.draw_key_held = false;
+          if (
+            document.elementFromPoint(this.mouse_position.x, this.mouse_position.y) ==
+            this.sketchpad
+          ) {
+            this.sketchpad.dispatchEvent(
+              new MouseEvent("mouseup", {
+                clientX: this.mouse_position.x,
+                clientY: this.mouse_position.y,
+              })
+            );
+          }
+        }
+      });
+    }
 
     this.display.querySelector("#sketchpad-undo").addEventListener("click", this.undo);
     this.display.querySelector("#sketchpad-redo").addEventListener("click", this.redo);
@@ -348,12 +412,21 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
   }
 
   private end_trial() {
+    const trial_data = <any>{};
+
+    trial_data.rt = performance.now() - this.start_time;
+
+    if (this.params.save_final_image) {
+      trial_data.png = this.sketchpad.toDataURL();
+    }
+
+    if (this.params.save_strokes) {
+      trial_data.strokes = this.strokes;
+    }
+
     this.display.innerHTML = "";
 
-    this.jsPsych.finishTrial({
-      strokes: this.strokes,
-      rt: Math.round(performance.now() - this.start_time),
-    });
+    this.jsPsych.finishTrial(trial_data);
 
     this.trial_finished_handler();
   }

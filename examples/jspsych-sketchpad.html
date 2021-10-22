@@ -11,6 +11,7 @@
     var jsPsych = initJsPsych({
       on_finish: () => {
         jsPsych.data.displayData()
+        jsPsych.data.get().localSave('json', 'test-file.json')
       }
     });
 
@@ -22,7 +23,8 @@
       stroke_color_palette: [
         'black',  'red', 'orange','yellow', 'green', 'blue', 'purple',
         'grey', 'white', 'maroon', 'gold'
-      ]
+      ],
+      key_to_draw: ' '
     }
     
     jsPsych.run([sketchpad_trial]);
