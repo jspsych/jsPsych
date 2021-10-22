@@ -1,0 +1,31 @@
+/* navigation buttons */
+.jspsych-survey-btn {
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+/* question prompt text */
+.jspsych-survey-question-prompt {
+    font-family: "Open Sans", "Arial", sans-serif;
+    font-size: 18px;
+    line-height: 1em;
+}
+
+/* question spacing (modify existing CSS classes instead of overwriting them with custom class) */
+.sv_bootstrap_css .sv_qstn {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 0.5em !important;
+}
+
+/* html prompts */
+.jspsych-survey-html {
+    font-size: 18px;
+}
+
+/* textbox inputs */
+.jspsych-display-element input[type="text"], .jspsych-display-element textarea {
+    font-family: "Open Sans", "Arial", sans-serif;
+    font-size: 14px;
+    padding: 4px;
+}

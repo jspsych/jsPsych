@@ -68,7 +68,7 @@ const info = <const>{
         columns: {
           type: ParameterType.INT,
           pretty_name: "Columns",
-          default: 40,
+          default: 40, // TO DO: different defaults for text vs multi choice/select, or use different parameter names
         },
       },
     },
@@ -120,7 +120,7 @@ const info = <const>{
      * randomizing the question order, since HTML question types are also randomized.
      */
     title: {
-      type: ParameterType.HTML_STRING,
+      type: ParameterType.STRING,
       pretty_name: "Title",
       default: null,
     },
@@ -161,7 +161,6 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
 
   // TO DO:
   // - move the setup functions outside of the trial method?
-  // - fix the question row spacing CSS
   // - add other and none options to multi-choice/select
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     this.applyStyles(); // applies bootstrap theme

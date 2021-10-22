@@ -18,7 +18,10 @@ pages | array | *undefined* | An array of arrays. Each inner array contains the 
 randomize_question_order | boolean | `false` | If `true`, the display order of the questions within each survey page is randomly determined at the start of the trial. In the data object, if question `name` values are not provided, then `Q0` will refer to the first question in the array, regardless of where it was presented visually.
 button_label_next | string |  'Continue' | Label of the button to move forward to the next page, or finish the survey.
 button_label_previous | string | 'Back' | Label of the button to move to a previous page in the survey.
-autocomplete | boolean | false | This determines whether or not all of the input elements on the page should allow autocomplete. Setting this to `true` will enable autocomplete or auto-fill for the form.
+button_label_finish | string | 'Finish' | Label of the button to submit responses.
+autocomplete | boolean | `false` | This determines whether or not all of the input elements on the page should allow autocomplete. Setting this to `true` will enable autocomplete or auto-fill for the form.
+show_question_numbers | string | "off" | One of: "on", "onPage", "off". If "on", questions will be labelled starting with "1." on the first page, and numbering will continue across pages. If "onPage", questions will be labelled starting with "1.", with separate numbering on each page. If "off", no numbers will be added before the question prompts. Note: HTML question types are ignored in automatic numbering.
+title | string | `null` | If specified, this text will be shown at the top of the survey pages. This parameter provides a method for fixing any arbitrary text to the top of the page when randomizing the question order with the `randomize_question_order` parameter (since HTML question types are also randomized).
 
 ### Question types and parameters
 
@@ -31,10 +34,20 @@ Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 type | string | *undefined* | The question type. Options are: "drop-down", "html", "likert", "multi-choice", "multi-select", "ranking", "rating", "text".
 prompt | string | *undefined* | The prompt/question that will be associated with the question's response field. If the question type is "html", then this string is the HTML-formatted string to be displayed. 
-required | boolean | false | Whether a response to the question is required (`true`) or not (`false`), using the HTML5 `required` attribute. 
-name | string | null | Name of the question to be used for storing data. If left undefined then default names will be used to identify the questions in the data: `Q0`, `Q1`, etc.
+required | boolean | `false` | Whether a response to the question is required (`true`) or not (`false`), using the HTML5 `required` attribute. 
+name | string | `null` | Name of the question to be used for storing data. If this parameter is not provided, then default names will be used to identify the questions in the data: `Q0`, `Q1`, etc.
+
+#### HTML
+
+Present arbitrary HTML-formatted content in the list of questions, including text, images, and sounds. There are no response options.
+
+The only available parameters are those listed for all question types. 
+Parameters with a default value of *undefined* must be specified.
+Other parameters can be left unspecified if the default value is acceptable.
 
 #### Multi-choice
+
+Present a question with a limited set of options. The participant can only select one option.
 
 In addition to the parameters for all question types, the multi-choice question type also offers the following parameters. 
 Parameters with a default value of *undefined* must be specified.
@@ -43,7 +56,22 @@ Other parameters can be left unspecified if the default value is acceptable.
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 options | array of strings | *undefined* | This array contains the set of multiple choice options to display for the question.
-horizontal | boolean | false | If `true`, then the question is centered and the options are displayed horizontally. 
+option_reorder | string | "none" | One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the `options` array. If `random`, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.
+columns | integer | 1 | Number of columns to use for displaying the multiple choice options. If 0, then the choices will be displayed horizontally.
+
+#### Multi-select
+
+Present a question with a limited set of options. The participant can only select multiple options.
+
+In addition to the parameters for all question types, the multi-choice question type also offers the following parameters. 
+Parameters with a default value of *undefined* must be specified.
+Other parameters can be left unspecified if the default value is acceptable.
+
+Parameter | Type | Default Value | Description
+----------|------|---------------|------------
+options | array of strings | *undefined* | This array contains the set of multiple choice options to display for the question.
+option_reorder | string | "none" | One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the `options` array. If `random`, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.
+columns | integer | 1 | Number of columns to use for displaying the multiple choice options. If 0, then the choices will be displayed horizontally.
 
 #### Text
 
@@ -55,7 +83,7 @@ Other parameters can be left unspecified if the default value is acceptable.
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-value | string | "" | Placeholder text in the text response field. 
+placeholder | string | "" | Placeholder text in the text response field. 
 rows | integer | 1 | The number of rows for the response text box. 
 columns | integer | 40 | The number of columns for the response text box. 
 validation | string | "" | A regular expression used to validate the response.
@@ -72,7 +100,7 @@ question_order | array | An array with the order of questions. For example `[2,0
 
 ## Examples
 
-???+ example "Multi-choice"
+???+ example "Basic single page"
     === "Code"
 
         ```javascript
@@ -92,11 +120,11 @@ question_order | array | An array with the order of questions. For example `[2,0
                 required: true
               }, 
               {
-                type: 'multi-choice',
-                prompt: "Which of the following do you like the least?", 
-                name: 'FruitDislike', 
+                type: 'multi-select',
+                prompt: "Which of the following do you like?", 
+                name: 'FruitLike', 
                 options: ['Apple', 'Banana', 'Orange', 'Grape', 'Strawberry'], 
-                required: false
+                required: false,
               }
             ]
           ],
@@ -110,28 +138,51 @@ question_order | array | An array with the order of questions. For example `[2,0
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-multi-choice-demo1.html">Open demo in new tab</a>
 
-???+ example "Text"
+???+ example "Multiple pages, more customization"
     === "Code"
 
         ```javascript
         var trial = {
           type: jsPsychSurvey,
-          questions: [
-            {
-              type: 'text',
-              prompt: "Where were you born?", 
-              value: 'City, State, Country',
-              name: 'birthplace', 
-              required: true,
-            }, 
-            {
-              type: 'text'
-              prompt: "How old are you?", 
-              name: 'age', 
-              required: false,
-            }
+          pages: [
+            [
+              {
+                type: 'text',
+                prompt: "Where were you born?", 
+                placeholder: 'City, State, Country',
+                name: 'birthplace', 
+                required: true,
+              }, 
+              {
+                type: 'text'
+                prompt: "How old are you?", 
+                name: 'age', 
+                columns: 5,
+                required: false,
+              }
+            ],
+            [
+              {
+                type: 'multi-choice',
+                prompt: "What&#39;s your favorite color?", 
+                options: ['blue','yellow','pink','teal','orange','lime green','other','none of these'],
+                name: 'FavColor', 
+              }, 
+              {
+                type: 'multi-select'
+                prompt: "Which of these animals do you like? Select all that apply.", 
+                options: ['lion','squirrel','badger','whale'],
+                option_reorder: 'random',
+                columns: 0,
+                name: 'AnimalLike', 
+              }
+            ]
           ],
           randomize_question_order: true,
+          title: 'Demographic questions',
+          button_label_next: 'Continue',
+          button_label_back: 'Previous',
+          button_label_finish: 'Submit'
         };
         ```
 
