@@ -8,12 +8,20 @@
   <body></body>
   <script>
 
-    var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: () => {
+        jsPsych.data.displayData()
+      }
+    });
 
     var sketchpad_trial = {
       type: jsPsychSketchpad,
       canvas_border_width: 2,
-      canvas_shape: 'circle'
+      background_image: 'img/navarro_night_tree_05_575.jpg',
+      prompt: '<p>Draw something!</p>',
+      stroke_color_palette: [
+        'black',  'red', 'orange','yellow', 'green', 'blue', 'purple'
+      ]
     }
     
     jsPsych.run([sketchpad_trial]);
