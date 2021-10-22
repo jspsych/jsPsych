@@ -177,15 +177,15 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
       this.params.canvas_shape == "rectangle"
         ? this.params.canvas_width
         : this.params.canvas_diameter
-    }px;">`;
+    }px; display: flex; justify-content: space-between; flex-wrap: wrap;">`;
 
-    sketchpad_controls += `<div id="sketchpad-color-palette" style="width:50%; display: inline-block; text-align:left;">`;
+    sketchpad_controls += `<div id="sketchpad-color-palette" style="display: inline-block; text-align:left; flex-basis: 50%">`;
     for (const color of this.params.stroke_color_palette) {
       sketchpad_controls += `<button class="sketchpad-color-select" data-color="${color}" style="background-color:${color};"></button>`;
     }
     sketchpad_controls += `</div>`;
 
-    sketchpad_controls += `<div id="sketchpad-actions" style="width:50%; display:inline-block; right: 0; text-align:right;">
+    sketchpad_controls += `<div id="sketchpad-actions" style="display:inline-block; text-align:right;">
         <button class="jspsych-btn" id="sketchpad-clear">Clear</button>
         <button class="jspsych-btn" id="sketchpad-undo" disabled>Undo</button>
         <button class="jspsych-btn" id="sketchpad-redo" disabled>Redo</button>
@@ -193,7 +193,7 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
 
     canvas_html += sketchpad_controls;
 
-    const finish_button_html = `<p><button class="jspsych-btn" id="sketchpad-end">Finished</button></p>`;
+    const finish_button_html = `<p style="flex-basis:100%;"><button class="jspsych-btn" id="sketchpad-end">Finished</button></p>`;
 
     let display_html;
     if (this.params.prompt !== null) {
