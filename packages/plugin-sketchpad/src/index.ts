@@ -149,10 +149,31 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
     document.querySelector("head").insertAdjacentHTML(
       "beforeend",
       `<style id="sketchpad-styles">
-      .sketchpad-color-select { 
-        cursor: pointer; height: 33px; width: 33px; border-radius: 4px; padding: 0; border: 1px solid #ccc; 
-      }
-    </style>`
+        #sketchpad-controls {
+          line-height: 1; 
+          width:${
+            this.params.canvas_shape == "rectangle"
+              ? this.params.canvas_width
+              : this.params.canvas_diameter
+          }px; 
+          display: flex; 
+          justify-content: space-between; 
+          flex-wrap: wrap;
+        }
+        #sketchpad-color-palette { 
+          display: inline-block; text-align:left; flex-basis: 50%;
+        }
+        .sketchpad-color-select { 
+          cursor: pointer; height: 33px; width: 33px; border-radius: 4px; padding: 0; border: 1px solid #ccc; 
+        }
+        #sketchpad-canvas {
+          touch-action: none;
+          border: ${this.params.canvas_border_width}px solid ${this.params.canvas_border_color};
+        }
+        .sketchpad-circle {
+          border-radius: ${this.params.canvas_diameter / 2}px;
+        }
+      </style>`
     );
 
     this.current_stroke_color = trial.stroke_color;
@@ -179,16 +200,14 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
         <canvas id="sketchpad-canvas" 
         width="${this.params.canvas_width}" 
         height="${this.params.canvas_height}" 
-        style="border: ${this.params.canvas_border_width}px solid ${this.params.canvas_border_color};"></canvas>
+        class="sketchpad-rectangle"></canvas>
       `;
     } else if (this.params.canvas_shape == "circle") {
       canvas_html = `
         <canvas id="sketchpad-canvas" 
         width="${this.params.canvas_diameter}" 
         height="${this.params.canvas_diameter}" 
-        style="border: ${this.params.canvas_border_width}px solid ${
-        this.params.canvas_border_color
-      }; border-radius:${this.params.canvas_diameter / 2}px;">
+        class="sketchpad-circle">
         </canvas>
       `;
     } else {
@@ -197,13 +216,9 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
       );
     }
 
-    let sketchpad_controls = `<div id="sketchpad-controls" style="line-height: 1; width:${
-      this.params.canvas_shape == "rectangle"
-        ? this.params.canvas_width
-        : this.params.canvas_diameter
-    }px; display: flex; justify-content: space-between; flex-wrap: wrap;">`;
+    let sketchpad_controls = `<div id="sketchpad-controls">`;
 
-    sketchpad_controls += `<div id="sketchpad-color-palette" style="display: inline-block; text-align:left; flex-basis: 50%">`;
+    sketchpad_controls += `<div id="sketchpad-color-palette">`;
     for (const color of this.params.stroke_color_palette) {
       sketchpad_controls += `<button class="sketchpad-color-select" data-color="${color}" style="background-color:${color};"></button>`;
     }
@@ -239,16 +254,17 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
   }
 
   private setup_event_listeners() {
-    document.addEventListener("mousemove", (e) => {
+    document.addEventListener("pointermove", (e) => {
       this.mouse_position = { x: e.clientX, y: e.clientY };
     });
 
     this.display.querySelector("#sketchpad-end").addEventListener("click", this.end_trial);
 
-    this.sketchpad.addEventListener("mousedown", this.start_draw);
-    this.sketchpad.addEventListener("mousemove", this.move_draw);
-    this.sketchpad.addEventListener("mouseup", this.end_draw);
-    this.sketchpad.addEventListener("mouseleave", this.end_draw);
+    this.sketchpad.addEventListener("pointerdown", this.start_draw);
+    this.sketchpad.addEventListener("pointermove", this.move_draw);
+    this.sketchpad.addEventListener("pointerup", this.end_draw);
+    this.sketchpad.addEventListener("pointerleave", this.end_draw);
+    this.sketchpad.addEventListener("pointercancel", this.end_draw);
 
     if (this.params.key_to_draw !== null) {
       document.addEventListener("keydown", (e) => {
@@ -259,7 +275,7 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
             this.sketchpad
           ) {
             this.sketchpad.dispatchEvent(
-              new MouseEvent("mousedown", {
+              new PointerEvent("pointerdown", {
                 clientX: this.mouse_position.x,
                 clientY: this.mouse_position.y,
               })
@@ -276,7 +292,7 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
             this.sketchpad
           ) {
             this.sketchpad.dispatchEvent(
-              new MouseEvent("mouseup", {
+              new PointerEvent("pointerup", {
                 clientX: this.mouse_position.x,
                 clientY: this.mouse_position.y,
               })
@@ -336,6 +352,8 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
       action: "start",
       t: Math.round(performance.now() - this.start_time),
     });
+
+    this.sketchpad.releasePointerCapture(e.pointerId);
   }
 
   private move_draw(e) {
@@ -425,6 +443,8 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
     }
 
     this.display.innerHTML = "";
+
+    document.querySelector("#sketchpad-styles").remove();
 
     this.jsPsych.finishTrial(trial_data);
 
