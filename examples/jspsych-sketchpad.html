@@ -10,21 +10,25 @@
 
     var jsPsych = initJsPsych({
       on_finish: () => {
-        jsPsych.data.displayData()
-        jsPsych.data.get().localSave('json', 'test-file.json')
+        jsPsych.data.displayData();
       }
     });
 
     var sketchpad_trial = {
       type: jsPsychSketchpad,
       canvas_border_width: 2,
-      background_image: 'img/navarro_night_tree_05_575.jpg',
-      prompt: '<p>Draw something!</p>',
+      canvas_width: 512,
+      canvas_height: 351,
+      //background_image: 'img/table.jpg',
+      prompt: '<p>Draw something that goes on the object!</p>',
       stroke_color_palette: [
-        'black',  'red', 'orange','yellow', 'green', 'blue', 'purple',
-        'grey', 'white', 'maroon', 'gold'
+        'black', 'white',  'red', 'yellow', 'blue'        
       ],
-      key_to_draw: ' '
+      background_color: '#ccc',
+      key_to_draw: ' ',
+      choices: ['a','b','c'],
+      //trial_duration: 5000,
+      show_countdown_trial_duration: true
     }
     
     jsPsych.run([sketchpad_trial]);
