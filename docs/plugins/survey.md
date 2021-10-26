@@ -57,11 +57,11 @@ Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 options | array of strings | *undefined* | This array contains the set of multiple choice options to display for the question.
 option_reorder | string | "none" | One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the `options` array. If `random`, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.
-columns | integer | 1 | Number of columns to use for displaying the multiple choice options. If 0, then the choices will be displayed horizontally.
+columns | integer | 1 | Number of columns to use for displaying the options. If 1 (default), the choices will be displayed in a single column (vertically). If 0, choices will be displayed in a single row (horizontally). Any value greater than 1 can be used to display options in multiple columns. 
 
 #### Multi-select
 
-Present a question with a limited set of options. The participant can only select multiple options.
+Present a question with a limited set of options. The participant can select multiple options.
 
 In addition to the parameters for all question types, the multi-choice question type also offers the following parameters. 
 Parameters with a default value of *undefined* must be specified.
@@ -69,9 +69,9 @@ Other parameters can be left unspecified if the default value is acceptable.
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-options | array of strings | *undefined* | This array contains the set of multiple choice options to display for the question.
+options | array of strings | *undefined* | This array contains the set of options to display for the question.
 option_reorder | string | "none" | One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the `options` array. If `random`, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.
-columns | integer | 1 | Number of columns to use for displaying the multiple choice options. If 0, then the choices will be displayed horizontally.
+columns | integer | 1 | Number of columns to use for displaying the options. If 1 (default), the choices will be displayed in a single column (vertically). If 0, choices will be displayed in a single row (horizontally). Any value greater than 1 can be used to display options in multiple columns. 
 
 #### Text
 
@@ -84,8 +84,8 @@ Other parameters can be left unspecified if the default value is acceptable.
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 placeholder | string | "" | Placeholder text in the text response field. 
-rows | integer | 1 | The number of rows for the response text box. 
-columns | integer | 40 | The number of columns for the response text box. 
+textbox_rows | integer | 1 | The number of rows (height) for the response text box. 
+textbox_columns | integer | 40 | The number of columns (width) for the response text box. 
 validation | string | "" | A regular expression used to validate the response.
 
 ## Data Generated
@@ -157,7 +157,7 @@ question_order | array | An array with the order of questions. For example `[2,0
                 type: 'text'
                 prompt: "How old are you?", 
                 name: 'age', 
-                columns: 5,
+                textbox_columns: 5,
                 required: false,
               }
             ],

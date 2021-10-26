@@ -49,26 +49,34 @@ const info = <const>{
           options: ["none", "asc", "desc", "random"],
           default: "none",
         },
+        /**
+         * Multi-choice/multi-select only: The number of columns that should be used for displaying the options.
+         * If 1 (default), the choices will be displayed in a single column (vertically).
+         * If 0, choices will be displayed in a single row (horizontally).
+         * Any value greater than 1 can be used to display options in multiple columns.
+         */
+        columns: {
+          type: ParameterType.INT,
+          pretty_name: "Columns",
+          default: 1,
+        },
         /** Text only: Placeholder text in the response text box. */
         placeholder: {
           type: ParameterType.STRING,
           pretty_name: "Placeholder",
           default: "",
         },
-        /** Text only: The number of rows for the response text box. */
-        rows: {
+        /** Text only: The number of rows (height) for the response text box. */
+        textbox_rows: {
           type: ParameterType.INT,
-          pretty_name: "Rows",
+          pretty_name: "Textbox rows",
           default: 1,
         },
-        /**
-         * Text: The number of columns for the response text box.
-         * Multi-choice/multi-select: The number of columns
-         */
-        columns: {
+        /** Text only: The number of columns (width) for the response text box. */
+        textbox_columns: {
           type: ParameterType.INT,
-          pretty_name: "Columns",
-          default: 40, // TO DO: different defaults for text vs multi choice/select, or use different parameter names
+          pretty_name: "Textbox columns",
+          default: 40,
         },
       },
     },
@@ -203,15 +211,15 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     const setup_ranking_question = () => {};
     const setup_rating_question = () => {};
     const setup_text_question = (question, question_params) => {
-      // optional: placeholder, rows, columns
+      // optional: placeholder, textbox_rows, textbox_columns
       question.title = question_params.prompt;
       question.isRequired = question_params.required;
       question.placeHolder = question_params.placeholder;
       if (question.type == "comment") {
-        question.rows = question_params.rows;
-        question.cols = question_params.columns;
+        question.rows = question_params.textbox_rows;
+        question.cols = question_params.textbox_columns;
       } else {
-        question.size = question_params.columns;
+        question.size = question_params.textbox_columns;
       }
       return question;
     };
@@ -243,7 +251,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       for (let j = 0; j < trial.pages[i].length; j++) {
         let question_params = trial.pages[i][j];
         let q_type = this.question_type_map[question_params.type];
-        if (q_type == "text" && question_params.rows > 1) {
+        if (q_type == "text" && question_params.textbox_rows > 1) {
           q_type = "comment";
         }
         let question = page.addNewQuestion(q_type);
