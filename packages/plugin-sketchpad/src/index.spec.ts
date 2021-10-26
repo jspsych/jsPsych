@@ -15,6 +15,10 @@ describe("sketchpad", () => {
     const canvas = displayElement.querySelector("canvas");
     expect(canvas).not.toBeNull();
 
+    expect(displayElement.querySelector("#sketchpad-clear")).not.toBeNull();
+    expect(displayElement.querySelector("#sketchpad-undo")).not.toBeNull();
+    expect(displayElement.querySelector("#sketchpad-redo")).not.toBeNull();
+
     clickTarget(displayElement.querySelector("#sketchpad-end"));
     await expectFinished();
   });
@@ -122,6 +126,24 @@ describe("sketchpad", () => {
     expect(display_content.indexOf("prompt")).toBeGreaterThan(
       display_content.indexOf("finish-btn")
     );
+
+    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await expectFinished();
+  });
+
+  test("color palette generates correct buttons", async () => {
+    const { displayElement, getHTML, expectFinished } = await startTimeline([
+      {
+        type: sketchpad,
+        stroke_color_palette: ["#ff0000", "green", "#0000ff"],
+      },
+    ]);
+
+    const buttons = displayElement.querySelectorAll("button.sketchpad-color-select");
+    expect(buttons.length).toBe(3);
+    expect(buttons[0].getAttribute("data-color")).toBe("#ff0000");
+    expect(buttons[1].getAttribute("data-color")).toBe("green");
+    expect(buttons[2].getAttribute("data-color")).toBe("#0000ff");
 
     clickTarget(displayElement.querySelector("#sketchpad-end"));
     await expectFinished();
