@@ -21,7 +21,34 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 
 | Parameter          | Type            | Default Value | Description                              |
 | ------------------ | --------------- | ------------- | ---------------------------------------- |
-
+| canvas_shape | `"rectangle"` or `"circle"` | `"rectangle"` | The shape of the canvas element. |
+| canvas_width | int | 500 | Width of the canvas in pixels when `canvas_shape` is `"rectangle"` |
+| canvas_height | int | 500 | Height of the canvas in pixels when `canvas_shape` is `"rectangle"` |
+| canvas_diameter | int | 500 | Diameter of the canvas in pixels when `canvas_shape` is `"circle"` |
+| canvas_border_width | int | 0 | Width of the canvas border |
+| canvas_border_color | string | `"#000"` | Color of the canvas border |
+| background_image | image path | `null` | Path to an image to render as the background of the canvas |
+| background_color | string | `"#fff"` | Color of the canvas background. Note that a `background_image` will render on top of the color.
+| stroke_width | int | 2 | Width of the stroke on the canvas |
+| stroke_color | string | `"#000"` | Color of the stroke on the canvas |
+| stroke_color_palette | array of strings | `[]` | Array of colors to render as a palette of choices for stroke color. Clicking on the corresponding color button will change the stroke color. |
+| prompt | string | null | HTML content to render on the screen.
+| prompt_location | `"abovecanvas"` or `"belowcanvas"` or `"belowbutton"` | `"abovecanvas"` | The location to render the prompt content. |
+| save_final_image | bool | true | Whether to save the final image in the data as a base64 encoded data URL. |
+| save_strokes | bool | true | Whether to save the individual stroke data that generated the final image. |
+| key_to_draw | key string | null | If this key is held down then it is like the mouse button being held down. The "ink" will flow when the button is held and stop when it is lifted. Pass in the string representation of the key, e.g., `'a'` for the A key or `' '` for the spacebar. |
+| show_finished_button | bool | true | Whether to show the button that ends the trial. |
+| finished_button_label | string | `"Finished"` | The label for the button that ends the trial. |
+| show_clear_button | bool | true | Whether to show the button that clears the entire drawing. |
+| clear_button_label | string | `"Clear"` | The label for the button that clears the entire drawing. |
+| show_undo_button | bool | true | Whether to show the button that enables an undo action. |
+| undo_button_label | string | `"Undo"` | The label for the button that enables an undo action. |
+| show_redo_button | bool | true | Whether to show the button that enables a redo action. Note that `show_undo_button` must be `true` for the redo button to show up. |
+| redo_button_label | string | `"Redo"` | The label for the button that enables a redo action. |
+| choices | array of keys | `"NO_KEYS"` | This array contains the key(s) that the subject is allowed to press in order to end the trial. Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) - see [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) and [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/) for more examples. Any key presses that are not listed in the array will be ignored. The default value of `"NO_KEYS"` means that no keys will be accepted as valid responses. Specifying `"ALL_KEYS"` will mean that all responses are allowed. |
+| trial_duration | int | null | Length of time before the trial ends. If `null` the trial will continue indefinitely (until another way of ending the trial occurs). |
+| show_countdown_trial_duration | bool | false | Whether to show a timer that counts down until the end of the trial when `trial_duration` is not `null`. |
+| countdown_timer_html | string | `'<span id="sketchpad-timer"></span> remaining'` | The HTML to use for rendering the countdown timer. The element with `id="sketchpad-timer"` will have its content replaced by a countdown timer in the format `MM:SS`.
 
 ## Data Generated
 
@@ -29,6 +56,10 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
 | Name           | Type        | Value                                    |
 | -------------- | ----------- | ---------------------------------------- |
+| rt | int | The length of time from the start of the trial to the end of the trial.
+| response | string | If the trial was ended by clicking the finished button, then `"button"`. If the trial was ended by pressing a key, then the key that was pressed. If the trial timed out, then `null`. |
+| png | base64 data URL string | If `save_image` is true, then this will contain the base64 encoded data URL for the image, in png format. |
+| strokes | array of stroke objects | If `save_strokes` is true, then this will contain an array of stroke objects. Objects have an `action` property that is either `"start"`, `"move"`, or `"end"`. If `action` is `"start"` or `"move"` it will have an `x` and `y` property that report the coordinates of the action relative to the upper-left corner of the canvas. If `action` is `"start"` then the object will also have a `t` and `color` property, specifying the time of the action relative to the onset of the trial (ms) and the color of the stroke. If `action` is `"end"` then it will only have a `t` property. |
 
 
 ## Examples
