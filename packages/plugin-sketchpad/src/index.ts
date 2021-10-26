@@ -649,7 +649,7 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
 
     const trial_data = <any>{};
 
-    trial_data.rt = performance.now() - this.start_time;
+    trial_data.rt = Math.round(performance.now() - this.start_time);
     trial_data.response = response;
 
     if (this.params.save_final_image) {
