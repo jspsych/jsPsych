@@ -11,6 +11,7 @@ The plugin currently can record the following features:
 * Support for the WebAudio API.
 * Support for the Fullscreen API, e.g., through the [fullscreen plugin](../plugins/fullscreen.md).
 * The display refresh rate in frames per second.
+* Whether the device has a webcam and microphone. Note that this only reveals whether a webcam/microphone exists. The participant still needs to grant permission in order for the experiment to use these devices.
 
 !!! warning
     Features with an * are recorded by parsing the [user agent string](https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent). 
@@ -31,7 +32,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 
 | Parameter                      | Type             | Default Value | Description                              |
 | ------------------------------ | ---------------- | ------------- | ---------------------------------------- |
-| features | array of strings | `["width", "height", "webaudio", "browser", "browser_version", "mobile", "os", "fullscreen", "vsync_rate"]` | The list of browser features to record. The default value includes all of the available options. |
+| features | array of strings | `["width", "height", "webaudio", "browser", "browser_version", "mobile", "os", "fullscreen", "vsync_rate", "webcam", "microphone"]` | The list of browser features to record. The default value includes all of the available options. |
 | skip_features | array of strings | `[]` | Any features listed here will be skipped, even if they appear in `features`. Use this when you want to run most of the defaults.
 | vsync_frame_count | int | 60 | The number of frames to sample when measuring the display refresh rate (`"vsync_rate"`). Increasing the number will potenially improve the stability of the estimate at the cost of increasing the amount of time the plugin takes during this test. On most devices, 60 frames takes about 1 second to measure.
 | allow_window_resize | bool | true | Whether to allow the participant to resize the browser window if the window is smaller than `minimum_width` and/or `minimum_height`. If `false`, then the `minimum_width` and `minimum_height` parameters are ignored and you can validate the size in the `inclusion_function`.
@@ -57,6 +58,8 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | webaudio | bool | Whether the browser supports the WebAudio API.
 | fullscreen | bool | Whether the browser supports the Fullscreen API.
 | vsync_rate | number | An estimate of the refresh rate of the screen, in frames per second.
+| webcam | bool | Whether there is a webcam device available. Note that the participant still must grant permission to access the device before it can be used.
+| microphone | bool | Whether there is an audio input device available. Note that the participant still must grant permission to access the device before it can be used.
 
 Note that all of these values are only recorded when the corresponding key is included in the `features` parameter for the trial.
 
