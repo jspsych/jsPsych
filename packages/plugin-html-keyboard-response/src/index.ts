@@ -153,17 +153,22 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     }
   }
 
-  simulate(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+  simulate(trial: TrialType<Info>, simulation_options: any, load_callback: () => void) {
     load_callback();
 
-    const data = {
+    // calculate RT
+    const max_rt = trial.trial_duration || 10000;
+
+    const default_data = {
       stimulus: trial.stimulus,
-      rt: trial.choices == "NO_KEYS" ? null : 500,
+      rt: trial.choices == "NO_KEYS" ? null : 100,
       response:
         trial.choices == "NO_KEYS"
           ? null
           : this.jsPsych.randomization.sampleWithReplacement(trial.choices, 1)[0],
     };
+
+    const data = default_data;
 
     this.jsPsych.finishTrial(data);
   }

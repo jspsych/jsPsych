@@ -15,11 +15,31 @@
     }
   });
 
-  var trial_1 = {
+  var trial_1a = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
     choices: ['y', 'n'],
-    prompt: '<p>Does the color match the word? (y or n)</p>'
+    prompt: '<p>Does the color match the word? (y or n)</p>',
+    simulation_options: "long_trial"
+  };
+
+  var trial_1b = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
+    choices: ['y', 'n'],
+    prompt: '<p>Does the color match the word? (y or n)</p>',
+    simulation_options: {
+      data: {
+        rt: 10
+      }
+    }
+  };
+
+  var trial_1c = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
+    choices: ['y', 'n'],
+    prompt: '<p>Does the color match the word? (y or n)</p>',
   };
 
   var trial_2 = {
@@ -38,7 +58,20 @@
     prompt: '<p>No response allowed. 2s wait.</p>'
   };
 
-  jsPsych.simulate([trial_1, trial_2, trial_3]);
+  var sim_opts = {
+    default: {
+      data: {
+        rt: 100
+      }
+    },
+    long_trial: {
+      data: {
+        rt: 20000
+      }
+    }
+  }
+
+  jsPsych.simulate([trial_1, trial_2, trial_3], sim_opts);
 
 </script>
 </html>
