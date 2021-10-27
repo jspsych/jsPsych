@@ -152,6 +152,21 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       this.jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
     }
   }
+
+  simulate(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    load_callback();
+
+    const data = {
+      stimulus: trial.stimulus,
+      rt: trial.choices == "NO_KEYS" ? null : 500,
+      response:
+        trial.choices == "NO_KEYS"
+          ? null
+          : this.jsPsych.randomization.sampleWithReplacement(trial.choices, 1)[0],
+    };
+
+    this.jsPsych.finishTrial(data);
+  }
 }
 
 export default HtmlKeyboardResponsePlugin;
