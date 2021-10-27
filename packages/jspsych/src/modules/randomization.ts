@@ -173,7 +173,7 @@ export function sampleWithoutReplacement(arr, size) {
   return shuffle(arr).slice(0, size);
 }
 
-export function sampleWithReplacement(arr, size, weights) {
+export function sampleWithReplacement(arr, size, weights?) {
   if (!Array.isArray(arr)) {
     console.error("First argument to sampleWithReplacement() must be an array");
   }
