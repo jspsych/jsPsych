@@ -14,24 +14,27 @@
       }
     });
 
-    var sketchpad_trial = {
+    var trial = {
       type: jsPsychSketchpad,
-      canvas_border_width: 2,
-      canvas_width: 512,
-      canvas_height: 351,
-      //background_image: 'img/table.jpg',
-      prompt: '<p>Draw something that goes on the object!</p>',
-      stroke_color_palette: [
-        'black', 'white',  'red', 'yellow', 'blue'        
-      ],
-      background_color: '#ccc',
-      key_to_draw: ' ',
-      choices: ['a','b','c'],
-      //trial_duration: 5000,
-      show_countdown_trial_duration: true
+      prompt: '<p>Draw an apple!</p>',
+      prompt_location: 'abovecanvas',
+      canvas_width: 300,
+      canvas_height: 300,
+      canvas_border_width: 2
+    }
+
+    var trial2 = {
+      type: jsPsychSketchpad,
+      prompt: '<p>Circle the mouth using red. Circle the eyes using blue.</p>',
+      prompt_location: 'abovecanvas',
+      stroke_color_palette: ['red', 'blue'],
+      stroke_color: 'red',
+      background_image: 'img/sad_face_4.jpg',
+      canvas_width: 380,
+      canvas_height: 252
     }
     
-    jsPsych.run([sketchpad_trial]);
+    jsPsych.run([trial, trial2]);
 
   </script>
 </html>

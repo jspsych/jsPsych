@@ -74,7 +74,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
           prompt_location: 'abovecanvas',
           canvas_width: 300,
           canvas_height: 300,
-          border_width: 2
+          canvas_border_width: 2
         }
         ```
     
