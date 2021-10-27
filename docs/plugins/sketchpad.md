@@ -64,58 +64,46 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
 ## Examples
 
-???+ example "Identical distractors"
+???+ example "Basic sketchpad with a prompt"
     === "Code"
 
         ```javascript
-        var instructions = {
-          type: jsPsychHtmlButtonResponse,
-          stimulus: `<p>Press J if there is a backwards N.</p>
-            <p>Press F if all the Ns are in the normal orientation.</p>`,
-          choices: ['Continue']
-        }
-
         var trial = {
-          type: jsPsychVisualSearchCircle,
-          target: 'img/backwardN.gif',
-          foil: 'img/normalN.gif',
-          fixation_image: 'img/fixation.gif',
-          target_present: true,
-          set_size: 4
+          type: jsPsychSketchpad,
+          prompt: '<p>Draw an apple!</p>',
+          prompt_location: 'abovecanvas',
+          canvas_width: 300,
+          canvas_height: 300,
+          border_width: 2
         }
         ```
     
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="../../demos/jspsych-visual-search-circle-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="../../demos/jspsych-sketchpad-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-visual-search-circle-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-sketchpad-demo1.html">Open demo in new tab</a>
 
-???+ example "Variety of different distractors"
+???+ example "Image segmentation with different colors"
     === "Code"
 
         ```javascript
-        var instructions = {
-          type: jsPsychHtmlButtonResponse,
-          stimulus: `<p>Press E if there is an elephant in the group.</p>
-            <p>Press N if there is no elephant in the group.</p>`,
-          choices: ['Continue']
-        }
-
         var trial = {
-          type: jsPsychVisualSearchCircle,
-          stimuli: ['img/elephant.png', 'img/lion.png', 'img/monkey.png'],
-          fixation_image: 'img/fixation.gif',
-          target_present_key: 'e',
-          target_absent_key: 'n',
-          target_present: true
+          type: jsPsychSketchpad,
+          prompt: '<p style="width:380px">Circle the mouth using red. Circle the eyes using blue.</p>',
+          prompt_location: 'abovecanvas',
+          stroke_color_palette: ['red', 'blue'],
+          stroke_color: 'red',
+          background_image: 'img/sad_face_4.jpg',
+          canvas_width: 380,
+          canvas_height: 252
         }
         ```
 
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="../../demos/jspsych-visual-search-circle-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="../../demos/jspsych-sketchpad-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-visual-search-circle-demo2.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-sketchpad-demo2.html">Open demo in new tab</a>
