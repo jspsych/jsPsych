@@ -428,15 +428,16 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
           display: flex; 
           justify-content: space-between; 
           flex-wrap: wrap;
+          margin: auto;
         }
         #sketchpad-color-palette { 
-          display: inline-block; text-align:left; flex-basis: 50%;
+          display: inline-block; text-align:left; flex-grow: 1;
         }
         .sketchpad-color-select { 
           cursor: pointer; height: 33px; width: 33px; border-radius: 4px; padding: 0; border: 1px solid #ccc; 
         }
         #sketchpad-actions {
-          display:inline-block; text-align:right;
+          display:inline-block; text-align:right; flex-grow: 1;
         }
         #sketchpad-actions button {
           margin-left: 4px;
@@ -490,8 +491,8 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
   private start_draw(e) {
     this.is_drawing = true;
 
-    const x = e.clientX - this.sketchpad.getBoundingClientRect().left;
-    const y = e.clientY - this.sketchpad.getBoundingClientRect().top;
+    const x = Math.round(e.clientX - this.sketchpad.getBoundingClientRect().left);
+    const y = Math.round(e.clientY - this.sketchpad.getBoundingClientRect().top);
 
     this.undo_history = [];
     this.set_redo_btn_state(false);
@@ -515,8 +516,8 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
 
   private move_draw(e) {
     if (this.is_drawing) {
-      const x = e.clientX - this.sketchpad.getBoundingClientRect().left;
-      const y = e.clientY - this.sketchpad.getBoundingClientRect().top;
+      const x = Math.round(e.clientX - this.sketchpad.getBoundingClientRect().left);
+      const y = Math.round(e.clientY - this.sketchpad.getBoundingClientRect().top);
 
       this.ctx.lineTo(x, y);
       this.ctx.stroke();
