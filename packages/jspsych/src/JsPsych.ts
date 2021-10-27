@@ -71,6 +71,11 @@ export class JsPsych {
   private finished: Promise<void>;
   private resolveFinishedPromise: () => void;
 
+  /**
+   * is the experiment running in `simulate()` mode
+   */
+  private simulation_mode = false;
+
   // storing a single webaudio context to prevent problems with multiple inits
   // of jsPsych
   webaudio_context: AudioContext = null;
@@ -174,6 +179,11 @@ export class JsPsych {
 
     this.startExperiment();
     await this.finished;
+  }
+
+  async simulate(timeline: any[], simulation_options?) {
+    this.simulation_mode = true;
+    await this.run(timeline);
   }
 
   getProgress() {
@@ -579,11 +589,23 @@ export class JsPsych {
       }
     };
 
-    const trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
+    let trial_complete;
+    if (!this.simulation_mode) {
+      trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
+    }
+    if (this.simulation_mode) {
+      if (trial.type.simulate) {
+        trial_complete = trial.type.simulate(trial, {}, load_callback);
+      } else {
+        trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
+      }
+    }
+
     // see if trial_complete is a Promise by looking for .then() function
     const is_promise = trial_complete && typeof trial_complete.then == "function";
 
-    if (!is_promise) {
+    // in simulation mode we let the simulate function call the load_callback always.
+    if (!is_promise && !this.simulation_mode) {
       load_callback();
     }
 
