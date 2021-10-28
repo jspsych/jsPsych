@@ -83,7 +83,7 @@ describe("browser-check", () => {
 
     await expectFinished();
 
-    expect(getHTML()).toMatch(browserCheck.info.parameters.exclusion_message.default);
+    expect(getHTML()).toMatch(browserCheck.info.parameters.exclusion_message.default());
   });
 
   test("inclusion_function gets data from checks", async () => {

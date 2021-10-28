@@ -102,8 +102,10 @@ const info = <const>{
      * The message to display if `inclusion_function` returns `false`
      */
     exclusion_message: {
-      type: ParameterType.HTML_STRING,
-      default: `<p>Your browser does not meet the requirements to participate in this experiment.</p>`,
+      type: ParameterType.FUNCTION,
+      default: () => {
+        return `<p>Your browser does not meet the requirements to participate in this experiment.</p>`;
+      },
     },
   },
 };
@@ -345,7 +347,7 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
 
       const trial_data = { ...Object.fromEntries(feature_data) };
 
-      this.jsPsych.endExperiment(trial.exclusion_message, trial_data);
+      this.jsPsych.endExperiment(trial.exclusion_message(trial_data), trial_data);
     };
   }
 }

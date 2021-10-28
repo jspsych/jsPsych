@@ -41,7 +41,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | window_resize_message | string | see description | The message that will be displayed during the interactive resize when `allow_window_resize` is `true` and the window is too small. If the message contains HTML elements with the special IDs `browser-check-min-width`, `browser-check-min-height`, `browser-check-actual-height`, and/or `browser-check-actual-width`, then the contents of those elements will be dynamically updated to reflect the `minimum_width`, `minimum_height` and measured width and height of the browser. The default message is: `<p>Your browser window is too small to complete this experiment. Please maximize the size of your browser window. If your browser window is already maximized, you will not be able to complete this experiment.</p><p>The minimum window width is <span id="browser-check-min-width"></span> px.</p><p>Your current window width is <span id="browser-check-actual-width"></span> px.</p><p>The minimum window height is <span id="browser-check-min-height"></span> px.</p><p>Your current window height is <span id="browser-check-actual-height"></span> px.</p>`.
 resize_fail_button_text | string | `"I cannot make the window any larger"` | During the interactive resize, a button with this text will be displayed below the `window_resize_message` for the participant to click if the window cannot meet the minimum size needed. When the button is clicked, the experiment will end and `exclusion_message` will be displayed.
 inclusion_function | function | `() => { return true; }` | A function that evaluates to `true` if the browser meets all of the inclusion criteria for the experiment, and `false` otherwise. The first argument to the function will be an object containing key value pairs with the measured features of the browser. The keys will be the same as those listed in `features`. See example below.
-exclusion_message | string | `<p>Your browser does not meet the requirements to participate in this experiment.</p>` | The message to display if `inclusion_function` evaluates to `false` or if the participant clicks on the resize fail button during the interactive resize.
+exclusion_message | function | `() => { return <p>Your browser does not meet the requirements to participate in this experiment.</p> }` | A function that returns the message to display if `inclusion_function` evaluates to `false` or if the participant clicks on the resize fail button during the interactive resize. In order to allow customization of the message, the first argument to the function will be an object containing key value pairs with the measured features of the browser. The keys will be the same as those listed in `features`. See example below.
 
 ## Data Generated
 
@@ -65,12 +65,11 @@ Note that all of these values are only recorded when the corresponding key is in
 
 ## Examples
 
-???+ example "Recording all of the available features, no interactive resize"
+???+ example "Recording all of the available features, no exclusions"
     === "Code"
         ```javascript
         var trial = {
-          type: jsPsychBrowserCheck,
-          allow_resize: false
+          type: jsPsychBrowserCheck
         };
         ```
 
@@ -100,7 +99,7 @@ Note that all of these values are only recorded when the corresponding key is in
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-browser-check-demo2.html">Open demo in new tab</a>
 
-???+ example "Interactive resize"
+???+ example "Setting a minimum window height & width, with the option to resize the window"
     === "Code"
         ```javascript
         var trial = {
@@ -116,3 +115,28 @@ Note that all of these values are only recorded when the corresponding key is in
         </div>
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-browser-check-demo3.html">Open demo in new tab</a>
+
+???+ example "Custom exclusion message based on measured features"
+    === "Code"
+        ```javascript
+        var trial = {
+          type: jsPsychBrowserCheck,
+          inclusion_function: (data) => {
+            return data.browser == 'chrome' && data.mobile === false
+          },
+          exclusion_message: (data) => {
+            if(data.mobile){
+              return '<p>You must use a desktop/laptop computer to participate in this experiment.</p>';
+            } else if(data.browser !== 'chrome'){
+              return '<p>You must use Chrome as your browser to complete this experiment.</p>'
+            }
+          }
+        };
+        ``` 
+
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../../demos/jspsych-browser-check-demo4.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-browser-check-demo4.html">Open demo in new tab</a>
