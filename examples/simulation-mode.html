@@ -61,7 +61,7 @@
   var sim_opts = {
     default: {
       data: {
-        rt: 100
+        rt: () => { return jsPsych.randomization.sampleExGaussian(250,50,0.02) }
       }
     },
     long_trial: {
@@ -71,7 +71,7 @@
     }
   }
 
-  jsPsych.simulate([trial_1, trial_2, trial_3], sim_opts);
+  jsPsych.simulate([trial_1a, trial_1b, trial_1c, trial_2, trial_3], "data", sim_opts);
 
 </script>
 </html>

@@ -153,22 +153,88 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     }
   }
 
-  simulate(trial: TrialType<Info>, simulation_options: any, load_callback: () => void) {
-    load_callback();
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data") {
+      load_callback();
+      this.simulation_data_mode(trial, simulation_options);
+    }
+  }
 
-    // calculate RT
-    const max_rt = trial.trial_duration || 10000;
+  private simulation_data_mode(trial: TrialType<Info>, simulation_options) {
+    const alphabet = [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "o",
+      "p",
+      "q",
+      "r",
+      "s",
+      "t",
+      "u",
+      "v",
+      "w",
+      "x",
+      "y",
+      "z",
+    ];
+
+    // figure out sensible default data based on trial object
+    let rt = this.jsPsych.randomization.sampleExGaussian(500, 250, 0.01);
+    let key;
+    if (trial.choices == "NO_KEYS") {
+      key = null;
+    } else if (trial.choices == "ALL_KEYS") {
+      key = this.jsPsych.randomization.sampleWithoutReplacement(alphabet, 1)[0];
+    } else {
+      key = this.jsPsych.randomization.sampleWithoutReplacement(trial.choices, 1)[0];
+    }
 
     const default_data = {
       stimulus: trial.stimulus,
-      rt: trial.choices == "NO_KEYS" ? null : 100,
-      response:
-        trial.choices == "NO_KEYS"
-          ? null
-          : this.jsPsych.randomization.sampleWithReplacement(trial.choices, 1)[0],
+      rt: rt,
+      response: key,
     };
 
-    const data = default_data;
+    // override any data with data from simulation object
+    let data;
+    if (simulation_options && simulation_options.data) {
+      data = {
+        ...default_data,
+        ...simulation_options.data,
+      };
+    } else {
+      data = default_data;
+    }
+
+    // check for data consistency
+    if (data.rt) {
+      data.rt = Math.round(data.rt);
+    }
+    if (trial.trial_duration && data.rt > trial.trial_duration) {
+      data.rt = null;
+      data.response = null;
+    }
+    if (trial.choices == "NO_KEYS") {
+      data.rt = null;
+      data.response = null;
+    }
 
     this.jsPsych.finishTrial(data);
   }

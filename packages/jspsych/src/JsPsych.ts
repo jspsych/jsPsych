@@ -74,7 +74,7 @@ export class JsPsych {
   /**
    * is the experiment running in `simulate()` mode
    */
-  private simulation_mode = false;
+  private simulation_mode: "data-only" | "visual" = null;
 
   /**
    * simulation options passed in via `simulate()`
@@ -186,8 +186,12 @@ export class JsPsych {
     await this.finished;
   }
 
-  async simulate(timeline: any[], simulation_options = {}) {
-    this.simulation_mode = true;
+  async simulate(
+    timeline: any[],
+    simulation_mode: "data-only" | "visual",
+    simulation_options = {}
+  ) {
+    this.simulation_mode = simulation_mode;
     this.simulation_options = simulation_options;
     await this.run(timeline);
   }
@@ -602,18 +606,21 @@ export class JsPsych {
     if (this.simulation_mode) {
       if (trial.type.simulate) {
         let trial_sim_opts;
+        if (!trial.simulation_options) {
+          trial_sim_opts = this.simulation_options.default;
+        }
         if (trial.simulation_options) {
           if (typeof trial.simulation_options == "string") {
             if (this.simulation_options[trial.simulation_options]) {
               trial_sim_opts = this.simulation_options[trial.simulation_options];
             } else if (this.simulation_options.default) {
               console.log(
-                `No matching simulation options found for "{trial.simulation_options}". Using "default" options.`
+                `No matching simulation options found for "${trial.simulation_options}". Using "default" options.`
               );
               trial_sim_opts = this.simulation_options.default;
             } else {
               console.log(
-                `No matching simulation options found for "{trial.simulation_options}" and no "default" options provided. Using the default values provided by the plugin.`
+                `No matching simulation options found for "${trial.simulation_options}" and no "default" options provided. Using the default values provided by the plugin.`
               );
               trial_sim_opts = {};
             }
@@ -621,7 +628,14 @@ export class JsPsych {
             trial_sim_opts = trial.simulation_options;
           }
         }
-        trial_complete = trial.type.simulate(trial, trial_sim_opts, load_callback);
+        trial_sim_opts = this.utils.deepCopy(trial_sim_opts);
+        trial_sim_opts = this.replaceFunctionsWithValues(trial_sim_opts, null);
+        trial_complete = trial.type.simulate(
+          trial,
+          this.simulation_mode,
+          trial_sim_opts,
+          load_callback
+        );
       } else {
         trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
       }
