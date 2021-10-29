@@ -41,9 +41,9 @@ name | string | `null` | Name of the question to be used for storing data. If th
 
 Present arbitrary HTML-formatted content in the list of questions, including text, images, and sounds. There are no response options.
 
-The only available parameters are those listed for all question types. 
-Parameters with a default value of *undefined* must be specified.
-Other parameters can be left unspecified if the default value is acceptable.
+The only available parameters are those listed for all question types with a default value of *undefined* (`type` and `prompt`) and `name`. 
+The `name` parameter is optional and used to identify the question in the data, with a response value of `null`. 
+The `required` parameter will be ignored.
 
 #### Multi-choice
 
