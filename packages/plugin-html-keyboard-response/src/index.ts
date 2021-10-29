@@ -159,7 +159,7 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data") {
+    if (simulation_mode == "data-only") {
       load_callback();
       this.simulation_data_mode(trial, simulation_options);
     }
