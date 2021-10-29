@@ -231,6 +231,100 @@ output: shuffledArray = {
 
 ---
 
+## jsPsych.randomization.sampleExGaussian
+
+```javascript
+jsPsych.randomization.sampleExGaussian(mean, standard_deviation, rate)
+```
+
+### Parameters
+
+| Parameter  | Type    | Description                              |
+| ---------- | ------- | ---------------------------------------- |
+| mean       | number   | Mean of the normal distribution component of the exGaussian |
+| standard_deviation | number | Standard deviation of the normal distribution component of the exGaussian |
+| rate    | number   | Rate of the exponential distribution component of the exGaussian |
+
+### Return value
+
+A random sample from the distribution
+
+### Description
+
+Generates a random sample from an exponentially modified Gaussian distribution.
+
+### Examples
+
+#### Sample a value
+
+```javascript
+var rand_sample_exg = jsPsych.randomization.sampleExGaussian(500,250,0.01);
+```
+
+---
+
+## jsPsych.randomization.sampleExponential
+
+```javascript
+jsPsych.randomization.sampleExponential(rate)
+```
+
+### Parameters
+
+| Parameter  | Type    | Description                              |
+| ---------- | ------- | ---------------------------------------- |
+| rate    | number   | Rate of the exponential distribution |
+
+### Return value
+
+A random sample from the distribution
+
+### Description
+
+Generates a random sample from an exponential distribution.
+
+### Examples
+
+#### Sample a value
+
+```javascript
+var rand_sample_exg = jsPsych.randomization.sampleExponential(0.01);
+```
+
+---
+
+## jsPsych.randomization.sampleNormal
+
+```javascript
+jsPsych.randomization.sampleNormal(mean, standard_deviation)
+```
+
+### Parameters
+
+| Parameter  | Type    | Description                              |
+| ---------- | ------- | ---------------------------------------- |
+| mean       | number   | Mean of the normal distribution |
+| standard_deviation | number | Standard deviation of the normal distribution |
+
+
+### Return value
+
+A random sample from the distribution
+
+### Description
+
+Generates a random sample from a normal distribution.
+
+### Examples
+
+#### Sample a value
+
+```javascript
+var rand_sample_exg = jsPsych.randomization.sampleNormal(500, 250);
+```
+
+---
+
 ## jsPsych.randomization.sampleWithReplacement
 
 ```javascript
