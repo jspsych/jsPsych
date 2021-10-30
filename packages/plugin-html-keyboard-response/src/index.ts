@@ -163,9 +163,12 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       load_callback();
       this.simulation_data_mode(trial, simulation_options);
     }
+    if (simulation_mode == "visual") {
+      this.simulation_visual_mode(trial, simulation_options, load_callback);
+    }
   }
 
-  private simulation_data_mode(trial: TrialType<Info>, simulation_options) {
+  private simulation_create_data(trial: TrialType<Info>, simulation_options) {
     const alphabet = [
       "a",
       "b",
@@ -236,7 +239,32 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       data.response = null;
     }
 
+    return data;
+  }
+
+  private simulation_data_mode(trial: TrialType<Info>, simulation_options) {
+    const data = this.simulation_create_data(trial, simulation_options);
+
     this.jsPsych.finishTrial(data);
+  }
+
+  private simulation_visual_mode(
+    trial: TrialType<Info>,
+    simulation_options,
+    load_callback: () => void
+  ) {
+    const data = this.simulation_create_data(trial, simulation_options);
+
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial);
+    load_callback();
+
+    if (data.rt !== null) {
+      setTimeout(() => {
+        this.jsPsych.pluginAPI.pressKey(data.response);
+      }, data.rt);
+    }
   }
 }
 
