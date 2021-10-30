@@ -4,6 +4,7 @@ import { JsPsych } from "../../JsPsych";
 import { HardwareAPI } from "./HardwareAPI";
 import { KeyboardListenerAPI } from "./KeyboardListenerAPI";
 import { MediaAPI } from "./MediaAPI";
+import { SimulationAPI } from "./SimulationAPI";
 import { TimeoutAPI } from "./TimeoutAPI";
 
 export function createJointPluginAPIObject(jsPsych: JsPsych) {
@@ -19,8 +20,9 @@ export function createJointPluginAPIObject(jsPsych: JsPsych) {
       new TimeoutAPI(),
       new MediaAPI(settings.use_webaudio, jsPsych.webaudio_context),
       new HardwareAPI(),
+      new SimulationAPI(),
     ].map((object) => autoBind(object))
-  ) as KeyboardListenerAPI & TimeoutAPI & MediaAPI & HardwareAPI;
+  ) as KeyboardListenerAPI & TimeoutAPI & MediaAPI & HardwareAPI & SimulationAPI;
 }
 
 export type PluginAPI = ReturnType<typeof createJointPluginAPIObject>;
