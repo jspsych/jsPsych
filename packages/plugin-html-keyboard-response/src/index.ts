@@ -169,50 +169,10 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   }
 
   private simulation_create_data(trial: TrialType<Info>, simulation_options) {
-    const alphabet = [
-      "a",
-      "b",
-      "c",
-      "d",
-      "e",
-      "f",
-      "g",
-      "h",
-      "i",
-      "j",
-      "k",
-      "l",
-      "m",
-      "n",
-      "o",
-      "p",
-      "q",
-      "r",
-      "s",
-      "t",
-      "u",
-      "v",
-      "w",
-      "x",
-      "y",
-      "z",
-    ];
-
-    // figure out sensible default data based on trial object
-    let rt = this.jsPsych.randomization.sampleExGaussian(500, 250, 0.01);
-    let key;
-    if (trial.choices == "NO_KEYS") {
-      key = null;
-    } else if (trial.choices == "ALL_KEYS") {
-      key = this.jsPsych.randomization.sampleWithoutReplacement(alphabet, 1)[0];
-    } else {
-      key = this.jsPsych.randomization.sampleWithoutReplacement(trial.choices, 1)[0];
-    }
-
     const default_data = {
       stimulus: trial.stimulus,
-      rt: rt,
-      response: key,
+      rt: this.jsPsych.randomization.sampleExGaussian(500, 250, 0.01),
+      response: this.jsPsych.pluginAPI.getValidKey(trial.choices),
     };
 
     // override any data with data from simulation object

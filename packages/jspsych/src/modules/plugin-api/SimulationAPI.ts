@@ -1,3 +1,5 @@
+import { sampleWithoutReplacement } from "../randomization.js";
+
 export class SimulationAPI {
   dispatchEvent(event: Event) {
     document.body.dispatchEvent(event);
@@ -18,5 +20,58 @@ export class SimulationAPI {
 
   clickTarget(target: Element) {
     target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  }
+
+  getValidKey(choices: "NO_KEYS" | "ALL_KEYS" | Array<string>) {
+    const possible_keys = [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "o",
+      "p",
+      "q",
+      "r",
+      "s",
+      "t",
+      "u",
+      "v",
+      "w",
+      "x",
+      "y",
+      "z",
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      " ",
+    ];
+
+    let key;
+    if (choices == "NO_KEYS") {
+      key = null;
+    } else if (choices == "ALL_KEYS") {
+      key = sampleWithoutReplacement(possible_keys, 1)[0];
+    } else {
+      key = sampleWithoutReplacement(choices, 1)[0];
+    }
+
+    return key;
   }
 }
