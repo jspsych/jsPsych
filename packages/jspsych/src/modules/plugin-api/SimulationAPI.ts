@@ -101,10 +101,14 @@ export class SimulationAPI {
       }
     }
 
-    // If trial.choices is NO_KEYS make sure
+    // If trial.choices is NO_KEYS make sure that response and RT are null
     if (trial.choices && trial.choices == "NO_KEYS") {
-      data.rt = null;
-      data.response = null;
+      if (data.rt) {
+        data.rt = null;
+      }
+      if (data.response) {
+        data.response = null;
+      }
     }
   }
 }
