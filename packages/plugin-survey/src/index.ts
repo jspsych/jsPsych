@@ -1,5 +1,5 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
-import { QuestionComment, StylesManager, Survey } from "survey-knockout";
+import { QuestionComment, QuestionRadiogroup, StylesManager, Survey } from "survey-knockout";
 import { require } from "yargs";
 
 const info = <const>{
@@ -61,6 +61,22 @@ const info = <const>{
           type: ParameterType.INT,
           pretty_name: "Columns",
           default: 1,
+        },
+        /**
+         * Multi-choice/multi-select only: Whether or not to include an additional "other" option.
+         * If true, an "other" radio/checkbox option will be added on to the list multi-choice/multi-select options.
+         * Selecting this option will automatically produce a textbox to allow the participant to write in a response.
+         */
+        add_other_option: {
+          type: ParameterType.BOOL,
+          pretty_name: "Add other option",
+          default: false,
+        },
+        /** Multi-choice/multi-select only: If add_other_option is true, then this is the text label for the "other" option. */
+        other_option_text: {
+          type: ParameterType.BOOL,
+          pretty_name: "Other option text",
+          default: "Other",
         },
         /** Text only: Placeholder text in the response text box. */
         placeholder: {
@@ -185,6 +201,8 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     "options",
     "option_reorder",
     "columns",
+    "add_other_option",
+    "other_option_text",
   ]);
   private multiselect_params = this.all_question_params.concat([
     "options",
@@ -412,7 +430,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
 
   private setup_multichoice_question = (question, question_params) => {
     const req = ["options"];
-    const opt = ["columns", "option_reorder"];
+    const opt = ["columns", "option_reorder", "add_other_option", "other_option_text"];
     this.validate_question_params(
       this.all_question_params_req.concat(req),
       this.all_question_params_opt.concat(opt),
@@ -423,6 +441,10 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
 
     question.title = question_params.prompt;
     question.isRequired = question_params.required;
+    question.hasOther = question_params.add_other_option;
+    if (question.hasOther) {
+      question.otherText = question_params.other_option_text;
+    }
     question.choices = question_params.options;
     if (typeof question_params.option_reorder == "undefined") {
       question.choicesOrder = info.parameters.pages.nested.option_reorder.default;
@@ -430,7 +452,11 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       question.choicesOrder = question_params.option_reorder;
     }
     question.colCount = question_params.columns;
-    question.defaultValue = "";
+    if (question instanceof QuestionRadiogroup) {
+      question.defaultValue = "";
+    } else {
+      question.defaultValue = []; // multi-select/checkbox
+    }
     return question;
   };
 
