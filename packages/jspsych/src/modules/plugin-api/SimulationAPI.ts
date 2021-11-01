@@ -72,4 +72,39 @@ export class SimulationAPI {
 
     return key;
   }
+
+  mergeSimulationData(default_data, simulation_options) {
+    // override any data with data from simulation object
+    let data;
+    if (simulation_options && simulation_options.data) {
+      data = {
+        ...default_data,
+        ...simulation_options.data,
+      };
+    } else {
+      data = default_data;
+    }
+    return data;
+  }
+
+  checkSimulationDataConsistency(trial, data) {
+    // All RTs must be rounded
+    if (data.rt) {
+      data.rt = Math.round(data.rt);
+    }
+
+    // If a trial_duration and rt exist, make sure that the RT is not longer than the trial.
+    if (trial.trial_duration && data.rt && data.rt > trial.trial_duration) {
+      data.rt = null;
+      if (data.response) {
+        data.response = null;
+      }
+    }
+
+    // If trial.choices is NO_KEYS make sure
+    if (trial.choices && trial.choices == "NO_KEYS") {
+      data.rt = null;
+      data.response = null;
+    }
+  }
 }

@@ -175,29 +175,9 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       response: this.jsPsych.pluginAPI.getValidKey(trial.choices),
     };
 
-    // override any data with data from simulation object
-    let data;
-    if (simulation_options && simulation_options.data) {
-      data = {
-        ...default_data,
-        ...simulation_options.data,
-      };
-    } else {
-      data = default_data;
-    }
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
 
-    // check for data consistency
-    if (data.rt) {
-      data.rt = Math.round(data.rt);
-    }
-    if (trial.trial_duration && data.rt > trial.trial_duration) {
-      data.rt = null;
-      data.response = null;
-    }
-    if (trial.choices == "NO_KEYS") {
-      data.rt = null;
-      data.response = null;
-    }
+    this.jsPsych.pluginAPI.checkSimulationDataConsistency(trial, data);
 
     return data;
   }
