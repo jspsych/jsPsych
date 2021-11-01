@@ -32,7 +32,7 @@ const info = <const>{
         },
         /** Name of the question in the trial data. If no name is given, the questions are named Q0, Q1, etc. */
         name: {
-          type: ParameterType.STRING, // TO DO
+          type: ParameterType.STRING,
           pretty_name: "Question Name",
           default: "",
         },
@@ -259,7 +259,11 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
         }
         // set up question
         let question = page.addNewQuestion(q_type);
-        question.name = "p" + i.toString() + "_q" + j.toString();
+        if (typeof question_params.name !== "undefined") {
+          question.name = question_params.name;
+        } else {
+          question.name = "p" + i.toString() + "_q" + j.toString();
+        }
         switch (q_type) {
           case "comment": // text (multiple rows)
             this.setup_text_question(question, question_params);
@@ -296,11 +300,24 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
 
     this.start_time = performance.now();
 
-    this.survey.onComplete.add((sender) => {
+    this.survey.onComplete.add((sender, options) => {
       // clear display
       this.display.innerHTML = "";
-      // save the data
-      // TO DO: save empty responses to data
+      // add default values to any questions without responses
+      const all_questions = sender.getAllQuestions();
+      const data_names = Object.keys(sender.data);
+      console.log("q names in data: ", data_names);
+      all_questions.forEach((question) => {
+        if (!data_names.includes(question.name)) {
+          console.log("question name: ", question.name);
+          if (typeof question.defaultValue !== "undefined" && question.defaultValue !== null) {
+            let quest_default = question.defaultValue;
+            sender.mergeData({ [question.name]: quest_default });
+          } else {
+            sender.mergeData({ [question.name]: null });
+          }
+        }
+      });
       this.jsPsych.finishTrial({
         rt: Math.round(performance.now() - this.start_time),
         response: sender.data,
@@ -412,6 +429,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       question.choicesOrder = question_params.option_reorder;
     }
     question.colCount = question_params.columns;
+    question.defaultValue = "";
     return question;
   };
 
@@ -439,6 +457,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     } else {
       question.size = question_params.textbox_columns;
     }
+    question.defaultValue = "";
     return question;
   };
 }
