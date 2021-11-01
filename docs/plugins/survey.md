@@ -15,7 +15,7 @@ Other parameters can be left unspecified if the default value is acceptable.
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 pages | array | *undefined* | An array of arrays. Each inner array contains the content for a single page, which is made up of one or more question objects. 
-randomize_question_order | boolean | `false` | If `true`, the display order of the questions within each survey page is randomly determined at the start of the trial. In the data object, if question `name` values are not provided, then `Q0` will refer to the first question in the array, regardless of where it was presented visually.
+randomize_question_order | boolean | `false` | If `true`, the display order of the questions within each survey page is randomly determined at the start of the trial. In the data object, if question `name` values are not provided, then `P0_Q0` will refer to the first question in the first page array, regardless of where it was presented visually.
 button_label_next | string |  'Continue' | Label of the button to move forward to the next page, or finish the survey.
 button_label_previous | string | 'Back' | Label of the button to move to a previous page in the survey.
 button_label_finish | string | 'Finish' | Label of the button to submit responses.
@@ -35,11 +35,11 @@ Parameter | Type | Default Value | Description
 type | string | *undefined* | The question type. Options are: "drop-down", "html", "likert", "multi-choice", "multi-select", "ranking", "rating", "text".
 prompt | string | *undefined* | The prompt/question that will be associated with the question's response field. If the question type is "html", then this string is the HTML-formatted string to be displayed. 
 required | boolean | `false` | Whether a response to the question is required (`true`) or not (`false`), using the HTML5 `required` attribute. 
-name | string | `null` | Name of the question to be used for storing data. If this parameter is not provided, then default names will be used to identify the questions in the data: `Q0`, `Q1`, etc.
+name | string | `null` | Name of the question to be used for storing data. If this parameter is not provided, then default names will be used to identify the questions in the data: `P0_Q0`, `P0_Q1`, `P1_Q0` etc. Question names must be unique across all pages within the trial.
 
 #### HTML
 
-Present arbitrary HTML-formatted content in the list of questions, including text, images, and sounds. There are no response options.
+Present arbitrary HTML-formatted content embedded in the list of questions, including text, images, and sounds. There are no response options.
 
 The only available parameters are those listed for all question types with a default value of *undefined* (`type` and `prompt`) and `name`. 
 The `name` parameter is optional and used to identify the question in the data, with a response value of `null`. 
@@ -94,7 +94,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
 Name | Type | Value
 -----|------|------
-response | object | An object containing the response for each question. The object will have a separate key (variable) for each question, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. The responses are recorded as the name of the option label selected (string). If the `name` parameter is defined for the question, then the response object will use the value of `name` as the key for each question. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
+response | object | An object containing the response to each question. The object will have a separate key (variable) for each question, with the first question on the first page being recorded in `P0_Q0`, the second question on the first page in `P0_Q1`, and so on. If the `name` parameter is defined for the question, then the response object will use the value of `name` as the key for each question. The response type will depend on the question type. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response(s) are submitted. |
 question_order | array | An array with the order of questions. For example `[2,0,1]` would indicate that the first question was `trial.questions[2]` (the third item in the `questions` parameter), the second question was `trial.questions[0]`, and the final question was `trial.questions[1]`. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 

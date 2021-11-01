@@ -26,11 +26,12 @@ const info = <const>{
         },
         /** Whether or not a response to this question must be given in order to continue. */
         required: {
+          // TO DO
           type: ParameterType.BOOL,
           pretty_name: "Required",
           default: false,
         },
-        /** Name of the question in the trial data. If no name is given, the questions are named Q0, Q1, etc. */
+        /** Name of the question in the trial data. If no name is given, the questions are named P0_Q0, P0_Q1, etc. Names must be unique across pages. */
         name: {
           type: ParameterType.STRING,
           pretty_name: "Question Name",
@@ -262,7 +263,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
         if (typeof question_params.name !== "undefined") {
           question.name = question_params.name;
         } else {
-          question.name = "p" + i.toString() + "_q" + j.toString();
+          question.name = "P" + i.toString() + "_Q" + j.toString();
         }
         switch (q_type) {
           case "comment": // text (multiple rows)
