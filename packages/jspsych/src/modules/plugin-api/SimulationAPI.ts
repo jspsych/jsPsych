@@ -1,5 +1,3 @@
-import { sampleWithoutReplacement } from "../randomization.js";
-
 export class SimulationAPI {
   dispatchEvent(event: Event) {
     document.body.dispatchEvent(event);
@@ -67,9 +65,9 @@ export class SimulationAPI {
     if (choices == "NO_KEYS") {
       key = null;
     } else if (choices == "ALL_KEYS") {
-      key = sampleWithoutReplacement(possible_keys, 1)[0];
+      key = possible_keys[Math.floor(Math.random() * possible_keys.length)];
     } else {
-      key = sampleWithoutReplacement(choices, 1)[0];
+      key = choices[Math.floor(Math.random() * choices.length)];
     }
 
     return key;
