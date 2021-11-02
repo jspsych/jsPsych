@@ -8,7 +8,7 @@ import {
   StylesManager,
   Survey,
 } from "survey-knockout";
-import { require } from "yargs";
+//import { require } from "yargs";
 
 const info = <const>{
   name: "survey",
