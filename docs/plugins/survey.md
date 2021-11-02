@@ -162,10 +162,10 @@ question_order | array | An array with the order of questions. For example `[2,0
 
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="../../demos/jspsych-survey-multi-choice-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="../../demos/jspsych-survey-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-multi-choice-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo1.html">Open demo in new tab</a>
 
 ???+ example "Multiple pages, more customization"
     === "Code"
@@ -207,17 +207,43 @@ question_order | array | An array with the order of questions. For example `[2,0
               }
             ]
           ],
-          randomize_question_order: true,
-          title: 'Demographic questions',
+          title: 'My questionnaire',
           button_label_next: 'Continue',
           button_label_back: 'Previous',
           button_label_finish: 'Submit'
+          show_question_numbers: 'onPage'
         };
         ```
 
     === "Demo"
         <div style="text-align:center;">
-          <iframe src="../../demos/jspsych-survey-multi-choice-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+          <iframe src="../../demos/jspsych-survey-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-multi-choice-demo2.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-demo2.html">Open demo in new tab</a>
+
+???+ example "Randomization of question and choice order"
+    === "Code"
+
+        ```javascript
+        ```
+
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../../demos/jspsych-survey-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo3.html">Open demo in new tab</a>
+
+???+ example "Response scoring and validation"
+    === "Code"
+
+        ```javascript
+        ```
+
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../../demos/jspsych-survey-demo4.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo4.html">Open demo in new tab</a>
