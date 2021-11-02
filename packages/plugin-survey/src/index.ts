@@ -592,12 +592,8 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     } else {
       question.choicesOrder = question_params.option_reorder;
     }
-    if (question instanceof QuestionDropdown) {
-      question.colCount = 0;
-    } else {
-      question.colCount = question_params.columns;
-    }
-    if (question instanceof QuestionRadiogroup || question instanceof QuestionDropdown) {
+    question.colCount = question_params.columns;
+    if (question instanceof QuestionRadiogroup) {
       question.defaultValue = "";
     } else if (question instanceof QuestionCheckbox) {
       question.defaultValue = [];
