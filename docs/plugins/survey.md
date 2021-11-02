@@ -51,6 +51,7 @@ Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 options | array of strings | *undefined* | This array contains the set of multiple choice options to display for the question.
 option_reorder | string | "none" | One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the `options` array. If `random`, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.
+correct_response | string | null | String from the `options` array that should be considered correct. If specified, the data will include a `correct` property that indicates whether the response was correct (`true`) or not (`false`).
 
 #### HTML
 
@@ -87,6 +88,7 @@ Parameter | Type | Default Value | Description
 options | array of strings | *undefined* | This array contains the set of multiple choice options to display for the question.
 option_reorder | string | "none" | One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the `options` array. If `random`, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.
 columns | integer | 1 | Number of columns to use for displaying the options. If 1 (default), the choices will be displayed in a single column (vertically). If 0, choices will be displayed in a single row (horizontally). Any value greater than 1 can be used to display options in multiple columns. 
+correct_response | string | null | String from the `options` array that should be considered correct. If specified, the data will include a `correct` property that indicates whether the response was correct (`true`) or not (`false`).
 
 #### Multi-select
 
@@ -101,6 +103,7 @@ Parameter | Type | Default Value | Description
 options | array of strings | *undefined* | This array contains the set of options to display for the question.
 option_reorder | string | "none" | One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the `options` array. If `random`, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.
 columns | integer | 1 | Number of columns to use for displaying the options. If 1 (default), the choices will be displayed in a single column (vertically). If 0, choices will be displayed in a single row (horizontally). Any value greater than 1 can be used to display options in multiple columns. 
+correct_response | array of strings | null | Array of one or more strings from the `options` array that should be considered correct. If specified, the data will include a `correct` property that indicates whether the response was correct (`true`) or not (`false`).
 
 #### Text
 

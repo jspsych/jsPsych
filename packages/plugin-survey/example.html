@@ -22,7 +22,7 @@
       pages: [
         [
           {type: 'html', prompt: '<p>Here is some arbitrary text via an "html" question type.<br>Similar to preamble but can be inserted anywhere in the question set.</p><p>This trial uses automatic question numbering (continued across pages).</p>'},
-          {type: 'text', prompt: 'This is a single-line text question.', required: true},
+          {type: 'text', prompt: 'This is a single-line text question. The correct answer is "hello".', required: true, correct_response: "hello"},
           {type: 'text', prompt: 'This is a multi-line text question.', placeholder: 'This is a placeholder.', textbox_rows: 10, textbox_columns: 40},
         ],
         // [
@@ -43,7 +43,7 @@
         ],
         [
           {type: 'multi-choice', prompt: 'This is a multi-choice question with options in one column (the default).', options: options},
-          {type: 'multi-choice', prompt: 'This is a multi-choice question with options in one row.', options: options, columns: 0},
+          {type: 'multi-choice', prompt: 'This is a multi-choice question with options in one row. The correct response is option 5.', options: options, columns: 0, correct_response: "Option 5"},
           {type: 'multi-choice', prompt: 'This is a multi-choice question with options in two columns, with an "other" option.', options: options, columns: 2, add_other_option: true},
           {type: 'multi-select', prompt: 'This is a multi-select question.', options: options},
           {type: 'multi-select', prompt: 'This is a multi-select question with three columns and random option ordering.', options: options, columns: 3, option_reorder: 'random'},

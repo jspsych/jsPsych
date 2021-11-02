@@ -3,6 +3,7 @@ import {
   QuestionCheckbox,
   QuestionComment,
   QuestionDropdown,
+  QuestionMatrix,
   QuestionRadiogroup,
   QuestionSelectBase,
   StylesManager,
@@ -32,9 +33,8 @@ const info = <const>{
           pretty_name: "Prompt",
           default: null,
         },
-        /** Whether or not a response to this question must be given in order to continue. For likert questions, this applies to all statments in the table. */
+        /** Whether or not a response to this question must be given in order to continue. For likert questions, this applies to all statements in the table. */
         required: {
-          // TO DO
           type: ParameterType.BOOL,
           pretty_name: "Required",
           default: false,
@@ -140,6 +140,16 @@ const info = <const>{
           type: ParameterType.INT,
           pretty_name: "Textbox columns",
           default: 40,
+        },
+        /**
+         * All question types except HTML: value of the correct response. If specified, the response will be compared to this value,
+         * and an additional data property "correct" will store response accuracy (true or false).
+         */
+        correct_response: {
+          // TO DO
+          type: ParameterType.STRING,
+          pretty_name: "Correct response",
+          default: null,
         },
       },
     },
@@ -258,12 +268,14 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     "add_other_option",
     "other_option_text",
     "dropdown_select_prompt",
+    "correct_response",
   ]);
   private html_params = this.all_question_params.concat([]);
   private likert_params = this.all_question_params.concat([
     "statements",
     "options",
     "randomize_statement_order",
+    "correct_response",
   ]);
   private multichoice_params = this.all_question_params.concat([
     "options",
@@ -271,6 +283,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     "columns",
     "add_other_option",
     "other_option_text",
+    "correct_response",
   ]);
   private ranking_params = this.all_question_params.concat([]);
   private rating_params = this.all_question_params.concat([]);
@@ -278,6 +291,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     "placeholder",
     "textbox_rows",
     "textbox_columns",
+    "correct_response",
   ]);
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
@@ -324,13 +338,19 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     // required question label
     this.survey.requiredText = this.params.required_question_label;
 
-    // TO DO: required error text
-    // this.survey.onErrorCustomText = (sender, options) => {
+    // response validation and custom error text
+    // TO DO: get this working
+    this.survey.checkErrorsMode = "onNextPage"; // onValueChanged
+    // this.survey.onValidateQuestion.add(function(sender, options) {
     //   console.log('error: ', options);
-    //   if (options.name == "required") {
-    //     options.text = this.params.required_error;
+    //   if (options.question.isRequired && options.value == "") {
+    //       options.error = "Custom required text.";
     //   }
-    // };
+    // });
+
+    // TO DO: automatic response accuracy scoring for questions with a correctAnswer value
+    // see Survey Model onIsAnswerCorrect event
+    // https://surveyjs.io/Documentation/Library/?id=SurveyModel#onIsAnswerCorrect
 
     // pages and questions
     for (let i = 0; i < this.params.pages.length; i++) {
@@ -501,6 +521,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       "add_other_option",
       "other_option_text",
       "dropdown_select_prompt",
+      "correct_response",
     ];
     this.validate_question_params(
       this.all_question_params_req.concat(req),
@@ -523,6 +544,9 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     } else {
       question.choicesOrder = question_params.option_reorder;
     }
+    if (question_params.correct_response !== null) {
+      question.correctAnswer = question_params.correct_response;
+    }
     question.defaultValue = "";
     return question;
   };
@@ -544,7 +568,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
 
   private setup_likert_question = (question, question_params) => {
     const req = ["options", "statements"];
-    const opt = ["randomize_statement_order"];
+    const opt = ["randomize_statement_order", "correct_response"];
     this.validate_question_params(
       this.all_question_params_req.concat(req),
       this.all_question_params_opt.concat(opt),
@@ -564,14 +588,24 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       question.rows.push({ value: stmt.name, text: stmt.prompt });
     });
     question.rowsOrder = question_params.randomize_statement_order ? "random" : "initial";
+    if (question_params.correct_response !== null) {
+      question.correctAnswer = question_params.correct_response;
+    }
     console.log("likert question: ", question);
+    // TO DO: add default value
     return question;
   };
 
   // multi-choice, multi-select
   private setup_multichoice_question = (question, question_params) => {
     const req = ["options"];
-    const opt = ["columns", "option_reorder", "add_other_option", "other_option_text"];
+    const opt = [
+      "columns",
+      "option_reorder",
+      "add_other_option",
+      "other_option_text",
+      "correct_response",
+    ];
     this.validate_question_params(
       this.all_question_params_req.concat(req),
       this.all_question_params_opt.concat(opt),
@@ -593,6 +627,9 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       question.choicesOrder = question_params.option_reorder;
     }
     question.colCount = question_params.columns;
+    if (question_params.correct_response !== null) {
+      question.correctAnswer = question_params.correct_response;
+    }
     if (question instanceof QuestionRadiogroup) {
       question.defaultValue = "";
     } else if (question instanceof QuestionCheckbox) {
@@ -607,7 +644,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
 
   private setup_text_question = (question, question_params) => {
     const req = [];
-    const opt = ["placeholder", "textbox_rows", "textbox_columns"];
+    const opt = ["placeholder", "textbox_rows", "textbox_columns", "correct_response"];
     this.validate_question_params(
       this.all_question_params_req.concat(req),
       this.all_question_params_opt.concat(opt),
@@ -619,6 +656,9 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     question.title = question_params.prompt;
     question.isRequired = question_params.required;
     question.placeHolder = question_params.placeholder;
+    if (question_params.correct_response !== null) {
+      question.correctAnswer = question_params.correct_response;
+    }
     if (question instanceof QuestionComment) {
       question.rows = question_params.textbox_rows;
       question.cols = question_params.textbox_columns;
