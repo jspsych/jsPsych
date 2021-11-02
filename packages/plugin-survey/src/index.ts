@@ -1,5 +1,13 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
-import { QuestionComment, QuestionRadiogroup, StylesManager, Survey } from "survey-knockout";
+import {
+  QuestionCheckbox,
+  QuestionComment,
+  QuestionDropdown,
+  QuestionRadiogroup,
+  QuestionSelectBase,
+  StylesManager,
+  Survey,
+} from "survey-knockout";
 import { require } from "yargs";
 
 const info = <const>{
@@ -16,7 +24,7 @@ const info = <const>{
           type: ParameterType.SELECT,
           pretty_name: "Type",
           default: null,
-          options: ["html", "text", "multi-choice", "multi-select"], // TO DO: other types
+          options: ["drop-down", "html", "likert", "multi-choice", "multi-select", "text"], // TO DO: other types
         },
         /** Question prompt. */
         prompt: {
@@ -24,7 +32,7 @@ const info = <const>{
           pretty_name: "Prompt",
           default: null,
         },
-        /** Whether or not a response to this question must be given in order to continue. */
+        /** Whether or not a response to this question must be given in order to continue. For likert questions, this applies to all statments in the table. */
         required: {
           // TO DO
           type: ParameterType.BOOL,
@@ -37,14 +45,51 @@ const info = <const>{
           pretty_name: "Question Name",
           default: "",
         },
-        /** Multi-choice/multi-select only: Array of strings that contains the set of multiple choice options to display for the question. */
+        /** Likert only: array of objects, where each object represents a single statement/question to be displayed in a table row. */
+        statements: {
+          type: ParameterType.COMPLEX,
+          pretty_name: "Statements",
+          array: true,
+          default: null,
+          nested: {
+            /** Statement text */
+            prompt: {
+              type: ParameterType.STRING,
+              pretty_name: "Prompt",
+              default: null,
+            },
+            /** Identifier for the statement in the trial data. If none is given, the statements will be named "S0", "S1", etc.  */
+            name: {
+              type: ParameterType.STRING,
+              pretty_name: "Name",
+              default: null,
+            },
+          },
+        },
+        /** Likert only: Whether or not to randomize the order of statements (rows) in the likert table. */
+        randomize_statement_order: {
+          type: ParameterType.BOOL,
+          pretty_name: "Randomize statement order",
+          default: false,
+        },
+        /**
+         * Drop-down only: Text to be displayed in the drop-down menu as a prompt for making a selection.
+         * This text is not a valid answer, so submitting this selection will produce an error if a response is required.
+         * For a blank prompt, use a space character (" ").
+         */
+        dropdown_select_prompt: {
+          type: ParameterType.STRING,
+          pretty_name: "Drop-down select prompt",
+          default: "Choose...",
+        },
+        /** Drop-down/multi-choice/multi-select/likert only: Array of strings that contains the set of multiple choice options to display for the question. */
         options: {
           type: ParameterType.STRING,
           pretty_name: "Options",
           default: null,
           array: true,
         },
-        /** Multi-choice/multi-select only: re-ordering of options array */
+        /** Drop-down/multi-choice/multi-select only: re-ordering of options array */
         option_reorder: {
           type: ParameterType.SELECT,
           pretty_name: "Option reorder",
@@ -63,7 +108,7 @@ const info = <const>{
           default: 1,
         },
         /**
-         * Multi-choice/multi-select only: Whether or not to include an additional "other" option.
+         * Drop-down/multi-choice/multi-select only: Whether or not to include an additional "other" option.
          * If true, an "other" radio/checkbox option will be added on to the list multi-choice/multi-select options.
          * Selecting this option will automatically produce a textbox to allow the participant to write in a response.
          */
@@ -72,7 +117,7 @@ const info = <const>{
           pretty_name: "Add other option",
           default: false,
         },
-        /** Multi-choice/multi-select only: If add_other_option is true, then this is the text label for the "other" option. */
+        /** Drop-down/multi-choice/multi-select only: If add_other_option is true, then this is the text label for the "other" option. */
         other_option_text: {
           type: ParameterType.BOOL,
           pretty_name: "Other option text",
@@ -150,6 +195,19 @@ const info = <const>{
       pretty_name: "Title",
       default: null,
     },
+    /** Text to display if a required answer is not responded to. */
+    required_error: {
+      // TO DO
+      type: ParameterType.STRING,
+      pretty_name: "Required error",
+      default: "Please answer the question.",
+    },
+    /** String to display at the end of required questions. */
+    required_question_label: {
+      type: ParameterType.STRING,
+      pretty_name: "Required question label",
+      default: "*",
+    },
   },
 };
 
@@ -194,20 +252,25 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
   private all_question_params_req = ["type", "prompt"];
   private all_question_params_opt = ["name", "required"];
   private all_question_params = this.all_question_params_req.concat(this.all_question_params_opt);
-  private drowdown_params = this.all_question_params.concat([]);
+  private dropdown_params = this.all_question_params.concat([
+    "options",
+    "option_reorder",
+    "add_other_option",
+    "other_option_text",
+    "dropdown_select_prompt",
+  ]);
   private html_params = this.all_question_params.concat([]);
-  private likert_params = this.all_question_params.concat([]);
+  private likert_params = this.all_question_params.concat([
+    "statements",
+    "options",
+    "randomize_statement_order",
+  ]);
   private multichoice_params = this.all_question_params.concat([
     "options",
     "option_reorder",
     "columns",
     "add_other_option",
     "other_option_text",
-  ]);
-  private multiselect_params = this.all_question_params.concat([
-    "options",
-    "option_reorder",
-    "columns",
   ]);
   private ranking_params = this.all_question_params.concat([]);
   private rating_params = this.all_question_params.concat([]);
@@ -217,8 +280,6 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     "textbox_columns",
   ]);
 
-  // TO DO:
-  // - add other and none options to multi-choice/select
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     this.display = display_element;
     this.params = trial;
@@ -228,13 +289,23 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     // add custom CSS classes to survey elements
     // https://surveyjs.io/Examples/Library/?id=survey-customcss&platform=Knockoutjs&theme=bootstrap#content-docs
     const jspsych_css = {
+      root: "sv_main sv_bootstrap_css jspsych-survey-question",
       question: {
+        mainRoot: "sv_qstn jspsych-survey-question",
+        flowRoot: "sv_q_flow sv_qstn jspsych-survey-question",
         title: "jspsych-survey-question-prompt",
+        requiredText: "sv_q_required_text jspsych-survey-required",
       },
       html: {
         root: "jspsych-survey-html",
       },
       navigationButton: "jspsych-btn jspsych-survey-btn",
+      dropdown: {
+        control: "jspsych-survey-dropdown",
+      },
+      error: {
+        root: "alert alert-danger jspsych-survey-required",
+      },
     };
 
     // navigation buttons
@@ -249,6 +320,17 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     if (this.params.title !== null) {
       this.survey.title = this.params.title;
     }
+
+    // required question label
+    this.survey.requiredText = this.params.required_question_label;
+
+    // TO DO: required error text
+    // this.survey.onErrorCustomText = (sender, options) => {
+    //   console.log('error: ', options);
+    //   if (options.name == "required") {
+    //     options.text = this.params.required_error;
+    //   }
+    // };
 
     // pages and questions
     for (let i = 0; i < this.params.pages.length; i++) {
@@ -288,11 +370,13 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
             this.setup_text_question(question, question_params);
             break;
           case "dropdown":
+            this.setup_dropdown_question(question, question_params);
             break;
           case "html":
             this.setup_html_question(question, question_params);
             break;
           case "matrix": // likert
+            this.setup_likert_question(question, question_params);
             break;
           case "radiogroup": // multi-choice
             this.setup_multichoice_question(question, question_params);
@@ -409,7 +493,39 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
   };
 
   // methods for setting up different question types
-  private setup_dropdown_question = () => {};
+
+  private setup_dropdown_question = (question, question_params) => {
+    const req = ["options"];
+    const opt = [
+      "option_reorder",
+      "add_other_option",
+      "other_option_text",
+      "dropdown_select_prompt",
+    ];
+    this.validate_question_params(
+      this.all_question_params_req.concat(req),
+      this.all_question_params_opt.concat(opt),
+      question_params
+    );
+
+    this.set_question_defaults(question_params, this.dropdown_params);
+
+    question.title = question_params.prompt;
+    question.isRequired = question_params.required;
+    question.hasOther = question_params.add_other_option;
+    question.optionsCaption = question_params.dropdown_select_prompt;
+    if (question.hasOther) {
+      question.otherText = question_params.other_option_text;
+    }
+    question.choices = question_params.options;
+    if (typeof question_params.option_reorder == "undefined") {
+      question.choicesOrder = info.parameters.pages.nested.option_reorder.default;
+    } else {
+      question.choicesOrder = question_params.option_reorder;
+    }
+    question.defaultValue = "";
+    return question;
+  };
 
   private setup_html_question = (question, question_params) => {
     const req = [];
@@ -426,8 +542,33 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     return question;
   };
 
-  private setup_likert_question = () => {};
+  private setup_likert_question = (question, question_params) => {
+    const req = ["options", "statements"];
+    const opt = ["randomize_statement_order"];
+    this.validate_question_params(
+      this.all_question_params_req.concat(req),
+      this.all_question_params_opt.concat(opt),
+      question_params
+    );
 
+    this.set_question_defaults(question_params, this.likert_params);
+
+    question.title = question_params.prompt;
+    question.isAllRowRequired = question_params.required;
+    question.columns = [];
+    question_params.options.forEach((opt: string, ind: number) => {
+      question.columns.push({ value: ind, text: opt });
+    });
+    question.rows = [];
+    question_params.statements.forEach((stmt: { name: string; prompt: string }) => {
+      question.rows.push({ value: stmt.name, text: stmt.prompt });
+    });
+    question.rowsOrder = question_params.randomize_statement_order ? "random" : "initial";
+    console.log("likert question: ", question);
+    return question;
+  };
+
+  // multi-choice, multi-select
   private setup_multichoice_question = (question, question_params) => {
     const req = ["options"];
     const opt = ["columns", "option_reorder", "add_other_option", "other_option_text"];
@@ -451,11 +592,15 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     } else {
       question.choicesOrder = question_params.option_reorder;
     }
-    question.colCount = question_params.columns;
-    if (question instanceof QuestionRadiogroup) {
-      question.defaultValue = "";
+    if (question instanceof QuestionDropdown) {
+      question.colCount = 0;
     } else {
-      question.defaultValue = []; // multi-select/checkbox
+      question.colCount = question_params.columns;
+    }
+    if (question instanceof QuestionRadiogroup || question instanceof QuestionDropdown) {
+      question.defaultValue = "";
+    } else if (question instanceof QuestionCheckbox) {
+      question.defaultValue = [];
     }
     return question;
   };

@@ -11,11 +11,11 @@
     line-height: 1em;
 }
 
-/* question spacing (modify existing CSS classes instead of overwriting them with custom class) */
-.sv_bootstrap_css .sv_qstn {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    margin-bottom: 0.5em !important;
+/* question spacing */
+.jspsych-display-element div.jspsych-survey-question {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0.5em;
 }
 
 /* html prompts */
@@ -23,9 +23,14 @@
     font-size: 18px;
 }
 
-/* textbox inputs */
-.jspsych-display-element input[type="text"], .jspsych-display-element textarea {
+/* textbox inputs, dropdown menu */
+.jspsych-display-element input[type="text"], .jspsych-display-element textarea, .jspsych-display-element select.jspsych-survey-dropdown {
     font-family: "Open Sans", "Arial", sans-serif;
     font-size: 14px;
     padding: 4px;
+}
+
+/* required astrisk and error text */
+.jspsych-display-element .jspsych-survey-required {
+    color: red;
 }

@@ -22,6 +22,8 @@ button_label_finish | string | 'Finish' | Label of the button to submit response
 autocomplete | boolean | `false` | This determines whether or not all of the input elements on the page should allow autocomplete. Setting this to `true` will enable autocomplete or auto-fill for the form.
 show_question_numbers | string | "off" | One of: "on", "onPage", "off". If "on", questions will be labelled starting with "1." on the first page, and numbering will continue across pages. If "onPage", questions will be labelled starting with "1.", with separate numbering on each page. If "off", no numbers will be added before the question prompts. Note: HTML question types are ignored in automatic numbering.
 title | string | `null` | If specified, this text will be shown at the top of the survey pages. This parameter provides a method for fixing any arbitrary text to the top of the page when randomizing the question order with the `randomize_question_order` parameter (since HTML question types are also randomized).
+required_error | string | "Please answer the question." | Text to display if a required question is not responeded to.
+required_question_label | string | "*" | String to display at the end of required questions. Use an empty string ("") if you do not want to add a label to the end of required questions.
 
 ### Question types and parameters
 
@@ -33,9 +35,22 @@ Other parameters can be left unspecified if the default value is acceptable.
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 type | string | *undefined* | The question type. Options are: "drop-down", "html", "likert", "multi-choice", "multi-select", "ranking", "rating", "text".
-prompt | string | *undefined* | The prompt/question that will be associated with the question's response field. If the question type is "html", then this string is the HTML-formatted string to be displayed. 
+prompt | string | *undefined* | The prompt/question that will be associated with the question's response field. If the question type is "html", then this string is the HTML-formatted string to be displayed. If the question type is "likert", the prompt is a general question or title presented above the table.
 required | boolean | `false` | Whether a response to the question is required (`true`) or not (`false`), using the HTML5 `required` attribute. 
 name | string | `null` | Name of the question to be used for storing data. If this parameter is not provided, then default names will be used to identify the questions in the data: `P0_Q0`, `P0_Q1`, `P1_Q0` etc. Question names must be unique across all pages within the trial.
+
+#### Drop-down
+
+Present a question with a limited set of options in a drop-down menu. The participant can only select one option.
+
+In addition to the parameters for all question types, the multi-choice question type also offers the following parameters. 
+Parameters with a default value of *undefined* must be specified.
+Other parameters can be left unspecified if the default value is acceptable.
+
+Parameter | Type | Default Value | Description
+----------|------|---------------|------------
+options | array of strings | *undefined* | This array contains the set of multiple choice options to display for the question.
+option_reorder | string | "none" | One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the `options` array. If `random`, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.
 
 #### HTML
 
@@ -44,6 +59,20 @@ Present arbitrary HTML-formatted content embedded in the list of questions, incl
 The only available parameters are those listed for all question types with a default value of *undefined* (`type` and `prompt`) and `name`. 
 The `name` parameter is optional and used to identify the question in the data, with a response value of `null`. 
 The `required` parameter will be ignored.
+
+#### Likert
+
+Present a prompt along with a table of statements/questions (rows) and repeated response options for each statement/question (columns). 
+
+In addition to the parameters for all question types, the multi-choice question type also offers the following parameters. 
+Parameters with a default value of *undefined* must be specified.
+Other parameters can be left unspecified if the default value is acceptable.
+
+Parameter | Type | Default Value | Description
+----------|------|---------------|------------
+statements | array of objects | *undefined* | This array contains one or more objects representing the statements/questions to be presented in the table rows. Each object must have a `prompt`, which is the statement/question text. The objects can optionally include a `name`, which is how the statement should be identified in the data. If no `name` is provided, then the default values of "S0", "S1" etc. will be used.
+options | array of strings | *undefined* | This array contains the set of multiple choice options to be presented in the table columns.
+randomize_statement_order | boolean | `false` | If `true`, the order of statements/questions in the `statements` array will be randomized.
 
 #### Multi-choice
 
