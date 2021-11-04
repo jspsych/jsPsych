@@ -215,9 +215,9 @@ const info = <const>{
       default: null,
     },
     /** Text to display if a required answer is not responded to. */
-    required_error: {
+    required_error_text: {
       type: ParameterType.STRING,
-      pretty_name: "Required error",
+      pretty_name: "Required error text",
       default: "Please answer the question.",
     },
     /** String to display at the end of required questions. */
@@ -345,15 +345,8 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     // required question label
     this.survey.requiredText = this.params.required_question_label;
 
-    // response validation and custom error text
-    // TO DO: get this working
+    // TO DO: response validation
     this.survey.checkErrorsMode = "onNextPage"; // onValueChanged
-    // this.survey.onValidateQuestion.add(function(sender, options) {
-    //   console.log('error: ', options);
-    //   if (options.question.isRequired && options.value == "") {
-    //       options.error = "Custom required text.";
-    //   }
-    // });
 
     // TO DO: automatic response accuracy scoring for questions with a correctAnswer value
     // see Survey Model onIsAnswerCorrect event
@@ -387,6 +380,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
         }
         // set up question
         let question = page.addNewQuestion(q_type);
+        question.requiredErrorText = this.params.required_error_text;
         if (typeof question_params.name !== "undefined") {
           question.name = question_params.name;
         } else {
