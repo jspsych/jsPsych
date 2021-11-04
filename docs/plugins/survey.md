@@ -43,7 +43,7 @@ name | string | `null` | Name of the question to be used for storing data. If th
 
 Present a question with a limited set of options in a drop-down menu. The participant can only select one option.
 
-In addition to the parameters for all question types, the multi-choice question type also offers the following parameters. 
+In addition to the parameters for all question types, the drop-down question type also offers the following parameters. 
 Parameters with a default value of *undefined* must be specified.
 Other parameters can be left unspecified if the default value is acceptable.
 
@@ -65,7 +65,7 @@ The `required` parameter will be ignored.
 
 Present a prompt along with a table of statements/questions (rows) and repeated response options for each statement/question (columns). 
 
-In addition to the parameters for all question types, the multi-choice question type also offers the following parameters. 
+In addition to the parameters for all question types, the likert question type also offers the following parameters. 
 Parameters with a default value of *undefined* must be specified.
 Other parameters can be left unspecified if the default value is acceptable.
 
@@ -94,7 +94,7 @@ correct_response | string | null | String from the `options` array that should b
 
 Present a question with a limited set of options. The participant can select multiple options.
 
-In addition to the parameters for all question types, the multi-choice question type also offers the following parameters. 
+In addition to the parameters for all question types, the multi-select question type also offers the following parameters. 
 Parameters with a default value of *undefined* must be specified.
 Other parameters can be left unspecified if the default value is acceptable.
 
@@ -104,6 +104,20 @@ options | array of strings | *undefined* | This array contains the set of option
 option_reorder | string | "none" | One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the `options` array. If `random`, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.
 columns | integer | 1 | Number of columns to use for displaying the options. If 1 (default), the choices will be displayed in a single column (vertically). If 0, choices will be displayed in a single row (horizontally). Any value greater than 1 can be used to display options in multiple columns. 
 correct_response | array of strings | null | Array of one or more strings from the `options` array that should be considered correct. If specified, the data will include a `correct` property that indicates whether the response was correct (`true`) or not (`false`).
+
+#### Ranking
+
+Present a question with a limited set of options, where participants respond by dragging and dropping (ordering/ranking) the options. It is ideally used with a short list of options (up to about 7 items). It supports mouse responses, touch responses (mobile devices), and keyboard responses (Tab and Shift-Tab to select, and Up/Down arrow keys to re-order).
+
+In addition to the parameters for all question types, the ranking question type also offers the following parameters. 
+Parameters with a default value of *undefined* must be specified.
+Other parameters can be left unspecified if the default value is acceptable.
+
+Parameter | Type | Default Value | Description
+----------|------|---------------|------------
+options | array of strings | *undefined* | This array contains the set of to-be-ranked options for the question.
+option_reorder | string | "none" | One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the `options` array. If `random`, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.
+correct_response | array of strings | null | The same array of strings used for the `options` array, but listed in the order that should be considered correct. If specified, the data will include a `correct` property that indicates whether the response was correct (`true`) or not (`false`).
 
 #### Text
 

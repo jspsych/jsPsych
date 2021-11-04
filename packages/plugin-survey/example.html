@@ -39,7 +39,10 @@
         [
           {
             type: 'drop-down', prompt: 'Which shape do you like the best?', options: ['Triangle','Circle','Square'], add_other_option: true, option_reorder: 'asc', dropdown_select_prompt: 'Select one:', required: true
-          }
+          },
+          {
+            type: 'ranking', prompt: 'Please order the shapes from your most to least favorite.', options: ['Triangle','Circle','Square'], option_reorder: 'random'
+          },
         ],
         [
           {type: 'multi-choice', prompt: 'This is a multi-choice question with options in one column (the default).', options: options},

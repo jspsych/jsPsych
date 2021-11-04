@@ -5,6 +5,7 @@ import {
   QuestionDropdown,
   QuestionMatrix,
   QuestionRadiogroup,
+  QuestionRanking,
   QuestionSelectBase,
   StylesManager,
   Survey,
@@ -25,7 +26,15 @@ const info = <const>{
           type: ParameterType.SELECT,
           pretty_name: "Type",
           default: null,
-          options: ["drop-down", "html", "likert", "multi-choice", "multi-select", "text"], // TO DO: other types
+          options: [
+            "drop-down",
+            "html",
+            "likert",
+            "multi-choice",
+            "multi-select",
+            "ranking",
+            "text",
+          ], // TO DO: other types
         },
         /** Question prompt. */
         prompt: {
@@ -82,14 +91,14 @@ const info = <const>{
           pretty_name: "Drop-down select prompt",
           default: "Choose...",
         },
-        /** Drop-down/multi-choice/multi-select/likert only: Array of strings that contains the set of multiple choice options to display for the question. */
+        /** Drop-down/multi-choice/multi-select/likert/ranking only: Array of strings that contains the set of multiple choice options to display for the question. */
         options: {
           type: ParameterType.STRING,
           pretty_name: "Options",
           default: null,
           array: true,
         },
-        /** Drop-down/multi-choice/multi-select only: re-ordering of options array */
+        /** Drop-down/multi-choice/multi-select/ranking only: re-ordering of options array */
         option_reorder: {
           type: ParameterType.SELECT,
           pretty_name: "Option reorder",
@@ -108,7 +117,7 @@ const info = <const>{
           default: 1,
         },
         /**
-         * Drop-down/multi-choice/multi-select only: Whether or not to include an additional "other" option.
+         * Drop-down/multi-choice/multi-select/ranking only: Whether or not to include an additional "other" option.
          * If true, an "other" radio/checkbox option will be added on to the list multi-choice/multi-select options.
          * Selecting this option will automatically produce a textbox to allow the participant to write in a response.
          */
@@ -117,7 +126,7 @@ const info = <const>{
           pretty_name: "Add other option",
           default: false,
         },
-        /** Drop-down/multi-choice/multi-select only: If add_other_option is true, then this is the text label for the "other" option. */
+        /** Drop-down/multi-choice/multi-select/ranking only: If add_other_option is true, then this is the text label for the "other" option. */
         other_option_text: {
           type: ParameterType.BOOL,
           pretty_name: "Other option text",
@@ -207,7 +216,6 @@ const info = <const>{
     },
     /** Text to display if a required answer is not responded to. */
     required_error: {
-      // TO DO
       type: ParameterType.STRING,
       pretty_name: "Required error",
       default: "Please answer the question.",
@@ -285,7 +293,6 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     "other_option_text",
     "correct_response",
   ]);
-  private ranking_params = this.all_question_params.concat([]);
   private rating_params = this.all_question_params.concat([]);
   private text_params = this.all_question_params.concat([
     "placeholder",
@@ -405,6 +412,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
             this.setup_multichoice_question(question, question_params);
             break;
           case "ranking": // ranking
+            this.setup_multichoice_question(question, question_params);
             break;
           case "rating": // rating
             break;
@@ -596,7 +604,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     return question;
   };
 
-  // multi-choice, multi-select
+  // multi-choice, multi-select, ranking
   private setup_multichoice_question = (question, question_params) => {
     const req = ["options"];
     const opt = [
@@ -637,8 +645,6 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     }
     return question;
   };
-
-  private setup_ranking_question = () => {};
 
   private setup_rating_question = () => {};
 
