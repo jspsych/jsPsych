@@ -300,12 +300,12 @@ export class JsPsych {
     }
   }
 
-  endExperiment(end_message: string) {
+  endExperiment(end_message = "", data = {}) {
     this.timeline.end_message = end_message;
     this.timeline.end();
     this.pluginAPI.cancelAllKeyboardResponses();
     this.pluginAPI.clearAllTimeouts();
-    this.finishTrial();
+    this.finishTrial(data);
   }
 
   endCurrentTimeline() {
@@ -734,6 +734,11 @@ export class JsPsych {
   }
 
   private async checkExclusions(exclusions) {
+    if (exclusions.min_width || exclusions.min_height || exclusions.audio) {
+      console.warn(
+        "The exclusions option in `initJsPsych()` is deprecated and will be removed in a future version. We recommend using the browser-check plugin instead. See https://www.jspsych.org/latest/plugins/browser-check/."
+      );
+    }
     // MINIMUM SIZE
     if (exclusions.min_width || exclusions.min_height) {
       const mw = exclusions.min_width || 0;
