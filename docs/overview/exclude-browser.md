@@ -1,30 +1,12 @@
 # Exclude Participants Based on Browser Features
+*Changed in 7.1*
 
-Online subjects will use many different kinds of browsers. Depending on the experiment, it may be important to specify a minimum feature set of the browser. jsPsych makes this straightforward. Simply specify certain exclusion criteria in the `initJsPsych` method call. If a subject's browser doesn't meet the criteria the experiment will not start and the subject will see a message explaining the problem. For size restrictions the subject will see a message that displays the current size of their browser window and the minimum size needed to start the experiment, giving the subject an opportunity to enlarge the browser window to continue.
+Online subjects will use many different kinds of browsers. 
+Depending on the experiment, it may be important to specify a minimum feature set of the browser. 
 
-Current exclusion options:
-* Minimum browser width & height
-* Support for the WebAudio API
+As of v7.1 of jsPsych, the recommended way to do this is using the [browser-check plugin](../plugins/browser-check.md). 
+This plugin can record many features of the subject's browser and exclude subjects who do not meet a defined set of inclusion criteria.
+Please see the [browser-check plugin documentation](../plugins/browser-check.md) for more details.
 
-## Examples
-
-#### Exclude browsers that are not at least 800x600 pixels
-
-```javascript
-initJsPsych({
-  exclusions: {
-    min_width: 800,
-    min_height: 600
-  }
-});
-```
-
-#### Exclude browsers that do not have access to the WebAudio API
-
-```javascript
-initJsPsych({
-  exclusions: {
-    audio: true
-  }
-});
-```
+The prior approach of using the `exclusions` parameter in `initJsPsych()` is deprecated and will be removed in `v8.0`. 
+You can find the documentation for it in the [7.0 docs](https://www.jspsych.org/7.0/overview/exclude-browser).

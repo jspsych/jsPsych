@@ -12,6 +12,7 @@ Plugin | Description
 [audio&#8209;button&#8209;response](audio-button-response.md) | Play an audio file and allow the subject to respond by choosing a button to click. The button can be customized extensively, e.g., using images in place of standard buttons.
 [audio&#8209;keyboard&#8209;response](audio-keyboard-response.md) | Play an audio file and allow the subject to respond by pressing a key.
 [audio&#8209;slider&#8209;response](audio-slider-response.md) | Play an audio file and allow the subject to respond by moving a slider to indicate a value.
+[browser&#8209;check](browser-check.md) | Measures various features of the participant's browser and runs an inclusion check to see if the browser meets a custom set of criteria for running the study.
 [call&#8209;function](call-function.md) | Executes an arbitrary function call. Doesn't display anything to the subject, and the subject is usually unaware that this plugin has even executed. It's useful for performing tasks at specified times in the experiment, such as saving data.
 [canvas&#8209;button&#8209;response](canvas-button-response.md) | Draw a stimulus on a [HTML canvas element](https://www.w3schools.com/html/html5_canvas.asp), and record a button click response. Useful for displaying dynamic, parametrically-defined graphics, and for controlling the positioning of multiple graphical elements (shapes, text, images).
 [canvas&#8209;keyboard&#8209;response](canvas-keyboard-response) | Draw a stimulus on a [HTML canvas element](https://www.w3schools.com/html/html5_canvas.asp), and record a key press response. Useful for displaying dynamic, parametrically-defined graphics, and for controlling the positioning of multiple graphical elements (shapes, text, images).
@@ -40,6 +41,7 @@ Plugin | Description
 [same&#8209;different&#8209;image](same-different-image.md) | A same-different judgment task. An image is shown, followed by a brief gap, and then another stimulus is shown. The subject indicates whether the stimuli are the same or different.
 [serial&#8209;reaction&#8209;time](serial-reaction-time.md) | A set of boxes are displayed on the screen and one of them changes color. The subject presses a key that corresponds to the different color box as fast as possible.
 [serial&#8209;reaction&#8209;time&#8209;mouse](serial-reaction-time-mouse.md) | A set of boxes are displayed on the screen and one of them changes color. The subjects clicks the box that changed color as fast as possible.
+[sketchpad](sketchpad.md) | Creates an interactive canvas that the participant can draw on using their mouse or touchscreen.
 [survey&#8209;html&#8209;form](survey-html-form.md) | Renders a custom HTML form. Allows for mixing multiple kinds of form input.
 [survey&#8209;likert](survey-likert.md) | Displays likert-style questions.
 [survey&#8209;multi&#8209;choice](survey-multi-choice.md) | Displays multiple choice questions with one answer allowed per question.

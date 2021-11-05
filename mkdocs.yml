@@ -74,6 +74,7 @@ nav:
   - 'audio-button-response': 'plugins/audio-button-response.md'
   - 'audio-keyboard-response': 'plugins/audio-keyboard-response.md'
   - 'audio-slider-response': 'plugins/audio-slider-response.md'
+  - 'browser-check': 'plugins/browser-check.md'
   - 'call-function': 'plugins/call-function.md'
   - 'canvas-button-response': 'plugins/canvas-button-response.md'
   - 'canvas-keyboard-response': 'plugins/canvas-keyboard-response.md'
@@ -102,6 +103,7 @@ nav:
   - 'same-different-image': 'plugins/same-different-image.md'
   - 'serial-reaction-time': 'plugins/serial-reaction-time.md'
   - 'serial-reaction-time-mouse': 'plugins/serial-reaction-time-mouse.md'
+  - 'sketchpad' : 'plugins/sketchpad.md'
   - 'survey-html-form' : 'plugins/survey-html-form.md'
   - 'survey-likert': 'plugins/survey-likert.md'
   - 'survey-multi-choice': 'plugins/survey-multi-choice.md'
@@ -117,6 +119,7 @@ nav:
   - 'webgazer-validate': 'plugins/webgazer-validate.md'
 - Extensions:
   - 'List of Extensions': 'extensions/list-of-extensions.md'
+  - 'mouse-tracking': 'extensions/mouse-tracking.md'
   - 'webgazer': 'extensions/webgazer.md'
 - Developers:
   - 'Configuration': 'developers/configuration.md'
