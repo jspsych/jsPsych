@@ -1,6 +1,7 @@
 import autoBind from "auto-bind";
 
 import { version } from "../package.json";
+import { MigrationError } from "./migration";
 import { JsPsychData } from "./modules/data";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { ParameterType, universalPluginParameters } from "./modules/plugins";
@@ -516,6 +517,12 @@ export class JsPsych {
 
     // process all timeline variables for this trial
     this.evaluateTimelineVariables(trial);
+
+    if (typeof trial.type === "string") {
+      throw new MigrationError(
+        "A string was provided as the trial's `type` parameter. Since jsPsych v7, the `type` parameter needs to be a plugin object."
+      );
+    }
 
     // instantiate the plugin for this trial
     trial.type = {
