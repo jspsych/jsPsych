@@ -118,6 +118,7 @@ nav:
   - 'webgazer-validate': 'plugins/webgazer-validate.md'
 - Extensions:
   - 'List of Extensions': 'extensions/list-of-extensions.md'
+  - 'mouse-tracking': 'extensions/mouse-tracking.md'
   - 'webgazer': 'extensions/webgazer.md'
 - Developers:
   - 'Configuration': 'developers/configuration.md'
