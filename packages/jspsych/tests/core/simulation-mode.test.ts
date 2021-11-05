@@ -1,5 +1,5 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import { simulateTimeline } from "@jspsych/test-utils";
+import { clickTarget, simulateTimeline } from "@jspsych/test-utils";
 
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType, initJsPsych } from "../../src";
 
@@ -212,5 +212,69 @@ describe("data simulation mode", () => {
     await expectFinished();
 
     expect(getData().values()[0].rt).toBe(100);
+  });
+
+  test("If a plugin doesn't support simulation, it runs as usual", async () => {
+    class FakePlugin {
+      static info = {
+        name: "fake-plugin",
+        parameters: {
+          foo: {
+            type: ParameterType.BOOL,
+            default: true,
+          },
+        },
+      };
+
+      constructor(private jsPsych: JsPsych) {}
+
+      trial(display_element, trial) {
+        display_element.innerHTML = "<button id='end'>CLICK</button>";
+        display_element.querySelector("#end").addEventListener("click", () => {
+          this.jsPsych.finishTrial({ foo: trial.foo });
+        });
+      }
+    }
+
+    const jsPsych = initJsPsych();
+
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        simulation_options: {
+          data: {
+            rt: 100,
+          },
+        },
+      },
+      {
+        type: FakePlugin,
+      },
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        simulation_options: {
+          data: {
+            rt: 200,
+          },
+        },
+      },
+    ];
+
+    const { expectFinished, expectRunning, getData, getHTML, displayElement } =
+      await simulateTimeline(timeline);
+
+    await expectRunning();
+
+    expect(getHTML()).toContain("button");
+
+    clickTarget(displayElement.querySelector("#end"));
+
+    await expectFinished();
+
+    expect(getData().values()[0].rt).toBe(100);
+    expect(getData().values()[1].foo).toBe(true);
+    expect(getData().values()[2].rt).toBe(200);
   });
 });
