@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-sketchpad/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
+
+    var jsPsych = initJsPsych({
+      on_finish: () => {
+        jsPsych.data.displayData();
+      }
+    });
+
+    var trial = {
+      type: jsPsychSketchpad,
+      prompt: '<p>Draw an apple!</p>',
+      prompt_location: 'abovecanvas',
+      canvas_width: 300,
+      canvas_height: 300,
+      canvas_border_width: 2
+    }
+
+    var trial2 = {
+      type: jsPsychSketchpad,
+      prompt: '<p>Circle the mouth using red. Circle the eyes using blue.</p>',
+      prompt_location: 'abovecanvas',
+      stroke_color_palette: ['red', 'blue'],
+      stroke_color: 'red',
+      background_image: 'img/sad_face_4.jpg',
+      canvas_width: 380,
+      canvas_height: 252
+    }
+    
+    jsPsych.run([trial, trial2]);
+
+  </script>
+</html>

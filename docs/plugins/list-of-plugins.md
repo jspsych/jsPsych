@@ -40,6 +40,7 @@ Plugin | Description
 [same&#8209;different&#8209;image](same-different-image.md) | A same-different judgment task. An image is shown, followed by a brief gap, and then another stimulus is shown. The subject indicates whether the stimuli are the same or different.
 [serial&#8209;reaction&#8209;time](serial-reaction-time.md) | A set of boxes are displayed on the screen and one of them changes color. The subject presses a key that corresponds to the different color box as fast as possible.
 [serial&#8209;reaction&#8209;time&#8209;mouse](serial-reaction-time-mouse.md) | A set of boxes are displayed on the screen and one of them changes color. The subjects clicks the box that changed color as fast as possible.
+[sketchpad](sketchpad.md) | Creates an interactive canvas that the participant can draw on using their mouse or touchscreen.
 [survey&#8209;html&#8209;form](survey-html-form.md) | Renders a custom HTML form. Allows for mixing multiple kinds of form input.
 [survey&#8209;likert](survey-likert.md) | Displays likert-style questions.
 [survey&#8209;multi&#8209;choice](survey-multi-choice.md) | Displays multiple choice questions with one answer allowed per question.
