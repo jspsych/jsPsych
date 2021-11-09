@@ -164,7 +164,7 @@ var face_name_procedure = {
 ### Using in a function
 
 Continung the example from the previous section, what if we wanted to show the name with the face, combining the two variables together? 
-To do this, we can use a [dynamic parameter](..overview/dynamic-parameters/) (a function) to create an HTML-string that uses both variables in a single parameter.
+To do this, we can use a [dynamic parameter](dynamic-parameters.md) (a function) to create an HTML-string that uses both variables in a single parameter.
 The value of the `stimulus` parameter will be a function that returns an HTML string that contains both the image and the name. 
 
 ```javascript
