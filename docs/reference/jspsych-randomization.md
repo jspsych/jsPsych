@@ -127,6 +127,37 @@ console.log(jsPsych.randomization.randomID(8));
 
 ---
 
+## jsPsych.randomization.randomInt
+
+```javascript
+jsPsych.randomization.randomInt(lower, upper)
+```
+
+### Parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| lower    | integer | The smallest value it is possible to generate |
+| upper | integer | The largest value it is possible to generate |
+
+### Return value
+
+An integer
+
+### Description
+
+Generates a random integer from `lower` to `upper`
+
+### Example
+
+```javascript
+console.log(jsPsych.randomization.randomInt(2,4));
+// outputs: 2 or 3 or 4.
+```
+
+---
+
+
 ## jsPsych.randomization.repeat
 
 ```javascript

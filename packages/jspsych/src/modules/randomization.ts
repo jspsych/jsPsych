@@ -240,6 +240,19 @@ export function randomID(length = 32) {
   return result;
 }
 
+/**
+ * Generate a random integer from `lower` to `upper`, inclusive of both end points.
+ * @param lower The lowest value it is possible to generate
+ * @param upper The highest value it is possible to generate
+ * @returns A random integer
+ */
+export function randomInt(lower: number, upper: number) {
+  if (upper < lower) {
+    throw new Error("Upper boundary must be less than or equal to lower boundary");
+  }
+  return lower + Math.floor(Math.random() * (upper - lower + 1));
+}
+
 export function sampleNormal(mean: number, standard_deviation: number) {
   return randn_bm() * standard_deviation + mean;
 }
