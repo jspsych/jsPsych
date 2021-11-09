@@ -1,7 +1,7 @@
 # survey
 
 The survey displays one or more questions of different types, on one or more pages that the participant can navigate. 
-The supported question types are: "drop-down", "likert", "multi-choice", "multi-select", "ranking", "rating", "text". 
+The supported question types are: "drop-down", "likert", "likert-table", "multi-choice", "multi-select", "ranking", "text". 
 There is also an "html" type for adding arbitrary HTML-formatted content (without any associated response field) in the question set.
 
 ## Parameters
@@ -34,8 +34,8 @@ Other parameters can be left unspecified if the default value is acceptable.
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-type | string | *undefined* | The question type. Options are: "drop-down", "html", "likert", "multi-choice", "multi-select", "ranking", "rating", "text".
-prompt | string | *undefined* | The prompt/question that will be associated with the question's response field. If the question type is "html", then this string is the HTML-formatted string to be displayed. If the question type is "likert", the prompt is a general question or title presented above the table.
+type | string | *undefined* | The question type. Options are: "drop-down", "html", "likert", "likert-table", "multi-choice", "multi-select", "ranking", "rating", "text".
+prompt | string | *undefined* | The prompt/question that will be associated with the question's response field. If the question type is "html", then this string is the HTML-formatted string to be displayed. If the question type is "likert-table", the prompt is a general question or title presented above the table.
 required | boolean | `false` | Whether a response to the question is required (`true`) or not (`false`), using the HTML5 `required` attribute. 
 name | string | `null` | Name of the question to be used for storing data. If this parameter is not provided, then default names will be used to identify the questions in the data: `P0_Q0`, `P0_Q1`, `P1_Q0` etc. Question names must be unique across all pages within the trial.
 
@@ -63,9 +63,27 @@ The `required` parameter will be ignored.
 
 #### Likert
 
-Present a prompt along with a table of statements/questions (rows) and repeated response options for each statement/question (columns). 
+Present a prompt along with a discrete rating scale. The scale values are presented as buttons that can be selected and de-selected. 
+The scale is specified by the `likert_scale_values` parameter, which is an array of text labels and associated values, or it is generated using the `likert_rating_min`/`max`/`stepsize` parameters (along with optional maximum/minimum descriptions). 
 
 In addition to the parameters for all question types, the likert question type also offers the following parameters. 
+Parameters with a default value of *undefined* must be specified.
+Other parameters can be left unspecified if the default value is acceptable.
+
+Parameter | Type | Default Value | Description
+----------|------|---------------|------------
+likert_scale_values | array of objects | `null` | Array of objects that defines the rating scale labels and associated values to be stored in the data. Each object defines a single rating option. The objects must have a `value` property, which is an integer or string value that will be stored as the response in the data. The objects can optionally have a `text` property, which is a string that will be displayed for that rating option (example: `[{value: 1, text: "A lot"},{value: 2, text: "Somewhat"},{value: 3, text: "Not much"}]`). If no `text` property is specified then the `value` will be displayed (examples: `[{value: 1},{value: 2},{value: 3}]`, `[{value: "Yes"},{value: "Maybe"},{value: "No"}]`). If provided, this parameter will override the `likert_rating_min`/`max`/`stepsize` parameters.
+likert_scale_min | integer | 1 | If the `likert_scale_values` array is not specified, then this parameter will define the minimum scale value. 
+likert_scale_max | integer | 5 | If the `likert_scale_values` array is not specified, then this parameter will define the maximum scale value. 
+likert_scale_stepsize | integer | 1 | If the `likert_scale_values` array is not specified, then this parameter will define the step size that should be used for generating rating options between the minimum and maximum values. 
+likert_scale_min_label | string | `null` | Description for the minimum (first) rating option. If provided, this text will be shown inside the first rating button, before the rating text/value. This parameter is meant for defining the scale's minimum when integer values are used for the rating scale buttons.
+likert_scale_max_label | string | `null` | Description for the maximum (last) rating option. If provided, this text will be shown inside the first rating button, after the rating text/value. This parameter is meant for defining the scale's maximum when integer values are used for the rating scale buttons.
+
+#### Likert-table
+
+Present a prompt along with a table of statements/questions (rows) and repeated response options for each statement/question (columns). 
+
+In addition to the parameters for all question types, the likert-table question type also offers the following parameters. 
 Parameters with a default value of *undefined* must be specified.
 Other parameters can be left unspecified if the default value is acceptable.
 

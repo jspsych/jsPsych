@@ -6,9 +6,11 @@ import {
   QuestionMatrix,
   QuestionRadiogroup,
   QuestionRanking,
+  QuestionRating,
   QuestionSelectBase,
   StylesManager,
   Survey,
+  SurveyTriggerRunExpression,
 } from "survey-knockout";
 //import { require } from "yargs";
 
@@ -21,7 +23,7 @@ const info = <const>{
       pretty_name: "Pages",
       array: true,
       nested: {
-        /** Question type: one of "drop-down", "html", "likert", "multi-choice", "multi-select", "ranking", "rating", "text" */
+        /** Question type: one of "drop-down", "html", "likert", "likert-table", "multi-choice", "multi-select", "ranking", "text" */
         type: {
           type: ParameterType.SELECT,
           pretty_name: "Type",
@@ -30,11 +32,12 @@ const info = <const>{
             "drop-down",
             "html",
             "likert",
+            "likert-table",
             "multi-choice",
             "multi-select",
             "ranking",
             "text",
-          ], // TO DO: other types
+          ], // TO DO: fix likert-table, fix ranking
         },
         /** Question prompt. */
         prompt: {
@@ -42,7 +45,7 @@ const info = <const>{
           pretty_name: "Prompt",
           default: null,
         },
-        /** Whether or not a response to this question must be given in order to continue. For likert questions, this applies to all statements in the table. */
+        /** Whether or not a response to this question must be given in order to continue. For likert-table questions, this applies to all statements in the table. */
         required: {
           type: ParameterType.BOOL,
           pretty_name: "Required",
@@ -54,7 +57,49 @@ const info = <const>{
           pretty_name: "Question Name",
           default: "",
         },
-        /** Likert only: array of objects, where each object represents a single statement/question to be displayed in a table row. */
+        /**
+         * Likert only: Array of objects that defines the rating scale values.
+         * Each object defines a single rating option and must have a "value" property (integer or string).
+         * Each object can optionally have a "text" property (string) that contains a different text label that should be displayed for the rating option.
+         * If this array is not provided, then the likert_scale_min/max/stepsize values will be used to generate the scale.
+         */
+        likert_scale_values: {
+          type: ParameterType.COMPLEX,
+          pretty_name: "Likert scale values",
+          default: null,
+          array: true,
+        },
+        /** Likert only: Minimum rating scale value. */
+        likert_scale_min: {
+          type: ParameterType.INT,
+          pretty_name: "Likert scale min",
+          default: 1,
+        },
+        /** Likert only: Maximum rating scale value. */
+        likert_scale_max: {
+          type: ParameterType.INT,
+          pretty_name: "Likert scale max",
+          default: 5,
+        },
+        /** Likert only: Step size for generating rating scale values between the minimum and maximum. */
+        likert_scale_stepsize: {
+          type: ParameterType.INT,
+          pretty_name: "Likert scale step size",
+          default: 1,
+        },
+        /** Likert only: Text description to be shown for the minimum (first) rating option. */
+        likert_scale_min_label: {
+          type: ParameterType.STRING,
+          pretty_name: "Likert scale min label",
+          default: null,
+        },
+        /** Likert only: Text description to be shown for the maximum (last) rating option. */
+        likert_scale_max_label: {
+          type: ParameterType.STRING,
+          pretty_name: "Likert scale max label",
+          default: null,
+        },
+        /** Likert-table only: array of objects, where each object represents a single statement/question to be displayed in a table row. */
         statements: {
           type: ParameterType.COMPLEX,
           pretty_name: "Statements",
@@ -75,7 +120,7 @@ const info = <const>{
             },
           },
         },
-        /** Likert only: Whether or not to randomize the order of statements (rows) in the likert table. */
+        /** Likert-table only: Whether or not to randomize the order of statements (rows) in the likert table. */
         randomize_statement_order: {
           type: ParameterType.BOOL,
           pretty_name: "Randomize statement order",
@@ -91,7 +136,7 @@ const info = <const>{
           pretty_name: "Drop-down select prompt",
           default: "Choose...",
         },
-        /** Drop-down/multi-choice/multi-select/likert/ranking only: Array of strings that contains the set of multiple choice options to display for the question. */
+        /** Drop-down/multi-choice/multi-select/likert-table/ranking only: Array of strings that contains the set of multiple choice options to display for the question. */
         options: {
           type: ParameterType.STRING,
           pretty_name: "Options",
@@ -155,7 +200,7 @@ const info = <const>{
          * and an additional data property "correct" will store response accuracy (true or false).
          */
         correct_response: {
-          // TO DO
+          // TO DO: add correct response and accuracy scoring to data
           type: ParameterType.STRING,
           pretty_name: "Correct response",
           default: null,
@@ -188,7 +233,7 @@ const info = <const>{
     },
     /** Setting this to true will enable browser auto-complete or auto-fill for the form. */
     autocomplete: {
-      // TO DO
+      // TO DO: add auto-complete settings
       type: ParameterType.BOOL,
       pretty_name: "Allow autocomplete",
       default: false,
@@ -257,11 +302,11 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
   readonly question_type_map: { [key: string]: string } = {
     "drop-down": "dropdown",
     html: "html",
-    likert: "matrix",
+    likert: "rating",
+    "likert-table": "matrix",
     "multi-choice": "radiogroup",
     "multi-select": "checkbox",
     ranking: "ranking",
-    rating: "rating",
     text: "text",
     comment: "comment", // not listed in the jsPsych docs for simplicity, but needed here for validating question types
   };
@@ -280,6 +325,15 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
   ]);
   private html_params = this.all_question_params.concat([]);
   private likert_params = this.all_question_params.concat([
+    "likert_scale_values",
+    "likert_scale_min",
+    "likert_scale_max",
+    "likert_scale_stepsize",
+    "likert_scale_min_label",
+    "likert_scale_max_label",
+    "correct_response",
+  ]);
+  private likert_table_params = this.all_question_params.concat([
     "statements",
     "options",
     "randomize_statement_order",
@@ -293,7 +347,6 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     "other_option_text",
     "correct_response",
   ]);
-  private rating_params = this.all_question_params.concat([]);
   private text_params = this.all_question_params.concat([
     "placeholder",
     "textbox_rows",
@@ -345,7 +398,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     // required question label
     this.survey.requiredText = this.params.required_question_label;
 
-    // TO DO: response validation
+    // TO DO: add response validation
     this.survey.checkErrorsMode = "onNextPage"; // onValueChanged
 
     // TO DO: automatic response accuracy scoring for questions with a correctAnswer value
@@ -396,8 +449,8 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
           case "html":
             this.setup_html_question(question, question_params);
             break;
-          case "matrix": // likert
-            this.setup_likert_question(question, question_params);
+          case "matrix": // likert-table
+            this.setup_likert_table_question(question, question_params);
             break;
           case "radiogroup": // multi-choice
             this.setup_multichoice_question(question, question_params);
@@ -408,7 +461,8 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
           case "ranking": // ranking
             this.setup_multichoice_question(question, question_params);
             break;
-          case "rating": // rating
+          case "rating": // likert
+            this.setup_likert_question(question, question_params);
             break;
           case "text": // text (single row)
             this.setup_text_question(question, question_params);
@@ -431,10 +485,8 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       // add default values to any questions without responses
       const all_questions = sender.getAllQuestions();
       const data_names = Object.keys(sender.data);
-      console.log("q names in data: ", data_names);
       all_questions.forEach((question) => {
         if (!data_names.includes(question.name)) {
-          console.log("question name: ", question.name);
           if (typeof question.defaultValue !== "undefined" && question.defaultValue !== null) {
             let quest_default = question.defaultValue;
             sender.mergeData({ [question.name]: quest_default });
@@ -569,6 +621,47 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
   };
 
   private setup_likert_question = (question, question_params) => {
+    const req = [];
+    const opt = [
+      "likert_scale_values",
+      "likert_scale_min",
+      "likert_scale_max",
+      "likert_scale_stepsize",
+      "likert_scale_min_label",
+      "likert_scale_max_label",
+      "correct_response",
+    ];
+    this.validate_question_params(
+      this.all_question_params_req.concat(req),
+      this.all_question_params_opt.concat(opt),
+      question_params
+    );
+
+    this.set_question_defaults(question_params, this.likert_params);
+
+    question.title = question_params.prompt;
+    question.isRequired = question_params.required;
+    if (question_params.likert_scale_values !== null) {
+      question.rateValues = question_params.likert_scale_values;
+    } else {
+      question.rateMin = question_params.likert_scale_min;
+      question.rateMax = question_params.likert_scale_max;
+      question.rateStep = question_params.likert_scale_stepsize;
+    }
+    if (question_params.likert_scale_min_label !== null) {
+      question.minRateDescription = question_params.likert_scale_min_label;
+    }
+    if (question_params.likert_scale_min_label !== null) {
+      question.maxRateDescription = question_params.likert_scale_max_label;
+    }
+    if (question_params.correct_response !== null) {
+      question.correctAnswer = question_params.correct_response;
+    }
+    // TO DO: add likert default value (empty string?: question.defaultValue = "";)
+    return question;
+  };
+
+  private setup_likert_table_question = (question, question_params) => {
     const req = ["options", "statements"];
     const opt = ["randomize_statement_order", "correct_response"];
     this.validate_question_params(
@@ -577,7 +670,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       question_params
     );
 
-    this.set_question_defaults(question_params, this.likert_params);
+    this.set_question_defaults(question_params, this.likert_table_params);
 
     question.title = question_params.prompt;
     question.isAllRowRequired = question_params.required;
@@ -593,8 +686,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     if (question_params.correct_response !== null) {
       question.correctAnswer = question_params.correct_response;
     }
-    console.log("likert question: ", question);
-    // TO DO: add default value
+    // TO DO: add likert-table default value (empty array?: question.defaultValue = [];)
     return question;
   };
 
@@ -639,8 +731,6 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     }
     return question;
   };
-
-  private setup_rating_question = () => {};
 
   private setup_text_question = (question, question_params) => {
     const req = [];

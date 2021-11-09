@@ -25,9 +25,12 @@
           {type: 'text', prompt: 'This is a single-line text question. The correct answer is "hello".', required: true, correct_response: "hello"},
           {type: 'text', prompt: 'This is a multi-line text question.', placeholder: 'This is a placeholder.', textbox_rows: 10, textbox_columns: 40},
         ],
+        [
+          {type: 'likert', prompt: 'This is a likert question prompt.', likert_scale_values: [{value: 1, text: "A lot"},{value: 2, text: "Somewhat"},{value: 3, text: "Not much"}]},
+        ],
         // [
-        //   {
-        //     type: 'likert', 
+        //   {  // NOT WORKING - error before page loads
+        //     type: 'likert-table', 
         //     prompt: 'Please indicate how much you agree with the following statements:', 
         //     statements: [{prompt: 'I like cats.', name: 'cat'},{prompt: 'I like giraffes.', name: 'giraffe'},{prompt: 'I like antelopes.', name: 'antelope'},{prompt: 'I like lizards.', name: 'lizard'}],
         //     options: ['A lot', 'Somewhat', 'Not very much'],
@@ -36,13 +39,15 @@
         //     randomize_statement_order: true, 
         //  }
         // ],
+        // [  // NOT WORKING - error when trying to drag/drop the options
+        //   {
+        //     type: 'ranking', prompt: 'Please order the shapes from your most to least favorite.', options: ['Triangle','Circle','Square'], option_reorder: 'random'
+        //   },
+        // ],
         [
           {
             type: 'drop-down', prompt: 'Which shape do you like the best?', options: ['Triangle','Circle','Square'], add_other_option: true, option_reorder: 'asc', dropdown_select_prompt: 'Select one:', required: true
-          },
-          {
-            type: 'ranking', prompt: 'Please order the shapes from your most to least favorite.', options: ['Triangle','Circle','Square'], option_reorder: 'random'
-          },
+          }
         ],
         [
           {type: 'multi-choice', prompt: 'This is a multi-choice question with options in one column (the default).', options: options},
