@@ -12,7 +12,6 @@ import {
   Survey,
   SurveyTriggerRunExpression,
 } from "survey-knockout";
-//import { require } from "yargs";
 
 const info = <const>{
   name: "survey",
@@ -314,17 +313,19 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
   // available parameters for each question type
   private all_question_params_req = ["type", "prompt"];
   private all_question_params_opt = ["name", "required"];
-  private all_question_params = this.all_question_params_req.concat(this.all_question_params_opt);
-  private dropdown_params = this.all_question_params.concat([
+  private all_question_params = [...this.all_question_params_req, ...this.all_question_params_opt];
+  private dropdown_params = [
+    ...this.all_question_params,
     "options",
     "option_reorder",
     "add_other_option",
     "other_option_text",
     "dropdown_select_prompt",
     "correct_response",
-  ]);
-  private html_params = this.all_question_params.concat([]);
-  private likert_params = this.all_question_params.concat([
+  ];
+  private html_params = [...this.all_question_params];
+  private likert_params = [
+    ...this.all_question_params,
     "likert_scale_values",
     "likert_scale_min",
     "likert_scale_max",
@@ -332,27 +333,30 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     "likert_scale_min_label",
     "likert_scale_max_label",
     "correct_response",
-  ]);
-  private likert_table_params = this.all_question_params.concat([
+  ];
+  private likert_table_params = [
+    ...this.all_question_params,
     "statements",
     "options",
     "randomize_statement_order",
     "correct_response",
-  ]);
-  private multichoice_params = this.all_question_params.concat([
+  ];
+  private multichoice_params = [
+    ...this.all_question_params,
     "options",
     "option_reorder",
     "columns",
     "add_other_option",
     "other_option_text",
     "correct_response",
-  ]);
-  private text_params = this.all_question_params.concat([
+  ];
+  private text_params = [
+    ...this.all_question_params,
     "placeholder",
     "textbox_rows",
     "textbox_columns",
     "correct_response",
-  ]);
+  ];
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     this.display = display_element;
@@ -407,13 +411,13 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
 
     // pages and questions
     for (let i = 0; i < this.params.pages.length; i++) {
-      let page_id = "page" + i.toString();
+      const page_id = "page" + i.toString();
       let page = this.survey.addNewPage(page_id);
       if (this.params.randomize_question_order) {
         page.questionsOrder = "random"; // TO DO: save question presentation order to data
       }
       for (let j = 0; j < this.params.pages[i].length; j++) {
-        let question_params = this.params.pages[i][j];
+        const question_params = this.params.pages[i][j];
         // question type validation
         let q_type: string;
         let q_opts: readonly string[] = Object.keys(this.question_type_map);
@@ -488,7 +492,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       all_questions.forEach((question) => {
         if (!data_names.includes(question.name)) {
           if (typeof question.defaultValue !== "undefined" && question.defaultValue !== null) {
-            let quest_default = question.defaultValue;
+            const quest_default = question.defaultValue;
             sender.mergeData({ [question.name]: quest_default });
           } else {
             sender.mergeData({ [question.name]: null });
@@ -530,7 +534,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       });
     }
     if (optional.length > 0) {
-      let supplied_params = Object.keys(supplied);
+      const supplied_params = Object.keys(supplied);
       let invalid_params = [];
       supplied_params.forEach((param: string) => {
         if (!(optional.includes(param) || required.includes(param))) {
