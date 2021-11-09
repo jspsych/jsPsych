@@ -229,7 +229,7 @@ The `type` parameter in this object controls the type of sampling that is done.
 Valid values for `type` are 
 
 * `"with-replacement"`: Sample `size` items from the timeline variables with the possibility of choosing the same item multiple time.
-* `"without-replacement"`: Sample `size` itesm from timeline variables, with each item being selected a maximum of 1 time.
+* `"without-replacement"`: Sample `size` items from timeline variables, with each item being selected a maximum of 1 time.
 * `"fixed-repetitons"`: Repeat each item in the timeline variables `size` times, in a random order. Unlike using the `repetitons` parameter, this method allows for consecutive trials to use the same timeline variable set.
 * `"alternate-groups"`: Sample in an alternating order based on a declared group membership. Groups are defined by the `groups` parameter. This parameter takes an array of arrays, where each inner array is a group and the items in the inner array are the indices of the timeline variables in the `timeline_variables` array that belong to that group.
 * `"custom"`: Write a function that returns a custom order of the timeline variables.
