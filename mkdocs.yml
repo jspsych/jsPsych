@@ -49,6 +49,7 @@ nav:
   - 'Dynamic Parameters': 'overview/dynamic-parameters.md'
   - 'Controlling Visual Appearance': 'overview/style.md'
   - 'Data Storage, Aggregation, and Manipulation': 'overview/data.md'
+  - 'Simulation Modes': 'overview/simulation.md'
   - 'Running Experiments': 'overview/running-experiments.md'
   - 'Experiment Settings': 'overview/experiment-options.md'
   - 'Events': 'overview/events.md'
