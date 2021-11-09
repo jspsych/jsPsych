@@ -75,19 +75,13 @@ export class SimulationAPI {
 
   mergeSimulationData(default_data, simulation_options) {
     // override any data with data from simulation object
-    let data;
-    if (simulation_options && simulation_options.data) {
-      data = {
-        ...default_data,
-        ...simulation_options.data,
-      };
-    } else {
-      data = default_data;
-    }
-    return data;
+    return {
+      ...default_data,
+      ...simulation_options?.data,
+    };
   }
 
-  checkSimulationDataConsistency(trial, data) {
+  ensureSimulationDataConsistency(trial, data) {
     // All RTs must be rounded
     if (data.rt) {
       data.rt = Math.round(data.rt);

@@ -161,14 +161,14 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   ) {
     if (simulation_mode == "data-only") {
       load_callback();
-      this.simulation_data_mode(trial, simulation_options);
+      this.simulate_data_only(trial, simulation_options);
     }
     if (simulation_mode == "visual") {
-      this.simulation_visual_mode(trial, simulation_options, load_callback);
+      this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
 
-  private simulation_create_data(trial: TrialType<Info>, simulation_options) {
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
     const default_data = {
       stimulus: trial.stimulus,
       rt: this.jsPsych.randomization.sampleExGaussian(500, 250, 0.01),
@@ -177,23 +177,19 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
     const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
 
-    this.jsPsych.pluginAPI.checkSimulationDataConsistency(trial, data);
+    this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
 
     return data;
   }
 
-  private simulation_data_mode(trial: TrialType<Info>, simulation_options) {
-    const data = this.simulation_create_data(trial, simulation_options);
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
 
     this.jsPsych.finishTrial(data);
   }
 
-  private simulation_visual_mode(
-    trial: TrialType<Info>,
-    simulation_options,
-    load_callback: () => void
-  ) {
-    const data = this.simulation_create_data(trial, simulation_options);
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
 
     const display_element = this.jsPsych.getDisplayElement();
 
