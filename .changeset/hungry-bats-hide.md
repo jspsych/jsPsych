@@ -2,4 +2,4 @@
 "jspsych": minor
 ---
 
-Added `sampleNormal(mean, std)`, `sampleExponential(rate)`, and `sampleExGaussian(mean, std, rate)` to `jsPsych.randomization`.
+Added `randomInt(lower, upper)`, `sampleNormal(mean, std)`, `sampleExponential(rate)`, and `sampleExGaussian(mean, std, rate)` to `jsPsych.randomization`.
