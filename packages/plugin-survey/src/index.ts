@@ -412,7 +412,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     // pages and questions
     for (let i = 0; i < this.params.pages.length; i++) {
       const page_id = "page" + i.toString();
-      let page = this.survey.addNewPage(page_id);
+      const page = this.survey.addNewPage(page_id);
       if (this.params.randomize_question_order) {
         page.questionsOrder = "random"; // TO DO: save question presentation order to data
       }
@@ -420,7 +420,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
         const question_params = this.params.pages[i][j];
         // question type validation
         let q_type: string;
-        let q_opts: readonly string[] = Object.keys(this.question_type_map);
+        const q_opts: readonly string[] = Object.keys(this.question_type_map);
         if (typeof question_params.type == "undefined") {
           throw new Error(
             'Error in survey plugin: question is missing the required "type" parameter.'
@@ -436,7 +436,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
           q_type = "comment";
         }
         // set up question
-        let question = page.addNewQuestion(q_type);
+        const question = page.addNewQuestion(q_type);
         question.requiredErrorText = this.params.required_error_text;
         if (typeof question_params.name !== "undefined") {
           question.name = question_params.name;
@@ -535,7 +535,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     }
     if (optional.length > 0) {
       const supplied_params = Object.keys(supplied);
-      let invalid_params = [];
+      const invalid_params = [];
       supplied_params.forEach((param: string) => {
         if (!(optional.includes(param) || required.includes(param))) {
           invalid_params.push(param);
