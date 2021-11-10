@@ -134,7 +134,7 @@ export async function startTimeline(timeline: any[], jsPsych: JsPsych | any = {}
  * Runs the given timeline by calling `jsPsych.simulate()` on the provided JsPsych object.
  *
  * @param timeline The timeline that is passed to `jsPsych.run()`
- * @param simulation_mode Either 'data' mode or 'visual' mode.
+ * @param simulation_mode Either 'data-only' mode or 'visual' mode.
  * @param simulation_options Options to pass to `jsPsych.simulate()`
  * @param jsPsych The jsPsych instance to be used. If left empty, a new instance will be created. If
  * a settings object is passed instead, the settings will be used to create the jsPsych instance.
