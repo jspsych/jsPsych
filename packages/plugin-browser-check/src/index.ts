@@ -134,7 +134,15 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     this.t = trial;
 
-    const featureCheckFunctionsMap = new Map<string, () => any>(
+    const featureCheckFunctionsMap = this.create_feature_fn_map(trial);
+
+    const features_to_check = trial.features.filter((x) => !trial.skip_features.includes(x));
+
+    this.run_trial(featureCheckFunctionsMap, features_to_check);
+  }
+
+  private create_feature_fn_map(trial) {
+    return new Map<string, () => any>(
       Object.entries({
         width: () => {
           return window.innerWidth;
@@ -252,10 +260,6 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
         },
       })
     );
-
-    const features_to_check = trial.features.filter((x) => !trial.skip_features.includes(x));
-
-    this.run_trial(featureCheckFunctionsMap, features_to_check);
   }
 
   private async run_trial(fnMap, features) {
