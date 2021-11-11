@@ -123,6 +123,7 @@ type Info = typeof info;
 class BrowserCheckPlugin implements JsPsychPlugin<Info> {
   static info = info;
   private end_flag = false;
+  private t: TrialType<Info>;
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -131,6 +132,8 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
   }
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    this.t = trial;
+
     const featureCheckFunctionsMap = new Map<string, () => any>(
       Object.entries({
         width: () => {
@@ -250,105 +253,165 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
       })
     );
 
+    const features_to_check = trial.features.filter((x) => !trial.skip_features.includes(x));
+
+    this.run_trial(featureCheckFunctionsMap, features_to_check);
+  }
+
+  private async run_trial(fnMap, features) {
+    const feature_data = await this.measure_features(fnMap, features);
+
+    const include = await this.inclusion_check(this.t.inclusion_function, feature_data);
+
+    if (include) {
+      this.end_trial(feature_data);
+    } else {
+      this.end_experiment(feature_data);
+    }
+  }
+
+  private async measure_features(fnMap, features_to_check) {
     const feature_data = new Map<string, any>();
     const feature_checks: Promise<void>[] = [];
-    const features_to_check = trial.features.filter((x) => !trial.skip_features.includes(x));
 
     for (const feature of features_to_check) {
       // this allows for feature check functions to be sync or async
-      feature_checks.push(Promise.resolve(featureCheckFunctionsMap.get(feature)()));
+      feature_checks.push(Promise.resolve(fnMap.get(feature)()));
     }
 
-    Promise.allSettled(feature_checks).then((results) => {
-      for (let i = 0; i < features_to_check.length; i++) {
-        if (results[i].status === "fulfilled") {
-          // @ts-expect-error because .value isn't recognized for some reason
-          feature_data.set(features_to_check[i], results[i].value);
-        } else {
-          feature_data.set(features_to_check[i], null);
-        }
-      }
-      inclusion_check();
-    });
+    const results = await Promise.allSettled(feature_checks);
 
-    const inclusion_check = async () => {
-      await check_allow_resize();
-
-      if (!this.end_flag && trial.inclusion_function(Object.fromEntries(feature_data))) {
-        end_trial();
+    for (let i = 0; i < features_to_check.length; i++) {
+      if (results[i].status === "fulfilled") {
+        // @ts-expect-error because .value isn't recognized for some reason
+        feature_data.set(features_to_check[i], results[i].value);
       } else {
-        end_experiment();
+        feature_data.set(features_to_check[i], null);
       }
-    };
+    }
 
-    const check_allow_resize = async () => {
-      const w = feature_data.get("width");
-      const h = feature_data.get("height");
+    return feature_data;
+  }
 
-      if (
-        trial.allow_window_resize &&
-        (w || h) &&
-        (trial.minimum_width > 0 || trial.minimum_height > 0)
+  private async inclusion_check(fn, data) {
+    await this.check_allow_resize(data);
+
+    return fn(Object.fromEntries(data));
+  }
+
+  private async check_allow_resize(feature_data) {
+    const display_element = this.jsPsych.getDisplayElement();
+    const w = feature_data.get("width");
+    const h = feature_data.get("height");
+
+    if (
+      this.t.allow_window_resize &&
+      (w || h) &&
+      (this.t.minimum_width > 0 || this.t.minimum_height > 0)
+    ) {
+      display_element.innerHTML =
+        this.t.window_resize_message +
+        `<p><button id="browser-check-max-size-btn" class="jspsych-btn">${this.t.resize_fail_button_text}</button></p>`;
+
+      display_element.querySelector("#browser-check-max-size-btn").addEventListener("click", () => {
+        display_element.innerHTML = "";
+        this.end_flag = true;
+      });
+
+      const min_width_el = display_element.querySelector("#browser-check-min-width");
+      const min_height_el = display_element.querySelector("#browser-check-min-height");
+      const actual_height_el = display_element.querySelector("#browser-check-actual-height");
+      const actual_width_el = display_element.querySelector("#browser-check-actual-width");
+
+      while (
+        !this.end_flag &&
+        (window.innerWidth < this.t.minimum_width || window.innerHeight < this.t.minimum_height)
       ) {
-        display_element.innerHTML =
-          trial.window_resize_message +
-          `<p><button id="browser-check-max-size-btn" class="jspsych-btn">${trial.resize_fail_button_text}</button></p>`;
-
-        display_element
-          .querySelector("#browser-check-max-size-btn")
-          .addEventListener("click", () => {
-            display_element.innerHTML = "";
-            this.end_flag = true;
-          });
-
-        const min_width_el = display_element.querySelector("#browser-check-min-width");
-        const min_height_el = display_element.querySelector("#browser-check-min-height");
-        const actual_height_el = display_element.querySelector("#browser-check-actual-height");
-        const actual_width_el = display_element.querySelector("#browser-check-actual-width");
-
-        while (
-          !this.end_flag &&
-          (window.innerWidth < trial.minimum_width || window.innerHeight < trial.minimum_height)
-        ) {
-          if (min_width_el) {
-            min_width_el.innerHTML = trial.minimum_width.toString();
-          }
-
-          if (min_height_el) {
-            min_height_el.innerHTML = trial.minimum_height.toString();
-          }
-
-          if (actual_height_el) {
-            actual_height_el.innerHTML = window.innerHeight.toString();
-          }
-
-          if (actual_width_el) {
-            actual_width_el.innerHTML = window.innerWidth.toString();
-          }
-
-          await this.delay(100);
-
-          feature_data.set("width", window.innerWidth);
-          feature_data.set("height", window.innerHeight);
+        if (min_width_el) {
+          min_width_el.innerHTML = this.t.minimum_width.toString();
         }
+
+        if (min_height_el) {
+          min_height_el.innerHTML = this.t.minimum_height.toString();
+        }
+
+        if (actual_height_el) {
+          actual_height_el.innerHTML = window.innerHeight.toString();
+        }
+
+        if (actual_width_el) {
+          actual_width_el.innerHTML = window.innerWidth.toString();
+        }
+
+        await this.delay(100);
+
+        feature_data.set("width", window.innerWidth);
+        feature_data.set("height", window.innerHeight);
       }
-    };
+    }
+  }
 
-    const end_trial = () => {
-      display_element.innerHTML = "";
+  private end_trial(feature_data) {
+    this.jsPsych.getDisplayElement().innerHTML = "";
 
-      const trial_data = { ...Object.fromEntries(feature_data) };
+    const trial_data = { ...Object.fromEntries(feature_data) };
 
-      this.jsPsych.finishTrial(trial_data);
-    };
+    this.jsPsych.finishTrial(trial_data);
+  }
 
-    var end_experiment = () => {
-      display_element.innerHTML = "";
+  private end_experiment(feature_data) {
+    this.jsPsych.getDisplayElement().innerHTML = "";
 
-      const trial_data = { ...Object.fromEntries(feature_data) };
+    const trial_data = { ...Object.fromEntries(feature_data) };
 
-      this.jsPsych.endExperiment(trial.exclusion_message(trial_data), trial_data);
-    };
+    this.jsPsych.endExperiment(this.t.exclusion_message(trial_data), trial_data);
+  }
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    const default_data = {};
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+    // const display_element = this.jsPsych.getDisplayElement();
+
+    // this.trial(display_element, trial);
+    // load_callback();
+
+    // if (data.rt !== null) {
+    //   setTimeout(() => {
+    //     this.jsPsych.pluginAPI.pressKey(data.response);
+    //   }, data.rt);
+    // }
   }
 }
 

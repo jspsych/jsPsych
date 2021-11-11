@@ -166,7 +166,7 @@ describe("browser-check", () => {
         "Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19"
       );
 
-    const { expectFinished, expectRunning } = await startTimeline([
+    const { expectFinished, expectRunning, getData } = await startTimeline([
       {
         type: browserCheck,
         skip_features: ["vsync_rate"],
@@ -186,6 +186,9 @@ describe("browser-check", () => {
     jest.runAllTimers();
 
     await expectFinished();
+
+    expect(getData().values()[0].width).toBe(2000);
+    expect(getData().values()[0].height).toBe(2000);
   });
 
   test("vsync rate", async () => {
