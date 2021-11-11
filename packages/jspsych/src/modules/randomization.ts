@@ -261,8 +261,19 @@ export function sampleExponential(rate: number) {
   return -Math.log(Math.random()) / rate;
 }
 
-export function sampleExGaussian(mean: number, standard_deviation: number, rate: number) {
-  return sampleNormal(mean, standard_deviation) + sampleExponential(rate);
+export function sampleExGaussian(
+  mean: number,
+  standard_deviation: number,
+  rate: number,
+  positive = false
+) {
+  let s = sampleNormal(mean, standard_deviation) + sampleExponential(rate);
+  if (positive) {
+    while (s <= 0) {
+      s = sampleNormal(mean, standard_deviation) + sampleExponential(rate);
+    }
+  }
+  return s;
 }
 
 // Box-Muller transformation for a random sample from normal distribution with mean = 0, std = 1

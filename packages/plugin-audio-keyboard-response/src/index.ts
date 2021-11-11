@@ -250,7 +250,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
     const default_data = {
       stimulus: trial.stimulus,
-      rt: this.jsPsych.randomization.sampleExGaussian(500, 250, 0.01),
+      rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
       response: this.jsPsych.pluginAPI.getValidKey(trial.choices),
     };
 

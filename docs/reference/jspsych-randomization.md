@@ -265,7 +265,7 @@ output: shuffledArray = {
 ## jsPsych.randomization.sampleExGaussian
 
 ```javascript
-jsPsych.randomization.sampleExGaussian(mean, standard_deviation, rate)
+jsPsych.randomization.sampleExGaussian(mean, standard_deviation, rate, positive=false)
 ```
 
 ### Parameters
@@ -275,6 +275,7 @@ jsPsych.randomization.sampleExGaussian(mean, standard_deviation, rate)
 | mean       | number   | Mean of the normal distribution component of the exGaussian |
 | standard_deviation | number | Standard deviation of the normal distribution component of the exGaussian |
 | rate    | number   | Rate of the exponential distribution component of the exGaussian |
+| positive | bool | If `true` sample will be constrained to > 0.
 
 ### Return value
 
@@ -289,7 +290,7 @@ Generates a random sample from an exponentially modified Gaussian distribution.
 #### Sample a value
 
 ```javascript
-var rand_sample_exg = jsPsych.randomization.sampleExGaussian(500,250,0.01);
+var rand_sample_exg = jsPsych.randomization.sampleExGaussian(500, 100, 0.01);
 ```
 
 ---

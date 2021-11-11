@@ -61,7 +61,7 @@
   var sim_opts = {
     default: {
       data: {
-        rt: () => { return jsPsych.randomization.sampleExGaussian(600,50,0.02) }
+        rt: () => { return jsPsych.randomization.sampleExGaussian(600,50,0.02, true) }
       }
     },
     long_trial: {
