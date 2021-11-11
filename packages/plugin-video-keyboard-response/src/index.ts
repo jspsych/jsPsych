@@ -214,6 +214,15 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       video_element.addEventListener("timeupdate", (e) => {
         var currenttime = video_element.currentTime;
         if (currenttime >= trial.stop) {
+          if(!trial.response_allowed_while_playing) {
+            var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
+              callback_function: after_response,
+              valid_responses: trial.choices,
+              rt_method: 'performance',
+              persist: false,
+              allow_held_key: false,
+            });
+          }
           video_element.pause();
           if (trial.trial_ends_after_video && !stopped) {
             // this is to prevent end_trial from being called twice, because the timeupdate event
