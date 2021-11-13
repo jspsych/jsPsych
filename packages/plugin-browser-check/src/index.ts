@@ -1,4 +1,3 @@
-import { clickTarget } from "@jspsych/test-utils";
 import { detect } from "detect-browser";
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
@@ -449,7 +448,7 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
       setTimeout(() => {
         const btn = document.querySelector("#browser-check-max-size-btn");
         if (btn) {
-          clickTarget(btn);
+          this.jsPsych.pluginAPI.clickTarget(btn);
         }
       }, 3000);
 
