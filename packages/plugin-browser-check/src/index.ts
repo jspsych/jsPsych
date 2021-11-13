@@ -301,6 +301,11 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
   private async inclusion_check(fn, data) {
     await this.check_allow_resize(data);
 
+    // screen was too small
+    if (this.end_flag) {
+      return false;
+    }
+
     return fn(Object.fromEntries(data));
   }
 
