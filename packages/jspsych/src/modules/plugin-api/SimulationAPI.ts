@@ -1,25 +1,58 @@
+import randomWords from "random-words";
+
 export class SimulationAPI {
   dispatchEvent(event: Event) {
     document.body.dispatchEvent(event);
   }
 
+  /**
+   * Dispatches a `keydown` event for the specified key
+   * @param key Character code (`.key` property) for the key to press.
+   */
   keyDown(key: string) {
     this.dispatchEvent(new KeyboardEvent("keydown", { key }));
   }
 
+  /**
+   * Dispatches a `keyup` event for the specified key
+   * @param key Character code (`.key` property) for the key to press.
+   */
   keyUp(key: string) {
     this.dispatchEvent(new KeyboardEvent("keyup", { key }));
   }
 
+  /**
+   * Dispatches a `keydown` and `keyup` event in sequence to simulate pressing a key.
+   * @param key Character code (`.key` property) for the key to press.
+   */
   pressKey(key: string) {
     this.keyDown(key);
     this.keyUp(key);
   }
 
+  /**
+   * Dispatches a `click` event on the target element
+   * @param target The element to click
+   */
   clickTarget(target: Element) {
     target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
   }
 
+  /**
+   * Sets the value of a target text input
+   * @param target A text input element to fill in
+   * @param text Text to input
+   */
+  fillTextInput(target: HTMLInputElement, text: string) {
+    target.value = text;
+  }
+
+  /**
+   * Picks a valid key from `choices`, taking into account jsPsych-specific
+   * identifiers like "NO_KEYS" and "ALL_KEYS".
+   * @param choices Which keys are valid.
+   * @returns A key selected at random from the valid keys.
+   */
   getValidKey(choices: "NO_KEYS" | "ALL_KEYS" | Array<string>) {
     const possible_keys = [
       "a",
@@ -71,6 +104,20 @@ export class SimulationAPI {
     }
 
     return key;
+  }
+
+  /**
+   * Generate one or more random words.
+   *
+   * This is a wrapper function for the {@link https://www.npmjs.com/package/random-words `random-words` npm package}.
+   *
+   * @param opts An object with optional properties `min`, `max`, `exactly`,
+   * `join`, `maxLength`, `wordsPerString`, `separator`, and `formatter`.
+   *
+   * @returns An array of words or a single string, depending on parameter choices.
+   */
+  randomWords(opts) {
+    return randomWords(opts);
   }
 
   mergeSimulationData(default_data, simulation_options) {
