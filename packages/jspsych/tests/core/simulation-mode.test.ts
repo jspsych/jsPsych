@@ -277,4 +277,34 @@ describe("data simulation mode", () => {
     expect(getData().values()[1].foo).toBe(true);
     expect(getData().values()[2].rt).toBe(200);
   });
+
+  test("endExperiment() works in simulation mode", async () => {
+    const jsPsych = initJsPsych();
+
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        on_finish: () => {
+          jsPsych.endExperiment("done");
+        },
+      },
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "bar",
+      },
+    ];
+
+    const { expectFinished, getData, getHTML } = await simulateTimeline(
+      timeline,
+      "data-only",
+      {},
+      jsPsych
+    );
+
+    await expectFinished();
+
+    expect(getHTML()).toMatch("done");
+    expect(getData().count()).toBe(1);
+  });
 });

@@ -275,7 +275,11 @@ describe("browser-check simulation", () => {
 
     jest.advanceTimersByTime(3000);
 
+    console.log(getHTML());
+
     await expectFinished();
+
+    console.log(getData().values());
 
     expect(getHTML()).toMatch("foo");
   });
