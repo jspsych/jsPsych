@@ -3,7 +3,7 @@
 <head>
   <script src="../packages/jspsych/dist/index.browser.js"></script>
   <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
-  <script src="../packages/plugin-cloze/dist/index.browser.js"></script>
+  <script src="../packages/plugin-survey-text/dist/index.browser.js"></script>
   <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
 </head>
 <body></body>
@@ -44,8 +44,12 @@
   };
 
   var trial_2 = {
-    type: jsPsychCloze,
-    text: 'The colors of the US Flag are %red%, %white%, and %%'
+    type: jsPsychSurveyText,
+    questions: [
+      {prompt: 'This is Q1'},
+      {prompt: 'This is Q2'},
+      {prompt: 'This is longer Q3', rows: 5}
+    ]
   };
 
   var trial_3 = {
@@ -59,7 +63,7 @@
   var sim_opts = {
     default: {
       data: {
-        rt: () => { return jsPsych.randomization.sampleExGaussian(600,50,0.02, true) }
+        //rt: () => { return jsPsych.randomization.sampleExGaussian(600,50,0.02, true) }
       }
     },
     long_trial: {

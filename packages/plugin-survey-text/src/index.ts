@@ -247,7 +247,7 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
 
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
     const question_data = {};
-    let rt = 0;
+    let rt = 1000;
 
     for (const q of trial.questions) {
       const name = q.name ? q.name : trial.questions.indexOf(q);
@@ -256,7 +256,8 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
           ? this.jsPsych.randomization.sampleExponential(0.25)
           : this.jsPsych.randomization.randomInt(1, 10) * q.rows;
       question_data[name] = this.jsPsych.pluginAPI.randomWords({ exactly: ans_words, join: " " });
-      rt += this.jsPsych.randomization.sampleExGaussian(3000, 800, 0.002);
+      rt += this.jsPsych.randomization.sampleExGaussian(2000, 400, 0.004, true);
+      console.log(rt);
     }
 
     const default_data = {
@@ -294,7 +295,7 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
           display_element.querySelector(`#input-${i}`),
           answers[i]
         );
-      }, ((data.rt - 300) / answers.length) * (i + 1));
+      }, ((data.rt - 1000) / answers.length) * (i + 1));
     }
     setTimeout(() => {
       this.jsPsych.pluginAPI.clickTarget(
