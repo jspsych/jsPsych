@@ -257,7 +257,6 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
           : this.jsPsych.randomization.randomInt(1, 10) * q.rows;
       question_data[name] = this.jsPsych.pluginAPI.randomWords({ exactly: ans_words, join: " " });
       rt += this.jsPsych.randomization.sampleExGaussian(2000, 400, 0.004, true);
-      console.log(rt);
     }
 
     const default_data = {
