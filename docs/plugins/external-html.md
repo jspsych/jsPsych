@@ -24,6 +24,10 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | url  | string  | The URL of the page.                     |
 | rt   | numeric | The response time in milliseconds for the subject to finish the trial. |
 
+## Simulation Mode
+
+In `visual` simulation mode, the plugin cannot interact with any form elements on the screen other than the `cont_btn` specified in the trial parameters. If your `check_fn` requires other user interaction, for example, clicking a checkbox, then you'll need to disable simulation for the trial and complete the interaction manually.
+
 ## Examples
 
 ### Loading a consent form
