@@ -38,6 +38,9 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | failed_audio   | array | One or more audio file paths that produced a loading failure before the trial ended. |
 | failed_video   | array | One or more video file paths that produced a loading failure before the trial ended. |
 
+## Simulation Mode
+
+In `visual` simulation mode, the plugin will run the trial as if the experiment was running normally. Specifying `simulation_options.data` will not work in `visual` mode.
 
 ## Examples
 
