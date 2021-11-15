@@ -4,6 +4,7 @@
   <script src="../packages/jspsych/dist/index.browser.js"></script>
   <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
   <script src="../packages/plugin-survey-text/dist/index.browser.js"></script>
+  <script src="../packages/plugin-fullscreen/dist/index.browser.js"></script>
   <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
 </head>
 <body></body>
@@ -15,6 +16,11 @@
       jsPsych.data.displayData();
     }
   });
+
+  var fs = {
+    type: jsPsychFullscreen,
+    delay_after: 0,
+  }
 
   var trial_1a = {
     type: jsPsychHtmlKeyboardResponse,
@@ -73,7 +79,7 @@
     }
   }
 
-  jsPsych.simulate([trial_1a, trial_1b, trial_1c, trial_2, trial_3], "visual", sim_opts);
+  jsPsych.simulate([fs, trial_1a, trial_1b, trial_1c, trial_2, trial_3], "visual", sim_opts);
 
 </script>
 </html>
