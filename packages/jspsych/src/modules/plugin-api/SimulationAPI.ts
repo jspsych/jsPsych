@@ -173,5 +173,17 @@ export class SimulationAPI {
         data.response = null;
       }
     }
+
+    // If response is not allowed before stimulus display complete, ensure RT
+    // is longer than display time.
+    if (trial.allow_response_before_complete) {
+      if (trial.sequence_reps && trial.frame_time) {
+        const min_time = trial.sequence_reps * trial.frame_time * trial.stimuli.length;
+        if (data.rt < min_time) {
+          data.rt = null;
+          data.response = null;
+        }
+      }
+    }
   }
 }
