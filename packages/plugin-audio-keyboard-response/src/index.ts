@@ -241,9 +241,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     this.trial(display_element, trial, load_callback);
 
     if (data.rt !== null) {
-      setTimeout(() => {
-        this.jsPsych.pluginAPI.pressKey(data.response);
-      }, data.rt);
+      this.jsPsych.pluginAPI.pressKey(data.response, data.rt);
     }
   }
 

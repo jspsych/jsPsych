@@ -289,18 +289,17 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
       return x[1] as string;
     });
     for (let i = 0; i < answers.length; i++) {
-      setTimeout(() => {
-        this.jsPsych.pluginAPI.fillTextInput(
-          display_element.querySelector(`#input-${i}`),
-          answers[i]
-        );
-      }, ((data.rt - 1000) / answers.length) * (i + 1));
-    }
-    setTimeout(() => {
-      this.jsPsych.pluginAPI.clickTarget(
-        display_element.querySelector("#jspsych-survey-text-next")
+      this.jsPsych.pluginAPI.fillTextInput(
+        display_element.querySelector(`#input-${i}`),
+        answers[i],
+        ((data.rt - 1000) / answers.length) * (i + 1)
       );
-    }, data.rt);
+    }
+
+    this.jsPsych.pluginAPI.clickTarget(
+      display_element.querySelector("#jspsych-survey-text-next"),
+      data.rt
+    );
   }
 }
 

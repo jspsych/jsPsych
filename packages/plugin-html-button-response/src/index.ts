@@ -241,11 +241,10 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
     load_callback();
 
     if (data.rt !== null) {
-      setTimeout(() => {
-        this.jsPsych.pluginAPI.clickTarget(
-          display_element.querySelector(`div[data-choice="${data.response}"] button`)
-        );
-      }, data.rt);
+      this.jsPsych.pluginAPI.clickTarget(
+        display_element.querySelector(`div[data-choice="${data.response}"] button`),
+        data.rt
+      );
     }
   }
 }

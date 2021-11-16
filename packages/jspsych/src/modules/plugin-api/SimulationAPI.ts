@@ -24,27 +24,49 @@ export class SimulationAPI {
   /**
    * Dispatches a `keydown` and `keyup` event in sequence to simulate pressing a key.
    * @param key Character code (`.key` property) for the key to press.
+   * @param delay Length of time to wait (ms) before executing action
    */
-  pressKey(key: string) {
-    this.keyDown(key);
-    this.keyUp(key);
+  pressKey(key: string, delay = 0) {
+    if (delay > 0) {
+      setTimeout(() => {
+        this.keyDown(key);
+        this.keyUp(key);
+      }, delay);
+    } else {
+      this.keyDown(key);
+      this.keyUp(key);
+    }
   }
 
   /**
    * Dispatches a `click` event on the target element
    * @param target The element to click
+   * @param delay Length of time to wait (ms) before executing action
    */
-  clickTarget(target: Element) {
-    target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  clickTarget(target: Element, delay = 0) {
+    if (delay > 0) {
+      setTimeout(() => {
+        target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      }, delay);
+    } else {
+      target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    }
   }
 
   /**
    * Sets the value of a target text input
    * @param target A text input element to fill in
    * @param text Text to input
+   * @param delay Length of time to wait (ms) before executing action
    */
-  fillTextInput(target: HTMLInputElement, text: string) {
-    target.value = text;
+  fillTextInput(target: HTMLInputElement, text: string, delay = 0) {
+    if (delay > 0) {
+      setTimeout(() => {
+        target.value = text;
+      }, delay);
+    } else {
+      target.value = text;
+    }
   }
 
   /**

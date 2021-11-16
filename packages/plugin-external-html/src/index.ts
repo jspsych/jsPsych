@@ -192,13 +192,12 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
     this.trial(display_element, trial, () => {
       load_callback();
       if (trial.cont_key) {
-        setTimeout(() => {
-          this.jsPsych.pluginAPI.pressKey(trial.cont_key);
-        }, data.rt);
+        this.jsPsych.pluginAPI.pressKey(trial.cont_key, data.rt);
       } else if (trial.cont_btn) {
-        setTimeout(() => {
-          this.jsPsych.pluginAPI.clickTarget(display_element.querySelector("#" + trial.cont_btn));
-        }, data.rt);
+        this.jsPsych.pluginAPI.clickTarget(
+          display_element.querySelector("#" + trial.cont_btn),
+          data.rt
+        );
       }
     });
   }

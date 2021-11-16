@@ -272,9 +272,7 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
     load_callback();
 
     for (const response of data.response) {
-      setTimeout(() => {
-        this.jsPsych.pluginAPI.pressKey(response.key_press);
-      }, response.rt);
+      this.jsPsych.pluginAPI.pressKey(response.key_press, response.rt);
     }
   }
 }

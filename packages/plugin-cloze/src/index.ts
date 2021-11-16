@@ -166,14 +166,10 @@ class ClozePlugin implements JsPsychPlugin<Info> {
     const inputs = display_element.querySelectorAll('input[type="text"]');
     let rt = this.jsPsych.randomization.sampleExGaussian(750, 200, 0.01, true);
     for (let i = 0; i < data.response.length; i++) {
-      setTimeout(() => {
-        this.jsPsych.pluginAPI.fillTextInput(inputs[i] as HTMLInputElement, data.response[i]);
-      }, rt);
+      this.jsPsych.pluginAPI.fillTextInput(inputs[i] as HTMLInputElement, data.response[i], rt);
       rt += this.jsPsych.randomization.sampleExGaussian(750, 200, 0.01, true);
     }
-    setTimeout(() => {
-      this.jsPsych.pluginAPI.clickTarget(display_element.querySelector("#finish_cloze_button"));
-    }, rt);
+    this.jsPsych.pluginAPI.clickTarget(display_element.querySelector("#finish_cloze_button"), rt);
   }
 }
 

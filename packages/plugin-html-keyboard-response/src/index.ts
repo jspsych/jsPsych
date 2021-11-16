@@ -197,9 +197,7 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     load_callback();
 
     if (data.rt !== null) {
-      setTimeout(() => {
-        this.jsPsych.pluginAPI.pressKey(data.response);
-      }, data.rt);
+      this.jsPsych.pluginAPI.pressKey(data.response, data.rt);
     }
   }
 }

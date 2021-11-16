@@ -162,12 +162,10 @@ class FullscreenPlugin implements JsPsychPlugin<Info> {
     } else {
       this.trial(display_element, trial);
       load_callback();
-
-      setTimeout(() => {
-        this.jsPsych.pluginAPI.clickTarget(
-          display_element.querySelector("#jspsych-fullscreen-btn")
-        );
-      }, this.jsPsych.randomization.sampleExGaussian(1000, 100, 1 / 200, true));
+      this.jsPsych.pluginAPI.clickTarget(
+        display_element.querySelector("#jspsych-fullscreen-btn"),
+        this.jsPsych.randomization.sampleExGaussian(1000, 100, 1 / 200, true)
+      );
     }
   }
 }
