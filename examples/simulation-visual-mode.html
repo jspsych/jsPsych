@@ -1,85 +1,90 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="../packages/jspsych/dist/index.browser.js"></script>
-  <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
-  <script src="../packages/plugin-survey-text/dist/index.browser.js"></script>
-  <script src="../packages/plugin-preload/dist/index.browser.js"></script>
-  <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
-</head>
-<body></body>
-<script>
+  <head>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-survey-text/dist/index.browser.js"></script>
+    <script src="../packages/plugin-visual-search-circle/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
+  </head>
+  <body></body>
+  <script>
 
-  var jsPsych = initJsPsych({
-    default_ITI: 250, 
-    on_finish: function() {
-      jsPsych.data.displayData();
+    var jsPsych = initJsPsych({
+      default_ITI: 250,
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
+
+    var vs = {
+      type: jsPsychVisualSearchCircle,
+      target: 'target.png',
+      foil: 'foil.png',
+      fixation_image: 'fixation.png',
+      set_size: 4,
+      target_present: true,
+      target_present_key: 'a',
+      target_absent_key: 'b',
     }
-  });
 
-  var pl = {
-    type: jsPsychPreload,
-    images:['img/1.gif', 'img/2.gif']
-  }
+    var trial_1a = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
+      choices: ['y', 'n'],
+      prompt: '<p>Does the color match the word? (y or n)</p>',
+      simulation_options: "long_trial"
+    };
 
-  var trial_1a = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
-    choices: ['y', 'n'],
-    prompt: '<p>Does the color match the word? (y or n)</p>',
-    simulation_options: "long_trial"
-  };
+    var trial_1b = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p style="color: blue; font-size: 48px; font-weight: bold;">BROWN</p>',
+      choices: ['y', 'n'],
+      prompt: '<p>Does the color match the word? (y or n)</p>',
+      simulation_options: {
+        data: {
+          rt: 1000
+        }
+      }
+    };
 
-  var trial_1b = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: '<p style="color: blue; font-size: 48px; font-weight: bold;">BROWN</p>',
-    choices: ['y', 'n'],
-    prompt: '<p>Does the color match the word? (y or n)</p>',
-    simulation_options: {
-      data: {
-        rt: 1000
+    var trial_1c = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p style="color: yellow; font-size: 48px; font-weight: bold;">YELLOW</p>',
+      choices: ['y', 'n'],
+      prompt: '<p>Does the color match the word? (y or n)</p>',
+    };
+
+    var trial_2 = {
+      type: jsPsychSurveyText,
+      questions: [
+        {prompt: 'This is Q1'},
+        {prompt: 'This is Q2'},
+        {prompt: 'This is longer Q3', rows: 5}
+      ]
+    };
+
+    var trial_3 = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p style="color: orange; font-size: 48px; font-weight: bold;">BLUE</p>',
+      choices: "NO_KEYS",
+      trial_duration: 2000,
+      prompt: '<p>No response allowed. 2s wait.</p>'
+    };
+
+    var sim_opts = {
+      default: {
+        data: {
+          //rt: () => { return jsPsych.randomization.sampleExGaussian(600,50,0.02, true) }
+        }
+      },
+      long_trial: {
+        data: {
+          rt: 2000
+        }
       }
     }
-  };
 
-  var trial_1c = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: '<p style="color: yellow; font-size: 48px; font-weight: bold;">YELLOW</p>',
-    choices: ['y', 'n'],
-    prompt: '<p>Does the color match the word? (y or n)</p>',
-  };
-
-  var trial_2 = {
-    type: jsPsychSurveyText,
-    questions: [
-      {prompt: 'This is Q1'},
-      {prompt: 'This is Q2'},
-      {prompt: 'This is longer Q3', rows: 5}
-    ]
-  };
-
-  var trial_3 = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: '<p style="color: orange; font-size: 48px; font-weight: bold;">BLUE</p>',
-    choices: "NO_KEYS",
-    trial_duration: 2000,
-    prompt: '<p>No response allowed. 2s wait.</p>'
-  };
-
-  var sim_opts = {
-    default: {
-      data: {
-        //rt: () => { return jsPsych.randomization.sampleExGaussian(600,50,0.02, true) }
-      }
-    },
-    long_trial: {
-      data: {
-        rt: 2000
-      }
-    }
-  }
-
-  jsPsych.simulate([pl, trial_1a, trial_1b, trial_1c, trial_2, trial_3], "visual", sim_opts);
-
-</script>
+    jsPsych.simulate([vs, trial_1a, trial_1b, trial_1c, trial_2, trial_3], "visual", sim_opts);
+  </script>
 </html>
