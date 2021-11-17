@@ -183,7 +183,7 @@ describe("image-slider-response simulation", () => {
 
     const data = getData().values()[0];
 
-    expect(data.response).toBeGreaterThanOrEqual(1);
+    expect(data.response).toBeGreaterThanOrEqual(0);
     expect(data.response).toBeLessThanOrEqual(100);
     expect(data.rt).toBeGreaterThan(0);
   });
@@ -209,7 +209,7 @@ describe("image-slider-response simulation", () => {
 
     const data = getData().values()[0];
 
-    expect(data.response).toBeGreaterThanOrEqual(1);
+    expect(data.response).toBeGreaterThanOrEqual(0);
     expect(data.response).toBeLessThanOrEqual(100);
     expect(data.rt).toBeGreaterThan(0);
   });
