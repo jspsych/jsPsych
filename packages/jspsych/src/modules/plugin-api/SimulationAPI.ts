@@ -39,16 +39,20 @@ export class SimulationAPI {
   }
 
   /**
-   * Dispatches a `click` event on the target element
+   * Dispatches `mousedown`, `mouseup`, and `click` events on the target element
    * @param target The element to click
    * @param delay Length of time to wait (ms) before executing action
    */
   clickTarget(target: Element, delay = 0) {
     if (delay > 0) {
       setTimeout(() => {
+        target.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        target.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
         target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       }, delay);
     } else {
+      target.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      target.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
       target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     }
   }
@@ -75,7 +79,7 @@ export class SimulationAPI {
    * @param choices Which keys are valid.
    * @returns A key selected at random from the valid keys.
    */
-  getValidKey(choices: "NO_KEYS" | "ALL_KEYS" | Array<string>) {
+  getValidKey(choices: "NO_KEYS" | "ALL_KEYS" | Array<string> | Array<Array<string>>) {
     const possible_keys = [
       "a",
       "b",
@@ -122,7 +126,8 @@ export class SimulationAPI {
     } else if (choices == "ALL_KEYS") {
       key = possible_keys[Math.floor(Math.random() * possible_keys.length)];
     } else {
-      key = choices[Math.floor(Math.random() * choices.length)];
+      const flat_choices = choices.flat();
+      key = flat_choices[Math.floor(Math.random() * flat_choices.length)];
     }
 
     return key;
@@ -161,6 +166,9 @@ export class SimulationAPI {
       data.rt = null;
       if (data.response) {
         data.response = null;
+      }
+      if (data.correct) {
+        data.correct = false;
       }
     }
 
