@@ -299,6 +299,80 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
       }, trial.trial_duration);
     }
   }
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    const key = this.jsPsych.pluginAPI.getValidKey([
+      trial.left_category_key,
+      trial.right_category_key,
+    ]);
+    const correct =
+      trial.stim_key_association == "left"
+        ? key == trial.left_category_key
+        : key == trial.right_category_key;
+
+    const default_data = {
+      stimulus: trial.stimulus,
+      response: key,
+      rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+      correct: correct,
+    };
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial);
+    load_callback();
+
+    if (data.response !== null) {
+      this.jsPsych.pluginAPI.pressKey(data.response, data.rt);
+    }
+
+    const cont_rt = data.rt == null ? trial.trial_duration : data.rt;
+
+    if (trial.force_correct_key_press) {
+      if (!data.correct) {
+        this.jsPsych.pluginAPI.pressKey(
+          trial.stim_key_association == "left" ? trial.left_category_key : trial.right_category_key,
+          cont_rt + this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true)
+        );
+      }
+    } else {
+      this.jsPsych.pluginAPI.pressKey(
+        this.jsPsych.pluginAPI.getValidKey(trial.key_to_move_forward),
+        cont_rt + this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true)
+      );
+    }
+  }
 }
 
 export default IatImagePlugin;
