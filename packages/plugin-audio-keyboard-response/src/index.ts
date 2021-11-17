@@ -60,6 +60,7 @@ type Info = typeof info;
  */
 class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
+  private audio;
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -69,7 +70,6 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
     // setup stimulus
     var context = this.jsPsych.pluginAPI.audioContext();
-    var audio;
 
     // store response
     var response = {
@@ -85,12 +85,12 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       .getAudioBuffer(trial.stimulus)
       .then((buffer) => {
         if (context !== null) {
-          audio = context.createBufferSource();
-          audio.buffer = buffer;
-          audio.connect(context.destination);
+          this.audio = context.createBufferSource();
+          this.audio.buffer = buffer;
+          this.audio.connect(context.destination);
         } else {
-          audio = buffer;
-          audio.currentTime = 0;
+          this.audio = buffer;
+          this.audio.currentTime = 0;
         }
         setupTrial();
       })
@@ -104,7 +104,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     const setupTrial = () => {
       // set up end event if trial needs it
       if (trial.trial_ends_after_audio) {
-        audio.addEventListener("ended", end_trial);
+        this.audio.addEventListener("ended", end_trial);
       }
 
       // show prompt if there is one
@@ -115,16 +115,16 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       // start audio
       if (context !== null) {
         startTime = context.currentTime;
-        audio.start(startTime);
+        this.audio.start(startTime);
       } else {
-        audio.play();
+        this.audio.play();
       }
 
       // start keyboard listener when trial starts or sound ends
       if (trial.response_allowed_while_playing) {
         setup_keyboard_listener();
       } else if (!trial.trial_ends_after_audio) {
-        audio.addEventListener("ended", setup_keyboard_listener);
+        this.audio.addEventListener("ended", setup_keyboard_listener);
       }
 
       // end trial if time limit is set
@@ -145,13 +145,13 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       // stop the audio file if it is playing
       // remove end event listeners if they exist
       if (context !== null) {
-        audio.stop();
+        this.audio.stop();
       } else {
-        audio.pause();
+        this.audio.pause();
       }
 
-      audio.removeEventListener("ended", end_trial);
-      audio.removeEventListener("ended", setup_keyboard_listener);
+      this.audio.removeEventListener("ended", end_trial);
+      this.audio.removeEventListener("ended", setup_keyboard_listener);
 
       // kill keyboard listeners
       this.jsPsych.pluginAPI.cancelAllKeyboardResponses();
@@ -238,11 +238,20 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
     const display_element = this.jsPsych.getDisplayElement();
 
-    this.trial(display_element, trial, load_callback);
+    const respond = () => {
+      if (data.rt !== null) {
+        this.jsPsych.pluginAPI.pressKey(data.response, data.rt);
+      }
+    };
 
-    if (data.rt !== null) {
-      this.jsPsych.pluginAPI.pressKey(data.response, data.rt);
-    }
+    this.trial(display_element, trial, () => {
+      load_callback();
+      if (!trial.response_allowed_while_playing) {
+        this.audio.addEventListener("ended", respond);
+      } else {
+        respond();
+      }
+    });
   }
 
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
