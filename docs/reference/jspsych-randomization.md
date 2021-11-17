@@ -262,6 +262,41 @@ output: shuffledArray = {
 
 ---
 
+## jsPsych.randomization.sampleBernoulli
+
+```javascript
+jsPsych.randomization.sampleBernoulli(p)
+```
+
+### Parameters
+
+| Parameter  | Type    | Description                              |
+| ---------- | ------- | ---------------------------------------- |
+| p       | number   | Probability of sampling 1 |
+
+
+### Return value
+
+Returns 0 with probability `1-p` and 1 with probability `p`.
+
+### Description
+
+Generates a random sample from a Bernoulli distribution.
+
+### Examples
+
+#### Sample a value
+
+```javascript
+if(jsPsych.randomization.sampleBernoulli(0.8)){
+	// this happens 80% of the time
+} else {
+	// this happens 20% of the time
+}
+```
+
+---
+
 ## jsPsych.randomization.sampleExGaussian
 
 ```javascript

@@ -253,6 +253,15 @@ export function randomInt(lower: number, upper: number) {
   return lower + Math.floor(Math.random() * (upper - lower + 1));
 }
 
+/**
+ * Generates a random sample from a Bernoulli distribution.
+ * @param p The probability of sampling 1.
+ * @returns 0, with probability 1-p, or 1, with probability p.
+ */
+export function sampleBernoulli(p: number) {
+  return Math.random() <= p ? 1 : 0;
+}
+
 export function sampleNormal(mean: number, standard_deviation: number) {
   return randn_bm() * standard_deviation + mean;
 }
