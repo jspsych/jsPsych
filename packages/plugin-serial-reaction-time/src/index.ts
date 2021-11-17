@@ -272,6 +272,68 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
 
     return stimulus;
   };
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    let key;
+    if (this.jsPsych.randomization.sampleBernoulli(0.8) == 1) {
+      key = trial.choices[trial.target[0]][trial.target[1]];
+    } else {
+      // @ts-ignore something wrong with trial.choices type here?
+      key = this.jsPsych.pluginAPI.getValidKey(trial.choices);
+      while (key == trial.choices[trial.target[0]][trial.target[1]]) {
+        // @ts-ignore something wrong with trial.choices type here?
+        key = this.jsPsych.pluginAPI.getValidKey(trial.choices);
+      }
+    }
+
+    const default_data = {
+      grid: trial.grid,
+      target: trial.target,
+      response: key,
+      rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+      correct: key == trial.choices[trial.target[0]][trial.target[1]],
+    };
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial);
+    load_callback();
+
+    if (data.rt !== null) {
+      this.jsPsych.pluginAPI.pressKey(data.response, data.rt);
+    }
+  }
 }
 
 export default SerialReactionTimePlugin;
