@@ -325,8 +325,20 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     this.trial(display_element, trial);
     load_callback();
 
-    if (data.rt !== null) {
-      this.jsPsych.pluginAPI.pressKey(data.response, data.rt);
+    const video_element = display_element.querySelector<HTMLVideoElement>(
+      "#jspsych-video-button-response-stimulus"
+    );
+
+    const respond = () => {
+      if (data.rt !== null) {
+        this.jsPsych.pluginAPI.pressKey(data.response, data.rt);
+      }
+    };
+
+    if (!trial.response_allowed_while_playing) {
+      video_element.addEventListener("ended", respond);
+    } else {
+      respond();
     }
   }
 

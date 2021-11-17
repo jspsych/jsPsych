@@ -408,11 +408,23 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
     this.trial(display_element, trial);
     load_callback();
 
-    if (data.rt !== null) {
-      this.jsPsych.pluginAPI.clickTarget(
-        display_element.querySelector(`div[data-choice="${data.response}"] button`),
-        data.rt
-      );
+    const video_element = display_element.querySelector<HTMLVideoElement>(
+      "#jspsych-video-button-response-stimulus"
+    );
+
+    const respond = () => {
+      if (data.rt !== null) {
+        this.jsPsych.pluginAPI.clickTarget(
+          display_element.querySelector(`div[data-choice="${data.response}"] button`),
+          data.rt
+        );
+      }
+    };
+
+    if (!trial.response_allowed_while_playing) {
+      video_element.addEventListener("ended", respond);
+    } else {
+      respond();
     }
   }
 }
