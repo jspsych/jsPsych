@@ -1,4 +1,4 @@
-import randomWords from "random-words";
+import rw from "random-words";
 
 export function repeat(array, repetitions, unpack = false) {
   const arr_isArray = Array.isArray(array);
@@ -298,7 +298,7 @@ export function sampleExGaussian(
  * @returns An array of words or a single string, depending on parameter choices.
  */
 export function randomWords(opts) {
-  return randomWords(opts);
+  return rw(opts);
 }
 
 // Box-Muller transformation for a random sample from normal distribution with mean = 0, std = 1
