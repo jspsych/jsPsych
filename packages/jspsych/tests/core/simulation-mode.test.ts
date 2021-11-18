@@ -1,7 +1,9 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import { clickTarget, simulateTimeline } from "@jspsych/test-utils";
+import { clickTarget, pressKey, simulateTimeline } from "@jspsych/test-utils";
 
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType, initJsPsych } from "../../src";
+
+jest.useFakeTimers();
 
 describe("data simulation mode", () => {
   test("jsPsych.simulate() runs as drop-in replacement for jsPsych.run()", async () => {
@@ -306,5 +308,64 @@ describe("data simulation mode", () => {
 
     expect(getHTML()).toMatch("done");
     expect(getData().count()).toBe(1);
+  });
+
+  test("Setting mode in simulation_options will control which mode is used", async () => {
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "bar",
+        simulation_options: {
+          mode: "data-only",
+        },
+      },
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        simulation_options: {
+          mode: "visual",
+        },
+      },
+    ];
+
+    const { expectRunning, expectFinished, getHTML } = await simulateTimeline(timeline);
+
+    await expectRunning();
+
+    expect(getHTML()).toContain("foo");
+
+    jest.runAllTimers();
+
+    await expectFinished();
+  });
+
+  test("Trial can be run normally by specifying simulate:false in simulation options", async () => {
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "bar",
+      },
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        simulation_options: {
+          simulate: false,
+        },
+      },
+    ];
+
+    const { expectRunning, expectFinished, getHTML } = await simulateTimeline(timeline);
+
+    await expectRunning();
+
+    expect(getHTML()).toContain("foo");
+
+    jest.runAllTimers();
+
+    await expectRunning();
+
+    pressKey("a");
+
+    await expectFinished();
   });
 });

@@ -611,6 +611,7 @@ export class JsPsych {
       trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
     }
     if (this.simulation_mode) {
+      // check if the trial supports simulation
       if (trial.type.simulate) {
         let trial_sim_opts;
         if (!trial.simulation_options) {
@@ -637,13 +638,19 @@ export class JsPsych {
         }
         trial_sim_opts = this.utils.deepCopy(trial_sim_opts);
         trial_sim_opts = this.replaceFunctionsWithValues(trial_sim_opts, null);
-        trial_complete = trial.type.simulate(
-          trial,
-          this.simulation_mode,
-          trial_sim_opts,
-          load_callback
-        );
+
+        if (trial_sim_opts?.simulate === false) {
+          trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
+        } else {
+          trial_complete = trial.type.simulate(
+            trial,
+            trial_sim_opts?.mode || this.simulation_mode,
+            trial_sim_opts,
+            load_callback
+          );
+        }
       } else {
+        // trial doesn't have a simulate method, so just run as usual
         trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
       }
     }
