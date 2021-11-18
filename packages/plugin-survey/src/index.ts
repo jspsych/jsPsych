@@ -289,6 +289,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
   private params: TrialType<Info>;
   private start_time: number;
   private survey;
+  private trial_data: any = {};
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -405,9 +406,30 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     // TO DO: add response validation
     this.survey.checkErrorsMode = "onNextPage"; // onValueChanged
 
-    // TO DO: automatic response accuracy scoring for questions with a correctAnswer value
-    // see Survey Model onIsAnswerCorrect event
-    // https://surveyjs.io/Documentation/Library/?id=SurveyModel#onIsAnswerCorrect
+    // initialize trial data
+    this.trial_data.accuracy = [];
+    this.trial_data.question_order = [];
+
+    // response scoring function
+    const score_response = (sender, options) => {
+      if (
+        typeof options.question !== "undefined" &&
+        options.question !== null &&
+        typeof options.question.correctAnswer !== "undefined" &&
+        options.question.correctAnswer !== null
+      ) {
+        let correct: boolean;
+        if (options.question.correctAnswer == options.value) {
+          correct = true;
+        } else {
+          correct = false;
+        }
+        const q_name = options.name;
+        const question_acc = {};
+        question_acc[q_name] = correct;
+        this.trial_data.accuracy.push(question_acc);
+      }
+    };
 
     // pages and questions
     for (let i = 0; i < this.params.pages.length; i++) {
@@ -478,6 +500,11 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     // apply jsPsych-specific CSS
     this.survey.css = jspsych_css;
 
+    // add the accuracy scoring for questions with a "correct_response" parameter value
+    // TO DO: onValueChanged is not the right method to use for this because it doesn't score responses when
+    // a value is not changed (i.e. no response or default/placeholder response)
+    this.survey.onValueChanged.add(score_response);
+
     // render the survey and record start time
     this.survey.render(this.display);
 
@@ -499,9 +526,12 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
           }
         }
       });
+      // TO DO: restructure survey data (sender.data) here?
+      // finish trial and save data
       this.jsPsych.finishTrial({
         rt: Math.round(performance.now() - this.start_time),
         response: sender.data,
+        accuracy: this.trial_data.accuracy,
       });
     });
   }
