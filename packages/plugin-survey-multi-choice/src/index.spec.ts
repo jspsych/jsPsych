@@ -1,6 +1,8 @@
-import { clickTarget, startTimeline } from "@jspsych/test-utils";
+import { clickTarget, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import surveyMultiChoice from ".";
+
+jest.useFakeTimers();
 
 const getInputElement = (choiceId: number, value: string) =>
   document.querySelector(
@@ -40,5 +42,64 @@ describe("survey-multi-choice plugin", () => {
     expect(surveyData.Q2).toBe("c");
     expect(surveyData.Q3).toBe("d");
     expect(surveyData.Q4).toBe("e");
+  });
+});
+
+describe("survey-likert plugin simulation", () => {
+  test("data-only mode works", async () => {
+    const scale = ["a", "b", "c", "d", "e"];
+    const { getData, expectFinished } = await simulateTimeline([
+      {
+        type: surveyMultiChoice,
+        questions: [
+          { prompt: "Q0", options: scale },
+          { prompt: "Q1", options: scale },
+          { prompt: "Q2", options: scale },
+          { prompt: "Q3", options: scale },
+          { prompt: "Q4", options: scale },
+        ],
+        randomize_question_order: true,
+      },
+    ]);
+
+    await expectFinished();
+
+    const surveyData = getData().values()[0].response;
+    const all_valid = Object.entries(surveyData).every((x) => {
+      return scale.includes(x[1] as string);
+    });
+    expect(all_valid).toBe(true);
+  });
+
+  test("visual mode works", async () => {
+    const scale = ["a", "b", "c", "d", "e"];
+    const { getData, expectFinished, expectRunning } = await simulateTimeline(
+      [
+        {
+          type: surveyMultiChoice,
+          questions: [
+            { prompt: "Q0", options: scale },
+            { prompt: "Q1", options: scale },
+            { prompt: "Q2", options: scale },
+            { prompt: "Q3", options: scale },
+            { prompt: "Q4", options: scale },
+          ],
+          randomize_question_order: true,
+        },
+      ],
+      "visual"
+    );
+
+    await expectRunning();
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    const surveyData = getData().values()[0].response;
+    const all_valid = Object.entries(surveyData).every((x) => {
+      return scale.includes(x[1] as string);
+    });
+    expect(all_valid).toBe(true);
   });
 });
