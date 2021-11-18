@@ -255,7 +255,10 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
         q.rows == 1
           ? this.jsPsych.randomization.sampleExponential(0.25)
           : this.jsPsych.randomization.randomInt(1, 10) * q.rows;
-      question_data[name] = this.jsPsych.pluginAPI.randomWords({ exactly: ans_words, join: " " });
+      question_data[name] = this.jsPsych.randomization.randomWords({
+        exactly: ans_words,
+        join: " ",
+      });
       rt += this.jsPsych.randomization.sampleExGaussian(2000, 400, 0.004, true);
     }
 

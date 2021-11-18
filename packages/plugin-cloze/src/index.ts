@@ -132,7 +132,7 @@ class ClozePlugin implements JsPsychPlugin<Info> {
     const responses = [];
     for (const word of solutions) {
       if (word == "") {
-        responses.push(this.jsPsych.pluginAPI.randomWords({ exactly: 1 }));
+        responses.push(this.jsPsych.randomization.randomWords({ exactly: 1 }));
       } else {
         responses.push(word);
       }

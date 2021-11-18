@@ -1,5 +1,3 @@
-import randomWords from "random-words";
-
 export class SimulationAPI {
   dispatchEvent(event: Event) {
     document.body.dispatchEvent(event);
@@ -131,20 +129,6 @@ export class SimulationAPI {
     }
 
     return key;
-  }
-
-  /**
-   * Generate one or more random words.
-   *
-   * This is a wrapper function for the {@link https://www.npmjs.com/package/random-words `random-words` npm package}.
-   *
-   * @param opts An object with optional properties `min`, `max`, `exactly`,
-   * `join`, `maxLength`, `wordsPerString`, `separator`, and `formatter`.
-   *
-   * @returns An array of words or a single string, depending on parameter choices.
-   */
-  randomWords(opts) {
-    return randomWords(opts);
   }
 
   mergeSimulationData(default_data, simulation_options) {

@@ -1,3 +1,5 @@
+import randomWords from "random-words";
+
 export function repeat(array, repetitions, unpack = false) {
   const arr_isArray = Array.isArray(array);
   const rep_isArray = Array.isArray(repetitions);
@@ -283,6 +285,20 @@ export function sampleExGaussian(
     }
   }
   return s;
+}
+
+/**
+ * Generate one or more random words.
+ *
+ * This is a wrapper function for the {@link https://www.npmjs.com/package/random-words `random-words` npm package}.
+ *
+ * @param opts An object with optional properties `min`, `max`, `exactly`,
+ * `join`, `maxLength`, `wordsPerString`, `separator`, and `formatter`.
+ *
+ * @returns An array of words or a single string, depending on parameter choices.
+ */
+export function randomWords(opts) {
+  return randomWords(opts);
 }
 
 // Box-Muller transformation for a random sample from normal distribution with mean = 0, std = 1
