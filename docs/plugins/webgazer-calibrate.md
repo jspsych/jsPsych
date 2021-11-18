@@ -25,6 +25,10 @@ Name | Type | Value
 
 No data currently added by this plugin. Use the [webgazer-validate](jspsych-webgazer-validate) plugin to measure the precision and accuracy of calibration.
 
+## Simulation Mode
+
+This plugin does not yet support [simulation mode](../overview/simulation.md).
+
 ## Example
 
 Because the eye tracking plugins need to be used in conjunction with each other, please see the [example on the eye tracking overview page](../overview/eye-tracking.md#example) for an integrated example. 

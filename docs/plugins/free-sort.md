@@ -38,6 +38,10 @@ moves | array | An array containing objects representing all of the moves the pa
 final_locations | array | An array containing objects representing the final locations of all the stimuli in the sorting area. Each element in the array represents a stimulus, and has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. 
 rt | numeric | The response time in milliseconds for the participant to finish all sorting.
 
+## Simulation Mode
+
+This plugin does not yet support [simulation mode](../overview/simulation.md).
+
 ## Examples
 
 ???+ example "Basic example"
