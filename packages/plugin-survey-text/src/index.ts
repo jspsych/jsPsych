@@ -250,7 +250,7 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
     let rt = 1000;
 
     for (const q of trial.questions) {
-      const name = q.name ? q.name : trial.questions.indexOf(q);
+      const name = q.name ? q.name : `Q${trial.questions.indexOf(q)}`;
       const ans_words =
         q.rows == 1
           ? this.jsPsych.randomization.sampleExponential(0.25)
