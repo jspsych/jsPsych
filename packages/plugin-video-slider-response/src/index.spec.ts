@@ -55,7 +55,7 @@ describe("video-slider-response simulation", () => {
     await expectFinished();
 
     expect(getData().values()[0].rt).toBeGreaterThan(0);
-    expect(getData().values()[0].response).toBeGreaterThanOrEqual(1);
+    expect(getData().values()[0].response).toBeGreaterThanOrEqual(0);
     expect(getData().values()[0].response).toBeLessThanOrEqual(100);
   });
 });

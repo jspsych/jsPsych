@@ -290,13 +290,10 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
     this.trial(display_element, trial);
     load_callback();
 
-    console.log(data);
-
     if (data.rt !== null) {
       const target = display_element.querySelector(
         `.jspsych-serial-reaction-time-stimulus-cell[data-row="${data.response[0]}"][data-column="${data.response[1]}"]`
       );
-      console.log(target);
       this.jsPsych.pluginAPI.clickTarget(target, data.rt);
     }
   }
