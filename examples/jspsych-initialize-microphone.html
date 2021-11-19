@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../packages/jspsych/dist/index.browser.js"></script>
+  <script src="../packages/plugin-initialize-microphone/dist/index.browser.js"></script>
+  <script src="../packages/plugin-html-audio-response/dist/index.browser.js"></script>
+  <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+  var jsPsych = initJsPsych();
+
+  let init_mic = {
+    type: jsPsychInitializeMicrophone,
+  }
+
+  let ar = {
+    type: jsPsychHtmlAudioResponse,
+    stimulus: '<p>Speak!</p>'
+  }
+
+  jsPsych.run([init_mic, ar]);
+
+</script>
+</html>
