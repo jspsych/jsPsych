@@ -42,17 +42,16 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     const ro = new ResizeObserver((entries) => {
-      console.log(`ro perf = ${performance.now()}`);
+      console.log("ro event");
+      this.stimulus_start_time = performance.now();
     });
 
     ro.observe(display_element);
 
-    this.showDisplay(display_element, trial);
-    this.addButtonEvent(display_element, trial);
+    // this.showDisplay(display_element, trial);
+    // this.addButtonEvent(display_element, trial);
 
-    this.stimulus_start_time = performance.now();
-
-    this.startRecording();
+    this.startRecording(display_element, trial);
 
     // hide image if timing is set
     if (trial.stimulus_duration !== null) {
@@ -87,7 +86,7 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
     });
   }
 
-  private startRecording() {
+  private startRecording(display_element, trial) {
     const recorder: MediaRecorder = this.jsPsych.pluginAPI.getMicrophoneRecorder();
     const recorded_data_chunks = [];
 
@@ -112,6 +111,8 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
 
     recorder.addEventListener("start", (e) => {
       this.recorder_start_time = e.timeStamp;
+      this.showDisplay(display_element, trial);
+      this.addButtonEvent(display_element, trial);
     });
 
     this.jsPsych.pluginAPI.setTimeout(() => {
