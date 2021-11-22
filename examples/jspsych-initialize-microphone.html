@@ -17,7 +17,10 @@
 
   let ar = {
     type: jsPsychHtmlAudioResponse,
-    stimulus: '<p>Speak!</p>'
+    stimulus: '<p>Speak!</p>',
+    on_finish: (data) => {
+      console.log(data);
+    }
   }
 
   jsPsych.run([init_mic, ar]);

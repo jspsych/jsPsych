@@ -9,7 +9,6 @@ const info = <const>{
       pretty_name: "Stimulus",
       default: undefined,
     },
-
     /** How long to show the stimulus. */
     stimulus_duration: {
       type: ParameterType.INT,
@@ -20,7 +19,11 @@ const info = <const>{
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
-      default: null,
+      default: 2000,
+    },
+    button_label: {
+      type: ParameterType.STRING,
+      default: "Continue",
     },
   },
 };
@@ -37,88 +40,104 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
   private stimulus_start_time;
   private recorder_start_time;
+  private recorder: MediaRecorder;
+  private response;
+  private load_resolver;
 
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    const ro = new ResizeObserver((entries) => {
-      console.log("ro event");
-      this.stimulus_start_time = performance.now();
-    });
+    this.recorder = this.jsPsych.pluginAPI.getMicrophoneRecorder();
 
-    ro.observe(display_element);
+    this.setupRecordingEvents(display_element, trial);
 
-    // this.showDisplay(display_element, trial);
-    // this.addButtonEvent(display_element, trial);
+    this.startRecording();
 
-    this.startRecording(display_element, trial);
-
-    // hide image if timing is set
+    // setup timer for hiding the stimulus
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
-        display_element.querySelector<HTMLElement>(
-          "#jspsych-html-audio-response-stimulus"
-        ).style.visibility = "hidden";
+        this.hideStimulus(display_element);
       }, trial.stimulus_duration);
     }
 
-    // end trial if time limit is set
+    // setup timer for ending the trial
     if (trial.trial_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
-        this.endTrial(display_element, trial);
+        this.stopRecording().then(() => {
+          this.endTrial(display_element, trial);
+        });
       }, trial.trial_duration);
     }
   }
 
   private showDisplay(display_element, trial) {
+    const ro = new ResizeObserver((entries) => {
+      this.stimulus_start_time = performance.now();
+      console.log("ro event");
+      ro.disconnect();
+    });
+
+    ro.observe(display_element);
+
     let html = `<div id="jspsych-html-audio-response-stimulus">${trial.stimulus}</div>`;
 
-    html += `<p><button class="jspsych-btn" id="finish-trial">Done</button></p>`;
+    html += `<p><button class="jspsych-btn" id="finish-trial">${trial.button_label}</button></p>`;
 
     display_element.innerHTML = html;
+  }
+
+  private hideStimulus(display_element: HTMLElement) {
+    display_element.querySelector<HTMLElement>(
+      "#jspsych-html-audio-response-stimulus"
+    ).style.visibility = "hidden";
   }
 
   private addButtonEvent(display_element, trial) {
     display_element.querySelector("#finish-trial").addEventListener("click", () => {
       const end_time = performance.now();
       const rt = Math.round(end_time - this.stimulus_start_time);
-      this.endTrial(display_element, trial, rt);
+      this.stopRecording().then(() => {
+        this.endTrial(display_element, trial, rt);
+      });
     });
   }
 
-  private startRecording(display_element, trial) {
-    const recorder: MediaRecorder = this.jsPsych.pluginAPI.getMicrophoneRecorder();
+  private setupRecordingEvents(display_element, trial) {
     const recorded_data_chunks = [];
 
-    recorder.addEventListener("dataavailable", (e) => {
+    this.recorder.addEventListener("dataavailable", (e) => {
       if (e.data.size > 0) {
         recorded_data_chunks.push(e.data);
       }
-      console.log("dataavail event");
     });
 
-    recorder.addEventListener("stop", () => {
+    this.recorder.addEventListener("stop", () => {
       const url = new Blob(recorded_data_chunks, { type: "audio/webm" });
       const reader = new FileReader();
       reader.addEventListener("load", () => {
         const base64 = (reader.result as string).split(",")[1];
-        console.log(base64);
+        this.response = base64;
+        this.load_resolver();
       });
       reader.readAsDataURL(url);
-
-      console.log(this.stimulus_start_time, this.recorder_start_time);
     });
 
-    recorder.addEventListener("start", (e) => {
+    this.recorder.addEventListener("start", (e) => {
       this.recorder_start_time = e.timeStamp;
       this.showDisplay(display_element, trial);
       this.addButtonEvent(display_element, trial);
     });
+  }
 
-    this.jsPsych.pluginAPI.setTimeout(() => {
-      recorder.stop();
-    }, 2000);
-    recorder.start();
+  private startRecording() {
+    this.recorder.start();
+  }
+
+  private stopRecording() {
+    this.recorder.stop();
+    return new Promise((resolve) => {
+      this.load_resolver = resolve;
+    });
   }
 
   private endTrial(display_element, trial, rt: number = null) {
@@ -129,6 +148,8 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
     var trial_data = {
       rt: rt,
       stimulus: trial.stimulus,
+      response: this.response,
+      estimated_stimulus_onset: Math.round(this.stimulus_start_time - this.recorder_start_time),
     };
 
     // clear the display
