@@ -29,6 +29,10 @@ const info = <const>{
       type: ParameterType.BOOL,
       default: false,
     },
+    store_audio_url: {
+      type: ParameterType.BOOL,
+      default: false,
+    },
   },
 };
 
@@ -165,7 +169,11 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
       <button id="continue" class="jspsych-btn">Continue</button>
     `;
 
-    display_element.querySelector("#record-again").addEventListener("click", this.startRecording);
+    display_element.querySelector("#record-again").addEventListener("click", () => {
+      // release object url to save memory
+      URL.revokeObjectURL(this.audio_url);
+      this.startRecording();
+    });
     display_element.querySelector("#continue").addEventListener("click", () => {
       this.endTrial(display_element, trial);
     });
@@ -179,12 +187,18 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
     this.jsPsych.pluginAPI.clearAllTimeouts();
 
     // gather the data to store for the trial
-    var trial_data = {
+    var trial_data: any = {
       rt: this.rt,
       stimulus: trial.stimulus,
       response: this.response,
       estimated_stimulus_onset: Math.round(this.stimulus_start_time - this.recorder_start_time),
     };
+
+    if (trial.store_audio_url) {
+      trial_data.audio_url = this.audio_url;
+    } else {
+      URL.revokeObjectURL(this.audio_url);
+    }
 
     // clear the display
     display_element.innerHTML = "";
