@@ -18,6 +18,7 @@
   let ar = {
     type: jsPsychHtmlAudioResponse,
     stimulus: '<p>Speak!</p>',
+    allow_playback: true,
     on_finish: (data) => {
       console.log(data);
     }

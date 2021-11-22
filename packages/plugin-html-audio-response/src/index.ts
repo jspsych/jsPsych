@@ -16,7 +16,7 @@ const info = <const>{
       default: null,
     },
     /** How long to show the trial. */
-    trial_duration: {
+    recording_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: 2000,
@@ -24,6 +24,10 @@ const info = <const>{
     button_label: {
       type: ParameterType.STRING,
       default: "Continue",
+    },
+    allow_playback: {
+      type: ParameterType.BOOL,
+      default: false,
     },
   },
 };
@@ -41,8 +45,10 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
   private stimulus_start_time;
   private recorder_start_time;
   private recorder: MediaRecorder;
+  private audio_url;
   private response;
   private load_resolver;
+  private rt: number = null;
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -52,22 +58,6 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
     this.setupRecordingEvents(display_element, trial);
 
     this.startRecording();
-
-    // setup timer for hiding the stimulus
-    if (trial.stimulus_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(() => {
-        this.hideStimulus(display_element);
-      }, trial.stimulus_duration);
-    }
-
-    // setup timer for ending the trial
-    if (trial.trial_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(() => {
-        this.stopRecording().then(() => {
-          this.endTrial(display_element, trial);
-        });
-      }, trial.trial_duration);
-    }
   }
 
   private showDisplay(display_element, trial) {
@@ -95,9 +85,13 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
   private addButtonEvent(display_element, trial) {
     display_element.querySelector("#finish-trial").addEventListener("click", () => {
       const end_time = performance.now();
-      const rt = Math.round(end_time - this.stimulus_start_time);
+      this.rt = Math.round(end_time - this.stimulus_start_time);
       this.stopRecording().then(() => {
-        this.endTrial(display_element, trial, rt);
+        if (trial.allow_playback) {
+          this.showPlaybackControls(display_element, trial);
+        } else {
+          this.endTrial(display_element, trial);
+        }
       });
     });
   }
@@ -112,20 +106,44 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
     });
 
     this.recorder.addEventListener("stop", () => {
-      const url = new Blob(recorded_data_chunks, { type: "audio/webm" });
+      const data = new Blob(recorded_data_chunks, { type: "audio/webm" });
+      this.audio_url = URL.createObjectURL(data);
       const reader = new FileReader();
       reader.addEventListener("load", () => {
         const base64 = (reader.result as string).split(",")[1];
         this.response = base64;
         this.load_resolver();
       });
-      reader.readAsDataURL(url);
+      reader.readAsDataURL(data);
     });
 
     this.recorder.addEventListener("start", (e) => {
+      // resets the recorded data
+      recorded_data_chunks.length = 0;
+
       this.recorder_start_time = e.timeStamp;
       this.showDisplay(display_element, trial);
       this.addButtonEvent(display_element, trial);
+
+      // setup timer for hiding the stimulus
+      if (trial.stimulus_duration !== null) {
+        this.jsPsych.pluginAPI.setTimeout(() => {
+          this.hideStimulus(display_element);
+        }, trial.stimulus_duration);
+      }
+
+      // setup timer for ending the trial
+      if (trial.recording_duration !== null) {
+        this.jsPsych.pluginAPI.setTimeout(() => {
+          this.stopRecording().then(() => {
+            if (trial.allow_playback) {
+              this.showPlaybackControls(display_element, trial);
+            } else {
+              this.endTrial(display_element, trial);
+            }
+          });
+        }, trial.recording_duration);
+      }
     });
   }
 
@@ -140,13 +158,29 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
     });
   }
 
-  private endTrial(display_element, trial, rt: number = null) {
+  private showPlaybackControls(display_element, trial) {
+    display_element.innerHTML = `
+      <p><audio id="playback" src="${this.audio_url}" controls></audio></p>
+      <button id="record-again" class="jspsych-btn">Record Again</button>
+      <button id="continue" class="jspsych-btn">Continue</button>
+    `;
+
+    display_element.querySelector("#record-again").addEventListener("click", this.startRecording);
+    display_element.querySelector("#continue").addEventListener("click", () => {
+      this.endTrial(display_element, trial);
+    });
+
+    // const audio = display_element.querySelector('#playback');
+    // audio.src =
+  }
+
+  private endTrial(display_element, trial) {
     // kill any remaining setTimeout handlers
     this.jsPsych.pluginAPI.clearAllTimeouts();
 
     // gather the data to store for the trial
     var trial_data = {
-      rt: rt,
+      rt: this.rt,
       stimulus: trial.stimulus,
       response: this.response,
       estimated_stimulus_onset: Math.round(this.stimulus_start_time - this.recorder_start_time),
