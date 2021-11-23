@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8" />
     <script src="../jspsych/dist/index.browser.js"></script>
     <script src="./dist/index.browser.js"></script>
-    <link rel="stylesheet" href="../jspsych/css/jspsych.css">
-    <link rel="stylesheet" href="css/plugin-survey.css">
+    <link rel="stylesheet" href="../jspsych/css/jspsych.css" />
+    <link rel="stylesheet" href="css/plugin-survey.css" />
   </head>
   <body></body>
   <script type="text/javascript">
@@ -30,13 +31,13 @@
         ],
         // [
         //   {  // NOT WORKING - error before page loads
-        //     type: 'likert-table', 
-        //     prompt: 'Please indicate how much you agree with the following statements:', 
+        //     type: 'likert-table',
+        //     prompt: 'Please indicate how much you agree with the following statements:',
         //     statements: [{prompt: 'I like cats.', name: 'cat'},{prompt: 'I like giraffes.', name: 'giraffe'},{prompt: 'I like antelopes.', name: 'antelope'},{prompt: 'I like lizards.', name: 'lizard'}],
         //     options: ['A lot', 'Somewhat', 'Not very much'],
         //     name: 'animals',
-        //     required: true, 
-        //     randomize_statement_order: true, 
+        //     required: true,
+        //     randomize_statement_order: true,
         //  }
         // ],
         // [  // NOT WORKING - error when trying to drag/drop the options
@@ -67,19 +68,18 @@
 
     var survey_trial_random = {
       type: jsPsychSurvey,
-      pages: [[  
-        {type: 'text', prompt: 'Question 1.', textbox_rows: 2, textbox_columns: 20}, 
+      pages: [[
+        {type: 'text', prompt: 'Question 1.', textbox_rows: 2, textbox_columns: 20},
         {type: 'text', prompt: 'Question 2.'},
-        {type: 'text', prompt: 'Question 3.', textbox_columns: 50}, 
-        {type: 'text', prompt: 'Question 4.', textbox_rows: 2}, 
+        {type: 'text', prompt: 'Question 3.', textbox_columns: 50},
+        {type: 'text', prompt: 'Question 4.', textbox_rows: 2},
         {type: 'text', prompt: 'Question 5.'},
-        {type: 'text', prompt: 'Question 6.', textbox_rows: 10, textbox_columns: 20}, 
+        {type: 'text', prompt: 'Question 6.', textbox_rows: 10, textbox_columns: 20},
       ]],
       title: 'This is a separate survey trial. The order of questions should be randomized.',
       randomize_question_order: true
     };
 
     jsPsych.run([survey_trial, survey_trial_random]);
-
   </script>
 </html>

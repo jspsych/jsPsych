@@ -275,6 +275,67 @@ const info = <const>{
 
 type Info = typeof info;
 
+// available parameters for each question type
+const all_question_params_req = ["type", "prompt"];
+const all_question_params_opt = ["name", "required"];
+const all_question_params = [...all_question_params_req, ...all_question_params_opt];
+const dropdown_params = [
+  ...all_question_params,
+  "options",
+  "option_reorder",
+  "add_other_option",
+  "other_option_text",
+  "dropdown_select_prompt",
+  "correct_response",
+];
+const html_params = [...all_question_params];
+const likert_params = [
+  ...all_question_params,
+  "likert_scale_values",
+  "likert_scale_min",
+  "likert_scale_max",
+  "likert_scale_stepsize",
+  "likert_scale_min_label",
+  "likert_scale_max_label",
+  "correct_response",
+];
+const likert_table_params = [
+  ...all_question_params,
+  "statements",
+  "options",
+  "randomize_statement_order",
+  "correct_response",
+];
+const multichoice_params = [
+  ...all_question_params,
+  "options",
+  "option_reorder",
+  "columns",
+  "add_other_option",
+  "other_option_text",
+  "correct_response",
+];
+const text_params = [
+  ...all_question_params,
+  "placeholder",
+  "textbox_rows",
+  "textbox_columns",
+  "correct_response",
+];
+
+// map jsPsych question types onto SurveyJS question types
+const question_type_map: Record<string, string> = {
+  "drop-down": "dropdown",
+  html: "html",
+  likert: "rating",
+  "likert-table": "matrix",
+  "multi-choice": "radiogroup",
+  "multi-select": "checkbox",
+  ranking: "ranking",
+  text: "text",
+  comment: "comment", // not listed in the jsPsych docs for simplicity, but needed here for validating question types
+};
+
 /**
  * **survey**
  *
@@ -285,10 +346,7 @@ type Info = typeof info;
  */
 class SurveyPlugin implements JsPsychPlugin<Info> {
   static info = info;
-  private display: HTMLElement;
-  private params: TrialType<Info>;
-  private start_time: number;
-  private survey;
+  private survey: Survey;
   private trial_data: any = {};
 
   constructor(private jsPsych: JsPsych) {}
@@ -298,76 +356,13 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     // https://surveyjs.io/Examples/Library/?id=custom-theme
   }
 
-  // map jsPsych question types onto SurveyJS question types
-  readonly question_type_map: { [key: string]: string } = {
-    "drop-down": "dropdown",
-    html: "html",
-    likert: "rating",
-    "likert-table": "matrix",
-    "multi-choice": "radiogroup",
-    "multi-select": "checkbox",
-    ranking: "ranking",
-    text: "text",
-    comment: "comment", // not listed in the jsPsych docs for simplicity, but needed here for validating question types
-  };
-
-  // available parameters for each question type
-  private all_question_params_req = ["type", "prompt"];
-  private all_question_params_opt = ["name", "required"];
-  private all_question_params = [...this.all_question_params_req, ...this.all_question_params_opt];
-  private dropdown_params = [
-    ...this.all_question_params,
-    "options",
-    "option_reorder",
-    "add_other_option",
-    "other_option_text",
-    "dropdown_select_prompt",
-    "correct_response",
-  ];
-  private html_params = [...this.all_question_params];
-  private likert_params = [
-    ...this.all_question_params,
-    "likert_scale_values",
-    "likert_scale_min",
-    "likert_scale_max",
-    "likert_scale_stepsize",
-    "likert_scale_min_label",
-    "likert_scale_max_label",
-    "correct_response",
-  ];
-  private likert_table_params = [
-    ...this.all_question_params,
-    "statements",
-    "options",
-    "randomize_statement_order",
-    "correct_response",
-  ];
-  private multichoice_params = [
-    ...this.all_question_params,
-    "options",
-    "option_reorder",
-    "columns",
-    "add_other_option",
-    "other_option_text",
-    "correct_response",
-  ];
-  private text_params = [
-    ...this.all_question_params,
-    "placeholder",
-    "textbox_rows",
-    "textbox_columns",
-    "correct_response",
-  ];
-
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    this.display = display_element;
-    this.params = trial;
     this.survey = new Survey(); // set up survey in code: https://surveyjs.io/Documentation/Library#survey-objects
     this.applyStyles(); // applies bootstrap theme
 
     // add custom CSS classes to survey elements
     // https://surveyjs.io/Examples/Library/?id=survey-customcss&platform=Knockoutjs&theme=bootstrap#content-docs
-    const jspsych_css = {
+    this.survey.css = {
       root: "sv_main sv_bootstrap_css jspsych-survey-question",
       question: {
         mainRoot: "sv_qstn jspsych-survey-question",
@@ -388,20 +383,20 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     };
 
     // navigation buttons
-    this.survey.pagePrevText = this.params.button_label_back;
-    this.survey.pageNextText = this.params.button_label_next;
-    this.survey.completeText = this.params.button_label_finish;
+    this.survey.pagePrevText = trial.button_label_back;
+    this.survey.pageNextText = trial.button_label_next;
+    this.survey.completeText = trial.button_label_finish;
 
     // page numbers
-    this.survey.showQuestionNumbers = this.params.show_question_numbers;
+    this.survey.showQuestionNumbers = trial.show_question_numbers;
 
     // survey title
-    if (this.params.title !== null) {
-      this.survey.title = this.params.title;
+    if (trial.title !== null) {
+      this.survey.title = trial.title;
     }
 
     // required question label
-    this.survey.requiredText = this.params.required_question_label;
+    this.survey.requiredText = trial.required_question_label;
 
     // TO DO: add response validation
     this.survey.checkErrorsMode = "onNextPage"; // onValueChanged
@@ -412,38 +407,26 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
 
     // response scoring function
     const score_response = (sender, options) => {
-      if (
-        typeof options.question !== "undefined" &&
-        options.question !== null &&
-        typeof options.question.correctAnswer !== "undefined" &&
-        options.question.correctAnswer !== null
-      ) {
-        let correct: boolean;
-        if (options.question.correctAnswer == options.value) {
-          correct = true;
-        } else {
-          correct = false;
-        }
-        const q_name = options.name;
-        const question_acc = {};
-        question_acc[q_name] = correct;
-        this.trial_data.accuracy.push(question_acc);
+      if (options.question?.correctAnswer) {
+        this.trial_data.accuracy.push({
+          [options.name]: options.question.correctAnswer == options.value,
+        });
       }
     };
 
     // pages and questions
-    for (let i = 0; i < this.params.pages.length; i++) {
-      const page_id = "page" + i.toString();
-      const page = this.survey.addNewPage(page_id);
-      if (this.params.randomize_question_order) {
+    for (const [pageIndex, questions] of trial.pages.entries()) {
+      const page = this.survey.addNewPage(`page${pageIndex}`);
+
+      if (trial.randomize_question_order) {
         page.questionsOrder = "random"; // TO DO: save question presentation order to data
       }
-      for (let j = 0; j < this.params.pages[i].length; j++) {
-        const question_params = this.params.pages[i][j];
+      for (const [questionIndex, question_params] of (questions as any[]).entries()) {
         // question type validation
         let q_type: string;
-        const q_opts: readonly string[] = Object.keys(this.question_type_map);
-        if (typeof question_params.type == "undefined") {
+        const q_opts = Object.keys(question_type_map);
+
+        if (typeof question_params.type === "undefined") {
           throw new Error(
             'Error in survey plugin: question is missing the required "type" parameter.'
           );
@@ -452,53 +435,35 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
             'Error in survey plugin: invalid question type "' + question_params.type + '".'
           );
         } else {
-          q_type = this.question_type_map[question_params.type];
+          q_type = question_type_map[question_params.type];
         }
-        if (q_type == "text" && question_params.textbox_rows > 1) {
+
+        if (q_type === "text" && question_params.textbox_rows > 1) {
           q_type = "comment";
         }
+
         // set up question
         const question = page.addNewQuestion(q_type);
-        question.requiredErrorText = this.params.required_error_text;
-        if (typeof question_params.name !== "undefined") {
-          question.name = question_params.name;
-        } else {
-          question.name = "P" + i.toString() + "_Q" + j.toString();
-        }
-        switch (q_type) {
-          case "comment": // text (multiple rows)
-            this.setup_text_question(question, question_params);
-            break;
-          case "dropdown":
-            this.setup_dropdown_question(question, question_params);
-            break;
-          case "html":
-            this.setup_html_question(question, question_params);
-            break;
-          case "matrix": // likert-table
-            this.setup_likert_table_question(question, question_params);
-            break;
-          case "radiogroup": // multi-choice
-            this.setup_multichoice_question(question, question_params);
-            break;
-          case "checkbox": // multi-select
-            this.setup_multichoice_question(question, question_params);
-            break;
-          case "ranking": // ranking
-            this.setup_multichoice_question(question, question_params);
-            break;
-          case "rating": // likert
-            this.setup_likert_question(question, question_params);
-            break;
-          case "text": // text (single row)
-            this.setup_text_question(question, question_params);
-            break;
+        question.requiredErrorText = trial.required_error_text;
+        question.name = question_params.name ?? `P${pageIndex}_Q${questionIndex}`;
+
+        const setup_function = {
+          comment: this.setup_text_question, // text (multiple rows)
+          dropdown: this.setup_dropdown_question,
+          html: this.setup_html_question,
+          matrix: this.setup_likert_table_question, // likert-table
+          radiogroup: this.setup_multichoice_question, // multi-choice
+          checkbox: this.setup_multichoice_question, // multi-select
+          ranking: this.setup_multichoice_question, // ranking
+          rating: this.setup_likert_question, // likert
+          text: this.setup_text_question, // text (single row)
+        }[q_type];
+
+        if (setup_function) {
+          setup_function(question, question_params);
         }
       }
     }
-
-    // apply jsPsych-specific CSS
-    this.survey.css = jspsych_css;
 
     // add the accuracy scoring for questions with a "correct_response" parameter value
     // TO DO: onValueChanged is not the right method to use for this because it doesn't score responses when
@@ -506,291 +471,245 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     this.survey.onValueChanged.add(score_response);
 
     // render the survey and record start time
-    this.survey.render(this.display);
+    this.survey.render(display_element);
 
-    this.start_time = performance.now();
+    const start_time = performance.now();
 
     this.survey.onComplete.add((sender, options) => {
       // clear display
-      this.display.innerHTML = "";
+      display_element.innerHTML = "";
       // add default values to any questions without responses
       const all_questions = sender.getAllQuestions();
       const data_names = Object.keys(sender.data);
-      all_questions.forEach((question) => {
+      for (const question of all_questions) {
         if (!data_names.includes(question.name)) {
-          if (typeof question.defaultValue !== "undefined" && question.defaultValue !== null) {
-            const quest_default = question.defaultValue;
-            sender.mergeData({ [question.name]: quest_default });
-          } else {
-            sender.mergeData({ [question.name]: null });
-          }
+          sender.mergeData({ [question.name]: question.defaultValue ?? null });
         }
-      });
+      }
+
       // TO DO: restructure survey data (sender.data) here?
       // finish trial and save data
       this.jsPsych.finishTrial({
-        rt: Math.round(performance.now() - this.start_time),
+        rt: Math.round(performance.now() - start_time),
         response: sender.data,
         accuracy: this.trial_data.accuracy,
       });
     });
   }
 
-  // method for validating parameters for each question type
-  private validate_question_params = (
+  /**
+   * Validate parameters for any question type
+   *
+   * @param supplied
+   * @param required
+   * @param optional
+   * @returns
+   */
+  private static validate_question_params(
+    supplied: Record<string, unknown>,
     required: string[],
-    optional: string[],
-    supplied: { [key: string]: unknown }
-  ) => {
-    let valid = true;
-    if (required.length > 0) {
-      required.forEach((param) => {
-        if (!supplied.hasOwnProperty(param)) {
-          valid = false;
-          if (param == "type") {
-            throw new Error(
-              'Error in survey plugin: question is missing the required "type" parameter.'
-            );
-          } else {
-            throw new Error(
-              'Error in survey plugin: question is missing required parameter "' +
-                param +
-                '" for question type "' +
-                supplied.type +
-                '".'
-            );
-          }
-        }
-      });
-    }
-    if (optional.length > 0) {
-      const supplied_params = Object.keys(supplied);
-      const invalid_params = [];
-      supplied_params.forEach((param: string) => {
-        if (!(optional.includes(param) || required.includes(param))) {
-          invalid_params.push(param);
-        }
-      });
-      if (invalid_params.length > 0) {
-        console.warn(
-          'Warning in survey plugin: the following question parameters have been specified but are not allowed for the question type "' +
-            supplied.type +
-            '" and will be ignored: ' +
-            invalid_params
+    optional: string[]
+  ) {
+    required = [...all_question_params_req, ...required];
+    optional = [...all_question_params_opt, ...optional];
+
+    for (const param of required) {
+      if (!supplied.hasOwnProperty(param)) {
+        throw new Error(
+          param === "type"
+            ? 'Error in survey plugin: question is missing the required "type" parameter.'
+            : `Error in survey plugin: question is missing required parameter "${param}" for question type "${supplied.type}."`
         );
       }
     }
-    if (valid) {
-      return true;
-    } else {
-      return false;
-    }
-  };
 
-  // method for setting defaults for undefined question-specific parameters
-  private set_question_defaults = (
-    supplied_params: { [key: string]: unknown },
+    const invalid_params = Object.keys(supplied).filter(
+      (param) => !(optional.includes(param) || required.includes(param))
+    );
+
+    if (invalid_params.length > 0) {
+      console.warn(
+        `Warning in survey plugin: the following question parameters have been specified but are not allowed for the question type "${supplied.type}" and will be ignored: ${invalid_params}`
+      );
+    }
+  }
+
+  /**
+   * Set defaults for undefined question-specific parameters
+   **/
+  private static set_question_defaults = (
+    supplied_params: Record<string, unknown>,
     available_params: string[]
   ) => {
-    available_params.forEach((param) => {
+    for (const param of available_params) {
       if (typeof supplied_params[param] === "undefined") {
         supplied_params[param] = info.parameters.pages.nested[param].default;
       }
-    });
-    return supplied_params;
+    }
   };
 
   // methods for setting up different question types
 
-  private setup_dropdown_question = (question, question_params) => {
-    const req = ["options"];
-    const opt = [
-      "option_reorder",
-      "add_other_option",
-      "other_option_text",
-      "dropdown_select_prompt",
-      "correct_response",
-    ];
-    this.validate_question_params(
-      this.all_question_params_req.concat(req),
-      this.all_question_params_opt.concat(opt),
-      question_params
+  private setup_dropdown_question = (question, params) => {
+    SurveyPlugin.validate_question_params(
+      params,
+      ["options"],
+      [
+        "option_reorder",
+        "add_other_option",
+        "other_option_text",
+        "dropdown_select_prompt",
+        "correct_response",
+      ]
     );
 
-    this.set_question_defaults(question_params, this.dropdown_params);
+    SurveyPlugin.set_question_defaults(params, dropdown_params);
 
-    question.title = question_params.prompt;
-    question.isRequired = question_params.required;
-    question.hasOther = question_params.add_other_option;
-    question.optionsCaption = question_params.dropdown_select_prompt;
+    question.title = params.prompt;
+    question.isRequired = params.required;
+    question.hasOther = params.add_other_option;
+    question.optionsCaption = params.dropdown_select_prompt;
     if (question.hasOther) {
-      question.otherText = question_params.other_option_text;
+      question.otherText = params.other_option_text;
     }
-    question.choices = question_params.options;
-    if (typeof question_params.option_reorder == "undefined") {
+    question.choices = params.options;
+    if (typeof params.option_reorder === "undefined") {
       question.choicesOrder = info.parameters.pages.nested.option_reorder.default;
     } else {
-      question.choicesOrder = question_params.option_reorder;
+      question.choicesOrder = params.option_reorder;
     }
-    if (question_params.correct_response !== null) {
-      question.correctAnswer = question_params.correct_response;
+    if (params.correct_response !== null) {
+      question.correctAnswer = params.correct_response;
     }
     question.defaultValue = "";
-    return question;
   };
 
-  private setup_html_question = (question, question_params) => {
-    const req = [];
-    const opt = [];
-    this.validate_question_params(
-      this.all_question_params_req.concat(req),
-      this.all_question_params_opt.concat(opt),
-      question_params
-    );
+  private setup_html_question = (question, params) => {
+    SurveyPlugin.validate_question_params(params, [], []);
+    SurveyPlugin.set_question_defaults(params, html_params);
 
-    this.set_question_defaults(question_params, this.html_params);
-
-    question.html = question_params.prompt;
-    return question;
+    question.html = params.prompt;
   };
 
-  private setup_likert_question = (question, question_params) => {
-    const req = [];
-    const opt = [
-      "likert_scale_values",
-      "likert_scale_min",
-      "likert_scale_max",
-      "likert_scale_stepsize",
-      "likert_scale_min_label",
-      "likert_scale_max_label",
-      "correct_response",
-    ];
-    this.validate_question_params(
-      this.all_question_params_req.concat(req),
-      this.all_question_params_opt.concat(opt),
-      question_params
+  private setup_likert_question = (question, params) => {
+    SurveyPlugin.validate_question_params(
+      params,
+      [],
+      [
+        "likert_scale_values",
+        "likert_scale_min",
+        "likert_scale_max",
+        "likert_scale_stepsize",
+        "likert_scale_min_label",
+        "likert_scale_max_label",
+        "correct_response",
+      ]
     );
 
-    this.set_question_defaults(question_params, this.likert_params);
+    SurveyPlugin.set_question_defaults(params, likert_params);
 
-    question.title = question_params.prompt;
-    question.isRequired = question_params.required;
-    if (question_params.likert_scale_values !== null) {
-      question.rateValues = question_params.likert_scale_values;
+    question.title = params.prompt;
+    question.isRequired = params.required;
+    if (params.likert_scale_values !== null) {
+      question.rateValues = params.likert_scale_values;
     } else {
-      question.rateMin = question_params.likert_scale_min;
-      question.rateMax = question_params.likert_scale_max;
-      question.rateStep = question_params.likert_scale_stepsize;
+      question.rateMin = params.likert_scale_min;
+      question.rateMax = params.likert_scale_max;
+      question.rateStep = params.likert_scale_stepsize;
     }
-    if (question_params.likert_scale_min_label !== null) {
-      question.minRateDescription = question_params.likert_scale_min_label;
+    if (params.likert_scale_min_label !== null) {
+      question.minRateDescription = params.likert_scale_min_label;
     }
-    if (question_params.likert_scale_min_label !== null) {
-      question.maxRateDescription = question_params.likert_scale_max_label;
+    if (params.likert_scale_min_label !== null) {
+      question.maxRateDescription = params.likert_scale_max_label;
     }
-    if (question_params.correct_response !== null) {
-      question.correctAnswer = question_params.correct_response;
+    if (params.correct_response !== null) {
+      question.correctAnswer = params.correct_response;
     }
     // TO DO: add likert default value (empty string?: question.defaultValue = "";)
-    return question;
   };
 
-  private setup_likert_table_question = (question, question_params) => {
-    const req = ["options", "statements"];
-    const opt = ["randomize_statement_order", "correct_response"];
-    this.validate_question_params(
-      this.all_question_params_req.concat(req),
-      this.all_question_params_opt.concat(opt),
-      question_params
+  private setup_likert_table_question = (question, params) => {
+    SurveyPlugin.validate_question_params(
+      params,
+      ["options", "statements"],
+      ["randomize_statement_order", "correct_response"]
     );
 
-    this.set_question_defaults(question_params, this.likert_table_params);
+    SurveyPlugin.set_question_defaults(params, likert_table_params);
 
-    question.title = question_params.prompt;
-    question.isAllRowRequired = question_params.required;
-    question.columns = [];
-    question_params.options.forEach((opt: string, ind: number) => {
-      question.columns.push({ value: ind, text: opt });
-    });
-    question.rows = [];
-    question_params.statements.forEach((stmt: { name: string; prompt: string }) => {
-      question.rows.push({ value: stmt.name, text: stmt.prompt });
-    });
-    question.rowsOrder = question_params.randomize_statement_order ? "random" : "initial";
-    if (question_params.correct_response !== null) {
-      question.correctAnswer = question_params.correct_response;
+    question.title = params.prompt;
+    question.isAllRowRequired = params.required;
+    question.columns = params.options.map((opt: string, ind: number) => ({
+      value: ind,
+      text: opt,
+    }));
+    question.rows = params.statements.map((stmt: { name: string; prompt: string }) => ({
+      value: stmt.name,
+      text: stmt.prompt,
+    }));
+    question.rowsOrder = params.randomize_statement_order ? "random" : "initial";
+    if (params.correct_response !== null) {
+      question.correctAnswer = params.correct_response;
     }
     // TO DO: add likert-table default value (empty array?: question.defaultValue = [];)
-    return question;
   };
 
   // multi-choice, multi-select, ranking
-  private setup_multichoice_question = (question, question_params) => {
-    const req = ["options"];
-    const opt = [
-      "columns",
-      "option_reorder",
-      "add_other_option",
-      "other_option_text",
-      "correct_response",
-    ];
-    this.validate_question_params(
-      this.all_question_params_req.concat(req),
-      this.all_question_params_opt.concat(opt),
-      question_params
+  private setup_multichoice_question = (question, params) => {
+    SurveyPlugin.validate_question_params(
+      params,
+      ["options"],
+      ["columns", "option_reorder", "add_other_option", "other_option_text", "correct_response"]
     );
 
-    this.set_question_defaults(question_params, this.multichoice_params);
+    SurveyPlugin.set_question_defaults(params, multichoice_params);
 
-    question.title = question_params.prompt;
-    question.isRequired = question_params.required;
-    question.hasOther = question_params.add_other_option;
+    question.title = params.prompt;
+    question.isRequired = params.required;
+    question.hasOther = params.add_other_option;
     if (question.hasOther) {
-      question.otherText = question_params.other_option_text;
+      question.otherText = params.other_option_text;
     }
-    question.choices = question_params.options;
-    if (typeof question_params.option_reorder == "undefined") {
+    question.choices = params.options;
+    if (typeof params.option_reorder === "undefined") {
       question.choicesOrder = info.parameters.pages.nested.option_reorder.default;
     } else {
-      question.choicesOrder = question_params.option_reorder;
+      question.choicesOrder = params.option_reorder;
     }
-    question.colCount = question_params.columns;
-    if (question_params.correct_response !== null) {
-      question.correctAnswer = question_params.correct_response;
+    question.colCount = params.columns;
+    if (params.correct_response !== null) {
+      question.correctAnswer = params.correct_response;
     }
     if (question instanceof QuestionRadiogroup) {
       question.defaultValue = "";
     } else if (question instanceof QuestionCheckbox) {
       question.defaultValue = [];
     }
-    return question;
   };
 
-  private setup_text_question = (question, question_params) => {
-    const req = [];
-    const opt = ["placeholder", "textbox_rows", "textbox_columns", "correct_response"];
-    this.validate_question_params(
-      this.all_question_params_req.concat(req),
-      this.all_question_params_opt.concat(opt),
-      question_params
+  private setup_text_question = (question, params) => {
+    SurveyPlugin.validate_question_params(
+      params,
+      [],
+      ["placeholder", "textbox_rows", "textbox_columns", "correct_response"]
     );
 
-    this.set_question_defaults(question_params, this.text_params);
+    SurveyPlugin.set_question_defaults(params, text_params);
 
-    question.title = question_params.prompt;
-    question.isRequired = question_params.required;
-    question.placeHolder = question_params.placeholder;
-    if (question_params.correct_response !== null) {
-      question.correctAnswer = question_params.correct_response;
+    question.title = params.prompt;
+    question.isRequired = params.required;
+    question.placeHolder = params.placeholder;
+    if (params.correct_response !== null) {
+      question.correctAnswer = params.correct_response;
     }
     if (question instanceof QuestionComment) {
-      question.rows = question_params.textbox_rows;
-      question.cols = question_params.textbox_columns;
+      question.rows = params.textbox_rows;
+      question.cols = params.textbox_columns;
     } else {
-      question.size = question_params.textbox_columns;
+      question.size = params.textbox_columns;
     }
     question.defaultValue = "";
-    return question;
   };
 }
 
