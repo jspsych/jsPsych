@@ -1,4 +1,4 @@
-import { clickTarget, startTimeline } from "@jspsych/test-utils";
+import { clickTarget, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import surveyMultiSelect from ".";
 
@@ -73,5 +73,64 @@ describe("survey-multi-select plugin", () => {
     expect(surveyData.Q2[0]).toBe("c");
     expect(surveyData.Q3[0]).toBe("d");
     expect(surveyData.Q4[0]).toBe("e");
+  });
+});
+
+describe("survey-likert plugin simulation", () => {
+  test("data-only mode works", async () => {
+    const scale = ["a", "b", "c", "d", "e"];
+    const { getData, expectFinished } = await simulateTimeline([
+      {
+        type: surveyMultiSelect,
+        questions: [
+          { prompt: "Q0", options: scale },
+          { prompt: "Q1", options: scale },
+          { prompt: "Q2", options: scale },
+          { prompt: "Q3", options: scale },
+          { prompt: "Q4", options: scale },
+        ],
+        randomize_question_order: true,
+      },
+    ]);
+
+    await expectFinished();
+
+    const surveyData = getData().values()[0].response;
+    const responses = Object.entries(surveyData);
+    for (const r of responses) {
+      expect(scale).toEqual(expect.arrayContaining(r[1] as []));
+    }
+  });
+
+  test("visual mode works", async () => {
+    const scale = ["a", "b", "c", "d", "e"];
+    const { getData, expectFinished, expectRunning } = await simulateTimeline(
+      [
+        {
+          type: surveyMultiSelect,
+          questions: [
+            { prompt: "Q0", options: scale },
+            { prompt: "Q1", options: scale },
+            { prompt: "Q2", options: scale },
+            { prompt: "Q3", options: scale },
+            { prompt: "Q4", options: scale },
+          ],
+          randomize_question_order: true,
+        },
+      ],
+      "visual"
+    );
+
+    await expectRunning();
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    const surveyData = getData().values()[0].response;
+    const responses = Object.entries(surveyData);
+    for (const r of responses) {
+      expect(scale).toEqual(expect.arrayContaining(r[1] as []));
+    }
   });
 });

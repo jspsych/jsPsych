@@ -61,6 +61,9 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | png | base64 data URL string | If `save_image` is true, then this will contain the base64 encoded data URL for the image, in png format. |
 | strokes | array of stroke objects | If `save_strokes` is true, then this will contain an array of stroke objects. Objects have an `action` property that is either `"start"`, `"move"`, or `"end"`. If `action` is `"start"` or `"move"` it will have an `x` and `y` property that report the coordinates of the action relative to the upper-left corner of the canvas. If `action` is `"start"` then the object will also have a `t` and `color` property, specifying the time of the action relative to the onset of the trial (ms) and the color of the stroke. If `action` is `"end"` then it will only have a `t` property. |
 
+## Simulation Mode
+
+This plugin does not yet support [simulation mode](../overview/simulation.md).
 
 ## Examples
 

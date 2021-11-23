@@ -1,4 +1,4 @@
-import { clickTarget, startTimeline } from "@jspsych/test-utils";
+import { clickTarget, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import htmlSliderResponse from ".";
 
@@ -140,5 +140,52 @@ describe("html-slider-response", () => {
     clickTarget(document.querySelector("#jspsych-html-slider-response-next"));
 
     await expectFinished();
+  });
+});
+
+describe("html-slider-response simulation", () => {
+  test("data-only mode works", async () => {
+    const { getData, expectFinished } = await simulateTimeline([
+      {
+        type: htmlSliderResponse,
+        stimulus: "this is html",
+        labels: ["left", "right"],
+        button_label: "button",
+      },
+    ]);
+
+    await expectFinished();
+
+    const data = getData().values()[0];
+
+    expect(data.response).toBeGreaterThanOrEqual(0);
+    expect(data.response).toBeLessThanOrEqual(100);
+    expect(data.rt).toBeGreaterThan(0);
+  });
+
+  test("data-only mode works", async () => {
+    const { getData, expectRunning, expectFinished } = await simulateTimeline(
+      [
+        {
+          type: htmlSliderResponse,
+          stimulus: "this is html",
+          labels: ["left", "right"],
+          button_label: "button",
+        },
+      ],
+      "visual"
+    );
+
+    await expectRunning();
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    const data = getData().values()[0];
+
+    expect(data.response).toBeGreaterThanOrEqual(0);
+    expect(data.response).toBeLessThanOrEqual(100);
+    expect(data.rt).toBeGreaterThan(0);
   });
 });

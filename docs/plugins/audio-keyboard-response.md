@@ -32,6 +32,12 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | rt        | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first began playing until the subject made a key response. If no key was pressed before the trial ended, then the value will be `null`. |
 | stimulus  | string  | Path to the audio file that played during the trial. |
 
+## Simulation Mode
+
+In `data-only` simulation mode, the `response_allowed_while_playing` parameter does not currently influence the simulated response time. 
+This is because the audio file is not loaded in `data-only` mode and therefore the length is unknown. 
+This may change in a future version as we improve the simulation modes.
+
 ## Examples
 
 ???+ example "Trial continues until subject gives a response"

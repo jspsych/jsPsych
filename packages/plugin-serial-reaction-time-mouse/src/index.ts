@@ -233,6 +233,70 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
 
     return stimulus;
   }
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    let response = this.jsPsych.utils.deepCopy(trial.target);
+    if (trial.allow_nontarget_responses && this.jsPsych.randomization.sampleBernoulli(0.8) !== 1) {
+      while (response[0] == trial.target[0] && response[1] == trial.target[1]) {
+        response[0] == this.jsPsych.randomization.randomInt(0, trial.grid.length);
+        //@ts-ignore array typing is not quite right
+        response[1] == this.jsPsych.randomization.randomInt(0, trial.grid[response[0]].length);
+      }
+    }
+
+    const default_data = {
+      grid: trial.grid,
+      target: trial.target,
+      response: response,
+      rt:
+        trial.pre_target_duration +
+        this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+      correct: response[0] == trial.target[0] && response[1] == trial.target[1],
+    };
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial);
+    load_callback();
+
+    if (data.rt !== null) {
+      const target = display_element.querySelector(
+        `.jspsych-serial-reaction-time-stimulus-cell[data-row="${data.response[0]}"][data-column="${data.response[1]}"]`
+      );
+      this.jsPsych.pluginAPI.clickTarget(target, data.rt);
+    }
+  }
 }
 
 export default SerialReactionTimeMousePlugin;

@@ -1,4 +1,4 @@
-import { pressKey, startTimeline } from "@jspsych/test-utils";
+import { pressKey, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import serialReactionTime from ".";
 
@@ -85,5 +85,50 @@ describe("serial-reaction-time plugin", () => {
     var trial_data = getData().last(2).values();
     expect(trial_data[0].correct).toBe(true);
     expect(trial_data[1].correct).toBe(false);
+  });
+});
+
+describe("serial-reaction-time plugin simulation", () => {
+  test("data-only mode works", async () => {
+    const { expectFinished, getData } = await simulateTimeline([
+      {
+        type: serialReactionTime,
+        grid: [[1, 1, 1, 1]],
+        target: [0, 0],
+        choices: [["a", "b", "c", "d"]],
+      },
+    ]);
+
+    await expectFinished();
+
+    const data = getData().values()[0];
+
+    expect(data.correct).toBe(data.response == "a");
+    expect(data.rt).toBeGreaterThan(0);
+  });
+
+  test("visual mode works", async () => {
+    const { expectFinished, expectRunning, getData } = await simulateTimeline(
+      [
+        {
+          type: serialReactionTime,
+          grid: [[1, 1, 1, 1]],
+          target: [0, 0],
+          choices: [["a", "b", "c", "d"]],
+        },
+      ],
+      "visual"
+    );
+
+    await expectRunning();
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    const data = getData().values()[0];
+
+    expect(data.correct).toBe(data.response == "a");
+    expect(data.rt).toBeGreaterThan(0);
   });
 });

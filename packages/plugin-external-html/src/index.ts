@@ -68,14 +68,73 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
       url = trial.url + "?t=" + performance.now();
     }
 
+    fetch(url)
+      .then((response) => {
+        return response.text();
+      })
+      .then((html) => {
+        display_element.innerHTML = html;
+        on_load();
+        var t0 = performance.now();
+
+        const key_listener = (e) => {
+          if (this.jsPsych.pluginAPI.compareKeys(e.key, trial.cont_key)) {
+            finish();
+          }
+        };
+
+        const finish = () => {
+          if (trial.check_fn && !trial.check_fn(display_element)) {
+            return;
+          }
+          if (trial.cont_key) {
+            display_element.removeEventListener("keydown", key_listener);
+          }
+          var trial_data = {
+            rt: Math.round(performance.now() - t0),
+            url: trial.url,
+          };
+          display_element.innerHTML = "";
+          this.jsPsych.finishTrial(trial_data);
+          trial_complete();
+        };
+
+        // by default, scripts on the external page are not executed with XMLHttpRequest().
+        // To activate their content through DOM manipulation, we need to relocate all script tags
+        if (trial.execute_script) {
+          // changed for..of getElementsByTagName("script") here to for i loop due to TS error:
+          // Type 'HTMLCollectionOf<HTMLScriptElement>' must have a '[Symbol.iterator]()' method that returns an iterator.ts(2488)
+          var all_scripts = display_element.getElementsByTagName("script");
+          for (var i = 0; i < all_scripts.length; i++) {
+            const relocatedScript = document.createElement("script");
+            const curr_script = all_scripts[i];
+            relocatedScript.text = curr_script.text;
+            curr_script.parentNode.replaceChild(relocatedScript, curr_script);
+          }
+        }
+
+        if (trial.cont_btn) {
+          display_element.querySelector("#" + trial.cont_btn).addEventListener("click", finish);
+        }
+
+        if (trial.cont_key) {
+          display_element.addEventListener("keydown", key_listener);
+        }
+      })
+      .catch((err) => {
+        console.error(`Something went wrong with fetch() in plugin-external-html.`, err);
+      });
+
     // helper to load via XMLHttpRequest
-    const load = (element, file, callback) => {
+    /*const load = (element, file, callback) => {
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.open("GET", file, true);
       xmlhttp.onload = () => {
+        console.log(`loaded ${xmlhttp.status}`)
         if (xmlhttp.status == 200 || xmlhttp.status == 0) {
           //Check if loaded
           element.innerHTML = xmlhttp.responseText;
+          console.log(`made it ${xmlhttp.responseText}`);
           callback();
         }
       };
@@ -83,56 +142,63 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
     };
 
     load(display_element, url, () => {
-      on_load();
-      var t0 = performance.now();
-
-      const key_listener = (e) => {
-        if (this.jsPsych.pluginAPI.compareKeys(e.key, trial.cont_key)) {
-          finish();
-        }
-      };
-
-      const finish = () => {
-        if (trial.check_fn && !trial.check_fn(display_element)) {
-          return;
-        }
-        if (trial.cont_key) {
-          display_element.removeEventListener("keydown", key_listener);
-        }
-        var trial_data = {
-          rt: Math.round(performance.now() - t0),
-          url: trial.url,
-        };
-        display_element.innerHTML = "";
-        this.jsPsych.finishTrial(trial_data);
-        trial_complete();
-      };
-
-      // by default, scripts on the external page are not executed with XMLHttpRequest().
-      // To activate their content through DOM manipulation, we need to relocate all script tags
-      if (trial.execute_script) {
-        // changed for..of getElementsByTagName("script") here to for i loop due to TS error:
-        // Type 'HTMLCollectionOf<HTMLScriptElement>' must have a '[Symbol.iterator]()' method that returns an iterator.ts(2488)
-        var all_scripts = display_element.getElementsByTagName("script");
-        for (var i = 0; i < all_scripts.length; i++) {
-          const relocatedScript = document.createElement("script");
-          const curr_script = all_scripts[i];
-          relocatedScript.text = curr_script.text;
-          curr_script.parentNode.replaceChild(relocatedScript, curr_script);
-        }
-      }
-
-      if (trial.cont_btn) {
-        display_element.querySelector("#" + trial.cont_btn).addEventListener("click", finish);
-      }
-
-      if (trial.cont_key) {
-        display_element.addEventListener("keydown", key_listener);
-      }
+      
     });
-
+*/
     return new Promise((resolve) => {
       trial_complete = resolve;
+    });
+  }
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    const default_data = {
+      url: trial.url,
+      rt: this.jsPsych.randomization.sampleExGaussian(2000, 200, 1 / 200, true),
+    };
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial, () => {
+      load_callback();
+      if (trial.cont_key) {
+        this.jsPsych.pluginAPI.pressKey(trial.cont_key, data.rt);
+      } else if (trial.cont_btn) {
+        this.jsPsych.pluginAPI.clickTarget(
+          display_element.querySelector("#" + trial.cont_btn),
+          data.rt
+        );
+      }
     });
   }
 }

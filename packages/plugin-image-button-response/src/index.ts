@@ -355,6 +355,57 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
       );
     }
   }
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    const default_data = {
+      stimulus: trial.stimulus,
+      rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+      response: this.jsPsych.randomization.randomInt(0, trial.choices.length - 1),
+    };
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial);
+    load_callback();
+
+    if (data.rt !== null) {
+      this.jsPsych.pluginAPI.clickTarget(
+        display_element.querySelector(`div[data-choice="${data.response}"] button`),
+        data.rt
+      );
+    }
+  }
 }
 
 export default ImageButtonResponsePlugin;

@@ -19,6 +19,10 @@ Name | Type | Value
 -----|------|------
 load_time | numeric | The time it took for webgazer to initialize. This can be a long time in some situations, so this value is recorded for troubleshooting when participants are reporting difficulty.
 
+## Simulation Mode
+
+This plugin does not yet support [simulation mode](../overview/simulation.md).
+
 ## Example
 
 Because the eye tracking plugins need to be used in conjunction with each other, please see the [example on the eye tracking overview page](../overview/eye-tracking.md#example) for an integrated example. 

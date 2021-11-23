@@ -48,14 +48,15 @@ class ClozePlugin implements JsPsychPlugin<Info> {
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var html = '<div class="cloze">';
     var elements = trial.text.split("%");
-    var solutions = [];
+    const solutions = this.getSolutions(trial.text);
 
+    let solution_counter = 0;
     for (var i = 0; i < elements.length; i++) {
       if (i % 2 === 0) {
         html += elements[i];
       } else {
-        solutions.push(elements[i].trim());
-        html += '<input type="text" id="input' + (solutions.length - 1) + '" value="">';
+        html += `<input type="text" id="input${solution_counter}" value="">`;
+        solution_counter++;
       }
     }
     html += "</div>";
@@ -97,6 +98,78 @@ class ClozePlugin implements JsPsychPlugin<Info> {
       trial.button_text +
       "</button>";
     display_element.querySelector("#finish_cloze_button").addEventListener("click", check);
+  }
+
+  private getSolutions(text: string) {
+    const solutions = [];
+    const elements = text.split("%");
+    for (let i = 0; i < elements.length; i++) {
+      if (i % 2 == 1) {
+        solutions.push(elements[i].trim());
+      }
+    }
+
+    return solutions;
+  }
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    const solutions = this.getSolutions(trial.text);
+    const responses = [];
+    for (const word of solutions) {
+      if (word == "") {
+        responses.push(this.jsPsych.randomization.randomWords({ exactly: 1 }));
+      } else {
+        responses.push(word);
+      }
+    }
+
+    const default_data = {
+      response: responses,
+    };
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    //this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial);
+    load_callback();
+
+    const inputs = display_element.querySelectorAll('input[type="text"]');
+    let rt = this.jsPsych.randomization.sampleExGaussian(750, 200, 0.01, true);
+    for (let i = 0; i < data.response.length; i++) {
+      this.jsPsych.pluginAPI.fillTextInput(inputs[i] as HTMLInputElement, data.response[i], rt);
+      rt += this.jsPsych.randomization.sampleExGaussian(750, 200, 0.01, true);
+    }
+    this.jsPsych.pluginAPI.clickTarget(display_element.querySelector("#finish_cloze_button"), rt);
   }
 }
 

@@ -24,6 +24,10 @@ Name | Type | Value
 final_width_px | numeric | Final width of the resizable div container, in pixels.
 scale_factor | numeric | Scaling factor that will be applied to the div containing jsPsych content.
 
+## Simulation Mode
+
+This plugin does not yet support [simulation mode](../overview/simulation.md).
+
 ## Examples
 
 ???+ example "Measuring a credit card and resizing the display to have 150 pixels equal an inch."

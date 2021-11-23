@@ -29,6 +29,10 @@ average_offset | array | The average `x` and `y` distance from each validation p
 samples_per_sec | numeric | The average number of samples per second. Calculated by finding samples per second for each point and then averaging these estimates together.
 validation_points | array | The list of validation points, in the order that they appeared.
 
+## Simulation Mode
+
+This plugin does not yet support [simulation mode](../overview/simulation.md).
+
 ## Example
 
 Because the eye tracking plugins need to be used in conjunction with each other, please see the [example on the eye tracking overview page](../overview/eye-tracking.md#example) for an integrated example. 

@@ -72,6 +72,16 @@ export class JsPsych {
   private finished: Promise<void>;
   private resolveFinishedPromise: () => void;
 
+  /**
+   * is the experiment running in `simulate()` mode
+   */
+  private simulation_mode: "data-only" | "visual" = null;
+
+  /**
+   * simulation options passed in via `simulate()`
+   */
+  private simulation_options;
+
   // storing a single webaudio context to prevent problems with multiple inits
   // of jsPsych
   webaudio_context: AudioContext = null;
@@ -175,6 +185,16 @@ export class JsPsych {
 
     this.startExperiment();
     await this.finished;
+  }
+
+  async simulate(
+    timeline: any[],
+    simulation_mode: "data-only" | "visual",
+    simulation_options = {}
+  ) {
+    this.simulation_mode = simulation_mode;
+    this.simulation_options = simulation_options;
+    await this.run(timeline);
   }
 
   getProgress() {
@@ -586,11 +606,60 @@ export class JsPsych {
       }
     };
 
-    const trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
+    let trial_complete;
+    if (!this.simulation_mode) {
+      trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
+    }
+    if (this.simulation_mode) {
+      // check if the trial supports simulation
+      if (trial.type.simulate) {
+        let trial_sim_opts;
+        if (!trial.simulation_options) {
+          trial_sim_opts = this.simulation_options.default;
+        }
+        if (trial.simulation_options) {
+          if (typeof trial.simulation_options == "string") {
+            if (this.simulation_options[trial.simulation_options]) {
+              trial_sim_opts = this.simulation_options[trial.simulation_options];
+            } else if (this.simulation_options.default) {
+              console.log(
+                `No matching simulation options found for "${trial.simulation_options}". Using "default" options.`
+              );
+              trial_sim_opts = this.simulation_options.default;
+            } else {
+              console.log(
+                `No matching simulation options found for "${trial.simulation_options}" and no "default" options provided. Using the default values provided by the plugin.`
+              );
+              trial_sim_opts = {};
+            }
+          } else {
+            trial_sim_opts = trial.simulation_options;
+          }
+        }
+        trial_sim_opts = this.utils.deepCopy(trial_sim_opts);
+        trial_sim_opts = this.replaceFunctionsWithValues(trial_sim_opts, null);
+
+        if (trial_sim_opts?.simulate === false) {
+          trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
+        } else {
+          trial_complete = trial.type.simulate(
+            trial,
+            trial_sim_opts?.mode || this.simulation_mode,
+            trial_sim_opts,
+            load_callback
+          );
+        }
+      } else {
+        // trial doesn't have a simulate method, so just run as usual
+        trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
+      }
+    }
+
     // see if trial_complete is a Promise by looking for .then() function
     const is_promise = trial_complete && typeof trial_complete.then == "function";
 
-    if (!is_promise) {
+    // in simulation mode we let the simulate function call the load_callback always.
+    if (!is_promise && !this.simulation_mode) {
       load_callback();
     }
 

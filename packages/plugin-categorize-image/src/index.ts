@@ -37,6 +37,7 @@ const info = <const>{
     incorrect_text: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Incorrect text",
+      default: "<p class='feedback'>Wrong</p>",
     },
     /** Any content here will be displayed below the stimulus. */
     prompt: {
@@ -219,6 +220,61 @@ class CategorizeImagePlugin implements JsPsychPlugin<Info> {
         this.jsPsych.pluginAPI.setTimeout(endTrial, trial.feedback_duration);
       }
     };
+  }
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    const key = this.jsPsych.pluginAPI.getValidKey(trial.choices);
+
+    const default_data = {
+      stimulus: trial.stimulus,
+      response: key,
+      rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+      correct: key == trial.key_answer,
+    };
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial);
+    load_callback();
+
+    if (data.rt !== null) {
+      this.jsPsych.pluginAPI.pressKey(data.response, data.rt);
+    }
+
+    if (trial.force_correct_button_press && !data.correct) {
+      this.jsPsych.pluginAPI.pressKey(trial.key_answer, data.rt + trial.feedback_duration / 2);
+    }
   }
 }
 

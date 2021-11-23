@@ -272,6 +272,74 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
       allow_held_key: false,
     });
   }
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    const animation_length = trial.sequence_reps * trial.frame_time * trial.stimuli.length;
+    const key = this.jsPsych.pluginAPI.getValidKey(trial.choices);
+
+    const default_data = {
+      stimulus: trial.stimuli,
+      rt: animation_length + this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+      response: key,
+      correct: key == trial.key_answer,
+    };
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    if (data.rt == null || data.response == null) {
+      throw new Error(`
+        Simulated response for categorize-animation plugin was invalid. 
+        This could be because the response RT was too fast and generated
+        before the animation finished when the allow_response_before_complete
+        parameter is false. In a real experiment this would cause the experiment
+        to pause indefinitely.`);
+    } else {
+      this.jsPsych.finishTrial(data);
+    }
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial);
+    load_callback();
+
+    if (data.rt !== null) {
+      this.jsPsych.pluginAPI.pressKey(data.response, data.rt);
+    } else {
+      throw new Error(`
+        Simulated response for categorize-animation plugin was invalid. 
+        This could be because the response RT was too fast and generated
+        before the animation finished when the allow_response_before_complete
+        parameter is false. In a real experiment this would cause the experiment
+        to pause indefinitely.`);
+    }
+  }
 }
 
 export default CategorizeAnimationPlugin;

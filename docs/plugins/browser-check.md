@@ -63,6 +63,16 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
 Note that all of these values are only recorded when the corresponding key is included in the `features` parameter for the trial.
 
+## Simulation Mode 
+
+In [simulation mode](../overview/simulation.md) the plugin will report the actual features of the browser, with the exception of `vsync_rate`, which is always 60. 
+
+In `data-only` mode, if `allow_window_resize` is true and the browser's width and height are below the maximum value then the reported width and height will be equal to `minimum_width` and `minimum_height`, as if the participant resized the browser to meet the specifications.
+
+In `visual` mode, if `allow_window_resize` is true and the browser's width and height are below the maximum value then the experiment will wait for 3 seconds before clicking the resize fail button. During this time, you can adjust the window if you would like to.
+
+As with all simulated plugins, you can override the default (actual) data with fake data using `simulation_options`. This allows you to test your exclusion criteria by simulating other configurations.
+
 ## Examples
 
 ???+ example "Recording all of the available features, no exclusions"

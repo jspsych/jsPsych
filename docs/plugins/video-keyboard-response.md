@@ -35,6 +35,12 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | rt        | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response. |
 stimulus | array | The `stimulus` array. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 
+## Simulation Mode
+
+In `data-only` simulation mode, the `response_allowed_while_playing` parameter does not currently influence the simulated response time. 
+This is because the audio file is not loaded in `data-only` mode and therefore the length is unknown. 
+This may change in a future version as we improve the simulation modes.
+
 ## Examples
 
 ???+ example "Show a video and advance to next trial automatically"

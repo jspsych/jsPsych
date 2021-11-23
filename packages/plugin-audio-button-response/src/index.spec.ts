@@ -1,4 +1,4 @@
-import { clickTarget, startTimeline } from "@jspsych/test-utils";
+import { clickTarget, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 import { initJsPsych } from "jspsych";
 
 import audioButtonResponse from ".";
@@ -15,7 +15,7 @@ describe.skip("audio-button-response", () => {
         prompt: "foo",
         choices: ["choice1"],
         on_load: () => {
-          expect(getHTML()).toContain("ffgfgoo");
+          expect(getHTML()).toContain("foo");
 
           clickTarget(displayElement.querySelector("button"));
         },
@@ -31,5 +31,56 @@ describe.skip("audio-button-response", () => {
     expect(getHTML()).not.toContain("foo");
 
     await finished;
+  });
+});
+
+describe("audio-button-response simulation", () => {
+  test("data mode works", async () => {
+    const timeline = [
+      {
+        type: audioButtonResponse,
+        stimulus: "foo.mp3",
+        choices: ["click"],
+      },
+    ];
+
+    const { expectFinished, getData } = await simulateTimeline(timeline);
+
+    await expectFinished();
+
+    expect(getData().values()[0].rt).toBeGreaterThan(0);
+    expect(getData().values()[0].response).toBe(0);
+  });
+
+  // can't run this until we mock Audio elements.
+  test.skip("visual mode works", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const timeline = [
+      {
+        type: audioButtonResponse,
+        stimulus: "foo.mp3",
+        prompt: "foo",
+        choices: ["click"],
+      },
+    ];
+
+    const { expectFinished, expectRunning, getHTML, getData } = await simulateTimeline(
+      timeline,
+      "visual",
+      {},
+      jsPsych
+    );
+
+    await expectRunning();
+
+    expect(getHTML()).toContain("foo");
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    expect(getData().values()[0].rt).toBeGreaterThan(0);
+    expect(getData().values()[0].response).toBe(0);
   });
 });

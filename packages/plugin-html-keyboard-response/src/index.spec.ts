@@ -1,4 +1,4 @@
-import { pressKey, startTimeline } from "@jspsych/test-utils";
+import { pressKey, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import htmlKeyboardResponse from ".";
 
@@ -132,5 +132,48 @@ describe("html-keyboard-response", () => {
     );
 
     await expectRunning();
+  });
+});
+
+describe("html-keyboard-response simulation", () => {
+  test("data mode works", async () => {
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+      },
+    ];
+
+    const { expectFinished, getData } = await simulateTimeline(timeline);
+
+    await expectFinished();
+
+    expect(getData().values()[0].rt).toBeGreaterThan(0);
+    expect(typeof getData().values()[0].response).toBe("string");
+  });
+
+  test("visual mode works", async () => {
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+      },
+    ];
+
+    const { expectFinished, expectRunning, getHTML, getData } = await simulateTimeline(
+      timeline,
+      "visual"
+    );
+
+    await expectRunning();
+
+    expect(getHTML()).toContain("foo");
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    expect(getData().values()[0].rt).toBeGreaterThan(0);
+    expect(typeof getData().values()[0].response).toBe("string");
   });
 });

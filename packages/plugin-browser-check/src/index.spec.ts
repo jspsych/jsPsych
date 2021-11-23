@@ -1,4 +1,4 @@
-import { clickTarget, pressKey, startTimeline } from "@jspsych/test-utils";
+import { clickTarget, pressKey, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import browserCheck from ".";
 
@@ -166,7 +166,7 @@ describe("browser-check", () => {
         "Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19"
       );
 
-    const { expectFinished, expectRunning } = await startTimeline([
+    const { expectFinished, expectRunning, getData } = await startTimeline([
       {
         type: browserCheck,
         skip_features: ["vsync_rate"],
@@ -186,6 +186,9 @@ describe("browser-check", () => {
     jest.runAllTimers();
 
     await expectFinished();
+
+    expect(getData().values()[0].width).toBe(2000);
+    expect(getData().values()[0].height).toBe(2000);
   });
 
   test("vsync rate", async () => {
@@ -209,5 +212,71 @@ describe("browser-check", () => {
     await expectFinished();
 
     expect(getData().values()[0].vsync_rate).toBe(1000 / 16);
+  });
+});
+
+describe("browser-check simulation", () => {
+  test("data-only mode works", async () => {
+    jest
+      .spyOn(navigator, "userAgent", "get")
+      .mockReturnValue(
+        "Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19"
+      );
+
+    const { expectFinished, getData } = await simulateTimeline([
+      {
+        type: browserCheck,
+      },
+    ]);
+
+    await expectFinished();
+  });
+
+  test("visual mode works", async () => {
+    jest
+      .spyOn(navigator, "userAgent", "get")
+      .mockReturnValue(
+        "Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19"
+      );
+
+    const { expectFinished, getData } = await simulateTimeline(
+      [
+        {
+          type: browserCheck,
+        },
+      ],
+      "visual"
+    );
+
+    await expectFinished();
+  });
+
+  test("visual mode works when window too small", async () => {
+    jest
+      .spyOn(navigator, "userAgent", "get")
+      .mockReturnValue(
+        "Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19"
+      );
+
+    const { expectFinished, expectRunning, getData, getHTML } = await simulateTimeline(
+      [
+        {
+          type: browserCheck,
+          minimum_width: 3000,
+          exclusion_message: () => {
+            return "foo";
+          },
+        },
+      ],
+      "visual"
+    );
+
+    await expectRunning();
+
+    jest.advanceTimersByTime(3000);
+
+    await expectFinished();
+
+    expect(getHTML()).toMatch("foo");
   });
 });

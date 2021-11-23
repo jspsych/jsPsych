@@ -24,6 +24,12 @@ Name | Type | Value
 -----|------|------
 success | boolean | true if the browser supports fullscreen mode (i.e., is not Safari)
 
+## Simulation Mode
+
+Web browsers do not allow fullscreen mode to be triggered by a script to avoid malicious usage of fullscreen behavior when the user is not wanting it.
+In `visual` simulation mode, the trial will run normally and the button will get a simulated click, but the display will not change. 
+If you want the display to actually enter fullscreen mode during the simulation, you should disable simulation for the fullscreen trial and manually click the button.
+
 ## Examples
 
 
