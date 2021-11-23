@@ -3,14 +3,14 @@ import {
   QuestionCheckbox,
   QuestionComment,
   QuestionDropdown,
+  QuestionHtml,
   QuestionMatrix,
   QuestionRadiogroup,
   QuestionRanking,
   QuestionRating,
-  QuestionSelectBase,
+  QuestionText,
   StylesManager,
   Survey,
-  SurveyTriggerRunExpression,
 } from "survey-knockout";
 
 const info = <const>{
@@ -323,18 +323,17 @@ const text_params = [
   "correct_response",
 ];
 
-// map jsPsych question types onto SurveyJS question types
-const question_type_map: Record<string, string> = {
-  "drop-down": "dropdown",
-  html: "html",
-  likert: "rating",
-  "likert-table": "matrix",
-  "multi-choice": "radiogroup",
-  "multi-select": "checkbox",
-  ranking: "ranking",
-  text: "text",
-  comment: "comment", // not listed in the jsPsych docs for simplicity, but needed here for validating question types
-};
+const question_types = [
+  "drop-down",
+  "html",
+  "likert",
+  "likert-table",
+  "multi-choice",
+  "multi-select",
+  "ranking",
+  "text",
+  "comment",
+];
 
 /**
  * **survey**
@@ -422,46 +421,36 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
         page.questionsOrder = "random"; // TO DO: save question presentation order to data
       }
       for (const [questionIndex, question_params] of (questions as any[]).entries()) {
-        // question type validation
-        let q_type: string;
-        const q_opts = Object.keys(question_type_map);
+        let question_type = question_params.type;
 
-        if (typeof question_params.type === "undefined") {
+        if (typeof question_type === "undefined") {
           throw new Error(
             'Error in survey plugin: question is missing the required "type" parameter.'
           );
-        } else if (!q_opts.includes(question_params.type)) {
-          throw new Error(
-            'Error in survey plugin: invalid question type "' + question_params.type + '".'
-          );
-        } else {
-          q_type = question_type_map[question_params.type];
         }
-
-        if (q_type === "text" && question_params.textbox_rows > 1) {
-          q_type = "comment";
+        if (!question_types.includes(question_type)) {
+          throw new Error(`Error in survey plugin: invalid question type "${question_type}".`);
         }
 
         // set up question
-        const question = page.addNewQuestion(q_type);
-        question.requiredErrorText = trial.required_error_text;
-        question.name = question_params.name ?? `P${pageIndex}_Q${questionIndex}`;
 
         const setup_function = {
-          comment: this.setup_text_question, // text (multiple rows)
-          dropdown: this.setup_dropdown_question,
+          "drop-down": this.setup_dropdown_question,
           html: this.setup_html_question,
-          matrix: this.setup_likert_table_question, // likert-table
-          radiogroup: this.setup_multichoice_question, // multi-choice
-          checkbox: this.setup_multichoice_question, // multi-select
-          ranking: this.setup_multichoice_question, // ranking
-          rating: this.setup_likert_question, // likert
-          text: this.setup_text_question, // text (single row)
-        }[q_type];
+          "likert-table": this.setup_likert_table_question,
+          "multi-choice": this.setup_multichoice_question,
+          "multi-select": this.setup_multichoice_question,
+          ranking: this.setup_multichoice_question,
+          likert: this.setup_likert_question,
+          text: this.setup_text_question,
+        }[question_type];
 
-        if (setup_function) {
-          setup_function(question, question_params);
-        }
+        const question = setup_function(
+          question_params.name ?? `P${pageIndex}_Q${questionIndex}`,
+          question_params
+        );
+        question.requiredErrorText = trial.required_error_text;
+        page.addQuestion(question);
       }
     }
 
@@ -550,7 +539,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
 
   // methods for setting up different question types
 
-  private setup_dropdown_question = (question, params) => {
+  private setup_dropdown_question = (name: string, params) => {
     SurveyPlugin.validate_question_params(
       params,
       ["options"],
@@ -564,6 +553,8 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     );
 
     SurveyPlugin.set_question_defaults(params, dropdown_params);
+
+    const question = new QuestionDropdown(name);
 
     question.title = params.prompt;
     question.isRequired = params.required;
@@ -582,16 +573,21 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       question.correctAnswer = params.correct_response;
     }
     question.defaultValue = "";
+
+    return question;
   };
 
-  private setup_html_question = (question, params) => {
+  private setup_html_question = (name: string, params) => {
     SurveyPlugin.validate_question_params(params, [], []);
     SurveyPlugin.set_question_defaults(params, html_params);
 
+    const question = new QuestionHtml(name);
     question.html = params.prompt;
+
+    return question;
   };
 
-  private setup_likert_question = (question, params) => {
+  private setup_likert_question = (name: string, params) => {
     SurveyPlugin.validate_question_params(
       params,
       [],
@@ -607,6 +603,8 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     );
 
     SurveyPlugin.set_question_defaults(params, likert_params);
+
+    const question = new QuestionRating(name);
 
     question.title = params.prompt;
     question.isRequired = params.required;
@@ -627,9 +625,11 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       question.correctAnswer = params.correct_response;
     }
     // TO DO: add likert default value (empty string?: question.defaultValue = "";)
+
+    return question;
   };
 
-  private setup_likert_table_question = (question, params) => {
+  private setup_likert_table_question = (name: string, params) => {
     SurveyPlugin.validate_question_params(
       params,
       ["options", "statements"],
@@ -637,6 +637,8 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     );
 
     SurveyPlugin.set_question_defaults(params, likert_table_params);
+
+    const question = new QuestionMatrix(name);
 
     question.title = params.prompt;
     question.isAllRowRequired = params.required;
@@ -653,10 +655,12 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       question.correctAnswer = params.correct_response;
     }
     // TO DO: add likert-table default value (empty array?: question.defaultValue = [];)
+
+    return question;
   };
 
   // multi-choice, multi-select, ranking
-  private setup_multichoice_question = (question, params) => {
+  private setup_multichoice_question = (name: string, params) => {
     SurveyPlugin.validate_question_params(
       params,
       ["options"],
@@ -664,6 +668,23 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     );
 
     SurveyPlugin.set_question_defaults(params, multichoice_params);
+
+    let question: QuestionRadiogroup | QuestionCheckbox | QuestionRanking;
+    switch (params.type) {
+      case "multi-choice":
+        question = new QuestionRadiogroup(name);
+        question.defaultValue = "";
+        break;
+
+      case "multi-select":
+        question = new QuestionCheckbox(name);
+        question.defaultValue = [];
+        break;
+
+      case "ranking":
+        question = new QuestionRanking(name);
+        break;
+    }
 
     question.title = params.prompt;
     question.isRequired = params.required;
@@ -681,14 +702,12 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     if (params.correct_response !== null) {
       question.correctAnswer = params.correct_response;
     }
-    if (question instanceof QuestionRadiogroup) {
-      question.defaultValue = "";
-    } else if (question instanceof QuestionCheckbox) {
-      question.defaultValue = [];
-    }
+
+    return question;
   };
 
-  private setup_text_question = (question, params) => {
+  // text or comment
+  private setup_text_question = (name: string, params) => {
     SurveyPlugin.validate_question_params(
       params,
       [],
@@ -696,6 +715,8 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     );
 
     SurveyPlugin.set_question_defaults(params, text_params);
+
+    const question = params.textbox_rows > 1 ? new QuestionComment(name) : new QuestionText(name);
 
     question.title = params.prompt;
     question.isRequired = params.required;
@@ -710,6 +731,8 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       question.size = params.textbox_columns;
     }
     question.defaultValue = "";
+
+    return question;
   };
 }
 

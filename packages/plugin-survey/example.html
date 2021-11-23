@@ -29,17 +29,17 @@
         [
           {type: 'likert', prompt: 'This is a likert question prompt.', likert_scale_values: [{value: 1, text: "A lot"},{value: 2, text: "Somewhat"},{value: 3, text: "Not much"}]},
         ],
-        // [
-        //   {  // NOT WORKING - error before page loads
-        //     type: 'likert-table',
-        //     prompt: 'Please indicate how much you agree with the following statements:',
-        //     statements: [{prompt: 'I like cats.', name: 'cat'},{prompt: 'I like giraffes.', name: 'giraffe'},{prompt: 'I like antelopes.', name: 'antelope'},{prompt: 'I like lizards.', name: 'lizard'}],
-        //     options: ['A lot', 'Somewhat', 'Not very much'],
-        //     name: 'animals',
-        //     required: true,
-        //     randomize_statement_order: true,
-        //  }
-        // ],
+        [
+          {
+            type: 'likert-table',
+            prompt: 'Please indicate how much you agree with the following statements:',
+            statements: [{prompt: 'I like cats.', name: 'cat'},{prompt: 'I like giraffes.', name: 'giraffe'},{prompt: 'I like antelopes.', name: 'antelope'},{prompt: 'I like lizards.', name: 'lizard'}],
+            options: ['A lot', 'Somewhat', 'Not very much'],
+            name: 'animals',
+            required: true,
+            randomize_statement_order: true,
+         }
+        ],
         // [  // NOT WORKING - error when trying to drag/drop the options
         //   {
         //     type: 'ranking', prompt: 'Please order the shapes from your most to least favorite.', options: ['Triangle','Circle','Square'], option_reorder: 'random'
