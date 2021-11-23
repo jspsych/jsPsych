@@ -35,10 +35,10 @@ class CallFunctionPlugin implements JsPsychPlugin<Info> {
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     //trial.post_trial_gap = 0;  // TO DO: TS error: number not assignable to type any[]. I don't think this param should be an array..?
-    var return_val;
+    let return_val;
 
     const end_trial = () => {
-      var trial_data = {
+      const trial_data = {
         value: return_val,
       };
 
@@ -46,7 +46,7 @@ class CallFunctionPlugin implements JsPsychPlugin<Info> {
     };
 
     if (trial.async) {
-      var done = (data) => {
+      const done = (data) => {
         return_val = data;
         end_trial();
       };
@@ -56,6 +56,9 @@ class CallFunctionPlugin implements JsPsychPlugin<Info> {
       end_trial();
     }
   }
+
+  // no explicit simulate() mode for this plugin because it would just do
+  // the same thing as the regular plugin
 }
 
 export default CallFunctionPlugin;

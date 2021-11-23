@@ -1,8 +1,10 @@
-import { clickTarget, startTimeline } from "@jspsych/test-utils";
+import { clickTarget, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import surveyText from ".";
 
 const selectInput = (selector: string) => document.querySelector<HTMLInputElement>(selector);
+
+jest.useFakeTimers();
 
 describe("survey-text plugin", () => {
   test("default parameters work correctly", async () => {
@@ -89,5 +91,44 @@ describe("survey-text plugin", () => {
     expect(surveyData.Q2).toBe("a2");
     expect(surveyData.Q3).toBe("a3");
     expect(surveyData.Q4).toBe("a4");
+  });
+});
+
+describe("survey-text simulation", () => {
+  test("data-only mode works", async () => {
+    const { getData, expectFinished } = await simulateTimeline([
+      {
+        type: surveyText,
+        questions: [{ prompt: "How old are you?" }, { prompt: "Where were you born?" }],
+      },
+    ]);
+
+    await expectFinished();
+
+    const data = getData().values()[0];
+
+    expect(Object.entries(data.response).length).toBe(2);
+  });
+
+  test("visual mode works", async () => {
+    const { getData, expectFinished, expectRunning } = await simulateTimeline(
+      [
+        {
+          type: surveyText,
+          questions: [{ prompt: "How old are you?" }, { prompt: "Where were you born?" }],
+        },
+      ],
+      "visual"
+    );
+
+    await expectRunning();
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    const data = getData().values()[0];
+
+    expect(Object.entries(data.response).length).toBe(2);
   });
 });

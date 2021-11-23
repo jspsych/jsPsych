@@ -159,6 +159,71 @@ class SameDifferentHtmlPlugin implements JsPsychPlugin<Info> {
       });
     };
   }
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    const key = this.jsPsych.pluginAPI.getValidKey([trial.same_key, trial.different_key]);
+
+    const default_data = <any>{
+      stimuli: trial.stimuli,
+      response: key,
+      answer: trial.answer,
+      correct: trial.answer == "same" ? key == trial.same_key : key == trial.different_key,
+      rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+    };
+
+    if (trial.first_stim_duration == null) {
+      default_data.rt_stim1 = this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true);
+      default_data.response_stim1 = this.jsPsych.pluginAPI.getValidKey([
+        trial.same_key,
+        trial.different_key,
+      ]);
+    }
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial);
+    load_callback();
+
+    if (trial.first_stim_duration == null) {
+      this.jsPsych.pluginAPI.pressKey(data.response_stim1, data.rt_stim1);
+    }
+
+    this.jsPsych.pluginAPI.pressKey(
+      data.response,
+      trial.first_stim_duration + trial.gap_duration + data.rt
+    );
+  }
 }
 
 export default SameDifferentHtmlPlugin;

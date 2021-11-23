@@ -216,6 +216,29 @@ trial(display_element, trial){
 
 The data recorded will be that `correct` is `true` and that `rt` is `350`. [Additional data for the trial](../overview/plugins.md#data-collected-by-all-plugins) will also be collected automatically.
 
+## Simulation mode
+
+Plugins can optionally support [simulation modes](../overview/simulation.md).
+
+To add simulation support, a plugin needs a `simulate()` function that accepts four arguments
+
+`simulate(trial, simulation_mode, simulation_options, load_callback)`
+
+* `trial`: This is the same as the `trial` parameter passed to the plugin's `trial()` method. It contains an object of the parameters for the trial.
+* `simulation_mode`: A string, either `"data-only"` or `"visual"`. This specifies which simulation mode is being requested. Plugins can optionally support `"visual"` mode. If `"visual"` mode is not supported, the plugin should default to `"data-only"` mode when `"visual"` mode is requested.
+* `simulation_options`: An object of simulation-specific options.
+* `load_callback`: A function handle to invoke when the simulation is ready to trigger the `on_load` event for the trial. It is important to invoke this at the correct time during the simulation so that any `on_load` events in the experiment execute as expected.
+
+Typically the flow for supporting simulation mode involves:
+
+1. Generating artificial data that is consistent with the `trial` parameters.
+2. Merging that data with any data specified by the user in `simulation_options`.
+3. Verifying that the final data object is still consistent with the `trial` parameters. For example, checking that RTs are not longer than the duration of the trial.
+4. In `data-only` mode, call `jsPsych.finishTrial()` with the artificial data.
+5. In `visual` mode, invoke the `trial()` method of the plugin and then use the artificial data to trigger the appropriate events. There are a variety of methods in the [Plugin API module](../reference/jspsych-pluginAPI.md) to assist with things like simulating key presses and mouse clicks.
+
+We plan to add a longer guide about simulation development in the future. For now, we recommend browsing the source code of plugins that support simulation mode to see how the flow described above is implemented.
+
 ## Advice for writing plugins
 
 If you are developing a plugin with the aim of including it in the main jsPsych repository we encourage you to follow the [contribution guidelines](contributing.md#contributing-to-the-codebase). 

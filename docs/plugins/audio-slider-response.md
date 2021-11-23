@@ -39,6 +39,12 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | stimulus     | string  | The path of the audio file that was played. |
 | slider_start | numeric | The starting value of the slider.        |
 
+## Simulation Mode
+
+In `data-only` simulation mode, the `response_allowed_while_playing` parameter does not currently influence the simulated response time. 
+This is because the audio file is not loaded in `data-only` mode and therefore the length is unknown. 
+This may change in a future version as we improve the simulation modes.
+
 ## Examples
 
 ???+ example "A simple rating scale"

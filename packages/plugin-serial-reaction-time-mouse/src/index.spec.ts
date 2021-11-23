@@ -1,6 +1,8 @@
-import { mouseDownMouseUpTarget, startTimeline } from "@jspsych/test-utils";
+import { mouseDownMouseUpTarget, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import serialReactionTimeMouse from ".";
+
+jest.useFakeTimers();
 
 const getCellElement = (cellId: string) =>
   document.querySelector(`#jspsych-serial-reaction-time-stimulus-cell-${cellId}`) as HTMLElement;
@@ -26,5 +28,48 @@ describe("serial-reaction-time-mouse plugin", () => {
     mouseDownMouseUpTarget(getCellElement("0-0"));
 
     await expectFinished();
+  });
+});
+
+describe("serial-reaction-time plugin simulation", () => {
+  test("data-only mode works", async () => {
+    const { expectFinished, getData } = await simulateTimeline([
+      {
+        type: serialReactionTimeMouse,
+        grid: [[1, 1, 1, 1]],
+        target: [0, 0],
+      },
+    ]);
+
+    await expectFinished();
+
+    const data = getData().values()[0];
+
+    expect(data.correct).toBe(data.response[1] == data.target[1]);
+    expect(data.rt).toBeGreaterThan(0);
+  });
+
+  test("visual mode works", async () => {
+    const { expectFinished, expectRunning, getData } = await simulateTimeline(
+      [
+        {
+          type: serialReactionTimeMouse,
+          grid: [[1, 1, 1, 1]],
+          target: [0, 0],
+        },
+      ],
+      "visual"
+    );
+
+    await expectRunning();
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    const data = getData().values()[0];
+
+    expect(data.correct).toBe(data.response[1] == data.target[1]);
+    expect(data.rt).toBeGreaterThan(0);
   });
 });

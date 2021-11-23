@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-survey-text/dist/index.browser.js"></script>
+    <script src="../packages/plugin-instructions/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
+  </head>
+  <body></body>
+  <script>
+
+    var jsPsych = initJsPsych({
+      default_ITI: 250,
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
+
+    var ins = {
+      type: jsPsychInstructions,
+      pages: ["page 1", "page 2", "page 3", "page 4", "page 5", "page 6"]
+    }
+
+    var trial_1a = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
+      choices: ['y', 'n'],
+      prompt: '<p>Does the color match the word? (y or n)</p>',
+      simulation_options: "long_trial"
+    };
+
+    var trial_1b = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p style="color: blue; font-size: 48px; font-weight: bold;">BROWN</p>',
+      choices: ['y', 'n'],
+      prompt: '<p>Does the color match the word? (y or n)</p>',
+      simulation_options: {
+        data: {
+          rt: 1000
+        }
+      }
+    };
+
+    var trial_1c = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p style="color: yellow; font-size: 48px; font-weight: bold;">YELLOW</p>',
+      choices: ['y', 'n'],
+      prompt: '<p>Does the color match the word? (y or n)</p>',
+    };
+
+    var trial_2 = {
+      type: jsPsychSurveyText,
+      questions: [
+        {prompt: 'This is Q1'},
+        {prompt: 'This is Q2'},
+        {prompt: 'This is longer Q3', rows: 5}
+      ]
+    };
+
+    var trial_3 = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p style="color: orange; font-size: 48px; font-weight: bold;">BLUE</p>',
+      choices: "NO_KEYS",
+      trial_duration: 2000,
+      prompt: '<p>No response allowed. 2s wait.</p>'
+    };
+
+    var sim_opts = {
+      default: {
+        data: {
+          //rt: () => { return jsPsych.randomization.sampleExGaussian(600,50,0.02, true) }
+        }
+      },
+      long_trial: {
+        data: {
+          rt: 2000
+        }
+      }
+    }
+
+    jsPsych.simulate([ins, trial_1a, trial_1b, trial_1c, trial_2, trial_3], "visual", sim_opts);
+  </script>
+</html>

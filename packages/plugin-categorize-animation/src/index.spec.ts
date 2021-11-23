@@ -1,4 +1,4 @@
-import { pressKey, startTimeline } from "@jspsych/test-utils";
+import { pressKey, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import categorizeAnimation from ".";
 
@@ -271,5 +271,45 @@ describe("categorize-animation plugin", () => {
     jest.advanceTimersByTime(2000);
 
     await expectFinished();
+  });
+});
+
+describe("categorize-animation plugin simulation", () => {
+  test("data-only mode works", async () => {
+    const { getData, expectFinished } = await simulateTimeline([
+      {
+        type: categorizeAnimation,
+        stimuli: ["img/happy_face_1.jpg", "img/sad_face_1.jpg"],
+        frame_time: 500,
+        key_answer: "d",
+        render_on_canvas: false,
+      },
+    ]);
+
+    await expectFinished();
+    expect(getData().values()[0].rt).toBeGreaterThan(1000);
+  });
+
+  test("visual mode works", async () => {
+    const { getData, expectRunning, expectFinished } = await simulateTimeline(
+      [
+        {
+          type: categorizeAnimation,
+          stimuli: ["img/happy_face_1.jpg", "img/sad_face_1.jpg"],
+          frame_time: 500,
+          key_answer: "d",
+          render_on_canvas: false,
+        },
+      ],
+      "visual"
+    );
+
+    await expectRunning();
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    expect(getData().values()[0].rt).toBeGreaterThan(1000);
   });
 });

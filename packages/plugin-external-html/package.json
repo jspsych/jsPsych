@@ -16,7 +16,7 @@
   ],
   "source": "src/index.ts",
   "scripts": {
-    "test": "jest  --passWithNoTests",
+    "test": "jest",
     "test:watch": "npm test -- --watch",
     "tsc": "tsc",
     "build": "rollup --config",
@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@jspsych/config": "^1.0.0",
-    "@jspsych/test-utils": "^1.0.0"
+    "@jspsych/test-utils": "^1.0.0",
+    "jest-fetch-mock": "^3.0.3"
   }
 }

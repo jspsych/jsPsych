@@ -129,3 +129,53 @@ export async function startTimeline(timeline: any[], jsPsych: JsPsych | any = {}
     finished,
   };
 }
+
+/**
+ * Runs the given timeline by calling `jsPsych.simulate()` on the provided JsPsych object.
+ *
+ * @param timeline The timeline that is passed to `jsPsych.run()`
+ * @param simulation_mode Either 'data-only' mode or 'visual' mode.
+ * @param simulation_options Options to pass to `jsPsych.simulate()`
+ * @param jsPsych The jsPsych instance to be used. If left empty, a new instance will be created. If
+ * a settings object is passed instead, the settings will be used to create the jsPsych instance.
+ *
+ * @returns An object containing test helper functions, the jsPsych instance, and the jsPsych
+ * display element
+ */
+export async function simulateTimeline(
+  timeline: any[],
+  simulation_mode: "data-only" | "visual" = "data-only",
+  simulation_options: any = {},
+  jsPsych: JsPsych | any = {}
+) {
+  const jsPsychInstance = jsPsych instanceof JsPsych ? jsPsych : new JsPsych(jsPsych);
+
+  let hasFinished = false;
+  const finished = jsPsychInstance
+    .simulate(timeline, simulation_mode, simulation_options)
+    .then(() => {
+      hasFinished = true;
+    });
+  await flushPromises();
+
+  const displayElement = jsPsychInstance.getDisplayElement();
+
+  return {
+    jsPsych: jsPsychInstance,
+    displayElement,
+    /** Shorthand for `jsPsych.getDisplayElement().innerHTML` */
+    getHTML: () => displayElement.innerHTML,
+    /** Shorthand for `jsPsych.data.get()` */
+    getData: () => jsPsychInstance.data.get(),
+    expectFinished: async () => {
+      await flushPromises();
+      expect(hasFinished).toBe(true);
+    },
+    expectRunning: async () => {
+      await flushPromises();
+      expect(hasFinished).toBe(false);
+    },
+    /** A promise that is resolved when `jsPsych.simulate()` is done. */
+    finished,
+  };
+}

@@ -1,6 +1,8 @@
-import { clickTarget, startTimeline } from "@jspsych/test-utils";
+import { clickTarget, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import maxdiff from ".";
+
+jest.useFakeTimers();
 
 describe("maxdiff plugin", () => {
   test("returns appropriate response with randomization", async () => {
@@ -20,5 +22,46 @@ describe("maxdiff plugin", () => {
     await expectFinished();
 
     expect(getData().values()[0].response).toEqual({ left: "a", right: "b" });
+  });
+});
+
+describe("maxdiff plugin simulation", () => {
+  test("data-only mode works", async () => {
+    const { getData, expectFinished } = await simulateTimeline([
+      {
+        type: maxdiff,
+        alternatives: ["a", "b", "c", "d"],
+        labels: ["Most", "Least"],
+        required: true,
+      },
+    ]);
+
+    await expectFinished();
+
+    expect(getData().values()[0].response.left).not.toBeNull();
+    expect(getData().values()[0].response.right).not.toBeNull();
+  });
+
+  test("visual mode works", async () => {
+    const { getData, expectFinished, expectRunning } = await simulateTimeline(
+      [
+        {
+          type: maxdiff,
+          alternatives: ["a", "b", "c", "d"],
+          labels: ["Most", "Least"],
+          required: true,
+        },
+      ],
+      "visual"
+    );
+
+    await expectRunning();
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    expect(getData().values()[0].response.left).not.toBeNull();
+    expect(getData().values()[0].response.right).not.toBeNull();
   });
 });

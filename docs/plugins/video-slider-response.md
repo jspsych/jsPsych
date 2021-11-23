@@ -45,6 +45,12 @@ stimulus | array | The `stimulus` array. This will be encoded as a JSON string w
 slider_start | numeric | The starting value of the slider. 
 start | numeric | The start time of the video clip.
 
+## Simulation Mode
+
+In `data-only` simulation mode, the `response_allowed_while_playing` parameter does not currently influence the simulated response time. 
+This is because the audio file is not loaded in `data-only` mode and therefore the length is unknown. 
+This may change in a future version as we improve the simulation modes.
+
 ## Example
 
 ???+ example "Rate enjoyment of a video clip"

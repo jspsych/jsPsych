@@ -239,6 +239,107 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
       });
     }
   }
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    let curr_page = 0;
+    let rt = 0;
+    const view_history = [];
+
+    while (curr_page !== trial.pages.length) {
+      const view_time = this.jsPsych.randomization.sampleExGaussian(3000, 300, 1 / 300);
+      view_history.push({ page_index: curr_page, viewing_time: view_time });
+      rt += view_time;
+      if (curr_page == 0 || !trial.allow_backward) {
+        curr_page++;
+      } else {
+        if (this.jsPsych.randomization.sampleBernoulli(0.9) == 1) {
+          curr_page++;
+        } else {
+          curr_page--;
+        }
+      }
+    }
+
+    const default_data = {
+      view_history: view_history,
+      rt: rt,
+    };
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial);
+    load_callback();
+
+    const advance = (rt) => {
+      if (trial.allow_keys) {
+        this.jsPsych.pluginAPI.pressKey(trial.key_forward, rt);
+      } else if (trial.show_clickable_nav) {
+        this.jsPsych.pluginAPI.clickTarget(
+          display_element.querySelector("#jspsych-instructions-next"),
+          rt
+        );
+      }
+    };
+
+    const backup = (rt) => {
+      if (trial.allow_keys) {
+        this.jsPsych.pluginAPI.pressKey(trial.key_backward, rt);
+      } else if (trial.show_clickable_nav) {
+        this.jsPsych.pluginAPI.clickTarget(
+          display_element.querySelector("#jspsych-instructions-back"),
+          rt
+        );
+      }
+    };
+
+    let curr_page = 0;
+    let t = 0;
+    for (let i = 0; i < data.view_history.length; i++) {
+      if (i == data.view_history.length - 1) {
+        advance(t + data.view_history[i].viewing_time);
+      } else {
+        if (data.view_history[i + 1].page_index > curr_page) {
+          advance(t + data.view_history[i].viewing_time);
+        }
+        if (data.view_history[i + 1].page_index < curr_page) {
+          backup(t + data.view_history[i].viewing_time);
+        }
+        t += data.view_history[i].viewing_time;
+        curr_page = data.view_history[i + 1].page_index;
+      }
+    }
+  }
 }
 
 export default InstructionsPlugin;
