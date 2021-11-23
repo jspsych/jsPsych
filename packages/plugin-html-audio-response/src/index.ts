@@ -6,22 +6,31 @@ const info = <const>{
     /** The HTML string to be displayed */
     stimulus: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Stimulus",
       default: undefined,
     },
     /** How long to show the stimulus. */
     stimulus_duration: {
       type: ParameterType.INT,
-      pretty_name: "Stimulus duration",
       default: null,
     },
     /** How long to show the trial. */
     recording_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: 2000,
     },
-    button_label: {
+    show_done_button: {
+      type: ParameterType.BOOL,
+      default: true,
+    },
+    done_button_label: {
+      type: ParameterType.STRING,
+      default: "Continue",
+    },
+    record_again_button_label: {
+      type: ParameterType.STRING,
+      default: "Record again",
+    },
+    accept_button_label: {
       type: ParameterType.STRING,
       default: "Continue",
     },
@@ -29,7 +38,7 @@ const info = <const>{
       type: ParameterType.BOOL,
       default: false,
     },
-    store_audio_url: {
+    save_audio_url: {
       type: ParameterType.BOOL,
       default: false,
     },
@@ -75,7 +84,9 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
 
     let html = `<div id="jspsych-html-audio-response-stimulus">${trial.stimulus}</div>`;
 
-    html += `<p><button class="jspsych-btn" id="finish-trial">${trial.button_label}</button></p>`;
+    if (trial.show_done_button) {
+      html += `<p><button class="jspsych-btn" id="finish-trial">${trial.done_button_label}</button></p>`;
+    }
 
     display_element.innerHTML = html;
   }
@@ -87,17 +98,20 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
   }
 
   private addButtonEvent(display_element, trial) {
-    display_element.querySelector("#finish-trial").addEventListener("click", () => {
-      const end_time = performance.now();
-      this.rt = Math.round(end_time - this.stimulus_start_time);
-      this.stopRecording().then(() => {
-        if (trial.allow_playback) {
-          this.showPlaybackControls(display_element, trial);
-        } else {
-          this.endTrial(display_element, trial);
-        }
+    const btn = display_element.querySelector("#finish-trial");
+    if (btn) {
+      btn.addEventListener("click", () => {
+        const end_time = performance.now();
+        this.rt = Math.round(end_time - this.stimulus_start_time);
+        this.stopRecording().then(() => {
+          if (trial.allow_playback) {
+            this.showPlaybackControls(display_element, trial);
+          } else {
+            this.endTrial(display_element, trial);
+          }
+        });
       });
-    });
+    }
   }
 
   private setupRecordingEvents(display_element, trial) {
@@ -165,8 +179,8 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
   private showPlaybackControls(display_element, trial) {
     display_element.innerHTML = `
       <p><audio id="playback" src="${this.audio_url}" controls></audio></p>
-      <button id="record-again" class="jspsych-btn">Record Again</button>
-      <button id="continue" class="jspsych-btn">Continue</button>
+      <button id="record-again" class="jspsych-btn">${trial.record_again_button_label}</button>
+      <button id="continue" class="jspsych-btn">${trial.accept_button_label}</button>
     `;
 
     display_element.querySelector("#record-again").addEventListener("click", () => {
@@ -194,7 +208,7 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
       estimated_stimulus_onset: Math.round(this.stimulus_start_time - this.recorder_start_time),
     };
 
-    if (trial.store_audio_url) {
+    if (trial.save_audio_url) {
       trial_data.audio_url = this.audio_url;
     } else {
       URL.revokeObjectURL(this.audio_url);

@@ -24,6 +24,7 @@ Plugin | Description
 [external&#8209;html](external-html.md) | Displays an external HTML page (such as a consent form) and lets the subject respond by clicking a button or pressing a key. Plugin can validate their response, which is useful for making sure that a subject has granted consent before starting the experiment.
 [free&#8209;sort](free-sort.md) | Displays a set of images on the screen in random locations. Subjects can click and drag the images to move them around the screen. Records all the moves made by the subject, so the sequence of moves can be recovered from the data.
 [fullscreen](fullscreen.md) | Toggles the experiment in and out of fullscreen mode.
+[html&#8209;audio&#8209;response](html-audio-response.md) | Display an HTML-formatted stimulus and records an audio response via a microphone.
 [html&#8209;button&#8209;response](html-button-response.md) | Display an HTML-formatted stimulus and allow the subject to respond by choosing a button to click. The button can be customized extensively, e.g., using images in place of standard buttons.
 [html&#8209;keyboard&#8209;response](html-keyboard-response.md) | Display an HTML-formatted stimulus and allow the subject to respond by pressing a key.
 [html&#8209;slider&#8209;response](html-slider-response.md) | Display an HTML-formatted stimulus and allow the subject to respond by moving a slider to indicate a value.
@@ -32,6 +33,7 @@ Plugin | Description
 [image&#8209;button&#8209;response](image-button-response.md) | Display an image and allow the subject to respond by choosing a button to click. The button can be customized extensively, e.g., using images in place of standard buttons.
 [image&#8209;keyboard&#8209;response](image-keyboard-response.md) | Display an image and allow the subject to respond by pressing a key.
 [image&#8209;slider&#8209;response](image-slider-response.md) | Display an image and allow the subject to respond by moving a slider to indicate a value.
+[initialize&#8209;microphone](initialize-microphone.md) | Request permission to use the subject's microphone to record audio and allows the subject to choose which microphone to use if multiple devices are enabled.
 [instructions](instructions.md) | For displaying instructions to the subject. Allows the subject to navigate between pages of instructions using keys or buttons.
 [maxdiff](maxdiff.md) | Displays rows of alternatives to be selected for two mutually-exclusive categories, typically as 'most' or 'least' on a particular criteria (e.g. importance, preference, similarity). The participant responds by selecting one radio button corresponding to an alternative in both the left and right response columns.
 [preload](preload.md) | This plugin loads images, audio, and video files into the browser's memory before they are needed in the experiment, in order to improve stimulus and response timing, and to avoid disrupting the flow of the experiment.
