@@ -325,6 +325,63 @@ jsPsych.pluginAPI.getAutoPreloadList(timeline);
 
 ---
 
+### getMicrophoneRecorder
+
+```javascript
+jsPsych.pluginAPI.getMicrophoneRecorder()
+```
+
+#### Parameters
+
+None
+
+#### Return value
+
+A `MediaRecorder` object connected to the `MediaStream` for the active microphone.
+
+#### Description
+
+Provides access to the `MediaRecorder` created by [initializeMicrophoneRecorder()](#initializemicrophonerecorder).
+If no microphone recorder exists, it returns `null`.
+
+#### Example
+
+```javascript
+const recorder = jsPsych.pluginAPI.getMicrophoneRecorder();
+```
+
+---
+
+### initializeMicrophoneRecorder
+
+```javascript
+jsPsych.pluginAPI.initializeMicrophoneRecorder(stream)
+```
+
+#### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+stream | `MediaStream` | The `MediaStream` object from an active microphone device.
+
+#### Return value
+
+None.
+
+#### Description
+
+Generates a `MediaRecorder` object from provided `MediaStream` and stores this for access via [getMicrophoneRecorder()](#getmicrophonerecorder).
+
+#### Example
+
+```javascript
+const stream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: mic_id } });
+
+jsPsych.pluginAPI.initializeMicrophoneRecorder(stream);
+```
+
+---
+
 ### preloadAudio
 
 ```javascript
