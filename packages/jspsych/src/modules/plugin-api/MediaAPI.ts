@@ -324,7 +324,7 @@ export class MediaAPI {
     this.preload_requests = [];
   }
 
-  private microphone_recorder: MediaRecorder;
+  private microphone_recorder: MediaRecorder = null;
 
   initializeMicrophoneRecorder(stream: MediaStream) {
     const recorder = new MediaRecorder(stream);
