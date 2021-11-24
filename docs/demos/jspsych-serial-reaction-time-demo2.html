@@ -1,101 +1,73 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="docs-demo-timeline.js"></script>
     <script src="https://unpkg.com/jspsych@7.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-serial-reaction-time@1.0.0"></script>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css"
-    />
-    <style>
-      .jspsych-btn {
-        margin-bottom: 10px;
-      }
-    </style>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" />
+    <link rel="stylesheet" href="docs-demo.css" type="text/css">
   </head>
   <body></body>
   <script>
 
-    var jsPsych = initJsPsych();
-    
-      var start = {
-        type: jsPsychHtmlButtonResponse,
-        stimulus: '',
-        choices: ['Run demo']
-      };
+    const jsPsych = initJsPsych();
 
-      var show_data = {
-        type: jsPsychHtmlButtonResponse,
-        stimulus: function() {
-          var trial_data = jsPsych.data.get().last(4).values();
-          var trial_json = JSON.stringify(trial_data, null, 2);
-          return `<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>
-            <pre style="margin-top:0px;text-align:left;">${trial_json}</pre>`;
-        },
-        choices: ['Repeat demo']
-      };
+    const instructions = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: '<p>Use the R, I, V, and M keys to respond.</p>',
+      choices: ['Continue']
+    }
 
-      var instructions = {
-        type: jsPsychHtmlButtonResponse,
-        stimulus: '<p>Use the R, I, V, and M keys to respond.</p>',
-        choices: ['Continue']
-      }
+    const grid = [
+      [1,1],
+      [1,1]
+    ]
 
-      var grid = [
-        [1,1],
-        [1,1]
-      ]
+    const response_map = [
+      ['r','i'],
+      ['v','m']
+    ]
 
-      var response_map = [
-        ['r','i'],
-        ['v','m']
-      ]
+    const trial_1 = {
+      type: jsPsychSerialReactionTime,
+      grid: grid,
+      choices: response_map,
+      target: [0,0],
+      show_response_feedback: true,
+      feedback_duration: 500
+    }
+    const trial_2 = {
+      type: jsPsychSerialReactionTime,
+      grid: grid,
+      choices: response_map,
+      target: [0,1],
+      show_response_feedback: true,
+      feedback_duration: 500
+    }
+    const trial_3 = {
+      type: jsPsychSerialReactionTime,
+      grid: grid,
+      choices: response_map,
+      target: [1,1],
+      show_response_feedback: true,
+      feedback_duration: 500
+    }
+    const trial_4 = {
+      type: jsPsychSerialReactionTime,
+      grid: grid,
+      choices: response_map,
+      target: [1,0],
+      show_response_feedback: true,
+      feedback_duration: 500
+    }
 
-      var trial_1 = {
-        type: jsPsychSerialReactionTime,
-        grid: grid,
-        choices: response_map,
-        target: [0,0],
-        show_response_feedback: true,
-        feedback_duration: 500
-      }
-      var trial_2 = {
-        type: jsPsychSerialReactionTime,
-        grid: grid,
-        choices: response_map,
-        target: [0,1],
-        show_response_feedback: true,
-        feedback_duration: 500
-      }
-      var trial_3 = {
-        type: jsPsychSerialReactionTime,
-        grid: grid,
-        choices: response_map,
-        target: [1,1],
-        show_response_feedback: true,
-        feedback_duration: 500
-      }
-      var trial_4 = {
-        type: jsPsychSerialReactionTime,
-        grid: grid,
-        choices: response_map,
-        target: [1,0],
-        show_response_feedback: true,
-        feedback_duration: 500
-      }
+    const timeline = [instructions, trial_1, trial_2, trial_3, trial_4],
 
-      var trial_loop = {
-        timeline: [instructions, trial_1, trial_2, trial_3, trial_4, show_data],
-        loop_function: function() {
-          return true;
-        }
-      };
-
-      if (typeof jsPsych !== "undefined") {
-        jsPsych.run([start, trial_loop]);
-      } else {
-        document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
-      }
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
   </script>
 </html>

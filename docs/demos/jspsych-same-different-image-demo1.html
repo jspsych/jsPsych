@@ -1,76 +1,48 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="docs-demo-timeline.js"></script>
     <script src="https://unpkg.com/jspsych@7.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-same-different-image@1.0.0"></script>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css"
-    />
-    <style>
-      .jspsych-btn {
-        margin-bottom: 10px;
-      }
-    </style>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" />
+    <link rel="stylesheet" href="docs-demo.css" type="text/css">
   </head>
   <body></body>
   <script>
 
-    var jsPsych = initJsPsych();
-    
-      var preload = {
-        type: jsPsychPreload,
-        images: [
-          'img/happy_face_1.jpg', 
-          'img/sad_face_3.jpg'
-        ]
-      }
+    const jsPsych = initJsPsych();
 
-      var start = {
-        type: jsPsychHtmlButtonResponse,
-        stimulus: '',
-        choices: ['Run demo']
-      };
+    const preload = {
+      type: jsPsychPreload,
+      images: [
+        'img/happy_face_1.jpg',
+        'img/sad_face_3.jpg'
+      ]
+    }
 
-      var show_data = {
-        type: jsPsychHtmlButtonResponse,
-        stimulus: function() {
-          var trial_data = jsPsych.data.getLastTrialData().values();
-          var trial_json = JSON.stringify(trial_data, null, 2);
-          return `<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>
-            <pre style="margin-top:0px;text-align:left;">${trial_json}</pre>`;
-        },
-        choices: ['Repeat demo']
-      };
+    const trial = {
+      type: jsPsychSameDifferentImage,
+      stimuli: [
+        'img/happy_face_1.jpg',
+        'img/sad_face_3.jpg'
+      ],
+      prompt: `<p>Press s if the faces had the same emotional expression.</p>
+        <p>Press d if the faces had different emotional expressions.</p>`,
+      same_key: 's',
+      different_key: 'd',
+      first_stim_duration: 800,
+      second_stim_duration: 800,
+      answer: 'different'
+    }
 
-      var trial = {
-        type: jsPsychSameDifferentImage,
-        stimuli: [
-          'img/happy_face_1.jpg', 
-          'img/sad_face_3.jpg'
-        ],
-        prompt: `<p>Press s if the faces had the same emotional expression.</p>
-          <p>Press d if the faces had different emotional expressions.</p>`,
-        same_key: 's',
-        different_key: 'd',
-        first_stim_duration: 800,
-        second_stim_duration: 800,
-        answer: 'different'
-      }
+    const timeline = [trial];
 
-      var trial_loop = {
-        timeline: [trial, show_data],
-        loop_function: function() {
-          return true;
-        }
-      };
-
-      if (typeof jsPsych !== "undefined") {
-        jsPsych.run([preload, start, trial_loop]);
-      } else {
-        document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
-      }
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline, [preload]));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
   </script>
 </html>

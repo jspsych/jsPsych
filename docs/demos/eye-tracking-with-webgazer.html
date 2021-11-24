@@ -15,11 +15,7 @@
       rel="stylesheet"
       href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css"
     />
-    <style>
-      .jspsych-btn {
-        margin-bottom: 10px;
-      }
-    </style>
+    <link rel="stylesheet" href="docs-demo.css" type="text/css">
   </head>
   <body></body>
   <script>
@@ -132,7 +128,7 @@
         `
       }
 
-      var trial = {
+      const trial = {
         type: jsPsychImageKeyboardResponse,
         stimulus: 'img/blue.png',
         choices: "NO_KEYS",
