@@ -39,5 +39,8 @@
   "devDependencies": {
     "@jspsych/config": "^1.0.0",
     "@jspsych/test-utils": "^1.0.0"
+  },
+  "dependencies": {
+    "resize-observer-polyfill": "^1.5.1"
   }
 }
