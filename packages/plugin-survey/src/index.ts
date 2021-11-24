@@ -507,7 +507,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
         throw new Error(
           param === "type"
             ? 'Error in survey plugin: question is missing the required "type" parameter.'
-            : `Error in survey plugin: question is missing required parameter "${param}" for question type "${supplied.type}."`
+            : `Error in survey plugin: question is missing required parameter "${param}" for question type "${supplied.type}".`
         );
       }
     }
