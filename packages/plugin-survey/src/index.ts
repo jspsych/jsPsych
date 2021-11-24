@@ -683,6 +683,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
 
       case "ranking":
         question = new QuestionRanking(name);
+        question.fallbackToSortableJS = true;
         break;
     }
 
