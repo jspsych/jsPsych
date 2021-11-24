@@ -351,8 +351,17 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   applyStyles() {
-    StylesManager.applyTheme("bootstrap");
     // https://surveyjs.io/Examples/Library/?id=custom-theme
+    const colors = StylesManager.ThemeColors["default"];
+    // colors["$main-color"] = "#7ff07f";
+    // colors["$main-hover-color"] = "#6fe06f";
+    // colors["$text-color"] = "#4a4a4a";
+    // colors["$header-color"] = "#7ff07f";
+
+    // colors["$header-background-color"] = "#4a4a4a";
+    // colors["$body-container-background-color"] = "#f8f8f8";
+
+    StylesManager.applyTheme();
   }
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
@@ -362,23 +371,23 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     // add custom CSS classes to survey elements
     // https://surveyjs.io/Examples/Library/?id=survey-customcss&platform=Knockoutjs&theme=bootstrap#content-docs
     this.survey.css = {
-      root: "sv_main sv_bootstrap_css jspsych-survey-question",
-      question: {
-        mainRoot: "sv_qstn jspsych-survey-question",
-        flowRoot: "sv_q_flow sv_qstn jspsych-survey-question",
-        title: "jspsych-survey-question-prompt",
-        requiredText: "sv_q_required_text jspsych-survey-required",
-      },
-      html: {
-        root: "jspsych-survey-html",
-      },
-      navigationButton: "jspsych-btn jspsych-survey-btn",
-      dropdown: {
-        control: "jspsych-survey-dropdown",
-      },
-      error: {
-        root: "alert alert-danger jspsych-survey-required",
-      },
+      //   root: "sv_main sv_bootstrap_css jspsych-survey-question",
+      //   question: {
+      //     mainRoot: "sv_qstn jspsych-survey-question",
+      //     flowRoot: "sv_q_flow sv_qstn jspsych-survey-question",
+      //     title: "jspsych-survey-question-prompt",
+      //     requiredText: "sv_q_required_text jspsych-survey-required",
+      //   },
+      //   html: {
+      //     root: "jspsych-survey-html",
+      //   },
+      //   navigationButton: "jspsych-btn jspsych-survey-btn",
+      //   dropdown: {
+      //     control: "jspsych-survey-dropdown",
+      //   },
+      //   error: {
+      //     root: "alert alert-danger jspsych-survey-required",
+      //   },
     };
 
     // navigation buttons
