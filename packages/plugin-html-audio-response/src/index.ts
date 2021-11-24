@@ -1,5 +1,4 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
-import ResizeObserver from "resize-observer-polyfill";
 
 const info = <const>{
   name: "html-audio-response",
