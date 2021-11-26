@@ -107,6 +107,14 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    // catch mistake where stimuli are not an array
+    if (!Array.isArray(trial.stimulus)) {
+      throw new Error(`
+        The stimulus property for the video-keyboard-response plugin must be an array
+        of files. See https://www.jspsych.org/latest/plugins/video-keyboard-response/#parameters
+      `);
+    }
+
     // setup stimulus
     var video_html = "<div>";
     video_html += '<video id="jspsych-video-keyboard-response-stimulus"';
