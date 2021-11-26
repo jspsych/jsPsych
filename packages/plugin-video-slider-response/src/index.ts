@@ -147,7 +147,7 @@ type Info = typeof info;
 class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) { }
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     if (!Array.isArray(trial.stimulus)) {
@@ -299,11 +299,11 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
         } else {
           video_element.pause();
         }
-        video_element.onseeked = () => { };
+        video_element.onseeked = () => {};
       };
       video_element.onplaying = () => {
         video_element.currentTime = trial.start;
-        video_element.onplaying = () => { };
+        video_element.onplaying = () => {};
       };
       // fix for iOS/MacOS browsers: videos aren't seekable until they start playing, so need to hide/mute, play,
       // change current time, then show/unmute
@@ -324,7 +324,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
             end_trial();
           }
 
-          if (!trial.response_allowed_while_playing){
+          if (!trial.response_allowed_while_playing) {
             enable_slider();
           }
         }
@@ -345,6 +345,10 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
       display_element
         .querySelector("#jspsych-video-slider-response-response")
         .addEventListener("touchstart", enable_button);
+
+      display_element
+        .querySelector("#jspsych-video-slider-response-response")
+        .addEventListener("change", enable_button);
     }
 
     var startTime = performance.now();
@@ -367,7 +371,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
         .pause();
       display_element.querySelector<HTMLVideoElement>(
         "#jspsych-video-slider-response-stimulus-video"
-      ).onended = () => { };
+      ).onended = () => {};
 
       // gather the data to store for the trial
       var trial_data = {

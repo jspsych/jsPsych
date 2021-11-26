@@ -365,6 +365,10 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
       display_element
         .querySelector("#jspsych-image-slider-response-response")
         .addEventListener("touchstart", enable_button);
+
+      display_element
+        .querySelector("#jspsych-image-slider-response-response")
+        .addEventListener("change", enable_button);
     }
 
     const end_trial = () => {
