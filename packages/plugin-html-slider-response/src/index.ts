@@ -182,6 +182,10 @@ class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
       display_element
         .querySelector("#jspsych-html-slider-response-response")
         .addEventListener("touchstart", enable_button);
+
+      display_element
+        .querySelector("#jspsych-html-slider-response-response")
+        .addEventListener("change", enable_button);
     }
 
     const end_trial = () => {

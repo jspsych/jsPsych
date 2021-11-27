@@ -206,6 +206,10 @@ class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
       display_element
         .querySelector("#jspsych-canvas-slider-response-response")
         .addEventListener("touchstart", enable_button);
+
+      display_element
+        .querySelector("#jspsych-canvas-slider-response-response")
+        .addEventListener("change", enable_button);
     }
 
     display_element

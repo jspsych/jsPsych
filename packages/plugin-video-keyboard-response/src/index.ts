@@ -107,6 +107,14 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    // catch mistake where stimuli are not an array
+    if (!Array.isArray(trial.stimulus)) {
+      throw new Error(`
+        The stimulus property for the video-keyboard-response plugin must be an array
+        of files. See https://www.jspsych.org/latest/plugins/video-keyboard-response/#parameters
+      `);
+    }
+
     // setup stimulus
     var video_html = "<div>";
     video_html += '<video id="jspsych-video-keyboard-response-stimulus"';
@@ -214,6 +222,15 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       video_element.addEventListener("timeupdate", (e) => {
         var currenttime = video_element.currentTime;
         if (currenttime >= trial.stop) {
+          if(!trial.response_allowed_while_playing) {
+            var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
+              callback_function: after_response,
+              valid_responses: trial.choices,
+              rt_method: 'performance',
+              persist: false,
+              allow_held_key: false,
+            });
+          }
           video_element.pause();
           if (trial.trial_ends_after_video && !stopped) {
             // this is to prevent end_trial from being called twice, because the timeupdate event
