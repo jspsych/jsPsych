@@ -96,9 +96,10 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
   }
 
   private hideStimulus(display_element: HTMLElement) {
-    display_element.querySelector<HTMLElement>(
-      "#jspsych-html-audio-response-stimulus"
-    ).style.visibility = "hidden";
+    const el: HTMLElement = display_element.querySelector("#jspsych-html-audio-response-stimulus");
+    if (el) {
+      el.style.visibility = "hidden";
+    }
   }
 
   private addButtonEvent(display_element, trial) {
@@ -155,13 +156,17 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
       // setup timer for ending the trial
       if (trial.recording_duration !== null) {
         this.jsPsych.pluginAPI.setTimeout(() => {
-          this.stopRecording().then(() => {
-            if (trial.allow_playback) {
-              this.showPlaybackControls(display_element, trial);
-            } else {
-              this.endTrial(display_element, trial);
-            }
-          });
+          // this check is necessary for cases where the
+          // done_button is clicked before the timer expires
+          if (this.recorder.state !== "inactive") {
+            this.stopRecording().then(() => {
+              if (trial.allow_playback) {
+                this.showPlaybackControls(display_element, trial);
+              } else {
+                this.endTrial(display_element, trial);
+              }
+            });
+          }
         }, trial.recording_duration);
       }
     };
