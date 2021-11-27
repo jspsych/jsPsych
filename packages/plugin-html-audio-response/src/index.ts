@@ -62,6 +62,10 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
   private response;
   private load_resolver;
   private rt: number = null;
+  private start_event_handler;
+  private stop_event_handler;
+  private data_available_handler;
+  private recorded_data_chunks = [];
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -74,10 +78,10 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
   }
 
   private showDisplay(display_element, trial) {
-    const ro = new ResizeObserver((entries) => {
+    const ro = new ResizeObserver((entries, observer) => {
       this.stimulus_start_time = performance.now();
-      console.log("ro event");
-      ro.disconnect();
+      observer.unobserve(display_element);
+      //observer.disconnect();
     });
 
     ro.observe(display_element);
@@ -115,16 +119,14 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
   }
 
   private setupRecordingEvents(display_element, trial) {
-    const recorded_data_chunks = [];
-
-    this.recorder.addEventListener("dataavailable", (e) => {
+    this.data_available_handler = (e) => {
       if (e.data.size > 0) {
-        recorded_data_chunks.push(e.data);
+        this.recorded_data_chunks.push(e.data);
       }
-    });
+    };
 
-    this.recorder.addEventListener("stop", () => {
-      const data = new Blob(recorded_data_chunks, { type: "audio/webm" });
+    this.stop_event_handler = () => {
+      const data = new Blob(this.recorded_data_chunks, { type: "audio/webm" });
       this.audio_url = URL.createObjectURL(data);
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -133,11 +135,11 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
         this.load_resolver();
       });
       reader.readAsDataURL(data);
-    });
+    };
 
-    this.recorder.addEventListener("start", (e) => {
+    this.start_event_handler = (e) => {
       // resets the recorded data
-      recorded_data_chunks.length = 0;
+      this.recorded_data_chunks.length = 0;
 
       this.recorder_start_time = e.timeStamp;
       this.showDisplay(display_element, trial);
@@ -162,7 +164,13 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
           });
         }, trial.recording_duration);
       }
-    });
+    };
+
+    this.recorder.addEventListener("dataavailable", this.data_available_handler);
+
+    this.recorder.addEventListener("stop", this.stop_event_handler);
+
+    this.recorder.addEventListener("start", this.start_event_handler);
   }
 
   private startRecording() {
@@ -197,6 +205,12 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
   }
 
   private endTrial(display_element, trial) {
+    // clear recordering event handler
+
+    this.recorder.removeEventListener("dataavailable", this.data_available_handler);
+    this.recorder.removeEventListener("start", this.start_event_handler);
+    this.recorder.removeEventListener("stop", this.stop_event_handler);
+
     // kill any remaining setTimeout handlers
     this.jsPsych.pluginAPI.clearAllTimeouts();
 
