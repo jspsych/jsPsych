@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../../dist/index.browser.js"></script>
+    <script src="../../../plugin-html-button-response/dist/index.browser.js"></script>
+    <script src="../../../plugin-html-audio-response/dist/index.browser.js"></script>
+    <script src="../../../plugin-initialize-microphone/dist/index.browser.js"></script>
+    <script src="../../../plugin-survey-text/dist/index.browser.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../css/jspsych.css" />
+    <style>
+      html,
+      body {
+        background: black;
+        color: white;
+      }
+    </style>
+  </head>
+  <body></body>
+  <script>
+
+    var jsPsych = initJsPsych();
+    var timeline = [];
+    var n_trials = 5;
+    var buffer_length = 1000;
+    var trial_count = 0;
+    var iti_durations = [500,600,700,800,900,1000];
+
+    jsPsych.data.addProperties({version: 'event.timeStamp'});
+
+    var enter_trial_info = {
+        type: jsPsychSurveyText,
+        preamble: '<p>Timing test for audio recordings: event.timeStamp method</p>',
+        questions: [
+            {prompt: '<p>Enter the number of trials to run, e.g. 100:</p>', required: true, name: 'n_trials', columns: 6, rows: 1},
+            {prompt: '<p>Enter the recording duration in ms, e.g. 1000:<br>Must be at least 300 ms.</p>', required: true, name: 'buffer_length', columns: 6, rows: 1},
+            {prompt: '<p>Enter the browser info.</p>', required: true, name: 'browser', columns: 40, rows: 1},
+            {prompt: '<p>Enter the device and OS info.</p>', required: true, name: 'device_os', columns: 40, rows: 1},
+            {prompt: '<p>Enter the intended RT.</p>', required: true, name: 'intended_rt', columns: 6, rows: 1}
+        ],
+        button_label: 'Next',
+        on_finish: function(data) {
+            n_trials = parseInt(data.response.n_trials, 10);
+            buffer_length = parseInt(data.response.buffer_length, 10);
+        }
+    };
+    timeline.push(enter_trial_info);
+
+    var audio_check_start = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: '<p>Now you will be able to record a test sound<br>and then play it back to check that the audio has been captured clearly.</p>'+
+        '<p>After you press the "Start the recording check" button,<br>you will be need to approve the browser&#39;s request to use the mic.</p>'+
+        '<p>Then the browser will record audio for 2 seconds.</p>'+
+        '<p>You will then see an audio player and you will be able to play back your recording.</p>'+
+        '<p>You can re-record as many times as necessary to ensure that,<br>during the test, the audio will be captured clearly.</p>',
+        choices: ['Start the recording check']
+    };
+    timeline.push(audio_check_start);
+
+    var init_mic = {
+      type: jsPsychInitializeMicrophone,
+    }
+    timeline.push(init_mic);
+
+    var audio_check = {
+        type: jsPsychHtmlAudioResponse,
+        stimulus: `<div style="width:200px; height: 200px; background: white;"></div>`,
+        recording_duration: 2000,
+        allow_playback: true,
+    };
+    timeline.push(audio_check);
+
+    var start = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: '<p>Press the "Start" button to start the audio recording test.</p>',
+        choices: ['Start'],
+        post_trial_gap: 1000
+    };
+    timeline.push(start);
+
+    var trial = {
+        type: jsPsychHtmlAudioResponse,
+        stimulus: `<div style="width:200px; height: 200px; background: white;"></div>`,
+        stimulus_duration: 100,
+        show_done_button: false,
+        recording_duration: function() {return buffer_length;},
+        post_trial_gap: function() {
+            return jsPsych.randomization.sampleWithoutReplacement(iti_durations,1)[0];
+        }
+    };
+
+    var trial_loop = {
+        timeline: [trial],
+        loop_function: function() {
+            trial_count++;
+            if (trial_count == n_trials) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    };
+    timeline.push(trial_loop);
+
+    var end = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: '<p>The test has finished.</p>',
+        choices: ['Done']
+    };
+    timeline.push(end);
+
+    jsPsych.run(timeline);
+  </script>
+</html>
