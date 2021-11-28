@@ -1,0 +1,10 @@
+@use "survey-knockout/survey.css";
+
+.sv_main {
+  font-family: "Open Sans", "Arial", sans-serif;
+  font-size: 18px;
+
+  .sv_body {
+    border-top-width: 0;
+  }
+}

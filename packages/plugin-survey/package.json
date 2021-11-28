@@ -19,8 +19,10 @@
     "test": "jest",
     "test:watch": "npm test -- --watch",
     "tsc": "tsc",
-    "build": "rollup --config",
-    "build:watch": "npm run build -- --watch"
+    "build:js": "rollup --config",
+    "build:styles": "sass --load-path ../../node_modules css/survey.scss css/survey.css",
+    "build": "run-p build:js build:styles",
+    "build:watch": "run-p \"build:js -- --watch\" \"build:styles -- --watch\""
   },
   "repository": {
     "type": "git",
@@ -38,7 +40,9 @@
   },
   "devDependencies": {
     "@jspsych/config": "^1.0.0",
-    "@jspsych/test-utils": "^1.0.0"
+    "@jspsych/test-utils": "^1.0.0",
+    "npm-run-all": "^4.1.5",
+    "sass": "^1.43.5"
   },
   "dependencies": {
     "survey-knockout": "^1.8.78"
