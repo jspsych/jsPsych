@@ -48,7 +48,7 @@ The `type` parameter now expects the value to be a plugin class rather than a st
 For example, if you load the `html-keyboard-response` plugin from the CDN...
 
 ```html
-<script src="http://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+<script src="http://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
 ```
 
 ... or from the `plugin-html-keyboard-response.js` file in the release archive...

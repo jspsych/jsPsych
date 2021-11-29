@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://unpkg.com/jspsych@7.0.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+    <script src="https://unpkg.com/jspsych@7.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@1.0.0"></script>
@@ -13,13 +13,9 @@
     <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.0"></script>
     <link
       rel="stylesheet"
-      href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css"
+      href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css"
     />
-    <style>
-      .jspsych-btn {
-        margin-bottom: 10px;
-      }
-    </style>
+    <link rel="stylesheet" href="docs-demo.css" type="text/css">
   </head>
   <body></body>
   <script>
@@ -132,7 +128,7 @@
         `
       }
 
-      var trial = {
+      const trial = {
         type: jsPsychImageKeyboardResponse,
         stimulus: 'img/blue.png',
         choices: "NO_KEYS",

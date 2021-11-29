@@ -10,12 +10,12 @@ The [official version of WebGazer](https://webgazer.cs.brown.edu/#download) is c
 
 You must include the `webgazer.js` file in your experiment via a `<script>` tag. 
 However, the `webgazer.js` file is not part of any of the jsPsych NPM packages and is therefore not available via the unpkg.com CDN. 
-Instead, it can be found on the jsdelivr.net CDN at: "https://cdn.jsdelivr.net/gh/jspsych/jsPsych@7.0.0/examples/js/webgazer/webgazer.js".
+Instead, it can be found on the jsdelivr.net CDN at: "https://cdn.jsdelivr.net/gh/jspsych/jspsych@7.1.0/examples/js/webgazer/webgazer.js".
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@7.0.0"></script>
-  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
+  <script src="https://unpkg.com/jspsych@7.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jspsych@7.1.0/examples/js/webgazer/webgazer.js"></script>
 </head>
 ```
 
@@ -33,8 +33,8 @@ The [webgazer extension](../extensions/webgazer.md) adds functionality to jsPsyc
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@7.0.0"></script>
-  <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
+  <script src="https://unpkg.com/jspsych@7.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jspsych/jspsych@7.1.0/examples/js/webgazer/webgazer.js"></script>
   <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.0"></script>
 </head>
 ```
@@ -167,19 +167,19 @@ If you have tips based on your own experience please consider sharing them on ou
     <!DOCTYPE html>
     <html>
       <head>
-        <script src="https://unpkg.com/jspsych@7.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/jspsych@7.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@1.0.0"></script>
-        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jspsych@7.1.0/examples/js/webgazer/webgazer.js"></script>
         <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.0"></script>
         <link
           rel="stylesheet"
-          href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css"
+          href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css"
         />
         <style>
           .jspsych-btn {
