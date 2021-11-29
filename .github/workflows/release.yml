@@ -75,7 +75,7 @@ jobs:
                     owner,
                     repo,
                     release_id: releaseId,
-                    name: `${name.replace("@jspsych/", "jspsych-")}-${version}-dist.zip`,
+                    name: `jspsych.zip`,
                     label: "Dist archive (zip)",
                     headers: {
                       "content-type": "application/zip",

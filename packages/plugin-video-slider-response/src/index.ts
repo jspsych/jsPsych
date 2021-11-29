@@ -150,6 +150,13 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    if (!Array.isArray(trial.stimulus)) {
+      throw new Error(`
+        The stimulus property for the video-slider-response plugin must be an array
+        of files. See https://www.jspsych.org/latest/plugins/video-slider-response/#parameters
+      `);
+    }
+
     // half of the thumb width value from jspsych.css, used to adjust the label positions
     var half_thumb_width = 7.5;
 
@@ -316,6 +323,10 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
             stopped = true;
             end_trial();
           }
+
+          if (!trial.response_allowed_while_playing) {
+            enable_slider();
+          }
         }
       });
     }
@@ -334,6 +345,10 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
       display_element
         .querySelector("#jspsych-video-slider-response-response")
         .addEventListener("touchstart", enable_button);
+
+      display_element
+        .querySelector("#jspsych-video-slider-response-response")
+        .addEventListener("change", enable_button);
     }
 
     var startTime = performance.now();

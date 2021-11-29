@@ -127,6 +127,13 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    if (!Array.isArray(trial.stimulus)) {
+      throw new Error(`
+        The stimulus property for the video-button-response plugin must be an array
+        of files. See https://www.jspsych.org/latest/plugins/video-button-response/#parameters
+      `);
+    }
+
     // setup stimulus
     var video_html = "<div>";
     video_html += '<video id="jspsych-video-button-response-stimulus"';
@@ -261,6 +268,9 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
       video_element.addEventListener("timeupdate", (e) => {
         var currenttime = video_element.currentTime;
         if (currenttime >= trial.stop) {
+          if (!trial.response_allowed_while_playing) {
+            enable_buttons();
+          }
           video_element.pause();
           if (trial.trial_ends_after_video && !stopped) {
             // this is to prevent end_trial from being called twice, because the timeupdate event

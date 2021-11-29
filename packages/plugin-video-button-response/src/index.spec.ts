@@ -9,6 +9,24 @@ beforeAll(() => {
   window.HTMLMediaElement.prototype.pause = () => {};
 });
 
+describe("video-button-response", () => {
+  test("throws error when stimulus is not array #1537", async () => {
+    const jsPsych = initJsPsych();
+
+    const timeline = [
+      {
+        type: videoButtonResponse,
+        stimulus: "foo.mp4",
+        choices: ["foo"],
+      },
+    ];
+
+    await expect(async () => {
+      await jsPsych.run(timeline);
+    }).rejects.toThrowError();
+  });
+});
+
 describe("video-button-response simulation", () => {
   test("data mode works", async () => {
     const timeline = [

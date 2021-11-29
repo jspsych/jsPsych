@@ -248,6 +248,10 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
         display_element
           .querySelector("#jspsych-audio-slider-response-response")
           .addEventListener("touchstart", enable_button);
+
+        display_element
+          .querySelector("#jspsych-audio-slider-response-response")
+          .addEventListener("change", enable_button);
       }
 
       display_element

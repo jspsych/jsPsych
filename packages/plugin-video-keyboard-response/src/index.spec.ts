@@ -9,6 +9,24 @@ beforeAll(() => {
   window.HTMLMediaElement.prototype.pause = () => {};
 });
 
+// I can't figure out how to get this tested with jest
+describe("video-keyboard-response", () => {
+  test("throws error when stimulus is not array #1537", async () => {
+    const jsPsych = initJsPsych();
+
+    const timeline = [
+      {
+        type: videoKeyboardResponse,
+        stimulus: "foo.mp4",
+      },
+    ];
+
+    await expect(async () => {
+      await jsPsych.run(timeline);
+    }).rejects.toThrowError();
+  });
+});
+
 describe("video-keyboard-response simulation", () => {
   test("data mode works", async () => {
     const timeline = [
