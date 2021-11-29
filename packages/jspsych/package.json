@@ -1,6 +1,6 @@
 {
   "name": "jspsych",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "description": "Behavioral experiments in a browser",
   "type": "module",
   "main": "dist/index.cjs",
@@ -43,8 +43,8 @@
     "random-words": "^1.1.1"
   },
   "devDependencies": {
-    "@jspsych/config": "^1.0.0",
-    "@jspsych/test-utils": "^1.0.0",
+    "@jspsych/config": "^1.1.0",
+    "@jspsych/test-utils": "^1.1.0",
     "@types/dom-mediacapture-record": "^1.0.11"
   }
 }

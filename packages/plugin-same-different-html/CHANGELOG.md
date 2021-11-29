@@ -1,17 +1,20 @@
 # @jspsych/plugin-same-different-html
 
+## 1.1.0
+
+### Minor Changes
+
+- [#2287](https://github.com/jspsych/jsPsych/pull/2287) [`522aa2cd`](https://github.com/jspsych/jsPsych/commit/522aa2cdbf64886e95b2b50f5442cc360b631339) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Added support for `data-only` and `visual` simulation modes.
+
 ## 1.0.0
+
 ### Major Changes
 
-
-
 - [#2183](https://github.com/jspsych/jsPsych/pull/2183) [`c8760b1`](https://github.com/jspsych/jsPsych/commit/c8760b19483453b0e77dc98e464e1629b5605a15) Thanks [@jodeleeuw](https://github.com/jodeleeuw), [@becky-gilbert](https://github.com/becky-gilbert), [@bjoluc](https://github.com/bjoluc)! - **jsPsych is now fully modular, with individual NPM packages for the core library, plugins, and extensions.**
-  
+
   To support this change, we've made a number of breaking changes. We've added [a guide for migrating from version 6.x to 7.x](https://www.jspsych.org/7.0/support/migration-v7/) to the documentation, and updated the [hello world tutorial](https://www.jspsych.org/7.0/tutorials/hello-world/) with instructions for configuring jsPsych in three different ways. In addition to enabling package management, some of the benefits that this change provides include an improved developer experience with IntelliSense code hints, proper encapsulation of jsPsych so that multiple instances can be run on the same page, and easier integration with modern JavaScript tools like bundlers.
 
 ### Patch Changes
-
-
 
 - [#1880](https://github.com/jspsych/jsPsych/pull/1880) [`1436132`](https://github.com/jspsych/jsPsych/commit/1436132d6da70034c032fcd5e18aa8f0dc9525e6) Thanks [@nikbpetrov](https://github.com/nikbpetrov)! - Fixed a bug where `null` was incorrectly set as the default value for the `first_stim_duration` and `second_stim_duration` parameters. The defaults for these parameters have been changed to `1000`, consistent with existing documentation.
 
