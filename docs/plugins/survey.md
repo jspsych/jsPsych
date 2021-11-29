@@ -218,7 +218,7 @@ question_order | array | An array with the order of questions. For example `[2,0
                 required: true,
               }, 
               {
-                type: 'text'
+                type: 'text',
                 prompt: "How old are you?", 
                 name: 'age', 
                 textbox_columns: 5,
@@ -233,7 +233,7 @@ question_order | array | An array with the order of questions. For example `[2,0
                 name: 'FavColor', 
               }, 
               {
-                type: 'multi-select'
+                type: 'multi-select',
                 prompt: "Which of these animals do you like? Select all that apply.", 
                 options: ['lion','squirrel','badger','whale'],
                 option_reorder: 'random',
@@ -245,7 +245,7 @@ question_order | array | An array with the order of questions. For example `[2,0
           title: 'My questionnaire',
           button_label_next: 'Continue',
           button_label_back: 'Previous',
-          button_label_finish: 'Submit'
+          button_label_finish: 'Submit',
           show_question_numbers: 'onPage'
         };
         ```
