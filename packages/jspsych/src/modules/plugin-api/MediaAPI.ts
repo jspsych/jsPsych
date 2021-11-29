@@ -323,4 +323,15 @@ export class MediaAPI {
     }
     this.preload_requests = [];
   }
+
+  private microphone_recorder: MediaRecorder = null;
+
+  initializeMicrophoneRecorder(stream: MediaStream) {
+    const recorder = new MediaRecorder(stream);
+    this.microphone_recorder = recorder;
+  }
+
+  getMicrophoneRecorder(): MediaRecorder {
+    return this.microphone_recorder;
+  }
 }
