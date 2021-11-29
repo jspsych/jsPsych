@@ -15,7 +15,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | Parameter                      | Type             | Default Value      | Description                              |
 | ------------------------------ | ---------------- | ------------------ | ---------------------------------------- |
 | stimulus                       | audio file       | undefined          | Path to audio file to be played.         |
-| choices                        | array of strings | `jsPsych.ALL_KEYS` | This array contains the key(s) that the subject is allowed to press in order to respond to the stimulus. Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) - see [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) and [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/) for more examples. Any key presses that are not listed in the array will be ignored. The default value of `jsPsych.ALL_KEYS` means that all keys will be accepted as valid responses. Specifying `jsPsych.NO_KEYS` will mean that no responses are allowed. |
+| choices                        | array of strings | `"ALL_KEYS"` | This array contains the key(s) that the subject is allowed to press in order to respond to the stimulus. Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) - see [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) and [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/) for more examples. Any key presses that are not listed in the array will be ignored. The default value of `"ALL_KEYS"` means that all keys will be accepted as valid responses. Specifying `"NO_KEYS"` will mean that no responses are allowed. |
 | prompt                         | string           | null               | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press). |
 | trial_duration                 | numeric          | null               | How long to wait for the subject to make a response before ending the trial in milliseconds. If the subject fails to make a response before this timer is reached, the subject's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely. |
 | response_ends_trial            | boolean          | true               | If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can use set this parameter to `false` to force the subject to listen to the stimulus for a fixed amount of time, even if they respond before the time is complete. |
@@ -31,6 +31,12 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | response  | string  | Indicates which key the subject pressed. If no key was pressed before the trial ended, then the value will be `null`. |
 | rt        | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first began playing until the subject made a key response. If no key was pressed before the trial ended, then the value will be `null`. |
 | stimulus  | string  | Path to the audio file that played during the trial. |
+
+## Simulation Mode
+
+In `data-only` simulation mode, the `response_allowed_while_playing` parameter does not currently influence the simulated response time. 
+This is because the audio file is not loaded in `data-only` mode and therefore the length is unknown. 
+This may change in a future version as we improve the simulation modes.
 
 ## Examples
 
@@ -60,7 +66,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 		var trial = {
 			type: jsPsychAudioKeyboardResponse,
 			stimulus: 'sound/tone.mp3',
-			choices: jsPsych.NO_KEYS,
+			choices: "NO_KEYS",
 			trial_ends_after_audio: true
 		};
 		```

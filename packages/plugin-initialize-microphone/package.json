@@ -1,0 +1,43 @@
+{
+  "name": "@jspsych/plugin-initiliaze-microphone",
+  "version": "0.1.0",
+  "description": "jsPsych plugin for getting permission to initialize the user's microphone",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
+  "typings": "dist/index.d.ts",
+  "unpkg": "dist/index.browser.min.js",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "source": "src/index.ts",
+  "scripts": {
+    "test": "jest --passWithNoTests",
+    "test:watch": "npm test -- --watch",
+    "tsc": "tsc",
+    "build": "rollup --config",
+    "build:watch": "npm run build -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jspsych/jsPsych.git",
+    "directory": "packages/plugin-initialize-microphone"
+  },
+  "author": "Josh de Leeuw",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jspsych/jsPsych/issues"
+  },
+  "homepage": "https://www.jspsych.org/latest/plugins/initialize-microphone",
+  "peerDependencies": {
+    "jspsych": ">=7.0.0"
+  },
+  "devDependencies": {
+    "@jspsych/config": "^1.0.0",
+    "@jspsych/test-utils": "^1.0.0"
+  }
+}

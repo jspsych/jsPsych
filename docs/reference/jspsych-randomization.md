@@ -127,6 +127,37 @@ console.log(jsPsych.randomization.randomID(8));
 
 ---
 
+## jsPsych.randomization.randomInt
+
+```javascript
+jsPsych.randomization.randomInt(lower, upper)
+```
+
+### Parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| lower    | integer | The smallest value it is possible to generate |
+| upper | integer | The largest value it is possible to generate |
+
+### Return value
+
+An integer
+
+### Description
+
+Generates a random integer from `lower` to `upper`
+
+### Example
+
+```javascript
+console.log(jsPsych.randomization.randomInt(2,4));
+// outputs: 2 or 3 or 4.
+```
+
+---
+
+
 ## jsPsych.randomization.repeat
 
 ```javascript
@@ -227,6 +258,136 @@ output: shuffledArray = {
 	person_name: ['Fred', 'Joe', 'Mary', 'Joe', 'Mary', 'Fred']
 }
 */
+```
+
+---
+
+## jsPsych.randomization.sampleBernoulli
+
+```javascript
+jsPsych.randomization.sampleBernoulli(p)
+```
+
+### Parameters
+
+| Parameter  | Type    | Description                              |
+| ---------- | ------- | ---------------------------------------- |
+| p       | number   | Probability of sampling 1 |
+
+
+### Return value
+
+Returns 0 with probability `1-p` and 1 with probability `p`.
+
+### Description
+
+Generates a random sample from a Bernoulli distribution.
+
+### Examples
+
+#### Sample a value
+
+```javascript
+if(jsPsych.randomization.sampleBernoulli(0.8)){
+	// this happens 80% of the time
+} else {
+	// this happens 20% of the time
+}
+```
+
+---
+
+## jsPsych.randomization.sampleExGaussian
+
+```javascript
+jsPsych.randomization.sampleExGaussian(mean, standard_deviation, rate, positive=false)
+```
+
+### Parameters
+
+| Parameter  | Type    | Description                              |
+| ---------- | ------- | ---------------------------------------- |
+| mean       | number   | Mean of the normal distribution component of the exGaussian |
+| standard_deviation | number | Standard deviation of the normal distribution component of the exGaussian |
+| rate    | number   | Rate of the exponential distribution component of the exGaussian |
+| positive | bool | If `true` sample will be constrained to > 0.
+
+### Return value
+
+A random sample from the distribution
+
+### Description
+
+Generates a random sample from an exponentially modified Gaussian distribution.
+
+### Examples
+
+#### Sample a value
+
+```javascript
+var rand_sample_exg = jsPsych.randomization.sampleExGaussian(500, 100, 0.01);
+```
+
+---
+
+## jsPsych.randomization.sampleExponential
+
+```javascript
+jsPsych.randomization.sampleExponential(rate)
+```
+
+### Parameters
+
+| Parameter  | Type    | Description                              |
+| ---------- | ------- | ---------------------------------------- |
+| rate    | number   | Rate of the exponential distribution |
+
+### Return value
+
+A random sample from the distribution
+
+### Description
+
+Generates a random sample from an exponential distribution.
+
+### Examples
+
+#### Sample a value
+
+```javascript
+var rand_sample_exg = jsPsych.randomization.sampleExponential(0.01);
+```
+
+---
+
+## jsPsych.randomization.sampleNormal
+
+```javascript
+jsPsych.randomization.sampleNormal(mean, standard_deviation)
+```
+
+### Parameters
+
+| Parameter  | Type    | Description                              |
+| ---------- | ------- | ---------------------------------------- |
+| mean       | number   | Mean of the normal distribution |
+| standard_deviation | number | Standard deviation of the normal distribution |
+
+
+### Return value
+
+A random sample from the distribution
+
+### Description
+
+Generates a random sample from a normal distribution.
+
+### Examples
+
+#### Sample a value
+
+```javascript
+var rand_sample_exg = jsPsych.randomization.sampleNormal(500, 250);
 ```
 
 ---

@@ -1,10 +1,10 @@
-import { clickTarget, startTimeline } from "@jspsych/test-utils";
+import { clickTarget, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import cloze from ".";
 
 jest.useFakeTimers();
 
-const getIntpuElementById = (id: string) => document.getElementById(id) as HTMLInputElement;
+const getInputElementById = (id: string) => document.getElementById(id) as HTMLInputElement;
 
 describe("cloze", () => {
   test("displays cloze", async () => {
@@ -68,7 +68,7 @@ describe("cloze", () => {
       },
     ]);
 
-    getIntpuElementById("input0").value = "cloze";
+    getInputElementById("input0").value = "cloze";
     clickTarget(document.querySelector("#finish_cloze_button"));
     await expectFinished();
   });
@@ -82,7 +82,7 @@ describe("cloze", () => {
       },
     ]);
 
-    getIntpuElementById("input0").value = "some wrong answer";
+    getInputElementById("input0").value = "some wrong answer";
     clickTarget(document.querySelector("#finish_cloze_button"));
     await expectRunning();
   });
@@ -99,7 +99,7 @@ describe("cloze", () => {
       },
     ]);
 
-    getIntpuElementById("input0").value = "cloze";
+    getInputElementById("input0").value = "cloze";
     clickTarget(document.querySelector("#finish_cloze_button"));
     expect(mistakeFn).not.toHaveBeenCalled();
   });
@@ -116,26 +116,64 @@ describe("cloze", () => {
       },
     ]);
 
-    getIntpuElementById("input0").value = "some wrong answer";
+    getInputElementById("input0").value = "some wrong answer";
     clickTarget(document.querySelector("#finish_cloze_button"));
     expect(mistakeFn).toHaveBeenCalled();
   });
 
   test("response data is stored as an array", async () => {
-    const { getData } = await startTimeline([
+    const { getData, getHTML } = await startTimeline([
       {
         type: cloze,
         text: "This is a %cloze% text. Here is another cloze response box %%.",
       },
     ]);
 
-    getIntpuElementById("input0").value = "cloze1";
-    getIntpuElementById("input1").value = "cloze2";
+    getInputElementById("input0").value = "cloze1";
+    getInputElementById("input1").value = "cloze2";
     clickTarget(document.querySelector("#finish_cloze_button"));
 
     const data = getData().values()[0].response;
     expect(data.length).toBe(2);
     expect(data[0]).toBe("cloze1");
     expect(data[1]).toBe("cloze2");
+  });
+});
+
+describe("cloze simulation", () => {
+  test("data-only mode works", async () => {
+    const { getData, expectFinished } = await simulateTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze% text. Here is another cloze response box %%.",
+      },
+    ]);
+
+    await expectFinished();
+
+    const data = getData().values()[0];
+    expect(data.response[0]).toBe("cloze");
+    expect(data.response[1]).not.toBe("");
+  });
+  test("visual mode works", async () => {
+    const { getData, expectFinished, expectRunning } = await simulateTimeline(
+      [
+        {
+          type: cloze,
+          text: "This is a %cloze% text. Here is another cloze response box %%.",
+        },
+      ],
+      "visual"
+    );
+
+    await expectRunning();
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    const data = getData().values()[0];
+    expect(data.response[0]).toBe("cloze");
+    expect(data.response[1]).not.toBe("");
   });
 });

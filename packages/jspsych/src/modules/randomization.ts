@@ -1,3 +1,5 @@
+import rw from "random-words";
+
 export function repeat(array, repetitions, unpack = false) {
   const arr_isArray = Array.isArray(array);
   const rep_isArray = Array.isArray(repetitions);
@@ -173,7 +175,7 @@ export function sampleWithoutReplacement(arr, size) {
   return shuffle(arr).slice(0, size);
 }
 
-export function sampleWithReplacement(arr, size, weights) {
+export function sampleWithReplacement(arr, size, weights?) {
   if (!Array.isArray(arr)) {
     console.error("First argument to sampleWithReplacement() must be an array");
   }
@@ -238,6 +240,75 @@ export function randomID(length = 32) {
     result += chars[Math.floor(Math.random() * chars.length)];
   }
   return result;
+}
+
+/**
+ * Generate a random integer from `lower` to `upper`, inclusive of both end points.
+ * @param lower The lowest value it is possible to generate
+ * @param upper The highest value it is possible to generate
+ * @returns A random integer
+ */
+export function randomInt(lower: number, upper: number) {
+  if (upper < lower) {
+    throw new Error("Upper boundary must be less than or equal to lower boundary");
+  }
+  return lower + Math.floor(Math.random() * (upper - lower + 1));
+}
+
+/**
+ * Generates a random sample from a Bernoulli distribution.
+ * @param p The probability of sampling 1.
+ * @returns 0, with probability 1-p, or 1, with probability p.
+ */
+export function sampleBernoulli(p: number) {
+  return Math.random() <= p ? 1 : 0;
+}
+
+export function sampleNormal(mean: number, standard_deviation: number) {
+  return randn_bm() * standard_deviation + mean;
+}
+
+export function sampleExponential(rate: number) {
+  return -Math.log(Math.random()) / rate;
+}
+
+export function sampleExGaussian(
+  mean: number,
+  standard_deviation: number,
+  rate: number,
+  positive = false
+) {
+  let s = sampleNormal(mean, standard_deviation) + sampleExponential(rate);
+  if (positive) {
+    while (s <= 0) {
+      s = sampleNormal(mean, standard_deviation) + sampleExponential(rate);
+    }
+  }
+  return s;
+}
+
+/**
+ * Generate one or more random words.
+ *
+ * This is a wrapper function for the {@link https://www.npmjs.com/package/random-words `random-words` npm package}.
+ *
+ * @param opts An object with optional properties `min`, `max`, `exactly`,
+ * `join`, `maxLength`, `wordsPerString`, `separator`, and `formatter`.
+ *
+ * @returns An array of words or a single string, depending on parameter choices.
+ */
+export function randomWords(opts) {
+  return rw(opts);
+}
+
+// Box-Muller transformation for a random sample from normal distribution with mean = 0, std = 1
+// https://stackoverflow.com/a/36481059/3726673
+function randn_bm() {
+  var u = 0,
+    v = 0;
+  while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+  while (v === 0) v = Math.random();
+  return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 }
 
 function unpackArray(array) {

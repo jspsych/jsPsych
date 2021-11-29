@@ -72,14 +72,18 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    const showBlankScreen = () => {
+      display_element.innerHTML = "";
+
+      this.jsPsych.pluginAPI.setTimeout(showSecondStim, trial.gap_duration);
+    };
+
     display_element.innerHTML =
       '<img class="jspsych-same-different-stimulus" src="' + trial.stimuli[0] + '"></img>';
 
     var first_stim_info: { key: string; rt: number };
     if (trial.first_stim_duration > 0) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
-        showBlankScreen();
-      }, trial.first_stim_duration);
+      this.jsPsych.pluginAPI.setTimeout(showBlankScreen, trial.first_stim_duration);
     } else {
       const afterKeyboardResponse = (info: { key: string; rt: number }) => {
         first_stim_info = info;
@@ -94,14 +98,6 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
       });
     }
 
-    const showBlankScreen = () => {
-      display_element.innerHTML = "";
-
-      this.jsPsych.pluginAPI.setTimeout(function () {
-        showSecondStim();
-      }, trial.gap_duration);
-    };
-
     const showSecondStim = () => {
       var html =
         '<img class="jspsych-same-different-stimulus" src="' + trial.stimuli[1] + '"></img>';
@@ -113,7 +109,7 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
       display_element.innerHTML = html;
 
       if (trial.second_stim_duration > 0) {
-        this.jsPsych.pluginAPI.setTimeout(function () {
+        this.jsPsych.pluginAPI.setTimeout(() => {
           display_element.querySelector<HTMLElement>(
             ".jspsych-same-different-stimulus"
           ).style.visibility = "hidden";
@@ -162,6 +158,71 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
         allow_held_key: false,
       });
     };
+  }
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    const key = this.jsPsych.pluginAPI.getValidKey([trial.same_key, trial.different_key]);
+
+    const default_data = <any>{
+      stimuli: trial.stimuli,
+      response: key,
+      answer: trial.answer,
+      correct: trial.answer == "same" ? key == trial.same_key : key == trial.different_key,
+      rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+    };
+
+    if (trial.first_stim_duration == null) {
+      default_data.rt_stim1 = this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true);
+      default_data.response_stim1 = this.jsPsych.pluginAPI.getValidKey([
+        trial.same_key,
+        trial.different_key,
+      ]);
+    }
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial);
+    load_callback();
+
+    if (trial.first_stim_duration == null) {
+      this.jsPsych.pluginAPI.pressKey(data.response_stim1, data.rt_stim1);
+    }
+
+    this.jsPsych.pluginAPI.pressKey(
+      data.response,
+      trial.first_stim_duration + trial.gap_duration + data.rt
+    );
   }
 }
 

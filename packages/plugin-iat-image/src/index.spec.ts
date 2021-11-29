@@ -1,4 +1,4 @@
-import { pressKey, startTimeline } from "@jspsych/test-utils";
+import { pressKey, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import iatImage from ".";
 
@@ -332,5 +332,55 @@ describe("iat-image plugin", () => {
     pressKey("j");
 
     await expectFinished();
+  });
+});
+
+describe("iat-image plugin simulation", () => {
+  test("data-only mode works", async () => {
+    const { getData, expectFinished } = await simulateTimeline([
+      {
+        type: iatImage,
+        stimulus: "dog.png",
+        response_ends_trial: true,
+        display_feedback: false,
+        left_category_key: "f",
+        right_category_key: "j",
+        left_category_label: ["FRIENDLY"],
+        right_category_label: ["UNFRIENDLY"],
+        stim_key_association: "left",
+      },
+    ]);
+
+    await expectFinished();
+
+    expect(getData().values()[0].rt).toBeGreaterThan(0);
+  });
+
+  test("visual mode works", async () => {
+    const { getData, expectFinished, expectRunning } = await simulateTimeline(
+      [
+        {
+          type: iatImage,
+          stimulus: "dog.png",
+          response_ends_trial: true,
+          display_feedback: false,
+          left_category_key: "f",
+          right_category_key: "j",
+          left_category_label: ["FRIENDLY"],
+          right_category_label: ["UNFRIENDLY"],
+          stim_key_association: "left",
+          //trial_duration: 500,
+        },
+      ],
+      "visual"
+    );
+
+    await expectRunning();
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    expect(getData().values()[0].rt).toBeGreaterThan(0);
   });
 });

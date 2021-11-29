@@ -315,7 +315,7 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
     }
 
     function calculateGazeCentroid(gazeData) {
-      var x_diff_m = gazeData.reduce(function (accumulator, currentValue, index) {
+      var x_diff_m = gazeData.reduce((accumulator, currentValue, index) => {
         accumulator += currentValue.dx;
         if (index == gazeData.length - 1) {
           return accumulator / gazeData.length;
@@ -324,7 +324,7 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
         }
       }, 0);
 
-      var y_diff_m = gazeData.reduce(function (accumulator, currentValue, index) {
+      var y_diff_m = gazeData.reduce((accumulator, currentValue, index) => {
         accumulator += currentValue.dy;
         if (index == gazeData.length - 1) {
           return accumulator / gazeData.length;
@@ -334,9 +334,7 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
       }, 0);
 
       var median_distance = median(
-        gazeData.map(function (x) {
-          return Math.sqrt(Math.pow(x.dx - x_diff_m, 2) + Math.pow(x.dy - y_diff_m, 2));
-        })
+        gazeData.map((x) => Math.sqrt(Math.pow(x.dx - x_diff_m, 2) + Math.pow(x.dy - y_diff_m, 2)))
       );
 
       return {
@@ -347,10 +345,8 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
     }
 
     function calculatePercentInROI(gazeData) {
-      var distances = gazeData.map(function (p) {
-        return Math.sqrt(Math.pow(p.dx, 2) + Math.pow(p.dy, 2));
-      });
-      var sum_in_roi = distances.reduce(function (accumulator, currentValue) {
+      var distances = gazeData.map((p) => Math.sqrt(Math.pow(p.dx, 2) + Math.pow(p.dy, 2)));
+      var sum_in_roi = distances.reduce((accumulator, currentValue) => {
         if (currentValue <= trial.roi_radius) {
           accumulator++;
         }
@@ -371,21 +367,11 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
           for (var j = 1; j < gazeData[i].length; j++) {
             t_diff.push(gazeData[i][j].t - gazeData[i][j - 1].t);
           }
-          mean_diff.push(
-            t_diff.reduce(function (a, b) {
-              return a + b;
-            }, 0) / t_diff.length
-          );
+          mean_diff.push(t_diff.reduce((a, b) => a + b, 0) / t_diff.length);
         }
       }
       if (mean_diff.length > 0) {
-        return (
-          1000 /
-          (mean_diff.reduce(function (a, b) {
-            return a + b;
-          }, 0) /
-            mean_diff.length)
-        );
+        return 1000 / (mean_diff.reduce((a, b) => a + b, 0) / mean_diff.length);
       } else {
         return null;
       }

@@ -61,6 +61,10 @@ _Note: The deg data are **only** returned if viewing distance is estimated with 
 | win_height_deg  | numeric | The interior height of the window in degrees.                              |
 | view_dist_mm    | numeric | Estimated distance to the screen in millimeters.                           |
 
+## Simulation Mode
+
+This plugin does not yet support [simulation mode](../overview/simulation.md).
+
 ## Example
 
 ???+ example "Measure distance to screen and pixel ratio; no resizing"

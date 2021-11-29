@@ -113,7 +113,7 @@ class CategorizeHtmlPlugin implements JsPsychPlugin<Info> {
 
     // hide image after time if the timing parameter is set
     if (trial.stimulus_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector<HTMLElement>(
           "#jspsych-categorize-html-stimulus"
         ).style.visibility = "hidden";
@@ -163,7 +163,7 @@ class CategorizeHtmlPlugin implements JsPsychPlugin<Info> {
     });
 
     if (trial.trial_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
+      this.jsPsych.pluginAPI.setTimeout(() => {
         after_response({
           key: null,
           rt: null,
@@ -205,7 +205,7 @@ class CategorizeHtmlPlugin implements JsPsychPlugin<Info> {
         correct === false &&
         ((timeout && trial.show_feedback_on_timeout) || !timeout)
       ) {
-        var after_forced_response = function (info) {
+        var after_forced_response = (info) => {
           endTrial();
         };
 
@@ -217,11 +217,64 @@ class CategorizeHtmlPlugin implements JsPsychPlugin<Info> {
           allow_held_key: false,
         });
       } else {
-        this.jsPsych.pluginAPI.setTimeout(function () {
-          endTrial();
-        }, trial.feedback_duration);
+        this.jsPsych.pluginAPI.setTimeout(endTrial, trial.feedback_duration);
       }
     };
+  }
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    const key = this.jsPsych.pluginAPI.getValidKey(trial.choices);
+
+    const default_data = {
+      stimulus: trial.stimulus,
+      response: key,
+      rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+      correct: key == trial.key_answer,
+    };
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial);
+    load_callback();
+
+    if (data.rt !== null) {
+      this.jsPsych.pluginAPI.pressKey(data.response, data.rt);
+    }
+
+    if (trial.force_correct_button_press && !data.correct) {
+      this.jsPsych.pluginAPI.pressKey(trial.key_answer, data.rt + trial.feedback_duration / 2);
+    }
   }
 }
 

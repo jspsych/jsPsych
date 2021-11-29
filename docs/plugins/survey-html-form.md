@@ -24,6 +24,10 @@ Name | Type | Value
 response | object | An object containing the response for each input. The object will have a separate key (variable) for the response to each input, with each variable being named after its corresponding input element. Each response is a string containing whatever the subject answered for this particular input. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 rt | numeric | The response time in milliseconds for the subject to make a response. |
 
+## Simulation Mode
+
+This plugin does not yet support [simulation mode](../overview/simulation.md).
+
 ## Examples
 
 ???+ example "Fill in the blanks"

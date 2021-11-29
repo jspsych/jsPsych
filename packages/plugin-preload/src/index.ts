@@ -240,7 +240,7 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
       // show detailed errors, if necessary
       if (trial.show_detailed_errors) {
         display_element.innerHTML += "<p><strong>Error details:</strong></p>";
-        detailed_errors.forEach(function (e) {
+        detailed_errors.forEach((e) => {
           display_element.innerHTML += e;
         });
       }
@@ -284,13 +284,13 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
         this.jsPsych.pluginAPI.preloadImages(images, cb, file_loading_success, file_loading_error);
       };
       if (video.length > 0) {
-        load_video(function () {});
+        load_video(() => {});
       }
       if (audio.length > 0) {
-        load_audio(function () {});
+        load_audio(() => {});
       }
       if (images.length > 0) {
-        load_images(function () {});
+        load_images(() => {});
       }
     }
 
@@ -386,6 +386,48 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
         trial.on_success(source);
       }
     }
+  }
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    const default_data = {
+      success: true,
+      timeout: false,
+      failed_images: [],
+      failed_audio: [],
+      failed_video: [],
+    };
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial);
+    load_callback();
   }
 }
 

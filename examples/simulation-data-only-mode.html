@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../packages/jspsych/dist/index.browser.js"></script>
+  <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
+  <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+  var jsPsych = initJsPsych({
+    default_ITI: 250, 
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+
+  var trial_1a = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
+    choices: ['y', 'n'],
+    prompt: '<p>Does the color match the word? (y or n)</p>',
+    simulation_options: "long_trial"
+  };
+
+  var trial_1b = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
+    choices: ['y', 'n'],
+    prompt: '<p>Does the color match the word? (y or n)</p>',
+    simulation_options: {
+      data: {
+        rt: 10
+      }
+    }
+  };
+
+  var trial_1c = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
+    choices: ['y', 'n'],
+    prompt: '<p>Does the color match the word? (y or n)</p>',
+  };
+
+  var trial_2 = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">RED</p>',
+    choices: ['y', 'n'],
+    trial_duration: 5000,
+    prompt: '<p>Does the color match the word? (y or n; 5s time limit)</p>'
+  };
+
+  var trial_3 = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<p style="color: orange; font-size: 48px; font-weight: bold;">BLUE</p>',
+    choices: "NO_KEYS",
+    trial_duration: 2000,
+    prompt: '<p>No response allowed. 2s wait.</p>'
+  };
+
+  var sim_opts = {
+    default: {
+      data: {
+        rt: () => { return jsPsych.randomization.sampleExGaussian(250, 50, 0.02, true) }
+      }
+    },
+    long_trial: {
+      data: {
+        rt: 20000
+      }
+    }
+  }
+
+  jsPsych.simulate([trial_1a, trial_1b, trial_1c, trial_2, trial_3], "data-only", sim_opts);
+
+</script>
+</html>

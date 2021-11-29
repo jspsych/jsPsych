@@ -313,7 +313,7 @@ var save_data = {
 var fail_message = {
 	type: jsPsychHtmlKeyboardResponse,
 	stimulus: 'The experiment failed to load. Please contact the researcher.',
-	choices: jsPsych.NO_KEYS,
+	choices: "NO_KEYS",
 	trial_duration: null 
 }
 

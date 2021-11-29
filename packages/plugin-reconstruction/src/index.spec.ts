@@ -1,4 +1,4 @@
-import { clickTarget, pressKey, startTimeline } from "@jspsych/test-utils";
+import { clickTarget, pressKey, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import reconstruction from ".";
 
@@ -170,5 +170,51 @@ describe("reconstruction", () => {
     clickTarget(displayElement.querySelector("button"));
 
     expect(getData().values()[0].final_value).toEqual(0.55);
+  });
+});
+
+describe("reconstruction simulation", () => {
+  test("data-only mode works", async () => {
+    const timeline = [
+      {
+        type: reconstruction,
+        stim_function: function (val) {
+          return `<p>${Math.round(val * 10)}</p>`;
+        },
+        starting_value: 0.5,
+        step_size: 0.05,
+      },
+    ];
+
+    const { getData, expectFinished } = await simulateTimeline(timeline);
+
+    await expectFinished();
+
+    expect(getData().values()[0].final_value).toBeGreaterThanOrEqual(0);
+    expect(getData().values()[0].final_value).toBeLessThanOrEqual(1);
+  });
+
+  test("visual mode works", async () => {
+    const timeline = [
+      {
+        type: reconstruction,
+        stim_function: function (val) {
+          return `<p>${Math.round(val * 10)}</p>`;
+        },
+        starting_value: 0.5,
+        step_size: 0.05,
+      },
+    ];
+
+    const { getData, expectFinished, expectRunning } = await simulateTimeline(timeline, "visual");
+
+    await expectRunning();
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    expect(getData().values()[0].final_value).toBeGreaterThanOrEqual(0);
+    expect(getData().values()[0].final_value).toBeLessThanOrEqual(1);
   });
 });

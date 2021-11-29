@@ -107,7 +107,7 @@ class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
         });
       }
 
-      document.querySelector("#jspsych-wg-cont").addEventListener("click", function () {
+      document.querySelector("#jspsych-wg-cont").addEventListener("click", () => {
         if (observer) {
           observer.disconnect();
         }

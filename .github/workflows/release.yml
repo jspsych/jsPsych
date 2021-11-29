@@ -55,9 +55,10 @@ jobs:
             const distFile = "dist.zip";
 
             let errorMessage;
-            for (const { name: tag, version } of publishedPackages) {
+            for (const { name, version } of publishedPackages) {
+              const tag = `${name}@${version}`;
               // Only upload the dist archive for the chore package, plugins, and extensions
-              if (tag.startsWith("jspsych@") || tag.includes("/plugin-") || tag.includes("/extension-")) {
+              if (name.startsWith("jspsych@") || name.includes("/plugin-") || name.includes("/extension-")) {
                 console.log(`Uploading dist archive release asset for ${tag}`);
                 try {
                   // https://docs.github.com/en/rest/reference/repos#get-a-release-by-tag-name
@@ -74,12 +75,7 @@ jobs:
                     owner,
                     repo,
                     release_id: releaseId,
-
-                    // Tag to filename transformation:
-                    // * jspsych@1.2.3 => jspsych-1.2.3-dist.zip
-                    // * @jspsych/plugin-test@1.2.3 => jspsych-plugin-test-1.2.3-dist.zip
-                    name: `${tag.replace("@jspsych/", "jspsych-").replace("@", "-")}-dist.zip`,
-
+                    name: `jspsych.zip`,
                     label: "Dist archive (zip)",
                     headers: {
                       "content-type": "application/zip",

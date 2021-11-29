@@ -13,8 +13,8 @@ To use a plugin, you'll need to load the plugin's JavaScript file in your experi
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@7.0.0" type="text/javascript"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0" type="text/javascript"></script>
+  <script src="https://unpkg.com/jspsych@7.1.0" type="text/javascript"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0" type="text/javascript"></script>
 </head>
 ```
 
@@ -191,7 +191,7 @@ If you want CSS rules that only apply to specific elements during a trial, you c
 <script>
   var fixation_trial = {
     type: jsPsychHtmlKeyboardResponse,
-    choices: jsPsych.NO_KEYS,
+    choices: "NO_KEYS",
     stimulus: '+',
     css_classes: ['fixation']
   };

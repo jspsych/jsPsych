@@ -49,14 +49,14 @@ You can accomplish this in a couple different ways.
 
 One option is to create a trial that contains a link that the participant clicks to end the experiment and return to Prolific. For example, the `html-keyboard-response` plugin can be used to display text that includes a link. This could go on a debriefing page.
 
-Here's an example trial that could be used. Note that `choices` is set to `jsPsych.NO_KEYS`, which will prevent the participant from continuing past this point in the experiment.
+Here's an example trial that could be used. Note that `choices` is set to `"NO_KEYS"`, which will prevent the participant from continuing past this point in the experiment.
 
 ```js
 var final_trial = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: `<p>You've finished the last task. Thanks for participating!</p>
     <p><a href="https://app.prolific.co/submissions/complete?cc=XXXXXXX">Click here to return to Prolific and complete the study</a>.</p>`,
-  choices: jsPsych.NO_KEYS
+  choices: "NO_KEYS"
 }
 ```
 

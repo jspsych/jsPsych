@@ -48,7 +48,7 @@ The `type` parameter now expects the value to be a plugin class rather than a st
 For example, if you load the `html-keyboard-response` plugin from the CDN...
 
 ```html
-<script src="http://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+<script src="http://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
 ```
 
 ... or from the `plugin-html-keyboard-response.js` file in the release archive...
@@ -68,6 +68,21 @@ Note that the value is *not a string*.
 var trial = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: 'Hello, version 7.0!'
+}
+```
+
+## The `choices` parameter for keyboard response trials
+
+The `choices` parameter for keyboard response trials no longer supports `jsPsych.NO_KEYS` and `jsPsych.ALL_KEYS`, and they have been replaced by the strings `"NO_KEYS"` and `"ALL_KEYS"` respectively.
+
+For example, if you load the `audio-keyboard-response` plugin, you can prevent any user input like...
+
+```js
+var trial = {
+  type: jsPsychAudioKeyboardResponse,
+  choices: "NO_KEYS",
+  stimulus: 'example.ogg',
+  trial_ends_after_audio: true
 }
 ```
 

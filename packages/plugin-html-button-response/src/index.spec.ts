@@ -1,4 +1,4 @@
-import { clickTarget, startTimeline } from "@jspsych/test-utils";
+import { clickTarget, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import htmlButtonResponse from ".";
 
@@ -152,5 +152,56 @@ describe("html-button-response", () => {
     expect(document.querySelector("#jspsych-html-button-response-stimulus").className).toBe(
       " responded"
     );
+  });
+});
+
+describe("html-button-response simulation", () => {
+  test("data mode works", async () => {
+    const timeline = [
+      {
+        type: htmlButtonResponse,
+        stimulus: "foo",
+        choices: ["a", "b", "c"],
+      },
+    ];
+
+    const { expectFinished, getData } = await simulateTimeline(timeline);
+
+    await expectFinished();
+
+    const response = getData().values()[0].response;
+
+    expect(getData().values()[0].rt).toBeGreaterThan(0);
+    expect(response).toBeGreaterThanOrEqual(0);
+    expect(response).toBeLessThanOrEqual(2);
+  });
+
+  test("visual mode works", async () => {
+    const timeline = [
+      {
+        type: htmlButtonResponse,
+        stimulus: "foo",
+        choices: ["a", "b", "c"],
+      },
+    ];
+
+    const { expectFinished, expectRunning, getHTML, getData } = await simulateTimeline(
+      timeline,
+      "visual"
+    );
+
+    await expectRunning();
+
+    expect(getHTML()).toContain("foo");
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    const response = getData().values()[0].response;
+
+    expect(getData().values()[0].rt).toBeGreaterThan(0);
+    expect(response).toBeGreaterThanOrEqual(0);
+    expect(response).toBeLessThanOrEqual(2);
   });
 });

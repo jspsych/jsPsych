@@ -136,10 +136,10 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
     // first checks that the same alternative cannot be endorsed in the left and right columns simultaneously.
     // then enables the submit button if the trial is required.
     const left_right = ["left", "right"];
-    left_right.forEach(function (p) {
+    left_right.forEach((p) => {
       // Get all elements either 'left' or 'right'
-      document.getElementsByName(p).forEach(function (alt) {
-        alt.addEventListener("click", function () {
+      document.getElementsByName(p).forEach((alt) => {
+        alt.addEventListener("click", () => {
           // Find the opposite (if left, then right & vice versa) identified by the class (jspsych-maxdiff-alt-1, 2, etc)
           var op = alt["name"] == "left" ? "right" : "left";
           var n = document.getElementsByClassName(alt.className).namedItem(op);
@@ -203,6 +203,100 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
     });
 
     var startTime = performance.now();
+  }
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    const choices = this.jsPsych.randomization.sampleWithoutReplacement(trial.alternatives, 2);
+    const response = { left: null, right: null };
+    if (!trial.required && this.jsPsych.randomization.sampleBernoulli(0.1)) {
+      choices.pop();
+      if (this.jsPsych.randomization.sampleBernoulli(0.8)) {
+        choices.pop();
+      }
+    }
+
+    if (choices.length == 1) {
+      if (this.jsPsych.randomization.sampleBernoulli(0.5)) {
+        response.left = choices[0];
+      } else {
+        response.right = choices[0];
+      }
+    }
+
+    if (choices.length == 2) {
+      response.left = choices[0];
+      response.right = choices[1];
+    }
+
+    const default_data = {
+      rt: this.jsPsych.randomization.sampleExGaussian(3000, 300, 1 / 300, true),
+      labels: trial.labels,
+      response: response,
+    };
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial);
+    load_callback();
+
+    //@ts-ignore something about symbol iterators?
+    const list = [...display_element.querySelectorAll("[id^=jspsych-maxdiff-alternative]")].map(
+      (x) => {
+        return x.innerHTML;
+      }
+    );
+
+    if (data.response.left !== null) {
+      const index_left = list.indexOf(data.response.left);
+      this.jsPsych.pluginAPI.clickTarget(
+        display_element.querySelector(`.jspsych-maxdiff-alt-${index_left}[name="left"]`),
+        data.rt / 3
+      );
+    }
+
+    if (data.response.right !== null) {
+      const index_right = list.indexOf(data.response.right);
+      this.jsPsych.pluginAPI.clickTarget(
+        display_element.querySelector(`.jspsych-maxdiff-alt-${index_right}[name="right"]`),
+        (data.rt / 3) * 2
+      );
+    }
+
+    this.jsPsych.pluginAPI.clickTarget(
+      display_element.querySelector("#jspsych-maxdiff-next"),
+      data.rt
+    );
   }
 }
 

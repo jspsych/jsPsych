@@ -1,4 +1,4 @@
-import { clickTarget, startTimeline } from "@jspsych/test-utils";
+import { clickTarget, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import imageButtonResponse from ".";
 
@@ -152,5 +152,56 @@ describe("image-button-response", () => {
 
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
+  });
+});
+
+describe("image-button-response simulation", () => {
+  test("data mode works", async () => {
+    const timeline = [
+      {
+        type: imageButtonResponse,
+        stimulus: "foo.png",
+        choices: ["a", "b", "c"],
+        render_on_canvas: false,
+      },
+    ];
+
+    const { expectFinished, getData } = await simulateTimeline(timeline);
+
+    await expectFinished();
+
+    const response = getData().values()[0].response;
+
+    expect(getData().values()[0].rt).toBeGreaterThan(0);
+    expect(response).toBeGreaterThanOrEqual(0);
+    expect(response).toBeLessThanOrEqual(2);
+  });
+
+  test("visual mode works", async () => {
+    const timeline = [
+      {
+        type: imageButtonResponse,
+        stimulus: "foo.png",
+        choices: ["a", "b", "c"],
+        render_on_canvas: false,
+      },
+    ];
+
+    const { expectFinished, expectRunning, getHTML, getData } = await simulateTimeline(
+      timeline,
+      "visual"
+    );
+
+    await expectRunning();
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    const response = getData().values()[0].response;
+
+    expect(getData().values()[0].rt).toBeGreaterThan(0);
+    expect(response).toBeGreaterThanOrEqual(0);
+    expect(response).toBeLessThanOrEqual(2);
   });
 });

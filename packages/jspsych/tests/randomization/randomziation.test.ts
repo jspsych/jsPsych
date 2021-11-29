@@ -1,6 +1,7 @@
 import {
   factorial,
   randomID,
+  randomInt,
   repeat,
   shuffle,
   shuffleAlternateGroups,
@@ -132,5 +133,35 @@ describe("shuffleNoRepeats", function () {
       }
     }
     expect(repeats).toBe(0);
+  });
+});
+
+describe("randomInt", () => {
+  test("generates random int between positive boundaries", () => {
+    var samples = [];
+    for (var i = 0; i < 1000; i++) {
+      samples.push(randomInt(3, 10));
+    }
+    expect(
+      samples.every((x) => {
+        return x >= 3 && x <= 10;
+      })
+    ).toBe(true);
+  });
+  test("generates random int between negative boundaries", () => {
+    var samples = [];
+    for (var i = 0; i < 1000; i++) {
+      samples.push(randomInt(-5, -1));
+    }
+    expect(
+      samples.every((x) => {
+        return x >= -5 && x <= -1;
+      })
+    ).toBe(true);
+  });
+  test("setting upper < lower throws an error", () => {
+    expect(() => {
+      randomInt(1, 0);
+    }).toThrowError();
   });
 });

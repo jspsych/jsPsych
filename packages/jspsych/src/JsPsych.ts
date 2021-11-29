@@ -1,6 +1,7 @@
 import autoBind from "auto-bind";
 
 import { version } from "../package.json";
+import { MigrationError } from "./migration";
 import { JsPsychData } from "./modules/data";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { ParameterType, universalPluginParameters } from "./modules/plugins";
@@ -70,6 +71,16 @@ export class JsPsych {
    */
   private finished: Promise<void>;
   private resolveFinishedPromise: () => void;
+
+  /**
+   * is the experiment running in `simulate()` mode
+   */
+  private simulation_mode: "data-only" | "visual" = null;
+
+  /**
+   * simulation options passed in via `simulate()`
+   */
+  private simulation_options;
 
   // storing a single webaudio context to prevent problems with multiple inits
   // of jsPsych
@@ -174,6 +185,16 @@ export class JsPsych {
 
     this.startExperiment();
     await this.finished;
+  }
+
+  async simulate(
+    timeline: any[],
+    simulation_mode: "data-only" | "visual",
+    simulation_options = {}
+  ) {
+    this.simulation_mode = simulation_mode;
+    this.simulation_options = simulation_options;
+    await this.run(timeline);
   }
 
   getProgress() {
@@ -299,12 +320,12 @@ export class JsPsych {
     }
   }
 
-  endExperiment(end_message: string) {
+  endExperiment(end_message = "", data = {}) {
     this.timeline.end_message = end_message;
     this.timeline.end();
     this.pluginAPI.cancelAllKeyboardResponses();
     this.pluginAPI.clearAllTimeouts();
-    this.finishTrial();
+    this.finishTrial(data);
   }
 
   endCurrentTimeline() {
@@ -517,6 +538,12 @@ export class JsPsych {
     // process all timeline variables for this trial
     this.evaluateTimelineVariables(trial);
 
+    if (typeof trial.type === "string") {
+      throw new MigrationError(
+        "A string was provided as the trial's `type` parameter. Since jsPsych v7, the `type` parameter needs to be a plugin object."
+      );
+    }
+
     // instantiate the plugin for this trial
     trial.type = {
       // this is a hack to internally keep the old plugin object structure and prevent touching more
@@ -579,11 +606,60 @@ export class JsPsych {
       }
     };
 
-    const trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
+    let trial_complete;
+    if (!this.simulation_mode) {
+      trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
+    }
+    if (this.simulation_mode) {
+      // check if the trial supports simulation
+      if (trial.type.simulate) {
+        let trial_sim_opts;
+        if (!trial.simulation_options) {
+          trial_sim_opts = this.simulation_options.default;
+        }
+        if (trial.simulation_options) {
+          if (typeof trial.simulation_options == "string") {
+            if (this.simulation_options[trial.simulation_options]) {
+              trial_sim_opts = this.simulation_options[trial.simulation_options];
+            } else if (this.simulation_options.default) {
+              console.log(
+                `No matching simulation options found for "${trial.simulation_options}". Using "default" options.`
+              );
+              trial_sim_opts = this.simulation_options.default;
+            } else {
+              console.log(
+                `No matching simulation options found for "${trial.simulation_options}" and no "default" options provided. Using the default values provided by the plugin.`
+              );
+              trial_sim_opts = {};
+            }
+          } else {
+            trial_sim_opts = trial.simulation_options;
+          }
+        }
+        trial_sim_opts = this.utils.deepCopy(trial_sim_opts);
+        trial_sim_opts = this.replaceFunctionsWithValues(trial_sim_opts, null);
+
+        if (trial_sim_opts?.simulate === false) {
+          trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
+        } else {
+          trial_complete = trial.type.simulate(
+            trial,
+            trial_sim_opts?.mode || this.simulation_mode,
+            trial_sim_opts,
+            load_callback
+          );
+        }
+      } else {
+        // trial doesn't have a simulate method, so just run as usual
+        trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
+      }
+    }
+
     // see if trial_complete is a Promise by looking for .then() function
     const is_promise = trial_complete && typeof trial_complete.then == "function";
 
-    if (!is_promise) {
+    // in simulation mode we let the simulate function call the load_callback always.
+    if (!is_promise && !this.simulation_mode) {
       load_callback();
     }
 
@@ -727,6 +803,11 @@ export class JsPsych {
   }
 
   private async checkExclusions(exclusions) {
+    if (exclusions.min_width || exclusions.min_height || exclusions.audio) {
+      console.warn(
+        "The exclusions option in `initJsPsych()` is deprecated and will be removed in a future version. We recommend using the browser-check plugin instead. See https://www.jspsych.org/latest/plugins/browser-check/."
+      );
+    }
     // MINIMUM SIZE
     if (exclusions.min_width || exclusions.min_height) {
       const mw = exclusions.min_width || 0;

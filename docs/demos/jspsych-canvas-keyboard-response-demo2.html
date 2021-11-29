@@ -1,67 +1,41 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="https://unpkg.com/jspsych@7.0.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@1.0.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
-  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css">
-  <style>
-      .jspsych-btn {margin-bottom: 10px;}
-  </style>
-</head>
-<body></body>
-<script>
+  <head>
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@7.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@1.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" />
+    <link rel="stylesheet" href="docs-demo.css" type="text/css" />
+  </head>
+  <body></body>
+  <script>
 
-  var jsPsych = initJsPsych();
+    const jsPsych = initJsPsych();
 
-  var start = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: '',
-    choices: ['Run demo']
-  };
-
-  var show_data = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: function() {
-      var trial_data = jsPsych.data.getLastTrialData().values();
-      var trial_json = JSON.stringify(trial_data, null, 2);
-      return `<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>
-        <pre style="margin-top:0px;text-align:left;">${trial_json}</pre>`;
-    },
-    choices: ['Repeat demo']
-  };
-
-
-  function drawCirc(c){
-    var ctx = c.getContext('2d');
-    ctx.beginPath();
-    ctx.arc(100, 75, 50, 0, 2 * Math.PI);
-    ctx.stroke();
-  }
-
-  var trial = {
-    type: jsPsychCanvasKeyboardResponse,
-    canvas_size: [300, 300],
-    stimulus: drawCirc,
-    prompt: '<p>No key response is allowed.</p><p>The stimulus disappears after 3 seconds.</p>',
-    choices: jsPsych.NO_KEYS,
-    trial_duration: 3000,
-    data: {shape: 'circle', radius: 50}
-  }
-
-  var canvas_data_loop = {
-    timeline: [trial, show_data],
-    loop_function: function() {
-      return true;
+    function drawCirc(c){
+      const ctx = c.getContext('2d');
+      ctx.beginPath();
+      ctx.arc(100, 75, 50, 0, 2 * Math.PI);
+      ctx.stroke();
     }
-  };
 
-  if (typeof jsPsych !== "undefined") {
-    jsPsych.run([start, canvas_data_loop]);
-  } else {
-    document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
-  }
+    const trial = {
+      type: jsPsychCanvasKeyboardResponse,
+      canvas_size: [300, 300],
+      stimulus: drawCirc,
+      prompt: '<p>No key response is allowed.</p><p>The stimulus disappears after 3 seconds.</p>',
+      choices: "NO_KEYS",
+      trial_duration: 3000,
+      data: {shape: 'circle', radius: 50}
+    }
 
-</script>
+    const timeline = [trial];
 
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
 </html>

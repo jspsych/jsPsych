@@ -25,9 +25,9 @@ Start by setting up a new HTML file with jsPsych, the html-keyboard-response plu
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@7.0.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-    <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@7.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+    <link href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
@@ -87,9 +87,9 @@ After each step in the tutorial you can view the complete code up to that point 
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+        <link href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -166,9 +166,9 @@ timeline.push(instructions);
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+        <link href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -223,10 +223,10 @@ We need to start by loading this plugin by adding a `<script>` tag to the docume
 ```html hl_lines="5"
 <head>
   <title>My experiment</title>
-  <script src="https://unpkg.com/jspsych@7.0.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
-  <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+  <script src="https://unpkg.com/jspsych@7.1.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
+  <link href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
 </head>
 ```
 
@@ -261,10 +261,10 @@ timeline.push(blue_trial, orange_trial);
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
-        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
+        <link href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -339,11 +339,11 @@ First we need to add the preload plugin to our `<head>` section.
 ```html hl_lines="6"
 <head>
   <title>My experiment</title>
-  <script src="https://unpkg.com/jspsych@7.0.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
-  <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+  <script src="https://unpkg.com/jspsych@7.1.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
+  <link href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
 </head>
 ```
 
@@ -370,11 +370,11 @@ timeline.push(preload);
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
-        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
+        <link href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -458,13 +458,13 @@ var test_stimuli = [
 ];
 ```
 
-Instead of just showing the blue and orange circles, let's also set up the experiment to show a fixation cross (+) in between trials. We can define a trial to show the fixation cross for a fixed amount of time by using the `trial_duration` parameter of the html-keyboard-response plugin and setting the `choices` parameter to the special value `jsPsych.NO_KEYS`, which means that no responses will be accepted as a valid response and the trial will last however long the `trial_duration` parameter specifies.
+Instead of just showing the blue and orange circles, let's also set up the experiment to show a fixation cross (+) in between trials. We can define a trial to show the fixation cross for a fixed amount of time by using the `trial_duration` parameter of the html-keyboard-response plugin and setting the `choices` parameter to the special value `"NO_KEYS"`, which means that no responses will be accepted as a valid response and the trial will last however long the `trial_duration` parameter specifies.
 
 ```javascript
 var fixation = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: '<div style="font-size:60px;">+</div>',
-  choices: jsPsych.NO_KEYS,
+  choices: "NO_KEYS",
   trial_duration: 1000,
 };
 ```
@@ -503,11 +503,11 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
-        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
+        <link href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -563,7 +563,7 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
         var fixation = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
-          choices: jsPsych.NO_KEYS,
+          choices: "NO_KEYS",
           trial_duration: 1000,
         };
 
@@ -617,11 +617,11 @@ var test_procedure = {
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
-        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
+        <link href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -677,7 +677,7 @@ var test_procedure = {
         var fixation = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
-          choices: jsPsych.NO_KEYS,
+          choices: "NO_KEYS",
           trial_duration: 1000,
         };
 
@@ -713,7 +713,7 @@ To do that here, we'll use one of the built-in randomization methods in [jsPsych
 var fixation = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: '<div style="font-size:60px;">+</div>',
-  choices: jsPsych.NO_KEYS,
+  choices: "NO_KEYS",
   trial_duration: function(){
     return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
   }
@@ -789,7 +789,7 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
         var fixation = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
-          choices: jsPsych.NO_KEYS,
+          choices: "NO_KEYS",
           trial_duration: function(){
             return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
           }
@@ -838,11 +838,11 @@ var jsPsych = initJsPsych({
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
-        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
+        <link href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -902,7 +902,7 @@ var jsPsych = initJsPsych({
         var fixation = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
-          choices: jsPsych.NO_KEYS,
+          choices: "NO_KEYS",
           trial_duration: function(){
             return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
           }
@@ -978,7 +978,7 @@ Another kind of tagging that would be useful is to mark each fixation trial as s
 var fixation = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: '<div style="font-size:60px;">+</div>',
-  choices: jsPsych.NO_KEYS,
+  choices: "NO_KEYS",
   trial_duration: function(){
     return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
   },
@@ -995,11 +995,11 @@ var fixation = {
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
-        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
+        <link href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -1059,7 +1059,7 @@ var fixation = {
         var fixation = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
-          choices: jsPsych.NO_KEYS,
+          choices: "NO_KEYS",
           trial_duration: function(){
             return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
           },
@@ -1134,11 +1134,11 @@ The `data.response` value is a string representation of the key the subject pres
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
-        <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
+        <link href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -1198,7 +1198,7 @@ The `data.response` value is a string representation of the key the subject pres
         var fixation = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: '<div style="font-size:60px;">+</div>',
-          choices: jsPsych.NO_KEYS,
+          choices: "NO_KEYS",
           trial_duration: function(){
             return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
           },
@@ -1284,11 +1284,11 @@ This code is available in the `/examples` folder in the jsPsych release download
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@7.0.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
-    <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@7.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
+    <link href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
@@ -1348,7 +1348,7 @@ This code is available in the `/examples` folder in the jsPsych release download
     var fixation = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: '<div style="font-size:60px;">+</div>',
-      choices: jsPsych.NO_KEYS,
+      choices: "NO_KEYS",
       trial_duration: function(){
         return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
       },

@@ -127,6 +127,13 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    if (!Array.isArray(trial.stimulus)) {
+      throw new Error(`
+        The stimulus property for the video-button-response plugin must be an array
+        of files. See https://www.jspsych.org/latest/plugins/video-button-response/#parameters
+      `);
+    }
+
     // setup stimulus
     var video_html = "<div>";
     video_html += '<video id="jspsych-video-button-response-stimulus"';
@@ -222,7 +229,7 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
       video_element.src = video_preload_blob;
     }
 
-    video_element.onended = function () {
+    video_element.onended = () => {
       if (trial.trial_ends_after_video) {
         end_trial();
       } else if (!trial.response_allowed_while_playing) {
@@ -236,7 +243,7 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
     // before showing and playing, so that the video doesn't automatically show the first frame
     if (trial.start !== null) {
       video_element.pause();
-      video_element.onseeked = function () {
+      video_element.onseeked = () => {
         video_element.style.visibility = "visible";
         video_element.muted = false;
         if (trial.autoplay) {
@@ -244,11 +251,11 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
         } else {
           video_element.pause();
         }
-        video_element.onseeked = function () {};
+        video_element.onseeked = () => {};
       };
-      video_element.onplaying = function () {
+      video_element.onplaying = () => {
         video_element.currentTime = trial.start;
-        video_element.onplaying = function () {};
+        video_element.onplaying = () => {};
       };
       // fix for iOS/MacOS browsers: videos aren't seekable until they start playing, so need to hide/mute, play,
       // change current time, then show/unmute
@@ -258,9 +265,12 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     let stopped = false;
     if (trial.stop !== null) {
-      video_element.addEventListener("timeupdate", function (e) {
+      video_element.addEventListener("timeupdate", (e) => {
         var currenttime = video_element.currentTime;
         if (currenttime >= trial.stop) {
+          if (!trial.response_allowed_while_playing) {
+            enable_buttons();
+          }
           video_element.pause();
           if (trial.trial_ends_after_video && !stopped) {
             // this is to prevent end_trial from being called twice, because the timeupdate event
@@ -296,7 +306,7 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
         .pause();
       display_element.querySelector<HTMLVideoElement>(
         "#jspsych-video-button-response-stimulus"
-      ).onended = function () {};
+      ).onended = () => {};
 
       // gather the data to store for the trial
       var trial_data = {
@@ -361,9 +371,70 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // end trial if time limit is set
     if (trial.trial_duration !== null) {
-      this.jsPsych.pluginAPI.setTimeout(function () {
-        end_trial();
-      }, trial.trial_duration);
+      this.jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
+    }
+  }
+
+  simulate(
+    trial: TrialType<Info>,
+    simulation_mode,
+    simulation_options: any,
+    load_callback: () => void
+  ) {
+    if (simulation_mode == "data-only") {
+      load_callback();
+      this.simulate_data_only(trial, simulation_options);
+    }
+    if (simulation_mode == "visual") {
+      this.simulate_visual(trial, simulation_options, load_callback);
+    }
+  }
+
+  private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    const default_data = {
+      stimulus: trial.stimulus,
+      rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+      response: this.jsPsych.randomization.randomInt(0, trial.choices.length - 1),
+    };
+
+    const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
+
+    this.jsPsych.pluginAPI.ensureSimulationDataConsistency(trial, data);
+
+    return data;
+  }
+
+  private simulate_data_only(trial: TrialType<Info>, simulation_options) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    this.jsPsych.finishTrial(data);
+  }
+
+  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+    const data = this.create_simulation_data(trial, simulation_options);
+
+    const display_element = this.jsPsych.getDisplayElement();
+
+    this.trial(display_element, trial);
+    load_callback();
+
+    const video_element = display_element.querySelector<HTMLVideoElement>(
+      "#jspsych-video-button-response-stimulus"
+    );
+
+    const respond = () => {
+      if (data.rt !== null) {
+        this.jsPsych.pluginAPI.clickTarget(
+          display_element.querySelector(`div[data-choice="${data.response}"] button`),
+          data.rt
+        );
+      }
+    };
+
+    if (!trial.response_allowed_while_playing) {
+      video_element.addEventListener("ended", respond);
+    } else {
+      respond();
     }
   }
 }

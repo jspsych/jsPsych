@@ -53,7 +53,7 @@ slider_start | numeric | The starting value of the slider.
                 </div>
                 </div>`,
             require_movement: true,
-            labels: ['100% chance that team A wins', '50% chance that team A wins', '0% chance that team A wins']
+            labels: ['100% chance', '50% chance', '0% chance']
         };
         ```
 
