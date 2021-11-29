@@ -27,6 +27,10 @@ Name | Type | Value
 -----|------|------
 device_id | string | The [device ID](https://developer.mozilla.org/en-US/docs/Web/API/MediaDeviceInfo/deviceId) of the selected microphone.
 
+## Simulation Mode
+
+This plugin does not yet support [simulation mode](../overview/simulation.md).
+
 ## Examples
 
 ???+ example "Ask for microphone permission"

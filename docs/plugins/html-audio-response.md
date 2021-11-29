@@ -52,6 +52,10 @@ stimulus | string | The HTML content that was displayed on the screen.
 estimated_stimulus_onset | number | This is an estimate of when the stimulus appeared relative to the start of the audio recording. The plugin is configured so that the recording should start prior to the display of the stimulus. We have not yet been able to verify the accuracy of this estimate with external measurement devices.
 audio_url | string | A URL to a copy of the audio data.
 
+## Simulation Mode
+
+This plugin does not yet support [simulation mode](../overview/simulation.md).
+
 ## Examples
 
 ???+ example "Simple spoken response to a stimulus"
