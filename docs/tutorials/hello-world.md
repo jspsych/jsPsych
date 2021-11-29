@@ -4,7 +4,8 @@ In the long tradition of **"Hello world!"** examples, this tutorial creates an e
 
 ## Choose your own (setup) adventure
 
-With the release of version 7.0 of jsPsych there are now three different ways that you can add jsPsych to your project. Which approach you choose will depend on what your goals are.
+Starting with the release of version 7.0 of jsPsych there are three different ways that you can add jsPsych to your project.
+Which approach you choose will depend on what your goals are.
 
 - [**I want the simplest possible setup**](#option-1-using-cdn-hosted-scripts). This approach involves using scripts that are hosted on a CDN. You do not need to download or install anything to start using jsPsych. The limitation is that you cannot customize the library. For most experiments, this approach will be sufficient.
 
