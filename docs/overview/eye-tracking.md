@@ -168,10 +168,10 @@ If you have tips based on your own experience please consider sharing them on ou
     <html>
       <head>
         <script src="https://unpkg.com/jspsych@7.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@1.0.0"></script>
