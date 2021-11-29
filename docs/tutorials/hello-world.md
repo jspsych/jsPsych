@@ -177,9 +177,9 @@ Once you've saved the file, open it in a browser. You should see "Hello world!" 
 
 ### Step 1: Download jsPsych
 
-Start by downloading the latest release of jsPsych. The most recent version can always be found at the top of the [GitHub releases page](https://github.com/jspsych/jsPsych/releases). 
-Note that even the releases that are for a particular plugin or extension will contain the full set of files needed to run jsPsych locally.
-You should download the `Dist archive (zip)` file for whatever the most recent released package is.
+Start by downloading the latest release of jsPsych. Here's a [direct link (jspsych.zip)](https://www.github.com/jspsych/jspsych/releases/latest/download/jspsych.zip). The most recent version can always be found at the top of the [GitHub releases page](https://github.com/jspsych/jsPsych/releases).
+Note that even the releases that are for a particular plugin or extension will contain the full set of files needed to run jsPsych locally in the `dist archive (zip)` release asset. 
+You should download the zip file for whatever the most recently released package is.
 This will ensure that you have the most recent version of all the packages associated with jsPsych.
 
 ### Step 2: Create a folder to store your experiment files
