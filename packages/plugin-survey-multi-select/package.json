@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-survey-multi-select",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "a jspsych plugin for multiple choice survey questions",
   "type": "module",
   "main": "dist/index.cjs",
@@ -34,10 +34,10 @@
   },
   "homepage": "https://www.jspsych.org/latest/plugins/survey-multi-select",
   "peerDependencies": {
-    "jspsych": ">=7.0.0"
+    "jspsych": ">=7.1.0"
   },
   "devDependencies": {
-    "@jspsych/config": "^1.0.0",
-    "@jspsych/test-utils": "^1.0.0"
+    "@jspsych/config": "^1.1.0",
+    "@jspsych/test-utils": "^1.1.0"
   }
 }

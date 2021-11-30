@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-preload",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "type": "module",
   "main": "dist/index.cjs",
@@ -34,10 +34,10 @@
   },
   "homepage": "https://www.jspsych.org/latest/plugins/preload",
   "peerDependencies": {
-    "jspsych": ">=7.0.0"
+    "jspsych": ">=7.1.0"
   },
   "devDependencies": {
-    "@jspsych/config": "^1.0.0",
+    "@jspsych/config": "^1.1.0",
     "@jspsych/plugin-audio-keyboard-response": "*",
     "@jspsych/plugin-image-keyboard-response": "*",
     "@jspsych/plugin-video-keyboard-response": "*"

@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-cloze",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "jsPsych plugin for displaying a cloze test and checking participants answers against a correct solution",
   "type": "module",
   "main": "dist/index.cjs",
@@ -34,10 +34,10 @@
   },
   "homepage": "https://www.jspsych.org/latest/plugins/cloze",
   "peerDependencies": {
-    "jspsych": ">=7.0.0"
+    "jspsych": ">=7.1.0"
   },
   "devDependencies": {
-    "@jspsych/config": "^1.0.0",
-    "@jspsych/test-utils": "^1.0.0"
+    "@jspsych/config": "^1.1.0",
+    "@jspsych/test-utils": "^1.1.0"
   }
 }

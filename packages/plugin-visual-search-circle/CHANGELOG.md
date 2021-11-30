@@ -1,17 +1,20 @@
 # @jspsych/plugin-visual-search-circle
 
+## 1.1.0
+
+### Minor Changes
+
+- [#2287](https://github.com/jspsych/jsPsych/pull/2287) [`522aa2cd`](https://github.com/jspsych/jsPsych/commit/522aa2cdbf64886e95b2b50f5442cc360b631339) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Added support for `data-only` and `visual` simulation modes.
+
 ## 1.0.0
+
 ### Major Changes
 
-
-
 - [#2183](https://github.com/jspsych/jsPsych/pull/2183) [`c8760b1`](https://github.com/jspsych/jsPsych/commit/c8760b19483453b0e77dc98e464e1629b5605a15) Thanks [@jodeleeuw](https://github.com/jodeleeuw), [@becky-gilbert](https://github.com/becky-gilbert), [@bjoluc](https://github.com/bjoluc)! - **jsPsych is now fully modular, with individual NPM packages for the core library, plugins, and extensions.**
-  
+
   To support this change, we've made a number of breaking changes. We've added [a guide for migrating from version 6.x to 7.x](https://www.jspsych.org/7.0/support/migration-v7/) to the documentation, and updated the [hello world tutorial](https://www.jspsych.org/7.0/tutorials/hello-world/) with instructions for configuring jsPsych in three different ways. In addition to enabling package management, some of the benefits that this change provides include an improved developer experience with IntelliSense code hints, proper encapsulation of jsPsych so that multiple instances can be run on the same page, and easier integration with modern JavaScript tools like bundlers.
 
-
-- [#2133](https://github.com/jspsych/jsPsych/pull/2133) [`2acc888`](https://github.com/jspsych/jsPsych/commit/2acc8880c51e60ee9d8694a0d1a1a62f55a53655) Thanks [@becky-gilbert](https://github.com/becky-gilbert)! - Added new `stimuli` parameter and changed `foil` parameter to only allow a string (not array). The visual circle stimuli set can now be defined in two ways. One option is to use the `set_size`, `target` (image string), and `foil` (image string) parameters, in which case the `foil` image will be repeated up to `set_size` (if target is not present) or `set_size` - 1 (if target is present). The other option is to specify the `stimuli` parameter, which is an arbitrary array of images and therefore allows for different foil/distractor images.
-
+* [#2133](https://github.com/jspsych/jsPsych/pull/2133) [`2acc888`](https://github.com/jspsych/jsPsych/commit/2acc8880c51e60ee9d8694a0d1a1a62f55a53655) Thanks [@becky-gilbert](https://github.com/becky-gilbert)! - Added new `stimuli` parameter and changed `foil` parameter to only allow a string (not array). The visual circle stimuli set can now be defined in two ways. One option is to use the `set_size`, `target` (image string), and `foil` (image string) parameters, in which case the `foil` image will be repeated up to `set_size` (if target is not present) or `set_size` - 1 (if target is present). The other option is to specify the `stimuli` parameter, which is an arbitrary array of images and therefore allows for different foil/distractor images.
 
 ### Patch Changes
 
