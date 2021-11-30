@@ -34,7 +34,7 @@
   },
   "homepage": "https://www.jspsych.org/latest/plugins/free-sort",
   "peerDependencies": {
-    "jspsych": ">=7.0.0"
+    "jspsych": ">=7.1.0"
   },
   "devDependencies": {
     "@jspsych/config": "^1.0.0",
