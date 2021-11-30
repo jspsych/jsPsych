@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <script src="docs-demo-timeline.js"></script>
     <script src="https://unpkg.com/jspsych@7.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.0"></script>
@@ -19,23 +20,12 @@
       pages: [
         [
           {
-            type: 'html',
-            prompt: 'Please answer the following questions:',
-          },
-          {
             type: 'multi-choice',
-            prompt: "Which of the following do you like the most?", 
-            name: 'VegetablesLike', 
-            options: ['Tomato', 'Cucumber', 'Eggplant', 'Corn', 'Peas'], 
+            prompt: 'During the experiment, are allowed to write things down on paper to help you?',
+            options: ["Yes", "No"],
+            correct_response: "No",
             required: true
           }, 
-          {
-            type: 'multi-select',
-            prompt: "Which of the following do you like?", 
-            name: 'FruitLike', 
-            options: ['Apple', 'Banana', 'Orange', 'Grape', 'Strawberry'], 
-            required: false,
-          }
         ]
       ],
     };

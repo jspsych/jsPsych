@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <script src="docs-demo-timeline.js"></script>
-    <!--<script src="https://unpkg.com/jspsych@7.1.0"></script>
+    <script src="https://unpkg.com/jspsych@7.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
-    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" />-->
-    <script src="../../packages/jspsych/dist/index.browser.js"></script>
-    <script src="../../packages/plugin-html-button-response/dist/index.browser.js"></script>
-    <script src="../../packages/plugin-survey/dist/index.browser.js"></script>
-    <link rel="stylesheet" href="../../packages/jspsych/css/jspsych.css">
+    <script src="https://unpkg.com/@jspsych/plugin-survey@0.1.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.1.0/css/jspsych.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.1.0/css/survey.css">
     <link rel="stylesheet" href="docs-demo.css" type="text/css">
-    <link rel="stylesheet" href="../../packages/plugin-survey/css/survey.css">
   </head>
   <body></body>
   <script>
@@ -41,7 +37,7 @@
         [
           {
             type: 'multi-choice',
-            prompt: "What&#39;s your favorite color?", 
+            prompt: "What's your favorite color?", 
             options: ['blue','yellow','pink','teal','orange','lime green','other','none of these'],
             name: 'FavColor', 
           }, 

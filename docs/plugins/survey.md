@@ -280,10 +280,69 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-demo2.html">Open demo in new tab</a>
 
-???+ example "Randomization of question and choice order"
+???+ example "Single and multiple item Likert-style scales"
     === "Code"
 
         ```javascript
+        const trial = {
+          type: jsPsychSurvey,
+          pages: [
+            [
+              {
+                type: 'likert',
+                prompt: 'I like to eat vegetables.',
+                likert_scale_min_label: 'Strongly Disagree',
+                likert_scale_max_label: 'Strongly Agree',
+                likert_scale_values: [
+                  {value: 1},
+                  {value: 2},
+                  {value: 3},
+                  {value: 4},
+                  {value: 5}
+                ]
+              }, 
+              {
+                type: 'likert',
+                prompt: 'I like to eat fruit.',
+                likert_scale_min_label: 'Strongly Disagree',
+                likert_scale_max_label: 'Strongly Agree',
+                likert_scale_values: [
+                  {value: 1},
+                  {value: 2},
+                  {value: 3},
+                  {value: 4},
+                  {value: 5}
+                ]
+              },
+              {
+                type: 'likert',
+                prompt: 'I like to eat meat.',
+                likert_scale_min_label: 'Strongly Disagree',
+                likert_scale_max_label: 'Strongly Agree',
+                likert_scale_values: [
+                  {value: 1},
+                  {value: 2},
+                  {value: 3},
+                  {value: 4},
+                  {value: 5}
+                ]
+              },  
+              
+            ],
+            [
+              {
+                type: 'likert-table',
+                prompt: ' ',
+                statements: [
+                  {prompt: 'I like to eat vegetables', name: 'VeggiesTable'},
+                  {prompt: 'I like to eat fruit', name: 'FruitTable'},
+                  {prompt: 'I like to eat meat', name: 'MeatTable'},
+                ],
+                options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'],
+              }
+            ]
+          ],
+        };
         ```
 
     === "Demo"
@@ -293,10 +352,24 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo3.html">Open demo in new tab</a>
 
-???+ example "Response scoring and validation"
+???+ example "Response scoring"
     === "Code"
 
         ```javascript
+        const trial = {
+          type: jsPsychSurvey,
+          pages: [
+            [
+              {
+                type: 'multi-choice',
+                prompt: 'During the experiment, are allowed to write things down on paper to help you?',
+                options: ["Yes", "No"],
+                correct_response: "No",
+                required: true
+              }, 
+            ]
+          ],
+        };
         ```
 
     === "Demo"
