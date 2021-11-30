@@ -107,6 +107,7 @@ nav:
   - 'serial-reaction-time': 'plugins/serial-reaction-time.md'
   - 'serial-reaction-time-mouse': 'plugins/serial-reaction-time-mouse.md'
   - 'sketchpad' : 'plugins/sketchpad.md'
+  - 'survey' : 'plugins/survey.md'
   - 'survey-html-form' : 'plugins/survey-html-form.md'
   - 'survey-likert': 'plugins/survey-likert.md'
   - 'survey-multi-choice': 'plugins/survey-multi-choice.md'

@@ -1,0 +1,25 @@
+@use "survey-knockout/survey.css";
+
+.sv_main {
+  font-family: "Open Sans", "Arial", sans-serif;
+  font-size: 18px;
+  text-align: left;
+
+  .sv_body {
+    border-top-width: 0;
+  }
+
+  .sv_p_root {
+    .sv_row {
+      border-bottom: none;
+    }
+  }
+
+  .sv_container .sv_body .sv_p_root .sv_q_title {
+    font-weight: normal;
+  }
+
+  .sv_q_erbox {
+    font-size: 0.85em;
+  }
+}

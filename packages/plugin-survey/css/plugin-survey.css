@@ -1,0 +1,36 @@
+/* navigation buttons */
+.jspsych-survey-btn {
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+/* question prompt text */
+.jspsych-survey-question-prompt {
+    font-family: "Open Sans", "Arial", sans-serif;
+    font-size: 18px;
+    line-height: 1em;
+}
+
+/* question spacing */
+.jspsych-display-element div.jspsych-survey-question {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0.5em;
+}
+
+/* html prompts */
+.jspsych-survey-html {
+    font-size: 18px;
+}
+
+/* textbox inputs, dropdown menu */
+.jspsych-display-element input[type="text"], .jspsych-display-element textarea, .jspsych-display-element select.jspsych-survey-dropdown {
+    font-family: "Open Sans", "Arial", sans-serif;
+    font-size: 14px;
+    padding: 4px;
+}
+
+/* required astrisk and error text */
+.jspsych-display-element .jspsych-survey-required {
+    color: red;
+}
