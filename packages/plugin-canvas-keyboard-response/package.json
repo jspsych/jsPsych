@@ -34,7 +34,7 @@
   },
   "homepage": "https://www.jspsych.org/latest/plugins/canvas-keyboard-response",
   "peerDependencies": {
-    "jspsych": ">=7.0.0"
+    "jspsych": ">=7.1.0"
   },
   "devDependencies": {
     "@jspsych/config": "^1.1.0",
