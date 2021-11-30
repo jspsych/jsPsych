@@ -1,5 +1,11 @@
 # @jspsych/plugin-fullscreen
 
+## 1.1.0
+
+### Minor Changes
+
+- [#2287](https://github.com/jspsych/jsPsych/pull/2287) [`522aa2cd`](https://github.com/jspsych/jsPsych/commit/522aa2cdbf64886e95b2b50f5442cc360b631339) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Added support for `data-only` and `visual` simulation modes.
+
 ## 1.0.1
 
 ### Patch Changes
