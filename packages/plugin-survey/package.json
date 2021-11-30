@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-survey",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "A jsPsych plugin for complex surveys",
   "type": "module",
   "main": "dist/index.cjs",
