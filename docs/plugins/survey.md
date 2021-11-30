@@ -1,8 +1,22 @@
 # survey
 
-The survey displays one or more questions of different types, on one or more pages that the participant can navigate. 
-The supported question types are: "drop-down", "likert", "likert-table", "multi-choice", "multi-select", "ranking", "text". 
-There is also an "html" type for adding arbitrary HTML-formatted content (without any associated response field) in the question set.
+The survey plugin displays one or more questions of different types, on one or more pages that the participant can navigate. This plugin is built on top of the [SurveyJS](https://surveyjs.io/) library.
+
+The supported question types are: 
+
+- [`"drop-down"`](#drop-down) for presenting a question with a limited set of options in a drop-down menu. The participant can only select one option. 
+- [`"likert"`](#likert) for presenting a prompt along with a discrete rating scale.
+- [`"likert-table"`](#likert-table) for presenting a prompt along with a table of statements/questions (rows) and repeated response options for each statement/question (columns).
+- [`"multi-choice"`](#multi-choice) for presenting a question with a limited set of options. The participant can only select one option.
+- [`"multi-select"`](#multi-select) for presenting a question with a limited set of options. The participant can select multiple options.
+- [`"ranking"`](#ranking) for presenting a question with a limited set of options, where participants respond by dragging and dropping (ordering/ranking) the options.
+- [`"text"`](#text) for presenting a question with a free response text field in which the participant can type in an answer.
+
+There is also an [`"html"`](#html) type for adding arbitrary HTML-formatted content (without any associated response field) in the question set.
+
+!!! warning
+    Development on this plugin is ongoing and we plan to incorporate more of the features that [SurveyJS](https://surveyjs.io/) provides. Prior to release of version `1.0` of the plugin, we expect the parameters and implementation of this plugin to change. We recommend performing a little bit of extra testing with any experiments that utilize this plugin. 
+
 
 ## Parameters
 
@@ -15,13 +29,12 @@ Other parameters can be left unspecified if the default value is acceptable.
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 pages | array | *undefined* | An array of arrays. Each inner array contains the content for a single page, which is made up of one or more question objects. 
-randomize_question_order | boolean | `false` | If `true`, the display order of the questions within each survey page is randomly determined at the start of the trial. In the data object, if question `name` values are not provided, then `P0_Q0` will refer to the first question in the first page array, regardless of where it was presented visually.
 button_label_next | string |  'Continue' | Label of the button to move forward to the next page, or finish the survey.
 button_label_previous | string | 'Back' | Label of the button to move to a previous page in the survey.
 button_label_finish | string | 'Finish' | Label of the button to submit responses.
 autocomplete | boolean | `false` | This determines whether or not all of the input elements on the page should allow autocomplete. Setting this to `true` will enable autocomplete or auto-fill for the form.
 show_question_numbers | string | "off" | One of: "on", "onPage", "off". If "on", questions will be labelled starting with "1." on the first page, and numbering will continue across pages. If "onPage", questions will be labelled starting with "1.", with separate numbering on each page. If "off", no numbers will be added before the question prompts. Note: HTML question types are ignored in automatic numbering.
-title | string | `null` | If specified, this text will be shown at the top of the survey pages. This parameter provides a method for fixing any arbitrary text to the top of the page when randomizing the question order with the `randomize_question_order` parameter (since HTML question types are also randomized).
+title | string | `null` | If specified, this text will be shown at the top of the survey pages.
 required_error | string | "Please answer the question." | Text to display if a required question is not responeded to.
 required_question_label | string | "*" | String to display at the end of required questions. Use an empty string ("") if you do not want to add a label to the end of required questions.
 
@@ -160,7 +173,10 @@ Name | Type | Value
 -----|------|------
 response | object | An object containing the response to each question. The object will have a separate key (variable) for each question, with the first question on the first page being recorded in `P0_Q0`, the second question on the first page in `P0_Q1`, and so on. If the `name` parameter is defined for the question, then the response object will use the value of `name` as the key for each question. The response type will depend on the question type. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. Note that, if any questions use the `other` option (`add_other_option: true`), then the response value will be the `other_option_text` (e.g. "Other") and any text written in the textbox will be saved as "(question name)-Comment". |
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response(s) are submitted. |
-question_order | array | An array with the order of questions. For example `[2,0,1]` would indicate that the first question was `trial.questions[2]` (the third item in the `questions` parameter), the second question was `trial.questions[0]`, and the final question was `trial.questions[1]`. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
+
+## Simulation Mode
+
+This plugin does not yet support [simulation mode](../overview/simulation.md).
 
 ## Examples
 
