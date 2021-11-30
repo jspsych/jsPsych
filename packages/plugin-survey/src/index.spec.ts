@@ -39,14 +39,19 @@ describe("survey plugin", () => {
       },
     ]);
 
-    const question = displayElement.getElementsByClassName("jspsych-survey-question");
-    expect(question[0]).not.toBeNull();
-    expect(question[0].querySelector("span").innerHTML).toBe("foo");
+    // check that label displayed
+    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    expect(question).not.toBeNull();
+    expect(question.querySelector("span").innerHTML).toBe("foo");
+
+    // check that dropdown displayed
     const dropdown_menu = displayElement.getElementsByTagName("select");
     expect(dropdown_menu[0]).not.toBeNull();
 
+    // check that finish button displayed
     const finish_button = displayElement.querySelector("input.sv_complete_btn");
     expect(finish_button).not.toBeNull();
+
     clickTarget(finish_button);
 
     await expectFinished();
@@ -61,16 +66,16 @@ describe("survey plugin", () => {
           [
             {
               type: "html",
-              prompt: "foo",
+              prompt: "<span id='prompt'>foo</span>",
             },
           ],
         ],
       },
     ]);
 
-    const question = displayElement.getElementsByClassName("jspsych-survey-html");
-    expect(question[0]).not.toBeNull();
-    expect(question[0].innerHTML).toBe("foo");
+    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    expect(question).not.toBeNull();
+    expect(question.querySelector("#prompt").innerHTML).toBe("foo");
 
     const finish_button = displayElement.querySelector("input.sv_complete_btn");
     expect(finish_button).not.toBeNull();
@@ -108,15 +113,17 @@ describe("survey plugin", () => {
       },
     ]);
 
-    const question = displayElement.getElementsByClassName("jspsych-survey-question-prompt");
-    expect(question[0]).not.toBeNull();
-    expect(question[0].querySelector("span").innerHTML).toBe("foo");
-    const radio_btns = displayElement.querySelectorAll("div.radio");
+    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    expect(question).not.toBeNull();
+    expect(question.querySelector("span").innerHTML).toBe("foo");
+
+    const radio_btns = displayElement.querySelectorAll("input[type='radio']");
     expect(radio_btns).not.toBeNull();
     expect(radio_btns.length).toBe(2);
 
     const finish_button = displayElement.querySelector("input.sv_complete_btn");
     expect(finish_button).not.toBeNull();
+
     clickTarget(finish_button);
 
     await expectFinished();
@@ -139,10 +146,11 @@ describe("survey plugin", () => {
       },
     ]);
 
-    const question = displayElement.getElementsByClassName("jspsych-survey-question-prompt");
-    expect(question[0]).not.toBeNull();
-    expect(question[0].querySelector("span").innerHTML).toBe("foo");
-    const checkboxes = displayElement.querySelectorAll("div.checkbox");
+    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    expect(question).not.toBeNull();
+    expect(question.querySelector("span").innerHTML).toBe("foo");
+
+    const checkboxes = displayElement.querySelectorAll("input[type='checkbox']");
     expect(checkboxes).not.toBeNull();
     expect(checkboxes.length).toBe(2);
 
@@ -169,9 +177,10 @@ describe("survey plugin", () => {
       },
     ]);
 
-    const question = displayElement.getElementsByClassName("jspsych-survey-question-prompt");
-    expect(question[0]).not.toBeNull();
-    expect(question[0].querySelector("span").innerHTML).toBe("foo");
+    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    expect(question).not.toBeNull();
+    expect(question.querySelector("span").innerHTML).toBe("foo");
+
     const textinput = displayElement.querySelectorAll("input");
     expect(textinput[0]).not.toBeNull();
     expect(textinput[0].type).toBe("text");
@@ -200,9 +209,10 @@ describe("survey plugin", () => {
       },
     ]);
 
-    const question = displayElement.getElementsByClassName("jspsych-survey-question-prompt");
-    expect(question[0]).not.toBeNull();
-    expect(question[0].querySelector("span").innerHTML).toBe("foo");
+    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    expect(question).not.toBeNull();
+    expect(question.querySelector("span").innerHTML).toBe("foo");
+
     const textarea = displayElement.querySelectorAll("textarea");
     expect(textarea[0]).not.toBeNull();
     expect(textarea[0].cols).toBe(40);
