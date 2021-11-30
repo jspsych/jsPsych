@@ -353,13 +353,30 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
   applyStyles() {
     // https://surveyjs.io/Examples/Library/?id=custom-theme
     const colors = StylesManager.ThemeColors["default"];
-    // colors["$main-color"] = "#7ff07f";
-    // colors["$main-hover-color"] = "#6fe06f";
-    // colors["$text-color"] = "#4a4a4a";
-    // colors["$header-color"] = "#7ff07f";
 
-    // colors["$header-background-color"] = "#4a4a4a";
-    // colors["$body-container-background-color"] = "#f8f8f8";
+    colors["$background-dim"] = "#f3f3f3";
+    colors["$body-background-color"] = "white";
+    colors["$body-container-background-color"] = "white";
+    colors["$border-color"] = "#e7e7e7";
+    colors["$disable-color"] = "#dbdbdb";
+    colors["$disabled-label-color"] = "rgba(64, 64, 64, 0.5)";
+    colors["$disabled-slider-color"] = "#cfcfcf";
+    colors["$disabled-switch-color"] = "#9f9f9f";
+    colors["$error-background-color"] = "#fd6575";
+    colors["$error-color"] = "#ed5565";
+    colors["$foreground-disabled"] = "#161616";
+    //colors['$foreground-light'] = "orange"
+    colors["$header-background-color"] = "white";
+    colors["$header-color"] = "#6d7072";
+    colors["$inputs-background-color"] = "white";
+    colors["$main-color"] = "#919191";
+    colors["$main-hover-color"] = "#6b6b6b";
+    colors["$progress-buttons-color"] = "#8dd9ca";
+    colors["$progress-buttons-line-color"] = "#d4d4d4";
+    colors["$progress-text-color"] = "#9d9d9d";
+    colors["$slider-color"] = "white";
+    colors["$text-color"] = "#6d7072";
+    colors["$text-input-color"] = "#6d7072";
 
     StylesManager.applyTheme();
   }

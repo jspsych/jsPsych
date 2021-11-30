@@ -27,7 +27,17 @@
           {type: 'text', prompt: 'This is a multi-line text question.', placeholder: 'This is a placeholder.', textbox_rows: 10, textbox_columns: 40},
         ],
         [
-          {type: 'likert', prompt: 'This is a likert question prompt.', likert_scale_values: [{value: 1, text: "A lot"},{value: 2, text: "Somewhat"},{value: 3, text: "Not much"}]},
+          {
+            type: 'likert', 
+            prompt: 'This is a likert question prompt.', 
+            likert_scale_values: [
+              {value: 1},
+              {value: 2},
+              {value: 3}
+            ],
+            likert_scale_min_label: 'Agree',
+            likert_scale_max_label: 'Disagree',
+          },
         ],
         [
           {
