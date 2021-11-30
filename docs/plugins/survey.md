@@ -17,6 +17,13 @@ There is also an [`"html"`](#html) type for adding arbitrary HTML-formatted cont
 !!! warning
     Development on this plugin is ongoing and we plan to incorporate more of the features that [SurveyJS](https://surveyjs.io/) provides. Prior to release of version `1.0` of the plugin, we expect the parameters and implementation of this plugin to change. We recommend performing a little bit of extra testing with any experiments that utilize this plugin. 
 
+## CSS
+
+This plugin uses an additional stylesheet called `survey.css`. You can load it via: 
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.1.0/css/survey.css">
+```
 
 ## Parameters
 
