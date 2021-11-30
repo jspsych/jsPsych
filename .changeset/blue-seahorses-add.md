@@ -1,5 +1,5 @@
 ---
-"@jspsych/plugin-survey": major
+"@jspsych/plugin-survey": minor
 ---
 
 A plugin for presenting one or more pages with survey-type questions, such as multiple choice, multiple selection, free text responses, drop-down selection, and likert scale matrices. 
