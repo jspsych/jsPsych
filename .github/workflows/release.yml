@@ -36,7 +36,7 @@ jobs:
 
       - name: Create Release Pull Request or Publish Packages
         id: changesets
-        uses: changesets/action@master
+        uses: changesets/action@v1
         with:
           publish: npm run release
           commit: "chore(release): version packages"
