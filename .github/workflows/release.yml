@@ -44,6 +44,10 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Pack Dist Archive
+        if: steps.changesets.outputs.published == 'true'
+        run: npm run build:archive
+
       - name: Upload Release Assets
         uses: actions/github-script@v4
         if: steps.changesets.outputs.published == 'true'
