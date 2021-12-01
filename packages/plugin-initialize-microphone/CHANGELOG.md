@@ -1,4 +1,4 @@
-# @jspsych/plugin-initiliaze-microphone
+# @jspsych/plugin-initialize-microphone
 
 ## 1.0.0
 ### Major Changes

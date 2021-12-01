@@ -1,5 +1,5 @@
 {
-  "name": "@jspsych/plugin-initiliaze-microphone",
+  "name": "@jspsych/plugin-initialize-microphone",
   "version": "1.0.0",
   "description": "jsPsych plugin for getting permission to initialize the user's microphone",
   "type": "module",
