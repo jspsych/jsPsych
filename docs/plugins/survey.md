@@ -22,7 +22,7 @@ There is also an [`"html"`](#html) type for adding arbitrary HTML-formatted cont
 This plugin uses an additional stylesheet called `survey.css`. You can load it via: 
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.1.0/css/survey.css">
+<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.1.1/css/survey.css">
 ```
 
 ## Parameters

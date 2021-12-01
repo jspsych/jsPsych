@@ -12,7 +12,8 @@
   "unpkg": "dist/index.browser.min.js",
   "files": [
     "src",
-    "dist"
+    "dist",
+    "css"
   ],
   "source": "src/index.ts",
   "scripts": {
