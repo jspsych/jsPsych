@@ -1,0 +1,2603 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="canonical" href="https://www.jspsych.org/7.1/plugins/survey/">
+      
+      <link rel="icon" href="../../img/jspsych-favicon.png">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
+    
+    
+      
+        <title>survey - jsPsych</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.f7f47774.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4cae4f">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+  
+
+
+  
+
+  
+
+
+  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+  <script async src="https://www.google-analytics.com/analytics.js"></script>
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="orange">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#survey" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="jsPsych" class="md-header__button md-logo" aria-label="jsPsych" data-md-component="logo">
+      
+  <img src="../../img/jspsych-logo-no-text-mono.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            jsPsych
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              survey
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="jsPsych" class="md-nav__button md-logo" aria-label="jsPsych" data-md-component="logo">
+      
+  <img src="../../img/jspsych-logo-no-text-mono.svg" alt="logo">
+
+    </a>
+    jsPsych
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Tutorials
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/hello-world/" class="md-nav__link">
+        The Basics: Hello World
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/rt-task/" class="md-nav__link">
+        Demo Experiment: Simple Reaction Time Task
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/video-tutorials/" class="md-nav__link">
+        Video Tutorials
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Overview
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Overview" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Overview
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/timeline/" class="md-nav__link">
+        Creating an Experiment: The Timeline
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/plugins/" class="md-nav__link">
+        Plugins
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/extensions/" class="md-nav__link">
+        Extensions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/dynamic-parameters/" class="md-nav__link">
+        Dynamic Parameters
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/style/" class="md-nav__link">
+        Controlling Visual Appearance
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/data/" class="md-nav__link">
+        Data Storage, Aggregation, and Manipulation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/simulation/" class="md-nav__link">
+        Simulation Modes
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/running-experiments/" class="md-nav__link">
+        Running Experiments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/experiment-options/" class="md-nav__link">
+        Experiment Settings
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/events/" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/record-browser-interactions/" class="md-nav__link">
+        Record Browser Interactions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/media-preloading/" class="md-nav__link">
+        Media Preloading
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/fullscreen/" class="md-nav__link">
+        Fullscreen Experiments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/eye-tracking/" class="md-nav__link">
+        Eye Tracking
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/exclude-browser/" class="md-nav__link">
+        Exclude Participants Based on Browser Features
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/progress-bar/" class="md-nav__link">
+        Automatic Progress Bar
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/prolific/" class="md-nav__link">
+        Integrating with Prolific
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/mturk/" class="md-nav__link">
+        Integrating with Mechanical Turk
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/browser-device-support/" class="md-nav__link">
+        Browser and Device Support
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/timing-accuracy/" class="md-nav__link">
+        Timing Accuracy
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        Reference
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/jspsych/" class="md-nav__link">
+        jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/jspsych-data/" class="md-nav__link">
+        jsPsych.data
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/jspsych-randomization/" class="md-nav__link">
+        jsPsych.randomization
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/jspsych-turk/" class="md-nav__link">
+        jsPsych.turk
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/jspsych-pluginAPI/" class="md-nav__link">
+        jsPsych.pluginAPI
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      <label class="md-nav__link" for="__nav_5">
+        Plugins
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Plugins" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Plugins
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../list-of-plugins/" class="md-nav__link">
+        List of Plugins
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../animation/" class="md-nav__link">
+        animation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../audio-button-response/" class="md-nav__link">
+        audio-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../audio-keyboard-response/" class="md-nav__link">
+        audio-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../audio-slider-response/" class="md-nav__link">
+        audio-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../browser-check/" class="md-nav__link">
+        browser-check
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../call-function/" class="md-nav__link">
+        call-function
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../canvas-button-response/" class="md-nav__link">
+        canvas-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../canvas-keyboard-response/" class="md-nav__link">
+        canvas-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../canvas-slider-response/" class="md-nav__link">
+        canvas-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../categorize-animation/" class="md-nav__link">
+        categorize-animation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../categorize-html/" class="md-nav__link">
+        categorize-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../categorize-image/" class="md-nav__link">
+        categorize-image
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloze/" class="md-nav__link">
+        cloze
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../external-html/" class="md-nav__link">
+        external-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../free-sort/" class="md-nav__link">
+        free-sort
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fullscreen/" class="md-nav__link">
+        fullscreen
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../html-audio-response/" class="md-nav__link">
+        html-audio-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../html-button-response/" class="md-nav__link">
+        html-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../html-keyboard-response/" class="md-nav__link">
+        html-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../html-slider-response/" class="md-nav__link">
+        html-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iat-html/" class="md-nav__link">
+        iat-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iat-image/" class="md-nav__link">
+        iat-image
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../image-button-response/" class="md-nav__link">
+        image-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../image-keyboard-response/" class="md-nav__link">
+        image-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../image-slider-response/" class="md-nav__link">
+        image-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../initialize-microphone/" class="md-nav__link">
+        initialize-microphone
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../instructions/" class="md-nav__link">
+        instructions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../maxdiff/" class="md-nav__link">
+        maxdiff
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preload/" class="md-nav__link">
+        preload
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reconstruction/" class="md-nav__link">
+        reconstruction
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resize/" class="md-nav__link">
+        resize
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../same-different-html/" class="md-nav__link">
+        same-different-html
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../same-different-image/" class="md-nav__link">
+        same-different-image
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serial-reaction-time/" class="md-nav__link">
+        serial-reaction-time
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serial-reaction-time-mouse/" class="md-nav__link">
+        serial-reaction-time-mouse
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sketchpad/" class="md-nav__link">
+        sketchpad
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          survey
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        survey
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#css" class="md-nav__link">
+    CSS
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#survey-parameters" class="md-nav__link">
+    Survey parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#question-types-and-parameters" class="md-nav__link">
+    Question types and parameters
+  </a>
+  
+    <nav class="md-nav" aria-label="Question types and parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters-for-all-question-types" class="md-nav__link">
+    Parameters for all question types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drop-down" class="md-nav__link">
+    Drop-down
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#html" class="md-nav__link">
+    HTML
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#likert" class="md-nav__link">
+    Likert
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#likert-table" class="md-nav__link">
+    Likert-table
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-choice" class="md-nav__link">
+    Multi-choice
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-select" class="md-nav__link">
+    Multi-select
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ranking" class="md-nav__link">
+    Ranking
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#text" class="md-nav__link">
+    Text
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-generated" class="md-nav__link">
+    Data Generated
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simulation-mode" class="md-nav__link">
+    Simulation Mode
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../survey-html-form/" class="md-nav__link">
+        survey-html-form
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../survey-likert/" class="md-nav__link">
+        survey-likert
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../survey-multi-choice/" class="md-nav__link">
+        survey-multi-choice
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../survey-multi-select/" class="md-nav__link">
+        survey-multi-select
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../survey-text/" class="md-nav__link">
+        survey-text
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../video-button-response/" class="md-nav__link">
+        video-button-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../video-keyboard-response/" class="md-nav__link">
+        video-keyboard-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../video-slider-response/" class="md-nav__link">
+        video-slider-response
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../virtual-chinrest/" class="md-nav__link">
+        virtual-chinrest
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visual-search-circle/" class="md-nav__link">
+        visual-search-circle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../webgazer-calibrate/" class="md-nav__link">
+        webgazer-calibrate
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../webgazer-init-camera/" class="md-nav__link">
+        webgazer-init-camera
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../webgazer-validate/" class="md-nav__link">
+        webgazer-validate
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
+        Extensions
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Extensions" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Extensions
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/list-of-extensions/" class="md-nav__link">
+        List of Extensions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/mouse-tracking/" class="md-nav__link">
+        mouse-tracking
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/webgazer/" class="md-nav__link">
+        webgazer
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      <label class="md-nav__link" for="__nav_7">
+        Developers
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Developers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Developers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/configuration/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/contributing/" class="md-nav__link">
+        Contributing to jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/plugin-development/" class="md-nav__link">
+        Plugin Development
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/extension-development/" class="md-nav__link">
+        Extension Development
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      <label class="md-nav__link" for="__nav_8">
+        Support
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Support" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Support
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../support/support/" class="md-nav__link">
+        Getting Help
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../support/migration-v7/" class="md-nav__link">
+        Migrating from 6.x to 7.x
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      <label class="md-nav__link" for="__nav_9">
+        About
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/about/" class="md-nav__link">
+        About jsPsych
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#css" class="md-nav__link">
+    CSS
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#survey-parameters" class="md-nav__link">
+    Survey parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#question-types-and-parameters" class="md-nav__link">
+    Question types and parameters
+  </a>
+  
+    <nav class="md-nav" aria-label="Question types and parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters-for-all-question-types" class="md-nav__link">
+    Parameters for all question types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drop-down" class="md-nav__link">
+    Drop-down
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#html" class="md-nav__link">
+    HTML
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#likert" class="md-nav__link">
+    Likert
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#likert-table" class="md-nav__link">
+    Likert-table
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-choice" class="md-nav__link">
+    Multi-choice
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-select" class="md-nav__link">
+    Multi-select
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ranking" class="md-nav__link">
+    Ranking
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#text" class="md-nav__link">
+    Text
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-generated" class="md-nav__link">
+    Data Generated
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simulation-mode" class="md-nav__link">
+    Simulation Mode
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/jspsych/jsPsych/edit/master/docs/plugins/survey.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="survey">survey<a class="headerlink" href="#survey" title="Permanent link">&para;</a></h1>
+<p>The survey plugin displays one or more questions of different types, on one or more pages that the participant can navigate. This plugin is built on top of the <a href="https://surveyjs.io/">SurveyJS</a> library.</p>
+<p>The supported question types are: </p>
+<ul>
+<li><a href="#drop-down"><code>"drop-down"</code></a> for presenting a question with a limited set of options in a drop-down menu. The participant can only select one option. </li>
+<li><a href="#likert"><code>"likert"</code></a> for presenting a prompt along with a discrete rating scale.</li>
+<li><a href="#likert-table"><code>"likert-table"</code></a> for presenting a prompt along with a table of statements/questions (rows) and repeated response options for each statement/question (columns).</li>
+<li><a href="#multi-choice"><code>"multi-choice"</code></a> for presenting a question with a limited set of options. The participant can only select one option.</li>
+<li><a href="#multi-select"><code>"multi-select"</code></a> for presenting a question with a limited set of options. The participant can select multiple options.</li>
+<li><a href="#ranking"><code>"ranking"</code></a> for presenting a question with a limited set of options, where participants respond by dragging and dropping (ordering/ranking) the options.</li>
+<li><a href="#text"><code>"text"</code></a> for presenting a question with a free response text field in which the participant can type in an answer.</li>
+</ul>
+<p>There is also an <a href="#html"><code>"html"</code></a> type for adding arbitrary HTML-formatted content (without any associated response field) in the question set.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Development on this plugin is ongoing and we plan to incorporate more of the features that <a href="https://surveyjs.io/">SurveyJS</a> provides. Prior to release of version <code>1.0</code> of the plugin, we expect the parameters and implementation of this plugin to change. We recommend performing a little bit of extra testing with any experiments that utilize this plugin. </p>
+</div>
+<h2 id="css">CSS<a class="headerlink" href="#css" title="Permanent link">&para;</a></h2>
+<p>This plugin uses an additional stylesheet called <code>survey.css</code>. You can load it via: </p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/@jspsych/plugin-survey@0.1.0/css/survey.css&quot;</span><span class="p">&gt;</span>
+</code></pre></div>
+<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
+<p>In addition to the <a href="../../overview/plugins/#parameters-available-in-all-plugins">parameters available in all plugins</a>, this plugin accepts the following parameters. 
+Parameters with a default value of <em>undefined</em> must be specified. 
+Other parameters can be left unspecified if the default value is acceptable.</p>
+<h3 id="survey-parameters">Survey parameters<a class="headerlink" href="#survey-parameters" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pages</td>
+<td>array</td>
+<td><em>undefined</em></td>
+<td>An array of arrays. Each inner array contains the content for a single page, which is made up of one or more question objects.</td>
+</tr>
+<tr>
+<td>button_label_next</td>
+<td>string</td>
+<td>'Continue'</td>
+<td>Label of the button to move forward to the next page, or finish the survey.</td>
+</tr>
+<tr>
+<td>button_label_previous</td>
+<td>string</td>
+<td>'Back'</td>
+<td>Label of the button to move to a previous page in the survey.</td>
+</tr>
+<tr>
+<td>button_label_finish</td>
+<td>string</td>
+<td>'Finish'</td>
+<td>Label of the button to submit responses.</td>
+</tr>
+<tr>
+<td>autocomplete</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>This determines whether or not all of the input elements on the page should allow autocomplete. Setting this to <code>true</code> will enable autocomplete or auto-fill for the form.</td>
+</tr>
+<tr>
+<td>show_question_numbers</td>
+<td>string</td>
+<td>"off"</td>
+<td>One of: "on", "onPage", "off". If "on", questions will be labelled starting with "1." on the first page, and numbering will continue across pages. If "onPage", questions will be labelled starting with "1.", with separate numbering on each page. If "off", no numbers will be added before the question prompts. Note: HTML question types are ignored in automatic numbering.</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td><code>null</code></td>
+<td>If specified, this text will be shown at the top of the survey pages.</td>
+</tr>
+<tr>
+<td>required_error</td>
+<td>string</td>
+<td>"Please answer the question."</td>
+<td>Text to display if a required question is not responeded to.</td>
+</tr>
+<tr>
+<td>required_question_label</td>
+<td>string</td>
+<td>"*"</td>
+<td>String to display at the end of required questions. Use an empty string ("") if you do not want to add a label to the end of required questions.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="question-types-and-parameters">Question types and parameters<a class="headerlink" href="#question-types-and-parameters" title="Permanent link">&para;</a></h3>
+<h4 id="parameters-for-all-question-types">Parameters for all question types<a class="headerlink" href="#parameters-for-all-question-types" title="Permanent link">&para;</a></h4>
+<p>Parameters with a default value of <em>undefined</em> must be specified. 
+Other parameters can be left unspecified if the default value is acceptable.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>string</td>
+<td><em>undefined</em></td>
+<td>The question type. Options are: "drop-down", "html", "likert", "likert-table", "multi-choice", "multi-select", "ranking", "rating", "text".</td>
+</tr>
+<tr>
+<td>prompt</td>
+<td>string</td>
+<td><em>undefined</em></td>
+<td>The prompt/question that will be associated with the question's response field. If the question type is "html", then this string is the HTML-formatted string to be displayed. If the question type is "likert-table", the prompt is a general question or title presented above the table.</td>
+</tr>
+<tr>
+<td>required</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Whether a response to the question is required (<code>true</code>) or not (<code>false</code>), using the HTML5 <code>required</code> attribute.</td>
+</tr>
+<tr>
+<td>name</td>
+<td>string</td>
+<td><code>null</code></td>
+<td>Name of the question to be used for storing data. If this parameter is not provided, then default names will be used to identify the questions in the data: <code>P0_Q0</code>, <code>P0_Q1</code>, <code>P1_Q0</code> etc. Question names must be unique across all pages within the trial.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="drop-down">Drop-down<a class="headerlink" href="#drop-down" title="Permanent link">&para;</a></h4>
+<p>Present a question with a limited set of options in a drop-down menu. The participant can only select one option.</p>
+<p>In addition to the parameters for all question types, the drop-down question type also offers the following parameters. 
+Parameters with a default value of <em>undefined</em> must be specified.
+Other parameters can be left unspecified if the default value is acceptable.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>options</td>
+<td>array of strings</td>
+<td><em>undefined</em></td>
+<td>This array contains the set of multiple choice options to display for the question.</td>
+</tr>
+<tr>
+<td>option_reorder</td>
+<td>string</td>
+<td>"none"</td>
+<td>One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the <code>options</code> array. If <code>random</code>, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.</td>
+</tr>
+<tr>
+<td>correct_response</td>
+<td>string</td>
+<td>null</td>
+<td>String from the <code>options</code> array that should be considered correct. If specified, the data will include a <code>correct</code> property that indicates whether the response was correct (<code>true</code>) or not (<code>false</code>).</td>
+</tr>
+</tbody>
+</table>
+<h4 id="html">HTML<a class="headerlink" href="#html" title="Permanent link">&para;</a></h4>
+<p>Present arbitrary HTML-formatted content embedded in the list of questions, including text, images, and sounds. There are no response options.</p>
+<p>The only available parameters are those listed for all question types with a default value of <em>undefined</em> (<code>type</code> and <code>prompt</code>) and <code>name</code>. 
+The <code>name</code> parameter is optional and used to identify the question in the data, with a response value of <code>null</code>. 
+The <code>required</code> parameter will be ignored.</p>
+<h4 id="likert">Likert<a class="headerlink" href="#likert" title="Permanent link">&para;</a></h4>
+<p>Present a prompt along with a discrete rating scale. The scale values are presented as buttons that can be selected and de-selected. 
+The scale is specified by the <code>likert_scale_values</code> parameter, which is an array of text labels and associated values, or it is generated using the <code>likert_rating_min</code>/<code>max</code>/<code>stepsize</code> parameters (along with optional maximum/minimum descriptions). </p>
+<p>In addition to the parameters for all question types, the likert question type also offers the following parameters. 
+Parameters with a default value of <em>undefined</em> must be specified.
+Other parameters can be left unspecified if the default value is acceptable.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>likert_scale_values</td>
+<td>array of objects</td>
+<td><code>null</code></td>
+<td>Array of objects that defines the rating scale labels and associated values to be stored in the data. Each object defines a single rating option. The objects must have a <code>value</code> property, which is an integer or string value that will be stored as the response in the data. The objects can optionally have a <code>text</code> property, which is a string that will be displayed for that rating option (example: <code>[{value: 1, text: "A lot"},{value: 2, text: "Somewhat"},{value: 3, text: "Not much"}]</code>). If no <code>text</code> property is specified then the <code>value</code> will be displayed (examples: <code>[{value: 1},{value: 2},{value: 3}]</code>, <code>[{value: "Yes"},{value: "Maybe"},{value: "No"}]</code>). If provided, this parameter will override the <code>likert_rating_min</code>/<code>max</code>/<code>stepsize</code> parameters.</td>
+</tr>
+<tr>
+<td>likert_scale_min</td>
+<td>integer</td>
+<td>1</td>
+<td>If the <code>likert_scale_values</code> array is not specified, then this parameter will define the minimum scale value.</td>
+</tr>
+<tr>
+<td>likert_scale_max</td>
+<td>integer</td>
+<td>5</td>
+<td>If the <code>likert_scale_values</code> array is not specified, then this parameter will define the maximum scale value.</td>
+</tr>
+<tr>
+<td>likert_scale_stepsize</td>
+<td>integer</td>
+<td>1</td>
+<td>If the <code>likert_scale_values</code> array is not specified, then this parameter will define the step size that should be used for generating rating options between the minimum and maximum values.</td>
+</tr>
+<tr>
+<td>likert_scale_min_label</td>
+<td>string</td>
+<td><code>null</code></td>
+<td>Description for the minimum (first) rating option. If provided, this text will be shown inside the first rating button, before the rating text/value. This parameter is meant for defining the scale's minimum when integer values are used for the rating scale buttons.</td>
+</tr>
+<tr>
+<td>likert_scale_max_label</td>
+<td>string</td>
+<td><code>null</code></td>
+<td>Description for the maximum (last) rating option. If provided, this text will be shown inside the first rating button, after the rating text/value. This parameter is meant for defining the scale's maximum when integer values are used for the rating scale buttons.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="likert-table">Likert-table<a class="headerlink" href="#likert-table" title="Permanent link">&para;</a></h4>
+<p>Present a prompt along with a table of statements/questions (rows) and repeated response options for each statement/question (columns). </p>
+<p>In addition to the parameters for all question types, the likert-table question type also offers the following parameters. 
+Parameters with a default value of <em>undefined</em> must be specified.
+Other parameters can be left unspecified if the default value is acceptable.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>statements</td>
+<td>array of objects</td>
+<td><em>undefined</em></td>
+<td>This array contains one or more objects representing the statements/questions to be presented in the table rows. Each object must have a <code>prompt</code>, which is the statement/question text. The objects can optionally include a <code>name</code>, which is how the statement should be identified in the data. If no <code>name</code> is provided, then the default values of "S0", "S1" etc. will be used.</td>
+</tr>
+<tr>
+<td>options</td>
+<td>array of strings</td>
+<td><em>undefined</em></td>
+<td>This array contains the set of multiple choice options to be presented in the table columns.</td>
+</tr>
+<tr>
+<td>randomize_statement_order</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>If <code>true</code>, the order of statements/questions in the <code>statements</code> array will be randomized.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="multi-choice">Multi-choice<a class="headerlink" href="#multi-choice" title="Permanent link">&para;</a></h4>
+<p>Present a question with a limited set of options. The participant can only select one option.</p>
+<p>In addition to the parameters for all question types, the multi-choice question type also offers the following parameters. 
+Parameters with a default value of <em>undefined</em> must be specified.
+Other parameters can be left unspecified if the default value is acceptable.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>options</td>
+<td>array of strings</td>
+<td><em>undefined</em></td>
+<td>This array contains the set of multiple choice options to display for the question.</td>
+</tr>
+<tr>
+<td>option_reorder</td>
+<td>string</td>
+<td>"none"</td>
+<td>One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the <code>options</code> array. If <code>random</code>, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.</td>
+</tr>
+<tr>
+<td>columns</td>
+<td>integer</td>
+<td>1</td>
+<td>Number of columns to use for displaying the options. If 1 (default), the choices will be displayed in a single column (vertically). If 0, choices will be displayed in a single row (horizontally). Any value greater than 1 can be used to display options in multiple columns.</td>
+</tr>
+<tr>
+<td>correct_response</td>
+<td>string</td>
+<td>null</td>
+<td>String from the <code>options</code> array that should be considered correct. If specified, the data will include a <code>correct</code> property that indicates whether the response was correct (<code>true</code>) or not (<code>false</code>).</td>
+</tr>
+</tbody>
+</table>
+<h4 id="multi-select">Multi-select<a class="headerlink" href="#multi-select" title="Permanent link">&para;</a></h4>
+<p>Present a question with a limited set of options. The participant can select multiple options.</p>
+<p>In addition to the parameters for all question types, the multi-select question type also offers the following parameters. 
+Parameters with a default value of <em>undefined</em> must be specified.
+Other parameters can be left unspecified if the default value is acceptable.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>options</td>
+<td>array of strings</td>
+<td><em>undefined</em></td>
+<td>This array contains the set of options to display for the question.</td>
+</tr>
+<tr>
+<td>option_reorder</td>
+<td>string</td>
+<td>"none"</td>
+<td>One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the <code>options</code> array. If <code>random</code>, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.</td>
+</tr>
+<tr>
+<td>columns</td>
+<td>integer</td>
+<td>1</td>
+<td>Number of columns to use for displaying the options. If 1 (default), the choices will be displayed in a single column (vertically). If 0, choices will be displayed in a single row (horizontally). Any value greater than 1 can be used to display options in multiple columns.</td>
+</tr>
+<tr>
+<td>correct_response</td>
+<td>array of strings</td>
+<td>null</td>
+<td>Array of one or more strings from the <code>options</code> array that should be considered correct. If specified, the data will include a <code>correct</code> property that indicates whether the response was correct (<code>true</code>) or not (<code>false</code>).</td>
+</tr>
+</tbody>
+</table>
+<h4 id="ranking">Ranking<a class="headerlink" href="#ranking" title="Permanent link">&para;</a></h4>
+<p>Present a question with a limited set of options, where participants respond by dragging and dropping (ordering/ranking) the options. It is ideally used with a short list of options (up to about 7 items). It supports mouse responses, touch responses (mobile devices), and keyboard responses (Tab and Shift-Tab to select, and Up/Down arrow keys to re-order).</p>
+<p>In addition to the parameters for all question types, the ranking question type also offers the following parameters. 
+Parameters with a default value of <em>undefined</em> must be specified.
+Other parameters can be left unspecified if the default value is acceptable.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>options</td>
+<td>array of strings</td>
+<td><em>undefined</em></td>
+<td>This array contains the set of to-be-ranked options for the question.</td>
+</tr>
+<tr>
+<td>option_reorder</td>
+<td>string</td>
+<td>"none"</td>
+<td>One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the <code>options</code> array. If <code>random</code>, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.</td>
+</tr>
+<tr>
+<td>correct_response</td>
+<td>array of strings</td>
+<td>null</td>
+<td>The same array of strings used for the <code>options</code> array, but listed in the order that should be considered correct. If specified, the data will include a <code>correct</code> property that indicates whether the response was correct (<code>true</code>) or not (<code>false</code>).</td>
+</tr>
+</tbody>
+</table>
+<h4 id="text">Text<a class="headerlink" href="#text" title="Permanent link">&para;</a></h4>
+<p>Present a question with a free response text field in which the participant can type in an answer.</p>
+<p>In addition to the parameters for all question types, the text question also offers the following parameters. 
+Parameters with a default value of <em>undefined</em> must be specified. 
+Other parameters can be left unspecified if the default value is acceptable.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>placeholder</td>
+<td>string</td>
+<td>""</td>
+<td>Placeholder text in the text response field.</td>
+</tr>
+<tr>
+<td>textbox_rows</td>
+<td>integer</td>
+<td>1</td>
+<td>The number of rows (height) for the response text box.</td>
+</tr>
+<tr>
+<td>textbox_columns</td>
+<td>integer</td>
+<td>40</td>
+<td>The number of columns (width) for the response text box.</td>
+</tr>
+<tr>
+<td>validation</td>
+<td>string</td>
+<td>""</td>
+<td>A regular expression used to validate the response.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="data-generated">Data Generated<a class="headerlink" href="#data-generated" title="Permanent link">&para;</a></h2>
+<p>In addition to the <a href="../../overview/plugins/#data-collected-by-all-plugins">default data collected by all plugins</a>, this plugin collects the following data for each trial.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>response</td>
+<td>object</td>
+<td>An object containing the response to each question. The object will have a separate key (variable) for each question, with the first question on the first page being recorded in <code>P0_Q0</code>, the second question on the first page in <code>P0_Q1</code>, and so on. If the <code>name</code> parameter is defined for the question, then the response object will use the value of <code>name</code> as the key for each question. The response type will depend on the question type. This will be encoded as a JSON string when data is saved using the <code>.json()</code> or <code>.csv()</code> functions. Note that, if any questions use the <code>other</code> option (<code>add_other_option: true</code>), then the response value will be the <code>other_option_text</code> (e.g. "Other") and any text written in the textbox will be saved as "(question name)-Comment".</td>
+</tr>
+<tr>
+<td>rt</td>
+<td>numeric</td>
+<td>The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response(s) are submitted.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="simulation-mode">Simulation Mode<a class="headerlink" href="#simulation-mode" title="Permanent link">&para;</a></h2>
+<p>This plugin does not yet support <a href="../../overview/simulation/">simulation mode</a>.</p>
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
+<details class="example" open="open"><summary>Basic single page</summary><div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Code</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychSurvey</span><span class="p">,</span>
+  <span class="nx">pages</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;html&#39;</span><span class="p">,</span>
+        <span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39;Please answer the following questions:&#39;</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;multi-choice&#39;</span><span class="p">,</span>
+        <span class="nx">prompt</span><span class="o">:</span> <span class="s2">&quot;Which of the following do you like the most?&quot;</span><span class="p">,</span> 
+        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;VegetablesLike&#39;</span><span class="p">,</span> 
+        <span class="nx">options</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;Tomato&#39;</span><span class="p">,</span> <span class="s1">&#39;Cucumber&#39;</span><span class="p">,</span> <span class="s1">&#39;Eggplant&#39;</span><span class="p">,</span> <span class="s1">&#39;Corn&#39;</span><span class="p">,</span> <span class="s1">&#39;Peas&#39;</span><span class="p">],</span> 
+        <span class="nx">required</span><span class="o">:</span> <span class="kc">true</span>
+      <span class="p">},</span> 
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;multi-select&#39;</span><span class="p">,</span>
+        <span class="nx">prompt</span><span class="o">:</span> <span class="s2">&quot;Which of the following do you like?&quot;</span><span class="p">,</span> 
+        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;FruitLike&#39;</span><span class="p">,</span> 
+        <span class="nx">options</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;Apple&#39;</span><span class="p">,</span> <span class="s1">&#39;Banana&#39;</span><span class="p">,</span> <span class="s1">&#39;Orange&#39;</span><span class="p">,</span> <span class="s1">&#39;Grape&#39;</span><span class="p">,</span> <span class="s1">&#39;Strawberry&#39;</span><span class="p">],</span> 
+        <span class="nx">required</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">],</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Demo</label><div class="tabbed-content">
+<p><div style="text-align:center;">
+  <iframe src="../../demos/jspsych-survey-demo1.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+</div></p>
+</div>
+</div>
+<p><a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo1.html">Open demo in new tab</a></p>
+</details>
+<details class="example" open="open"><summary>Multiple pages, more customization</summary><div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Code</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychSurvey</span><span class="p">,</span>
+  <span class="nx">pages</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span>
+        <span class="nx">prompt</span><span class="o">:</span> <span class="s2">&quot;Where were you born?&quot;</span><span class="p">,</span> 
+        <span class="nx">placeholder</span><span class="o">:</span> <span class="s1">&#39;City, State, Country&#39;</span><span class="p">,</span>
+        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;birthplace&#39;</span><span class="p">,</span> 
+        <span class="nx">required</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="p">},</span> 
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span>
+        <span class="nx">prompt</span><span class="o">:</span> <span class="s2">&quot;How old are you?&quot;</span><span class="p">,</span> 
+        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;age&#39;</span><span class="p">,</span> 
+        <span class="nx">textbox_columns</span><span class="o">:</span> <span class="mf">5</span><span class="p">,</span>
+        <span class="nx">required</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+      <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;multi-choice&#39;</span><span class="p">,</span>
+        <span class="nx">prompt</span><span class="o">:</span> <span class="s2">&quot;What&amp;#39;s your favorite color?&quot;</span><span class="p">,</span> 
+        <span class="nx">options</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="s1">&#39;yellow&#39;</span><span class="p">,</span><span class="s1">&#39;pink&#39;</span><span class="p">,</span><span class="s1">&#39;teal&#39;</span><span class="p">,</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span><span class="s1">&#39;lime green&#39;</span><span class="p">,</span><span class="s1">&#39;other&#39;</span><span class="p">,</span><span class="s1">&#39;none of these&#39;</span><span class="p">],</span>
+        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;FavColor&#39;</span><span class="p">,</span> 
+      <span class="p">},</span> 
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;multi-select&#39;</span><span class="p">,</span>
+        <span class="nx">prompt</span><span class="o">:</span> <span class="s2">&quot;Which of these animals do you like? Select all that apply.&quot;</span><span class="p">,</span> 
+        <span class="nx">options</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;lion&#39;</span><span class="p">,</span><span class="s1">&#39;squirrel&#39;</span><span class="p">,</span><span class="s1">&#39;badger&#39;</span><span class="p">,</span><span class="s1">&#39;whale&#39;</span><span class="p">],</span>
+        <span class="nx">option_reorder</span><span class="o">:</span> <span class="s1">&#39;random&#39;</span><span class="p">,</span>
+        <span class="nx">columns</span><span class="o">:</span> <span class="mf">0</span><span class="p">,</span>
+        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;AnimalLike&#39;</span><span class="p">,</span> 
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">],</span>
+  <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;My questionnaire&#39;</span><span class="p">,</span>
+  <span class="nx">button_label_next</span><span class="o">:</span> <span class="s1">&#39;Continue&#39;</span><span class="p">,</span>
+  <span class="nx">button_label_back</span><span class="o">:</span> <span class="s1">&#39;Previous&#39;</span><span class="p">,</span>
+  <span class="nx">button_label_finish</span><span class="o">:</span> <span class="s1">&#39;Submit&#39;</span><span class="p">,</span>
+  <span class="nx">show_question_numbers</span><span class="o">:</span> <span class="s1">&#39;onPage&#39;</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">Demo</label><div class="tabbed-content">
+<p><div style="text-align:center;">
+  <iframe src="../../demos/jspsych-survey-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+</div></p>
+</div>
+</div>
+<p><a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-demo2.html">Open demo in new tab</a></p>
+</details>
+<details class="example" open="open"><summary>Single and multiple item Likert-style scales</summary><div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Code</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychSurvey</span><span class="p">,</span>
+  <span class="nx">pages</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;likert&#39;</span><span class="p">,</span>
+        <span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39;I like to eat vegetables.&#39;</span><span class="p">,</span>
+        <span class="nx">likert_scale_min_label</span><span class="o">:</span> <span class="s1">&#39;Strongly Disagree&#39;</span><span class="p">,</span>
+        <span class="nx">likert_scale_max_label</span><span class="o">:</span> <span class="s1">&#39;Strongly Agree&#39;</span><span class="p">,</span>
+        <span class="nx">likert_scale_values</span><span class="o">:</span> <span class="p">[</span>
+          <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="mf">1</span><span class="p">},</span>
+          <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="mf">2</span><span class="p">},</span>
+          <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="mf">3</span><span class="p">},</span>
+          <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="mf">4</span><span class="p">},</span>
+          <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="mf">5</span><span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">},</span> 
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;likert&#39;</span><span class="p">,</span>
+        <span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39;I like to eat fruit.&#39;</span><span class="p">,</span>
+        <span class="nx">likert_scale_min_label</span><span class="o">:</span> <span class="s1">&#39;Strongly Disagree&#39;</span><span class="p">,</span>
+        <span class="nx">likert_scale_max_label</span><span class="o">:</span> <span class="s1">&#39;Strongly Agree&#39;</span><span class="p">,</span>
+        <span class="nx">likert_scale_values</span><span class="o">:</span> <span class="p">[</span>
+          <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="mf">1</span><span class="p">},</span>
+          <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="mf">2</span><span class="p">},</span>
+          <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="mf">3</span><span class="p">},</span>
+          <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="mf">4</span><span class="p">},</span>
+          <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="mf">5</span><span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;likert&#39;</span><span class="p">,</span>
+        <span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39;I like to eat meat.&#39;</span><span class="p">,</span>
+        <span class="nx">likert_scale_min_label</span><span class="o">:</span> <span class="s1">&#39;Strongly Disagree&#39;</span><span class="p">,</span>
+        <span class="nx">likert_scale_max_label</span><span class="o">:</span> <span class="s1">&#39;Strongly Agree&#39;</span><span class="p">,</span>
+        <span class="nx">likert_scale_values</span><span class="o">:</span> <span class="p">[</span>
+          <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="mf">1</span><span class="p">},</span>
+          <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="mf">2</span><span class="p">},</span>
+          <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="mf">3</span><span class="p">},</span>
+          <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="mf">4</span><span class="p">},</span>
+          <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="mf">5</span><span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">},</span>  
+
+    <span class="p">],</span>
+    <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;likert-table&#39;</span><span class="p">,</span>
+        <span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39; &#39;</span><span class="p">,</span>
+        <span class="nx">statements</span><span class="o">:</span> <span class="p">[</span>
+          <span class="p">{</span><span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39;I like to eat vegetables&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;VeggiesTable&#39;</span><span class="p">},</span>
+          <span class="p">{</span><span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39;I like to eat fruit&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;FruitTable&#39;</span><span class="p">},</span>
+          <span class="p">{</span><span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39;I like to eat meat&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;MeatTable&#39;</span><span class="p">},</span>
+        <span class="p">],</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;Strongly Disagree&#39;</span><span class="p">,</span> <span class="s1">&#39;Disagree&#39;</span><span class="p">,</span> <span class="s1">&#39;Neutral&#39;</span><span class="p">,</span> <span class="s1">&#39;Agree&#39;</span><span class="p">,</span> <span class="s1">&#39;Strongly Agree&#39;</span><span class="p">],</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">],</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">Demo</label><div class="tabbed-content">
+<p><div style="text-align:center;">
+  <iframe src="../../demos/jspsych-survey-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+</div></p>
+</div>
+</div>
+<p><a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo3.html">Open demo in new tab</a></p>
+</details>
+<details class="example" open="open"><summary>Response scoring</summary><div class="tabbed-set" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><label for="__tabbed_4_1">Code</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychSurvey</span><span class="p">,</span>
+  <span class="nx">pages</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;multi-choice&#39;</span><span class="p">,</span>
+        <span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39;During the experiment, are allowed to write things down on paper to help you?&#39;</span><span class="p">,</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;Yes&quot;</span><span class="p">,</span> <span class="s2">&quot;No&quot;</span><span class="p">],</span>
+        <span class="nx">correct_response</span><span class="o">:</span> <span class="s2">&quot;No&quot;</span><span class="p">,</span>
+        <span class="nx">required</span><span class="o">:</span> <span class="kc">true</span>
+      <span class="p">},</span> 
+    <span class="p">]</span>
+  <span class="p">],</span>
+<span class="p">};</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><label for="__tabbed_4_2">Demo</label><div class="tabbed-content">
+<p><div style="text-align:center;">
+  <iframe src="../../demos/jspsych-survey-demo4.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+</div></p>
+</div>
+</div>
+<p><a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo4.html">Open demo in new tab</a></p>
+</details>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../sketchpad/" class="md-footer__link md-footer__link--prev" aria-label="Previous: sketchpad" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              sketchpad
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../survey-html-form/" class="md-footer__link md-footer__link--next" aria-label="Next: survey-html-form" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              survey-html-form
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2012-2021 Josh de Leeuw
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.709b4209.min.js", "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.febc23d1.min.js"></script>
+      
+    
+  </body>
+</html>
