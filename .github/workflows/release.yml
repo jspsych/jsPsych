@@ -62,8 +62,8 @@ jobs:
             let errorMessage;
             for (const { name, version } of publishedPackages) {
               const tag = `${name}@${version}`;
-              // Only upload the dist archive for the chore package, plugins, and extensions
-              if (name.startsWith("jspsych@") || name.includes("/plugin-") || name.includes("/extension-")) {
+              // Only upload the dist archive for the core package, plugins, and extensions
+              if (name === "jspsych" || name.includes("/plugin-") || name.includes("/extension-")) {
                 console.log(`Uploading dist archive release asset for ${tag}`);
                 try {
                   // https://docs.github.com/en/rest/reference/repos#get-a-release-by-tag-name
