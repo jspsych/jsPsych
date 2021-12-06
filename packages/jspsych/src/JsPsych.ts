@@ -189,7 +189,7 @@ export class JsPsych {
 
   async simulate(
     timeline: any[],
-    simulation_mode: "data-only" | "visual",
+    simulation_mode: "data-only" | "visual" = "data-only",
     simulation_options = {}
   ) {
     this.simulation_mode = simulation_mode;
