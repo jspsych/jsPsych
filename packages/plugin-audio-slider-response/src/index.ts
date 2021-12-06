@@ -89,6 +89,11 @@ const info = <const>{
       pretty_name: "Response allowed while playing",
       default: true,
     },
+    hide_slider_while_playing: {
+      type: ParameterType.BOOL,
+      pretty_name: "Hide slider while playing",
+      default: false
+    },
   },
 };
 
@@ -154,6 +159,10 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
       // enable slider after audio ends if necessary
       if (!trial.response_allowed_while_playing && !trial.trial_ends_after_audio) {
         audio.addEventListener("ended", enable_slider);
+      }
+
+      if (trial.hide_slider_while_playing) {
+        audio.addEventListener("ended", show_slider);
       }
 
       var html = '<div id="jspsych-audio-slider-response-wrapper" style="margin: 100px 0px;">';
@@ -283,6 +292,10 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
         audio.play();
       }
 
+      if (trial.hide_slider_while_playing) {
+        hide_slider();
+      }
+
       // end trial if trial_duration is set
       if (trial.trial_duration !== null) {
         this.jsPsych.pluginAPI.setTimeout(() => {
@@ -292,6 +305,17 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
 
       on_load();
     };
+
+    
+    function hide_slider() {
+      (document.getElementsByClassName("jspsych-slider")[0] as HTMLElement).style.display = "none";
+      (document.getElementById("jspsych-audio-slider-response-next") as HTMLElement).style.display = "none";
+    }
+
+    function show_slider(){
+      (document.getElementsByClassName("jspsych-slider")[0] as HTMLElement).style.display = "";
+      (document.getElementById("jspsych-audio-slider-response-next") as HTMLElement).style.display = "";
+    }
 
     // function to enable slider after audio ends
     function enable_slider() {
@@ -317,6 +341,7 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
 
       audio.removeEventListener("ended", end_trial);
       audio.removeEventListener("ended", enable_slider);
+      audio.removeEventListener("ended", show_slider)
 
       // save data
       var trialdata = {

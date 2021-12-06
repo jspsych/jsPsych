@@ -131,9 +131,9 @@ const info = <const>{
       pretty_name: "Response allowed while playing",
       default: true,
     },
-    hide_slider_while_video_plays: {
+    hide_slider_while_playing: {
       type: ParameterType.BOOL,
-      pretty_name: "Hide slider while video plays",
+      pretty_name: "Hide slider while playing",
       default: false,
       description: "If true the slider will be hidden while the video plays and it will appear when the video stops"
     },
@@ -277,13 +277,13 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
     }
 
     video_element.onended = () => {
+      if(trial.hide_slider_while_playing) {
+        show_slider();
+      } 
+      
       if (trial.trial_ends_after_video) {
         end_trial();
       } else if (!trial.response_allowed_while_playing) {
-        if(trial.hide_slider_while_video_plays) {
-          show_slider();
-        }
-
         enable_slider();
       }
     };
@@ -320,7 +320,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
         var currenttime = video_element.currentTime;
         if (currenttime >= trial.stop) {
           video_element.pause();
-          if (trial.hide_slider_while_video_plays){
+          if (trial.hide_slider_while_playing){
             show_slider();
           }
 
@@ -350,7 +350,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
         .addEventListener("touchstart", enable_button);
     }
 
-    if (trial.hide_slider_while_video_plays) {
+    if (trial.hide_slider_while_playing) {
       hide_slider();
     }
 
@@ -426,10 +426,12 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     function hide_slider() {
       (document.getElementsByClassName("jspsych-video-slider-response-container")[0] as HTMLElement).style.display = "none";
+      (document.getElementById("jspsych-video-slider-response-next") as HTMLElement).style.display = "none";
     }
 
     function show_slider() {
       (document.getElementsByClassName("jspsych-video-slider-response-container")[0] as HTMLElement).style.display = "";
+      (document.getElementById("jspsych-video-slider-response-next") as HTMLElement).style.display = "";
     }
 
     // end trial if time limit is set
