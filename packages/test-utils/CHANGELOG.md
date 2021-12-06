@@ -1,5 +1,11 @@
 # @jspsych/test-utils
 
+## 1.1.1
+
+### Patch Changes
+
+- [#2376](https://github.com/jspsych/jsPsych/pull/2376) [`01f8a373`](https://github.com/jspsych/jsPsych/commit/01f8a373799baf871b0f91b64e81cb108323bacd) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Fix the default mode for `simulateTimeline()` to defer to jsPsych's default.
+
 ## 1.1.0
 
 ### Minor Changes
