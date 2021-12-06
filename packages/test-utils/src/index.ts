@@ -144,7 +144,7 @@ export async function startTimeline(timeline: any[], jsPsych: JsPsych | any = {}
  */
 export async function simulateTimeline(
   timeline: any[],
-  simulation_mode: "data-only" | "visual" = "data-only",
+  simulation_mode?: "data-only" | "visual",
   simulation_options: any = {},
   jsPsych: JsPsych | any = {}
 ) {
