@@ -10,7 +10,7 @@ The [official version of WebGazer](https://webgazer.cs.brown.edu/#download) is c
 
 You must include the `webgazer.js` file in your experiment via a `<script>` tag. 
 However, the `webgazer.js` file is not part of any of the jsPsych NPM packages and is therefore not available via the unpkg.com CDN. 
-Instead, it can be found on the jsdelivr.net CDN at: "https://cdn.jsdelivr.net/gh/jspsych/jspsych@7.1.1/examples/js/webgazer/webgazer.js".
+Instead, it can be found on the jsdelivr.net CDN at: "https://cdn.jsdelivr.net/gh/jspsych/jspsych@jspsych@7.1.1/examples/js/webgazer/webgazer.js".
 
 ```html
 <head>
