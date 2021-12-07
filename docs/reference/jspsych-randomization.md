@@ -467,6 +467,42 @@ var sample = jsPsych.randomization.sampleWithoutReplacement(myArray, 2);
 
 ---
 
+## jsPsych.randomization.setSeed
+
+```javascript
+jsPsych.randomization.setSeed(seed)
+```
+
+### Parameters
+
+| Parameter | Type  | Description                    |
+| --------- | ----- | ------------------------------ |
+| seed      | string or number | A seed for the random number generator |
+
+### Return value
+
+Returns the seed value.
+
+### Description
+
+This function will override the behavior of `Math.random()` to produce a seedable pseudo random number generator. 
+It uses the [seedrandom package](https://www.npmjs.com/package/seedrandom). 
+
+Using `setSeed()` without passing in a seed will generate a random 32-bit seed.
+The seed value will be returned from the function call, allowing you to save it in the data for the experiment if needed.
+
+### Examples
+
+#### Shuffle an array
+
+```javascript
+var myArray = [1,2,3,4,5];
+var shuffledArray = jsPsych.randomization.shuffle(myArray);
+// output: shuffledArray = [3,2,4,1,5]
+```
+
+---
+
 ## jsPsych.randomization.shuffle
 
 ```javascript
