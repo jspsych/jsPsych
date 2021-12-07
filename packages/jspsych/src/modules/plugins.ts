@@ -133,6 +133,13 @@ export const universalPluginParameters = <const>{
     pretty_name: "Custom CSS classes",
     default: null,
   },
+  /**
+   * Options to control simulation mode for the trial.
+   */
+  simulation_options: {
+    type: ParameterType.COMPLEX,
+    default: null,
+  },
 };
 
 export type UniversalPluginParameters = InferredParameters<typeof universalPluginParameters>;
