@@ -3,6 +3,7 @@ import {
   randomID,
   randomInt,
   repeat,
+  setSeed,
   shuffle,
   shuffleAlternateGroups,
   shuffleNoRepeats,
@@ -163,5 +164,22 @@ describe("randomInt", () => {
     expect(() => {
       randomInt(1, 0);
     }).toThrowError();
+  });
+});
+
+describe("setSeed", () => {
+  test("Replaces Math.random() with seedable RNG", () => {
+    setSeed(12603);
+
+    const r1_1 = Math.random();
+    const r1_2 = Math.random();
+
+    setSeed(12603);
+
+    const r2_1 = Math.random();
+    const r2_2 = Math.random();
+
+    expect(r1_1).toEqual(r2_1);
+    expect(r1_2).toEqual(r2_2);
   });
 });
