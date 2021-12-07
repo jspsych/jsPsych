@@ -12,7 +12,7 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-describe("#shuffle", () => {
+describe("shuffle", () => {
   test("should produce fixed order with mock RNG", () => {
     jest.spyOn(Math, "random").mockReturnValue(0.5);
     const arr = [1, 2, 3, 4, 5, 6];
@@ -31,7 +31,7 @@ describe("shuffleAlternateGroups", () => {
   });
 });
 
-describe("#randomID", () => {
+describe("randomID", () => {
   test("should produce ID based on mock RNG", () => {
     jest
       .spyOn(Math, "random")
