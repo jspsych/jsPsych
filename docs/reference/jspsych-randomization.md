@@ -485,8 +485,10 @@ Returns the seed value.
 
 ### Description
 
-This function will override the behavior of `Math.random()` to produce a seedable pseudo random number generator. 
+This function will override the behavior of `Math.random()` to produce a seedable pseudo random number generator.
 It uses the [seedrandom package](https://www.npmjs.com/package/seedrandom). 
+Note that calling `setSeed()` will change how `Math.random()` behaves for the entire document. 
+If you have non-jsPsych components on the page that use `Math.random()` they will be affected.
 
 Using `setSeed()` without passing in a seed will generate a random 32-bit seed.
 The seed value will be returned from the function call, allowing you to save it in the data for the experiment if needed.
