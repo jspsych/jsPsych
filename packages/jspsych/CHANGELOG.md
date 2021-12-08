@@ -1,5 +1,11 @@
 # jspsych
 
+## 7.1.2
+
+### Patch Changes
+
+- [#2380](https://github.com/jspsych/jsPsych/pull/2380) [`5159e0eb`](https://github.com/jspsych/jsPsych/commit/5159e0eb23ecf2a131bf91edbd13a4b04bf0283b) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Fixed the case where `simulation_options` is a function that returns a string for looking up corresponding options in the simulate settings.
+
 ## 7.1.1
 
 ### Patch Changes
