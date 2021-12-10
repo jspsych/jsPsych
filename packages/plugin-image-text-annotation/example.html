@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head> 
+    <script src="../jspsych/dist/index.browser.js"></script>
+    <script src="dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../jspsych/css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
+    const jsPsych = initJsPsych();
+
+    const trial = {
+      type: jsPsychImageTextAnnotation,
+      image: '../../examples/img/happy_face_3.jpg',
+      prompt: '<p>Label the face.</p>'
+    }
+
+    jsPsych.run([trial])
+  </script>
+</html>
