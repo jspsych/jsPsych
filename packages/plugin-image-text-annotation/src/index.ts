@@ -140,8 +140,6 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           cursor: pointer;
         }
 
-        
-
         #jspsych-annotation-display #annotation-options {
           text-align: left;
           padding-left: 24px;
@@ -156,7 +154,7 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
 
     this.is_drawing = true;
 
-    this.active_box = new AnnotationBox(x, y);
+    this.active_box = new AnnotationBox(x, y, this.boxes);
 
     this.img_container.appendChild(this.active_box.getElement());
 
@@ -165,20 +163,25 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
   }
 
   private move_box(e) {
-    const x = Math.round(e.clientX - this.img_container.getBoundingClientRect().left);
-    const y = Math.round(e.clientY - this.img_container.getBoundingClientRect().top);
+    if (this.is_drawing) {
+      const x = Math.round(e.clientX - this.img_container.getBoundingClientRect().left);
+      const y = Math.round(e.clientY - this.img_container.getBoundingClientRect().top);
 
-    this.active_box.setEndCoords(x, y);
+      this.active_box.setEndCoords(x, y);
+    }
   }
 
   private stop_box() {
-    this.active_box.setLabel(this.active_label);
-    this.active_box.finishDrawing();
+    if (this.is_drawing) {
+      this.active_box.finishDrawing();
 
-    this.boxes.push(this.active_box);
+      this.active_box.setLabel(this.active_label);
 
-    this.active_box = null;
-    this.img_container.removeEventListener("mousemove", this.move_box);
+      this.active_box = null;
+      this.img_container.removeEventListener("mousemove", this.move_box);
+
+      this.is_drawing = false;
+    }
   }
 
   private sort_boxes() {
@@ -202,8 +205,9 @@ class AnnotationBox {
   private end_x;
   private end_y;
   private is_hovered = false;
+  private box_list: Array<AnnotationBox>;
 
-  constructor(x, y) {
+  constructor(x, y, box_list) {
     this.start_x = x;
     this.start_y = y;
 
@@ -212,12 +216,9 @@ class AnnotationBox {
     el.style.left = `${x}px`;
     el.style.top = `${y}px`;
 
-    el.innerHTML = `
-      <p class="annotation-box-label"></p>
-      <span class="annotation-box-remove">X</span>
-    `;
-
     this.element = el;
+
+    this.box_list = box_list;
   }
 
   private hover(e) {
@@ -264,8 +265,25 @@ class AnnotationBox {
   }
 
   finishDrawing() {
+    this.element.innerHTML = `
+      <p class="annotation-box-label"></p>
+      <span class="annotation-box-remove">X</span>
+    `;
+
+    this.box_list.push(this);
+
     this.element.addEventListener("mouseenter", (e) => this.hover(e));
     this.element.addEventListener("mouseleave", (e) => this.exit_hover(e));
+    this.element.querySelector(".annotation-box-remove").addEventListener("mousedown", (e) => {
+      e.stopPropagation();
+    });
+    this.element.querySelector(".annotation-box-remove").addEventListener("mouseup", (e) => {
+      e.stopPropagation();
+    });
+    this.element.querySelector(".annotation-box-remove").addEventListener("click", (e) => {
+      e.preventDefault();
+      this.remove();
+    });
   }
 
   area() {
@@ -275,6 +293,13 @@ class AnnotationBox {
 
   setZIndex(z: string) {
     this.element.style.zIndex = z;
+  }
+
+  remove() {
+    this.element.remove();
+    this.box_list = this.box_list.filter((x) => {
+      x !== this;
+    });
   }
 }
 
