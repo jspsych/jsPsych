@@ -7,10 +7,10 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
-    "build": "npm run build -w jspsych && npm run build -ws",
+    "build": "turbo run build",
     "build:archive": "gulp createCoreDistArchive",
     "prepare": "husky install && npm run build",
-    "tsc": "npm run tsc -ws",
+    "tsc": "turbo tsc",
     "changeset": "changeset",
     "release": "changeset publish"
   },
@@ -25,7 +25,8 @@
     "import-sort-style-module": "^6.0.0",
     "lint-staged": "^11.1.2",
     "prettier": "^2.3.2",
-    "prettier-plugin-import-sort": "^0.0.7"
+    "prettier-plugin-import-sort": "^0.0.7",
+    "turbo": "^1.0.6"
   },
   "prettier": {
     "printWidth": 100
@@ -43,5 +44,21 @@
     "projects": [
       "<rootDir>/packages/*/jest.config.cjs"
     ]
+  },
+  "turbo": {
+    "baseBranch": "origin/main",
+    "pipeline": {
+      "build": {
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "dist/**"
+        ]
+      },
+      "tsc": {
+        "outputs": []
+      }
+    }
   }
 }
