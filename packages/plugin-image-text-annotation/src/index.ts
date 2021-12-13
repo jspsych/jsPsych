@@ -57,7 +57,7 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
         <div id='annotation-options'>
           <div><input type="radio" id="opt1" name="annotate_label" value="foo"><label for="opt1">Foo</label></div>
           <div><input type="radio" id="opt2" name="annotate_label" value="bar"><label for="opt2">Bar</label></div>
-          <div><input type="radio" id="opt3" name="annotate_label" value=""><label for="opt3"><input type="text"></label></div>
+          <div><input type="radio" id="opt3" name="annotate_label" value=""><label for="opt3"><input id="opt3_text" type="text"></label></div>
         </div>
       </div>
     `;
@@ -79,6 +79,13 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
     this.img_container.addEventListener("mousemove", this.sort_boxes);
 
     document.addEventListener("click", this.deselect_all);
+
+    this.display_element
+      .querySelector('input[type="text"]')
+      .addEventListener("change", this.add_new_label);
+    this.display_element
+      .querySelector('input[type="text"]')
+      .addEventListener("change", this.update_labels);
   }
 
   private add_css() {
@@ -284,6 +291,46 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
         b.deselect();
       }
     }
+  }
+
+  private add_new_label(e) {
+    const container = this.display_element.querySelector("#annotation-options");
+    const options = container.querySelectorAll('input[type="radio"]').length;
+    const html = `
+      <div><input type="radio" id="opt${options + 1}" name="annotate_label" value=""><label for="${
+      options + 1
+    }"><input id="opt${options + 1}_text" type="text"></label></div>
+    `;
+    container.insertAdjacentHTML("beforeend", html);
+    container
+      .querySelector(`#opt${options + 1}_text`)
+      .addEventListener("change", this.add_new_label);
+    container
+      .querySelector(`#opt${options + 1}_text`)
+      .addEventListener("change", this.update_labels);
+    e.target.removeEventListener("change", this.add_new_label);
+
+    container
+      .querySelector(`#opt${options + 1}`)
+      .addEventListener("change", this.handle_radio_change);
+  }
+
+  private update_labels(e) {
+    const text = e.target as HTMLFormElement;
+    const radio = text.parentElement.parentElement.querySelector(
+      'input[type="radio"]'
+    ) as HTMLFormElement;
+
+    const old_label = radio.value;
+    const new_label = text.value;
+
+    for (const b of this.boxes) {
+      if (b.getLabel() == old_label) {
+        b.setLabel(new_label);
+      }
+    }
+
+    radio.value = new_label;
   }
 }
 
