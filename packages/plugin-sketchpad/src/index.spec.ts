@@ -148,4 +148,68 @@ describe("sketchpad", () => {
     clickTarget(displayElement.querySelector("#sketchpad-end"));
     await expectFinished();
   });
+
+  test("redo_button_label changes text", async () => {
+    const { displayElement, getHTML, expectFinished } = await startTimeline([
+      {
+        type: sketchpad,
+        redo_button_label: "foo",
+      },
+    ]);
+
+    const button = displayElement.querySelector("#sketchpad-redo");
+
+    expect(button.innerHTML).toBe("foo");
+
+    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await expectFinished();
+  });
+
+  test("undo_button_label changes text", async () => {
+    const { displayElement, getHTML, expectFinished } = await startTimeline([
+      {
+        type: sketchpad,
+        undo_button_label: "foo",
+      },
+    ]);
+
+    const button = displayElement.querySelector("#sketchpad-undo");
+
+    expect(button.innerHTML).toBe("foo");
+
+    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await expectFinished();
+  });
+
+  test("clear_button_label changes text", async () => {
+    const { displayElement, getHTML, expectFinished } = await startTimeline([
+      {
+        type: sketchpad,
+        clear_button_label: "foo",
+      },
+    ]);
+
+    const button = displayElement.querySelector("#sketchpad-clear");
+
+    expect(button.innerHTML).toBe("foo");
+
+    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await expectFinished();
+  });
+
+  test("finished_button_label changes text", async () => {
+    const { displayElement, getHTML, expectFinished } = await startTimeline([
+      {
+        type: sketchpad,
+        finished_button_label: "foo",
+      },
+    ]);
+
+    const button = displayElement.querySelector("#sketchpad-end");
+
+    expect(button.innerHTML).toBe("foo");
+
+    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await expectFinished();
+  });
 });
