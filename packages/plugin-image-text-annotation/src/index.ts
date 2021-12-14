@@ -12,6 +12,11 @@ const info = <const>{
       type: ParameterType.HTML_STRING,
       default: null,
     },
+    regions: {
+      type: ParameterType.COMPLEX,
+      default: [],
+      array: true,
+    },
   },
 };
 
@@ -42,6 +47,14 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
     this.add_css();
     this.renderDisplay(trial);
     this.addEvents(trial);
+
+    for (const roi of trial.regions) {
+      const box = new AnnotationBox(roi.left, roi.top, this.boxes, this.img_container, this);
+      box.setEndCoords(roi.right, roi.bottom);
+      box.finishDrawing();
+      box.setLabel(roi.label ? roi.label : "?");
+      box.setModifiable(false);
+    }
   }
 
   private renderDisplay(trial) {
@@ -199,12 +212,12 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           bottom: -4px;
         }
 
-        #jspsych-annotation-display #annotated-image-container .annotation-box:hover .annotation-box-remove {
+        #jspsych-annotation-display #annotated-image-container .annotation-box.modifiable:hover .annotation-box-remove {
           visibility: visible;
           
         }
 
-        #jspsych-annotation-display #annotated-image-container .annotation-box:hover .annotation-box-resize {
+        #jspsych-annotation-display #annotated-image-container .annotation-box.modifiable:hover .annotation-box-resize {
           visibility: visible;
         }
 
@@ -223,8 +236,6 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
     this.is_drawing = true;
 
     this.active_box = new AnnotationBox(x, y, this.boxes, this.img_container, this);
-
-    this.img_container.appendChild(this.active_box.getElement());
 
     this.img_container.addEventListener("mousemove", this.move_box);
     this.img_container.addEventListener("mouseup", this.stop_box);
@@ -345,6 +356,7 @@ class AnnotationBox {
   private container: HTMLElement;
   private selected = false;
   private plugin: ImageTextAnnotationPlugin;
+  private modifiable = true;
 
   constructor(x, y, box_list, container, plugin) {
     autoBind(this);
@@ -356,11 +368,22 @@ class AnnotationBox {
     this.setAnchorCoords(x, y);
 
     const el = document.createElement("div");
-    el.setAttribute("class", "annotation-box");
+    el.classList.add("annotation-box", "modifiable");
     el.style.left = `${x}px`;
     el.style.top = `${y}px`;
 
     this.element = el;
+
+    this.container.appendChild(this.element);
+  }
+
+  setModifiable(modifiable: boolean) {
+    this.modifiable = modifiable;
+    if (modifiable) {
+      this.element.classList.add("modifiable");
+    } else {
+      this.element.classList.remove("modifiable");
+    }
   }
 
   setLabel(label) {
