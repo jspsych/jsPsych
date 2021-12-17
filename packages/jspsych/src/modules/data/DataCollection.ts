@@ -142,6 +142,7 @@ export class DataCollection {
       );
       filtered_data.push(filtered_columns);
     }
+    return new DataCollection(filtered_data);
   }
 
   select(column) {
