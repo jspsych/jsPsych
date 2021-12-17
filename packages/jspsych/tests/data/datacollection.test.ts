@@ -15,14 +15,14 @@ describe("DataCollection", () => {
     dataCollection = new DataCollection(data);
   });
 
-  test("#filter", () => {
+  test("filter", () => {
     expect(dataCollection.filter({ filter: true }).count()).toBe(2);
   });
-  test("#filter OR", () => {
+  test("filter OR", () => {
     expect(dataCollection.filter([{ filter: true }, { rt: 300 }]).count()).toBe(2);
     expect(dataCollection.filter([{ filter: true }, { rt: 200 }]).count()).toBe(3);
   });
-  test("#filterCustom", () => {
+  test("filterCustom", () => {
     expect(
       dataCollection
         .filterCustom((x) => {
@@ -31,43 +31,43 @@ describe("DataCollection", () => {
         .count()
     ).toBe(2);
   });
-  test("#ignore", () => {
+  test("ignore", () => {
     expect(dataCollection.ignore("rt").select("rt").count()).toBe(0);
   });
-  test("#select", () => {
+  test("select", () => {
     expect(JSON.stringify(dataCollection.select("rt").values)).toBe(
       JSON.stringify([100, 200, 300, 400, 500])
     );
   });
-  test("#addToAll", () => {
+  test("addToAll", () => {
     expect(dataCollection.readOnly().addToAll({ added: 5 }).select("added").count()).toBe(5);
   });
-  test("#addToLast", () => {
+  test("addToLast", () => {
     dataCollection.addToLast({ lastonly: true });
     expect(dataCollection.values()[4].lastonly).toBe(true);
   });
-  test("#readOnly", () => {
+  test("readOnly", () => {
     const d = dataCollection.readOnly().values();
     d[0].rt = 0;
     expect(dataCollection.values()[0].rt).toBe(100);
   });
-  test("not #readOnly", () => {
+  test("not readOnly", () => {
     const d = dataCollection.values();
     d[0].rt = 0;
     expect(dataCollection.values()[0].rt).toBe(0);
   });
-  test("#count", () => {
+  test("count", () => {
     expect(dataCollection.count()).toBe(5);
   });
-  test("#push", () => {
+  test("push", () => {
     dataCollection.push({ rt: 600, filter: true });
     expect(dataCollection.count()).toBe(6);
   });
-  test("#values", () => {
+  test("values", () => {
     expect(JSON.stringify(dataCollection.values())).toBe(JSON.stringify(data));
     expect(dataCollection.values()).toBe(data);
   });
-  test("#first", () => {
+  test("first", () => {
     expect(dataCollection.first(3).count()).toBe(3);
     expect(dataCollection.first(2).values()[1].rt).toBe(200);
     expect(dataCollection.first().count()).toBe(1);
@@ -82,7 +82,7 @@ describe("DataCollection", () => {
     const too_many = n + 1;
     expect(dataCollection.first(too_many).count()).toBe(n);
   });
-  test("#last", () => {
+  test("last", () => {
     expect(dataCollection.last(2).count()).toBe(2);
     expect(dataCollection.last(2).values()[0].rt).toBe(400);
     expect(dataCollection.last().count()).toBe(1);
@@ -97,14 +97,14 @@ describe("DataCollection", () => {
     const too_many = n + 1;
     expect(dataCollection.last(too_many).count()).toBe(n);
   });
-  test("#join", () => {
+  test("join", () => {
     const dc1 = dataCollection.filter({ filter: true });
     const dc2 = dataCollection.filter({ rt: 500 });
     const data = dc1.join(dc2);
     expect(data.count()).toBe(3);
     expect(data.values()[2].rt).toBe(500);
   });
-  test("#unqiueNames", () => {
+  test("unqiueNames", () => {
     expect(
       new DataCollection([
         { rt: 100, filter: true },
