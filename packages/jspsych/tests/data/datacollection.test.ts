@@ -31,6 +31,26 @@ describe("DataCollection", () => {
         .count()
     ).toBe(2);
   });
+
+  test("filterColumns", () => {
+    data = [
+      { foo: "bar", rt: 100, filter: true },
+      { foo: "bar", rt: 200, filter: false },
+      { foo: "bar", rt: 300, filter: true },
+      { foo: "bar", rt: 400, filter: false },
+      { foo: "bar", rt: 500, filter: false },
+    ];
+    dataCollection = new DataCollection(data);
+
+    const filtered_data = dataCollection.filterColumns(["rt", "foo"]);
+
+    expect(
+      filtered_data.values().filter((x) => {
+        return x.foo && x.rt && !x.filter;
+      }).length
+    ).toBe(5);
+  });
+
   test("ignore", () => {
     expect(dataCollection.ignore("rt").select("rt").count()).toBe(0);
   });
