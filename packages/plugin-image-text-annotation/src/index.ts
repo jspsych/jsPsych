@@ -137,32 +137,18 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           line-height:1em;
           background-color: rgba(255,255,255,0.5);
           border-radius: 5px;
-          border: 1px solid green;
+          border: 1px solid rgba(255,255,255,0.5);
           position:absolute;
-          top:50%;
-          left:50%;
-          transform: translate(-50%,-50%);
+          top:2px;
+          left:2px;
           padding: 0.25em;
           user-select: none;
           cursor: pointer;
         }
 
         #jspsych-annotation-display #annotated-image-container .annotation-box .annotation-box-label.selected {
-          font-size:10px;
-          font-family:monospace;
-          text-align:left;
-          line-height:1em;
-          background-color: rgba(255,255,255,0.5);
-          border-radius: 5px;
           border: 1px solid red;
           color: red;
-          position:absolute;
-          top:50%;
-          left:50%;
-          transform: translate(-50%,-50%);
-          padding: 0.25em;
-          user-select: none;
-          cursor: pointer;
         }
 
         .annotation-box-remove {
@@ -352,6 +338,8 @@ class AnnotationBox {
   private start_y;
   private end_x;
   private end_y;
+  private drag_offset_x;
+  private drag_offset_y;
   private box_list: Array<AnnotationBox>;
   private container: HTMLElement;
   private selected = false;
@@ -410,6 +398,20 @@ class AnnotationBox {
     this.end_x = x;
     this.end_y = y;
 
+    this.updateRenderLocation();
+  }
+
+  translate(x, y) {
+    this.start_x += x;
+    this.start_y += y;
+
+    this.end_x += x;
+    this.end_y += y;
+
+    this.updateRenderLocation();
+  }
+
+  updateRenderLocation() {
     this.element.style.width = `${Math.abs(this.end_x - this.start_x)}px`;
     this.element.style.height = `${Math.abs(this.end_y - this.start_y)}px`;
 
@@ -494,7 +496,11 @@ class AnnotationBox {
     });
 
     this.element.querySelector(".annotation-box-label").addEventListener("click", this.select);
+
     this.element.querySelector(".annotation-box-label").addEventListener("mousedown", (e) => {
+      if (this.modifiable) {
+        this.startDrag(e);
+      }
       e.stopPropagation();
     });
   }
@@ -512,6 +518,31 @@ class AnnotationBox {
 
   stopMove() {
     this.container.removeEventListener("mousemove", this.moveHandler);
+  }
+
+  startDrag(e) {
+    this.drag_offset_x =
+      Math.round(e.clientX - this.container.getBoundingClientRect().left) - this.start_x;
+    this.drag_offset_y =
+      Math.round(e.clientY - this.container.getBoundingClientRect().top) - this.start_y;
+
+    this.container.addEventListener("mousemove", this.dragHandler);
+    this.container.addEventListener("mouseup", this.stopDrag);
+  }
+
+  stopDrag() {
+    this.container.removeEventListener("mousemove", this.dragHandler);
+    this.container.removeEventListener("mouseup", this.stopDrag);
+  }
+
+  dragHandler(e) {
+    const x = Math.round(e.clientX - this.container.getBoundingClientRect().left);
+    const y = Math.round(e.clientY - this.container.getBoundingClientRect().top);
+
+    const dx = x - this.drag_offset_x - this.start_x;
+    const dy = y - this.drag_offset_y - this.start_y;
+
+    this.translate(dx, dy);
   }
 
   area() {
