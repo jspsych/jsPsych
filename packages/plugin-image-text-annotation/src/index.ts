@@ -38,6 +38,7 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
   private active_label: string;
   private boxes: Array<AnnotationBox> = [];
   private display_element: HTMLElement;
+  private deselect_all_flag = true;
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -68,8 +69,8 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           <img src="${trial.image}" draggable="false"></img>
         </div>
         <div id='annotation-options'>
-          <div><input type="radio" id="opt1" name="annotate_label" value="foo"><label for="opt1">Foo</label></div>
-          <div><input type="radio" id="opt2" name="annotate_label" value="bar"><label for="opt2">Bar</label></div>
+          <div><input type="radio" id="opt1" name="annotate_label" value="Foo"><label for="opt1">Foo</label></div>
+          <div><input type="radio" id="opt2" name="annotate_label" value="Bar"><label for="opt2">Bar</label></div>
           <div><input type="radio" id="opt3" name="annotate_label" value=""><label for="opt3"><input id="opt3_text" type="text"></label></div>
         </div>
       </div>
@@ -91,6 +92,9 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
 
     this.img_container.addEventListener("mousemove", this.sort_boxes);
 
+    document.addEventListener("mousedown", () => {
+      this.deselect_all_flag = true;
+    });
     document.addEventListener("click", this.deselect_all);
 
     this.display_element
@@ -242,10 +246,13 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
 
       this.active_box.setLabel(this.active_label);
 
+      this.active_box.select();
+
       this.active_box = null;
       this.img_container.removeEventListener("mousemove", this.move_box);
 
       this.is_drawing = false;
+      this.deselect_all_flag = false;
     }
   }
 
@@ -283,7 +290,7 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
   }
 
   private deselect_all(e) {
-    if (!["RADIO", "LABEL", "INPUT"].includes(e.target.tagName)) {
+    if (this.deselect_all_flag && !["RADIO", "LABEL", "INPUT"].includes(e.target.tagName)) {
       for (const b of this.boxes) {
         b.deselect();
       }
@@ -440,6 +447,10 @@ class AnnotationBox {
 
     this.box_list.push(this);
 
+    this.addEvents();
+  }
+
+  addEvents() {
     this.element.querySelector(".annotation-box-remove").addEventListener("mousedown", (e) => {
       e.stopPropagation();
     });
@@ -495,7 +506,10 @@ class AnnotationBox {
       this.stopMove();
     });
 
-    this.element.querySelector(".annotation-box-label").addEventListener("click", this.select);
+    this.element.querySelector(".annotation-box-label").addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.select();
+    });
 
     this.element.querySelector(".annotation-box-label").addEventListener("mousedown", (e) => {
       if (this.modifiable) {
@@ -561,8 +575,7 @@ class AnnotationBox {
     });
   }
 
-  select(e: Event) {
-    e.stopPropagation();
+  select() {
     for (const b of this.box_list) {
       b.deselect();
     }
