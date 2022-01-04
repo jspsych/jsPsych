@@ -131,8 +131,7 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
         }
 
         #jspsych-annotation-display #annotated-image-container .annotation-box:hover {
-          border: 1px solid yellow;
-          color:yellow;
+          
         }
 
         #jspsych-annotation-display #annotated-image-container .annotation-box .annotation-box-label {
@@ -142,6 +141,7 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           line-height:1em;
           background-color: white;
           border-radius: 5px;
+          border: 1px solid white;
           box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
           position:absolute;
           top:2px;
@@ -151,9 +151,13 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           cursor: pointer;
         }
 
+        #jspsych-annotation-display #annotated-image-container .annotation-box .annotation-box-label:hover {
+          background-color: #eee;
+          border:1px solid #eee;
+        }
+
         #jspsych-annotation-display #annotated-image-container .annotation-box .annotation-box-label.selected {
-          border: 1px solid red;
-          color: red;
+          border: 1px solid green;
         }
 
         .annotation-box::before {
@@ -188,29 +192,29 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
 
         .annotation-box-resize {
           visibility: hidden;
-          width: 10px;
-          height: 10px;
-          background-color: rgba(128,128,128,0.5);
-          border: 1px solid rgba(128,128,128,0.5);
+          width: 14px;
+          height: 14px;
+          background-color: #00800080;
+          border: 1px solid #00800080;
           position: absolute;
           cursor: pointer;
           user-select: none;
         }
 
         .annotation-box .left {
-          left: -9px;
+          left: -8px;
         }
 
         .annotation-box .top {
-          top: -9px;
+          top: -8px;
         }
 
         .annotation-box .right {
-          right: -9px;
+          right: -8px;
         }
 
         .annotation-box .bottom {
-          bottom: -9px;
+          bottom: -8px;
         }
 
         .annotation-box.modifiable:hover .annotation-box-remove {
