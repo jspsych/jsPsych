@@ -140,13 +140,13 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           font-family:monospace;
           text-align:left;
           line-height:1em;
-          background-color: rgba(255,255,255,0.5);
+          background-color: white;
           border-radius: 5px;
-          border: 1px solid rgba(255,255,255,0.5);
+          box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
           position:absolute;
           top:2px;
           left:2px;
-          padding: 0.25em;
+          padding: 0.5em;
           user-select: none;
           cursor: pointer;
         }
@@ -156,59 +156,68 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           color: red;
         }
 
+        .annotation-box::before {
+          content: "";
+          position: absolute;
+          height: calc(100% + 24px);
+          width: calc(100% + 24px);
+          top: -12px;
+          left: -12px;
+        }
+
         .annotation-box-remove {
           visibility: hidden;
           user-select: none;
-          font-size:15px;
-          font-family:monospace;
-          margin:0px;
-          text-align:left;
-          line-height:1em;
+          font-size: 14px;
+          font-family: monospace;
+          margin: 0px;
+          text-align: center;
+          line-height: 1em;
           position: absolute;
-          top:0;
-          right:0;
-          background-color: green;
-          color: white;
-          width:1em;
-          height:1em;
+          left:-16px;
+          top: 5px;
+          background-color: white;
+          color: #777;
+          border-radius: 3px;
+          box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+          width: 14px;
+          height: 14px;
           text-align: center;
           cursor: pointer;
         }
 
         .annotation-box-resize {
           visibility: hidden;
-          width: 6px;
-          height: 6px;
-          border-radius: 3px;
-          background-color: green;
-          border: 1px solid white;
+          width: 10px;
+          height: 10px;
+          background-color: rgba(128,128,128,0.5);
+          border: 1px solid rgba(128,128,128,0.5);
           position: absolute;
           cursor: pointer;
           user-select: none;
         }
 
         .annotation-box .left {
-          left: -4px;
+          left: -9px;
         }
 
         .annotation-box .top {
-          top: -4px;
+          top: -9px;
         }
 
         .annotation-box .right {
-          right: -4px;
+          right: -9px;
         }
 
         .annotation-box .bottom {
-          bottom: -4px;
+          bottom: -9px;
         }
 
-        #jspsych-annotation-display #annotated-image-container .annotation-box.modifiable:hover .annotation-box-remove {
-          visibility: visible;
-          
+        .annotation-box.modifiable:hover .annotation-box-remove {
+          visibility: visible; 
         }
 
-        #jspsych-annotation-display #annotated-image-container .annotation-box.modifiable:hover .annotation-box-resize {
+        .annotation-box.modifiable:hover .annotation-box-resize {
           visibility: visible;
         }
 
