@@ -12,6 +12,11 @@ const info = <const>{
       type: ParameterType.HTML_STRING,
       default: null,
     },
+    labels: {
+      type: ParameterType.STRING,
+      array: true,
+      default: [],
+    },
     regions: {
       type: ParameterType.COMPLEX,
       default: [],
@@ -69,9 +74,16 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           <img src="${trial.image}" draggable="false"></img>
         </div>
         <div id='annotation-options'>
-          <div><input type="radio" id="opt1" name="annotate_label" value="Foo"><label for="opt1">Foo</label></div>
-          <div><input type="radio" id="opt2" name="annotate_label" value="Bar"><label for="opt2">Bar</label></div>
-          <div><input type="radio" id="opt3" name="annotate_label" value=""><label for="opt3"><input id="opt3_text" type="text"></label></div>
+    `;
+    let i = 1;
+    for (const l of trial.labels) {
+      html += `<div><input type="radio" id="opt${i}" name="annotate_label" value="${l}"><label for="opt${i}">${l}</label></div>`;
+      i++;
+    }
+    html += `
+          <div><input type="radio" id="opt${i}" name="annotate_label" value=""><label for="opt${i}"><input id="opt${i}_text" type="text"></label></div>
+    `;
+    html += `
         </div>
       </div>
     `;
