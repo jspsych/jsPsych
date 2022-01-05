@@ -1,6 +1,6 @@
 # webgazer-init-camera
 
-This plugin initializes the camera and helps the participant center their face in the camera view for using the the [WebGazer extension](../extensions/webgazer). For a narrative description of eye tracking with jsPsych, see the [eye tracking overview](../overview/eye-tracking). 
+This plugin initializes the camera and helps the participant center their face in the camera view for using the the [WebGazer extension](../../extensions/webgazer). For a narrative description of eye tracking with jsPsych, see the [eye tracking overview](../../overview/eye-tracking). 
 
 ## Parameters
 
