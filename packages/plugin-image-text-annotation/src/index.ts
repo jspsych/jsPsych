@@ -137,10 +137,19 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           border-radius: 0.75em;
           background-color: green;
           color: white;
-          padding: 0.25em 0.5em;
+          padding: 0.35em 0.5em;
           margin: 0.25em 0em;
           cursor: pointer;
           display: block;
+          line-height: normal;
+        }
+
+        #jspsych-annotation-display label::before {
+          content: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>');
+          display: inline-block;
+          padding-right: 0.5em;
+          position: relative;
+          top: 0.15em;
         }
 
         #jspsych-annotation-display label input[type="text"] {
@@ -149,7 +158,7 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           color: white;
           font-size: 18px;
           margin: 0;
-          padding:0
+          padding:0;
         }
 
         #jspsych-annotation-display label input[type="text"]:hover {
