@@ -125,6 +125,48 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           display: flex;
         }
 
+        #jspsych-annotation-display #annotation-options div {
+          margin-bottom: 0.5em;
+        }
+
+        #jspsych-annotation-display input[type="radio"] {
+          display: none;
+        }
+
+        #jspsych-annotation-display label {
+          border-radius: 0.75em;
+          background-color: green;
+          color: white;
+          padding: 0.25em 0.5em;
+          margin: 0.25em 0em;
+          cursor: pointer;
+          display: block;
+        }
+
+        #jspsych-annotation-display label input[type="text"] {
+          background: none;
+          border: none;
+          color: white;
+          font-size: 18px;
+          margin: 0;
+          padding:0
+        }
+
+        #jspsych-annotation-display label input[type="text"]:hover {
+          border-bottom: 1px solid white;
+        }
+
+        #jspsych-annotation-display label input[type="text"]:active, 
+        #jspsych-annotation-display label input[type="text"]:focus,
+        #jspsych-annotation-display label input[type="text"]:focus-visible {
+          border-bottom: 1px solid white;
+          outline: none;
+        }
+
+        #jspsych-annotation-display input[type="radio"]:checked + label {
+          background-color: grey;
+        }
+
         #jspsych-annotation-display #annotated-image-container {
           cursor: crosshair;
           position: relative;
@@ -140,6 +182,7 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           position: absolute;
           color:green;
           user-select: none;
+          background-color: #00800040;
         }
 
         #jspsych-annotation-display #annotated-image-container .annotation-box:hover {
@@ -162,6 +205,7 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           padding: 0.5em;
           user-select: none;
           cursor: pointer;
+          visibility: hidden;
         }
 
         .annotation-box-label:hover {
@@ -275,6 +319,10 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
         }
 
         .annotation-box.modifiable:hover .annotation-box-resize {
+          visibility: visible;
+        }
+
+        .annotation-box:hover .annotation-box-label {
           visibility: visible;
         }
 
