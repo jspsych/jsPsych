@@ -134,14 +134,15 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           
         }
 
-        #jspsych-annotation-display #annotated-image-container .annotation-box .annotation-box-label {
+        .annotation-box-label {
           font-size:10px;
           font-family:monospace;
           text-align:left;
           line-height:1em;
-          background-color: white;
+          color: white;
+          background-color: green;
           border-radius: 5px;
-          border: 1px solid white;
+          border: 1px solid green;
           box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
           position:absolute;
           top:2px;
@@ -151,70 +152,110 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           cursor: pointer;
         }
 
-        #jspsych-annotation-display #annotated-image-container .annotation-box .annotation-box-label:hover {
-          background-color: #eee;
-          border:1px solid #eee;
+        .annotation-box-label:hover {
+          filter: brightness(110%);
         }
 
-        #jspsych-annotation-display #annotated-image-container .annotation-box .annotation-box-label.selected {
-          border: 1px solid green;
+        .annotation-box-label.selected {
+          border: 1px solid white;
         }
 
         .annotation-box::before {
           content: "";
           position: absolute;
-          height: calc(100% + 24px);
-          width: calc(100% + 24px);
-          top: -12px;
-          left: -12px;
+          height: calc(100% + 8px);
+          width: calc(100% + 8px);
+          top: -4px;
+          left: -4px;
         }
 
         .annotation-box-remove {
           visibility: hidden;
           user-select: none;
-          font-size: 14px;
+          font-size: 10px;
           font-family: monospace;
           margin: 0px;
           text-align: center;
           line-height: 1em;
           position: absolute;
-          left:-16px;
-          top: 5px;
+          top: 2px;
+          right: 2px;
           background-color: white;
           color: #777;
           border-radius: 3px;
           box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-          width: 14px;
-          height: 14px;
+          padding: 0.5em;
           text-align: center;
           cursor: pointer;
         }
 
+        .annotation-box-remove:hover {
+          background-color: #eee;
+        }
+
         .annotation-box-resize {
           visibility: hidden;
-          width: 14px;
-          height: 14px;
+          width: 4px;
+          height: 4px;
           background-color: #00800080;
           border: 1px solid #00800080;
           position: absolute;
-          cursor: pointer;
           user-select: none;
+          transition: height 0.25s, width 0.25s, left 0.25s, top 0.25s, right 0.25s, bottom 0.25s;
+        }
+        
+        .annotation-box-resize:hover {
+          width: 14px;
+          height:14px;
         }
 
-        .annotation-box .left {
+        .annotation-box-resize.top.left, .annotation-box-resize.bottom.right {
+          cursor: nwse-resize;
+        }
+
+        .annotation-box-resize.top.right, .annotation-box-resize.bottom.left {
+          cursor: nesw-resize;
+        }
+
+        .annotation-box-resize.left {
+          left: -3px;
+        }
+
+        .annotation-box-resize.top {
+          top: -3px;
+        }
+
+        .annotation-box-resize.right {
+          right: -3px;
+        }
+
+        .annotation-box-resize.bottom {
+          bottom: -3px;
+        }
+
+        .annotation-box-resize.left:hover {
           left: -8px;
         }
 
-        .annotation-box .top {
+        .annotation-box-resize.top:hover {
           top: -8px;
         }
 
-        .annotation-box .right {
+        .annotation-box-resize.right:hover {
           right: -8px;
         }
 
-        .annotation-box .bottom {
+        .annotation-box-resize.bottom:hover {
           bottom: -8px;
+        }
+
+        .annotation-box-resize::before {
+          content: "";
+          position: absolute;
+          height: calc(100% + 12px);
+          width: calc(100% + 12px);
+          top: -6px;
+          left: -6px;
         }
 
         .annotation-box.modifiable:hover .annotation-box-remove {
