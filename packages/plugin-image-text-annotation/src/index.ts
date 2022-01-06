@@ -22,6 +22,20 @@ const info = <const>{
       default: [],
       array: true,
     },
+    colors: {
+      type: ParameterType.STRING,
+      array: true,
+      default: [
+        "#e41a1c",
+        "#377eb8",
+        "#4daf4a",
+        "#984ea3",
+        "#ff7f00",
+        "#ffff33",
+        "#a65628",
+        "#f781bf",
+      ],
+    },
   },
 };
 
@@ -40,15 +54,26 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
   private img_container: HTMLElement;
   private is_drawing = false;
   private active_box: AnnotationBox;
-  private active_label: string;
   private boxes: Array<AnnotationBox> = [];
   private display_element: HTMLElement;
   private deselect_all_flag = true;
+  private categories = [];
+  private active_category = { id: null, label: "?", color: "#444" };
+  private palette: Array<string>;
 
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     this.display_element = display_element;
+    this.palette = trial.colors;
+
+    for (let i = 0; i < trial.labels.length; i++) {
+      this.categories.push({
+        id: i,
+        color: trial.colors[i],
+        label: trial.labels[i],
+      });
+    }
 
     this.add_css();
     this.renderDisplay(trial);
@@ -75,14 +100,14 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
         </div>
         <div id='annotation-options'>
     `;
-    let i = 1;
+    let i = 0;
     for (const l of trial.labels) {
-      html += `<div><input type="radio" id="opt${i}" name="annotate_label" value="${l}"><label for="opt${i}">${l}</label></div>`;
+      html += `<div style="--main-color:${trial.colors[i]}"><input type="radio" id="opt${i}" name="annotate_label" value="${l}"><label for="opt${i}">${l}</label></div>`;
       i++;
     }
-    html += `
-          <div><input type="radio" id="opt${i}" name="annotate_label" value=""><label for="opt${i}"><input id="opt${i}_text" type="text"></label></div>
-    `;
+    // html += `
+    //       <div><input type="radio" id="opt${i}" name="annotate_label" value=""><label for="opt${i}"><input id="opt${i}_text" type="text"></label></div>
+    // `;
     html += `
         </div>
       </div>
@@ -90,6 +115,8 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
     html += `</div>`;
 
     this.display_element.innerHTML = html;
+
+    this.add_new_label();
 
     this.img_container = this.display_element.querySelector("#annotated-image-container");
   }
@@ -108,13 +135,6 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
       this.deselect_all_flag = true;
     });
     document.addEventListener("click", this.deselect_all);
-
-    this.display_element
-      .querySelector('input[type="text"]')
-      .addEventListener("change", this.add_new_label);
-    this.display_element
-      .querySelector('input[type="text"]')
-      .addEventListener("change", this.update_labels);
   }
 
   private add_css() {
@@ -135,21 +155,28 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
 
         #jspsych-annotation-display label {
           border-radius: 0.75em;
-          background-color: green;
+          background-color: var(--main-color);
           color: white;
           padding: 0.35em 0.5em;
-          margin: 0.25em 0em;
+          margin-bottom: 0.25em;
           cursor: pointer;
           display: block;
           line-height: normal;
+          transition: margin-right 0.2s;
         }
 
-        #jspsych-annotation-display label::before {
+        #jspsych-annotation-display input[type="radio"] + label::before {
           content: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>');
           display: inline-block;
           padding-right: 0.5em;
           position: relative;
           top: 0.15em;
+          transform: scale(0);
+          transition: transform 0.2s;
+        }
+
+        #jspsych-annotation-display input[type="radio"]:checked + label::before {
+          transform: scale(1);
         }
 
         #jspsych-annotation-display label input[type="text"] {
@@ -172,10 +199,6 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           outline: none;
         }
 
-        #jspsych-annotation-display input[type="radio"]:checked + label {
-          background-color: grey;
-        }
-
         #jspsych-annotation-display #annotated-image-container {
           cursor: crosshair;
           position: relative;
@@ -187,11 +210,11 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
         }
 
         #jspsych-annotation-display #annotated-image-container .annotation-box {
-          border: 1px solid green;
+          border: 1px solid var(--main-color);
           position: absolute;
-          color:green;
+          color: var(--main-color);
           user-select: none;
-          background-color: #00800040;
+          background-color: var(--very-transparent-color);
         }
 
         #jspsych-annotation-display #annotated-image-container .annotation-box:hover {
@@ -204,9 +227,9 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           text-align:left;
           line-height:1em;
           color: white;
-          background-color: green;
+          background-color: var(--main-color);
           border-radius: 5px;
-          border: 1px solid green;
+          border: 1px solid var(--main-color);
           box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
           position:absolute;
           top:2px;
@@ -262,8 +285,8 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           visibility: hidden;
           width: 4px;
           height: 4px;
-          background-color: #00800080;
-          border: 1px solid #00800080;
+          background-color: var(--transparent-color);
+          border: 1px solid var(--transparent-color);
           position: absolute;
           user-select: none;
           transition: height 0.25s, width 0.25s, left 0.25s, top 0.25s, right 0.25s, bottom 0.25s;
@@ -368,7 +391,7 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
     if (this.is_drawing) {
       this.active_box.finishDrawing();
 
-      this.active_box.setLabel(this.active_label);
+      this.active_box.setCategory(this.active_category);
 
       this.active_box.select();
 
@@ -405,10 +428,10 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
   }
 
   private handle_radio_change(e) {
-    this.active_label = (e.target as HTMLFormElement).value;
+    this.active_category = this.categories[(e.target as HTMLFormElement).id.substring(3, 4)];
     for (const b of this.boxes) {
       if (b.isSelected()) {
-        b.setLabel(this.active_label);
+        b.setCategory(this.active_category);
       }
     }
   }
@@ -421,25 +444,37 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
     }
   }
 
-  private add_new_label(e) {
+  private add_new_label(e?) {
     const container = this.display_element.querySelector("#annotation-options");
-    const options = container.querySelectorAll('input[type="radio"]').length;
+    const category_id = this.categories.length;
+
+    this.categories.push({
+      id: category_id,
+      label: "",
+      color: this.palette[category_id],
+    });
+
     const html = `
-      <div><input type="radio" id="opt${options + 1}" name="annotate_label" value=""><label for="${
-      options + 1
-    }"><input id="opt${options + 1}_text" type="text"></label></div>
+      <div style="--main-color: ${this.palette[category_id]}"><input type="radio" id="opt${category_id}" name="annotate_label" value=""><label for="opt${category_id}"><input id="opt${category_id}_text" type="text"></label></div>
     `;
     container.insertAdjacentHTML("beforeend", html);
     container
-      .querySelector(`#opt${options + 1}_text`)
+      .querySelector(`#opt${category_id}_text`)
       .addEventListener("change", this.add_new_label);
     container
-      .querySelector(`#opt${options + 1}_text`)
+      .querySelector(`#opt${category_id}_text`)
       .addEventListener("change", this.update_labels);
-    e.target.removeEventListener("change", this.add_new_label);
+    container.querySelector(`#opt${category_id}_text`).addEventListener("click", (e) => {
+      (e.target as HTMLFormElement).parentElement.parentElement.querySelector("input").checked =
+        true;
+    });
+
+    if (e) {
+      e.target.removeEventListener("change", this.add_new_label);
+    }
 
     container
-      .querySelector(`#opt${options + 1}`)
+      .querySelector(`#opt${category_id}`)
       .addEventListener("change", this.handle_radio_change);
   }
 
@@ -476,6 +511,8 @@ class AnnotationBox {
   private selected = false;
   private plugin: ImageTextAnnotationPlugin;
   private modifiable = true;
+  private color = "#444444";
+  private category = null;
 
   constructor(x, y, box_list, container, plugin) {
     autoBind(this);
@@ -493,6 +530,8 @@ class AnnotationBox {
 
     this.element = el;
 
+    this.setColor(this.color);
+
     this.container.appendChild(this.element);
   }
 
@@ -503,6 +542,18 @@ class AnnotationBox {
     } else {
       this.element.classList.remove("modifiable");
     }
+  }
+
+  setCategory(category) {
+    this.category = category.id;
+    this.setLabel(category.label);
+    this.setColor(category.color);
+  }
+
+  setColor(color) {
+    this.element.style.setProperty("--main-color", color);
+    this.element.style.setProperty("--transparent-color", color + "80");
+    this.element.style.setProperty("--very-transparent-color", color + "40");
   }
 
   setLabel(label) {
