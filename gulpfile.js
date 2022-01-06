@@ -1,1 +1,1 @@
-export { createCoreDistArchive } from "@jspsych/config/gulp";
+export { createCoreDistArchive, updateUnpkgLinks } from "@jspsych/config/gulp";

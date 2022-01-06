@@ -9,6 +9,7 @@
     "test:watch": "npm test -- --watch",
     "build": "npm run build -w jspsych && npm run build -ws",
     "build:archive": "gulp createCoreDistArchive",
+    "update-unpkg-links": "gulp updateUnpkgLinks",
     "prepare": "husky install && npm run build",
     "tsc": "npm run tsc -ws",
     "changeset": "changeset",
