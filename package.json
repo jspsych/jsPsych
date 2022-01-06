@@ -9,7 +9,7 @@
     "test:watch": "npm test -- --watch",
     "build": "turbo run build",
     "build:archive": "gulp createCoreDistArchive",
-    "prepare": "husky install && npm run build",
+    "prepare": "node -e 'process.exit(!process.env.CI)' || (husky install && npm run build)",
     "tsc": "turbo tsc",
     "changeset": "changeset",
     "release": "changeset publish"
@@ -47,6 +47,7 @@
   },
   "turbo": {
     "baseBranch": "origin/main",
+    "npmClient": "npm",
     "pipeline": {
       "build": {
         "dependsOn": [
