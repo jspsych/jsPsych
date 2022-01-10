@@ -1,0 +1,226 @@
+import { JsPsych, initJsPsych } from "jspsych";
+import { mocked } from "ts-jest/utils";
+
+import TestPlugin from "../../tests/TestPlugin";
+import {
+  repeat,
+  sampleWithReplacement,
+  sampleWithoutReplacement,
+  shuffle,
+  shuffleAlternateGroups,
+} from "../modules/randomization";
+import { Timeline } from "./Timeline";
+import { Trial } from "./Trial";
+import { SampleOptions, TimelineDescription, TimelineVariable } from ".";
+
+jest.mock("../../tests/TestPlugin");
+jest.mock("../modules/randomization");
+const TestPluginMock = mocked(TestPlugin, true);
+
+const exampleTimeline: TimelineDescription = {
+  timeline: [{ type: TestPlugin }, { type: TestPlugin }, { timeline: [{ type: TestPlugin }] }],
+};
+
+describe("Timeline", () => {
+  let jsPsych: JsPsych;
+
+  beforeEach(() => {
+    jsPsych = initJsPsych();
+    TestPluginMock.mockReset();
+    TestPluginMock.prototype.trial.mockImplementation(() => {
+      jsPsych.finishTrial({ my: "result" });
+    });
+  });
+
+  describe("run()", () => {
+    it("instantiates proper child nodes", async () => {
+      const timeline = new Timeline(jsPsych, exampleTimeline);
+
+      await timeline.run();
+
+      const children = timeline.children;
+      expect(children).toEqual([expect.any(Trial), expect.any(Trial), expect.any(Timeline)]);
+      expect((children[2] as Timeline).children).toEqual([expect.any(Trial)]);
+    });
+
+    it("repeats a timeline according to `repetitions`", async () => {
+      const timeline = new Timeline(jsPsych, { ...exampleTimeline, repetitions: 2 });
+
+      await timeline.run();
+
+      expect(timeline.children.length).toBe(6);
+    });
+
+    it("repeats a timeline according to `loop_function`", async () => {
+      const loopFunction = jest.fn();
+      loopFunction.mockReturnValue(false);
+      loopFunction.mockReturnValueOnce(true);
+
+      const timeline = new Timeline(jsPsych, { ...exampleTimeline, loop_function: loopFunction });
+
+      await timeline.run();
+      expect(loopFunction).toHaveBeenCalledTimes(2);
+      expect(timeline.children.length).toBe(6);
+    });
+
+    it("repeats a timeline according to `repetitions` and `loop_function`", async () => {
+      const loopFunction = jest.fn();
+      loopFunction.mockReturnValue(false);
+      loopFunction.mockReturnValueOnce(true);
+      loopFunction.mockReturnValueOnce(false);
+      loopFunction.mockReturnValueOnce(true);
+
+      const timeline = new Timeline(jsPsych, {
+        ...exampleTimeline,
+        repetitions: 2,
+        loop_function: loopFunction,
+      });
+
+      await timeline.run();
+      expect(loopFunction).toHaveBeenCalledTimes(4);
+      expect(timeline.children.length).toBe(12);
+    });
+
+    it("skips execution if `conditional_function` returns `false`", async () => {
+      const timeline = new Timeline(jsPsych, {
+        ...exampleTimeline,
+        conditional_function: jest.fn(() => false),
+      });
+
+      await timeline.run();
+      expect(timeline.children.length).toBe(0);
+    });
+
+    it("executes regularly if `conditional_function` returns `true`", async () => {
+      const timeline = new Timeline(jsPsych, {
+        ...exampleTimeline,
+        conditional_function: jest.fn(() => true),
+      });
+
+      await timeline.run();
+      expect(timeline.children.length).toBe(3);
+    });
+
+    describe("with timeline variables", () => {
+      it("repeats all trials for each set of variables", async () => {
+        const xValues = [];
+        TestPluginMock.prototype.trial.mockImplementation(() => {
+          xValues.push(timeline.evaluateTimelineVariable(new TimelineVariable("x")));
+          jsPsych.finishTrial();
+        });
+
+        const timeline = new Timeline(jsPsych, {
+          timeline: [{ type: TestPlugin }],
+          timeline_variables: [{ x: 0 }, { x: 1 }, { x: 2 }, { x: 3 }],
+        });
+
+        await timeline.run();
+        expect(timeline.children.length).toBe(4);
+        expect(xValues).toEqual([0, 1, 2, 3]);
+      });
+
+      it("respects the `randomize_order` and `sample` options", async () => {
+        let xValues: number[];
+
+        const createTimeline = (sample: SampleOptions, randomize_order?: boolean) => {
+          xValues = [];
+          const timeline = new Timeline(jsPsych, {
+            timeline: [{ type: TestPlugin }],
+            timeline_variables: [{ x: 0 }, { x: 1 }],
+            sample,
+            randomize_order,
+          });
+          TestPluginMock.prototype.trial.mockImplementation(() => {
+            xValues.push(timeline.evaluateTimelineVariable(new TimelineVariable("x")));
+            jsPsych.finishTrial();
+          });
+          return timeline;
+        };
+
+        // `randomize_order`
+        mocked(shuffle).mockReturnValue([1, 0]);
+        await createTimeline(undefined, true).run();
+        expect(shuffle).toHaveBeenCalledWith([0, 1]);
+        expect(xValues).toEqual([1, 0]);
+
+        // with-replacement
+        mocked(sampleWithReplacement).mockReturnValue([0, 0]);
+        await createTimeline({ type: "with-replacement", size: 2, weights: [1, 1] }).run();
+        expect(sampleWithReplacement).toHaveBeenCalledWith([0, 1], 2, [1, 1]);
+        expect(xValues).toEqual([0, 0]);
+
+        // without-replacement
+        mocked(sampleWithoutReplacement).mockReturnValue([1, 0]);
+        await createTimeline({ type: "without-replacement", size: 2 }).run();
+        expect(sampleWithoutReplacement).toHaveBeenCalledWith([0, 1], 2);
+        expect(xValues).toEqual([1, 0]);
+
+        // fixed-repetitions
+        mocked(repeat).mockReturnValue([0, 0, 1, 1]);
+        await createTimeline({ type: "fixed-repetitions", size: 2 }).run();
+        expect(repeat).toHaveBeenCalledWith([0, 1], 2);
+        expect(xValues).toEqual([0, 0, 1, 1]);
+
+        // alternate-groups
+        mocked(shuffleAlternateGroups).mockReturnValue([1, 0]);
+        await createTimeline({
+          type: "alternate-groups",
+          groups: [[0], [1]],
+          randomize_group_order: true,
+        }).run();
+        expect(shuffleAlternateGroups).toHaveBeenCalledWith([[0], [1]], true);
+        expect(xValues).toEqual([1, 0]);
+
+        // custom function
+        const sampleFunction = jest.fn(() => [0]);
+        await createTimeline({ type: "custom", fn: sampleFunction }).run();
+        expect(sampleFunction).toHaveBeenCalledTimes(1);
+        expect(xValues).toEqual([0]);
+
+        // @ts-expect-error non-existing type
+        await expect(createTimeline({ type: "invalid" }).run()).rejects.toEqual(expect.any(Error));
+      });
+    });
+  });
+
+  describe("evaluateTimelineVariable()", () => {
+    describe("if a local timeline variable exists", () => {
+      it("returns the local timeline variable", async () => {
+        const timeline = new Timeline(jsPsych, {
+          timeline: [{ type: TestPlugin }],
+          timeline_variables: [{ x: 0 }],
+        });
+
+        await timeline.run();
+        expect(timeline.evaluateTimelineVariable(new TimelineVariable("x"))).toBe(0);
+      });
+    });
+
+    describe("if a timeline variable is not defined locally", () => {
+      it("recursively falls back to parent timeline variables", async () => {
+        const timeline = new Timeline(jsPsych, {
+          timeline: [{ timeline: [{ type: TestPlugin }] }],
+          timeline_variables: [{ x: 0 }],
+        });
+
+        const variable = new TimelineVariable("x");
+
+        await timeline.run();
+        expect(timeline.evaluateTimelineVariable(variable)).toBe(0);
+        expect(timeline.children[0].evaluateTimelineVariable(variable)).toBe(0);
+      });
+
+      it("returns `undefined` if there are no parents or none of them has a value for the variable", async () => {
+        const timeline = new Timeline(jsPsych, {
+          timeline: [{ timeline: [{ type: TestPlugin }] }],
+        });
+
+        const variable = new TimelineVariable("x");
+
+        await timeline.run();
+        expect(timeline.evaluateTimelineVariable(variable)).toBeUndefined();
+        expect(timeline.children[0].evaluateTimelineVariable(variable)).toBeUndefined();
+      });
+    });
+  });
+});

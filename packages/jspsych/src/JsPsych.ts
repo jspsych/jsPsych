@@ -123,6 +123,8 @@ export class JsPsych {
 
     autoBind(this); // so we can pass JsPsych methods as callbacks and `this` remains the JsPsych instance
 
+    this._resetTrialPromise();
+
     this.webaudio_context =
       typeof window !== "undefined" && typeof window.AudioContext !== "undefined"
         ? new AudioContext()
@@ -224,101 +226,101 @@ export class JsPsych {
     return this.DOM_container;
   }
 
-  finishTrial(data = {}) {
-    if (this.current_trial_finished) {
-      return;
-    }
-    this.current_trial_finished = true;
+  // finishTrial(data = {}) {
+  //   if (this.current_trial_finished) {
+  //     return;
+  //   }
+  //   this.current_trial_finished = true;
 
-    // remove any CSS classes that were added to the DOM via css_classes parameter
-    if (
-      typeof this.current_trial.css_classes !== "undefined" &&
-      Array.isArray(this.current_trial.css_classes)
-    ) {
-      this.DOM_target.classList.remove(...this.current_trial.css_classes);
-    }
+  //   // remove any CSS classes that were added to the DOM via css_classes parameter
+  //   if (
+  //     typeof this.current_trial.css_classes !== "undefined" &&
+  //     Array.isArray(this.current_trial.css_classes)
+  //   ) {
+  //     this.DOM_target.classList.remove(...this.current_trial.css_classes);
+  //   }
 
-    // write the data from the trial
-    this.data.write(data);
+  //   // write the data from the trial
+  //   this.data.write(data);
 
-    // get back the data with all of the defaults in
-    const trial_data = this.data.get().filter({ trial_index: this.global_trial_index });
+  //   // get back the data with all of the defaults in
+  //   const trial_data = this.data.get().filter({ trial_index: this.global_trial_index });
 
-    // for trial-level callbacks, we just want to pass in a reference to the values
-    // of the DataCollection, for easy access and editing.
-    const trial_data_values = trial_data.values()[0];
+  //   // for trial-level callbacks, we just want to pass in a reference to the values
+  //   // of the DataCollection, for easy access and editing.
+  //   const trial_data_values = trial_data.values()[0];
 
-    const current_trial = this.current_trial;
+  //   const current_trial = this.current_trial;
 
-    if (typeof current_trial.save_trial_parameters === "object") {
-      for (const key of Object.keys(current_trial.save_trial_parameters)) {
-        const key_val = current_trial.save_trial_parameters[key];
-        if (key_val === true) {
-          if (typeof current_trial[key] === "undefined") {
-            console.warn(
-              `Invalid parameter specified in save_trial_parameters. Trial has no property called "${key}".`
-            );
-          } else if (typeof current_trial[key] === "function") {
-            trial_data_values[key] = current_trial[key].toString();
-          } else {
-            trial_data_values[key] = current_trial[key];
-          }
-        }
-        if (key_val === false) {
-          // we don't allow internal_node_id or trial_index to be deleted because it would break other things
-          if (key !== "internal_node_id" && key !== "trial_index") {
-            delete trial_data_values[key];
-          }
-        }
-      }
-    }
-    // handle extension callbacks
-    if (Array.isArray(current_trial.extensions)) {
-      for (const extension of current_trial.extensions) {
-        const ext_data_values = this.extensions[extension.type.info.name].on_finish(
-          extension.params
-        );
-        Object.assign(trial_data_values, ext_data_values);
-      }
-    }
+  //   if (typeof current_trial.save_trial_parameters === "object") {
+  //     for (const key of Object.keys(current_trial.save_trial_parameters)) {
+  //       const key_val = current_trial.save_trial_parameters[key];
+  //       if (key_val === true) {
+  //         if (typeof current_trial[key] === "undefined") {
+  //           console.warn(
+  //             `Invalid parameter specified in save_trial_parameters. Trial has no property called "${key}".`
+  //           );
+  //         } else if (typeof current_trial[key] === "function") {
+  //           trial_data_values[key] = current_trial[key].toString();
+  //         } else {
+  //           trial_data_values[key] = current_trial[key];
+  //         }
+  //       }
+  //       if (key_val === false) {
+  //         // we don't allow internal_node_id or trial_index to be deleted because it would break other things
+  //         if (key !== "internal_node_id" && key !== "trial_index") {
+  //           delete trial_data_values[key];
+  //         }
+  //       }
+  //     }
+  //   }
+  //   // handle extension callbacks
+  //   if (Array.isArray(current_trial.extensions)) {
+  //     for (const extension of current_trial.extensions) {
+  //       const ext_data_values = this.extensions[extension.type.info.name].on_finish(
+  //         extension.params
+  //       );
+  //       Object.assign(trial_data_values, ext_data_values);
+  //     }
+  //   }
 
-    // about to execute lots of callbacks, so switch context.
-    this.internal.call_immediate = true;
+  //   // about to execute lots of callbacks, so switch context.
+  //   this.internal.call_immediate = true;
 
-    // handle callback at plugin level
-    if (typeof current_trial.on_finish === "function") {
-      current_trial.on_finish(trial_data_values);
-    }
+  //   // handle callback at plugin level
+  //   if (typeof current_trial.on_finish === "function") {
+  //     current_trial.on_finish(trial_data_values);
+  //   }
 
-    // handle callback at whole-experiment level
-    this.opts.on_trial_finish(trial_data_values);
+  //   // handle callback at whole-experiment level
+  //   this.opts.on_trial_finish(trial_data_values);
 
-    // after the above callbacks are complete, then the data should be finalized
-    // for this trial. call the on_data_update handler, passing in the same
-    // data object that just went through the trial's finish handlers.
-    this.opts.on_data_update(trial_data_values);
+  //   // after the above callbacks are complete, then the data should be finalized
+  //   // for this trial. call the on_data_update handler, passing in the same
+  //   // data object that just went through the trial's finish handlers.
+  //   this.opts.on_data_update(trial_data_values);
 
-    // done with callbacks
-    this.internal.call_immediate = false;
+  //   // done with callbacks
+  //   this.internal.call_immediate = false;
 
-    // wait for iti
-    if (
-      typeof current_trial.post_trial_gap === null ||
-      typeof current_trial.post_trial_gap === "undefined"
-    ) {
-      if (this.opts.default_iti > 0) {
-        setTimeout(this.nextTrial, this.opts.default_iti);
-      } else {
-        this.nextTrial();
-      }
-    } else {
-      if (current_trial.post_trial_gap > 0) {
-        setTimeout(this.nextTrial, current_trial.post_trial_gap);
-      } else {
-        this.nextTrial();
-      }
-    }
-  }
+  //   // wait for iti
+  //   if (
+  //     typeof current_trial.post_trial_gap === null ||
+  //     typeof current_trial.post_trial_gap === "undefined"
+  //   ) {
+  //     if (this.opts.default_iti > 0) {
+  //       setTimeout(this.nextTrial, this.opts.default_iti);
+  //     } else {
+  //       this.nextTrial();
+  //     }
+  //   } else {
+  //     if (current_trial.post_trial_gap > 0) {
+  //       setTimeout(this.nextTrial, current_trial.post_trial_gap);
+  //     } else {
+  //       this.nextTrial();
+  //     }
+  //   }
+  // }
 
   endExperiment(end_message = "", data = {}) {
     this.timeline.end_message = end_message;
@@ -880,5 +882,24 @@ export class JsPsych {
 
   getProgressBarCompleted() {
     return this.progress_bar_amount;
+  }
+
+  // New stuff as replacements for old methods:
+
+  /**
+   * resolved when `jsPsych.finishTrial()` is called
+   */
+  _trialPromise: Promise<Record<string, any>>;
+
+  private _resolveTrialPromise: (data: Record<string, any>) => void;
+  private _resetTrialPromise = () => {
+    this._trialPromise = new Promise((resolve) => {
+      this._resolveTrialPromise = resolve;
+    });
+  };
+
+  finishTrial(data: Record<string, any> = {}) {
+    this._resolveTrialPromise(data);
+    this._resetTrialPromise();
   }
 }

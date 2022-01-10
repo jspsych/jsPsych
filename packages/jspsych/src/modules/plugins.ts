@@ -123,7 +123,7 @@ export const universalPluginParameters = <const>{
   post_trial_gap: {
     type: ParameterType.INT,
     pretty_name: "Post trial gap",
-    default: null,
+    default: 0,
   },
   /**
    * A list of CSS classes to add to the jsPsych display element for the duration of this trial
@@ -131,18 +131,20 @@ export const universalPluginParameters = <const>{
   css_classes: {
     type: ParameterType.STRING,
     pretty_name: "Custom CSS classes",
-    default: null,
+    default: "",
   },
   /**
    * Options to control simulation mode for the trial.
    */
   simulation_options: {
     type: ParameterType.COMPLEX,
-    default: null,
+    default: {},
   },
 };
 
 export type UniversalPluginParameters = InferredParameters<typeof universalPluginParameters>;
+
+type test = undefined extends null ? "a" : "b";
 
 export interface PluginInfo {
   name: string;
