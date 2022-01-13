@@ -1,16 +1,4 @@
-/**
-Flatten the type output to improve type hints shown in editors.
-Borrowed from type-fest
-*/
-type Simplify<T> = { [KeyType in keyof T]: T[KeyType] };
-
-/**
-Create a type that makes the given keys required. The remaining keys are kept as is.
-Borrowed from type-fest
-*/
-type SetRequired<BaseType, Keys extends keyof BaseType> = Simplify<
-  Omit<BaseType, Keys> & Required<Pick<BaseType, Keys>>
->;
+import { SetRequired } from "type-fest";
 
 /**
  * Parameter types for plugins
@@ -51,13 +39,17 @@ type ParameterTypeMap = {
   [ParameterType.TIMELINE]: any;
 };
 
-export interface ParameterInfo {
-  type: ParameterType;
+type PreloadParameterType = ParameterType.AUDIO | ParameterType.VIDEO | ParameterType.IMAGE;
+
+export type ParameterInfo = (
+  | { type: Exclude<ParameterType, ParameterType.COMPLEX | PreloadParameterType> }
+  | { type: ParameterType.COMPLEX; nested?: ParameterInfos }
+  | { type: PreloadParameterType; preload?: boolean }
+) & {
   array?: boolean;
   pretty_name?: string;
   default?: any;
-  preload?: boolean;
-}
+};
 
 export interface ParameterInfos {
   [key: string]: ParameterInfo;
@@ -148,9 +140,7 @@ type test = undefined extends null ? "a" : "b";
 
 export interface PluginInfo {
   name: string;
-  parameters: {
-    [key: string]: ParameterInfo;
-  };
+  parameters: ParameterInfos;
 }
 
 export interface JsPsychPlugin<I extends PluginInfo> {

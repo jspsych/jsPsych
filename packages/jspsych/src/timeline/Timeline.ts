@@ -8,19 +8,26 @@ import {
   shuffleAlternateGroups,
 } from "../modules/randomization";
 import { deepCopy } from "../modules/utils";
+import { BaseTimelineNode } from "./BaseTimelineNode";
 import { Trial } from "./Trial";
-import { TimelineDescription, TimelineNode, TimelineVariable, isTimelineDescription } from ".";
+import {
+  GetParameterValueOptions,
+  TimelineDescription,
+  TimelineNode,
+  TimelineVariable,
+  isTimelineDescription,
+  timelineDescriptionKeys,
+} from ".";
 
-export class Timeline implements TimelineNode {
+export class Timeline extends BaseTimelineNode {
   public readonly children: TimelineNode[] = [];
-  public readonly description: TimelineDescription;
 
   constructor(
-    private readonly jsPsych: JsPsych,
-    description: TimelineDescription,
-    private readonly parent?: TimelineNode
+    jsPsych: JsPsych,
+    public readonly description: TimelineDescription,
+    protected readonly parent?: Timeline
   ) {
-    this.description = deepCopy(description);
+    super(jsPsych);
   }
 
   public async run() {
@@ -122,5 +129,10 @@ export class Timeline implements TimelineNode {
     }
   }
 
-  public getParameterValue(parameterName: string) {}
+  public getParameterValue(parameterName: string, options?: GetParameterValueOptions) {
+    if (timelineDescriptionKeys.includes(parameterName)) {
+      return;
+    }
+    return super.getParameterValue(parameterName, options);
+  }
 }

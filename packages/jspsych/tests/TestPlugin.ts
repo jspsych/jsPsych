@@ -2,23 +2,13 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 export const testPluginInfo = <const>{
   name: "test",
-  parameters: {
-    stimulus: {
-      type: ParameterType.STRING,
-      pretty_name: "Stimulus",
-      default: undefined,
-    },
-  },
+  parameters: {},
 };
 
 class TestPlugin implements JsPsychPlugin<typeof testPluginInfo> {
   static info = testPluginInfo;
-  static currentInstance: TestPlugin;
-  static trialFunctionSpy: jest.SpyInstance<void, [HTMLElement, TrialType<typeof testPluginInfo>]>;
 
-  constructor(private jsPsych: JsPsych) {
-    TestPlugin.currentInstance = this;
-  }
+  constructor(private jsPsych: JsPsych) {}
 
   trial(
     display_element: HTMLElement,

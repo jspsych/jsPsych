@@ -34,6 +34,16 @@ export interface TrialDescription extends Record<string, any> {
   on_finish?: (data: any) => void;
 }
 
+export const trialDescriptionKeys = [
+  "type",
+  "post_trial_gap",
+  "css_classes",
+  "simulation_options",
+  "on_start",
+  "on_load",
+  "on_finish",
+];
+
 /** https://www.jspsych.org/latest/overview/timeline/#sampling-methods */
 export type SampleOptions =
   | { type: "with-replacement"; size: number; weights?: number[] }
@@ -42,7 +52,7 @@ export type SampleOptions =
   | { type: "alternate-groups"; groups: number[][]; randomize_group_order?: boolean }
   | { type: "custom"; fn: (ids: number[]) => number[] };
 
-export interface TimelineDescription {
+export interface TimelineDescription extends Record<string, any> {
   timeline: Array<TimelineDescription | TrialDescription>;
   timeline_variables?: Record<string, any>[];
 
@@ -74,6 +84,18 @@ export interface TimelineDescription {
   on_timeline_finish?: () => void;
 }
 
+export const timelineDescriptionKeys = [
+  "timeline",
+  "timeline_variables",
+  "repetitions",
+  "loop_function",
+  "conditional_function",
+  "randomize_order",
+  "sample",
+  "on_timeline_start",
+  "on_timeline_finish",
+];
+
 export function isTrialDescription(
   description: TrialDescription | TimelineDescription
 ): description is TrialDescription {
@@ -85,6 +107,8 @@ export function isTimelineDescription(
 ): description is TimelineDescription {
   return Boolean((description as TimelineDescription).timeline);
 }
+
+export type GetParameterValueOptions = { evaluateFunctions?: boolean; recursive?: boolean };
 
 export interface TimelineNode {
   readonly description: TimelineDescription | TrialDescription;
@@ -100,9 +124,15 @@ export interface TimelineNode {
 
   /**
    * Retrieves a parameter value from the description of this timeline node, recursively falling
-   * back to the description of each parent timeline node. If the parameter is a timeline variable,
-   * evaluates the variable at the timeline node where it is specified and returns the result. If
-   * the parameter is not specified, returns `undefined`.
+   * back to the description of each parent timeline node if `recursive` is not set to `false`. If
+   * the parameter...
+   *
+   * * is a timeline variable, evaluates the variable and returns the result.
+   * * is not specified, returns `undefined`.
+   * * is a function and `evaluateFunctions` is set to `true`, invokes the function and returns its
+   *   return value
+   *
+   * `parameterName` may include dots to signal nested object properties.
    */
-  getParameterValue(parameterName: string): any;
+  getParameterValue(parameterName: string, options?: GetParameterValueOptions): any;
 }

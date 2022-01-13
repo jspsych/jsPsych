@@ -11,7 +11,7 @@ import {
 } from "../modules/randomization";
 import { Timeline } from "./Timeline";
 import { Trial } from "./Trial";
-import { SampleOptions, TimelineDescription, TimelineVariable } from ".";
+import { SampleOptions, TimelineDescription, TimelineVariable, trialDescriptionKeys } from ".";
 
 jest.mock("../../tests/TestPlugin");
 jest.mock("../modules/randomization");
@@ -199,15 +199,17 @@ describe("Timeline", () => {
     describe("if a timeline variable is not defined locally", () => {
       it("recursively falls back to parent timeline variables", async () => {
         const timeline = new Timeline(jsPsych, {
-          timeline: [{ timeline: [{ type: TestPlugin }] }],
-          timeline_variables: [{ x: 0 }],
+          timeline: [{ timeline: [{ type: TestPlugin }], timeline_variables: [{ x: undefined }] }],
+          timeline_variables: [{ x: 0, y: 0 }],
         });
 
-        const variable = new TimelineVariable("x");
-
         await timeline.run();
-        expect(timeline.evaluateTimelineVariable(variable)).toBe(0);
-        expect(timeline.children[0].evaluateTimelineVariable(variable)).toBe(0);
+        expect(timeline.evaluateTimelineVariable(new TimelineVariable("x"))).toBe(0);
+        expect(timeline.evaluateTimelineVariable(new TimelineVariable("y"))).toBe(0);
+
+        const childTimeline = timeline.children[0] as Timeline;
+        expect(childTimeline.evaluateTimelineVariable(new TimelineVariable("x"))).toBeUndefined();
+        expect(childTimeline.evaluateTimelineVariable(new TimelineVariable("y"))).toBe(0);
       });
 
       it("returns `undefined` if there are no parents or none of them has a value for the variable", async () => {
@@ -219,8 +221,110 @@ describe("Timeline", () => {
 
         await timeline.run();
         expect(timeline.evaluateTimelineVariable(variable)).toBeUndefined();
-        expect(timeline.children[0].evaluateTimelineVariable(variable)).toBeUndefined();
+        expect(
+          (timeline.children[0] as Timeline).evaluateTimelineVariable(variable)
+        ).toBeUndefined();
       });
+    });
+  });
+
+  describe("getParameterValue()", () => {
+    // Note: This includes test cases for the implementation provided by `BaseTimelineNode`.
+
+    it("ignores builtin timeline parameters", async () => {
+      const timeline = new Timeline(jsPsych, {
+        timeline: [],
+        timeline_variables: [],
+        repetitions: 1,
+        loop_function: jest.fn(),
+        conditional_function: jest.fn(),
+        randomize_order: false,
+        sample: { type: "custom", fn: jest.fn() },
+        on_timeline_start: jest.fn(),
+        on_timeline_finish: jest.fn(),
+      });
+
+      expect(timeline.getParameterValue("timeline")).toBeUndefined();
+      expect(timeline.getParameterValue("timeline_variables")).toBeUndefined();
+      expect(timeline.getParameterValue("repetitions")).toBeUndefined();
+      expect(timeline.getParameterValue("loop_function")).toBeUndefined();
+      expect(timeline.getParameterValue("conditional_function")).toBeUndefined();
+      expect(timeline.getParameterValue("randomize_order")).toBeUndefined();
+      expect(timeline.getParameterValue("sample")).toBeUndefined();
+      expect(timeline.getParameterValue("on_timeline_start")).toBeUndefined();
+      expect(timeline.getParameterValue("on_timeline_finish")).toBeUndefined();
+    });
+
+    it("returns the local parameter value, if it exists", async () => {
+      const timeline = new Timeline(jsPsych, { timeline: [], my_parameter: "test" });
+
+      expect(timeline.getParameterValue("my_parameter")).toBe("test");
+      expect(timeline.getParameterValue("other_parameter")).toBeUndefined();
+    });
+
+    it("falls back to parent parameter values if `recursive` is not `false`", async () => {
+      const parentTimeline = new Timeline(jsPsych, {
+        timeline: [],
+        first_parameter: "test",
+        second_parameter: "test",
+      });
+      const childTimeline = new Timeline(
+        jsPsych,
+        { timeline: [], first_parameter: undefined },
+        parentTimeline
+      );
+
+      expect(childTimeline.getParameterValue("second_parameter")).toBe("test");
+      expect(
+        childTimeline.getParameterValue("second_parameter", { recursive: false })
+      ).toBeUndefined();
+
+      expect(childTimeline.getParameterValue("first_parameter")).toBeUndefined();
+      expect(childTimeline.getParameterValue("other_parameter")).toBeUndefined();
+    });
+
+    it("evaluates timeline variables", async () => {
+      const timeline = new Timeline(jsPsych, {
+        timeline: [{ timeline: [], child_parameter: new TimelineVariable("x") }],
+        timeline_variables: [{ x: 0 }],
+        parent_parameter: new TimelineVariable("x"),
+      });
+
+      await timeline.run();
+
+      expect(timeline.children[0].getParameterValue("child_parameter")).toBe(0);
+      expect(timeline.children[0].getParameterValue("parent_parameter")).toBe(0);
+    });
+
+    it("evaluates functions if `evaluateFunctions` is set to `true`", async () => {
+      const timeline = new Timeline(jsPsych, {
+        timeline: [],
+        function_parameter: jest.fn(() => "result"),
+      });
+
+      expect(typeof timeline.getParameterValue("function_parameter")).toBe("function");
+      expect(
+        typeof timeline.getParameterValue("function_parameter", { evaluateFunctions: false })
+      ).toBe("function");
+      expect(timeline.getParameterValue("function_parameter", { evaluateFunctions: true })).toBe(
+        "result"
+      );
+    });
+
+    it("considers nested properties if `parameterName` contains dots", async () => {
+      const timeline = new Timeline(jsPsych, {
+        timeline: [],
+        object: {
+          childString: "foo",
+          childObject: {
+            childString: "bar",
+          },
+        },
+      });
+
+      expect(timeline.getParameterValue("object.childString")).toBe("foo");
+      expect(timeline.getParameterValue("object.childObject")).toEqual({ childString: "bar" });
+      expect(timeline.getParameterValue("object.childObject.childString")).toBe("bar");
     });
   });
 });

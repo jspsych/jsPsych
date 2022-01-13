@@ -1,25 +1,35 @@
 import { JsPsych, JsPsychPlugin, ParameterType, PluginInfo, TrialType } from "jspsych";
+import { ParameterInfos } from "src/modules/plugins";
 
 import { deepCopy } from "../modules/utils";
+import { BaseTimelineNode } from "./BaseTimelineNode";
 import { Timeline } from "./Timeline";
-import { TimelineNode, TimelineVariable, TrialDescription, isPromise } from ".";
+import {
+  GetParameterValueOptions,
+  TimelineNode,
+  TimelineVariable,
+  TrialDescription,
+  isPromise,
+  trialDescriptionKeys,
+} from ".";
 
-export class Trial implements TimelineNode {
+export class Trial extends BaseTimelineNode {
   resultData: Record<string, any>;
 
   public pluginInstance: JsPsychPlugin<any>;
-  public readonly description: TrialDescription;
+  public readonly trialObject: TrialDescription;
 
   constructor(
-    private readonly jsPsych: JsPsych,
-    description: TrialDescription,
-    private readonly parent?: Timeline
+    jsPsych: JsPsych,
+    public readonly description: TrialDescription,
+    protected readonly parent: Timeline
   ) {
-    this.description = deepCopy(description);
-    // TODO perform checks on the description object
+    super(jsPsych);
+    this.trialObject = deepCopy(description);
   }
 
   public async run() {
+    this.processParameters();
     this.onStart();
 
     this.pluginInstance = new this.description.type(this.jsPsych);
@@ -27,7 +37,7 @@ export class Trial implements TimelineNode {
     let trialPromise = this.jsPsych._trialPromise;
     const trialReturnValue = this.pluginInstance.trial(
       this.jsPsych.getDisplayElement() ?? document.createElement("div"), // TODO Remove this hack once getDisplayElement() returns something
-      this.description,
+      this.trialObject,
       this.onLoad
     );
 
@@ -45,7 +55,7 @@ export class Trial implements TimelineNode {
 
   private onStart() {
     if (this.description.on_start) {
-      this.description.on_start(this.description);
+      this.description.on_start(this.trialObject);
     }
   }
 
@@ -67,31 +77,53 @@ export class Trial implements TimelineNode {
     return this.parent?.evaluateTimelineVariable(variable);
   }
 
-  public getParameterValue(parameterName: string) {
-    const localResult = this.description[parameterName];
-    return typeof localResult === undefined
-      ? this.parent.getParameterValue(parameterName)
-      : localResult;
+  public getParameterValue(parameterName: string, options?: GetParameterValueOptions) {
+    if (trialDescriptionKeys.includes(parameterName)) {
+      return;
+    }
+    return super.getParameterValue(parameterName, options);
   }
 
   /**
    * Checks that the parameters provided in the trial description align with the plugin's info
-   * object, sets default values for optional parameters, and resolves timeline variable parameters.
+   * object, resolves missing parameter values from the parent timeline, resolves timeline variable
+   * parameters, evaluates parameter functions if the expected parameter type is not `FUNCTION`, and
+   * sets default values for optional parameters.
    */
-  private initializeParameters() {
+  private processParameters() {
     const pluginInfo: PluginInfo = this.description.type["info"];
-    for (const [parameterName, parameterConfig] of Object.entries(pluginInfo.parameters)) {
-      // if (typeof trial.type.info.parameters[param].default === "undefined") {
-      //   throw new Error(
-      //     "You must specify a value for the " +
-      //       param +
-      //       " parameter in the " +
-      //       trial.type.info.name +
-      //       " plugin."
-      //   );
-      // } else {
-      //   trial[param] = trial.type.info.parameters[param].default;
-      // }
-    }
+
+    // Set parameters according to the plugin info object
+    const assignParameterValues = (
+      parameterObject: Record<string, any>,
+      parameterInfos: ParameterInfos,
+      path = ""
+    ) => {
+      for (const [parameterName, parameterConfig] of Object.entries(parameterInfos)) {
+        const parameterPath = path + parameterName;
+
+        let parameterValue = this.getParameterValue(parameterPath, {
+          evaluateFunctions: parameterConfig.type !== ParameterType.FUNCTION,
+        });
+
+        if (typeof parameterValue === "undefined") {
+          if (typeof parameterConfig.default === "undefined") {
+            throw new Error(
+              `You must specify a value for the "${parameterPath}" parameter in the "${pluginInfo.name}" plugin.`
+            );
+          } else {
+            parameterValue = parameterConfig.default;
+          }
+        }
+
+        if (parameterConfig.type === ParameterType.COMPLEX && parameterConfig.nested) {
+          assignParameterValues(parameterValue, parameterConfig.nested, parameterPath + ".");
+        }
+
+        parameterObject[parameterName] = parameterValue;
+      }
+    };
+
+    assignParameterValues(this.trialObject, pluginInfo.parameters);
   }
 }

@@ -40,12 +40,16 @@
   "homepage": "https://www.jspsych.org",
   "dependencies": {
     "auto-bind": "^4.0.0",
+    "lodash.get": "^4.4.2",
+    "lodash.has": "^4.5.2",
     "random-words": "^1.1.1",
     "type-fest": "^2.9.0"
   },
   "devDependencies": {
     "@jspsych/config": "^1.1.0",
     "@jspsych/test-utils": "^1.1.1",
-    "@types/dom-mediacapture-record": "^1.0.11"
+    "@types/dom-mediacapture-record": "^1.0.11",
+    "@types/lodash.get": "^4.4.6",
+    "@types/lodash.has": "^4.5.6"
   }
 }
