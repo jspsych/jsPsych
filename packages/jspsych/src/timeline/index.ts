@@ -136,3 +136,6 @@ export interface TimelineNode {
    */
   getParameterValue(parameterName: string, options?: GetParameterValueOptions): any;
 }
+
+export type TrialResult = Record<string, any>;
+export type TrialResults = Array<Record<string, any>>;

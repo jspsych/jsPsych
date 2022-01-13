@@ -898,7 +898,7 @@ export class JsPsych {
     });
   };
 
-  finishTrial(data: Record<string, any> = {}) {
+  finishTrial(data?: Record<string, any>) {
     this._resolveTrialPromise(data);
     this._resetTrialPromise();
   }

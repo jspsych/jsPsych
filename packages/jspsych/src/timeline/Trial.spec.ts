@@ -103,10 +103,22 @@ describe("Trial", () => {
         expect(onLoadCallback).toHaveBeenCalledTimes(1);
       });
 
-      it("picks up the result data from the promise", async () => {
-        const trial = createTrial({ type: TestPlugin });
-        await trial.run();
-        expect(trial.resultData).toEqual({ promised: "result" });
+      it("picks up the result data from the promise or the `finishTrial()` function (where the latter one takes precedence)", async () => {
+        const trial1 = createTrial({ type: TestPlugin });
+        await trial1.run();
+        expect(trial1.getResult()).toEqual({ promised: "result" });
+
+        TestPluginMock.prototype.trial.mockImplementation(
+          async (display_element, trial, on_load) => {
+            on_load();
+            jsPsych.finishTrial({ my: "result" });
+            return { promised: "result" };
+          }
+        );
+
+        const trial2 = createTrial({ type: TestPlugin });
+        await trial2.run();
+        expect(trial2.getResult()).toEqual({ my: "result" });
       });
     });
 
@@ -123,7 +135,7 @@ describe("Trial", () => {
         const trial = createTrial({ type: TestPlugin });
 
         await trial.run();
-        expect(trial.resultData).toEqual({ my: "result" });
+        expect(trial.getResult()).toEqual({ my: "result" });
       });
     });
 
@@ -134,6 +146,12 @@ describe("Trial", () => {
 
       expect(onFinishCallback).toHaveBeenCalledTimes(1);
       expect(onFinishCallback).toHaveBeenCalledWith({ my: "result" });
+    });
+
+    it("includes result data from the `data` property", async () => {
+      const trial = createTrial({ type: TestPlugin, data: { custom: "value" } });
+      await trial.run();
+      expect(trial.getResult()).toEqual({ my: "result", custom: "value" });
     });
 
     describe("with a plugin parameter specification", () => {

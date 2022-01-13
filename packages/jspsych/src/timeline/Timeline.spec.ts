@@ -60,6 +60,9 @@ describe("Timeline", () => {
 
       await timeline.run();
       expect(loopFunction).toHaveBeenCalledTimes(2);
+      expect(loopFunction).toHaveBeenNthCalledWith(1, Array(3).fill({ my: "result" }));
+      expect(loopFunction).toHaveBeenNthCalledWith(2, Array(6).fill({ my: "result" }));
+
       expect(timeline.children.length).toBe(6);
     });
 
@@ -325,6 +328,22 @@ describe("Timeline", () => {
       expect(timeline.getParameterValue("object.childString")).toBe("foo");
       expect(timeline.getParameterValue("object.childObject")).toEqual({ childString: "bar" });
       expect(timeline.getParameterValue("object.childObject.childString")).toBe("bar");
+    });
+  });
+
+  describe("getResults()", () => {
+    it("recursively returns all results", async () => {
+      const timeline = new Timeline(jsPsych, exampleTimeline);
+      await timeline.run();
+      expect(timeline.getResults()).toEqual(Array(3).fill({ my: "result" }));
+    });
+
+    it("does not include `undefined` results", async () => {
+      const timeline = new Timeline(jsPsych, exampleTimeline);
+      await timeline.run();
+
+      jest.spyOn(timeline.children[0] as Trial, "getResult").mockReturnValue(undefined);
+      expect(timeline.getResults()).toEqual(Array(2).fill({ my: "result" }));
     });
   });
 });

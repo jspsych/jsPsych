@@ -6,15 +6,15 @@ import { BaseTimelineNode } from "./BaseTimelineNode";
 import { Timeline } from "./Timeline";
 import {
   GetParameterValueOptions,
-  TimelineNode,
   TimelineVariable,
   TrialDescription,
+  TrialResult,
   isPromise,
   trialDescriptionKeys,
 } from ".";
 
 export class Trial extends BaseTimelineNode {
-  resultData: Record<string, any>;
+  private result: TrialResult;
 
   public pluginInstance: JsPsychPlugin<any>;
   public readonly trialObject: TrialDescription;
@@ -35,20 +35,35 @@ export class Trial extends BaseTimelineNode {
     this.pluginInstance = new this.description.type(this.jsPsych);
 
     let trialPromise = this.jsPsych._trialPromise;
+
+    /** Used as a way to figure out if `finishTrial()` has ben called without awaiting `trialPromise` */
+    let hasTrialPromiseBeenResolved = false;
+    trialPromise.then(() => {
+      hasTrialPromiseBeenResolved = true;
+    });
+
     const trialReturnValue = this.pluginInstance.trial(
       this.jsPsych.getDisplayElement() ?? document.createElement("div"), // TODO Remove this hack once getDisplayElement() returns something
       this.trialObject,
       this.onLoad
     );
 
+    // Wait until the trial has completed and grab result data
+    let result: TrialResult;
     if (isPromise(trialReturnValue)) {
-      trialPromise = trialReturnValue;
+      result = await Promise.race([trialReturnValue, trialPromise]);
+
+      // If `finishTrial()` was called, use the result provided to it. This may happen although
+      // `trialReturnValue` won the race ("run-to-completion").
+      if (hasTrialPromiseBeenResolved) {
+        result = await trialPromise;
+      }
     } else {
       this.onLoad();
+      result = await trialPromise;
     }
 
-    // Wait until the trial has completed and grab result data
-    this.resultData = (await trialPromise) ?? {};
+    this.result = { ...this.trialObject.data, ...result };
 
     this.onFinish();
   }
@@ -67,7 +82,7 @@ export class Trial extends BaseTimelineNode {
 
   private onFinish() {
     if (this.description.on_finish) {
-      this.description.on_finish(this.resultData);
+      this.description.on_finish(this.getResult());
     }
   }
 
@@ -82,6 +97,13 @@ export class Trial extends BaseTimelineNode {
       return;
     }
     return super.getParameterValue(parameterName, options);
+  }
+
+  /**
+   * Returns the result object of this trial or `undefined` if the result is not yet known.
+   */
+  public getResult() {
+    return this.result;
   }
 
   /**

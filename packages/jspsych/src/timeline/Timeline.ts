@@ -1,5 +1,4 @@
 import { JsPsych } from "../JsPsych";
-import { JsPsychPlugin, PluginInfo } from "../modules/plugins";
 import {
   repeat,
   sampleWithReplacement,
@@ -7,7 +6,6 @@ import {
   shuffle,
   shuffleAlternateGroups,
 } from "../modules/randomization";
-import { deepCopy } from "../modules/utils";
 import { BaseTimelineNode } from "./BaseTimelineNode";
 import { Trial } from "./Trial";
 import {
@@ -46,7 +44,7 @@ export class Timeline extends BaseTimelineNode {
               await childNode.run();
             }
           }
-        } while (description.loop_function && description.loop_function([])); // TODO What data?
+        } while (description.loop_function && description.loop_function(this.getResults()));
       }
     }
   }
@@ -134,5 +132,24 @@ export class Timeline extends BaseTimelineNode {
       return;
     }
     return super.getParameterValue(parameterName, options);
+  }
+
+  /**
+   * Returns a flat array containing the results of all nested trials that have results so far
+   */
+  public getResults() {
+    const results = [];
+    for (const child of this.children) {
+      if (child instanceof Trial) {
+        const childResult = child.getResult();
+        if (childResult) {
+          results.push(childResult);
+        }
+      } else if (child instanceof Timeline) {
+        results.push(...child.getResults());
+      }
+    }
+
+    return results;
   }
 }
