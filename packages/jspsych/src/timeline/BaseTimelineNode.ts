@@ -7,21 +7,30 @@ import {
   GetParameterValueOptions,
   TimelineDescription,
   TimelineNode,
+  TimelineNodeStatus,
   TimelineVariable,
   TrialDescription,
 } from ".";
 
 export abstract class BaseTimelineNode implements TimelineNode {
   abstract readonly description: TimelineDescription | TrialDescription;
-  protected abstract readonly parent?: Timeline;
+  abstract readonly index: number;
 
-  constructor(protected readonly jsPsych: JsPsych) {}
+  protected abstract readonly parent?: Timeline;
 
   abstract run(): Promise<void>;
   abstract evaluateTimelineVariable(variable: TimelineVariable): any;
 
+  protected status = TimelineNodeStatus.PENDING;
+
+  constructor(protected readonly jsPsych: JsPsych) {}
+
+  getStatus() {
+    return this.status;
+  }
+
   getParameterValue(parameterName: string, options: GetParameterValueOptions = {}) {
-    const { evaluateFunctions = false, recursive = true } = options;
+    const { evaluateFunctions = true, recursive = true } = options;
 
     let result: any;
     if (has(this.description, parameterName)) {

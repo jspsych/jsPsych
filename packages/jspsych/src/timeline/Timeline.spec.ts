@@ -1,3 +1,4 @@
+import { flushPromises } from "@jspsych/test-utils";
 import { JsPsych, initJsPsych } from "jspsych";
 import { mocked } from "ts-jest/utils";
 
@@ -11,7 +12,10 @@ import {
 } from "../modules/randomization";
 import { Timeline } from "./Timeline";
 import { Trial } from "./Trial";
-import { SampleOptions, TimelineDescription, TimelineVariable, trialDescriptionKeys } from ".";
+import { PromiseWrapper } from "./util";
+import { SampleOptions, TimelineDescription, TimelineNodeStatus, TimelineVariable } from ".";
+
+jest.useFakeTimers();
 
 jest.mock("../../tests/TestPlugin");
 jest.mock("../modules/randomization");
@@ -24,12 +28,26 @@ const exampleTimeline: TimelineDescription = {
 describe("Timeline", () => {
   let jsPsych: JsPsych;
 
+  /**
+   * Allows to run
+   * ```js
+   * TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+   * ```
+   * and move through trials via `proceedWithTrial()`
+   */
+  const trialPromise = new PromiseWrapper();
+  const proceedWithTrial = () => {
+    trialPromise.resolve();
+    return flushPromises();
+  };
+
   beforeEach(() => {
     jsPsych = initJsPsych();
     TestPluginMock.mockReset();
     TestPluginMock.prototype.trial.mockImplementation(() => {
       jsPsych.finishTrial({ my: "result" });
     });
+    trialPromise.reset();
   });
 
   describe("run()", () => {
@@ -41,6 +59,71 @@ describe("Timeline", () => {
       const children = timeline.children;
       expect(children).toEqual([expect.any(Trial), expect.any(Trial), expect.any(Timeline)]);
       expect((children[2] as Timeline).children).toEqual([expect.any(Trial)]);
+
+      expect(children.map((child) => child.index)).toEqual([0, 1, 2]);
+    });
+
+    describe("with `pause()` and `resume()` calls`", () => {
+      it("pauses, resumes, and updates the results of getStatus()", async () => {
+        TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+
+        const timeline = new Timeline(jsPsych, exampleTimeline);
+        const runPromise = timeline.run();
+
+        expect(timeline.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+        expect(timeline.children[0].getStatus()).toBe(TimelineNodeStatus.RUNNING);
+        await proceedWithTrial();
+
+        expect(timeline.children[0].getStatus()).toBe(TimelineNodeStatus.COMPLETED);
+        expect(timeline.children[1].getStatus()).toBe(TimelineNodeStatus.RUNNING);
+        timeline.pause();
+        expect(timeline.getStatus()).toBe(TimelineNodeStatus.PAUSED);
+
+        await proceedWithTrial();
+        expect(timeline.children[1].getStatus()).toBe(TimelineNodeStatus.COMPLETED);
+        expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.PENDING);
+
+        // Resolving the next trial promise shouldn't continue the experiment since no trial should be running.
+        await proceedWithTrial();
+
+        expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.PENDING);
+
+        timeline.resume();
+        await flushPromises();
+        expect(timeline.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+        expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.RUNNING);
+
+        await proceedWithTrial();
+        expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.COMPLETED);
+        expect(timeline.getStatus()).toBe(TimelineNodeStatus.COMPLETED);
+
+        await runPromise;
+      });
+
+      // https://www.jspsych.org/7.1/reference/jspsych/#description_15
+      it("doesn't affect `post_trial_gap`", async () => {
+        TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+
+        const timeline = new Timeline(jsPsych, [{ type: TestPlugin, post_trial_gap: 200 }]);
+        const runPromise = timeline.run();
+        const child = timeline.children[0];
+
+        expect(child.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+        await proceedWithTrial();
+        expect(child.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+
+        timeline.pause();
+        jest.advanceTimersByTime(100);
+        timeline.resume();
+        await flushPromises();
+        expect(timeline.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+
+        jest.advanceTimersByTime(100);
+        await flushPromises();
+        expect(timeline.getStatus()).toBe(TimelineNodeStatus.COMPLETED);
+
+        await runPromise;
+      });
     });
 
     it("repeats a timeline according to `repetitions`", async () => {
@@ -60,8 +143,14 @@ describe("Timeline", () => {
 
       await timeline.run();
       expect(loopFunction).toHaveBeenCalledTimes(2);
-      expect(loopFunction).toHaveBeenNthCalledWith(1, Array(3).fill({ my: "result" }));
-      expect(loopFunction).toHaveBeenNthCalledWith(2, Array(6).fill({ my: "result" }));
+      expect(loopFunction).toHaveBeenNthCalledWith(
+        1,
+        Array(3).fill(expect.objectContaining({ my: "result" }))
+      );
+      expect(loopFunction).toHaveBeenNthCalledWith(
+        2,
+        Array(6).fill(expect.objectContaining({ my: "result" }))
+      );
 
       expect(timeline.children.length).toBe(6);
     });
@@ -299,19 +388,19 @@ describe("Timeline", () => {
       expect(timeline.children[0].getParameterValue("parent_parameter")).toBe(0);
     });
 
-    it("evaluates functions if `evaluateFunctions` is set to `true`", async () => {
+    it("evaluates functions unless `evaluateFunctions` is set to `false`", async () => {
       const timeline = new Timeline(jsPsych, {
         timeline: [],
         function_parameter: jest.fn(() => "result"),
       });
 
-      expect(typeof timeline.getParameterValue("function_parameter")).toBe("function");
-      expect(
-        typeof timeline.getParameterValue("function_parameter", { evaluateFunctions: false })
-      ).toBe("function");
+      expect(timeline.getParameterValue("function_parameter")).toBe("result");
       expect(timeline.getParameterValue("function_parameter", { evaluateFunctions: true })).toBe(
         "result"
       );
+      expect(
+        typeof timeline.getParameterValue("function_parameter", { evaluateFunctions: false })
+      ).toBe("function");
     });
 
     it("considers nested properties if `parameterName` contains dots", async () => {
@@ -335,7 +424,9 @@ describe("Timeline", () => {
     it("recursively returns all results", async () => {
       const timeline = new Timeline(jsPsych, exampleTimeline);
       await timeline.run();
-      expect(timeline.getResults()).toEqual(Array(3).fill({ my: "result" }));
+      expect(timeline.getResults()).toEqual(
+        Array(3).fill(expect.objectContaining({ my: "result" }))
+      );
     });
 
     it("does not include `undefined` results", async () => {
@@ -343,7 +434,59 @@ describe("Timeline", () => {
       await timeline.run();
 
       jest.spyOn(timeline.children[0] as Trial, "getResult").mockReturnValue(undefined);
-      expect(timeline.getResults()).toEqual(Array(2).fill({ my: "result" }));
+      expect(timeline.getResults()).toEqual(
+        Array(2).fill(expect.objectContaining({ my: "result" }))
+      );
+    });
+  });
+
+  describe("getProgress()", () => {
+    it("always returns the current progress of a simple timeline", async () => {
+      TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+
+      const timeline = new Timeline(jsPsych, Array(4).fill({ type: TestPlugin }));
+      expect(timeline.getProgress()).toBe(0);
+
+      const runPromise = timeline.run();
+      expect(timeline.getProgress()).toBe(0);
+
+      await proceedWithTrial();
+      expect(timeline.getProgress()).toBe(0.25);
+
+      await proceedWithTrial();
+      expect(timeline.getProgress()).toBe(0.5);
+
+      await proceedWithTrial();
+      expect(timeline.getProgress()).toBe(0.75);
+
+      await proceedWithTrial();
+      expect(timeline.getProgress()).toBe(1);
+
+      await runPromise;
+      expect(timeline.getProgress()).toBe(1);
+    });
+  });
+
+  describe("getNaiveTrialCount()", () => {
+    it("correctly estimates the length of a timeline (including nested timelines)", async () => {
+      const timeline = new Timeline(jsPsych, {
+        timeline: [
+          { type: TestPlugin },
+          { timeline: [{ type: TestPlugin }], repetitions: 2, timeline_variables: [] },
+          { timeline: [{ type: TestPlugin }], repetitions: 5 },
+        ],
+        repetitions: 3,
+        timeline_variables: [{ x: 1 }, { x: 2 }],
+      });
+
+      const estimate = (1 + 1 * 2 + 1 * 5) * 3 * 2;
+      expect(timeline.getNaiveTrialCount()).toBe(estimate);
+    });
+  });
+
+  describe("getActiveNode()", () => {
+    it("", async () => {
+      // TODO
     });
   });
 });

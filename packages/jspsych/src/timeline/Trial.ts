@@ -4,37 +4,61 @@ import { ParameterInfos } from "src/modules/plugins";
 import { deepCopy } from "../modules/utils";
 import { BaseTimelineNode } from "./BaseTimelineNode";
 import { Timeline } from "./Timeline";
-import {
-  GetParameterValueOptions,
-  TimelineVariable,
-  TrialDescription,
-  TrialResult,
-  isPromise,
-  trialDescriptionKeys,
-} from ".";
+import { delay } from "./util";
+import { TimelineNodeStatus, TimelineVariable, TrialDescription, TrialResult, isPromise } from ".";
 
 export class Trial extends BaseTimelineNode {
-  private result: TrialResult;
-
   public pluginInstance: JsPsychPlugin<any>;
   public readonly trialObject: TrialDescription;
+
+  private result: TrialResult;
+  private readonly pluginInfo: PluginInfo;
 
   constructor(
     jsPsych: JsPsych,
     public readonly description: TrialDescription,
-    protected readonly parent: Timeline
+    protected readonly parent: Timeline,
+    public readonly index: number
   ) {
     super(jsPsych);
     this.trialObject = deepCopy(description);
+    this.pluginInfo = this.description.type["info"];
   }
 
   public async run() {
+    this.status = TimelineNodeStatus.RUNNING;
     this.processParameters();
+
+    this.focusContainerElement();
+    this.addCssClasses();
+
     this.onStart();
 
     this.pluginInstance = new this.description.type(this.jsPsych);
 
-    let trialPromise = this.jsPsych._trialPromise;
+    const result = await this.executeTrial();
+
+    this.result = this.jsPsych.data.write({
+      ...this.trialObject.data,
+      ...result,
+      trial_type: this.pluginInfo.name,
+      trial_index: this.index,
+    });
+
+    this.onFinish();
+
+    const gap =
+      this.getParameterValue("post_trial_gap") ?? this.jsPsych.getInitSettings().default_iti;
+    if (gap !== 0) {
+      await delay(gap);
+    }
+
+    this.removeCssClasses();
+    this.status = TimelineNodeStatus.COMPLETED;
+  }
+
+  private async executeTrial() {
+    let trialPromise = this.jsPsych.finishTrialPromise.get();
 
     /** Used as a way to figure out if `finishTrial()` has ben called without awaiting `trialPromise` */
     let hasTrialPromiseBeenResolved = false;
@@ -63,9 +87,36 @@ export class Trial extends BaseTimelineNode {
       result = await trialPromise;
     }
 
-    this.result = { ...this.trialObject.data, ...result };
+    return result;
+  }
 
-    this.onFinish();
+  private focusContainerElement() {
+    //   // apply the focus to the element containing the experiment.
+    //   this.DOM_container.focus();
+    //   // reset the scroll on the DOM target
+    //   this.DOM_target.scrollTop = 0;
+  }
+
+  private addCssClasses() {
+    //   // add CSS classes to the DOM_target if they exist in trial.css_classes
+    //   if (typeof trial.css_classes !== "undefined") {
+    //     if (!Array.isArray(trial.css_classes) && typeof trial.css_classes === "string") {
+    //       trial.css_classes = [trial.css_classes];
+    //     }
+    //     if (Array.isArray(trial.css_classes)) {
+    //       this.DOM_target.classList.add(...trial.css_classes);
+    //     }
+    //   }
+  }
+
+  private removeCssClasses() {
+    //   // remove any CSS classes that were added to the DOM via css_classes parameter
+    //   if (
+    //     typeof this.current_trial.css_classes !== "undefined" &&
+    //     Array.isArray(this.current_trial.css_classes)
+    //   ) {
+    //     this.DOM_target.classList.remove(...this.current_trial.css_classes);
+    //   }
   }
 
   private onStart() {
@@ -92,13 +143,6 @@ export class Trial extends BaseTimelineNode {
     return this.parent?.evaluateTimelineVariable(variable);
   }
 
-  public getParameterValue(parameterName: string, options?: GetParameterValueOptions) {
-    if (trialDescriptionKeys.includes(parameterName)) {
-      return;
-    }
-    return super.getParameterValue(parameterName, options);
-  }
-
   /**
    * Returns the result object of this trial or `undefined` if the result is not yet known.
    */
@@ -113,9 +157,6 @@ export class Trial extends BaseTimelineNode {
    * sets default values for optional parameters.
    */
   private processParameters() {
-    const pluginInfo: PluginInfo = this.description.type["info"];
-
-    // Set parameters according to the plugin info object
     const assignParameterValues = (
       parameterObject: Record<string, any>,
       parameterInfos: ParameterInfos,
@@ -131,7 +172,7 @@ export class Trial extends BaseTimelineNode {
         if (typeof parameterValue === "undefined") {
           if (typeof parameterConfig.default === "undefined") {
             throw new Error(
-              `You must specify a value for the "${parameterPath}" parameter in the "${pluginInfo.name}" plugin.`
+              `You must specify a value for the "${parameterPath}" parameter in the "${this.pluginInfo.name}" plugin.`
             );
           } else {
             parameterValue = parameterConfig.default;
@@ -146,6 +187,6 @@ export class Trial extends BaseTimelineNode {
       }
     };
 
-    assignParameterValues(this.trialObject, pluginInfo.parameters);
+    assignParameterValues(this.trialObject, this.pluginInfo.parameters);
   }
 }

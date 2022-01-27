@@ -34,16 +34,6 @@ export interface TrialDescription extends Record<string, any> {
   on_finish?: (data: any) => void;
 }
 
-export const trialDescriptionKeys = [
-  "type",
-  "post_trial_gap",
-  "css_classes",
-  "simulation_options",
-  "on_start",
-  "on_load",
-  "on_finish",
-];
-
 /** https://www.jspsych.org/latest/overview/timeline/#sampling-methods */
 export type SampleOptions =
   | { type: "with-replacement"; size: number; weights?: number[] }
@@ -52,8 +42,10 @@ export type SampleOptions =
   | { type: "alternate-groups"; groups: number[][]; randomize_group_order?: boolean }
   | { type: "custom"; fn: (ids: number[]) => number[] };
 
+export type TimelineArray = Array<TimelineDescription | TrialDescription>;
+
 export interface TimelineDescription extends Record<string, any> {
-  timeline: Array<TimelineDescription | TrialDescription>;
+  timeline: TimelineArray;
   timeline_variables?: Record<string, any>[];
 
   // Control flow
@@ -108,12 +100,22 @@ export function isTimelineDescription(
   return Boolean((description as TimelineDescription).timeline);
 }
 
+export enum TimelineNodeStatus {
+  PENDING,
+  RUNNING,
+  PAUSED,
+  COMPLETED,
+  ABORTED,
+}
+
 export type GetParameterValueOptions = { evaluateFunctions?: boolean; recursive?: boolean };
 
 export interface TimelineNode {
   readonly description: TimelineDescription | TrialDescription;
+  readonly index: number;
 
   run(): Promise<void>;
+  getStatus(): TimelineNodeStatus;
 
   /**
    * Recursively evaluates the given timeline variable, starting at the current timeline node.
@@ -129,8 +131,8 @@ export interface TimelineNode {
    *
    * * is a timeline variable, evaluates the variable and returns the result.
    * * is not specified, returns `undefined`.
-   * * is a function and `evaluateFunctions` is set to `true`, invokes the function and returns its
-   *   return value
+   * * is a function and `evaluateFunctions` is not set to `false`, invokes the function and returns
+   *   its return value
    *
    * `parameterName` may include dots to signal nested object properties.
    */

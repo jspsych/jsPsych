@@ -33,24 +33,13 @@ export class JsPsychData {
   }
 
   write(data_object) {
-    const progress = this.jsPsych.getProgress();
-    const trial = this.jsPsych.getCurrentTrial();
-
-    //var trial_opt_data = typeof trial.data == 'function' ? trial.data() : trial.data;
-
-    const default_data = {
-      trial_type: trial.type.info.name,
-      trial_index: progress.current_trial_global,
-      time_elapsed: this.jsPsych.getTotalTime(),
-      internal_node_id: this.jsPsych.getCurrentTimelineNodeID(),
-    };
-
-    this.allData.push({
+    const newObject = {
       ...data_object,
-      ...trial.data,
-      ...default_data,
+      time_elapsed: this.jsPsych.getTotalTime(),
       ...this.dataProperties,
-    });
+    };
+    this.allData.push(newObject);
+    return newObject;
   }
 
   addProperties(properties) {
@@ -160,15 +149,5 @@ export class JsPsychData {
     document.addEventListener("fullscreenchange", fullscreenchange);
     document.addEventListener("mozfullscreenchange", fullscreenchange);
     document.addEventListener("webkitfullscreenchange", fullscreenchange);
-  }
-
-  // public methods for testing purposes. not recommended for use.
-  _customInsert(data) {
-    this.allData = new DataCollection(data);
-  }
-
-  _fullreset() {
-    this.reset();
-    this.dataProperties = {};
   }
 }

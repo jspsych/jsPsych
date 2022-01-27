@@ -1,3 +1,4 @@
+import { flushPromises } from "@jspsych/test-utils";
 import { JsPsych, initJsPsych } from "jspsych";
 import { mocked } from "ts-jest/utils";
 
@@ -5,7 +6,10 @@ import TestPlugin from "../../tests/TestPlugin";
 import { ParameterInfos, ParameterType } from "../modules/plugins";
 import { Timeline } from "./Timeline";
 import { Trial } from "./Trial";
-import { TimelineVariable, TrialDescription } from ".";
+import { PromiseWrapper } from "./util";
+import { TimelineNodeStatus, TimelineVariable, TrialDescription } from ".";
+
+jest.useFakeTimers();
 
 jest.mock("../../tests/TestPlugin");
 jest.mock("./Timeline");
@@ -20,6 +24,19 @@ describe("Trial", () => {
   let jsPsych: JsPsych;
   let timeline: Timeline;
 
+  /**
+   * Allows to run
+   * ```js
+   * TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+   * ```
+   * and move through trials via `proceedWithTrial()`
+   */
+  const trialPromise = new PromiseWrapper();
+  const proceedWithTrial = () => {
+    trialPromise.resolve();
+    return flushPromises();
+  };
+
   beforeEach(() => {
     jsPsych = initJsPsych();
     TestPluginMock.mockReset();
@@ -27,15 +44,17 @@ describe("Trial", () => {
       jsPsych.finishTrial({ my: "result" });
     });
     setTestPluginParameters({});
+    trialPromise.reset();
 
     timeline = new Timeline(jsPsych, { timeline: [] });
   });
 
-  const createTrial = (description: TrialDescription) => new Trial(jsPsych, description, timeline);
+  const createTrial = (description: TrialDescription) =>
+    new Trial(jsPsych, description, timeline, 0);
 
   describe("run()", () => {
     it("instantiates the corresponding plugin", async () => {
-      const trial = new Trial(jsPsych, { type: TestPlugin }, timeline);
+      const trial = new Trial(jsPsych, { type: TestPlugin }, timeline, 0);
 
       await trial.run();
 
@@ -106,7 +125,7 @@ describe("Trial", () => {
       it("picks up the result data from the promise or the `finishTrial()` function (where the latter one takes precedence)", async () => {
         const trial1 = createTrial({ type: TestPlugin });
         await trial1.run();
-        expect(trial1.getResult()).toEqual({ promised: "result" });
+        expect(trial1.getResult()).toEqual(expect.objectContaining({ promised: "result" }));
 
         TestPluginMock.prototype.trial.mockImplementation(
           async (display_element, trial, on_load) => {
@@ -118,7 +137,7 @@ describe("Trial", () => {
 
         const trial2 = createTrial({ type: TestPlugin });
         await trial2.run();
-        expect(trial2.getResult()).toEqual({ my: "result" });
+        expect(trial2.getResult()).toEqual(expect.objectContaining({ my: "result" }));
       });
     });
 
@@ -135,7 +154,7 @@ describe("Trial", () => {
         const trial = createTrial({ type: TestPlugin });
 
         await trial.run();
-        expect(trial.getResult()).toEqual({ my: "result" });
+        expect(trial.getResult()).toEqual(expect.objectContaining({ my: "result" }));
       });
     });
 
@@ -145,13 +164,25 @@ describe("Trial", () => {
       await trial.run();
 
       expect(onFinishCallback).toHaveBeenCalledTimes(1);
-      expect(onFinishCallback).toHaveBeenCalledWith({ my: "result" });
+      expect(onFinishCallback).toHaveBeenCalledWith(expect.objectContaining({ my: "result" }));
     });
 
     it("includes result data from the `data` property", async () => {
       const trial = createTrial({ type: TestPlugin, data: { custom: "value" } });
       await trial.run();
-      expect(trial.getResult()).toEqual({ my: "result", custom: "value" });
+      expect(trial.getResult()).toEqual(expect.objectContaining({ my: "result", custom: "value" }));
+    });
+
+    it("includes a set of common result properties", async () => {
+      const trial = createTrial({ type: TestPlugin });
+      await trial.run();
+      expect(trial.getResult()).toEqual(
+        expect.objectContaining({
+          trial_type: "test",
+          trial_index: 0,
+          time_elapsed: expect.any(Number),
+        })
+      );
     });
 
     describe("with a plugin parameter specification", () => {
@@ -270,6 +301,45 @@ describe("Trial", () => {
         );
       });
     });
+
+    it("respects `default_iti` and `post_trial_gap``", async () => {
+      jest.spyOn(jsPsych, "getInitSettings").mockReturnValue({ default_iti: 100 });
+      TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+
+      const trial1 = createTrial({ type: TestPlugin });
+
+      const runPromise1 = trial1.run();
+      expect(trial1.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+
+      await proceedWithTrial();
+      expect(trial1.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+
+      jest.advanceTimersByTime(100);
+      await flushPromises();
+      expect(trial1.getStatus()).toBe(TimelineNodeStatus.COMPLETED);
+
+      await runPromise1;
+
+      // @ts-expect-error function parameters and timeline variables are not yet included in the
+      // trial type
+      const trial2 = createTrial({ type: TestPlugin, post_trial_gap: () => 200 });
+
+      const runPromise2 = trial2.run();
+      expect(trial2.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+
+      await proceedWithTrial();
+      expect(trial2.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+
+      jest.advanceTimersByTime(100);
+      await flushPromises();
+      expect(trial2.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+
+      jest.advanceTimersByTime(100);
+      await flushPromises();
+      expect(trial2.getStatus()).toBe(TimelineNodeStatus.COMPLETED);
+
+      await runPromise2;
+    });
   });
 
   describe("evaluateTimelineVariable()", () => {
@@ -277,40 +347,11 @@ describe("Trial", () => {
       const timeline = new Timeline(jsPsych, { timeline: [] });
       mocked(timeline).evaluateTimelineVariable.mockReturnValue(1);
 
-      const trial = new Trial(jsPsych, { type: TestPlugin }, timeline);
+      const trial = new Trial(jsPsych, { type: TestPlugin }, timeline, 0);
 
       const variable = new TimelineVariable("x");
       expect(trial.evaluateTimelineVariable(variable)).toBe(1);
       expect(timeline.evaluateTimelineVariable).toHaveBeenCalledWith(variable);
-    });
-  });
-
-  describe("getParameterValue()", () => {
-    // Note: The BaseTimelineNode `getParameterValue()` implementation is tested in the unit tests
-    // of the `Timeline` class
-
-    it("ignores builtin trial parameters", async () => {
-      const trial = new Trial(
-        jsPsych,
-        {
-          type: TestPlugin,
-          post_trial_gap: 0,
-          css_classes: "",
-          simulation_options: {},
-          on_start: jest.fn(),
-          on_load: jest.fn(),
-          on_finish: jest.fn(),
-        },
-        timeline
-      );
-
-      expect(trial.getParameterValue("type")).toBeUndefined();
-      expect(trial.getParameterValue("post_trial_gap")).toBeUndefined();
-      expect(trial.getParameterValue("css_classes")).toBeUndefined();
-      expect(trial.getParameterValue("simulation_options")).toBeUndefined();
-      expect(trial.getParameterValue("on_start")).toBeUndefined();
-      expect(trial.getParameterValue("on_load")).toBeUndefined();
-      expect(trial.getParameterValue("on_finish")).toBeUndefined();
     });
   });
 });

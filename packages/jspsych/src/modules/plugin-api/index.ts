@@ -18,7 +18,7 @@ export function createJointPluginAPIObject(jsPsych: JsPsych) {
         settings.minimum_valid_rt
       ),
       new TimeoutAPI(),
-      new MediaAPI(settings.use_webaudio, jsPsych.webaudio_context),
+      new MediaAPI(settings.use_webaudio),
       new HardwareAPI(),
       new SimulationAPI(),
     ].map((object) => autoBind(object))
