@@ -27,10 +27,6 @@
   "engines": {
     "node": ">=14.0.0"
   },
-  "scripts": {
-    "build": "",
-    "tsc": ""
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jspsych/jsPsych.git",
