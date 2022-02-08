@@ -13,7 +13,8 @@
     "prepare": "node -e 'process.exit(!process.env.CI)' || (husky install && npm run build)",
     "tsc": "turbo tsc",
     "changeset": "changeset",
-    "release": "changeset publish"
+    "changeset:version": "changeset version && npm install && npm run update-unpkg-links",
+    "changeset:publish": "npm run build && changeset publish"
   },
   "engines": {
     "node": ">=14.0.0",
