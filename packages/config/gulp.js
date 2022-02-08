@@ -85,15 +85,15 @@ export const createCoreDistArchive = () =>
       // Rewrite script source paths
       .pipe(
         replace(
-          /<script src="(.*)\/packages\/(.*)\/dist\/index\.browser\.js"><\/script>/g,
-          '<script src="$1/dist/$2.js"></script>'
+          /<script src="(.*)\/packages\/(.*)\/dist\/index\.browser\.js"/g,
+          '<script src="$1/dist/$2.js"'
         )
       )
       // Rewrite jspsych css source paths
       .pipe(
         replace(
-          /<link rel="stylesheet" href="(.*)\/packages\/jspsych\/css\/(.*)" \/>/g,
-          '<link rel="stylesheet" href="$1/dist/$2" />'
+          /<link rel="stylesheet" href="(.*)\/packages\/jspsych\/css\/(.*)"/g,
+          '<link rel="stylesheet" href="$1/dist/$2"'
         )
       ),
 
