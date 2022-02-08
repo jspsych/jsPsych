@@ -23,8 +23,10 @@
     "test": "jest",
     "test:watch": "npm test -- --watch",
     "tsc": "tsc",
-    "build": "rollup --config",
-    "build:watch": "npm run build -- --watch",
+    "build:js": "rollup --config",
+    "build:styles": "webpack-cli",
+    "build": "run-p build:js build:styles",
+    "build:watch": "run-p \"build:js -- --watch\" \"build:styles watch\"",
     "prepack": "cp ../../README.md ."
   },
   "repository": {
@@ -43,7 +45,18 @@
     "random-words": "^1.1.1"
   },
   "devDependencies": {
+    "@fontsource/open-sans": "4.5.3",
     "@jspsych/config": "^1.1.0",
-    "@types/dom-mediacapture-record": "^1.0.11"
+    "@types/dom-mediacapture-record": "^1.0.11",
+    "base64-inline-loader": "^2.0.1",
+    "css-loader": "^6.6.0",
+    "mini-css-extract-plugin": "^2.5.3",
+    "npm-run-all": "^4.1.5",
+    "sass": "^1.43.5",
+    "sass-loader": "^12.4.0",
+    "webpack": "^5.68.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-remove-empty-scripts": "^0.7.2",
+    "replace-in-file-webpack-plugin": "^1.0.6"
   }
 }
