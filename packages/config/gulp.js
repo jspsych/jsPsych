@@ -13,6 +13,20 @@ const { dest, src } = gulp;
 
 const readJsonFile = (filename) => JSON.parse(readFileSync(filename, "utf8"));
 
+const getAllPackages = () =>
+  glob
+    // Get an array of all package.json filenames
+    .sync("packages/*/package.json")
+
+    // Map file names to package details
+    .map((filename) => {
+      const packageJson = readJsonFile(filename);
+      return {
+        name: packageJson.name,
+        version: packageJson.version,
+      };
+    });
+
 const getVersionFileContents = () =>
   [
     "Included in this release:\n",
@@ -25,19 +39,7 @@ const getVersionFileContents = () =>
         "/";
 
       return (
-        glob
-          // Get an array of all package.json filenames
-          .sync("packages/*/package.json")
-
-          // Map file names to package details
-          .map((filename) => {
-            const packageJson = readJsonFile(filename);
-            return {
-              name: packageJson.name,
-              version: packageJson.version,
-            };
-          })
-
+        getAllPackages()
           // Filter packages that should not be listed
           .filter(({ name }) => !["@jspsych/config", "@jspsych/test-utils"].includes(name))
 
@@ -105,3 +107,23 @@ export const createCoreDistArchive = () =>
   )
     .pipe(zip("dist.zip"))
     .pipe(dest("."));
+
+/**
+ * Updates each unpkg link with a precise version number to the corresponding package's current
+ * version as defined in the package's `package.json`. Only considers `.md` and `.html` files.
+ */
+export const updateUnpkgLinks = () => {
+  const packageVersions = new Map(getAllPackages().map(({ name, version }) => [name, version]));
+
+  return src(["./**/*.{md,html}"])
+    .pipe(
+      replace(
+        /"https:\/\/unpkg\.com\/(@?.*)@(\d+.\d+.\d+)(\/[^"]*)?"/g,
+        (url, packageName, currentVersion, path) => {
+          const latestVersion = packageVersions.get(packageName) ?? currentVersion;
+          return `"https://unpkg.com/${packageName}@${latestVersion}${path ?? ""}"`;
+        }
+      )
+    )
+    .pipe(dest("./"));
+};
