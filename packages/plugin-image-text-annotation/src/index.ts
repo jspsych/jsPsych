@@ -58,8 +58,8 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
   private display_element: HTMLElement;
   private deselect_all_flag = true;
   private categories = [];
-  private active_category = { id: null, label: "?", color: "#444" };
   private palette: Array<string>;
+  private labelDialog: LabelDialog;
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -88,6 +88,11 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
     }
   }
 
+  showLabelDialog(target: AnnotationBox, x, y) {
+    this.labelDialog.setTarget(target);
+    this.labelDialog.show(x, y);
+  }
+
   private renderDisplay(trial) {
     let html = `<div id="jspsych-annotation-display">`;
     if (trial.prompt !== null) {
@@ -98,37 +103,19 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
         <div id='annotated-image-container'>
           <img src="${trial.image}" draggable="false"></img>
         </div>
-        <div id='annotation-options'>
-    `;
-    let i = 0;
-    for (const l of trial.labels) {
-      html += `<div style="--main-color:${trial.colors[i]}"><input type="radio" id="opt${i}" name="annotate_label" value="${l}"><label for="opt${i}">${l}</label></div>`;
-      i++;
-    }
-    // html += `
-    //       <div><input type="radio" id="opt${i}" name="annotate_label" value=""><label for="opt${i}"><input id="opt${i}_text" type="text"></label></div>
-    // `;
-    html += `
-        </div>
       </div>
     `;
     html += `</div>`;
 
     this.display_element.innerHTML = html;
 
-    this.add_new_label();
-
     this.img_container = this.display_element.querySelector("#annotated-image-container");
+
+    this.labelDialog = new LabelDialog(true, this.categories, this.img_container);
   }
 
   private addEvents(trial) {
     this.img_container.addEventListener("mousedown", this.start_box);
-
-    const radios = this.display_element.querySelectorAll('input[type="radio"]');
-    for (const r of Array.from(radios)) {
-      r.addEventListener("change", this.handle_radio_change);
-    }
-
     this.img_container.addEventListener("mousemove", this.sort_boxes);
 
     document.addEventListener("mousedown", () => {
@@ -145,8 +132,46 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           display: flex;
         }
 
-        #jspsych-annotation-display #annotation-options div {
-          margin-bottom: 0.5em;
+        #annotation-dialog {
+          position: absolute;
+          z-index: 999;
+          border-radius: 2px;
+          box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+          background: white;
+          transform: scale(1);
+          transform-origin: top left;
+          transition: transform 0.3s, top 0.3s, left 0.3s;
+          display: block;
+          cursor: initial;
+        }
+
+        #annotation-dialog.hidden {
+          transform: scale(0);
+        }
+
+        #annotation-dialog-close {
+          text-align: right;
+        }
+
+        #annotation-dialog-close-btn {
+          border: 0;
+          background-color: white;
+          color: #999;
+          font-size: 20px;
+          cursor: pointer;
+        }
+
+        #annotation-dialog-close-btn:hover {
+          color: black;
+        }
+
+        #annotation-options {
+          text-align: left;
+          display: flex;
+          row-gap: 0.25em;
+          flex-wrap: wrap;
+          margin-bottom: 0.25em;
+          padding: 0px 10px;
         }
 
         #jspsych-annotation-display input[type="radio"] {
@@ -158,32 +183,37 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           background-color: var(--main-color);
           color: white;
           padding: 0.35em 0.5em;
-          margin-bottom: 0.25em;
+          margin-right: 0.25em;
           cursor: pointer;
           display: block;
           line-height: normal;
-          transition: margin-right 0.2s;
+          font-size:12px;
         }
 
-        #jspsych-annotation-display input[type="radio"] + label::before {
-          content: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>');
+        .annotation-label-container {
+          flex-shrink: 0;
+        }
+
+        #jspsych-annotation-display input[type="radio"] + label::after {
+          content: "";
+          border: 1px solid white;
+          border-radius: 20px;
+          height: 1em;
+          width: 1em;
+          margin-left: 0.25em;
+          vertical-align: middle;
           display: inline-block;
-          padding-right: 0.5em;
-          position: relative;
-          top: 0.15em;
-          transform: scale(0);
-          transition: transform 0.2s;
         }
 
-        #jspsych-annotation-display input[type="radio"]:checked + label::before {
-          transform: scale(1);
+        #jspsych-annotation-display input[type="radio"]:checked + label::after {
+          content: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>');
         }
 
         #jspsych-annotation-display label input[type="text"] {
           background: none;
           border: none;
           color: white;
-          font-size: 18px;
+          font-size: 12px;
           margin: 0;
           padding:0;
         }
@@ -209,16 +239,22 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           display: block;
         }
 
-        #jspsych-annotation-display #annotated-image-container .annotation-box {
+        .annotation-box {
           border: 1px solid var(--main-color);
           position: absolute;
           color: var(--main-color);
           user-select: none;
           background-color: var(--very-transparent-color);
+          cursor: pointer;
         }
 
-        #jspsych-annotation-display #annotated-image-container .annotation-box:hover {
-          
+        .annotation-box::before {
+          content: "";
+          position: absolute;
+          height: calc(100% + 8px);
+          width: calc(100% + 8px);
+          top: -4px;
+          left: -4px;
         }
 
         .annotation-box-label {
@@ -248,14 +284,7 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           border: 1px solid white;
         }
 
-        .annotation-box::before {
-          content: "";
-          position: absolute;
-          height: calc(100% + 8px);
-          width: calc(100% + 8px);
-          top: -4px;
-          left: -4px;
-        }
+        
 
         .annotation-box-remove {
           visibility: hidden;
@@ -358,10 +387,6 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
           visibility: visible;
         }
 
-        #jspsych-annotation-display #annotation-options {
-          text-align: left;
-          padding-left: 24px;
-        }
       </style>`
     );
   }
@@ -391,7 +416,7 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
     if (this.is_drawing) {
       this.active_box.finishDrawing();
 
-      this.active_box.setCategory(this.active_category);
+      // this.active_box.setCategory(this.active_category);
 
       this.active_box.select();
 
@@ -415,27 +440,6 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
     }
   }
 
-  select_label(label: string) {
-    const radio: HTMLFormElement = this.display_element.querySelector(`input[value='${label}']`);
-    if (radio) {
-      radio.checked = true;
-    } else {
-      const radios = this.display_element.querySelectorAll('input[type="radio"]');
-      for (const r of Array.from(radios)) {
-        (r as HTMLFormElement).checked = false;
-      }
-    }
-  }
-
-  private handle_radio_change(e) {
-    this.active_category = this.categories[(e.target as HTMLFormElement).id.substring(3, 4)];
-    for (const b of this.boxes) {
-      if (b.isSelected()) {
-        b.setCategory(this.active_category);
-      }
-    }
-  }
-
   private deselect_all(e) {
     if (this.deselect_all_flag && !["RADIO", "LABEL", "INPUT"].includes(e.target.tagName)) {
       for (const b of this.boxes) {
@@ -443,19 +447,103 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
       }
     }
   }
+}
+
+class LabelDialog {
+  private element: HTMLElement;
+  private container: HTMLElement;
+  private target: AnnotationBox;
+  private categories = [];
+  private allow_user_generated_labels: boolean;
+
+  constructor(allow_user_generated_labels, categories, container) {
+    autoBind(this);
+
+    this.allow_user_generated_labels = allow_user_generated_labels;
+    this.container = container;
+    this.categories = categories;
+
+    this.initRender();
+  }
+
+  initRender() {
+    const el = document.createElement("div");
+    el.id = "annotation-dialog";
+    el.className = "hidden";
+    let html = `
+      <div id='annotation-dialog-close'>
+        <button id='annotation-dialog-close-btn'>&times;</button>
+      </div>
+    `;
+    html += `<div id='annotation-options'>`;
+    let i = 0;
+    for (const cat of this.categories) {
+      html += `<div class="annotation-label-container" style="--main-color:${cat.color}"><input type="radio" id="opt${i}" name="annotate_label" value="${cat.label}"><label for="opt${i}">${cat.label}</label></div>`;
+      i++;
+    }
+    html += `</div>`;
+
+    html += `
+      <div id='annotation-dialog-remove'>
+        <button id='annotation-dialog-remove-btn'>Remove</button>
+      </div>
+    `;
+    el.innerHTML = html;
+
+    this.element = el;
+    this.container.appendChild(this.element);
+
+    this.addEvents();
+
+    if (this.allow_user_generated_labels) {
+      this.add_new_label();
+    }
+  }
+
+  private addEvents() {
+    const radios = this.element.querySelectorAll('input[type="radio"]');
+    for (const r of Array.from(radios)) {
+      r.addEventListener("change", this.handle_radio_change);
+    }
+
+    this.element.querySelector("#annotation-dialog-close-btn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.hide();
+    });
+
+    this.element.addEventListener("mousedown", (e) => {
+      e.stopPropagation();
+    });
+  }
+
+  show(x, y) {
+    requestAnimationFrame(() => {});
+    this.element.style.top = `${y}px`;
+    this.element.style.left = `${x}px`;
+
+    this.element.classList.remove("hidden");
+  }
+
+  hide() {
+    this.element.classList.add("hidden");
+  }
+
+  setTarget(box: AnnotationBox) {
+    this.target = box;
+  }
 
   private add_new_label(e?) {
-    const container = this.display_element.querySelector("#annotation-options");
     const category_id = this.categories.length;
+    const container = this.element.querySelector("#annotation-options");
 
     this.categories.push({
       id: category_id,
       label: "",
-      color: this.palette[category_id],
+      color: "#ab37f2",
     });
 
     const html = `
-      <div style="--main-color: ${this.palette[category_id]}"><input type="radio" id="opt${category_id}" name="annotate_label" value=""><label for="opt${category_id}"><input id="opt${category_id}_text" type="text"></label></div>
+      <div class="annotation-label-container" style="--main-color: ${"#ab37f2"}"><input type="radio" id="opt${category_id}" name="annotate_label" value=""><label for="opt${category_id}"><input id="opt${category_id}_text" type="text" size="10"></label></div>
     `;
     container.insertAdjacentHTML("beforeend", html);
     container
@@ -478,6 +566,11 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
       .addEventListener("change", this.handle_radio_change);
   }
 
+  private handle_radio_change(e) {
+    const category = this.categories[(e.target as HTMLFormElement).id.substring(3, 4)];
+    this.target.setCategory(category);
+  }
+
   private update_labels(e) {
     const text = e.target as HTMLFormElement;
     const radio = text.parentElement.parentElement.querySelector(
@@ -487,19 +580,19 @@ class ImageTextAnnotationPlugin implements JsPsychPlugin<Info> {
     const old_label = radio.value;
     const new_label = text.value;
 
-    for (const b of this.boxes) {
-      if (b.getLabel() == old_label) {
-        b.setLabel(new_label);
-      }
-    }
+    // for (const b of this.boxes) {
+    //   if (b.getLabel() == old_label) {
+    //     b.setLabel(new_label);
+    //   }
+    // }
 
     radio.value = new_label;
   }
 }
 
 class AnnotationBox {
-  private label = "?";
   private element: HTMLElement;
+  private label = "?";
   private start_x;
   private start_y;
   private end_x;
@@ -513,6 +606,7 @@ class AnnotationBox {
   private modifiable = true;
   private color = "#444444";
   private category = null;
+  private showDialogFlag = false;
 
   constructor(x, y, box_list, container, plugin) {
     autoBind(this);
@@ -560,7 +654,7 @@ class AnnotationBox {
     if (label) {
       this.label = label;
     }
-    this.element.querySelector(".annotation-box-label").innerHTML = this.label;
+    //this.element.querySelector(".annotation-box-label").innerHTML = this.label;
   }
 
   getLabel() {
@@ -611,9 +705,10 @@ class AnnotationBox {
   }
 
   finishDrawing() {
+    // <span class="annotation-box-label"></span>
+    //   <span class="annotation-box-remove">X</span>
+
     this.element.innerHTML = `
-      <span class="annotation-box-label"></span>
-      <span class="annotation-box-remove">X</span>
       <div class="annotation-box-resize top left"></div>
       <div class="annotation-box-resize top right"></div>
       <div class="annotation-box-resize bottom left"></div>
@@ -626,16 +721,46 @@ class AnnotationBox {
   }
 
   addEvents() {
-    this.element.querySelector(".annotation-box-remove").addEventListener("mousedown", (e) => {
+    // this.element.querySelector(".annotation-box-remove").addEventListener("mousedown", (e) => {
+    //   e.stopPropagation();
+    // });
+    // this.element.querySelector(".annotation-box-remove").addEventListener("mouseup", (e) => {
+    //   e.stopPropagation();
+    // });
+    // this.element.querySelector(".annotation-box-remove").addEventListener("click", (e) => {
+    //   e.preventDefault();
+    //   this.remove();
+    // });
+
+    this.element.addEventListener("mousedown", (e) => {
+      e.stopPropagation();
+
+      this.showDialogFlag = true;
+
+      if (this.modifiable) {
+        this.startDrag(e);
+      }
+    });
+
+    this.element.addEventListener("mouseup", (e) => {
+      this.stopDrag();
+      this.stopMove();
+
+      if (this.showDialogFlag) {
+        this.plugin.showLabelDialog(
+          this,
+          e.clientX - this.container.getBoundingClientRect().left,
+          e.clientY - this.container.getBoundingClientRect().top
+        );
+      }
+
       e.stopPropagation();
     });
-    this.element.querySelector(".annotation-box-remove").addEventListener("mouseup", (e) => {
-      e.stopPropagation();
-    });
-    this.element.querySelector(".annotation-box-remove").addEventListener("click", (e) => {
-      e.preventDefault();
-      this.remove();
-    });
+
+    // this.container.addEventListener("mouseup", (e)=>{
+    //   this.stopMove();
+    //   e.stopPropagation();
+    // })
 
     this.element
       .querySelector(".annotation-box-resize.bottom.right")
@@ -677,21 +802,17 @@ class AnnotationBox {
         this.startMove();
       });
 
-    this.container.addEventListener("mouseup", () => {
-      this.stopMove();
-    });
+    // this.element.querySelector(".annotation-box-label").addEventListener("click", (e) => {
+    //   e.stopPropagation();
+    //   this.select();
+    // });
 
-    this.element.querySelector(".annotation-box-label").addEventListener("click", (e) => {
-      e.stopPropagation();
-      this.select();
-    });
-
-    this.element.querySelector(".annotation-box-label").addEventListener("mousedown", (e) => {
-      if (this.modifiable) {
-        this.startDrag(e);
-      }
-      e.stopPropagation();
-    });
+    // this.element.querySelector(".annotation-box-label").addEventListener("mousedown", (e) => {
+    //   if (this.modifiable) {
+    //     this.startDrag(e);
+    //   }
+    //   e.stopPropagation();
+    // });
   }
 
   startMove() {
@@ -731,6 +852,8 @@ class AnnotationBox {
   }
 
   dragHandler(e) {
+    this.showDialogFlag = false;
+
     const box = this.element.getBoundingClientRect();
     const container = this.container.getBoundingClientRect();
 
@@ -775,13 +898,12 @@ class AnnotationBox {
       b.deselect();
     }
     this.selected = true;
-    this.element.querySelector(".annotation-box-label").classList.add("selected");
-    this.plugin.select_label(this.label);
+    //this.element.querySelector(".annotation-box-label").classList.add("selected");
   }
 
   deselect() {
     this.selected = false;
-    this.element.querySelector(".annotation-box-label").classList.remove("selected");
+    //this.element.querySelector(".annotation-box-label").classList.remove("selected");
   }
 
   isSelected() {
