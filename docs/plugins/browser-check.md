@@ -96,7 +96,7 @@ As with all simulated plugins, you can override the default (actual) data with f
         var trial = {
           type: jsPsychBrowserCheck,
           inclusion_function: (data) => {
-            return ['chrome', 'firefox'].contains(data.browser);
+            return ['chrome', 'firefox'].includes(data.browser);
           },
           exclusion_message: `<p>You must use Chrome or Firefox to complete this experiment.</p>`
         };

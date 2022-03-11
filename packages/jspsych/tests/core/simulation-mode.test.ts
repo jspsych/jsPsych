@@ -216,6 +216,32 @@ describe("data simulation mode", () => {
     expect(getData().values()[0].rt).toBe(100);
   });
 
+  test("Simulation options can be a function that evals to a string at run time", async () => {
+    const jsPsych = initJsPsych();
+
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        simulation_options: () => {
+          return "foo";
+        },
+      },
+    ];
+
+    const { expectFinished, getData } = await simulateTimeline(timeline, "data-only", {
+      foo: {
+        data: {
+          rt: 100,
+        },
+      },
+    });
+
+    await expectFinished();
+
+    expect(getData().values()[0].rt).toBe(100);
+  });
+
   test("If a plugin doesn't support simulation, it runs as usual", async () => {
     class FakePlugin {
       static info = {
