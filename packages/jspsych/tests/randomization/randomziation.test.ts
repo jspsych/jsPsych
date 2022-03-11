@@ -3,6 +3,7 @@ import {
   randomID,
   randomInt,
   repeat,
+  setSeed,
   shuffle,
   shuffleAlternateGroups,
   shuffleNoRepeats,
@@ -12,7 +13,7 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-describe("#shuffle", () => {
+describe("shuffle", () => {
   test("should produce fixed order with mock RNG", () => {
     jest.spyOn(Math, "random").mockReturnValue(0.5);
     const arr = [1, 2, 3, 4, 5, 6];
@@ -31,7 +32,7 @@ describe("shuffleAlternateGroups", () => {
   });
 });
 
-describe("#randomID", () => {
+describe("randomID", () => {
   test("should produce ID based on mock RNG", () => {
     jest
       .spyOn(Math, "random")
@@ -163,5 +164,22 @@ describe("randomInt", () => {
     expect(() => {
       randomInt(1, 0);
     }).toThrowError();
+  });
+});
+
+describe("setSeed", () => {
+  test("Replaces Math.random() with seedable RNG", () => {
+    setSeed("jspsych");
+
+    const r1_1 = Math.random();
+    const r1_2 = Math.random();
+
+    setSeed("jspsych");
+
+    const r2_1 = Math.random();
+    const r2_2 = Math.random();
+
+    expect(r1_1).toEqual(r2_1);
+    expect(r1_2).toEqual(r2_2);
   });
 });
