@@ -45,7 +45,6 @@
   },
   "devDependencies": {
     "@jspsych/config": "^1.1.0",
-    "@jspsych/test-utils": "^1.1.1",
     "@types/dom-mediacapture-record": "^1.0.11",
     "@types/seedrandom": "^3.0.1"
   }
