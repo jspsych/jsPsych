@@ -20,6 +20,7 @@
     "node": ">=14.0.0",
     "npm": ">=7.0.0"
   },
+  "packageManager": "npm@8.3.1",
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.3",
     "@changesets/cli": "^2.21.1",
@@ -46,22 +47,5 @@
     "projects": [
       "<rootDir>/packages/*/jest.config.cjs"
     ]
-  },
-  "turbo": {
-    "baseBranch": "origin/main",
-    "npmClient": "npm",
-    "pipeline": {
-      "build": {
-        "dependsOn": [
-          "^build"
-        ],
-        "outputs": [
-          "dist/**"
-        ]
-      },
-      "tsc": {
-        "outputs": []
-      }
-    }
   }
 }
