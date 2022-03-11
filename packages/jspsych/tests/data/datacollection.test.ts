@@ -41,11 +41,10 @@ describe("DataCollection", () => {
 
     const filtered_data = dataCollection.filterColumns(["rt", "foo"]);
 
-    expect(
-      filtered_data.values().filter((x) => {
-        return x.foo && x.rt && !x.filter;
-      }).length
-    ).toBe(5);
+    expect(filtered_data.values()).toEqual([
+      { foo: "bar", rt: 100 },
+      { foo: "bar", rt: 200 },
+    ]);
   });
 
   test("ignore", () => {
