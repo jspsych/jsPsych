@@ -36,9 +36,6 @@ describe("DataCollection", () => {
     data = [
       { foo: "bar", rt: 100, filter: true },
       { foo: "bar", rt: 200, filter: false },
-      { foo: "bar", rt: 300, filter: true },
-      { foo: "bar", rt: 400, filter: false },
-      { foo: "bar", rt: 500, filter: false },
     ];
     dataCollection = new DataCollection(data);
 
