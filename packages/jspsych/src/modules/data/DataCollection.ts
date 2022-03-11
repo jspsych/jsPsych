@@ -135,14 +135,11 @@ export class DataCollection {
   }
 
   filterColumns(columns: Array<string>) {
-    const filtered_data = [];
-    for (const trial of this.trials) {
-      const filtered_columns = Object.fromEntries(
-        columns.filter((key) => key in trial).map((key) => [key, trial[key]])
-      );
-      filtered_data.push(filtered_columns);
-    }
-    return new DataCollection(filtered_data);
+    return new DataCollection(
+      this.trials.map((trial) =>
+        Object.fromEntries(columns.filter((key) => key in trial).map((key) => [key, trial[key]]))
+      )
+    );
   }
 
   select(column) {
