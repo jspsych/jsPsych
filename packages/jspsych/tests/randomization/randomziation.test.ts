@@ -169,12 +169,12 @@ describe("randomInt", () => {
 
 describe("setSeed", () => {
   test("Replaces Math.random() with seedable RNG", () => {
-    setSeed(12603);
+    setSeed("jspsych");
 
     const r1_1 = Math.random();
     const r1_2 = Math.random();
 
-    setSeed(12603);
+    setSeed("jspsych");
 
     const r2_1 = Math.random();
     const r2_2 = Math.random();
