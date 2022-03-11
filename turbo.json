@@ -1,0 +1,17 @@
+{
+  "baseBranch": "origin/main",
+  "npmClient": "npm",
+  "pipeline": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
+    },
+    "tsc": {
+      "outputs": []
+    }
+  }
+}
