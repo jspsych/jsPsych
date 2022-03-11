@@ -1,6 +1,6 @@
 # webgazer-validate
 
-This plugin can be used to measure the accuracy and precision of gaze predictions made by the [WebGazer extension](../../extensions/webgazer). For a narrative description of eye tracking with jsPsych, see the [eye tracking overview](../../overview/eye-tracking). 
+This plugin can be used to measure the accuracy and precision of gaze predictions made by the [WebGazer extension](../extensions/webgazer.md). For a narrative description of eye tracking with jsPsych, see the [eye tracking overview](../overview/eye-tracking.md). 
 
 ## Parameters
 
