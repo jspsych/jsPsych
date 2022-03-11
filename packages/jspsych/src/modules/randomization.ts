@@ -7,10 +7,10 @@ import seedrandom from "seedrandom";
  * @param seed An optional seed. If none is given, a random seed will be generated.
  * @returns The seed value.
  */
-export function setSeed(seed?) {
+export function setSeed(seed?: string) {
   if (!seed) {
     const prng = seedrandom();
-    seed = prng.int32();
+    seed = prng.int32().toString();
   }
   seedrandom(seed, { global: true });
   return seed;

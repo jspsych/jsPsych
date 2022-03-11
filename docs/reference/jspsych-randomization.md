@@ -477,7 +477,7 @@ jsPsych.randomization.setSeed(seed)
 
 | Parameter | Type  | Description                    |
 | --------- | ----- | ------------------------------ |
-| seed      | string or number | A seed for the random number generator |
+| seed      | string | A seed for the random number generator |
 
 ### Return value
 
@@ -495,12 +495,19 @@ The seed value will be returned from the function call, allowing you to save it 
 
 ### Examples
 
-#### Shuffle an array
+#### Use a random 32-bit seed and save to data
 
 ```javascript
-var myArray = [1,2,3,4,5];
-var shuffledArray = jsPsych.randomization.shuffle(myArray);
-// output: shuffledArray = [3,2,4,1,5]
+const seed = jsPsych.setSeed();
+jsPsych.data.addProperties({
+	rng_seed: seed
+});
+```
+
+#### Use your own seed
+
+```javascript
+jsPsych.setSeed("jspsych");
 ```
 
 ---
