@@ -364,6 +364,15 @@ The filter method returns a DataCollection object, so methods can be chained ont
 var block_1_correct = jsPsych.data.get().filter({block:1, correct:true}).count();
 ```
 
+#### .filterColumns()
+
+Selects the set of columns listed in the array. This is the opposite of the `.ignore()` method.
+
+```javascript
+// Get only the subject, rt, and condition entries for each trial.
+const subset_of_data = jsPsych.data.get().filterColumns(['subject', 'rt', 'condition'])
+```
+
 #### .filterCustom()
 
 This method is similar to the `.filter()` method, except that it accepts a function as the filter. The function is passed a single argument, containing the data for a trial. If the function returns `true` the trial is included in the returned DataCollection.

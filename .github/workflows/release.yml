@@ -25,7 +25,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Download Turborepo cache
         uses: actions/cache@v2
@@ -34,9 +34,6 @@ jobs:
           key: ${{ runner.os }}-node-16-turbo-${{ hashFiles('node_modules/.cache/turbo') }}
           restore-keys: |
             ${{ runner.os }}-node-16-turbo-
-
-      - name: Build packages
-        run: npm run build
 
       - name: Run tests
         run: npm run test -- --ci --maxWorkers=2
@@ -47,7 +44,8 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          publish: npm run release
+          version: npm run changeset:version
+          publish: npm run changeset:publish
           commit: "chore(release): version packages"
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
