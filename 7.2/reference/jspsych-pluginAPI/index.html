@@ -1,0 +1,4797 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://www.jspsych.org/7.2/reference/jspsych-pluginAPI/">
+      
+      <link rel="icon" href="../../img/jspsych-favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.5">
+    
+    
+      
+        <title>jsPsych.pluginAPI - jsPsych</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2d9f7617.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4cae4f">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+  <script async src="https://www.google-analytics.com/analytics.js"></script>
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="orange">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#jspsychpluginapi" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-component="outdated" hidden>
+        <aside class="md-banner md-banner--warning">
+          
+        </aside>
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="jsPsych" class="md-header__button md-logo" aria-label="jsPsych" data-md-component="logo">
+      
+  <img src="../../img/jspsych-logo-no-text-mono.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            jsPsych
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              jsPsych.pluginAPI
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="jsPsych" class="md-nav__button md-logo" aria-label="jsPsych" data-md-component="logo">
+      
+  <img src="../../img/jspsych-logo-no-text-mono.svg" alt="logo">
+
+    </a>
+    jsPsych
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Tutorials
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/hello-world/" class="md-nav__link">
+        The Basics: Hello World
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/rt-task/" class="md-nav__link">
+        Demo Experiment: Simple Reaction Time Task
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/video-tutorials/" class="md-nav__link">
+        Video Tutorials
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Overview
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Overview" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Overview
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/timeline/" class="md-nav__link">
+        Creating an Experiment: The Timeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/plugins/" class="md-nav__link">
+        Plugins
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/extensions/" class="md-nav__link">
+        Extensions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/dynamic-parameters/" class="md-nav__link">
+        Dynamic Parameters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/style/" class="md-nav__link">
+        Controlling Visual Appearance
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/data/" class="md-nav__link">
+        Data Storage, Aggregation, and Manipulation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/simulation/" class="md-nav__link">
+        Simulation Modes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/running-experiments/" class="md-nav__link">
+        Running Experiments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/experiment-options/" class="md-nav__link">
+        Experiment Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/events/" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/record-browser-interactions/" class="md-nav__link">
+        Record Browser Interactions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/media-preloading/" class="md-nav__link">
+        Media Preloading
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/fullscreen/" class="md-nav__link">
+        Fullscreen Experiments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/eye-tracking/" class="md-nav__link">
+        Eye Tracking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/exclude-browser/" class="md-nav__link">
+        Exclude Participants Based on Browser Features
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/progress-bar/" class="md-nav__link">
+        Automatic Progress Bar
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/prolific/" class="md-nav__link">
+        Integrating with Prolific
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/mturk/" class="md-nav__link">
+        Integrating with Mechanical Turk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/browser-device-support/" class="md-nav__link">
+        Browser and Device Support
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/timing-accuracy/" class="md-nav__link">
+        Timing Accuracy
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych/" class="md-nav__link">
+        jsPsych
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-data/" class="md-nav__link">
+        jsPsych.data
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-randomization/" class="md-nav__link">
+        jsPsych.randomization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jspsych-turk/" class="md-nav__link">
+        jsPsych.turk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          jsPsych.pluginAPI
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        jsPsych.pluginAPI
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#keyboard-input" class="md-nav__link">
+    Keyboard Input
+  </a>
+  
+    <nav class="md-nav" aria-label="Keyboard Input">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cancelallkeyboardresponses" class="md-nav__link">
+    cancelAllKeyboardResponses
+  </a>
+  
+    <nav class="md-nav" aria-label="cancelAllKeyboardResponses">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cancelkeyboardresponse" class="md-nav__link">
+    cancelKeyboardResponse
+  </a>
+  
+    <nav class="md-nav" aria-label="cancelKeyboardResponse">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_1" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_1" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_1" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comparekeys" class="md-nav__link">
+    compareKeys
+  </a>
+  
+    <nav class="md-nav" aria-label="compareKeys">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_2" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_2" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_2" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-examples" class="md-nav__link">
+    Basic examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comparing-a-key-response-and-key-parameter-value-in-plugins" class="md-nav__link">
+    Comparing a key response and key parameter value in plugins
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scoring-a-key-response-in-experiment-code" class="md-nav__link">
+    Scoring a key response in experiment code
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getkeyboardresponse" class="md-nav__link">
+    getKeyboardResponse
+  </a>
+  
+    <nav class="md-nav" aria-label="getKeyboardResponse">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_3" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_3" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_3" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-a-single-response-from-any-key" class="md-nav__link">
+    Get a single response from any key
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-a-responses-from-a-key-until-the-letter-q-is-pressed" class="md-nav__link">
+    Get a responses from a key until the letter q is pressed
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#media" class="md-nav__link">
+    Media
+  </a>
+  
+    <nav class="md-nav" aria-label="Media">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getaudiobuffer" class="md-nav__link">
+    getAudioBuffer
+  </a>
+  
+    <nav class="md-nav" aria-label="getAudioBuffer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_4" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_4" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_4" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_2" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#html-5-audio" class="md-nav__link">
+    HTML 5 Audio
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webaudio-api" class="md-nav__link">
+    WebAudio API
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getautopreloadlist" class="md-nav__link">
+    getAutoPreloadList
+  </a>
+  
+    <nav class="md-nav" aria-label="getAutoPreloadList">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_5" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_5" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_5" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_2" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getmicrophonerecorder" class="md-nav__link">
+    getMicrophoneRecorder
+  </a>
+  
+    <nav class="md-nav" aria-label="getMicrophoneRecorder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_6" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_6" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_6" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_3" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initializemicrophonerecorder" class="md-nav__link">
+    initializeMicrophoneRecorder
+  </a>
+  
+    <nav class="md-nav" aria-label="initializeMicrophoneRecorder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_7" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_7" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_7" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_4" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preloadaudio" class="md-nav__link">
+    preloadAudio
+  </a>
+  
+    <nav class="md-nav" aria-label="preloadAudio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_8" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_8" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_8" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_3" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-use" class="md-nav__link">
+    Basic use
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#show-progress-of-loading" class="md-nav__link">
+    Show progress of loading
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preloadimages" class="md-nav__link">
+    preloadImages
+  </a>
+  
+    <nav class="md-nav" aria-label="preloadImages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_9" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_9" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_9" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_4" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-use_1" class="md-nav__link">
+    Basic use
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#show-progress-of-loading_1" class="md-nav__link">
+    Show progress of loading
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preloadvideo" class="md-nav__link">
+    preloadVideo
+  </a>
+  
+    <nav class="md-nav" aria-label="preloadVideo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_10" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_10" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_10" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_5" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-use_2" class="md-nav__link">
+    Basic use
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#show-progress-of-loading_2" class="md-nav__link">
+    Show progress of loading
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simulation" class="md-nav__link">
+    Simulation
+  </a>
+  
+    <nav class="md-nav" aria-label="Simulation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clicktarget" class="md-nav__link">
+    clickTarget
+  </a>
+  
+    <nav class="md-nav" aria-label="clickTarget">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_11" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_11" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_11" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_5" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ensuresimulationdataconsistency" class="md-nav__link">
+    ensureSimulationDataConsistency
+  </a>
+  
+    <nav class="md-nav" aria-label="ensureSimulationDataConsistency">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_12" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_12" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_12" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_6" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filltextinput" class="md-nav__link">
+    fillTextInput
+  </a>
+  
+    <nav class="md-nav" aria-label="fillTextInput">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_13" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_13" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_13" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_7" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getvalidkey" class="md-nav__link">
+    getValidKey
+  </a>
+  
+    <nav class="md-nav" aria-label="getValidKey">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_14" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_14" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_14" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_8" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keydown" class="md-nav__link">
+    keyDown
+  </a>
+  
+    <nav class="md-nav" aria-label="keyDown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_15" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_15" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_15" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_9" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keyup" class="md-nav__link">
+    keyUp
+  </a>
+  
+    <nav class="md-nav" aria-label="keyUp">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_16" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_16" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_16" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_10" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mergesimulationdata" class="md-nav__link">
+    mergeSimulationData
+  </a>
+  
+    <nav class="md-nav" aria-label="mergeSimulationData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_17" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_17" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_17" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_11" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#timeouts" class="md-nav__link">
+    Timeouts
+  </a>
+  
+    <nav class="md-nav" aria-label="Timeouts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clearalltimeouts" class="md-nav__link">
+    clearAllTimeouts
+  </a>
+  
+    <nav class="md-nav" aria-label="clearAllTimeouts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_18" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_18" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_18" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#settimeout" class="md-nav__link">
+    setTimeout
+  </a>
+  
+    <nav class="md-nav" aria-label="setTimeout">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_19" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_19" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_19" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_12" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Plugins
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Plugins" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Plugins
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/list-of-plugins/" class="md-nav__link">
+        List of Plugins
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/animation/" class="md-nav__link">
+        animation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/audio-button-response/" class="md-nav__link">
+        audio-button-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/audio-keyboard-response/" class="md-nav__link">
+        audio-keyboard-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/audio-slider-response/" class="md-nav__link">
+        audio-slider-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/browser-check/" class="md-nav__link">
+        browser-check
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/call-function/" class="md-nav__link">
+        call-function
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/canvas-button-response/" class="md-nav__link">
+        canvas-button-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/canvas-keyboard-response/" class="md-nav__link">
+        canvas-keyboard-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/canvas-slider-response/" class="md-nav__link">
+        canvas-slider-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/categorize-animation/" class="md-nav__link">
+        categorize-animation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/categorize-html/" class="md-nav__link">
+        categorize-html
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/categorize-image/" class="md-nav__link">
+        categorize-image
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/cloze/" class="md-nav__link">
+        cloze
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/external-html/" class="md-nav__link">
+        external-html
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/free-sort/" class="md-nav__link">
+        free-sort
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/fullscreen/" class="md-nav__link">
+        fullscreen
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/html-audio-response/" class="md-nav__link">
+        html-audio-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/html-button-response/" class="md-nav__link">
+        html-button-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/html-keyboard-response/" class="md-nav__link">
+        html-keyboard-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/html-slider-response/" class="md-nav__link">
+        html-slider-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/iat-html/" class="md-nav__link">
+        iat-html
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/iat-image/" class="md-nav__link">
+        iat-image
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/image-button-response/" class="md-nav__link">
+        image-button-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/image-keyboard-response/" class="md-nav__link">
+        image-keyboard-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/image-slider-response/" class="md-nav__link">
+        image-slider-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/initialize-microphone/" class="md-nav__link">
+        initialize-microphone
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/instructions/" class="md-nav__link">
+        instructions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/maxdiff/" class="md-nav__link">
+        maxdiff
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/preload/" class="md-nav__link">
+        preload
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/reconstruction/" class="md-nav__link">
+        reconstruction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/resize/" class="md-nav__link">
+        resize
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/same-different-html/" class="md-nav__link">
+        same-different-html
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/same-different-image/" class="md-nav__link">
+        same-different-image
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/serial-reaction-time/" class="md-nav__link">
+        serial-reaction-time
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/serial-reaction-time-mouse/" class="md-nav__link">
+        serial-reaction-time-mouse
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/sketchpad/" class="md-nav__link">
+        sketchpad
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/survey/" class="md-nav__link">
+        survey
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/survey-html-form/" class="md-nav__link">
+        survey-html-form
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/survey-likert/" class="md-nav__link">
+        survey-likert
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/survey-multi-choice/" class="md-nav__link">
+        survey-multi-choice
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/survey-multi-select/" class="md-nav__link">
+        survey-multi-select
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/survey-text/" class="md-nav__link">
+        survey-text
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/video-button-response/" class="md-nav__link">
+        video-button-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/video-keyboard-response/" class="md-nav__link">
+        video-keyboard-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/video-slider-response/" class="md-nav__link">
+        video-slider-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/virtual-chinrest/" class="md-nav__link">
+        virtual-chinrest
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/visual-search-circle/" class="md-nav__link">
+        visual-search-circle
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/webgazer-calibrate/" class="md-nav__link">
+        webgazer-calibrate
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/webgazer-init-camera/" class="md-nav__link">
+        webgazer-init-camera
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/webgazer-validate/" class="md-nav__link">
+        webgazer-validate
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Extensions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Extensions" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Extensions
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/list-of-extensions/" class="md-nav__link">
+        List of Extensions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/mouse-tracking/" class="md-nav__link">
+        mouse-tracking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/webgazer/" class="md-nav__link">
+        webgazer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Developers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Developers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Developers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/configuration/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/contributing/" class="md-nav__link">
+        Contributing to jsPsych
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/plugin-development/" class="md-nav__link">
+        Plugin Development
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/extension-development/" class="md-nav__link">
+        Extension Development
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          Support
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Support" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Support
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../support/support/" class="md-nav__link">
+        Getting Help
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../support/migration-v7/" class="md-nav__link">
+        Migrating from 6.x to 7.x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          About
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/about/" class="md-nav__link">
+        About jsPsych
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#keyboard-input" class="md-nav__link">
+    Keyboard Input
+  </a>
+  
+    <nav class="md-nav" aria-label="Keyboard Input">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cancelallkeyboardresponses" class="md-nav__link">
+    cancelAllKeyboardResponses
+  </a>
+  
+    <nav class="md-nav" aria-label="cancelAllKeyboardResponses">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cancelkeyboardresponse" class="md-nav__link">
+    cancelKeyboardResponse
+  </a>
+  
+    <nav class="md-nav" aria-label="cancelKeyboardResponse">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_1" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_1" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_1" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comparekeys" class="md-nav__link">
+    compareKeys
+  </a>
+  
+    <nav class="md-nav" aria-label="compareKeys">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_2" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_2" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_2" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-examples" class="md-nav__link">
+    Basic examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comparing-a-key-response-and-key-parameter-value-in-plugins" class="md-nav__link">
+    Comparing a key response and key parameter value in plugins
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scoring-a-key-response-in-experiment-code" class="md-nav__link">
+    Scoring a key response in experiment code
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getkeyboardresponse" class="md-nav__link">
+    getKeyboardResponse
+  </a>
+  
+    <nav class="md-nav" aria-label="getKeyboardResponse">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_3" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_3" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_3" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-a-single-response-from-any-key" class="md-nav__link">
+    Get a single response from any key
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-a-responses-from-a-key-until-the-letter-q-is-pressed" class="md-nav__link">
+    Get a responses from a key until the letter q is pressed
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#media" class="md-nav__link">
+    Media
+  </a>
+  
+    <nav class="md-nav" aria-label="Media">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getaudiobuffer" class="md-nav__link">
+    getAudioBuffer
+  </a>
+  
+    <nav class="md-nav" aria-label="getAudioBuffer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_4" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_4" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_4" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_2" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#html-5-audio" class="md-nav__link">
+    HTML 5 Audio
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webaudio-api" class="md-nav__link">
+    WebAudio API
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getautopreloadlist" class="md-nav__link">
+    getAutoPreloadList
+  </a>
+  
+    <nav class="md-nav" aria-label="getAutoPreloadList">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_5" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_5" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_5" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_2" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getmicrophonerecorder" class="md-nav__link">
+    getMicrophoneRecorder
+  </a>
+  
+    <nav class="md-nav" aria-label="getMicrophoneRecorder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_6" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_6" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_6" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_3" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initializemicrophonerecorder" class="md-nav__link">
+    initializeMicrophoneRecorder
+  </a>
+  
+    <nav class="md-nav" aria-label="initializeMicrophoneRecorder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_7" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_7" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_7" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_4" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preloadaudio" class="md-nav__link">
+    preloadAudio
+  </a>
+  
+    <nav class="md-nav" aria-label="preloadAudio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_8" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_8" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_8" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_3" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-use" class="md-nav__link">
+    Basic use
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#show-progress-of-loading" class="md-nav__link">
+    Show progress of loading
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preloadimages" class="md-nav__link">
+    preloadImages
+  </a>
+  
+    <nav class="md-nav" aria-label="preloadImages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_9" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_9" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_9" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_4" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-use_1" class="md-nav__link">
+    Basic use
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#show-progress-of-loading_1" class="md-nav__link">
+    Show progress of loading
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preloadvideo" class="md-nav__link">
+    preloadVideo
+  </a>
+  
+    <nav class="md-nav" aria-label="preloadVideo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_10" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_10" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_10" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_5" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-use_2" class="md-nav__link">
+    Basic use
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#show-progress-of-loading_2" class="md-nav__link">
+    Show progress of loading
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simulation" class="md-nav__link">
+    Simulation
+  </a>
+  
+    <nav class="md-nav" aria-label="Simulation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clicktarget" class="md-nav__link">
+    clickTarget
+  </a>
+  
+    <nav class="md-nav" aria-label="clickTarget">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_11" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_11" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_11" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_5" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ensuresimulationdataconsistency" class="md-nav__link">
+    ensureSimulationDataConsistency
+  </a>
+  
+    <nav class="md-nav" aria-label="ensureSimulationDataConsistency">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_12" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_12" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_12" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_6" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filltextinput" class="md-nav__link">
+    fillTextInput
+  </a>
+  
+    <nav class="md-nav" aria-label="fillTextInput">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_13" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_13" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_13" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_7" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getvalidkey" class="md-nav__link">
+    getValidKey
+  </a>
+  
+    <nav class="md-nav" aria-label="getValidKey">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_14" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_14" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_14" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_8" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keydown" class="md-nav__link">
+    keyDown
+  </a>
+  
+    <nav class="md-nav" aria-label="keyDown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_15" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_15" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_15" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_9" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keyup" class="md-nav__link">
+    keyUp
+  </a>
+  
+    <nav class="md-nav" aria-label="keyUp">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_16" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_16" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_16" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_10" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mergesimulationdata" class="md-nav__link">
+    mergeSimulationData
+  </a>
+  
+    <nav class="md-nav" aria-label="mergeSimulationData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_17" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_17" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_17" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_11" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#timeouts" class="md-nav__link">
+    Timeouts
+  </a>
+  
+    <nav class="md-nav" aria-label="Timeouts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clearalltimeouts" class="md-nav__link">
+    clearAllTimeouts
+  </a>
+  
+    <nav class="md-nav" aria-label="clearAllTimeouts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_18" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_18" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_18" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#settimeout" class="md-nav__link">
+    setTimeout
+  </a>
+  
+    <nav class="md-nav" aria-label="setTimeout">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_19" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_19" class="md-nav__link">
+    Return value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_19" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_12" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+<a href="https://github.com/jspsych/jsPsych/edit/master/docs/reference/jspsych-pluginAPI.md" title="Edit this page" class="md-content__button md-icon">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+</a>
+
+
+
+<h1 id="jspsychpluginapi">jsPsych.pluginAPI<a class="headerlink" href="#jspsychpluginapi" title="Permanent link">&para;</a></h1>
+<p>The pluginAPI module contains functions that are useful when developing plugins. All of the functions are accessible through the <code>pluginAPI</code> object. In this documentation we've divided them up based on different kinds of functionality.</p>
+<h2 id="keyboard-input">Keyboard Input<a class="headerlink" href="#keyboard-input" title="Permanent link">&para;</a></h2>
+<h3 id="cancelallkeyboardresponses">cancelAllKeyboardResponses<a class="headerlink" href="#cancelallkeyboardresponses" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">cancelAllKeyboardResponses</span><span class="p">()</span>
+</code></pre></div>
+<h4 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h4>
+<p>None.</p>
+<h4 id="return-value">Return value<a class="headerlink" href="#return-value" title="Permanent link">&para;</a></h4>
+<p>Returns nothing.</p>
+<h4 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h4>
+<p>Cancels all currently active keyboard listeners created by <code>jsPsych.pluginAPI.getKeyboardResponse</code>.</p>
+<h4 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">cancelAllKeyboardResponses</span><span class="p">();</span>
+</code></pre></div>
+<hr />
+<h3 id="cancelkeyboardresponse">cancelKeyboardResponse<a class="headerlink" href="#cancelkeyboardresponse" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">cancelKeyboardResponse</span><span class="p">(</span><span class="nx">listener_id</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_1">Parameters<a class="headerlink" href="#parameters_1" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>listener_id</td>
+<td>object</td>
+<td>The listener_id object generated by the call to <code>jsPsych.pluginAPI.getKeyboardResponse</code>.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_1">Return value<a class="headerlink" href="#return-value_1" title="Permanent link">&para;</a></h4>
+<p>Returns nothing.</p>
+<h4 id="description_1">Description<a class="headerlink" href="#description_1" title="Permanent link">&para;</a></h4>
+<p>Cancels a specific keyboard listener created by <code>jsPsych.pluginAPI.getKeyboardResponse</code>.</p>
+<h4 id="example_1">Example<a class="headerlink" href="#example_1" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1">// create a persistent keyboard listener</span>
+<span class="kd">var</span> <span class="nx">listener_id</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getKeyboardResponse</span><span class="p">({</span>
+    <span class="nx">callback_function</span><span class="o">:</span> <span class="nx">after_response</span><span class="p">,</span> 
+    <span class="nx">valid_responses</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="s1">&#39;q&#39;</span><span class="p">],</span> 
+    <span class="nx">rt_method</span><span class="o">:</span> <span class="s1">&#39;performance&#39;</span><span class="p">,</span> 
+    <span class="nx">persist</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">allow_held_key</span><span class="o">:</span> <span class="kc">false</span>
+<span class="p">});</span>
+
+<span class="c1">// cancel keyboard listener</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">cancelKeyboardResponse</span><span class="p">(</span><span class="nx">listener_id</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h3 id="comparekeys">compareKeys<a class="headerlink" href="#comparekeys" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">key1</span><span class="p">,</span> <span class="nx">key2</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_2">Parameters<a class="headerlink" href="#parameters_2" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>key1</td>
+<td>string or numeric</td>
+<td>The representation of a key, either string or keycode</td>
+</tr>
+<tr>
+<td>key2</td>
+<td>string or numeric</td>
+<td>The representation of a key, either string or keycode</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_2">Return value<a class="headerlink" href="#return-value_2" title="Permanent link">&para;</a></h4>
+<p>Returns true if keycodes or strings refer to the same key, regardless of type. Returns false if the keycodes or strings do not match.</p>
+<h4 id="description_2">Description<a class="headerlink" href="#description_2" title="Permanent link">&para;</a></h4>
+<p>Compares two keys to see if they are the same, ignoring differences in representational type, and using the appropriate case sensitivity based on the experiment's settings. </p>
+<p>If <code>case_sensitive_responses</code> is set to <code>false</code> in <code>initJsPsych</code> (the default), then the string key comparison will not be case-sensitive, e.g., "a" and "A" will match, and this function will return <code>true</code>. If <code>case_sensitive_responses</code> is set to <code>true</code> in <code>initJsPsych</code>, then the string key comparison will not be case-sensitive, e.g., "a" and "A" will not match, and this function will return <code>false</code>. </p>
+<p>We recommend using this function to compare keys in all plugin and experiment code, rather than using something like <code>if (response == 'j')...</code>. This is because the response key returned by the <code>jsPsych.pluginAPI.getKeyboardResponse</code> function will be converted to lowercase when <code>case_sensitive_responses</code> is <code>false</code>, and it will match the exact key press representation when <code>case_sensitive_responses</code> is <code>true</code>. Using this <code>compareKeys</code> function will ensure that your key comparisons work appropriately based on the experiment's <code>case_sensitive_responses</code> setting, and that you do not need to remember to check key responses against different case versions of the comparison key (e.g. <code>if (response == 'ArrowLeft' || response == 'arrowleft')...</code>). </p>
+<h4 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h4>
+<h5 id="basic-examples">Basic examples<a class="headerlink" href="#basic-examples" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">);</span>
+<span class="c1">// returns true when case_sensitive_responses is false in initJsPsych</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">);</span>
+<span class="c1">// returns false when case_sensitive_responses is true in initJsPsych</span>
+
+<span class="c1">// also works with numeric key codes (but note that numeric keyCode values are now deprecated)</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mf">65</span><span class="p">);</span>
+<span class="c1">// returns true</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="mf">31</span><span class="p">);</span>
+<span class="c1">// returns false</span>
+</code></pre></div>
+<h5 id="comparing-a-key-response-and-key-parameter-value-in-plugins">Comparing a key response and key parameter value in plugins<a class="headerlink" href="#comparing-a-key-response-and-key-parameter-value-in-plugins" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="c1">// this is the callback_function passed to jsPsych.pluginAPI.getKeyboardResponse</span>
+<span class="kd">var</span> <span class="nx">after_response</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// score the response by comparing the key that was pressed against the trial&#39;s key_answer parameter</span>
+  <span class="kd">var</span> <span class="nx">correct</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">trial</span><span class="p">.</span><span class="nx">key_answer</span><span class="p">,</span> <span class="nx">info</span><span class="p">.</span><span class="nx">key</span><span class="p">);</span>
+  <span class="c1">//...</span>
+<span class="p">}</span>
+</code></pre></div>
+<h5 id="scoring-a-key-response-in-experiment-code">Scoring a key response in experiment code<a class="headerlink" href="#scoring-a-key-response-in-experiment-code" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;&lt;&lt;&lt;&lt;&#39;</span><span class="p">,</span>
+  <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;j&#39;</span><span class="p">],</span>
+  <span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39;Press f for left. Press j for right.&#39;</span><span class="p">,</span>
+  <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="c1">// score the response by comparing the key that was pressed (data.response) against the </span>
+    <span class="c1">// correct response for this trial (&#39;f&#39;), and store reponse accuracy in the trial data</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">)){</span>
+      <span class="nx">data</span><span class="p">.</span><span class="nx">correct</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">data</span><span class="p">.</span><span class="nx">correct</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> 
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<hr />
+<h3 id="getkeyboardresponse">getKeyboardResponse<a class="headerlink" href="#getkeyboardresponse" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getKeyboardResponse</span><span class="p">(</span><span class="nx">parameters</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_3">Parameters<a class="headerlink" href="#parameters_3" title="Permanent link">&para;</a></h4>
+<p>The method accepts an object of parameter values (see example below). The valid keys for this object are listed in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callback_function</td>
+<td>function</td>
+<td>The function to execute whenever a valid keyboard response is generated.</td>
+</tr>
+<tr>
+<td>valid_responses</td>
+<td>array</td>
+<td>An array of key codes or character strings representing valid responses. Responses not on the list will be ignored. An empty array indicates that all responses are acceptable.</td>
+</tr>
+<tr>
+<td>rt_method</td>
+<td>string</td>
+<td>Indicates which method of recording time to use. The <code>'performance'</code> method uses calls to <code>performance.now()</code>, which is the standard way of measuring timing in jsPsych. It is <a href="http://caniuse.com/#search=performance">supported by up-to-date versions of all the major browsers</a>. The <code>audio</code> method is used in conjuction with an <code>audio_context</code> (set as an additional parameter). This uses the clock time of the <code>audio_context</code> when audio stimuli are being played.</td>
+</tr>
+<tr>
+<td>audio_context</td>
+<td>AudioContext object</td>
+<td>The AudioContext of the audio file that is being played.</td>
+</tr>
+<tr>
+<td>audio_context_start_time</td>
+<td>numeric</td>
+<td>The scheduled time of the sound file in the AudioContext. This will be used as the start time.</td>
+</tr>
+<tr>
+<td>allow_held_key</td>
+<td>boolean</td>
+<td>If <code>true</code>, then responses will be registered from keys that are being held down. If <code>false</code>, then a held key can only register a response the first time that <code>getKeyboardResponse</code> is called for that key. For example, if a participant holds down the <code>A</code> key before the experiment starts, then the first time <code>getKeyboardResponse</code> is called, the <code>A</code> will register as a key press. However, any future calls to <code>getKeyboardResponse</code> will not register the <code>A</code> until the participant releases the key and presses it again.</td>
+</tr>
+<tr>
+<td>persist</td>
+<td>boolean</td>
+<td>If false, then the keyboard listener will only trigger the first time a valid key is pressed. If true, then it will trigger every time a valid key is pressed until it is explicitly cancelled by <code>jsPsych.pluginAPI.cancelKeyboardResponse</code> or <code>jsPsych.pluginAPI.cancelAllKeyboardResponses</code>.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_3">Return value<a class="headerlink" href="#return-value_3" title="Permanent link">&para;</a></h4>
+<p>Return an object that uniquely identifies the keyboard listener. This object can be passed to <code>jsPsych.pluginAPI.cancelKeyboardResponse</code> to cancel the keyboard listener.</p>
+<h4 id="description_3">Description<a class="headerlink" href="#description_3" title="Permanent link">&para;</a></h4>
+<p>Gets a keyboard response from the subject, recording the response time from when the function is first called until a valid response is generated.</p>
+<p>The keyboard event listener will be bound to the <code>display_element</code> declared in <code>initJsPsych()</code> (or the <code>&lt;body&gt;</code> element if no <code>display_element</code> is specified). This allows jsPsych experiments to be embedded in websites with other content without disrupting the functionality of other UI elements.</p>
+<p>A valid response triggers the <code>callback_function</code> specified in the parameters. A single argument is passed to the callback function. The argument contains an object with the properties <code>key</code> and <code>rt</code>. <code>key</code> contains the string representation of the response key, and <code>rt</code> contains the response time. </p>
+<p>This function uses the <code>.key</code> value of the keyboard event, which is <em>case sensitive</em>. When <code>case_sensitive_responses</code> is <code>false</code> in <code>initJsPsych</code> (the default), this function will convert both the <code>valid_responses</code> strings and the response key to lowercase before comparing them, and it will pass the lowercase version of the response key to the <code>callback_function</code>. For example, if <code>valid_responses</code> is <code>['a']</code>, then both 'A' and 'a' will be considered valid key presses, and 'a' will be returned as the response key. When <code>case_sensitive_responses</code> is <code>true</code> in <code>initJsPsych</code>, this function will not convert the case when comparing the <code>valid_responses</code> and response key, and it will not convert the case of the response key that is passed to the <code>callback_function</code>. For example, if <code>valid_responses</code> is <code>['a']</code>, then 'a' will be the only valid key press, and 'A' (i.e. 'a' with CapsLock on or Shift held down) will not be accepted. Also, if <code>valid_responses</code> includes multiple letter case options (e.g. <code>"ALL_KEYS"</code>), then you may need to check the response key against both letter cases when scoring etc., e.g. <code>if (response == 'ArrowLeft' || response =='arrowleft') ...</code>.</p>
+<h4 id="examples_1">Examples<a class="headerlink" href="#examples_1" title="Permanent link">&para;</a></h4>
+<h5 id="get-a-single-response-from-any-key">Get a single response from any key<a class="headerlink" href="#get-a-single-response-from-any-key" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">after_response</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">){</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;You pressed key &#39;</span><span class="o">+</span><span class="nx">info</span><span class="p">.</span><span class="nx">key</span><span class="o">+</span><span class="s1">&#39; after &#39;</span><span class="o">+</span><span class="nx">info</span><span class="p">.</span><span class="nx">rt</span><span class="o">+</span><span class="s1">&#39;ms&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getKeyboardResponse</span><span class="p">({</span>
+  <span class="nx">callback_function</span><span class="o">:</span><span class="nx">after_response</span><span class="p">,</span>
+  <span class="nx">valid_responses</span><span class="o">:</span> <span class="s2">&quot;ALL_KEYS&quot;</span><span class="p">,</span>
+  <span class="nx">rt_method</span><span class="o">:</span> <span class="s1">&#39;performance&#39;</span><span class="p">,</span>
+  <span class="nx">persist</span><span class="o">:</span> <span class="kc">false</span>
+<span class="p">});</span>
+</code></pre></div>
+<h5 id="get-a-responses-from-a-key-until-the-letter-q-is-pressed">Get a responses from a key until the letter q is pressed<a class="headerlink" href="#get-a-responses-from-a-key-until-the-letter-q-is-pressed" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">after_response</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">){</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;You pressed key &#39;</span><span class="o">+</span><span class="nx">info</span><span class="p">.</span><span class="nx">key</span><span class="o">+</span><span class="s1">&#39; after &#39;</span><span class="o">+</span><span class="nx">info</span><span class="p">.</span><span class="nx">rt</span><span class="o">+</span><span class="s1">&#39;ms&#39;</span><span class="p">);</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">info</span><span class="p">.</span><span class="nx">key</span><span class="p">,</span><span class="s1">&#39;q&#39;</span><span class="p">)){</span> <span class="err">/</span>
+        <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">cancelKeyboardResponse</span><span class="p">(</span><span class="nx">listener</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">listener</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getKeyboardResponse</span><span class="p">({</span>
+  <span class="nx">callback_function</span><span class="o">:</span><span class="nx">after_response</span><span class="p">,</span>
+  <span class="nx">valid_responses</span><span class="o">:</span> <span class="s2">&quot;ALL_KEYS&quot;</span><span class="p">,</span>
+  <span class="nx">rt_method</span><span class="o">:</span> <span class="s1">&#39;performance&#39;</span><span class="p">,</span>
+  <span class="nx">persist</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">});</span>
+</code></pre></div>
+<h2 id="media">Media<a class="headerlink" href="#media" title="Permanent link">&para;</a></h2>
+<h3 id="getaudiobuffer">getAudioBuffer<a class="headerlink" href="#getaudiobuffer" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAudioBuffer</span><span class="p">(</span><span class="nx">filepath</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_4">Parameters<a class="headerlink" href="#parameters_4" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>filepath</td>
+<td>string</td>
+<td>The path to the audio file that was preloaded.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_4">Return value<a class="headerlink" href="#return-value_4" title="Permanent link">&para;</a></h4>
+<p>Returns a Promise that resolves when the audio file loads. Success handler's parameter will be the audio buffer. If the experiment is running using the WebAudio API it will be an AudioBuffer object. Otherwise, it will be an HTML5 Audio object. The failure handler's parameter is the error generated by <code>preloadAudio</code>.</p>
+<h4 id="description_4">Description<a class="headerlink" href="#description_4" title="Permanent link">&para;</a></h4>
+<p>Gets an AudioBuffer that can be played with the WebAudio API or an Audio object that can be played with HTML5 Audio. </p>
+<p>It is strongly recommended that you preload audio files before calling this method. This method will load the files if they are not preloaded, but this may result in delays during the experiment as audio is downloaded.</p>
+<h4 id="examples_2">Examples<a class="headerlink" href="#examples_2" title="Permanent link">&para;</a></h4>
+<h5 id="html-5-audio">HTML 5 Audio<a class="headerlink" href="#html-5-audio" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAudioBuffer</span><span class="p">(</span><span class="s1">&#39;my-sound.mp3&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">audio</span><span class="p">){</span>
+    <span class="nx">audio</span><span class="p">.</span><span class="nx">play</span><span class="p">();</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Audio file failed to load&#39;</span><span class="p">)</span>
+  <span class="p">})</span>
+</code></pre></div>
+<h5 id="webaudio-api">WebAudio API<a class="headerlink" href="#webaudio-api" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">audioContext</span><span class="p">();</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAudioBuffer</span><span class="p">(</span><span class="s1">&#39;my-sound.mp3&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">buffer</span><span class="p">){</span>
+    <span class="nx">audio</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">createBufferSource</span><span class="p">();</span>
+    <span class="nx">audio</span><span class="p">.</span><span class="nx">buffer</span> <span class="o">=</span> <span class="nx">buffer</span><span class="p">;</span>
+    <span class="nx">audio</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">destination</span><span class="p">);</span>
+    <span class="nx">audio</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">currentTime</span><span class="p">);</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Audio file failed to load&#39;</span><span class="p">)</span>
+  <span class="p">})</span>
+</code></pre></div>
+<p>See the <code>audio-keyboard-response</code> plugin for an example in a fuller context.</p>
+<hr />
+<h3 id="getautopreloadlist">getAutoPreloadList<a class="headerlink" href="#getautopreloadlist" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAutoPreloadList</span><span class="p">(</span><span class="nx">timeline</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_5">Parameters<a class="headerlink" href="#parameters_5" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>timeline</td>
+<td>array</td>
+<td>An array containing the trial object(s) from which a list of media files should be automatically generated. This array can contain the entire experiment timeline, or any individual parts of a larger timeline, such as specific timeline nodes and trial objects.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_5">Return value<a class="headerlink" href="#return-value_5" title="Permanent link">&para;</a></h4>
+<p>An object with properties for each media type: <code>images</code>, <code>audio</code>, and <code>video</code>. Each property contains an array of the unique files of that media type that were automatically extracted from the timeline. If no files are found in the timeline for a particular media type, then the array will be empty for that type.</p>
+<h4 id="description_5">Description<a class="headerlink" href="#description_5" title="Permanent link">&para;</a></h4>
+<p>This method is used to automatically generate lists of unique image, audio, and video files from a timeline. It is used by the <code>preload</code> plugin to generate a list of to-be-preloaded files based on the trials passed to the <code>trials</code> parameter and/or the experiment timeline passed to <code>jsPsych.run</code> (when <code>auto_preload</code> is true). It can be used in custom plugins and experiment code to generate a list of audio/image/video files, based on a timeline. </p>
+<p>This function will only return files from plugin parameters that are marked as parameter type <code>AUDIO</code>/<code>IMAGE</code>/<code>VIDEO</code>, and only when the <code>preload</code> flag of the corresponding parameter definition has not been set to <code>false</code>, and the trial's parameter value is not a function.
+When a file path is returned to the trial parameter from a function (including the <code>jsPsych.timelineVariable</code> function), or when the file path is embedded in an HTML string, that file will not be detected by the <code>getAutoPreloadList</code> method.
+In these cases, the file should be preloaded manually.
+See <a href="../../overview/media-preloading/">Media Preloading</a> for more information.</p>
+<h4 id="example_2">Example<a class="headerlink" href="#example_2" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">audio_trial</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychAudioKeyboardResponse</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;file.mp3&#39;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">image_trial</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychImageKeyboardResponse</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;file.png&#39;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">video_trial</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychVideoKeyboardResponse</span>
+    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;file.mp4&#39;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[</span><span class="nx">audio_trial</span><span class="p">,</span> <span class="nx">image_trial</span><span class="p">,</span> <span class="nx">video_trial</span><span class="p">];</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAutoPreloadList</span><span class="p">(</span><span class="nx">timeline</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h3 id="getmicrophonerecorder">getMicrophoneRecorder<a class="headerlink" href="#getmicrophonerecorder" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getMicrophoneRecorder</span><span class="p">()</span>
+</code></pre></div>
+<h4 id="parameters_6">Parameters<a class="headerlink" href="#parameters_6" title="Permanent link">&para;</a></h4>
+<p>None</p>
+<h4 id="return-value_6">Return value<a class="headerlink" href="#return-value_6" title="Permanent link">&para;</a></h4>
+<p>A <code>MediaRecorder</code> object connected to the <code>MediaStream</code> for the active microphone.</p>
+<h4 id="description_6">Description<a class="headerlink" href="#description_6" title="Permanent link">&para;</a></h4>
+<p>Provides access to the <code>MediaRecorder</code> created by <a href="#initializemicrophonerecorder">initializeMicrophoneRecorder()</a>.
+If no microphone recorder exists, it returns <code>null</code>.</p>
+<h4 id="example_3">Example<a class="headerlink" href="#example_3" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span> <span class="nx">recorder</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getMicrophoneRecorder</span><span class="p">();</span>
+</code></pre></div>
+<hr />
+<h3 id="initializemicrophonerecorder">initializeMicrophoneRecorder<a class="headerlink" href="#initializemicrophonerecorder" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">initializeMicrophoneRecorder</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_7">Parameters<a class="headerlink" href="#parameters_7" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stream</td>
+<td><code>MediaStream</code></td>
+<td>The <code>MediaStream</code> object from an active microphone device.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_7">Return value<a class="headerlink" href="#return-value_7" title="Permanent link">&para;</a></h4>
+<p>None.</p>
+<h4 id="description_7">Description<a class="headerlink" href="#description_7" title="Permanent link">&para;</a></h4>
+<p>Generates a <code>MediaRecorder</code> object from provided <code>MediaStream</code> and stores this for access via <a href="#getmicrophonerecorder">getMicrophoneRecorder()</a>.</p>
+<h4 id="example_4">Example<a class="headerlink" href="#example_4" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span> <span class="nx">stream</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">mediaDevices</span><span class="p">.</span><span class="nx">getUserMedia</span><span class="p">({</span> <span class="nx">audio</span><span class="o">:</span> <span class="p">{</span> <span class="nx">deviceId</span><span class="o">:</span> <span class="nx">mic_id</span> <span class="p">}</span> <span class="p">});</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">initializeMicrophoneRecorder</span><span class="p">(</span><span class="nx">stream</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h3 id="preloadaudio">preloadAudio<a class="headerlink" href="#preloadaudio" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadAudio</span><span class="p">(</span><span class="nx">files</span><span class="p">,</span> <span class="nx">callback_complete</span><span class="p">,</span> <span class="nx">callback_load</span><span class="p">,</span> <span class="nx">callback_error</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_8">Parameters<a class="headerlink" href="#parameters_8" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>files</td>
+<td>array</td>
+<td>An array of audio file paths to load. The array can be nested (e.g., if images are in multiple arrays to help sort by condition or task).</td>
+</tr>
+<tr>
+<td>callback_complete</td>
+<td>function</td>
+<td>A function to execute when all the files have been loaded.</td>
+</tr>
+<tr>
+<td>callback_load</td>
+<td>function</td>
+<td>A function to execute after a single file has been loaded. A single parameter is passed to this function which is the file source (string) that has loaded.</td>
+</tr>
+<tr>
+<td>callback_error</td>
+<td>function</td>
+<td>A function to execute after a single file has produced an error. A single parameter is passed to this function which is the file source (string) that produced the error.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_8">Return value<a class="headerlink" href="#return-value_8" title="Permanent link">&para;</a></h4>
+<p>Returns nothing.</p>
+<h4 id="description_8">Description<a class="headerlink" href="#description_8" title="Permanent link">&para;</a></h4>
+<p>This function is used to preload audio files. It is used by the <code>preload</code> plugin, and could be called directly to preload audio files in custom plugins or experiment. See <a href="../../overview/media-preloading/">Media Preloading</a> for more information.</p>
+<p>It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the files are loaded. Thus, it is possible that an audio file would be required for playing before it is done preloading. The <code>callback_complete</code> function will only execute after all the audio files are loaded, and can be used to control the flow of the experiment (e.g., by starting the experiment in the <code>callback_complete</code> function).</p>
+<p>The <code>callback_load</code> and <code>callback_error</code> functions are called after each file has either loaded or produced an error, so these functions can also be used to monitor loading progress. See example below.</p>
+<h4 id="examples_3">Examples<a class="headerlink" href="#examples_3" title="Permanent link">&para;</a></h4>
+<h5 id="basic-use">Basic use<a class="headerlink" href="#basic-use" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">sounds</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;file1.mp3&#39;</span><span class="p">,</span> <span class="s1">&#39;file2.mp3&#39;</span><span class="p">,</span> <span class="s1">&#39;file3.mp3&#39;</span><span class="p">];</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadAudio</span><span class="p">(</span><span class="nx">sounds</span><span class="p">,</span> 
+    <span class="kd">function</span><span class="p">(){</span> <span class="nx">startExperiment</span><span class="p">();</span> <span class="p">},</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;file loaded: &#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span> <span class="p">}</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;error loading file: &#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">startExperiment</span><span class="p">(){</span>
+    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h5 id="show-progress-of-loading">Show progress of loading<a class="headerlink" href="#show-progress-of-loading" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">sounds</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;file1.mp3&#39;</span><span class="p">,</span> <span class="s1">&#39;file2.mp3&#39;</span><span class="p">,</span> <span class="s1">&#39;file3.mp3&#39;</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">n_loaded</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadAudio</span><span class="p">(</span><span class="nx">sounds</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">startExperiment</span><span class="p">();</span> <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span> <span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span> <span class="p">});</span>
+
+<span class="kd">function</span> <span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span>
+  <span class="nx">n_loaded</span><span class="o">++</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">percentcomplete</span> <span class="o">=</span> <span class="nx">n_loaded</span> <span class="o">/</span> <span class="nx">sounds</span><span class="p">.</span><span class="nx">length</span> <span class="o">*</span> <span class="mf">100</span><span class="p">;</span>
+
+    <span class="c1">// could put something fancier here, like a progress bar</span>
+    <span class="c1">// or updating text in the DOM.</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Loaded &#39;</span><span class="o">+</span><span class="nx">percentcomplete</span><span class="o">+</span><span class="s1">&#39;% of audio files&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">startExperiment</span><span class="p">(){</span>
+  <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<hr />
+<h3 id="preloadimages">preloadImages<a class="headerlink" href="#preloadimages" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadImages</span><span class="p">(</span><span class="nx">images</span><span class="p">,</span> <span class="nx">callback_complete</span><span class="p">,</span> <span class="nx">callback_load</span><span class="p">,</span> <span class="nx">callback_error</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_9">Parameters<a class="headerlink" href="#parameters_9" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>images</td>
+<td>array</td>
+<td>An array of image paths to load. The array can be nested (e.g., if images are in multiple arrays to help sort by condition or task).</td>
+</tr>
+<tr>
+<td>callback_complete</td>
+<td>function</td>
+<td>A function to execute when all the images have been loaded.</td>
+</tr>
+<tr>
+<td>callback_load</td>
+<td>function</td>
+<td>A function to execute after a single file has been loaded. A single parameter is passed to this function which is the file source (string) that has loaded.</td>
+</tr>
+<tr>
+<td>callback_error</td>
+<td>function</td>
+<td>A function to execute after a single file has produced an error. A single parameter is passed to this function which is the file source (string) that produced the error.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_9">Return value<a class="headerlink" href="#return-value_9" title="Permanent link">&para;</a></h4>
+<p>Returns nothing.</p>
+<h4 id="description_9">Description<a class="headerlink" href="#description_9" title="Permanent link">&para;</a></h4>
+<p>This function is used to preload image files. It is used by the <code>preload</code> plugin, and could be called directly to preload image files in custom plugins or experiment code. See <a href="../../overview/media-preloading/">Media Preloading</a> for more information.</p>
+<p>It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the images are loaded. Thus, it is possible that an image would be required for display before it is done preloading. The <code>callback_complete</code> function will only execute after all the images are loaded, and can be used to control the flow of the experiment (e.g., by starting the experiment in the <code>callback_complete</code> function).</p>
+<p>The <code>callback_load</code> and <code>callback_error</code> functions are called after each file has either loaded or produced an error, so these functions can also be used to monitor loading progress. See example below.</p>
+<h4 id="examples_4">Examples<a class="headerlink" href="#examples_4" title="Permanent link">&para;</a></h4>
+<h5 id="basic-use_1">Basic use<a class="headerlink" href="#basic-use_1" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">images</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;img/file1.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/file2.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/file3.png&#39;</span><span class="p">];</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadImages</span><span class="p">(</span><span class="nx">images</span><span class="p">,</span> 
+    <span class="kd">function</span><span class="p">(){</span> <span class="nx">startExperiment</span><span class="p">();</span> <span class="p">},</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;file loaded: &#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span> <span class="p">}</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;error loading file: &#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">startExperiment</span><span class="p">(){</span>
+    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h5 id="show-progress-of-loading_1">Show progress of loading<a class="headerlink" href="#show-progress-of-loading_1" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">images</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;img/file1.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/file2.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/file3.png&#39;</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">n_loaded</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadImages</span><span class="p">(</span><span class="nx">images</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">startExperiment</span><span class="p">();</span> <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span> <span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span> <span class="p">});</span>
+
+<span class="kd">function</span> <span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span>
+  <span class="nx">n_loaded</span><span class="o">++</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">percentcomplete</span> <span class="o">=</span> <span class="nx">n_loaded</span> <span class="o">/</span> <span class="nx">images</span><span class="p">.</span><span class="nx">length</span> <span class="o">*</span> <span class="mf">100</span><span class="p">;</span>
+
+    <span class="c1">// could put something fancier here, like a progress bar</span>
+    <span class="c1">// or updating text in the DOM.</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Loaded &#39;</span><span class="o">+</span><span class="nx">percentcomplete</span><span class="o">+</span><span class="s1">&#39;% of images&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">startExperiment</span><span class="p">(){</span>
+  <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<hr />
+<h3 id="preloadvideo">preloadVideo<a class="headerlink" href="#preloadvideo" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadVideo</span><span class="p">(</span><span class="nx">video</span><span class="p">,</span> <span class="nx">callback_complete</span><span class="p">,</span> <span class="nx">callback_load</span><span class="p">,</span> <span class="nx">callback_error</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_10">Parameters<a class="headerlink" href="#parameters_10" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>video</td>
+<td>array</td>
+<td>An array of video paths to load. The array can be nested (e.g., if videos are in multiple arrays to help sort by condition or task).</td>
+</tr>
+<tr>
+<td>callback_complete</td>
+<td>function</td>
+<td>A function to execute when all the videos have been loaded.</td>
+</tr>
+<tr>
+<td>callback_load</td>
+<td>function</td>
+<td>A function to execute after a single file has been loaded. A single parameter is passed to this function which is the file source (string) that has loaded.</td>
+</tr>
+<tr>
+<td>callback_error</td>
+<td>function</td>
+<td>A function to execute after a single file has produced an error. A single parameter is passed to this function which is the file source (string) that produced the error.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_10">Return value<a class="headerlink" href="#return-value_10" title="Permanent link">&para;</a></h4>
+<p>Returns nothing.</p>
+<h4 id="description_10">Description<a class="headerlink" href="#description_10" title="Permanent link">&para;</a></h4>
+<p>This function is used to preload video files. It is used by the <code>preload</code> plugin, and could be called directly to preload video files in custom plugins or experiment code. See <a href="../../overview/media-preloading/">Media Preloading</a> for more information.</p>
+<p>It is possible to run this function without specifying a callback function. However, in this case the code will continue executing while the videos are loaded. Thus, it is possible that a video would be requested before it is done preloading. The <code>callback_complete</code> function will only execute after all the videos are loaded, and can be used to control the flow of the experiment (e.g., by starting the experiment in the <code>callback_complete</code> function).</p>
+<p>The <code>callback_load</code> and <code>callback_error</code> functions are called after each file has either loaded or produced an error, so these functions can also be used to monitor loading progress. See example below.</p>
+<h4 id="examples_5">Examples<a class="headerlink" href="#examples_5" title="Permanent link">&para;</a></h4>
+<h5 id="basic-use_2">Basic use<a class="headerlink" href="#basic-use_2" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">videos</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;vid/file1.mp4&#39;</span><span class="p">,</span> <span class="s1">&#39;vid/file2.mp4&#39;</span><span class="p">,</span> <span class="s1">&#39;vid/file3.mp4&#39;</span><span class="p">];</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadVideo</span><span class="p">(</span><span class="nx">videos</span><span class="p">,</span> 
+  <span class="kd">function</span><span class="p">(){</span> <span class="nx">startExperiment</span><span class="p">();</span> <span class="p">},</span>
+  <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;file loaded: &#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span> <span class="p">}</span>
+  <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;error loading file: &#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">startExperiment</span><span class="p">(){</span>
+  <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h5 id="show-progress-of-loading_2">Show progress of loading<a class="headerlink" href="#show-progress-of-loading_2" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">videos</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;vid/file1.mp4&#39;</span><span class="p">,</span> <span class="s1">&#39;vid/file2.mp4&#39;</span><span class="p">,</span> <span class="s1">&#39;vid/file3.mp4&#39;</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">n_loaded</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadVideo</span><span class="p">(</span><span class="nx">videos</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">startExperiment</span><span class="p">();</span> <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span> <span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span> <span class="p">});</span>
+
+<span class="kd">function</span> <span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span>
+  <span class="nx">n_loaded</span><span class="o">++</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">percentcomplete</span> <span class="o">=</span> <span class="nx">n_loaded</span> <span class="o">/</span> <span class="nx">videos</span><span class="p">.</span><span class="nx">length</span> <span class="o">*</span> <span class="mf">100</span><span class="p">;</span>
+
+    <span class="c1">// could put something fancier here, like a progress bar</span>
+    <span class="c1">// or updating text in the DOM.</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Loaded &#39;</span><span class="o">+</span><span class="nx">percentcomplete</span><span class="o">+</span><span class="s1">&#39;% of videos&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">startExperiment</span><span class="p">(){</span>
+  <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<hr />
+<h2 id="simulation">Simulation<a class="headerlink" href="#simulation" title="Permanent link">&para;</a></h2>
+<h3 id="clicktarget">clickTarget<a class="headerlink" href="#clicktarget" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">clickTarget</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">delay</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_11">Parameters<a class="headerlink" href="#parameters_11" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>target</td>
+<td>Element</td>
+<td>The DOM element to simulate clicking on.</td>
+</tr>
+<tr>
+<td>delay</td>
+<td>number</td>
+<td>Time to wait in milliseconds. The click will be executed after the delay.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_11">Return value<a class="headerlink" href="#return-value_11" title="Permanent link">&para;</a></h4>
+<p>None</p>
+<h4 id="description_11">Description<a class="headerlink" href="#description_11" title="Permanent link">&para;</a></h4>
+<p>Simulates clicking on a DOM element by dispatching three MouseEvents on the <code>target</code>: <code>'mousedown'</code>, then <code>'mouseup'</code>, then <code>'click'</code>. If <code>delay</code> is positive, then the events are scheduled to execute after the delay via <code>setTimeout</code>.</p>
+<h4 id="example_5">Example<a class="headerlink" href="#example_5" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span> <span class="nx">target</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.jspsych-btn&#39;</span><span class="p">);</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">clickTarget</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="mf">500</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h3 id="ensuresimulationdataconsistency">ensureSimulationDataConsistency<a class="headerlink" href="#ensuresimulationdataconsistency" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">ensureSimulationDataConsistency</span><span class="p">(</span><span class="nx">trial</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_12">Parameters<a class="headerlink" href="#parameters_12" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>trial</td>
+<td>object</td>
+<td>Parameters for the trial, e.g., those passed to the plugin's <code>trial()</code> method.</td>
+</tr>
+<tr>
+<td>data</td>
+<td>object</td>
+<td>An object containing data for the trial.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_12">Return value<a class="headerlink" href="#return-value_12" title="Permanent link">&para;</a></h4>
+<p>None. The <code>data</code> object is modified in place by this method.</p>
+<h4 id="description_12">Description<a class="headerlink" href="#description_12" title="Permanent link">&para;</a></h4>
+<p>Performs some basic consistency checks on the <code>data</code> based on the parameters specified in <code>trial</code>. For example, if <code>trial.choices</code> is <code>"NO_KEYS"</code> but <code>data.response</code> is a key string then <code>data.response</code> and <code>data.rt</code> are set to <code>null</code>.</p>
+<h4 id="example_6">Example<a class="headerlink" href="#example_6" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">ensureSimulationDataConsistency</span><span class="p">(</span><span class="nx">trial</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h3 id="filltextinput">fillTextInput<a class="headerlink" href="#filltextinput" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">fillTextInput</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">text</span><span class="p">,</span> <span class="nx">delay</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_13">Parameters<a class="headerlink" href="#parameters_13" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>target</td>
+<td>HTMLInputElement</td>
+<td>The input element to fill in with text.</td>
+</tr>
+<tr>
+<td>text</td>
+<td>string</td>
+<td>The text to input.</td>
+</tr>
+<tr>
+<td>delay</td>
+<td>number</td>
+<td>Time to wait in milliseconds. The text will be inserted after the delay.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_13">Return value<a class="headerlink" href="#return-value_13" title="Permanent link">&para;</a></h4>
+<p>None</p>
+<h4 id="description_13">Description<a class="headerlink" href="#description_13" title="Permanent link">&para;</a></h4>
+<p>Sets the value of the <code>target</code> HTMLInputElement to equal <code>text</code>. </p>
+<h4 id="example_7">Example<a class="headerlink" href="#example_7" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span> <span class="nx">target</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;input[type=&quot;text&quot;]&#39;</span><span class="p">);</span>
+
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">fillTextInput</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="s2">&quot;hello!&quot;</span><span class="p">,</span> <span class="mf">500</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h3 id="getvalidkey">getValidKey<a class="headerlink" href="#getvalidkey" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getValidKey</span><span class="p">(</span><span class="nx">choices</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_14">Parameters<a class="headerlink" href="#parameters_14" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>choices</td>
+<td>"NO_KEYS" or "ALL_KEYS" or array of strings</td>
+<td>Representation of the valid keys allowed for a keyboard response used by the <code>getKeyboardResponse</code> method.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_14">Return value<a class="headerlink" href="#return-value_14" title="Permanent link">&para;</a></h4>
+<p>A valid key given the <code>choices</code> parameter, chosen at random from the possible keys.</p>
+<h4 id="description_14">Description<a class="headerlink" href="#description_14" title="Permanent link">&para;</a></h4>
+<p>Picks a random key given a set of options. Currently it only picks letters and numbers when <code>choices</code> is <code>"ALL_KEYS"</code>.</p>
+<h4 id="example_8">Example<a class="headerlink" href="#example_8" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span> <span class="nx">random_key</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getValidKey</span><span class="p">(</span><span class="nx">trial</span><span class="p">.</span><span class="nx">choices</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h3 id="keydown">keyDown<a class="headerlink" href="#keydown" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">keyDown</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_15">Parameters<a class="headerlink" href="#parameters_15" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>key</td>
+<td>string</td>
+<td>The <code>.key</code> property of the corresponding key on the keyboard.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_15">Return value<a class="headerlink" href="#return-value_15" title="Permanent link">&para;</a></h4>
+<p>None.</p>
+<h4 id="description_15">Description<a class="headerlink" href="#description_15" title="Permanent link">&para;</a></h4>
+<p>Dispatches a <code>'keydown'</code> event for the specified <code>key</code>. </p>
+<h4 id="example_9">Example<a class="headerlink" href="#example_9" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">keyDown</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h3 id="keyup">keyUp<a class="headerlink" href="#keyup" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">keyUp</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_16">Parameters<a class="headerlink" href="#parameters_16" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>key</td>
+<td>string</td>
+<td>The <code>.key</code> property of the corresponding key on the keyboard.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_16">Return value<a class="headerlink" href="#return-value_16" title="Permanent link">&para;</a></h4>
+<p>None.</p>
+<h4 id="description_16">Description<a class="headerlink" href="#description_16" title="Permanent link">&para;</a></h4>
+<p>Dispatches a <code>'keyup'</code> event for the specified <code>key</code>. </p>
+<h4 id="example_10">Example<a class="headerlink" href="#example_10" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">keyUp</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h3 id="mergesimulationdata">mergeSimulationData<a class="headerlink" href="#mergesimulationdata" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">mergeSimulationData</span><span class="p">(</span><span class="nx">default_data</span><span class="p">,</span> <span class="nx">simulation_options</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_17">Parameters<a class="headerlink" href="#parameters_17" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>default_data</td>
+<td>object</td>
+<td>An object containing data values for the simulated trial.</td>
+</tr>
+<tr>
+<td>simulation_options</td>
+<td>object</td>
+<td>The <code>simulation_options</code> specified for the trial.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_17">Return value<a class="headerlink" href="#return-value_17" title="Permanent link">&para;</a></h4>
+<p>An object of data.</p>
+<h4 id="description_17">Description<a class="headerlink" href="#description_17" title="Permanent link">&para;</a></h4>
+<p>This method merges the <code>default_data</code> with any data specified in <code>simulation_options.data</code>, giving priority to values specified in <code>simulation_options.data</code>. It returns the merged data.</p>
+<h4 id="example_11">Example<a class="headerlink" href="#example_11" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span> <span class="nx">default_data</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">rt</span><span class="o">:</span> <span class="mf">500</span><span class="p">,</span>
+  <span class="nx">response</span><span class="o">:</span> <span class="s1">&#39;a&#39;</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">simulation_options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">rt</span><span class="o">:</span> <span class="mf">200</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">mergeSimulationData</span><span class="p">(</span><span class="nx">default_data</span><span class="p">,</span> <span class="nx">simulation_options</span><span class="p">);</span>
+
+<span class="nx">data</span><span class="p">.</span><span class="nx">rt</span> <span class="o">===</span> <span class="mf">200</span><span class="p">;</span> <span class="c1">// true</span>
+</code></pre></div>
+<hr />
+<h2 id="timeouts">Timeouts<a class="headerlink" href="#timeouts" title="Permanent link">&para;</a></h2>
+<h3 id="clearalltimeouts">clearAllTimeouts<a class="headerlink" href="#clearalltimeouts" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">clearAllTimeouts</span><span class="p">()</span>
+</code></pre></div>
+<h4 id="parameters_18">Parameters<a class="headerlink" href="#parameters_18" title="Permanent link">&para;</a></h4>
+<p>None.</p>
+<h4 id="return-value_18">Return value<a class="headerlink" href="#return-value_18" title="Permanent link">&para;</a></h4>
+<p>Returns nothing.</p>
+<h4 id="description_18">Description<a class="headerlink" href="#description_18" title="Permanent link">&para;</a></h4>
+<p>Clears any pending timeouts that were set using jsPsych.pluginAPI.setTimeout().</p>
+<hr />
+<h3 id="settimeout">setTimeout<a class="headerlink" href="#settimeout" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">callback</span><span class="p">,</span> <span class="nx">delay</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="parameters_19">Parameters<a class="headerlink" href="#parameters_19" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callback</td>
+<td>function</td>
+<td>A function to execute after waiting for delay.</td>
+</tr>
+<tr>
+<td>delay</td>
+<td>integer</td>
+<td>Time to wait in milliseconds.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-value_19">Return value<a class="headerlink" href="#return-value_19" title="Permanent link">&para;</a></h4>
+<p>Returns the ID of the setTimeout handle.</p>
+<h4 id="description_19">Description<a class="headerlink" href="#description_19" title="Permanent link">&para;</a></h4>
+<p>This is simply a call to the standard setTimeout function in JavaScript with the added benefit of registering the setTimeout call in a central list. This is useful for scenarios where some other event (the trial ending, aborting the experiment) should stop the execution of queued timeouts.</p>
+<h4 id="example_12">Example<a class="headerlink" href="#example_12" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1">// print the time</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">())</span>
+
+<span class="c1">// print the time 1s later</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">())</span>
+<span class="p">},</span> <span class="mf">1000</span><span class="p">);</span>
+</code></pre></div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../jspsych-turk/" class="md-footer__link md-footer__link--prev" aria-label="Previous: jsPsych.turk" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              jsPsych.turk
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../plugins/list-of-plugins/" class="md-footer__link md-footer__link--next" aria-label="Next: List of Plugins" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              List of Plugins
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2012-2021 Josh de Leeuw
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.bd0b6b67.min.js", "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.467223ff.min.js"></script>
+      
+    
+  </body>
+</html>
