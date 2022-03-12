@@ -1,5 +1,15 @@
 # @jspsych/config
 
+## 1.2.0
+
+### Minor Changes
+
+- [#2431](https://github.com/jspsych/jsPsych/pull/2431) [`87f332f9`](https://github.com/jspsych/jsPsych/commit/87f332f92540eef028bbed7284e30c1cf614cc96) Thanks [@bjoluc](https://github.com/bjoluc)! - Implement an `updateUnpkgLinks` Gulp task to update each unpkg link with a precise version number to the corresponding package's current version as defined in the package's `package.json`.
+
+### Patch Changes
+
+- [#2505](https://github.com/jspsych/jsPsych/pull/2505) [`9486bc50`](https://github.com/jspsych/jsPsych/commit/9486bc509f8fe4b4ac4b93510ddd8fd17e5f1b05) Thanks [@bjoluc](https://github.com/bjoluc)! - Fix css path rewriting in `createCoreDistArchive` Gulp task when `link` tags do not end in `/>`
+
 ## 1.1.0
 
 ### Minor Changes

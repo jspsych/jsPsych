@@ -1,5 +1,19 @@
 # jspsych
 
+## 7.2.0
+
+### Minor Changes
+
+- [#2407](https://github.com/jspsych/jsPsych/pull/2407) [`cafc6a1f`](https://github.com/jspsych/jsPsych/commit/cafc6a1f65f3f6b9f09598e3b12dfa2ad76d9451) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Added `filterColumns()` to the DataCollection class. This function lets users select a subset of the columns in the DataCollection. It is the opposite of the `ignore()` method.
+
+* [#2379](https://github.com/jspsych/jsPsych/pull/2379) [`9a28fb08`](https://github.com/jspsych/jsPsych/commit/9a28fb08dbe0953b9a8eea2d1da988152f370e66) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Added `setSeed()` to `jsPsych.randomization` to allow for seeding the random number generator and generating predictable sequences of random numbers.
+
+### Patch Changes
+
+- [#2539](https://github.com/jspsych/jsPsych/pull/2539) [`49d69075`](https://github.com/jspsych/jsPsych/commit/49d6907505cdfcd4aa997c7501a8dbd704646162) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Fixed an issue where the `post_trial_gap` was still run in realtime during `data-only` simulation mode. The gap is now skipped as intended.
+
+* [#2504](https://github.com/jspsych/jsPsych/pull/2504) [`60f4d868`](https://github.com/jspsych/jsPsych/commit/60f4d868352d78593beba39c8b2bf0e88b264df8) Thanks [@bjoluc](https://github.com/bjoluc)! - Inline Open Sans web font in `jspsych.css` to be GDPR-compliant (see #2153)
+
 ## 7.1.2
 
 ### Patch Changes
