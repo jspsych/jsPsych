@@ -302,7 +302,9 @@ export class JsPsych {
     this.internal.call_immediate = false;
 
     // wait for iti
-    if (
+    if (this.simulation_mode === "data-only") {
+      this.nextTrial();
+    } else if (
       typeof current_trial.post_trial_gap === null ||
       typeof current_trial.post_trial_gap === "undefined"
     ) {
