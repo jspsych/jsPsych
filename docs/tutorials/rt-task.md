@@ -729,11 +729,11 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
     <html>
       <head>
         <title>My experiment</title>
-        <script src="jspsych-6.3.0/jspsych.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
-        <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+        <script src="https://unpkg.com/jspsych@7.2.1"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
+        <link href="https://unpkg.com/jspsych@7.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
