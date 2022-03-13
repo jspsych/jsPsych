@@ -1,5 +1,11 @@
 # jspsych
 
+## 7.2.1
+
+### Patch Changes
+
+- [#2540](https://github.com/jspsych/jsPsych/pull/2540) [`48b83652`](https://github.com/jspsych/jsPsych/commit/48b8365294cf76a0dcc91225da4405c583f3349f) Thanks [@bjoluc](https://github.com/bjoluc)! - Fix a ReferenceError ("`require$0` is not defined") related to the new seedable random number generator
+
 ## 7.2.0
 
 ### Minor Changes
