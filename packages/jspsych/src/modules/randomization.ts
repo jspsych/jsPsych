@@ -7,7 +7,7 @@ import seedrandom from "seedrandom/lib/alea";
  * @param seed An optional seed. If none is given, a random seed will be generated.
  * @returns The seed value.
  */
-export function setSeed(seed: string = seedrandom().int32().toString()) {
+export function setSeed(seed: string = Math.random().toString()) {
   Math.random = seedrandom(seed);
   return seed;
 }
