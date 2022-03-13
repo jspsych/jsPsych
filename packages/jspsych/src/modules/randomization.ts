@@ -1,5 +1,5 @@
 import rw from "random-words";
-import seedrandom from "seedrandom";
+import seedrandom from "seedrandom/lib/alea";
 
 /**
  * Uses the `seedrandom` package to replace Math.random() with a seedable PRNG.
@@ -7,12 +7,8 @@ import seedrandom from "seedrandom";
  * @param seed An optional seed. If none is given, a random seed will be generated.
  * @returns The seed value.
  */
-export function setSeed(seed?: string) {
-  if (!seed) {
-    const prng = seedrandom();
-    seed = prng.int32().toString();
-  }
-  seedrandom(seed, { global: true });
+export function setSeed(seed: string = Math.random().toString()) {
+  Math.random = seedrandom(seed);
   return seed;
 }
 
