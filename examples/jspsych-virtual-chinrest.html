@@ -45,7 +45,7 @@
     // note: pixels_per_unit will be ignored
     let no_resize = {
       type: jsPsychVirtualChinrest,
-      blindspot_reps: 1,
+      blindspot_reps: 3,
       resize_units: "none",
       pixels_per_unit: 50 
     };
@@ -65,7 +65,7 @@
       prompt: '<p>The stimulus above should be 4cm x 4cm if resizing worked properly.</p>'
     };
 
-    jsPsych.run([no_resize, validation_trial]); // deg_resize, no_resize, error_trial
+    jsPsych.run([cm_resize, validation_trial]); // deg_resize, no_resize, error_trial
 
   </script>
 </html>

@@ -11,14 +11,6 @@ The plugin works in two phases.
 
 **Phase 2**. To measure the participant's viewing distance from their screen we use a [blind spot](<https://en.wikipedia.org/wiki/Blind_spot_(vision)>) task. Participants are asked to focus on a black square on the screen with their right eye closed, while a red dot repeatedly sweeps from right to left. They press the spacebar on their keyboard whenever they perceive that the red dot has disappeared. This part allows the plugin to use the distance between the black square and the red dot when it disappears from eyesight to estimate how far the participant is from the monitor. This estimation assumes that the blind spot is located at 13.5° temporally.
 
-## Dependency
-
-This plugin requires the SVG.js library, available at [https://svgjs.com](https://svgjs.com/docs/3.0/) or via the CDN link below. You must include the library in the `<head>` section of your experiment page.
-
-```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.3/svg.min.js"></script>
-```
-
 ## Parameters
 
 Parameters can be left unspecified if the default value is acceptable.
