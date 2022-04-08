@@ -42,8 +42,7 @@ const info = <const>{
     item_path: {
       type: ParameterType.IMAGE,
       pretty_name: "Item path",
-      default: "img/card.png",
-      // TO DO: I think the background image should be optional, in which case we don't want to try to auto-preload this parameter?
+      default: null,
       preload: false,
     },
     /** The height of the item to be measured, in mm. */
@@ -191,7 +190,11 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
     /** create content for first screen, resizing card */
     let pagesize_content = `
         <div id="page-size">
-          <div id="item" style="border: none; height: ${start_div_height}px; width: ${start_div_width}px; margin: 5px auto; background-color: none; position: relative; background-image: url(${trial.item_path}); background-size: 100% auto; background-repeat: no-repeat;">
+          <div id="item" style="border: none; height: ${start_div_height}px; width: ${start_div_width}px; margin: 5px auto; background-color: #ddd; position: relative; ${
+      trial.item_path === null
+        ? ""
+        : `background-image: url(${trial.item_path}); background-size: 100% auto; background-repeat: no-repeat;`
+    }">
             <div id="jspsych-resize-handle" style="cursor: nwse-resize; background-color: none; width: ${adjust_size}px; height: ${adjust_size}px; border: 5px solid red; border-left: 0; border-top: 0; position: absolute; bottom: 0; right: 0;">
             </div>
           </div>
