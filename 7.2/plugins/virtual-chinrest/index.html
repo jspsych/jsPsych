@@ -1437,13 +1437,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dependency" class="md-nav__link">
-    Dependency
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     Parameters
   </a>
@@ -1859,13 +1852,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dependency" class="md-nav__link">
-    Dependency
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     Parameters
   </a>
@@ -1920,10 +1906,6 @@
 <p>The plugin works in two phases.</p>
 <p><strong>Phase 1</strong>. To calculate the pixel-to-cm conversion rate for a participant’s display, participants are asked to place a credit card or other item of the same size on the screen and resize an image until it is the same size as the credit card. Since we know the physical dimensions of the card, we can find the conversion rate for the participant's display.</p>
 <p><strong>Phase 2</strong>. To measure the participant's viewing distance from their screen we use a <a href="https://en.wikipedia.org/wiki/Blind_spot_(vision)">blind spot</a> task. Participants are asked to focus on a black square on the screen with their right eye closed, while a red dot repeatedly sweeps from right to left. They press the spacebar on their keyboard whenever they perceive that the red dot has disappeared. This part allows the plugin to use the distance between the black square and the red dot when it disappears from eyesight to estimate how far the participant is from the monitor. This estimation assumes that the blind spot is located at 13.5° temporally.</p>
-<h2 id="dependency">Dependency<a class="headerlink" href="#dependency" title="Permanent link">&para;</a></h2>
-<p>This plugin requires the SVG.js library, available at <a href="https://svgjs.com/docs/3.0/">https://svgjs.com</a> or via the CDN link below. You must include the library in the <code>&lt;head&gt;</code> section of your experiment page.</p>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.3/svg.min.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</code></pre></div>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <p>Parameters can be left unspecified if the default value is acceptable.</p>
 <table>
@@ -1963,8 +1945,8 @@
 <tr>
 <td>item_path</td>
 <td>string</td>
-<td>"img/card.png"</td>
-<td>Path of the item to be presented in the card stimulus during the resizing phase. <em>The default image is available in <code>/examples/img/card.png</code></em></td>
+<td>null</td>
+<td>Path of the item to be presented in the card stimulus during the resizing phase. If <code>null</code> then no image is shown, and a solid color background is used instead. <em>An example image is available in <code>/examples/img/card.png</code></em></td>
 </tr>
 <tr>
 <td>item_height_mm</td>
