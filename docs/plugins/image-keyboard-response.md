@@ -1,5 +1,7 @@
 # image-keyboard-response
 
+Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-image-keyboard-response/CHANGELOG.md).
+
 This plugin displays and image and records responses generated with the keyboard. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the subject has failed to respond within a fixed length of time.
 
 Image files can be automatically preloaded by jsPsych using the [`preload` plugin](preload.md). However, if you are using timeline variables or another dynamic method to specify the image stimulus, you will need to [manually preload](../overview/media-preloading.md#manual-preloading) the images.
@@ -30,6 +32,29 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | response  | string  | Indicates which key the subject pressed. |
 | rt        | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response. |
 | stimulus  | string  | The path of the image that was displayed. |
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-image-keyboard-response.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-image-keyboard-response
+```
+```js
+import imageKeyboardResponse from '@jspsych/plugin-image-keyboard-response';
+```
 
 ## Examples
 

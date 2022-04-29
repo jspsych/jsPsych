@@ -1,5 +1,7 @@
 # iat-image
 
+Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-iat-image/CHANGELOG.md).
+
 This plugin runs a single trial of the [implicit association test (IAT)](https://implicit.harvard.edu/implicit/iatdetails.html), using an image as the stimulus.
 
 ## Parameters
@@ -32,6 +34,29 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | response  | string  | Indicates which key the subject pressed. |
 | rt        | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response. |
 | correct   | boolean | Boolean indicating whether the user's key press was correct or incorrect for the given image. |
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-iat-image@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-iat-image.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-iat-image
+```
+```js
+import iatImage from '@jspsych/plugin-iat-image';
+```
 
 ## Examples
 

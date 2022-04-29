@@ -1,5 +1,7 @@
 # html-audio-response
 
+Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-audio-response/CHANGELOG.md).
+
 This plugin displays HTML content and records audio from the participant via a microphone. 
 
 In order to get access to the microphone, you need to use the [initialize-microphone plugin](initialize-microphone.md) on your timeline prior to using this plugin.
@@ -55,6 +57,29 @@ audio_url | string | A URL to a copy of the audio data.
 ## Simulation Mode
 
 This plugin does not yet support [simulation mode](../overview/simulation.md).
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-html-audio-response@1.0.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-html-audio-response.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-html-audio-response
+```
+```js
+import htmlAudioResponse from '@jspsych/plugin-html-audio-response';
+```
 
 ## Examples
 

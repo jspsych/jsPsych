@@ -1,5 +1,7 @@
 # visual-search-circle plugin
 
+Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-visual-search-circle/CHANGELOG.md).
+
 This plugin presents a customizable visual-search task modelled after [Wang, Cavanagh, & Green (1994)](http://dx.doi.org/10.3758/BF03206946). The subject indicates whether or not a target is present among a set of distractors. The stimuli are displayed in a circle, evenly-spaced, equidistant from a fixation point. Here is an example using normal and backward Ns:
 
 ![Sample Visual Search Stimulus](../img/visual_search_example.jpg)
@@ -43,6 +45,29 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | set_size       | numeric     | The number of items in the search array  |
 | target_present | boolean     | True if the target is present in the search array |
 | locations      | array       | Array where each element is the pixel value of the center of an image in the search array. If the target is present, then the first element will represent the location of the target. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-visual-search-circle@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-visual-search-circle.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-visual-search-circle
+```
+```js
+import visualSearchCircle from '@jspsych/plugin-visual-search-circle';
+```
 
 ## Examples
 

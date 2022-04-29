@@ -1,5 +1,7 @@
 # canvas-slider-response
 
+Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-canvas-slider-response/CHANGELOG.md).
+
 This plugin can be used to draw a stimulus on a [HTML canvas element](https://www.w3schools.com/html/html5_canvas.asp) and collect a response within a range of values, which is made by dragging a slider. The canvas stimulus can be useful for displaying dynamic, parametrically-defined graphics, and for controlling the positioning of multiple graphical elements (shapes, text, images). The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the subject has failed to respond within a fixed length of time.
 
 ## Parameters
@@ -33,6 +35,28 @@ response | numeric | The numeric value of the slider.
 rt | numeric | The time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.
 
 Note: the canvas stimulus is *not* included in the trial data because it is a function. Any stimulus information that should be saved in the trial data can be added via the `data` parameter.
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-canvas-slider-response@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-canvas-slider-response.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-canvas-slider-response
+```
+```js
+import canvasSliderResponse from '@jspsych/plugin-canvas-slider-response';
 
 ## Examples
 

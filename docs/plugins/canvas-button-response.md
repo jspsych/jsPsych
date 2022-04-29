@@ -1,5 +1,7 @@
 # canvas-button-response
 
+Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-canvas-button-response/CHANGELOG.md).
+
 This plugin can be used to draw a stimulus on a [HTML canvas element](https://www.w3schools.com/html/html5_canvas.asp), and record a button click response and response time. The canvas stimulus can be useful for displaying dynamic, parametrically-defined graphics, and for controlling the positioning of multiple graphical elements (shapes, text, images). The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the subject has failed to respond within a fixed length of time. One or more button choices will be displayed under the canvas, and the button style can be customized using HTML formatting.
 
 ## Parameters
@@ -29,6 +31,28 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
 response | numeric | Indicates which button the subject pressed. The first button in the `choices` array is 0, the second is 1, and so on.
 
 Note: the canvas stimulus is *not* included in the trial data because it is a function. Any stimulus information that should be saved in the trial data can be added via the `data` parameter.
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-canvas-button-response@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-canvas-button-response.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-canvas-button-response
+```
+```js
+import canvasButtonResponse from '@jspsych/plugin-canvas-button-response';
 
 ## Examples
 

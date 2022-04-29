@@ -1,5 +1,7 @@
 # browser-check
 
+Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-browser-check/CHANGELOG.md).
+
 This plugin measures and records various features of the participant's browser and can end the experiment if defined inclusion criteria are not met.
 
 The plugin currently can record the following features:
@@ -72,6 +74,28 @@ In `data-only` mode, if `allow_window_resize` is true and the browser's width an
 In `visual` mode, if `allow_window_resize` is true and the browser's width and height are below the maximum value then the experiment will wait for 3 seconds before clicking the resize fail button. During this time, you can adjust the window if you would like to.
 
 As with all simulated plugins, you can override the default (actual) data with fake data using `simulation_options`. This allows you to test your exclusion criteria by simulating other configurations.
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-browser-check@1.0.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-browser-check.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-browser-check
+```
+```js
+import browserCheck from '@jspsych/plugin-browser-check';
 
 ## Examples
 

@@ -1,5 +1,7 @@
 # sketchpad plugin
 
+Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-sketchpad/CHANGELOG.md).
+
 This plugin creates an interactive canvas that the participant can draw on using their mouse or touchscreen.
 It can be used for sketching tasks, like asking the participant to draw a particular object.
 It can also be used for some image segmentation or annotation tasks by setting the `background_image` parameter to render an image on the canvas.
@@ -64,6 +66,29 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 ## Simulation Mode
 
 This plugin does not yet support [simulation mode](../overview/simulation.md).
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-sketchpad@1.0.1"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-sketchpad.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-sketchpad
+```
+```js
+import sketchpad from '@jspsych/plugin-sketchpad';
+```
 
 ## Examples
 

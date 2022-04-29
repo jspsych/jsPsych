@@ -1,5 +1,7 @@
 # survey-html-form plugin
 
+Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-html-form/CHANGELOG.md).
+
 The survey-html-form plugin displays a set of `<inputs>` from a HTML string. The type of input can be freely chosen, for a list of possible input types see the [MDN page on inputs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input). The subject provides answers to the input fields.
 
 ## Parameters
@@ -27,6 +29,29 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
 ## Simulation Mode
 
 This plugin does not yet support [simulation mode](../overview/simulation.md).
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-survey-html-form@1.0.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-survey-html-form.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-survey-html-form
+```
+```js
+import surveyHtmlForm from '@jspsych/plugin-survey-html-form';
+```
 
 ## Examples
 

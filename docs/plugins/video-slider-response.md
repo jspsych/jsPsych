@@ -1,5 +1,7 @@
 # video-slider-response plugin
 
+Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-video-slider-response/CHANGELOG.md).
+
 This plugin plays a video and allows the subject to respond by dragging a slider. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically when the subject responds, when the video file has finished playing, or if the subject has failed to respond within a fixed length of time. You can also prevent the slider response from being made before the video has finished playing.
 
 Video files can be automatically preloaded by jsPsych using the [`preload` plugin](preload.md). However, if you are using timeline variables or another dynamic method to specify the video stimulus, you will need to [manually preload](../overview/media-preloading.md#manual-preloading) the videos. Also note that video preloading is disabled when the experiment is running as a file (i.e. opened directly in the browser, rather than through a server), in order to prevent CORS errors - see the section on [Running Experiments](../overview/running-experiments.md) for more information.
@@ -50,6 +52,29 @@ start | numeric | The start time of the video clip.
 In `data-only` simulation mode, the `response_allowed_while_playing` parameter does not currently influence the simulated response time. 
 This is because the audio file is not loaded in `data-only` mode and therefore the length is unknown. 
 This may change in a future version as we improve the simulation modes.
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-video-slider-response@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-video-slider-response.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-video-slider-response
+```
+```js
+import videoSliderResponse from '@jspsych/plugin-video-slider-response';
+```
 
 ## Example
 

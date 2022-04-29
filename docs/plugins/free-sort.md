@@ -1,5 +1,7 @@
 # free-sort plugin
 
+Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-free-sort/CHANGELOG.md).
+
 The free-sort plugin displays one or more images on the screen that the participant can interact with by clicking and dragging with a mouse, or touching and dragging with a touchscreen device. When the trial starts, the images can be positioned outside or inside the sort area. All images must be moved into the sorting area before the participant can click a button to end the trial. All of the moves that the participant performs are recorded, as well as the final positions of all images. This plugin could be useful when asking participants to position images based on similarity to one another, or to recall image spatial locations.
 
 ## Parameters
@@ -41,6 +43,29 @@ rt | numeric | The response time in milliseconds for the participant to finish a
 ## Simulation Mode
 
 This plugin does not yet support [simulation mode](../overview/simulation.md).
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-free-sort@1.0.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-free-sort.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-free-sort
+```
+```js
+import freeSort from '@jspsych/plugin-free-sort';
+```
 
 ## Examples
 

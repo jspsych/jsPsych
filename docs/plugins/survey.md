@@ -1,5 +1,7 @@
 # survey
 
+Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey/CHANGELOG.md).
+
 The survey plugin displays one or more questions of different types, on one or more pages that the participant can navigate. This plugin is built on top of the [SurveyJS](https://surveyjs.io/) library.
 
 The supported question types are: 
@@ -184,6 +186,29 @@ rt | numeric | The response time in milliseconds for the subject to make a respo
 ## Simulation Mode
 
 This plugin does not yet support [simulation mode](../overview/simulation.md).
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-survey@0.1.1"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-survey.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-survey
+```
+```js
+import survey from '@jspsych/plugin-survey';
+```
 
 ## Examples
 

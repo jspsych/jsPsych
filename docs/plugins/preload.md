@@ -1,5 +1,7 @@
 # preload
 
+Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-preload/CHANGELOG.md).
+
 This plugin loads images, audio, and video files. It is used for loading files into the browser's memory before they are needed in the experiment, in order to improve stimulus and response timing, and avoid disruption to the experiment flow. We recommend using this plugin anytime you are loading media files, and especially when your experiment requires large and/or many media files. See the [Media Preloading page](../overview/media-preloading/) for more information.
 
 The preload trial will end as soon as all files have loaded successfully. The trial will end or stop with an error message when one of these two scenarios occurs (whichever comes first): (a) all files have not finished loading when the `max_load_time` duration is reached, or (b) all file requests have responded with either a load or fail event, and one or more files has failed to load. The `continue_after_error` parameter determines whether the trial will stop with an error message or end (allowing the experiment to continue) when preloading is not successful.
@@ -41,6 +43,30 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 ## Simulation Mode
 
 In `visual` simulation mode, the plugin will run the trial as if the experiment was running normally. Specifying `simulation_options.data` will not work in `visual` mode.
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-preload.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-preload
+```
+```js
+import preload from '@jspsych/plugin-preload';
+```
+
 
 ## Examples
 
