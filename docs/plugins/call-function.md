@@ -45,6 +45,7 @@ npm install @jspsych/plugin-call-function
 ```
 ```js
 import callFunction from '@jspsych/plugin-call-function';
+```
 
 ## Examples
 

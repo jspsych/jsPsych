@@ -96,6 +96,7 @@ npm install @jspsych/plugin-browser-check
 ```
 ```js
 import browserCheck from '@jspsych/plugin-browser-check';
+```
 
 ## Examples
 

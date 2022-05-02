@@ -53,6 +53,7 @@ npm install @jspsych/plugin-canvas-button-response
 ```
 ```js
 import canvasButtonResponse from '@jspsych/plugin-canvas-button-response';
+```
 
 ## Examples
 

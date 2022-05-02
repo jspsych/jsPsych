@@ -61,6 +61,7 @@ npm install @jspsych/plugin-audio-keyboard-response
 ```
 ```js
 import audioKeyboardResponse from '@jspsych/plugin-audio-keyboard-response';
+```
 
 ## Examples
 

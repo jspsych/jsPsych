@@ -68,6 +68,7 @@ npm install @jspsych/plugin-audio-slider-response
 ```
 ```js
 import audioSliderResponse from '@jspsych/plugin-audio-slider-response';
+```
 
 ## Examples
 

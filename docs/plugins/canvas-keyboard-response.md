@@ -50,6 +50,7 @@ npm install @jspsych/plugin-canvas-keyboard-response
 ```
 ```js
 import canvasKeyboardResponse from '@jspsych/plugin-canvas-keyboard-response';
+```
 
 ## Examples
 

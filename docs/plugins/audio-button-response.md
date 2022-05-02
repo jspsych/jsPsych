@@ -63,6 +63,7 @@ npm install @jspsych/plugin-audio-button-response
 ```
 ```js
 import audioButtonResponse from '@jspsych/plugin-audio-button-response';
+```
 
 ## Examples
 

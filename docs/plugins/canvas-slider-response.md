@@ -57,6 +57,7 @@ npm install @jspsych/plugin-canvas-slider-response
 ```
 ```js
 import canvasSliderResponse from '@jspsych/plugin-canvas-slider-response';
+```
 
 ## Examples
 
