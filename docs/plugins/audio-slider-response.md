@@ -1,6 +1,6 @@
 # audio-slider-response
 
-Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-slider-response/CHANGELOG.md).
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-slider-response/CHANGELOG.md).
 
 This plugin plays an audio file and allows the subject to respond by dragging a slider.
 

@@ -1,6 +1,6 @@
-# serial-reaction-time plugin
+# serial-reaction-time
 
-Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-serial-reaction-time/CHANGELOG.md).
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-serial-reaction-time/CHANGELOG.md).
 
 The serial reaction time plugin implements a generalized version of the SRT task [(Nissen & Bullemer, 1987)](https://doi.org/10.1016%2F0010-0285%2887%2990002-8). Squares are displayed in a grid-based system on the screen, and one square changes color. The participant presses a key that corresponds to the darkened key. Feedback is optionally displayed, showing the participant which square the key they pressed matches.
 

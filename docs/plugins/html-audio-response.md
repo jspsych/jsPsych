@@ -1,6 +1,6 @@
 # html-audio-response
 
-Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-audio-response/CHANGELOG.md).
+Current version: 1.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-audio-response/CHANGELOG.md).
 
 This plugin displays HTML content and records audio from the participant via a microphone. 
 

@@ -1,6 +1,6 @@
-# survey-multi-choice plugin
+# survey-multi-choice
 
-Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-multi-choice/CHANGELOG.md).
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-multi-choice/CHANGELOG.md).
 
 The survey-multi-choice plugin displays a set of questions with multiple choice response fields. The subject selects a single answer.
 

@@ -1,6 +1,6 @@
-# sketchpad plugin
+# sketchpad
 
-Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-sketchpad/CHANGELOG.md).
+Current version: 1.0.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-sketchpad/CHANGELOG.md).
 
 This plugin creates an interactive canvas that the participant can draw on using their mouse or touchscreen.
 It can be used for sketching tasks, like asking the participant to draw a particular object.

@@ -1,6 +1,6 @@
-# survey-likert plugin
+# survey-likert
 
-Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-likert/CHANGELOG.md).
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-likert/CHANGELOG.md).
 
 The survey-likert plugin displays a set of questions with Likert scale responses. The subject responds by selecting a radio button.
 

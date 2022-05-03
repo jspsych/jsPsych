@@ -1,6 +1,6 @@
 # audio-keyboard-response
 
-Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-keyboard-response/CHANGELOG.md).
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-keyboard-response/CHANGELOG.md).
 
 This plugin plays audio files and records responses generated with the keyboard.
 

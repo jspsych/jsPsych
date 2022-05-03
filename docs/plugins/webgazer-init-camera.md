@@ -1,6 +1,6 @@
 # webgazer-init-camera
 
-Current version: current-plugin-version. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-webgazer-init-camera/CHANGELOG.md).
+Current version: 1.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-webgazer-init-camera/CHANGELOG.md).
 
 This plugin initializes the camera and helps the participant center their face in the camera view for using the the [WebGazer extension](../extensions/webgazer.md). For a narrative description of eye tracking with jsPsych, see the [eye tracking overview](../overview/eye-tracking.md). 
 
