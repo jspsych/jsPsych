@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
 import { sep as pathSeparator } from "path";
+import { StringDecoder } from "string_decoder";
 
 import glob from "glob";
 import gulp from "gulp";
@@ -126,4 +127,27 @@ export const updateUnpkgLinks = () => {
       )
     )
     .pipe(dest("./"));
+};
+
+/**
+ * Substitutes the string "current-plugin-version" or version number that follows the text "Current version: "
+ * in the plugin docs pages with the package's current version, as defined in the package's `package.json`.
+ * Only considers `.md` files in `docs/plugins` folder.
+ * Gets the package name from the docs page title (i.e. following "# "), ignoring the string " plugin" in the title.
+ */
+export const updatePluginVersion = () => {
+  const packageVersions = new Map(getAllPackages().map(({ name, version }) => [name, version]));
+
+  return src(["././docs/plugins/*.md"])
+    .pipe(
+      replace(
+        /\# (.+?)(?: plugin)?[\s]*?[\n]*Current version: (\d+.\d+.\d+|current-plugin-version)\./gi,
+        (match_str, packageName, currentVersionText) => {
+          const fullPackageName = "@jspsych/plugin-" + packageName;
+          const latestVersion = packageVersions.get(fullPackageName) ?? currentVersionText;
+          return `# ${packageName}\n\nCurrent version: ${latestVersion}.`;
+        }
+      )
+    )
+    .pipe(dest("./docs/plugins"));
 };
