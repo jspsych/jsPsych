@@ -18,7 +18,7 @@ extra:
   analytics:
     provider: google
     property: 'UA-50563838-1'
-copyright: 'Copyright &copy; 2012-2021 Josh de Leeuw'
+copyright: 'Copyright &copy; 2012-2022 Josh de Leeuw'
 markdown_extensions:
   - admonition
   - codehilite:
@@ -26,7 +26,8 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.superfences
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.details
   - pymdownx.snippets
   - pymdownx.emoji:
