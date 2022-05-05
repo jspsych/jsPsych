@@ -1,4 +1,6 @@
-# serial-reaction-time-mouse plugin
+# serial-reaction-time-mouse
+
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-serial-reaction-time-mouse/CHANGELOG.md).
 
 The serial reaction time mouse plugin implements a generalized version of the SRT task [(Nissen & Bullmer, 1987)](https://doi.org/10.1016%2F0010-0285%2887%2990002-8). Squares are displayed in a grid-based system on the screen, and one square changes color. The participant must click on the square that changes color.
 
@@ -29,7 +31,30 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | target | array   | The `[row, column]` target location on the grid. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 | rt     | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the second stimulus first appears on the screen until the subject's response. |
 | response | array | The `[row, column]` response location on the grid. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
-| correct | boolean | Whether the response location matches the target location (`true`) or not (`false`)l
+| correct | boolean | Whether the response location matches the target location (`true`) or not (`false`). |
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-serial-reaction-time-mouse@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-serial-reaction-time-mouse.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-serial-reaction-time-mouse
+```
+```js
+import serialReactionTimeMouse from '@jspsych/plugin-serial-reaction-time-mouse';
+```
 
 ## Examples
 

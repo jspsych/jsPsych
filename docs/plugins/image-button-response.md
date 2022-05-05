@@ -1,5 +1,7 @@
 # image-button-response
 
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-image-button-response/CHANGELOG.md).
+
 This plugin displays an image and records responses generated with a button click. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the subject has failed to respond within a fixed length of time. The button itself can be customized using HTML formatting.
 
 Image files can be automatically preloaded by jsPsych using the [`preload` plugin](preload.md). However, if you are using timeline variables or another dynamic method to specify the image stimulus, you will need to [manually preload](../overview/media-preloading.md#manual-preloading) the images.
@@ -33,6 +35,29 @@ Name | Type | Value
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.
 response | numeric | Indicates which button the subject pressed. The first button in the `choices` array is 0, the second is 1, and so on.
 stimulus | string | The path of the image that was displayed.
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-image-button-response@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-image-button-response.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-image-button-response
+```
+```js
+import imageButtonResponse from '@jspsych/plugin-image-button-response';
+```
 
 ## Examples
 

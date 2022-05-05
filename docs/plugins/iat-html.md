@@ -1,4 +1,6 @@
-# iat-html plugin
+# iat-html
+
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-iat-html/CHANGELOG.md).
 
 This plugin runs a single trial of the [implicit association test (IAT)](https://implicit.harvard.edu/implicit/iatdetails.html), using HTML content as the stimulus.
 
@@ -32,6 +34,29 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | response  | string  | Indicates which key the subject pressed. |
 | rt        | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response. |
 | correct   | boolean | Boolean indicating whether the user's key press was correct or incorrect for the given stimulus. |
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-iat-html@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-iat-html.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-iat-html
+```
+```js
+import iatHtml from '@jspsych/plugin-iat-html';
+```
 
 ## Examples
 

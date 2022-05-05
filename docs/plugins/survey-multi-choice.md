@@ -1,4 +1,6 @@
-# survey-multi-choice plugin
+# survey-multi-choice
+
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-multi-choice/CHANGELOG.md).
 
 The survey-multi-choice plugin displays a set of questions with multiple choice response fields. The subject selects a single answer.
 
@@ -23,6 +25,29 @@ Name | Type | Value
 response | object | An object containing the response for each question. The object will have a separate key (variable) for each question, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. The responses are recorded as the name of the option label selected (string). If the `name` parameter is defined for the question, then the response object will use the value of `name` as the key for each question. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response(s) are submitted. |
 question_order | array | An array with the order of questions. For example `[2,0,1]` would indicate that the first question was `trial.questions[2]` (the third item in the `questions` parameter), the second question was `trial.questions[0]`, and the final question was `trial.questions[1]`. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-survey-multi-choice.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-survey-multi-choice
+```
+```js
+import surveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
+```
 
 ## Examples
 

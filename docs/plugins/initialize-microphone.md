@@ -1,5 +1,7 @@
 # initialize-microphone
 
+Current version: 1.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-initialize-microphone/CHANGELOG.md).
+
 This plugin asks the participant to grant permission to access a microphone. 
 If multiple microphones are connected to the participant's device, then it allows the participant to pick which device to use. 
 Once access is granted for an experiment you do not need to get permission again.
@@ -30,6 +32,29 @@ device_id | string | The [device ID](https://developer.mozilla.org/en-US/docs/We
 ## Simulation Mode
 
 This plugin does not yet support [simulation mode](../overview/simulation.md).
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-initialize-microphone@1.0.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-initialize-microphone.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-initialize-microphone
+```
+```js
+import initializeMicrophone from '@jspsych/plugin-initialize-microphone';
+```
 
 ## Examples
 

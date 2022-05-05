@@ -1,4 +1,6 @@
-# instructions plugin
+# instructions
+
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-instructions/CHANGELOG.md).
 
 This plugin is for showing instructions to the subject. It allows subjects to navigate through multiple pages of instructions at their own pace, recording how long the subject spends on each page. Navigation can be done using the mouse or keyboard. Subjects can be allowed to navigate forwards and backwards through pages, if desired.
 
@@ -27,6 +29,29 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | ------------ | ----------- | ---------------------------------------- |
 | view_history | array       | An array containing the order of pages the subject viewed (including when the subject returned to previous pages) and the time spent viewing each page. Each object in the array represents a single page view, and contains keys called `page_index` (the page number, starting with 0) and `viewing_time` (duration of the page view). This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 | rt           | numeric     | The response time in milliseconds for the subject to view all of the pages. |
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-instructions@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-instructions.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-instructions
+```
+```js
+import instructions from '@jspsych/plugin-instructions';
+```
 
 ## Examples
 

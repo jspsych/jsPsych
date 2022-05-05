@@ -1,5 +1,7 @@
 # categorize-image
 
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-categorize-image/CHANGELOG.md).
+
 The categorize image plugin shows an image object on the screen. The subject responds by pressing a key. Feedback indicating the correctness of the response is given.
 
 ## Parameters
@@ -34,6 +36,30 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | response  | string  | Indicates which key the subject pressed. |
 | rt        | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response. |
 | correct   | boolean | `true` if the subject got the correct answer, `false` otherwise. |
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-categorize-image@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-categorize-image.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-categorize-image
+```
+```js
+import categorizeImage from '@jspsych/plugin-categorize-image';
+```
+
 
 ## Examples
 

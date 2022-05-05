@@ -1,4 +1,6 @@
-# external-html plugin
+# external-html
+
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-external-html/CHANGELOG.md).
 
 The HTML plugin displays an external HTML document (often a consent form). Either a keyboard response or a button press can be used to continue to the next trial. It allows the experimenter to check if conditions are met (such as indicating informed consent) before continuing.
 
@@ -27,6 +29,29 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 ## Simulation Mode
 
 In `visual` simulation mode, the plugin cannot interact with any form elements on the screen other than the `cont_btn` specified in the trial parameters. If your `check_fn` requires other user interaction, for example, clicking a checkbox, then you'll need to disable simulation for the trial and complete the interaction manually.
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-external-html@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-external-html.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-external-html
+```
+```js
+import externalHtml from '@jspsych/plugin-external-html';
+```
 
 ## Examples
 

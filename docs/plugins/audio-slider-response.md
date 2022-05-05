@@ -1,5 +1,7 @@
 # audio-slider-response
 
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-slider-response/CHANGELOG.md).
+
 This plugin plays an audio file and allows the subject to respond by dragging a slider.
 
 If the browser supports it, audio files are played using the WebAudio API. This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. 
@@ -44,6 +46,29 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 In `data-only` simulation mode, the `response_allowed_while_playing` parameter does not currently influence the simulated response time. 
 This is because the audio file is not loaded in `data-only` mode and therefore the length is unknown. 
 This may change in a future version as we improve the simulation modes.
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-audio-slider-response@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-audio-slider-response.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-audio-slider-response
+```
+```js
+import audioSliderResponse from '@jspsych/plugin-audio-slider-response';
+```
 
 ## Examples
 

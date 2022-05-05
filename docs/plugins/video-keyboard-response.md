@@ -1,4 +1,6 @@
-# video-keyboard-response plugin
+# video-keyboard-response
+
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-video-keyboard-response/CHANGELOG.md).
 
 This plugin plays a video file and records a keyboard response. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically when the subject responds, when the video file has finished playing, or if the subject has failed to respond within a fixed length of time. You can also prevent a keyboard response from being recorded before the video has finished playing.
 
@@ -40,6 +42,29 @@ stimulus | array | The `stimulus` array. This will be encoded as a JSON string w
 In `data-only` simulation mode, the `response_allowed_while_playing` parameter does not currently influence the simulated response time. 
 This is because the audio file is not loaded in `data-only` mode and therefore the length is unknown. 
 This may change in a future version as we improve the simulation modes.
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-video-keyboard-response@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-video-keyboard-response.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-video-keyboard-response
+```
+```js
+import videoKeyboardResponse from '@jspsych/plugin-video-keyboard-response';
+```
 
 ## Examples
 

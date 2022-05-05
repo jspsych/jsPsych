@@ -1,5 +1,7 @@
 # audio-button-response
 
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-button-response/CHANGELOG.md).
+
 This plugin plays audio files and records responses generated with a button click.
 
 If the browser supports it, audio files are played using the WebAudio API. This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. 
@@ -39,6 +41,29 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 In `data-only` simulation mode, the `response_allowed_while_playing` parameter does not currently influence the simulated response time. 
 This is because the audio file is not loaded in `data-only` mode and therefore the length is unknown. 
 This may change in a future version as we improve the simulation modes.
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-audio-button-response@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-audio-button-response.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-audio-button-response
+```
+```js
+import audioButtonResponse from '@jspsych/plugin-audio-button-response';
+```
 
 ## Examples
 

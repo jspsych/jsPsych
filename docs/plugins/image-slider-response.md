@@ -1,5 +1,7 @@
 # image-slider-response
 
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-image-slider-response/CHANGELOG.md).
+
 This plugin displays and image and allows the subject to respond by dragging a slider.
 
 Image files can be automatically preloaded by jsPsych using the [`preload` plugin](preload.md). However, if you are using timeline variables or another dynamic method to specify the image stimulus, you will need to [manually preload](../overview/media-preloading.md#manual-preloading) the images.
@@ -38,6 +40,29 @@ response | numeric | The numeric value of the slider.
 rt | numeric | The time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.
 stimulus | string | The path of the image that was displayed.
 slider_start | numeric | The starting value of the slider.
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-image-slider-response@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-image-slider-response.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-image-slider-response
+```
+```js
+import imageSliderResponse from '@jspsych/plugin-image-slider-response';
+```
 
 ## Examples
 

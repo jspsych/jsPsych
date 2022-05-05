@@ -1,5 +1,7 @@
 # html-slider-response
 
+Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-slider-response/CHANGELOG.md).
+
 This plugin displays HTML content and allows the subject to respond by dragging a slider.
 
 ## Parameters
@@ -32,6 +34,29 @@ response | numeric | The numeric value of the slider.
 rt | numeric | The time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.
 stimulus | string | The HTML content that was displayed on the screen.
 slider_start | numeric | The starting value of the slider.
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-html-slider-response@1.1.0"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-html-slider-response.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-html-slider-response
+```
+```js
+import htmlSliderResponse from '@jspsych/plugin-html-slider-response';
+```
 
 ## Examples
 
