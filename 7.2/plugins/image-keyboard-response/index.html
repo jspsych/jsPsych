@@ -1015,6 +1015,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    Install
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     Examples
   </a>
@@ -1639,6 +1646,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    Install
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     Examples
   </a>
@@ -1663,6 +1677,7 @@
                 
                 
                 <h1 id="image-keyboard-response">image-keyboard-response<a class="headerlink" href="#image-keyboard-response" title="Permanent link">&para;</a></h1>
+<p>Current version: 1.1.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-image-keyboard-response/CHANGELOG.md">See version history</a>.</p>
 <p>This plugin displays and image and records responses generated with the keyboard. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the subject has failed to respond within a fixed length of time.</p>
 <p>Image files can be automatically preloaded by jsPsych using the <a href="../preload/"><code>preload</code> plugin</a>. However, if you are using timeline variables or another dynamic method to specify the image stimulus, you will need to <a href="../../overview/media-preloading/#manual-preloading">manually preload</a> the images.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
@@ -1767,6 +1782,18 @@
 </tr>
 </tbody>
 </table>
+<h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
+<p>Using the CDN-hosted JavaScript file:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div>
+<p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-image-keyboard-response.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div>
+<p>Using NPM:</p>
+<p><div class="highlight"><pre><span></span><code>npm install @jspsych/plugin-image-keyboard-response
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">imageKeyboardResponse</span> <span class="nx">from</span> <span class="s1">&#39;@jspsych/plugin-image-keyboard-response&#39;</span><span class="p">;</span>
+</code></pre></div></p>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <details class="example" open="open"><summary>Displaying trial until subject gives a response</summary><div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Code</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>

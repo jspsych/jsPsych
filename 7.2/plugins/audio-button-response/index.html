@@ -758,6 +758,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    Install
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     Examples
   </a>
@@ -1653,6 +1660,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    Install
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     Examples
   </a>
@@ -1677,6 +1691,7 @@
                 
                 
                 <h1 id="audio-button-response">audio-button-response<a class="headerlink" href="#audio-button-response" title="Permanent link">&para;</a></h1>
+<p>Current version: 1.1.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-button-response/CHANGELOG.md">See version history</a>.</p>
 <p>This plugin plays audio files and records responses generated with a button click.</p>
 <p>If the browser supports it, audio files are played using the WebAudio API. This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. </p>
 <p>Audio files can be automatically preloaded by jsPsych using the <a href="../preload/"><code>preload</code> plugin</a>. However, if you are using timeline variables or another dynamic method to specify the audio stimulus, you will need to <a href="../../overview/media-preloading/#manual-preloading">manually preload</a> the audio.</p>
@@ -1782,6 +1797,18 @@
 <p>In <code>data-only</code> simulation mode, the <code>response_allowed_while_playing</code> parameter does not currently influence the simulated response time. 
 This is because the audio file is not loaded in <code>data-only</code> mode and therefore the length is unknown. 
 This may change in a future version as we improve the simulation modes.</p>
+<h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
+<p>Using the CDN-hosted JavaScript file:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-audio-button-response@1.1.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div>
+<p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-audio-button-response.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div>
+<p>Using NPM:</p>
+<p><div class="highlight"><pre><span></span><code>npm install @jspsych/plugin-audio-button-response
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">audioButtonResponse</span> <span class="nx">from</span> <span class="s1">&#39;@jspsych/plugin-audio-button-response&#39;</span><span class="p">;</span>
+</code></pre></div></p>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <details class="example" open="open"><summary>Displaying question until subject gives a response</summary><div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Code</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>

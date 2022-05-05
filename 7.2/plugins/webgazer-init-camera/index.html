@@ -1322,6 +1322,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    Install
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#example" class="md-nav__link">
     Example
   </a>
@@ -1653,6 +1660,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    Install
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#example" class="md-nav__link">
     Example
   </a>
@@ -1677,6 +1691,7 @@
                 
                 
                 <h1 id="webgazer-init-camera">webgazer-init-camera<a class="headerlink" href="#webgazer-init-camera" title="Permanent link">&para;</a></h1>
+<p>Current version: 1.0.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-webgazer-init-camera/CHANGELOG.md">See version history</a>.</p>
 <p>This plugin initializes the camera and helps the participant center their face in the camera view for using the the <a href="../../extensions/webgazer/">WebGazer extension</a>. For a narrative description of eye tracking with jsPsych, see the <a href="../../overview/eye-tracking/">eye tracking overview</a>. </p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <p>In addition to the <a href="../../overview/plugins/#parameters-available-in-all-plugins">parameters available in all plugins</a>, this plugin accepts the following parameters. Parameters with a default value of <em>undefined</em> must be specified. Other parameters can be left unspecified if the default value is acceptable.</p>
@@ -1724,6 +1739,18 @@
 </table>
 <h2 id="simulation-mode">Simulation Mode<a class="headerlink" href="#simulation-mode" title="Permanent link">&para;</a></h2>
 <p>This plugin does not yet support <a href="../../overview/simulation/">simulation mode</a>.</p>
+<h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
+<p>Using the CDN-hosted JavaScript file:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div>
+<p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-webgazer-init-camera.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div>
+<p>Using NPM:</p>
+<p><div class="highlight"><pre><span></span><code>npm install @jspsych/plugin-webgazer-init-camera
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">webgazerInitCamera</span> <span class="nx">from</span> <span class="s1">&#39;@jspsych/plugin-webgazer-init-camera&#39;</span><span class="p">;</span>
+</code></pre></div></p>
 <h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
 <p>Because the eye tracking plugins need to be used in conjunction with each other, please see the <a href="../../overview/eye-tracking/#example">example on the eye tracking overview page</a> for an integrated example. </p>
                 

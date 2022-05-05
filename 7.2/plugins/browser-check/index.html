@@ -794,6 +794,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    Install
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     Examples
   </a>
@@ -1653,6 +1660,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    Install
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     Examples
   </a>
@@ -1677,6 +1691,7 @@
                 
                 
                 <h1 id="browser-check">browser-check<a class="headerlink" href="#browser-check" title="Permanent link">&para;</a></h1>
+<p>Current version: 1.0.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-browser-check/CHANGELOG.md">See version history</a>.</p>
 <p>This plugin measures and records various features of the participant's browser and can end the experiment if defined inclusion criteria are not met.</p>
 <p>The plugin currently can record the following features:</p>
 <ul>
@@ -1850,6 +1865,18 @@ See the examples below for more guidance.</p>
 <p>In <code>data-only</code> mode, if <code>allow_window_resize</code> is true and the browser's width and height are below the maximum value then the reported width and height will be equal to <code>minimum_width</code> and <code>minimum_height</code>, as if the participant resized the browser to meet the specifications.</p>
 <p>In <code>visual</code> mode, if <code>allow_window_resize</code> is true and the browser's width and height are below the maximum value then the experiment will wait for 3 seconds before clicking the resize fail button. During this time, you can adjust the window if you would like to.</p>
 <p>As with all simulated plugins, you can override the default (actual) data with fake data using <code>simulation_options</code>. This allows you to test your exclusion criteria by simulating other configurations.</p>
+<h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
+<p>Using the CDN-hosted JavaScript file:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-browser-check@1.0.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div>
+<p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-browser-check.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div>
+<p>Using NPM:</p>
+<p><div class="highlight"><pre><span></span><code>npm install @jspsych/plugin-browser-check
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">browserCheck</span> <span class="nx">from</span> <span class="s1">&#39;@jspsych/plugin-browser-check&#39;</span><span class="p">;</span>
+</code></pre></div></p>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <details class="example" open="open"><summary>Recording all of the available features, no exclusions</summary><div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Code</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>

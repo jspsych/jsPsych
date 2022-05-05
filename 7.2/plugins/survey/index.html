@@ -1274,6 +1274,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    Install
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     Examples
   </a>
@@ -1845,6 +1852,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    Install
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     Examples
   </a>
@@ -1869,6 +1883,7 @@
                 
                 
                 <h1 id="survey">survey<a class="headerlink" href="#survey" title="Permanent link">&para;</a></h1>
+<p>Current version: 0.1.1. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey/CHANGELOG.md">See version history</a>.</p>
 <p>The survey plugin displays one or more questions of different types, on one or more pages that the participant can navigate. This plugin is built on top of the <a href="https://surveyjs.io/">SurveyJS</a> library.</p>
 <p>The supported question types are: </p>
 <ul>
@@ -2312,6 +2327,18 @@ Other parameters can be left unspecified if the default value is acceptable.</p>
 </table>
 <h2 id="simulation-mode">Simulation Mode<a class="headerlink" href="#simulation-mode" title="Permanent link">&para;</a></h2>
 <p>This plugin does not yet support <a href="../../overview/simulation/">simulation mode</a>.</p>
+<h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
+<p>Using the CDN-hosted JavaScript file:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-survey@0.1.1&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div>
+<p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-survey.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div>
+<p>Using NPM:</p>
+<p><div class="highlight"><pre><span></span><code>npm install @jspsych/plugin-survey
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">survey</span> <span class="nx">from</span> <span class="s1">&#39;@jspsych/plugin-survey&#39;</span><span class="p">;</span>
+</code></pre></div></p>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <details class="example" open="open"><summary>Basic single page</summary><div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Code</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>

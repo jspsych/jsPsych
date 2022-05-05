@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#external-html-plugin" class="md-skip">
+        <a href="#external-html" class="md-skip">
           Skip to content
         </a>
       
@@ -902,6 +902,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    Install
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     Examples
   </a>
@@ -1679,6 +1686,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    Install
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     Examples
   </a>
@@ -1728,7 +1742,8 @@
                   </a>
                 
                 
-                <h1 id="external-html-plugin">external-html plugin<a class="headerlink" href="#external-html-plugin" title="Permanent link">&para;</a></h1>
+                <h1 id="external-html">external-html<a class="headerlink" href="#external-html" title="Permanent link">&para;</a></h1>
+<p>Current version: 1.1.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-external-html/CHANGELOG.md">See version history</a>.</p>
 <p>The HTML plugin displays an external HTML document (often a consent form). Either a keyboard response or a button press can be used to continue to the next trial. It allows the experimenter to check if conditions are met (such as indicating informed consent) before continuing.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <p>In addition to the <a href="../../overview/plugins/#parameters-available-in-all-plugins">parameters available in all plugins</a>, this plugin accepts the following parameters. Parameters with a default value of <em>undefined</em> must be specified. Other parameters can be left unspecified if the default value is acceptable.</p>
@@ -1805,6 +1820,18 @@
 </table>
 <h2 id="simulation-mode">Simulation Mode<a class="headerlink" href="#simulation-mode" title="Permanent link">&para;</a></h2>
 <p>In <code>visual</code> simulation mode, the plugin cannot interact with any form elements on the screen other than the <code>cont_btn</code> specified in the trial parameters. If your <code>check_fn</code> requires other user interaction, for example, clicking a checkbox, then you'll need to disable simulation for the trial and complete the interaction manually.</p>
+<h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
+<p>Using the CDN-hosted JavaScript file:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-external-html@1.1.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div>
+<p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-external-html.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div>
+<p>Using NPM:</p>
+<p><div class="highlight"><pre><span></span><code>npm install @jspsych/plugin-external-html
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">externalHtml</span> <span class="nx">from</span> <span class="s1">&#39;@jspsych/plugin-external-html&#39;</span><span class="p">;</span>
+</code></pre></div></p>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <h3 id="loading-a-consent-form">Loading a consent form<a class="headerlink" href="#loading-a-consent-form" title="Permanent link">&para;</a></h3>
 <h5 id="this-content-would-be-in-a-file-called-external_pagehtml">This content would be in a file called 'external_page.html'<a class="headerlink" href="#this-content-would-be-in-a-file-called-external_pagehtml" title="Permanent link">&para;</a></h5>

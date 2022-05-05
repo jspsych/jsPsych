@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#serial-reaction-time-mouse-plugin" class="md-skip">
+        <a href="#serial-reaction-time-mouse" class="md-skip">
           Skip to content
         </a>
       
@@ -1147,6 +1147,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    Install
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     Examples
   </a>
@@ -1639,6 +1646,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    Install
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     Examples
   </a>
@@ -1662,7 +1676,8 @@
                   </a>
                 
                 
-                <h1 id="serial-reaction-time-mouse-plugin">serial-reaction-time-mouse plugin<a class="headerlink" href="#serial-reaction-time-mouse-plugin" title="Permanent link">&para;</a></h1>
+                <h1 id="serial-reaction-time-mouse">serial-reaction-time-mouse<a class="headerlink" href="#serial-reaction-time-mouse" title="Permanent link">&para;</a></h1>
+<p>Current version: 1.1.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-serial-reaction-time-mouse/CHANGELOG.md">See version history</a>.</p>
 <p>The serial reaction time mouse plugin implements a generalized version of the SRT task <a href="https://doi.org/10.1016%2F0010-0285%2887%2990002-8">(Nissen &amp; Bullmer, 1987)</a>. Squares are displayed in a grid-based system on the screen, and one square changes color. The participant must click on the square that changes color.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <p>In addition to the <a href="../../overview/plugins/#parameters-available-in-all-plugins">parameters available in all plugins</a>, this plugin accepts the following parameters. Parameters with a default value of <em>undefined</em> must be specified. Other parameters can be left unspecified if the default value is acceptable.</p>
@@ -1772,10 +1787,22 @@
 <tr>
 <td>correct</td>
 <td>boolean</td>
-<td>Whether the response location matches the target location (<code>true</code>) or not (<code>false</code>)l</td>
+<td>Whether the response location matches the target location (<code>true</code>) or not (<code>false</code>).</td>
 </tr>
 </tbody>
 </table>
+<h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
+<p>Using the CDN-hosted JavaScript file:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-serial-reaction-time-mouse@1.1.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div>
+<p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-serial-reaction-time-mouse.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div>
+<p>Using NPM:</p>
+<p><div class="highlight"><pre><span></span><code>npm install @jspsych/plugin-serial-reaction-time-mouse
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">serialReactionTimeMouse</span> <span class="nx">from</span> <span class="s1">&#39;@jspsych/plugin-serial-reaction-time-mouse&#39;</span><span class="p">;</span>
+</code></pre></div></p>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <details class="example" open="open"><summary>A classic version of the SRT</summary><div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Code</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">grid</span> <span class="o">=</span> <span class="p">[</span>
